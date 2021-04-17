@@ -206,6 +206,11 @@ class MangaController :
                 padding()
             }
         }
+        binding.actionToolbar.applyInsetter {
+            type(navigationBars = true) {
+                margin(bottom = true)
+            }
+        }
         return binding.root
     }
 
@@ -1003,9 +1008,10 @@ class MangaController :
     // OVERFLOW MENU DIALOGS
 
     private fun getUnreadChaptersSorted() = presenter.chapters
+        .sortedWith(presenter.getChapterSort())
         .filter { !it.read && it.status == Download.State.NOT_DOWNLOADED }
         .distinctBy { it.name }
-        .sortedByDescending { it.source_order }
+        .reversed()
 
     private fun downloadChapters(choice: Int) {
         val chaptersToDownload = when (choice) {

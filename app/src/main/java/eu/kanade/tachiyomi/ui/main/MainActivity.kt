@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDialogController
@@ -151,6 +152,9 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                     R.id.nav_library -> {
                         val controller = router.getControllerWithTag(id.toString()) as? LibraryController
                         controller?.showSettingsSheet()
+                    }
+                    R.id.nav_updates -> {
+                        router.pushController(DownloadController().withFadeTransaction())
                     }
                 }
             }
@@ -445,7 +449,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
     fun fixViewToBottom(view: View) {
         val listener = AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             val maxAbsOffset = appBarLayout.measuredHeight - binding.tabs.measuredHeight
-            view.translationY = -maxAbsOffset - verticalOffset.toFloat()
+            view.translationY = -maxAbsOffset - verticalOffset.toFloat() + appBarLayout.marginTop
         }
         binding.appbar.addOnOffsetChangedListener(listener)
         fixedViewsToBottom[view] = listener
