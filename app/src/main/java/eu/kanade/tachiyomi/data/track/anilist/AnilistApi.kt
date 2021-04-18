@@ -150,6 +150,56 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         }
     }
 
+    suspend fun searchAnime(search: String): List<TrackSearch> {
+        return withIOContext {
+            val query = """
+            |query Search(${'$'}query: String) {
+                |Page (perPage: 50) {
+                    |media(search: ${'$'}query, type: ANIME, format_not_in: [NOVEL]) {
+                        |id
+                        |title {
+                            |romaji
+                        |}
+                        |coverImage {
+                            |large
+                        |}
+                        |type
+                        |status
+                        |chapters
+                        |description
+                        |startDate {
+                            |year
+                            |month
+                            |day
+                        |}
+                    |}
+                |}
+            |}
+            |""".trimMargin()
+            val payload = buildJsonObject {
+                put("query", query)
+                putJsonObject("variables") {
+                    put("query", search)
+                }
+            }
+            authClient.newCall(
+                POST(
+                    apiUrl,
+                    body = payload.toString().toRequestBody(jsonMime)
+                )
+            )
+                .await()
+                .parseAs<JsonObject>()
+                .let { response ->
+                    val data = response["data"]!!.jsonObject
+                    val page = data["Page"]!!.jsonObject
+                    val media = page["media"]!!.jsonArray
+                    val entries = media.map { jsonToALManga(it.jsonObject) }
+                    entries.map { it.toTrack() }
+                }
+        }
+    }
+
     suspend fun findLibManga(track: Track, userid: Int): Track? {
         return withIOContext {
             val query = """

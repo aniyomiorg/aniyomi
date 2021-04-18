@@ -39,6 +39,37 @@ data class ALManga(
     }
 }
 
+data class ALAnime(
+    val media_id: Int,
+    val title_romaji: String,
+    val image_url_lge: String,
+    val description: String?,
+    val type: String,
+    val publishing_status: String,
+    val start_date_fuzzy: Long,
+    val total_chapters: Int
+) {
+
+    fun toTrack() = TrackSearch.create(TrackManager.ANILIST).apply {
+        media_id = this@ALAnime.media_id
+        title = title_romaji
+        total_chapters = this@ALAnime.total_chapters
+        cover_url = image_url_lge
+        summary = description ?: ""
+        tracking_url = AnilistApi.mangaUrl(media_id)
+        publishing_status = this@ALAnime.publishing_status
+        publishing_type = type
+        if (start_date_fuzzy != 0L) {
+            start_date = try {
+                val outputDf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                outputDf.format(start_date_fuzzy)
+            } catch (e: Exception) {
+                ""
+            }
+        }
+    }
+}
+
 data class ALUserManga(
     val library_id: Long,
     val list_status: String,

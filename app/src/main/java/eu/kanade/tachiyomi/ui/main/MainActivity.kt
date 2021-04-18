@@ -32,6 +32,7 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
 import eu.kanade.tachiyomi.databinding.MainActivityBinding
 import eu.kanade.tachiyomi.extension.api.ExtensionGithubApi
+import eu.kanade.tachiyomi.ui.animelib.MoreController
 import eu.kanade.tachiyomi.ui.base.activity.BaseViewBindingActivity
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.FabController
@@ -68,6 +69,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             2 -> R.id.nav_history
             3 -> R.id.nav_updates
             4 -> R.id.nav_browse
+            5 -> R.id.nav_animelib
             else -> R.id.nav_library
         }
     }
@@ -146,6 +148,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                     R.id.nav_history -> setRoot(HistoryController(), id)
                     R.id.nav_browse -> setRoot(BrowseController(), id)
                     R.id.nav_more -> setRoot(MoreController(), id)
+                    R.id.nav_animelib -> setRoot(AnimelibController(), id)
                 }
             } else if (!isHandlingShortcut) {
                 when (id) {
