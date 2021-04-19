@@ -9,6 +9,7 @@ import com.tfcporciuncula.flow.FlowSharedPreferences
 import com.tfcporciuncula.flow.Preference
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Manga
+import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferenceValues.DisplayMode
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
@@ -213,6 +214,8 @@ class PreferencesHelper(val context: Context) {
 
     fun removeBookmarkedChapters() = prefs.getBoolean(Keys.removeBookmarkedChapters, false)
 
+    fun removeBookmarkedEpisodes() = prefs.getBoolean(Keys.removeBookmarkedEpisodes, false)
+
     fun libraryUpdateInterval() = flowPrefs.getInt(Keys.libraryUpdateInterval, 24)
 
     fun libraryUpdateRestriction() = prefs.getStringSet(Keys.libraryUpdateRestriction, setOf("wifi"))
@@ -223,6 +226,17 @@ class PreferencesHelper(val context: Context) {
     fun libraryUpdatePrioritization() = flowPrefs.getInt(Keys.libraryUpdatePrioritization, 0)
 
     fun libraryDisplayMode() = flowPrefs.getEnum(Keys.libraryDisplayMode, DisplayMode.COMPACT_GRID)
+
+    fun animelibUpdateInterval() = flowPrefs.getInt(Keys.animelibUpdateInterval, 24)
+
+    fun animelibUpdateRestriction() = prefs.getStringSet(Keys.animelibUpdateRestriction, setOf("wifi"))
+
+    fun animelibUpdateCategories() = flowPrefs.getStringSet(Keys.animelibUpdateCategories, emptySet())
+    fun animelibUpdateCategoriesExclude() = flowPrefs.getStringSet(Keys.animelibUpdateCategoriesExclude, emptySet())
+
+    fun animelibUpdatePrioritization() = flowPrefs.getInt(Keys.animelibUpdatePrioritization, 0)
+
+    fun animelibDisplayMode() = flowPrefs.getEnum(Keys.animelibDisplayMode, DisplayMode.COMPACT_GRID)
 
     fun downloadBadge() = flowPrefs.getBoolean(Keys.downloadBadge, false)
 
@@ -245,6 +259,10 @@ class PreferencesHelper(val context: Context) {
     fun librarySortingMode() = flowPrefs.getInt(Keys.librarySortingMode, 0)
 
     fun librarySortingAscending() = flowPrefs.getBoolean("library_sorting_ascending", true)
+
+    fun animelibSortingMode() = flowPrefs.getInt(Keys.animelibSortingMode, 0)
+
+    fun animelibSortingAscending() = flowPrefs.getBoolean("animelib_sorting_ascending", true)
 
     fun automaticExtUpdates() = flowPrefs.getBoolean(Keys.automaticExtUpdates, true)
 
@@ -289,11 +307,23 @@ class PreferencesHelper(val context: Context) {
 
     fun filterChapterByBookmarked() = prefs.getInt(Keys.defaultChapterFilterByBookmarked, Manga.SHOW_ALL)
 
+    fun filterEpisodeByRead() = prefs.getInt(Keys.defaultEpisodeFilterByRead, Anime.SHOW_ALL)
+
+    fun filterEpisodeByDownloaded() = prefs.getInt(Keys.defaultEpisodeFilterByDownloaded, Anime.SHOW_ALL)
+
+    fun filterEpisodeByBookmarked() = prefs.getInt(Keys.defaultEpisodeFilterByBookmarked, Anime.SHOW_ALL)
+
     fun sortChapterBySourceOrNumber() = prefs.getInt(Keys.defaultChapterSortBySourceOrNumber, Manga.SORTING_SOURCE)
 
     fun displayChapterByNameOrNumber() = prefs.getInt(Keys.defaultChapterDisplayByNameOrNumber, Manga.DISPLAY_NAME)
 
     fun sortChapterByAscendingOrDescending() = prefs.getInt(Keys.defaultChapterSortByAscendingOrDescending, Manga.SORT_DESC)
+
+    fun sortEpisodeBySourceOrNumber() = prefs.getInt(Keys.defaultEpisodeSortBySourceOrNumber, Anime.SORTING_SOURCE)
+
+    fun displayEpisodeByNameOrNumber() = prefs.getInt(Keys.defaultEpisodeDisplayByNameOrNumber, Anime.DISPLAY_NAME)
+
+    fun sortEpisodeByAscendingOrDescending() = prefs.getInt(Keys.defaultEpisodeSortByAscendingOrDescending, Anime.SORT_DESC)
 
     fun incognitoMode() = flowPrefs.getBoolean(Keys.incognitoMode, false)
 
@@ -307,6 +337,17 @@ class PreferencesHelper(val context: Context) {
             putInt(Keys.defaultChapterSortBySourceOrNumber, manga.sorting)
             putInt(Keys.defaultChapterDisplayByNameOrNumber, manga.displayMode)
             putInt(Keys.defaultChapterSortByAscendingOrDescending, if (manga.sortDescending()) Manga.SORT_DESC else Manga.SORT_ASC)
+        }
+    }
+
+    fun setEpisodeSettingsDefault(anime: Anime) {
+        prefs.edit {
+            putInt(Keys.defaultEpisodeFilterByRead, anime.readFilter)
+            putInt(Keys.defaultEpisodeFilterByDownloaded, anime.downloadedFilter)
+            putInt(Keys.defaultEpisodeFilterByBookmarked, anime.bookmarkedFilter)
+            putInt(Keys.defaultEpisodeSortBySourceOrNumber, anime.sorting)
+            putInt(Keys.defaultEpisodeDisplayByNameOrNumber, anime.displayMode)
+            putInt(Keys.defaultEpisodeSortByAscendingOrDescending, if (anime.sortDescending()) Anime.SORT_DESC else Anime.SORT_ASC)
         }
     }
 }

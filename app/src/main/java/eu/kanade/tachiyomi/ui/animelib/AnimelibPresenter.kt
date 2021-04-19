@@ -2,13 +2,13 @@ package eu.kanade.tachiyomi.ui.animelib
 
 import android.os.Bundle
 import com.jakewharton.rxrelay.BehaviorRelay
-import eu.kanade.tachiyomi.data.cache.CoverCache
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
+import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeCategory
 import eu.kanade.tachiyomi.data.database.models.Category
-import eu.kanade.tachiyomi.data.database.models.Chapter
-import eu.kanade.tachiyomi.data.download.DownloadManager
+import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.SourceManager
@@ -44,11 +44,11 @@ private typealias AnimelibMap = Map<Int, List<AnimelibItem>>
  * Presenter of [AnimelibController].
  */
 class AnimelibPresenter(
-    private val db: DatabaseHelper = Injekt.get(),
+    private val db: AnimeDatabaseHelper = Injekt.get(),
     private val preferences: PreferencesHelper = Injekt.get(),
-    private val coverCache: CoverCache = Injekt.get(),
+    private val coverCache: AnimeCoverCache = Injekt.get(),
     private val sourceManager: SourceManager = Injekt.get(),
-    private val downloadManager: DownloadManager = Injekt.get(),
+    private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get()
 ) : BasePresenter<AnimelibController>() {
 
@@ -188,7 +188,7 @@ class AnimelibPresenter(
     }
 
     /**
-     * Sets downloaded chapter count to each anime.
+     * Sets downloaded episode count to each anime.
      *
      * @param map the map of anime.
      */
@@ -259,16 +259,16 @@ class AnimelibPresenter(
                     else -> i1.anime.unread.compareTo(i2.anime.unread)
                 }
                 AnimelibSort.TOTAL -> {
-                    val anime1TotalChapter = totalChapterAnime[i1.anime.id!!] ?: 0
-                    val mange2TotalChapter = totalChapterAnime[i2.anime.id!!] ?: 0
-                    anime1TotalChapter.compareTo(mange2TotalChapter)
+                    val anime1TotalEpisode = totalChapterAnime[i1.anime.id!!] ?: 0
+                    val mange2TotalEpisode = totalChapterAnime[i2.anime.id!!] ?: 0
+                    anime1TotalEpisode.compareTo(mange2TotalEpisode)
                 }
                 AnimelibSort.LATEST_CHAPTER -> {
-                    val anime1latestChapter = latestChapterAnime[i1.anime.id!!]
+                    val anime1latestEpisode = latestChapterAnime[i1.anime.id!!]
                         ?: latestChapterAnime.size
-                    val anime2latestChapter = latestChapterAnime[i2.anime.id!!]
+                    val anime2latestEpisode = latestChapterAnime[i2.anime.id!!]
                         ?: latestChapterAnime.size
-                    anime1latestChapter.compareTo(anime2latestChapter)
+                    anime1latestEpisode.compareTo(anime2latestEpisode)
                 }
                 AnimelibSort.CHAPTER_FETCH_DATE -> {
                     val anime1chapterFetchDate = chapterFetchDateAnime[i1.anime.id!!]
@@ -348,7 +348,7 @@ class AnimelibPresenter(
      */
     private fun getTracksObservable(): Observable<Map<Long, Map<Int, Boolean>>> {
         return db.getTracks().asRxObservable().map { tracks ->
-            tracks.groupBy { it.anime_id }
+            tracks.groupBy { it.manga_id }
                 .mapValues { tracksForAnimeId ->
                     // Check if any of the trackers is logged in for the current anime id
                     tracksForAnimeId.value.associate {
@@ -400,48 +400,48 @@ class AnimelibPresenter(
     }
 
     /**
-     * Queues all unread chapters from the given list of anime.
+     * Queues all unread episodes from the given list of anime.
      *
      * @param animes the list of anime.
      */
-    fun downloadUnreadChapters(animes: List<Anime>) {
+    fun downloadUnreadEpisodes(animes: List<Anime>) {
         animes.forEach { anime ->
             launchIO {
-                val chapters = db.getChapters(anime).executeAsBlocking()
+                val episodes = db.getEpisodes(anime).executeAsBlocking()
                     .filter { !it.read }
 
-                downloadManager.downloadChapters(anime, chapters)
+                downloadManager.downloadEpisodes(anime, episodes)
             }
         }
     }
 
     /**
-     * Marks animes' chapters read status.
+     * Marks animes' episodes read status.
      *
      * @param animes the list of anime.
      */
     fun markReadStatus(animes: List<Anime>, read: Boolean) {
         animes.forEach { anime ->
             launchIO {
-                val chapters = db.getChapters(anime).executeAsBlocking()
-                chapters.forEach {
+                val episodes = db.getEpisodes(anime).executeAsBlocking()
+                episodes.forEach {
                     it.read = read
                     if (!read) {
                         it.last_page_read = 0
                     }
                 }
-                db.updateChaptersProgress(chapters).executeAsBlocking()
+                db.updateEpisodesProgress(episodes).executeAsBlocking()
 
                 if (preferences.removeAfterMarkedAsRead()) {
-                    deleteChapters(anime, chapters)
+                    deleteEpisodes(anime, episodes)
                 }
             }
         }
     }
 
-    private fun deleteChapters(anime: Anime, chapters: List<Chapter>) {
+    private fun deleteEpisodes(anime: Anime, episodes: List<Episode>) {
         sourceManager.get(anime.source)?.let { source ->
-            downloadManager.deleteChapters(chapters, anime, source)
+            downloadManager.deleteEpisodes(episodes, anime, source)
         }
     }
 
@@ -450,9 +450,9 @@ class AnimelibPresenter(
      *
      * @param animes the list of anime to delete.
      * @param deleteFromAnimelib whether to delete anime from animelib.
-     * @param deleteChapters whether to delete downloaded chapters.
+     * @param deleteEpisodes whether to delete downloaded episodes.
      */
-    fun removeAnimes(animes: List<Anime>, deleteFromAnimelib: Boolean, deleteChapters: Boolean) {
+    fun removeAnimes(animes: List<Anime>, deleteFromAnimelib: Boolean, deleteEpisodes: Boolean) {
         launchIO {
             val animeToDelete = animes.distinctBy { it.id }
 
@@ -464,7 +464,7 @@ class AnimelibPresenter(
                 db.insertAnimes(animeToDelete).executeAsBlocking()
             }
 
-            if (deleteChapters) {
+            if (deleteEpisodes) {
                 animeToDelete.forEach { anime ->
                     val source = sourceManager.get(anime.source) as? HttpSource
                     if (source != null) {

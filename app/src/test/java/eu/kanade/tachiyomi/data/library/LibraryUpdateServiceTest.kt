@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.CustomRobolectricGradleTestRunner
+import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.database.models.Chapter
 import eu.kanade.tachiyomi.data.database.models.LibraryManga
 import eu.kanade.tachiyomi.source.SourceManager
@@ -34,7 +35,7 @@ class LibraryUpdateServiceTest {
 
     lateinit var app: Application
     lateinit var context: Context
-    lateinit var service: LibraryUpdateService
+    lateinit var service: AnimelibUpdateService
     lateinit var source: HttpSource
 
     @Before
@@ -50,7 +51,7 @@ class LibraryUpdateServiceTest {
         }
         Injekt.importModule(module)
 
-        service = Robolectric.setupService(LibraryUpdateService::class.java)
+        service = Robolectric.setupService(AnimelibUpdateService::class.java)
         source = mock(HttpSource::class.java)
         `when`(service.sourceManager.get(anyLong())).thenReturn(source)
     }
@@ -58,7 +59,7 @@ class LibraryUpdateServiceTest {
     @Test
     fun testLifecycle() {
         // Smoke test
-        Robolectric.buildService(LibraryUpdateService::class.java)
+        Robolectric.buildService(AnimelibUpdateService::class.java)
             .attach()
             .create()
             .startCommand(0, 0)
@@ -99,7 +100,7 @@ class LibraryUpdateServiceTest {
 
         val intent = Intent()
         val categoryId = intent.getIntExtra(LibraryUpdateService.KEY_CATEGORY, -1)
-        val target = LibraryUpdateService.Target.CHAPTERS
+        val target = AnimelibUpdateService.Target.CHAPTERS
         runBlocking {
             service.addMangaToQueue(categoryId, target)
             service.updateChapterList()

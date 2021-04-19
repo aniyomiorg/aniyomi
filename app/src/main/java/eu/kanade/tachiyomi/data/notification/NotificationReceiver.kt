@@ -13,9 +13,10 @@ import eu.kanade.tachiyomi.data.backup.BackupRestoreService
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Chapter
 import eu.kanade.tachiyomi.data.database.models.Manga
+import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadService
-import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -409,6 +410,56 @@ class NotificationReceiver : BroadcastReceiver() {
             return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
+        /**
+         * Returns [PendingIntent] that starts a reader activity containing episode.
+         *
+         * @param context context of application
+         * @param anime anime of episode
+         * @param episode episode that needs to be opened
+         */
+        internal fun openEpisodePendingActivity(context: Context, anime: Anime, episode: Episode): PendingIntent {
+            val newIntent = ReaderActivity.newIntent(context, anime, episode)
+            return PendingIntent.getActivity(context, anime.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
+        /**
+         * Returns [PendingIntent] that opens the anime info controller.
+         *
+         * @param context context of application
+         * @param anime anime of episode
+         */
+        internal fun openEpisodePendingActivity(context: Context, anime: Anime, groupId: Int): PendingIntent {
+            val newIntent =
+                    Intent(context, MainActivity::class.java).setAction(MainActivity.SHORTCUT_MANGA)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            .putExtra(AnimeController.MANGA_EXTRA, anime.id)
+                            .putExtra("notificationId", anime.id.hashCode())
+                            .putExtra("groupId", groupId)
+            return PendingIntent.getActivity(context, anime.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
+        /**
+         * Returns [PendingIntent] that marks a episode as seen and deletes it if preferred
+         *
+         * @param context context of application
+         * @param anime anime of episode
+         */
+        internal fun markAsReadPendingBroadcast(
+                context: Context,
+                anime: Anime,
+                episodes: Array<Episode>,
+                groupId: Int
+        ): PendingIntent {
+            val newIntent = Intent(context, NotificationReceiver::class.java).apply {
+                action = ACTION_MARK_AS_READ
+                putExtra(EXTRA_CHAPTER_URL, episodes.map { it.url }.toTypedArray())
+                putExtra(EXTRA_MANGA_ID, anime.id)
+                putExtra(EXTRA_NOTIFICATION_ID, anime.id.hashCode())
+                putExtra(EXTRA_GROUP_ID, groupId)
+            }
+            return PendingIntent.getBroadcast(context, anime.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+        
         /**
          * Returns [PendingIntent] that starts a reader activity containing chapter.
          *

@@ -4,7 +4,9 @@ import eu.kanade.tachiyomi.data.database.tables.CategoryTable as Category
 import eu.kanade.tachiyomi.data.database.tables.ChapterTable as Chapter
 import eu.kanade.tachiyomi.data.database.tables.HistoryTable as History
 import eu.kanade.tachiyomi.data.database.tables.MangaCategoryTable as MangaCategory
+import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable as AnimeCategory
 import eu.kanade.tachiyomi.data.database.tables.MangaTable as Manga
+import eu.kanade.tachiyomi.data.database.tables.AnimeTable as Anime
 
 /**
  * Query to get the manga from the library, with their categories and unread count.
@@ -102,6 +104,19 @@ fun getLastReadMangaQuery() =
     ORDER BY max DESC
 """
 
+fun getLastReadAnimeQuery() =
+        """
+    SELECT ${Anime.TABLE}.*, MAX(${History.TABLE}.${History.COL_LAST_READ}) AS max
+    FROM ${Anime.TABLE}
+    JOIN ${Chapter.TABLE}
+    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
+    JOIN ${History.TABLE}
+    ON ${Chapter.TABLE}.${Chapter.COL_ID} = ${History.TABLE}.${History.COL_CHAPTER_ID}
+    WHERE ${Anime.TABLE}.${Anime.COL_FAVORITE} = 1
+    GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
+    ORDER BY max DESC
+"""
+
 fun getTotalChapterMangaQuery() =
     """
     SELECT ${Manga.TABLE}.*
@@ -109,6 +124,16 @@ fun getTotalChapterMangaQuery() =
     JOIN ${Chapter.TABLE}
     ON ${Manga.TABLE}.${Manga.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
     GROUP BY ${Manga.TABLE}.${Manga.COL_ID}
+    ORDER by COUNT(*)
+"""
+
+fun getTotalChapterAnimeQuery() =
+        """
+    SELECT ${Anime.TABLE}.*
+    FROM ${Anime.TABLE}
+    JOIN ${Anime.TABLE}
+    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
+    GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
     ORDER by COUNT(*)
 """
 
@@ -122,6 +147,16 @@ fun getLatestChapterMangaQuery() =
     ORDER by max DESC
 """
 
+fun getLatestChapterAnimeQuery() =
+        """
+    SELECT ${Anime.TABLE}.*, MAX(${Chapter.TABLE}.${Chapter.COL_DATE_UPLOAD}) AS max
+    FROM ${Anime.TABLE}
+    JOIN ${Chapter.TABLE}
+    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
+    GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
+    ORDER by max DESC
+"""
+
 fun getChapterFetchDateMangaQuery() =
     """
     SELECT ${Manga.TABLE}.*, MAX(${Chapter.TABLE}.${Chapter.COL_DATE_FETCH}) AS max
@@ -129,6 +164,16 @@ fun getChapterFetchDateMangaQuery() =
     JOIN ${Chapter.TABLE}
     ON ${Manga.TABLE}.${Manga.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
     GROUP BY ${Manga.TABLE}.${Manga.COL_ID}
+    ORDER by max DESC
+"""
+
+fun getChapterFetchDateAnimeQuery() =
+        """
+    SELECT ${Anime.TABLE}.*, MAX(${Chapter.TABLE}.${Chapter.COL_DATE_FETCH}) AS max
+    FROM ${Anime.TABLE}
+    JOIN ${Chapter.TABLE}
+    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
+    GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
     ORDER by max DESC
 """
 
@@ -141,4 +186,15 @@ fun getCategoriesForMangaQuery() =
     JOIN ${MangaCategory.TABLE} ON ${Category.TABLE}.${Category.COL_ID} =
     ${MangaCategory.TABLE}.${MangaCategory.COL_CATEGORY_ID}
     WHERE ${MangaCategory.COL_MANGA_ID} = ?
+"""
+
+/**
+ * Query to get the categories for an anime.
+ */
+fun getCategoriesForAnimeQuery() =
+        """
+    SELECT ${Category.TABLE}.* FROM ${Category.TABLE}
+    JOIN ${AnimeCategory.TABLE} ON ${Category.TABLE}.${Category.COL_ID} =
+    ${AnimeCategory.TABLE}.${AnimeCategory.COL_CATEGORY_ID}
+    WHERE ${AnimeCategory.COL_MANGA_ID} = ?
 """

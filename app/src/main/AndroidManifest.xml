@@ -164,7 +164,7 @@
             android:exported="false" />
 
         <service
-            android:name=".data.library.LibraryUpdateService"
+            android:name=".data.animelib.AnimelibUpdateService"
             android:exported="false" />
 
         <service

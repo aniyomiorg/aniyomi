@@ -119,6 +119,8 @@ object PreferenceKeys {
 
     const val removeBookmarkedChapters = "pref_remove_bookmarked"
 
+    const val removeBookmarkedEpisodes = "pref_remove_bookmarked_episodes"
+
     const val libraryUpdateInterval = "pref_library_update_interval_key"
 
     const val libraryUpdateRestriction = "library_update_restriction"
@@ -127,6 +129,15 @@ object PreferenceKeys {
     const val libraryUpdateCategoriesExclude = "library_update_categories_exclude"
 
     const val libraryUpdatePrioritization = "library_update_prioritization"
+
+    const val animelibUpdateInterval = "pref_animelib_update_interval_key"
+
+    const val animelibUpdateRestriction = "animelib_update_restriction"
+
+    const val animelibUpdateCategories = "animelib_update_categories"
+    const val animelibUpdateCategoriesExclude = "animelib_update_categories_exclude"
+
+    const val animelibUpdatePrioritization = "animelib_update_prioritization"
 
     const val downloadedOnly = "pref_downloaded_only"
 
@@ -139,6 +150,8 @@ object PreferenceKeys {
     const val filterTracked = "pref_filter_library_tracked"
 
     const val librarySortingMode = "library_sorting_mode"
+
+    const val animelibSortingMode = "animelib_sorting_mode"
 
     const val automaticExtUpdates = "automatic_ext_updates"
 
@@ -162,12 +175,16 @@ object PreferenceKeys {
 
     const val showLibraryUpdateErrors = "show_library_update_errors"
 
+    const val showAnimelibUpdateErrors = "show_animelib_update_errors"
+
     const val downloadNew = "download_new"
 
     const val downloadNewCategories = "download_new_categories"
     const val downloadNewCategoriesExclude = "download_new_categories_exclude"
 
     const val libraryDisplayMode = "pref_display_mode_library"
+
+    const val animelibDisplayMode = "pref_display_mode_animelib"
 
     const val lang = "app_language"
 
@@ -204,6 +221,18 @@ object PreferenceKeys {
     const val defaultChapterSortByAscendingOrDescending = "default_chapter_sort_by_ascending_or_descending"
 
     const val defaultChapterDisplayByNameOrNumber = "default_chapter_display_by_name_or_number"
+
+    const val defaultEpisodeFilterByRead = "default_episode_filter_by_read"
+
+    const val defaultEpisodeFilterByDownloaded = "default_episode_filter_by_downloaded"
+
+    const val defaultEpisodeFilterByBookmarked = "default_episode_filter_by_bookmarked"
+
+    const val defaultEpisodeSortBySourceOrNumber = "default_episode_sort_by_source_or_number" // and upload date
+
+    const val defaultEpisodeSortByAscendingOrDescending = "default_episode_sort_by_ascending_or_descending"
+
+    const val defaultEpisodeDisplayByNameOrNumber = "default_episode_display_by_name_or_number"
 
     const val incognitoMode = "incognito_mode"
 

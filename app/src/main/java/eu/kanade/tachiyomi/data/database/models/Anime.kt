@@ -17,16 +17,16 @@ interface Anime : SAnime {
 
     var viewer: Int
 
-    var chapter_flags: Int
+    var episode_flags: Int
 
     var cover_last_modified: Long
 
-    fun setChapterOrder(order: Int) {
+    fun setEpisodeOrder(order: Int) {
         setFlags(order, SORT_MASK)
     }
 
     fun sortDescending(): Boolean {
-        return chapter_flags and SORT_MASK == SORT_DESC
+        return episode_flags and SORT_MASK == SORT_DESC
     }
 
     fun getGenres(): List<String>? {
@@ -34,28 +34,28 @@ interface Anime : SAnime {
     }
 
     private fun setFlags(flag: Int, mask: Int) {
-        chapter_flags = chapter_flags and mask.inv() or (flag and mask)
+        episode_flags = episode_flags and mask.inv() or (flag and mask)
     }
 
-    // Used to display the chapter's title one way or another
+    // Used to display the episode's title one way or another
     var displayMode: Int
-        get() = chapter_flags and DISPLAY_MASK
+        get() = episode_flags and DISPLAY_MASK
         set(mode) = setFlags(mode, DISPLAY_MASK)
 
     var readFilter: Int
-        get() = chapter_flags and READ_MASK
+        get() = episode_flags and READ_MASK
         set(filter) = setFlags(filter, READ_MASK)
 
     var downloadedFilter: Int
-        get() = chapter_flags and DOWNLOADED_MASK
+        get() = episode_flags and DOWNLOADED_MASK
         set(filter) = setFlags(filter, DOWNLOADED_MASK)
 
     var bookmarkedFilter: Int
-        get() = chapter_flags and BOOKMARKED_MASK
+        get() = episode_flags and BOOKMARKED_MASK
         set(filter) = setFlags(filter, BOOKMARKED_MASK)
 
     var sorting: Int
-        get() = chapter_flags and SORTING_MASK
+        get() = episode_flags and SORTING_MASK
         set(sort) = setFlags(sort, SORTING_MASK)
 
     companion object {
