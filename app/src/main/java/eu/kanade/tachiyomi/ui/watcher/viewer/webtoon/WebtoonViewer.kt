@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.WebtoonLayoutManager
 import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
 import eu.kanade.tachiyomi.ui.watcher.model.EpisodeTransition
-import eu.kanade.tachiyomi.ui.watcher.model.WatcherPage
 import eu.kanade.tachiyomi.ui.watcher.model.ViewerEpisodes
+import eu.kanade.tachiyomi.ui.watcher.model.WatcherPage
 import eu.kanade.tachiyomi.ui.watcher.viewer.BaseViewer
 import eu.kanade.tachiyomi.ui.watcher.viewer.ViewerNavigation.NavigationRegion
 import kotlinx.coroutines.MainScope

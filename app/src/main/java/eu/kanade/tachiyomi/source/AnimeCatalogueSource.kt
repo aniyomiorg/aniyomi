@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.source
 
-import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.AnimesPage
+import eu.kanade.tachiyomi.source.model.FilterList
 import rx.Observable
 
 interface AnimeCatalogueSource : AnimeSource {

@@ -7,11 +7,11 @@ import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.model.AnimeDownloadQueue
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.online.fetchAllImageUrlsFromPageList
@@ -50,7 +50,7 @@ class AnimeDownloader(
     private val context: Context,
     private val provider: AnimeDownloadProvider,
     private val cache: AnimeDownloadCache,
-    private val sourceManager: SourceManager
+    private val sourceManager: AnimeSourceManager
 ) {
 
     private val episodeCache: EpisodeCache by injectLazy()

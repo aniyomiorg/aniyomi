@@ -33,8 +33,8 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 class MangaInfoHeaderAdapter(
-        private val controller: AnimeController,
-        private val fromSource: Boolean
+    private val controller: AnimeController,
+    private val fromSource: Boolean
 ) :
     RecyclerView.Adapter<AnimeInfoHeaderAdapter.HeaderViewHolder>() {
 

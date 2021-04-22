@@ -1,8 +1,10 @@
 package eu.kanade.tachiyomi.data.track.kitsu
 
 import androidx.annotation.CallSuper
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
@@ -88,6 +90,44 @@ class KitsuLibManga(obj: JsonObject, manga: JsonObject) {
     }
 }
 
+class KitsuLibAnime(obj: JsonObject, anime: JsonObject) {
+    val id = anime["id"]!!.jsonPrimitive.int
+    private val canonicalTitle = anime["attributes"]!!.jsonObject["canonicalTitle"]!!.jsonPrimitive.content
+    private val episodeCount = anime["attributes"]!!.jsonObject["episodeCount"]?.jsonPrimitive?.intOrNull
+    val type = anime["attributes"]!!.jsonObject["animeType"]?.jsonPrimitive?.contentOrNull.orEmpty()
+    val original = anime["attributes"]!!.jsonObject["posterImage"]!!.jsonObject["original"]!!.jsonPrimitive.content
+    private val synopsis = anime["attributes"]!!.jsonObject["synopsis"]!!.jsonPrimitive.content
+    private val startDate = anime["attributes"]!!.jsonObject["startDate"]?.jsonPrimitive?.contentOrNull.orEmpty()
+    private val libraryId = obj["id"]!!.jsonPrimitive.int
+    val status = obj["attributes"]!!.jsonObject["status"]!!.jsonPrimitive.content
+    private val ratingTwenty = obj["attributes"]!!.jsonObject["ratingTwenty"]?.jsonPrimitive?.contentOrNull
+    val progress = obj["attributes"]!!.jsonObject["progress"]!!.jsonPrimitive.int
+
+    fun toTrack() = AnimeTrackSearch.create(TrackManager.KITSU).apply {
+        media_id = libraryId
+        title = canonicalTitle
+        total_episodes = episodeCount ?: 0
+        cover_url = original
+        summary = synopsis
+        tracking_url = KitsuApi.mangaUrl(media_id)
+        publishing_status = this@KitsuLibAnime.status
+        publishing_type = type
+        start_date = startDate
+        status = toTrackStatus()
+        score = ratingTwenty?.let { it.toInt() / 2f } ?: 0f
+        last_episode_seen = progress
+    }
+
+    private fun toTrackStatus() = when (status) {
+        "current" -> Kitsu.READING
+        "completed" -> Kitsu.COMPLETED
+        "on_hold" -> Kitsu.ON_HOLD
+        "dropped" -> Kitsu.DROPPED
+        "planned" -> Kitsu.PLAN_TO_READ
+        else -> throw Exception("Unknown status")
+    }
+}
+
 fun Track.toKitsuStatus() = when (status) {
     Kitsu.READING -> "current"
     Kitsu.COMPLETED -> "completed"
@@ -98,5 +138,18 @@ fun Track.toKitsuStatus() = when (status) {
 }
 
 fun Track.toKitsuScore(): String? {
+    return if (score > 0) (score * 2).toInt().toString() else null
+}
+
+fun AnimeTrack.toKitsuStatus() = when (status) {
+    Kitsu.READING -> "current"
+    Kitsu.COMPLETED -> "completed"
+    Kitsu.ON_HOLD -> "on_hold"
+    Kitsu.DROPPED -> "dropped"
+    Kitsu.PLAN_TO_READ -> "planned"
+    else -> throw Exception("Unknown status")
+}
+
+fun AnimeTrack.toKitsuScore(): String? {
     return if (score > 0) (score * 2).toInt().toString() else null
 }

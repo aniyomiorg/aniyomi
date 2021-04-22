@@ -3,10 +3,10 @@ package eu.kanade.tachiyomi.data.download
 import android.content.Context
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.AnimeSourceManager
 import kotlinx.coroutines.flow.onEach
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
 class AnimeDownloadCache(
     private val context: Context,
     private val provider: AnimeDownloadProvider,
-    private val sourceManager: SourceManager,
+    private val sourceManager: AnimeSourceManager,
     private val preferences: PreferencesHelper = Injekt.get()
 ) {
 

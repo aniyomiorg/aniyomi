@@ -4,7 +4,7 @@ class EpisodeImpl : Episode {
 
     override var id: Long? = null
 
-    override var manga_id: Long? = null
+    override var anime_id: Long? = null
 
     override lateinit var url: String
 

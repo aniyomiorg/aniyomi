@@ -32,18 +32,32 @@ import eu.davidea.flexibleadapter.SelectableAdapter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
+import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Episode
-import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.databinding.AnimeControllerBinding
 import eu.kanade.tachiyomi.source.LocalSource
-import eu.kanade.tachiyomi.source.Source
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.AnimeSource
+import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.online.AnimeHttpSource
+import eu.kanade.tachiyomi.ui.anime.episode.AnimeEpisodesHeaderAdapter
+import eu.kanade.tachiyomi.ui.anime.episode.DeleteEpisodesDialog
+import eu.kanade.tachiyomi.ui.anime.episode.DownloadCustomEpisodesDialog
+import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
+import eu.kanade.tachiyomi.ui.anime.episode.EpisodesAdapter
+import eu.kanade.tachiyomi.ui.anime.episode.EpisodesSettingsSheet
+import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodesAdapter
+import eu.kanade.tachiyomi.ui.anime.info.AnimeInfoHeaderAdapter
+import eu.kanade.tachiyomi.ui.anime.track.TrackItem
+import eu.kanade.tachiyomi.ui.anime.track.TrackSearchDialog
+import eu.kanade.tachiyomi.ui.anime.track.TrackSheet
+import eu.kanade.tachiyomi.ui.animelib.AnimelibController
+import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCategoriesDialog
+import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCoverDialog
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.ToolbarLiftOnScrollController
@@ -52,24 +66,10 @@ import eu.kanade.tachiyomi.ui.browse.migration.search.AnimeSearchController
 import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
 import eu.kanade.tachiyomi.ui.browse.source.latest.LatestUpdatesController
-import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCategoriesDialog
-import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCoverDialog
-import eu.kanade.tachiyomi.ui.animelib.AnimelibController
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
-import eu.kanade.tachiyomi.ui.anime.episode.EpisodesAdapter
-import eu.kanade.tachiyomi.ui.anime.episode.EpisodesSettingsSheet
-import eu.kanade.tachiyomi.ui.anime.episode.DeleteEpisodesDialog
-import eu.kanade.tachiyomi.ui.anime.episode.DownloadCustomEpisodesDialog
-import eu.kanade.tachiyomi.ui.anime.episode.AnimeEpisodesHeaderAdapter
-import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodesAdapter
-import eu.kanade.tachiyomi.ui.anime.info.AnimeInfoHeaderAdapter
-import eu.kanade.tachiyomi.ui.anime.track.TrackItem
-import eu.kanade.tachiyomi.ui.anime.track.TrackSearchDialog
-import eu.kanade.tachiyomi.ui.anime.track.TrackSheet
-import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
 import eu.kanade.tachiyomi.ui.recent.history.HistoryController
 import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
+import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.hasCustomCover
@@ -111,7 +111,7 @@ class AnimeController :
     ) {
         this.anime = anime
         if (anime != null) {
-            source = Injekt.get<SourceManager>().getOrStub(anime.source)
+            source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
         }
     }
 
@@ -125,7 +125,7 @@ class AnimeController :
     var anime: Anime? = null
         private set
 
-    var source: Source? = null
+    var source: AnimeSource? = null
         private set
 
     private val fromSource = args.getBoolean(FROM_SOURCE_EXTRA, false)
@@ -401,7 +401,7 @@ class AnimeController :
      * @param anime anime object containing information about anime.
      * @param source the source of the anime.
      */
-    fun onNextAnimeInfo(anime: Anime, source: Source) {
+    fun onNextAnimeInfo(anime: Anime, source: AnimeSource) {
         if (anime.initialized) {
             // Update view.
             animeInfoAdapter?.update(anime, source)
@@ -943,7 +943,7 @@ class AnimeController :
     }
 
     private fun downloadEpisodes(episodes: List<EpisodeItem>) {
-        if (source is SourceManager.StubSource) {
+        if (source is AnimeSourceManager.StubSource) {
             activity?.toast(R.string.loader_not_implemented_error)
             return
         }

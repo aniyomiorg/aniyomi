@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.source.Source
+import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.launchIn
@@ -48,7 +48,7 @@ class AnimeDownloadProvider(private val context: Context) {
      * @param anime the anime to query.
      * @param source the source of the anime.
      */
-    internal fun getAnimeDir(anime: Anime, source: Source): UniFile {
+    internal fun getAnimeDir(anime: Anime, source: AnimeSource): UniFile {
         try {
             return downloadsDir
                 .createDirectory(getSourceDirName(source))
@@ -64,7 +64,7 @@ class AnimeDownloadProvider(private val context: Context) {
      *
      * @param source the source to query.
      */
-    fun findSourceDir(source: Source): UniFile? {
+    fun findSourceDir(source: AnimeSource): UniFile? {
         return downloadsDir.findFile(getSourceDirName(source), true)
     }
 
@@ -74,7 +74,7 @@ class AnimeDownloadProvider(private val context: Context) {
      * @param anime the anime to query.
      * @param source the source of the anime.
      */
-    fun findAnimeDir(anime: Anime, source: Source): UniFile? {
+    fun findAnimeDir(anime: Anime, source: AnimeSource): UniFile? {
         val sourceDir = findSourceDir(source)
         return sourceDir?.findFile(getAnimeDirName(anime))
     }
@@ -86,7 +86,7 @@ class AnimeDownloadProvider(private val context: Context) {
      * @param anime the anime of the episode.
      * @param source the source of the episode.
      */
-    fun findEpisodeDir(episode: Episode, anime: Anime, source: Source): UniFile? {
+    fun findEpisodeDir(episode: Episode, anime: Anime, source: AnimeSource): UniFile? {
         val animeDir = findAnimeDir(anime, source)
         return getValidEpisodeDirNames(episode).asSequence()
             .mapNotNull { animeDir?.findFile(it) }
@@ -100,7 +100,7 @@ class AnimeDownloadProvider(private val context: Context) {
      * @param anime the anime of the episode.
      * @param source the source of the episode.
      */
-    fun findEpisodeDirs(episodes: List<Episode>, anime: Anime, source: Source): List<UniFile> {
+    fun findEpisodeDirs(episodes: List<Episode>, anime: Anime, source: AnimeSource): List<UniFile> {
         val animeDir = findAnimeDir(anime, source) ?: return emptyList()
         return episodes.mapNotNull { episode ->
             getValidEpisodeDirNames(episode).asSequence()
@@ -114,7 +114,7 @@ class AnimeDownloadProvider(private val context: Context) {
      *
      * @param source the source to query.
      */
-    fun getSourceDirName(source: Source): String {
+    fun getSourceDirName(source: AnimeSource): String {
         return source.toString()
     }
 

@@ -235,8 +235,8 @@ class AnimelibUpdateNotifier(private val context: Context) {
                 .centerCrop()
                 .circleCrop()
                 .override(
-                        NOTIF_ICON_SIZE,
-                        NOTIF_ICON_SIZE
+                    NOTIF_ICON_SIZE,
+                    NOTIF_ICON_SIZE
                 )
                 .submit()
                 .get()

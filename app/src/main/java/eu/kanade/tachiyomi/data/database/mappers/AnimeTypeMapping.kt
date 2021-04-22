@@ -64,7 +64,7 @@ class AnimePutResolver : DefaultPutResolver<Anime>() {
             COL_LAST_UPDATE to obj.last_update,
             COL_INITIALIZED to obj.initialized,
             COL_VIEWER to obj.viewer,
-            COL_CHAPTER_FLAGS to obj.chapter_flags,
+            COL_CHAPTER_FLAGS to obj.episode_flags,
             COL_COVER_LAST_MODIFIED to obj.cover_last_modified,
             COL_DATE_ADDED to obj.date_added
         )
@@ -86,7 +86,7 @@ interface BaseAnimeGetResolver {
         last_update = cursor.getLong(cursor.getColumnIndex(COL_LAST_UPDATE))
         initialized = cursor.getInt(cursor.getColumnIndex(COL_INITIALIZED)) == 1
         viewer = cursor.getInt(cursor.getColumnIndex(COL_VIEWER))
-        chapter_flags = cursor.getInt(cursor.getColumnIndex(COL_CHAPTER_FLAGS))
+        episode_flags = cursor.getInt(cursor.getColumnIndex(COL_CHAPTER_FLAGS))
         cover_last_modified = cursor.getLong(cursor.getColumnIndex(COL_COVER_LAST_MODIFIED))
         date_added = cursor.getLong(cursor.getColumnIndex(COL_DATE_ADDED))
     }

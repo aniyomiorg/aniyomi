@@ -6,24 +6,24 @@ import android.os.Bundle
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeCategory
-import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.Category
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.source.LocalSource
-import eu.kanade.tachiyomi.source.Source
-import eu.kanade.tachiyomi.source.model.toSEpisode
+import eu.kanade.tachiyomi.source.LocalAnimeSource
+import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.source.model.toSAnime
-import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
+import eu.kanade.tachiyomi.source.model.toSEpisode
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.anime.track.TrackItem
+import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.*
 import eu.kanade.tachiyomi.util.episode.EpisodeSettingsHelper
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
@@ -46,7 +46,7 @@ import java.util.Date
 
 class AnimePresenter(
     val anime: Anime,
-    val source: Source,
+    val source: AnimeSource,
     val preferences: PreferencesHelper = Injekt.get(),
     private val db: AnimeDatabaseHelper = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
@@ -275,7 +275,7 @@ class AnimePresenter(
             .fromCallable {
                 context.contentResolver.openInputStream(data)?.use {
                     if (anime.isLocal()) {
-                        LocalSource.updateCover(context, anime, it)
+                        LocalAnimeSource.updateCover(context, anime, it)
                         anime.updateCoverLastModified(db)
                     } else if (anime.favorite) {
                         coverCache.setCustomCoverToCache(anime, it)
@@ -544,7 +544,7 @@ class AnimePresenter(
     }
 
     private fun downloadNewEpisodes(episodes: List<Episode>) {
-        if (episodes.isEmpty() || !anime.shouldDownloadNewChapters(db, preferences)) return
+        if (episodes.isEmpty() || !anime.shouldDownloadNewEpisodes(db, preferences)) return
 
         downloadEpisodes(episodes)
     }

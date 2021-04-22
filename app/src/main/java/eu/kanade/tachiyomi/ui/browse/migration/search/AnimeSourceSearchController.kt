@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
 import eu.kanade.tachiyomi.ui.browse.source.browse.AnimeSourceItem
+import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
 
 class AnimeSourceSearchController(
     bundle: Bundle
@@ -28,7 +28,7 @@ class AnimeSourceSearchController(
         newAnime = item.anime
         val searchController = router.backstack.findLast { it.controller().javaClass == AnimeSearchController::class.java }?.controller() as AnimeSearchController?
         val dialog =
-                AnimeSearchController.MigrationDialog(oldAnime, newAnime, this)
+            AnimeSearchController.MigrationDialog(oldAnime, newAnime, this)
         dialog.targetController = searchController
         dialog.showDialog(router)
         return true

@@ -3,14 +3,14 @@ package eu.kanade.tachiyomi.data.database.queries
 import com.pushtorefresh.storio.sqlite.queries.Query
 import com.pushtorefresh.storio.sqlite.queries.RawQuery
 import eu.kanade.tachiyomi.data.database.DbProvider
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeEpisode
+import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.data.database.resolvers.AnimeEpisodeGetResolver
 import eu.kanade.tachiyomi.data.database.resolvers.EpisodeBackupPutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.EpisodeKnownBackupPutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.EpisodeProgressPutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.EpisodeSourceOrderPutResolver
-import eu.kanade.tachiyomi.data.database.resolvers.AnimeEpisodeGetResolver
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable
 import java.util.Date
 

@@ -1,7 +1,7 @@
 package tachiyomi.source
 
-import tachiyomi.source.model.EpisodeInfo
 import tachiyomi.source.model.AnimeInfo
+import tachiyomi.source.model.EpisodeInfo
 import tachiyomi.source.model.Page
 
 /**
@@ -51,5 +51,4 @@ interface AnimeSource {
     fun getRegex(): Regex {
         return Regex("")
     }
-
 }

@@ -12,8 +12,8 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
 class EpisodesAdapter(
-        controller: AnimeController,
-        context: Context
+    controller: AnimeController,
+    context: Context
 ) : BaseEpisodesAdapter<EpisodeItem>(controller) {
 
     private val preferences: PreferencesHelper by injectLazy()

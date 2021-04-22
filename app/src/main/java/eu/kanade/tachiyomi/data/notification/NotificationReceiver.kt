@@ -9,18 +9,20 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.backup.BackupRestoreService
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
-import eu.kanade.tachiyomi.data.database.models.Chapter
-import eu.kanade.tachiyomi.data.database.models.Manga
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.Chapter
+import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadService
+import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.SourceManager
-import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.anime.AnimeController
+import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
@@ -34,8 +36,6 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import eu.kanade.tachiyomi.BuildConfig.APPLICATION_ID as ID
-import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
-import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 
 /**
  * Global [BroadcastReceiver] that runs on UI thread
@@ -445,11 +445,11 @@ class NotificationReceiver : BroadcastReceiver() {
          */
         internal fun openEpisodePendingActivity(context: Context, anime: Anime, groupId: Int): PendingIntent {
             val newIntent =
-                    Intent(context, MainActivity::class.java).setAction(MainActivity.SHORTCUT_MANGA)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            .putExtra(AnimeController.MANGA_EXTRA, anime.id)
-                            .putExtra("notificationId", anime.id.hashCode())
-                            .putExtra("groupId", groupId)
+                Intent(context, MainActivity::class.java).setAction(MainActivity.SHORTCUT_MANGA)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(AnimeController.MANGA_EXTRA, anime.id)
+                    .putExtra("notificationId", anime.id.hashCode())
+                    .putExtra("groupId", groupId)
             return PendingIntent.getActivity(context, anime.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
@@ -460,10 +460,10 @@ class NotificationReceiver : BroadcastReceiver() {
          * @param anime anime of episode
          */
         internal fun markAsReadPendingBroadcast(
-                context: Context,
-                anime: Anime,
-                episodes: Array<Episode>,
-                groupId: Int
+            context: Context,
+            anime: Anime,
+            episodes: Array<Episode>,
+            groupId: Int
         ): PendingIntent {
             val newIntent = Intent(context, NotificationReceiver::class.java).apply {
                 action = ACTION_MARK_AS_READ
@@ -474,7 +474,7 @@ class NotificationReceiver : BroadcastReceiver() {
             }
             return PendingIntent.getBroadcast(context, anime.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
-        
+
         /**
          * Returns [PendingIntent] that starts a reader activity containing chapter.
          *

@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.util.storage
 
-import eu.kanade.tachiyomi.source.model.SEpisode
 import eu.kanade.tachiyomi.source.model.SAnime
+import eu.kanade.tachiyomi.source.model.SEpisode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.io.Closeable

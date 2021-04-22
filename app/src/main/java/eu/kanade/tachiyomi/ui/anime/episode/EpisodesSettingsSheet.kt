@@ -14,9 +14,9 @@ import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.Stat
 import eu.kanade.tachiyomi.widget.sheet.TabbedBottomSheetDialog
 
 class EpisodesSettingsSheet(
-        private val router: Router,
-        private val presenter: AnimePresenter,
-        onGroupClickListener: (ExtendedNavigationView.Group) -> Unit
+    private val router: Router,
+    private val presenter: AnimePresenter,
+    onGroupClickListener: (ExtendedNavigationView.Group) -> Unit
 ) : TabbedBottomSheetDialog(router.activity!!) {
 
     val filters: Filter

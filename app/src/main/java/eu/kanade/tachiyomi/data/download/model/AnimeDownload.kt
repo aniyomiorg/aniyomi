@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.download.model
 
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.AnimeHttpSource
 import rx.subjects.PublishSubject

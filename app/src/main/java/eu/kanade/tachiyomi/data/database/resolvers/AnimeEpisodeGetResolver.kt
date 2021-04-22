@@ -2,8 +2,8 @@ package eu.kanade.tachiyomi.data.database.resolvers
 
 import android.database.Cursor
 import com.pushtorefresh.storio.sqlite.operations.get.DefaultGetResolver
-import eu.kanade.tachiyomi.data.database.mappers.EpisodeGetResolver
 import eu.kanade.tachiyomi.data.database.mappers.AnimeGetResolver
+import eu.kanade.tachiyomi.data.database.mappers.EpisodeGetResolver
 import eu.kanade.tachiyomi.data.database.models.AnimeEpisode
 
 class AnimeEpisodeGetResolver : DefaultGetResolver<AnimeEpisode>() {

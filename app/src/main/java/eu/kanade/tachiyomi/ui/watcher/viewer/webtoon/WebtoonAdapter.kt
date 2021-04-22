@@ -6,9 +6,9 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import eu.kanade.tachiyomi.ui.watcher.model.EpisodeTransition
+import eu.kanade.tachiyomi.ui.watcher.model.ViewerEpisodes
 import eu.kanade.tachiyomi.ui.watcher.model.WatcherEpisode
 import eu.kanade.tachiyomi.ui.watcher.model.WatcherPage
-import eu.kanade.tachiyomi.ui.watcher.model.ViewerEpisodes
 import eu.kanade.tachiyomi.ui.watcher.viewer.hasMissingEpisodes
 
 /**

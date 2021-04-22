@@ -8,12 +8,12 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.glide.GlideApp
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
-import eu.kanade.tachiyomi.databinding.TrackSearchItemBinding
+import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import eu.kanade.tachiyomi.databinding.AnimeTrackSearchItemBinding
 import eu.kanade.tachiyomi.util.view.inflate
 
 class TrackSearchAdapter(context: Context) :
-    ArrayAdapter<TrackSearch>(context, R.layout.track_search_item, mutableListOf<TrackSearch>()) {
+    ArrayAdapter<AnimeTrackSearch>(context, R.layout.track_search_item, mutableListOf<AnimeTrackSearch>()) {
 
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         var v = view
@@ -32,7 +32,7 @@ class TrackSearchAdapter(context: Context) :
         return v
     }
 
-    fun setItems(syncs: List<TrackSearch>) {
+    fun setItems(syncs: List<AnimeTrackSearch>) {
         setNotifyOnChange(false)
         clear()
         addAll(syncs)
@@ -41,9 +41,9 @@ class TrackSearchAdapter(context: Context) :
 
     class TrackSearchHolder(private val view: View) {
 
-        private val binding = TrackSearchItemBinding.bind(view)
+        private val binding = AnimeTrackSearchItemBinding.bind(view)
 
-        fun onSetValues(track: TrackSearch) {
+        fun onSetValues(track: AnimeTrackSearch) {
             binding.trackSearchTitle.text = track.title
             binding.trackSearchSummary.text = track.summary
             GlideApp.with(view.context).clear(binding.trackSearchCover)

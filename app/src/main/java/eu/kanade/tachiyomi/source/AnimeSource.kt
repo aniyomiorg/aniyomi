@@ -1,13 +1,12 @@
 package eu.kanade.tachiyomi.source
 
 import android.graphics.drawable.Drawable
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.extension.ExtensionManager
 import eu.kanade.tachiyomi.source.model.*
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import rx.Observable
-import tachiyomi.source.model.EpisodeInfo
 import tachiyomi.source.model.AnimeInfo
+import tachiyomi.source.model.EpisodeInfo
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

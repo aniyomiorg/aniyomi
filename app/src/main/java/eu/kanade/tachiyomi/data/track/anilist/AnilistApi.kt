@@ -5,6 +5,7 @@ import androidx.core.net.toUri
 import com.afollestad.date.dayOfMonth
 import com.afollestad.date.month
 import com.afollestad.date.year
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.network.POST
@@ -92,6 +93,74 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("score", track.score.toInt())
                     put("startedAt", createDate(track.started_reading_date))
                     put("completedAt", createDate(track.finished_reading_date))
+                }
+            }
+            authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
+                .await()
+            track
+        }
+    }
+
+    suspend fun addLibAnime(track: AnimeTrack): AnimeTrack {
+        return withIOContext {
+            val query = """
+            |mutation AddManga(${'$'}mangaId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus) {
+                |SaveMediaListEntry (mediaId: ${'$'}mangaId, progress: ${'$'}progress, status: ${'$'}status) { 
+                |   id 
+                |   status 
+                |} 
+            |}
+            |""".trimMargin()
+            val payload = buildJsonObject {
+                put("query", query)
+                putJsonObject("variables") {
+                    put("mangaId", track.media_id)
+                    put("progress", track.last_episode_seen)
+                    put("status", track.toAnilistStatus())
+                }
+            }
+            authClient.newCall(
+                POST(
+                    apiUrl,
+                    body = payload.toString().toRequestBody(jsonMime)
+                )
+            )
+                .await()
+                .parseAs<JsonObject>()
+                .let {
+                    track.library_id =
+                        it["data"]!!.jsonObject["SaveMediaListEntry"]!!.jsonObject["id"]!!.jsonPrimitive.long
+                    track
+                }
+        }
+    }
+
+    suspend fun updateLibAnime(track: AnimeTrack): AnimeTrack {
+        return withIOContext {
+            val query = """
+            |mutation UpdateManga(
+                |${'$'}listId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus,
+                |${'$'}score: Int, ${'$'}startedAt: FuzzyDateInput, ${'$'}completedAt: FuzzyDateInput
+            |) {
+                |SaveMediaListEntry(
+                    |id: ${'$'}listId, progress: ${'$'}progress, status: ${'$'}status,
+                    |scoreRaw: ${'$'}score, startedAt: ${'$'}startedAt, completedAt: ${'$'}completedAt
+                |) {
+                    |id
+                    |status
+                    |progress
+                |}
+            |}
+            |""".trimMargin()
+            val payload = buildJsonObject {
+                put("query", query)
+                putJsonObject("variables") {
+                    put("listId", track.library_id)
+                    put("progress", track.last_episode_seen)
+                    put("status", track.toAnilistStatus())
+                    put("score", track.score.toInt())
+                    put("startedAt", createDate(track.started_watching_date))
+                    put("completedAt", createDate(track.finished_watching_date))
                 }
             }
             authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
@@ -267,8 +336,79 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         }
     }
 
+    suspend fun findLibAnime(track: AnimeTrack, userid: Int): AnimeTrack? {
+        return withIOContext {
+            val query = """
+            |query (${'$'}id: Int!, ${'$'}manga_id: Int!) {
+                |Page {
+                    |mediaList(userId: ${'$'}id, type: MANGA, mediaId: ${'$'}manga_id) {
+                        |id
+                        |status
+                        |scoreRaw: score(format: POINT_100)
+                        |progress
+                        |startedAt {
+                            |year
+                            |month
+                            |day
+                        |}
+                        |completedAt {
+                            |year
+                            |month
+                            |day
+                        |}
+                        |media {
+                            |id
+                            |title {
+                                |romaji
+                            |}
+                            |coverImage {
+                                |large
+                            |}
+                            |type
+                            |status
+                            |chapters
+                            |description
+                            |startDate {
+                                |year
+                                |month
+                                |day
+                            |}
+                        |}
+                    |}
+                |}
+            |}
+            |""".trimMargin()
+            val payload = buildJsonObject {
+                put("query", query)
+                putJsonObject("variables") {
+                    put("id", userid)
+                    put("manga_id", track.media_id)
+                }
+            }
+            authClient.newCall(
+                POST(
+                    apiUrl,
+                    body = payload.toString().toRequestBody(jsonMime)
+                )
+            )
+                .await()
+                .parseAs<JsonObject>()
+                .let { response ->
+                    val data = response["data"]!!.jsonObject
+                    val page = data["Page"]!!.jsonObject
+                    val media = page["mediaList"]!!.jsonArray
+                    val entries = media.map { jsonToALUserAnime(it.jsonObject) }
+                    entries.firstOrNull()?.toTrack()
+                }
+        }
+    }
+
     suspend fun getLibManga(track: Track, userid: Int): Track {
         return findLibManga(track, userid) ?: throw Exception("Could not find manga")
+    }
+
+    suspend fun getLibAnime(track: AnimeTrack, userid: Int): AnimeTrack {
+        return findLibAnime(track, userid) ?: throw Exception("Could not find anime")
     }
 
     fun createOAuth(token: String): OAuth {
@@ -324,6 +464,18 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
 
     private fun jsonToALUserManga(struct: JsonObject): ALUserManga {
         return ALUserManga(
+            struct["id"]!!.jsonPrimitive.long,
+            struct["status"]!!.jsonPrimitive.content,
+            struct["scoreRaw"]!!.jsonPrimitive.int,
+            struct["progress"]!!.jsonPrimitive.int,
+            parseDate(struct, "startedAt"),
+            parseDate(struct, "completedAt"),
+            jsonToALManga(struct["media"]!!.jsonObject)
+        )
+    }
+
+    private fun jsonToALUserAnime(struct: JsonObject): ALUserAnime {
+        return ALUserAnime(
             struct["id"]!!.jsonPrimitive.long,
             struct["status"]!!.jsonPrimitive.content,
             struct["scoreRaw"]!!.jsonPrimitive.int,

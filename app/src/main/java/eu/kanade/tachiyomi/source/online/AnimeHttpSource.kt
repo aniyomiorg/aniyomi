@@ -4,12 +4,12 @@ import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.asObservableSuccess
 import eu.kanade.tachiyomi.network.newCallWithProgress
-import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.model.FilterList
+import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 import eu.kanade.tachiyomi.source.model.AnimesPage
+import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.Page
-import eu.kanade.tachiyomi.source.model.SEpisode
 import eu.kanade.tachiyomi.source.model.SAnime
+import eu.kanade.tachiyomi.source.model.SEpisode
 import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -23,7 +23,7 @@ import java.security.MessageDigest
 /**
  * A simple implementation for sources from a website.
  */
-abstract class AnimeHttpSource : CatalogueSource {
+abstract class AnimeHttpSource : AnimeCatalogueSource {
 
     /**
      * Network service.
@@ -147,7 +147,7 @@ abstract class AnimeHttpSource : CatalogueSource {
      *
      * @param page the page number to retrieve.
      */
-    override fun fetchLatestAnimeUpdates(page: Int): Observable<AnimesPage> {
+    override fun fetchLatestUpdates(page: Int): Observable<AnimesPage> {
         return client.newCall(latestUpdatesRequest(page))
             .asObservableSuccess()
             .map { response ->
@@ -240,7 +240,7 @@ abstract class AnimeHttpSource : CatalogueSource {
      *
      * @param episode the episode whose page list has to be fetched.
      */
-    override fun fetchAnimePageList(episode: SEpisode): Observable<List<Page>> {
+    override fun fetchPageList(episode: SEpisode): Observable<List<Page>> {
         return client.newCall(pageListRequest(episode))
             .asObservableSuccess()
             .map { response ->

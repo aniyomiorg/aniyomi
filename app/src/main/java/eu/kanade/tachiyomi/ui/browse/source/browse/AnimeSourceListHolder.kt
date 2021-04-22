@@ -11,7 +11,6 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.glide.GlideApp
 import eu.kanade.tachiyomi.data.glide.toAnimeThumbnail
 import eu.kanade.tachiyomi.databinding.AnimeSourceListItemBinding
-import eu.kanade.tachiyomi.databinding.SourceListItemBinding
 import eu.kanade.tachiyomi.util.system.getResourceColor
 
 /**
@@ -23,7 +22,7 @@ import eu.kanade.tachiyomi.util.system.getResourceColor
  * @constructor creates a new catalogue holder.
  */
 class AnimeSourceListHolder(private val view: View, adapter: FlexibleAdapter<*>) :
-        AnimeSourceHolder<AnimeSourceListItemBinding>(view, adapter) {
+    AnimeSourceHolder<AnimeSourceListItemBinding>(view, adapter) {
 
     override val binding = AnimeSourceListItemBinding.bind(view)
 

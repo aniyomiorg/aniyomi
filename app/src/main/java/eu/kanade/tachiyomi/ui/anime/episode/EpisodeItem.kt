@@ -7,8 +7,8 @@ import eu.davidea.flexibleadapter.items.AbstractHeaderItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodeItem
 
 class EpisodeItem(episode: Episode, val anime: Anime) :
@@ -23,10 +23,10 @@ class EpisodeItem(episode: Episode, val anime: Anime) :
     }
 
     override fun bindViewHolder(
-            adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
-            holder: EpisodeHolder,
-            position: Int,
-            payloads: List<Any?>?
+        adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
+        holder: EpisodeHolder,
+        position: Int,
+        payloads: List<Any?>?
     ) {
         holder.bind(this, anime)
     }

@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import kotlinx.serialization.decodeFromString
@@ -37,6 +38,10 @@ class Shikimori(private val context: Context, id: Int) : TrackService(id) {
     }
 
     override fun displayScore(track: Track): String {
+        return track.score.toInt().toString()
+    }
+
+    override fun displayScore(track: AnimeTrack): String {
         return track.score.toInt().toString()
     }
 

@@ -3,9 +3,9 @@ package eu.kanade.tachiyomi.data.database.queries
 import com.pushtorefresh.storio.sqlite.queries.Query
 import com.pushtorefresh.storio.sqlite.queries.RawQuery
 import eu.kanade.tachiyomi.data.database.DbProvider
+import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Manga
-import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.tables.CategoryTable
 
 interface CategoryQueries : DbProvider {
@@ -31,14 +31,14 @@ interface CategoryQueries : DbProvider {
         .prepare()
 
     fun getCategoriesForAnime(anime: Anime) = db.get()
-            .listOfObjects(Category::class.java)
-            .withQuery(
-                    RawQuery.builder()
-                            .query(getCategoriesForMangaQuery())
-                            .args(anime.id)
-                            .build()
-            )
-            .prepare()
+        .listOfObjects(Category::class.java)
+        .withQuery(
+            RawQuery.builder()
+                .query(getCategoriesForMangaQuery())
+                .args(anime.id)
+                .build()
+        )
+        .prepare()
 
     fun insertCategory(category: Category) = db.put().`object`(category).prepare()
 

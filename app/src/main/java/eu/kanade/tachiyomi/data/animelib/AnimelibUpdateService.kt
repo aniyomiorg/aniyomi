@@ -7,25 +7,28 @@ import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateRanker.rankingScheme
+import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService.Companion.start
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
+import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Episode
-import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
-import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadService
-import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateRanker.rankingScheme
-import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService.Companion.start
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.model.SAnime
+import eu.kanade.tachiyomi.source.model.toSAnime
+import eu.kanade.tachiyomi.source.model.toSEpisode
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
+import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
 import eu.kanade.tachiyomi.util.prepUpdateCover
-import eu.kanade.tachiyomi.util.shouldDownloadNewChapters
+import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.acquireWakeLock
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
@@ -37,6 +40,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -56,7 +60,7 @@ import java.util.concurrent.atomic.AtomicInteger
  */
 class AnimelibUpdateService(
     val db: AnimeDatabaseHelper = Injekt.get(),
-    val sourceManager: SourceManager = Injekt.get(),
+    val sourceManager: AnimeSourceManager = Injekt.get(),
     val preferences: PreferencesHelper = Injekt.get(),
     val downloadManager: AnimeDownloadManager = Injekt.get(),
     val trackManager: TrackManager = Injekt.get(),
@@ -205,7 +209,7 @@ class AnimelibUpdateService(
         }
         updateJob = ioScope.launch(handler) {
             when (target) {
-                Target.CHAPTERS -> updateChapterList()
+                Target.CHAPTERS -> updateEpisodeList()
                 Target.COVERS -> updateCovers()
                 Target.TRACKING -> updateTrackings()
             }
@@ -262,7 +266,7 @@ class AnimelibUpdateService(
      * @param animeToUpdate the list to update
      * @return an observable delivering the progress of each update.
      */
-    suspend fun updateChapterList() {
+    suspend fun updateEpisodeList() {
         val progressCount = AtomicInteger(0)
         val newUpdates = mutableListOf<Pair<AnimelibAnime, Array<Episode>>>()
         val failedUpdates = mutableListOf<Pair<Anime, String?>>()
@@ -279,8 +283,8 @@ class AnimelibUpdateService(
                 val (newEpisodes, _) = updateAnime(anime)
 
                 if (newEpisodes.isNotEmpty()) {
-                    if (anime.shouldDownloadNewChapters(db, preferences)) {
-                        downloadChapters(anime, newEpisodes)
+                    if (anime.shouldDownloadNewEpisodes(db, preferences)) {
+                        downloadEpisodes(anime, newEpisodes)
                         hasDownloads = true
                     }
 
@@ -315,7 +319,7 @@ class AnimelibUpdateService(
         }
     }
 
-    private fun downloadChapters(anime: Anime, episodes: List<Episode>) {
+    private fun downloadEpisodes(anime: Anime, episodes: List<Episode>) {
         // We don't want to start downloading while the library is updating, because websites
         // may don't like it and they could ban the user.
         downloadManager.downloadEpisodes(anime, episodes, false)
@@ -327,7 +331,7 @@ class AnimelibUpdateService(
      * @param anime the anime to update.
      * @return a pair of the inserted and removed chapters.
      */
-    suspend fun updateAnime(anime: Anime): Pair<List<Chapter>, List<Chapter>> {
+    suspend fun updateAnime(anime: Anime): Pair<List<Episode>, List<Episode>> {
         val source = sourceManager.getOrStub(anime.source)
 
         // Update anime details metadata in the background
@@ -350,10 +354,10 @@ class AnimelibUpdateService(
             }
         }
 
-        val chapters = source.getChapterList(anime.toAnimeInfo())
-            .map { it.toSChapter() }
+        val chapters = source.getEpisodeList(anime.toAnimeInfo())
+            .map { it.toSEpisode() }
 
-        return syncChaptersWithSource(db, chapters, anime, source)
+        return syncEpisodesWithSource(db, chapters, anime, source)
     }
 
     private suspend fun updateCovers() {
@@ -402,15 +406,15 @@ class AnimelibUpdateService(
             notifier.showProgressNotification(anime, progressCount++, animeToUpdate.size)
 
             // Update the tracking details.
-            db.getAnimeTracks(anime).executeAsBlocking()
+            db.getTracks(anime).executeAsBlocking()
                 .map { track ->
                     supervisorScope {
                         async {
                             val service = trackManager.getService(track.sync_id)
                             if (service != null && service in loggedServices) {
                                 try {
-                                    val updatedTrack = service.refresh(track)
-                                    db.insertAnimeTrack(updatedTrack).executeAsBlocking()
+                                    val updatedTrack = service.refreshAnime(track)
+                                    db.insertTrack(updatedTrack).executeAsBlocking()
                                 } catch (e: Throwable) {
                                     // Ignore errors and continue
                                     Timber.e(e)

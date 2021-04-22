@@ -9,13 +9,13 @@ import androidx.core.view.isVisible
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
-import eu.kanade.tachiyomi.databinding.TrackSearchDialogBinding
-import eu.kanade.tachiyomi.ui.base.controller.DialogController
+import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import eu.kanade.tachiyomi.databinding.AnimeTrackSearchDialogBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
+import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
@@ -28,11 +28,11 @@ import java.util.concurrent.TimeUnit
 
 class TrackSearchDialog : DialogController {
 
-    private var binding: TrackSearchDialogBinding? = null
+    private var binding: AnimeTrackSearchDialogBinding? = null
 
     private var adapter: TrackSearchAdapter? = null
 
-    private var selectedItem: Track? = null
+    private var selectedItem: AnimeTrack? = null
 
     private val service: TrackService
 
@@ -52,7 +52,7 @@ class TrackSearchDialog : DialogController {
     }
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-        binding = TrackSearchDialogBinding.inflate(LayoutInflater.from(activity!!))
+        binding = AnimeTrackSearchDialogBinding.inflate(LayoutInflater.from(activity!!))
         val dialog = MaterialDialog(activity!!)
             .customView(view = binding!!.root)
             .positiveButton(android.R.string.ok) { onPositiveButtonClick() }
@@ -109,7 +109,7 @@ class TrackSearchDialog : DialogController {
         trackController.presenter.trackingSearch(query, service)
     }
 
-    fun onSearchResults(results: List<TrackSearch>) {
+    fun onSearchResults(results: List<AnimeTrackSearch>) {
         selectedItem = null
         val binding = binding ?: return
         binding.progress.isVisible = false

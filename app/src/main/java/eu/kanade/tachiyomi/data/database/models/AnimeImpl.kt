@@ -32,7 +32,7 @@ open class AnimeImpl : Anime {
 
     override var viewer: Int = 0
 
-    override var chapter_flags: Int = 0
+    override var episode_flags: Int = 0
 
     override var cover_last_modified: Long = 0
 

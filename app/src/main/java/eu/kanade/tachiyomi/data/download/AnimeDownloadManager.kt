@@ -4,13 +4,13 @@ import android.content.Context
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.model.AnimeDownloadQueue
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.source.Source
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.AnimeSource
+import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.util.lang.launchIO
 import rx.Observable
@@ -26,7 +26,7 @@ import uy.kohesive.injekt.injectLazy
  */
 class AnimeDownloadManager(private val context: Context) {
 
-    private val sourceManager: SourceManager by injectLazy()
+    private val sourceManager: AnimeSourceManager by injectLazy()
     private val preferences: PreferencesHelper by injectLazy()
 
     /**
@@ -137,7 +137,7 @@ class AnimeDownloadManager(private val context: Context) {
      * @param episode the downloaded episode.
      * @return an observable containing the list of pages from the episode.
      */
-    fun buildPageList(source: Source, anime: Anime, episode: Episode): Observable<List<Page>> {
+    fun buildPageList(source: AnimeSource, anime: Anime, episode: Episode): Observable<List<Page>> {
         return buildPageList(provider.findEpisodeDir(episode, anime, source))
     }
 
@@ -210,7 +210,7 @@ class AnimeDownloadManager(private val context: Context) {
      * @param anime the anime of the episodes.
      * @param source the source of the episodes.
      */
-    fun deleteEpisodes(episodes: List<Episode>, anime: Anime, source: Source): List<Episode> {
+    fun deleteEpisodes(episodes: List<Episode>, anime: Anime, source: AnimeSource): List<Episode> {
         val filteredEpisodes = getEpisodesToDelete(episodes)
         launchIO {
             removeFromDownloadQueue(filteredEpisodes)
@@ -249,7 +249,7 @@ class AnimeDownloadManager(private val context: Context) {
      * @param anime the anime to delete.
      * @param source the source of the anime.
      */
-    fun deleteAnime(anime: Anime, source: Source) {
+    fun deleteAnime(anime: Anime, source: AnimeSource) {
         launchIO {
             downloader.queue.remove(anime)
             provider.findAnimeDir(anime, source)?.delete()
@@ -286,7 +286,7 @@ class AnimeDownloadManager(private val context: Context) {
      * @param oldEpisode the existing episode with the old name.
      * @param newEpisode the target episode with the new name.
      */
-    fun renameEpisode(source: Source, anime: Anime, oldEpisode: Episode, newEpisode: Episode) {
+    fun renameEpisode(source: AnimeSource, anime: Anime, oldEpisode: Episode, newEpisode: Episode) {
         val oldNames = provider.getValidEpisodeDirNames(oldEpisode)
         val newName = provider.getEpisodeDirName(newEpisode)
         val animeDir = provider.getAnimeDir(anime, source)

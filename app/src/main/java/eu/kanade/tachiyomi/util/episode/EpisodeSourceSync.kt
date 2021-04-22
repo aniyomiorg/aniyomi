@@ -1,10 +1,10 @@
 package eu.kanade.tachiyomi.util.episode
 
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
-import eu.kanade.tachiyomi.source.Source
+import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.source.model.SEpisode
 import eu.kanade.tachiyomi.source.online.AnimeHttpSource
 import uy.kohesive.injekt.Injekt
@@ -25,7 +25,7 @@ fun syncEpisodesWithSource(
     db: AnimeDatabaseHelper,
     rawSourceEpisodes: List<SEpisode>,
     anime: Anime,
-    source: Source
+    source: AnimeSource
 ): Pair<List<Episode>, List<Episode>> {
     if (rawSourceEpisodes.isEmpty()) {
         throw NoEpisodesException()

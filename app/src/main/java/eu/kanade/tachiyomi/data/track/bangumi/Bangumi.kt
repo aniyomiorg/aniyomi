@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
@@ -31,12 +32,24 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
         return track.score.toInt().toString()
     }
 
+    override fun displayScore(track: AnimeTrack): String {
+        return track.score.toInt().toString()
+    }
+
     override suspend fun add(track: Track): Track {
         return api.addLibManga(track)
     }
 
+    override suspend fun addAnime(track: AnimeTrack): AnimeTrack {
+        return api.addLibAnime(track)
+    }
+
     override suspend fun update(track: Track): Track {
         return api.updateLibManga(track)
+    }
+
+    override suspend fun updateAnime(track: AnimeTrack): AnimeTrack {
+        return api.updateLibAnime(track)
     }
 
     override suspend fun bind(track: Track): Track {
@@ -59,6 +72,26 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
         }
     }
 
+    override suspend fun bindAnime(track: AnimeTrack): AnimeTrack {
+        val statusTrack = api.statusLibAnime(track)
+        val remoteTrack = api.findLibAnime(track)
+        return if (remoteTrack != null && statusTrack != null) {
+            track.copyPersonalFrom(remoteTrack)
+            track.library_id = remoteTrack.library_id
+            track.status = statusTrack.status
+            track.score = statusTrack.score
+            track.last_episode_seen = statusTrack.last_episode_seen
+            track.total_episodes = remoteTrack.total_episodes
+            refreshAnime(track)
+        } else {
+            // Set default fields if it's not found in the list
+            track.status = READING
+            track.score = 0F
+            addAnime(track)
+            updateAnime(track)
+        }
+    }
+
     override suspend fun search(query: String): List<TrackSearch> {
         return api.search(query)
     }
@@ -68,6 +101,15 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
         track.copyPersonalFrom(remoteStatusTrack!!)
         api.findLibManga(track)?.let { remoteTrack ->
             track.total_chapters = remoteTrack.total_chapters
+        }
+        return track
+    }
+
+    override suspend fun refreshAnime(track: AnimeTrack): AnimeTrack {
+        val remoteStatusTrack = api.statusLibAnime(track)
+        track.copyPersonalFrom(remoteStatusTrack!!)
+        api.findLibAnime(track)?.let { remoteTrack ->
+            track.total_episodes = remoteTrack.total_episodes
         }
         return track
     }

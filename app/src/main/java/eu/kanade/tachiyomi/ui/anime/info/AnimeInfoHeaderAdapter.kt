@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.glide.GlideApp
 import eu.kanade.tachiyomi.data.glide.AnimeThumbnail
+import eu.kanade.tachiyomi.data.glide.GlideApp
 import eu.kanade.tachiyomi.data.glide.toAnimeThumbnail
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.databinding.AnimeInfoHeaderBinding
-import eu.kanade.tachiyomi.source.Source
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.AnimeSource
+import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.model.SAnime
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.anime.AnimeController
@@ -33,15 +33,15 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 class AnimeInfoHeaderAdapter(
-        private val controller: AnimeController,
-        private val fromSource: Boolean
+    private val controller: AnimeController,
+    private val fromSource: Boolean
 ) :
     RecyclerView.Adapter<AnimeInfoHeaderAdapter.HeaderViewHolder>() {
 
     private val trackManager: TrackManager by injectLazy()
 
     private var anime: Anime = controller.presenter.anime
-    private var source: Source = controller.presenter.source
+    private var source: AnimeSource = controller.presenter.source
     private var trackCount: Int = 0
 
     private lateinit var binding: AnimeInfoHeaderBinding
@@ -66,7 +66,7 @@ class AnimeInfoHeaderAdapter(
      * @param anime anime object containing information about anime.
      * @param source the source of the anime.
      */
-    fun update(anime: Anime, source: Source) {
+    fun update(anime: Anime, source: AnimeSource) {
         this.anime = anime
         this.source = source
 
@@ -199,7 +199,7 @@ class AnimeInfoHeaderAdapter(
          * @param anime anime object containing information about anime.
          * @param source the source of the anime.
          */
-        private fun setAnimeInfo(anime: Anime, source: Source?) {
+        private fun setAnimeInfo(anime: Anime, source: AnimeSource?) {
             // Update full title TextView.
             binding.animeFullTitle.text = if (anime.title.isBlank()) {
                 view.context.getString(R.string.unknown)
@@ -227,7 +227,7 @@ class AnimeInfoHeaderAdapter(
                 if (animeSource != null) {
                     text = animeSource
                     setOnClickListener {
-                        val sourceManager = Injekt.get<SourceManager>()
+                        val sourceManager = Injekt.get<AnimeSourceManager>()
                         controller.performSearch(sourceManager.getOrStub(source.id).name)
                     }
                 } else {

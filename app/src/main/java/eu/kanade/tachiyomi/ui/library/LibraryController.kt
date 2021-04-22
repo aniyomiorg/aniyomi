@@ -7,7 +7,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.graphics.drawable.DrawableCompat
@@ -22,6 +21,7 @@ import dev.chrisbanes.insetter.applyInsetter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Manga
+import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
 import eu.kanade.tachiyomi.databinding.LibraryControllerBinding
@@ -32,7 +32,7 @@ import eu.kanade.tachiyomi.ui.base.controller.TabbedController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.manga.AnimeController
+import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.util.system.getResourceColor
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.drop
@@ -45,14 +45,14 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class LibraryController(
-    bundle: Bundle? = null,
-    private val preferences: PreferencesHelper = Injekt.get()
+        bundle: Bundle? = null,
+        private val preferences: PreferencesHelper = Injekt.get()
 ) : SearchableNucleusController<LibraryControllerBinding, LibraryPresenter>(bundle),
-    RootController,
-    TabbedController,
-    ActionMode.Callback,
-    ChangeMangaCategoriesDialog.Listener,
-    DeleteLibraryMangasDialog.Listener {
+        RootController,
+        TabbedController,
+        ActionMode.Callback,
+        ChangeMangaCategoriesDialog.Listener,
+        DeleteLibraryMangasDialog.Listener {
 
     /**
      * Position of the active category.
@@ -163,34 +163,32 @@ class LibraryController(
         return LibraryPresenter()
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        binding = LibraryControllerBinding.inflate(inflater)
+    override fun createBinding(inflater: LayoutInflater) = LibraryControllerBinding.inflate(inflater)
+
+    override fun onViewCreated(view: View) {
+        super.onViewCreated(view)
+
         binding.actionToolbar.applyInsetter {
             type(navigationBars = true) {
                 margin(bottom = true)
             }
         }
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View) {
-        super.onViewCreated(view)
 
         adapter = LibraryAdapter(this)
         binding.libraryPager.adapter = adapter
         binding.libraryPager.pageSelections()
-            .onEach {
-                preferences.lastUsedCategory().set(it)
-                activeCategory = it
-                updateTitle()
-            }
-            .launchIn(viewScope)
+                .onEach {
+                    preferences.lastUsedCategory().set(it)
+                    activeCategory = it
+                    updateTitle()
+                }
+                .launchIn(viewScope)
 
         getColumnsPreferenceForCurrentOrientation().asImmediateFlow { mangaPerRow = it }
-            .drop(1)
-            // Set again the adapter to recalculate the covers height
-            .onEach { reattachAdapter() }
-            .launchIn(viewScope)
+                .drop(1)
+                // Set again the adapter to recalculate the covers height
+                .onEach { reattachAdapter() }
+                .launchIn(viewScope)
 
         if (selectedMangas.isNotEmpty()) {
             createActionModeIfNeeded()
@@ -207,12 +205,12 @@ class LibraryController(
         }
 
         binding.btnGlobalSearch.clicks()
-            .onEach {
-                router.pushController(
-                    GlobalSearchController(presenter.query).withFadeTransaction()
-                )
-            }
-            .launchIn(viewScope)
+                .onEach {
+                    router.pushController(
+                            GlobalSearchController(presenter.query).withFadeTransaction()
+                    )
+                }
+                .launchIn(viewScope)
 
         (activity as? MainActivity)?.fixViewToBottom(binding.actionToolbar)
     }
@@ -287,8 +285,8 @@ class LibraryController(
         // Set the categories
         adapter.categories = categories
         adapter.itemsPerCategory = adapter.categories
-            .map { (it.id ?: -1) to (mangaMap[it.id]?.size ?: 0) }
-            .toMap()
+                .map { (it.id ?: -1) to (mangaMap[it.id]?.size ?: 0) }
+                .toMap()
 
         // Restore active category.
         binding.libraryPager.setCurrentItem(activeCat, false)
@@ -366,8 +364,8 @@ class LibraryController(
         if (actionMode == null) {
             actionMode = (activity as AppCompatActivity).startSupportActionMode(this)
             binding.actionToolbar.show(
-                actionMode!!,
-                R.menu.library_selection
+                    actionMode!!,
+                    R.menu.library_selection
             ) { onActionItemClicked(it!!) }
             (activity as? MainActivity)?.showBottomNav(visible = false, collapse = true)
         }
@@ -395,7 +393,7 @@ class LibraryController(
         if (presenter.query.isNotEmpty()) {
             binding.btnGlobalSearch.isVisible = true
             binding.btnGlobalSearch.text =
-                resources?.getString(R.string.action_global_search_query, presenter.query)
+                    resources?.getString(R.string.action_global_search_query, presenter.query)
         } else {
             binding.btnGlobalSearch.isVisible = false
         }
@@ -417,7 +415,7 @@ class LibraryController(
         when (item.itemId) {
             R.id.action_search -> expandActionViewFromInteraction = true
             R.id.action_filter -> showSettingsSheet()
-            R.id.action_update_animelib -> {
+            R.id.action_update_library -> {
                 activity?.let {
                     if (LibraryUpdateService.start(it)) {
                         it.toast(R.string.updating_library)
@@ -487,7 +485,7 @@ class LibraryController(
         // Notify the presenter a manga is being opened.
         presenter.onOpenManga()
 
-        router.pushController(AnimeController(manga).withFadeTransaction())
+        router.pushController(MangaController(manga).withFadeTransaction())
     }
 
     /**
@@ -533,11 +531,11 @@ class LibraryController(
 
         // Get indexes of the common categories to preselect.
         val commonCategoriesIndexes = presenter.getCommonCategories(mangas)
-            .map { categories.indexOf(it) }
-            .toTypedArray()
+                .map { categories.indexOf(it) }
+                .toTypedArray()
 
         ChangeMangaCategoriesDialog(this, mangas, categories, commonCategoriesIndexes)
-            .showDialog(router)
+                .showDialog(router)
     }
 
     private fun downloadUnreadChapters() {

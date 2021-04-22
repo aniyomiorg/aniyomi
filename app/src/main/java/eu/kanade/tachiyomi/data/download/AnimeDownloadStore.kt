@@ -2,11 +2,11 @@ package eu.kanade.tachiyomi.data.download
 
 import android.content.Context
 import androidx.core.content.edit
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
-import eu.kanade.tachiyomi.source.SourceManager
-import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.source.AnimeSourceManager
+import eu.kanade.tachiyomi.source.online.AnimeHttpSource
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -20,7 +20,7 @@ import uy.kohesive.injekt.injectLazy
  */
 class AnimeDownloadStore(
     context: Context,
-    private val sourceManager: SourceManager
+    private val sourceManager: AnimeSourceManager
 ) {
 
     /**
@@ -29,7 +29,7 @@ class AnimeDownloadStore(
     private val preferences = context.getSharedPreferences("active_downloads", Context.MODE_PRIVATE)
 
     private val json: Json by injectLazy()
-    private val db: DatabaseHelper by injectLazy()
+    private val db: AnimeDatabaseHelper by injectLazy()
 
     /**
      * Counter used to keep the queue order.
@@ -73,7 +73,7 @@ class AnimeDownloadStore(
      * @param download the download.
      */
     private fun getKey(download: AnimeDownload): String {
-        return download.chapter.id!!.toString()
+        return download.episode.id!!.toString()
     }
 
     /**
@@ -92,9 +92,9 @@ class AnimeDownloadStore(
                 val anime = cachedAnime.getOrPut(animeId) {
                     db.getAnime(animeId).executeAsBlocking()
                 } ?: continue
-                val source = sourceManager.get(anime.source) as? HttpSource ?: continue
-                val chapter = db.getChapter(chapterId).executeAsBlocking() ?: continue
-                downloads.add(AnimeDownload(source, anime, chapter))
+                val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: continue
+                val episode = db.getEpisode(chapterId).executeAsBlocking() ?: continue
+                downloads.add(AnimeDownload(source, anime, episode))
             }
         }
 
@@ -109,7 +109,7 @@ class AnimeDownloadStore(
      * @param download the download to serialize.
      */
     private fun serialize(download: AnimeDownload): String {
-        val obj = AnimeDownloadObject(download.anime.id!!, download.chapter.id!!, counter++)
+        val obj = AnimeDownloadObject(download.anime.id!!, download.episode.id!!, counter++)
         return json.encodeToString(obj)
     }
 

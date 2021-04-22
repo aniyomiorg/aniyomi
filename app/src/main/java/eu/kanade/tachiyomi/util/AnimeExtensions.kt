@@ -52,10 +52,10 @@ fun Anime.updateCoverLastModified(db: AnimeDatabaseHelper) {
     db.updateAnimeCoverLastModified(this).executeAsBlocking()
 }
 
-fun Anime.shouldDownloadNewChapters(db: AnimeDatabaseHelper, prefs: PreferencesHelper): Boolean {
+fun Anime.shouldDownloadNewEpisodes(db: AnimeDatabaseHelper, prefs: PreferencesHelper): Boolean {
     if (!favorite) return false
 
-    // Boolean to determine if user wants to automatically download new chapters.
+    // Boolean to determine if user wants to automatically download new episodes.
     val downloadNew = prefs.downloadNew().get()
     if (!downloadNew) return false
 

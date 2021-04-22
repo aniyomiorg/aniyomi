@@ -1,12 +1,12 @@
 package eu.kanade.tachiyomi.data.database.queries
 
+import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable as AnimeCategory
+import eu.kanade.tachiyomi.data.database.tables.AnimeTable as Anime
 import eu.kanade.tachiyomi.data.database.tables.CategoryTable as Category
 import eu.kanade.tachiyomi.data.database.tables.ChapterTable as Chapter
 import eu.kanade.tachiyomi.data.database.tables.HistoryTable as History
 import eu.kanade.tachiyomi.data.database.tables.MangaCategoryTable as MangaCategory
-import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable as AnimeCategory
 import eu.kanade.tachiyomi.data.database.tables.MangaTable as Manga
-import eu.kanade.tachiyomi.data.database.tables.AnimeTable as Anime
 
 /**
  * Query to get the manga from the library, with their categories and unread count.
@@ -105,7 +105,7 @@ fun getLastReadMangaQuery() =
 """
 
 fun getLastReadAnimeQuery() =
-        """
+    """
     SELECT ${Anime.TABLE}.*, MAX(${History.TABLE}.${History.COL_LAST_READ}) AS max
     FROM ${Anime.TABLE}
     JOIN ${Chapter.TABLE}
@@ -128,7 +128,7 @@ fun getTotalChapterMangaQuery() =
 """
 
 fun getTotalChapterAnimeQuery() =
-        """
+    """
     SELECT ${Anime.TABLE}.*
     FROM ${Anime.TABLE}
     JOIN ${Anime.TABLE}
@@ -148,7 +148,7 @@ fun getLatestChapterMangaQuery() =
 """
 
 fun getLatestChapterAnimeQuery() =
-        """
+    """
     SELECT ${Anime.TABLE}.*, MAX(${Chapter.TABLE}.${Chapter.COL_DATE_UPLOAD}) AS max
     FROM ${Anime.TABLE}
     JOIN ${Chapter.TABLE}
@@ -168,7 +168,7 @@ fun getChapterFetchDateMangaQuery() =
 """
 
 fun getChapterFetchDateAnimeQuery() =
-        """
+    """
     SELECT ${Anime.TABLE}.*, MAX(${Chapter.TABLE}.${Chapter.COL_DATE_FETCH}) AS max
     FROM ${Anime.TABLE}
     JOIN ${Chapter.TABLE}
@@ -192,7 +192,7 @@ fun getCategoriesForMangaQuery() =
  * Query to get the categories for an anime.
  */
 fun getCategoriesForAnimeQuery() =
-        """
+    """
     SELECT ${Category.TABLE}.* FROM ${Category.TABLE}
     JOIN ${AnimeCategory.TABLE} ON ${Category.TABLE}.${Category.COL_ID} =
     ${AnimeCategory.TABLE}.${AnimeCategory.COL_CATEGORY_ID}

@@ -37,6 +37,6 @@ class AnimeFlagsPutResolver(private val updateAll: Boolean = false) : PutResolve
 
     fun mapToContentValues(anime: Anime) =
         contentValuesOf(
-            AnimeTable.COL_CHAPTER_FLAGS to anime.chapter_flags
+            AnimeTable.COL_CHAPTER_FLAGS to anime.episode_flags
         )
 }

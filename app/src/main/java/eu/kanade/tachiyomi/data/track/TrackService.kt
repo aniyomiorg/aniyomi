@@ -4,8 +4,8 @@ import androidx.annotation.CallSuper
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -50,6 +50,8 @@ abstract class TrackService(val id: Int) {
     abstract fun displayScore(track: AnimeTrack): String
 
     abstract suspend fun add(track: Track): Track
+
+    abstract suspend fun addAnime(track: AnimeTrack): AnimeTrack
 
     abstract suspend fun update(track: Track): Track
 

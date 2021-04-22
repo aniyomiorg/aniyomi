@@ -11,11 +11,11 @@ import com.pushtorefresh.storio.sqlite.queries.InsertQuery
 import com.pushtorefresh.storio.sqlite.queries.UpdateQuery
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.AnimeTrackImpl
+import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable.COL_ANIME_ID
 import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable.COL_FINISH_DATE
 import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable.COL_ID
 import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable.COL_LAST_EPISODE_SEEN
 import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable.COL_LIBRARY_ID
-import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable.COL_ANIME_ID
 import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable.COL_MEDIA_ID
 import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable.COL_SCORE
 import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable.COL_START_DATE

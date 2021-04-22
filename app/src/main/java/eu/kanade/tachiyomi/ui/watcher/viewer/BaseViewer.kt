@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.ui.watcher.viewer
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
-import eu.kanade.tachiyomi.ui.watcher.model.WatcherPage
 import eu.kanade.tachiyomi.ui.watcher.model.ViewerEpisodes
+import eu.kanade.tachiyomi.ui.watcher.model.WatcherPage
 
 /**
  * Interface for implementing a viewer.

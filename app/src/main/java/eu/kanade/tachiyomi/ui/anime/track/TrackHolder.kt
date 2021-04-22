@@ -27,7 +27,7 @@ class TrackHolder(private val binding: TrackItemBinding, adapter: TrackAdapter) 
             true
         }
         binding.trackStatus.setOnClickListener { listener.onStatusClick(bindingAdapterPosition) }
-        binding.trackChapters.setOnClickListener { listener.onChaptersClick(bindingAdapterPosition) }
+        binding.trackChapters.setOnClickListener { listener.onEpisodesClick(bindingAdapterPosition) }
         binding.trackScore.setOnClickListener { listener.onScoreClick(bindingAdapterPosition) }
         binding.trackStartDate.setOnClickListener { listener.onStartDateClick(bindingAdapterPosition) }
         binding.trackFinishDate.setOnClickListener { listener.onFinishDateClick(bindingAdapterPosition) }
@@ -45,16 +45,16 @@ class TrackHolder(private val binding: TrackItemBinding, adapter: TrackAdapter) 
         binding.trackDetails.isVisible = track != null
         if (track != null) {
             binding.trackTitle.text = track.title
-            binding.trackChapters.text = "${track.last_chapter_read}/" +
-                if (track.total_chapters > 0) track.total_chapters else "-"
+            binding.trackChapters.text = "${track.last_episode_seen}/" +
+                if (track.total_episodes > 0) track.total_episodes else "-"
             binding.trackStatus.text = item.service.getStatus(track.status)
             binding.trackScore.text = if (track.score == 0f) "-" else item.service.displayScore(track)
 
             if (item.service.supportsReadingDates) {
                 binding.trackStartDate.text =
-                    if (track.started_reading_date != 0L) dateFormat.format(track.started_reading_date) else "-"
+                    if (track.started_watching_date != 0L) dateFormat.format(track.started_watching_date) else "-"
                 binding.trackFinishDate.text =
-                    if (track.finished_reading_date != 0L) dateFormat.format(track.finished_reading_date) else "-"
+                    if (track.finished_watching_date != 0L) dateFormat.format(track.finished_watching_date) else "-"
             } else {
                 binding.bottomDivider.isVisible = false
                 binding.vertDivider3.isVisible = false

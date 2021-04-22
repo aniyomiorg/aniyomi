@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.data.track.anilist
 
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -102,7 +103,49 @@ data class ALUserManga(
     }
 }
 
+data class ALUserAnime(
+    val library_id: Long,
+    val list_status: String,
+    val score_raw: Int,
+    val chapters_read: Int,
+    val start_date_fuzzy: Long,
+    val completed_date_fuzzy: Long,
+    val manga: ALManga
+) {
+
+    fun toTrack() = AnimeTrack.create(TrackManager.ANILIST).apply {
+        media_id = manga.media_id
+        status = toTrackStatus()
+        score = score_raw.toFloat()
+        started_watching_date = start_date_fuzzy
+        finished_watching_date = completed_date_fuzzy
+        last_episode_seen = chapters_read
+        library_id = this@ALUserAnime.library_id
+        total_episodes = manga.total_chapters
+    }
+
+    fun toTrackStatus() = when (list_status) {
+        "CURRENT" -> Anilist.READING
+        "COMPLETED" -> Anilist.COMPLETED
+        "PAUSED" -> Anilist.PAUSED
+        "DROPPED" -> Anilist.DROPPED
+        "PLANNING" -> Anilist.PLANNING
+        "REPEATING" -> Anilist.REPEATING
+        else -> throw NotImplementedError("Unknown status: $list_status")
+    }
+}
+
 fun Track.toAnilistStatus() = when (status) {
+    Anilist.READING -> "CURRENT"
+    Anilist.COMPLETED -> "COMPLETED"
+    Anilist.PAUSED -> "PAUSED"
+    Anilist.DROPPED -> "DROPPED"
+    Anilist.PLANNING -> "PLANNING"
+    Anilist.REPEATING -> "REPEATING"
+    else -> throw NotImplementedError("Unknown status: $status")
+}
+
+fun AnimeTrack.toAnilistStatus() = when (status) {
     Anilist.READING -> "CURRENT"
     Anilist.COMPLETED -> "COMPLETED"
     Anilist.PAUSED -> "PAUSED"
@@ -115,6 +158,32 @@ fun Track.toAnilistStatus() = when (status) {
 private val preferences: PreferencesHelper by injectLazy()
 
 fun Track.toAnilistScore(): String = when (preferences.anilistScoreType().get()) {
+// 10 point
+    "POINT_10" -> (score.toInt() / 10).toString()
+// 100 point
+    "POINT_100" -> score.toInt().toString()
+// 5 stars
+    "POINT_5" -> when {
+        score == 0f -> "0"
+        score < 30 -> "1"
+        score < 50 -> "2"
+        score < 70 -> "3"
+        score < 90 -> "4"
+        else -> "5"
+    }
+// Smiley
+    "POINT_3" -> when {
+        score == 0f -> "0"
+        score <= 35 -> ":("
+        score <= 60 -> ":|"
+        else -> ":)"
+    }
+// 10 point decimal
+    "POINT_10_DECIMAL" -> (score / 10).toString()
+    else -> throw NotImplementedError("Unknown score type")
+}
+
+fun AnimeTrack.toAnilistScore(): String = when (preferences.anilistScoreType().get()) {
 // 10 point
     "POINT_10" -> (score.toInt() / 10).toString()
 // 100 point

@@ -7,8 +7,8 @@ import eu.kanade.tachiyomi.data.database.models.AnimeCategory
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.Source
-import eu.kanade.tachiyomi.source.model.SEpisode
 import eu.kanade.tachiyomi.source.model.SAnime
+import eu.kanade.tachiyomi.source.model.SEpisode
 import eu.kanade.tachiyomi.source.model.toSEpisode
 import eu.kanade.tachiyomi.ui.browse.migration.AnimeMigrationFlags
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalAnimeSearchCardItem
@@ -80,15 +80,15 @@ class AnimeSearchPresenter(
     ) {
         val flags = preferences.migrateFlags().get()
         val migrateEpisodes =
-                AnimeMigrationFlags.hasEpisodes(
+            AnimeMigrationFlags.hasEpisodes(
                 flags
             )
         val migrateCategories =
-                AnimeMigrationFlags.hasCategories(
+            AnimeMigrationFlags.hasCategories(
                 flags
             )
         val migrateTracks =
-                AnimeMigrationFlags.hasTracks(
+            AnimeMigrationFlags.hasTracks(
                 flags
             )
 

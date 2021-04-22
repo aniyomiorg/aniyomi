@@ -4,9 +4,9 @@ import android.view.View
 import android.view.ViewGroup
 import eu.kanade.tachiyomi.ui.watcher.model.EpisodeTransition
 import eu.kanade.tachiyomi.ui.watcher.model.InsertPage
+import eu.kanade.tachiyomi.ui.watcher.model.ViewerEpisodes
 import eu.kanade.tachiyomi.ui.watcher.model.WatcherEpisode
 import eu.kanade.tachiyomi.ui.watcher.model.WatcherPage
-import eu.kanade.tachiyomi.ui.watcher.model.ViewerEpisodes
 import eu.kanade.tachiyomi.ui.watcher.viewer.hasMissingEpisodes
 import eu.kanade.tachiyomi.widget.ViewPagerAdapter
 import timber.log.Timber

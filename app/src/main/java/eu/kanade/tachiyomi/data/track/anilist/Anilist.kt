@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
@@ -130,8 +131,30 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         }
     }
 
+    override fun displayScore(track: AnimeTrack): String {
+        val score = track.score
+
+        return when (scorePreference.get()) {
+            POINT_5 -> when (score) {
+                0f -> "0 ★"
+                else -> "${((score + 10) / 20).toInt()} ★"
+            }
+            POINT_3 -> when {
+                score == 0f -> "0"
+                score <= 35 -> "😦"
+                score <= 60 -> "😐"
+                else -> "😊"
+            }
+            else -> track.toAnilistScore()
+        }
+    }
+
     override suspend fun add(track: Track): Track {
         return api.addLibManga(track)
+    }
+
+    override suspend fun addAnime(track: AnimeTrack): AnimeTrack {
+        return api.addLibAnime(track)
     }
 
     override suspend fun update(track: Track): Track {
@@ -143,6 +166,17 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         }
 
         return api.updateLibManga(track)
+    }
+
+    override suspend fun updateAnime(track: AnimeTrack): AnimeTrack {
+        // If user was using API v1 fetch library_id
+        if (track.library_id == null || track.library_id!! == 0L) {
+            val libManga = api.findLibAnime(track, getUsername().toInt())
+                ?: throw Exception("$track not found on user library")
+            track.library_id = libManga.library_id
+        }
+
+        return api.updateLibAnime(track)
     }
 
     override suspend fun bind(track: Track): Track {
@@ -159,6 +193,20 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         }
     }
 
+    override suspend fun bindAnime(track: AnimeTrack): AnimeTrack {
+        val remoteTrack = api.findLibAnime(track, getUsername().toInt())
+        return if (remoteTrack != null) {
+            track.copyPersonalFrom(remoteTrack)
+            track.library_id = remoteTrack.library_id
+            updateAnime(track)
+        } else {
+            // Set default fields if it's not found in the list
+            track.status = READING
+            track.score = 0F
+            addAnime(track)
+        }
+    }
+
     override suspend fun search(query: String): List<TrackSearch> {
         return api.search(query)
     }
@@ -167,6 +215,13 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         val remoteTrack = api.getLibManga(track, getUsername().toInt())
         track.copyPersonalFrom(remoteTrack)
         track.total_chapters = remoteTrack.total_chapters
+        return track
+    }
+
+    override suspend fun refreshAnime(track: AnimeTrack): AnimeTrack {
+        val remoteTrack = api.getLibAnime(track, getUsername().toInt())
+        track.copyPersonalFrom(remoteTrack)
+        track.total_episodes = remoteTrack.total_episodes
         return track
     }
 

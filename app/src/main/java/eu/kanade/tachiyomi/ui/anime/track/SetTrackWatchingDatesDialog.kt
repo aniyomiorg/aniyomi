@@ -7,7 +7,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.datetime.datePicker
 import com.bluelinelabs.conductor.Controller
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import uy.kohesive.injekt.Injekt
@@ -34,7 +34,7 @@ class SetTrackWatchingDatesDialog<T> : DialogController
 
     @Suppress("unused")
     constructor(bundle: Bundle) : super(bundle) {
-        val track = bundle.getSerializable(KEY_ITEM_TRACK) as Track
+        val track = bundle.getSerializable(KEY_ITEM_TRACK) as AnimeTrack
         val service = Injekt.get<TrackManager>().getService(track.sync_id)!!
         item = TrackItem(track, service)
         dateToUpdate = ReadingDate.Start
@@ -61,8 +61,8 @@ class SetTrackWatchingDatesDialog<T> : DialogController
         return Calendar.getInstance().apply {
             item.track?.let {
                 val date = when (dateToUpdate) {
-                    ReadingDate.Start -> it.started_reading_date
-                    ReadingDate.Finish -> it.finished_reading_date
+                    ReadingDate.Start -> it.started_watching_date
+                    ReadingDate.Finish -> it.finished_watching_date
                 }
                 if (date != 0L) {
                     timeInMillis = date

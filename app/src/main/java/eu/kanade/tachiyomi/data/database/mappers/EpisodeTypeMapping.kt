@@ -46,7 +46,7 @@ class EpisodePutResolver : DefaultPutResolver<Episode>() {
     override fun mapToContentValues(obj: Episode) =
         contentValuesOf(
             COL_ID to obj.id,
-            COL_MANGA_ID to obj.manga_id,
+            COL_MANGA_ID to obj.anime_id,
             COL_URL to obj.url,
             COL_NAME to obj.name,
             COL_READ to obj.read,
@@ -64,7 +64,7 @@ class EpisodeGetResolver : DefaultGetResolver<Episode>() {
 
     override fun mapFromCursor(cursor: Cursor): Episode = EpisodeImpl().apply {
         id = cursor.getLong(cursor.getColumnIndex(COL_ID))
-        manga_id = cursor.getLong(cursor.getColumnIndex(COL_MANGA_ID))
+        anime_id = cursor.getLong(cursor.getColumnIndex(COL_MANGA_ID))
         url = cursor.getString(cursor.getColumnIndex(COL_URL))
         name = cursor.getString(cursor.getColumnIndex(COL_NAME))
         scanlator = cursor.getString(cursor.getColumnIndex(COL_SCANLATOR))

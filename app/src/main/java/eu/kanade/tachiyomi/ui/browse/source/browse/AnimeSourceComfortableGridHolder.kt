@@ -7,7 +7,6 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.glide.GlideApp
 import eu.kanade.tachiyomi.data.glide.toAnimeThumbnail
 import eu.kanade.tachiyomi.databinding.AnimeSourceComfortableGridItemBinding
-import eu.kanade.tachiyomi.databinding.SourceComfortableGridItemBinding
 import eu.kanade.tachiyomi.widget.StateImageViewTarget
 
 /**
@@ -19,7 +18,7 @@ import eu.kanade.tachiyomi.widget.StateImageViewTarget
  * @constructor creates a new catalogue holder.
  */
 class AnimeSourceComfortableGridHolder(private val view: View, private val adapter: FlexibleAdapter<*>) :
-        AnimeSourceHolder<AnimeSourceComfortableGridItemBinding>(view, adapter) {
+    AnimeSourceHolder<AnimeSourceComfortableGridItemBinding>(view, adapter) {
 
     override val binding = AnimeSourceComfortableGridItemBinding.bind(view)
 

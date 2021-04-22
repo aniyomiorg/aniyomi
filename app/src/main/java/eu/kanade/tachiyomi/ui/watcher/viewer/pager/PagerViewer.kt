@@ -13,8 +13,8 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
 import eu.kanade.tachiyomi.ui.watcher.model.EpisodeTransition
 import eu.kanade.tachiyomi.ui.watcher.model.InsertPage
-import eu.kanade.tachiyomi.ui.watcher.model.WatcherPage
 import eu.kanade.tachiyomi.ui.watcher.model.ViewerEpisodes
+import eu.kanade.tachiyomi.ui.watcher.model.WatcherPage
 import eu.kanade.tachiyomi.ui.watcher.viewer.BaseViewer
 import eu.kanade.tachiyomi.ui.watcher.viewer.ViewerNavigation.NavigationRegion
 import kotlinx.coroutines.MainScope

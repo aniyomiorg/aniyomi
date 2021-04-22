@@ -76,7 +76,7 @@ interface Source : tachiyomi.source.Source {
     @Suppress("DEPRECATION")
     override suspend fun getChapterList(manga: MangaInfo): List<ChapterInfo> {
         return fetchChapterList(manga.toSManga()).awaitSingle()
-                .map { it.toChapterInfo() }
+            .map { it.toChapterInfo() }
     }
 
     /**
@@ -85,7 +85,7 @@ interface Source : tachiyomi.source.Source {
     @Suppress("DEPRECATION")
     override suspend fun getPageList(chapter: ChapterInfo): List<tachiyomi.source.model.Page> {
         return fetchPageList(chapter.toSChapter()).awaitSingle()
-                .map { it.toPageUrl() }
+            .map { it.toPageUrl() }
     }
 }
 
