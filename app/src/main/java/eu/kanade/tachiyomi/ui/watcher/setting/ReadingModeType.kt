@@ -6,12 +6,12 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.lang.next
 
 enum class ReadingModeType(val prefValue: Int, @StringRes val stringRes: Int, @DrawableRes val iconRes: Int) {
-    DEFAULT(0, R.string.default_viewer, R.drawable.ic_watcher_default_24dp),
-    LEFT_TO_RIGHT(1, R.string.left_to_right_viewer, R.drawable.ic_watcher_ltr_24dp),
-    RIGHT_TO_LEFT(2, R.string.right_to_left_viewer, R.drawable.ic_watcher_rtl_24dp),
-    VERTICAL(3, R.string.vertical_viewer, R.drawable.ic_watcher_vertical_24dp),
-    WEBTOON(4, R.string.webtoon_viewer, R.drawable.ic_watcher_webtoon_24dp),
-    CONTINUOUS_VERTICAL(5, R.string.vertical_plus_viewer, R.drawable.ic_watcher_continuous_vertical_24dp),
+    DEFAULT(0, R.string.default_viewer, R.drawable.ic_reader_default_24dp),
+    LEFT_TO_RIGHT(1, R.string.left_to_right_viewer, R.drawable.ic_reader_ltr_24dp),
+    RIGHT_TO_LEFT(2, R.string.right_to_left_viewer, R.drawable.ic_reader_rtl_24dp),
+    VERTICAL(3, R.string.vertical_viewer, R.drawable.ic_reader_vertical_24dp),
+    WEBTOON(4, R.string.webtoon_viewer, R.drawable.ic_reader_webtoon_24dp),
+    CONTINUOUS_VERTICAL(5, R.string.vertical_plus_viewer, R.drawable.ic_reader_continuous_vertical_24dp),
     ;
 
     companion object {

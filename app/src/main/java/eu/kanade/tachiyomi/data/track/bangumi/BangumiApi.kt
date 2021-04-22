@@ -131,6 +131,30 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         }
     }
 
+    suspend fun searchAnime(search: String): List<AnimeTrackSearch> {
+        return withIOContext {
+            val url = "$apiUrl/search/subject/${URLEncoder.encode(search, Charsets.UTF_8.name())}"
+                .toUri()
+                .buildUpon()
+                .appendQueryParameter("max_results", "20")
+                .build()
+            authClient.newCall(GET(url.toString()))
+                .await()
+                .use {
+                    var responseBody = it.body?.string().orEmpty()
+                    if (responseBody.isEmpty()) {
+                        throw Exception("Null Response")
+                    }
+                    if (responseBody.contains("\"code\":404")) {
+                        responseBody = "{\"results\":0,\"list\":[]}"
+                    }
+                    val response = json.decodeFromString<JsonObject>(responseBody)["list"]?.jsonArray
+                    response?.filter { it.jsonObject["type"]?.jsonPrimitive?.int == 1 }
+                        ?.map { jsonToSearchAnime(it.jsonObject) }.orEmpty()
+                }
+        }
+    }
+
     private fun jsonToSearch(obj: JsonObject): TrackSearch {
         val coverUrl = if (obj["images"] is JsonObject) {
             obj["images"]?.jsonObject?.get("common")?.jsonPrimitive?.contentOrNull ?: ""

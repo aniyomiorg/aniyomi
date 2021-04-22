@@ -7,10 +7,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.google.android.material.tabs.TabLayout
@@ -37,6 +37,8 @@ import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.view.clicks
+import reactivecircus.flowbinding.viewpager.pageSelections
 import rx.Subscription
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -160,15 +162,7 @@ class AnimelibController(
         return AnimelibPresenter()
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        binding = AnimelibControllerBinding.inflate(inflater)
-        binding.actionToolbar.applyInsetter {
-            type(navigationBars = true) {
-                margin(bottom = true)
-            }
-        }
-        return binding.root
-    }
+    override fun createBinding(inflater: LayoutInflater) = AnimelibControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
@@ -271,7 +265,7 @@ class AnimelibController(
         if (animeMap.isNotEmpty()) {
             binding.emptyView.hide()
         } else {
-            binding.emptyView.show(R.string.information_empty_animelib)
+            binding.emptyView.show(R.string.information_empty_library)
         }
 
         // Get the current active category.
@@ -417,7 +411,7 @@ class AnimelibController(
             R.id.action_update_animelib -> {
                 activity?.let {
                     if (AnimelibUpdateService.start(it)) {
-                        it.toast(R.string.updating_animelib)
+                        it.toast(R.string.updating_library)
                     }
                 }
             }
@@ -539,7 +533,7 @@ class AnimelibController(
 
     private fun downloadUnreadChapters() {
         val animes = selectedAnimes.toList()
-        presenter.downloadUnreadChapters(animes)
+        presenter.downloadUnreadEpisodes(animes)
         destroyActionModeIfNeeded()
     }
 

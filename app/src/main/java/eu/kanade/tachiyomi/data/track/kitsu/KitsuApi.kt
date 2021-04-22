@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.data.track.kitsu
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
@@ -200,6 +201,18 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
         }
     }
 
+    suspend fun searchAnime(query: String): List<AnimeTrackSearch> {
+        return withIOContext {
+            authClient.newCall(GET(algoliaKeyUrl))
+                .await()
+                .parseAs<JsonObject>()
+                .let {
+                    val key = it["media"]!!.jsonObject["key"]!!.jsonPrimitive.content
+                    algoliaSearchAnime(key, query)
+                }
+        }
+    }
+
     private suspend fun algoliaSearch(key: String, query: String): List<TrackSearch> {
         return withIOContext {
             val jsonObject = buildJsonObject {
@@ -223,6 +236,35 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                 .let {
                     it["hits"]!!.jsonArray
                         .map { KitsuSearchManga(it.jsonObject) }
+                        .filter { it.subType != "novel" }
+                        .map { it.toTrack() }
+                }
+        }
+    }
+
+    private suspend fun algoliaSearchAnime(key: String, query: String): List<AnimeTrackSearch> {
+        return withIOContext {
+            val jsonObject = buildJsonObject {
+                put("params", "query=$query$algoliaFilter")
+            }
+
+            client.newCall(
+                POST(
+                    algoliaUrl,
+                    headers = headersOf(
+                        "X-Algolia-Application-Id",
+                        algoliaAppId,
+                        "X-Algolia-API-Key",
+                        key,
+                    ),
+                    body = jsonObject.toString().toRequestBody(jsonMime)
+                )
+            )
+                .await()
+                .parseAs<JsonObject>()
+                .let {
+                    it["hits"]!!.jsonArray
+                        .map { KitsuSearchAnime(it.jsonObject) }
                         .filter { it.subType != "novel" }
                         .map { it.toTrack() }
                 }

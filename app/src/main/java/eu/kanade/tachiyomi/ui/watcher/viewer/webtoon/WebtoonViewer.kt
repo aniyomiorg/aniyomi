@@ -9,7 +9,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.WebtoonLayoutManager
+import androidx.recyclerview.widget.WebtoonLayoutManagerAnime
 import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
 import eu.kanade.tachiyomi.ui.watcher.model.EpisodeTransition
 import eu.kanade.tachiyomi.ui.watcher.model.ViewerEpisodes
@@ -43,7 +43,7 @@ class WebtoonViewer(val activity: WatcherActivity, val isContinuous: Boolean = t
     /**
      * Layout manager of the recycler view.
      */
-    private val layoutManager = WebtoonLayoutManager(activity)
+    private val layoutManager = WebtoonLayoutManagerAnime(activity)
 
     /**
      * Adapter of the recycler view.

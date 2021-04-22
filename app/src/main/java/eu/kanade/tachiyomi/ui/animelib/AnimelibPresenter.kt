@@ -11,9 +11,9 @@ import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.model.SAnime
-import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.source.online.AnimeHttpSource
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.isLocal
 import eu.kanade.tachiyomi.util.lang.combineLatest
@@ -47,7 +47,7 @@ class AnimelibPresenter(
     private val db: AnimeDatabaseHelper = Injekt.get(),
     private val preferences: PreferencesHelper = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
-    private val sourceManager: SourceManager = Injekt.get(),
+    private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get()
 ) : BasePresenter<AnimelibController>() {
@@ -348,7 +348,7 @@ class AnimelibPresenter(
      */
     private fun getTracksObservable(): Observable<Map<Long, Map<Int, Boolean>>> {
         return db.getTracks().asRxObservable().map { tracks ->
-            tracks.groupBy { it.manga_id }
+            tracks.groupBy { it.anime_id }
                 .mapValues { tracksForAnimeId ->
                     // Check if any of the trackers is logged in for the current anime id
                     tracksForAnimeId.value.associate {
@@ -466,7 +466,7 @@ class AnimelibPresenter(
 
             if (deleteEpisodes) {
                 animeToDelete.forEach { anime ->
-                    val source = sourceManager.get(anime.source) as? HttpSource
+                    val source = sourceManager.get(anime.source) as? AnimeHttpSource
                     if (source != null) {
                         downloadManager.deleteAnime(anime, source)
                     }

@@ -5,7 +5,7 @@ import android.os.Parcelable
 import android.util.SparseArray
 import androidx.recyclerview.widget.RecyclerView
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.kanade.tachiyomi.source.CatalogueSource
+import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 
 /**
  * Adapter that holds the search cards.
@@ -72,7 +72,7 @@ class GlobalAnimeSearchAdapter(val controller: GlobalAnimeSearchController) :
     }
 
     interface OnTitleClickListener {
-        fun onTitleClick(source: CatalogueSource)
+        fun onTitleClick(source: AnimeCatalogueSource)
     }
 
     private companion object {

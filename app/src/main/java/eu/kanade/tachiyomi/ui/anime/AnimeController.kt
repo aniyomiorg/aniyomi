@@ -11,7 +11,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.graphics.blue
@@ -26,7 +25,6 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.SelectableAdapter
 import eu.kanade.tachiyomi.R
@@ -38,11 +36,11 @@ import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.databinding.AnimeControllerBinding
-import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.source.AnimeSourceManager
+import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.online.AnimeHttpSource
 import eu.kanade.tachiyomi.ui.anime.episode.AnimeEpisodesHeaderAdapter
 import eu.kanade.tachiyomi.ui.anime.episode.DeleteEpisodesDialog
@@ -199,20 +197,7 @@ class AnimeController :
         )
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        binding = AnimeControllerBinding.inflate(inflater)
-        binding.recycler.applyInsetter {
-            type(navigationBars = true) {
-                padding()
-            }
-        }
-        binding.actionToolbar.applyInsetter {
-            type(navigationBars = true) {
-                margin(bottom = true)
-            }
-        }
-        return binding.root
-    }
+    override fun createBinding(inflater: LayoutInflater) = AnimeControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
@@ -1061,7 +1046,7 @@ class AnimeController :
         activity?.toast(error.message)
     }
 
-    fun onTrackingSearchResults(results: List<TrackSearch>) {
+    fun onTrackingSearchResults(results: List<AnimeTrackSearch>) {
         getTrackingSearchDialog()?.onSearchResults(results)
     }
 

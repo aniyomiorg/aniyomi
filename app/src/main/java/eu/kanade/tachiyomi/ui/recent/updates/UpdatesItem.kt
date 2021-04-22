@@ -7,11 +7,11 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Chapter
 import eu.kanade.tachiyomi.data.database.models.Manga
-import eu.kanade.tachiyomi.ui.manga.chapter.base.BaseEpisodeItem
+import eu.kanade.tachiyomi.ui.manga.chapter.base.BaseChapterItem
 import eu.kanade.tachiyomi.ui.recent.DateSectionItem
 
 class UpdatesItem(chapter: Chapter, val manga: Manga, header: DateSectionItem) :
-    BaseEpisodeItem<UpdatesHolder, DateSectionItem>(chapter, header) {
+    BaseChapterItem<UpdatesHolder, DateSectionItem>(chapter, header) {
 
     override fun getLayoutRes(): Int {
         return R.layout.updates_item

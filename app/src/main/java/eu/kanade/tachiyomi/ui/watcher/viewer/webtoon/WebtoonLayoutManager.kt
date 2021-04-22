@@ -13,7 +13,7 @@ import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
  * This layout manager uses the same package name as the support library in order to use a package
  * protected method.
  */
-class WebtoonLayoutManager(activity: WatcherActivity) : LinearLayoutManager(activity) {
+class WebtoonLayoutManagerAnime(activity: WatcherActivity) : LinearLayoutManager(activity) {
 
     /**
      * Extra layout space is set to half the screen height.

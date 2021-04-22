@@ -4,8 +4,8 @@ import android.content.Context
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
-import eu.kanade.tachiyomi.source.LocalSource
-import eu.kanade.tachiyomi.source.Source
+import eu.kanade.tachiyomi.source.AnimeSource
+import eu.kanade.tachiyomi.source.LocalAnimeSource
 import eu.kanade.tachiyomi.source.online.AnimeHttpSource
 import eu.kanade.tachiyomi.ui.watcher.model.WatcherEpisode
 import rx.Completable
@@ -21,7 +21,7 @@ class EpisodeLoader(
     private val context: Context,
     private val downloadManager: AnimeDownloadManager,
     private val anime: Anime,
-    private val source: Source
+    private val source: AnimeSource
 ) {
 
     /**
@@ -79,12 +79,12 @@ class EpisodeLoader(
         return when {
             isDownloaded -> DownloadPageLoader(episode, anime, source, downloadManager)
             source is AnimeHttpSource -> HttpPageLoader(episode, source)
-            source is LocalSource -> source.getFormat(episode.episode).let { format ->
+            source is LocalAnimeSource -> source.getFormat(episode.episode).let { format ->
                 when (format) {
-                    is LocalSource.Format.Directory -> DirectoryPageLoader(format.file)
-                    is LocalSource.Format.Zip -> ZipPageLoader(format.file)
-                    is LocalSource.Format.Rar -> RarPageLoader(format.file)
-                    is LocalSource.Format.Epub -> EpubPageLoader(format.file)
+                    is LocalAnimeSource.Format.Directory -> DirectoryPageLoader(format.file)
+                    is LocalAnimeSource.Format.Zip -> ZipPageLoader(format.file)
+                    is LocalAnimeSource.Format.Rar -> RarPageLoader(format.file)
+                    is LocalAnimeSource.Format.Anime -> EpubPageLoader(format.file)
                 }
             }
             else -> error(context.getString(R.string.loader_not_implemented_error))

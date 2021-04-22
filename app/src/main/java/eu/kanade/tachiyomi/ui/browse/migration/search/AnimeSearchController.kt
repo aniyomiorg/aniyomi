@@ -9,7 +9,7 @@ import com.bluelinelabs.conductor.Controller
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.source.CatalogueSource
+import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.migration.MigrationFlags
@@ -123,7 +123,7 @@ class AnimeSearchController(
         }
     }
 
-    override fun onTitleClick(source: CatalogueSource) {
+    override fun onTitleClick(source: AnimeCatalogueSource) {
         presenter.preferences.lastUsedSource().set(source.id)
 
         router.pushController(AnimeSourceSearchController(anime, source, presenter.query).withFadeTransaction())

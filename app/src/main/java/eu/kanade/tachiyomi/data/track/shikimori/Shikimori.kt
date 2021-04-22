@@ -4,9 +4,10 @@ import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -49,8 +50,16 @@ class Shikimori(private val context: Context, id: Int) : TrackService(id) {
         return api.addLibManga(track, getUsername())
     }
 
+    override suspend fun addAnime(track: AnimeTrack): AnimeTrack {
+        return api.addLibAnime(track, getUsername())
+    }
+
     override suspend fun update(track: Track): Track {
         return api.updateLibManga(track, getUsername())
+    }
+
+    override suspend fun updateAnime(track: AnimeTrack): AnimeTrack {
+        return api.updateLibAnime(track, getUsername())
     }
 
     override suspend fun bind(track: Track): Track {
@@ -67,14 +76,40 @@ class Shikimori(private val context: Context, id: Int) : TrackService(id) {
         }
     }
 
+    override suspend fun bindAnime(track: AnimeTrack): AnimeTrack {
+        val remoteTrack = api.findLibAnime(track, getUsername())
+        return if (remoteTrack != null) {
+            track.copyPersonalFrom(remoteTrack)
+            track.library_id = remoteTrack.library_id
+            updateAnime(track)
+        } else {
+            // Set default fields if it's not found in the list
+            track.status = READING
+            track.score = 0F
+            addAnime(track)
+        }
+    }
+
     override suspend fun search(query: String): List<TrackSearch> {
         return api.search(query)
+    }
+
+    override suspend fun searchAnime(query: String): List<AnimeTrackSearch> {
+        return api.searchAnime(query)
     }
 
     override suspend fun refresh(track: Track): Track {
         api.findLibManga(track, getUsername())?.let { remoteTrack ->
             track.copyPersonalFrom(remoteTrack)
             track.total_chapters = remoteTrack.total_chapters
+        }
+        return track
+    }
+
+    override suspend fun refreshAnime(track: AnimeTrack): AnimeTrack {
+        api.findLibAnime(track, getUsername())?.let { remoteTrack ->
+            track.copyPersonalFrom(remoteTrack)
+            track.total_episodes = remoteTrack.total_episodes
         }
         return track
     }

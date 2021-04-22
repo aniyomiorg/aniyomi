@@ -4,7 +4,7 @@ import android.app.Application
 import android.net.Uri
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
-import eu.kanade.tachiyomi.source.Source
+import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.watcher.model.WatcherEpisode
 import eu.kanade.tachiyomi.ui.watcher.model.WatcherPage
@@ -17,7 +17,7 @@ import uy.kohesive.injekt.injectLazy
 class DownloadPageLoader(
     private val episode: WatcherEpisode,
     private val anime: Anime,
-    private val source: Source,
+    private val source: AnimeSource,
     private val downloadManager: AnimeDownloadManager
 ) : PageLoader() {
 

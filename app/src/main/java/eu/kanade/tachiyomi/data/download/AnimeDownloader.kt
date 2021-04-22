@@ -282,7 +282,7 @@ class AnimeDownloader(
 
         val pageListObservable = if (download.pages == null) {
             // Pull page list from network and add them to download object
-            download.source.fetchAnimePageList(download.episode)
+            download.source.fetchPageList(download.episode)
                 .doOnNext { pages ->
                     if (pages.isEmpty()) {
                         throw Exception(context.getString(R.string.page_list_empty_error))

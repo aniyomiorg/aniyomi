@@ -33,7 +33,7 @@ class WatcherGeneralSettings @JvmOverloads constructor(context: Context, attrs: 
      */
     private fun initGeneralPreferences() {
         binding.rotationMode.bindToPreference(preferences.rotation(), 1)
-        binding.backgroundColor.bindToIntPreference(preferences.watcherTheme(), R.array.watcher_themes_values)
+        binding.backgroundColor.bindToIntPreference(preferences.watcherTheme(), R.array.reader_themes_values)
         binding.showPageNumber.bindToPreference(preferences.showPageNumber())
         binding.fullscreen.bindToPreference(preferences.fullscreen())
         binding.keepscreen.bindToPreference(preferences.keepScreenOn())

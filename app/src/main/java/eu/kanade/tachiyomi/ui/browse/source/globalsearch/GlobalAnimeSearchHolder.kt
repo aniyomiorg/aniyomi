@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.databinding.GlobalSearchControllerCardBinding
-import eu.kanade.tachiyomi.source.LocalSource
+import eu.kanade.tachiyomi.source.LocalAnimeSource
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 /**
@@ -51,7 +51,7 @@ class GlobalAnimeSearchHolder(view: View, val adapter: GlobalAnimeSearchAdapter)
         val titlePrefix = if (item.highlighted) "▶ " else ""
 
         binding.title.text = titlePrefix + source.name
-        binding.subtitle.isVisible = source !is LocalSource
+        binding.subtitle.isVisible = source !is LocalAnimeSource
         binding.subtitle.text = LocaleHelper.getDisplayName(source.lang)
 
         when {

@@ -19,7 +19,7 @@ import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
-import eu.kanade.tachiyomi.ui.manga.AnimeController
+import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.getResourceColor
 import eu.kanade.tachiyomi.util.view.setChips
@@ -33,10 +33,10 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 class MangaInfoHeaderAdapter(
-    private val controller: AnimeController,
+    private val controller: MangaController,
     private val fromSource: Boolean
 ) :
-    RecyclerView.Adapter<AnimeInfoHeaderAdapter.HeaderViewHolder>() {
+    RecyclerView.Adapter<MangaInfoHeaderAdapter.HeaderViewHolder>() {
 
     private val trackManager: TrackManager by injectLazy()
 

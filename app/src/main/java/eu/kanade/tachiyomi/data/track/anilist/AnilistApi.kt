@@ -7,6 +7,7 @@ import com.afollestad.date.month
 import com.afollestad.date.year
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.await
@@ -219,7 +220,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         }
     }
 
-    suspend fun searchAnime(search: String): List<TrackSearch> {
+    suspend fun searchAnime(search: String): List<AnimeTrackSearch> {
         return withIOContext {
             val query = """
             |query Search(${'$'}query: String) {
@@ -263,7 +264,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     val data = response["data"]!!.jsonObject
                     val page = data["Page"]!!.jsonObject
                     val media = page["media"]!!.jsonArray
-                    val entries = media.map { jsonToALManga(it.jsonObject) }
+                    val entries = media.map { jsonToALAnime(it.jsonObject) }
                     entries.map { it.toTrack() }
                 }
         }
@@ -451,6 +452,19 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
 
     private fun jsonToALManga(struct: JsonObject): ALManga {
         return ALManga(
+            struct["id"]!!.jsonPrimitive.int,
+            struct["title"]!!.jsonObject["romaji"]!!.jsonPrimitive.content,
+            struct["coverImage"]!!.jsonObject["large"]!!.jsonPrimitive.content,
+            struct["description"]!!.jsonPrimitive.contentOrNull,
+            struct["type"]!!.jsonPrimitive.content,
+            struct["status"]!!.jsonPrimitive.contentOrNull ?: "",
+            parseDate(struct, "startDate"),
+            struct["chapters"]!!.jsonPrimitive.intOrNull ?: 0
+        )
+    }
+
+    private fun jsonToALAnime(struct: JsonObject): ALAnime {
+        return ALAnime(
             struct["id"]!!.jsonPrimitive.int,
             struct["title"]!!.jsonObject["romaji"]!!.jsonPrimitive.content,
             struct["coverImage"]!!.jsonObject["large"]!!.jsonPrimitive.content,

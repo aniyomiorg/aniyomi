@@ -1,8 +1,10 @@
 package eu.kanade.tachiyomi.data.track.shikimori
 
 import androidx.core.net.toUri
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
@@ -50,7 +52,31 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
         }
     }
 
+    suspend fun addLibAnime(track: AnimeTrack, user_id: String): AnimeTrack {
+        return withIOContext {
+            val payload = buildJsonObject {
+                putJsonObject("user_rate") {
+                    put("user_id", user_id)
+                    put("target_id", track.media_id)
+                    put("target_type", "Manga")
+                    put("chapters", track.last_episode_seen)
+                    put("score", track.score.toInt())
+                    put("status", track.toShikimoriStatus())
+                }
+            }
+            authClient.newCall(
+                POST(
+                    "$apiUrl/v2/user_rates",
+                    body = payload.toString().toRequestBody(jsonMime)
+                )
+            ).await()
+            track
+        }
+    }
+
     suspend fun updateLibManga(track: Track, user_id: String): Track = addLibManga(track, user_id)
+
+    suspend fun updateLibAnime(track: AnimeTrack, user_id: String): AnimeTrack = addLibAnime(track, user_id)
 
     suspend fun search(search: String): List<TrackSearch> {
         return withIOContext {
@@ -70,11 +96,43 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
         }
     }
 
+    suspend fun searchAnime(search: String): List<AnimeTrackSearch> {
+        return withIOContext {
+            val url = "$apiUrl/animes".toUri().buildUpon()
+                .appendQueryParameter("order", "popularity")
+                .appendQueryParameter("search", search)
+                .appendQueryParameter("limit", "20")
+                .build()
+            authClient.newCall(GET(url.toString()))
+                .await()
+                .parseAs<JsonArray>()
+                .let { response ->
+                    response.map {
+                        jsonToAnimeSearch(it.jsonObject)
+                    }
+                }
+        }
+    }
+
     private fun jsonToSearch(obj: JsonObject): TrackSearch {
         return TrackSearch.create(TrackManager.SHIKIMORI).apply {
             media_id = obj["id"]!!.jsonPrimitive.int
             title = obj["name"]!!.jsonPrimitive.content
             total_chapters = obj["chapters"]!!.jsonPrimitive.int
+            cover_url = baseUrl + obj["image"]!!.jsonObject["preview"]!!.jsonPrimitive.content
+            summary = ""
+            tracking_url = baseUrl + obj["url"]!!.jsonPrimitive.content
+            publishing_status = obj["status"]!!.jsonPrimitive.content
+            publishing_type = obj["kind"]!!.jsonPrimitive.content
+            start_date = obj.get("aired_on")!!.jsonPrimitive.contentOrNull ?: ""
+        }
+    }
+
+    private fun jsonToAnimeSearch(obj: JsonObject): AnimeTrackSearch {
+        return AnimeTrackSearch.create(TrackManager.SHIKIMORI).apply {
+            media_id = obj["id"]!!.jsonPrimitive.int
+            title = obj["name"]!!.jsonPrimitive.content
+            total_episodes = obj["episodes"]!!.jsonPrimitive.int
             cover_url = baseUrl + obj["image"]!!.jsonObject["preview"]!!.jsonPrimitive.content
             summary = ""
             tracking_url = baseUrl + obj["url"]!!.jsonPrimitive.content
@@ -93,6 +151,18 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             score = (obj["score"]!!.jsonPrimitive.int).toFloat()
             status = toTrackStatus(obj["status"]!!.jsonPrimitive.content)
             tracking_url = baseUrl + mangas["url"]!!.jsonPrimitive.content
+        }
+    }
+
+    private fun jsonToAnimeTrack(obj: JsonObject, animes: JsonObject): AnimeTrack {
+        return AnimeTrack.create(TrackManager.SHIKIMORI).apply {
+            title = animes["name"]!!.jsonPrimitive.content
+            media_id = obj["id"]!!.jsonPrimitive.int
+            total_episodes = animes["episodes"]!!.jsonPrimitive.int
+            last_episode_seen = obj["episodes"]!!.jsonPrimitive.int
+            score = (obj["score"]!!.jsonPrimitive.int).toFloat()
+            status = toTrackStatus(obj["status"]!!.jsonPrimitive.content)
+            tracking_url = baseUrl + animes["url"]!!.jsonPrimitive.content
         }
     }
 
@@ -119,6 +189,35 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
                     }
                     val entry = response.map {
                         jsonToTrack(it.jsonObject, mangas)
+                    }
+                    entry.firstOrNull()
+                }
+        }
+    }
+
+    suspend fun findLibAnime(track: AnimeTrack, user_id: String): AnimeTrack? {
+        return withIOContext {
+            val urlAnimes = "$apiUrl/mangas".toUri().buildUpon()
+                .appendPath(track.media_id.toString())
+                .build()
+            val animes = authClient.newCall(GET(urlAnimes.toString()))
+                .await()
+                .parseAs<JsonObject>()
+
+            val url = "$apiUrl/v2/user_rates".toUri().buildUpon()
+                .appendQueryParameter("user_id", user_id)
+                .appendQueryParameter("target_id", track.media_id.toString())
+                .appendQueryParameter("target_type", "Anime")
+                .build()
+            authClient.newCall(GET(url.toString()))
+                .await()
+                .parseAs<JsonArray>()
+                .let { response ->
+                    if (response.size > 1) {
+                        throw Exception("Too much mangas in response")
+                    }
+                    val entry = response.map {
+                        jsonToAnimeTrack(it.jsonObject, animes)
                     }
                     entry.firstOrNull()
                 }

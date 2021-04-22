@@ -4,6 +4,7 @@ import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import uy.kohesive.injekt.injectLazy
 import java.text.SimpleDateFormat
@@ -51,10 +52,10 @@ data class ALAnime(
     val total_chapters: Int
 ) {
 
-    fun toTrack() = TrackSearch.create(TrackManager.ANILIST).apply {
+    fun toTrack() = AnimeTrackSearch.create(TrackManager.ANILIST).apply {
         media_id = this@ALAnime.media_id
         title = title_romaji
-        total_chapters = this@ALAnime.total_chapters
+        total_episodes = this@ALAnime.total_chapters
         cover_url = image_url_lge
         summary = description ?: ""
         tracking_url = AnilistApi.mangaUrl(media_id)

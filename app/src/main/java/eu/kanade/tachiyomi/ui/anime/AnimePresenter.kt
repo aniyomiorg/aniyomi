@@ -17,8 +17,8 @@ import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.source.LocalAnimeSource
 import eu.kanade.tachiyomi.source.AnimeSource
+import eu.kanade.tachiyomi.source.LocalAnimeSource
 import eu.kanade.tachiyomi.source.model.toSAnime
 import eu.kanade.tachiyomi.source.model.toSEpisode
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
@@ -714,7 +714,7 @@ class AnimePresenter(
         searchTrackerJob?.cancel()
         searchTrackerJob = launchIO {
             try {
-                val results = service.search(query)
+                val results = service.searchAnime(query)
                 withUIContext { view?.onTrackingSearchResults(results) }
             } catch (e: Throwable) {
                 withUIContext { view?.onTrackingSearchResultsError(e) }

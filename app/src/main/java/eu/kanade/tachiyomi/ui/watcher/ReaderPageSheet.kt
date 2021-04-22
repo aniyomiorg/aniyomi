@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.watcher
 
 import com.afollestad.materialdialogs.MaterialDialog
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.databinding.WatcherPageSheetBinding
+import eu.kanade.tachiyomi.databinding.ReaderPageSheetBinding
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.watcher.model.WatcherPage
 import eu.kanade.tachiyomi.widget.sheet.BaseBottomSheetDialog
@@ -15,7 +15,7 @@ class WatcherPageSheet(
     private val page: WatcherPage
 ) : BaseBottomSheetDialog(activity) {
 
-    private val binding = WatcherPageSheetBinding.inflate(activity.layoutInflater, null, false)
+    private val binding = ReaderPageSheetBinding.inflate(activity.layoutInflater, null, false)
 
     init {
         setContentView(binding.root)

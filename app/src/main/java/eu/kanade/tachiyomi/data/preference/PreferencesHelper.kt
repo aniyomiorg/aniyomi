@@ -134,6 +134,8 @@ class PreferencesHelper(val context: Context) {
 
     fun alwaysShowChapterTransition() = flowPrefs.getBoolean(Keys.alwaysShowChapterTransition, true)
 
+    fun alwaysShowEpisodeTransition() = flowPrefs.getBoolean(Keys.alwaysShowChapterTransition, true)
+
     fun cropBorders() = flowPrefs.getBoolean(Keys.cropBorders, false)
 
     fun cropBordersWebtoon() = flowPrefs.getBoolean(Keys.cropBordersWebtoon, false)

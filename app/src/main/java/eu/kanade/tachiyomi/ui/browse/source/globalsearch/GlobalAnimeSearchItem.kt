@@ -6,7 +6,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.CatalogueSource
+import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 
 /**
  * Item that contains search result information.
@@ -15,7 +15,7 @@ import eu.kanade.tachiyomi.source.CatalogueSource
  * @param results the search results.
  * @param highlighted whether this search item should be highlighted/marked in the catalogue search view.
  */
-class GlobalAnimeSearchItem(val source: CatalogueSource, val results: List<GlobalAnimeSearchCardItem>?, val highlighted: Boolean = false) :
+class GlobalAnimeSearchItem(val source: AnimeCatalogueSource, val results: List<GlobalAnimeSearchCardItem>?, val highlighted: Boolean = false) :
     AbstractFlexibleItem<GlobalAnimeSearchHolder>() {
 
     /**

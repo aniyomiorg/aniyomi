@@ -6,20 +6,18 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import dev.chrisbanes.insetter.applyInsetter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.GlobalAnimeSearchControllerBinding
-import eu.kanade.tachiyomi.source.CatalogueSource
+import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
-import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
+import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseAnimeSourceController
 import uy.kohesive.injekt.injectLazy
 
 /**
@@ -57,15 +55,7 @@ open class GlobalAnimeSearchController(
      * @param container containing parent views.
      * @return inflated view
      */
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        binding = GlobalAnimeSearchControllerBinding.inflate(inflater)
-        binding.recycler.applyInsetter {
-            type(navigationBars = true) {
-                padding()
-            }
-        }
-        return binding.root
-    }
+    override fun createBinding(inflater: LayoutInflater) = GlobalAnimeSearchControllerBinding.inflate(inflater)
 
     override fun getTitle(): String? {
         return presenter.query
@@ -170,7 +160,7 @@ open class GlobalAnimeSearchController(
      * @param source used to find holder containing source
      * @return the holder of the anime or null if it's not bound.
      */
-    private fun getHolder(source: CatalogueSource): GlobalAnimeSearchHolder? {
+    private fun getHolder(source: AnimeCatalogueSource): GlobalAnimeSearchHolder? {
         val adapter = adapter ?: return null
 
         adapter.allBoundViewHolders.forEach { holder ->
@@ -211,15 +201,15 @@ open class GlobalAnimeSearchController(
      *
      * @param anime the initialized anime.
      */
-    fun onAnimeInitialized(source: CatalogueSource, anime: Anime) {
+    fun onAnimeInitialized(source: AnimeCatalogueSource, anime: Anime) {
         getHolder(source)?.setImage(anime)
     }
 
     /**
      * Opens a catalogue with the given search.
      */
-    override fun onTitleClick(source: CatalogueSource) {
+    override fun onTitleClick(source: AnimeCatalogueSource) {
         presenter.preferences.lastUsedSource().set(source.id)
-        router.pushController(BrowseSourceController(source, presenter.query).withFadeTransaction())
+        router.pushController(BrowseAnimeSourceController(source, presenter.query).withFadeTransaction())
     }
 }

@@ -87,7 +87,7 @@ class HttpPageLoader(
     override fun getPages(): Observable<List<WatcherPage>> {
         return episodeCache
             .getPageListFromCache(episode.episode)
-            .onErrorResumeNext { source.fetchPageListAnime(episode.episode) }
+            .onErrorResumeNext { source.fetchPageList(episode.episode) }
             .map { pages ->
                 pages.mapIndexed { index, page ->
                     // Don't trust sources and use our own indexing

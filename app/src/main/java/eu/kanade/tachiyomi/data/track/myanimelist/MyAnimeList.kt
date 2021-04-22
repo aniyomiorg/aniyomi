@@ -4,9 +4,10 @@ import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -77,7 +78,17 @@ class MyAnimeList(private val context: Context, id: Int) : TrackService(id) {
         return api.updateItem(track)
     }
 
+    override suspend fun addAnime(track: AnimeTrack): AnimeTrack {
+        track.status = READING
+        track.score = 0F
+        return api.updateItem(track)
+    }
+
     override suspend fun update(track: Track): Track {
+        return api.updateItem(track)
+    }
+
+    override suspend fun updateAnime(track: AnimeTrack): AnimeTrack {
         return api.updateItem(track)
     }
 
@@ -89,6 +100,17 @@ class MyAnimeList(private val context: Context, id: Int) : TrackService(id) {
             update(track)
         } else {
             add(track)
+        }
+    }
+
+    override suspend fun bindAnime(track: AnimeTrack): AnimeTrack {
+        val remoteTrack = api.findListItem(track)
+        return if (remoteTrack != null) {
+            track.copyPersonalFrom(remoteTrack)
+            track.media_id = remoteTrack.media_id
+            updateAnime(track)
+        } else {
+            addAnime(track)
         }
     }
 
@@ -108,8 +130,28 @@ class MyAnimeList(private val context: Context, id: Int) : TrackService(id) {
         return api.search(query)
     }
 
+    override suspend fun searchAnime(query: String): List<AnimeTrackSearch> {
+        if (query.startsWith(SEARCH_ID_PREFIX)) {
+            query.substringAfter(SEARCH_ID_PREFIX).toIntOrNull()?.let { id ->
+                return listOf(api.getAnimeDetails(id))
+            }
+        }
+
+        if (query.startsWith(SEARCH_LIST_PREFIX)) {
+            query.substringAfter(SEARCH_LIST_PREFIX).let { title ->
+                return api.findListItemsAnime(title)
+            }
+        }
+
+        return api.searchAnime(query)
+    }
+
     override suspend fun refresh(track: Track): Track {
         return api.findListItem(track) ?: add(track)
+    }
+
+    override suspend fun refreshAnime(track: AnimeTrack): AnimeTrack {
+        return api.findListItem(track) ?: addAnime(track)
     }
 
     override suspend fun login(username: String, password: String) = login(password)

@@ -5,15 +5,15 @@ import android.os.Bundle
 import android.os.Environment
 import com.jakewharton.rxrelay.BehaviorRelay
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.cache.CoverCache
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
+import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.History
-import eu.kanade.tachiyomi.data.download.DownloadManager
+import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.source.LocalSource
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.AnimeSourceManager
+import eu.kanade.tachiyomi.source.LocalAnimeSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.ui.watcher.loader.EpisodeLoader
@@ -44,10 +44,10 @@ import java.util.concurrent.TimeUnit
  * Presenter used by the activity to perform background operations.
  */
 class WatcherPresenter(
-    private val db: DatabaseHelper = Injekt.get(),
-    private val sourceManager: SourceManager = Injekt.get(),
-    private val downloadManager: DownloadManager = Injekt.get(),
-    private val coverCache: CoverCache = Injekt.get(),
+    private val db: AnimeDatabaseHelper = Injekt.get(),
+    private val sourceManager: AnimeSourceManager = Injekt.get(),
+    private val downloadManager: AnimeDownloadManager = Injekt.get(),
+    private val coverCache: AnimeCoverCache = Injekt.get(),
     private val preferences: PreferencesHelper = Injekt.get()
 ) : BasePresenter<WatcherActivity>() {
 
@@ -613,7 +613,7 @@ class WatcherPresenter(
             .fromCallable {
                 if (anime.isLocal()) {
                     val context = Injekt.get<Application>()
-                    LocalSource.updateCover(context, anime, stream())
+                    LocalAnimeSource.updateCover(context, anime, stream())
                     anime.updateCoverLastModified(db)
                     R.string.cover_updated
                     SetAsCoverResult.Success
@@ -666,14 +666,14 @@ class WatcherPresenter(
             db.getTracks(anime).executeAsBlocking()
                 .mapNotNull { track ->
                     val service = trackManager.getService(track.sync_id)
-                    if (service != null && service.isLogged && episodeRead > track.last_episode_read) {
-                        track.last_episode_read = episodeRead
+                    if (service != null && service.isLogged && episodeRead > track.last_episode_seen) {
+                        track.last_episode_seen = episodeRead
 
                         // We want these to execute even if the presenter is destroyed and leaks
                         // for a while. The view can still be garbage collected.
                         async {
                             runCatching {
-                                service.update(track)
+                                service.updateAnime(track)
                                 db.insertTrack(track).executeAsBlocking()
                             }
                         }

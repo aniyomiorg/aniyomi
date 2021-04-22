@@ -99,7 +99,7 @@ class WatcherTransitionView @JvmOverloads constructor(context: Context, attrs: A
             is EpisodeTransition.Next -> calculateEpisodeDifference(transition.to, transition.from)
         }
 
-        binding.warningText.text = resources.getQuantityString(R.plurals.missing_episodes_warning, episodeDifference.toInt(), episodeDifference.toInt())
+        binding.warningText.text = resources.getQuantityString(R.plurals.missing_chapters_warning, episodeDifference.toInt(), episodeDifference.toInt())
         binding.warning.isVisible = true
     }
 }

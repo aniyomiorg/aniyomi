@@ -7,6 +7,7 @@ import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.network.NetworkHelper
 import okhttp3.OkHttpClient
@@ -62,6 +63,8 @@ abstract class TrackService(val id: Int) {
     abstract suspend fun bindAnime(track: AnimeTrack): AnimeTrack
 
     abstract suspend fun search(query: String): List<TrackSearch>
+
+    abstract suspend fun searchAnime(query: String): List<AnimeTrackSearch>
 
     abstract suspend fun refresh(track: Track): Track
 

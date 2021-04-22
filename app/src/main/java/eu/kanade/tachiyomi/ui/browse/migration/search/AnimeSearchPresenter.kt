@@ -5,8 +5,8 @@ import com.jakewharton.rxrelay.BehaviorRelay
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeCategory
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
-import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.Source
+import eu.kanade.tachiyomi.source.AnimeCatalogueSource
+import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.source.model.SAnime
 import eu.kanade.tachiyomi.source.model.SEpisode
 import eu.kanade.tachiyomi.source.model.toSEpisode
@@ -34,13 +34,13 @@ class AnimeSearchPresenter(
         replacingAnimeRelay.subscribeLatestCache({ controller, isReplacingAnime -> (controller as? AnimeSearchController)?.renderIsReplacingAnime(isReplacingAnime) })
     }
 
-    override fun getEnabledSources(): List<CatalogueSource> {
+    override fun getEnabledSources(): List<AnimeCatalogueSource> {
         // Put the source of the selected anime at the top
         return super.getEnabledSources()
             .sortedByDescending { it.id == anime.source }
     }
 
-    override fun createCatalogueSearchItem(source: CatalogueSource, results: List<GlobalAnimeSearchCardItem>?): GlobalAnimeSearchItem {
+    override fun createCatalogueSearchItem(source: AnimeCatalogueSource, results: List<GlobalAnimeSearchCardItem>?): GlobalAnimeSearchItem {
         // Set the catalogue search item as highlighted if the source matches that of the selected anime
         return GlobalAnimeSearchItem(source, results, source.id == anime.source)
     }
@@ -72,7 +72,7 @@ class AnimeSearchPresenter(
     }
 
     private fun migrateAnimeInternal(
-        source: Source,
+        source: AnimeSource,
         sourceEpisodes: List<SEpisode>,
         prevAnime: Anime,
         anime: Anime,

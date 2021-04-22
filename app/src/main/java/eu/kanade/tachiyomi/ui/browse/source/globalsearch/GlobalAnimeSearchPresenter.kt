@@ -6,9 +6,9 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.extension.ExtensionManager
-import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.Source
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.AnimeCatalogueSource
+import eu.kanade.tachiyomi.source.AnimeSource
+import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.model.AnimesPage
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.SAnime
@@ -37,7 +37,7 @@ import uy.kohesive.injekt.injectLazy
 open class GlobalAnimeSearchPresenter(
     val initialQuery: String? = "",
     val initialExtensionFilter: String? = null,
-    val sourceManager: SourceManager = Injekt.get(),
+    val sourceManager: AnimeSourceManager = Injekt.get(),
     val db: AnimeDatabaseHelper = Injekt.get(),
     val preferences: PreferencesHelper = Injekt.get()
 ) : BasePresenter<GlobalAnimeSearchController>() {
@@ -55,7 +55,7 @@ open class GlobalAnimeSearchPresenter(
     /**
      * Subject which fetches image of given anime.
      */
-    private val fetchImageSubject = PublishSubject.create<Pair<List<Anime>, Source>>()
+    private val fetchImageSubject = PublishSubject.create<Pair<List<Anime>, AnimeSource>>()
 
     /**
      * Subscription for fetching images of anime.
@@ -97,7 +97,7 @@ open class GlobalAnimeSearchPresenter(
      *
      * @return list containing enabled sources.
      */
-    protected open fun getEnabledSources(): List<CatalogueSource> {
+    protected open fun getEnabledSources(): List<AnimeCatalogueSource> {
         val languages = preferences.enabledLanguages().get()
         val disabledSourceIds = preferences.disabledSources().get()
         val pinnedSourceIds = preferences.pinnedSources().get()
@@ -108,17 +108,17 @@ open class GlobalAnimeSearchPresenter(
             .sortedWith(compareBy({ it.id.toString() !in pinnedSourceIds }, { "${it.name.toLowerCase()} (${it.lang})" }))
     }
 
-    private fun getSourcesToQuery(): List<CatalogueSource> {
+    private fun getSourcesToQuery(): List<AnimeCatalogueSource> {
         val filter = extensionFilter
         val enabledSources = getEnabledSources()
-        var filteredSources: List<CatalogueSource>? = null
+        var filteredSources: List<AnimeCatalogueSource>? = null
 
         if (!filter.isNullOrEmpty()) {
             filteredSources = extensionManager.installedExtensions
                 .filter { it.pkgName == filter }
                 .flatMap { it.sources }
                 .filter { it in enabledSources }
-                .filterIsInstance<CatalogueSource>()
+                .filterIsInstance<AnimeCatalogueSource>()
         }
 
         if (filteredSources != null && filteredSources.isNotEmpty()) {
@@ -135,7 +135,7 @@ open class GlobalAnimeSearchPresenter(
     /**
      * Creates a catalogue search item
      */
-    protected open fun createCatalogueSearchItem(source: CatalogueSource, results: List<GlobalAnimeSearchCardItem>?): GlobalAnimeSearchItem {
+    protected open fun createCatalogueSearchItem(source: AnimeCatalogueSource, results: List<GlobalAnimeSearchCardItem>?): GlobalAnimeSearchItem {
         return GlobalAnimeSearchItem(source, results)
     }
 
@@ -208,7 +208,7 @@ open class GlobalAnimeSearchPresenter(
      *
      * @param anime the list of anime to initialize.
      */
-    private fun fetchImage(anime: List<Anime>, source: Source) {
+    private fun fetchImage(anime: List<Anime>, source: AnimeSource) {
         fetchImageSubject.onNext(Pair(anime, source))
     }
 
@@ -223,7 +223,7 @@ open class GlobalAnimeSearchPresenter(
                     .filter { it.thumbnail_url == null && !it.initialized }
                     .map { Pair(it, source) }
                     .concatMap { runAsObservable({ getAnimeDetails(it.first, it.second) }) }
-                    .map { Pair(source as CatalogueSource, it) }
+                    .map { Pair(source as AnimeCatalogueSource, it) }
             }
             .onBackpressureBuffer()
             .observeOn(AndroidSchedulers.mainThread())
@@ -244,7 +244,7 @@ open class GlobalAnimeSearchPresenter(
      * @param anime the anime to initialize.
      * @return The initialized anime.
      */
-    private suspend fun getAnimeDetails(anime: Anime, source: Source): Anime {
+    private suspend fun getAnimeDetails(anime: Anime, source: AnimeSource): Anime {
         val networkAnime = source.getAnimeDetails(anime.toAnimeInfo())
         anime.copyFrom(networkAnime.toSAnime())
         anime.initialized = true

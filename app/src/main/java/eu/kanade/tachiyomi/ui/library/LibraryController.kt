@@ -45,14 +45,14 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class LibraryController(
-        bundle: Bundle? = null,
-        private val preferences: PreferencesHelper = Injekt.get()
+    bundle: Bundle? = null,
+    private val preferences: PreferencesHelper = Injekt.get()
 ) : SearchableNucleusController<LibraryControllerBinding, LibraryPresenter>(bundle),
-        RootController,
-        TabbedController,
-        ActionMode.Callback,
-        ChangeMangaCategoriesDialog.Listener,
-        DeleteLibraryMangasDialog.Listener {
+    RootController,
+    TabbedController,
+    ActionMode.Callback,
+    ChangeMangaCategoriesDialog.Listener,
+    DeleteLibraryMangasDialog.Listener {
 
     /**
      * Position of the active category.
@@ -177,18 +177,18 @@ class LibraryController(
         adapter = LibraryAdapter(this)
         binding.libraryPager.adapter = adapter
         binding.libraryPager.pageSelections()
-                .onEach {
-                    preferences.lastUsedCategory().set(it)
-                    activeCategory = it
-                    updateTitle()
-                }
-                .launchIn(viewScope)
+            .onEach {
+                preferences.lastUsedCategory().set(it)
+                activeCategory = it
+                updateTitle()
+            }
+            .launchIn(viewScope)
 
         getColumnsPreferenceForCurrentOrientation().asImmediateFlow { mangaPerRow = it }
-                .drop(1)
-                // Set again the adapter to recalculate the covers height
-                .onEach { reattachAdapter() }
-                .launchIn(viewScope)
+            .drop(1)
+            // Set again the adapter to recalculate the covers height
+            .onEach { reattachAdapter() }
+            .launchIn(viewScope)
 
         if (selectedMangas.isNotEmpty()) {
             createActionModeIfNeeded()
@@ -205,12 +205,12 @@ class LibraryController(
         }
 
         binding.btnGlobalSearch.clicks()
-                .onEach {
-                    router.pushController(
-                            GlobalSearchController(presenter.query).withFadeTransaction()
-                    )
-                }
-                .launchIn(viewScope)
+            .onEach {
+                router.pushController(
+                    GlobalSearchController(presenter.query).withFadeTransaction()
+                )
+            }
+            .launchIn(viewScope)
 
         (activity as? MainActivity)?.fixViewToBottom(binding.actionToolbar)
     }
@@ -285,8 +285,8 @@ class LibraryController(
         // Set the categories
         adapter.categories = categories
         adapter.itemsPerCategory = adapter.categories
-                .map { (it.id ?: -1) to (mangaMap[it.id]?.size ?: 0) }
-                .toMap()
+            .map { (it.id ?: -1) to (mangaMap[it.id]?.size ?: 0) }
+            .toMap()
 
         // Restore active category.
         binding.libraryPager.setCurrentItem(activeCat, false)
@@ -364,8 +364,8 @@ class LibraryController(
         if (actionMode == null) {
             actionMode = (activity as AppCompatActivity).startSupportActionMode(this)
             binding.actionToolbar.show(
-                    actionMode!!,
-                    R.menu.library_selection
+                actionMode!!,
+                R.menu.library_selection
             ) { onActionItemClicked(it!!) }
             (activity as? MainActivity)?.showBottomNav(visible = false, collapse = true)
         }
@@ -393,7 +393,7 @@ class LibraryController(
         if (presenter.query.isNotEmpty()) {
             binding.btnGlobalSearch.isVisible = true
             binding.btnGlobalSearch.text =
-                    resources?.getString(R.string.action_global_search_query, presenter.query)
+                resources?.getString(R.string.action_global_search_query, presenter.query)
         } else {
             binding.btnGlobalSearch.isVisible = false
         }
@@ -531,11 +531,11 @@ class LibraryController(
 
         // Get indexes of the common categories to preselect.
         val commonCategoriesIndexes = presenter.getCommonCategories(mangas)
-                .map { categories.indexOf(it) }
-                .toTypedArray()
+            .map { categories.indexOf(it) }
+            .toTypedArray()
 
         ChangeMangaCategoriesDialog(this, mangas, categories, commonCategoriesIndexes)
-                .showDialog(router)
+            .showDialog(router)
     }
 
     private fun downloadUnreadChapters() {

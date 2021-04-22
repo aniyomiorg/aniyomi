@@ -23,7 +23,7 @@ import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.source.browse.ProgressItem
-import eu.kanade.tachiyomi.ui.manga.AnimeController
+import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.filter
@@ -168,7 +168,7 @@ class HistoryController :
 
     override fun onItemClick(position: Int) {
         val manga = (adapter?.getItem(position) as? HistoryItem)?.mch?.manga ?: return
-        router.pushController(AnimeController(manga).withFadeTransaction())
+        router.pushController(MangaController(manga).withFadeTransaction())
     }
 
     override fun removeHistory(manga: Manga, history: History, all: Boolean) {

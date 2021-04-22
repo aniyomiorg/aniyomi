@@ -52,6 +52,42 @@ class KitsuSearchManga(obj: JsonObject) {
     }
 }
 
+class KitsuSearchAnime(obj: JsonObject) {
+    val id = obj["id"]!!.jsonPrimitive.int
+    private val canonicalTitle = obj["canonicalTitle"]!!.jsonPrimitive.content
+    private val chapterCount = obj["chapterCount"]?.jsonPrimitive?.intOrNull
+    val subType = obj["subtype"]?.jsonPrimitive?.contentOrNull
+    val original = try {
+        obj["posterImage"]?.jsonObject?.get("original")?.jsonPrimitive?.content
+    } catch (e: IllegalArgumentException) {
+        // posterImage is sometimes a jsonNull object instead
+        null
+    }
+    private val synopsis = obj["synopsis"]!!.jsonPrimitive.content
+    private var startDate = obj["startDate"]?.jsonPrimitive?.contentOrNull?.let {
+        val outputDf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        outputDf.format(Date(it.toLong() * 1000))
+    }
+    private val endDate = obj["endDate"]?.jsonPrimitive?.contentOrNull
+
+    @CallSuper
+    fun toTrack() = AnimeTrackSearch.create(TrackManager.KITSU).apply {
+        media_id = this@KitsuSearchAnime.id
+        title = canonicalTitle
+        total_episodes = chapterCount ?: 0
+        cover_url = original ?: ""
+        summary = synopsis
+        tracking_url = KitsuApi.mangaUrl(media_id)
+        publishing_status = if (endDate == null) {
+            "Publishing"
+        } else {
+            "Finished"
+        }
+        publishing_type = subType ?: ""
+        start_date = startDate ?: ""
+    }
+}
+
 class KitsuLibManga(obj: JsonObject, manga: JsonObject) {
     val id = manga["id"]!!.jsonPrimitive.int
     private val canonicalTitle = manga["attributes"]!!.jsonObject["canonicalTitle"]!!.jsonPrimitive.content

@@ -11,7 +11,7 @@ import eu.kanade.tachiyomi.databinding.MigrationMangaControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.migration.search.SearchController
-import eu.kanade.tachiyomi.ui.manga.AnimeController
+import eu.kanade.tachiyomi.ui.manga.MangaController
 
 class MigrationMangaController :
     NucleusController<MigrationMangaControllerBinding, MigrationMangaPresenter>,
@@ -79,7 +79,7 @@ class MigrationMangaController :
 
     override fun onCoverClick(position: Int) {
         val mangaItem = adapter?.getItem(position) as? MigrationMangaItem ?: return
-        router.pushController(AnimeController(mangaItem.manga).withFadeTransaction())
+        router.pushController(MangaController(mangaItem.manga).withFadeTransaction())
     }
 
     companion object {
