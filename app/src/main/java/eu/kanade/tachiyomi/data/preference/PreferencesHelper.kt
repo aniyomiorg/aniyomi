@@ -130,6 +130,8 @@ class PreferencesHelper(val context: Context) {
 
     fun readerTheme() = flowPrefs.getInt(Keys.readerTheme, 1)
 
+    fun watcherTheme() = flowPrefs.getInt(Keys.readerTheme, 1)
+
     fun alwaysShowChapterTransition() = flowPrefs.getBoolean(Keys.alwaysShowChapterTransition, true)
 
     fun cropBorders() = flowPrefs.getBoolean(Keys.cropBorders, false)
@@ -163,6 +165,8 @@ class PreferencesHelper(val context: Context) {
     fun landscapeColumns() = flowPrefs.getInt(Keys.landscapeColumns, 0)
 
     fun jumpToChapters() = prefs.getBoolean(Keys.jumpToChapters, false)
+
+    fun jumpToEpisodes() = prefs.getBoolean(Keys.jumpToEpisodes, false)
 
     fun updateOnlyNonCompleted() = prefs.getBoolean(Keys.updateOnlyNonCompleted, false)
 

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.data.glide.toAnimeThumbnail
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -302,7 +303,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
     }
 
     companion object {
-        private const val NOTIF_MAX_CHAPTERS = 5
+        private const val NOTIF_MAX_EPISODES = 5
         private const val NOTIF_TITLE_MAX_LEN = 45
         private const val NOTIF_ICON_SIZE = 192
     }

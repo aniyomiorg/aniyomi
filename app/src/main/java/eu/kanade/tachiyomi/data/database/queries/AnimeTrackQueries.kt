@@ -4,41 +4,41 @@ import com.pushtorefresh.storio.sqlite.queries.DeleteQuery
 import com.pushtorefresh.storio.sqlite.queries.Query
 import eu.kanade.tachiyomi.data.database.DbProvider
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.Track
-import eu.kanade.tachiyomi.data.database.tables.TrackTable
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
+import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable
 import eu.kanade.tachiyomi.data.track.TrackService
 
 interface AnimeTrackQueries : DbProvider {
 
     fun getTracks() = db.get()
-        .listOfObjects(Track::class.java)
+        .listOfObjects(AnimeTrack::class.java)
         .withQuery(
             Query.builder()
-                .table(TrackTable.TABLE)
+                .table(AnimeTrackTable.TABLE)
                 .build()
         )
         .prepare()
 
     fun getTracks(anime: Anime) = db.get()
-        .listOfObjects(Track::class.java)
+        .listOfObjects(AnimeTrack::class.java)
         .withQuery(
             Query.builder()
-                .table(TrackTable.TABLE)
-                .where("${TrackTable.COL_MANGA_ID} = ?")
+                .table(AnimeTrackTable.TABLE)
+                .where("${AnimeTrackTable.COL_ANIME_ID} = ?")
                 .whereArgs(anime.id)
                 .build()
         )
         .prepare()
 
-    fun insertTrack(track: Track) = db.put().`object`(track).prepare()
+    fun insertTrack(track: AnimeTrack) = db.put().`object`(track).prepare()
 
-    fun insertTracks(tracks: List<Track>) = db.put().objects(tracks).prepare()
+    fun insertTracks(tracks: List<AnimeTrack>) = db.put().objects(tracks).prepare()
 
     fun deleteTrackForAnime(anime: Anime, sync: TrackService) = db.delete()
         .byQuery(
             DeleteQuery.builder()
-                .table(TrackTable.TABLE)
-                .where("${TrackTable.COL_MANGA_ID} = ? AND ${TrackTable.COL_SYNC_ID} = ?")
+                .table(AnimeTrackTable.TABLE)
+                .where("${AnimeTrackTable.COL_ANIME_ID} = ? AND ${AnimeTrackTable.COL_SYNC_ID} = ?")
                 .whereArgs(anime.id, sync.id)
                 .build()
         )

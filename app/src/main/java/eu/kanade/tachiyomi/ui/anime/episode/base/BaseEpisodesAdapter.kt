@@ -1,0 +1,22 @@
+package eu.kanade.tachiyomi.ui.anime.episode.base
+
+import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.items.IFlexible
+
+abstract class BaseEpisodesAdapter<T : IFlexible<*>>(
+    controller: OnEpisodeClickListener
+) : FlexibleAdapter<T>(null, controller, true) {
+
+    /**
+     * Listener for browse item clicks.
+     */
+    val clickListener: OnEpisodeClickListener = controller
+
+    /**
+     * Listener which should be called when user clicks the download icons.
+     */
+    interface OnEpisodeClickListener {
+        fun downloadEpisode(position: Int)
+        fun deleteEpisode(position: Int)
+    }
+}

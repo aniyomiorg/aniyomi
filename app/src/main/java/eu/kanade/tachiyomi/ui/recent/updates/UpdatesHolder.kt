@@ -11,7 +11,7 @@ import eu.kanade.tachiyomi.data.glide.GlideApp
 import eu.kanade.tachiyomi.data.glide.toMangaThumbnail
 import eu.kanade.tachiyomi.databinding.UpdatesItemBinding
 import eu.kanade.tachiyomi.source.LocalSource
-import eu.kanade.tachiyomi.ui.manga.chapter.base.BaseChapterHolder
+import eu.kanade.tachiyomi.ui.manga.chapter.base.BaseEpisodeHolder
 
 /**
  * Holder that contains chapter item
@@ -23,7 +23,7 @@ import eu.kanade.tachiyomi.ui.manga.chapter.base.BaseChapterHolder
  * @constructor creates a new recent chapter holder.
  */
 class UpdatesHolder(private val view: View, private val adapter: UpdatesAdapter) :
-    BaseChapterHolder(view, adapter) {
+    BaseEpisodeHolder(view, adapter) {
 
     private val binding = UpdatesItemBinding.bind(view)
 

@@ -32,7 +32,7 @@ import eu.kanade.tachiyomi.ui.base.controller.TabbedController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.manga.MangaController
+import eu.kanade.tachiyomi.ui.manga.AnimeController
 import eu.kanade.tachiyomi.util.system.getResourceColor
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.drop
@@ -417,7 +417,7 @@ class LibraryController(
         when (item.itemId) {
             R.id.action_search -> expandActionViewFromInteraction = true
             R.id.action_filter -> showSettingsSheet()
-            R.id.action_update_library -> {
+            R.id.action_update_animelib -> {
                 activity?.let {
                     if (LibraryUpdateService.start(it)) {
                         it.toast(R.string.updating_library)
@@ -487,7 +487,7 @@ class LibraryController(
         // Notify the presenter a manga is being opened.
         presenter.onOpenManga()
 
-        router.pushController(MangaController(manga).withFadeTransaction())
+        router.pushController(AnimeController(manga).withFadeTransaction())
     }
 
     /**

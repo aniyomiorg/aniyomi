@@ -20,8 +20,10 @@ import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.ui.main.MainActivity
+import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
+import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.getUriCompat
@@ -32,6 +34,8 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import eu.kanade.tachiyomi.BuildConfig.APPLICATION_ID as ID
+import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
+import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 
 /**
  * Global [BroadcastReceiver] that runs on UI thread
@@ -220,6 +224,17 @@ class NotificationReceiver : BroadcastReceiver() {
      */
     private fun cancelLibraryUpdate(context: Context, notificationId: Int) {
         LibraryUpdateService.stop(context)
+        Handler().post { dismissNotification(context, notificationId) }
+    }
+
+    /**
+     * Method called when user wants to stop a library update
+     *
+     * @param context context of application
+     * @param notificationId id of notification
+     */
+    private fun cancelAnimelibUpdate(context: Context, notificationId: Int) {
+        AnimelibUpdateService.stop(context)
         Handler().post { dismissNotification(context, notificationId) }
     }
 
@@ -418,7 +433,7 @@ class NotificationReceiver : BroadcastReceiver() {
          * @param episode episode that needs to be opened
          */
         internal fun openEpisodePendingActivity(context: Context, anime: Anime, episode: Episode): PendingIntent {
-            val newIntent = ReaderActivity.newIntent(context, anime, episode)
+            val newIntent = WatcherActivity.newIntent(context, anime, episode)
             return PendingIntent.getActivity(context, anime.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 

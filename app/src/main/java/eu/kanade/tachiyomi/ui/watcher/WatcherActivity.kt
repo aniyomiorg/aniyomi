@@ -21,15 +21,18 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
+import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Chapter
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
+import eu.kanade.tachiyomi.data.preference.toggle
 import eu.kanade.tachiyomi.databinding.WatcherActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -37,12 +40,12 @@ import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.watcher.WatcherPresenter.SetAsCoverResult.AddToLibraryFirst
 import eu.kanade.tachiyomi.ui.watcher.WatcherPresenter.SetAsCoverResult.Error
 import eu.kanade.tachiyomi.ui.watcher.WatcherPresenter.SetAsCoverResult.Success
-import eu.kanade.tachiyomi.ui.watcher.model.WatcherChapter
+import eu.kanade.tachiyomi.ui.watcher.model.WatcherEpisode
 import eu.kanade.tachiyomi.ui.watcher.model.WatcherPage
-import eu.kanade.tachiyomi.ui.watcher.model.ViewerChapters
+import eu.kanade.tachiyomi.ui.watcher.model.ViewerEpisodes
 import eu.kanade.tachiyomi.ui.watcher.setting.OrientationType
 import eu.kanade.tachiyomi.ui.watcher.setting.WatcherSettingsSheet
-import eu.kanade.tachiyomi.ui.watcher.setting.WatchingModeType
+import eu.kanade.tachiyomi.ui.watcher.setting.ReadingModeType
 import eu.kanade.tachiyomi.ui.watcher.viewer.BaseViewer
 import eu.kanade.tachiyomi.ui.watcher.viewer.pager.L2RPagerViewer
 import eu.kanade.tachiyomi.ui.watcher.viewer.pager.R2LPagerViewer
@@ -55,6 +58,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.defaultBar
 import eu.kanade.tachiyomi.util.view.hideBar
 import eu.kanade.tachiyomi.util.view.isDefaultBar
+import eu.kanade.tachiyomi.util.view.setTooltip
 import eu.kanade.tachiyomi.util.view.showBar
 import eu.kanade.tachiyomi.widget.SimpleAnimationListener
 import eu.kanade.tachiyomi.widget.SimpleSeekBarListener
@@ -77,7 +81,7 @@ import kotlin.math.abs
 class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>() {
 
     companion object {
-        fun newIntent(context: Context, anime: Anime, episode: Chapter): Intent {
+        fun newIntent(context: Context, anime: Anime, episode: Episode): Intent {
             return Intent(context, WatcherActivity::class.java).apply {
                 putExtra("anime", anime.id)
                 putExtra("episode", episode.id)
@@ -128,9 +132,9 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(
             when (preferences.watcherTheme().get()) {
-                0 -> R.style.Theme_Watcher_Light
-                2 -> R.style.Theme_Watcher_Dark_Grey
-                else -> R.style.Theme_Watcher_Dark
+                0 -> R.style.Theme_Reader_Light
+                2 -> R.style.Theme_Reader_Dark_Grey
+                else -> R.style.Theme_Reader_Dark
             }
         )
         super.onCreate(savedInstanceState)
@@ -214,9 +218,9 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.watcher, menu)
 
-        val isChapterBookmarked = presenter?.getCurrentChapter()?.episode?.bookmark ?: false
-        menu.findItem(R.id.action_bookmark).isVisible = !isChapterBookmarked
-        menu.findItem(R.id.action_remove_bookmark).isVisible = isChapterBookmarked
+        val isEpisodeBookmarked = presenter?.getCurrentEpisode()?.episode?.bookmark ?: false
+        menu.findItem(R.id.action_bookmark).isVisible = !isEpisodeBookmarked
+        menu.findItem(R.id.action_remove_bookmark).isVisible = isEpisodeBookmarked
 
         return true
     }
@@ -228,11 +232,11 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_bookmark -> {
-                presenter.bookmarkCurrentChapter(true)
+                presenter.bookmarkCurrentEpisode(true)
                 invalidateOptionsMenu()
             }
             R.id.action_remove_bookmark -> {
-                presenter.bookmarkCurrentChapter(false)
+                presenter.bookmarkCurrentEpisode(false)
                 invalidateOptionsMenu()
             }
         }
@@ -250,10 +254,10 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_N) {
-            presenter.loadNextChapter()
+            presenter.loadNextEpisode()
             return true
         } else if (keyCode == KeyEvent.KEYCODE_P) {
-            presenter.loadPreviousChapter()
+            presenter.loadPreviousEpisode()
             return true
         }
         return super.onKeyUp(keyCode, event)
@@ -321,21 +325,21 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
                 }
             }
         )
-        binding.leftChapter.setOnClickListener {
+        binding.leftEpisode.setOnClickListener {
             if (viewer != null) {
                 if (viewer is R2LPagerViewer) {
-                    loadNextChapter()
+                    loadNextEpisode()
                 } else {
-                    loadPreviousChapter()
+                    loadPreviousEpisode()
                 }
             }
         }
-        binding.rightChapter.setOnClickListener {
+        binding.rightEpisode.setOnClickListener {
             if (viewer != null) {
                 if (viewer is R2LPagerViewer) {
-                    loadPreviousChapter()
+                    loadPreviousEpisode()
                 } else {
-                    loadNextChapter()
+                    loadNextEpisode()
                 }
             }
         }
@@ -347,18 +351,18 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
     }
 
     private fun initBottomShortcuts() {
-        // Watching mode
-        with(binding.actionWatchingMode) {
+        // Reading mode
+        with(binding.actionReadingMode) {
             setTooltip(R.string.viewer)
 
             setOnClickListener {
-                val newWatchingMode =
-                    WatchingModeType.getNextWatchingMode(presenter.getAnimeViewer(resolveDefault = false))
-                presenter.setAnimeViewer(newWatchingMode.prefValue)
+                val newReadingMode =
+                    ReadingModeType.getNextReadingMode(presenter.getAnimeViewer(resolveDefault = false))
+                presenter.setAnimeViewer(newReadingMode.prefValue)
 
                 menuToggleToast?.cancel()
-                if (!preferences.showWatchingMode()) {
-                    menuToggleToast = toast(newWatchingMode.stringRes)
+                if (!preferences.showReadingMode()) {
+                    menuToggleToast = toast(newReadingMode.stringRes)
                 }
             }
         }
@@ -386,7 +390,7 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
             setTooltip(R.string.pref_crop_borders)
 
             setOnClickListener {
-                val isPagerType = WatchingModeType.isPagerType(presenter.getAnimeViewer())
+                val isPagerType = ReadingModeType.isPagerType(presenter.getAnimeViewer())
                 if (isPagerType) {
                     preferences.cropBorders().toggle()
                 } else {
@@ -423,7 +427,7 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
     }
 
     private fun updateCropBordersShortcut() {
-        val isPagerType = WatchingModeType.isPagerType(presenter.getAnimeViewer())
+        val isPagerType = ReadingModeType.isPagerType(presenter.getAnimeViewer())
         val enabled = if (isPagerType) {
             preferences.cropBorders().get()
         } else {
@@ -515,14 +519,14 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
     fun setAnime(anime: Anime) {
         val prevViewer = viewer
 
-        val viewerMode = WatchingModeType.fromPreference(presenter.getAnimeViewer(resolveDefault = false))
-        binding.actionWatchingMode.setImageResource(viewerMode.iconRes)
+        val viewerMode = ReadingModeType.fromPreference(presenter.getAnimeViewer(resolveDefault = false))
+        binding.actionReadingMode.setImageResource(viewerMode.iconRes)
 
         val newViewer = when (presenter.getAnimeViewer()) {
-            WatchingModeType.LEFT_TO_RIGHT.prefValue -> L2RPagerViewer(this)
-            WatchingModeType.VERTICAL.prefValue -> VerticalPagerViewer(this)
-            WatchingModeType.WEBTOON.prefValue -> WebtoonViewer(this)
-            WatchingModeType.CONTINUOUS_VERTICAL.prefValue -> WebtoonViewer(this, isContinuous = false)
+            ReadingModeType.LEFT_TO_RIGHT.prefValue -> L2RPagerViewer(this)
+            ReadingModeType.VERTICAL.prefValue -> VerticalPagerViewer(this)
+            ReadingModeType.WEBTOON.prefValue -> WebtoonViewer(this)
+            ReadingModeType.CONTINUOUS_VERTICAL.prefValue -> WebtoonViewer(this, isContinuous = false)
             else -> R2LPagerViewer(this)
         }
 
@@ -534,26 +538,26 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
         viewer = newViewer
         binding.viewerContainer.addView(newViewer.getView())
 
-        if (preferences.showWatchingMode()) {
-            showWatchingModeToast(presenter.getAnimeViewer())
+        if (preferences.showReadingMode()) {
+            showReadingModeToast(presenter.getAnimeViewer())
         }
 
         binding.toolbar.title = anime.title
 
         binding.pageSeekbar.isRTL = newViewer is R2LPagerViewer
         if (newViewer is R2LPagerViewer) {
-            binding.leftChapter.setTooltip(R.string.action_next_episode)
-            binding.rightChapter.setTooltip(R.string.action_previous_episode)
+            binding.leftEpisode.setTooltip(R.string.action_next_episode)
+            binding.rightEpisode.setTooltip(R.string.action_previous_episode)
         } else {
-            binding.leftChapter.setTooltip(R.string.action_previous_episode)
-            binding.rightChapter.setTooltip(R.string.action_next_episode)
+            binding.leftEpisode.setTooltip(R.string.action_previous_episode)
+            binding.rightEpisode.setTooltip(R.string.action_next_episode)
         }
 
         binding.pleaseWait.isVisible = true
         binding.pleaseWait.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in_long))
     }
 
-    private fun showWatchingModeToast(mode: Int) {
+    private fun showReadingModeToast(mode: Int) {
         try {
             val strings = resources.getStringArray(R.array.viewers_selector)
             readingModeToast?.cancel()
@@ -564,13 +568,13 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
     }
 
     /**
-     * Called from the presenter whenever a new [viewerChapters] have been set. It delegates the
+     * Called from the presenter whenever a new [viewerEpisodes] have been set. It delegates the
      * method to the current viewer, but also set the subtitle on the toolbar.
      */
-    fun setChapters(viewerChapters: ViewerChapters) {
+    fun setEpisodes(viewerEpisodes: ViewerEpisodes) {
         binding.pleaseWait.isVisible = false
-        viewer?.setChapters(viewerChapters)
-        binding.toolbar.subtitle = viewerChapters.currChapter.episode.name
+        viewer?.setEpisodes(viewerEpisodes)
+        binding.toolbar.subtitle = viewerEpisodes.currEpisode.episode.name
 
         // Invalidate menu to show proper episode bookmark state
         invalidateOptionsMenu()
@@ -580,7 +584,7 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
      * Called from the presenter if the initial load couldn't load the pages of the episode. In
      * this case the activity is closed and a toast is shown to the user.
      */
-    fun setInitialChapterError(error: Throwable) {
+    fun setInitialEpisodeError(error: Throwable) {
         Timber.e(error)
         finish()
         toast(error.message)
@@ -608,8 +612,8 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
      */
     fun moveToPageIndex(index: Int) {
         val viewer = viewer ?: return
-        val currentChapter = presenter.getCurrentChapter() ?: return
-        val page = currentChapter.pages?.getOrNull(index) ?: return
+        val currentEpisode = presenter.getCurrentEpisode() ?: return
+        val page = currentEpisode.pages?.getOrNull(index) ?: return
         viewer.moveToPage(page)
     }
 
@@ -617,16 +621,16 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
      * Tells the presenter to load the next episode and mark it as active. The progress dialog
      * should be automatically shown.
      */
-    private fun loadNextChapter() {
-        presenter.loadNextChapter()
+    private fun loadNextEpisode() {
+        presenter.loadNextEpisode()
     }
 
     /**
      * Tells the presenter to load the previous episode and mark it as active. The progress dialog
      * should be automatically shown.
      */
-    private fun loadPreviousChapter() {
-        presenter.loadPreviousChapter()
+    private fun loadPreviousEpisode() {
+        presenter.loadPreviousEpisode()
     }
 
     /**
@@ -667,8 +671,8 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
      * Called from the viewer when the given [episode] should be preloaded. It should be called when
      * the viewer is reaching the beginning or end of a episode or the transition page is active.
      */
-    fun requestPreloadChapter(episode: WatcherChapter) {
-        presenter.preloadChapter(episode)
+    fun requestPreloadEpisode(episode: WatcherEpisode) {
+        presenter.preloadEpisode(episode)
     }
 
     /**

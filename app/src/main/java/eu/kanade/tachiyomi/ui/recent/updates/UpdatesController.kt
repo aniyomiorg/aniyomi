@@ -20,10 +20,9 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.UpdatesControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
-import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.manga.MangaController
-import eu.kanade.tachiyomi.ui.manga.chapter.base.BaseChaptersAdapter
+import eu.kanade.tachiyomi.ui.manga.AnimeController
+import eu.kanade.tachiyomi.ui.manga.chapter.base.BaseEpisodesAdapter
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.util.system.notificationManager
 import eu.kanade.tachiyomi.util.system.toast
@@ -43,7 +42,7 @@ class UpdatesController :
     FlexibleAdapter.OnItemClickListener,
     FlexibleAdapter.OnItemLongClickListener,
     FlexibleAdapter.OnUpdateListener,
-    BaseChaptersAdapter.OnChapterClickListener,
+    BaseEpisodesAdapter.OnChapterClickListener,
     ConfirmDeleteChaptersDialog.Listener,
     UpdatesAdapter.OnCoverClickListener {
 
@@ -132,7 +131,7 @@ class UpdatesController :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_update_library -> updateLibrary()
+            R.id.action_update_animelib -> updateLibrary()
         }
 
         return super.onOptionsItemSelected(item)
@@ -287,7 +286,7 @@ class UpdatesController :
     }
 
     private fun openManga(chapter: UpdatesItem) {
-        router.pushController(MangaController(chapter.manga).withFadeTransaction())
+        router.pushController(AnimeController(chapter.manga).withFadeTransaction())
     }
 
     /**

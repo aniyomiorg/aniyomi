@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <eu.kanade.tachiyomi.widget.RevealAnimationView
+        android:id="@+id/reveal_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorAccent"
+        android:elevation="5dp"
+        android:visibility="invisible" />
+
+    <eu.kanade.tachiyomi.widget.ThemedSwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/toolbar_bottom"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/fab_list_padding"
+            tools:listitem="@layout/chapters_item" />
+
+    </eu.kanade.tachiyomi.widget.ThemedSwipeRefreshLayout>
+
+    <eu.kanade.tachiyomi.widget.MaterialFastScroll
+        android:id="@+id/fast_scroller"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="end"
+        app:fastScrollerBubbleEnabled="false"
+        tools:visibility="visible" />
+
+    <eu.kanade.tachiyomi.widget.ActionToolbar
+        android:id="@+id/action_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:layout_dodgeInsetEdges="bottom" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

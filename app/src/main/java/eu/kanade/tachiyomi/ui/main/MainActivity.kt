@@ -32,7 +32,6 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
 import eu.kanade.tachiyomi.databinding.MainActivityBinding
 import eu.kanade.tachiyomi.extension.api.ExtensionGithubApi
-import eu.kanade.tachiyomi.ui.animelib.MoreController
 import eu.kanade.tachiyomi.ui.base.activity.BaseViewBindingActivity
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.FabController
@@ -45,7 +44,7 @@ import eu.kanade.tachiyomi.ui.browse.BrowseController
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
 import eu.kanade.tachiyomi.ui.download.DownloadController
 import eu.kanade.tachiyomi.ui.library.LibraryController
-import eu.kanade.tachiyomi.ui.manga.MangaController
+import eu.kanade.tachiyomi.ui.manga.AnimeController
 import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.recent.history.HistoryController
 import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
@@ -69,7 +68,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             2 -> R.id.nav_history
             3 -> R.id.nav_updates
             4 -> R.id.nav_browse
-            5 -> R.id.nav_animelib
+            5 -> R.id.nav_library
             else -> R.id.nav_library
         }
     }
@@ -148,7 +147,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                     R.id.nav_history -> setRoot(HistoryController(), id)
                     R.id.nav_browse -> setRoot(BrowseController(), id)
                     R.id.nav_more -> setRoot(MoreController(), id)
-                    R.id.nav_animelib -> setRoot(AnimelibController(), id)
+                    R.id.nav_library -> setRoot(AnimelibController(), id)
                 }
             } else if (!isHandlingShortcut) {
                 when (id) {
@@ -284,7 +283,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                     router.popToRoot()
                 }
                 setSelectedNavItem(R.id.nav_library)
-                router.pushController(RouterTransaction.with(MangaController(extras)))
+                router.pushController(RouterTransaction.with(AnimeController(extras)))
             }
             SHORTCUT_DOWNLOADS -> {
                 if (router.backstackSize > 1) {

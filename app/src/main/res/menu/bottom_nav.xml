@@ -5,6 +5,10 @@
         android:icon="@drawable/ic_collections_bookmark_state"
         android:title="@string/label_library" />
     <item
+        android:id="@+id/nav_animelib"
+        android:icon="@drawable/ic_collections_bookmark_state"
+        android:title="@string/label_animelib" />
+    <item
         android:id="@+id/nav_updates"
         android:icon="@drawable/ic_new_releases_state"
         android:title="@string/label_recent_updates" />

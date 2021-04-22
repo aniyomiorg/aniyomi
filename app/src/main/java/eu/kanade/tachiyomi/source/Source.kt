@@ -4,9 +4,7 @@ import android.graphics.drawable.Drawable
 import eu.kanade.tachiyomi.extension.ExtensionManager
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SChapter
-import eu.kanade.tachiyomi.source.model.SEpisode
 import eu.kanade.tachiyomi.source.model.SManga
-import eu.kanade.tachiyomi.source.model.SAnime
 import eu.kanade.tachiyomi.source.model.toChapterInfo
 import eu.kanade.tachiyomi.source.model.toMangaInfo
 import eu.kanade.tachiyomi.source.model.toPageUrl
@@ -46,14 +44,6 @@ interface Source : tachiyomi.source.Source {
     fun fetchMangaDetails(manga: SManga): Observable<SManga>
 
     /**
-     * Returns an observable with the updated details for a manga.
-     *
-     * @param anime the manga to update.
-     */
-    @Deprecated("Use getAnimeDetails instead")
-    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime>
-
-    /**
      * Returns an observable with all the available chapters for a manga.
      *
      * @param manga the manga to update.
@@ -62,28 +52,12 @@ interface Source : tachiyomi.source.Source {
     fun fetchChapterList(manga: SManga): Observable<List<SChapter>>
 
     /**
-     * Returns an observable with all the available chapters for a manga.
-     *
-     * @param anime the manga to update.
-     */
-    @Deprecated("Use getEpisodeList instead")
-    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>>
-
-    /**
      * Returns an observable with the list of pages a chapter has.
      *
      * @param chapter the chapter.
      */
     @Deprecated("Use getPageList instead")
     fun fetchPageList(chapter: SChapter): Observable<List<Page>>
-
-    /**
-     * Returns an observable with the list of pages a episode has.
-     *
-     * @param episode the episode.
-     */
-    @Deprecated("Use getPageList instead")
-    fun fetchAnimePageList(episode: SEpisode): Observable<List<Page>>
 
     /**
      * [1.x API] Get the updated details for a manga.
@@ -102,7 +76,7 @@ interface Source : tachiyomi.source.Source {
     @Suppress("DEPRECATION")
     override suspend fun getChapterList(manga: MangaInfo): List<ChapterInfo> {
         return fetchChapterList(manga.toSManga()).awaitSingle()
-            .map { it.toChapterInfo() }
+                .map { it.toChapterInfo() }
     }
 
     /**
@@ -111,7 +85,7 @@ interface Source : tachiyomi.source.Source {
     @Suppress("DEPRECATION")
     override suspend fun getPageList(chapter: ChapterInfo): List<tachiyomi.source.model.Page> {
         return fetchPageList(chapter.toSChapter()).awaitSingle()
-            .map { it.toPageUrl() }
+                .map { it.toPageUrl() }
     }
 }
 

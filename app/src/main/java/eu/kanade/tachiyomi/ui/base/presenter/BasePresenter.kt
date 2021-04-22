@@ -51,6 +51,15 @@ open class BasePresenter<V> : RxPresenter<V>() {
     fun <T> Observable<T>.subscribeLatestCache(onNext: (V, T) -> Unit, onError: ((V, Throwable) -> Unit)? = null) = compose(deliverLatestCache<T>()).subscribe(split(onNext, onError)).apply { add(this) }
 
     /**
+     * Subscribes an observable with [deliverLatestCache] and adds it to the presenter's lifecycle
+     * subscription list.
+     *
+     * @param onNext function to execute when the observable emits an item.
+     * @param onError function to execute when the observable throws an error.
+     */
+    fun <T> Observable<T>.subscribeLatestAnimeCache(onNext: (V, T) -> Unit, onError: ((V, Throwable) -> Unit)? = null) = compose(deliverLatestCache<T>()).subscribe(split(onNext, onError)).apply { add(this) }
+
+    /**
      * Subscribes an observable with [deliverReplay] and adds it to the presenter's lifecycle
      * subscription list.
      *

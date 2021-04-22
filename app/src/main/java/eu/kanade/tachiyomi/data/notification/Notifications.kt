@@ -25,6 +25,7 @@ object Notifications {
      */
     const val CHANNEL_LIBRARY = "library_channel"
     const val ID_LIBRARY_PROGRESS = -101
+    const val ID_ANIMELIB_PROGRESS = -1337101
     const val ID_LIBRARY_ERROR = -102
 
     /**
@@ -43,7 +44,9 @@ object Notifications {
      */
     const val CHANNEL_NEW_CHAPTERS = "new_chapters_channel"
     const val ID_NEW_CHAPTERS = -301
+    const val ID_NEW_EPISODES = -1337301
     const val GROUP_NEW_CHAPTERS = "eu.kanade.tachiyomi.NEW_CHAPTERS"
+    const val GROUP_NEW_EPISODES = "eu.kanade.tachiyomi.NEW_EPISODES"
 
     /**
      * Notification channel and ids used by the library updater.
