@@ -78,21 +78,20 @@ class AboutController : SettingsController() {
                 openInBrowser(url)
             }
         }
-        if (BuildConfig.DEBUG) {
-            preference {
-                key = "pref_about_notices"
-                titleRes = R.string.notices
-                onClick {
-                    openInBrowser("https://github.com/tachiyomiorg/tachiyomi/blob/master/PREVIEW_RELEASE_NOTES.md")
-                }
-            }
-        }
 
         preferenceCategory {
             preference {
                 key = "pref_about_website"
                 titleRes = R.string.website
                 "https://tachiyomi.org".also {
+                    summary = it
+                    onClick { openInBrowser(it) }
+                }
+            }
+            preference {
+                key = "pref_about_facebook"
+                title = "Facebook"
+                "https://facebook.com/tachiyomiorg".also {
                     summary = it
                     onClick { openInBrowser(it) }
                 }
@@ -116,15 +115,7 @@ class AboutController : SettingsController() {
             preference {
                 key = "pref_about_github"
                 title = "GitHub"
-                "https://github.com/tachiyomiorg/tachiyomi".also {
-                    summary = it
-                    onClick { openInBrowser(it) }
-                }
-            }
-            preference {
-                key = "pref_about_label_extensions"
-                titleRes = R.string.label_extensions
-                "https://github.com/tachiyomiorg/tachiyomi-extensions".also {
+                "https://github.com/tachiyomiorg".also {
                     summary = it
                     onClick { openInBrowser(it) }
                 }

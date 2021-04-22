@@ -22,23 +22,23 @@ import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Category
-import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.preference.PreferenceValues.DisplayMode
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
-import eu.kanade.tachiyomi.databinding.SourceControllerBinding
-import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.LocalSource
+import eu.kanade.tachiyomi.databinding.AnimeSourceControllerBinding
+import eu.kanade.tachiyomi.source.AnimeCatalogueSource
+import eu.kanade.tachiyomi.source.LocalAnimeSource
 import eu.kanade.tachiyomi.source.model.FilterList
-import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.source.online.AnimeHttpSource
+import eu.kanade.tachiyomi.ui.anime.AnimeController
+import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCategoriesDialog
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
-import eu.kanade.tachiyomi.ui.library.ChangeMangaCategoriesDialog
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.system.connectivityManager
@@ -59,15 +59,15 @@ import uy.kohesive.injekt.injectLazy
 /**
  * Controller to manage the catalogues available in the app.
  */
-open class BrowseSourceController(bundle: Bundle) :
-    SearchableNucleusController<SourceControllerBinding, BrowseSourcePresenter>(bundle),
+open class BrowseAnimeSourceController(bundle: Bundle) :
+    SearchableNucleusController<AnimeSourceControllerBinding, BrowseAnimeSourcePresenter>(bundle),
     FabController,
     FlexibleAdapter.OnItemClickListener,
     FlexibleAdapter.OnItemLongClickListener,
     FlexibleAdapter.EndlessScrollListener,
-    ChangeMangaCategoriesDialog.Listener {
+    ChangeAnimeCategoriesDialog.Listener {
 
-    constructor(source: CatalogueSource, searchQuery: String? = null) : this(
+    constructor(source: AnimeCatalogueSource, searchQuery: String? = null) : this(
         Bundle().apply {
             putLong(SOURCE_ID_KEY, source.id)
 
@@ -80,7 +80,7 @@ open class BrowseSourceController(bundle: Bundle) :
     private val preferences: PreferencesHelper by injectLazy()
 
     /**
-     * Adapter containing the list of manga from the catalogue.
+     * Adapter containing the list of anime from the catalogue.
      */
     protected var adapter: FlexibleAdapter<IFlexible<*>>? = null
 
@@ -103,7 +103,7 @@ open class BrowseSourceController(bundle: Bundle) :
     private var recycler: RecyclerView? = null
 
     /**
-     * Subscription for the number of manga per row.
+     * Subscription for the number of anime per row.
      */
     private var numColumnsJob: Job? = null
 
@@ -120,11 +120,11 @@ open class BrowseSourceController(bundle: Bundle) :
         return presenter.source.name
     }
 
-    override fun createPresenter(): BrowseSourcePresenter {
-        return BrowseSourcePresenter(args.getLong(SOURCE_ID_KEY), args.getString(SEARCH_QUERY_KEY))
+    override fun createPresenter(): BrowseAnimeSourcePresenter {
+        return BrowseAnimeSourcePresenter(args.getLong(SOURCE_ID_KEY), args.getString(SEARCH_QUERY_KEY))
     }
 
-    override fun createBinding(inflater: LayoutInflater) = SourceControllerBinding.inflate(inflater)
+    override fun createBinding(inflater: LayoutInflater) = AnimeSourceControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
@@ -218,7 +218,7 @@ open class BrowseSourceController(bundle: Bundle) :
                 numColumnsJob = getColumnsPreferenceForCurrentOrientation().asImmediateFlow { spanCount = it }
                     .drop(1)
                     // Set again the adapter to recalculate the covers height
-                    .onEach { adapter = this@BrowseSourceController.adapter }
+                    .onEach { adapter = this@BrowseAnimeSourceController.adapter }
                     .launchIn(viewScope)
 
                 (layoutManager as GridLayoutManager).spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -289,10 +289,10 @@ open class BrowseSourceController(bundle: Bundle) :
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
 
-        val isHttpSource = presenter.source is HttpSource
+        val isHttpSource = presenter.source is AnimeHttpSource
         menu.findItem(R.id.action_open_in_web_view).isVisible = isHttpSource
 
-        val isLocalSource = presenter.source is LocalSource
+        val isLocalSource = presenter.source is LocalAnimeSource
         menu.findItem(R.id.action_local_source_help).isVisible = isLocalSource
     }
 
@@ -309,7 +309,7 @@ open class BrowseSourceController(bundle: Bundle) :
     }
 
     private fun openInWebView() {
-        val source = presenter.source as? HttpSource ?: return
+        val source = presenter.source as? AnimeHttpSource ?: return
 
         val activity = activity ?: return
         val intent = WebViewActivity.newIntent(activity, source.baseUrl, source.id, presenter.source.name)
@@ -317,7 +317,7 @@ open class BrowseSourceController(bundle: Bundle) :
     }
 
     private fun openLocalSourceHelpGuide() {
-        activity?.openInBrowser(LocalSource.HELP_URL)
+        activity?.openInBrowser(LocalAnimeSource.HELP_URL)
     }
 
     /**
@@ -341,16 +341,16 @@ open class BrowseSourceController(bundle: Bundle) :
      * Called from the presenter when the network request is received.
      *
      * @param page the current page.
-     * @param mangas the list of manga of the page.
+     * @param animes the list of anime of the page.
      */
-    fun onAddPage(page: Int, mangas: List<SourceItem>) {
+    fun onAddPage(page: Int, animes: List<AnimeSourceItem>) {
         val adapter = adapter ?: return
         hideProgressBar()
         if (page == 1) {
             adapter.clear()
             resetProgressItem()
         }
-        adapter.onLoadMoreComplete(mangas)
+        adapter.onLoadMoreComplete(animes)
     }
 
     /**
@@ -378,7 +378,7 @@ open class BrowseSourceController(bundle: Bundle) :
         }
 
         if (adapter.isEmpty) {
-            val actions = if (presenter.source is LocalSource) {
+            val actions = if (presenter.source is LocalAnimeSource) {
                 listOf(
                     EmptyView.Action(R.string.local_source_help_guide, R.drawable.ic_help_24dp) { openLocalSourceHelpGuide() }
                 )
@@ -435,12 +435,12 @@ open class BrowseSourceController(bundle: Bundle) :
     }
 
     /**
-     * Called from the presenter when a manga is initialized.
+     * Called from the presenter when a anime is initialized.
      *
-     * @param manga the manga initialized
+     * @param anime the anime initialized
      */
-    fun onMangaInitialized(manga: Manga) {
-        getHolder(manga)?.setImage(manga)
+    fun onAnimeInitialized(anime: Anime) {
+        getHolder(anime)?.setImage(anime)
     }
 
     /**
@@ -456,17 +456,17 @@ open class BrowseSourceController(bundle: Bundle) :
         activity?.invalidateOptionsMenu()
         setupRecycler(view)
 
-        // Initialize mangas if not on a metered connection
+        // Initialize animes if not on a metered connection
         if (!view.context.connectivityManager.isActiveNetworkMetered) {
-            val mangas = (0 until adapter.itemCount).mapNotNull {
-                (adapter.getItem(it) as? SourceItem)?.manga
+            val animes = (0 until adapter.itemCount).mapNotNull {
+                (adapter.getItem(it) as? AnimeSourceItem)?.anime
             }
-            presenter.initializeMangas(mangas)
+            presenter.initializeAnimes(animes)
         }
     }
 
     /**
-     * Returns a preference for the number of manga per row based on the current orientation.
+     * Returns a preference for the number of anime per row based on the current orientation.
      *
      * @return the preference.
      */
@@ -479,18 +479,18 @@ open class BrowseSourceController(bundle: Bundle) :
     }
 
     /**
-     * Returns the view holder for the given manga.
+     * Returns the view holder for the given anime.
      *
-     * @param manga the manga to find.
-     * @return the holder of the manga or null if it's not bound.
+     * @param anime the anime to find.
+     * @return the holder of the anime or null if it's not bound.
      */
-    private fun getHolder(manga: Manga): SourceHolder<*>? {
+    private fun getHolder(anime: Anime): AnimeSourceHolder<*>? {
         val adapter = adapter ?: return null
 
         adapter.allBoundViewHolders.forEach { holder ->
-            val item = adapter.getItem(holder.bindingAdapterPosition) as? SourceItem
-            if (item != null && item.manga.id!! == manga.id!!) {
-                return holder as SourceHolder<*>
+            val item = adapter.getItem(holder.bindingAdapterPosition) as? AnimeSourceItem
+            if (item != null && item.anime.id!! == anime.id!!) {
+                return holder as AnimeSourceHolder<*>
             }
         }
 
@@ -516,32 +516,32 @@ open class BrowseSourceController(bundle: Bundle) :
     }
 
     /**
-     * Called when a manga is clicked.
+     * Called when a anime is clicked.
      *
      * @param position the position of the element clicked.
      * @return true if the item should be selected, false otherwise.
      */
     override fun onItemClick(view: View, position: Int): Boolean {
-        val item = adapter?.getItem(position) as? SourceItem ?: return false
-        router.pushController(MangaController(item.manga, true).withFadeTransaction())
+        val item = adapter?.getItem(position) as? AnimeSourceItem ?: return false
+        router.pushController(AnimeController(item.anime, true).withFadeTransaction())
 
         return false
     }
 
     /**
-     * Called when a manga is long clicked.
+     * Called when a anime is long clicked.
      *
-     * Adds the manga to the default category if none is set it shows a list of categories for the user to put the manga
+     * Adds the anime to the default category if none is set it shows a list of categories for the user to put the anime
      * in, the list consists of the default category plus the user's categories. The default category is preselected on
-     * new manga, and on already favorited manga the manga's categories are preselected.
+     * new anime, and on already favorited anime the anime's categories are preselected.
      *
      * @param position the position of the element clicked.
      */
     override fun onItemLongClick(position: Int) {
         val activity = activity ?: return
-        val manga = (adapter?.getItem(position) as? SourceItem?)?.manga ?: return
+        val anime = (adapter?.getItem(position) as? AnimeSourceItem?)?.anime ?: return
 
-        if (manga.favorite) {
+        if (anime.favorite) {
             MaterialDialog(activity)
                 .listItems(
                     items = listOf(activity.getString(R.string.remove_from_library)),
@@ -549,7 +549,7 @@ open class BrowseSourceController(bundle: Bundle) :
                 ) { _, which, _ ->
                     when (which) {
                         0 -> {
-                            presenter.changeMangaFavorite(manga)
+                            presenter.changeAnimeFavorite(anime)
                             adapter?.notifyItemChanged(position)
                             activity.toast(activity.getString(R.string.manga_removed_library))
                         }
@@ -564,30 +564,30 @@ open class BrowseSourceController(bundle: Bundle) :
             when {
                 // Default category set
                 defaultCategory != null -> {
-                    presenter.moveMangaToCategory(manga, defaultCategory)
+                    presenter.moveAnimeToCategory(anime, defaultCategory)
 
-                    presenter.changeMangaFavorite(manga)
+                    presenter.changeAnimeFavorite(anime)
                     adapter?.notifyItemChanged(position)
                     activity.toast(activity.getString(R.string.manga_added_library))
                 }
 
                 // Automatic 'Default' or no categories
                 defaultCategoryId == 0 || categories.isEmpty() -> {
-                    presenter.moveMangaToCategory(manga, null)
+                    presenter.moveAnimeToCategory(anime, null)
 
-                    presenter.changeMangaFavorite(manga)
+                    presenter.changeAnimeFavorite(anime)
                     adapter?.notifyItemChanged(position)
                     activity.toast(activity.getString(R.string.manga_added_library))
                 }
 
                 // Choose a category
                 else -> {
-                    val ids = presenter.getMangaCategoryIds(manga)
+                    val ids = presenter.getAnimeCategoryIds(anime)
                     val preselected = ids.mapNotNull { id ->
                         categories.indexOfFirst { it.id == id }.takeIf { it != -1 }
                     }.toTypedArray()
 
-                    ChangeMangaCategoriesDialog(this, listOf(manga), categories, preselected)
+                    ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected)
                         .showDialog(router)
                 }
             }
@@ -595,18 +595,18 @@ open class BrowseSourceController(bundle: Bundle) :
     }
 
     /**
-     * Update manga to use selected categories.
+     * Update anime to use selected categories.
      *
-     * @param mangas The list of manga to move to categories.
-     * @param categories The list of categories where manga will be placed.
+     * @param animes The list of anime to move to categories.
+     * @param categories The list of categories where anime will be placed.
      */
-    override fun updateCategoriesForMangas(mangas: List<Manga>, categories: List<Category>) {
-        val manga = mangas.firstOrNull() ?: return
+    override fun updateCategoriesForAnimes(animes: List<Anime>, categories: List<Category>) {
+        val anime = animes.firstOrNull() ?: return
 
-        presenter.changeMangaFavorite(manga)
-        presenter.updateMangaCategories(manga, categories)
+        presenter.changeAnimeFavorite(anime)
+        presenter.updateAnimeCategories(anime, categories)
 
-        val position = adapter?.currentItems?.indexOfFirst { it -> (it as SourceItem).manga.id == manga.id }
+        val position = adapter?.currentItems?.indexOfFirst { it -> (it as AnimeSourceItem).anime.id == anime.id }
         if (position != null) {
             adapter?.notifyItemChanged(position)
         }
