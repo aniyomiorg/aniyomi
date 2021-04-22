@@ -11,7 +11,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.graphics.blue
@@ -199,8 +198,11 @@ class MangaController :
         )
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        binding = MangaControllerBinding.inflate(inflater)
+    override fun createBinding(inflater: LayoutInflater) = MangaControllerBinding.inflate(inflater)
+
+    override fun onViewCreated(view: View) {
+        super.onViewCreated(view)
+
         binding.recycler.applyInsetter {
             type(navigationBars = true) {
                 padding()
@@ -211,11 +213,6 @@ class MangaController :
                 margin(bottom = true)
             }
         }
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View) {
-        super.onViewCreated(view)
 
         if (manga == null || source == null) return
 
@@ -1007,11 +1004,17 @@ class MangaController :
 
     // OVERFLOW MENU DIALOGS
 
-    private fun getUnreadChaptersSorted() = presenter.chapters
-        .sortedWith(presenter.getChapterSort())
-        .filter { !it.read && it.status == Download.State.NOT_DOWNLOADED }
-        .distinctBy { it.name }
-        .reversed()
+    private fun getUnreadChaptersSorted(): List<ChapterItem> {
+        val chapters = presenter.chapters
+            .sortedWith(presenter.getChapterSort())
+            .filter { !it.read && it.status == Download.State.NOT_DOWNLOADED }
+            .distinctBy { it.name }
+        return if (presenter.sortDescending()) {
+            chapters.reversed()
+        } else {
+            chapters
+        }
+    }
 
     private fun downloadChapters(choice: Int) {
         val chaptersToDownload = when (choice) {

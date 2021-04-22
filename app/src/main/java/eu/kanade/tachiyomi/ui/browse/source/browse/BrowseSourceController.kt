@@ -124,10 +124,7 @@ open class BrowseSourceController(bundle: Bundle) :
         return BrowseSourcePresenter(args.getLong(SOURCE_ID_KEY), args.getString(SEARCH_QUERY_KEY))
     }
 
-    override fun inflateView(inflater: LayoutInflater, container: ViewGroup): View {
-        binding = SourceControllerBinding.inflate(inflater)
-        return binding.root
-    }
+    override fun createBinding(inflater: LayoutInflater) = SourceControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
@@ -269,6 +266,7 @@ open class BrowseSourceController(bundle: Bundle) :
                 if (router.backstackSize >= 2 && router.backstack[router.backstackSize - 2].controller() is GlobalSearchController) {
                     router.popController(this)
                 } else {
+                    nonSubmittedQuery = ""
                     searchWithQuery("")
                 }
 
