@@ -19,6 +19,7 @@ import eu.kanade.tachiyomi.databinding.PagerControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.RxController
 import eu.kanade.tachiyomi.ui.base.controller.TabbedController
+import eu.kanade.tachiyomi.ui.browse.animeextension.AnimeExtensionController
 import eu.kanade.tachiyomi.ui.browse.extension.ExtensionController
 import eu.kanade.tachiyomi.ui.browse.migration.sources.MigrationSourcesController
 import eu.kanade.tachiyomi.ui.browse.source.SourceController
@@ -108,6 +109,7 @@ class BrowseController :
         private val tabTitles = listOf(
             R.string.label_sources,
             R.string.label_extensions,
+            R.string.label_animeextensions,
             R.string.label_migration
         )
             .map { resources!!.getString(it) }
@@ -121,6 +123,7 @@ class BrowseController :
                 val controller: Controller = when (position) {
                     SOURCES_CONTROLLER -> SourceController()
                     EXTENSIONS_CONTROLLER -> ExtensionController()
+                    ANIMEEXTENSIONS_CONTROLLER -> AnimeExtensionController()
                     MIGRATION_CONTROLLER -> MigrationSourcesController()
                     else -> error("Wrong position $position")
                 }
@@ -138,6 +141,7 @@ class BrowseController :
 
         const val SOURCES_CONTROLLER = 0
         const val EXTENSIONS_CONTROLLER = 1
-        const val MIGRATION_CONTROLLER = 2
+        const val ANIMEEXTENSIONS_CONTROLLER = 2
+        const val MIGRATION_CONTROLLER = 3
     }
 }

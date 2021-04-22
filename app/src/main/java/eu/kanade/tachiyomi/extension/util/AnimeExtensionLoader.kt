@@ -7,11 +7,11 @@ import android.content.pm.PackageManager
 import dalvik.system.PathClassLoader
 import eu.kanade.tachiyomi.annotations.Nsfw
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.extension.model.Extension
-import eu.kanade.tachiyomi.extension.model.LoadResult
-import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.Source
-import eu.kanade.tachiyomi.source.SourceFactory
+import eu.kanade.tachiyomi.extension.model.AnimeExtension
+import eu.kanade.tachiyomi.extension.model.AnimeLoadResult
+import eu.kanade.tachiyomi.source.AnimeCatalogueSource
+import eu.kanade.tachiyomi.source.AnimeSource
+import eu.kanade.tachiyomi.source.AnimeSourceFactory
 import eu.kanade.tachiyomi.util.lang.Hash
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -22,7 +22,7 @@ import uy.kohesive.injekt.injectLazy
  * Class that handles the loading of the extensions installed in the system.
  */
 @SuppressLint("PackageManagerGetSignatures")
-internal object ExtensionLoader {
+internal object AnimeExtensionLoader {
 
     private val preferences: PreferencesHelper by injectLazy()
     private val loadNsfwSource by lazy {
@@ -34,7 +34,7 @@ internal object ExtensionLoader {
     private const val METADATA_SOURCE_FACTORY = "tachiyomi.extension.factory"
     private const val METADATA_NSFW = "tachiyomi.extension.nsfw"
     const val LIB_VERSION_MIN = 1.2
-    const val LIB_VERSION_MAX = 1.3
+    const val LIB_VERSION_MAX = 1.2
 
     private const val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or PackageManager.GET_SIGNATURES
 
@@ -51,7 +51,7 @@ internal object ExtensionLoader {
      *
      * @param context The application context.
      */
-    fun loadExtensions(context: Context): List<LoadResult> {
+    fun loadExtensions(context: Context): List<AnimeLoadResult> {
         val pkgManager = context.packageManager
         val installedPkgs = pkgManager.getInstalledPackages(PACKAGE_FLAGS)
         val extPkgs = installedPkgs.filter { isPackageAnExtension(it) }
@@ -71,15 +71,15 @@ internal object ExtensionLoader {
      * Attempts to load an extension from the given package name. It checks if the extension
      * contains the required feature flag before trying to load it.
      */
-    fun loadExtensionFromPkgName(context: Context, pkgName: String): LoadResult {
+    fun loadExtensionFromPkgName(context: Context, pkgName: String): AnimeLoadResult {
         val pkgInfo = try {
             context.packageManager.getPackageInfo(pkgName, PACKAGE_FLAGS)
         } catch (error: PackageManager.NameNotFoundException) {
             // Unlikely, but the package may have been uninstalled at this point
-            return LoadResult.Error(error)
+            return AnimeLoadResult.Error(error)
         }
         if (!isPackageAnExtension(pkgInfo)) {
-            return LoadResult.Error("Tried to load a package that wasn't a extension")
+            return AnimeLoadResult.Error("Tried to load a package that wasn't a extension")
         }
         return loadExtension(context, pkgName, pkgInfo)
     }
@@ -91,14 +91,14 @@ internal object ExtensionLoader {
      * @param pkgName The package name of the extension to load.
      * @param pkgInfo The package info of the extension.
      */
-    private fun loadExtension(context: Context, pkgName: String, pkgInfo: PackageInfo): LoadResult {
+    private fun loadExtension(context: Context, pkgName: String, pkgInfo: PackageInfo): AnimeLoadResult {
         val pkgManager = context.packageManager
 
         val appInfo = try {
             pkgManager.getApplicationInfo(pkgName, PackageManager.GET_META_DATA)
         } catch (error: PackageManager.NameNotFoundException) {
             // Unlikely, but the package may have been uninstalled at this point
-            return LoadResult.Error(error)
+            return AnimeLoadResult.Error(error)
         }
 
         val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Tachiyomi: ")
@@ -108,7 +108,7 @@ internal object ExtensionLoader {
         if (versionName.isNullOrEmpty()) {
             val exception = Exception("Missing versionName for extension $extName")
             Timber.w(exception)
-            return LoadResult.Error(exception)
+            return AnimeLoadResult.Error(exception)
         }
 
         // Validate lib version
@@ -119,22 +119,22 @@ internal object ExtensionLoader {
                     "$LIB_VERSION_MIN to $LIB_VERSION_MAX are allowed"
             )
             Timber.w(exception)
-            return LoadResult.Error(exception)
+            return AnimeLoadResult.Error(exception)
         }
 
         val signatureHash = getSignatureHash(pkgInfo)
 
         if (signatureHash == null) {
-            return LoadResult.Error("Package $pkgName isn't signed")
+            return AnimeLoadResult.Error("Package $pkgName isn't signed")
         } else if (signatureHash !in trustedSignatures) {
-            val extension = Extension.Untrusted(extName, pkgName, versionName, versionCode, signatureHash)
+            val extension = AnimeExtension.Untrusted(extName, pkgName, versionName, versionCode, signatureHash)
             Timber.w("Extension $pkgName isn't trusted")
-            return LoadResult.Untrusted(extension)
+            return AnimeLoadResult.Untrusted(extension)
         }
 
         val isNsfw = appInfo.metaData.getInt(METADATA_NSFW) == 1
         if (!loadNsfwSource && isNsfw) {
-            return LoadResult.Error("NSFW extension $pkgName not allowed")
+            return AnimeLoadResult.Error("NSFW extension $pkgName not allowed")
         }
 
         val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
@@ -152,8 +152,8 @@ internal object ExtensionLoader {
             .flatMap {
                 try {
                     when (val obj = Class.forName(it, false, classLoader).newInstance()) {
-                        is Source -> listOf(obj)
-                        is SourceFactory -> {
+                        is AnimeSource -> listOf(obj)
+                        is AnimeSourceFactory -> {
                             if (isSourceNsfw(obj)) {
                                 emptyList()
                             } else {
@@ -164,12 +164,12 @@ internal object ExtensionLoader {
                     }
                 } catch (e: Throwable) {
                     Timber.e(e, "Extension load error: $extName ($it)")
-                    return LoadResult.Error(e)
+                    return AnimeLoadResult.Error(e)
                 }
             }
             .filter { !isSourceNsfw(it) }
 
-        val langs = sources.filterIsInstance<CatalogueSource>()
+        val langs = sources.filterIsInstance<AnimeCatalogueSource>()
             .map { it.lang }
             .toSet()
         val lang = when (langs.size) {
@@ -178,7 +178,7 @@ internal object ExtensionLoader {
             else -> "all"
         }
 
-        val extension = Extension.Installed(
+        val extension = AnimeExtension.Installed(
             extName,
             pkgName,
             versionName,
@@ -189,7 +189,7 @@ internal object ExtensionLoader {
             pkgFactory = appInfo.metaData.getString(METADATA_SOURCE_FACTORY),
             isUnofficial = signatureHash != officialSignature
         )
-        return LoadResult.Success(extension)
+        return AnimeLoadResult.Success(extension)
     }
 
     /**
@@ -223,7 +223,7 @@ internal object ExtensionLoader {
             return false
         }
 
-        if (clazz !is Source && clazz !is SourceFactory) {
+        if (clazz !is AnimeSource && clazz !is AnimeSourceFactory) {
             return false
         }
 

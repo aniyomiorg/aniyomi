@@ -22,6 +22,7 @@
     <string name="label_backup">Backup</string>
     <string name="label_migration">Migrate</string>
     <string name="label_extensions">Extensions</string>
+    <string name="label_animeextensions">Anime Extensions</string>
     <string name="label_extension_info">Extension info</string>
     <string name="label_help">Help</string>
 

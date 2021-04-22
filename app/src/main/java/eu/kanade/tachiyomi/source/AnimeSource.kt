@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.source
 
 import android.graphics.drawable.Drawable
-import eu.kanade.tachiyomi.extension.ExtensionManager
+import eu.kanade.tachiyomi.extension.AnimeExtensionManager
 import eu.kanade.tachiyomi.source.model.*
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import rx.Observable
@@ -82,6 +82,6 @@ interface AnimeSource : tachiyomi.source.AnimeSource {
     }
 }
 
-fun Source.iconAnime(): Drawable? = Injekt.get<ExtensionManager>().getAppIconForSource(this)
+fun AnimeSource.icon(): Drawable? = Injekt.get<AnimeExtensionManager>().getAppIconForSource(this)
 
-fun Source.getPreferenceKeyAnime(): String = "source_$id"
+fun AnimeSource.getPreferenceKey(): String = "source_$id"

@@ -48,7 +48,6 @@ import eu.kanade.tachiyomi.ui.library.LibraryController
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.recent.history.HistoryController
-import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.InternalResourceHelper
@@ -153,7 +152,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             if (currentRoot?.tag()?.toIntOrNull() != id) {
                 when (id) {
                     R.id.nav_library -> setRoot(LibraryController(), id)
-                    R.id.nav_animelib -> setRoot(UpdatesController(), id)
+                    R.id.nav_animelib -> setRoot(AnimelibController(), id)
                     R.id.nav_history -> setRoot(HistoryController(), id)
                     R.id.nav_browse -> setRoot(BrowseController(), id)
                     R.id.nav_more -> setRoot(MoreController(), id)
@@ -163,9 +162,13 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                     R.id.nav_library -> {
                         val controller = router.getControllerWithTag(id.toString()) as? LibraryController
                         controller?.showSettingsSheet()
-                    }
-                    R.id.nav_animelib -> {
+                    } /*
+                    R.id.nav_updates -> {
                         router.pushController(DownloadController().withFadeTransaction())
+                    }*/
+                    R.id.nav_animelib -> {
+                        val controller = router.getControllerWithTag(id.toString()) as? AnimelibController
+                        controller?.showSettingsSheet()
                     }
                 }
             }
@@ -276,7 +279,8 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
 
         when (intent.action) {
             SHORTCUT_LIBRARY -> setSelectedNavItem(R.id.nav_library)
-            SHORTCUT_RECENTLY_UPDATED -> setSelectedNavItem(R.id.nav_animelib)
+            SHORTCUT_ANIMELIB -> setSelectedNavItem(R.id.nav_animelib)
+            // SHORTCUT_RECENTLY_UPDATED -> setSelectedNavItem(R.id.nav_updates)
             SHORTCUT_RECENTLY_READ -> setSelectedNavItem(R.id.nav_history)
             SHORTCUT_CATALOGUES -> setSelectedNavItem(R.id.nav_browse)
             SHORTCUT_EXTENSIONS -> {
@@ -485,6 +489,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
     companion object {
         // Shortcut actions
         const val SHORTCUT_LIBRARY = "eu.kanade.tachiyomi.SHOW_LIBRARY"
+        const val SHORTCUT_ANIMELIB = "eu.kanade.tachiyomi.SHOW_ANIMELIB"
         const val SHORTCUT_RECENTLY_UPDATED = "eu.kanade.tachiyomi.SHOW_RECENTLY_UPDATED"
         const val SHORTCUT_RECENTLY_READ = "eu.kanade.tachiyomi.SHOW_RECENTLY_READ"
         const val SHORTCUT_CATALOGUES = "eu.kanade.tachiyomi.SHOW_CATALOGUES"
