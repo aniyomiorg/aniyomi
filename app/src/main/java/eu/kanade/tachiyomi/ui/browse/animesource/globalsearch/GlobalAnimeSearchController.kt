@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.browse.source.globalsearch
+package eu.kanade.tachiyomi.ui.browse.animesource.globalsearch
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,7 +17,7 @@ import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
-import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseAnimeSourceController
+import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 import uy.kohesive.injekt.injectLazy
 
 /**
@@ -209,7 +209,7 @@ open class GlobalAnimeSearchController(
      * Opens a catalogue with the given search.
      */
     override fun onTitleClick(source: AnimeCatalogueSource) {
-        presenter.preferences.lastUsedSource().set(source.id)
+        presenter.preferences.lastUsedAnimeSource().set(source.id)
         router.pushController(BrowseAnimeSourceController(source, presenter.query).withFadeTransaction())
     }
 }

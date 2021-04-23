@@ -176,6 +176,8 @@ class PreferencesHelper(val context: Context) {
 
     fun lastUsedSource() = flowPrefs.getLong(Keys.lastUsedSource, -1)
 
+    fun lastUsedAnimeSource() = flowPrefs.getLong(Keys.lastUsedAnimeSource, -1)
+
     fun lastUsedCategory() = flowPrefs.getInt(Keys.lastUsedCategory, 0)
 
     fun lastVersionCode() = flowPrefs.getInt("last_version_code", 0)
@@ -278,13 +280,21 @@ class PreferencesHelper(val context: Context) {
 
     fun extensionUpdatesCount() = flowPrefs.getInt("ext_updates_count", 0)
 
+    fun animeextensionUpdatesCount() = flowPrefs.getInt("animeext_updates_count", 0)
+
     fun lastExtCheck() = flowPrefs.getLong("last_ext_check", 0)
+
+    fun lastAnimeExtCheck() = flowPrefs.getLong("last_anime_ext_check", 0)
 
     fun searchPinnedSourcesOnly() = prefs.getBoolean(Keys.searchPinnedSourcesOnly, false)
 
     fun disabledSources() = flowPrefs.getStringSet("hidden_catalogues", emptySet())
 
-    fun pinnedSources() = flowPrefs.getStringSet("pinned_catalogues", emptySet())
+    fun disabledAnimeSources() = flowPrefs.getStringSet("hidden_catalogues", emptySet())
+
+    fun pinnedSources() = flowPrefs.getStringSet("pinned_anime_catalogues", emptySet())
+
+    fun pinnedAnimeSources() = flowPrefs.getStringSet("pinned_anime_catalogues", emptySet())
 
     fun downloadNew() = flowPrefs.getBoolean(Keys.downloadNew, false)
 

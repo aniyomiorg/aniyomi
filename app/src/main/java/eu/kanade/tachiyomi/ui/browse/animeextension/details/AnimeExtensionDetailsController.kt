@@ -31,7 +31,7 @@ import eu.kanade.tachiyomi.databinding.AnimeExtensionDetailControllerBinding
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 import eu.kanade.tachiyomi.source.AnimeSource
-import eu.kanade.tachiyomi.source.ConfigurableSource
+import eu.kanade.tachiyomi.source.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.source.getPreferenceKey
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.ToolbarLiftOnScrollController
@@ -134,7 +134,7 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
                                     }
 
                                     // React to enable/disable all changes
-                                    preferences.disabledSources().asFlow()
+                                    preferences.disabledAnimeSources().asFlow()
                                         .onEach {
                                             val enabled = source.isEnabled()
                                             isChecked = enabled
@@ -144,7 +144,7 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
                                 }
 
                                 // Source enable/disable
-                                if (source is ConfigurableSource) {
+                                if (source is ConfigurableAnimeSource) {
                                     switchSettingsPreference {
                                         block()
                                         onSettingsClick = View.OnClickListener {
@@ -205,9 +205,9 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
 
     private fun toggleSource(source: AnimeSource, enable: Boolean) {
         if (enable) {
-            preferences.disabledSources() -= source.id.toString()
+            preferences.disabledAnimeSources() -= source.id.toString()
         } else {
-            preferences.disabledSources() += source.id.toString()
+            preferences.disabledAnimeSources() += source.id.toString()
         }
     }
 
@@ -229,7 +229,7 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
     }
 
     private fun AnimeSource.isEnabled(): Boolean {
-        return id.toString() !in preferences.disabledSources().get()
+        return id.toString() !in preferences.disabledAnimeSources().get()
     }
 
     private fun getPreferenceThemeContext(): Context {

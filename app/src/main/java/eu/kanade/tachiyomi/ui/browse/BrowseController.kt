@@ -20,6 +20,7 @@ import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.RxController
 import eu.kanade.tachiyomi.ui.base.controller.TabbedController
 import eu.kanade.tachiyomi.ui.browse.animeextension.AnimeExtensionController
+import eu.kanade.tachiyomi.ui.browse.animesource.AnimeSourceController
 import eu.kanade.tachiyomi.ui.browse.extension.ExtensionController
 import eu.kanade.tachiyomi.ui.browse.migration.sources.MigrationSourcesController
 import eu.kanade.tachiyomi.ui.browse.source.SourceController
@@ -108,6 +109,7 @@ class BrowseController :
 
         private val tabTitles = listOf(
             R.string.label_sources,
+            R.string.label_animesources,
             R.string.label_extensions,
             R.string.label_animeextensions,
             R.string.label_migration
@@ -122,6 +124,7 @@ class BrowseController :
             if (!router.hasRootController()) {
                 val controller: Controller = when (position) {
                     SOURCES_CONTROLLER -> SourceController()
+                    ANIMESOURCES_CONTROLLER -> AnimeSourceController()
                     EXTENSIONS_CONTROLLER -> ExtensionController()
                     ANIMEEXTENSIONS_CONTROLLER -> AnimeExtensionController()
                     MIGRATION_CONTROLLER -> MigrationSourcesController()
@@ -140,8 +143,9 @@ class BrowseController :
         const val TO_EXTENSIONS_EXTRA = "to_extensions"
 
         const val SOURCES_CONTROLLER = 0
-        const val EXTENSIONS_CONTROLLER = 1
-        const val ANIMEEXTENSIONS_CONTROLLER = 2
-        const val MIGRATION_CONTROLLER = 3
+        const val ANIMESOURCES_CONTROLLER = 1
+        const val EXTENSIONS_CONTROLLER = 2
+        const val ANIMEEXTENSIONS_CONTROLLER = 3
+        const val MIGRATION_CONTROLLER = 4
     }
 }

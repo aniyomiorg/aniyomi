@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.browse.source.globalsearch
+package eu.kanade.tachiyomi.ui.browse.animesource.globalsearch
 
 import android.os.Bundle
 import android.os.Parcelable

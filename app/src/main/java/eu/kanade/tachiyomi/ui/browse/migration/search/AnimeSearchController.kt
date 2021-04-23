@@ -12,9 +12,9 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
+import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
+import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchPresenter
 import eu.kanade.tachiyomi.ui.browse.migration.MigrationFlags
-import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalAnimeSearchController
-import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalAnimeSearchPresenter
 import uy.kohesive.injekt.injectLazy
 
 class AnimeSearchController(

@@ -44,7 +44,6 @@ open class AnimeExtensionPresenter(
         val untrustedObservable = extensionManager.getUntrustedExtensionsObservable()
         val availableObservable = extensionManager.getAvailableExtensionsObservable()
             .startWith(emptyList<AnimeExtension.Available>())
-        Log.i("bruhh2", availableObservable.toString())
         return Observable.combineLatest(installedObservable, untrustedObservable, availableObservable) { installed, untrusted, available -> Triple(installed, untrusted, available) }
             .debounce(500, TimeUnit.MILLISECONDS)
             .map(::toItems)

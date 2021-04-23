@@ -8,12 +8,12 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.model.InstallStep
-import eu.kanade.tachiyomi.source.CatalogueSource
+import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 
 /**
  * Item that contains source information.
  *
- * @param source Instance of [CatalogueSource] containing source information.
+ * @param source Instance of [AnimeCatalogueSource] containing source information.
  * @param header The header for this item.
  */
 data class AnimeExtensionItem(

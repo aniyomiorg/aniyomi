@@ -10,10 +10,10 @@ import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.source.model.SAnime
 import eu.kanade.tachiyomi.source.model.SEpisode
 import eu.kanade.tachiyomi.source.model.toSEpisode
+import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchCardItem
+import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchItem
+import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchPresenter
 import eu.kanade.tachiyomi.ui.browse.migration.AnimeMigrationFlags
-import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalAnimeSearchCardItem
-import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalAnimeSearchItem
-import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalAnimeSearchPresenter
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI

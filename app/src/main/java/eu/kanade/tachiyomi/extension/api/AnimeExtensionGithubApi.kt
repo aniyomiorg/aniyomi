@@ -35,7 +35,7 @@ internal class AnimeExtensionGithubApi {
     suspend fun checkForUpdates(context: Context): List<AnimeExtension.Installed> {
         val extensions = findExtensions()
 
-        preferences.lastExtCheck().set(Date().time)
+        preferences.lastAnimeExtCheck().set(Date().time)
 
         val installedExtensions = ExtensionLoader.loadExtensions(context)
             .filterIsInstance<AnimeLoadResult.Success>()

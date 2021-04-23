@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.browse.source.browse
+package eu.kanade.tachiyomi.ui.browse.animesource.browse
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -37,7 +37,7 @@ import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCategoriesDialog
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
-import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
+import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
@@ -95,7 +95,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
     /**
      * Sheet containing filter items.
      */
-    private var filterSheet: SourceFilterSheet? = null
+    private var filterSheet: AnimeSourceFilterSheet? = null
 
     /**
      * Recycler view with the list of results.
@@ -144,7 +144,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
             return
         }
 
-        filterSheet = SourceFilterSheet(
+        filterSheet = AnimeSourceFilterSheet(
             activity!!,
             onFilterClicked = {
                 val allDefault = presenter.sourceFilters == presenter.source.getFilterList()
@@ -263,7 +263,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
         searchItem.fixExpand(
             onExpand = { invalidateMenuOnExpand() },
             onCollapse = {
-                if (router.backstackSize >= 2 && router.backstack[router.backstackSize - 2].controller() is GlobalSearchController) {
+                if (router.backstackSize >= 2 && router.backstack[router.backstackSize - 2].controller() is GlobalAnimeSearchController) {
                     router.popController(this)
                 } else {
                     nonSubmittedQuery = ""

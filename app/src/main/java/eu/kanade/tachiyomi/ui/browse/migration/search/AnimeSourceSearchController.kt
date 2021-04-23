@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.source.AnimeCatalogueSource
-import eu.kanade.tachiyomi.ui.browse.source.browse.AnimeSourceItem
+import eu.kanade.tachiyomi.ui.browse.animesource.browse.AnimeSourceItem
 import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
 
 class AnimeSourceSearchController(

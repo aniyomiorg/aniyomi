@@ -1,11 +1,11 @@
-package eu.kanade.tachiyomi.ui.browse.source.globalsearch
+package eu.kanade.tachiyomi.ui.browse.animesource.globalsearch
 
 import android.os.Bundle
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.extension.ExtensionManager
+import eu.kanade.tachiyomi.extension.AnimeExtensionManager
 import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.source.AnimeSourceManager
@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.SAnime
 import eu.kanade.tachiyomi.source.model.toSAnime
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
-import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourcePresenter
+import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourcePresenter
 import eu.kanade.tachiyomi.util.lang.runAsObservable
 import rx.Observable
 import rx.Subscription
@@ -62,7 +62,7 @@ open class GlobalAnimeSearchPresenter(
      */
     private var fetchImageSubscription: Subscription? = null
 
-    private val extensionManager: ExtensionManager by injectLazy()
+    private val extensionManager: AnimeExtensionManager by injectLazy()
 
     private var extensionFilter: String? = null
 
@@ -74,7 +74,7 @@ open class GlobalAnimeSearchPresenter(
 
         // Perform a search with previous or initial state
         search(
-            savedState?.getString(BrowseSourcePresenter::query.name)
+            savedState?.getString(BrowseAnimeSourcePresenter::query.name)
                 ?: initialQuery.orEmpty()
         )
     }
@@ -86,7 +86,7 @@ open class GlobalAnimeSearchPresenter(
     }
 
     override fun onSave(state: Bundle) {
-        state.putString(BrowseSourcePresenter::query.name, query)
+        state.putString(BrowseAnimeSourcePresenter::query.name, query)
         state.putString(GlobalAnimeSearchPresenter::extensionFilter.name, extensionFilter)
         super.onSave(state)
     }
@@ -99,8 +99,8 @@ open class GlobalAnimeSearchPresenter(
      */
     protected open fun getEnabledSources(): List<AnimeCatalogueSource> {
         val languages = preferences.enabledLanguages().get()
-        val disabledSourceIds = preferences.disabledSources().get()
-        val pinnedSourceIds = preferences.pinnedSources().get()
+        val disabledSourceIds = preferences.disabledAnimeSources().get()
+        val pinnedSourceIds = preferences.pinnedAnimeSources().get()
 
         return sourceManager.getCatalogueSources()
             .filter { it.lang in languages }
@@ -126,7 +126,7 @@ open class GlobalAnimeSearchPresenter(
         }
 
         val onlyPinnedSources = preferences.searchPinnedSourcesOnly()
-        val pinnedSourceIds = preferences.pinnedSources().get()
+        val pinnedSourceIds = preferences.pinnedAnimeSources().get()
 
         return enabledSources
             .filter { if (onlyPinnedSources) it.id.toString() in pinnedSourceIds else true }
@@ -158,7 +158,7 @@ open class GlobalAnimeSearchPresenter(
         val initialItems = sources.map { createCatalogueSearchItem(it, null) }
         var items = initialItems
 
-        val pinnedSourceIds = preferences.pinnedSources().get()
+        val pinnedSourceIds = preferences.pinnedAnimeSources().get()
 
         fetchSourcesSubscription?.unsubscribe()
         fetchSourcesSubscription = Observable.from(sources)

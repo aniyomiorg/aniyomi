@@ -126,7 +126,7 @@ internal class AnimeExtensionInstaller(private val context: Context) {
      * @param uri The uri of the extension to install.
      */
     fun installApk(downloadId: Long, uri: Uri) {
-        val intent = Intent(context, ExtensionInstallActivity::class.java)
+        val intent = Intent(context, AnimeExtensionInstallActivity::class.java)
             .setDataAndType(uri, APK_MIME)
             .putExtra(EXTRA_DOWNLOAD_ID, downloadId)
             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)

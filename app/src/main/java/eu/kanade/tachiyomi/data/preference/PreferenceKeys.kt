@@ -99,6 +99,8 @@ object PreferenceKeys {
 
     const val lastUsedSource = "last_catalogue_source"
 
+    const val lastUsedAnimeSource = "last_anime_catalogue_source"
+
     const val lastUsedCategory = "last_used_category"
 
     const val sourceDisplayMode = "pref_display_mode_catalogue"

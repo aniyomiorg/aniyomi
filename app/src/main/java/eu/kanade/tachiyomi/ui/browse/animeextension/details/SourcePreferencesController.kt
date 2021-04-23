@@ -23,16 +23,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.EmptyPreferenceDataStore
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
-import eu.kanade.tachiyomi.databinding.SourcePreferencesControllerBinding
-import eu.kanade.tachiyomi.source.ConfigurableSource
-import eu.kanade.tachiyomi.source.Source
+import eu.kanade.tachiyomi.databinding.AnimeSourcePreferencesControllerBinding
+import eu.kanade.tachiyomi.source.AnimeSource
+import eu.kanade.tachiyomi.source.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.source.getPreferenceKey
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import timber.log.Timber
 
 @SuppressLint("RestrictedApi")
 class SourcePreferencesController(bundle: Bundle? = null) :
-    NucleusController<SourcePreferencesControllerBinding, SourcePreferencesPresenter>(bundle),
+    NucleusController<AnimeSourcePreferencesControllerBinding, SourcePreferencesPresenter>(bundle),
     PreferenceManager.OnDisplayPreferenceDialogListener,
     DialogPreference.TargetFragment {
 
@@ -44,9 +44,9 @@ class SourcePreferencesController(bundle: Bundle? = null) :
         bundleOf(SOURCE_ID to sourceId)
     )
 
-    override fun createBinding(inflater: LayoutInflater): SourcePreferencesControllerBinding {
+    override fun createBinding(inflater: LayoutInflater): AnimeSourcePreferencesControllerBinding {
         val themedInflater = inflater.cloneInContext(getPreferenceThemeContext())
-        return SourcePreferencesControllerBinding.inflate(themedInflater)
+        return AnimeSourcePreferencesControllerBinding.inflate(themedInflater)
     }
 
     override fun createPresenter(): SourcePreferencesPresenter {
@@ -98,14 +98,14 @@ class SourcePreferencesController(bundle: Bundle? = null) :
         lastOpenPreferencePosition = savedInstanceState.get(LASTOPENPREFERENCE_KEY) as? Int
     }
 
-    private fun addPreferencesForSource(screen: PreferenceScreen, source: Source) {
+    private fun addPreferencesForSource(screen: PreferenceScreen, source: AnimeSource) {
         val context = screen.context
 
         val dataStore = SharedPreferencesDataStore(
             context.getSharedPreferences(source.getPreferenceKey(), Context.MODE_PRIVATE)
         )
 
-        if (source is ConfigurableSource) {
+        if (source is ConfigurableAnimeSource) {
             val newScreen = screen.preferenceManager.createPreferenceScreen(context)
             source.setupPreferenceScreen(newScreen)
 

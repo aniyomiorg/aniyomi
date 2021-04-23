@@ -4,11 +4,11 @@ import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.source.LocalSource
+import eu.kanade.tachiyomi.source.LocalAnimeSource
 import eu.kanade.tachiyomi.source.model.SAnime
 import java.util.Date
 
-fun Anime.isLocal() = source == LocalSource.ID
+fun Anime.isLocal() = source == LocalAnimeSource.ID
 
 /**
  * Call before updating [Anime.thumbnail_url] to ensure old cover can be cleared from cache

@@ -175,7 +175,7 @@ class AnimeExtensionManager(
      */
     private fun updatedInstalledExtensionsStatuses(availableExtensions: List<AnimeExtension.Available>) {
         if (availableExtensions.isEmpty()) {
-            preferences.extensionUpdatesCount().set(0)
+            preferences.animeextensionUpdatesCount().set(0)
             return
         }
 
@@ -360,6 +360,6 @@ class AnimeExtensionManager(
     }
 
     private fun updatePendingUpdatesCount() {
-        preferences.extensionUpdatesCount().set(installedExtensions.count { it.hasUpdate })
+        preferences.animeextensionUpdatesCount().set(installedExtensions.count { it.hasUpdate })
     }
 }

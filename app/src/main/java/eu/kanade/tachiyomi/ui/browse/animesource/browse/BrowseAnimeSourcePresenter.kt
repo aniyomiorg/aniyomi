@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.browse.source.browse
+package eu.kanade.tachiyomi.ui.browse.animesource.browse
 
 import android.os.Bundle
 import eu.davidea.flexibleadapter.items.IFlexible
@@ -10,25 +10,25 @@ import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.AnimeCatalogueSource
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.model.Filter
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.SAnime
 import eu.kanade.tachiyomi.source.model.toSAnime
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
-import eu.kanade.tachiyomi.ui.browse.source.filter.CheckboxItem
-import eu.kanade.tachiyomi.ui.browse.source.filter.CheckboxSectionItem
-import eu.kanade.tachiyomi.ui.browse.source.filter.GroupItem
-import eu.kanade.tachiyomi.ui.browse.source.filter.HeaderItem
-import eu.kanade.tachiyomi.ui.browse.source.filter.SelectItem
-import eu.kanade.tachiyomi.ui.browse.source.filter.SelectSectionItem
-import eu.kanade.tachiyomi.ui.browse.source.filter.SeparatorItem
-import eu.kanade.tachiyomi.ui.browse.source.filter.SortGroup
-import eu.kanade.tachiyomi.ui.browse.source.filter.SortItem
-import eu.kanade.tachiyomi.ui.browse.source.filter.TextItem
-import eu.kanade.tachiyomi.ui.browse.source.filter.TextSectionItem
-import eu.kanade.tachiyomi.ui.browse.source.filter.TriStateItem
-import eu.kanade.tachiyomi.ui.browse.source.filter.TriStateSectionItem
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.CheckboxItem
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.CheckboxSectionItem
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.GroupItem
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.HeaderItem
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.SelectItem
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.SelectSectionItem
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.SeparatorItem
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.SortGroup
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.SortItem
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.TextItem
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.TextSectionItem
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.TriStateItem
+import eu.kanade.tachiyomi.ui.browse.animesource.filter.TriStateSectionItem
 import eu.kanade.tachiyomi.util.episode.EpisodeSettingsHelper
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withUIContext
@@ -50,12 +50,12 @@ import uy.kohesive.injekt.api.get
 import java.util.Date
 
 /**
- * Presenter of [BrowseSourceController].
+ * Presenter of [BrowseAnimeSourceController].
  */
 open class BrowseAnimeSourcePresenter(
     private val sourceId: Long,
     searchQuery: String? = null,
-    private val sourceManager: SourceManager = Injekt.get(),
+    private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val db: AnimeDatabaseHelper = Injekt.get(),
     private val prefs: PreferencesHelper = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get()
