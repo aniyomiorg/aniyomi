@@ -29,7 +29,6 @@ open class BaseEpisodeHolder(
                     },
                     onMenuItemClick = {
                         adapter.clickListener.deleteEpisode(position)
-                        true
                     }
                 )
             }

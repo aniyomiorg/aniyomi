@@ -715,8 +715,7 @@ class AnimeController :
 
     fun onEpisodeDownloadUpdate(download: AnimeDownload) {
         episodesAdapter?.currentItems?.find { it.id == download.episode.id }?.let {
-            episodesAdapter?.updateItem(it)
-            episodesAdapter?.notifyDataSetChanged()
+            episodesAdapter?.updateItem(it, it.status)
         }
     }
 
