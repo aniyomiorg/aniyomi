@@ -106,7 +106,7 @@ fun syncEpisodesWithSource(
         val deletedReadEpisodeNumbers = TreeSet<Float>()
         if (toDelete.isNotEmpty()) {
             for (c in toDelete) {
-                if (c.read) {
+                if (c.seen) {
                     deletedReadEpisodeNumbers.add(c.episode_number)
                 }
                 deletedEpisodeNumbers.add(c.episode_number)
@@ -124,7 +124,7 @@ fun syncEpisodesWithSource(
                 c.date_fetch = now++
                 // Try to mark already read episodes as read when the source deletes them
                 if (c.isRecognizedNumber && c.episode_number in deletedReadEpisodeNumbers) {
-                    c.read = true
+                    c.seen = true
                 }
                 if (c.isRecognizedNumber && c.episode_number in deletedEpisodeNumbers) {
                     readded.add(c)

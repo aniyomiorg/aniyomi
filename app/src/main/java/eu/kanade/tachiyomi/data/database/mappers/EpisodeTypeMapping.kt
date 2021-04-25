@@ -11,16 +11,16 @@ import com.pushtorefresh.storio.sqlite.queries.InsertQuery
 import com.pushtorefresh.storio.sqlite.queries.UpdateQuery
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.EpisodeImpl
+import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_ANIME_ID
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_BOOKMARK
-import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_CHAPTER_NUMBER
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_DATE_FETCH
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_DATE_UPLOAD
+import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_EPISODE_NUMBER
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_ID
-import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_LAST_PAGE_READ
-import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_MANGA_ID
+import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_LAST_SECOND_SEEN
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_NAME
-import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_READ
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_SCANLATOR
+import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_SEEN
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_SOURCE_ORDER
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_URL
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.TABLE
@@ -46,16 +46,16 @@ class EpisodePutResolver : DefaultPutResolver<Episode>() {
     override fun mapToContentValues(obj: Episode) =
         contentValuesOf(
             COL_ID to obj.id,
-            COL_MANGA_ID to obj.anime_id,
+            COL_ANIME_ID to obj.anime_id,
             COL_URL to obj.url,
             COL_NAME to obj.name,
-            COL_READ to obj.read,
+            COL_SEEN to obj.seen,
             COL_SCANLATOR to obj.scanlator,
             COL_BOOKMARK to obj.bookmark,
             COL_DATE_FETCH to obj.date_fetch,
             COL_DATE_UPLOAD to obj.date_upload,
-            COL_LAST_PAGE_READ to obj.last_page_read,
-            COL_CHAPTER_NUMBER to obj.episode_number,
+            COL_LAST_SECOND_SEEN to obj.last_second_seen,
+            COL_EPISODE_NUMBER to obj.episode_number,
             COL_SOURCE_ORDER to obj.source_order
         )
 }
@@ -64,16 +64,16 @@ class EpisodeGetResolver : DefaultGetResolver<Episode>() {
 
     override fun mapFromCursor(cursor: Cursor): Episode = EpisodeImpl().apply {
         id = cursor.getLong(cursor.getColumnIndex(COL_ID))
-        anime_id = cursor.getLong(cursor.getColumnIndex(COL_MANGA_ID))
+        anime_id = cursor.getLong(cursor.getColumnIndex(COL_ANIME_ID))
         url = cursor.getString(cursor.getColumnIndex(COL_URL))
         name = cursor.getString(cursor.getColumnIndex(COL_NAME))
         scanlator = cursor.getString(cursor.getColumnIndex(COL_SCANLATOR))
-        read = cursor.getInt(cursor.getColumnIndex(COL_READ)) == 1
+        seen = cursor.getInt(cursor.getColumnIndex(COL_SEEN)) == 1
         bookmark = cursor.getInt(cursor.getColumnIndex(COL_BOOKMARK)) == 1
         date_fetch = cursor.getLong(cursor.getColumnIndex(COL_DATE_FETCH))
         date_upload = cursor.getLong(cursor.getColumnIndex(COL_DATE_UPLOAD))
-        last_page_read = cursor.getInt(cursor.getColumnIndex(COL_LAST_PAGE_READ))
-        episode_number = cursor.getFloat(cursor.getColumnIndex(COL_CHAPTER_NUMBER))
+        last_second_seen = cursor.getInt(cursor.getColumnIndex(COL_LAST_SECOND_SEEN))
+        episode_number = cursor.getFloat(cursor.getColumnIndex(COL_EPISODE_NUMBER))
         source_order = cursor.getInt(cursor.getColumnIndex(COL_SOURCE_ORDER))
     }
 }

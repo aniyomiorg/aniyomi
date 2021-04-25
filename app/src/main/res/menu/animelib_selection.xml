@@ -10,9 +10,9 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_download_unread"
+        android:id="@+id/action_download_unseen"
         android:icon="@drawable/ic_get_app_24dp"
-        android:title="@string/action_download_unread"
+        android:title="@string/action_download_unseen"
         app:iconTint="?attr/colorOnPrimary"
         app:showAsAction="always" />
 

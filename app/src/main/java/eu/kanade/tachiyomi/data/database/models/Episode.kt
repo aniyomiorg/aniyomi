@@ -9,11 +9,11 @@ interface Episode : SEpisode, Serializable {
 
     var anime_id: Long?
 
-    var read: Boolean
+    var seen: Boolean
 
     var bookmark: Boolean
 
-    var last_page_read: Int
+    var last_second_seen: Int
 
     var date_fetch: Long
 

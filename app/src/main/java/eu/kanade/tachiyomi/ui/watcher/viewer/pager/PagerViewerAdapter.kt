@@ -43,7 +43,7 @@ class PagerViewerAdapter(private val viewer: PagerViewer) : ViewPagerAdapter() {
         if (episodes.prevEpisode != null) {
             // We only need to add the last few pages of the previous episode, because it'll be
             // selected as the current episode when one of those pages is selected.
-            val prevPages = episodes.prevEpisode.pages
+            val prevPages = episodes.prevEpisode.seconds
             if (prevPages != null) {
                 newItems.addAll(prevPages.takeLast(2))
             }
@@ -55,7 +55,7 @@ class PagerViewerAdapter(private val viewer: PagerViewer) : ViewPagerAdapter() {
         }
 
         // Add current episode.
-        val currPages = episodes.currEpisode.pages
+        val currPages = episodes.currEpisode.seconds
         if (currPages != null) {
             newItems.addAll(currPages)
         }
@@ -75,7 +75,7 @@ class PagerViewerAdapter(private val viewer: PagerViewer) : ViewPagerAdapter() {
         if (episodes.nextEpisode != null) {
             // Add at most two pages, because this episode will be selected before the user can
             // swap more pages.
-            val nextPages = episodes.nextEpisode.pages
+            val nextPages = episodes.nextEpisode.seconds
             if (nextPages != null) {
                 newItems.addAll(nextPages.take(2))
             }

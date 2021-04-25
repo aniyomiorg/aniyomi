@@ -10,9 +10,9 @@ import com.pushtorefresh.storio.sqlite.queries.DeleteQuery
 import com.pushtorefresh.storio.sqlite.queries.InsertQuery
 import com.pushtorefresh.storio.sqlite.queries.UpdateQuery
 import eu.kanade.tachiyomi.data.database.models.AnimeCategory
+import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable.COL_ANIME_ID
 import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable.COL_CATEGORY_ID
 import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable.COL_ID
-import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable.COL_MANGA_ID
 import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable.TABLE
 
 class AnimeCategoryTypeMapping : SQLiteTypeMapping<AnimeCategory>(
@@ -36,7 +36,7 @@ class AnimeCategoryPutResolver : DefaultPutResolver<AnimeCategory>() {
     override fun mapToContentValues(obj: AnimeCategory) =
         contentValuesOf(
             COL_ID to obj.id,
-            COL_MANGA_ID to obj.anime_id,
+            COL_ANIME_ID to obj.anime_id,
             COL_CATEGORY_ID to obj.category_id
         )
 }
@@ -45,7 +45,7 @@ class AnimeCategoryGetResolver : DefaultGetResolver<AnimeCategory>() {
 
     override fun mapFromCursor(cursor: Cursor): AnimeCategory = AnimeCategory().apply {
         id = cursor.getLong(cursor.getColumnIndex(COL_ID))
-        anime_id = cursor.getLong(cursor.getColumnIndex(COL_MANGA_ID))
+        anime_id = cursor.getLong(cursor.getColumnIndex(COL_ANIME_ID))
         category_id = cursor.getInt(cursor.getColumnIndex(COL_CATEGORY_ID))
     }
 }

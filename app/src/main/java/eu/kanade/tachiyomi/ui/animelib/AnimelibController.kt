@@ -452,7 +452,7 @@ class AnimelibController(
     private fun onActionItemClicked(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_move_to_category -> showChangeAnimeCategoriesDialog()
-            R.id.action_download_unread -> downloadUnreadChapters()
+            R.id.action_download_unseen -> downloadUnseenEpisodes()
             R.id.action_mark_as_read -> markReadStatus(true)
             R.id.action_mark_as_unread -> markReadStatus(false)
             R.id.action_delete -> showDeleteAnimeDialog()
@@ -531,9 +531,9 @@ class AnimelibController(
             .showDialog(router)
     }
 
-    private fun downloadUnreadChapters() {
+    private fun downloadUnseenEpisodes() {
         val animes = selectedAnimes.toList()
-        presenter.downloadUnreadEpisodes(animes)
+        presenter.downloadUnseenEpisodes(animes)
         destroyActionModeIfNeeded()
     }
 
@@ -552,8 +552,8 @@ class AnimelibController(
         destroyActionModeIfNeeded()
     }
 
-    override fun deleteAnimes(animes: List<Anime>, deleteFromAnimelib: Boolean, deleteChapters: Boolean) {
-        presenter.removeAnimes(animes, deleteFromAnimelib, deleteChapters)
+    override fun deleteAnimes(animes: List<Anime>, deleteFromAnimelib: Boolean, deleteEpisodes: Boolean) {
+        presenter.removeAnimes(animes, deleteFromAnimelib, deleteEpisodes)
         destroyActionModeIfNeeded()
     }
 

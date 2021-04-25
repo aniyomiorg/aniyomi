@@ -318,11 +318,11 @@ class LegacyBackupManager(context: Context, version: Int = CURRENT_VERSION) : Ab
 
         // Check if user wants history information in backup
         if (options and BACKUP_HISTORY_MASK == BACKUP_HISTORY) {
-            val historyForAnime = animedatabaseHelper.getHistoryByMangaId(anime.id!!).executeAsBlocking()
+            val historyForAnime = animedatabaseHelper.getHistoryByAnimeId(anime.id!!).executeAsBlocking()
             if (historyForAnime.isNotEmpty()) {
                 val historyData = historyForAnime.mapNotNull { history ->
-                    val url = animedatabaseHelper.getEpisode(history.chapter_id).executeAsBlocking()?.url
-                    url?.let { DHistory(url, history.last_read) }
+                    val url = animedatabaseHelper.getEpisode(history.episode_id).executeAsBlocking()?.url
+                    url?.let { DHistory(url, history.last_seen) }
                 }
                 val historyJson = parser.toJsonTree(historyData)
                 if (historyJson.asJsonArray.size() > 0) {

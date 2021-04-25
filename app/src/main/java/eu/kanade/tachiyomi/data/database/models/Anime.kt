@@ -42,9 +42,9 @@ interface Anime : SAnime {
         get() = episode_flags and DISPLAY_MASK
         set(mode) = setFlags(mode, DISPLAY_MASK)
 
-    var readFilter: Int
-        get() = episode_flags and READ_MASK
-        set(filter) = setFlags(filter, READ_MASK)
+    var seenFilter: Int
+        get() = episode_flags and SEEN_MASK
+        set(filter) = setFlags(filter, SEEN_MASK)
 
     var downloadedFilter: Int
         get() = episode_flags and DOWNLOADED_MASK
@@ -67,9 +67,9 @@ interface Anime : SAnime {
         // Generic filter that does not filter anything
         const val SHOW_ALL = 0x00000000
 
-        const val SHOW_UNREAD = 0x00000002
-        const val SHOW_READ = 0x00000004
-        const val READ_MASK = 0x00000006
+        const val SHOW_UNSEEN = 0x00000002
+        const val SHOW_SEEN = 0x00000004
+        const val SEEN_MASK = 0x00000006
 
         const val SHOW_DOWNLOADED = 0x00000008
         const val SHOW_NOT_DOWNLOADED = 0x00000010

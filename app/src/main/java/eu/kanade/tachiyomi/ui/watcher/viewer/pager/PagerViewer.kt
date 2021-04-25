@@ -188,7 +188,7 @@ abstract class PagerViewer(val activity: WatcherActivity) : BaseViewer {
      * activity of the change and requests the preload of the next episode if this is the last page.
      */
     private fun onWatcherPageSelected(page: WatcherPage, allowPreload: Boolean) {
-        val pages = page.episode.pages ?: return
+        val pages = page.episode.seconds ?: return
         Timber.d("onWatcherPageSelected: ${page.number}/${pages.size}")
         activity.onPageSelected(page)
 
@@ -241,7 +241,7 @@ abstract class PagerViewer(val activity: WatcherActivity) : BaseViewer {
         // Layout the pager once a episode is being set
         if (pager.isGone) {
             Timber.d("Pager first layout")
-            val pages = episodes.currEpisode.pages ?: return
+            val pages = episodes.currEpisode.seconds ?: return
             moveToPage(pages[min(episodes.currEpisode.requestedPage, pages.lastIndex)])
             pager.isVisible = true
         }

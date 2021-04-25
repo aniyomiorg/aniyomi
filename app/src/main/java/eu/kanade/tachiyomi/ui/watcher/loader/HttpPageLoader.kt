@@ -66,7 +66,7 @@ class HttpPageLoader(
         queue.clear()
 
         // Cache current page list progress for online episodes to allow a faster reopen
-        val pages = episode.pages
+        val pages = episode.seconds
         if (pages != null) {
             Completable
                 .fromAction {
@@ -142,7 +142,7 @@ class HttpPageLoader(
      */
     private fun preloadNextPages(currentPage: WatcherPage, amount: Int): List<PriorityPage> {
         val pageIndex = currentPage.index
-        val pages = currentPage.episode.pages ?: return emptyList()
+        val pages = currentPage.episode.seconds ?: return emptyList()
         if (pageIndex == pages.lastIndex) return emptyList()
 
         return pages

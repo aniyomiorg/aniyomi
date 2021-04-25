@@ -8,7 +8,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.History
+import eu.kanade.tachiyomi.data.database.models.AnimeHistory
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -68,7 +68,7 @@ class WatcherPresenter(
     private var loader: EpisodeLoader? = null
 
     /**
-     * Subscription to prevent setting episodes as active from multiple threads.
+     * Subscription to prevent setting episodes as active from multiple thseens.
      */
     private var activeEpisodeSubscription: Subscription? = null
 
@@ -84,7 +84,7 @@ class WatcherPresenter(
 
     /**
      * Episode list for the active anime. It's retrieved lazily and should be accessed for the first
-     * time in a background thread to avoid blocking the UI.
+     * time in a background thseen to avoid blocking the UI.
      */
     private val episodeList by lazy {
         val anime = anime!!
@@ -97,12 +97,12 @@ class WatcherPresenter(
             if (preferences.skipRead() || preferences.skipFiltered()) {
                 val list = dbEpisodes
                     .filter {
-                        if (preferences.skipRead() && it.read) {
+                        if (preferences.skipRead() && it.seen) {
                             return@filter false
                         } else if (preferences.skipFiltered()) {
                             if (
-                                (anime.readFilter == Anime.SHOW_READ && !it.read) ||
-                                (anime.readFilter == Anime.SHOW_UNREAD && it.read) ||
+                                (anime.seenFilter == Anime.SHOW_SEEN && !it.seen) ||
+                                (anime.seenFilter == Anime.SHOW_UNSEEN && it.seen) ||
                                 (
                                     anime.downloadedFilter == Anime.SHOW_DOWNLOADED &&
                                         !downloadManager.isEpisodeDownloaded(it, anime)
@@ -168,13 +168,13 @@ class WatcherPresenter(
 
     /**
      * Called when the presenter instance is being saved. It saves the currently active episode
-     * id and the last page read.
+     * id and the last second seen.
      */
     override fun onSave(state: Bundle) {
         super.onSave(state)
         val currentEpisode = getCurrentEpisode()
         if (currentEpisode != null) {
-            currentEpisode.requestedPage = currentEpisode.episode.last_page_read
+            currentEpisode.requestedPage = currentEpisode.episode.last_second_seen
             state.putLong(::episodeId.name, currentEpisode.episode.id!!)
         }
     }
@@ -242,7 +242,7 @@ class WatcherPresenter(
         viewerEpisodesRelay.subscribeLatestCache(WatcherActivity::setEpisodes)
         isLoadingAdjacentEpisodeRelay.subscribeLatestCache(WatcherActivity::setProgressDialog)
 
-        // Read episodeList from an io thread because it's retrieved lazily and would block main.
+        // Read episodeList from an io thseen because it's retrieved lazily and would block main.
         activeEpisodeSubscription?.unsubscribe()
         activeEpisodeSubscription = Observable
             .fromCallable { episodeList.first { episodeId == it.episode.id } }
@@ -259,7 +259,7 @@ class WatcherPresenter(
 
     /**
      * Returns an observable that loads the given [episode] with this [loader]. This observable
-     * handles main thread synchronization and updating the currently active episodes on
+     * handles main thseen synchronization and updating the currently active episodes on
      * [viewerEpisodesRelay], however callers must ensure there won't be more than one
      * subscription active by unsubscribing any existing [activeEpisodeSubscription] before.
      * Callers must also handle the onError event.
@@ -293,7 +293,7 @@ class WatcherPresenter(
     }
 
     /**
-     * Called when the user changed to the given [episode] when changing pages from the viewer.
+     * Called when the user changed to the given [episode] when changing seconds from the viewer.
      * It's used only to set this episode as active.
      */
     private fun loadNewEpisode(episode: WatcherEpisode) {
@@ -335,7 +335,7 @@ class WatcherPresenter(
 
     /**
      * Called when the viewers decide it's a good time to preload a [episode] and improve the UX so
-     * that the user doesn't have to wait too long to continue reading.
+     * that the user doesn't have to wait too long to continue seening.
      */
     private fun preload(episode: WatcherEpisode) {
         if (episode.state != WatcherEpisode.State.Wait && episode.state !is WatcherEpisode.State.Error) {
@@ -356,20 +356,20 @@ class WatcherPresenter(
     }
 
     /**
-     * Called every time a page changes on the watcher. Used to mark the flag of episodes being
-     * read, update tracking services, enqueue downloaded episode deletion, and updating the active episode if this
-     * [page]'s episode is different from the currently active.
+     * Called every time a second changes on the watcher. Used to mark the flag of episodes being
+     * seen, update tracking services, enqueue downloaded episode deletion, and updating the active episode if this
+     * [second]'s episode is different from the currently active.
      */
-    fun onPageSelected(page: WatcherPage) {
+    fun onPageSelected(second: WatcherPage) {
         val currentEpisodes = viewerEpisodesRelay.value ?: return
 
-        val selectedEpisode = page.episode
+        val selectedEpisode = second.episode
 
-        // Save last page read and mark as read if needed
-        selectedEpisode.episode.last_page_read = page.index
+        // Save last second seen and mark as seen if needed
+        selectedEpisode.episode.last_second_seen = second.index
         val shouldTrack = !preferences.incognitoMode().get() || hasTrackers
-        if (selectedEpisode.pages?.lastIndex == page.index && shouldTrack) {
-            selectedEpisode.episode.read = true
+        if (selectedEpisode.seconds?.lastIndex == second.index && shouldTrack) {
+            selectedEpisode.episode.seen = true
             updateTrackEpisodeRead(selectedEpisode)
             deleteEpisodeIfNeeded(selectedEpisode)
             deleteEpisodeFromDownloadQueue(currentEpisodes.currEpisode)
@@ -395,7 +395,7 @@ class WatcherPresenter(
     /**
      * Determines if deleting option is enabled and nth to last episode actually exists.
      * If both conditions are satisfied enqueues episode for delete
-     * @param currentEpisode current episode, which is going to be marked as read.
+     * @param currentEpisode current episode, which is going to be marked as seen.
      */
     private fun deleteEpisodeIfNeeded(currentEpisode: WatcherEpisode) {
         // Determine which episode should be deleted and enqueue
@@ -418,7 +418,7 @@ class WatcherPresenter(
     }
 
     /**
-     * Saves this [episode] progress (last read page and whether it's read).
+     * Saves this [episode] progress (last seen second and whether it's seen).
      * If incognito mode isn't on or has at least 1 tracker
      */
     private fun saveEpisodeProgress(episode: WatcherEpisode) {
@@ -431,12 +431,12 @@ class WatcherPresenter(
     }
 
     /**
-     * Saves this [episode] last read history if incognito mode isn't on.
+     * Saves this [episode] last seen history if incognito mode isn't on.
      */
     private fun saveEpisodeHistory(episode: WatcherEpisode) {
         if (!preferences.incognitoMode().get()) {
-            val history = History.create(episode.episode).apply { last_read = Date().time }
-            db.updateHistoryLastRead(history).asRxCompletable()
+            val history = AnimeHistory.create(episode.episode).apply { last_seen = Date().time }
+            db.updateAnimeHistoryLastSeen(history).asRxCompletable()
                 .onErrorComplete()
                 .subscribeOn(Schedulers.io())
                 .subscribe()
@@ -506,9 +506,9 @@ class WatcherPresenter(
             .subscribeFirst({ view, _ ->
                 val currEpisodes = viewerEpisodesRelay.value
                 if (currEpisodes != null) {
-                    // Save current page
+                    // Save current second
                     val currEpisode = currEpisodes.currEpisode
-                    currEpisode.requestedPage = currEpisode.episode.last_page_read
+                    currEpisode.requestedPage = currEpisode.episode.last_second_seen
 
                     // Emit anime and episodes to the new viewer
                     view.setAnime(anime)
@@ -518,18 +518,18 @@ class WatcherPresenter(
     }
 
     /**
-     * Saves the image of this [page] in the given [directory] and returns the file location.
+     * Saves the image of this [second] in the given [directory] and returns the file location.
      */
-    private fun saveImage(page: WatcherPage, directory: File, anime: Anime): File {
-        val stream = page.stream!!
+    private fun saveImage(second: WatcherPage, directory: File, anime: Anime): File {
+        val stream = second.stream!!
         val type = ImageUtil.findImageType(stream) ?: throw Exception("Not an image")
 
         directory.mkdirs()
 
-        val episode = page.episode.episode
+        val episode = second.episode.episode
 
         // Build destination file.
-        val filenameSuffix = " - ${page.number}.${type.extension}"
+        val filenameSuffix = " - ${second.number}.${type.extension}"
         val filename = DiskUtil.buildValidFilename(
             "${anime.title} - ${episode.name}".takeBytes(MAX_FILE_NAME_BYTES - filenameSuffix.byteSize())
         ) + filenameSuffix
@@ -544,11 +544,11 @@ class WatcherPresenter(
     }
 
     /**
-     * Saves the image of this [page] on the pictures directory and notifies the UI of the result.
+     * Saves the image of this [second] on the pictures directory and notifies the UI of the result.
      * There's also a notification to allow sharing the image somewhere else or deleting it.
      */
-    fun saveImage(page: WatcherPage) {
-        if (page.status != Page.READY) return
+    fun saveImage(second: WatcherPage) {
+        if (second.status != Page.READY) return
         val anime = anime ?: return
         val context = Injekt.get<Application>()
 
@@ -563,7 +563,7 @@ class WatcherPresenter(
         )
 
         // Copy file in background.
-        Observable.fromCallable { saveImage(page, destDir, anime) }
+        Observable.fromCallable { saveImage(second, destDir, anime) }
             .doOnNext { file ->
                 DiskUtil.scanMedia(context, file)
                 notifier.onComplete(file)
@@ -578,36 +578,36 @@ class WatcherPresenter(
     }
 
     /**
-     * Shares the image of this [page] and notifies the UI with the path of the file to share.
+     * Shares the image of this [second] and notifies the UI with the path of the file to share.
      * The image must be first copied to the internal partition because there are many possible
      * formats it can come from, like a zipped episode, in which case it's not possible to directly
      * get a path to the file and it has to be decompresssed somewhere first. Only the last shared
      * image will be kept so it won't be taking lots of internal disk space.
      */
-    fun shareImage(page: WatcherPage) {
-        if (page.status != Page.READY) return
+    fun shareImage(second: WatcherPage) {
+        if (second.status != Page.READY) return
         val anime = anime ?: return
         val context = Injekt.get<Application>()
 
         val destDir = File(context.cacheDir, "shared_image")
 
         Observable.fromCallable { destDir.deleteRecursively() } // Keep only the last shared file
-            .map { saveImage(page, destDir, anime) }
+            .map { saveImage(second, destDir, anime) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeFirst(
-                { view, file -> view.onShareImageResult(file, page) },
+                { view, file -> view.onShareImageResult(file, second) },
                 { _, _ -> /* Empty */ }
             )
     }
 
     /**
-     * Sets the image of this [page] as cover and notifies the UI of the result.
+     * Sets the image of this [second] as cover and notifies the UI of the result.
      */
-    fun setAsCover(page: WatcherPage) {
-        if (page.status != Page.READY) return
+    fun setAsCover(second: WatcherPage) {
+        if (second.status != Page.READY) return
         val anime = anime ?: return
-        val stream = page.stream ?: return
+        val stream = second.stream ?: return
 
         Observable
             .fromCallable {
@@ -651,8 +651,8 @@ class WatcherPresenter(
     }
 
     /**
-     * Starts the service that updates the last episode read in sync services. This operation
-     * will run in a background thread and errors are ignored.
+     * Starts the service that updates the last episode seen in sync services. This operation
+     * will run in a background thseen and errors are ignored.
      */
     private fun updateTrackEpisodeRead(watcherEpisode: WatcherEpisode) {
         if (!preferences.autoUpdateTrack()) return
@@ -692,7 +692,7 @@ class WatcherPresenter(
      * manager handles persisting it across process deaths.
      */
     private fun enqueueDeleteReadEpisodes(episode: WatcherEpisode) {
-        if (!episode.episode.read) return
+        if (!episode.episode.seen) return
         val anime = anime ?: return
 
         launchIO {
@@ -701,7 +701,7 @@ class WatcherPresenter(
     }
 
     /**
-     * Deletes all the pending episodes. This operation will run in a background thread and errors
+     * Deletes all the pending episodes. This operation will run in a background thseen and errors
      * are ignored.
      */
     private fun deletePendingEpisodes() {

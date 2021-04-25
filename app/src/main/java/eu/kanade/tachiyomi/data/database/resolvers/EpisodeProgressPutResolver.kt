@@ -27,8 +27,8 @@ class EpisodeProgressPutResolver : PutResolver<Episode>() {
 
     fun mapToContentValues(episode: Episode) =
         contentValuesOf(
-            EpisodeTable.COL_READ to episode.read,
+            EpisodeTable.COL_SEEN to episode.seen,
             EpisodeTable.COL_BOOKMARK to episode.bookmark,
-            EpisodeTable.COL_LAST_PAGE_READ to episode.last_page_read
+            EpisodeTable.COL_LAST_SECOND_SEEN to episode.last_second_seen
         )
 }

@@ -6,7 +6,7 @@ object AnimeCategoryTable {
 
     const val COL_ID = "_id"
 
-    const val COL_MANGA_ID = "anime_id"
+    const val COL_ANIME_ID = "anime_id"
 
     const val COL_CATEGORY_ID = "category_id"
 
@@ -14,11 +14,11 @@ object AnimeCategoryTable {
         get() =
             """CREATE TABLE $TABLE(
             $COL_ID INTEGER NOT NULL PRIMARY KEY,
-            $COL_MANGA_ID INTEGER NOT NULL,
+            $COL_ANIME_ID INTEGER NOT NULL,
             $COL_CATEGORY_ID INTEGER NOT NULL,
             FOREIGN KEY($COL_CATEGORY_ID) REFERENCES ${CategoryTable.TABLE} (${CategoryTable.COL_ID})
             ON DELETE CASCADE,
-            FOREIGN KEY($COL_MANGA_ID) REFERENCES ${AnimeTable.TABLE} (${AnimeTable.COL_ID})
+            FOREIGN KEY($COL_ANIME_ID) REFERENCES ${AnimeTable.TABLE} (${AnimeTable.COL_ID})
             ON DELETE CASCADE
             )"""
 }

@@ -16,7 +16,7 @@ import eu.kanade.tachiyomi.data.database.resolvers.AnimelibAnimeGetResolver
 import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable
 import eu.kanade.tachiyomi.data.database.tables.CategoryTable
-import eu.kanade.tachiyomi.data.database.tables.ChapterTable
+import eu.kanade.tachiyomi.data.database.tables.EpisodeTable
 
 interface AnimeQueries : DbProvider {
 
@@ -33,8 +33,8 @@ interface AnimeQueries : DbProvider {
         .listOfObjects(AnimelibAnime::class.java)
         .withQuery(
             RawQuery.builder()
-                .query(libraryQuery)
-                .observesTables(AnimeTable.TABLE, ChapterTable.TABLE, AnimeCategoryTable.TABLE, CategoryTable.TABLE)
+                .query(animelibQuery)
+                .observesTables(AnimeTable.TABLE, EpisodeTable.TABLE, AnimeCategoryTable.TABLE, CategoryTable.TABLE)
                 .build()
         )
         .withGetResolver(AnimelibAnimeGetResolver.INSTANCE)
@@ -135,41 +135,41 @@ interface AnimeQueries : DbProvider {
         )
         .prepare()
 
-    fun getLastReadAnime() = db.get()
+    fun getLastSeenAnime() = db.get()
         .listOfObjects(Anime::class.java)
         .withQuery(
             RawQuery.builder()
-                .query(getLastReadAnimeQuery())
+                .query(getLastSeenAnimeQuery())
                 .observesTables(AnimeTable.TABLE)
                 .build()
         )
         .prepare()
 
-    fun getTotalChapterAnime() = db.get()
+    fun getTotalEpisodeAnime() = db.get()
         .listOfObjects(Anime::class.java)
         .withQuery(
             RawQuery.builder()
-                .query(getTotalChapterAnimeQuery())
+                .query(getTotalEpisodeAnimeQuery())
                 .observesTables(AnimeTable.TABLE)
                 .build()
         )
         .prepare()
 
-    fun getLatestChapterAnime() = db.get()
+    fun getLatestEpisodeAnime() = db.get()
         .listOfObjects(Anime::class.java)
         .withQuery(
             RawQuery.builder()
-                .query(getLatestChapterAnimeQuery())
+                .query(getLatestEpisodeAnimeQuery())
                 .observesTables(AnimeTable.TABLE)
                 .build()
         )
         .prepare()
 
-    fun getChapterFetchDateAnime() = db.get()
+    fun getEpisodeFetchDateAnime() = db.get()
         .listOfObjects(Anime::class.java)
         .withQuery(
             RawQuery.builder()
-                .query(getChapterFetchDateAnimeQuery())
+                .query(getEpisodeFetchDateAnimeQuery())
                 .observesTables(AnimeTable.TABLE)
                 .build()
         )

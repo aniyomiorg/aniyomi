@@ -612,7 +612,7 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
     fun moveToPageIndex(index: Int) {
         val viewer = viewer ?: return
         val currentEpisode = presenter.getCurrentEpisode() ?: return
-        val page = currentEpisode.pages?.getOrNull(index) ?: return
+        val page = currentEpisode.seconds?.getOrNull(index) ?: return
         viewer.moveToPage(page)
     }
 
@@ -639,7 +639,7 @@ class WatcherActivity : BaseRxActivity<WatcherActivityBinding, WatcherPresenter>
     @SuppressLint("SetTextI18n")
     fun onPageSelected(page: WatcherPage) {
         presenter.onPageSelected(page)
-        val pages = page.episode.pages ?: return
+        val pages = page.episode.seconds ?: return
 
         // Set bottom page number
         binding.pageNumber.text = "${page.number}/${pages.size}"

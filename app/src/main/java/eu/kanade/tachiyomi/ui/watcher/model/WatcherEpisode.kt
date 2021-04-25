@@ -18,8 +18,8 @@ data class WatcherEpisode(val episode: Episode) {
 
     val stateObserver by lazy { stateRelay.asObservable() }
 
-    val pages: List<WatcherPage>?
-        get() = (state as? State.Loaded)?.pages
+    val seconds: List<WatcherPage>?
+        get() = (state as? State.Loaded)?.seconds
 
     var pageLoader: PageLoader? = null
 
@@ -48,6 +48,6 @@ data class WatcherEpisode(val episode: Episode) {
         object Wait : State()
         object Loading : State()
         class Error(val error: Throwable) : State()
-        class Loaded(val pages: List<WatcherPage>) : State()
+        class Loaded(val seconds: List<WatcherPage>) : State()
     }
 }

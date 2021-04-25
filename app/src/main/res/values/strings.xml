@@ -56,6 +56,7 @@
     <string name="action_mark_previous_as_read">Mark previous as read</string>
     <string name="action_download">Download</string>
     <string name="action_download_unread">Download unread chapters</string>
+    <string name="action_download_unseen">Download unseen episodes</string>
     <string name="action_bookmark">Bookmark chapter</string>
     <string name="action_remove_bookmark">Unbookmark chapter</string>
     <string name="action_delete">Delete</string>
@@ -573,6 +574,7 @@
     <string name="download_custom">Custom</string>
     <string name="download_all">All</string>
     <string name="download_unread">Unread</string>
+    <string name="download_unseen">Unseen</string>
     <string name="confirm_delete_chapters">Are you sure you want to delete the selected chapters?</string>
     <string name="invalid_download_dir">Invalid download location</string>
     <string name="chapter_settings">Chapter settings</string>

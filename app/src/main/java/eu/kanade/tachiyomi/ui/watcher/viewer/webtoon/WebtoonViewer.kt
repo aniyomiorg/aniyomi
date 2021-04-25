@@ -177,7 +177,7 @@ class WebtoonViewer(val activity: WatcherActivity, val isContinuous: Boolean = t
      * activity of the change and requests the preload of the next episode if this is the last page.
      */
     private fun onPageSelected(page: WatcherPage, allowPreload: Boolean) {
-        val pages = page.episode.pages ?: return
+        val pages = page.episode.seconds ?: return
         Timber.d("onPageSelected: ${page.number}/${pages.size}")
         activity.onPageSelected(page)
 
@@ -220,7 +220,7 @@ class WebtoonViewer(val activity: WatcherActivity, val isContinuous: Boolean = t
 
         if (recycler.isGone) {
             Timber.d("Recycler first layout")
-            val pages = episodes.currEpisode.pages ?: return
+            val pages = episodes.currEpisode.seconds ?: return
             moveToPage(pages[min(episodes.currEpisode.requestedPage, pages.lastIndex)])
             recycler.isVisible = true
         }

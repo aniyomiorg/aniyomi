@@ -18,7 +18,7 @@ interface AnimeCategoryQueries : DbProvider {
         .byQuery(
             DeleteQuery.builder()
                 .table(AnimeCategoryTable.TABLE)
-                .where("${AnimeCategoryTable.COL_MANGA_ID} IN (${Queries.placeholders(animes.size)})")
+                .where("${AnimeCategoryTable.COL_ANIME_ID} IN (${Queries.placeholders(animes.size)})")
                 .whereArgs(*animes.map { it.id }.toTypedArray())
                 .build()
         )

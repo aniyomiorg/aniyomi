@@ -103,7 +103,7 @@ class AnimeSearchPresenter(
 
                 val prevAnimeEpisodes = db.getEpisodes(prevAnime).executeAsBlocking()
                 val maxEpisodeRead = prevAnimeEpisodes
-                    .filter { it.read }
+                    .filter { it.seen }
                     .maxOfOrNull { it.episode_number }
                 if (maxEpisodeRead != null) {
                     val dbEpisodes = db.getEpisodes(anime).executeAsBlocking()
@@ -115,7 +115,7 @@ class AnimeSearchPresenter(
                                 episode.date_fetch = prevEpisode.date_fetch
                                 episode.bookmark = prevEpisode.bookmark
                             } else if (episode.episode_number <= maxEpisodeRead) {
-                                episode.read = true
+                                episode.seen = true
                             }
                         }
                     }

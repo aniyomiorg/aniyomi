@@ -38,14 +38,14 @@ class EpisodeHolder(
 
         // Set correct text color
         val episodeTitleColor = when {
-            episode.read -> adapter.readColor
+            episode.seen -> adapter.readColor
             episode.bookmark -> adapter.bookmarkedColor
             else -> adapter.unreadColor
         }
         binding.episodeTitle.setTextColor(episodeTitleColor)
 
         val episodeDescriptionColor = when {
-            episode.read -> adapter.readColor
+            episode.seen -> adapter.readColor
             episode.bookmark -> adapter.bookmarkedColor
             else -> adapter.unreadColorSecondary
         }
@@ -58,10 +58,10 @@ class EpisodeHolder(
         if (episode.date_upload > 0) {
             descriptions.add(adapter.dateFormat.format(Date(episode.date_upload)))
         }
-        if (!episode.read && episode.last_page_read > 0) {
+        if (!episode.seen && episode.last_second_seen > 0) {
             val lastPageRead = buildSpannedString {
                 color(adapter.readColor) {
-                    append(itemView.context.getString(R.string.chapter_progress, episode.last_page_read + 1))
+                    append(itemView.context.getString(R.string.chapter_progress, episode.last_second_seen + 1))
                 }
             }
             descriptions.add(lastPageRead)

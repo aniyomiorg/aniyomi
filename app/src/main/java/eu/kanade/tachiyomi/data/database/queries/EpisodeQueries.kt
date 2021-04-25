@@ -21,7 +21,7 @@ interface EpisodeQueries : DbProvider {
         .withQuery(
             Query.builder()
                 .table(EpisodeTable.TABLE)
-                .where("${EpisodeTable.COL_MANGA_ID} = ?")
+                .where("${EpisodeTable.COL_ANIME_ID} = ?")
                 .whereArgs(anime.id)
                 .build()
         )
@@ -66,7 +66,7 @@ interface EpisodeQueries : DbProvider {
         .withQuery(
             Query.builder()
                 .table(EpisodeTable.TABLE)
-                .where("${EpisodeTable.COL_URL} = ? AND ${EpisodeTable.COL_MANGA_ID} = ?")
+                .where("${EpisodeTable.COL_URL} = ? AND ${EpisodeTable.COL_ANIME_ID} = ?")
                 .whereArgs(url, animeId)
                 .build()
         )

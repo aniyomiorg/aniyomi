@@ -406,9 +406,9 @@ class AnimePresenter(
 
         val unreadFilter = onlyUnread()
         if (unreadFilter == State.INCLUDE) {
-            observable = observable.filter { !it.read }
+            observable = observable.filter { !it.seen }
         } else if (unreadFilter == State.EXCLUDE) {
-            observable = observable.filter { it.read }
+            observable = observable.filter { it.seen }
         }
 
         val downloadedFilter = onlyDownloaded()
@@ -470,7 +470,7 @@ class AnimePresenter(
      * Returns the next unread episode or null if everything is read.
      */
     fun getNextUnreadEpisode(): EpisodeItem? {
-        return episodes.sortedWith(getEpisodeSort()).findLast { !it.read }
+        return episodes.sortedWith(getEpisodeSort()).findLast { !it.seen }
     }
 
     /**
@@ -480,9 +480,9 @@ class AnimePresenter(
      */
     fun markEpisodesRead(selectedEpisodes: List<EpisodeItem>, read: Boolean) {
         val episodes = selectedEpisodes.map { episode ->
-            episode.read = read
+            episode.seen = read
             if (!read) {
-                episode.last_page_read = 0
+                episode.last_second_seen = 0
             }
             episode
         }
@@ -491,7 +491,7 @@ class AnimePresenter(
             db.updateEpisodesProgress(episodes).executeAsBlocking()
 
             if (preferences.removeAfterMarkedAsRead()) {
-                deleteEpisodes(episodes.filter { it.read })
+                deleteEpisodes(episodes.filter { it.seen })
             }
         }
     }
@@ -563,10 +563,10 @@ class AnimePresenter(
      * @param state whether to display only unread episodes or all episodes.
      */
     fun setUnreadFilter(state: State) {
-        anime.readFilter = when (state) {
+        anime.seenFilter = when (state) {
             State.IGNORE -> Anime.SHOW_ALL
-            State.INCLUDE -> Anime.SHOW_UNREAD
-            State.EXCLUDE -> Anime.SHOW_READ
+            State.INCLUDE -> Anime.SHOW_UNSEEN
+            State.EXCLUDE -> Anime.SHOW_SEEN
         }
         db.updateFlags(anime).executeAsBlocking()
         refreshEpisodes()
@@ -655,9 +655,9 @@ class AnimePresenter(
      * Whether the display only unread filter is enabled.
      */
     fun onlyUnread(): State {
-        return when (anime.readFilter) {
-            Anime.SHOW_UNREAD -> State.INCLUDE
-            Anime.SHOW_READ -> State.EXCLUDE
+        return when (anime.seenFilter) {
+            Anime.SHOW_UNSEEN -> State.INCLUDE
+            Anime.SHOW_SEEN -> State.EXCLUDE
             else -> State.IGNORE
         }
     }

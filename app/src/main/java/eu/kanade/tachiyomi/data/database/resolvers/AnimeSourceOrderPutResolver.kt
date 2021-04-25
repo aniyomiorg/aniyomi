@@ -21,7 +21,7 @@ class AnimeSourceOrderPutResolver : PutResolver<Episode>() {
 
     fun mapToUpdateQuery(episode: Episode) = UpdateQuery.builder()
         .table(EpisodeTable.TABLE)
-        .where("${EpisodeTable.COL_URL} = ? AND ${EpisodeTable.COL_MANGA_ID} = ?")
+        .where("${EpisodeTable.COL_URL} = ? AND ${EpisodeTable.COL_ANIME_ID} = ?")
         .whereArgs(episode.url, episode.anime_id)
         .build()
 

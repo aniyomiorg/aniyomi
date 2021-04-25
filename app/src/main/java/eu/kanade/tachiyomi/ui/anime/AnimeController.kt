@@ -686,7 +686,7 @@ class AnimeController :
         }
 
         val context = view?.context
-        if (context != null && episodes.any { it.read }) {
+        if (context != null && episodes.any { it.seen }) {
             actionFab?.text = context.getString(R.string.action_resume)
         }
     }
@@ -836,8 +836,8 @@ class AnimeController :
             binding.actionToolbar.findItem(R.id.action_delete)?.isVisible = !isLocalSource && episodes.any { it.isDownloaded }
             binding.actionToolbar.findItem(R.id.action_bookmark)?.isVisible = episodes.any { !it.episode.bookmark }
             binding.actionToolbar.findItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.episode.bookmark }
-            binding.actionToolbar.findItem(R.id.action_mark_as_read)?.isVisible = episodes.any { !it.episode.read }
-            binding.actionToolbar.findItem(R.id.action_mark_as_unread)?.isVisible = episodes.all { it.episode.read }
+            binding.actionToolbar.findItem(R.id.action_mark_as_read)?.isVisible = episodes.any { !it.episode.seen }
+            binding.actionToolbar.findItem(R.id.action_mark_as_unread)?.isVisible = episodes.all { it.episode.seen }
 
             // Hide FAB to avoid interfering with the bottom action toolbar
             actionFab?.isVisible = false
@@ -992,22 +992,22 @@ class AnimeController :
 
     // OVERFLOW MENU DIALOGS
 
-    private fun getUnreadEpisodesSorted() = presenter.episodes
+    private fun getUnseenEpisodesSorted() = presenter.episodes
         .sortedWith(presenter.getEpisodeSort())
-        .filter { !it.read && it.status == AnimeDownload.State.NOT_DOWNLOADED }
+        .filter { !it.seen && it.status == AnimeDownload.State.NOT_DOWNLOADED }
         .distinctBy { it.name }
         .reversed()
 
     private fun downloadEpisodes(choice: Int) {
         val episodesToDownload = when (choice) {
-            R.id.download_next -> getUnreadEpisodesSorted().take(1)
-            R.id.download_next_5 -> getUnreadEpisodesSorted().take(5)
-            R.id.download_next_10 -> getUnreadEpisodesSorted().take(10)
+            R.id.download_next -> getUnseenEpisodesSorted().take(1)
+            R.id.download_next_5 -> getUnseenEpisodesSorted().take(5)
+            R.id.download_next_10 -> getUnseenEpisodesSorted().take(10)
             R.id.download_custom -> {
                 showCustomDownloadDialog()
                 return
             }
-            R.id.download_unread -> presenter.episodes.filter { !it.read }
+            R.id.download_unread -> presenter.episodes.filter { !it.seen }
             R.id.download_all -> presenter.episodes
             else -> emptyList()
         }
@@ -1025,7 +1025,7 @@ class AnimeController :
     }
 
     override fun downloadCustomEpisodes(amount: Int) {
-        val episodesToDownload = getUnreadEpisodesSorted().take(amount)
+        val episodesToDownload = getUnseenEpisodesSorted().take(amount)
         if (episodesToDownload.isNotEmpty()) {
             downloadEpisodes(episodesToDownload)
         }

@@ -56,8 +56,8 @@ class EpisodeLoader(
 
                 // If the episode is partially read, set the starting page to the last the user read
                 // otherwise use the requested page.
-                if (!episode.episode.read) {
-                    episode.requestedPage = episode.episode.last_page_read
+                if (!episode.episode.seen) {
+                    episode.requestedPage = episode.episode.last_second_seen
                 }
             }
             .toCompletable()

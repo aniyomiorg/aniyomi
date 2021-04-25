@@ -2,12 +2,8 @@ package eu.kanade.tachiyomi.data.database
 
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
-import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable
-import eu.kanade.tachiyomi.data.database.tables.AnimeTable
-import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable
 import eu.kanade.tachiyomi.data.database.tables.CategoryTable
 import eu.kanade.tachiyomi.data.database.tables.ChapterTable
-import eu.kanade.tachiyomi.data.database.tables.EpisodeTable
 import eu.kanade.tachiyomi.data.database.tables.HistoryTable
 import eu.kanade.tachiyomi.data.database.tables.MangaCategoryTable
 import eu.kanade.tachiyomi.data.database.tables.MangaTable
@@ -35,22 +31,12 @@ class DbOpenCallback : SupportSQLiteOpenHelper.Callback(DATABASE_VERSION) {
         execSQL(MangaCategoryTable.createTableQuery)
         execSQL(HistoryTable.createTableQuery)
 
-        execSQL(AnimeTable.createTableQuery)
-        execSQL(EpisodeTable.createTableQuery)
-        execSQL(AnimeTrackTable.createTableQuery)
-        execSQL(AnimeCategoryTable.createTableQuery)
-
         // DB indexes
         execSQL(MangaTable.createUrlIndexQuery)
         execSQL(MangaTable.createLibraryIndexQuery)
         execSQL(ChapterTable.createMangaIdIndexQuery)
         execSQL(ChapterTable.createUnreadChaptersIndexQuery)
         execSQL(HistoryTable.createChapterIdIndexQuery)
-
-        execSQL(AnimeTable.createUrlIndexQuery)
-        execSQL(AnimeTable.createLibraryIndexQuery)
-        execSQL(EpisodeTable.createMangaIdIndexQuery)
-        execSQL(EpisodeTable.createUnreadEpisodesIndexQuery)
     }
 
     override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {

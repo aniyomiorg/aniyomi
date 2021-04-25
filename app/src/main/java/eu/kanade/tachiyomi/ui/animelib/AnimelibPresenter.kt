@@ -225,19 +225,19 @@ class AnimelibPresenter(
 
         val lastReadAnime by lazy {
             var counter = 0
-            db.getLastReadAnime().executeAsBlocking().associate { it.id!! to counter++ }
+            db.getLastSeenAnime().executeAsBlocking().associate { it.id!! to counter++ }
         }
         val totalChapterAnime by lazy {
             var counter = 0
-            db.getTotalChapterAnime().executeAsBlocking().associate { it.id!! to counter++ }
+            db.getTotalEpisodeAnime().executeAsBlocking().associate { it.id!! to counter++ }
         }
         val latestChapterAnime by lazy {
             var counter = 0
-            db.getLatestChapterAnime().executeAsBlocking().associate { it.id!! to counter++ }
+            db.getLatestEpisodeAnime().executeAsBlocking().associate { it.id!! to counter++ }
         }
         val chapterFetchDateAnime by lazy {
             var counter = 0
-            db.getChapterFetchDateAnime().executeAsBlocking().associate { it.id!! to counter++ }
+            db.getEpisodeFetchDateAnime().executeAsBlocking().associate { it.id!! to counter++ }
         }
 
         val sortAscending = preferences.animelibSortingAscending().get()
@@ -404,11 +404,11 @@ class AnimelibPresenter(
      *
      * @param animes the list of anime.
      */
-    fun downloadUnreadEpisodes(animes: List<Anime>) {
+    fun downloadUnseenEpisodes(animes: List<Anime>) {
         animes.forEach { anime ->
             launchIO {
                 val episodes = db.getEpisodes(anime).executeAsBlocking()
-                    .filter { !it.read }
+                    .filter { !it.seen }
 
                 downloadManager.downloadEpisodes(anime, episodes)
             }
@@ -425,9 +425,9 @@ class AnimelibPresenter(
             launchIO {
                 val episodes = db.getEpisodes(anime).executeAsBlocking()
                 episodes.forEach {
-                    it.read = read
+                    it.seen = read
                     if (!read) {
-                        it.last_page_read = 0
+                        it.last_second_seen = 0
                     }
                 }
                 db.updateEpisodesProgress(episodes).executeAsBlocking()

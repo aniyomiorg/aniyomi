@@ -12,11 +12,11 @@ class EpisodeImpl : Episode {
 
     override var scanlator: String? = null
 
-    override var read: Boolean = false
+    override var seen: Boolean = false
 
     override var bookmark: Boolean = false
 
-    override var last_page_read: Int = 0
+    override var last_second_seen: Int = 0
 
     override var date_fetch: Long = 0
 

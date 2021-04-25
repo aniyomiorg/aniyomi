@@ -26,7 +26,7 @@ object EpisodeSettingsHelper {
      */
     fun applySettingDefaults(anime: Anime) {
         with(anime) {
-            readFilter = prefs.filterEpisodeByRead()
+            seenFilter = prefs.filterEpisodeBySeen()
             downloadedFilter = prefs.filterEpisodeByDownloaded()
             bookmarkedFilter = prefs.filterEpisodeByBookmarked()
             sorting = prefs.sortEpisodeBySourceOrNumber()
@@ -44,7 +44,7 @@ object EpisodeSettingsHelper {
         launchIO {
             val updatedAnimes = db.getAnimes().executeAsBlocking().map { anime ->
                 with(anime) {
-                    readFilter = prefs.filterEpisodeByRead()
+                    seenFilter = prefs.filterEpisodeBySeen()
                     downloadedFilter = prefs.filterEpisodeByDownloaded()
                     bookmarkedFilter = prefs.filterEpisodeByBookmarked()
                     sorting = prefs.sortEpisodeBySourceOrNumber()

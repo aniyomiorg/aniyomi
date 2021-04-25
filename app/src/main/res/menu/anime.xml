@@ -29,8 +29,8 @@
                 android:id="@+id/download_custom"
                 android:title="@string/download_custom" />
             <item
-                android:id="@+id/download_unread"
-                android:title="@string/download_unread" />
+                android:id="@+id/download_unseen"
+                android:title="@string/download_unseen" />
             <item
                 android:id="@+id/download_all"
                 android:title="@string/download_all" />

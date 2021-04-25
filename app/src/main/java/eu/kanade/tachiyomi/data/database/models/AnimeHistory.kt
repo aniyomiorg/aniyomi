@@ -5,7 +5,7 @@ import java.io.Serializable
 /**
  * Object containing the history statistics of a chapter
  */
-interface History : Serializable {
+interface AnimeHistory : Serializable {
 
     /**
      * Id of history object.
@@ -15,17 +15,17 @@ interface History : Serializable {
     /**
      * Chapter id of history object.
      */
-    var chapter_id: Long
+    var episode_id: Long
 
     /**
-     * Last time chapter was read in time long format
+     * Last time episode was read in time long format
      */
-    var last_read: Long
+    var last_seen: Long
 
     /**
      * Total time chapter was read - todo not yet implemented
      */
-    var time_read: Long
+    var time_seen: Long
 
     companion object {
 
@@ -35,8 +35,8 @@ interface History : Serializable {
          * @param chapter chapter object
          * @return history object
          */
-        fun create(chapter: Chapter): History = HistoryImpl().apply {
-            this.chapter_id = chapter.id!!
+        fun create(episode: Episode): AnimeHistory = AnimeHistoryImpl().apply {
+            this.episode_id = episode.id!!
         }
     }
 }
