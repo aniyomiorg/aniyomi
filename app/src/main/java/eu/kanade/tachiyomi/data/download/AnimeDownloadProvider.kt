@@ -76,7 +76,7 @@ class AnimeDownloadProvider(private val context: Context) {
      */
     fun findAnimeDir(anime: Anime, source: AnimeSource): UniFile? {
         val sourceDir = findSourceDir(source)
-        return sourceDir?.findFile(getAnimeDirName(anime))
+        return sourceDir?.findFile(getAnimeDirName(anime), true)
     }
 
     /**
@@ -89,7 +89,7 @@ class AnimeDownloadProvider(private val context: Context) {
     fun findEpisodeDir(episode: Episode, anime: Anime, source: AnimeSource): UniFile? {
         val animeDir = findAnimeDir(anime, source)
         return getValidEpisodeDirNames(episode).asSequence()
-            .mapNotNull { animeDir?.findFile(it) }
+            .mapNotNull { animeDir?.findFile(it, true) }
             .firstOrNull()
     }
 
@@ -115,7 +115,7 @@ class AnimeDownloadProvider(private val context: Context) {
      * @param source the source to query.
      */
     fun getSourceDirName(source: AnimeSource): String {
-        return source.toString()
+        return DiskUtil.buildValidFilename(source.toString())
     }
 
     /**
@@ -149,7 +149,7 @@ class AnimeDownloadProvider(private val context: Context) {
     fun getValidEpisodeDirNames(episode: Episode): List<String> {
         return listOf(
             getEpisodeDirName(episode),
-
+            // TODO: remove this
             // Legacy episode directory name used in v0.9.2 and before
             DiskUtil.buildValidFilename(episode.name)
         )

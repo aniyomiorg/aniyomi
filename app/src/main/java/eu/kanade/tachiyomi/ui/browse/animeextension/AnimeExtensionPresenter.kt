@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.ui.browse.animeextension
 
 import android.app.Application
 import android.os.Bundle
-import android.util.Log
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.extension.AnimeExtensionManager

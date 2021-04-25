@@ -4,7 +4,7 @@ import android.content.Context
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.model.AnimeLoadResult
-import eu.kanade.tachiyomi.extension.util.ExtensionLoader
+import eu.kanade.tachiyomi.extension.util.AnimeExtensionLoader
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.await
@@ -37,7 +37,7 @@ internal class AnimeExtensionGithubApi {
 
         preferences.lastAnimeExtCheck().set(Date().time)
 
-        val installedExtensions = ExtensionLoader.loadExtensions(context)
+        val installedExtensions = AnimeExtensionLoader.loadExtensions(context)
             .filterIsInstance<AnimeLoadResult.Success>()
             .map { it.extension }
 
@@ -60,7 +60,7 @@ internal class AnimeExtensionGithubApi {
             .filter { element ->
                 val versionName = element.jsonObject["version"]!!.jsonPrimitive.content
                 val libVersion = versionName.substringBeforeLast('.').toDouble()
-                libVersion >= ExtensionLoader.LIB_VERSION_MIN && libVersion <= ExtensionLoader.LIB_VERSION_MAX
+                libVersion >= AnimeExtensionLoader.LIB_VERSION_MIN && libVersion <= AnimeExtensionLoader.LIB_VERSION_MAX
             }
             .map { element ->
                 val name = element.jsonObject["name"]!!.jsonPrimitive.content.substringAfter("Tachiyomi: ")

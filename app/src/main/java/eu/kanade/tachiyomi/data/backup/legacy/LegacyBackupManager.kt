@@ -13,18 +13,25 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.data.backup.AbstractBackupManager
+import eu.kanade.tachiyomi.data.backup.BackupCreateService.Companion.BACKUP_ANIMECATEGORY
+import eu.kanade.tachiyomi.data.backup.BackupCreateService.Companion.BACKUP_ANIMECATEGORY_MASK
 import eu.kanade.tachiyomi.data.backup.BackupCreateService.Companion.BACKUP_CATEGORY
 import eu.kanade.tachiyomi.data.backup.BackupCreateService.Companion.BACKUP_CATEGORY_MASK
 import eu.kanade.tachiyomi.data.backup.BackupCreateService.Companion.BACKUP_CHAPTER
 import eu.kanade.tachiyomi.data.backup.BackupCreateService.Companion.BACKUP_CHAPTER_MASK
+import eu.kanade.tachiyomi.data.backup.BackupCreateService.Companion.BACKUP_EPISODE
+import eu.kanade.tachiyomi.data.backup.BackupCreateService.Companion.BACKUP_EPISODE_MASK
 import eu.kanade.tachiyomi.data.backup.BackupCreateService.Companion.BACKUP_HISTORY
 import eu.kanade.tachiyomi.data.backup.BackupCreateService.Companion.BACKUP_HISTORY_MASK
 import eu.kanade.tachiyomi.data.backup.BackupCreateService.Companion.BACKUP_TRACK
 import eu.kanade.tachiyomi.data.backup.BackupCreateService.Companion.BACKUP_TRACK_MASK
 import eu.kanade.tachiyomi.data.backup.legacy.models.Backup
+import eu.kanade.tachiyomi.data.backup.legacy.models.Backup.ANIMECATEGORIES
+import eu.kanade.tachiyomi.data.backup.legacy.models.Backup.ANIMEEXTENSIONS
 import eu.kanade.tachiyomi.data.backup.legacy.models.Backup.CATEGORIES
 import eu.kanade.tachiyomi.data.backup.legacy.models.Backup.CHAPTERS
 import eu.kanade.tachiyomi.data.backup.legacy.models.Backup.CURRENT_VERSION
+import eu.kanade.tachiyomi.data.backup.legacy.models.Backup.EPISODES
 import eu.kanade.tachiyomi.data.backup.legacy.models.Backup.EXTENSIONS
 import eu.kanade.tachiyomi.data.backup.legacy.models.Backup.HISTORY
 import eu.kanade.tachiyomi.data.backup.legacy.models.Backup.MANGA
@@ -35,18 +42,12 @@ import eu.kanade.tachiyomi.data.backup.legacy.serializer.ChapterTypeAdapter
 import eu.kanade.tachiyomi.data.backup.legacy.serializer.HistoryTypeAdapter
 import eu.kanade.tachiyomi.data.backup.legacy.serializer.MangaTypeAdapter
 import eu.kanade.tachiyomi.data.backup.legacy.serializer.TrackTypeAdapter
-import eu.kanade.tachiyomi.data.database.models.CategoryImpl
-import eu.kanade.tachiyomi.data.database.models.Chapter
-import eu.kanade.tachiyomi.data.database.models.ChapterImpl
-import eu.kanade.tachiyomi.data.database.models.History
-import eu.kanade.tachiyomi.data.database.models.Manga
-import eu.kanade.tachiyomi.data.database.models.MangaCategory
-import eu.kanade.tachiyomi.data.database.models.MangaImpl
-import eu.kanade.tachiyomi.data.database.models.Track
-import eu.kanade.tachiyomi.data.database.models.TrackImpl
-import eu.kanade.tachiyomi.data.database.models.toMangaInfo
+import eu.kanade.tachiyomi.data.database.models.*
+import eu.kanade.tachiyomi.source.AnimeSource
+import eu.kanade.tachiyomi.source.LocalAnimeSource
 import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.Source
+import eu.kanade.tachiyomi.source.model.toSAnime
 import eu.kanade.tachiyomi.source.model.toSManga
 import timber.log.Timber
 import kotlin.math.max
@@ -77,17 +78,29 @@ class LegacyBackupManager(context: Context, version: Int = CURRENT_VERSION) : Ab
         // Create manga array
         val mangaEntries = JsonArray()
 
+        // Create anime array
+        val animeEntries = JsonArray()
+
         // Create category array
         val categoryEntries = JsonArray()
 
+        // Create animecategory array
+        val animecategoryEntries = JsonArray()
+
         // Create extension ID/name mapping
         val extensionEntries = JsonArray()
+
+        // Create animeextension ID/name mapping
+        val animeextensionEntries = JsonArray()
 
         // Add value's to root
         root[Backup.VERSION] = CURRENT_VERSION
         root[Backup.MANGAS] = mangaEntries
         root[CATEGORIES] = categoryEntries
         root[EXTENSIONS] = extensionEntries
+        root[Backup.ANIMES] = animeEntries
+        root[ANIMECATEGORIES] = animecategoryEntries
+        root[ANIMEEXTENSIONS] = animeextensionEntries
 
         databaseHelper.inTransaction {
             val mangas = getFavoriteManga()
@@ -113,6 +126,30 @@ class LegacyBackupManager(context: Context, version: Int = CURRENT_VERSION) : Ab
 
             // Backup extension ID/name mapping
             backupExtensionInfo(extensionEntries, extensions)
+
+            val animes = getFavoriteAnime()
+
+            val animeextensions: MutableSet<String> = mutableSetOf()
+
+            // Backup library anime and its dependencies
+            animes.forEach { anime ->
+                animeEntries.add(backupAnimeObject(anime, flags))
+
+                // Maintain set of extensions/sources used (excludes local source)
+                if (anime.source != LocalAnimeSource.ID) {
+                    sourceManager.get(anime.source)?.let {
+                        extensions.add("${anime.source}:${it.name}")
+                    }
+                }
+            }
+
+            // Backup categories
+            if ((flags and BACKUP_ANIMECATEGORY_MASK) == BACKUP_ANIMECATEGORY) {
+                backupCategories(animecategoryEntries)
+            }
+
+            // Backup extension ID/name mapping
+            backupExtensionInfo(animeextensionEntries, animeextensions)
         }
 
         try {
@@ -162,6 +199,16 @@ class LegacyBackupManager(context: Context, version: Int = CURRENT_VERSION) : Ab
      */
     internal fun backupCategories(root: JsonArray) {
         val categories = databaseHelper.getCategories().executeAsBlocking()
+        categories.forEach { root.add(parser.toJsonTree(it)) }
+    }
+
+    /**
+     * Backup the categories of library
+     *
+     * @param root root of categories json
+     */
+    internal fun backupAnimeCategories(root: JsonArray) {
+        val categories = animedatabaseHelper.getCategories().executeAsBlocking()
         categories.forEach { root.add(parser.toJsonTree(it)) }
     }
 
@@ -226,11 +273,79 @@ class LegacyBackupManager(context: Context, version: Int = CURRENT_VERSION) : Ab
         return entry
     }
 
+    /**
+     * Convert a anime to Json
+     *
+     * @param anime anime that gets converted
+     * @return [JsonElement] containing anime information
+     */
+    internal fun backupAnimeObject(anime: Anime, options: Int): JsonElement {
+        // Entry for this anime
+        val entry = JsonObject()
+
+        // Backup anime fields
+        entry[MANGA] = parser.toJsonTree(anime)
+
+        // Check if user wants episode information in backup
+        if (options and BACKUP_EPISODE_MASK == BACKUP_EPISODE) {
+            // Backup all the episodes
+            val episodes = animedatabaseHelper.getEpisodes(anime).executeAsBlocking()
+            if (episodes.isNotEmpty()) {
+                val episodesJson = parser.toJsonTree(episodes)
+                if (episodesJson.asJsonArray.size() > 0) {
+                    entry[EPISODES] = episodesJson
+                }
+            }
+        }
+
+        // Check if user wants category information in backup
+        if (options and BACKUP_CATEGORY_MASK == BACKUP_CATEGORY) {
+            // Backup categories for this anime
+            val categoriesForAnime = animedatabaseHelper.getCategoriesForAnime(anime).executeAsBlocking()
+            if (categoriesForAnime.isNotEmpty()) {
+                val categoriesNames = categoriesForAnime.map { it.name }
+                entry[CATEGORIES] = parser.toJsonTree(categoriesNames)
+            }
+        }
+
+        // Check if user wants track information in backup
+        if (options and BACKUP_TRACK_MASK == BACKUP_TRACK) {
+            val tracks = animedatabaseHelper.getTracks(anime).executeAsBlocking()
+            if (tracks.isNotEmpty()) {
+                entry[TRACK] = parser.toJsonTree(tracks)
+            }
+        }
+
+        // Check if user wants history information in backup
+        if (options and BACKUP_HISTORY_MASK == BACKUP_HISTORY) {
+            val historyForAnime = animedatabaseHelper.getHistoryByMangaId(anime.id!!).executeAsBlocking()
+            if (historyForAnime.isNotEmpty()) {
+                val historyData = historyForAnime.mapNotNull { history ->
+                    val url = animedatabaseHelper.getEpisode(history.chapter_id).executeAsBlocking()?.url
+                    url?.let { DHistory(url, history.last_read) }
+                }
+                val historyJson = parser.toJsonTree(historyData)
+                if (historyJson.asJsonArray.size() > 0) {
+                    entry[HISTORY] = historyJson
+                }
+            }
+        }
+
+        return entry
+    }
+
     fun restoreMangaNoFetch(manga: Manga, dbManga: Manga) {
         manga.id = dbManga.id
         manga.copyFrom(dbManga)
         manga.favorite = true
         insertManga(manga)
+    }
+
+    fun restoreAnimeNoFetch(anime: Anime, dbAnime: Anime) {
+        anime.id = dbAnime.id
+        anime.copyFrom(dbAnime)
+        anime.favorite = true
+        insertAnime(anime)
     }
 
     /**
@@ -247,6 +362,23 @@ class LegacyBackupManager(context: Context, version: Int = CURRENT_VERSION) : Ab
             it.favorite = true
             it.initialized = true
             it.id = insertManga(manga)
+        }
+    }
+
+    /**
+     * Fetches manga information
+     *
+     * @param source source of manga
+     * @param manga manga that needs updating
+     * @return Updated manga.
+     */
+    suspend fun fetchAnime(source: AnimeSource, manga: Anime): Anime {
+        val networkManga = source.getAnimeDetails(manga.toAnimeInfo())
+        return manga.also {
+            it.copyFrom(networkManga.toSAnime())
+            it.favorite = true
+            it.initialized = true
+            it.id = insertAnime(manga)
         }
     }
 

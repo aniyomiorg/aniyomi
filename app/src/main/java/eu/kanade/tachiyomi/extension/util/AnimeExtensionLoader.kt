@@ -29,12 +29,12 @@ internal object AnimeExtensionLoader {
         preferences.showNsfwSource().get()
     }
 
-    private const val EXTENSION_FEATURE = "tachiyomi.extension"
-    private const val METADATA_SOURCE_CLASS = "tachiyomi.extension.class"
-    private const val METADATA_SOURCE_FACTORY = "tachiyomi.extension.factory"
-    private const val METADATA_NSFW = "tachiyomi.extension.nsfw"
+    private const val EXTENSION_FEATURE = "tachiyomi.animeextension"
+    private const val METADATA_SOURCE_CLASS = "tachiyomi.animeextension.class"
+    private const val METADATA_SOURCE_FACTORY = "tachiyomi.animeextension.factory"
+    private const val METADATA_NSFW = "tachiyomi.animeextension.nsfw"
     const val LIB_VERSION_MIN = 1.2
-    const val LIB_VERSION_MAX = 1.2
+    const val LIB_VERSION_MAX = 1.3
 
     private const val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or PackageManager.GET_SIGNATURES
 
@@ -55,7 +55,6 @@ internal object AnimeExtensionLoader {
         val pkgManager = context.packageManager
         val installedPkgs = pkgManager.getInstalledPackages(PACKAGE_FLAGS)
         val extPkgs = installedPkgs.filter { isPackageAnExtension(it) }
-
         if (extPkgs.isEmpty()) return emptyList()
 
         // Load each extension concurrently and wait for completion

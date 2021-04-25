@@ -47,6 +47,11 @@ class TachiGlideModule : AppGlideModule() {
             MangaThumbnailModelLoader.Factory()
         )
         registry.append(
+            AnimeThumbnail::class.java,
+            InputStream::class.java,
+            AnimeThumbnailModelLoader.Factory()
+        )
+        registry.append(
             InputStream::class.java,
             InputStream::class.java,
             PassthroughModelLoader.Factory()

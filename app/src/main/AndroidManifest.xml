@@ -83,6 +83,16 @@
                 android:resource="@xml/s_pen_actions"/>
         </activity>
         <activity
+            android:name=".ui.watcher.WatcherActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="com.samsung.android.support.REMOTE_ACTION" />
+            </intent-filter>
+
+            <meta-data android:name="com.samsung.android.support.REMOTE_ACTION"
+                android:resource="@xml/s_pen_actions"/>
+        </activity>
+        <activity
             android:name=".ui.security.BiometricUnlockActivity"
             android:theme="@style/Theme.Base" />
         <activity
@@ -149,6 +159,10 @@
             android:name=".extension.util.ExtensionInstallActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <activity
+            android:name=".extension.util.AnimeExtensionInstallActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -169,6 +183,10 @@
 
         <service
             android:name=".data.download.DownloadService"
+            android:exported="false" />
+
+        <service
+            android:name=".data.download.AnimeDownloadService"
             android:exported="false" />
 
         <service

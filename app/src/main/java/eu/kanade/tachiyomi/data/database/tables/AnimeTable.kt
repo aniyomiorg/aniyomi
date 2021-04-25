@@ -68,7 +68,7 @@ object AnimeTable {
         get() = "CREATE INDEX ${TABLE}_${COL_URL}_index ON $TABLE($COL_URL)"
 
     val createLibraryIndexQuery: String
-        get() = "CREATE INDEX library_${COL_FAVORITE}_index ON $TABLE($COL_FAVORITE) " +
+        get() = "CREATE INDEX animelib_${COL_FAVORITE}_index ON $TABLE($COL_FAVORITE) " +
             "WHERE $COL_FAVORITE = 1"
 
     val addCoverLastModified: String
