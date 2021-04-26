@@ -25,12 +25,12 @@ android {
     ndkVersion = AndroidConfig.ndk
 
     defaultConfig {
-        applicationId = "eu.kanade.tachiyomi"
+        applicationId = "xyz.jmir.tachiyomi.mi"
         minSdkVersion(AndroidConfig.minSdk)
         targetSdkVersion(AndroidConfig.targetSdk)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        versionCode = 58
-        versionName = "0.10.11"
+        versionCode = 59
+        versionName = "0.10.11-mi"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -38,7 +38,7 @@ android {
         buildConfigField("boolean", "INCLUDE_UPDATER", "false")
 
         // Please disable ACRA or use your own instance in forked versions of the project
-        buildConfigField("String", "ACRA_URI", "\"https://tachiyomi.kanade.eu/crash_report\"")
+        buildConfigField("String", "ACRA_URI", "\"https://acra.jmir.xyz/crash_report\"")
 
         multiDexEnabled = true
 
