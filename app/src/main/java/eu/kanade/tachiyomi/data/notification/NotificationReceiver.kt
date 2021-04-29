@@ -447,7 +447,7 @@ class NotificationReceiver : BroadcastReceiver() {
             val newIntent =
                 Intent(context, MainActivity::class.java).setAction(MainActivity.SHORTCUT_MANGA)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(AnimeController.MANGA_EXTRA, anime.id)
+                    .putExtra(AnimeController.ANIME_EXTRA, anime.id)
                     .putExtra("notificationId", anime.id.hashCode())
                     .putExtra("groupId", groupId)
             return PendingIntent.getActivity(context, anime.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT)

@@ -103,7 +103,7 @@ class AnimeController :
 
     constructor(anime: Anime?, fromSource: Boolean = false) : super(
         bundleOf(
-            MANGA_EXTRA to (anime?.id ?: 0),
+            ANIME_EXTRA to (anime?.id ?: 0),
             FROM_SOURCE_EXTRA to fromSource
         )
     ) {
@@ -118,7 +118,7 @@ class AnimeController :
     )
 
     @Suppress("unused")
-    constructor(bundle: Bundle) : this(bundle.getLong(MANGA_EXTRA))
+    constructor(bundle: Bundle) : this(bundle.getLong(ANIME_EXTRA))
 
     var anime: Anime? = null
         private set
@@ -1072,7 +1072,7 @@ class AnimeController :
 
     companion object {
         const val FROM_SOURCE_EXTRA = "from_source"
-        const val MANGA_EXTRA = "anime"
+        const val ANIME_EXTRA = "anime"
 
         /**
          * Key to change the cover of a anime in [onActivityResult].

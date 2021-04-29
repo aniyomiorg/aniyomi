@@ -43,7 +43,7 @@ class WatcherActivity : AppCompatActivity() {
         playerView = findViewById(R.id.player_view)
         dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "xyz.jmir.tachiyomi.mi"))
         mediaItem = MediaItem.Builder()
-            .setUri("https://ecchi.ninja/uploads/AnimePahe_Vivy_-_Fluorite_Eyes_Song_-_01_1080p_SubsPlease_wslP.mp4")
+            .setUri(intent.getStringExtra("uri"))
             .setMimeType(MimeTypes.VIDEO_MP4)
             .build()
         playbackPosition = intent.extras!!.getLong("second")
