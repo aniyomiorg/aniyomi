@@ -17,7 +17,6 @@ if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
     apply(plugin = "com.google.gms.google-services")
 }
 
-
 shortcutHelper.setFilePath("./shortcuts.xml")
 
 android {
