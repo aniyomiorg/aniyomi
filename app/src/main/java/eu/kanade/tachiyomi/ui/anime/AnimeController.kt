@@ -635,6 +635,14 @@ class AnimeController :
             val activity = activity ?: return
             presenter.editCover(anime!!, activity, dataUri)
         }
+        if (requestCode == REQUEST_SECONDS) {
+            val seconds = data!!.getLongExtra("seconds_result", 0)
+            val total_seconds = data.getLongExtra("total_seconds_result", 0)
+            val episode: Episode = data.getSerializableExtra("episode") as Episode
+            episode.last_second_seen = seconds
+            episode.total_seconds = total_seconds
+            presenter.setEpisodesProgress(arrayListOf(EpisodeItem(episode, anime!!)))
+        }
     }
 
     fun onSetCoverSuccess() {
@@ -725,7 +733,7 @@ class AnimeController :
         if (hasAnimation) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         }
-        startActivity(intent)
+        startActivityForResult(intent, REQUEST_SECONDS)
     }
 
     override fun onItemClick(view: View?, position: Int): Boolean {
@@ -1069,5 +1077,6 @@ class AnimeController :
          * Key to change the cover of a anime in [onActivityResult].
          */
         const val REQUEST_IMAGE_OPEN = 101
+        const val REQUEST_SECONDS = 102
     }
 }

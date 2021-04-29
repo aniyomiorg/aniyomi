@@ -22,6 +22,7 @@ import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_NAME
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_SCANLATOR
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_SEEN
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_SOURCE_ORDER
+import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_TOTAL_SECONDS
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.COL_URL
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.TABLE
 
@@ -55,6 +56,7 @@ class EpisodePutResolver : DefaultPutResolver<Episode>() {
             COL_DATE_FETCH to obj.date_fetch,
             COL_DATE_UPLOAD to obj.date_upload,
             COL_LAST_SECOND_SEEN to obj.last_second_seen,
+            COL_TOTAL_SECONDS to obj.total_seconds,
             COL_EPISODE_NUMBER to obj.episode_number,
             COL_SOURCE_ORDER to obj.source_order
         )
@@ -72,7 +74,8 @@ class EpisodeGetResolver : DefaultGetResolver<Episode>() {
         bookmark = cursor.getInt(cursor.getColumnIndex(COL_BOOKMARK)) == 1
         date_fetch = cursor.getLong(cursor.getColumnIndex(COL_DATE_FETCH))
         date_upload = cursor.getLong(cursor.getColumnIndex(COL_DATE_UPLOAD))
-        last_second_seen = cursor.getInt(cursor.getColumnIndex(COL_LAST_SECOND_SEEN))
+        last_second_seen = cursor.getLong(cursor.getColumnIndex(COL_LAST_SECOND_SEEN))
+        total_seconds = cursor.getLong(cursor.getColumnIndex(COL_TOTAL_SECONDS))
         episode_number = cursor.getFloat(cursor.getColumnIndex(COL_EPISODE_NUMBER))
         source_order = cursor.getInt(cursor.getColumnIndex(COL_SOURCE_ORDER))
     }

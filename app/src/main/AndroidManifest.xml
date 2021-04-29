@@ -84,6 +84,7 @@
         </activity>
         <activity
             android:name=".ui.watcher.WatcherActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="com.samsung.android.support.REMOTE_ACTION" />

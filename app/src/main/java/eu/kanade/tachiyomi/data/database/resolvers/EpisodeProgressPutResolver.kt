@@ -29,6 +29,7 @@ class EpisodeProgressPutResolver : PutResolver<Episode>() {
         contentValuesOf(
             EpisodeTable.COL_SEEN to episode.seen,
             EpisodeTable.COL_BOOKMARK to episode.bookmark,
-            EpisodeTable.COL_LAST_SECOND_SEEN to episode.last_second_seen
+            EpisodeTable.COL_LAST_SECOND_SEEN to episode.last_second_seen,
+            EpisodeTable.COL_TOTAL_SECONDS to episode.total_seconds
         )
 }

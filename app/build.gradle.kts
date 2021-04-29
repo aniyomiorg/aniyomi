@@ -266,6 +266,14 @@ dependencies {
 
     // For detecting memory leaks; see https://square.github.io/leakcanary/
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.7")
+
+    //exoplayer
+    val exoplayerVersion = "2.13.3"
+    implementation("com.google.android.exoplayer:exoplayer:$exoplayerVersion")
+    implementation("com.google.android.exoplayer:exoplayer-core:$exoplayerVersion")
+    implementation("com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion")
+    implementation("com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion")
+    implementation("com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion")
 }
 
 tasks {

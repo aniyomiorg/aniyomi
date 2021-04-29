@@ -24,6 +24,8 @@ object EpisodeTable {
 
     const val COL_LAST_SECOND_SEEN = "last_second_seen"
 
+    const val COL_TOTAL_SECONDS = "total_seconds"
+
     const val COL_EPISODE_NUMBER = "episode_number"
 
     const val COL_SOURCE_ORDER = "source_order"
@@ -38,7 +40,8 @@ object EpisodeTable {
             $COL_SCANLATOR TEXT,
             $COL_SEEN BOOLEAN NOT NULL,
             $COL_BOOKMARK BOOLEAN NOT NULL,
-            $COL_LAST_SECOND_SEEN INT NOT NULL,
+            $COL_LAST_SECOND_SEEN LONG NOT NULL,
+            $COL_TOTAL_SECONDS LONG NOT NULL,
             $COL_EPISODE_NUMBER FLOAT NOT NULL,
             $COL_SOURCE_ORDER INTEGER NOT NULL,
             $COL_DATE_FETCH LONG NOT NULL,

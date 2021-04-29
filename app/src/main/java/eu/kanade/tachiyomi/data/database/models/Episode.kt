@@ -13,7 +13,9 @@ interface Episode : SEpisode, Serializable {
 
     var bookmark: Boolean
 
-    var last_second_seen: Int
+    var last_second_seen: Long
+
+    var total_seconds: Long
 
     var date_fetch: Long
 

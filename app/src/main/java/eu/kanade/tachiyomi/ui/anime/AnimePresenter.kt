@@ -497,6 +497,26 @@ class AnimePresenter(
     }
 
     /**
+     * Mark the selected episode list as read/unread.
+     * @param selectedEpisodes the list of selected episodes.
+     * @param read whether to mark episodes as read or unread.
+     */
+    fun setEpisodesProgress(selectedEpisodes: List<EpisodeItem>) {
+        val episodes = selectedEpisodes.map { episode ->
+            if (!episode.seen) episode.seen = episode.last_second_seen > episode.total_seconds * 0.85
+            episode
+        }
+
+        launchIO {
+            db.updateEpisodesProgress(episodes).executeAsBlocking()
+
+            if (preferences.removeAfterMarkedAsRead()) {
+                deleteEpisodes(episodes.filter { it.seen })
+            }
+        }
+    }
+
+    /**
      * Downloads the given list of episodes with the manager.
      * @param episodes the list of episodes to download.
      */

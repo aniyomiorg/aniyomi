@@ -16,7 +16,9 @@ class EpisodeImpl : Episode {
 
     override var bookmark: Boolean = false
 
-    override var last_second_seen: Int = 0
+    override var last_second_seen: Long = 0
+
+    override var total_seconds: Long = 0
 
     override var date_fetch: Long = 0
 

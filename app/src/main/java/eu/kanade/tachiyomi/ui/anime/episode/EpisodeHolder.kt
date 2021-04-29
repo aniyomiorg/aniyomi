@@ -11,6 +11,7 @@ import eu.kanade.tachiyomi.databinding.EpisodesItemBinding
 import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodeHolder
 import java.util.Date
+import java.util.concurrent.TimeUnit
 
 class EpisodeHolder(
     view: View,
@@ -61,7 +62,23 @@ class EpisodeHolder(
         if (!episode.seen && episode.last_second_seen > 0) {
             val lastPageRead = buildSpannedString {
                 color(adapter.readColor) {
-                    append(itemView.context.getString(R.string.chapter_progress, episode.last_second_seen + 1))
+                    append(
+                        itemView.context.getString(
+                            R.string.episode_progress,
+                            String.format(
+                                "%d:%02d",
+                                TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen),
+                                TimeUnit.MILLISECONDS.toSeconds(episode.last_second_seen) -
+                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen))
+                            ),
+                            String.format(
+                                "%d:%02d",
+                                TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds),
+                                TimeUnit.MILLISECONDS.toSeconds(episode.total_seconds) -
+                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds))
+                            )
+                        )
+                    )
                 }
             }
             descriptions.add(lastPageRead)

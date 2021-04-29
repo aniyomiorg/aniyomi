@@ -1,9 +1,9 @@
 package eu.kanade.tachiyomi.source.online
 
-import eu.kanade.tachiyomi.source.model.AnimesPage
+import eu.kanade.tachiyomi.source.model.MangasPage
 import eu.kanade.tachiyomi.source.model.Page
-import eu.kanade.tachiyomi.source.model.SAnime
-import eu.kanade.tachiyomi.source.model.SEpisode
+import eu.kanade.tachiyomi.source.model.SChapter
+import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.util.asJsoup
 import okhttp3.Response
 import org.jsoup.nodes.Document
@@ -12,93 +12,93 @@ import org.jsoup.nodes.Element
 /**
  * A simple implementation for sources from a website using Jsoup, an HTML parser.
  */
-abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
+abstract class ParsedHttpSource : HttpSource() {
 
     /**
-     * Parses the response from the site and returns a [AnimesPage] object.
+     * Parses the response from the site and returns a [MangasPage] object.
      *
      * @param response the response from the site.
      */
-    override fun popularAnimeParse(response: Response): AnimesPage {
+    override fun popularMangaParse(response: Response): MangasPage {
         val document = response.asJsoup()
 
-        val animes = document.select(popularAnimeSelector()).map { element ->
-            popularAnimeFromElement(element)
+        val mangas = document.select(popularMangaSelector()).map { element ->
+            popularMangaFromElement(element)
         }
 
-        val hasNextPage = popularAnimeNextPageSelector()?.let { selector ->
+        val hasNextPage = popularMangaNextPageSelector()?.let { selector ->
             document.select(selector).first()
         } != null
 
-        return AnimesPage(animes, hasNextPage)
+        return MangasPage(mangas, hasNextPage)
     }
 
     /**
-     * Returns the Jsoup selector that returns a list of [Element] corresponding to each anime.
+     * Returns the Jsoup selector that returns a list of [Element] corresponding to each manga.
      */
-    protected abstract fun popularAnimeSelector(): String
+    protected abstract fun popularMangaSelector(): String
 
     /**
-     * Returns a anime from the given [element]. Most sites only show the title and the url, it's
+     * Returns a manga from the given [element]. Most sites only show the title and the url, it's
      * totally fine to fill only those two values.
      *
-     * @param element an element obtained from [popularAnimeSelector].
+     * @param element an element obtained from [popularMangaSelector].
      */
-    protected abstract fun popularAnimeFromElement(element: Element): SAnime
+    protected abstract fun popularMangaFromElement(element: Element): SManga
 
     /**
      * Returns the Jsoup selector that returns the <a> tag linking to the next page, or null if
      * there's no next page.
      */
-    protected abstract fun popularAnimeNextPageSelector(): String?
+    protected abstract fun popularMangaNextPageSelector(): String?
 
     /**
-     * Parses the response from the site and returns a [AnimesPage] object.
+     * Parses the response from the site and returns a [MangasPage] object.
      *
      * @param response the response from the site.
      */
-    override fun searchAnimeParse(response: Response): AnimesPage {
+    override fun searchMangaParse(response: Response): MangasPage {
         val document = response.asJsoup()
 
-        val animes = document.select(searchAnimeSelector()).map { element ->
-            searchAnimeFromElement(element)
+        val mangas = document.select(searchMangaSelector()).map { element ->
+            searchMangaFromElement(element)
         }
 
-        val hasNextPage = searchAnimeNextPageSelector()?.let { selector ->
+        val hasNextPage = searchMangaNextPageSelector()?.let { selector ->
             document.select(selector).first()
         } != null
 
-        return AnimesPage(animes, hasNextPage)
+        return MangasPage(mangas, hasNextPage)
     }
 
     /**
-     * Returns the Jsoup selector that returns a list of [Element] corresponding to each anime.
+     * Returns the Jsoup selector that returns a list of [Element] corresponding to each manga.
      */
-    protected abstract fun searchAnimeSelector(): String
+    protected abstract fun searchMangaSelector(): String
 
     /**
-     * Returns a anime from the given [element]. Most sites only show the title and the url, it's
+     * Returns a manga from the given [element]. Most sites only show the title and the url, it's
      * totally fine to fill only those two values.
      *
-     * @param element an element obtained from [searchAnimeSelector].
+     * @param element an element obtained from [searchMangaSelector].
      */
-    protected abstract fun searchAnimeFromElement(element: Element): SAnime
+    protected abstract fun searchMangaFromElement(element: Element): SManga
 
     /**
      * Returns the Jsoup selector that returns the <a> tag linking to the next page, or null if
      * there's no next page.
      */
-    protected abstract fun searchAnimeNextPageSelector(): String?
+    protected abstract fun searchMangaNextPageSelector(): String?
 
     /**
-     * Parses the response from the site and returns a [AnimesPage] object.
+     * Parses the response from the site and returns a [MangasPage] object.
      *
      * @param response the response from the site.
      */
-    override fun latestUpdatesParse(response: Response): AnimesPage {
+    override fun latestUpdatesParse(response: Response): MangasPage {
         val document = response.asJsoup()
 
-        val animes = document.select(latestUpdatesSelector()).map { element ->
+        val mangas = document.select(latestUpdatesSelector()).map { element ->
             latestUpdatesFromElement(element)
         }
 
@@ -106,21 +106,21 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
             document.select(selector).first()
         } != null
 
-        return AnimesPage(animes, hasNextPage)
+        return MangasPage(mangas, hasNextPage)
     }
 
     /**
-     * Returns the Jsoup selector that returns a list of [Element] corresponding to each anime.
+     * Returns the Jsoup selector that returns a list of [Element] corresponding to each manga.
      */
     protected abstract fun latestUpdatesSelector(): String
 
     /**
-     * Returns a anime from the given [element]. Most sites only show the title and the url, it's
+     * Returns a manga from the given [element]. Most sites only show the title and the url, it's
      * totally fine to fill only those two values.
      *
      * @param element an element obtained from [latestUpdatesSelector].
      */
-    protected abstract fun latestUpdatesFromElement(element: Element): SAnime
+    protected abstract fun latestUpdatesFromElement(element: Element): SManga
 
     /**
      * Returns the Jsoup selector that returns the <a> tag linking to the next page, or null if
@@ -129,42 +129,42 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
     protected abstract fun latestUpdatesNextPageSelector(): String?
 
     /**
-     * Parses the response from the site and returns the details of a anime.
+     * Parses the response from the site and returns the details of a manga.
      *
      * @param response the response from the site.
      */
-    override fun animeDetailsParse(response: Response): SAnime {
-        return animeDetailsParse(response.asJsoup())
+    override fun mangaDetailsParse(response: Response): SManga {
+        return mangaDetailsParse(response.asJsoup())
     }
 
     /**
-     * Returns the details of the anime from the given [document].
+     * Returns the details of the manga from the given [document].
      *
      * @param document the parsed document.
      */
-    protected abstract fun animeDetailsParse(document: Document): SAnime
+    protected abstract fun mangaDetailsParse(document: Document): SManga
 
     /**
-     * Parses the response from the site and returns a list of episodes.
+     * Parses the response from the site and returns a list of chapters.
      *
      * @param response the response from the site.
      */
-    override fun episodeListParse(response: Response): List<SEpisode> {
+    override fun chapterListParse(response: Response): List<SChapter> {
         val document = response.asJsoup()
-        return document.select(episodeListSelector()).map { episodeFromElement(it) }
+        return document.select(chapterListSelector()).map { chapterFromElement(it) }
     }
 
     /**
-     * Returns the Jsoup selector that returns a list of [Element] corresponding to each episode.
+     * Returns the Jsoup selector that returns a list of [Element] corresponding to each chapter.
      */
-    protected abstract fun episodeListSelector(): String
+    protected abstract fun chapterListSelector(): String
 
     /**
-     * Returns a episode from the given element.
+     * Returns a chapter from the given element.
      *
-     * @param element an element obtained from [episodeListSelector].
+     * @param element an element obtained from [chapterListSelector].
      */
-    protected abstract fun episodeFromElement(element: Element): SEpisode
+    protected abstract fun chapterFromElement(element: Element): SChapter
 
     /**
      * Parses the response from the site and returns the page list.
