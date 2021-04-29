@@ -1,18 +1,13 @@
 package eu.kanade.tachiyomi.ui.anime.info
 
-import android.graphics.PorterDuff
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import coil.loadAny
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.glide.AnimeThumbnail
-import eu.kanade.tachiyomi.data.glide.GlideApp
-import eu.kanade.tachiyomi.data.glide.toAnimeThumbnail
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.databinding.AnimeInfoHeaderBinding
 import eu.kanade.tachiyomi.source.AnimeSource
@@ -21,7 +16,6 @@ import eu.kanade.tachiyomi.source.model.SAnime
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.util.system.copyToClipboard
-import eu.kanade.tachiyomi.util.system.getResourceColor
 import eu.kanade.tachiyomi.util.view.setChips
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
@@ -47,7 +41,6 @@ class AnimeInfoHeaderAdapter(
     private lateinit var binding: AnimeInfoHeaderBinding
 
     private var initialLoad: Boolean = true
-    private var currentAnimeThumbnail: AnimeThumbnail? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeaderViewHolder {
         binding = AnimeInfoHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -249,17 +242,8 @@ class AnimeInfoHeaderAdapter(
             setFavoriteButtonState(anime.favorite)
 
             // Set cover if changed.
-            val animeThumbnail = anime.toAnimeThumbnail()
-            if (animeThumbnail != currentAnimeThumbnail) {
-                currentAnimeThumbnail = animeThumbnail
-                listOf(binding.animeCover, binding.backdrop)
-                    .forEach {
-                        GlideApp.with(view.context)
-                            .load(animeThumbnail)
-                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                            .centerCrop()
-                            .into(it)
-                    }
+            listOf(binding.animeCover, binding.backdrop).forEach {
+                it.loadAny(anime)
             }
 
             // Anime info section
@@ -303,18 +287,6 @@ class AnimeInfoHeaderAdapter(
                     toggleAnimeInfo()
                     initialLoad = false
                 }
-            }
-
-            // backgroundTint attribute doesn't work properly on Android 5
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
-                listOf(binding.backdropOverlay, binding.animeInfoToggleMoreScrim)
-                    .forEach {
-                        @Suppress("DEPRECATION")
-                        it.background.setColorFilter(
-                            view.context.getResourceColor(android.R.attr.colorBackground),
-                            PorterDuff.Mode.SRC_ATOP
-                        )
-                    }
             }
         }
 

@@ -13,10 +13,10 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeImpl
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_ARTIST
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_AUTHOR
-import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_CHAPTER_FLAGS
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_COVER_LAST_MODIFIED
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_DATE_ADDED
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_DESCRIPTION
+import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_EPISODE_FLAGS
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_FAVORITE
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_GENRE
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_ID
@@ -63,8 +63,8 @@ class AnimePutResolver : DefaultPutResolver<Anime>() {
             COL_FAVORITE to obj.favorite,
             COL_LAST_UPDATE to obj.last_update,
             COL_INITIALIZED to obj.initialized,
-            COL_VIEWER to obj.viewer,
-            COL_CHAPTER_FLAGS to obj.episode_flags,
+            COL_VIEWER to obj.viewer_flags,
+            COL_EPISODE_FLAGS to obj.episode_flags,
             COL_COVER_LAST_MODIFIED to obj.cover_last_modified,
             COL_DATE_ADDED to obj.date_added
         )
@@ -85,8 +85,8 @@ interface BaseAnimeGetResolver {
         favorite = cursor.getInt(cursor.getColumnIndex(COL_FAVORITE)) == 1
         last_update = cursor.getLong(cursor.getColumnIndex(COL_LAST_UPDATE))
         initialized = cursor.getInt(cursor.getColumnIndex(COL_INITIALIZED)) == 1
-        viewer = cursor.getInt(cursor.getColumnIndex(COL_VIEWER))
-        episode_flags = cursor.getInt(cursor.getColumnIndex(COL_CHAPTER_FLAGS))
+        viewer_flags = cursor.getInt(cursor.getColumnIndex(COL_VIEWER))
+        episode_flags = cursor.getInt(cursor.getColumnIndex(COL_EPISODE_FLAGS))
         cover_last_modified = cursor.getLong(cursor.getColumnIndex(COL_COVER_LAST_MODIFIED))
         date_added = cursor.getLong(cursor.getColumnIndex(COL_DATE_ADDED))
     }

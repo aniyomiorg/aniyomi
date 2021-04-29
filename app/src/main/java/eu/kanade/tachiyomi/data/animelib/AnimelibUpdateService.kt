@@ -385,7 +385,7 @@ class AnimelibUpdateService(
                 }
             }
         }
-
+        coverCache.clearMemoryCache()
         notifier.cancelProgressNotification()
     }
 

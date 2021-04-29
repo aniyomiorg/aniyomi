@@ -152,11 +152,11 @@ class EpisodesSettingsSheet(
                 }
 
                 source.state =
-                    if (sorting == Anime.SORTING_SOURCE) order else Item.MultiSort.SORT_NONE
+                    if (sorting == Anime.EPISODE_SORTING_SOURCE) order else Item.MultiSort.SORT_NONE
                 episodeNum.state =
-                    if (sorting == Anime.SORTING_NUMBER) order else Item.MultiSort.SORT_NONE
+                    if (sorting == Anime.EPISODE_SORTING_NUMBER) order else Item.MultiSort.SORT_NONE
                 uploadDate.state =
-                    if (sorting == Anime.SORTING_UPLOAD_DATE) order else Item.MultiSort.SORT_NONE
+                    if (sorting == Anime.EPISODE_SORTING_UPLOAD_DATE) order else Item.MultiSort.SORT_NONE
             }
 
             override fun onItemClicked(item: Item) {
@@ -175,9 +175,9 @@ class EpisodesSettingsSheet(
                 }
 
                 when (item) {
-                    source -> presenter.setSorting(Anime.SORTING_SOURCE)
-                    episodeNum -> presenter.setSorting(Anime.SORTING_NUMBER)
-                    uploadDate -> presenter.setSorting(Anime.SORTING_UPLOAD_DATE)
+                    source -> presenter.setSorting(Anime.EPISODE_SORTING_SOURCE)
+                    episodeNum -> presenter.setSorting(Anime.EPISODE_SORTING_NUMBER)
+                    uploadDate -> presenter.setSorting(Anime.EPISODE_SORTING_UPLOAD_DATE)
                     else -> throw Exception("Unknown sorting")
                 }
 
@@ -209,8 +209,8 @@ class EpisodesSettingsSheet(
 
             override fun initModels() {
                 val mode = presenter.anime.displayMode
-                displayTitle.checked = mode == Anime.DISPLAY_NAME
-                displayEpisodeNum.checked = mode == Anime.DISPLAY_NUMBER
+                displayTitle.checked = mode == Anime.EPISODE_DISPLAY_NAME
+                displayEpisodeNum.checked = mode == Anime.EPISODE_DISPLAY_NUMBER
             }
 
             override fun onItemClicked(item: Item) {
@@ -221,8 +221,8 @@ class EpisodesSettingsSheet(
                 item.checked = true
 
                 when (item) {
-                    displayTitle -> presenter.setDisplayMode(Anime.DISPLAY_NAME)
-                    displayEpisodeNum -> presenter.setDisplayMode(Anime.DISPLAY_NUMBER)
+                    displayTitle -> presenter.setDisplayMode(Anime.EPISODE_DISPLAY_NAME)
+                    displayEpisodeNum -> presenter.setDisplayMode(Anime.EPISODE_DISPLAY_NUMBER)
                     else -> throw NotImplementedError("Unknown display mode")
                 }
 

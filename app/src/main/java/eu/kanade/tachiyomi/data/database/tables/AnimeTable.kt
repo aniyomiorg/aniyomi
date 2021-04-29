@@ -34,7 +34,7 @@ object AnimeTable {
 
     const val COL_VIEWER = "viewer"
 
-    const val COL_CHAPTER_FLAGS = "chapter_flags"
+    const val COL_EPISODE_FLAGS = "episode_flags"
 
     const val COL_UNREAD = "unread"
 
@@ -59,7 +59,7 @@ object AnimeTable {
             $COL_LAST_UPDATE LONG,
             $COL_INITIALIZED BOOLEAN NOT NULL,
             $COL_VIEWER INTEGER NOT NULL,
-            $COL_CHAPTER_FLAGS INTEGER NOT NULL,
+            $COL_EPISODE_FLAGS INTEGER NOT NULL,
             $COL_COVER_LAST_MODIFIED LONG NOT NULL,
             $COL_DATE_ADDED LONG NOT NULL
             )"""
@@ -82,8 +82,8 @@ object AnimeTable {
      */
     val backfillDateAdded: String
         get() = "UPDATE $TABLE SET $COL_DATE_ADDED = " +
-            "(SELECT MIN(${ChapterTable.COL_DATE_FETCH}) " +
-            "FROM $TABLE INNER JOIN ${ChapterTable.TABLE} " +
-            "ON $TABLE.$COL_ID = ${ChapterTable.TABLE}.${ChapterTable.COL_MANGA_ID} " +
+            "(SELECT MIN(${EpisodeTable.COL_DATE_FETCH}) " +
+            "FROM $TABLE INNER JOIN ${EpisodeTable.TABLE} " +
+            "ON $TABLE.$COL_ID = ${EpisodeTable.TABLE}.${EpisodeTable.COL_ANIME_ID} " +
             "GROUP BY $TABLE.$COL_ID)"
 }

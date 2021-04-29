@@ -30,7 +30,7 @@ open class AnimeImpl : Anime {
 
     override var initialized: Boolean = false
 
-    override var viewer: Int = 0
+    override var viewer_flags: Int = 0
 
     override var episode_flags: Int = 0
 

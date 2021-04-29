@@ -17,7 +17,7 @@ object EpisodeSettingsHelper {
     fun setGlobalSettings(anime: Anime?) {
         anime?.let {
             prefs.setEpisodeSettingsDefault(it)
-            db.updateFlags(it).executeAsBlocking()
+            db.updateEpisodeFlags(it).executeAsBlocking()
         }
     }
 
@@ -34,7 +34,7 @@ object EpisodeSettingsHelper {
             setEpisodeOrder(prefs.sortEpisodeByAscendingOrDescending())
         }
 
-        db.updateFlags(anime).executeAsBlocking()
+        db.updateEpisodeFlags(anime).executeAsBlocking()
     }
 
     /**
@@ -54,7 +54,7 @@ object EpisodeSettingsHelper {
                 anime
             }
 
-            db.updateFlags(updatedAnimes).executeAsBlocking()
+            db.updateEpisodeFlags(updatedAnimes).executeAsBlocking()
         }
     }
 }

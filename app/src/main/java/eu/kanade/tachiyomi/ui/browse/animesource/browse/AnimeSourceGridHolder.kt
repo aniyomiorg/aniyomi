@@ -1,11 +1,14 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.browse
 
 import android.view.View
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import coil.clear
+import coil.imageLoader
+import coil.request.CachePolicy
+import coil.request.ImageRequest
+import coil.transition.CrossfadeTransition
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.glide.GlideApp
-import eu.kanade.tachiyomi.data.glide.toAnimeThumbnail
 import eu.kanade.tachiyomi.databinding.AnimeSourceComfortableGridItemBinding
 import eu.kanade.tachiyomi.widget.StateImageViewTarget
 
@@ -42,14 +45,18 @@ open class AnimeSourceGridHolder(private val view: View, private val adapter: Fl
         // For rounded corners
         binding.card.clipToOutline = true
 
-        GlideApp.with(view.context).clear(binding.thumbnail)
+        binding.thumbnail.clear()
         if (!anime.thumbnail_url.isNullOrEmpty()) {
-            GlideApp.with(view.context)
-                .load(anime.toAnimeThumbnail())
-                .diskCacheStrategy(DiskCacheStrategy.DATA)
-                .centerCrop()
-                .placeholder(android.R.color.transparent)
-                .into(StateImageViewTarget(binding.thumbnail, binding.progress))
+            val crossfadeDuration = view.context.imageLoader.defaults.transition.let {
+                if (it is CrossfadeTransition) it.durationMillis else 0
+            }
+            val request = ImageRequest.Builder(view.context)
+                .data(anime)
+                .setParameter(AnimeCoverFetcher.USE_CUSTOM_COVER, false)
+                .diskCachePolicy(CachePolicy.DISABLED)
+                .target(StateImageViewTarget(binding.thumbnail, binding.progress, crossfadeDuration))
+                .build()
+            itemView.context.imageLoader.enqueue(request)
         }
     }
 }

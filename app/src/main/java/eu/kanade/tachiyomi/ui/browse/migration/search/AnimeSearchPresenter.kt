@@ -150,9 +150,9 @@ class AnimeSearchPresenter(
 
             // Update reading preferences
             anime.episode_flags = prevAnime.episode_flags
-            db.updateFlags(anime).executeAsBlocking()
-            anime.viewer = prevAnime.viewer
-            db.updateAnimeViewer(anime).executeAsBlocking()
+            db.updateEpisodeFlags(anime).executeAsBlocking()
+            anime.viewer_flags = prevAnime.viewer_flags
+            db.updateViewerFlags(anime).executeAsBlocking()
 
             // Update date added
             if (replace) {

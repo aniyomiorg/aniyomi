@@ -295,14 +295,15 @@ class AnimeController :
 
                 // Get coordinates and start animation
                 actionFab?.getCoordinates()?.let { coordinates ->
-                    if (!binding.revealView.showRevealEffect(
-                            coordinates.x,
-                            coordinates.y,
-                            revealAnimationListener
-                        )
-                    ) {
-                        openEpisode(item.episode)
-                    }
+                    binding.revealView.showRevealEffect(
+                        coordinates.x,
+                        coordinates.y,
+                        object : AnimatorListenerAdapter() {
+                            override fun onAnimationStart(animation: Animator?) {
+                                openEpisode(item.episode, true)
+                            }
+                        }
+                    )
                 }
             } else {
                 view?.context?.toast(R.string.no_next_chapter)

@@ -13,6 +13,8 @@ import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.preference.PreferenceValues.DisplayMode
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
+import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
+import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
@@ -86,8 +88,6 @@ class PreferencesHelper(val context: Context) {
 
     fun themeDark() = flowPrefs.getEnum(Keys.themeDark, Values.DarkThemeVariant.default)
 
-    fun rotation() = flowPrefs.getInt(Keys.rotation, 1)
-
     fun pageTransitions() = flowPrefs.getBoolean(Keys.enableTransitions, true)
 
     fun doubleTapAnimSpeed() = flowPrefs.getInt(Keys.doubleTapAnimationSpeed, 500)
@@ -122,7 +122,9 @@ class PreferencesHelper(val context: Context) {
 
     fun colorFilterMode() = flowPrefs.getInt(Keys.colorFilterMode, 0)
 
-    fun defaultViewer() = prefs.getInt(Keys.defaultViewer, 2)
+    fun defaultReadingMode() = prefs.getInt(Keys.defaultReadingMode, ReadingModeType.RIGHT_TO_LEFT.flagValue)
+
+    fun defaultOrientationType() = prefs.getInt(Keys.defaultOrientationType, OrientationType.FREE.flagValue)
 
     fun imageScaleType() = flowPrefs.getInt(Keys.imageScaleType, 1)
 
@@ -211,6 +213,10 @@ class PreferencesHelper(val context: Context) {
     fun downloadsDirectory() = flowPrefs.getString(Keys.downloadsDirectory, defaultDownloadsDir.toString())
 
     fun downloadOnlyOverWifi() = prefs.getBoolean(Keys.downloadOnlyOverWifi, true)
+
+    fun folderPerManga() = prefs.getBoolean(Keys.folderPerManga, false)
+
+    fun folderPerAnime() = prefs.getBoolean(Keys.folderPerAnime, false)
 
     fun numberOfBackups() = flowPrefs.getInt(Keys.numberOfBackups, 1)
 
@@ -329,17 +335,17 @@ class PreferencesHelper(val context: Context) {
 
     fun filterEpisodeByBookmarked() = prefs.getInt(Keys.defaultEpisodeFilterByBookmarked, Anime.SHOW_ALL)
 
-    fun sortChapterBySourceOrNumber() = prefs.getInt(Keys.defaultChapterSortBySourceOrNumber, Manga.SORTING_SOURCE)
+    fun sortChapterBySourceOrNumber() = prefs.getInt(Keys.defaultChapterSortBySourceOrNumber, Manga.CHAPTER_SORTING_SOURCE)
 
-    fun displayChapterByNameOrNumber() = prefs.getInt(Keys.defaultChapterDisplayByNameOrNumber, Manga.DISPLAY_NAME)
+    fun displayChapterByNameOrNumber() = prefs.getInt(Keys.defaultChapterDisplayByNameOrNumber, Manga.CHAPTER_DISPLAY_NAME)
 
-    fun sortChapterByAscendingOrDescending() = prefs.getInt(Keys.defaultChapterSortByAscendingOrDescending, Manga.SORT_DESC)
+    fun sortChapterByAscendingOrDescending() = prefs.getInt(Keys.defaultChapterSortByAscendingOrDescending, Manga.CHAPTER_SORT_DESC)
 
-    fun sortEpisodeBySourceOrNumber() = prefs.getInt(Keys.defaultEpisodeSortBySourceOrNumber, Anime.SORTING_SOURCE)
+    fun sortEpisodeBySourceOrNumber() = prefs.getInt(Keys.defaultEpisodeSortBySourceOrNumber, Anime.EPISODE_SORTING_SOURCE)
 
-    fun displayEpisodeByNameOrNumber() = prefs.getInt(Keys.defaultEpisodeDisplayByNameOrNumber, Anime.DISPLAY_NAME)
+    fun displayEpisodeByNameOrNumber() = prefs.getInt(Keys.defaultEpisodeDisplayByNameOrNumber, Anime.EPISODE_DISPLAY_NAME)
 
-    fun sortEpisodeByAscendingOrDescending() = prefs.getInt(Keys.defaultEpisodeSortByAscendingOrDescending, Anime.SORT_DESC)
+    fun sortEpisodeByAscendingOrDescending() = prefs.getInt(Keys.defaultEpisodeSortByAscendingOrDescending, Anime.EPISODE_SORT_DESC)
 
     fun incognitoMode() = flowPrefs.getBoolean(Keys.incognitoMode, false)
 
@@ -352,7 +358,7 @@ class PreferencesHelper(val context: Context) {
             putInt(Keys.defaultChapterFilterByBookmarked, manga.bookmarkedFilter)
             putInt(Keys.defaultChapterSortBySourceOrNumber, manga.sorting)
             putInt(Keys.defaultChapterDisplayByNameOrNumber, manga.displayMode)
-            putInt(Keys.defaultChapterSortByAscendingOrDescending, if (manga.sortDescending()) Manga.SORT_DESC else Manga.SORT_ASC)
+            putInt(Keys.defaultChapterSortByAscendingOrDescending, if (manga.sortDescending()) Manga.CHAPTER_SORT_DESC else Manga.CHAPTER_SORT_ASC)
         }
     }
 
@@ -363,7 +369,7 @@ class PreferencesHelper(val context: Context) {
             putInt(Keys.defaultEpisodeFilterByBookmarked, anime.bookmarkedFilter)
             putInt(Keys.defaultEpisodeSortBySourceOrNumber, anime.sorting)
             putInt(Keys.defaultEpisodeDisplayByNameOrNumber, anime.displayMode)
-            putInt(Keys.defaultEpisodeSortByAscendingOrDescending, if (anime.sortDescending()) Anime.SORT_DESC else Anime.SORT_ASC)
+            putInt(Keys.defaultEpisodeSortByAscendingOrDescending, if (anime.sortDescending()) Anime.EPISODE_SORT_DESC else Anime.EPISODE_SORT_ASC)
         }
     }
 }

@@ -6,17 +6,8 @@ import com.pushtorefresh.storio.sqlite.queries.RawQuery
 import eu.kanade.tachiyomi.data.database.DbProvider
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
-import eu.kanade.tachiyomi.data.database.resolvers.AnimeCoverLastModifiedPutResolver
-import eu.kanade.tachiyomi.data.database.resolvers.AnimeFavoritePutResolver
-import eu.kanade.tachiyomi.data.database.resolvers.AnimeFlagsPutResolver
-import eu.kanade.tachiyomi.data.database.resolvers.AnimeLastUpdatedPutResolver
-import eu.kanade.tachiyomi.data.database.resolvers.AnimeTitlePutResolver
-import eu.kanade.tachiyomi.data.database.resolvers.AnimeViewerPutResolver
-import eu.kanade.tachiyomi.data.database.resolvers.AnimelibAnimeGetResolver
-import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable
-import eu.kanade.tachiyomi.data.database.tables.AnimeTable
-import eu.kanade.tachiyomi.data.database.tables.CategoryTable
-import eu.kanade.tachiyomi.data.database.tables.EpisodeTable
+import eu.kanade.tachiyomi.data.database.resolvers.*
+import eu.kanade.tachiyomi.data.database.tables.*
 
 interface AnimeQueries : DbProvider {
 
@@ -78,14 +69,24 @@ interface AnimeQueries : DbProvider {
 
     fun insertAnimes(animes: List<Anime>) = db.put().objects(animes).prepare()
 
-    fun updateFlags(anime: Anime) = db.put()
+    fun updateEpisodeFlags(anime: Anime) = db.put()
         .`object`(anime)
-        .withPutResolver(AnimeFlagsPutResolver())
+        .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_EPISODE_FLAGS, Anime::episode_flags))
         .prepare()
 
-    fun updateFlags(animes: List<Anime>) = db.put()
+    fun updateEpisodeFlags(animes: List<Anime>) = db.put()
         .objects(animes)
-        .withPutResolver(AnimeFlagsPutResolver(true))
+        .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_EPISODE_FLAGS, Anime::episode_flags, true))
+        .prepare()
+
+    fun updateViewerFlags(anime: Anime) = db.put()
+        .`object`(anime)
+        .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_VIEWER, Anime::viewer_flags))
+        .prepare()
+
+    fun updateViewerFlags(anime: List<Anime>) = db.put()
+        .objects(anime)
+        .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_VIEWER, Anime::viewer_flags, true))
         .prepare()
 
     fun updateLastUpdated(anime: Anime) = db.put()
@@ -96,11 +97,6 @@ interface AnimeQueries : DbProvider {
     fun updateAnimeFavorite(anime: Anime) = db.put()
         .`object`(anime)
         .withPutResolver(AnimeFavoritePutResolver())
-        .prepare()
-
-    fun updateAnimeViewer(anime: Anime) = db.put()
-        .`object`(anime)
-        .withPutResolver(AnimeViewerPutResolver())
         .prepare()
 
     fun updateAnimeTitle(anime: Anime) = db.put()

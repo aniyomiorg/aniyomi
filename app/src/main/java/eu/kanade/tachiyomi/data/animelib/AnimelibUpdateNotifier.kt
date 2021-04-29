@@ -6,19 +6,22 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.bumptech.glide.Glide
+import coil.imageLoader
+import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
-import eu.kanade.tachiyomi.data.glide.toAnimeThumbnail
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.lang.chop
+import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.notification
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.notificationManager
@@ -165,14 +168,17 @@ class AnimelibUpdateNotifier(private val context: Context) {
 
             // Per-anime notification
             if (!preferences.hideNotificationContent()) {
-                updates.forEach { (anime, episodes) ->
-                    notify(anime.id.hashCode(), createNewEpisodesNotification(anime, episodes))
+                launchUI {
+                    updates.forEach { (anime, episodes) ->
+                        notify(anime.id.hashCode(), createNewEpisodesNotification(anime, episodes))
+                    }
                 }
             }
         }
     }
 
-    private fun createNewEpisodesNotification(anime: Anime, episodes: Array<Episode>): Notification {
+    private suspend fun createNewEpisodesNotification(anime: Anime, episodes: Array<Episode>): Notification {
+        val icon = getAnimeIcon(anime)
         return context.notification(Notifications.CHANNEL_NEW_CHAPTERS) {
             setContentTitle(anime.title)
 
@@ -182,7 +188,6 @@ class AnimelibUpdateNotifier(private val context: Context) {
 
             setSmallIcon(R.drawable.ic_tachi)
 
-            val icon = getAnimeIcon(anime)
             if (icon != null) {
                 setLargeIcon(icon)
             }
@@ -226,23 +231,14 @@ class AnimelibUpdateNotifier(private val context: Context) {
         context.notificationManager.cancel(Notifications.ID_ANIMELIB_PROGRESS)
     }
 
-    private fun getAnimeIcon(anime: Anime): Bitmap? {
-        return try {
-            Glide.with(context)
-                .asBitmap()
-                .load(anime.toAnimeThumbnail())
-                .dontTransform()
-                .centerCrop()
-                .circleCrop()
-                .override(
-                    NOTIF_ICON_SIZE,
-                    NOTIF_ICON_SIZE
-                )
-                .submit()
-                .get()
-        } catch (e: Exception) {
-            null
-        }
+    private suspend fun getAnimeIcon(anime: Anime): Bitmap? {
+        val request = ImageRequest.Builder(context)
+            .data(anime)
+            .transformations(CircleCropTransformation())
+            .size(AnimelibUpdateNotifier.NOTIF_ICON_SIZE)
+            .build()
+        val drawable = context.imageLoader.execute(request).drawable
+        return (drawable as? BitmapDrawable)?.bitmap
     }
 
     private fun getNewEpisodesDescription(episodes: Array<Episode>): String {

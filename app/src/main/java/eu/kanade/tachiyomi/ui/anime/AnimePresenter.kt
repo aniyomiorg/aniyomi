@@ -280,6 +280,7 @@ class AnimePresenter(
                     } else if (anime.favorite) {
                         coverCache.setCustomCoverToCache(anime, it)
                         anime.updateCoverLastModified(db)
+                        coverCache.clearMemoryCache()
                     }
                 }
             }
@@ -296,6 +297,7 @@ class AnimePresenter(
             .fromCallable {
                 coverCache.deleteCustomCover(anime)
                 anime.updateCoverLastModified(db)
+                coverCache.clearMemoryCache()
             }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -430,15 +432,15 @@ class AnimePresenter(
 
     fun getEpisodeSort(): (Episode, Episode) -> Int {
         return when (anime.sorting) {
-            Anime.SORTING_SOURCE -> when (sortDescending()) {
+            Anime.EPISODE_SORTING_SOURCE -> when (sortDescending()) {
                 true -> { c1, c2 -> c1.source_order.compareTo(c2.source_order) }
                 false -> { c1, c2 -> c2.source_order.compareTo(c1.source_order) }
             }
-            Anime.SORTING_NUMBER -> when (sortDescending()) {
+            Anime.EPISODE_SORTING_NUMBER -> when (sortDescending()) {
                 true -> { c1, c2 -> c2.episode_number.compareTo(c1.episode_number) }
                 false -> { c1, c2 -> c1.episode_number.compareTo(c2.episode_number) }
             }
-            Anime.SORTING_UPLOAD_DATE -> when (sortDescending()) {
+            Anime.EPISODE_SORTING_UPLOAD_DATE -> when (sortDescending()) {
                 true -> { c1, c2 -> c2.date_upload.compareTo(c1.date_upload) }
                 false -> { c1, c2 -> c1.date_upload.compareTo(c2.date_upload) }
             }
@@ -573,8 +575,8 @@ class AnimePresenter(
      * Reverses the sorting and requests an UI update.
      */
     fun reverseSortOrder() {
-        anime.setEpisodeOrder(if (sortDescending()) Anime.SORT_ASC else Anime.SORT_DESC)
-        db.updateFlags(anime).executeAsBlocking()
+        anime.setEpisodeOrder(if (sortDescending()) Anime.EPISODE_SORT_ASC else Anime.EPISODE_SORT_DESC)
+        db.updateEpisodeFlags(anime).executeAsBlocking()
         refreshEpisodes()
     }
 
@@ -585,10 +587,10 @@ class AnimePresenter(
     fun setUnreadFilter(state: State) {
         anime.seenFilter = when (state) {
             State.IGNORE -> Anime.SHOW_ALL
-            State.INCLUDE -> Anime.SHOW_UNSEEN
-            State.EXCLUDE -> Anime.SHOW_SEEN
+            State.INCLUDE -> Anime.EPISODE_SHOW_UNSEEN
+            State.EXCLUDE -> Anime.EPISODE_SHOW_SEEN
         }
-        db.updateFlags(anime).executeAsBlocking()
+        db.updateEpisodeFlags(anime).executeAsBlocking()
         refreshEpisodes()
     }
 
@@ -599,10 +601,10 @@ class AnimePresenter(
     fun setDownloadedFilter(state: State) {
         anime.downloadedFilter = when (state) {
             State.IGNORE -> Anime.SHOW_ALL
-            State.INCLUDE -> Anime.SHOW_DOWNLOADED
-            State.EXCLUDE -> Anime.SHOW_NOT_DOWNLOADED
+            State.INCLUDE -> Anime.EPISODE_SHOW_DOWNLOADED
+            State.EXCLUDE -> Anime.EPISODE_SHOW_NOT_DOWNLOADED
         }
-        db.updateFlags(anime).executeAsBlocking()
+        db.updateEpisodeFlags(anime).executeAsBlocking()
         refreshEpisodes()
     }
 
@@ -613,10 +615,10 @@ class AnimePresenter(
     fun setBookmarkedFilter(state: State) {
         anime.bookmarkedFilter = when (state) {
             State.IGNORE -> Anime.SHOW_ALL
-            State.INCLUDE -> Anime.SHOW_BOOKMARKED
-            State.EXCLUDE -> Anime.SHOW_NOT_BOOKMARKED
+            State.INCLUDE -> Anime.EPISODE_SHOW_BOOKMARKED
+            State.EXCLUDE -> Anime.EPISODE_SHOW_NOT_BOOKMARKED
         }
-        db.updateFlags(anime).executeAsBlocking()
+        db.updateEpisodeFlags(anime).executeAsBlocking()
         refreshEpisodes()
     }
 
@@ -626,7 +628,7 @@ class AnimePresenter(
      */
     fun setDisplayMode(mode: Int) {
         anime.displayMode = mode
-        db.updateFlags(anime).executeAsBlocking()
+        db.updateEpisodeFlags(anime).executeAsBlocking()
     }
 
     /**
@@ -635,7 +637,7 @@ class AnimePresenter(
      */
     fun setSorting(sort: Int) {
         anime.sorting = sort
-        db.updateFlags(anime).executeAsBlocking()
+        db.updateEpisodeFlags(anime).executeAsBlocking()
         refreshEpisodes()
     }
 
@@ -654,8 +656,8 @@ class AnimePresenter(
             return State.INCLUDE
         }
         return when (anime.downloadedFilter) {
-            Anime.SHOW_DOWNLOADED -> State.INCLUDE
-            Anime.SHOW_NOT_DOWNLOADED -> State.EXCLUDE
+            Anime.EPISODE_SHOW_DOWNLOADED -> State.INCLUDE
+            Anime.EPISODE_SHOW_NOT_DOWNLOADED -> State.EXCLUDE
             else -> State.IGNORE
         }
     }
@@ -665,8 +667,8 @@ class AnimePresenter(
      */
     fun onlyBookmarked(): State {
         return when (anime.bookmarkedFilter) {
-            Anime.SHOW_BOOKMARKED -> State.INCLUDE
-            Anime.SHOW_NOT_BOOKMARKED -> State.EXCLUDE
+            Anime.EPISODE_SHOW_BOOKMARKED -> State.INCLUDE
+            Anime.EPISODE_SHOW_NOT_BOOKMARKED -> State.EXCLUDE
             else -> State.IGNORE
         }
     }
@@ -676,8 +678,8 @@ class AnimePresenter(
      */
     fun onlyUnread(): State {
         return when (anime.seenFilter) {
-            Anime.SHOW_UNSEEN -> State.INCLUDE
-            Anime.SHOW_SEEN -> State.EXCLUDE
+            Anime.EPISODE_SHOW_UNSEEN -> State.INCLUDE
+            Anime.EPISODE_SHOW_SEEN -> State.EXCLUDE
             else -> State.IGNORE
         }
     }
