@@ -115,11 +115,8 @@ object PreferenceKeys {
 
     const val folderPerManga = "create_folder_per_manga"
 
-<<<<<<< HEAD
     const val folderPerAnime = "create_folder_per_anime"
 
-=======
->>>>>>> 60f18f3b5a254a0cf3d590af146df75069a0c03c
     const val numberOfBackups = "backup_slots"
 
     const val backupInterval = "backup_interval"
