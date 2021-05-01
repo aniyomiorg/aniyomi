@@ -38,7 +38,7 @@ class SourceListHolder(private val view: View, adapter: FlexibleAdapter<*>) :
         binding.title.text = manga.title
         binding.title.setTextColor(if (manga.favorite) favoriteColor else unfavoriteColor)
 
-        // Set alpha of thumbnail.
+        // Set alpha of anime_thumbnail.
         binding.thumbnail.alpha = if (manga.favorite) 0.3f else 1.0f
 
         setImage(manga)

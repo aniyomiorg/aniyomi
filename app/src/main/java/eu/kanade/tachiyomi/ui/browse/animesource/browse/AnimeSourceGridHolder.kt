@@ -51,7 +51,7 @@ open class AnimeSourceGridHolder(private val view: View, private val adapter: Fl
                 if (it is CrossfadeTransition) it.durationMillis else 0
             }
             val request = ImageRequest.Builder(view.context)
-                .data(anime)
+                .data(anime.thumbnail_url)
                 .setParameter(AnimeCoverFetcher.USE_CUSTOM_COVER, false)
                 .diskCachePolicy(CachePolicy.DISABLED)
                 .target(StateImageViewTarget(binding.thumbnail, binding.progress, crossfadeDuration))

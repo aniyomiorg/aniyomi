@@ -61,18 +61,17 @@ class AnimeCoverFetcher : Fetcher<Anime> {
         }
     }
 
-    private suspend fun httpLoader(manga: Anime, options: Options): FetchResult {
-        val coverFile = coverCache.getCoverFile(manga) ?: error("No cover specified")
-
+    private suspend fun httpLoader(anime: Anime, options: Options): FetchResult {
+        val coverFile = coverCache.getCoverFile(anime) ?: error("No cover specified")
         // Use previously cached cover if exist
         if (coverFile.exists() && options.diskCachePolicy.readEnabled) {
-            if (!manga.favorite) {
+            if (!anime.favorite) {
                 coverFile.setLastModified(Date().time)
             }
             return fileLoader(coverFile)
         }
 
-        val (response, body) = awaitGetCall(manga, options)
+        val (response, body) = awaitGetCall(anime, options)
         if (!response.isSuccessful) {
             body.close()
             throw HttpException(response)
@@ -100,19 +99,19 @@ class AnimeCoverFetcher : Fetcher<Anime> {
         )
     }
 
-    private suspend fun awaitGetCall(manga: Anime, options: Options): Pair<Response, ResponseBody> {
-        val call = getCall(manga, options)
+    private suspend fun awaitGetCall(anime: Anime, options: Options): Pair<Response, ResponseBody> {
+        val call = getCall(anime, options)
         val response = call.await()
         return response to checkNotNull(response.body) { "Null response source" }
     }
 
-    private fun getCall(manga: Anime, options: Options): Call {
-        val source = sourceManager.get(manga.source) as? AnimeHttpSource
+    private fun getCall(anime: Anime, options: Options): Call {
+        val source = sourceManager.get(anime.source) as? AnimeHttpSource
         val client = source?.client ?: defaultClient
 
         val newClient = client.newBuilder().build()
 
-        val request = Request.Builder().url(manga.thumbnail_url!!).also {
+        val request = Request.Builder().url(anime.thumbnail_url!!).also {
             if (source != null) {
                 it.headers(source.headers)
             }
@@ -138,8 +137,8 @@ class AnimeCoverFetcher : Fetcher<Anime> {
         return newClient.newCall(request)
     }
 
-    private fun fileLoader(manga: Anime): FetchResult {
-        return fileLoader(File(manga.thumbnail_url!!.substringAfter("file://")))
+    private fun fileLoader(anime: Anime): FetchResult {
+        return fileLoader(File(anime.thumbnail_url!!.substringAfter("file://")))
     }
 
     private fun fileLoader(file: File): FetchResult {

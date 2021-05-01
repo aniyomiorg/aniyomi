@@ -48,7 +48,7 @@ class AnimeSourceListHolder(private val view: View, adapter: FlexibleAdapter<*>)
         binding.thumbnail.clear()
         if (!anime.thumbnail_url.isNullOrEmpty()) {
             val radius = view.context.resources.getDimension(R.dimen.card_radius)
-            binding.thumbnail.loadAny(anime) {
+            binding.thumbnail.loadAny(anime.thumbnail_url) {
                 setParameter(AnimeCoverFetcher.USE_CUSTOM_COVER, false)
                 transformations(RoundedCornersTransformation(radius))
                 diskCachePolicy(CachePolicy.DISABLED)

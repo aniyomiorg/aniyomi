@@ -52,7 +52,7 @@ class AnimelibListHolder(
         // show local text badge if local anime
         binding.localText.isVisible = item.anime.isLocal()
 
-        // Create thumbnail onclick to simulate long click
+        // Create anime_thumbnail onclick to simulate long click
         binding.thumbnail.setOnClickListener {
             // Simulate long click on this view to enter selection mode
             onLongClick(itemView)
@@ -61,7 +61,7 @@ class AnimelibListHolder(
         // Update the cover.
         val radius = view.context.resources.getDimension(R.dimen.card_radius)
         binding.thumbnail.clear()
-        binding.thumbnail.loadAny(item.anime) {
+        binding.thumbnail.loadAny(item.anime.thumbnail_url) {
             transformations(RoundedCornersTransformation(radius))
         }
     }

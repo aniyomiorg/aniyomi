@@ -32,6 +32,7 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
 import eu.kanade.tachiyomi.databinding.MainActivityBinding
 import eu.kanade.tachiyomi.extension.api.ExtensionGithubApi
+import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.animelib.AnimelibController
 import eu.kanade.tachiyomi.ui.base.activity.BaseViewBindingActivity
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
@@ -43,6 +44,7 @@ import eu.kanade.tachiyomi.ui.base.controller.ToolbarLiftOnScrollController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.BrowseController
 import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
+import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
 import eu.kanade.tachiyomi.ui.download.DownloadController
 import eu.kanade.tachiyomi.ui.library.LibraryController
@@ -237,6 +239,10 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                 if (!it) {
                     val fg = router.backstack.last().controller()
                     if (fg is BrowseSourceController || fg is MangaController && fg.fromSource) {
+                        router.popToRoot()
+                    }
+                    val fga = router.backstack.last().controller()
+                    if (fga is BrowseAnimeSourceController || fga is AnimeController && fga.fromSource) {
                         router.popToRoot()
                     }
                 }

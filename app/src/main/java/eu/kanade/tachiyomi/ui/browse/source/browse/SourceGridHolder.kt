@@ -35,7 +35,7 @@ open class SourceGridHolder(private val view: View, private val adapter: Flexibl
         // Set manga title
         binding.title.text = manga.title
 
-        // Set alpha of thumbnail.
+        // Set alpha of anime_thumbnail.
         binding.thumbnail.alpha = if (manga.favorite) 0.3f else 1.0f
 
         setImage(manga)

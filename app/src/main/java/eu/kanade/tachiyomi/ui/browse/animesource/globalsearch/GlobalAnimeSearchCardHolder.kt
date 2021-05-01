@@ -38,7 +38,7 @@ class GlobalAnimeSearchCardHolder(view: View, adapter: GlobalAnimeSearchCardAdap
         binding.card.clipToOutline = true
 
         binding.title.text = anime.title
-        // Set alpha of thumbnail.
+        // Set alpha of anime_thumbnail.
         binding.cover.alpha = if (anime.favorite) 0.3f else 1.0f
 
         setImage(anime)

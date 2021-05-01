@@ -52,7 +52,7 @@ class LibraryListHolder(
         // show local text badge if local manga
         binding.localText.isVisible = item.manga.isLocal()
 
-        // Create thumbnail onclick to simulate long click
+        // Create anime_thumbnail onclick to simulate long click
         binding.thumbnail.setOnClickListener {
             // Simulate long click on this view to enter selection mode
             onLongClick(itemView)
