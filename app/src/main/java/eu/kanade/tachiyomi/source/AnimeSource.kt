@@ -37,12 +37,20 @@ interface AnimeSource : tachiyomi.source.AnimeSource {
     fun fetchAnimeDetails(anime: SAnime): Observable<SAnime>
 
     /**
-     * Returns an observable with all the available chapters for a anime.
+     * Returns an observable with all the available episodes for an anime.
      *
      * @param anime the anime to update.
      */
     @Deprecated("Use getEpisodeList instead")
     fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>>
+
+    /**
+     * Returns an observable with a link for the episode of an anime.
+     *
+     * @param episode the episode to get the link for.
+     */
+    @Deprecated("Use getEpisodeList instead")
+    fun fetchEpisodeLink(episode: SEpisode): Observable<String>
 
     /**
      * Returns an observable with the list of pages a chapter has.
@@ -64,12 +72,20 @@ interface AnimeSource : tachiyomi.source.AnimeSource {
     }
 
     /**
-     * [1.x API] Get all the available chapters for a anime.
+     * [1.x API] Get all the available episodes for a anime.
      */
     @Suppress("DEPRECATION")
     override suspend fun getEpisodeList(anime: AnimeInfo): List<EpisodeInfo> {
         return fetchEpisodeList(anime.toSAnime()).awaitSingle()
             .map { it.toEpisodeInfo() }
+    }
+
+    /**
+     * [1.x API] Get a link for the episode of an anime.
+     */
+    @Suppress("DEPRECATION")
+    override suspend fun getEpisodeLink(episode: EpisodeInfo): String {
+        return fetchEpisodeLink(episode.toSEpisode()).awaitSingle()
     }
 
     /**

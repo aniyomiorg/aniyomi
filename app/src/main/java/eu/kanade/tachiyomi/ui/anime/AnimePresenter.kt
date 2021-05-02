@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.anime
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
@@ -19,6 +20,7 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.source.LocalAnimeSource
+import eu.kanade.tachiyomi.source.model.toEpisodeInfo
 import eu.kanade.tachiyomi.source.model.toSAnime
 import eu.kanade.tachiyomi.source.model.toSEpisode
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
@@ -31,10 +33,7 @@ import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.State
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.*
 import rx.Observable
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
@@ -43,6 +42,8 @@ import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class AnimePresenter(
     val anime: Anime,
@@ -82,6 +83,11 @@ class AnimePresenter(
      * Subscription to retrieve the new list of episodes from the source.
      */
     private var fetchEpisodesJob: Job? = null
+
+    /**
+     * Subscription to retrieve the new link of episodes from the source.
+     */
+    private var fetchEpisodeLinksJob: Job? = null
 
     /**
      * Subscription to observe download status changes.
@@ -389,6 +395,28 @@ class AnimePresenter(
                 withUIContext { view?.onFetchEpisodesError(e) }
             }
         }
+    }
+
+    /**
+     * Requests an updated list of episodes from the source.
+     */
+    fun fetchEpisodeLinksFromSource(manualFetch: Boolean = false, episode: Episode): String {
+        hasRequested = true
+        var link = runBlocking {
+            return@runBlocking suspendCoroutine<String> { continuation ->
+                var link: String
+                presenterScope.launchIO {
+                    try {
+                        link = source.getEpisodeLink(episode.toEpisodeInfo())
+                        continuation.resume(link)
+                    } catch (e: Throwable) {
+                        withUIContext { view?.onFetchEpisodeLinksError(e) }
+                    }
+                }
+            }
+        }
+        Log.i("lol", "omg" + link)
+        return link
     }
 
     /**

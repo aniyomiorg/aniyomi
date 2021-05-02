@@ -218,6 +218,14 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         }
     }
 
+    override fun fetchEpisodeLink(episode: SEpisode): Observable<String> {
+        return client.newCall(episodeLinkRequest(episode))
+            .asObservableSuccess()
+            .map { response ->
+                episodeLinkParse(response)
+            }
+    }
+
     /**
      * Returns the request for updating the episode list. Override only if it's needed to override
      * the url, send different headers or request method like POST.
@@ -229,11 +237,28 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     }
 
     /**
+     * Returns the request for getting the episode link. Override only if it's needed to override
+     * the url, send different headers or request method like POST.
+     *
+     * @param episode the episode to look for links.
+     */
+    protected open fun episodeLinkRequest(episode: SEpisode): Request {
+        return GET(baseUrl + episode.url, headers)
+    }
+
+    /**
      * Parses the response from the site and returns a list of episodes.
      *
      * @param response the response from the site.
      */
     protected abstract fun episodeListParse(response: Response): List<SEpisode>
+
+    /**
+     * Parses the response from the site and returns a list of episodes.
+     *
+     * @param response the response from the site.
+     */
+    protected abstract fun episodeLinkParse(response: Response): String
 
     /**
      * Returns an observable with the page list for a episode.

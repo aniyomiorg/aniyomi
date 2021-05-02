@@ -79,6 +79,9 @@ import eu.kanade.tachiyomi.util.view.shrinkOnScroll
 import eu.kanade.tachiyomi.util.view.snack
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import okhttp3.Callback
 import reactivecircus.flowbinding.recyclerview.scrollEvents
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
 import timber.log.Timber
@@ -722,6 +725,14 @@ class AnimeController :
         }
     }
 
+    private fun fetchEpisodeLinksFromSource(manualFetch: Boolean = false, episode: Episode): String {
+        return presenter.fetchEpisodeLinksFromSource(manualFetch, episode)
+    }
+
+    fun onFetchEpisodeLinksError(error: Throwable) {
+        activity?.toast("no links found")
+    }
+
     fun onEpisodeDownloadUpdate(download: AnimeDownload) {
         episodesAdapter?.currentItems?.find { it.id == download.episode.id }?.let {
             episodesAdapter?.updateItem(it, it.status)
@@ -730,11 +741,16 @@ class AnimeController :
 
     fun openEpisode(episode: Episode, hasAnimation: Boolean = false) {
         val activity = activity ?: return
-        val intent = WatcherActivity.newIntent(activity, presenter.anime, episode)
-        if (hasAnimation) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        runBlocking {
+            launch {
+                val url = fetchEpisodeLinksFromSource(false, episode)
+                val intent = WatcherActivity.newIntent(activity, presenter.anime, episode, url)
+                if (hasAnimation) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                }
+                startActivityForResult(intent, REQUEST_SECONDS)
+            }
         }
-        startActivityForResult(intent, REQUEST_SECONDS)
     }
 
     override fun onItemClick(view: View?, position: Int): Boolean {

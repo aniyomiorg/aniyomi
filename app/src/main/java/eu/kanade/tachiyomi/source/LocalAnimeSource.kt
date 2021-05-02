@@ -203,6 +203,12 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         return Observable.just(episodes)
     }
 
+    override fun fetchEpisodeLink(episode: SEpisode): Observable<String> {
+        val link = episode.url
+
+        return Observable.just(link)
+    }
+
     /**
      * Strips the anime title from a episode name, matching only based on alphanumeric and whitespace
      * characters.

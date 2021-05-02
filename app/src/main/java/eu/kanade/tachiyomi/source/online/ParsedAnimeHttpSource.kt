@@ -160,11 +160,33 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
     protected abstract fun episodeListSelector(): String
 
     /**
+     * Parses the response from the site and returns a list of episodes.
+     *
+     * @param response the response from the site.
+     */
+    override fun episodeLinkParse(response: Response): String {
+        val document = response.asJsoup()
+        return linkFromElement(document.select(episodeLinkSelector()).first())
+    }
+
+    /**
+     * Returns the Jsoup selector that returns a list of [Element] corresponding to each episode.
+     */
+    protected abstract fun episodeLinkSelector(): String
+
+    /**
      * Returns a episode from the given element.
      *
      * @param element an element obtained from [episodeListSelector].
      */
     protected abstract fun episodeFromElement(element: Element): SEpisode
+
+    /**
+     * Returns a episode from the given element.
+     *
+     * @param element an element obtained from [episodeListSelector].
+     */
+    protected abstract fun linkFromElement(element: Element): String
 
     /**
      * Parses the response from the site and returns the page list.

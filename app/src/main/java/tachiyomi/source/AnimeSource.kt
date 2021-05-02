@@ -37,6 +37,13 @@ interface AnimeSource {
     suspend fun getEpisodeList(anime: AnimeInfo): List<EpisodeInfo>
 
     /**
+     * Returns an observable with all the available chapters for a anime.
+     *
+     * @param anime the anime to update.
+     */
+    suspend fun getEpisodeLink(episode: EpisodeInfo): String
+
+    /**
      * Returns an observable with the list of pages a chapter has.
      *
      * @param chapter the chapter.

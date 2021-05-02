@@ -62,6 +62,10 @@ open class AnimeSourceManager(private val context: Context) {
             return Observable.error(getSourceNotInstalledException())
         }
 
+        override fun fetchEpisodeLink(episode: SEpisode): Observable<String> {
+            return Observable.error(getSourceNotInstalledException())
+        }
+
         override fun fetchPageList(episode: SEpisode): Observable<List<Page>> {
             return Observable.error(getSourceNotInstalledException())
         }

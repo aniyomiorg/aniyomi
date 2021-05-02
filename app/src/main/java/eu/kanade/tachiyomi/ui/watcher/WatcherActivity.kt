@@ -42,6 +42,7 @@ class WatcherActivity : AppCompatActivity() {
         setContentView(R.layout.watcher_activity)
         playerView = findViewById(R.id.player_view)
         dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "xyz.jmir.tachiyomi.mi"))
+        Log.i("uri is ", intent.getStringExtra("uri"))
         mediaItem = MediaItem.Builder()
             .setUri(intent.getStringExtra("uri"))
             .setMimeType(MimeTypes.VIDEO_MP4)
@@ -127,12 +128,13 @@ class WatcherActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context, anime: Anime, episode: Episode): Intent {
+        fun newIntent(context: Context, anime: Anime, episode: Episode, url: String): Intent {
             return Intent(context, WatcherActivity::class.java).apply {
                 putExtra("anime", anime.id)
                 putExtra("episode", episode)
                 putExtra("second", episode.last_second_seen)
-                putExtra("uri", episode.url)
+                putExtra("uri", url)
+                Log.i("bruhh", url)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
