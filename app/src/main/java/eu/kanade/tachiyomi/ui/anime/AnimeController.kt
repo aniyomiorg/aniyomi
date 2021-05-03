@@ -60,10 +60,10 @@ import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.ToolbarLiftOnScrollController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
+import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
+import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
+import eu.kanade.tachiyomi.ui.browse.animesource.latest.LatestUpdatesController
 import eu.kanade.tachiyomi.ui.browse.migration.search.AnimeSearchController
-import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
-import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
-import eu.kanade.tachiyomi.ui.browse.source.latest.LatestUpdatesController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.recent.history.HistoryController
 import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
@@ -554,7 +554,7 @@ class AnimeController :
      * @param query the search query to pass to the search controller
      */
     fun performGlobalSearch(query: String) {
-        router.pushController(GlobalSearchController(query).withFadeTransaction())
+        router.pushController(GlobalAnimeSearchController(query).withFadeTransaction())
     }
 
     /**
@@ -584,7 +584,7 @@ class AnimeController :
                 // Search doesn't currently work in source Latest view
                 return
             }
-            is BrowseSourceController -> {
+            is BrowseAnimeSourceController -> {
                 router.handleBack()
                 previousController.searchWithQuery(query)
             }
