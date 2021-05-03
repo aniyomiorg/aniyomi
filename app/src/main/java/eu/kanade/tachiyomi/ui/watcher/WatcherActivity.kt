@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.watcher
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -42,7 +41,6 @@ class WatcherActivity : AppCompatActivity() {
         setContentView(R.layout.watcher_activity)
         playerView = findViewById(R.id.player_view)
         dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "xyz.jmir.tachiyomi.mi"))
-        Log.i("uri is ", intent.getStringExtra("uri"))
         mediaItem = MediaItem.Builder()
             .setUri(intent.getStringExtra("uri"))
             .setMimeType(MimeTypes.VIDEO_MP4)
@@ -79,7 +77,6 @@ class WatcherActivity : AppCompatActivity() {
         currentWindow = exoPlayer.currentWindowIndex
         val episode = intent.getSerializableExtra("episode") as Episode
         val returnIntent = intent
-        Log.i("bruhh", exoPlayer.duration.toString())
         returnIntent.putExtra("seconds_result", playbackPosition)
         returnIntent.putExtra("total_seconds_result", exoPlayer.duration)
         returnIntent.putExtra("episode", episode)
@@ -134,7 +131,6 @@ class WatcherActivity : AppCompatActivity() {
                 putExtra("episode", episode)
                 putExtra("second", episode.last_second_seen)
                 putExtra("uri", url)
-                Log.i("bruhh", url)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
