@@ -2,7 +2,12 @@ package eu.kanade.tachiyomi.source
 
 import android.graphics.drawable.Drawable
 import eu.kanade.tachiyomi.extension.AnimeExtensionManager
-import eu.kanade.tachiyomi.source.model.*
+import eu.kanade.tachiyomi.source.model.SAnime
+import eu.kanade.tachiyomi.source.model.SEpisode
+import eu.kanade.tachiyomi.source.model.toAnimeInfo
+import eu.kanade.tachiyomi.source.model.toEpisodeInfo
+import eu.kanade.tachiyomi.source.model.toSAnime
+import eu.kanade.tachiyomi.source.model.toSEpisode
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import rx.Observable
 import tachiyomi.source.model.AnimeInfo
@@ -53,14 +58,6 @@ interface AnimeSource : tachiyomi.source.AnimeSource {
     fun fetchEpisodeLink(episode: SEpisode): Observable<String>
 
     /**
-     * Returns an observable with the list of pages a chapter has.
-     *
-     * @param chapter the chapter.
-     */
-    @Deprecated("Use getPageList instead")
-    fun fetchPageList(episode: SEpisode): Observable<List<Page>>
-
-    /**
      * [1.x API] Get the updated details for a anime.
      */
     @Suppress("DEPRECATION")
@@ -86,15 +83,6 @@ interface AnimeSource : tachiyomi.source.AnimeSource {
     @Suppress("DEPRECATION")
     override suspend fun getEpisodeLink(episode: EpisodeInfo): String {
         return fetchEpisodeLink(episode.toSEpisode()).awaitSingle()
-    }
-
-    /**
-     * [1.x API] Get the list of pages a chapter has.
-     */
-    @Suppress("DEPRECATION")
-    override suspend fun getPageList(episode: EpisodeInfo): List<tachiyomi.source.model.Page> {
-        return fetchPageList(episode.toSEpisode()).awaitSingle()
-            .map { it.toPageUrl() }
     }
 }
 

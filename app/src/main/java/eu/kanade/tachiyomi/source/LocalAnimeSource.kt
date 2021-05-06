@@ -7,7 +7,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.model.AnimesPage
 import eu.kanade.tachiyomi.source.model.Filter
 import eu.kanade.tachiyomi.source.model.FilterList
-import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SAnime
 import eu.kanade.tachiyomi.source.model.SEpisode
 import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
@@ -241,10 +240,6 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         }
 
         return episodeName.substring(episodeNameIndex).trimStart(' ', '-', '_', ',', ':')
-    }
-
-    override fun fetchPageList(episode: SEpisode): Observable<List<Page>> {
-        return Observable.error(Exception("Unused"))
     }
 
     private fun isSupportedFile(extension: String): Boolean {

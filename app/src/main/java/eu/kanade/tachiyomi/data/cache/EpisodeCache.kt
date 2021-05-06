@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.data.cache
 
 import android.content.Context
 import android.text.format.Formatter
-import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.jakewharton.disklrucache.DiskLruCache
 import eu.kanade.tachiyomi.data.database.models.Episode
@@ -12,7 +11,6 @@ import eu.kanade.tachiyomi.util.storage.saveTo
 import okhttp3.Response
 import okio.buffer
 import okio.sink
-import rx.Observable
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.IOException
@@ -90,24 +88,6 @@ class EpisodeCache(private val context: Context) {
             diskCache.remove(key)
         } catch (e: Exception) {
             false
-        }
-    }
-
-    /**
-     * Get page list from cache.
-     *
-     * @param episode the episode.
-     * @return an observable of the list of pages.
-     */
-    fun getPageListFromCache(episode: Episode): Observable<List<Page>> {
-        return Observable.fromCallable {
-            // Get the key for the episode.
-            val key = DiskUtil.hashKeyForDisk(getKey(episode))
-
-            // Convert JSON string to list of objects. Throws an exception if snapshot is null
-            diskCache.get(key).use {
-                gson.fromJson<List<Page>>(it.getString(0))
-            }
         }
     }
 

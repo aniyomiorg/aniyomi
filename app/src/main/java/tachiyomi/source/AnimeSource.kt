@@ -2,7 +2,6 @@ package tachiyomi.source
 
 import tachiyomi.source.model.AnimeInfo
 import tachiyomi.source.model.EpisodeInfo
-import tachiyomi.source.model.Page
 
 /**
  * A basic interface for creating a source. It could be an online source, a local source, etc...
@@ -42,13 +41,6 @@ interface AnimeSource {
      * @param anime the anime to update.
      */
     suspend fun getEpisodeLink(episode: EpisodeInfo): String
-
-    /**
-     * Returns an observable with the list of pages a chapter has.
-     *
-     * @param chapter the chapter.
-     */
-    suspend fun getPageList(chapter: EpisodeInfo): List<Page>
 
     /**
      * Returns a regex used to determine chapter information.

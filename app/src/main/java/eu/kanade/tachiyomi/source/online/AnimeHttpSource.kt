@@ -261,19 +261,6 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     protected abstract fun episodeLinkParse(response: Response): String
 
     /**
-     * Returns an observable with the page list for a episode.
-     *
-     * @param episode the episode whose page list has to be fetched.
-     */
-    override fun fetchPageList(episode: SEpisode): Observable<List<Page>> {
-        return client.newCall(pageListRequest(episode))
-            .asObservableSuccess()
-            .map { response ->
-                pageListParse(response)
-            }
-    }
-
-    /**
      * Returns the request for getting the page list. Override only if it's needed to override the
      * url, send different headers or request method like POST.
      *

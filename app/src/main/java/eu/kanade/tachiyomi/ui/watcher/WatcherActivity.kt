@@ -3,9 +3,11 @@ package eu.kanade.tachiyomi.ui.watcher
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -62,6 +64,20 @@ class WatcherActivity : AppCompatActivity() {
             setMediaItem(mediaItem, false)
             prepare()
         }
+        class PlayerEventListener : Player.EventListener {
+            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+                playerView.keepScreenOn = !(
+                    playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED ||
+                        !playWhenReady
+                    )
+            }
+            override fun onTracksChanged(trackGroups: TrackGroupArray, trackSelections: TrackSelectionArray) {}
+            override fun onLoadingChanged(isLoading: Boolean) {}
+            override fun onRepeatModeChanged(repeatMode: Int) {}
+            override fun onPlayerError(error: ExoPlaybackException) {}
+            override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
+        }
+        exoPlayer.addListener(PlayerEventListener())
         playerView.player = exoPlayer
         duration = exoPlayer.duration
     }

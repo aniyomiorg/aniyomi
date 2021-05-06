@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.source
 
 import android.content.Context
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SAnime
 import eu.kanade.tachiyomi.source.model.SEpisode
 import eu.kanade.tachiyomi.source.online.AnimeHttpSource
@@ -63,10 +62,6 @@ open class AnimeSourceManager(private val context: Context) {
         }
 
         override fun fetchEpisodeLink(episode: SEpisode): Observable<String> {
-            return Observable.error(getSourceNotInstalledException())
-        }
-
-        override fun fetchPageList(episode: SEpisode): Observable<List<Page>> {
             return Observable.error(getSourceNotInstalledException())
         }
 

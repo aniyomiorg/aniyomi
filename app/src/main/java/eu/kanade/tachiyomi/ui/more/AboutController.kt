@@ -212,7 +212,7 @@ class AboutController : SettingsController() {
             )
             outputDf.timeZone = TimeZone.getDefault()
 
-            buildTime.toDateTimestampString(dateFormat)
+            buildTime!!.toDateTimestampString(dateFormat)
         } catch (e: ParseException) {
             BuildConfig.BUILD_TIME
         }
