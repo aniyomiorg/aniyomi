@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.watcher
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.TrackGroupArray
@@ -16,6 +15,7 @@ import com.google.android.exoplayer2.util.Util
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.util.view.hideBar
 
 const val STATE_RESUME_WINDOW = "resumeWindow"
 const val STATE_RESUME_POSITION = "resumePosition"
@@ -30,7 +30,7 @@ class WatcherActivity : AppCompatActivity() {
 
     private var duration: Long = 0
     private var currentWindow = 0
-    private var playbackPosition: Long = 0
+    private var playbackPosition = 0L
     private var isFullscreen = false
     private var isPlayerPlaying = true
     private var mediaItem = MediaItem.Builder()
@@ -41,6 +41,9 @@ class WatcherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.watcher_activity)
+        window.decorView.setOnSystemUiVisibilityChangeListener {
+            window.hideBar()
+        }
         playerView = findViewById(R.id.player_view)
         dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "xyz.jmir.tachiyomi.mi"))
         mediaItem = MediaItem.Builder()

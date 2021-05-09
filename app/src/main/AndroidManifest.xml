@@ -84,6 +84,7 @@
         </activity>
         <activity
             android:name=".ui.watcher.WatcherActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask">
             <intent-filter>

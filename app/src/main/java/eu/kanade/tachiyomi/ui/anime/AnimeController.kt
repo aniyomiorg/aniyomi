@@ -963,7 +963,9 @@ class AnimeController :
         if (view != null && !anime.favorite) {
             addSnackbar = (activity as? MainActivity)?.binding?.rootCoordinator?.snack(view.context.getString(R.string.snack_add_to_animelib), Snackbar.LENGTH_INDEFINITE) {
                 setAction(R.string.action_add) {
-                    addToAnimelib(anime)
+                    if (!anime.favorite) {
+                        addToAnimelib(anime)
+                    }
                 }
             }
         }
