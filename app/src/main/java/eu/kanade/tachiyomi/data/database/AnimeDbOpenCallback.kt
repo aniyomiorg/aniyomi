@@ -20,7 +20,7 @@ class AnimeDbOpenCallback : SupportSQLiteOpenHelper.Callback(DATABASE_VERSION) {
         /**
          * Version of the database.
          */
-        const val DATABASE_VERSION = 11
+        const val DATABASE_VERSION = 12
     }
 
     override fun onCreate(db: SupportSQLiteDatabase) = with(db) {
@@ -45,7 +45,7 @@ class AnimeDbOpenCallback : SupportSQLiteOpenHelper.Callback(DATABASE_VERSION) {
 
             // Fix kissmanga covers after supporting cloudflare
             db.execSQL(
-                """UPDATE mangas SET thumbnail_url =
+                """UPDATE animes SET thumbnail_url =
                     REPLACE(thumbnail_url, '93.174.95.110', 'kissmanga.com') WHERE source = 4"""
             )
         }
@@ -67,7 +67,7 @@ class AnimeDbOpenCallback : SupportSQLiteOpenHelper.Callback(DATABASE_VERSION) {
             db.execSQL(AnimeTrackTable.addLibraryId)
         }
         if (oldVersion < 8) {
-            db.execSQL("DROP INDEX IF EXISTS mangas_favorite_index")
+            db.execSQL("DROP INDEX IF EXISTS animes_favorite_index")
             db.execSQL(AnimeTable.createLibraryIndexQuery)
             db.execSQL(EpisodeTable.createUnseenEpisodesIndexQuery)
         }

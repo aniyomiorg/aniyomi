@@ -47,7 +47,7 @@ object AnimeTrackTable {
             $COL_START_DATE LONG NOT NULL,
             $COL_FINISH_DATE LONG NOT NULL,
             UNIQUE ($COL_ANIME_ID, $COL_SYNC_ID) ON CONFLICT REPLACE,
-            FOREIGN KEY($COL_ANIME_ID) REFERENCES ${MangaTable.TABLE} (${MangaTable.COL_ID})
+            FOREIGN KEY($COL_ANIME_ID) REFERENCES ${AnimeTable.TABLE} (${AnimeTable.COL_ID})
             ON DELETE CASCADE
             )"""
 

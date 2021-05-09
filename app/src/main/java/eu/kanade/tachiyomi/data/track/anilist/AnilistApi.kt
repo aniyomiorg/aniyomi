@@ -105,8 +105,8 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
     suspend fun addLibAnime(track: AnimeTrack): AnimeTrack {
         return withIOContext {
             val query = """
-            |mutation AddManga(${'$'}mangaId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus) {
-                |SaveMediaListEntry (mediaId: ${'$'}mangaId, progress: ${'$'}progress, status: ${'$'}status) { 
+            |mutation AddAnime(${'$'}animeId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus) {
+                |SaveMediaListEntry (mediaId: ${'$'}animeId, progress: ${'$'}progress, status: ${'$'}status) { 
                 |   id 
                 |   status 
                 |} 
@@ -115,7 +115,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             val payload = buildJsonObject {
                 put("query", query)
                 putJsonObject("variables") {
-                    put("mangaId", track.media_id)
+                    put("animeId", track.media_id)
                     put("progress", track.last_episode_seen)
                     put("status", track.toAnilistStatus())
                 }
@@ -139,7 +139,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
     suspend fun updateLibAnime(track: AnimeTrack): AnimeTrack {
         return withIOContext {
             val query = """
-            |mutation UpdateManga(
+            |mutation UpdateAnime(
                 |${'$'}listId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus,
                 |${'$'}score: Int, ${'$'}startedAt: FuzzyDateInput, ${'$'}completedAt: FuzzyDateInput
             |) {

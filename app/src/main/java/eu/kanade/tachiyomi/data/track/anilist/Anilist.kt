@@ -18,6 +18,7 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
 
     companion object {
         const val READING = 1
+        const val WATCHING = 1
         const val COMPLETED = 2
         const val PAUSED = 3
         const val DROPPED = 4
@@ -64,8 +65,8 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
 
     override fun getStatus(status: Int): String = with(context) {
         when (status) {
-            READING -> getString(R.string.reading)
-            PLANNING -> getString(R.string.plan_to_read)
+            WATCHING -> getString(R.string.watching)
+            PLANNING -> getString(R.string.plan_to_watch)
             COMPLETED -> getString(R.string.completed)
             REPEATING -> getString(R.string.repeating)
             PAUSED -> getString(R.string.paused)

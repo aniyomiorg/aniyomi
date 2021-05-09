@@ -49,13 +49,13 @@ data class ALAnime(
     val type: String,
     val publishing_status: String,
     val start_date_fuzzy: Long,
-    val total_chapters: Int
+    val total_episodes: Int
 ) {
 
     fun toTrack() = AnimeTrackSearch.create(TrackManager.ANILIST).apply {
         media_id = this@ALAnime.media_id
         title = title_romaji
-        total_episodes = this@ALAnime.total_chapters
+        total_episodes = this@ALAnime.total_episodes
         cover_url = image_url_lge
         summary = description ?: ""
         tracking_url = AnilistApi.mangaUrl(media_id)
@@ -147,7 +147,7 @@ fun Track.toAnilistStatus() = when (status) {
 }
 
 fun AnimeTrack.toAnilistStatus() = when (status) {
-    Anilist.READING -> "CURRENT"
+    Anilist.WATCHING -> "CURRENT"
     Anilist.COMPLETED -> "COMPLETED"
     Anilist.PAUSED -> "PAUSED"
     Anilist.DROPPED -> "DROPPED"
