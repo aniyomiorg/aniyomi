@@ -17,7 +17,7 @@ class GithubUpdateChecker {
         if (BuildConfig.DEBUG) {
             "tachiyomiorg/tachiyomi-preview"
         } else {
-            "jmir1/tachiyomi"
+            "jmir1/tachiyomi-mi"
         }
     }
 
