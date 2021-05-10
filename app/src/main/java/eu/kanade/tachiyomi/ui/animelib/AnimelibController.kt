@@ -30,7 +30,7 @@ import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
 import eu.kanade.tachiyomi.ui.base.controller.TabbedController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
-import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
+import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.system.getResourceColor
 import eu.kanade.tachiyomi.util.system.toast
@@ -200,7 +200,7 @@ class AnimelibController(
         binding.btnGlobalSearch.clicks()
             .onEach {
                 router.pushController(
-                    GlobalSearchController(presenter.query).withFadeTransaction()
+                    GlobalAnimeSearchController(presenter.query).withFadeTransaction()
                 )
             }
             .launchIn(viewScope)

@@ -51,7 +51,7 @@ class GlobalAnimeSearchCardHolder(view: View, adapter: GlobalAnimeSearchCardAdap
                 if (it is CrossfadeTransition) it.durationMillis else 0
             }
             val request = ImageRequest.Builder(itemView.context)
-                .data(anime)
+                .data(anime.thumbnail_url)
                 .setParameter(AnimeCoverFetcher.USE_CUSTOM_COVER, false)
                 .diskCachePolicy(CachePolicy.DISABLED)
                 .target(StateImageViewTarget(binding.cover, binding.progress, crossfadeDuration))
