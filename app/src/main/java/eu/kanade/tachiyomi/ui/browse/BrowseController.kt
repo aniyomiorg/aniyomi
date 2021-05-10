@@ -75,8 +75,9 @@ class BrowseController :
             (activity as? MainActivity)?.binding?.tabs?.apply {
                 setupWithViewPager(binding.pager)
 
-                // Show badge on tab for extension updates
+                // Show badges on tabs for extension updates
                 setExtensionUpdateBadge()
+                setAnimeExtensionUpdateBadge()
             }
         }
     }
@@ -97,10 +98,22 @@ class BrowseController :
         (activity as? MainActivity)?.binding?.tabs?.apply {
             val updates = preferences.extensionUpdatesCount().get()
             if (updates > 0) {
-                val badge: BadgeDrawable? = getTabAt(1)?.orCreateBadge
+                val badge: BadgeDrawable? = getTabAt(EXTENSIONS_CONTROLLER)?.orCreateBadge
                 badge?.isVisible = true
             } else {
                 getTabAt(EXTENSIONS_CONTROLLER)?.removeBadge()
+            }
+        }
+    }
+
+    fun setAnimeExtensionUpdateBadge() {
+        (activity as? MainActivity)?.binding?.tabs?.apply {
+            val updates = preferences.animeextensionUpdatesCount().get()
+            if (updates > 0) {
+                val badge: BadgeDrawable? = getTabAt(ANIMEEXTENSIONS_CONTROLLER)?.orCreateBadge
+                badge?.isVisible = true
+            } else {
+                getTabAt(ANIMEEXTENSIONS_CONTROLLER)?.removeBadge()
             }
         }
     }

@@ -178,7 +178,7 @@ open class AnimeExtensionController :
 
         // Update badge on parent controller tab
         val ctrl = parentController as BrowseController
-        ctrl.setExtensionUpdateBadge()
+        ctrl.setAnimeExtensionUpdateBadge()
         ctrl.extensionListUpdateRelay.call(true)
     }
 
