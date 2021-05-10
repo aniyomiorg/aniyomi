@@ -22,13 +22,14 @@ import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.model.toEpisodeInfo
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
-import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.notificationManager
@@ -38,6 +39,8 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 import eu.kanade.tachiyomi.BuildConfig.APPLICATION_ID as ID
 
 /**
@@ -437,7 +440,20 @@ class NotificationReceiver : BroadcastReceiver() {
          */
         internal fun openEpisodePendingActivity(context: Context, anime: Anime, episode: Episode): PendingIntent {
             val source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
-            val newIntent = WatcherActivity.newIntent(context, anime, episode, runBlocking { source.fetchEpisodeLink(episode).awaitSingle() })
+            val link = runBlocking {
+                return@runBlocking suspendCoroutine<String> { continuation ->
+                    var link: String
+                    launchIO {
+                        try {
+                            link = source.getEpisodeLink(episode.toEpisodeInfo())
+                            continuation.resume(link)
+                        } catch (e: Throwable) {
+                            withUIContext { throw e }
+                        }
+                    }
+                }
+            }
+            val newIntent = WatcherActivity.newIntent(context, anime, episode, link)
             return PendingIntent.getActivity(context, anime.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
@@ -449,7 +465,7 @@ class NotificationReceiver : BroadcastReceiver() {
          */
         internal fun openEpisodePendingActivity(context: Context, anime: Anime, groupId: Int): PendingIntent {
             val newIntent =
-                Intent(context, MainActivity::class.java).setAction(MainActivity.SHORTCUT_MANGA)
+                Intent(context, MainActivity::class.java).setAction(MainActivity.SHORTCUT_ANIME)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(AnimeController.ANIME_EXTRA, anime.id)
                     .putExtra("notificationId", anime.id.hashCode())

@@ -8,7 +8,6 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -18,7 +17,7 @@ class AnimelibUpdateJob(private val context: Context, workerParams: WorkerParame
     Worker(context, workerParams) {
 
     override fun doWork(): Result {
-        return if (LibraryUpdateService.start(context)) {
+        return if (AnimelibUpdateService.start(context)) {
             Result.success()
         } else {
             Result.failure()

@@ -318,6 +318,14 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                 setSelectedNavItem(R.id.nav_library)
                 router.pushController(RouterTransaction.with(MangaController(extras)))
             }
+            SHORTCUT_ANIME -> {
+                val extras = intent.extras ?: return false
+                if (router.backstackSize > 1) {
+                    router.popToRoot()
+                }
+                setSelectedNavItem(R.id.nav_animelib)
+                router.pushController(RouterTransaction.with(AnimeController(extras)))
+            }
             SHORTCUT_DOWNLOADS -> {
                 if (router.backstackSize > 1) {
                     router.popToRoot()
@@ -515,6 +523,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
         const val SHORTCUT_CATALOGUES = "eu.kanade.tachiyomi.SHOW_CATALOGUES"
         const val SHORTCUT_DOWNLOADS = "eu.kanade.tachiyomi.SHOW_DOWNLOADS"
         const val SHORTCUT_MANGA = "eu.kanade.tachiyomi.SHOW_MANGA"
+        const val SHORTCUT_ANIME = "eu.kanade.tachiyomi.SHOW_ANIME"
         const val SHORTCUT_EXTENSIONS = "eu.kanade.tachiyomi.EXTENSIONS"
 
         const val INTENT_SEARCH = "eu.kanade.tachiyomi.SEARCH"

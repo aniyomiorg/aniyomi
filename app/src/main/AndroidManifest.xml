@@ -180,6 +180,10 @@
             android:exported="false" />
 
         <service
+            android:name=".data.library.LibraryUpdateService"
+            android:exported="false" />
+
+        <service
             android:name=".data.animelib.AnimelibUpdateService"
             android:exported="false" />
 

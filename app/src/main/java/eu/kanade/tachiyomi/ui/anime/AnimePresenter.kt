@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.anime
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
@@ -410,7 +409,7 @@ class AnimePresenter(
      */
     fun fetchEpisodeLinksFromSource(manualFetch: Boolean = false, episode: Episode): String {
         hasRequested = true
-        var link = runBlocking {
+        val link = runBlocking {
             return@runBlocking suspendCoroutine<String> { continuation ->
                 var link: String
                 presenterScope.launchIO {
@@ -423,7 +422,6 @@ class AnimePresenter(
                 }
             }
         }
-        Log.i("lol", "omg" + link)
         return link
     }
 
