@@ -1,6 +1,6 @@
-| Build | Latest Realease | Translate Tachiyomi | Discord Server |
-|-------|----------|------------|---------|
-| ![CI](https://github.com/tachiyomiorg/tachiyomi/workflows/CI/badge.svg?branch=dev&event=push) | [![stable release](https://img.shields.io/github/release/jmir1/tachiyomi-mi.svg?maxAge=3600&label=download)](https://github.com/jmir1/tachiyomi-mi/releases) | [![Translation status](https://hosted.weblate.org/widgets/tachiyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/tachiyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
+| Build | Codefactor | Latest Realease | Translate Tachiyomi | Discord Server |
+|-------|-------|----------|------------|---------|
+| ![CI](https://github.com/tachiyomiorg/tachiyomi/workflows/CI/badge.svg?branch=dev&event=push) | [![CodeFactor](https://www.codefactor.io/repository/github/jmir1/tachiyomi-mi/badge)](https://www.codefactor.io/repository/github/jmir1/tachiyomi-mi) | [![stable release](https://img.shields.io/github/release/jmir1/tachiyomi-mi.svg?maxAge=3600&label=download)](https://github.com/jmir1/tachiyomi-mi/releases) | [![Translation status](https://hosted.weblate.org/widgets/tachiyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/tachiyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
 
 
 # ![app icon](./.github/readme-images/app-icon.png)Tachiyomi-MI
