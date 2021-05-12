@@ -172,6 +172,7 @@ class WatcherActivity : AppCompatActivity() {
         returnIntent.putExtra("previousResult", true)
         setResult(RESULT_OK, returnIntent)
         exoPlayer.release()
+        super.onBackPressed()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
