@@ -71,9 +71,9 @@ class AboutController : SettingsController() {
 
             onClick {
                 val url = if (BuildConfig.DEBUG) {
-                    "https://github.com/tachiyomiorg/tachiyomi-preview/releases/tag/r${BuildConfig.COMMIT_COUNT}"
+                    "https://github.com/jmir1/tachiyomi-mi/releases/tag/v${BuildConfig.COMMIT_COUNT}"
                 } else {
-                    "https://github.com/tachiyomiorg/tachiyomi/releases/tag/v${BuildConfig.VERSION_NAME}"
+                    "https://github.com/jmir1/tachiyomi-mi/releases/tag/v${BuildConfig.VERSION_NAME}"
                 }
                 openInBrowser(url)
             }
@@ -90,7 +90,7 @@ class AboutController : SettingsController() {
             }
             preference {
                 key = "pref_about_facebook"
-                title = "Facebook"
+                title = "Tachiyomi Facebook"
                 "https://facebook.com/tachiyomiorg".also {
                     summary = it
                     onClick { openInBrowser(it) }
@@ -98,7 +98,7 @@ class AboutController : SettingsController() {
             }
             preference {
                 key = "pref_about_twitter"
-                title = "Twitter"
+                title = "Tachiyomi Twitter"
                 "https://twitter.com/tachiyomiorg".also {
                     summary = it
                     onClick { openInBrowser(it) }
@@ -106,8 +106,8 @@ class AboutController : SettingsController() {
             }
             preference {
                 key = "pref_about_discord"
-                title = "Discord"
-                "https://discord.gg/tachiyomi".also {
+                title = "Tachiyomi-MI Discord"
+                "https://discord.gg/F32UjdJZrR".also {
                     summary = it
                     onClick { openInBrowser(it) }
                 }
@@ -115,7 +115,7 @@ class AboutController : SettingsController() {
             preference {
                 key = "pref_about_github"
                 title = "GitHub"
-                "https://github.com/tachiyomiorg".also {
+                "https://github.com/jmir1/tachiyomi-mi".also {
                     summary = it
                     onClick { openInBrowser(it) }
                 }
