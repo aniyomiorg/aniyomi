@@ -809,4 +809,5 @@
     <!-- S Pen actions -->
     <string name="spen_previous_page">Previous page</string>
     <string name="spen_next_page">Next page</string>
+    <string name="watcher_controls_skip_text">+85 s</string>
 </resources>

@@ -3,11 +3,15 @@ package eu.kanade.tachiyomi.ui.watcher
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.github.vkay94.dtpv.DoubleTapPlayerView
+import com.github.vkay94.dtpv.youtube.YouTubeOverlay
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
-import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.MimeTypes
@@ -15,6 +19,7 @@ import com.google.android.exoplayer2.util.Util
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.util.view.hideBar
 
 const val STATE_RESUME_WINDOW = "resumeWindow"
@@ -26,7 +31,11 @@ class WatcherActivity : AppCompatActivity() {
 
     private lateinit var exoPlayer: SimpleExoPlayer
     private lateinit var dataSourceFactory: DataSource.Factory
-    private lateinit var playerView: PlayerView
+    private lateinit var playerView: DoubleTapPlayerView
+    private lateinit var youTubeDoubleTap: YouTubeOverlay
+    private lateinit var skipBtn: TextView
+    private lateinit var nextBtn: ImageButton
+    private lateinit var prevBtn: ImageButton
 
     private var duration: Long = 0
     private var currentWindow = 0
@@ -45,6 +54,23 @@ class WatcherActivity : AppCompatActivity() {
             window.hideBar()
         }
         playerView = findViewById(R.id.player_view)
+        youTubeDoubleTap = findViewById(R.id.youtube_overlay)
+        youTubeDoubleTap
+            .performListener(object : YouTubeOverlay.PerformListener {
+                override fun onAnimationStart() {
+                    // Do UI changes when circle scaling animation starts (e.g. hide controller views)
+                    youTubeDoubleTap.visibility = View.VISIBLE
+                }
+
+                override fun onAnimationEnd() {
+                    // Do UI changes when circle scaling animation starts (e.g. show controller views)
+                    youTubeDoubleTap.visibility = View.GONE
+                }
+            })
+        skipBtn = findViewById(R.id.watcher_controls_skip_btn)
+        nextBtn = findViewById(R.id.watcher_controls_next)
+        prevBtn = findViewById(R.id.watcher_controls_prev)
+
         dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "xyz.jmir.tachiyomi.mi"))
         mediaItem = MediaItem.Builder()
             .setUri(intent.getStringExtra("uri"))
@@ -81,6 +107,18 @@ class WatcherActivity : AppCompatActivity() {
             override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
         }
         exoPlayer.addListener(PlayerEventListener())
+        skipBtn.setOnClickListener { exoPlayer.seekTo(exoPlayer.currentPosition + 85000) }
+        if (intent.getBooleanExtra("hasNextEpisode", false)) {
+            nextBtn.setOnClickListener {
+                nextEpisode()
+            }
+        }
+        if (intent.getBooleanExtra("hasPreviousEpisode", false)) {
+            prevBtn.setOnClickListener {
+                previousEpisode()
+            }
+        }
+        youTubeDoubleTap.player(exoPlayer)
         playerView.player = exoPlayer
         duration = exoPlayer.duration
     }
@@ -91,6 +129,7 @@ class WatcherActivity : AppCompatActivity() {
     }
 
     private fun releasePlayer() {
+        youTubeDoubleTap.player(exoPlayer)
         isPlayerPlaying = exoPlayer.playWhenReady
         playbackPosition = exoPlayer.currentPosition
         currentWindow = exoPlayer.currentWindowIndex
@@ -99,6 +138,38 @@ class WatcherActivity : AppCompatActivity() {
         returnIntent.putExtra("seconds_result", playbackPosition)
         returnIntent.putExtra("total_seconds_result", exoPlayer.duration)
         returnIntent.putExtra("episode", episode)
+        setResult(RESULT_OK, returnIntent)
+        exoPlayer.release()
+        super.onBackPressed()
+    }
+
+    private fun nextEpisode() {
+        youTubeDoubleTap.player(exoPlayer)
+        isPlayerPlaying = exoPlayer.playWhenReady
+        playbackPosition = exoPlayer.currentPosition
+        currentWindow = exoPlayer.currentWindowIndex
+        val episode = intent.getSerializableExtra("episode") as Episode
+        val returnIntent = intent
+        returnIntent.putExtra("seconds_result", playbackPosition)
+        returnIntent.putExtra("total_seconds_result", exoPlayer.duration)
+        returnIntent.putExtra("episode", episode)
+        returnIntent.putExtra("nextResult", true)
+        setResult(RESULT_OK, returnIntent)
+        exoPlayer.release()
+        super.onBackPressed()
+    }
+
+    private fun previousEpisode() {
+        youTubeDoubleTap.player(exoPlayer)
+        isPlayerPlaying = exoPlayer.playWhenReady
+        playbackPosition = exoPlayer.currentPosition
+        currentWindow = exoPlayer.currentWindowIndex
+        val episode = intent.getSerializableExtra("episode") as Episode
+        val returnIntent = intent
+        returnIntent.putExtra("seconds_result", playbackPosition)
+        returnIntent.putExtra("total_seconds_result", exoPlayer.duration)
+        returnIntent.putExtra("episode", episode)
+        returnIntent.putExtra("previousResult", true)
         setResult(RESULT_OK, returnIntent)
         exoPlayer.release()
     }
@@ -144,12 +215,19 @@ class WatcherActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context, anime: Anime, episode: Episode, url: String): Intent {
+        fun newIntent(context: Context, anime: Anime, episode: Episode, episodeList: List<EpisodeItem>, url: String): Intent {
             return Intent(context, WatcherActivity::class.java).apply {
                 putExtra("anime", anime.id)
                 putExtra("episode", episode)
                 putExtra("second", episode.last_second_seen)
                 putExtra("uri", url)
+                if (episodeList.isNotEmpty()) {
+                    putExtra("hasNextEpisode", episode.episode_number < episodeList[0].episode_number)
+                    putExtra("hasPreviousEpisode", episode.episode_number > episodeList[episodeList.size - 1].episode_number)
+                } else {
+                    putExtra("hasNextEpisode", false)
+                    putExtra("hasPreviousEpisode", false)
+                }
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }

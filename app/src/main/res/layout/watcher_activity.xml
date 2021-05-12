@@ -5,19 +5,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
+    <FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/main_media_frame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
         android:background="#000000">
 
-        <com.google.android.exoplayer2.ui.PlayerView
+        <com.github.vkay94.dtpv.DoubleTapPlayerView
             android:id="@+id/player_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center" />
+            app:controller_layout_id="@layout/watcher_controls_view"
+            app:fastforward_increment="85000"
+            app:dtpv_controller="@+id/youtube_overlay"
+            app:show_buffering="when_playing"/>
+
+        <com.github.vkay94.dtpv.youtube.YouTubeOverlay
+            android:id="@+id/youtube_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+
+            app:yt_playerView="@+id/player_view" />
 
     </FrameLayout>
 
+
+
 </LinearLayout>
+

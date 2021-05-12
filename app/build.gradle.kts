@@ -273,6 +273,9 @@ dependencies {
     implementation("com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion")
     implementation("com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion")
     implementation("com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion")
+
+    //player doubletap
+    implementation("com.github.vkay94:DoubleTapPlayerView:1.0.2")
 }
 
 tasks {

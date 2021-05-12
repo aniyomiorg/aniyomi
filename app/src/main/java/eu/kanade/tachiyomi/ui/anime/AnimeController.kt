@@ -81,7 +81,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import okhttp3.Callback
 import reactivecircus.flowbinding.recyclerview.scrollEvents
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
 import timber.log.Timber
@@ -641,11 +640,24 @@ class AnimeController :
         }
         if (requestCode == REQUEST_SECONDS) {
             val seconds = data!!.getLongExtra("seconds_result", 0)
-            val total_seconds = data.getLongExtra("total_seconds_result", 0)
+            val totalSeconds = data.getLongExtra("total_seconds_result", 0)
             val episode: Episode = data.getSerializableExtra("episode") as Episode
             episode.last_second_seen = seconds
-            episode.total_seconds = total_seconds
+            episode.total_seconds = totalSeconds
             presenter.setEpisodesProgress(arrayListOf(EpisodeItem(episode, anime!!)))
+            // if next or previous episode was pressed
+            if (data.getBooleanExtra("nextResult", false)) {
+                val episodeList = presenter.episodes.sortedWith(presenter.getEpisodeSort())
+                val idx = episodeList.indexOfFirst { it.episode_number == episode.episode_number }
+                val nextEpisode = episodeList[idx - 1].episode
+                openEpisode(nextEpisode)
+            }
+            if (data.getBooleanExtra("previousResult", false)) {
+                val episodeList = presenter.episodes.sortedWith(presenter.getEpisodeSort())
+                val idx = episodeList.indexOfFirst { it.episode_number == episode.episode_number }
+                val previousEpisode = episodeList[idx + 1].episode
+                openEpisode(previousEpisode)
+            }
         }
     }
 
@@ -744,7 +756,8 @@ class AnimeController :
         runBlocking {
             launch {
                 val url = fetchEpisodeLinksFromSource(false, episode)
-                val intent = WatcherActivity.newIntent(activity, presenter.anime, episode, url)
+                val episodeList = presenter.episodes.sortedWith(presenter.getEpisodeSort())
+                val intent = WatcherActivity.newIntent(activity, presenter.anime, episode, episodeList, url)
                 if (hasAnimation) {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 }

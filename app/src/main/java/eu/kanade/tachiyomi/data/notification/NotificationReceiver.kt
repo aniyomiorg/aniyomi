@@ -24,6 +24,7 @@ import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.toEpisodeInfo
 import eu.kanade.tachiyomi.ui.anime.AnimeController
+import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
@@ -39,6 +40,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
+import java.util.Collections.emptyList
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import eu.kanade.tachiyomi.BuildConfig.APPLICATION_ID as ID
@@ -453,7 +455,8 @@ class NotificationReceiver : BroadcastReceiver() {
                     }
                 }
             }
-            val newIntent = WatcherActivity.newIntent(context, anime, episode, link)
+            val episodeList: List<EpisodeItem> = emptyList()
+            val newIntent = WatcherActivity.newIntent(context, anime, episode, episodeList, link)
             return PendingIntent.getActivity(context, anime.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
