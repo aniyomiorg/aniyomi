@@ -17,10 +17,17 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.AnimeHistory
 import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.util.view.hideBar
+import rx.schedulers.Schedulers
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
+import java.util.*
 
 const val STATE_RESUME_WINDOW = "resumeWindow"
 const val STATE_RESUME_POSITION = "resumePosition"
@@ -29,6 +36,9 @@ const val STATE_PLAYER_PLAYING = "playerOnPlay"
 
 class WatcherActivity : AppCompatActivity() {
 
+    private val preferences: PreferencesHelper = Injekt.get()
+    private val incognitoMode = preferences.incognitoMode().get()
+    private val db: AnimeDatabaseHelper = Injekt.get()
     private lateinit var exoPlayer: SimpleExoPlayer
     private lateinit var dataSourceFactory: DataSource.Factory
     private lateinit var playerView: DoubleTapPlayerView
@@ -134,6 +144,8 @@ class WatcherActivity : AppCompatActivity() {
         playbackPosition = exoPlayer.currentPosition
         currentWindow = exoPlayer.currentWindowIndex
         val episode = intent.getSerializableExtra("episode") as Episode
+        val anime = intent.getSerializableExtra("anime_anime") as Anime
+        saveEpisodeHistory(EpisodeItem(episode, anime))
         val returnIntent = intent
         returnIntent.putExtra("seconds_result", playbackPosition)
         returnIntent.putExtra("total_seconds_result", exoPlayer.duration)
@@ -215,10 +227,21 @@ class WatcherActivity : AppCompatActivity() {
         }
     }
 
+    private fun saveEpisodeHistory(episode: EpisodeItem) {
+        if (!incognitoMode) {
+            val history = AnimeHistory.create(episode.episode).apply { last_seen = Date().time }
+            db.updateAnimeHistoryLastSeen(history).asRxCompletable()
+                .onErrorComplete()
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+        }
+    }
+
     companion object {
         fun newIntent(context: Context, anime: Anime, episode: Episode, episodeList: List<EpisodeItem>, url: String): Intent {
             return Intent(context, WatcherActivity::class.java).apply {
                 putExtra("anime", anime.id)
+                putExtra("anime_anime", anime)
                 putExtra("episode", episode)
                 putExtra("second", episode.last_second_seen)
                 putExtra("uri", url)

@@ -15,7 +15,7 @@
         android:id="@+id/cover"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:contentDescription="@string/description_cover"
+        android:contentDescription="@string/anime_description_cover"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="h,3:2"
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/manga_title"
+            android:id="@+id/anime_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -44,7 +44,7 @@
             tools:text="Title" />
 
         <TextView
-            android:id="@+id/manga_subtitle"
+            android:id="@+id/anime_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"

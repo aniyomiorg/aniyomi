@@ -5,6 +5,6 @@ package eu.kanade.tachiyomi.data.database.models
  *
  * @param manga object containing manga
  * @param chapter object containing chater
- * @param history object containing history
+ * @param animehistory object containing history
  */
-data class AnimeEpisodeHistory(val anime: Anime, val episode: Episode, val history: AnimeHistory)
+data class AnimeEpisodeHistory(val anime: Anime, val episode: Episode, val animehistory: AnimeHistory)

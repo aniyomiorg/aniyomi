@@ -810,4 +810,8 @@
     <string name="spen_previous_page">Previous page</string>
     <string name="spen_next_page">Next page</string>
     <string name="watcher_controls_skip_text">+85 s</string>
+    <string name="no_next_episode">Next Episode not found!</string>
+    <string name="anime_description_cover">Cover of Anime</string>
+    <string name="label_history">Manga</string>
+    <string name="label_animehistory">Anime</string>
 </resources>
