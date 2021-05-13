@@ -85,7 +85,7 @@ class BrowseController :
     override fun configureTabs(tabs: TabLayout) {
         with(tabs) {
             tabGravity = TabLayout.GRAVITY_FILL
-            tabMode = TabLayout.MODE_FIXED
+            tabMode = TabLayout.MODE_SCROLLABLE
         }
     }
 
