@@ -203,6 +203,15 @@ class AnimeDownloadManager(private val context: Context) {
         deleteEpisodes(listOf(download.episode), download.anime, download.source)
     }
 
+    fun deletePendingDownloads(vararg downloads: AnimeDownload) {
+        val downloadsByAnime = downloads.groupBy { it.anime.id }
+        downloadsByAnime.map { entry ->
+            val anime = entry.value.first().anime
+            val source = entry.value.first().source
+            deleteEpisodes(entry.value.map { it.episode }, anime, source)
+        }
+    }
+
     /**
      * Deletes the directories of a list of downloaded episodes.
      *

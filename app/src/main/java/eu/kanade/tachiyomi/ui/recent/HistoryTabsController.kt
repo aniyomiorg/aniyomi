@@ -23,7 +23,7 @@ class HistoryTabsController() :
     RootController,
     TabbedController {
 
-    private var adapter: HistroyTabsAdapter? = null
+    private var adapter: HistoryTabsAdapter? = null
 
     override fun getTitle(): String {
         return resources!!.getString(R.string.history)
@@ -34,7 +34,7 @@ class HistoryTabsController() :
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
 
-        adapter = HistroyTabsAdapter()
+        adapter = HistoryTabsAdapter()
         binding.pager.adapter = adapter
     }
 
@@ -46,7 +46,7 @@ class HistoryTabsController() :
     override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
         super.onChangeStarted(handler, type)
         if (type.isEnter) {
-            (activity as? MainActivity)?.binding?.tabs?.apply {
+            (activity as? MainActivity)?.binding?.toolbarLayout?.tabs?.apply {
                 setupWithViewPager(binding.pager)
             }
         }
@@ -59,7 +59,7 @@ class HistoryTabsController() :
         }
     }
 
-    private inner class HistroyTabsAdapter : RouterPagerAdapter(this@HistoryTabsController) {
+    private inner class HistoryTabsAdapter : RouterPagerAdapter(this@HistoryTabsController) {
 
         private val tabTitles = listOf(
             R.string.label_history,

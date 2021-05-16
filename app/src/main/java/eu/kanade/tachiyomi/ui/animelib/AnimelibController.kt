@@ -211,7 +211,7 @@ class AnimelibController(
     override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
         super.onChangeStarted(handler, type)
         if (type.isEnter) {
-            (activity as? MainActivity)?.binding?.tabs?.setupWithViewPager(binding.animelibPager)
+            (activity as? MainActivity)?.binding?.toolbarLayout?.tabs?.setupWithViewPager(binding.animelibPager)
             presenter.subscribeAnimelib()
         }
     }
@@ -290,7 +290,7 @@ class AnimelibController(
         // Delay the scroll position to allow the view to be properly measured.
         view.post {
             if (isAttached) {
-                (activity as? MainActivity)?.binding?.tabs?.setScrollPosition(binding.animelibPager.currentItem, 0f, true)
+                (activity as? MainActivity)?.binding?.toolbarLayout?.tabs?.setScrollPosition(binding.animelibPager.currentItem, 0f, true)
             }
         }
 

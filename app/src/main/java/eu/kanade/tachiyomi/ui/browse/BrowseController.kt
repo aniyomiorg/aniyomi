@@ -107,7 +107,7 @@ class BrowseController :
     }
 
     fun setAnimeExtensionUpdateBadge() {
-        (activity as? MainActivity)?.binding?.tabs?.apply {
+        (activity as? MainActivity)?.binding?.toolbarLayout?.tabs?.apply {
             val updates = preferences.animeextensionUpdatesCount().get()
             if (updates > 0) {
                 val badge: BadgeDrawable? = getTabAt(ANIMEEXTENSIONS_CONTROLLER)?.orCreateBadge

@@ -275,11 +275,6 @@ class SettingsGeneralController : SettingsController() {
                 titleRes = R.string.label_recent_updates
                 defaultValue = true
             }
-            switchPreference {
-                key = Keys.showNavHistory
-                titleRes = R.string.label_recent_manga
-                defaultValue = true
-            }
         }
     }
 }
