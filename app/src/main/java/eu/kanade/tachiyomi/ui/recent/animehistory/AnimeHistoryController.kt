@@ -39,7 +39,7 @@ import reactivecircus.flowbinding.appcompat.queryTextChanges
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import java.util.*
+import java.util.Collections
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
