@@ -13,6 +13,17 @@
     </shortcut>
     <shortcut
         android:enabled="true"
+        android:icon="@drawable/sc_collections_bookmark_48dp"
+        android:shortcutDisabledMessage="@string/app_not_available"
+        android:shortcutId="show_animelib"
+        android:shortcutLongLabel="@string/label_animelib"
+        android:shortcutShortLabel="@string/label_animelib">
+        <intent
+            android:action="eu.kanade.tachiyomi.SHOW_ANIMELIB"
+            android:targetClass="eu.kanade.tachiyomi.ui.main.MainActivity" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
         android:icon="@drawable/sc_new_releases_48dp"
         android:shortcutDisabledMessage="@string/app_not_available"
         android:shortcutId="show_recently_updated"
@@ -20,17 +31,6 @@
         android:shortcutShortLabel="@string/short_recent_updates">
         <intent
             android:action="eu.kanade.tachiyomi.SHOW_RECENTLY_UPDATED"
-            android:targetClass="eu.kanade.tachiyomi.ui.main.MainActivity" />
-    </shortcut>
-    <shortcut
-        android:enabled="true"
-        android:icon="@drawable/sc_history_48dp"
-        android:shortcutDisabledMessage="@string/app_not_available"
-        android:shortcutId="show_recently_read"
-        android:shortcutLongLabel="@string/label_recent_manga"
-        android:shortcutShortLabel="@string/label_recent_manga">
-        <intent
-            android:action="eu.kanade.tachiyomi.SHOW_RECENTLY_READ"
             android:targetClass="eu.kanade.tachiyomi.ui.main.MainActivity" />
     </shortcut>
     <shortcut
