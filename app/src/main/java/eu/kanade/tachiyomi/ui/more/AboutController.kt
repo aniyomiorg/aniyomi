@@ -71,7 +71,7 @@ class AboutController : SettingsController() {
 
             onClick {
                 val url = if (BuildConfig.DEBUG) {
-                    "https://github.com/jmir1/tachiyomi-mi/releases/tag/v${BuildConfig.COMMIT_COUNT}"
+                    "https://github.com/jmir1/tachiyomi-mi-preview/releases/tag/r${BuildConfig.COMMIT_COUNT}"
                 } else {
                     "https://github.com/jmir1/tachiyomi-mi/releases/tag/v${BuildConfig.VERSION_NAME}"
                 }

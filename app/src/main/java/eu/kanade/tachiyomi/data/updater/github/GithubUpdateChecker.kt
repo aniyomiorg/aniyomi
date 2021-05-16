@@ -15,7 +15,7 @@ class GithubUpdateChecker {
 
     private val repo: String by lazy {
         if (BuildConfig.DEBUG) {
-            "tachiyomiorg/tachiyomi-preview"
+            "jmir1/tachiyomi-mi-preview"
         } else {
             "jmir1/tachiyomi-mi"
         }
@@ -43,7 +43,7 @@ class GithubUpdateChecker {
         val newVersion = versionTag.replace("[^\\d.]".toRegex(), "")
 
         return if (BuildConfig.DEBUG) {
-            // Preview builds: based on releases in "tachiyomiorg/tachiyomi-preview" repo
+            // Preview builds: based on releases in "jmir1/tachiyomi-preview" repo
             // tagged as something like "r1234"
             newVersion.toInt() > BuildConfig.COMMIT_COUNT.toInt()
         } else {
