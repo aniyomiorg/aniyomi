@@ -639,12 +639,14 @@ class AnimeController :
             presenter.editCover(anime!!, activity, dataUri)
         }
         if (requestCode == REQUEST_SECONDS) {
-            val seconds = data!!.getLongExtra("seconds_result", 0)
-            val totalSeconds = data.getLongExtra("total_seconds_result", 0)
+            val seconds = data!!.getLongExtra("seconds_result", 0L)
+            val totalSeconds = data.getLongExtra("total_seconds_result", 0L)
             val episode: Episode = data.getSerializableExtra("episode") as Episode
-            episode.last_second_seen = seconds
-            episode.total_seconds = totalSeconds
-            presenter.setEpisodesProgress(arrayListOf(EpisodeItem(episode, anime!!)))
+            if (totalSeconds > 0L) {
+                episode.last_second_seen = seconds
+                episode.total_seconds = totalSeconds
+                presenter.setEpisodesProgress(arrayListOf(EpisodeItem(episode, anime!!)))
+            }
             // if next or previous episode was pressed
             if (data.getBooleanExtra("nextResult", false)) {
                 val episodeList = presenter.episodes.sortedWith(presenter.getEpisodeSort())
