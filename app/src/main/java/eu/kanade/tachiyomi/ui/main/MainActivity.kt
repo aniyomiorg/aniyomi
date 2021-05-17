@@ -33,6 +33,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
 import eu.kanade.tachiyomi.databinding.MainActivityBinding
+import eu.kanade.tachiyomi.extension.api.AnimeExtensionGithubApi
 import eu.kanade.tachiyomi.extension.api.ExtensionGithubApi
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.animelib.AnimelibController
@@ -234,6 +235,10 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             .asImmediateFlow { setExtensionsBadge() }
             .launchIn(lifecycleScope)
 
+        preferences.animeextensionUpdatesCount()
+            .asImmediateFlow { setExtensionsBadge() }
+            .launchIn(lifecycleScope)
+
         preferences.downloadedOnly()
             .asImmediateFlow { binding.toolbarLayout.downloadedOnly.isVisible = it }
             .launchIn(lifecycleScope)
@@ -287,7 +292,9 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
         lifecycleScope.launchIO {
             try {
                 val pendingUpdates = ExtensionGithubApi().checkForUpdates(this@MainActivity)
+                val pendingAnimeUpdates = AnimeExtensionGithubApi().checkForUpdates(this@MainActivity)
                 preferences.extensionUpdatesCount().set(pendingUpdates.size)
+                preferences.animeextensionUpdatesCount().set(pendingAnimeUpdates.size)
             } catch (e: Exception) {
                 Timber.e(e)
             }

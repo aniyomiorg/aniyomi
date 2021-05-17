@@ -92,6 +92,7 @@ class BrowseController :
     override fun cleanupTabs(tabs: TabLayout) {
         // Remove extension update badge
         tabs.getTabAt(EXTENSIONS_CONTROLLER)?.removeBadge()
+        tabs.getTabAt(ANIMEEXTENSIONS_CONTROLLER)?.removeBadge()
     }
 
     fun setExtensionUpdateBadge() {
