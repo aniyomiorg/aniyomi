@@ -8,6 +8,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.AnimeExtensionCardItemBinding
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
+import eu.kanade.tachiyomi.extension.model.Extension
 import eu.kanade.tachiyomi.extension.model.InstallStep
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import uy.kohesive.injekt.Injekt
@@ -36,8 +37,8 @@ class AnimeExtensionHolder(view: View, val adapter: AnimeExtensionAdapter) :
         binding.lang.text = LocaleHelper.getSourceDisplayName(extension.lang, itemView.context)
         binding.warning.text = when {
             extension is AnimeExtension.Untrusted -> itemView.context.getString(R.string.ext_untrusted)
-            extension is AnimeExtension.Installed && extension.isObsolete -> itemView.context.getString(R.string.ext_obsolete)
             extension is AnimeExtension.Installed && extension.isUnofficial -> itemView.context.getString(R.string.ext_unofficial)
+            extension is AnimeExtension.Installed && extension.isObsolete -> itemView.context.getString(R.string.ext_obsolete)
             extension.isNsfw && shouldLabelNsfw -> itemView.context.getString(R.string.ext_nsfw_short)
             else -> ""
         }.toUpperCase()
