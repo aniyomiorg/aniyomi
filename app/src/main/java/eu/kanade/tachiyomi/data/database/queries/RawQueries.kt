@@ -71,6 +71,19 @@ fun getRecentsQuery() =
 """
 
 /**
+ * Query to get the recent chapters of manga from the library up to a date.
+ */
+fun getRecentsQueryAnime() =
+    """
+    SELECT ${Anime.TABLE}.${Anime.COL_URL} as animeUrl, * FROM ${Anime.TABLE} JOIN ${Episode.TABLE}
+    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
+    WHERE ${Anime.COL_FAVORITE} = 1 
+    AND ${Episode.COL_DATE_UPLOAD} > ?
+    AND ${Episode.COL_DATE_FETCH} > ${Anime.COL_DATE_ADDED}
+    ORDER BY ${Episode.COL_DATE_UPLOAD} DESC
+"""
+
+/**
  * Query to get the recently read chapters of manga from the library up to a date.
  * The max_last_read table contains the most recent chapters grouped by manga
  * The select statement returns all information of chapters that have the same id as the chapter in max_last_read
@@ -99,7 +112,7 @@ fun getRecentMangasQuery(search: String = "") =
 
 fun getRecentAnimesQuery(search: String = "") =
     """
-    SELECT ${Anime.TABLE}.${Anime.COL_URL} as mangaUrl, ${Anime.TABLE}.*, ${Episode.TABLE}.*, ${AnimeHistory.TABLE}.*
+    SELECT ${Anime.TABLE}.${Anime.COL_URL} as animeUrl, ${Anime.TABLE}.*, ${Episode.TABLE}.*, ${AnimeHistory.TABLE}.*
     FROM ${Anime.TABLE}
     JOIN ${Episode.TABLE}
     ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
@@ -195,7 +208,7 @@ fun getTotalEpisodeAnimeQuery() =
     SELECT ${Anime.TABLE}.*
     FROM ${Anime.TABLE}
     JOIN ${Anime.TABLE}
-    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
+    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
     GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
     ORDER by COUNT(*)
 """
@@ -212,10 +225,10 @@ fun getLatestChapterMangaQuery() =
 
 fun getLatestEpisodeAnimeQuery() =
     """
-    SELECT ${Anime.TABLE}.*, MAX(${Chapter.TABLE}.${Chapter.COL_DATE_UPLOAD}) AS max
+    SELECT ${Anime.TABLE}.*, MAX(${Episode.TABLE}.${Episode.COL_DATE_UPLOAD}) AS max
     FROM ${Anime.TABLE}
     JOIN ${Chapter.TABLE}
-    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
+    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
     GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
     ORDER by max DESC
 """
@@ -232,10 +245,10 @@ fun getChapterFetchDateMangaQuery() =
 
 fun getEpisodeFetchDateAnimeQuery() =
     """
-    SELECT ${Anime.TABLE}.*, MAX(${Chapter.TABLE}.${Chapter.COL_DATE_FETCH}) AS max
+    SELECT ${Anime.TABLE}.*, MAX(${Episode.TABLE}.${Episode.COL_DATE_FETCH}) AS max
     FROM ${Anime.TABLE}
-    JOIN ${Chapter.TABLE}
-    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
+    JOIN ${Episode.TABLE}
+    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
     GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
     ORDER by max DESC
 """

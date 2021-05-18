@@ -14,7 +14,7 @@ import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.BackupRestoreService
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeHistory
 import eu.kanade.tachiyomi.databinding.AnimeHistoryControllerBinding
@@ -56,7 +56,7 @@ class AnimeHistoryController :
     AnimeHistoryAdapter.OnItemClickListener,
     RemoveAnimeHistoryDialog.Listener {
 
-    private val db: DatabaseHelper by injectLazy()
+    private val db: AnimeDatabaseHelper by injectLazy()
 
     /**
      * Adapter containing the recent anime.

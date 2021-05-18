@@ -31,7 +31,7 @@ interface EpisodeQueries : DbProvider {
         .listOfObjects(AnimeEpisode::class.java)
         .withQuery(
             RawQuery.builder()
-                .query(getRecentsQuery())
+                .query(getRecentsQueryAnime())
                 .args(date.time)
                 .observesTables(EpisodeTable.TABLE)
                 .build()

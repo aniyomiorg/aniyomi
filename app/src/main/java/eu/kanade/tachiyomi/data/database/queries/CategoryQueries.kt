@@ -34,7 +34,7 @@ interface CategoryQueries : DbProvider {
         .listOfObjects(Category::class.java)
         .withQuery(
             RawQuery.builder()
-                .query(getCategoriesForMangaQuery())
+                .query(getCategoriesForAnimeQuery())
                 .args(anime.id)
                 .build()
         )

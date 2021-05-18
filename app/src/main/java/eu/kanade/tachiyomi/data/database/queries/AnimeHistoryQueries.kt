@@ -48,11 +48,11 @@ interface AnimeHistoryQueries : AnimeDbProvider {
         )
         .prepare()
 
-    fun getHistoryByChapterUrl(chapterUrl: String) = db.get()
+    fun getHistoryByEpisodeUrl(chapterUrl: String) = db.get()
         .`object`(AnimeHistory::class.java)
         .withQuery(
             RawQuery.builder()
-                .query(getHistoryByChapterUrl())
+                .query(getHistoryByEpisodeUrl())
                 .args(chapterUrl)
                 .observesTables(AnimeHistoryTable.TABLE)
                 .build()
