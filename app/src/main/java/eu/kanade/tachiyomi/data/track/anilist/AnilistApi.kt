@@ -342,7 +342,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             val query = """
             |query (${'$'}id: Int!, ${'$'}manga_id: Int!) {
                 |Page {
-                    |mediaList(userId: ${'$'}id, type: MANGA, mediaId: ${'$'}manga_id) {
+                    |mediaList(userId: ${'$'}id, type: ANIME, mediaId: ${'$'}manga_id) {
                         |id
                         |status
                         |scoreRaw: score(format: POINT_100)

@@ -8,7 +8,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.AnimeExtensionCardItemBinding
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
-import eu.kanade.tachiyomi.extension.model.Extension
 import eu.kanade.tachiyomi.extension.model.InstallStep
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import uy.kohesive.injekt.Injekt
