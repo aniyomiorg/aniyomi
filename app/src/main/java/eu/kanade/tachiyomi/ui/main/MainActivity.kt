@@ -52,7 +52,7 @@ import eu.kanade.tachiyomi.ui.download.DownloadController
 import eu.kanade.tachiyomi.ui.library.LibraryController
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.more.MoreController
-import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
+import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.InternalResourceHelper
@@ -163,7 +163,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                 when (id) {
                     R.id.nav_library -> setRoot(LibraryController(), id)
                     R.id.nav_animelib -> setRoot(AnimelibController(), id)
-                    R.id.nav_updates -> setRoot(UpdatesController(), id)
+                    R.id.nav_updates -> setRoot(UpdatesTabsController(), id)
                     R.id.nav_browse -> setRoot(BrowseController(), id)
                     R.id.nav_more -> setRoot(MoreController(), id)
                 }

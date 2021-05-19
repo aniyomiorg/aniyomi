@@ -53,6 +53,8 @@
     <string name="action_select_inverse">Select inverse</string>
     <string name="action_mark_as_read">Mark as read</string>
     <string name="action_mark_as_unread">Mark as unread</string>
+    <string name="action_mark_as_seen">Mark as watched</string>
+    <string name="action_mark_as_unseen">Mark as unwatched</string>
     <string name="action_mark_previous_as_read">Mark previous as read</string>
     <string name="action_download">Download</string>
     <string name="action_download_unread">Download unread chapters</string>
@@ -582,6 +584,7 @@
     <string name="download_unread">Unread</string>
     <string name="download_unseen">Unseen</string>
     <string name="confirm_delete_chapters">Are you sure you want to delete the selected chapters?</string>
+    <string name="confirm_delete_episodes">Are you sure you want to delete the selected episodes?</string>
     <string name="invalid_download_dir">Invalid download location</string>
     <string name="chapter_settings">Chapter settings</string>
     <string name="confirm_set_chapter_settings">Are you sure you want to save these settings as default?</string>
@@ -812,4 +815,6 @@
     <string name="anime_description_cover">Cover of Anime</string>
     <string name="label_history">Manga</string>
     <string name="label_animehistory">Anime</string>
+    <string name="label_updates">Manga</string>
+    <string name="label_animeupdates">Anime</string>
 </resources>
