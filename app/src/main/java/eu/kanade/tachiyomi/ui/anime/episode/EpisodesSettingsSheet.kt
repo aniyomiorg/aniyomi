@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.anime.episode
 
 import android.content.Context
+import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.view.isVisible
@@ -16,21 +17,18 @@ import eu.kanade.tachiyomi.widget.sheet.TabbedBottomSheetDialog
 class EpisodesSettingsSheet(
     private val router: Router,
     private val presenter: AnimePresenter,
-    onGroupClickListener: (ExtendedNavigationView.Group) -> Unit
+    private val onGroupClickListener: (ExtendedNavigationView.Group) -> Unit
 ) : TabbedBottomSheetDialog(router.activity!!) {
 
-    val filters: Filter
-    private val sort: Sort
-    private val display: Display
+    val filters = Filter(router.activity!!)
+    private val sort = Sort(router.activity!!)
+    private val display = Display(router.activity!!)
 
-    init {
-        filters = Filter(router.activity!!)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
         filters.onGroupClicked = onGroupClickListener
-
-        sort = Sort(router.activity!!)
         sort.onGroupClicked = onGroupClickListener
-
-        display = Display(router.activity!!)
         display.onGroupClicked = onGroupClickListener
 
         binding.menu.isVisible = true

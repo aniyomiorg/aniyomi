@@ -46,7 +46,7 @@ class UpdatesTabsController() :
     override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
         super.onChangeStarted(handler, type)
         if (type.isEnter) {
-            (activity as? MainActivity)?.binding?.toolbarLayout?.tabs?.apply {
+            (activity as? MainActivity)?.binding?.tabs?.apply {
                 setupWithViewPager(binding.pager)
             }
         }
