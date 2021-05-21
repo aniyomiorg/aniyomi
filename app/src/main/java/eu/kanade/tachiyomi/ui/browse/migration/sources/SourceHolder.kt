@@ -23,4 +23,15 @@ class SourceHolder(view: View, val adapter: SourceAdapter) :
             binding.image.setImageDrawable(source.icon())
         }
     }
+    fun bind(item: AnimeSourceItem) {
+        val source = item.source
+
+        binding.title.text = "${source.name} (${item.animeCount})"
+        binding.subtitle.isVisible = source.lang != ""
+        binding.subtitle.text = LocaleHelper.getDisplayName(source.lang)
+
+        itemView.post {
+            binding.image.setImageDrawable(source.icon())
+        }
+    }
 }
