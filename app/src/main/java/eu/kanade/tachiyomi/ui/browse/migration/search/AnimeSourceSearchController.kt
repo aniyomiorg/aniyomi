@@ -5,11 +5,11 @@ import android.view.View
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.AnimeSourceItem
-import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
+import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 
 class AnimeSourceSearchController(
     bundle: Bundle
-) : BrowseSourceController(bundle) {
+) : BrowseAnimeSourceController(bundle) {
 
     constructor(anime: Anime? = null, source: AnimeCatalogueSource, searchQuery: String? = null) : this(
         Bundle().apply {
