@@ -52,15 +52,15 @@ abstract class TrackService(val id: Int) {
 
     abstract suspend fun add(track: Track): Track
 
-    abstract suspend fun addAnime(track: AnimeTrack): AnimeTrack
+    abstract suspend fun add(track: AnimeTrack): AnimeTrack
 
     abstract suspend fun update(track: Track): Track
 
-    abstract suspend fun updateAnime(track: AnimeTrack): AnimeTrack
+    abstract suspend fun update(track: AnimeTrack): AnimeTrack
 
     abstract suspend fun bind(track: Track): Track
 
-    abstract suspend fun bindAnime(track: AnimeTrack): AnimeTrack
+    abstract suspend fun bind(track: AnimeTrack): AnimeTrack
 
     abstract suspend fun search(query: String): List<TrackSearch>
 
@@ -68,7 +68,7 @@ abstract class TrackService(val id: Int) {
 
     abstract suspend fun refresh(track: Track): Track
 
-    abstract suspend fun refreshAnime(track: AnimeTrack): AnimeTrack
+    abstract suspend fun refresh(track: AnimeTrack): AnimeTrack
 
     abstract suspend fun login(username: String, password: String)
 

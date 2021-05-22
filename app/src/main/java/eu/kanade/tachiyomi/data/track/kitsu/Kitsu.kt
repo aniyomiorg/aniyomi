@@ -78,7 +78,7 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
         return api.addLibManga(track, getUserId())
     }
 
-    override suspend fun addAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun add(track: AnimeTrack): AnimeTrack {
         return api.addLibAnime(track, getUserId())
     }
 
@@ -86,7 +86,7 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
         return api.updateLibManga(track)
     }
 
-    override suspend fun updateAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun update(track: AnimeTrack): AnimeTrack {
         return api.updateLibAnime(track)
     }
 
@@ -103,16 +103,16 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
         }
     }
 
-    override suspend fun bindAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun bind(track: AnimeTrack): AnimeTrack {
         val remoteTrack = api.findLibAnime(track, getUserId())
         return if (remoteTrack != null) {
             track.copyPersonalFrom(remoteTrack)
             track.media_id = remoteTrack.media_id
-            updateAnime(track)
+            update(track)
         } else {
             track.status = READING
             track.score = 0F
-            addAnime(track)
+            add(track)
         }
     }
 
@@ -131,7 +131,7 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
         return track
     }
 
-    override suspend fun refreshAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun refresh(track: AnimeTrack): AnimeTrack {
         val remoteTrack = api.getLibAnime(track)
         track.copyPersonalFrom(remoteTrack)
         track.total_episodes = remoteTrack.total_episodes

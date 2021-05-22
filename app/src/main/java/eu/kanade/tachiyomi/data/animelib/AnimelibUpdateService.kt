@@ -21,12 +21,14 @@ import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.UnattendedTrackService
 import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.model.SAnime
 import eu.kanade.tachiyomi.source.model.toSAnime
 import eu.kanade.tachiyomi.source.model.toSEpisode
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
+import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.storage.getUriCompat
@@ -413,8 +415,12 @@ class AnimelibUpdateService(
                             val service = trackManager.getService(track.sync_id)
                             if (service != null && service in loggedServices) {
                                 try {
-                                    val updatedTrack = service.refreshAnime(track)
+                                    val updatedTrack = service.refresh(track)
                                     db.insertTrack(updatedTrack).executeAsBlocking()
+
+                                    if (service is UnattendedTrackService) {
+                                        syncEpisodesWithTrackServiceTwoWay(db, db.getEpisodes(anime).executeAsBlocking(), track, service)
+                                    }
                                 } catch (e: Throwable) {
                                     // Ignore errors and continue
                                     Timber.e(e)

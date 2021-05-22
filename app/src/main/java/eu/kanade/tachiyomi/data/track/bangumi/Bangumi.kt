@@ -41,7 +41,7 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
         return api.addLibManga(track)
     }
 
-    override suspend fun addAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun add(track: AnimeTrack): AnimeTrack {
         return api.addLibAnime(track)
     }
 
@@ -49,7 +49,7 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
         return api.updateLibManga(track)
     }
 
-    override suspend fun updateAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun update(track: AnimeTrack): AnimeTrack {
         return api.updateLibAnime(track)
     }
 
@@ -73,7 +73,7 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
         }
     }
 
-    override suspend fun bindAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun bind(track: AnimeTrack): AnimeTrack {
         val statusTrack = api.statusLibAnime(track)
         val remoteTrack = api.findLibAnime(track)
         return if (remoteTrack != null && statusTrack != null) {
@@ -83,13 +83,13 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
             track.score = statusTrack.score
             track.last_episode_seen = statusTrack.last_episode_seen
             track.total_episodes = remoteTrack.total_episodes
-            refreshAnime(track)
+            refresh(track)
         } else {
             // Set default fields if it's not found in the list
             track.status = READING
             track.score = 0F
-            addAnime(track)
-            updateAnime(track)
+            add(track)
+            update(track)
         }
     }
 
@@ -110,7 +110,7 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
         return track
     }
 
-    override suspend fun refreshAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun refresh(track: AnimeTrack): AnimeTrack {
         val remoteStatusTrack = api.statusLibAnime(track)
         track.copyPersonalFrom(remoteStatusTrack!!)
         api.findLibAnime(track)?.let { remoteTrack ->

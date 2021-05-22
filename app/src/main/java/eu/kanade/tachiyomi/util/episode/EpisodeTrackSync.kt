@@ -33,7 +33,7 @@ fun syncEpisodesWithTrackServiceTwoWay(db: AnimeDatabaseHelper, episodes: List<E
 
     launchIO {
         try {
-            service.updateAnime(remoteTrack)
+            service.update(remoteTrack)
             db.insertTrack(remoteTrack).executeAsBlocking()
         } catch (e: Throwable) {
             Timber.w(e)

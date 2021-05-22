@@ -155,7 +155,7 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         return api.addLibManga(track)
     }
 
-    override suspend fun addAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun add(track: AnimeTrack): AnimeTrack {
         return api.addLibAnime(track)
     }
 
@@ -170,7 +170,7 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         return api.updateLibManga(track)
     }
 
-    override suspend fun updateAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun update(track: AnimeTrack): AnimeTrack {
         // If user was using API v1 fetch library_id
         if (track.library_id == null || track.library_id!! == 0L) {
             val libManga = api.findLibAnime(track, getUsername().toInt())
@@ -195,17 +195,17 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         }
     }
 
-    override suspend fun bindAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun bind(track: AnimeTrack): AnimeTrack {
         val remoteTrack = api.findLibAnime(track, getUsername().toInt())
         return if (remoteTrack != null) {
             track.copyPersonalFrom(remoteTrack)
             track.library_id = remoteTrack.library_id
-            updateAnime(track)
+            update(track)
         } else {
             // Set default fields if it's not found in the list
             track.status = READING
             track.score = 0F
-            addAnime(track)
+            add(track)
         }
     }
 
@@ -224,7 +224,7 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         return track
     }
 
-    override suspend fun refreshAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun refresh(track: AnimeTrack): AnimeTrack {
         val remoteTrack = api.getLibAnime(track, getUsername().toInt())
         track.copyPersonalFrom(remoteTrack)
         track.total_episodes = remoteTrack.total_episodes

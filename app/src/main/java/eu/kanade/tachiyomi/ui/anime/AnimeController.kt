@@ -36,6 +36,8 @@ import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.UnattendedTrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.databinding.AnimeControllerBinding
 import eu.kanade.tachiyomi.source.AnimeSource
@@ -71,6 +73,7 @@ import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.hasCustomCover
+import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.getResourceColor
 import eu.kanade.tachiyomi.util.system.toast
@@ -503,6 +506,24 @@ class AnimeController :
                 ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected)
                     .showDialog(router)
             }
+        }
+
+        if (source != null && preferences.autoAddTrack()) {
+            presenter.trackList
+                .map { it.service }
+                .filterIsInstance<UnattendedTrackService>()
+                .filter { it.accept(source!!) }
+                .forEach { service ->
+                    launchIO {
+                        try {
+                            service.match(anime)?.let { track ->
+                                presenter.registerTracking(track, service as TrackService)
+                            }
+                        } catch (e: Exception) {
+                            Timber.w(e, "Could not match manga: ${anime.title} with service $service")
+                        }
+                    }
+                }
         }
     }
 

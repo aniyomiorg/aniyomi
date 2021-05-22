@@ -17,6 +17,7 @@ import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.UnattendedTrackService
 import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.source.LocalAnimeSource
 import eu.kanade.tachiyomi.source.model.toEpisodeInfo
@@ -27,6 +28,7 @@ import eu.kanade.tachiyomi.ui.anime.track.TrackItem
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.episode.EpisodeSettingsHelper
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
+import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
 import eu.kanade.tachiyomi.util.isLocal
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withUIContext
@@ -752,8 +754,12 @@ class AnimePresenter(
                         .filter { it.track != null }
                         .map {
                             async {
-                                val track = it.service.refreshAnime(it.track!!)
+                                val track = it.service.refresh(it.track!!)
                                 db.insertTrack(track).executeAsBlocking()
+
+                                if (it.service is UnattendedTrackService) {
+                                    syncEpisodesWithTrackServiceTwoWay(db, episodes, track, it.service)
+                                }
                             }
                         }
                         .awaitAll()
@@ -783,7 +789,7 @@ class AnimePresenter(
             item.anime_id = anime.id!!
             launchIO {
                 try {
-                    service.bindAnime(item)
+                    service.bind(item)
                     db.insertTrack(item).executeAsBlocking()
                 } catch (e: Throwable) {
                     withUIContext { view?.applicationContext?.toast(e.message) }
@@ -801,7 +807,7 @@ class AnimePresenter(
     private fun updateRemote(track: AnimeTrack, service: TrackService) {
         launchIO {
             try {
-                service.updateAnime(track)
+                service.update(track)
                 db.insertTrack(track).executeAsBlocking()
                 withUIContext { view?.onTrackingRefreshDone() }
             } catch (e: Throwable) {

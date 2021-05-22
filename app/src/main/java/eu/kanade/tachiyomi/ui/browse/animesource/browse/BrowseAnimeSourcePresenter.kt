@@ -9,6 +9,9 @@ import eu.kanade.tachiyomi.data.database.models.AnimeCategory
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.UnattendedTrackService
 import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.model.Filter
@@ -30,6 +33,7 @@ import eu.kanade.tachiyomi.ui.browse.animesource.filter.TextSectionItem
 import eu.kanade.tachiyomi.ui.browse.animesource.filter.TriStateItem
 import eu.kanade.tachiyomi.ui.browse.animesource.filter.TriStateSectionItem
 import eu.kanade.tachiyomi.util.episode.EpisodeSettingsHelper
+import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.removeCovers
@@ -101,6 +105,8 @@ open class BrowseAnimeSourcePresenter(
      * Subscription for one request from the pager.
      */
     private var pageSubscription: Subscription? = null
+
+    private val loggedServices by lazy { Injekt.get<TrackManager>().services.filter { it.isLogged } }
 
     init {
         query = searchQuery ?: ""
@@ -260,9 +266,34 @@ open class BrowseAnimeSourcePresenter(
             anime.removeCovers(coverCache)
         } else {
             EpisodeSettingsHelper.applySettingDefaults(anime)
+
+            if (prefs.autoAddTrack()) {
+                autoAddTrack(anime)
+            }
         }
 
         db.insertAnime(anime).executeAsBlocking()
+    }
+
+    private fun autoAddTrack(anime: Anime) {
+        loggedServices
+            .filterIsInstance<UnattendedTrackService>()
+            .filter { it.accept(source) }
+            .forEach { service ->
+                launchIO {
+                    try {
+                        service.match(anime)?.let { track ->
+                            track.anime_id = anime.id!!
+                            (service as TrackService).bind(track)
+                            db.insertTrack(track).executeAsBlocking()
+
+                            syncEpisodesWithTrackServiceTwoWay(db, db.getEpisodes(anime).executeAsBlocking(), track, service as TrackService)
+                        }
+                    } catch (e: Exception) {
+                        Timber.w(e, "Could not match anime: ${anime.title} with service $service")
+                    }
+                }
+            }
     }
 
     /**

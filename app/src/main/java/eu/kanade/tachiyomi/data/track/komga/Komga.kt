@@ -62,19 +62,19 @@ class Komga(private val context: Context, id: Int) : TrackService(id), Unattende
 
     override suspend fun add(track: Track): Track = throw Exception("Not used")
 
-    override suspend fun addAnime(track: AnimeTrack): AnimeTrack = throw Exception("Not used")
+    override suspend fun add(track: AnimeTrack): AnimeTrack = throw Exception("Not used")
 
     override suspend fun update(track: Track): Track {
         return api.updateProgress(track)
     }
 
-    override suspend fun updateAnime(track: AnimeTrack): AnimeTrack = throw Exception("Not used")
+    override suspend fun update(track: AnimeTrack): AnimeTrack = throw Exception("Not used")
 
     override suspend fun bind(track: Track): Track {
         return track
     }
 
-    override suspend fun bindAnime(track: AnimeTrack): AnimeTrack = throw Exception("Not used")
+    override suspend fun bind(track: AnimeTrack): AnimeTrack = throw Exception("Not used")
 
     override suspend fun search(query: String): List<TrackSearch> = throw Exception("Not used")
 
@@ -87,7 +87,7 @@ class Komga(private val context: Context, id: Int) : TrackService(id), Unattende
         return track
     }
 
-    override suspend fun refreshAnime(track: AnimeTrack): AnimeTrack {
+    override suspend fun refresh(track: AnimeTrack): AnimeTrack {
         TODO("Not yet implemented")
     }
 
