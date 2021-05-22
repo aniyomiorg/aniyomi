@@ -17,6 +17,7 @@
             android:layout_height="0dp"
             android:layout_marginBottom="44dp"
             android:alpha="0.2"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,6 +51,7 @@
                 android:background="@drawable/rounded_rectangle"
                 android:contentDescription="@string/description_cover"
                 android:maxWidth="100dp"
+                android:scaleType="centerCrop"
                 tools:src="@mipmap/ic_launcher" />
 
             <LinearLayout
@@ -142,8 +144,7 @@
             app:icon="@drawable/ic_favorite_border_24dp"
             app:layout_constraintEnd_toStartOf="@+id/btn_tracking"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/anime_info"
-            app:rippleColor="?attr/rippleColor" />
+            app:layout_constraintTop_toBottomOf="@+id/anime_info" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_tracking"
@@ -156,7 +157,6 @@
             app:layout_constraintEnd_toStartOf="@+id/btn_webview"
             app:layout_constraintStart_toEndOf="@+id/btn_favorite"
             app:layout_constraintTop_toBottomOf="@+id/anime_info"
-            app:rippleColor="?attr/rippleColor"
             tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
@@ -171,7 +171,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_tracking"
             app:layout_constraintTop_toBottomOf="@+id/anime_info"
-            app:rippleColor="?attr/rippleColor"
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
