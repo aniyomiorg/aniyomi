@@ -5,6 +5,7 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import eu.kanade.tachiyomi.data.backup.BackupCreatorJob
 import eu.kanade.tachiyomi.data.library.LibraryUpdateJob
+import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateJob
 import eu.kanade.tachiyomi.data.preference.PreferenceKeys
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -180,6 +181,19 @@ object Migrations {
                     remove("pref_rotation_type_key")
                     putInt("pref_default_reading_mode_key", newReadingMode)
                     remove("pref_default_viewer_key")
+                }
+            }
+            if (oldVersion < 61) {
+                // Handle removed every 1 or 2 hour library updates
+                val updateInterval = preferences.libraryUpdateInterval().get()
+                if (updateInterval == 1 || updateInterval == 2) {
+                    preferences.libraryUpdateInterval().set(3)
+                    LibraryUpdateJob.setupTask(context, 3)
+                }
+                val animeupdateInterval = preferences.animelibUpdateInterval().get()
+                if (animeupdateInterval == 1 || animeupdateInterval == 2) {
+                    preferences.animelibUpdateInterval().set(3)
+                    AnimelibUpdateJob.setupTask(context, 3)
                 }
             }
             return true

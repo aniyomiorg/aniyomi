@@ -56,8 +56,13 @@
         android:id="@+id/remove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:background="?selectableItemBackgroundBorderless"
         android:contentDescription="@string/action_remove"
+=======
+        android:background="@drawable/ripple_regular"
+        android:contentDescription="@string/action_resume"
+>>>>>>> pr17
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/resume"
@@ -69,7 +74,7 @@
         android:id="@+id/resume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?selectableItemBackgroundBorderless"
+        android:background="@drawable/ripple_regular"
         android:contentDescription="@string/action_resume"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
