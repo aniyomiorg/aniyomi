@@ -433,7 +433,7 @@ class NotificationReceiver : BroadcastReceiver() {
         }
 
         /**
-         * Returns [PendingIntent] that starts a reader activity containing episode.
+         * Returns [PendingIntent] that starts a watcher activity containing episode.
          *
          * @param context context of application
          * @param anime anime of episode
@@ -456,7 +456,7 @@ class NotificationReceiver : BroadcastReceiver() {
             }
             val episodeList: List<EpisodeItem> = emptyList()
             val newIntent = WatcherActivity.newIntent(context, anime, episode, episodeList, link)
-            return PendingIntent.getActivity(context, anime.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            return PendingIntent.getActivity(context, AnimeController.REQUEST_SECONDS, newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
         /**

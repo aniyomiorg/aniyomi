@@ -28,7 +28,8 @@ import uy.kohesive.injekt.injectLazy
 
 class AnimeInfoHeaderAdapter(
     private val controller: AnimeController,
-    private val fromSource: Boolean
+    private val fromSource: Boolean,
+    private val isTablet: Boolean,
 ) :
     RecyclerView.Adapter<AnimeInfoHeaderAdapter.HeaderViewHolder>() {
 
@@ -194,10 +195,16 @@ class AnimeInfoHeaderAdapter(
          */
         private fun setAnimeInfo(anime: Anime, source: AnimeSource?) {
             // Update full title TextView.
-            binding.animeFullTitle.text = if (anime.title.isBlank()) {
-                view.context.getString(R.string.unknown)
-            } else {
-                anime.title
+            with(binding.animeFullTitle) {
+                if (isTablet) {
+                    isVisible = false
+                } else {
+                    text = if (anime.title.isBlank()) {
+                        view.context.getString(eu.kanade.tachiyomi.R.string.unknown)
+                    } else {
+                        anime.title
+                    }
+                }
             }
 
             // Update author TextView.
@@ -282,8 +289,9 @@ class AnimeInfoHeaderAdapter(
                     .onEach { toggleAnimeInfo() }
                     .launchIn(controller.viewScope)
 
-                // Expand anime info if navigated from source listing
-                if (initialLoad && fromSource) {
+                // Expand anime info if navigated from source listing or explicitly set to
+                // (e.g. on tablets)
+                if (initialLoad && (fromSource || isTablet)) {
                     toggleAnimeInfo()
                     initialLoad = false
                 }

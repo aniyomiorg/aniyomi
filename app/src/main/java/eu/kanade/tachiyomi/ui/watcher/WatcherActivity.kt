@@ -25,8 +25,13 @@ import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeHistory
 import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.source.AnimeSource
+import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
+import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.view.hideBar
 import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
@@ -150,6 +155,7 @@ class WatcherActivity : AppCompatActivity() {
         val episode = intent.getSerializableExtra("episode") as Episode
         val anime = intent.getSerializableExtra("anime_anime") as Anime
         saveEpisodeHistory(EpisodeItem(episode, anime))
+        setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
         val returnIntent = intent
         returnIntent.putExtra("seconds_result", playbackPosition)
         returnIntent.putExtra("total_seconds_result", exoPlayer.duration)
@@ -238,6 +244,37 @@ class WatcherActivity : AppCompatActivity() {
                 .onErrorComplete()
                 .subscribeOn(Schedulers.io())
                 .subscribe()
+        }
+    }
+
+    private fun setEpisodeProgress(episode: Episode, anime: Anime, seconds: Long, totalSeconds: Long) {
+        if (!incognitoMode) {
+            if (totalSeconds > 0L) {
+                episode.last_second_seen = seconds
+                episode.total_seconds = totalSeconds
+                if (!episode.seen) episode.seen = episode.last_second_seen > episode.total_seconds * 0.85
+                val episodes = listOf(EpisodeItem(episode, anime))
+                launchIO {
+                    db.updateEpisodesProgress(episodes).executeAsBlocking()
+
+                    if (preferences.removeAfterMarkedAsRead()) {
+                        launchIO {
+                            try {
+                                val downloadManager: AnimeDownloadManager = Injekt.get()
+                                val source: AnimeSource = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
+                                downloadManager.deleteEpisodes(episodes, anime, source).forEach {
+                                    if (it is EpisodeItem) {
+                                        it.status = AnimeDownload.State.NOT_DOWNLOADED
+                                        it.download = null
+                                    }
+                                }
+                            } catch (e: Throwable) {
+                                throw e
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

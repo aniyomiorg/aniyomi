@@ -129,7 +129,7 @@ class AnimeHistoryPresenter : BasePresenter<AnimeHistoryController>() {
         }
 
         val chapters = db.getEpisodes(anime).executeAsBlocking()
-            .sortedWith { c1, c2 -> sortFunction(c1, c2) }
+            .sortedWith { c1, c2 -> sortFunction(c2, c1) }
 
         val currEpisodeIndex = chapters.indexOfFirst { chapter.id == it.id }
         return when (anime.sorting) {

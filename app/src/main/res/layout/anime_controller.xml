@@ -18,18 +18,17 @@
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/toolbar_bottom"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
+            android:id="@+id/full_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:clipToPadding="false"
             android:paddingBottom="@dimen/fab_list_padding"
-            tools:listitem="@layout/chapters_item" />
+            tools:listitem="@layout/episodes_item" />
 
     </eu.kanade.tachiyomi.widget.ThemedSwipeRefreshLayout>
 

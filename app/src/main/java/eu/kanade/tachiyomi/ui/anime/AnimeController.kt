@@ -25,6 +25,7 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.SelectableAdapter
 import eu.kanade.tachiyomi.R
@@ -207,35 +208,61 @@ class AnimeController :
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
 
-        if (anime == null || source == null) return
+        listOfNotNull(binding.fullRecycler, binding.infoRecycler, binding.episodesRecycler)
+            .forEach {
+                it.applyInsetter {
+                    type(navigationBars = true) {
+                        padding()
+                    }
+                }
 
-        // Init RecyclerView and adapter
-        animeInfoAdapter = AnimeInfoHeaderAdapter(this, fromSource)
-        episodesHeaderAdapter = AnimeEpisodesHeaderAdapter(this)
-        episodesAdapter = EpisodesAdapter(this, view.context)
-
-        binding.recycler.adapter = ConcatAdapter(animeInfoAdapter, episodesHeaderAdapter, episodesAdapter)
-        binding.recycler.layoutManager = LinearLayoutManager(view.context)
-        binding.recycler.setHasFixedSize(true)
-        episodesAdapter?.fastScroller = binding.fastScroller
-
-        actionFabScrollListener = actionFab?.shrinkOnScroll(binding.recycler)
-
-        // Skips directly to episodes list if navigated to from the animelib
-        binding.recycler.post {
-            if (!fromSource && preferences.jumpToEpisodes()) {
-                (binding.recycler.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(1, 0)
+                it.layoutManager = LinearLayoutManager(view.context)
+                it.setHasFixedSize(true)
             }
-
-            // Delayed in case we need to jump to episodes
-            binding.recycler.post {
-                updateToolbarTitleAlpha()
+        binding.actionToolbar.applyInsetter {
+            type(navigationBars = true) {
+                margin(bottom = true)
             }
         }
 
-        binding.recycler.scrollEvents()
-            .onEach { updateToolbarTitleAlpha() }
-            .launchIn(viewScope)
+        if (anime == null || source == null) return
+
+        // Init RecyclerView and adapter
+        animeInfoAdapter = AnimeInfoHeaderAdapter(this, fromSource, binding.infoRecycler != null)
+        episodesHeaderAdapter = AnimeEpisodesHeaderAdapter(this)
+        episodesAdapter = EpisodesAdapter(this, view.context)
+
+        // Phone layout
+        binding.fullRecycler?.let {
+            it.adapter = ConcatAdapter(animeInfoAdapter, episodesHeaderAdapter, episodesAdapter)
+
+            it.scrollEvents()
+                .onEach { updateToolbarTitleAlpha() }
+                .launchIn(viewScope)
+
+            // Skips directly to chapters list if navigated to from the library
+            it.post {
+                if (!fromSource && preferences.jumpToChapters()) {
+                    (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(1, 0)
+                }
+
+                // Delayed in case we need to jump to chapters
+                it.post {
+                    updateToolbarTitleAlpha()
+                }
+            }
+        }
+        // Tablet layout
+        binding.infoRecycler?.let {
+            it.adapter = animeInfoAdapter
+        }
+        binding.episodesRecycler?.let {
+            it.adapter = ConcatAdapter(episodesHeaderAdapter, episodesAdapter)
+        }
+
+        episodesAdapter?.fastScroller = binding.fastScroller
+
+        actionFabScrollListener = actionFab?.shrinkOnScroll(episodeRecycler)
 
         binding.swipeRefresh.refreshes()
             .onEach {
@@ -264,10 +291,10 @@ class AnimeController :
             alpha != null -> alpha
 
             // First item isn't in view, full opacity
-            ((binding.recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() > 0) -> 255
+            ((binding.fullRecycler!!.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() > 0) -> 255
 
             // Based on scroll amount when first item is in view
-            else -> min(binding.recycler.computeVerticalScrollOffset(), 255)
+            else -> min(binding.fullRecycler!!.computeVerticalScrollOffset(), 255)
         }
 
         (activity as? MainActivity)?.binding?.toolbar?.setTitleTextColor(
@@ -289,7 +316,7 @@ class AnimeController :
         fab.setText(R.string.action_start)
         fab.setIconResource(R.drawable.ic_play_arrow_24dp)
         fab.setOnClickListener {
-            val item = presenter.getNextUnreadEpisode()
+            val item = presenter.getNextUnseenEpisode()
             if (item != null) {
                 // Create animation listener
                 val revealAnimationListener: Animator.AnimatorListener = object : AnimatorListenerAdapter() {
@@ -311,14 +338,14 @@ class AnimeController :
                     )
                 }
             } else {
-                view?.context?.toast(R.string.no_next_chapter)
+                view?.context?.toast(R.string.no_next_episode)
             }
         }
     }
 
     override fun cleanupFab(fab: ExtendedFloatingActionButton) {
         fab.setOnClickListener(null)
-        actionFabScrollListener?.let { binding.recycler.removeOnScrollListener(it) }
+        actionFabScrollListener?.let { binding.fullRecycler!!.removeOnScrollListener(it) }
         actionFab = null
     }
 
@@ -660,23 +687,16 @@ class AnimeController :
             presenter.editCover(anime!!, activity, dataUri)
         }
         if (requestCode == REQUEST_SECONDS) {
-            val seconds = data!!.getLongExtra("seconds_result", 0L)
-            val totalSeconds = data.getLongExtra("total_seconds_result", 0L)
-            val episode: Episode = data.getSerializableExtra("episode") as Episode
-            if (totalSeconds > 0L) {
-                episode.last_second_seen = seconds
-                episode.total_seconds = totalSeconds
-                presenter.setEpisodesProgress(arrayListOf(EpisodeItem(episode, anime!!)))
-            }
+            val episode: Episode = data!!.getSerializableExtra("episode") as Episode
             // if next or previous episode was pressed
             if (data.getBooleanExtra("nextResult", false)) {
-                val episodeList = presenter.episodes.sortedWith(presenter.getEpisodeSort())
+                val episodeList = presenter.filteredAndSortedEpisodes
                 val idx = episodeList.indexOfFirst { it.episode_number == episode.episode_number }
                 val nextEpisode = episodeList[idx - 1].episode
                 openEpisode(nextEpisode)
             }
             if (data.getBooleanExtra("previousResult", false)) {
-                val episodeList = presenter.episodes.sortedWith(presenter.getEpisodeSort())
+                val episodeList = presenter.filteredAndSortedEpisodes
                 val idx = episodeList.indexOfFirst { it.episode_number == episode.episode_number }
                 val previousEpisode = episodeList[idx + 1].episode
                 openEpisode(previousEpisode)
@@ -710,7 +730,7 @@ class AnimeController :
     fun onNextEpisodes(episodes: List<EpisodeItem>) {
         // If the list is empty and it hasn't requested previously, fetch episodes from source
         // We use presenter episodes instead because they are always unfiltered
-        if (!presenter.hasRequested && presenter.episodes.isEmpty()) {
+        if (!presenter.hasRequested && presenter.allEpisodes.isEmpty()) {
             fetchEpisodesFromSource()
         }
 
@@ -779,7 +799,7 @@ class AnimeController :
         runBlocking {
             launch {
                 val url = fetchEpisodeLinksFromSource(false, episode)
-                val episodeList = presenter.episodes.sortedWith(presenter.getEpisodeSort())
+                val episodeList = presenter.filteredAndSortedEpisodes
                 val intent = WatcherActivity.newIntent(activity, presenter.anime, episode, episodeList, url)
                 if (hasAnimation) {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
@@ -1054,23 +1074,17 @@ class AnimeController :
 
     // OVERFLOW MENU DIALOGS
 
-    private fun getUnseenEpisodesSorted() = presenter.episodes
-        .sortedWith(presenter.getEpisodeSort())
-        .filter { !it.seen && it.status == AnimeDownload.State.NOT_DOWNLOADED }
-        .distinctBy { it.name }
-        .reversed()
-
     private fun downloadEpisodes(choice: Int) {
         val episodesToDownload = when (choice) {
-            R.id.download_next -> getUnseenEpisodesSorted().take(1)
-            R.id.download_next_5 -> getUnseenEpisodesSorted().take(5)
-            R.id.download_next_10 -> getUnseenEpisodesSorted().take(10)
+            R.id.download_next -> presenter.getUnseenEpisodesSorted().take(1)
+            R.id.download_next_5 -> presenter.getUnseenEpisodesSorted().take(5)
+            R.id.download_next_10 -> presenter.getUnseenEpisodesSorted().take(10)
             R.id.download_custom -> {
                 showCustomDownloadDialog()
                 return
             }
-            R.id.download_unread -> presenter.episodes.filter { !it.seen }
-            R.id.download_all -> presenter.episodes
+            R.id.download_unread -> presenter.allEpisodes.filter { !it.seen }
+            R.id.download_all -> presenter.allEpisodes
             else -> emptyList()
         }
         if (episodesToDownload.isNotEmpty()) {
@@ -1082,12 +1096,12 @@ class AnimeController :
     private fun showCustomDownloadDialog() {
         DownloadCustomEpisodesDialog(
             this,
-            presenter.episodes.size
+            presenter.allEpisodes.size
         ).showDialog(router)
     }
 
     override fun downloadCustomEpisodes(amount: Int) {
-        val episodesToDownload = getUnseenEpisodesSorted().take(amount)
+        val episodesToDownload = presenter.getUnseenEpisodesSorted().take(amount)
         if (episodesToDownload.isNotEmpty()) {
             downloadEpisodes(episodesToDownload)
         }
@@ -1123,6 +1137,9 @@ class AnimeController :
     }
 
     // Tracker sheet - end
+
+    private val episodeRecycler: RecyclerView
+        get() = binding.fullRecycler ?: binding.episodesRecycler!!
 
     companion object {
         const val FROM_SOURCE_EXTRA = "from_source"

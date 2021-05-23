@@ -27,6 +27,7 @@ import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.anime.track.TrackItem
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.episode.EpisodeSettingsHelper
+import eu.kanade.tachiyomi.util.episode.getEpisodeSort
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
 import eu.kanade.tachiyomi.util.isLocal
@@ -72,8 +73,9 @@ class AnimePresenter(
     /**
      * List of episodes of the anime. It's always unfiltered and unsorted.
      */
-    var episodes: List<EpisodeItem> = emptyList()
+    var allEpisodes: List<EpisodeItem> = emptyList()
         private set
+    var filteredAndSortedEpisodes: List<EpisodeItem> = emptyList()
 
     /**
      * Subject of list of episodes to allow updating the view without going to DB.
@@ -133,7 +135,13 @@ class AnimePresenter(
         // Prepare the relay.
         episodesRelay.flatMap { applyEpisodeFilters(it) }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeLatestCache(AnimeController::onNextEpisodes) { _, error -> Timber.e(error) }
+            .subscribeLatestCache(
+                { _, episodes ->
+                    filteredAndSortedEpisodes = episodes
+                    view?.onNextEpisodes(episodes)
+                },
+                { _, error -> Timber.e(error) }
+            )
 
         // Anime info - end
 
@@ -152,7 +160,7 @@ class AnimePresenter(
                     setDownloadedEpisodes(episodes)
 
                     // Store the last emission
-                    this.episodes = episodes
+                    this.allEpisodes = episodes
 
                     // Listen for download status changes
                     observeDownloads()
@@ -431,7 +439,7 @@ class AnimePresenter(
      * Updates the UI after applying the filters.
      */
     private fun refreshEpisodes() {
-        episodesRelay.call(episodes)
+        episodesRelay.call(allEpisodes)
     }
 
     /**
@@ -463,25 +471,7 @@ class AnimePresenter(
             observable = observable.filter { !it.bookmark }
         }
 
-        return observable.toSortedList(getEpisodeSort())
-    }
-
-    fun getEpisodeSort(): (Episode, Episode) -> Int {
-        return when (anime.sorting) {
-            Anime.EPISODE_SORTING_SOURCE -> when (sortDescending()) {
-                true -> { c1, c2 -> c1.source_order.compareTo(c2.source_order) }
-                false -> { c1, c2 -> c2.source_order.compareTo(c1.source_order) }
-            }
-            Anime.EPISODE_SORTING_NUMBER -> when (sortDescending()) {
-                true -> { c1, c2 -> c2.episode_number.compareTo(c1.episode_number) }
-                false -> { c1, c2 -> c1.episode_number.compareTo(c2.episode_number) }
-            }
-            Anime.EPISODE_SORTING_UPLOAD_DATE -> when (sortDescending()) {
-                true -> { c1, c2 -> c2.date_upload.compareTo(c1.date_upload) }
-                false -> { c1, c2 -> c1.date_upload.compareTo(c2.date_upload) }
-            }
-            else -> throw NotImplementedError("Unimplemented sorting method")
-        }
+        return observable.toSortedList(getEpisodeSort(anime))
     }
 
     /**
@@ -491,7 +481,7 @@ class AnimePresenter(
     private fun onDownloadStatusChange(download: AnimeDownload) {
         // Assign the download to the model object.
         if (download.status == AnimeDownload.State.QUEUE) {
-            episodes.find { it.id == download.episode.id }?.let {
+            allEpisodes.find { it.id == download.episode.id }?.let {
                 if (it.download == null) {
                     it.download = download
                 }
@@ -507,8 +497,24 @@ class AnimePresenter(
     /**
      * Returns the next unread episode or null if everything is read.
      */
-    fun getNextUnreadEpisode(): EpisodeItem? {
-        return episodes.sortedWith(getEpisodeSort()).findLast { !it.seen }
+    fun getNextUnseenEpisode(): EpisodeItem? {
+        return if (sortDescending()) {
+            return filteredAndSortedEpisodes.findLast { !it.seen }
+        } else {
+            filteredAndSortedEpisodes.find { !it.seen }
+        }
+    }
+
+    fun getUnseenEpisodesSorted(): List<EpisodeItem> {
+        val episodes = allEpisodes
+            .sortedWith(getEpisodeSort(anime))
+            .filter { !it.seen && it.status == AnimeDownload.State.NOT_DOWNLOADED }
+            .distinctBy { it.name }
+        return if (sortDescending()) {
+            episodes.reversed()
+        } else {
+            episodes
+        }
     }
 
     /**
@@ -758,7 +764,7 @@ class AnimePresenter(
                                 db.insertTrack(track).executeAsBlocking()
 
                                 if (it.service is UnattendedTrackService) {
-                                    syncEpisodesWithTrackServiceTwoWay(db, episodes, track, it.service)
+                                    syncEpisodesWithTrackServiceTwoWay(db, allEpisodes, track, it.service)
                                 }
                             }
                         }
@@ -791,6 +797,10 @@ class AnimePresenter(
                 try {
                     service.bind(item)
                     db.insertTrack(item).executeAsBlocking()
+
+                    if (service is UnattendedTrackService) {
+                        syncEpisodesWithTrackServiceTwoWay(db, allEpisodes, item, service)
+                    }
                 } catch (e: Throwable) {
                     withUIContext { view?.applicationContext?.toast(e.message) }
                 }
