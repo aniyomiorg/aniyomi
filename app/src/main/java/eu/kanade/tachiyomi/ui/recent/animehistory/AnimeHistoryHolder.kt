@@ -59,7 +59,7 @@ class AnimeHistoryHolder(
             binding.animeSubtitle.text = itemView.context.getString(
                 R.string.recent_manga_time,
                 formattedNumber,
-                Date(animehistory.episode_id).toTimestampString()
+                Date(animehistory.last_seen).toTimestampString()
             )
         } else {
             binding.animeSubtitle.text = Date(animehistory.last_seen).toTimestampString()
