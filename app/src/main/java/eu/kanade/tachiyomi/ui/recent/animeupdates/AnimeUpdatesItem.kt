@@ -14,7 +14,7 @@ class AnimeUpdatesItem(episode: Episode, val anime: Anime, header: DateSectionIt
     BaseEpisodeItem<AnimeUpdatesHolder, DateSectionItem>(episode, header) {
 
     override fun getLayoutRes(): Int {
-        return R.layout.updates_item
+        return R.layout.anime_updates_item
     }
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>): AnimeUpdatesHolder {
