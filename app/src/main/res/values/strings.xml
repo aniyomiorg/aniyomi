@@ -20,7 +20,7 @@
     <string name="label_recent_manga">History</string>
     <string name="label_sources">Sources</string>
     <string name="label_animesources">Anime Sources</string>
-    <string name="label_backup">Backup</string>
+    <string name="label_backup">Backup and restore</string>
     <string name="label_migration">Migrate</string>
     <string name="label_extensions">Extensions</string>
     <string name="label_animeextensions">Anime Extensions</string>
@@ -164,13 +164,14 @@
     <string name="theme_dark">On</string>
     <string name="pref_theme_light">Light theme</string>
     <string name="theme_light_default">Default</string>
-    <string name="theme_light_blue">Light blue</string>
+    <string name="theme_light_blue">Light Blue</string>
+    <string name="theme_light_strawberrydaiquiri">Strawberry Daiquiri</string>
     <string name="pref_theme_dark">Dark theme</string>
     <string name="theme_dark_default">Default</string>
-    <string name="theme_dark_blue">Dark blue</string>
-    <string name="theme_dark_midnightdusk">Midnight dusk</string>
-    <string name="theme_dark_amoled">AMOLED black</string>
-    <string name="theme_dark_amoled_hotpink">Hot pink</string>
+    <string name="theme_dark_blue">Dark Blue</string>
+    <string name="theme_dark_midnightdusk">Midnight Dusk</string>
+    <string name="theme_dark_amoled">AMOLED Black</string>
+    <string name="theme_dark_amoled_hotpink">Hot Pink</string>
     <string name="pref_start_screen">Start screen</string>
     <string name="pref_language">Language</string>
     <string name="system_default">Default</string>
@@ -397,7 +398,6 @@
     <string name="pref_search_pinned_sources_only">Only include pinned sources</string>
 
       <!-- Backup section -->
-    <string name="backup">Backup</string>
     <string name="pref_create_backup">Create backup</string>
     <string name="pref_create_backup_summ">Can be used to restore current library</string>
     <string name="pref_restore_backup">Restore backup</string>
@@ -527,6 +527,12 @@
     <string name="browse">Browse</string>
     <string name="local_source_help_guide">Local source guide</string>
     <string name="no_pinned_sources">You have no pinned sources</string>
+    <string name="chapter_not_found">Chapter not found</string>
+    <string name="episode_not_found">Episode not found</string>
+    <string name="local_invalid_format">Invalid chapter format</string>
+    <string name="local_invalid_episode_format">Invalid episode format</string>
+    <string name="local_filter_order_by">Order by</string>
+    <string name="date">Date</string>
 
     <!-- Manga activity -->
     <string name="manga_not_in_db">This manga has been removed from the database.</string>

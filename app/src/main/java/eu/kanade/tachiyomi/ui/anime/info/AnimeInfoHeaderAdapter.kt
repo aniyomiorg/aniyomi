@@ -195,16 +195,10 @@ class AnimeInfoHeaderAdapter(
          */
         private fun setAnimeInfo(anime: Anime, source: AnimeSource?) {
             // Update full title TextView.
-            with(binding.animeFullTitle) {
-                if (isTablet) {
-                    isVisible = false
-                } else {
-                    text = if (anime.title.isBlank()) {
-                        view.context.getString(eu.kanade.tachiyomi.R.string.unknown)
-                    } else {
-                        anime.title
-                    }
-                }
+            binding.animeFullTitle.text = if (anime.title.isBlank()) {
+                view.context.getString(R.string.unknown)
+            } else {
+                anime.title
             }
 
             // Update author TextView.

@@ -255,6 +255,15 @@ class AnimeController :
         // Tablet layout
         binding.infoRecycler?.let {
             it.adapter = animeInfoAdapter
+
+            it.scrollEvents()
+                .onEach { updateToolbarTitleAlpha() }
+                .launchIn(viewScope)
+
+            // Delayed in case we need to jump to episodes
+            it.post {
+                updateToolbarTitleAlpha()
+            }
         }
         binding.episodesRecycler?.let {
             it.adapter = ConcatAdapter(episodesHeaderAdapter, episodesAdapter)
@@ -286,15 +295,17 @@ class AnimeController :
     }
 
     private fun updateToolbarTitleAlpha(alpha: Int? = null) {
+        val scrolledList = binding.fullRecycler ?: binding.infoRecycler!!
+
         val calculatedAlpha = when {
             // Specific alpha provided
             alpha != null -> alpha
 
             // First item isn't in view, full opacity
-            ((binding.fullRecycler!!.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() > 0) -> 255
+            ((scrolledList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() > 0) -> 255
 
             // Based on scroll amount when first item is in view
-            else -> min(binding.fullRecycler!!.computeVerticalScrollOffset(), 255)
+            else -> min(scrolledList.computeVerticalScrollOffset(), 255)
         }
 
         (activity as? MainActivity)?.binding?.toolbar?.setTitleTextColor(

@@ -31,8 +31,6 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         private const val COVER_NAME = "cover.jpg"
         private val SUPPORTED_ARCHIVE_TYPES = setOf("zip", "rar", "cbr", "cbz", "epub")
 
-        private val POPULAR_FILTERS = FilterList(OrderBy())
-        private val LATEST_FILTERS = FilterList(OrderBy().apply { state = Filter.Sort.Selection(1, false) })
         private val LATEST_THRESHOLD = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)
 
         fun updateCover(context: Context, anime: SAnime, input: InputStream): File? {
@@ -191,12 +189,10 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
                     EpisodeRecognition.parseEpisodeNumber(this, anime)
                 }
             }
-            .sortedWith(
-                Comparator { c1, c2 ->
-                    val c = c2.episode_number.compareTo(c1.episode_number)
-                    if (c == 0) c2.name.compareToCaseInsensitiveNaturalOrder(c1.name) else c
-                }
-            )
+            .sortedWith { e1, e2 ->
+                val e = e2.episode_number.compareTo(e1.episode_number)
+                if (e == 0) e2.name.compareToCaseInsensitiveNaturalOrder(e1.name) else e
+            }
             .toList()
 
         return Observable.just(episodes)
@@ -243,7 +239,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
     }
 
     private fun isSupportedFile(extension: String): Boolean {
-        return extension.toLowerCase() in SUPPORTED_ARCHIVE_TYPES
+        return extension.toLowerCase(Locale.ROOT) in SUPPORTED_ARCHIVE_TYPES
     }
 
     fun getFormat(episode: SEpisode): Format {
@@ -255,7 +251,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
 
             return getFormat(chapFile)
         }
-        throw Exception("Episode not found")
+        throw Exception(context.getString(R.string.episode_not_found))
     }
 
     private fun getFormat(file: File): Format {
@@ -269,7 +265,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         } else if (extension.equals("epub", true)) {
             Format.Anime(file)
         } else {
-            throw Exception("Invalid episode format")
+            throw Exception(context.getString(R.string.local_invalid_episode_format))
         }
     }
 
@@ -312,9 +308,16 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         }
     }
 
-    private class OrderBy : Filter.Sort("Order by", arrayOf("Title", "Date"), Selection(0, true))
+    override fun getFilterList() = POPULAR_FILTERS
 
-    override fun getFilterList() = FilterList(OrderBy())
+    private val POPULAR_FILTERS = FilterList(OrderBy(context))
+    private val LATEST_FILTERS = FilterList(OrderBy(context).apply { state = Filter.Sort.Selection(1, false) })
+
+    private class OrderBy(context: Context) : Filter.Sort(
+        context.getString(R.string.local_filter_order_by),
+        arrayOf(context.getString(R.string.title), context.getString(R.string.date)),
+        Selection(0, true)
+    )
 
     sealed class Format {
         data class Directory(val file: File) : Format()
