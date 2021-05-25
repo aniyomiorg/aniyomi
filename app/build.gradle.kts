@@ -8,7 +8,6 @@ plugins {
     id("com.android.application")
     id("com.mikepenz.aboutlibraries.plugin")
     kotlin("android")
-    kotlin("kapt")
     kotlin("plugin.serialization")
     id("com.github.zellius.shortcut-helper")
 }
@@ -121,7 +120,7 @@ android {
 dependencies {
 
     // Source models and interfaces from Tachiyomi 1.x
-    implementation("tachiyomi.sourceapi:source-api:1.1")
+    implementation("org.tachiyomi:source-api:1.1")
 
     // AndroidX libraries
     implementation("androidx.annotation:annotation:1.3.0-alpha01")

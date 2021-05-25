@@ -21,6 +21,7 @@ import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.UnattendedTrackService
 import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.model.SAnime
@@ -273,6 +274,7 @@ class AnimelibUpdateService(
         val newUpdates = mutableListOf<Pair<AnimelibAnime, Array<Episode>>>()
         val failedUpdates = mutableListOf<Pair<Anime, String?>>()
         var hasDownloads = false
+        val loggedServices by lazy { trackManager.services.filter { it.isLogged } }
 
         animeToUpdate.forEach { anime ->
             if (updateJob?.isActive != true) {
@@ -300,6 +302,10 @@ class AnimelibUpdateService(
                     e.message
                 }
                 failedUpdates.add(anime to errorMessage)
+            }
+
+            if (preferences.autoUpdateTrackers()) {
+                updateTrackings(anime, loggedServices)
             }
         }
 
@@ -408,31 +414,35 @@ class AnimelibUpdateService(
             notifier.showProgressNotification(anime, progressCount++, animeToUpdate.size)
 
             // Update the tracking details.
-            db.getTracks(anime).executeAsBlocking()
-                .map { track ->
-                    supervisorScope {
-                        async {
-                            val service = trackManager.getService(track.sync_id)
-                            if (service != null && service in loggedServices) {
-                                try {
-                                    val updatedTrack = service.refresh(track)
-                                    db.insertTrack(updatedTrack).executeAsBlocking()
+            updateTrackings(anime, loggedServices)
+        }
 
-                                    if (service is UnattendedTrackService) {
-                                        syncEpisodesWithTrackServiceTwoWay(db, db.getEpisodes(anime).executeAsBlocking(), track, service)
-                                    }
-                                } catch (e: Throwable) {
-                                    // Ignore errors and continue
-                                    Timber.e(e)
+        notifier.cancelProgressNotification()
+    }
+
+    private suspend fun updateTrackings(anime: AnimelibAnime, loggedServices: List<TrackService>) {
+        db.getTracks(anime).executeAsBlocking()
+            .map { track ->
+                supervisorScope {
+                    async {
+                        val service = trackManager.getService(track.sync_id)
+                        if (service != null && service in loggedServices) {
+                            try {
+                                val updatedTrack = service.refresh(track)
+                                db.insertTrack(updatedTrack).executeAsBlocking()
+
+                                if (service is UnattendedTrackService) {
+                                    syncEpisodesWithTrackServiceTwoWay(db, db.getEpisodes(anime).executeAsBlocking(), track, service)
                                 }
+                            } catch (e: Throwable) {
+                                // Ignore errors and continue
+                                Timber.e(e)
                             }
                         }
                     }
                 }
-                .awaitAll()
-        }
-
-        notifier.cancelProgressNotification()
+            }
+            .awaitAll()
     }
 
     /**

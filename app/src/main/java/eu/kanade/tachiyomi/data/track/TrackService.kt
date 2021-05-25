@@ -50,10 +50,6 @@ abstract class TrackService(val id: Int) {
 
     abstract fun displayScore(track: AnimeTrack): String
 
-    abstract suspend fun add(track: Track): Track
-
-    abstract suspend fun add(track: AnimeTrack): AnimeTrack
-
     abstract suspend fun update(track: Track): Track
 
     abstract suspend fun update(track: AnimeTrack): AnimeTrack

@@ -74,11 +74,11 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
         return df.format(track.score)
     }
 
-    override suspend fun add(track: Track): Track {
+    private suspend fun add(track: Track): Track {
         return api.addLibManga(track, getUserId())
     }
 
-    override suspend fun add(track: AnimeTrack): AnimeTrack {
+    private suspend fun add(track: AnimeTrack): AnimeTrack {
         return api.addLibAnime(track, getUserId())
     }
 

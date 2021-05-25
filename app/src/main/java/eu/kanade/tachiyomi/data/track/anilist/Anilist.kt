@@ -151,11 +151,11 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         }
     }
 
-    override suspend fun add(track: Track): Track {
+    private suspend fun add(track: Track): Track {
         return api.addLibManga(track)
     }
 
-    override suspend fun add(track: AnimeTrack): AnimeTrack {
+    private suspend fun add(track: AnimeTrack): AnimeTrack {
         return api.addLibAnime(track)
     }
 

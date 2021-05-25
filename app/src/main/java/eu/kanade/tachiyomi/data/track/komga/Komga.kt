@@ -60,10 +60,6 @@ class Komga(private val context: Context, id: Int) : TrackService(id), Unattende
     override fun displayScore(track: Track): String = ""
     override fun displayScore(track: AnimeTrack): String = throw Exception("Not used")
 
-    override suspend fun add(track: Track): Track = throw Exception("Not used")
-
-    override suspend fun add(track: AnimeTrack): AnimeTrack = throw Exception("Not used")
-
     override suspend fun update(track: Track): Track {
         return api.updateProgress(track)
     }

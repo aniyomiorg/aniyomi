@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.anime.track
 import android.annotation.SuppressLint
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import eu.kanade.tachiyomi.R.string
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.TrackItemBinding
 import uy.kohesive.injekt.injectLazy
@@ -43,18 +42,22 @@ class TrackHolder(private val binding: TrackItemBinding, adapter: TrackAdapter) 
         binding.trackSet.isVisible = track == null
         binding.trackTitle.isVisible = track != null
 
-        binding.trackDetails.isVisible = track != null
+        binding.topDivider.isVisible = track != null
+        binding.middleRow.isVisible = track != null
+        binding.bottomDivider.isVisible = track != null
+        binding.bottomRow.isVisible = track != null
+
         if (track != null) {
             binding.trackTitle.text = track.title
             binding.trackChapters.text = "${track.last_episode_seen}/" +
                 if (track.total_episodes > 0) track.total_episodes else "-"
             binding.trackStatus.text = item.service.getStatus(track.status)
-            binding.trackScore.text = if (track.score == 0f) "-" else item.service.displayScore(track)
+
             if (item.service.getScoreList().isEmpty()) {
-                with(binding.trackScore) {
-                    text = context.getString(string.score_unsupported)
-                    isEnabled = false
-                }
+                binding.trackScore.isVisible = false
+                binding.vertDivider2.isVisible = false
+            } else {
+                binding.trackScore.text = if (track.score == 0f) "-" else item.service.displayScore(track)
             }
 
             if (item.service.supportsReadingDates) {
@@ -64,9 +67,7 @@ class TrackHolder(private val binding: TrackItemBinding, adapter: TrackAdapter) 
                     if (track.finished_watching_date != 0L) dateFormat.format(track.finished_watching_date) else "-"
             } else {
                 binding.bottomDivider.isVisible = false
-                binding.vertDivider3.isVisible = false
-                binding.trackStartDate.isVisible = false
-                binding.trackFinishDate.isVisible = false
+                binding.bottomRow.isVisible = false
             }
         }
     }
