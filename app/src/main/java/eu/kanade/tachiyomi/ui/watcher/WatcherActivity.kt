@@ -28,12 +28,16 @@ import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.view.hideBar
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import rx.schedulers.Schedulers
+import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
@@ -256,7 +260,9 @@ class WatcherActivity : AppCompatActivity() {
                 val episodes = listOf(EpisodeItem(episode, anime))
                 launchIO {
                     db.updateEpisodesProgress(episodes).executeAsBlocking()
-
+                    if (preferences.autoUpdateTrack()) {
+                        updateTrackEpisodeSeen(episode)
+                    }
                     if (preferences.removeAfterMarkedAsRead()) {
                         launchIO {
                             try {
@@ -275,6 +281,38 @@ class WatcherActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private fun updateTrackEpisodeSeen(episode: Episode) {
+        val anime = intent.getSerializableExtra("anime_anime") as? Anime ?: return
+
+        val episodeSeen = episode.episode_number.toInt()
+
+        val trackManager = Injekt.get<TrackManager>()
+
+        launchIO {
+            db.getTracks(anime).executeAsBlocking()
+                .mapNotNull { track ->
+                    val service = trackManager.getService(track.sync_id)
+                    if (service != null && service.isLogged && episodeSeen > track.last_episode_seen) {
+                        track.last_episode_seen = episodeSeen
+
+                        // We want these to execute even if the presenter is destroyed and leaks
+                        // for a while. The view can still be garbage collected.
+                        async {
+                            runCatching {
+                                service.update(track)
+                                db.insertTrack(track).executeAsBlocking()
+                            }
+                        }
+                    } else {
+                        null
+                    }
+                }
+                .awaitAll()
+                .mapNotNull { it.exceptionOrNull() }
+                .forEach { Timber.w(it) }
         }
     }
 
