@@ -260,7 +260,7 @@ class WatcherActivity : AppCompatActivity() {
                 val episodes = listOf(EpisodeItem(episode, anime))
                 launchIO {
                     db.updateEpisodesProgress(episodes).executeAsBlocking()
-                    if (preferences.autoUpdateTrack()) {
+                    if (preferences.autoUpdateTrack() && episode.seen) {
                         updateTrackEpisodeSeen(episode)
                     }
                     if (preferences.removeAfterMarkedAsRead()) {
