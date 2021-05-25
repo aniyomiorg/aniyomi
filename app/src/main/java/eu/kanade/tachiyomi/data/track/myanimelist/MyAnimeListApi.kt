@@ -194,10 +194,10 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
     suspend fun updateItem(track: AnimeTrack): AnimeTrack {
         return withIOContext {
             val formBodyBuilder = FormBody.Builder()
-                .add("status", track.toMyAnimeListStatus() ?: "reading")
-                .add("is_rereading", (track.status == MyAnimeList.REREADING).toString())
+                .add("status", track.toMyAnimeListStatus() ?: "watching")
+                .add("is_rewatching", (track.status == MyAnimeList.REREADING).toString())
                 .add("score", track.score.toString())
-                .add("num_chapters_read", track.last_episode_seen.toString())
+                .add("num_watched_episodes", track.last_episode_seen.toString())
             convertToIsoDate(track.started_watching_date)?.let {
                 formBodyBuilder.add("start_date", it)
             }
@@ -206,7 +206,7 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
             }
 
             val request = Request.Builder()
-                .url(mangaUrl(track.media_id).toString())
+                .url(animeUrl(track.media_id).toString())
                 .put(formBodyBuilder.build())
                 .build()
             authClient.newCall(request)
@@ -238,13 +238,13 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
         return withIOContext {
             val uri = "$baseApiUrl/anime".toUri().buildUpon()
                 .appendPath(track.media_id.toString())
-                .appendQueryParameter("fields", "num_chapters,my_list_status{start_date,finish_date}")
+                .appendQueryParameter("fields", "num_episodes,my_list_status{start_date,finish_date}")
                 .build()
             authClient.newCall(GET(uri.toString()))
                 .await()
                 .parseAs<JsonObject>()
                 .let { obj ->
-                    track.total_episodes = obj["num_chapters"]!!.jsonPrimitive.int
+                    track.total_episodes = obj["num_episodes"]!!.jsonPrimitive.int
                     obj.jsonObject["my_list_status"]?.jsonObject?.let {
                         parseAnimeItem(it, track)
                     }
@@ -344,9 +344,9 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
     private fun parseAnimeItem(response: JsonObject, track: AnimeTrack): AnimeTrack {
         val obj = response.jsonObject
         return track.apply {
-            val isRereading = obj["is_rereading"]!!.jsonPrimitive.boolean
+            val isRereading = obj["is_rewatching"]!!.jsonPrimitive.boolean
             status = if (isRereading) MyAnimeList.REREADING else getStatus(obj["status"]!!.jsonPrimitive.content)
-            last_episode_seen = obj["num_chapters_read"]!!.jsonPrimitive.int
+            last_episode_seen = obj["num_episodes_watched"]!!.jsonPrimitive.int
             score = obj["score"]!!.jsonPrimitive.int.toFloat()
             obj["start_date"]?.let {
                 started_watching_date = parseDate(it.jsonPrimitive.content)
@@ -391,6 +391,11 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
             .build()
 
         fun mangaUrl(id: Int): Uri = "$baseApiUrl/manga".toUri().buildUpon()
+            .appendPath(id.toString())
+            .appendPath("my_list_status")
+            .build()
+
+        fun animeUrl(id: Int): Uri = "$baseApiUrl/anime".toUri().buildUpon()
             .appendPath(id.toString())
             .appendPath("my_list_status")
             .build()

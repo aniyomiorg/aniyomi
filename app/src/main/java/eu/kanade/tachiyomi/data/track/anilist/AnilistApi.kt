@@ -230,7 +230,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             val query = """
             |query Search(${'$'}query: String) {
                 |Page (perPage: 50) {
-                    |media(search: ${'$'}query, type: ANIME, format_not_in: [NOVEL]) {
+                    |media(search: ${'$'}query, type: ANIME) {
                         |id
                         |title {
                             |romaji
@@ -240,7 +240,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                         |}
                         |type
                         |status
-                        |chapters
+                        |episodes
                         |description
                         |startDate {
                             |year
