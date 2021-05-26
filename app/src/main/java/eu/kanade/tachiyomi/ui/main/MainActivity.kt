@@ -76,7 +76,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             3 -> R.id.nav_animelib
             4 -> R.id.nav_browse
             5 -> R.id.nav_library
-            else -> R.id.nav_library
+            else -> R.id.nav_animelib
         }
     }
 
