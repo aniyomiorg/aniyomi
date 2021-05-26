@@ -132,6 +132,10 @@ class PreferencesHelper(val context: Context) {
 
     fun defaultOrientationType() = prefs.getInt(Keys.defaultOrientationType, OrientationType.FREE.flagValue)
 
+    fun defaultPlayerOrientationType() = prefs.getInt(Keys.defaultPlayerOrientationType, OrientationType.FREE.flagValue)
+
+    fun alwaysUseExternalPlayer() = prefs.getBoolean(Keys.alwaysUseExternalPlayer, false)
+
     fun imageScaleType() = flowPrefs.getInt(Keys.imageScaleType, 1)
 
     fun zoomStart() = flowPrefs.getInt(Keys.zoomStart, 1)

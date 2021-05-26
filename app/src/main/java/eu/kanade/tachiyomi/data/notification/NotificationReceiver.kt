@@ -456,7 +456,7 @@ class NotificationReceiver : BroadcastReceiver() {
             }
             val episodeList: List<EpisodeItem> = emptyList()
             val newIntent = WatcherActivity.newIntent(context, anime, episode, episodeList, link)
-            return PendingIntent.getActivity(context, AnimeController.REQUEST_SECONDS, newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            return PendingIntent.getActivity(context, AnimeController.REQUEST_INTERNAL, newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
         /**

@@ -373,6 +373,17 @@
     <string name="webtoon_side_padding_20">20%</string>
     <string name="webtoon_side_padding_25">25%</string>
 
+    <!-- Player section -->
+    <string name="pref_category_player">Player</string>
+    <string name="pref_category_progress">Progress</string>
+    <string name="pref_progress_mark_as_seen">At what point to mark the episode as seen</string>
+    <string name="pref_always_use_external_player">Always use external player</string>
+    <string name="pref_progress_80">80%</string>
+    <string name="pref_progress_85">85%</string>
+    <string name="pref_progress_90">90%</string>
+    <string name="pref_progress_95">95%</string>
+    <string name="pref_progress_100">100%</string>
+
       <!-- Downloads section -->
     <string name="pref_download_directory">Download location</string>
     <string name="pref_download_only_over_wifi">Only download over Wi-Fi</string>

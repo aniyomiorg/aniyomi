@@ -41,6 +41,12 @@ class SettingsMainController : SettingsController() {
             onClick { navigateTo(SettingsReaderController()) }
         }
         preference {
+            iconRes = R.drawable.ic_chrome_player_mode_24dp
+            iconTint = tintColor
+            titleRes = R.string.pref_category_player
+            onClick { navigateTo(SettingsPlayerController()) }
+        }
+        preference {
             iconRes = R.drawable.ic_get_app_24dp
             iconTint = tintColor
             titleRes = R.string.pref_category_downloads

@@ -57,6 +57,12 @@ object PreferenceKeys {
 
     const val defaultOrientationType = "pref_default_orientation_type_key"
 
+    const val defaultPlayerOrientationType = "pref_default_player_orientation_type_key"
+
+    const val progressPreference = "pref_progress_preference"
+
+    const val alwaysUseExternalPlayer = "pref_always_use_external_player"
+
     const val imageScaleType = "pref_image_scale_type_key"
 
     const val zoomStart = "pref_zoom_start_key"

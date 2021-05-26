@@ -5,12 +5,9 @@ import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.graphics.blue
@@ -32,11 +29,14 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.AnimeHistory
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.UnattendedTrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
@@ -45,12 +45,7 @@ import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.online.AnimeHttpSource
-import eu.kanade.tachiyomi.ui.anime.episode.AnimeEpisodesHeaderAdapter
-import eu.kanade.tachiyomi.ui.anime.episode.DeleteEpisodesDialog
-import eu.kanade.tachiyomi.ui.anime.episode.DownloadCustomEpisodesDialog
-import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
-import eu.kanade.tachiyomi.ui.anime.episode.EpisodesAdapter
-import eu.kanade.tachiyomi.ui.anime.episode.EpisodesSettingsSheet
+import eu.kanade.tachiyomi.ui.anime.episode.*
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodesAdapter
 import eu.kanade.tachiyomi.ui.anime.info.AnimeInfoHeaderAdapter
 import eu.kanade.tachiyomi.ui.anime.track.TrackItem
@@ -81,17 +76,20 @@ import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.getCoordinates
 import eu.kanade.tachiyomi.util.view.shrinkOnScroll
 import eu.kanade.tachiyomi.util.view.snack
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import reactivecircus.flowbinding.recyclerview.scrollEvents
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
+import rx.schedulers.Schedulers
 import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import java.util.ArrayDeque
+import java.util.*
 import kotlin.math.min
 
 class AnimeController :
@@ -127,6 +125,9 @@ class AnimeController :
     constructor(bundle: Bundle) : this(bundle.getLong(ANIME_EXTRA))
 
     var anime: Anime? = null
+        private set
+
+    var currentExtEpisode: Episode? = null
         private set
 
     var source: AnimeSource? = null
@@ -170,6 +171,10 @@ class AnimeController :
     private var isRefreshingEpisodes = false
 
     private var trackSheet: TrackSheet? = null
+
+    private val incognitoMode = preferences.incognitoMode().get()
+
+    private val db: AnimeDatabaseHelper = Injekt.get()
 
     init {
         setHasOptionsMenu(true)
@@ -697,7 +702,7 @@ class AnimeController :
             val activity = activity ?: return
             presenter.editCover(anime!!, activity, dataUri)
         }
-        if (requestCode == REQUEST_SECONDS) {
+        if (requestCode == REQUEST_INTERNAL) {
             val episode: Episode = data!!.getSerializableExtra("episode") as Episode
             // if next or previous episode was pressed
             if (data.getBooleanExtra("nextResult", false)) {
@@ -712,6 +717,97 @@ class AnimeController :
                 val previousEpisode = episodeList[idx + 1].episode
                 openEpisode(previousEpisode)
             }
+        }
+        if (requestCode == REQUEST_EXTERNAL && resultCode == Activity.RESULT_OK) {
+            val currentPosition: Long
+            val duration: Long
+            val cause = data!!.getStringExtra("end_by") ?: ""
+            if (cause.isNotEmpty()) {
+                currentPosition = data.getLongExtra("position", 0L)
+                duration = data.getLongExtra("duration", 0L)
+            } else {
+                currentPosition = data.getLongExtra("extra_position", 0L)
+                duration = data.getLongExtra("extra_duration", 0L)
+            }
+            if (cause == "playback_completion") {
+                setEpisodeProgress(currentExtEpisode!!, anime!!, 1L, 1L)
+            } else {
+                setEpisodeProgress(currentExtEpisode!!, anime!!, currentPosition, duration)
+            }
+            saveEpisodeHistory(EpisodeItem(currentExtEpisode!!, anime!!))
+        }
+    }
+
+    private fun saveEpisodeHistory(episode: EpisodeItem) {
+        if (!incognitoMode) {
+            val history = AnimeHistory.create(episode.episode).apply { last_seen = Date().time }
+            db.updateAnimeHistoryLastSeen(history).asRxCompletable()
+                .onErrorComplete()
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+        }
+    }
+
+    private fun setEpisodeProgress(episode: Episode, anime: Anime, seconds: Long, totalSeconds: Long) {
+        if (!incognitoMode) {
+            if (totalSeconds > 0L) {
+                episode.last_second_seen = seconds
+                episode.total_seconds = totalSeconds
+                if (!episode.seen) episode.seen = episode.last_second_seen > episode.total_seconds * 0.85
+                val episodes = listOf(EpisodeItem(episode, anime))
+                launchIO {
+                    db.updateEpisodesProgress(episodes).executeAsBlocking()
+                    if (preferences.autoUpdateTrack() && episode.seen) {
+                        updateTrackEpisodeSeen(episode, anime)
+                    }
+                    if (preferences.removeAfterMarkedAsRead()) {
+                        launchIO {
+                            try {
+                                val downloadManager: AnimeDownloadManager = Injekt.get()
+                                val source: AnimeSource = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
+                                downloadManager.deleteEpisodes(episodes, anime, source).forEach {
+                                    if (it is EpisodeItem) {
+                                        it.status = AnimeDownload.State.NOT_DOWNLOADED
+                                        it.download = null
+                                    }
+                                }
+                            } catch (e: Throwable) {
+                                throw e
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateTrackEpisodeSeen(episode: Episode, anime: Anime) {
+        val episodeSeen = episode.episode_number.toInt()
+
+        val trackManager = Injekt.get<TrackManager>()
+
+        launchIO {
+            db.getTracks(anime).executeAsBlocking()
+                .mapNotNull { track ->
+                    val service = trackManager.getService(track.sync_id)
+                    if (service != null && service.isLogged && episodeSeen > track.last_episode_seen) {
+                        track.last_episode_seen = episodeSeen
+
+                        // We want these to execute even if the presenter is destroyed and leaks
+                        // for a while. The view can still be garbage collected.
+                        async {
+                            runCatching {
+                                service.update(track)
+                                db.insertTrack(track).executeAsBlocking()
+                            }
+                        }
+                    } else {
+                        null
+                    }
+                }
+                .awaitAll()
+                .mapNotNull { it.exceptionOrNull() }
+                .forEach { Timber.w(it) }
         }
     }
 
@@ -815,7 +911,18 @@ class AnimeController :
                 if (hasAnimation) {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 }
-                startActivityForResult(intent, REQUEST_SECONDS)
+                if (!preferences.alwaysUseExternalPlayer()) {
+                    startActivityForResult(intent, REQUEST_INTERNAL)
+                } else {
+                    currentExtEpisode = episode
+                    val uri = Uri.parse(url)
+                    val extIntent = Intent(Intent.ACTION_VIEW)
+                    extIntent.setDataAndTypeAndNormalize(uri, "video/*")
+                    extIntent.putExtra("title", episode.name)
+                    extIntent.putExtra("position", episode.last_second_seen.toInt())
+                    extIntent.putExtra("return_result", true)
+                    startActivityForResult(extIntent, REQUEST_EXTERNAL)
+                }
             }
         }
     }
@@ -1160,6 +1267,7 @@ class AnimeController :
          * Key to change the cover of a anime in [onActivityResult].
          */
         const val REQUEST_IMAGE_OPEN = 101
-        const val REQUEST_SECONDS = 102
+        const val REQUEST_INTERNAL = 102
+        const val REQUEST_EXTERNAL = 103
     }
 }
