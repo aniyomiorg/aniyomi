@@ -477,7 +477,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             struct["type"]!!.jsonPrimitive.content,
             struct["status"]!!.jsonPrimitive.contentOrNull ?: "",
             parseDate(struct, "startDate"),
-            struct["chapters"]!!.jsonPrimitive.intOrNull ?: 0
+            struct["episodes"]!!.jsonPrimitive.intOrNull ?: 0
         )
     }
 
