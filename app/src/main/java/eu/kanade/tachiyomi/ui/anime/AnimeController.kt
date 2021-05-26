@@ -708,7 +708,7 @@ class AnimeController :
             }
             if (data.getBooleanExtra("previousResult", false)) {
                 val episodeList = presenter.filteredAndSortedEpisodes
-                val idx = episodeList.indexOfFirst { it.episode_number == episode.episode_number }
+                val idx = episodeList.indexOfLast { it.episode_number == episode.episode_number }
                 val previousEpisode = episodeList[idx + 1].episode
                 openEpisode(previousEpisode)
             }
@@ -1049,7 +1049,7 @@ class AnimeController :
 
     private fun markPreviousAsRead(episodes: List<EpisodeItem>) {
         val adapter = episodesAdapter ?: return
-        val prevEpisodes = if (presenter.sortDescending()) adapter.items.reversed() else adapter.items
+        val prevEpisodes = if (presenter.sortDescending()) adapter.items else adapter.items.reversed()
         val episodePos = prevEpisodes.indexOf(episodes.lastOrNull())
         if (episodePos != -1) {
             markAsRead(prevEpisodes.take(episodePos))
