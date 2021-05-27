@@ -9,13 +9,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.Configuration
 import android.os.Build
+import android.os.StrictMode
+import android.os.StrictMode.VmPolicy
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import androidx.multidex.MultiDex
 import coil.ImageLoader
 import coil.ImageLoaderFactory
@@ -49,6 +47,9 @@ open class App : Application(), LifecycleObserver, ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
+
+        val builder: VmPolicy.Builder = VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
 
         // TLS 1.3 support for Android < 10
