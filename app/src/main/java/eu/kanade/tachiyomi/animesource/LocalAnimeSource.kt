@@ -1,14 +1,14 @@
-package eu.kanade.tachiyomi.source
+package eu.kanade.tachiyomi.animesource
 
 import android.content.Context
 import com.github.junrar.Archive
 import com.google.gson.JsonParser
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.model.AnimesPage
-import eu.kanade.tachiyomi.source.model.Filter
-import eu.kanade.tachiyomi.source.model.FilterList
-import eu.kanade.tachiyomi.source.model.SAnime
-import eu.kanade.tachiyomi.source.model.SEpisode
+import eu.kanade.tachiyomi.animesource.model.AnimesPage
+import eu.kanade.tachiyomi.animesource.model.Filter
+import eu.kanade.tachiyomi.animesource.model.FilterList
+import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.AnimeFile

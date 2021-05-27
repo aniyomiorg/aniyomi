@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.browse
 
-import eu.kanade.tachiyomi.source.AnimeCatalogueSource
-import eu.kanade.tachiyomi.source.model.AnimesPage
-import eu.kanade.tachiyomi.source.model.FilterList
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.model.AnimesPage
+import eu.kanade.tachiyomi.animesource.model.FilterList
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers

@@ -12,11 +12,11 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFilterable
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
 import eu.kanade.tachiyomi.data.preference.PreferenceValues.DisplayMode
 import eu.kanade.tachiyomi.databinding.SourceComfortableGridItemBinding
 import eu.kanade.tachiyomi.databinding.SourceCompactGridItemBinding
-import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.widget.AutofitRecyclerView
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -24,7 +24,7 @@ import uy.kohesive.injekt.api.get
 class AnimelibItem(val anime: AnimelibAnime, private val animelibDisplayMode: Preference<DisplayMode>) :
     AbstractFlexibleItem<AnimelibHolder<*>>(), IFilterable<String> {
 
-    private val sourceManager: SourceManager = Injekt.get()
+    private val sourceManager: AnimeSourceManager = Injekt.get()
 
     var downloadCount = -1
     var unreadCount = -1

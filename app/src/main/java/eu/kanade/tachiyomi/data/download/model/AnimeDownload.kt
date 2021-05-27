@@ -1,14 +1,14 @@
 package eu.kanade.tachiyomi.data.download.model
 
+import eu.kanade.tachiyomi.animesource.model.Video
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
-import eu.kanade.tachiyomi.source.model.Page
-import eu.kanade.tachiyomi.source.online.AnimeHttpSource
 import rx.subjects.PublishSubject
 
 class AnimeDownload(val source: AnimeHttpSource, val anime: Anime, val episode: Episode) {
 
-    var pages: List<Page>? = null
+    var video: Video? = null
 
     @Volatile
     @Transient
@@ -35,8 +35,8 @@ class AnimeDownload(val source: AnimeHttpSource, val anime: Anime, val episode: 
 
     val progress: Int
         get() {
-            val pages = pages ?: return 0
-            return pages.map(Page::progress).average().toInt()
+            val video = video ?: return 0
+            return video.progress
         }
 
     fun setStatusSubject(subject: PublishSubject<AnimeDownload>?) {

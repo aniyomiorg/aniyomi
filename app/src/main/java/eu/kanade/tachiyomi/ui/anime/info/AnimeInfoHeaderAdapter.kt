@@ -7,13 +7,13 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.loadAny
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.databinding.AnimeInfoHeaderBinding
-import eu.kanade.tachiyomi.source.AnimeSource
-import eu.kanade.tachiyomi.source.AnimeSourceManager
-import eu.kanade.tachiyomi.source.model.SAnime
-import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.view.setChips
@@ -114,7 +114,7 @@ class AnimeInfoHeaderAdapter(
                 }
             }
 
-            if (controller.presenter.source is HttpSource) {
+            if (controller.presenter.source is AnimeHttpSource) {
                 binding.btnWebview.isVisible = true
                 binding.btnWebview.clicks()
                     .onEach { controller.openAnimeInWebView() }

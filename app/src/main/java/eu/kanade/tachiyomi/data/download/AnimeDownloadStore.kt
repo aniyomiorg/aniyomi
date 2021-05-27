@@ -2,11 +2,11 @@ package eu.kanade.tachiyomi.data.download
 
 import android.content.Context
 import androidx.core.content.edit
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
-import eu.kanade.tachiyomi.source.AnimeSourceManager
-import eu.kanade.tachiyomi.source.online.AnimeHttpSource
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString

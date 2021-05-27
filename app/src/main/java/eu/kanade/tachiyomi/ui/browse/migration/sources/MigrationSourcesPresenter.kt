@@ -1,11 +1,14 @@
 package eu.kanade.tachiyomi.ui.browse.migration.sources
 
 import android.os.Bundle
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Manga
-import eu.kanade.tachiyomi.source.*
+import eu.kanade.tachiyomi.source.LocalSource
+import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
@@ -49,7 +52,7 @@ class MigrationSourcesPresenter(
     private fun findSourcesWithAnime(library: List<Anime>): List<AnimeSourceItem> {
         return library
             .groupBy { it.source }
-            .filterKeys { it != LocalSource.ID }
+            .filterKeys { it != LocalAnimeSource.ID }
             .map {
                 val source = animesourceManager.getOrStub(it.key)
                 AnimeSourceItem(source, it.value.size)

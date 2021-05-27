@@ -100,7 +100,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             val downloadingProgressText = context.getString(
                 R.string.chapter_downloading_progress,
                 download.downloadedImages,
-                download.pages!!.size
+                1
             )
 
             if (preferences.hideNotificationContent()) {
@@ -113,7 +113,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                 setContentText(downloadingProgressText)
             }
 
-            setProgress(download.pages!!.size, download.downloadedImages, false)
+            setProgress(1, download.downloadedImages, false)
             setOngoing(true)
 
             show(Notifications.ID_DOWNLOAD_CHAPTER_PROGRESS)

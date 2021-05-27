@@ -3,6 +3,8 @@ package eu.kanade.tachiyomi.extension
 import android.content.Context
 import android.graphics.drawable.Drawable
 import com.jakewharton.rxrelay.BehaviorRelay
+import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.plusAssign
 import eu.kanade.tachiyomi.extension.api.AnimeExtensionGithubApi
@@ -12,8 +14,6 @@ import eu.kanade.tachiyomi.extension.model.InstallStep
 import eu.kanade.tachiyomi.extension.util.AnimeExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.util.AnimeExtensionInstaller
 import eu.kanade.tachiyomi.extension.util.AnimeExtensionLoader
-import eu.kanade.tachiyomi.source.AnimeSource
-import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.util.lang.launchNow
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async

@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.database.models
 
-import eu.kanade.tachiyomi.source.model.SEpisode
+import eu.kanade.tachiyomi.animesource.model.SEpisode
 import java.io.Serializable
 
 interface Episode : SEpisode, Serializable {

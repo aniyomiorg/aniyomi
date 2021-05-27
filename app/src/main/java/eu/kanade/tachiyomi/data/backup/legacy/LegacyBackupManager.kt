@@ -8,6 +8,8 @@ import com.github.salomonbrys.kotson.registerTypeHierarchyAdapter
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
+import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.model.toSAnime
 import eu.kanade.tachiyomi.data.backup.AbstractBackupManager
 import eu.kanade.tachiyomi.data.backup.legacy.models.Backup.CURRENT_VERSION
 import eu.kanade.tachiyomi.data.backup.legacy.models.DHistory
@@ -28,9 +30,7 @@ import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.database.models.TrackImpl
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.database.models.toMangaInfo
-import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.source.Source
-import eu.kanade.tachiyomi.source.model.toSAnime
 import eu.kanade.tachiyomi.source.model.toSManga
 import kotlin.math.max
 

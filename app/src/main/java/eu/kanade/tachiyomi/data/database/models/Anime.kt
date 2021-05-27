@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.database.models
 
-import eu.kanade.tachiyomi.source.model.SAnime
-import tachiyomi.source.model.AnimeInfo
+import eu.kanade.tachiyomi.animesource.model.SAnime
+import tachiyomi.animesource.model.AnimeInfo
 
 interface Anime : SAnime {
 

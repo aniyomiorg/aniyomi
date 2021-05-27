@@ -1,12 +1,12 @@
 package eu.kanade.tachiyomi.ui.recent.animeupdates
 
 import android.os.Bundle
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.AnimeEpisode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.ui.recent.DateSectionItem
 import eu.kanade.tachiyomi.util.lang.toDateKey

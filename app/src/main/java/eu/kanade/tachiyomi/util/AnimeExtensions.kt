@@ -1,11 +1,11 @@
 package eu.kanade.tachiyomi.util
 
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
+import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.source.LocalAnimeSource
-import eu.kanade.tachiyomi.source.model.SAnime
 import java.util.Date
 
 fun Anime.isLocal() = source == LocalAnimeSource.ID

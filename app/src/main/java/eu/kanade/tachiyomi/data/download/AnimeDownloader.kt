@@ -1,20 +1,21 @@
 package eu.kanade.tachiyomi.data.download
 
 import android.content.Context
+import android.util.Log
 import android.webkit.MimeTypeMap
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.fetchUrlFromVideo
+import eu.kanade.tachiyomi.animesource.model.Video
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.model.AnimeDownloadQueue
-import eu.kanade.tachiyomi.source.AnimeSourceManager
-import eu.kanade.tachiyomi.source.model.Page
-import eu.kanade.tachiyomi.source.online.AnimeHttpSource
-import eu.kanade.tachiyomi.source.online.fetchAllImageUrlsFromPageList
 import eu.kanade.tachiyomi.util.lang.RetryWithDelay
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNow
@@ -257,7 +258,8 @@ class AnimeDownloader(
 
             // Start downloader if needed
             if (autoStart && wasEmpty) {
-                DownloadService.start(this@AnimeDownloader.context)
+                Log.w("start", "started")
+                AnimeDownloadService.start(this@AnimeDownloader.context)
             }
         }
     }
@@ -280,17 +282,25 @@ class AnimeDownloader(
         val episodeDirname = provider.getEpisodeDirName(download.episode)
         val tmpDir = animeDir.createDirectory(episodeDirname + TMP_DIR_SUFFIX)
 
-        val pageListObservable = if (download.pages == null) {
-            // Pull page list from network and add them to download object
-            Observable.just(emptyList())
+        val videoObservable = if (download.video == null) {
+            // Pull video from network and add them to download object
+            download.source.fetchVideoList(download.episode)
+                .doOnNext { video ->
+                    if (video == null) {
+                        Timber.w("mah m9")
+                        throw Exception(context.getString(R.string.page_list_empty_error))
+                    }
+                    download.video = video
+                }
         } else {
-            // Or if the page list already exists, start from the file
-            Observable.just(download.pages!!)
+            // Or if the video already exists, start from the file
+            Observable.just(download.video!!)
         }
 
-        pageListObservable
+        videoObservable
             .doOnNext { _ ->
                 // Delete all temporary (unfinished) files
+                Timber.w("delfiles")
                 tmpDir.listFiles()
                     ?.filter { it.name!!.endsWith(".tmp") }
                     ?.forEach { it.delete() }
@@ -299,10 +309,10 @@ class AnimeDownloader(
                 download.status = AnimeDownload.State.DOWNLOADING
             }
             // Get all the URLs to the source images, fetch pages if necessary
-            .flatMap { download.source.fetchAllImageUrlsFromPageList(it) }
+            .flatMap { download.source.fetchUrlFromVideo(it) }
             // Start downloading images, consider we can have downloaded images already
             // Concurrently do 5 pages at a time
-            .flatMap({ page -> getOrAnimeDownloadImage(page, download, tmpDir) }, 5)
+            .flatMap({ video -> getOrAnimeDownloadImage(video, download, tmpDir) }, 5)
             .onBackpressureLatest()
             // Do when page is downloaded.
             .doOnNext { notifier.onProgressChange(download) }
@@ -322,61 +332,63 @@ class AnimeDownloader(
      * Returns the observable which gets the image from the filesystem if it exists or downloads it
      * otherwise.
      *
-     * @param page the page to download.
+     * @param video the page to download.
      * @param download the download of the page.
      * @param tmpDir the temporary directory of the download.
      */
-    private fun getOrAnimeDownloadImage(page: Page, download: AnimeDownload, tmpDir: UniFile): Observable<Page> {
+    private fun getOrAnimeDownloadImage(video: Video, download: AnimeDownload, tmpDir: UniFile): Observable<Video> {
         // If the image URL is empty, do nothing
-        if (page.imageUrl == null) {
-            return Observable.just(page)
+        if (video.videoUrl == null) {
+            Timber.w("nourl")
+            return Observable.just(video)
         }
 
-        val filename = String.format("%03d", page.number)
+        val filename = download.episode.name
+        Timber.w(filename)
         val tmpFile = tmpDir.findFile("$filename.tmp")
 
         // Delete temp file if it exists.
         tmpFile?.delete()
 
         // Try to find the image file.
-        val imageFile = tmpDir.listFiles()!!.find { it.name!!.startsWith("$filename.") }
+        val videoFile = tmpDir.listFiles()!!.find { it.name!!.startsWith("$filename.") }
 
-        // If the image is already downloaded, do nothing. Otherwise download from network
+        // If the video is already downloaded, do nothing. Otherwise download from network
         val pageObservable = when {
-            imageFile != null -> Observable.just(imageFile)
-            episodeCache.isImageInCache(page.imageUrl!!) -> copyImageFromCache(episodeCache.getImageFile(page.imageUrl!!), tmpDir, filename)
-            else -> downloadImage(page, download.source, tmpDir, filename)
+            videoFile != null -> Observable.just(videoFile)
+            episodeCache.isImageInCache(video.videoUrl!!) -> copyVideoFromCache(episodeCache.getVideoFile(video.videoUrl!!), tmpDir, filename)
+            else -> downloadVideo(video, download.source, tmpDir, filename)
         }
 
         return pageObservable
             // When the image is ready, set image path, progress (just in case) and status
             .doOnNext { file ->
-                page.uri = file.uri
-                page.progress = 100
+                video.uri = file.uri
+                video.progress = 100
                 download.downloadedImages++
-                page.status = Page.READY
+                video.status = Video.READY
             }
-            .map { page }
+            .map { video }
             // Mark this page as error and allow to download the remaining
             .onErrorReturn {
-                page.progress = 0
-                page.status = Page.ERROR
-                page
+                video.progress = 0
+                video.status = Video.ERROR
+                video
             }
     }
 
     /**
      * Returns the observable which downloads the image from network.
      *
-     * @param page the page to download.
+     * @param video the page to download.
      * @param source the source of the page.
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the image.
      */
-    private fun downloadImage(page: Page, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
-        page.status = Page.DOWNLOAD_IMAGE
-        page.progress = 0
-        return source.fetchImage(page)
+    private fun downloadVideo(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
+        video.status = Video.DOWNLOAD_IMAGE
+        video.progress = 0
+        return source.fetchVideo(video)
             .map { response ->
                 val file = tmpDir.createFile("$filename.tmp")
                 try {
@@ -401,7 +413,7 @@ class AnimeDownloader(
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the image.
      */
-    private fun copyImageFromCache(cacheFile: File, tmpDir: UniFile, filename: String): Observable<UniFile> {
+    private fun copyVideoFromCache(cacheFile: File, tmpDir: UniFile, filename: String): Observable<UniFile> {
         return Observable.just(cacheFile).map {
             val tmpFile = tmpDir.createFile("$filename.tmp")
             cacheFile.inputStream().use { input ->
@@ -451,7 +463,7 @@ class AnimeDownloader(
         // Ensure that the episode folder has all the images.
         val downloadedImages = tmpDir.listFiles().orEmpty().filterNot { it.name!!.endsWith(".tmp") }
 
-        download.status = if (downloadedImages.size == download.pages!!.size) {
+        download.status = if (downloadedImages.size == 1) {
             AnimeDownload.State.DOWNLOADED
         } else {
             AnimeDownload.State.ERROR

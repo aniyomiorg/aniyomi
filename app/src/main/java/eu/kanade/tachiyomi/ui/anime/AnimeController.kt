@@ -26,6 +26,10 @@ import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.SelectableAdapter
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
@@ -41,10 +45,6 @@ import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.UnattendedTrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.databinding.AnimeControllerBinding
-import eu.kanade.tachiyomi.source.AnimeSource
-import eu.kanade.tachiyomi.source.AnimeSourceManager
-import eu.kanade.tachiyomi.source.LocalSource
-import eu.kanade.tachiyomi.source.online.AnimeHttpSource
 import eu.kanade.tachiyomi.ui.anime.episode.*
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodesAdapter
 import eu.kanade.tachiyomi.ui.anime.info.AnimeInfoHeaderAdapter
@@ -65,6 +65,7 @@ import eu.kanade.tachiyomi.ui.browse.migration.search.AnimeSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.recent.history.HistoryController
 import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
+import eu.kanade.tachiyomi.ui.watcher.EpisodeLoader
 import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
@@ -80,8 +81,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import reactivecircus.flowbinding.recyclerview.scrollEvents
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
 import rx.schedulers.Schedulers
@@ -163,7 +162,7 @@ class AnimeController :
      */
     private val selectedEpisodes = mutableSetOf<EpisodeItem>()
 
-    private val isLocalSource by lazy { presenter.source.id == LocalSource.ID }
+    private val isLocalSource by lazy { presenter.source.id == LocalAnimeSource.ID }
 
     private var lastClickPositionStack = ArrayDeque(listOf(-1))
 
@@ -337,7 +336,7 @@ class AnimeController :
                 // Create animation listener
                 val revealAnimationListener: Animator.AnimatorListener = object : AnimatorListenerAdapter() {
                     override fun onAnimationStart(animation: Animator?) {
-                        openEpisode(item.episode, true)
+                        openEpisode(item.episode)
                     }
                 }
 
@@ -348,7 +347,7 @@ class AnimeController :
                         coordinates.y,
                         object : AnimatorListenerAdapter() {
                             override fun onAnimationStart(animation: Animator?) {
-                                openEpisode(item.episode, true)
+                                openEpisode(item.episode)
                             }
                         }
                     )
@@ -901,28 +900,22 @@ class AnimeController :
         }
     }
 
-    fun openEpisode(episode: Episode, hasAnimation: Boolean = false) {
+    fun openEpisode(episode: Episode) {
         val activity = activity ?: return
-        runBlocking {
-            launch {
-                val url = fetchEpisodeLinksFromSource(false, episode)
-                val episodeList = presenter.filteredAndSortedEpisodes
-                val intent = WatcherActivity.newIntent(activity, presenter.anime, episode, episodeList, url)
-                if (hasAnimation) {
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                }
-                if (!preferences.alwaysUseExternalPlayer()) {
-                    startActivityForResult(intent, REQUEST_INTERNAL)
-                } else {
-                    currentExtEpisode = episode
-                    val uri = Uri.parse(url)
-                    val extIntent = Intent(Intent.ACTION_VIEW)
-                    extIntent.setDataAndTypeAndNormalize(uri, "video/*")
-                    extIntent.putExtra("title", episode.name)
-                    extIntent.putExtra("position", episode.last_second_seen.toInt())
-                    extIntent.putExtra("return_result", true)
-                    startActivityForResult(extIntent, REQUEST_EXTERNAL)
-                }
+        launchIO {
+            val url = EpisodeLoader.getUri(episode, anime!!, source!!)
+            val episodeList = presenter.filteredAndSortedEpisodes
+            val intent = WatcherActivity.newIntent(activity, presenter.anime, episode, episodeList, url)
+            if (!preferences.alwaysUseExternalPlayer()) {
+                startActivityForResult(intent, REQUEST_INTERNAL)
+            } else {
+                currentExtEpisode = episode
+                val extIntent = Intent(Intent.ACTION_VIEW)
+                extIntent.setDataAndTypeAndNormalize(Uri.parse(url), "video/*")
+                extIntent.putExtra("title", episode.name)
+                extIntent.putExtra("position", episode.last_second_seen.toInt())
+                extIntent.putExtra("return_result", true)
+                startActivityForResult(extIntent, REQUEST_EXTERNAL)
             }
         }
     }

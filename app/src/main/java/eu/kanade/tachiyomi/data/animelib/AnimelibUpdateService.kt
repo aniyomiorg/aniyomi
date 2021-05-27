@@ -7,6 +7,10 @@ import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.animesource.model.toSAnime
+import eu.kanade.tachiyomi.animesource.model.toSEpisode
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateRanker.rankingScheme
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService.Companion.start
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
@@ -23,10 +27,6 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.UnattendedTrackService
-import eu.kanade.tachiyomi.source.AnimeSourceManager
-import eu.kanade.tachiyomi.source.model.SAnime
-import eu.kanade.tachiyomi.source.model.toSAnime
-import eu.kanade.tachiyomi.source.model.toSEpisode
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay

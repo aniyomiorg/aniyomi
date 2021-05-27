@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.source.AnimeSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.launchIn

@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.browse.migration.sources
 import android.view.View
 import androidx.core.view.isVisible
 import eu.davidea.viewholders.FlexibleViewHolder
+import eu.kanade.tachiyomi.animesource.icon
 import eu.kanade.tachiyomi.databinding.SourceMainControllerCardItemBinding
 import eu.kanade.tachiyomi.source.icon
 import eu.kanade.tachiyomi.util.system.LocaleHelper

@@ -2,14 +2,14 @@ package eu.kanade.tachiyomi.ui.browse.migration.search
 
 import android.os.Bundle
 import com.jakewharton.rxrelay.BehaviorRelay
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.animesource.model.SEpisode
+import eu.kanade.tachiyomi.animesource.model.toSEpisode
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeCategory
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
-import eu.kanade.tachiyomi.source.AnimeCatalogueSource
-import eu.kanade.tachiyomi.source.AnimeSource
-import eu.kanade.tachiyomi.source.model.SAnime
-import eu.kanade.tachiyomi.source.model.SEpisode
-import eu.kanade.tachiyomi.source.model.toSEpisode
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchCardItem
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchItem
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchPresenter

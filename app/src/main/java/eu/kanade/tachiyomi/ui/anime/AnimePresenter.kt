@@ -4,6 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import com.jakewharton.rxrelay.PublishRelay
+import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
+import eu.kanade.tachiyomi.animesource.model.toEpisodeInfo
+import eu.kanade.tachiyomi.animesource.model.toSAnime
+import eu.kanade.tachiyomi.animesource.model.toSEpisode
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
@@ -18,11 +23,6 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.UnattendedTrackService
-import eu.kanade.tachiyomi.source.AnimeSource
-import eu.kanade.tachiyomi.source.LocalAnimeSource
-import eu.kanade.tachiyomi.source.model.toEpisodeInfo
-import eu.kanade.tachiyomi.source.model.toSAnime
-import eu.kanade.tachiyomi.source.model.toSEpisode
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.anime.track.TrackItem
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter

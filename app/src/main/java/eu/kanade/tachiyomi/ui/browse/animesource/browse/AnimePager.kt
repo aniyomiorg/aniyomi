@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.browse
 
 import com.jakewharton.rxrelay.PublishRelay
-import eu.kanade.tachiyomi.source.model.AnimesPage
-import eu.kanade.tachiyomi.source.model.SAnime
+import eu.kanade.tachiyomi.animesource.model.AnimesPage
+import eu.kanade.tachiyomi.animesource.model.SAnime
 import rx.Observable
 
 /**

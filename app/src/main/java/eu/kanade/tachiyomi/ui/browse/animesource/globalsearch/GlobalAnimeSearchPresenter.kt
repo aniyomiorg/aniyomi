@@ -1,18 +1,18 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.globalsearch
 
 import android.os.Bundle
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.model.AnimesPage
+import eu.kanade.tachiyomi.animesource.model.FilterList
+import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.animesource.model.toSAnime
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.extension.AnimeExtensionManager
-import eu.kanade.tachiyomi.source.AnimeCatalogueSource
-import eu.kanade.tachiyomi.source.AnimeSource
-import eu.kanade.tachiyomi.source.AnimeSourceManager
-import eu.kanade.tachiyomi.source.model.AnimesPage
-import eu.kanade.tachiyomi.source.model.FilterList
-import eu.kanade.tachiyomi.source.model.SAnime
-import eu.kanade.tachiyomi.source.model.toSAnime
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourcePresenter
 import eu.kanade.tachiyomi.util.lang.runAsObservable

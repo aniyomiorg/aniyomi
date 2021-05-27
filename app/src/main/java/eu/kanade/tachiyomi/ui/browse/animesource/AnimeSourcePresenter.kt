@@ -1,10 +1,10 @@
 package eu.kanade.tachiyomi.ui.browse.animesource
 
 import android.os.Bundle
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.source.AnimeCatalogueSource
-import eu.kanade.tachiyomi.source.AnimeSourceManager
-import eu.kanade.tachiyomi.source.LocalAnimeSource
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged

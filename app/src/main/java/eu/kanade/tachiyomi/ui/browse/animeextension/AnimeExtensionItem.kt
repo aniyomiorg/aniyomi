@@ -6,9 +6,9 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractSectionableItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.model.InstallStep
-import eu.kanade.tachiyomi.source.AnimeCatalogueSource
 
 /**
  * Item that contains source information.

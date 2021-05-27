@@ -4,10 +4,9 @@ import android.view.View
 import androidx.core.view.isVisible
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
+import eu.kanade.tachiyomi.animesource.icon
 import eu.kanade.tachiyomi.databinding.SourceMainControllerCardItemBinding
-import eu.kanade.tachiyomi.source.LocalAnimeSource
-import eu.kanade.tachiyomi.source.LocalSource
-import eu.kanade.tachiyomi.source.icon
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.view.setVectorCompat
 
@@ -38,7 +37,7 @@ class AnimeSourceHolder(private val view: View, val adapter: AnimeSourceAdapter)
             val icon = source.icon()
             when {
                 icon != null -> binding.image.setImageDrawable(icon)
-                item.source.id == LocalSource.ID -> binding.image.setImageResource(R.mipmap.ic_local_source)
+                item.source.id == LocalAnimeSource.ID -> binding.image.setImageResource(R.mipmap.ic_local_source)
             }
         }
 

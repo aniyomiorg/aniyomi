@@ -6,9 +6,9 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.databinding.EpisodesItemBinding
-import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodeHolder
 import java.util.Date
 import java.util.concurrent.TimeUnit
@@ -93,7 +93,7 @@ class EpisodeHolder(
             binding.episodeDescription.text = ""
         }
 
-        binding.animedownload.isVisible = item.anime.source != LocalSource.ID
+        binding.animedownload.isVisible = item.anime.source != LocalAnimeSource.ID
         binding.animedownload.setState(item.status, item.progress)
     }
 }

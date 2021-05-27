@@ -5,7 +5,7 @@ import android.os.Parcelable
 import android.util.SparseArray
 import androidx.recyclerview.widget.RecyclerView
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.kanade.tachiyomi.source.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 
 /**
  * Adapter that holds the search cards.

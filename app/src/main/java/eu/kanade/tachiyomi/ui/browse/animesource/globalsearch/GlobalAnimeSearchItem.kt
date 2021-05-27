@@ -6,7 +6,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 
 /**
  * Item that contains search result information.

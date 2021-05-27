@@ -9,12 +9,12 @@ import coil.fetch.SourceResult
 import coil.network.HttpException
 import coil.request.get
 import coil.size.Size
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.await
-import eu.kanade.tachiyomi.source.AnimeSourceManager
-import eu.kanade.tachiyomi.source.online.AnimeHttpSource
 import okhttp3.CacheControl
 import okhttp3.Call
 import okhttp3.Request

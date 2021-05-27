@@ -1,6 +1,6 @@
-package eu.kanade.tachiyomi.source.model
+package eu.kanade.tachiyomi.animesource.model
 
-import tachiyomi.source.model.AnimeInfo
+import tachiyomi.animesource.model.AnimeInfo
 import java.io.Serializable
 
 interface SAnime : Serializable {

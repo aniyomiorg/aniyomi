@@ -8,7 +8,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractHeaderItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
-import eu.kanade.tachiyomi.source.model.Filter
+import eu.kanade.tachiyomi.animesource.model.Filter
 
 class SeparatorItem(val filter: Filter.Separator) : AbstractHeaderItem<SeparatorItem.Holder>() {
 

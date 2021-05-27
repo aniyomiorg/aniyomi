@@ -4,14 +4,14 @@ import android.content.Context
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.model.AnimeDownloadQueue
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.source.AnimeSource
-import eu.kanade.tachiyomi.source.AnimeSourceManager
-import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.util.lang.launchIO
 import rx.Observable
 import timber.log.Timber
@@ -137,8 +137,8 @@ class AnimeDownloadManager(private val context: Context) {
      * @param episode the downloaded episode.
      * @return an observable containing the list of pages from the episode.
      */
-    fun buildPageList(source: AnimeSource, anime: Anime, episode: Episode): Observable<List<Page>> {
-        return buildPageList(provider.findEpisodeDir(episode, anime, source))
+    fun buildVideo(source: AnimeSource, anime: Anime, episode: Episode): Observable<Video> {
+        return buildVideo(provider.findEpisodeDir(episode, anime, source))
     }
 
     /**
@@ -147,19 +147,17 @@ class AnimeDownloadManager(private val context: Context) {
      * @param episodeDir the file where the episode is downloaded.
      * @return an observable containing the list of pages from the episode.
      */
-    private fun buildPageList(episodeDir: UniFile?): Observable<List<Page>> {
+    private fun buildVideo(episodeDir: UniFile?): Observable<Video> {
         return Observable.fromCallable {
             val files = episodeDir?.listFiles().orEmpty()
-                .filter { "image" in it.type.orEmpty() }
+                .filter { "video" in it.type.orEmpty() }
 
             if (files.isEmpty()) {
                 throw Exception(context.getString(R.string.page_list_empty_error))
             }
 
-            files.sortedBy { it.name }
-                .mapIndexed { i, file ->
-                    Page(i, uri = file.uri).apply { status = Page.READY }
-                }
+            val file = files[0]
+            Video(uri = file.uri).apply { status = Video.READY }
         }
     }
 

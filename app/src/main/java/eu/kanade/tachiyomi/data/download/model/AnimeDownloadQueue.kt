@@ -1,10 +1,10 @@
 package eu.kanade.tachiyomi.data.download.model
 
 import com.jakewharton.rxrelay.PublishRelay
+import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadStore
-import eu.kanade.tachiyomi.source.model.Page
 import rx.Observable
 import rx.subjects.PublishSubject
 import java.util.concurrent.CopyOnWriteArrayList
@@ -80,7 +80,7 @@ class AnimeDownloadQueue(
 
     private fun setPagesFor(download: AnimeDownload) {
         if (download.status == AnimeDownload.State.DOWNLOADED || download.status == AnimeDownload.State.ERROR) {
-            setPagesSubject(download.pages, null)
+            setPagesSubject(download.video, null)
         }
     }
 
@@ -90,20 +90,20 @@ class AnimeDownloadQueue(
             .flatMap { download ->
                 if (download.status == AnimeDownload.State.DOWNLOADING) {
                     val pageStatusSubject = PublishSubject.create<Int>()
-                    setPagesSubject(download.pages, pageStatusSubject)
+                    setPagesSubject(download.video, pageStatusSubject)
                     return@flatMap pageStatusSubject
                         .onBackpressureBuffer()
-                        .filter { it == Page.READY }
+                        .filter { it == Video.READY }
                         .map { download }
                 } else if (download.status == AnimeDownload.State.DOWNLOADED || download.status == AnimeDownload.State.ERROR) {
-                    setPagesSubject(download.pages, null)
+                    setPagesSubject(download.video, null)
                 }
                 Observable.just(download)
             }
             .filter { it.status == AnimeDownload.State.DOWNLOADING }
     }
 
-    private fun setPagesSubject(pages: List<Page>?, subject: PublishSubject<Int>?) {
-        pages?.forEach { it.setStatusSubject(subject) }
+    private fun setPagesSubject(video: Video?, subject: PublishSubject<Int>?) {
+        video?.setStatusSubject(subject)
     }
 }

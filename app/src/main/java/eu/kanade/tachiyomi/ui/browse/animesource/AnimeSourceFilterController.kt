@@ -5,12 +5,12 @@ import androidx.preference.CheckBoxPreference
 import androidx.preference.PreferenceGroup
 import androidx.preference.PreferenceScreen
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.getPreferenceKey
+import eu.kanade.tachiyomi.animesource.icon
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.preference.minusAssign
 import eu.kanade.tachiyomi.data.preference.plusAssign
-import eu.kanade.tachiyomi.source.SourceManager
-import eu.kanade.tachiyomi.source.getPreferenceKey
-import eu.kanade.tachiyomi.source.icon
-import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.setting.SettingsController
 import eu.kanade.tachiyomi.util.preference.onChange
 import eu.kanade.tachiyomi.util.preference.switchPreferenceCategory
@@ -22,7 +22,7 @@ import java.util.TreeMap
 
 class AnimeSourceFilterController : SettingsController() {
 
-    private val onlineSources by lazy { Injekt.get<SourceManager>().getOnlineSources() }
+    private val onlineSources by lazy { Injekt.get<AnimeSourceManager>().getOnlineSources() }
 
     override fun setupPreferenceScreen(screen: PreferenceScreen) = screen.apply {
         titleRes = R.string.label_sources
@@ -78,7 +78,7 @@ class AnimeSourceFilterController : SettingsController() {
      *
      * @param group the language category.
      */
-    private fun addLanguageSources(group: PreferenceGroup, sources: List<HttpSource>) {
+    private fun addLanguageSources(group: PreferenceGroup, sources: List<AnimeHttpSource>) {
         val disabledSourceIds = preferences.disabledAnimeSources().get()
 
         sources

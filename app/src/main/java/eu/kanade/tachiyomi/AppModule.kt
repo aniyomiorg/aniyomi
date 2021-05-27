@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi
 
 import android.app.Application
 import android.os.Handler
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.CoverCache
@@ -15,7 +16,6 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.extension.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.ExtensionManager
 import eu.kanade.tachiyomi.network.NetworkHelper
-import eu.kanade.tachiyomi.source.AnimeSourceManager
 import eu.kanade.tachiyomi.source.SourceManager
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.api.InjektModule

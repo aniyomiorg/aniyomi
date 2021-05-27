@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.extension.model
 
-import eu.kanade.tachiyomi.source.AnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeSource
 
 sealed class AnimeExtension {
 

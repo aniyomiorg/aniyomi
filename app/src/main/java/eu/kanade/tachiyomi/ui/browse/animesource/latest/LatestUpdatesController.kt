@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.core.os.bundleOf
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourcePresenter
 

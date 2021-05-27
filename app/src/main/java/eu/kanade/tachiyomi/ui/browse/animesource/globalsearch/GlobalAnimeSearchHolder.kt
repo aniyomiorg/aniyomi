@@ -4,9 +4,9 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.davidea.viewholders.FlexibleViewHolder
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.databinding.GlobalSearchControllerCardBinding
-import eu.kanade.tachiyomi.source.LocalAnimeSource
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 /**

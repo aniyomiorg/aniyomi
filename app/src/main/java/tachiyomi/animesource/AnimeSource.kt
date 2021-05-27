@@ -1,7 +1,7 @@
-package tachiyomi.source
+package tachiyomi.animesource
 
-import tachiyomi.source.model.AnimeInfo
-import tachiyomi.source.model.EpisodeInfo
+import tachiyomi.animesource.model.AnimeInfo
+import tachiyomi.animesource.model.EpisodeInfo
 
 /**
  * A basic interface for creating a source. It could be an online source, a local source, etc...

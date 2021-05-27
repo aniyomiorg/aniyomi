@@ -13,13 +13,12 @@ import com.afollestad.materialdialogs.MaterialDialog
 import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.backup.BackupRestoreService
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeHistory
 import eu.kanade.tachiyomi.databinding.AnimeHistoryControllerBinding
-import eu.kanade.tachiyomi.source.AnimeSourceManager
-import eu.kanade.tachiyomi.source.model.toEpisodeInfo
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
@@ -27,21 +26,17 @@ import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.source.browse.ProgressItem
+import eu.kanade.tachiyomi.ui.watcher.EpisodeLoader
 import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
-import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.runBlocking
 import reactivecircus.flowbinding.appcompat.queryTextChanges
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.Collections
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 /**
  * Fragment that shows recently read anime.
@@ -166,19 +161,7 @@ class AnimeHistoryController :
         val nextEpisode = presenter.getNextEpisode(chapter, anime)
         if (nextEpisode != null) {
             val source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
-            val link = runBlocking {
-                return@runBlocking suspendCoroutine<String> { continuation ->
-                    var link: String
-                    launchIO {
-                        try {
-                            link = source.getEpisodeLink(nextEpisode.toEpisodeInfo())
-                            continuation.resume(link)
-                        } catch (e: Throwable) {
-                            withUIContext { throw e }
-                        }
-                    }
-                }
-            }
+            val link = EpisodeLoader.getUri(nextEpisode, anime, source)
             val episodeList: List<EpisodeItem> = Collections.emptyList()
             val newIntent = WatcherActivity.newIntent(activity, anime, nextEpisode, episodeList, link)
             startActivity(newIntent)

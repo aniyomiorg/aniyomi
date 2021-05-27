@@ -4,8 +4,8 @@ import android.content.Context
 import android.text.format.Formatter
 import com.google.gson.Gson
 import com.jakewharton.disklrucache.DiskLruCache
+import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.database.models.Episode
-import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import okhttp3.Response
@@ -97,9 +97,9 @@ class EpisodeCache(private val context: Context) {
      * @param episode the episode.
      * @param pages list of pages.
      */
-    fun putPageListToCache(episode: Episode, pages: List<Page>) {
+    fun putPageListToCache(episode: Episode, video: Video) {
         // Convert list of pages to json string.
-        val cachedValue = gson.toJson(pages)
+        val cachedValue = gson.toJson(video)
 
         // Initialize the editor (edits the values for an entry).
         var editor: DiskLruCache.Editor? = null
@@ -145,7 +145,7 @@ class EpisodeCache(private val context: Context) {
      * @param imageUrl url of image.
      * @return path of image.
      */
-    fun getImageFile(imageUrl: String): File {
+    fun getVideoFile(imageUrl: String): File {
         // Get file from md5 key.
         val imageName = DiskUtil.hashKeyForDisk(imageUrl) + ".0"
         return File(diskCache.directory, imageName)

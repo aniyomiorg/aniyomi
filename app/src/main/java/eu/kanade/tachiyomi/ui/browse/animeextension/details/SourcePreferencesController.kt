@@ -21,12 +21,12 @@ import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
+import eu.kanade.tachiyomi.animesource.getPreferenceKey
 import eu.kanade.tachiyomi.data.preference.EmptyPreferenceDataStore
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
 import eu.kanade.tachiyomi.databinding.AnimeSourcePreferencesControllerBinding
-import eu.kanade.tachiyomi.source.AnimeSource
-import eu.kanade.tachiyomi.source.ConfigurableAnimeSource
-import eu.kanade.tachiyomi.source.getPreferenceKey
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import timber.log.Timber
 

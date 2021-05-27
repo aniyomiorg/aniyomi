@@ -4,7 +4,6 @@ import eu.davidea.flexibleadapter.items.AbstractHeaderItem
 import eu.davidea.flexibleadapter.items.AbstractSectionableItem
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
-import eu.kanade.tachiyomi.source.model.Page
 
 abstract class BaseEpisodeItem<T : BaseEpisodeHolder, H : AbstractHeaderItem<*>>(
     val episode: Episode,
@@ -23,8 +22,8 @@ abstract class BaseEpisodeItem<T : BaseEpisodeHolder, H : AbstractHeaderItem<*>>
 
     val progress: Int
         get() {
-            val pages = download?.pages ?: return 0
-            return pages.map(Page::progress).average().toInt()
+            val video = download?.video ?: return 0
+            return video.progress
         }
 
     @Transient

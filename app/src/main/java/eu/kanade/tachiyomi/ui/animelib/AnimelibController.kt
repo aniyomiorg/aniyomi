@@ -19,13 +19,13 @@ import com.jakewharton.rxrelay.PublishRelay
 import com.tfcporciuncula.flow.Preference
 import dev.chrisbanes.insetter.applyInsetter
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
 import eu.kanade.tachiyomi.databinding.AnimelibControllerBinding
-import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
@@ -447,7 +447,7 @@ class AnimelibController(
         } else {
             mode.title = count.toString()
 
-            binding.actionToolbar.findItem(R.id.action_download_unread)?.isVisible = selectedAnimes.any { it.source != LocalSource.ID }
+            binding.actionToolbar.findItem(R.id.action_download_unread)?.isVisible = selectedAnimes.any { it.source != LocalAnimeSource.ID }
         }
         return false
     }

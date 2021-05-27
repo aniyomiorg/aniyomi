@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.recent.animehistory
 
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
-import eu.kanade.tachiyomi.source.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import uy.kohesive.injekt.injectLazy
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols

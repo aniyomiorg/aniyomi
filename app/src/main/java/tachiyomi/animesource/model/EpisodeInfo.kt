@@ -1,4 +1,4 @@
-package tachiyomi.source.model
+package tachiyomi.animesource.model
 
 data class EpisodeInfo(
     var key: String,

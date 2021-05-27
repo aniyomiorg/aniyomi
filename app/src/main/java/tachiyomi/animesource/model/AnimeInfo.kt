@@ -1,4 +1,4 @@
-package tachiyomi.source.model
+package tachiyomi.animesource.model
 
 /**
  * Model for a anime given by a source

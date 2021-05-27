@@ -6,8 +6,8 @@ import coil.clear
 import coil.loadAny
 import coil.transform.RoundedCornersTransformation
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.databinding.AnimeUpdatesItemBinding
-import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodeHolder
 
 /**
@@ -51,7 +51,7 @@ class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdat
         }
 
         // Set episode status
-        binding.download.isVisible = item.anime.source != LocalSource.ID
+        binding.download.isVisible = item.anime.source != LocalAnimeSource.ID
         binding.download.setState(item.status, item.progress)
 
         // Set cover
