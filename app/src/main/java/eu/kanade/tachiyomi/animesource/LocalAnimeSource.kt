@@ -4,9 +4,9 @@ import android.content.Context
 import com.github.junrar.Archive
 import com.google.gson.JsonParser
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.model.AnimeFilter
+import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
-import eu.kanade.tachiyomi.animesource.model.Filter
-import eu.kanade.tachiyomi.animesource.model.FilterList
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
@@ -66,7 +66,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
 
     override fun fetchPopularAnime(page: Int) = fetchSearchAnime(page, "", POPULAR_FILTERS)
 
-    override fun fetchSearchAnime(page: Int, query: String, filters: FilterList): Observable<AnimesPage> {
+    override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
         val baseDirs = getBaseDirectories(context)
 
         val time = if (filters === LATEST_FILTERS) System.currentTimeMillis() - LATEST_THRESHOLD else 0L
@@ -310,10 +310,10 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
 
     override fun getFilterList() = POPULAR_FILTERS
 
-    private val POPULAR_FILTERS = FilterList(OrderBy(context))
-    private val LATEST_FILTERS = FilterList(OrderBy(context).apply { state = Filter.Sort.Selection(1, false) })
+    private val POPULAR_FILTERS = AnimeFilterList(OrderBy(context))
+    private val LATEST_FILTERS = AnimeFilterList(OrderBy(context).apply { state = AnimeFilter.Sort.Selection(1, false) })
 
-    private class OrderBy(context: Context) : Filter.Sort(
+    private class OrderBy(context: Context) : AnimeFilter.Sort(
         context.getString(R.string.local_filter_order_by),
         arrayOf(context.getString(R.string.title), context.getString(R.string.date)),
         Selection(0, true)

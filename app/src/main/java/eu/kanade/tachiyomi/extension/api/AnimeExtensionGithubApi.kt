@@ -59,7 +59,7 @@ internal class AnimeExtensionGithubApi {
         return json
             .filter { element ->
                 val versionName = element.jsonObject["version"]!!.jsonPrimitive.content
-                val libVersion = versionName.substringBeforeLast('.').toDouble()
+                val libVersion = versionName.substringBeforeLast('.').toInt()
                 libVersion >= AnimeExtensionLoader.LIB_VERSION_MIN && libVersion <= AnimeExtensionLoader.LIB_VERSION_MAX
             }
             .map { element ->

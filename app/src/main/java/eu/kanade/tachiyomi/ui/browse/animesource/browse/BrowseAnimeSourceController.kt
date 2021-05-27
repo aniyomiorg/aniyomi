@@ -24,7 +24,7 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
-import eu.kanade.tachiyomi.animesource.model.FilterList
+import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Category
@@ -147,10 +147,10 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
                 val allDefault = presenter.sourceFilters == presenter.source.getFilterList()
                 showProgressBar()
                 adapter?.clear()
-                presenter.setSourceFilter(if (allDefault) FilterList() else presenter.sourceFilters)
+                presenter.setSourceFilter(if (allDefault) AnimeFilterList() else presenter.sourceFilters)
             },
             onResetClicked = {
-                presenter.appliedFilters = FilterList()
+                presenter.appliedFilters = AnimeFilterList()
                 val newFilters = presenter.source.getFilterList()
                 presenter.sourceFilters = newFilters
                 filterSheet?.setFilters(presenter.filterItems)

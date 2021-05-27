@@ -8,9 +8,9 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.model.Filter
+import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 
-open class CheckboxItem(val filter: Filter.CheckBox) : AbstractFlexibleItem<CheckboxItem.Holder>() {
+open class CheckboxItem(val filter: AnimeFilter.CheckBox) : AbstractFlexibleItem<CheckboxItem.Holder>() {
 
     override fun getLayoutRes(): Int {
         return R.layout.navigation_view_checkbox

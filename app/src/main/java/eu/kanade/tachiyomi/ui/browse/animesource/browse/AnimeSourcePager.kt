@@ -1,13 +1,13 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.browse
 
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
-import eu.kanade.tachiyomi.animesource.model.FilterList
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-open class AnimeSourcePager(val source: AnimeCatalogueSource, val query: String, val filters: FilterList) : AnimePager() {
+open class AnimeSourcePager(val source: AnimeCatalogueSource, val query: String, val filters: AnimeFilterList) : AnimePager() {
 
     override fun requestNext(): Observable<AnimesPage> {
         val page = currentPage

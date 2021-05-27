@@ -1,9 +1,9 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.filter
 
 import eu.davidea.flexibleadapter.items.ISectionable
-import eu.kanade.tachiyomi.animesource.model.Filter
+import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 
-class TriStateSectionItem(filter: Filter.TriState) : TriStateItem(filter), ISectionable<TriStateItem.Holder, GroupItem> {
+class TriStateSectionItem(filter: AnimeFilter.TriState) : TriStateItem(filter), ISectionable<TriStateItem.Holder, GroupItem> {
 
     private var head: GroupItem? = null
 
@@ -27,7 +27,7 @@ class TriStateSectionItem(filter: Filter.TriState) : TriStateItem(filter), ISect
     }
 }
 
-class TextSectionItem(filter: Filter.Text) : TextItem(filter), ISectionable<TextItem.Holder, GroupItem> {
+class TextSectionItem(filter: AnimeFilter.Text) : TextItem(filter), ISectionable<TextItem.Holder, GroupItem> {
 
     private var head: GroupItem? = null
 
@@ -51,7 +51,7 @@ class TextSectionItem(filter: Filter.Text) : TextItem(filter), ISectionable<Text
     }
 }
 
-class CheckboxSectionItem(filter: Filter.CheckBox) : CheckboxItem(filter), ISectionable<CheckboxItem.Holder, GroupItem> {
+class CheckboxSectionItem(filter: AnimeFilter.CheckBox) : CheckboxItem(filter), ISectionable<CheckboxItem.Holder, GroupItem> {
 
     private var head: GroupItem? = null
 
@@ -75,7 +75,7 @@ class CheckboxSectionItem(filter: Filter.CheckBox) : CheckboxItem(filter), ISect
     }
 }
 
-class SelectSectionItem(filter: Filter.Select<*>) : SelectItem(filter), ISectionable<SelectItem.Holder, GroupItem> {
+class SelectSectionItem(filter: AnimeFilter.Select<*>) : SelectItem(filter), ISectionable<SelectItem.Holder, GroupItem> {
 
     private var head: GroupItem? = null
 

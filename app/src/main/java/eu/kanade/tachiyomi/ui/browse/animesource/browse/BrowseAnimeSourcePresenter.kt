@@ -4,8 +4,8 @@ import android.os.Bundle
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
-import eu.kanade.tachiyomi.animesource.model.Filter
-import eu.kanade.tachiyomi.animesource.model.FilterList
+import eu.kanade.tachiyomi.animesource.model.AnimeFilter
+import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.toSAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
@@ -73,7 +73,7 @@ open class BrowseAnimeSourcePresenter(
     /**
      * Modifiable list of filters.
      */
-    var sourceFilters = FilterList()
+    var sourceFilters = AnimeFilterList()
         set(value) {
             field = value
             filterItems = value.toItems()
@@ -84,7 +84,7 @@ open class BrowseAnimeSourcePresenter(
     /**
      * List of filters used by the [Pager]. If empty alongside [query], the popular query is used.
      */
-    var appliedFilters = FilterList()
+    var appliedFilters = AnimeFilterList()
 
     /**
      * Pager containing a list of anime results.
@@ -137,7 +137,7 @@ open class BrowseAnimeSourcePresenter(
      * @param query the query.
      * @param filters the current state of the filters (for search mode).
      */
-    fun restartPager(query: String = this.query, filters: FilterList = this.appliedFilters) {
+    fun restartPager(query: String = this.query, filters: AnimeFilterList = this.appliedFilters) {
         this.query = query
         this.appliedFilters = filters
 
@@ -301,31 +301,31 @@ open class BrowseAnimeSourcePresenter(
      *
      * @param filters a list of active filters.
      */
-    fun setSourceFilter(filters: FilterList) {
+    fun setSourceFilter(filters: AnimeFilterList) {
         restartPager(filters = filters)
     }
 
-    open fun createPager(query: String, filters: FilterList): AnimePager {
+    open fun createPager(query: String, filters: AnimeFilterList): AnimePager {
         return AnimeSourcePager(source, query, filters)
     }
 
-    private fun FilterList.toItems(): List<IFlexible<*>> {
+    private fun AnimeFilterList.toItems(): List<IFlexible<*>> {
         return mapNotNull { filter ->
             when (filter) {
-                is Filter.Header -> HeaderItem(filter)
-                is Filter.Separator -> SeparatorItem(filter)
-                is Filter.CheckBox -> CheckboxItem(filter)
-                is Filter.TriState -> TriStateItem(filter)
-                is Filter.Text -> TextItem(filter)
-                is Filter.Select<*> -> SelectItem(filter)
-                is Filter.Group<*> -> {
+                is AnimeFilter.Header -> HeaderItem(filter)
+                is AnimeFilter.Separator -> SeparatorItem(filter)
+                is AnimeFilter.CheckBox -> CheckboxItem(filter)
+                is AnimeFilter.TriState -> TriStateItem(filter)
+                is AnimeFilter.Text -> TextItem(filter)
+                is AnimeFilter.Select<*> -> SelectItem(filter)
+                is AnimeFilter.Group<*> -> {
                     val group = GroupItem(filter)
                     val subItems = filter.state.mapNotNull {
                         when (it) {
-                            is Filter.CheckBox -> CheckboxSectionItem(it)
-                            is Filter.TriState -> TriStateSectionItem(it)
-                            is Filter.Text -> TextSectionItem(it)
-                            is Filter.Select<*> -> SelectSectionItem(it)
+                            is AnimeFilter.CheckBox -> CheckboxSectionItem(it)
+                            is AnimeFilter.TriState -> TriStateSectionItem(it)
+                            is AnimeFilter.Text -> TextSectionItem(it)
+                            is AnimeFilter.Select<*> -> SelectSectionItem(it)
                             else -> null
                         }
                     }
@@ -333,7 +333,7 @@ open class BrowseAnimeSourcePresenter(
                     group.subItems = subItems
                     group
                 }
-                is Filter.Sort -> {
+                is AnimeFilter.Sort -> {
                     val group = SortGroup(filter)
                     val subItems = filter.values.map {
                         SortItem(it, group)

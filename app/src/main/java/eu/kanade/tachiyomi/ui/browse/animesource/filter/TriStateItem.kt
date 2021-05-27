@@ -9,12 +9,12 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
-import eu.kanade.tachiyomi.animesource.model.Filter
+import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import eu.kanade.tachiyomi.util.system.dpToPx
 import eu.kanade.tachiyomi.util.system.getResourceColor
 import eu.kanade.tachiyomi.R as TR
 
-open class TriStateItem(val filter: Filter.TriState) : AbstractFlexibleItem<TriStateItem.Holder>() {
+open class TriStateItem(val filter: AnimeFilter.TriState) : AbstractFlexibleItem<TriStateItem.Holder>() {
 
     override fun getLayoutRes(): Int {
         return TR.layout.navigation_view_checkedtext
@@ -35,13 +35,13 @@ open class TriStateItem(val filter: Filter.TriState) : AbstractFlexibleItem<TriS
         fun getIcon() = AppCompatResources.getDrawable(
             view.context,
             when (filter.state) {
-                Filter.TriState.STATE_IGNORE -> TR.drawable.ic_check_box_outline_blank_24dp
-                Filter.TriState.STATE_INCLUDE -> TR.drawable.ic_check_box_24dp
-                Filter.TriState.STATE_EXCLUDE -> TR.drawable.ic_check_box_x_24dp
+                AnimeFilter.TriState.STATE_IGNORE -> TR.drawable.ic_check_box_outline_blank_24dp
+                AnimeFilter.TriState.STATE_INCLUDE -> TR.drawable.ic_check_box_24dp
+                AnimeFilter.TriState.STATE_EXCLUDE -> TR.drawable.ic_check_box_x_24dp
                 else -> throw Exception("Unknown state")
             }
         )?.apply {
-            val color = if (filter.state == Filter.TriState.STATE_INCLUDE) {
+            val color = if (filter.state == AnimeFilter.TriState.STATE_INCLUDE) {
                 view.context.getResourceColor(R.attr.colorAccent)
             } else {
                 view.context.getResourceColor(R.attr.colorOnBackground, 0.38f)

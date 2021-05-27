@@ -10,9 +10,9 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.model.Filter
+import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 
-open class TextItem(val filter: Filter.Text) : AbstractFlexibleItem<TextItem.Holder>() {
+open class TextItem(val filter: AnimeFilter.Text) : AbstractFlexibleItem<TextItem.Holder>() {
 
     override fun getLayoutRes(): Int {
         return R.layout.navigation_view_text

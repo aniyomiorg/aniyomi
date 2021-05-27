@@ -9,9 +9,9 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractHeaderItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
-import eu.kanade.tachiyomi.animesource.model.Filter
+import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 
-class HeaderItem(val filter: Filter.Header) : AbstractHeaderItem<HeaderItem.Holder>() {
+class HeaderItem(val filter: AnimeFilter.Header) : AbstractHeaderItem<HeaderItem.Holder>() {
 
     @SuppressLint("PrivateResource")
     override fun getLayoutRes(): Int {
