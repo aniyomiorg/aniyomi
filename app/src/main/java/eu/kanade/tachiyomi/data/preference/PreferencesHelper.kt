@@ -272,7 +272,11 @@ class PreferencesHelper(val context: Context) {
 
     fun categoryTabs() = flowPrefs.getBoolean(Keys.categoryTabs, true)
 
+    fun animeCategoryTabs() = flowPrefs.getBoolean(Keys.animeCategoryTabs, true)
+
     fun categoryNumberOfItems() = flowPrefs.getBoolean(Keys.categoryNumberOfItems, false)
+
+    fun animeCategoryNumberOfItems() = flowPrefs.getBoolean(Keys.animeCategoryNumberOfItems, false)
 
     fun filterDownloaded() = flowPrefs.getInt(Keys.filterDownloaded, ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
 

@@ -306,16 +306,16 @@ class AnimelibSettingsSheet(
             override val footer = null
 
             override fun initModels() {
-                showTabs.checked = preferences.categoryTabs().get()
-                showNumberOfItems.checked = preferences.categoryNumberOfItems().get()
+                showTabs.checked = preferences.animeCategoryTabs().get()
+                showNumberOfItems.checked = preferences.animeCategoryNumberOfItems().get()
             }
 
             override fun onItemClicked(item: Item) {
                 item as Item.CheckboxGroup
                 item.checked = !item.checked
                 when (item) {
-                    showTabs -> preferences.categoryTabs().set(item.checked)
-                    showNumberOfItems -> preferences.categoryNumberOfItems().set(item.checked)
+                    showTabs -> preferences.animeCategoryTabs().set(item.checked)
+                    showNumberOfItems -> preferences.animeCategoryNumberOfItems().set(item.checked)
                 }
                 adapter.notifyItemChanged(item)
             }

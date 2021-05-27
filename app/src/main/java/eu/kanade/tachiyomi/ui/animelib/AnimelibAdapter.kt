@@ -89,6 +89,19 @@ class AnimelibAdapter(
     }
 
     /**
+     * Returns the title to display for a category.
+     *
+     * @param position the position of the element.
+     * @return the title to display.
+     */
+    override fun getPageTitle(position: Int): CharSequence {
+        if (preferences.animeCategoryNumberOfItems().get()) {
+            return categories[position].let { "${it.name} (${itemsPerCategory[it.id]})" }
+        }
+        return categories[position].name
+    }
+
+    /**
      * Returns the position of the view.
      */
     override fun getItemPosition(obj: Any): Int {

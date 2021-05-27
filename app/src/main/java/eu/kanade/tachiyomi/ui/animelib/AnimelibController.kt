@@ -17,6 +17,7 @@ import com.google.android.material.tabs.TabLayout
 import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
 import com.tfcporciuncula.flow.Preference
+import dev.chrisbanes.insetter.applyInsetter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.database.models.Anime
@@ -135,7 +136,7 @@ class AnimelibController(
     }
 
     private fun updateTitle() {
-        val showCategoryTabs = preferences.categoryTabs().get()
+        val showCategoryTabs = preferences.animeCategoryTabs().get()
         val currentCategory = adapter?.categories?.getOrNull(binding.animelibPager.currentItem)
 
         var title = if (showCategoryTabs) {
@@ -144,7 +145,7 @@ class AnimelibController(
             currentCategory?.name
         }
 
-        if (preferences.categoryNumberOfItems().get() && animelibAnimeRelay.hasValue()) {
+        if (preferences.animeCategoryNumberOfItems().get() && animelibAnimeRelay.hasValue()) {
             animelibAnimeRelay.value.animes.let { animeMap ->
                 if (!showCategoryTabs) {
                     title += " (${animeMap[currentCategory?.id]?.size ?: 0})"
@@ -166,6 +167,12 @@ class AnimelibController(
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
+
+        binding.actionToolbar.applyInsetter {
+            type(navigationBars = true) {
+                margin(bottom = true)
+            }
+        }
 
         adapter = AnimelibAdapter(this)
         binding.animelibPager.adapter = adapter
@@ -324,8 +331,8 @@ class AnimelibController(
     }
 
     private fun onTabsSettingsChanged() {
-        tabsVisibilityRelay.call(preferences.categoryTabs().get() && adapter?.categories?.size ?: 0 > 1)
-        animeCountVisibilityRelay.call(preferences.categoryNumberOfItems().get())
+        tabsVisibilityRelay.call(preferences.animeCategoryTabs().get() && adapter?.categories?.size ?: 0 > 1)
+        animeCountVisibilityRelay.call(preferences.animeCategoryNumberOfItems().get())
         updateTitle()
     }
 

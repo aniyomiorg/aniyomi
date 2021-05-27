@@ -224,7 +224,11 @@ object PreferenceKeys {
 
     const val categoryTabs = "display_category_tabs"
 
+    const val animeCategoryTabs = "display_anime_category_tabs"
+
     const val categoryNumberOfItems = "display_number_of_items"
+
+    const val animeCategoryNumberOfItems = "display_number_of_items_anime"
 
     const val alwaysShowChapterTransition = "always_show_chapter_transition"
 
