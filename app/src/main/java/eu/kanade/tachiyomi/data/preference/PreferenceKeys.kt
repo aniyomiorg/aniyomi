@@ -222,6 +222,8 @@ object PreferenceKeys {
 
     const val unreadBadge = "display_unread_badge"
 
+    const val localBadge = "display_local_badge"
+
     const val categoryTabs = "display_category_tabs"
 
     const val animeCategoryTabs = "display_anime_category_tabs"
