@@ -50,7 +50,7 @@ class AnimelibComfortableGridHolder(
             text = item.downloadCount.toString()
         }
         // set local visibility if its local anime
-        binding.localText.isVisible = item.anime.isLocal()
+        binding.localText.isVisible = item.isLocal
 
         // For rounded corners
         binding.card.clipToOutline = true

@@ -13,8 +13,8 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferenceValues.DisplayMode
-import eu.kanade.tachiyomi.databinding.AnimeSourceComfortableGridItemBinding
-import eu.kanade.tachiyomi.databinding.AnimeSourceCompactGridItemBinding
+import eu.kanade.tachiyomi.databinding.SourceComfortableGridItemBinding
+import eu.kanade.tachiyomi.databinding.SourceCompactGridItemBinding
 import eu.kanade.tachiyomi.widget.AutofitRecyclerView
 
 class AnimeSourceItem(val anime: Anime, private val displayMode: Preference<DisplayMode>) :
@@ -34,7 +34,7 @@ class AnimeSourceItem(val anime: Anime, private val displayMode: Preference<Disp
     ): AnimeSourceHolder<*> {
         return when (displayMode.get()) {
             DisplayMode.COMPACT_GRID -> {
-                val binding = AnimeSourceCompactGridItemBinding.bind(view)
+                val binding = SourceCompactGridItemBinding.bind(view)
                 val parent = adapter.recyclerView as AutofitRecyclerView
                 val coverHeight = parent.itemWidth / 3 * 4
                 view.apply {
@@ -51,7 +51,7 @@ class AnimeSourceItem(val anime: Anime, private val displayMode: Preference<Disp
                 AnimeSourceGridHolder(view, adapter)
             }
             DisplayMode.COMFORTABLE_GRID -> {
-                val binding = AnimeSourceComfortableGridItemBinding.bind(view)
+                val binding = SourceComfortableGridItemBinding.bind(view)
                 val parent = adapter.recyclerView as AutofitRecyclerView
                 val coverHeight = parent.itemWidth / 3 * 4
                 view.apply {

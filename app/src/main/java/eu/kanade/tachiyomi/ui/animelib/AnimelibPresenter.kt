@@ -195,6 +195,7 @@ class AnimelibPresenter(
     private fun setBadges(map: AnimelibMap) {
         val showDownloadBadges = preferences.downloadBadge().get()
         val showUnreadBadges = preferences.unreadBadge().get()
+        val showLocalBadges = preferences.localBadge().get()
 
         for ((_, itemList) in map) {
             for (item in itemList) {
@@ -210,6 +211,13 @@ class AnimelibPresenter(
                 } else {
                     // Unset unread count if not enabled
                     -1
+                }
+
+                item.isLocal = if (showLocalBadges) {
+                    item.anime.isLocal()
+                } else {
+                    // Hide / Unset local badge if not enabled
+                    false
                 }
             }
         }

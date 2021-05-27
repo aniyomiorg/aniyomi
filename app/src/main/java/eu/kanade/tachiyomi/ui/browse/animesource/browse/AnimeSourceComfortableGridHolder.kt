@@ -9,7 +9,7 @@ import coil.transition.CrossfadeTransition
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.databinding.AnimeSourceComfortableGridItemBinding
+import eu.kanade.tachiyomi.databinding.SourceComfortableGridItemBinding
 import eu.kanade.tachiyomi.widget.StateImageViewTarget
 
 /**
@@ -21,9 +21,9 @@ import eu.kanade.tachiyomi.widget.StateImageViewTarget
  * @constructor creates a new catalogue holder.
  */
 class AnimeSourceComfortableGridHolder(private val view: View, private val adapter: FlexibleAdapter<*>) :
-    AnimeSourceHolder<AnimeSourceComfortableGridItemBinding>(view, adapter) {
+    AnimeSourceHolder<SourceComfortableGridItemBinding>(view, adapter) {
 
-    override val binding = AnimeSourceComfortableGridItemBinding.bind(view)
+    override val binding = SourceComfortableGridItemBinding.bind(view)
 
     /**
      * Method called from [CatalogueAdapter.onBindViewHolder]. It updates the data for this

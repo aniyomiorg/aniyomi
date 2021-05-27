@@ -28,6 +28,7 @@ class AnimelibItem(val anime: AnimelibAnime, private val animelibDisplayMode: Pr
 
     var downloadCount = -1
     var unreadCount = -1
+    var isLocal = false
 
     override fun getLayoutRes(): Int {
         return when (animelibDisplayMode.get()) {

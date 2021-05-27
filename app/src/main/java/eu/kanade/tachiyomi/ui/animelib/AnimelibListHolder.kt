@@ -50,7 +50,7 @@ class AnimelibListHolder(
             text = "${item.downloadCount}"
         }
         // show local text badge if local anime
-        binding.localText.isVisible = item.anime.isLocal()
+        binding.localText.isVisible = item.isLocal
 
         // Create anime_thumbnail onclick to simulate long click
         binding.thumbnail.setOnClickListener {
