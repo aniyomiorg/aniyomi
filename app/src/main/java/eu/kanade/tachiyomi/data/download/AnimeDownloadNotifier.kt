@@ -73,7 +73,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      * those can only be dismissed by the user.
      */
     fun dismissProgress() {
-        context.notificationManager.cancel(Notifications.ID_DOWNLOAD_CHAPTER_PROGRESS)
+        context.notificationManager.cancel(Notifications.ID_DOWNLOAD_EPISODE_PROGRESS)
     }
 
     /**
@@ -87,20 +87,19 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                 setSmallIcon(android.R.drawable.stat_sys_download)
                 clearActions()
                 // Open download manager when clicked
-                setContentIntent(NotificationHandler.openDownloadManagerPendingActivity(context))
+                setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
                 isDownloading = true
                 // Pause action
                 addAction(
                     R.drawable.ic_pause_24dp,
                     context.getString(R.string.action_pause),
-                    NotificationReceiver.pauseDownloadsPendingBroadcast(context)
+                    NotificationReceiver.pauseAnimeDownloadsPendingBroadcast(context)
                 )
             }
 
             val downloadingProgressText = context.getString(
-                R.string.chapter_downloading_progress,
-                download.downloadedImages,
-                1
+                R.string.episode_downloading_progress,
+                download.progress
             )
 
             if (preferences.hideNotificationContent()) {
@@ -116,7 +115,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             setProgress(100, download.progress, false)
             setOngoing(true)
 
-            show(Notifications.ID_DOWNLOAD_CHAPTER_PROGRESS)
+            show(Notifications.ID_DOWNLOAD_EPISODE_PROGRESS)
         }
     }
 
@@ -132,21 +131,21 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             setOngoing(false)
             clearActions()
             // Open download manager when clicked
-            setContentIntent(NotificationHandler.openDownloadManagerPendingActivity(context))
+            setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
             // Resume action
             addAction(
                 R.drawable.ic_play_arrow_24dp,
                 context.getString(R.string.action_resume),
-                NotificationReceiver.resumeDownloadsPendingBroadcast(context)
+                NotificationReceiver.resumeAnimeDownloadsPendingBroadcast(context)
             )
             // Clear action
             addAction(
                 R.drawable.ic_close_24dp,
                 context.getString(R.string.action_cancel_all),
-                NotificationReceiver.clearDownloadsPendingBroadcast(context)
+                NotificationReceiver.clearAnimeDownloadsPendingBroadcast(context)
             )
 
-            show(Notifications.ID_DOWNLOAD_CHAPTER_PROGRESS)
+            show(Notifications.ID_DOWNLOAD_EPISODE_PROGRESS)
         }
 
         // Reset initial values
@@ -167,7 +166,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                 setSmallIcon(android.R.drawable.stat_sys_download_done)
                 clearActions()
                 setAutoCancel(true)
-                setContentIntent(NotificationHandler.openDownloadManagerPendingActivity(context))
+                setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
                 setProgress(0, 0, false)
 
                 show(Notifications.ID_DOWNLOAD_CHAPTER_COMPLETE)
@@ -191,7 +190,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             setSmallIcon(android.R.drawable.stat_sys_warning)
             setAutoCancel(true)
             clearActions()
-            setContentIntent(NotificationHandler.openDownloadManagerPendingActivity(context))
+            setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
             setProgress(0, 0, false)
 
             show(Notifications.ID_DOWNLOAD_CHAPTER_ERROR)
@@ -218,7 +217,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             setContentText(error ?: context.getString(R.string.download_notifier_unknown_error))
             setSmallIcon(android.R.drawable.stat_sys_warning)
             clearActions()
-            setContentIntent(NotificationHandler.openDownloadManagerPendingActivity(context))
+            setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
             setProgress(0, 0, false)
 
             show(Notifications.ID_DOWNLOAD_CHAPTER_ERROR)

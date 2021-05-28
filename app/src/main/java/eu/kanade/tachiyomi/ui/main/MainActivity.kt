@@ -355,6 +355,13 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                 setSelectedNavItem(R.id.nav_more)
                 router.pushController(RouterTransaction.with(DownloadController()))
             }
+            SHORTCUT_ANIME_DOWNLOADS -> {
+                if (router.backstackSize > 1) {
+                    router.popToRoot()
+                }
+                setSelectedNavItem(R.id.nav_more)
+                router.pushController(RouterTransaction.with(DownloadController()))
+            }
             Intent.ACTION_SEARCH, Intent.ACTION_SEND, "com.google.android.gms.actions.SEARCH_ACTION" -> {
                 // If the intent match the "standard" Android search intent
                 // or the Google-specific search intent (triggered by saying or typing "search *query* on *Tachiyomi*" in Google Search/Google Assistant)
@@ -561,6 +568,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
         const val SHORTCUT_RECENTLY_READ = "eu.kanade.tachiyomi.SHOW_RECENTLY_READ"
         const val SHORTCUT_CATALOGUES = "eu.kanade.tachiyomi.SHOW_CATALOGUES"
         const val SHORTCUT_DOWNLOADS = "eu.kanade.tachiyomi.SHOW_DOWNLOADS"
+        const val SHORTCUT_ANIME_DOWNLOADS = "eu.kanade.tachiyomi.SHOW_ANIME_DOWNLOADS"
         const val SHORTCUT_MANGA = "eu.kanade.tachiyomi.SHOW_MANGA"
         const val SHORTCUT_ANIME = "eu.kanade.tachiyomi.SHOW_ANIME"
         const val SHORTCUT_EXTENSIONS = "eu.kanade.tachiyomi.EXTENSIONS"

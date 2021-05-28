@@ -27,6 +27,19 @@ object NotificationHandler {
     }
 
     /**
+     * Returns [PendingIntent] that starts a download activity.
+     *
+     * @param context context of application
+     */
+    internal fun openAnimeDownloadManagerPendingActivity(context: Context): PendingIntent {
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+            action = MainActivity.SHORTCUT_ANIME_DOWNLOADS
+        }
+        return PendingIntent.getActivity(context, 0, intent, 0)
+    }
+
+    /**
      * Returns [PendingIntent] that starts a gallery activity
      *
      * @param context context of application
