@@ -499,9 +499,9 @@ class AnimePresenter(
      */
     fun getNextUnseenEpisode(): EpisodeItem? {
         return if (sortDescending()) {
-            return filteredAndSortedEpisodes.findLast { !it.seen }
+            return filteredAndSortedEpisodes.find { !it.seen }
         } else {
-            filteredAndSortedEpisodes.find { !it.seen }
+            filteredAndSortedEpisodes.findLast { !it.seen }
         }
     }
 
@@ -511,9 +511,9 @@ class AnimePresenter(
             .filter { !it.seen && it.status == AnimeDownload.State.NOT_DOWNLOADED }
             .distinctBy { it.name }
         return if (sortDescending()) {
-            episodes.reversed()
-        } else {
             episodes
+        } else {
+            episodes.reversed()
         }
     }
 
