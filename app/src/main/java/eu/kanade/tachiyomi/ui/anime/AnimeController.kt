@@ -360,7 +360,7 @@ class AnimeController :
 
     override fun cleanupFab(fab: ExtendedFloatingActionButton) {
         fab.setOnClickListener(null)
-        actionFabScrollListener?.let { binding.fullRecycler!!.removeOnScrollListener(it) }
+        actionFabScrollListener?.let { episodeRecycler.removeOnScrollListener(it) }
         actionFab = null
     }
 
