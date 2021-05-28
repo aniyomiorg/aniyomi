@@ -13,7 +13,7 @@ import eu.kanade.tachiyomi.ui.base.controller.NoToolbarElevationController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.category.CategoryController
-import eu.kanade.tachiyomi.ui.download.DownloadController
+import eu.kanade.tachiyomi.ui.download.DownloadTabsController
 import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
 import eu.kanade.tachiyomi.ui.setting.SettingsController
 import eu.kanade.tachiyomi.ui.setting.SettingsMainController
@@ -93,7 +93,7 @@ class MoreController :
                 iconRes = R.drawable.ic_get_app_24dp
                 iconTint = tintColor
                 onClick {
-                    router.pushController(DownloadController().withFadeTransaction())
+                    router.pushController(DownloadTabsController().withFadeTransaction())
                 }
             }
             preference {

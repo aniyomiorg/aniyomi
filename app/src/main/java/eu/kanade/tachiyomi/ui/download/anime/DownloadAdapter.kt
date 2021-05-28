@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.download
+package eu.kanade.tachiyomi.ui.download.anime
 
 import android.view.MenuItem
 import eu.davidea.flexibleadapter.FlexibleAdapter

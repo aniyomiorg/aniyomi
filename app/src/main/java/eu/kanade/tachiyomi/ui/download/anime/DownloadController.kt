@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.download
+package eu.kanade.tachiyomi.ui.download.anime
 
 import android.view.LayoutInflater
 import android.view.Menu
@@ -11,10 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import dev.chrisbanes.insetter.applyInsetter
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.download.DownloadService
-import eu.kanade.tachiyomi.data.download.model.Download
+import eu.kanade.tachiyomi.data.download.AnimeDownloadService
+import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.databinding.DownloadControllerBinding
-import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.util.view.shrinkOnScroll
@@ -43,7 +42,7 @@ class DownloadController :
     /**
      * Map of subscriptions for active downloads.
      */
-    private val progressSubscriptions by lazy { mutableMapOf<Download, Subscription>() }
+    private val progressSubscriptions by lazy { mutableMapOf<AnimeDownload, Subscription>() }
 
     /**
      * Whether the download queue is running or not.
@@ -89,7 +88,7 @@ class DownloadController :
         actionFabScrollListener = actionFab?.shrinkOnScroll(binding.recycler)
 
         // Subscribe to changes
-        DownloadService.runningRelay
+        AnimeDownloadService.runningRelay
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeUntilDestroy { onQueueStatusChange(it) }
 
@@ -108,10 +107,10 @@ class DownloadController :
             val context = applicationContext ?: return@setOnClickListener
 
             if (isRunning) {
-                DownloadService.stop(context)
+                AnimeDownloadService.stop(context)
                 presenter.pauseDownloads()
             } else {
-                DownloadService.start(context)
+                AnimeDownloadService.start(context)
             }
 
             setInformationView()
@@ -146,14 +145,14 @@ class DownloadController :
         val context = applicationContext ?: return false
         when (item.itemId) {
             R.id.clear_queue -> {
-                DownloadService.stop(context)
+                AnimeDownloadService.stop(context)
                 presenter.clearQueue()
             }
             R.id.newest, R.id.oldest -> {
-                reorderQueue({ it.download.chapter.date_upload }, item.itemId == R.id.newest)
+                reorderQueue({ it.download.episode.date_upload }, item.itemId == R.id.newest)
             }
             R.id.asc, R.id.desc -> {
-                reorderQueue({ it.download.chapter.chapter_number }, item.itemId == R.id.desc)
+                reorderQueue({ it.download.episode.episode_number }, item.itemId == R.id.desc)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -175,19 +174,19 @@ class DownloadController :
      *
      * @param download the download whose status has changed.
      */
-    private fun onStatusChange(download: Download) {
+    private fun onStatusChange(download: AnimeDownload) {
         when (download.status) {
-            Download.State.DOWNLOADING -> {
+            AnimeDownload.State.DOWNLOADING -> {
                 observeProgress(download)
                 // Initial update of the downloaded pages
                 onUpdateDownloadedPages(download)
             }
-            Download.State.DOWNLOADED -> {
+            AnimeDownload.State.DOWNLOADED -> {
                 unsubscribeProgress(download)
                 onUpdateProgress(download)
                 onUpdateDownloadedPages(download)
             }
-            Download.State.ERROR -> unsubscribeProgress(download)
+            AnimeDownload.State.ERROR -> unsubscribeProgress(download)
         }
     }
 
@@ -196,13 +195,11 @@ class DownloadController :
      *
      * @param download the download to observe its progress.
      */
-    private fun observeProgress(download: Download) {
+    private fun observeProgress(download: AnimeDownload) {
         val subscription = Observable.interval(50, TimeUnit.MILLISECONDS)
             // Get the sum of percentages for all the pages.
             .flatMap {
-                Observable.from(download.pages)
-                    .map(Page::progress)
-                    .reduce { x, y -> x + y }
+                Observable.just(download.video!!.progress)
             }
             // Keep only the latest emission to avoid backpressure.
             .onBackpressureLatest()
@@ -226,7 +223,7 @@ class DownloadController :
      *
      * @param download the download to unsubscribe.
      */
-    private fun unsubscribeProgress(download: Download) {
+    private fun unsubscribeProgress(download: AnimeDownload) {
         progressSubscriptions.remove(download)?.unsubscribe()
     }
 
@@ -259,7 +256,7 @@ class DownloadController :
      *
      * @param download the download whose progress has changed.
      */
-    private fun onUpdateProgress(download: Download) {
+    private fun onUpdateProgress(download: AnimeDownload) {
         getHolder(download)?.notifyProgress()
     }
 
@@ -268,7 +265,7 @@ class DownloadController :
      *
      * @param download the download whose page has been downloaded.
      */
-    private fun onUpdateDownloadedPages(download: Download) {
+    private fun onUpdateDownloadedPages(download: AnimeDownload) {
         getHolder(download)?.notifyDownloadedPages()
     }
 
@@ -278,8 +275,8 @@ class DownloadController :
      * @param download the download to find.
      * @return the holder of the download or null if it's not bound.
      */
-    private fun getHolder(download: Download): DownloadHolder? {
-        return binding.recycler.findViewHolderForItemId(download.chapter.id!!) as? DownloadHolder
+    private fun getHolder(download: AnimeDownload): DownloadHolder? {
+        return binding.recycler.findViewHolderForItemId(download.episode.id!!) as? DownloadHolder
     }
 
     /**
@@ -359,7 +356,7 @@ class DownloadController :
             R.id.cancel_series -> {
                 val download = adapter?.getItem(position)?.download ?: return
                 val allDownloadsForSeries = adapter?.currentItems
-                    ?.filter { download.manga.id == it.download.manga.id }
+                    ?.filter { download.anime.id == it.download.anime.id }
                     ?.map(DownloadItem::download)
                 if (!allDownloadsForSeries.isNullOrEmpty()) {
                     presenter.cancelDownloads(allDownloadsForSeries)

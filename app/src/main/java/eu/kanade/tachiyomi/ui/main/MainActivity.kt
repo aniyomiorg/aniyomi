@@ -48,7 +48,7 @@ import eu.kanade.tachiyomi.ui.browse.BrowseController
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
-import eu.kanade.tachiyomi.ui.download.DownloadController
+import eu.kanade.tachiyomi.ui.download.DownloadTabsController
 import eu.kanade.tachiyomi.ui.library.LibraryController
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.more.MoreController
@@ -65,6 +65,8 @@ import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.util.Date
 import java.util.concurrent.TimeUnit
+import eu.kanade.tachiyomi.ui.download.anime.DownloadController as AnimeDownloadController
+import eu.kanade.tachiyomi.ui.download.manga.DownloadController as MangaDownloadController
 
 class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
 
@@ -182,7 +184,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                         controller?.showSettingsSheet()
                     }
                     R.id.nav_updates -> {
-                        router.pushController(DownloadController().withFadeTransaction())
+                        router.pushController(DownloadTabsController().withFadeTransaction())
                     }
                     R.id.nav_animelib -> {
                         val controller = router.getControllerWithTag(id.toString()) as? AnimelibController
@@ -352,15 +354,15 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                 if (router.backstackSize > 1) {
                     router.popToRoot()
                 }
-                setSelectedNavItem(R.id.nav_more)
-                router.pushController(RouterTransaction.with(DownloadController()))
+                setSelectedNavItem(R.id.nav_updates)
+                router.pushController(RouterTransaction.with(MangaDownloadController()))
             }
             SHORTCUT_ANIME_DOWNLOADS -> {
                 if (router.backstackSize > 1) {
                     router.popToRoot()
                 }
-                setSelectedNavItem(R.id.nav_more)
-                router.pushController(RouterTransaction.with(DownloadController()))
+                setSelectedNavItem(R.id.nav_updates)
+                router.pushController(RouterTransaction.with(AnimeDownloadController()))
             }
             Intent.ACTION_SEARCH, Intent.ACTION_SEND, "com.google.android.gms.actions.SEARCH_ACTION" -> {
                 // If the intent match the "standard" Android search intent

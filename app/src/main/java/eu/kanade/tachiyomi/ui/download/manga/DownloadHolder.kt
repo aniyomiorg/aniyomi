@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.download
+package eu.kanade.tachiyomi.ui.download.manga
 
 import android.view.View
 import eu.davidea.viewholders.FlexibleViewHolder

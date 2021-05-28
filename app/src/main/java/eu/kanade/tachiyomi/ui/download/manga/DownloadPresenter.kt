@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.download
+package eu.kanade.tachiyomi.ui.download.manga
 
 import android.os.Bundle
 import eu.kanade.tachiyomi.data.download.DownloadManager
