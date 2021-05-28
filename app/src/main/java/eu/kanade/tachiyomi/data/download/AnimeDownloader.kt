@@ -32,6 +32,7 @@ import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import uy.kohesive.injekt.injectLazy
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 /**
  * This class is the one in charge of downloading episodes.
@@ -204,7 +205,7 @@ class AnimeDownloader(
                     completeAnimeDownload(it)
                 },
                 { error ->
-                    DownloadService.stop(context)
+                    AnimeDownloadService.stop(context)
                     Timber.e(error)
                     notifier.onError(error.message)
                 }
@@ -310,16 +311,40 @@ class AnimeDownloader(
             }
             // Get all the URLs to the source images, fetch pages if necessary
             .flatMap { download.source.fetchUrlFromVideo(it) }
+            .doOnNext {
+                Observable.interval(50, TimeUnit.MILLISECONDS)
+                    // Get the sum of percentages for all the pages.
+                    .flatMap {
+                        Observable.just(download.video)
+                            .flatMap { Observable.just(it!!.progress) }
+                    }
+                    // Keep only the latest emission to avoid backpressure.
+                    .onBackpressureLatest()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { progress ->
+                        // Update the view only if the progress has changed.
+                        if (download.totalProgress != progress) {
+                            download.totalProgress = progress
+                            notifier.onProgressChange(download)
+                        }
+                    }
+            }
             // Start downloading images, consider we can have downloaded images already
             // Concurrently do 5 pages at a time
             .flatMap({ video -> getOrAnimeDownloadImage(video, download, tmpDir) }, 5)
             .onBackpressureLatest()
             // Do when page is downloaded.
-            .doOnNext { notifier.onProgressChange(download) }
             .toList()
             .map { download }
             // Do after download completes
-            .doOnNext { ensureSuccessfulAnimeDownload(download, animeDir, tmpDir, episodeDirname) }
+            .doOnNext {
+                ensureSuccessfulAnimeDownload(download, animeDir, tmpDir, episodeDirname)
+
+                if (download.status == AnimeDownload.State.DOWNLOADED) {
+                    Timber.w(download.status.name)
+                    notifier.dismissProgress()
+                }
+            }
             // If the page list threw, it will resume here
             .onErrorReturn { error ->
                 download.status = AnimeDownload.State.ERROR
@@ -488,7 +513,7 @@ class AnimeDownloader(
             queue.remove(download)
         }
         if (areAllAnimeDownloadsFinished()) {
-            DownloadService.stop(context)
+            AnimeDownloadService.stop(context)
         }
     }
 

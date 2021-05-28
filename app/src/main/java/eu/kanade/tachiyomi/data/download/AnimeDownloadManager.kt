@@ -104,7 +104,7 @@ class AnimeDownloadManager(private val context: Context) {
         val wasRunning = downloader.isRunning
 
         if (downloads.isEmpty()) {
-            DownloadService.stop(context)
+            AnimeDownloadService.stop(context)
             downloader.queue.clear()
             return
         }
@@ -242,7 +242,7 @@ class AnimeDownloadManager(private val context: Context) {
 
         if (wasRunning) {
             if (downloader.queue.isEmpty()) {
-                DownloadService.stop(context)
+                AnimeDownloadService.stop(context)
                 downloader.stop()
             } else if (downloader.queue.isNotEmpty()) {
                 downloader.start()

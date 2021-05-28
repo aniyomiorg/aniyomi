@@ -37,7 +37,7 @@ import eu.kanade.tachiyomi.data.database.models.AnimeHistory
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.DownloadService
+import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -1073,7 +1073,7 @@ class AnimeController :
     override fun downloadEpisode(position: Int) {
         val item = episodesAdapter?.getItem(position) ?: return
         if (item.status == AnimeDownload.State.ERROR) {
-            DownloadService.start(activity!!)
+            AnimeDownloadService.start(activity!!)
         } else {
             downloadEpisodes(listOf(item))
         }

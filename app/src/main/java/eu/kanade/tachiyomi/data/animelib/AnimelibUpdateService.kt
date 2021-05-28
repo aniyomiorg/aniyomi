@@ -21,7 +21,7 @@ import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.DownloadService
+import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -314,7 +314,7 @@ class AnimelibUpdateService(
         if (newUpdates.isNotEmpty()) {
             notifier.showUpdateNotifications(newUpdates)
             if (hasDownloads) {
-                DownloadService.start(this)
+                AnimeDownloadService.start(this)
             }
         }
 

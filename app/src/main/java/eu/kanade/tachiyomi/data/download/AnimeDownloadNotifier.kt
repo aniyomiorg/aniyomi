@@ -113,7 +113,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                 setContentText(downloadingProgressText)
             }
 
-            setProgress(1, download.downloadedImages, false)
+            setProgress(100, download.progress, false)
             setOngoing(true)
 
             show(Notifications.ID_DOWNLOAD_CHAPTER_PROGRESS)
