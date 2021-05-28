@@ -3,6 +3,9 @@
 # Keep extension's common dependencies
 -keep,allowoptimization class eu.kanade.tachiyomi.** { public protected *; }
 -keep,allowoptimization class androidx.preference.** { *; }
+-keep,allowoptimization class android.content.** { *; }
+-keep,allowoptimization class kotlinx.coroutines.** { *; }
+-keep,allowoptimization class uy.kohesive.injekt.** { *; }
 -keep,allowoptimization class kotlin.** { public protected *; }
 -keep,allowoptimization class okhttp3.** { public protected *; }
 -keep,allowoptimization class okio.** { public protected *; }
