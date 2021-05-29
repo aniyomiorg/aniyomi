@@ -33,7 +33,7 @@ class AnimeSourceFilterSheet(
 
     override fun show() {
         super.show()
-        sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     fun setFilters(items: List<IFlexible<*>>) {
