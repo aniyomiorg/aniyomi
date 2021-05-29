@@ -89,6 +89,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.min
 
 class AnimeController :
@@ -701,22 +702,6 @@ class AnimeController :
             val activity = activity ?: return
             presenter.editCover(anime!!, activity, dataUri)
         }
-        if (requestCode == REQUEST_INTERNAL) {
-            val episode: Episode = data!!.getSerializableExtra("episode") as Episode
-            // if next or previous episode was pressed
-            if (data.getBooleanExtra("nextResult", false)) {
-                val episodeList = presenter.filteredAndSortedEpisodes
-                val idx = episodeList.indexOfFirst { it.episode_number == episode.episode_number }
-                val nextEpisode = episodeList[idx - 1].episode
-                openEpisode(nextEpisode)
-            }
-            if (data.getBooleanExtra("previousResult", false)) {
-                val episodeList = presenter.filteredAndSortedEpisodes
-                val idx = episodeList.indexOfLast { it.episode_number == episode.episode_number }
-                val previousEpisode = episodeList[idx + 1].episode
-                openEpisode(previousEpisode)
-            }
-        }
         if (requestCode == REQUEST_EXTERNAL && resultCode == Activity.RESULT_OK) {
             val currentPosition: Long
             val duration: Long
@@ -903,12 +888,15 @@ class AnimeController :
     fun openEpisode(episode: Episode) {
         val activity = activity ?: return
         launchIO {
-            val url = EpisodeLoader.getUri(episode, anime!!, source!!)
-            val episodeList = presenter.filteredAndSortedEpisodes
-            val intent = WatcherActivity.newIntent(activity, presenter.anime, episode, episodeList, url)
+            val episodeList = ArrayList<Episode>()
+            for (episodeItem in presenter.filteredAndSortedEpisodes.reversed()) {
+                episodeList.add(episodeItem.episode)
+            }
+            val intent = WatcherActivity.newIntent(activity, presenter.anime, episode, episodeList)
             if (!preferences.alwaysUseExternalPlayer()) {
-                startActivityForResult(intent, REQUEST_INTERNAL)
+                startActivity(intent)
             } else {
+                val url = EpisodeLoader.getUri(episode, anime!!, source!!)
                 currentExtEpisode = episode
                 val extIntent = Intent(Intent.ACTION_VIEW)
                 extIntent.setDataAndTypeAndNormalize(Uri.parse(url), "video/*")

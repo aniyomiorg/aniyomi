@@ -60,6 +60,12 @@ class WatcherActivity : AppCompatActivity() {
     private lateinit var nextBtn: ImageButton
     private lateinit var prevBtn: ImageButton
 
+    private lateinit var episode: Episode
+    private lateinit var anime: Anime
+    private lateinit var source: AnimeSource
+    private lateinit var uri: String
+    private lateinit var episodeList: ArrayList<Episode>
+
     private var duration: Long = 0
     private var currentWindow = 0
     private var playbackPosition = 0L
@@ -95,11 +101,16 @@ class WatcherActivity : AppCompatActivity() {
         prevBtn = findViewById(R.id.watcher_controls_prev)
 
         dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "xyz.jmir.tachiyomi.mi"))
+        anime = intent.getSerializableExtra("anime") as Anime
+        episode = intent.getSerializableExtra("episode") as Episode
+        source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
+        episodeList = intent.getSerializableExtra("episodeList") as ArrayList<Episode>
+        uri = EpisodeLoader.getUri(episode, anime, source)
         mediaItem = MediaItem.Builder()
-            .setUri(intent.getStringExtra("uri"))
+            .setUri(uri)
             .setMimeType(MimeTypes.VIDEO_MP4)
             .build()
-        playbackPosition = intent.extras!!.getLong("second")
+        playbackPosition = episode.last_second_seen
 
         if (savedInstanceState != null) {
             currentWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW)
@@ -131,12 +142,12 @@ class WatcherActivity : AppCompatActivity() {
         }
         exoPlayer.addListener(PlayerEventListener())
         skipBtn.setOnClickListener { exoPlayer.seekTo(exoPlayer.currentPosition + 85000) }
-        if (intent.getBooleanExtra("hasNextEpisode", false)) {
+        if (episodeList.indexOf(episode) != episodeList.lastIndex && episodeList.isNotEmpty()) {
             nextBtn.setOnClickListener {
                 nextEpisode()
             }
         }
-        if (intent.getBooleanExtra("hasPreviousEpisode", false)) {
+        if (episodeList.indexOf(episode) != 0 && episodeList.isNotEmpty()) {
             prevBtn.setOnClickListener {
                 previousEpisode()
             }
@@ -156,49 +167,37 @@ class WatcherActivity : AppCompatActivity() {
         isPlayerPlaying = exoPlayer.playWhenReady
         playbackPosition = exoPlayer.currentPosition
         currentWindow = exoPlayer.currentWindowIndex
-        val episode = intent.getSerializableExtra("episode") as Episode
-        val anime = intent.getSerializableExtra("anime_anime") as Anime
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
-        val returnIntent = intent
-        returnIntent.putExtra("seconds_result", playbackPosition)
-        returnIntent.putExtra("total_seconds_result", exoPlayer.duration)
-        returnIntent.putExtra("episode", episode)
-        setResult(RESULT_OK, returnIntent)
         exoPlayer.release()
-        super.onBackPressed()
     }
 
     private fun nextEpisode() {
-        youTubeDoubleTap.player(exoPlayer)
-        isPlayerPlaying = exoPlayer.playWhenReady
-        playbackPosition = exoPlayer.currentPosition
-        currentWindow = exoPlayer.currentWindowIndex
-        val episode = intent.getSerializableExtra("episode") as Episode
-        val returnIntent = intent
-        returnIntent.putExtra("seconds_result", playbackPosition)
-        returnIntent.putExtra("total_seconds_result", exoPlayer.duration)
-        returnIntent.putExtra("episode", episode)
-        returnIntent.putExtra("nextResult", true)
-        setResult(RESULT_OK, returnIntent)
-        exoPlayer.release()
-        super.onBackPressed()
+        saveEpisodeHistory(EpisodeItem(episode, anime))
+        setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
+        episode = episodeList[episodeList.indexOf(episode) + 1]
+        uri = EpisodeLoader.getUri(episode, anime, source)
+        mediaItem = MediaItem.Builder()
+            .setUri(uri)
+            .setMimeType(MimeTypes.VIDEO_MP4)
+            .build()
+        exoPlayer.setMediaItem(mediaItem, episode.last_second_seen)
+        exoPlayer.prepare()
+        exoPlayer.playWhenReady = true
     }
 
     private fun previousEpisode() {
-        youTubeDoubleTap.player(exoPlayer)
-        isPlayerPlaying = exoPlayer.playWhenReady
-        playbackPosition = exoPlayer.currentPosition
-        currentWindow = exoPlayer.currentWindowIndex
-        val episode = intent.getSerializableExtra("episode") as Episode
-        val returnIntent = intent
-        returnIntent.putExtra("seconds_result", playbackPosition)
-        returnIntent.putExtra("total_seconds_result", exoPlayer.duration)
-        returnIntent.putExtra("episode", episode)
-        returnIntent.putExtra("previousResult", true)
-        setResult(RESULT_OK, returnIntent)
-        exoPlayer.release()
-        super.onBackPressed()
+        saveEpisodeHistory(EpisodeItem(episode, anime))
+        setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
+        episode = episodeList[episodeList.indexOf(episode) - 1]
+        uri = EpisodeLoader.getUri(episode, anime, source)
+        mediaItem = MediaItem.Builder()
+            .setUri(uri)
+            .setMimeType(MimeTypes.VIDEO_MP4)
+            .build()
+        exoPlayer.setMediaItem(mediaItem, episode.last_second_seen)
+        exoPlayer.prepare()
+        exoPlayer.playWhenReady = true
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -285,8 +284,6 @@ class WatcherActivity : AppCompatActivity() {
     }
 
     private fun updateTrackEpisodeSeen(episode: Episode) {
-        val anime = intent.getSerializableExtra("anime_anime") as? Anime ?: return
-
         val episodeSeen = episode.episode_number.toInt()
 
         val trackManager = Injekt.get<TrackManager>()
@@ -317,20 +314,12 @@ class WatcherActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context, anime: Anime, episode: Episode, episodeList: List<EpisodeItem>, url: String): Intent {
+        fun newIntent(context: Context, anime: Anime, episode: Episode, episodeList: ArrayList<Episode>): Intent {
             return Intent(context, WatcherActivity::class.java).apply {
-                putExtra("anime", anime.id)
-                putExtra("anime_anime", anime)
+                putExtra("anime", anime)
                 putExtra("episode", episode)
                 putExtra("second", episode.last_second_seen)
-                putExtra("uri", url)
-                if (episodeList.isNotEmpty()) {
-                    putExtra("hasNextEpisode", episode.episode_number < episodeList[0].episode_number)
-                    putExtra("hasPreviousEpisode", episode.episode_number > episodeList[episodeList.size - 1].episode_number)
-                } else {
-                    putExtra("hasNextEpisode", false)
-                    putExtra("hasPreviousEpisode", false)
-                }
+                putExtra("episodeList", episodeList)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }

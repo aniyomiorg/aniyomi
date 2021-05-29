@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.backup.BackupRestoreService
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
@@ -25,11 +24,9 @@ import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.ui.anime.AnimeController
-import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
-import eu.kanade.tachiyomi.ui.watcher.EpisodeLoader
 import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.storage.DiskUtil
@@ -40,7 +37,6 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
-import java.util.Collections.emptyList
 import eu.kanade.tachiyomi.BuildConfig.APPLICATION_ID as ID
 
 /**
@@ -490,10 +486,8 @@ class NotificationReceiver : BroadcastReceiver() {
          * @param episode episode that needs to be opened
          */
         internal fun openEpisodePendingActivity(context: Context, anime: Anime, episode: Episode): PendingIntent {
-            val source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
-            val link = EpisodeLoader.getUri(episode, anime, source)
-            val episodeList: List<EpisodeItem> = emptyList()
-            val newIntent = WatcherActivity.newIntent(context, anime, episode, episodeList, link)
+            val episodeList = ArrayList<Episode>()
+            val newIntent = WatcherActivity.newIntent(context, anime, episode, episodeList)
             return PendingIntent.getActivity(context, AnimeController.REQUEST_INTERNAL, newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 

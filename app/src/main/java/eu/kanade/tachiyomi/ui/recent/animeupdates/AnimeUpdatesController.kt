@@ -13,20 +13,18 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.SelectableAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.AnimeUpdatesControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
-import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodesAdapter
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.watcher.EpisodeLoader
 import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
 import eu.kanade.tachiyomi.util.system.notificationManager
 import eu.kanade.tachiyomi.util.system.toast
@@ -35,7 +33,6 @@ import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
 import timber.log.Timber
-import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.*
 
@@ -210,10 +207,8 @@ class AnimeUpdatesController :
      */
     private fun openEpisode(item: AnimeUpdatesItem) {
         val activity = activity ?: return
-        val source = Injekt.get<AnimeSourceManager>().getOrStub(item.anime.source)
-        val link = EpisodeLoader.getUri(item.episode, item.anime, source)
-        val episodeList: List<EpisodeItem> = Collections.emptyList()
-        val intent = WatcherActivity.newIntent(activity, item.anime, item.episode, episodeList, link)
+        val episodeList = ArrayList<Episode>()
+        val intent = WatcherActivity.newIntent(activity, item.anime, item.episode, episodeList)
         startActivity(intent)
     }
 
