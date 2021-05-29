@@ -288,7 +288,6 @@ class AnimeDownloader(
             download.source.fetchVideoList(download.episode)
                 .doOnNext { video ->
                     if (video == null) {
-                        Timber.w("mah m9")
                         throw Exception(context.getString(R.string.page_list_empty_error))
                     }
                     download.video = video
@@ -301,7 +300,6 @@ class AnimeDownloader(
         videoObservable
             .doOnNext { _ ->
                 // Delete all temporary (unfinished) files
-                Timber.w("delfiles")
                 tmpDir.listFiles()
                     ?.filter { it.name!!.endsWith(".tmp") }
                     ?.forEach { it.delete() }
@@ -364,7 +362,6 @@ class AnimeDownloader(
     private fun getOrAnimeDownloadImage(video: Video, download: AnimeDownload, tmpDir: UniFile): Observable<Video> {
         // If the image URL is empty, do nothing
         if (video.videoUrl == null) {
-            Timber.w("nourl")
             return Observable.just(video)
         }
 
@@ -418,8 +415,9 @@ class AnimeDownloader(
                 val file = tmpDir.createFile("$filename.tmp")
                 try {
                     response.body!!.source().saveTo(file.openOutputStream())
-                    val extension = getImageExtension(response, file)
-                    file.renameTo("$filename.$extension")
+                    // val extension = getImageExtension(response, file)
+                    // TODO: support other file formats!!
+                    file.renameTo("$filename.mp4")
                 } catch (e: Exception) {
                     response.close()
                     file.delete()
