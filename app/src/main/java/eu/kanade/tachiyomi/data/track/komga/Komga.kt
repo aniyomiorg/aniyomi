@@ -44,6 +44,8 @@ class Komga(private val context: Context, id: Int) : TrackService(id), Unattende
 
     override fun getStatusList() = listOf(UNREAD, READING, COMPLETED)
 
+    override fun getStatusListAnime() = listOf(UNREAD, READING, COMPLETED)
+
     override fun getStatus(status: Int): String = with(context) {
         when (status) {
             UNREAD -> getString(R.string.unread)

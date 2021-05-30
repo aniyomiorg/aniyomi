@@ -122,10 +122,10 @@ class BrowseController :
     private inner class BrowseAdapter : RouterPagerAdapter(this@BrowseController) {
 
         private val tabTitles = listOf(
-            R.string.label_sources,
             R.string.label_animesources,
-            R.string.label_extensions,
+            R.string.label_mangasources,
             R.string.label_animeextensions,
+            R.string.label_mangaextensions,
             R.string.label_migration
         )
             .map { resources!!.getString(it) }
@@ -156,10 +156,10 @@ class BrowseController :
     companion object {
         const val TO_EXTENSIONS_EXTRA = "to_extensions"
 
-        const val SOURCES_CONTROLLER = 0
-        const val ANIMESOURCES_CONTROLLER = 1
-        const val EXTENSIONS_CONTROLLER = 2
-        const val ANIMEEXTENSIONS_CONTROLLER = 3
+        const val SOURCES_CONTROLLER = 1
+        const val ANIMESOURCES_CONTROLLER = 0
+        const val EXTENSIONS_CONTROLLER = 3
+        const val ANIMEEXTENSIONS_CONTROLLER = 2
         const val MIGRATION_CONTROLLER = 4
     }
 }

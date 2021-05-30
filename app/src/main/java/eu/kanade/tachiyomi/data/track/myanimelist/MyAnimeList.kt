@@ -18,11 +18,14 @@ class MyAnimeList(private val context: Context, id: Int) : TrackService(id) {
 
     companion object {
         const val READING = 1
+        const val WATCHING = 11
         const val COMPLETED = 2
         const val ON_HOLD = 3
         const val DROPPED = 4
         const val PLAN_TO_READ = 6
+        const val PLAN_TO_WATCH = 16
         const val REREADING = 7
+        const val REWATCHING = 17
 
         private const val SEARCH_ID_PREFIX = "id:"
         private const val SEARCH_LIST_PREFIX = "my:"
@@ -46,14 +49,21 @@ class MyAnimeList(private val context: Context, id: Int) : TrackService(id) {
         return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_READ, REREADING)
     }
 
+    override fun getStatusListAnime(): List<Int> {
+        return listOf(WATCHING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_WATCH, REWATCHING)
+    }
+
     override fun getStatus(status: Int): String = with(context) {
         when (status) {
             READING -> getString(R.string.reading)
+            WATCHING -> getString(R.string.watching)
             COMPLETED -> getString(R.string.completed)
             ON_HOLD -> getString(R.string.on_hold)
             DROPPED -> getString(R.string.dropped)
             PLAN_TO_READ -> getString(R.string.plan_to_read)
+            PLAN_TO_WATCH -> getString(R.string.plan_to_watch)
             REREADING -> getString(R.string.repeating)
+            REWATCHING -> getString(R.string.repeating_anime)
             else -> ""
         }
     }
@@ -79,7 +89,7 @@ class MyAnimeList(private val context: Context, id: Int) : TrackService(id) {
     }
 
     private suspend fun add(track: AnimeTrack): AnimeTrack {
-        track.status = READING
+        track.status = WATCHING
         track.score = 0F
         return api.updateItem(track)
     }

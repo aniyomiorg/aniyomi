@@ -122,6 +122,10 @@ class Shikimori(private val context: Context, id: Int) : TrackService(id) {
         return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLANNING, REPEATING)
     }
 
+    override fun getStatusListAnime(): List<Int> {
+        return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLANNING, REPEATING)
+    }
+
     override fun getStatus(status: Int): String = with(context) {
         when (status) {
             READING -> getString(R.string.reading)

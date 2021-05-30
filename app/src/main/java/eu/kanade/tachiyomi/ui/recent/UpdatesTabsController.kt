@@ -62,8 +62,8 @@ class UpdatesTabsController() :
     private inner class UpdatesTabsAdapter : RouterPagerAdapter(this@UpdatesTabsController) {
 
         private val tabTitles = listOf(
-            R.string.label_updates,
-            R.string.label_animeupdates
+            R.string.label_animeupdates,
+            R.string.label_updates
         )
             .map { resources!!.getString(it) }
 
@@ -88,7 +88,7 @@ class UpdatesTabsController() :
     }
 
     companion object {
-        const val UPDATES_CONTROLLER = 0
-        const val ANIME_UPDATES_CONTROLLER = 1
+        const val UPDATES_CONTROLLER = 1
+        const val ANIME_UPDATES_CONTROLLER = 0
     }
 }

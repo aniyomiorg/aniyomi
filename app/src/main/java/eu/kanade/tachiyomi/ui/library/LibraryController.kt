@@ -132,7 +132,7 @@ class LibraryController(
         }
 
     override fun getTitle(): String? {
-        return currentTitle ?: resources?.getString(R.string.label_library)
+        return currentTitle ?: resources?.getString(R.string.label_mangalibrary)
     }
 
     private fun updateTitle() {
@@ -140,7 +140,7 @@ class LibraryController(
         val currentCategory = adapter?.categories?.getOrNull(binding.libraryPager.currentItem)
 
         var title = if (showCategoryTabs) {
-            resources?.getString(R.string.label_library)
+            resources?.getString(R.string.label_mangalibrary)
         } else {
             currentCategory?.name
         }

@@ -126,7 +126,7 @@ data class ALUserAnime(
     }
 
     fun toTrackStatus() = when (list_status) {
-        "CURRENT" -> Anilist.READING
+        "CURRENT" -> Anilist.WATCHING
         "COMPLETED" -> Anilist.COMPLETED
         "PAUSED" -> Anilist.PAUSED
         "DROPPED" -> Anilist.DROPPED

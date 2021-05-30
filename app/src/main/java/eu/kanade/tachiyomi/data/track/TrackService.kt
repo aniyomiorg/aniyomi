@@ -36,6 +36,8 @@ abstract class TrackService(val id: Int) {
 
     abstract fun getStatusList(): List<Int>
 
+    abstract fun getStatusListAnime(): List<Int>
+
     abstract fun getStatus(status: Int): String
 
     abstract fun getCompletionStatus(): Int
