@@ -177,6 +177,7 @@ class AnimelibController(
         adapter = AnimelibAdapter(this)
         binding.animelibPager.adapter = adapter
         binding.animelibPager.pageSelections()
+            .drop(1)
             .onEach {
                 preferences.lastUsedCategory().set(it)
                 activeCategory = it

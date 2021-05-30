@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name" translatable="false">Tachiyomi-MI</string>
 
-    <!--Models-->
+    <!-- Models -->
     <string name="name">Name</string>
     <string name="categories">Manga Categories</string>
     <string name="anime_categories">Anime Categories</string>
@@ -78,15 +78,10 @@
     <string name="action_rename_category">Rename category</string>
     <string name="action_move_category">Set categories</string>
     <string name="action_edit_cover">Edit cover</string>
-    <string name="action_sort_up">Sort up</string>
-    <string name="action_sort_down">Sort down</string>
-    <string name="action_show_downloaded">Downloaded</string>
-    <string name="action_next_unread">Next unread</string>
     <string name="action_view_chapters">View chapters</string>
     <string name="action_view_episodes">View episodes</string>
     <string name="action_stop">Stop</string>
     <string name="action_pause">Pause</string>
-    <string name="action_close">Close</string>
     <string name="action_previous_chapter">Previous chapter</string>
     <string name="action_previous_episode">Previous episode</string>
     <string name="action_next_chapter">Next chapter</string>
@@ -95,7 +90,6 @@
     <string name="action_remove">Remove</string>
     <string name="action_start">Start</string>
     <string name="action_resume">Resume</string>
-    <string name="action_move">Move</string>
     <string name="action_open_in_browser">Open in browser</string>
     <!-- Do not translate "WebView" -->
     <string name="action_open_in_web_view">Open in WebView</string>
@@ -105,8 +99,8 @@
     <string name="action_display_mode">Display mode</string>
     <string name="action_display">Display</string>
     <string name="action_display_grid">Compact grid</string>
-    <string name="action_display_list">List</string>
     <string name="action_display_comfortable_grid">Comfortable grid</string>
+    <string name="action_display_list">List</string>
     <string name="action_display_download_badge">Download badges</string>
     <string name="action_display_unread_badge">Unread badges</string>
     <string name="action_display_local_badge">Local badges</string>
@@ -119,7 +113,6 @@
     <string name="action_cancel_all">Cancel all</string>
     <string name="cancel_all_for_series">Cancel all for this series</string>
     <string name="action_sort">Sort</string>
-    <string name="action_sort_descending">Descending</string>
     <string name="action_reorganize_by">Reorder</string>
     <string name="action_order_by_upload_date">By upload date</string>
     <string name="action_order_by_chapter_number">By chapter number</string>
@@ -138,8 +131,6 @@
     <string name="action_show_errors">Show errors</string>
     <string name="action_create">Create</string>
     <string name="action_restore">Restore</string>
-    <string name="action_open">Open</string>
-    <string name="action_login">Log in</string>
     <string name="action_webview_back">Back</string>
     <string name="action_webview_forward">Forward</string>
     <string name="action_webview_refresh">Refresh</string>
@@ -149,7 +140,6 @@
 
     <!-- Shortcuts-->
     <string name="app_not_available">App not available</string>
-    <string name="short_recent_updates">Updates</string>
 
     <!-- Preferences -->
       <!-- Subsections -->
@@ -291,6 +281,8 @@
     <string name="pref_true_color">32-bit color</string>
     <string name="pref_true_color_summary">Reduces banding, but impacts performance</string>
     <string name="pref_crop_borders">Crop borders</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
     <string name="pref_custom_brightness">Custom brightness</string>
     <string name="pref_grayscale">Grayscale</string>
     <string name="pref_custom_color_filter">Custom color filter</string>
@@ -340,7 +332,6 @@
     <string name="vertical_plus_viewer">Continuous vertical</string>
     <string name="pager_viewer">Paged</string>
     <string name="pref_viewer_nav">Navigation layout</string>
-    <string name="pref_image_decoder">Image decoder</string>
     <string name="pref_image_scale_type">Scale type</string>
     <string name="scale_type_fit_screen">Fit screen</string>
     <string name="scale_type_stretch">Stretch</string>
@@ -463,7 +454,6 @@
     <string name="used_cache">Used: %1$s</string>
     <string name="cache_deleted">Cache cleared. %1$d files have been deleted</string>
     <string name="cache_delete_error">An error occurred while clearing cache</string>
-    <string name="choices_reset">Dialog choices reset</string>
     <string name="pref_clear_database">Clear database</string>
     <string name="pref_clear_database_summary">Delete history for manga that are not saved in your library</string>
     <string name="clear_database_confirmation">Are you sure? Read chapters and progress of non-library manga will be lost</string>
@@ -519,7 +509,6 @@
     <string name="unknown_error">Unknown error</string>
 
     <!-- Library fragment -->
-    <string name="library_search_hint">Title or author…</string>
     <string name="updating_category">Updating category</string>
     <string name="local_source_badge">Local</string>
     <string name="manga_from_library">Manga from library</string>
@@ -528,9 +517,6 @@
     <string name="tabs_header">Tabs</string>
 
     <!-- Catalogue fragment -->
-    <string name="source_requires_login">This source requires you to log in</string>
-    <string name="select_source">Select a source</string>
-    <string name="no_valid_sources">Please enable at least one valid source</string>
     <string name="no_more_results">No more results</string>
     <string name="no_results_found">No results found</string>
     <!-- Do not translate "WebView" -->
@@ -539,8 +525,6 @@
     <string name="other_source">Other</string>
     <string name="last_used_source">Last used</string>
     <string name="pinned_sources">Pinned</string>
-    <string name="invalid_combination">Default can\'t be selected with other categories</string>
-    <string name="added_to_library">The manga has been added to your library</string>
     <string name="action_global_search_hint">Global search…</string>
     <string name="action_global_search_query">Search for \"%1$s\" globally</string>
     <string name="latest">Latest</string>
@@ -558,7 +542,6 @@
     <string name="manga_not_in_db">This manga has been removed from the database.</string>
 
     <!-- Manga info fragment -->
-    <string name="manga_detail_tab">Info</string>
     <string name="description">Description</string>
     <string name="ongoing">Ongoing</string>
     <string name="unknown">Unknown</string>
@@ -585,17 +568,11 @@
     <string name="snack_add_to_animelib">Add anime to library?</string>
 
     <!-- Manga chapters fragment -->
-    <string name="manga_chapters_tab">Chapters</string>
-    <string name="manga_chapter_no_title">No title</string>
     <string name="display_mode_chapter">Chapter %1$s</string>
-    <string name="chapter_downloaded">Downloaded</string>
-    <string name="chapter_queued">Queued</string>
-    <string name="chapter_downloading">Downloading</string>
     <string name="chapter_downloading_progress">Downloading (%1$d/%2$d)</string>
     <string name="episode_downloading_progress">Downloading (%d%%)</string>
     <string name="chapter_error">Error</string>
     <string name="chapter_paused">Paused</string>
-    <string name="fetch_chapters_error">Could not fetch chapters</string>
     <string name="show_title">Source title</string>
     <string name="show_chapter_number">Chapter number</string>
     <string name="sorting_mode">Sorting mode</string>
@@ -658,7 +635,6 @@
     <string name="track_type">Type</string>
     <string name="track_author">Author</string>
     <string name="error_invalid_date_supplied">Invalid date supplied</string>
-    <string name="myanimelist_creds_missing">MAL login credentials not found</string>
     <string name="myanimelist_relogin">Please login to MAL again</string>
     <string name="source_unsupported">Source is not supported</string>
     <string name="error_no_match">No match found</string>
@@ -673,20 +649,14 @@
 
     <!-- Image notifier -->
     <string name="picture_saved">Picture saved</string>
-    <string name="saving_picture">Saving picture</string>
-    <string name="options">Options</string>
 
     <!-- Reader activity -->
     <string name="custom_filter">Custom filter</string>
     <string name="set_as_cover">Set as cover</string>
     <string name="cover_updated">Cover updated</string>
     <string name="share_page_info">%1$s: %2$s, page %3$d</string>
-    <string name="page_downloaded">Page copied to %1$s</string>
-    <string name="downloading">Downloading…</string>
-    <string name="download_progress">Downloaded %1$d%%</string>
     <string name="chapter_progress">Page: %1$d</string>
     <string name="episode_progress">Progress: %1$s/%2$s</string>
-    <string name="chapter_subtitle">Chapter %1$s</string>
     <string name="no_next_chapter">Next chapter not found</string>
     <string name="no_previous_chapter">Previous chapter not found</string>
     <string name="decode_image_error">The image couldn\'t be loaded</string>
@@ -719,7 +689,6 @@
 
     <!-- Source migration screen -->
     <string name="migration_help_guide">Source migration guide</string>
-    <string name="migration_info">Tap to select the source to migrate from</string>
     <string name="migration_dialog_what_to_include">Select data to include</string>
     <string name="migration_selection_prompt">Select a source to migrate from</string>
     <string name="migrate">Migrate</string>
@@ -727,11 +696,10 @@
 
     <!-- Downloads activity and service -->
     <string name="download_queue_error">Couldn\'t download chapters. You can try again in the downloads section</string>
-    <string name="download_insufficient_space">Couldn\'t download chapters due to low disk space</string>
+    <string name="download_insufficient_space">Couldn\'t download chapters due to low storage space</string>
 
     <!-- Library update service notifications -->
     <string name="notification_check_updates">Checking for new chapters</string>
-    <string name="notification_update_progress">Update progress: %1$d/%2$d</string>
     <string name="notification_new_chapters">New chapters found</string>
     <string name="notification_new_episodes">New episodes found</string>
     <plurals name="notification_new_chapters_summary">
@@ -770,10 +738,6 @@
     </plurals>
     <string name="notification_cover_update_failed">Failed to update cover</string>
     <string name="notification_first_add_to_library">Please add the manga to your library before doing this</string>
-    <string name="notification_not_connected_to_ac_title">Sync canceled</string>
-    <string name="notification_not_connected_to_ac_body">Not connected to AC power</string>
-    <string name="notification_no_connection_title">Sync canceled</string>
-    <string name="notification_no_connection_body">Connection not available</string>
 
     <!-- File Picker Titles -->
     <string name="file_select_cover">Select cover image</string>
@@ -788,7 +752,6 @@
     <string name="update_check_look_for_updates">Searching for updates…</string>
 
     <!--UpdateCheck Notifications-->
-    <string name="update_check_notification_file_download">Download update</string>
     <string name="update_check_notification_download_in_progress">Downloading…</string>
     <string name="update_check_notification_download_complete">Download complete</string>
     <string name="update_check_notification_download_error">Download error</string>
@@ -820,8 +783,6 @@
     <string name="download_notifier_downloader_title">Downloader</string>
     <string name="download_notifier_title_error">Error</string>
     <string name="download_notifier_unknown_error">Could not download chapter due to unexpected error</string>
-    <string name="download_notifier_page_error">A page is missing in directory</string>
-    <string name="download_notifier_page_ready_error">A page has not been loaded</string>
     <string name="download_notifier_text_only_wifi">No Wi-Fi connection available</string>
     <string name="download_notifier_no_network">No network connection available</string>
     <string name="download_notifier_download_paused">Download paused</string>
