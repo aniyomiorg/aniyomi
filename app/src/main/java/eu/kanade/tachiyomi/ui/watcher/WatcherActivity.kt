@@ -59,6 +59,8 @@ class WatcherActivity : AppCompatActivity() {
     private lateinit var skipBtn: TextView
     private lateinit var nextBtn: ImageButton
     private lateinit var prevBtn: ImageButton
+    private lateinit var backBtn: TextView
+    private lateinit var title: TextView
 
     private lateinit var episode: Episode
     private lateinit var anime: Anime
@@ -96,6 +98,8 @@ class WatcherActivity : AppCompatActivity() {
                     youTubeDoubleTap.visibility = View.GONE
                 }
             })
+        backBtn = findViewById(R.id.exo_overlay_back)
+        title = findViewById(R.id.exo_overlay_title)
         skipBtn = findViewById(R.id.watcher_controls_skip_btn)
         nextBtn = findViewById(R.id.watcher_controls_next)
         prevBtn = findViewById(R.id.watcher_controls_prev)
@@ -103,6 +107,7 @@ class WatcherActivity : AppCompatActivity() {
         dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "xyz.jmir.tachiyomi.mi"))
         anime = intent.getSerializableExtra("anime") as Anime
         episode = intent.getSerializableExtra("episode") as Episode
+        title.text = anime.title + " - " + episode.name
         source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
         episodeList = intent.getSerializableExtra("episodeList") as ArrayList<Episode>
         uri = EpisodeLoader.getUri(episode, anime, source)
@@ -141,20 +146,31 @@ class WatcherActivity : AppCompatActivity() {
             override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
         }
         exoPlayer.addListener(PlayerEventListener())
+        backBtn.setOnClickListener {
+            onBackPressed()
+        }
         skipBtn.setOnClickListener { exoPlayer.seekTo(exoPlayer.currentPosition + 85000) }
+        setBtnListeners()
+        youTubeDoubleTap.player(exoPlayer)
+        playerView.player = exoPlayer
+        duration = exoPlayer.duration
+    }
+
+    private fun setBtnListeners() {
         if (episodeList.indexOf(episode) != episodeList.lastIndex && episodeList.isNotEmpty()) {
             nextBtn.setOnClickListener {
                 nextEpisode()
             }
+        } else {
+            nextBtn.setOnClickListener(null)
         }
         if (episodeList.indexOf(episode) != 0 && episodeList.isNotEmpty()) {
             prevBtn.setOnClickListener {
                 previousEpisode()
             }
+        } else {
+            prevBtn.setOnClickListener(null)
         }
-        youTubeDoubleTap.player(exoPlayer)
-        playerView.player = exoPlayer
-        duration = exoPlayer.duration
     }
 
     override fun onBackPressed() {
@@ -176,6 +192,8 @@ class WatcherActivity : AppCompatActivity() {
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
         episode = episodeList[episodeList.indexOf(episode) + 1]
+        title.text = anime.title + " - " + episode.name
+        setBtnListeners()
         uri = EpisodeLoader.getUri(episode, anime, source)
         mediaItem = MediaItem.Builder()
             .setUri(uri)
@@ -190,6 +208,8 @@ class WatcherActivity : AppCompatActivity() {
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
         episode = episodeList[episodeList.indexOf(episode) - 1]
+        title.text = anime.title + " - " + episode.name
+        setBtnListeners()
         uri = EpisodeLoader.getUri(episode, anime, source)
         mediaItem = MediaItem.Builder()
             .setUri(uri)
