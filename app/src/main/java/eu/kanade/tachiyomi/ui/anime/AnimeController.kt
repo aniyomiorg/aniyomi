@@ -889,7 +889,11 @@ class AnimeController :
         val activity = activity ?: return
         launchIO {
             val episodeList = ArrayList<Episode>()
-            for (episodeItem in presenter.filteredAndSortedEpisodes.reversed()) {
+            val list = presenter.filteredAndSortedEpisodes.reversed()
+            val idx = list.indexOf(EpisodeItem(episode, anime!!))
+            val upper = if (list.lastIndex < idx + 100) list.lastIndex else idx + 100
+            val lower = if (0 > idx - 100) 0 else idx - 100
+            for (episodeItem in list.slice(lower..upper)) {
                 episodeList.add(episodeItem.episode)
             }
             val intent = WatcherActivity.newIntent(activity, presenter.anime, episode, episodeList)
