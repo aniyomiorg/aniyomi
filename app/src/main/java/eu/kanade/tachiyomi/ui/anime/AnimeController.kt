@@ -196,7 +196,7 @@ class AnimeController :
     override fun onChangeEnded(handler: ControllerChangeHandler, type: ControllerChangeType) {
         super.onChangeEnded(handler, type)
         if (anime == null || source == null) {
-            activity?.toast(R.string.manga_not_in_db)
+            activity?.toast(R.string.anime_not_in_db)
             router.popController(this)
         }
     }
@@ -563,7 +563,7 @@ class AnimeController :
                                 presenter.registerTracking(track, service as TrackService)
                             }
                         } catch (e: Exception) {
-                            Timber.w(e, "Could not match manga: ${anime.title} with service $service")
+                            Timber.w(e, "Could not match anime: ${anime.title} with service $service")
                         }
                     }
                 }
@@ -576,7 +576,7 @@ class AnimeController :
     private fun toggleFavorite() {
         val isNowFavorite = presenter.toggleFavorite()
         if (activity != null && !isNowFavorite && presenter.hasDownloads()) {
-            (activity as? MainActivity)?.binding?.rootCoordinator?.snack(activity!!.getString(R.string.delete_downloads_for_manga)) {
+            (activity as? MainActivity)?.binding?.rootCoordinator?.snack(activity!!.getString(R.string.delete_downloads_for_anime)) {
                 setAction(R.string.action_delete) {
                     presenter.deleteDownloads()
                 }
@@ -885,7 +885,7 @@ class AnimeController :
         }
     }
 
-    fun openEpisode(episode: Episode) {
+    fun openEpisode(episode: Episode, playerChangeRequested: Boolean = false) {
         val activity = activity ?: return
         launchIO {
             val episodeList = ArrayList<Episode>()
@@ -897,7 +897,8 @@ class AnimeController :
                 episodeList.add(episodeItem.episode)
             }
             val intent = WatcherActivity.newIntent(activity, presenter.anime, episode, episodeList)
-            if (!preferences.alwaysUseExternalPlayer()) {
+            val useInternal = if (preferences.alwaysUseExternalPlayer()) playerChangeRequested else !playerChangeRequested
+            if (useInternal) {
                 startActivity(intent)
             } else {
                 val url = EpisodeLoader.getUri(episode, anime!!, source!!)
@@ -1021,6 +1022,8 @@ class AnimeController :
             binding.actionToolbar.findItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.episode.bookmark }
             binding.actionToolbar.findItem(R.id.action_mark_as_read)?.isVisible = episodes.any { !it.episode.seen }
             binding.actionToolbar.findItem(R.id.action_mark_as_unread)?.isVisible = episodes.all { it.episode.seen }
+            binding.actionToolbar.findItem(R.id.action_play_externally)?.isVisible = !preferences.alwaysUseExternalPlayer()
+            binding.actionToolbar.findItem(R.id.action_play_internally)?.isVisible = preferences.alwaysUseExternalPlayer()
 
             // Hide FAB to avoid interfering with the bottom action toolbar
             actionFab?.isVisible = false
@@ -1043,6 +1046,8 @@ class AnimeController :
             R.id.action_mark_as_read -> markAsRead(getSelectedEpisodes())
             R.id.action_mark_as_unread -> markAsUnread(getSelectedEpisodes())
             R.id.action_mark_previous_as_read -> markPreviousAsRead(getSelectedEpisodes())
+            R.id.action_play_internally -> openEpisode(getSelectedEpisodes().last().episode, true)
+            R.id.action_play_externally -> openEpisode(getSelectedEpisodes().last().episode, true)
             else -> return false
         }
         return true

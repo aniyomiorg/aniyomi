@@ -4,7 +4,7 @@
 
 
 # ![app icon](./.github/readme-images/app-icon.png)Tachiyomi-MI
-Tachiyomi-MI is a fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 5.0 and above.
+Tachiyomi-MI is a fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 6.0 and above.
 
 ![screenshots of app](./.github/readme-images/screens.png)
 

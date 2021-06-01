@@ -51,4 +51,18 @@
         app:iconTint="?attr/colorOnPrimary"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_play_externally"
+        android:icon="@drawable/ic_baseline_open_in_new_24"
+        android:title="@string/action_play_externally"
+        app:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_play_internally"
+        android:icon="@drawable/ic_baseline_input_24"
+        android:title="@string/action_play_internally"
+        app:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="always" />
+
 </menu>

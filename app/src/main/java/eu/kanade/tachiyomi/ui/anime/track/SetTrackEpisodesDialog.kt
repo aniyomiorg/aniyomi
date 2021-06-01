@@ -41,7 +41,7 @@ class SetTrackEpisodesDialog<T> : DialogController
         val item = item
 
         val dialog = MaterialDialog(activity!!)
-            .title(R.string.chapters)
+            .title(R.string.episodes)
             .customView(R.layout.track_chapters_dialog, dialogWrapContent = false)
             .positiveButton(android.R.string.ok) { dialog ->
                 val view = dialog.getCustomView()

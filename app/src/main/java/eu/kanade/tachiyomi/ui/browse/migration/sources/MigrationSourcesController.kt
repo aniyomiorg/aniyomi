@@ -53,7 +53,7 @@ class MigrationSourcesController :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.source_migration, menu)
+        inflater.inflate(R.menu.browse_migrate, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

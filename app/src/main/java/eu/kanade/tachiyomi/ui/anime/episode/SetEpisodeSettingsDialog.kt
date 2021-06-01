@@ -15,33 +15,33 @@ import eu.kanade.tachiyomi.widget.DialogCheckboxView
 class SetEpisodeSettingsDialog(bundle: Bundle? = null) : DialogController(bundle) {
 
     constructor(anime: Anime) : this(
-        bundleOf(MANGA_KEY to anime)
+        bundleOf(ANIME_KEY to anime)
     )
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         val view = DialogCheckboxView(activity!!).apply {
             setDescription(R.string.confirm_set_chapter_settings)
-            setOptionDescription(R.string.also_set_chapter_settings_for_library)
+            setOptionDescription(R.string.also_set_episode_settings_for_library)
         }
 
         return MaterialDialog(activity!!)
-            .title(R.string.chapter_settings)
+            .title(R.string.episode_settings)
             .customView(
                 view = view,
                 horizontalPadding = true
             )
             .positiveButton(android.R.string.ok) {
-                EpisodeSettingsHelper.setGlobalSettings(args.getSerializable(MANGA_KEY)!! as Anime)
+                EpisodeSettingsHelper.setGlobalSettings(args.getSerializable(ANIME_KEY)!! as Anime)
                 if (view.isChecked()) {
                     EpisodeSettingsHelper.updateAllAnimesWithGlobalDefaults()
                 }
 
-                activity?.toast(activity!!.getString(R.string.chapter_settings_updated))
+                activity?.toast(activity!!.getString(R.string.episode_settings_updated))
             }
             .negativeButton(android.R.string.cancel)
     }
 
     private companion object {
-        const val MANGA_KEY = "anime"
+        const val ANIME_KEY = "anime"
     }
 }

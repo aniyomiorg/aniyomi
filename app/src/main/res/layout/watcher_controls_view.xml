@@ -23,7 +23,7 @@
     android:orientation="horizontal">
     <TextView
         android:id="@+id/exo_overlay_back"
-        android:text="back"
+        android:text="@string/player_overlay_back"
         android:textColor="#ffffff"
         android:textStyle="bold"
         android:gravity="center"
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"/>
     </LinearLayout>
 </LinearLayout>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
@@ -63,16 +63,20 @@
         android:orientation="horizontal">
 
         <ImageButton android:id="@+id/watcher_controls_prev"
-            style="@style/ExoMediaButton.Previous"/>
+            style="@style/ExoMediaButton.Previous"
+            android:contentDescription="@string/action_previous_episode" />
 
         <ImageButton android:id="@id/exo_play"
-            style="@style/ExoMediaButton.Play"/>
+            style="@style/ExoMediaButton.Play"
+            android:contentDescription="@string/action_play" />
 
         <ImageButton android:id="@id/exo_pause"
-            style="@style/ExoMediaButton.Pause"/>
+            style="@style/ExoMediaButton.Pause"
+            android:contentDescription="@string/action_pause" />
 
         <ImageButton android:id="@+id/watcher_controls_next"
-            style="@style/ExoMediaButton.Next"/>
+            style="@style/ExoMediaButton.Next"
+            android:contentDescription="@string/action_next_episode" />
 
         <TextView
             android:id="@+id/watcher_controls_skip_btn"
@@ -96,8 +100,8 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="4dp"
             android:includeFontPadding="false"
             android:textColor="#FFBEBEBE"/>
 
@@ -112,8 +116,8 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="15dp"
             android:includeFontPadding="false"
             android:textColor="#FFBEBEBE"/>
 

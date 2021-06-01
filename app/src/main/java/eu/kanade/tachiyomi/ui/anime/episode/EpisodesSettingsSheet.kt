@@ -199,7 +199,7 @@ class EpisodesSettingsSheet(
         inner class DisplayGroup : Group {
 
             private val displayTitle = Item.Radio(R.string.show_title, this)
-            private val displayEpisodeNum = Item.Radio(R.string.show_chapter_number, this)
+            private val displayEpisodeNum = Item.Radio(R.string.show_episode_number, this)
 
             override val header = null
             override val items = listOf(displayTitle, displayEpisodeNum)

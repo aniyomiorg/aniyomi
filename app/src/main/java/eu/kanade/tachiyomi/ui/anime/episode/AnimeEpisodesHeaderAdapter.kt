@@ -50,9 +50,9 @@ class AnimeEpisodesHeaderAdapter(
     inner class HeaderViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
             binding.episodesLabel.text = if (numEpisodes == null) {
-                view.context.getString(R.string.chapters)
+                view.context.getString(R.string.episodes)
             } else {
-                view.context.resources.getQuantityString(R.plurals.manga_num_chapters, numEpisodes!!, numEpisodes)
+                view.context.resources.getQuantityString(R.plurals.anime_num_episodes, numEpisodes!!, numEpisodes)
             }
 
             val filterColor = if (hasActiveFilters) {

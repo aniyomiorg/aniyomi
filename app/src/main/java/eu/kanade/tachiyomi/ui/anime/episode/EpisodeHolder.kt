@@ -32,7 +32,7 @@ class EpisodeHolder(
         binding.episodeTitle.text = when (anime.displayMode) {
             Anime.EPISODE_DISPLAY_NUMBER -> {
                 val number = adapter.decimalFormat.format(episode.episode_number.toDouble())
-                itemView.context.getString(R.string.display_mode_chapter, number)
+                itemView.context.getString(R.string.display_mode_episode, number)
             }
             else -> episode.name
         }
