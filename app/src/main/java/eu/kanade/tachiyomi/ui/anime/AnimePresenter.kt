@@ -547,7 +547,8 @@ class AnimePresenter(
      */
     fun setEpisodesProgress(selectedEpisodes: List<EpisodeItem>) {
         val episodes = selectedEpisodes.map { episode ->
-            if (!episode.seen) episode.seen = episode.last_second_seen > episode.total_seconds * 0.85
+            val progress = preferences.progressPreference()
+            if (!episode.seen) episode.seen = episode.last_second_seen >= episode.total_seconds * progress
             episode
         }
 

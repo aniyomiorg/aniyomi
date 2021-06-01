@@ -275,7 +275,8 @@ class WatcherActivity : AppCompatActivity() {
             if (totalSeconds > 0L) {
                 episode.last_second_seen = seconds
                 episode.total_seconds = totalSeconds
-                if (!episode.seen) episode.seen = episode.last_second_seen > episode.total_seconds * 0.85
+                val progress = preferences.progressPreference()
+                if (!episode.seen) episode.seen = episode.last_second_seen >= episode.total_seconds * progress
                 val episodes = listOf(EpisodeItem(episode, anime))
                 launchIO {
                     db.updateEpisodesProgress(episodes).executeAsBlocking()

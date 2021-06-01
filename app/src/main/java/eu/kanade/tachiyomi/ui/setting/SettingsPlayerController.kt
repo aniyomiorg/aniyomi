@@ -6,6 +6,7 @@ import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.util.preference.defaultValue
 import eu.kanade.tachiyomi.util.preference.entriesRes
 import eu.kanade.tachiyomi.util.preference.intListPreference
+import eu.kanade.tachiyomi.util.preference.listPreference
 import eu.kanade.tachiyomi.util.preference.preferenceCategory
 import eu.kanade.tachiyomi.util.preference.switchPreference
 import eu.kanade.tachiyomi.util.preference.titleRes
@@ -19,7 +20,7 @@ class SettingsPlayerController : SettingsController() {
         preferenceCategory {
             titleRes = R.string.pref_category_display
 
-            intListPreference {
+            /*intListPreference {
                 key = Keys.defaultPlayerOrientationType
                 titleRes = R.string.pref_rotation_type
                 entriesRes = arrayOf(
@@ -38,6 +39,32 @@ class SettingsPlayerController : SettingsController() {
                 key = Keys.fullscreen
                 titleRes = R.string.pref_fullscreen
                 defaultValue = true
+            }*/
+            listPreference {
+                key = Keys.progressPreference
+                titleRes = R.string.pref_progress_mark_as_seen
+
+                entriesRes = arrayOf(
+                    R.string.pref_progress_100,
+                    R.string.pref_progress_95,
+                    R.string.pref_progress_90,
+                    R.string.pref_progress_85,
+                    R.string.pref_progress_80,
+                    R.string.pref_progress_75,
+                    R.string.pref_progress_70
+                )
+                entryValues = arrayOf(
+                    "1.00F",
+                    "0.95F",
+                    "0.90F",
+                    "0.85F",
+                    "0.80F",
+                    "0.75F",
+                    "0.70F"
+                )
+                defaultValue = "0.85F"
+
+                summary = "%s"
             }
             switchPreference {
                 key = Keys.alwaysUseExternalPlayer
