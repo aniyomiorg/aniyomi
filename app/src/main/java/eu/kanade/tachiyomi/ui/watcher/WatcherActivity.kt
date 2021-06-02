@@ -111,9 +111,15 @@ class WatcherActivity : AppCompatActivity() {
         source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
         episodeList = intent.getSerializableExtra("episodeList") as ArrayList<Episode>
         uri = EpisodeLoader.getUri(episode, anime, source)
+        val mime = when (uri.substringAfterLast(".")) {
+            "mp4" -> MimeTypes.VIDEO_MP4
+            "mkv" -> MimeTypes.APPLICATION_MATROSKA
+            "m3u8" -> MimeTypes.APPLICATION_M3U8
+            else -> MimeTypes.VIDEO_MP4
+        }
         mediaItem = MediaItem.Builder()
             .setUri(uri)
-            .setMimeType(MimeTypes.VIDEO_MP4)
+            .setMimeType(mime)
             .build()
         playbackPosition = episode.last_second_seen
 
