@@ -57,7 +57,7 @@ class MigrationSourcesPresenter(
                 val source = animesourceManager.getOrStub(it.key)
                 AnimeSourceItem(source, it.value.size)
             }
-            .sortedBy { it.source.name.toLowerCase() }
+            .sortedBy { it.source.name.lowercase() }
             .toList()
     }
 }

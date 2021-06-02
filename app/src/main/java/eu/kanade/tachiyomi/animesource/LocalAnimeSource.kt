@@ -83,9 +83,9 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         when (state?.index) {
             0 -> {
                 animeDirs = if (state.ascending) {
-                    animeDirs.sortedBy { it.name.toLowerCase(Locale.ENGLISH) }
+                    animeDirs.sortedBy { it.name.lowercase(Locale.ENGLISH) }
                 } else {
-                    animeDirs.sortedByDescending { it.name.toLowerCase(Locale.ENGLISH) }
+                    animeDirs.sortedByDescending { it.name.lowercase(Locale.ENGLISH) }
                 }
             }
             1 -> {
@@ -239,7 +239,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
     }
 
     private fun isSupportedFile(extension: String): Boolean {
-        return extension.toLowerCase(Locale.ROOT) in SUPPORTED_ARCHIVE_TYPES
+        return extension.lowercase(Locale.ROOT) in SUPPORTED_ARCHIVE_TYPES
     }
 
     fun getFormat(episode: SEpisode): Format {

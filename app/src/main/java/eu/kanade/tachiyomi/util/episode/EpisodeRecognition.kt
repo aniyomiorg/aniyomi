@@ -44,7 +44,7 @@ object EpisodeRecognition {
         }
 
         // Get episode title with lower case
-        var name = episode.name.toLowerCase()
+        var name = episode.name.lowercase()
 
         // Remove comma's from episode.
         name = name.replace(',', '.')
@@ -77,7 +77,7 @@ object EpisodeRecognition {
         }
 
         // Remove anime title from episode title.
-        val nameWithoutAnime = name.replace(anime.title.toLowerCase(), "").trim()
+        val nameWithoutAnime = name.replace(anime.title.lowercase(), "").trim()
 
         // Check if first value is number after title remove.
         if (updateEpisode(withoutAnime.find(nameWithoutAnime), episode)) {
@@ -147,6 +147,6 @@ object EpisodeRecognition {
      * x.a -> x.1, x.b -> x.2, etc
      */
     private fun parseAlphaPostFix(alpha: Char): Float {
-        return ("0." + (alpha.toInt() - 96).toString()).toFloat()
+        return ("0." + (alpha.code - 96).toString()).toFloat()
     }
 }

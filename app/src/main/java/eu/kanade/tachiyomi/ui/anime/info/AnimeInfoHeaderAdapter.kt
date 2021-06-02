@@ -13,7 +13,7 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.databinding.AnimeInfoHeaderBinding
+import eu.kanade.tachiyomi.databinding.MangaInfoHeaderBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.view.setChips
@@ -39,12 +39,12 @@ class AnimeInfoHeaderAdapter(
     private var source: AnimeSource = controller.presenter.source
     private var trackCount: Int = 0
 
-    private lateinit var binding: AnimeInfoHeaderBinding
+    private lateinit var binding: MangaInfoHeaderBinding
 
     private var initialLoad: Boolean = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeaderViewHolder {
-        binding = AnimeInfoHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = MangaInfoHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return HeaderViewHolder(binding.root)
     }
 
@@ -76,7 +76,7 @@ class AnimeInfoHeaderAdapter(
     inner class HeaderViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
             // For rounded corners
-            binding.animeCover.clipToOutline = true
+            binding.mangaCover.clipToOutline = true
 
             binding.btnFavorite.clicks()
                 .onEach { controller.onFavoriteClick() }
@@ -121,61 +121,61 @@ class AnimeInfoHeaderAdapter(
                     .launchIn(controller.viewScope)
             }
 
-            binding.animeFullTitle.longClicks()
+            binding.mangaFullTitle.longClicks()
                 .onEach {
                     controller.activity?.copyToClipboard(
                         view.context.getString(R.string.title),
-                        binding.animeFullTitle.text.toString()
+                        binding.mangaFullTitle.text.toString()
                     )
                 }
                 .launchIn(controller.viewScope)
 
-            binding.animeFullTitle.clicks()
+            binding.mangaFullTitle.clicks()
                 .onEach {
-                    controller.performGlobalSearch(binding.animeFullTitle.text.toString())
+                    controller.performGlobalSearch(binding.mangaFullTitle.text.toString())
                 }
                 .launchIn(controller.viewScope)
 
-            binding.animeAuthor.longClicks()
+            binding.mangaAuthor.longClicks()
                 .onEach {
                     controller.activity?.copyToClipboard(
-                        binding.animeAuthor.text.toString(),
-                        binding.animeAuthor.text.toString()
+                        binding.mangaAuthor.text.toString(),
+                        binding.mangaAuthor.text.toString()
                     )
                 }
                 .launchIn(controller.viewScope)
 
-            binding.animeAuthor.clicks()
+            binding.mangaAuthor.clicks()
                 .onEach {
-                    controller.performGlobalSearch(binding.animeAuthor.text.toString())
+                    controller.performGlobalSearch(binding.mangaAuthor.text.toString())
                 }
                 .launchIn(controller.viewScope)
 
-            binding.animeArtist.longClicks()
+            binding.mangaArtist.longClicks()
                 .onEach {
                     controller.activity?.copyToClipboard(
-                        binding.animeArtist.text.toString(),
-                        binding.animeArtist.text.toString()
+                        binding.mangaArtist.text.toString(),
+                        binding.mangaArtist.text.toString()
                     )
                 }
                 .launchIn(controller.viewScope)
 
-            binding.animeArtist.clicks()
+            binding.mangaArtist.clicks()
                 .onEach {
-                    controller.performGlobalSearch(binding.animeArtist.text.toString())
+                    controller.performGlobalSearch(binding.mangaArtist.text.toString())
                 }
                 .launchIn(controller.viewScope)
 
-            binding.animeSummaryText.longClicks()
+            binding.mangaSummaryText.longClicks()
                 .onEach {
                     controller.activity?.copyToClipboard(
                         view.context.getString(R.string.description),
-                        binding.animeSummaryText.text.toString()
+                        binding.mangaSummaryText.text.toString()
                     )
                 }
                 .launchIn(controller.viewScope)
 
-            binding.animeCover.longClicks()
+            binding.mangaCover.longClicks()
                 .onEach {
                     controller.activity?.copyToClipboard(
                         view.context.getString(R.string.title),
@@ -195,14 +195,14 @@ class AnimeInfoHeaderAdapter(
          */
         private fun setAnimeInfo(anime: Anime, source: AnimeSource?) {
             // Update full title TextView.
-            binding.animeFullTitle.text = if (anime.title.isBlank()) {
+            binding.mangaFullTitle.text = if (anime.title.isBlank()) {
                 view.context.getString(R.string.unknown)
             } else {
                 anime.title
             }
 
             // Update author TextView.
-            binding.animeAuthor.text = if (anime.author.isNullOrBlank()) {
+            binding.mangaAuthor.text = if (anime.author.isNullOrBlank()) {
                 view.context.getString(R.string.unknown_author)
             } else {
                 anime.author
@@ -210,14 +210,14 @@ class AnimeInfoHeaderAdapter(
 
             // Update artist TextView.
             val hasArtist = !anime.artist.isNullOrBlank() && anime.artist != anime.author
-            binding.animeArtist.isVisible = hasArtist
+            binding.mangaArtist.isVisible = hasArtist
             if (hasArtist) {
-                binding.animeArtist.text = anime.artist
+                binding.mangaArtist.text = anime.artist
             }
 
             // If anime source is known update source TextView.
             val animeSource = source?.toString()
-            with(binding.animeSource) {
+            with(binding.mangaSource) {
                 if (animeSource != null) {
                     text = animeSource
                     setOnClickListener {
@@ -230,7 +230,7 @@ class AnimeInfoHeaderAdapter(
             }
 
             // Update status TextView.
-            binding.animeStatus.setText(
+            binding.mangaStatus.setText(
                 when (anime.status) {
                     SAnime.ONGOING -> R.string.ongoing
                     SAnime.COMPLETED -> R.string.completed
@@ -243,7 +243,7 @@ class AnimeInfoHeaderAdapter(
             setFavoriteButtonState(anime.favorite)
 
             // Set cover if changed.
-            listOf(binding.animeCover, binding.backdrop).forEach {
+            listOf(binding.mangaCover, binding.backdrop).forEach {
                 it.loadAny(anime.thumbnail_url)
             }
 
@@ -252,7 +252,7 @@ class AnimeInfoHeaderAdapter(
             showAnimeInfo(hasInfoContent)
             if (hasInfoContent) {
                 // Update description TextView.
-                binding.animeSummaryText.text = if (anime.description.isNullOrBlank()) {
+                binding.mangaSummaryText.text = if (anime.description.isNullOrBlank()) {
                     view.context.getString(R.string.unknown)
                 } else {
                     anime.description
@@ -260,25 +260,24 @@ class AnimeInfoHeaderAdapter(
 
                 // Update genres list
                 if (!anime.genre.isNullOrBlank()) {
-                    binding.animeGenresTagsCompactChips.setChips(
+                    binding.mangaGenresTagsCompactChips.setChips(
                         anime.getGenres(),
                         controller::performSearch
                     )
-                    binding.animeGenresTagsFullChips.setChips(
+                    binding.mangaGenresTagsFullChips.setChips(
                         anime.getGenres(),
                         controller::performSearch
                     )
                 } else {
-                    binding.animeGenresTagsCompactChips.isVisible = false
-                    binding.animeGenresTagsFullChips.isVisible = false
+                    binding.mangaGenresTagsCompactChips.isVisible = false
+                    binding.mangaGenresTagsFullChips.isVisible = false
                 }
 
                 // Handle showing more or less info
                 merge(
-                    binding.animeSummarySection.clicks(),
-                    binding.animeSummaryText.clicks(),
-                    binding.animeInfoToggleMore.clicks(),
-                    binding.animeInfoToggleLess.clicks()
+                    binding.mangaSummaryText.clicks(),
+                    binding.mangaInfoToggleMore.clicks(),
+                    binding.mangaInfoToggleLess.clicks()
                 )
                     .onEach { toggleAnimeInfo() }
                     .launchIn(controller.viewScope)
@@ -293,24 +292,24 @@ class AnimeInfoHeaderAdapter(
         }
 
         private fun showAnimeInfo(visible: Boolean) {
-            binding.animeSummarySection.isVisible = visible
+            binding.mangaSummarySection.isVisible = visible
         }
 
         private fun toggleAnimeInfo() {
-            val isCurrentlyExpanded = binding.animeSummaryText.maxLines != 2
+            val isCurrentlyExpanded = binding.mangaSummaryText.maxLines != 2
 
-            binding.animeInfoToggleMoreScrim.isVisible = isCurrentlyExpanded
-            binding.animeInfoToggleMore.isVisible = isCurrentlyExpanded
-            binding.animeInfoToggleLess.isVisible = !isCurrentlyExpanded
+            binding.mangaInfoToggleMoreScrim.isVisible = isCurrentlyExpanded
+            binding.mangaInfoToggleMore.isVisible = isCurrentlyExpanded
+            binding.mangaInfoToggleLess.isVisible = !isCurrentlyExpanded
 
-            binding.animeSummaryText.maxLines = if (isCurrentlyExpanded) {
+            binding.mangaSummaryText.maxLines = if (isCurrentlyExpanded) {
                 2
             } else {
                 Int.MAX_VALUE
             }
 
-            binding.animeGenresTagsCompact.isVisible = isCurrentlyExpanded
-            binding.animeGenresTagsFullChips.isVisible = !isCurrentlyExpanded
+            binding.mangaGenresTagsCompact.isVisible = isCurrentlyExpanded
+            binding.mangaGenresTagsFullChips.isVisible = !isCurrentlyExpanded
         }
 
         /**
