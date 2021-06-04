@@ -178,7 +178,9 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                         controller?.showSettingsSheet()
                     }
                     R.id.nav_updates -> {
-                        router.pushController(DownloadTabsController().withFadeTransaction())
+                        if (router.backstackSize == 1) {
+                            router.pushController(DownloadTabsController().withFadeTransaction())
+                        }
                     }
                     R.id.nav_animelib -> {
                         val controller = router.getControllerWithTag(id.toString()) as? AnimelibController
