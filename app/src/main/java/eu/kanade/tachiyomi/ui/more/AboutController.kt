@@ -26,7 +26,6 @@ import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.toast
 import timber.log.Timber
 import java.text.DateFormat
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
@@ -168,7 +167,7 @@ class AboutController : SettingsController(), NoToolbarElevationController {
             outputDf.timeZone = TimeZone.getDefault()
 
             buildTime!!.toDateTimestampString(dateFormat)
-        } catch (e: ParseException) {
+        } catch (e: Exception) {
             BuildConfig.BUILD_TIME
         }
     }

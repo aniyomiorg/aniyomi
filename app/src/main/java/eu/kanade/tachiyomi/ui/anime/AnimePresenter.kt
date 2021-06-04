@@ -36,6 +36,10 @@ import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
+import eu.kanade.tachiyomi.util.storage.DiskUtil
+import eu.kanade.tachiyomi.util.storage.getPicturesDir
+import eu.kanade.tachiyomi.util.storage.getTempShareDir
+import eu.kanade.tachiyomi.util.system.ImageUtil
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.updateCoverLastModified
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.State
@@ -51,6 +55,7 @@ import rx.schedulers.Schedulers
 import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 import java.util.Date
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -284,6 +289,33 @@ class AnimePresenter(
      */
     fun moveAnimeToCategory(anime: Anime, category: Category?) {
         moveAnimeToCategories(anime, listOfNotNull(category))
+    }
+
+    fun shareCover(context: Context): File {
+        return saveCover(getTempShareDir(context))
+    }
+
+    fun saveCover(context: Context) {
+        saveCover(getPicturesDir(context))
+    }
+
+    private fun saveCover(directory: File): File {
+        val cover = coverCache.getCoverFile(anime) ?: throw Exception("Cover url was null")
+        if (!cover.exists()) throw Exception("Cover not in cache")
+        val type = ImageUtil.findImageType(cover.inputStream())
+            ?: throw Exception("Not an image")
+
+        directory.mkdirs()
+
+        val filename = DiskUtil.buildValidFilename("${anime.title}.${type.extension}")
+
+        val destFile = File(directory, filename)
+        cover.inputStream().use { input ->
+            destFile.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
+        return destFile
     }
 
     /**

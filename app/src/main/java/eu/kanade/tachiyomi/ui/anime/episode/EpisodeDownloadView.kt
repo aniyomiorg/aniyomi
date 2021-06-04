@@ -10,14 +10,15 @@ import com.google.android.material.progressindicator.BaseProgressIndicator
 import com.mikepenz.aboutlibraries.util.getThemeColor
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
-import eu.kanade.tachiyomi.databinding.EpisodeDownloadViewBinding
+import eu.kanade.tachiyomi.databinding.ChapterDownloadViewBinding
 import eu.kanade.tachiyomi.util.system.dpToPx
 import eu.kanade.tachiyomi.util.view.setVectorCompat
 
 class EpisodeDownloadView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
 
-    private val binding: EpisodeDownloadViewBinding = EpisodeDownloadViewBinding.inflate(LayoutInflater.from(context), this, false)
+    private val binding: ChapterDownloadViewBinding =
+        ChapterDownloadViewBinding.inflate(LayoutInflater.from(context), this, false)
 
     private var state: AnimeDownload.State? = null
     private var progress = -1
@@ -28,7 +29,6 @@ class EpisodeDownloadView @JvmOverloads constructor(context: Context, attrs: Att
 
     fun setState(state: AnimeDownload.State, progress: Int = -1) {
         val isDirty = this.state?.value != state.value || this.progress != progress
-
         if (isDirty) {
             updateLayout(state, progress)
         }

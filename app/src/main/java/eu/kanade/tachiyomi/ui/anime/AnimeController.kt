@@ -72,7 +72,9 @@ import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.hasCustomCover
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
+import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.getResourceColor
+import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.getCoordinates
 import eu.kanade.tachiyomi.util.view.shrinkOnScroll
@@ -414,8 +416,11 @@ class AnimeController :
             R.id.download_custom, R.id.download_unread, R.id.download_all
             -> downloadEpisodes(item.itemId)
 
+            R.id.action_share_cover -> shareCover()
+            R.id.action_save_cover -> saveCover()
+            R.id.action_edit_cover -> changeCover()
+
             R.id.action_edit_categories -> onCategoriesClick()
-            R.id.action_edit_cover -> handleChangeCover()
             R.id.action_migrate -> migrateAnime()
         }
         return super.onOptionsItemSelected(item)
@@ -654,20 +659,35 @@ class AnimeController :
         }
     }
 
-    private fun handleChangeCover() {
-        val anime = anime ?: return
-        if (anime.hasCustomCover(coverCache)) {
-            showEditCoverDialog(anime)
-        } else {
-            openAnimeCoverPicker(anime)
+    private fun shareCover() {
+        try {
+            val activity = activity!!
+            val cover = presenter.shareCover(activity)
+            val uri = cover.getUriCompat(activity)
+            startActivity(Intent.createChooser(uri.toShareIntent(), activity.getString(R.string.action_share)))
+        } catch (e: Exception) {
+            Timber.e(e)
+            activity?.toast(R.string.error_sharing_cover)
         }
     }
 
-    /**
-     * Edit custom cover for selected anime.
-     */
-    private fun showEditCoverDialog(anime: Anime) {
-        ChangeAnimeCoverDialog(this, anime).showDialog(router)
+    private fun saveCover() {
+        try {
+            presenter.saveCover(activity!!)
+            activity?.toast(R.string.cover_saved)
+        } catch (e: Exception) {
+            Timber.e(e)
+            activity?.toast(R.string.error_saving_cover)
+        }
+    }
+
+    private fun changeCover() {
+        val anime = anime ?: return
+        if (anime.hasCustomCover(coverCache)) {
+            ChangeAnimeCoverDialog(this, anime).showDialog(router)
+        } else {
+            openAnimeCoverPicker(anime)
+        }
     }
 
     override fun openAnimeCoverPicker(anime: Anime) {
