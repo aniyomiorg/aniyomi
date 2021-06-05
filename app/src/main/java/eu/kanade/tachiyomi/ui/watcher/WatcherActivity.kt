@@ -17,6 +17,7 @@ import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -261,7 +262,7 @@ class WatcherActivity : AppCompatActivity() {
         uri = links[nextQuality].url
         mediaItem = MediaItem.Builder()
             .setUri(uri)
-            .setMimeType(MimeTypes.VIDEO_MP4)
+            .setMimeType(getMime(uri))
             .build()
         exoPlayer.setMediaItem(mediaItem, resumeAt)
         exoPlayer.prepare()

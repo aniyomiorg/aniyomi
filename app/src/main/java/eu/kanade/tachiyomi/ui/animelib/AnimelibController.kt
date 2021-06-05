@@ -262,7 +262,9 @@ class AnimelibController(
     }
 
     fun showSettingsSheet() {
-        settingsSheet?.show()
+        adapter?.categories?.get(binding.animelibPager.currentItem)?.let { category ->
+            settingsSheet?.show(category)
+        }
     }
 
     fun onNextAnimelibUpdate(categories: List<Category>, animeMap: Map<Int, List<AnimelibItem>>) {

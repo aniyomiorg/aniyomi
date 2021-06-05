@@ -21,17 +21,34 @@ import eu.kanade.tachiyomi.widget.AutofitRecyclerView
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class AnimelibItem(val anime: AnimelibAnime, private val animelibDisplayMode: Preference<DisplayMode>) :
+class AnimelibItem(
+    val anime: AnimelibAnime,
+    private val shouldSetFromCategory: Preference<Boolean>,
+    private val defaultLibraryDisplayMode: Preference<DisplayMode>
+) :
     AbstractFlexibleItem<AnimelibHolder<*>>(), IFilterable<String> {
 
     private val sourceManager: AnimeSourceManager = Injekt.get()
 
+    var displayMode: Int = -1
     var downloadCount = -1
     var unreadCount = -1
     var isLocal = false
 
+    private fun getDisplayMode(): DisplayMode {
+        return if (shouldSetFromCategory.get() && anime.category != 0) {
+            if (displayMode != -1) {
+                DisplayMode.values()[displayMode]
+            } else {
+                DisplayMode.COMPACT_GRID
+            }
+        } else {
+            defaultLibraryDisplayMode.get()
+        }
+    }
+
     override fun getLayoutRes(): Int {
-        return when (animelibDisplayMode.get()) {
+        return when (getDisplayMode()) {
             DisplayMode.COMPACT_GRID -> R.layout.source_compact_grid_item
             DisplayMode.COMFORTABLE_GRID -> R.layout.source_comfortable_grid_item
             DisplayMode.LIST -> R.layout.source_list_item
@@ -39,7 +56,7 @@ class AnimelibItem(val anime: AnimelibAnime, private val animelibDisplayMode: Pr
     }
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>): AnimelibHolder<*> {
-        return when (animelibDisplayMode.get()) {
+        return when (getDisplayMode()) {
             DisplayMode.COMPACT_GRID -> {
                 val binding = SourceCompactGridItemBinding.bind(view)
                 val parent = adapter.recyclerView as AutofitRecyclerView

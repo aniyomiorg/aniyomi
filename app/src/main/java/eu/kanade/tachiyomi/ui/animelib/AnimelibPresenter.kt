@@ -312,6 +312,13 @@ class AnimelibPresenter(
                 dbCategories
             }
 
+            animelibAnime.forEach { (categoryId, animelibAnime) ->
+                val category = categories.first { category -> category.id == categoryId }
+                animelibAnime.forEach { libraryItem ->
+                    libraryItem.displayMode = category.displayMode
+                }
+            }
+
             this.categories = categories
             Animelib(categories, animelibAnime)
         }
@@ -333,10 +340,18 @@ class AnimelibPresenter(
      * value.
      */
     private fun getAnimelibAnimesObservable(): Observable<AnimelibMap> {
-        val animelibDisplayMode = preferences.animelibDisplayMode()
+        val defaultLibraryDisplayMode = preferences.libraryDisplayMode()
+        val shouldSetFromCategory = preferences.categorisedDisplaySettings()
         return db.getAnimelibAnimes().asRxObservable()
             .map { list ->
-                list.map { AnimelibItem(it, animelibDisplayMode) }.groupBy { it.anime.category }
+                list.map { animelibAnime ->
+                    // Display mode based on user preference: take it from global library setting or category
+                    AnimelibItem(
+                        animelibAnime,
+                        shouldSetFromCategory,
+                        defaultLibraryDisplayMode
+                    )
+                }.groupBy { it.anime.category }
             }
     }
 
