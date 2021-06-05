@@ -23,7 +23,7 @@ class DeleteAnimelibAnimesDialog<T>(bundle: Bundle? = null) :
         return MaterialDialog(activity!!)
             .title(R.string.action_remove)
             .listItemsMultiChoice(
-                R.array.delete_selected_mangas,
+                R.array.delete_selected_animes,
                 initialSelection = intArrayOf(0)
             ) { _, selections, _ ->
                 val deleteFromAnimelib = 0 in selections

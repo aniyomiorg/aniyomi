@@ -29,8 +29,8 @@ class RemoveAnimeHistoryDialog<T>(bundle: Bundle? = null) : DialogController(bun
 
         // Create custom view
         val dialogCheckboxView = DialogCheckboxView(activity).apply {
-            setDescription(R.string.dialog_with_checkbox_remove_description)
-            setOptionDescription(R.string.dialog_with_checkbox_reset)
+            setDescription(R.string.dialog_with_checkbox_remove_description_anime)
+            setOptionDescription(R.string.dialog_with_checkbox_reset_anime)
         }
 
         return MaterialDialog(activity)

@@ -1,5 +1,6 @@
 package tachiyomi.animesource
 
+import eu.kanade.tachiyomi.animesource.model.Link
 import tachiyomi.animesource.model.AnimeInfo
 import tachiyomi.animesource.model.EpisodeInfo
 
@@ -40,7 +41,7 @@ interface AnimeSource {
      *
      * @param anime the anime to update.
      */
-    suspend fun getEpisodeLink(episode: EpisodeInfo): String
+    suspend fun getEpisodeLink(episode: EpisodeInfo): List<Link>
 
     /**
      * Returns a regex used to determine chapter information.

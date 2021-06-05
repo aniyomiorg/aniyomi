@@ -6,7 +6,6 @@ import android.os.Bundle
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
-import eu.kanade.tachiyomi.animesource.model.toEpisodeInfo
 import eu.kanade.tachiyomi.animesource.model.toSAnime
 import eu.kanade.tachiyomi.animesource.model.toSEpisode
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
@@ -46,7 +45,6 @@ import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.Stat
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.supervisorScope
 import rx.Observable
 import rx.Subscription
@@ -57,8 +55,6 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 import java.util.Date
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class AnimePresenter(
     val anime: Anime,
@@ -444,27 +440,6 @@ class AnimePresenter(
                 withUIContext { view?.onFetchEpisodesError(e) }
             }
         }
-    }
-
-    /**
-     * Requests an updated list of episodes from the source.
-     */
-    fun fetchEpisodeLinksFromSource(manualFetch: Boolean = false, episode: Episode): String {
-        hasRequested = true
-        val link = runBlocking {
-            return@runBlocking suspendCoroutine<String> { continuation ->
-                var link: String
-                presenterScope.launchIO {
-                    try {
-                        link = source.getEpisodeLink(episode.toEpisodeInfo())
-                        continuation.resume(link)
-                    } catch (e: Throwable) {
-                        withUIContext { view?.onFetchEpisodeLinksError(e) }
-                    }
-                }
-            }
-        }
-        return link
     }
 
     /**

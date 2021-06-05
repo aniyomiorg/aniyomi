@@ -521,7 +521,9 @@
     <string name="updating_category">Updating category</string>
     <string name="local_source_badge">Local</string>
     <string name="manga_from_library">Manga from library</string>
+    <string name="anime_from_library">Anime from library</string>
     <string name="downloaded_chapters">Downloaded chapters</string>
+    <string name="downloaded_episodes">Downloaded episodes</string>
     <string name="badges_header">Badges</string>
     <string name="tabs_header">Tabs</string>
 
@@ -667,7 +669,9 @@
     <string name="snack_categories_deleted">Categories deleted</string>
 
     <!-- Dialog option with checkbox view -->
+    <string name="dialog_with_checkbox_remove_description_anime">This will remove the watch date of this episode. Are you sure?</string>
     <string name="dialog_with_checkbox_remove_description">This will remove the read date of this chapter. Are you sure?</string>
+    <string name="dialog_with_checkbox_reset_anime">Reset all episodes for this anime</string>
     <string name="dialog_with_checkbox_reset">Reset all chapters for this manga</string>
 
     <!-- Image notifier -->

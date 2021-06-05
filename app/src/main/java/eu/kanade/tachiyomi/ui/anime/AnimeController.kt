@@ -892,10 +892,6 @@ class AnimeController :
         }
     }
 
-    private fun fetchEpisodeLinksFromSource(manualFetch: Boolean = false, episode: Episode): String {
-        return presenter.fetchEpisodeLinksFromSource(manualFetch, episode)
-    }
-
     fun onFetchEpisodeLinksError(error: Throwable) {
         activity?.toast("no links found")
     }
@@ -922,7 +918,7 @@ class AnimeController :
             if (useInternal) {
                 startActivity(intent)
             } else {
-                val url = EpisodeLoader.getUri(episode, anime!!, source!!)
+                val url = EpisodeLoader.getLink(episode, anime!!, source!!).url
                 currentExtEpisode = episode
                 val extIntent = Intent(Intent.ACTION_VIEW)
                 extIntent.setDataAndTypeAndNormalize(Uri.parse(url), "video/*")

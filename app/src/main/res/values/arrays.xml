@@ -89,6 +89,11 @@
         <item>@string/downloaded_chapters</item>
     </string-array>
 
+    <string-array name="delete_selected_animes">
+        <item>@string/anime_from_library</item>
+        <item>@string/downloaded_episodes</item>
+    </string-array>
+
     <string-array name="pager_nav">
         <item>@string/default_nav</item>
         <item>@string/l_nav</item>

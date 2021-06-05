@@ -4,11 +4,7 @@ import android.content.Context
 import com.github.junrar.Archive
 import com.google.gson.JsonParser
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.model.AnimeFilter
-import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
-import eu.kanade.tachiyomi.animesource.model.AnimesPage
-import eu.kanade.tachiyomi.animesource.model.SAnime
-import eu.kanade.tachiyomi.animesource.model.SEpisode
+import eu.kanade.tachiyomi.animesource.model.*
 import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.AnimeFile
@@ -198,8 +194,8 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         return Observable.just(episodes)
     }
 
-    override fun fetchEpisodeLink(episode: SEpisode): Observable<String> {
-        val link = episode.url
+    override fun fetchEpisodeLink(episode: SEpisode): Observable<List<Link>> {
+        val link = mutableListOf(Link(episode.url, "local"))
 
         return Observable.just(link)
     }

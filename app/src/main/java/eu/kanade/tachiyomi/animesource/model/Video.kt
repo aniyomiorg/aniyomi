@@ -7,6 +7,7 @@ import tachiyomi.animesource.model.VideoUrl
 
 open class Video(
     val url: String = "",
+    val quality: String = "",
     var videoUrl: String? = null,
     @Transient var uri: Uri? = null // Deprecated but can't be deleted due to extensions
 ) : ProgressListener {

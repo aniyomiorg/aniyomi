@@ -6,23 +6,27 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.vkay94.dtpv.DoubleTapPlayerView
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
-import com.google.android.exoplayer2.ExoPlaybackException
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackParameters
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.analytics.AnalyticsCollector
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
+import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.util.Clock
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.model.Link
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeHistory
@@ -33,6 +37,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.hideBar
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -40,7 +45,7 @@ import rx.schedulers.Schedulers
 import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Date
+import java.util.*
 
 const val STATE_RESUME_WINDOW = "resumeWindow"
 const val STATE_RESUME_POSITION = "resumePosition"
@@ -54,18 +59,21 @@ class WatcherActivity : AppCompatActivity() {
     private val db: AnimeDatabaseHelper = Injekt.get()
     private lateinit var exoPlayer: SimpleExoPlayer
     private lateinit var dataSourceFactory: DataSource.Factory
+    private lateinit var mediaSourceFactory: MediaSourceFactory
     private lateinit var playerView: DoubleTapPlayerView
     private lateinit var youTubeDoubleTap: YouTubeOverlay
     private lateinit var skipBtn: TextView
     private lateinit var nextBtn: ImageButton
     private lateinit var prevBtn: ImageButton
     private lateinit var backBtn: TextView
+    private lateinit var settingsBtn: ImageButton
     private lateinit var title: TextView
 
     private lateinit var episode: Episode
     private lateinit var anime: Anime
     private lateinit var source: AnimeSource
     private lateinit var uri: String
+    private lateinit var links: List<Link>
     private lateinit var episodeList: ArrayList<Episode>
 
     private var duration: Long = 0
@@ -103,23 +111,20 @@ class WatcherActivity : AppCompatActivity() {
         skipBtn = findViewById(R.id.watcher_controls_skip_btn)
         nextBtn = findViewById(R.id.watcher_controls_next)
         prevBtn = findViewById(R.id.watcher_controls_prev)
+        settingsBtn = findViewById(R.id.watcher_controls_settings)
 
-        dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "xyz.jmir.tachiyomi.mi"))
+        dataSourceFactory = DefaultDataSourceFactory(this, "xyz.jmir.tachiyomi.mi")
+        mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
         anime = intent.getSerializableExtra("anime") as Anime
         episode = intent.getSerializableExtra("episode") as Episode
         title.text = anime.title + " - " + episode.name
         source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
         episodeList = intent.getSerializableExtra("episodeList") as ArrayList<Episode>
-        uri = EpisodeLoader.getUri(episode, anime, source)
-        val mime = when (uri.substringAfterLast(".")) {
-            "mp4" -> MimeTypes.VIDEO_MP4
-            "mkv" -> MimeTypes.APPLICATION_MATROSKA
-            "m3u8" -> MimeTypes.APPLICATION_M3U8
-            else -> MimeTypes.VIDEO_MP4
-        }
+        links = EpisodeLoader.getLinks(episode, anime, source)
+        uri = links.first().url
         mediaItem = MediaItem.Builder()
             .setUri(uri)
-            .setMimeType(mime)
+            .setMimeType(getMime(uri))
             .build()
         playbackPosition = episode.last_second_seen
 
@@ -131,8 +136,25 @@ class WatcherActivity : AppCompatActivity() {
         }
     }
 
+    private fun getMime(uri: String): String {
+        return when (uri.substringAfterLast(".")) {
+            "mp4" -> MimeTypes.VIDEO_MP4
+            "mkv" -> MimeTypes.APPLICATION_MATROSKA
+            "m3u8" -> MimeTypes.APPLICATION_M3U8
+            else -> MimeTypes.VIDEO_MP4
+        }
+    }
+
     private fun initPlayer() {
-        exoPlayer = SimpleExoPlayer.Builder(this).build().apply {
+        exoPlayer = SimpleExoPlayer.Builder(
+            this,
+            DefaultRenderersFactory(this),
+            DefaultTrackSelector(this),
+            mediaSourceFactory,
+            DefaultLoadControl(),
+            DefaultBandwidthMeter.Builder(this).build(),
+            AnalyticsCollector(Clock.DEFAULT)
+        ).build().apply {
             playWhenReady = isPlayerPlaying
             seekTo(currentWindow, playbackPosition)
             setMediaItem(mediaItem, false)
@@ -154,6 +176,9 @@ class WatcherActivity : AppCompatActivity() {
         exoPlayer.addListener(PlayerEventListener())
         backBtn.setOnClickListener {
             onBackPressed()
+        }
+        settingsBtn.setOnClickListener {
+            settings()
         }
         skipBtn.setOnClickListener { exoPlayer.seekTo(exoPlayer.currentPosition + 85000) }
         setBtnListeners()
@@ -200,10 +225,11 @@ class WatcherActivity : AppCompatActivity() {
         episode = episodeList[episodeList.indexOf(episode) + 1]
         title.text = anime.title + " - " + episode.name
         setBtnListeners()
-        uri = EpisodeLoader.getUri(episode, anime, source)
+        links = EpisodeLoader.getLinks(episode, anime, source)
+        uri = links.first().url
         mediaItem = MediaItem.Builder()
             .setUri(uri)
-            .setMimeType(MimeTypes.VIDEO_MP4)
+            .setMimeType(getMime(uri))
             .build()
         exoPlayer.setMediaItem(mediaItem, episode.last_second_seen)
         exoPlayer.prepare()
@@ -216,12 +242,28 @@ class WatcherActivity : AppCompatActivity() {
         episode = episodeList[episodeList.indexOf(episode) - 1]
         title.text = anime.title + " - " + episode.name
         setBtnListeners()
-        uri = EpisodeLoader.getUri(episode, anime, source)
+        links = EpisodeLoader.getLinks(episode, anime, source)
+        uri = links.first().url
+        mediaItem = MediaItem.Builder()
+            .setUri(uri)
+            .setMimeType(getMime(uri))
+            .build()
+        exoPlayer.setMediaItem(mediaItem, episode.last_second_seen)
+        exoPlayer.prepare()
+        exoPlayer.playWhenReady = true
+    }
+
+    private fun settings() {
+        val resumeAt = exoPlayer.currentPosition
+        val currentQuality = links.indexOfFirst { it.url == uri }
+        val nextQuality = if (currentQuality == links.lastIndex) 0 else currentQuality + 1
+        baseContext.toast(links[nextQuality].quality, Toast.LENGTH_SHORT)
+        uri = links[nextQuality].url
         mediaItem = MediaItem.Builder()
             .setUri(uri)
             .setMimeType(MimeTypes.VIDEO_MP4)
             .build()
-        exoPlayer.setMediaItem(mediaItem, episode.last_second_seen)
+        exoPlayer.setMediaItem(mediaItem, resumeAt)
         exoPlayer.prepare()
         exoPlayer.playWhenReady = true
     }

@@ -19,7 +19,7 @@
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
     android:layout_alignParentTop="true"
-        android:background="#CC000000"
+    android:background="#CC000000"
     android:orientation="horizontal">
     <TextView
         android:id="@+id/exo_overlay_back"
@@ -86,6 +86,9 @@
             android:gravity="center"
             style="@style/ExoMediaButton" />
 
+        <ImageButton android:id="@+id/watcher_controls_settings"
+            style="@style/ExoStyledControls.Button.Bottom.Settings"
+            android:contentDescription="@string/action_next_episode" />
     </LinearLayout>
 
     <LinearLayout

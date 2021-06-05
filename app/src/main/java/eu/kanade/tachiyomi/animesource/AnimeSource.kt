@@ -1,12 +1,7 @@
 package eu.kanade.tachiyomi.animesource
 
 import android.graphics.drawable.Drawable
-import eu.kanade.tachiyomi.animesource.model.SAnime
-import eu.kanade.tachiyomi.animesource.model.SEpisode
-import eu.kanade.tachiyomi.animesource.model.toAnimeInfo
-import eu.kanade.tachiyomi.animesource.model.toEpisodeInfo
-import eu.kanade.tachiyomi.animesource.model.toSAnime
-import eu.kanade.tachiyomi.animesource.model.toSEpisode
+import eu.kanade.tachiyomi.animesource.model.*
 import eu.kanade.tachiyomi.extension.AnimeExtensionManager
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import rx.Observable
@@ -55,7 +50,7 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
      * @param episode the episode to get the link for.
      */
     @Deprecated("Use getEpisodeList instead")
-    fun fetchEpisodeLink(episode: SEpisode): Observable<String>
+    fun fetchEpisodeLink(episode: SEpisode): Observable<List<Link>>
 
     /**
      * [1.x API] Get the updated details for a anime.
@@ -81,7 +76,7 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
      * [1.x API] Get a link for the episode of an anime.
      */
     @Suppress("DEPRECATION")
-    override suspend fun getEpisodeLink(episode: EpisodeInfo): String {
+    override suspend fun getEpisodeLink(episode: EpisodeInfo): List<Link> {
         return fetchEpisodeLink(episode.toSEpisode()).awaitSingle()
     }
 }

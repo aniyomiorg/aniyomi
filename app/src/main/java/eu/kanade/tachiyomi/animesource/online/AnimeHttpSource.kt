@@ -1,19 +1,13 @@
 package eu.kanade.tachiyomi.animesource.online
 
-import android.net.Uri
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
-import eu.kanade.tachiyomi.animesource.model.AnimesPage
-import eu.kanade.tachiyomi.animesource.model.SAnime
-import eu.kanade.tachiyomi.animesource.model.SEpisode
-import eu.kanade.tachiyomi.animesource.model.Video
+import eu.kanade.tachiyomi.animesource.model.*
 import eu.kanade.tachiyomi.network.*
 import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import rx.Observable
-import timber.log.Timber
 import uy.kohesive.injekt.injectLazy
 import java.net.URI
 import java.net.URISyntaxException
@@ -217,7 +211,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         }
     }
 
-    override fun fetchEpisodeLink(episode: SEpisode): Observable<String> {
+    override fun fetchEpisodeLink(episode: SEpisode): Observable<List<Link>> {
         return client.newCall(episodeLinkRequest(episode))
             .asObservableSuccess()
             .map { response ->
@@ -232,7 +226,6 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param page the page whose source image has to be fetched.
      */
     open fun fetchVideoLink(video: Video): Observable<String> {
-        Timber.w("fetchVideoLink")
         return client.newCall(videoUrlRequest(video))
             .asObservableSuccess()
             .map { videoUrlParse(it) }
@@ -280,10 +273,12 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param chapter the chapter whose page list has to be fetched.
      */
-    fun fetchVideoList(episode: SEpisode): Observable<Video> {
+    fun fetchVideoList(episode: SEpisode): Observable<List<Link>> {
         return client.newCall(episodeLinkRequest(episode))
             .asObservableSuccess()
-            .map { response -> val link = episodeLinkParse(response); Video(link, link, Uri.parse(link)) }
+            .map { response ->
+                episodeLinkParse(response)
+            }
     }
 
     /**
@@ -318,7 +313,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param response the response from the site.
      */
-    protected abstract fun episodeLinkParse(response: Response): String
+    protected abstract fun episodeLinkParse(response: Response): List<Link>
 
     /**
      * Assigns the url of the episode without the scheme and domain. It saves some redundancy from
