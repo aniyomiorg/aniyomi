@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.webkit.CookieManager
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.Toast
@@ -20,12 +22,8 @@ import eu.kanade.tachiyomi.databinding.WebviewActivityBinding
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.activity.BaseViewBindingActivity
-import eu.kanade.tachiyomi.util.system.WebViewClientCompat
-import eu.kanade.tachiyomi.util.system.WebViewUtil
-import eu.kanade.tachiyomi.util.system.getResourceColor
-import eu.kanade.tachiyomi.util.system.openInBrowser
-import eu.kanade.tachiyomi.util.system.setDefaultSettings
-import eu.kanade.tachiyomi.util.system.toast
+import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
+import eu.kanade.tachiyomi.util.system.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.appcompat.navigationClicks
@@ -125,6 +123,12 @@ class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
                     supportActionBar?.subtitle = url
                     binding.swipeRefresh.isEnabled = true
                     binding.swipeRefresh.isRefreshing = false
+
+                    val cookies: String? = CookieManager.getInstance().getCookie(url)
+                    if (!cookies.isNullOrBlank()) {
+                        val data = Intent().setData(Uri.parse(cookies))
+                        setResult(WatcherActivity.REQUEST_COOKIES, data)
+                    }
 
                     // Reset to top when page refreshes
                     if (isRefreshing) {

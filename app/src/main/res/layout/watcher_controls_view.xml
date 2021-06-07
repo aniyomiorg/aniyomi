@@ -88,7 +88,17 @@
 
         <ImageButton android:id="@+id/watcher_controls_settings"
             style="@style/ExoStyledControls.Button.Bottom.Settings"
+            android:visibility="gone"
             android:contentDescription="@string/action_next_episode" />
+
+        <TextView
+            android:id="@+id/watcher_controls_captcha_btn"
+            android:text="captcha"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:visibility="gone"
+            style="@style/ExoMediaButton" />
     </LinearLayout>
 
     <LinearLayout

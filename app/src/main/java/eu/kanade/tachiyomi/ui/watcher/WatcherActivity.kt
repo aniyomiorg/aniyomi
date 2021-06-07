@@ -11,16 +11,16 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.vkay94.dtpv.DoubleTapPlayerView
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
 import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.analytics.AnalyticsCollector
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.*
+import com.google.android.exoplayer2.upstream.HttpDataSource.HttpDataSourceException
+import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException
 import com.google.android.exoplayer2.util.Clock
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
@@ -37,6 +37,7 @@ import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
+import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.hideBar
@@ -46,6 +47,7 @@ import rx.schedulers.Schedulers
 import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.IOException
 import java.util.*
 
 const val STATE_RESUME_WINDOW = "resumeWindow"
@@ -68,6 +70,7 @@ class WatcherActivity : AppCompatActivity() {
     private lateinit var prevBtn: ImageButton
     private lateinit var backBtn: TextView
     private lateinit var settingsBtn: ImageButton
+    private lateinit var captchaBtn: TextView
     private lateinit var title: TextView
 
     private lateinit var episode: Episode
@@ -75,6 +78,7 @@ class WatcherActivity : AppCompatActivity() {
     private lateinit var source: AnimeSource
     private lateinit var uri: String
     private lateinit var links: List<Link>
+    private var currentQuality = 0
     private lateinit var episodeList: ArrayList<Episode>
 
     private var duration: Long = 0
@@ -113,16 +117,24 @@ class WatcherActivity : AppCompatActivity() {
         nextBtn = findViewById(R.id.watcher_controls_next)
         prevBtn = findViewById(R.id.watcher_controls_prev)
         settingsBtn = findViewById(R.id.watcher_controls_settings)
+        captchaBtn = findViewById(R.id.watcher_controls_captcha_btn)
 
-        dataSourceFactory = DefaultDataSourceFactory(this, "xyz.jmir.tachiyomi.mi")
-        mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
         anime = intent.getSerializableExtra("anime") as Anime
         episode = intent.getSerializableExtra("episode") as Episode
         title.text = anime.title + " - " + episode.name
         source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
         episodeList = intent.getSerializableExtra("episodeList") as ArrayList<Episode>
         links = EpisodeLoader.getLinks(episode, anime, source)
+        if (links.lastIndex > 0) settingsBtn.visibility = View.VISIBLE
         uri = links.first().url
+        if (EpisodeLoader.isDownloaded(episode, anime)) {
+            dataSourceFactory = DefaultDataSourceFactory(this)
+        } else {
+            dataSourceFactory = DefaultHttpDataSource.Factory().apply {
+                setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4530.5 Safari/537.36")
+            }
+        }
+        mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
         mediaItem = MediaItem.Builder()
             .setUri(uri)
             .setMimeType(getMime(uri))
@@ -147,15 +159,7 @@ class WatcherActivity : AppCompatActivity() {
     }
 
     private fun initPlayer() {
-        exoPlayer = SimpleExoPlayer.Builder(
-            this,
-            DefaultRenderersFactory(this),
-            DefaultTrackSelector(this),
-            mediaSourceFactory,
-            DefaultLoadControl(),
-            DefaultBandwidthMeter.Builder(this).build(),
-            AnalyticsCollector(Clock.DEFAULT)
-        ).build().apply {
+        exoPlayer = newPlayer().apply {
             playWhenReady = isPlayerPlaying
             seekTo(currentWindow, playbackPosition)
             setMediaItem(mediaItem, false)
@@ -171,7 +175,30 @@ class WatcherActivity : AppCompatActivity() {
             override fun onTracksChanged(trackGroups: TrackGroupArray, trackSelections: TrackSelectionArray) {}
             override fun onLoadingChanged(isLoading: Boolean) {}
             override fun onRepeatModeChanged(repeatMode: Int) {}
-            override fun onPlayerError(error: ExoPlaybackException) {}
+            override fun onPlayerError(error: ExoPlaybackException) {
+                if (error.type == ExoPlaybackException.TYPE_SOURCE) {
+                    val cause: IOException = error.sourceException
+                    if (cause is HttpDataSourceException) {
+                        // An HTTP error occurred.
+                        val httpError = cause
+                        // This is the request for which the error occurred.
+                        val requestDataSpec = httpError.dataSpec
+                        // It's possible to find out more about the error both by casting and by
+                        // querying the cause.
+                        if (httpError is InvalidResponseCodeException) {
+                            // Cast to InvalidResponseCodeException and retrieve the response code,
+                            // message and headers.
+                            val errorMessage = "Error " + httpError.responseCode.toString() + ", try solving a captcha"
+                            captchaBtn.visibility = View.VISIBLE
+                            baseContext.toast(errorMessage, Toast.LENGTH_SHORT)
+                        } else {
+                            httpError.cause
+                            // Try calling httpError.getCause() to retrieve the underlying cause,
+                            // although note that it may be null.
+                        }
+                    }
+                }
+            }
             override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
         }
         exoPlayer.addListener(PlayerEventListener())
@@ -180,6 +207,9 @@ class WatcherActivity : AppCompatActivity() {
         }
         settingsBtn.setOnClickListener {
             settings()
+        }
+        captchaBtn.setOnClickListener {
+            captcha()
         }
         skipBtn.setOnClickListener { exoPlayer.seekTo(exoPlayer.currentPosition + 85000) }
         setBtnListeners()
@@ -227,14 +257,14 @@ class WatcherActivity : AppCompatActivity() {
         title.text = anime.title + " - " + episode.name
         setBtnListeners()
         links = EpisodeLoader.getLinks(episode, anime, source)
+        settingsBtn.visibility = if (links.lastIndex > 0) View.VISIBLE else View.GONE
         uri = links.first().url
+        currentQuality = 0
         mediaItem = MediaItem.Builder()
             .setUri(uri)
             .setMimeType(getMime(uri))
             .build()
-        exoPlayer.setMediaItem(mediaItem, episode.last_second_seen)
-        exoPlayer.prepare()
-        exoPlayer.playWhenReady = true
+        changePlayer(episode.last_second_seen)
     }
 
     private fun previousEpisode() {
@@ -244,29 +274,67 @@ class WatcherActivity : AppCompatActivity() {
         title.text = anime.title + " - " + episode.name
         setBtnListeners()
         links = EpisodeLoader.getLinks(episode, anime, source)
+        settingsBtn.visibility = if (links.lastIndex > 0) View.VISIBLE else View.GONE
         uri = links.first().url
+        currentQuality = 0
         mediaItem = MediaItem.Builder()
             .setUri(uri)
             .setMimeType(getMime(uri))
             .build()
-        exoPlayer.setMediaItem(mediaItem, episode.last_second_seen)
-        exoPlayer.prepare()
-        exoPlayer.playWhenReady = true
+        changePlayer(episode.last_second_seen)
     }
 
     private fun settings() {
-        val resumeAt = exoPlayer.currentPosition
-        val currentQuality = links.indexOfFirst { it.url == uri }
         val nextQuality = if (currentQuality == links.lastIndex) 0 else currentQuality + 1
         baseContext.toast(links[nextQuality].quality, Toast.LENGTH_SHORT)
         uri = links[nextQuality].url
+        currentQuality++
         mediaItem = MediaItem.Builder()
             .setUri(uri)
             .setMimeType(getMime(uri))
             .build()
+        changePlayer(exoPlayer.currentPosition)
+    }
+
+    private fun captcha() {
+        val intent = WebViewActivity.newIntent(this, uri, source.id, anime.title + episode.name)
+        startActivityForResult(intent, 1337)
+        captchaBtn.visibility = View.GONE
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_COOKIES && resultCode == REQUEST_COOKIES) {
+            val cookies = data?.data.toString()
+            dataSourceFactory = DefaultHttpDataSource.Factory().apply {
+                setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4530.5 Safari/537.36")
+                setDefaultRequestProperties(mapOf(Pair("cookie", cookies)))
+            }
+            mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
+            changePlayer(exoPlayer.currentPosition)
+        }
+    }
+
+    private fun changePlayer(resumeAt: Long) {
+        exoPlayer.release()
+        exoPlayer = newPlayer()
         exoPlayer.setMediaItem(mediaItem, resumeAt)
         exoPlayer.prepare()
         exoPlayer.playWhenReady = true
+        youTubeDoubleTap.player(exoPlayer)
+        playerView.player = exoPlayer
+    }
+
+    private fun newPlayer(): SimpleExoPlayer {
+        return SimpleExoPlayer.Builder(
+            this,
+            DefaultRenderersFactory(this),
+            DefaultTrackSelector(this),
+            mediaSourceFactory,
+            DefaultLoadControl(),
+            DefaultBandwidthMeter.Builder(this).build(),
+            AnalyticsCollector(Clock.DEFAULT)
+        ).build()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -393,5 +461,6 @@ class WatcherActivity : AppCompatActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
+        const val REQUEST_COOKIES = 1337
     }
 }

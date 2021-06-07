@@ -31,6 +31,11 @@ class EpisodeLoader {
             }
         }
 
+        fun isDownloaded(episode: Episode, anime: Anime): Boolean {
+            val downloadManager: AnimeDownloadManager = Injekt.get()
+            return downloadManager.isEpisodeDownloaded(episode, anime, true)
+        }
+
         fun getLink(episode: Episode, anime: Anime, source: AnimeSource): Link {
             val downloadManager: AnimeDownloadManager = Injekt.get()
             val isDownloaded = downloadManager.isEpisodeDownloaded(episode, anime, true)
