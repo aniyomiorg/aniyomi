@@ -53,7 +53,7 @@ class EpisodeLoader {
                     var links: List<Link>
                     launchIO {
                         try {
-                            links = source.getEpisodeLink(episode.toEpisodeInfo())
+                            links = source.getVideoList(episode.toEpisodeInfo())
                             continuation.resume(links)
                         } catch (e: Throwable) {
                             withUIContext { throw e }

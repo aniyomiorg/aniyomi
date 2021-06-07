@@ -7,6 +7,7 @@ import eu.kanade.tachiyomi.util.lang.awaitSingle
 import rx.Observable
 import tachiyomi.animesource.model.AnimeInfo
 import tachiyomi.animesource.model.EpisodeInfo
+import tachiyomi.animesource.model.VideoInfo
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -45,12 +46,12 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
     fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>>
 
     /**
-     * Returns an observable with a link for the episode of an anime.
+     * Returns an observable with a list of video for the episode of an anime.
      *
      * @param episode the episode to get the link for.
      */
-    @Deprecated("Use getEpisodeList instead")
-    fun fetchEpisodeLink(episode: SEpisode): Observable<List<Link>>
+    @Deprecated("Use getVideoList instead")
+    fun fetchVideoList(episode: SEpisode): Observable<List<Video>>
 
     /**
      * [1.x API] Get the updated details for a anime.
@@ -76,8 +77,9 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
      * [1.x API] Get a link for the episode of an anime.
      */
     @Suppress("DEPRECATION")
-    override suspend fun getEpisodeLink(episode: EpisodeInfo): List<Link> {
-        return fetchEpisodeLink(episode.toSEpisode()).awaitSingle()
+    override suspend fun getVideoList(episode: EpisodeInfo): List<VideoInfo> {
+        return fetchVideoList(episode.toSEpisode()).awaitSingle()
+            .map { it.toVideoUrl() }
     }
 }
 

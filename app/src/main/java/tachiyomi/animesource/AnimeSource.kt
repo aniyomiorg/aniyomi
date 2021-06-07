@@ -1,8 +1,8 @@
 package tachiyomi.animesource
 
-import eu.kanade.tachiyomi.animesource.model.Link
 import tachiyomi.animesource.model.AnimeInfo
 import tachiyomi.animesource.model.EpisodeInfo
+import tachiyomi.animesource.model.VideoInfo
 
 /**
  * A basic interface for creating a source. It could be an online source, a local source, etc...
@@ -41,7 +41,7 @@ interface AnimeSource {
      *
      * @param anime the anime to update.
      */
-    suspend fun getEpisodeLink(episode: EpisodeInfo): List<Link>
+    suspend fun getVideoList(episode: EpisodeInfo): List<VideoInfo>
 
     /**
      * Returns a regex used to determine chapter information.
