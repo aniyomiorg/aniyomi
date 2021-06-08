@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.updater
 
-import android.os.Build
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

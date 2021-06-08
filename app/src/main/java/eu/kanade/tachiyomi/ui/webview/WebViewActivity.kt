@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.appcompat.navigationClicks
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
+import timber.log.Timber
 import uy.kohesive.injekt.injectLazy
 
 class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
@@ -101,6 +102,7 @@ class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
                 headers = source.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }.toMutableMap()
                 binding.webview.settings.userAgentString = source.headers["User-Agent"]
             }
+            Timber.w(binding.webview.settings.userAgentString)
             headers["X-Requested-With"] = WebViewUtil.REQUESTED_WITH
 
             supportActionBar?.subtitle = url
@@ -127,6 +129,7 @@ class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
                     val cookies: String? = CookieManager.getInstance().getCookie(url)
                     if (!cookies.isNullOrBlank()) {
                         val data = Intent().setData(Uri.parse(cookies))
+                        data.putExtra("User-Agent", binding.webview.settings.userAgentString)
                         setResult(WatcherActivity.REQUEST_COOKIES, data)
                     }
 
@@ -211,13 +214,15 @@ class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
         private const val URL_KEY = "url_key"
         private const val SOURCE_KEY = "source_key"
         private const val TITLE_KEY = "title_key"
+        private const val ANIME_KEY = "anime_key"
 
-        fun newIntent(context: Context, url: String, sourceId: Long? = null, title: String? = null): Intent {
+        fun newIntent(context: Context, url: String, sourceId: Long? = null, title: String? = null, isAnime: Boolean = false): Intent {
             return Intent(context, WebViewActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 putExtra(URL_KEY, url)
                 putExtra(SOURCE_KEY, sourceId)
                 putExtra(TITLE_KEY, title)
+                putExtra(ANIME_KEY, isAnime)
             }
         }
     }

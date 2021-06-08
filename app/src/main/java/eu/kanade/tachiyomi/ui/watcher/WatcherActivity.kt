@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.webkit.CookieManager
+import android.webkit.WebSettings
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -76,6 +78,7 @@ class WatcherActivity : AppCompatActivity() {
     private lateinit var episode: Episode
     private lateinit var anime: Anime
     private lateinit var source: AnimeSource
+    private lateinit var userAgentString: String
     private lateinit var uri: String
     private lateinit var links: List<Link>
     private var currentQuality = 0
@@ -123,6 +126,8 @@ class WatcherActivity : AppCompatActivity() {
         episode = intent.getSerializableExtra("episode") as Episode
         title.text = anime.title + " - " + episode.name
         source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
+        userAgentString = WebSettings.getDefaultUserAgent(this)
+        Timber.w(userAgentString)
         episodeList = intent.getSerializableExtra("episodeList") as ArrayList<Episode>
         links = EpisodeLoader.getLinks(episode, anime, source)
         if (links.lastIndex > 0) settingsBtn.visibility = View.VISIBLE
@@ -131,7 +136,8 @@ class WatcherActivity : AppCompatActivity() {
             dataSourceFactory = DefaultDataSourceFactory(this)
         } else {
             dataSourceFactory = DefaultHttpDataSource.Factory().apply {
-                setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4530.5 Safari/537.36")
+                setDefaultRequestProperties(mapOf(Pair("cookie", CookieManager.getInstance().getCookie(uri))))
+                setUserAgent(userAgentString)
             }
         }
         mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
@@ -162,46 +168,10 @@ class WatcherActivity : AppCompatActivity() {
         exoPlayer = newPlayer().apply {
             playWhenReady = isPlayerPlaying
             seekTo(currentWindow, playbackPosition)
-            setMediaItem(mediaItem, false)
+            setMediaSource(mediaSourceFactory.createMediaSource(mediaItem), episode.last_second_seen)
             prepare()
         }
-        class PlayerEventListener : Player.EventListener {
-            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-                playerView.keepScreenOn = !(
-                    playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED ||
-                        !playWhenReady
-                    )
-            }
-            override fun onTracksChanged(trackGroups: TrackGroupArray, trackSelections: TrackSelectionArray) {}
-            override fun onLoadingChanged(isLoading: Boolean) {}
-            override fun onRepeatModeChanged(repeatMode: Int) {}
-            override fun onPlayerError(error: ExoPlaybackException) {
-                if (error.type == ExoPlaybackException.TYPE_SOURCE) {
-                    val cause: IOException = error.sourceException
-                    if (cause is HttpDataSourceException) {
-                        // An HTTP error occurred.
-                        val httpError = cause
-                        // This is the request for which the error occurred.
-                        val requestDataSpec = httpError.dataSpec
-                        // It's possible to find out more about the error both by casting and by
-                        // querying the cause.
-                        if (httpError is InvalidResponseCodeException) {
-                            // Cast to InvalidResponseCodeException and retrieve the response code,
-                            // message and headers.
-                            val errorMessage = "Error " + httpError.responseCode.toString() + ", try solving a captcha"
-                            captchaBtn.visibility = View.VISIBLE
-                            baseContext.toast(errorMessage, Toast.LENGTH_SHORT)
-                        } else {
-                            httpError.cause
-                            // Try calling httpError.getCause() to retrieve the underlying cause,
-                            // although note that it may be null.
-                        }
-                    }
-                }
-            }
-            override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
-        }
-        exoPlayer.addListener(PlayerEventListener())
+        exoPlayer.addListener(PlayerEventListener(playerView, captchaBtn, baseContext))
         backBtn.setOnClickListener {
             onBackPressed()
         }
@@ -288,7 +258,7 @@ class WatcherActivity : AppCompatActivity() {
         val nextQuality = if (currentQuality == links.lastIndex) 0 else currentQuality + 1
         baseContext.toast(links[nextQuality].quality, Toast.LENGTH_SHORT)
         uri = links[nextQuality].url
-        currentQuality++
+        currentQuality = nextQuality
         mediaItem = MediaItem.Builder()
             .setUri(uri)
             .setMimeType(getMime(uri))
@@ -297,8 +267,9 @@ class WatcherActivity : AppCompatActivity() {
     }
 
     private fun captcha() {
-        val intent = WebViewActivity.newIntent(this, uri, source.id, anime.title + episode.name)
-        startActivityForResult(intent, 1337)
+        exoPlayer.release()
+        val intent = WebViewActivity.newIntent(this, uri, source.id, anime.title + episode.name, true)
+        startActivityForResult(intent, REQUEST_COOKIES)
         captchaBtn.visibility = View.GONE
     }
 
@@ -306,21 +277,31 @@ class WatcherActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_COOKIES && resultCode == REQUEST_COOKIES) {
             val cookies = data?.data.toString()
-            dataSourceFactory = DefaultHttpDataSource.Factory().apply {
-                setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4530.5 Safari/537.36")
-                setDefaultRequestProperties(mapOf(Pair("cookie", cookies)))
-            }
+            userAgentString = data?.getStringExtra("User-Agent")!!
+            dataSourceFactory = DefaultHttpDataSource.Factory()
+                .setUserAgent(userAgentString)
+                .setDefaultRequestProperties(mapOf(Pair("cookie", cookies)))
+            Timber.w(cookies)
             mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
-            changePlayer(exoPlayer.currentPosition)
         }
     }
 
     private fun changePlayer(resumeAt: Long) {
+        if (EpisodeLoader.isDownloaded(episode, anime)) {
+            dataSourceFactory = DefaultDataSourceFactory(this)
+        } else {
+            dataSourceFactory = DefaultHttpDataSource.Factory().apply {
+                setDefaultRequestProperties(mapOf(Pair("cookie", CookieManager.getInstance().getCookie(uri))))
+                setUserAgent(userAgentString)
+            }
+        }
+        mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
         exoPlayer.release()
         exoPlayer = newPlayer()
-        exoPlayer.setMediaItem(mediaItem, resumeAt)
+        exoPlayer.setMediaSource(mediaSourceFactory.createMediaSource(mediaItem), resumeAt)
         exoPlayer.prepare()
         exoPlayer.playWhenReady = true
+        exoPlayer.addListener(PlayerEventListener(playerView, captchaBtn, baseContext))
         youTubeDoubleTap.player(exoPlayer)
         playerView.player = exoPlayer
     }
@@ -335,6 +316,48 @@ class WatcherActivity : AppCompatActivity() {
             DefaultBandwidthMeter.Builder(this).build(),
             AnalyticsCollector(Clock.DEFAULT)
         ).build()
+    }
+
+    class PlayerEventListener(val playerView: DoubleTapPlayerView, val captchaBtn: TextView, val baseContext: Context) : Player.EventListener {
+        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+            playerView.keepScreenOn = !(
+                playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED ||
+                    !playWhenReady
+                )
+        }
+        override fun onTracksChanged(trackGroups: TrackGroupArray, trackSelections: TrackSelectionArray) {}
+        override fun onLoadingChanged(isLoading: Boolean) {}
+        override fun onRepeatModeChanged(repeatMode: Int) {}
+        override fun onPlayerError(error: ExoPlaybackException) {
+            if (error.type == ExoPlaybackException.TYPE_SOURCE) {
+                val cause: IOException = error.sourceException
+                if (cause is HttpDataSourceException) {
+                    // An HTTP error occurred.
+                    val httpError = cause
+                    // This is the request for which the error occurred.
+                    val requestDataSpec = httpError.dataSpec
+                    for (header in requestDataSpec.httpRequestHeaders) {
+                        var message = ""
+                        message += header.key + " - " + header.value
+                        Timber.w(message)
+                    }
+                    // It's possible to find out more about the error both by casting and by
+                    // querying the cause.
+                    if (httpError is InvalidResponseCodeException) {
+                        // Cast to InvalidResponseCodeException and retrieve the response code,
+                        // message and headers.
+                        val errorMessage = "Error " + httpError.responseCode.toString() + ", try solving a captcha"
+                        captchaBtn.visibility = View.VISIBLE
+                        baseContext.toast(errorMessage, Toast.LENGTH_SHORT)
+                    } else {
+                        httpError.cause
+                        // Try calling httpError.getCause() to retrieve the underlying cause,
+                        // although note that it may be null.
+                    }
+                }
+            }
+        }
+        override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
