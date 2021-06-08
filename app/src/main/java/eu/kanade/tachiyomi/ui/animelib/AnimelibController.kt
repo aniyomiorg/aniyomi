@@ -262,8 +262,12 @@ class AnimelibController(
     }
 
     fun showSettingsSheet() {
-        adapter?.categories?.get(binding.animelibPager.currentItem)?.let { category ->
-            settingsSheet?.show(category)
+        if (adapter?.categories?.isNotEmpty() == true) {
+            adapter?.categories?.get(binding.animelibPager.currentItem)?.let { category ->
+                settingsSheet?.show(category)
+            }
+        } else {
+            settingsSheet?.show()
         }
     }
 
