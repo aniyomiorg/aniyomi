@@ -187,6 +187,7 @@ class DownloadController :
                 onUpdateDownloadedPages(download)
             }
             AnimeDownload.State.ERROR -> unsubscribeProgress(download)
+            else -> { /* unused */ }
         }
     }
 

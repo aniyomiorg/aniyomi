@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.browse.animesource.globalsearch
 import android.view.View
 import coil.clear
 import coil.imageLoader
-import coil.request.CachePolicy
 import coil.request.ImageRequest
 import coil.transition.CrossfadeTransition
 import eu.davidea.viewholders.FlexibleViewHolder
@@ -53,7 +52,6 @@ class GlobalAnimeSearchCardHolder(view: View, adapter: GlobalAnimeSearchCardAdap
             val request = ImageRequest.Builder(itemView.context)
                 .data(anime.thumbnail_url)
                 .setParameter(AnimeCoverFetcher.USE_CUSTOM_COVER, false)
-                .diskCachePolicy(CachePolicy.DISABLED)
                 .target(StateImageViewTarget(binding.cover, binding.progress, crossfadeDuration))
                 .build()
             itemView.context.imageLoader.enqueue(request)

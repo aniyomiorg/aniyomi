@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.Handler
+import androidx.core.content.ContextCompat
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.backup.BackupRestoreService
@@ -98,6 +98,7 @@ class NotificationReceiver : BroadcastReceiver() {
             )
             // Cancel library update and dismiss notification
             ACTION_CANCEL_LIBRARY_UPDATE -> cancelLibraryUpdate(context, Notifications.ID_LIBRARY_PROGRESS)
+            ACTION_CANCEL_ANIMELIB_UPDATE -> cancelAnimelibUpdate(context, Notifications.ID_ANIMELIB_PROGRESS)
             // Open reader activity
             ACTION_OPEN_CHAPTER -> {
                 openChapter(
@@ -159,7 +160,7 @@ class NotificationReceiver : BroadcastReceiver() {
      */
     private fun shareFile(context: Context, uri: Uri, fileMimeType: String, notificationId: Int) {
         dismissNotification(context, notificationId)
-        context.startActivity(uri.toShareIntent())
+        context.startActivity(uri.toShareIntent(fileMimeType))
     }
 
     /**
@@ -208,7 +209,7 @@ class NotificationReceiver : BroadcastReceiver() {
      */
     private fun cancelRestore(context: Context, notificationId: Int) {
         BackupRestoreService.stop(context)
-        Handler().post { dismissNotification(context, notificationId) }
+        ContextCompat.getMainExecutor(context).execute { dismissNotification(context, notificationId) }
     }
 
     /**
@@ -219,7 +220,7 @@ class NotificationReceiver : BroadcastReceiver() {
      */
     private fun cancelLibraryUpdate(context: Context, notificationId: Int) {
         LibraryUpdateService.stop(context)
-        Handler().post { dismissNotification(context, notificationId) }
+        ContextCompat.getMainExecutor(context).execute { dismissNotification(context, notificationId) }
     }
 
     /**
@@ -230,7 +231,7 @@ class NotificationReceiver : BroadcastReceiver() {
      */
     private fun cancelAnimelibUpdate(context: Context, notificationId: Int) {
         AnimelibUpdateService.stop(context)
-        Handler().post { dismissNotification(context, notificationId) }
+        ContextCompat.getMainExecutor(context).execute { dismissNotification(context, notificationId) }
     }
 
     /**
@@ -275,6 +276,7 @@ class NotificationReceiver : BroadcastReceiver() {
         private const val ACTION_CANCEL_RESTORE = "$ID.$NAME.CANCEL_RESTORE"
 
         private const val ACTION_CANCEL_LIBRARY_UPDATE = "$ID.$NAME.CANCEL_LIBRARY_UPDATE"
+        private const val ACTION_CANCEL_ANIMELIB_UPDATE = "$ID.$NAME.CANCEL_ANIMELIB_UPDATE"
 
         private const val ACTION_MARK_AS_READ = "$ID.$NAME.MARK_AS_READ"
         private const val ACTION_OPEN_CHAPTER = "$ID.$NAME.ACTION_OPEN_CHAPTER"
@@ -572,6 +574,19 @@ class NotificationReceiver : BroadcastReceiver() {
         internal fun cancelLibraryUpdatePendingBroadcast(context: Context): PendingIntent {
             val intent = Intent(context, NotificationReceiver::class.java).apply {
                 action = ACTION_CANCEL_LIBRARY_UPDATE
+            }
+            return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
+        /**
+         * Returns [PendingIntent] that starts a service which stops the library update
+         *
+         * @param context context of application
+         * @return [PendingIntent]
+         */
+        internal fun cancelAnimelibUpdatePendingBroadcast(context: Context): PendingIntent {
+            val intent = Intent(context, NotificationReceiver::class.java).apply {
+                action = ACTION_CANCEL_ANIMELIB_UPDATE
             }
             return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }

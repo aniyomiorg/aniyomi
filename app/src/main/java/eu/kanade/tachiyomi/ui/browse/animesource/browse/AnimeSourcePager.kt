@@ -2,14 +2,11 @@ package eu.kanade.tachiyomi.ui.browse.animesource.browse
 
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
-import eu.kanade.tachiyomi.animesource.model.AnimesPage
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import eu.kanade.tachiyomi.util.lang.awaitSingle
 
 open class AnimeSourcePager(val source: AnimeCatalogueSource, val query: String, val filters: AnimeFilterList) : AnimePager() {
 
-    override fun requestNext(): Observable<AnimesPage> {
+    override suspend fun requestNextPage() {
         val page = currentPage
 
         val observable = if (query.isBlank() && filters.isEmpty()) {
@@ -18,15 +15,12 @@ open class AnimeSourcePager(val source: AnimeCatalogueSource, val query: String,
             source.fetchSearchAnime(page, query, filters)
         }
 
-        return observable
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext {
-                if (it.animes.isNotEmpty()) {
-                    onPageReceived(it)
-                } else {
-                    throw NoResultsException()
-                }
-            }
+        val animesPage = observable.awaitSingle()
+
+        if (animesPage.animes.isNotEmpty()) {
+            onPageReceived(animesPage)
+        } else {
+            throw NoResultsException()
+        }
     }
 }

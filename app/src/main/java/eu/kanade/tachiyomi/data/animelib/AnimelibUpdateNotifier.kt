@@ -37,7 +37,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
      * Pending intent of action that cancels the library update
      */
     private val cancelIntent by lazy {
-        NotificationReceiver.cancelLibraryUpdatePendingBroadcast(context)
+        NotificationReceiver.cancelAnimelibUpdatePendingBroadcast(context)
     }
 
     /**

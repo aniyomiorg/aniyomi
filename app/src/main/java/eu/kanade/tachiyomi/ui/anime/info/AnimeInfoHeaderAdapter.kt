@@ -288,6 +288,8 @@ class AnimeInfoHeaderAdapter(
                 if (initialLoad && (fromSource || isTablet)) {
                     toggleAnimeInfo()
                     initialLoad = false
+                    // wrap_content and autoFixTextSize can cause unwanted behaviour this tries to solve it
+                    binding.mangaFullTitle.requestLayout()
                 }
 
                 // Refreshes will change the state and it needs to be set to correct state to display correctly

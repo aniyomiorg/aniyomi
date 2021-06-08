@@ -18,6 +18,7 @@ class ChangeAnimeCoverDialog<T>(bundle: Bundle? = null) :
         this.anime = anime
     }
 
+    @Suppress("DEPRECATION")
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         return MaterialDialog(activity!!)
             .title(R.string.action_edit_cover)

@@ -27,7 +27,6 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
-import java.util.Date
 
 /**
  * Coil component that fetches [Anime] cover while using the cached file in disk when available.
@@ -62,13 +61,15 @@ class AnimeCoverFetcher : Fetcher<Anime> {
     }
 
     private suspend fun httpLoader(anime: Anime, options: Options): FetchResult {
-        val coverFile = coverCache.getCoverFile(anime) ?: error("No cover specified")
-        // Use previously cached cover if exist
-        if (coverFile.exists() && options.diskCachePolicy.readEnabled) {
-            if (!anime.favorite) {
-                coverFile.setLastModified(Date().time)
-            }
-            return fileLoader(coverFile)
+        // Only cache separately if it's a library item
+        val coverCacheFile = if (anime.favorite) {
+            coverCache.getCoverFile(anime) ?: error("No cover specified")
+        } else {
+            null
+        }
+
+        if (coverCacheFile?.exists() == true && options.diskCachePolicy.readEnabled) {
+            return fileLoader(coverCacheFile)
         }
 
         val (response, body) = awaitGetCall(anime, options)
@@ -77,18 +78,16 @@ class AnimeCoverFetcher : Fetcher<Anime> {
             throw HttpException(response)
         }
 
-        // Write to disk for future use
-        if (options.diskCachePolicy.writeEnabled) {
+        if (coverCacheFile != null && options.diskCachePolicy.writeEnabled) {
+            @Suppress("BlockingMethodInNonBlockingContext")
             response.peekBody(Long.MAX_VALUE).source().use { input ->
-                val tmpFile = File(coverFile.absolutePath + "_tmp")
-                tmpFile.parentFile?.mkdirs()
-                tmpFile.sink().buffer().use { output ->
+                coverCacheFile.parentFile?.mkdirs()
+                if (coverCacheFile.exists()) {
+                    coverCacheFile.delete()
+                }
+                coverCacheFile.sink().buffer().use { output ->
                     output.writeAll(input)
                 }
-                if (coverFile.exists()) {
-                    coverFile.delete()
-                }
-                tmpFile.renameTo(coverFile)
             }
         }
 
@@ -107,10 +106,6 @@ class AnimeCoverFetcher : Fetcher<Anime> {
 
     private fun getCall(anime: Anime, options: Options): Call {
         val source = sourceManager.get(anime.source) as? AnimeHttpSource
-        val client = source?.client ?: defaultClient
-
-        val newClient = client.newBuilder().build()
-
         val request = Request.Builder().url(anime.thumbnail_url!!).also {
             if (source != null) {
                 it.headers(source.headers)
@@ -134,7 +129,8 @@ class AnimeCoverFetcher : Fetcher<Anime> {
             }
         }.build()
 
-        return newClient.newCall(request)
+        val client = source?.client?.newBuilder()?.cache(defaultClient.cache)?.build() ?: defaultClient
+        return client.newCall(request)
     }
 
     private fun fileLoader(anime: Anime): FetchResult {

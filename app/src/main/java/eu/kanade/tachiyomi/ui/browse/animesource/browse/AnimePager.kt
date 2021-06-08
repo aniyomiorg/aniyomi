@@ -19,7 +19,7 @@ abstract class AnimePager(var currentPage: Int = 1) {
         return results.asObservable()
     }
 
-    abstract fun requestNext(): Observable<AnimesPage>
+    abstract suspend fun requestNextPage()
 
     fun onPageReceived(animesPage: AnimesPage) {
         val page = currentPage

@@ -251,6 +251,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             .asImmediateFlow { binding.downloadedOnly.isVisible = it }
             .launchIn(lifecycleScope)
 
+        binding.incognitoMode.isVisible = preferences.incognitoMode().get()
         preferences.incognitoMode().asFlow()
             .drop(1)
             .onEach {
@@ -393,11 +394,12 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
         return true
     }
 
+    @Suppress("UNNECESSARY_SAFE_CALL")
     override fun onDestroy() {
         super.onDestroy()
 
         // Binding sometimes isn't actually instantiated yet somehow
-        nav.setOnItemSelectedListener(null)
+        nav?.setOnItemSelectedListener(null)
         binding?.toolbar.setNavigationOnClickListener(null)
     }
 

@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi
 
 import android.app.Application
-import android.os.Handler
+import androidx.core.content.ContextCompat
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
@@ -62,7 +62,7 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { Json { ignoreUnknownKeys = true } }
 
         // Asynchronously init expensive components for a faster cold start
-        Handler().post {
+        ContextCompat.getMainExecutor(app).execute {
             get<PreferencesHelper>()
 
             get<NetworkHelper>()
