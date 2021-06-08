@@ -24,14 +24,15 @@ class GithubRelease(
      * @return download link of latest release.
      */
     fun getDownloadLink(): String {
-        val apkVariant = when (Build.SUPPORTED_ABIS[0]) {
+        /*val apkVariant = when (Build.SUPPORTED_ABIS[0]) {
             "arm64-v8a" -> "-arm64-v8a"
             "armeabi-v7a" -> "-armeabi-v7a"
             "x86", "x86_64" -> "-x86"
             else -> ""
-        }
+        }*/
+        val apkVariant = ""
 
-        return assets.find { it.downloadLink.contains("tachiyomi-mi$apkVariant-") }?.downloadLink
+        return assets.find { it.downloadLink.contains("aniyomi$apkVariant-") }?.downloadLink
             ?: assets[0].downloadLink
     }
 

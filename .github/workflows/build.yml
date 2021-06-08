@@ -76,8 +76,8 @@ jobs:
       - name: Clean up build artifacts
         if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/tachiyomi-mi'
         run: |
-          cp ${{ env.SIGNED_RELEASE_FILE }} tachiyomi-${{ env.VERSION_TAG }}.apk
-          md5=`md5sum tachiyomi-${{ env.VERSION_TAG }}.apk | awk '{ print $1 }'`
+          cp ${{ env.SIGNED_RELEASE_FILE }} aniyomi-${{ env.VERSION_TAG }}.apk
+          md5=`md5sum aniyomi-${{ env.VERSION_TAG }}.apk | awk '{ print $1 }'`
           echo "APK_MD5=$md5" >> $GITHUB_ENV
 
       - name: Create Release
@@ -85,11 +85,11 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.VERSION_TAG }}
-          name: Tachiyomi ${{ env.VERSION_TAG }}
+          name: Aniyomi ${{ env.VERSION_TAG }}
           body: |
             MD5: ${{ env.APK_MD5 }}
           files: |
-            tachiyomi-${{ env.VERSION_TAG }}.apk
+            aniyomi-${{ env.VERSION_TAG }}.apk
           draft: true
           prerelease: false
         env:
