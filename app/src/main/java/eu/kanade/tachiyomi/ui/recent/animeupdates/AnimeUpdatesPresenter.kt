@@ -41,7 +41,7 @@ class AnimeUpdatesPresenter(
 
         downloadManager.queue.getStatusObservable()
             .observeOn(Schedulers.io())
-            .onBackpressureLatest()
+            .onBackpressureBuffer()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeLatestCache(
                 { view, it ->
@@ -55,7 +55,7 @@ class AnimeUpdatesPresenter(
 
         downloadManager.queue.getProgressObservable()
             .observeOn(Schedulers.io())
-            .onBackpressureLatest()
+            .onBackpressureBuffer()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeLatestCache(AnimeUpdatesController::onEpisodeDownloadUpdate) { _, error ->
                 Timber.e(error)

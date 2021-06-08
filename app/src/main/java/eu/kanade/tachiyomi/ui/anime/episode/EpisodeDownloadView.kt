@@ -48,8 +48,6 @@ class EpisodeDownloadView @JvmOverloads constructor(context: Context, attrs: Att
                 state == AnimeDownload.State.NOT_DOWNLOADED || state == AnimeDownload.State.QUEUE
             if (shouldBeVisible) {
                 hideAnimationBehavior = BaseProgressIndicator.HIDE_NONE
-                show()
-
                 if (state == AnimeDownload.State.NOT_DOWNLOADED || state == AnimeDownload.State.QUEUE) {
                     trackThickness = 2.dpToPx
                     setIndicatorColor(context.getThemeColor(android.R.attr.textColorHint))
@@ -72,6 +70,7 @@ class EpisodeDownloadView @JvmOverloads constructor(context: Context, attrs: Att
                     setIndicatorColor(context.getThemeColor(android.R.attr.textColorPrimary))
                     setProgressCompat(progress, true)
                 }
+                show()
             } else {
                 hideAnimationBehavior = BaseProgressIndicator.HIDE_OUTWARD
                 hide()

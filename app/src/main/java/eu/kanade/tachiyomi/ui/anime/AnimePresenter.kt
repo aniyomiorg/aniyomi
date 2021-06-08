@@ -366,7 +366,7 @@ class AnimePresenter(
         observeDownloadsStatusSubscription?.let { remove(it) }
         observeDownloadsStatusSubscription = downloadManager.queue.getStatusObservable()
             .observeOn(Schedulers.io())
-            .onBackpressureLatest()
+            .onBackpressureBuffer()
             .filter { download -> download.anime.id == anime.id }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeLatestCache(
@@ -382,7 +382,7 @@ class AnimePresenter(
         observeDownloadsPageSubscription?.let { remove(it) }
         observeDownloadsPageSubscription = downloadManager.queue.getProgressObservable()
             .observeOn(Schedulers.io())
-            .onBackpressureLatest()
+            .onBackpressureBuffer()
             .filter { download -> download.anime.id == anime.id }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeLatestAnimeCache(AnimeController::onEpisodeDownloadUpdate) { _, error ->
