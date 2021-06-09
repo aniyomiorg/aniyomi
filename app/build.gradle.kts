@@ -31,7 +31,7 @@ android {
         targetSdkVersion(AndroidConfig.targetSdk)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         versionCode = 63
-        versionName = "0.11.1.4-mi"
+        versionName = "0.11.1.5-mi"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -39,7 +39,7 @@ android {
         buildConfigField("boolean", "INCLUDE_UPDATER", "false")
 
         // Please disable ACRA or use your own instance in forked versions of the project
-        buildConfigField("String", "ACRA_URI", "\"https://acra.jmir.xyz/crash_report\"")
+        buildConfigField("String", "ACRA_URI", "\"https://acra.jmir.xyz/report\"")
 
         multiDexEnabled = true
 
