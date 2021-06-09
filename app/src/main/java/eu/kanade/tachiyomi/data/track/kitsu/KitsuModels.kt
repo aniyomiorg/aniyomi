@@ -55,7 +55,7 @@ class KitsuSearchManga(obj: JsonObject) {
 class KitsuSearchAnime(obj: JsonObject) {
     val id = obj["id"]!!.jsonPrimitive.int
     private val canonicalTitle = obj["canonicalTitle"]!!.jsonPrimitive.content
-    private val chapterCount = obj["chapterCount"]?.jsonPrimitive?.intOrNull
+    private val episodeCount = obj["episodeCount"]?.jsonPrimitive?.intOrNull
     val subType = obj["subtype"]?.jsonPrimitive?.contentOrNull
     val original = try {
         obj["posterImage"]?.jsonObject?.get("original")?.jsonPrimitive?.content
@@ -74,10 +74,10 @@ class KitsuSearchAnime(obj: JsonObject) {
     fun toTrack() = AnimeTrackSearch.create(TrackManager.KITSU).apply {
         media_id = this@KitsuSearchAnime.id
         title = canonicalTitle
-        total_episodes = chapterCount ?: 0
+        total_episodes = episodeCount ?: 0
         cover_url = original ?: ""
         summary = synopsis
-        tracking_url = KitsuApi.mangaUrl(media_id)
+        tracking_url = KitsuApi.animeUrl(media_id)
         publishing_status = if (endDate == null) {
             "Publishing"
         } else {
@@ -130,7 +130,7 @@ class KitsuLibAnime(obj: JsonObject, anime: JsonObject) {
     val id = anime["id"]!!.jsonPrimitive.int
     private val canonicalTitle = anime["attributes"]!!.jsonObject["canonicalTitle"]!!.jsonPrimitive.content
     private val episodeCount = anime["attributes"]!!.jsonObject["episodeCount"]?.jsonPrimitive?.intOrNull
-    val type = anime["attributes"]!!.jsonObject["animeType"]?.jsonPrimitive?.contentOrNull.orEmpty()
+    val type = anime["attributes"]!!.jsonObject["subtype"]?.jsonPrimitive?.contentOrNull.orEmpty()
     val original = anime["attributes"]!!.jsonObject["posterImage"]!!.jsonObject["original"]!!.jsonPrimitive.content
     private val synopsis = anime["attributes"]!!.jsonObject["synopsis"]!!.jsonPrimitive.content
     private val startDate = anime["attributes"]!!.jsonObject["startDate"]?.jsonPrimitive?.contentOrNull.orEmpty()
@@ -145,7 +145,7 @@ class KitsuLibAnime(obj: JsonObject, anime: JsonObject) {
         total_episodes = episodeCount ?: 0
         cover_url = original
         summary = synopsis
-        tracking_url = KitsuApi.mangaUrl(media_id)
+        tracking_url = KitsuApi.animeUrl(media_id)
         publishing_status = this@KitsuLibAnime.status
         publishing_type = type
         start_date = startDate
@@ -155,11 +155,11 @@ class KitsuLibAnime(obj: JsonObject, anime: JsonObject) {
     }
 
     private fun toTrackStatus() = when (status) {
-        "current" -> Kitsu.READING
+        "current" -> Kitsu.WATCHING
         "completed" -> Kitsu.COMPLETED
         "on_hold" -> Kitsu.ON_HOLD
         "dropped" -> Kitsu.DROPPED
-        "planned" -> Kitsu.PLAN_TO_READ
+        "planned" -> Kitsu.PLAN_TO_WATCH
         else -> throw Exception("Unknown status")
     }
 }
@@ -178,11 +178,11 @@ fun Track.toKitsuScore(): String? {
 }
 
 fun AnimeTrack.toKitsuStatus() = when (status) {
-    Kitsu.READING -> "current"
+    Kitsu.WATCHING -> "current"
     Kitsu.COMPLETED -> "completed"
     Kitsu.ON_HOLD -> "on_hold"
     Kitsu.DROPPED -> "dropped"
-    Kitsu.PLAN_TO_READ -> "planned"
+    Kitsu.PLAN_TO_WATCH -> "planned"
     else -> throw Exception("Unknown status")
 }
 

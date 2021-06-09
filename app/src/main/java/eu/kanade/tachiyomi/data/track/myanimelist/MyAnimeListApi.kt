@@ -152,7 +152,7 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                         summary = obj["synopsis"]?.jsonPrimitive?.content ?: ""
                         total_episodes = obj["num_episodes"]!!.jsonPrimitive.int
                         cover_url = obj["main_picture"]?.jsonObject?.get("large")?.jsonPrimitive?.content ?: ""
-                        tracking_url = "https://myanimelist.net/manga/$media_id"
+                        tracking_url = "https://myanimelist.net/anime/$media_id"
                         publishing_status = obj["status"]!!.jsonPrimitive.content.replace("_", " ")
                         publishing_type = obj["media_type"]!!.jsonPrimitive.content.replace("_", " ")
                         start_date = try {

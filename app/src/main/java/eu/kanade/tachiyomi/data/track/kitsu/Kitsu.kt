@@ -19,10 +19,12 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
 
     companion object {
         const val READING = 1
+        const val WATCHING = 11
         const val COMPLETED = 2
         const val ON_HOLD = 3
         const val DROPPED = 4
         const val PLAN_TO_READ = 5
+        const val PLAN_TO_WATCH = 15
     }
 
     @StringRes
@@ -43,13 +45,15 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
     }
 
     override fun getStatusListAnime(): List<Int> {
-        return listOf(READING, PLAN_TO_READ, COMPLETED, ON_HOLD, DROPPED)
+        return listOf(WATCHING, PLAN_TO_WATCH, COMPLETED, ON_HOLD, DROPPED)
     }
 
     override fun getStatus(status: Int): String = with(context) {
         when (status) {
             READING -> getString(R.string.currently_reading)
+            WATCHING -> getString(R.string.currently_watching)
             PLAN_TO_READ -> getString(R.string.want_to_read)
+            PLAN_TO_WATCH -> getString(R.string.want_to_watch)
             COMPLETED -> getString(R.string.completed)
             ON_HOLD -> getString(R.string.on_hold)
             DROPPED -> getString(R.string.dropped)
@@ -114,7 +118,7 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
             track.media_id = remoteTrack.media_id
             update(track)
         } else {
-            track.status = READING
+            track.status = WATCHING
             track.score = 0F
             add(track)
         }

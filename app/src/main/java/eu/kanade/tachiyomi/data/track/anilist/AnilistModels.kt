@@ -58,7 +58,7 @@ data class ALAnime(
         total_episodes = this@ALAnime.total_episodes
         cover_url = image_url_lge
         summary = description ?: ""
-        tracking_url = AnilistApi.mangaUrl(media_id)
+        tracking_url = AnilistApi.animeUrl(media_id)
         publishing_status = this@ALAnime.publishing_status
         publishing_type = type
         if (start_date_fuzzy != 0L) {

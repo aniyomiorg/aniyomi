@@ -469,9 +469,9 @@
     <string name="pref_clear_database_summary">Delete history for manga that are not saved in your library</string>
     <string name="clear_database_confirmation">Are you sure? Read chapters and progress of non-library manga will be lost</string>
     <string name="clear_database_completed">Entries deleted</string>
-    <string name="pref_refresh_library_covers">Refresh library manga covers</string>
+    <string name="pref_refresh_library_covers">Refresh library covers</string>
     <string name="pref_refresh_library_tracking">Refresh tracking</string>
-    <string name="pref_refresh_library_tracking_summary">Updates status, score and last chapter read from the tracking services</string>
+    <string name="pref_refresh_library_tracking_summary">Updates status, score and progress from the tracking services</string>
     <string name="pref_dump_crash_logs">Dump crash logs</string>
     <string name="pref_dump_crash_logs_summary">Saves error logs to a file for sharing with the developers</string>
     <string name="crash_log_saved">Crash logs saved</string>
@@ -650,6 +650,7 @@
     <string name="plan_to_read">Plan to read</string>
     <string name="plan_to_watch">Plan to watch</string>
     <string name="want_to_read">Want to read</string>
+    <string name="want_to_watch">Want to watch</string>
     <string name="repeating">Rereading</string>
     <string name="repeating_anime">Rewatching</string>
     <string name="score">Score</string>

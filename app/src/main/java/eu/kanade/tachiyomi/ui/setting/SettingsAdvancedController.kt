@@ -11,6 +11,7 @@ import androidx.preference.PreferenceScreen
 import com.afollestad.materialdialogs.MaterialDialog
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService
@@ -154,14 +155,20 @@ class SettingsAdvancedController : SettingsController() {
                 key = "pref_refresh_library_covers"
                 titleRes = R.string.pref_refresh_library_covers
 
-                onClick { LibraryUpdateService.start(context, target = Target.COVERS) }
+                onClick {
+                    LibraryUpdateService.start(context.createAttributionContext("manga"), target = Target.COVERS)
+                    AnimelibUpdateService.start(context.createAttributionContext("anime"), target = AnimelibUpdateService.Target.COVERS)
+                }
             }
             preference {
                 key = "pref_refresh_library_tracking"
                 titleRes = R.string.pref_refresh_library_tracking
                 summaryRes = R.string.pref_refresh_library_tracking_summary
 
-                onClick { LibraryUpdateService.start(context, target = Target.TRACKING) }
+                onClick {
+                    LibraryUpdateService.start(context.createAttributionContext("manga"), target = Target.TRACKING)
+                    AnimelibUpdateService.start(context.createAttributionContext("anime"), target = AnimelibUpdateService.Target.TRACKING)
+                }
             }
         }
     }
