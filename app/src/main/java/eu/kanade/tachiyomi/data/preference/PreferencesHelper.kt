@@ -248,20 +248,12 @@ class PreferencesHelper(val context: Context) {
     fun libraryUpdateRestriction() = flowPrefs.getStringSet(Keys.libraryUpdateRestriction, setOf(UNMETERED_NETWORK))
 
     fun libraryUpdateCategories() = flowPrefs.getStringSet(Keys.libraryUpdateCategories, emptySet())
+
     fun libraryUpdateCategoriesExclude() = flowPrefs.getStringSet(Keys.libraryUpdateCategoriesExclude, emptySet())
 
     fun libraryUpdatePrioritization() = flowPrefs.getInt(Keys.libraryUpdatePrioritization, 0)
 
     fun libraryDisplayMode() = flowPrefs.getEnum(Keys.libraryDisplayMode, DisplayMode.COMPACT_GRID)
-
-    fun animelibUpdateInterval() = flowPrefs.getInt(Keys.animelibUpdateInterval, 24)
-
-    fun animelibUpdateRestriction() = prefs.getStringSet(Keys.animelibUpdateRestriction, setOf("wifi"))
-
-    fun animelibUpdateCategories() = flowPrefs.getStringSet(Keys.animelibUpdateCategories, emptySet())
-    fun animelibUpdateCategoriesExclude() = flowPrefs.getStringSet(Keys.animelibUpdateCategoriesExclude, emptySet())
-
-    fun animelibUpdatePrioritization() = flowPrefs.getInt(Keys.animelibUpdatePrioritization, 0)
 
     fun animelibDisplayMode() = flowPrefs.getEnum(Keys.animelibDisplayMode, DisplayMode.COMPACT_GRID)
 

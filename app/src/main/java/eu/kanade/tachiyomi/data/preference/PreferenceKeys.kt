@@ -150,15 +150,6 @@ object PreferenceKeys {
 
     const val libraryUpdatePrioritization = "library_update_prioritization"
 
-    const val animelibUpdateInterval = "pref_animelib_update_interval_key"
-
-    const val animelibUpdateRestriction = "animelib_update_restriction"
-
-    const val animelibUpdateCategories = "animelib_update_categories"
-    const val animelibUpdateCategoriesExclude = "animelib_update_categories_exclude"
-
-    const val animelibUpdatePrioritization = "animelib_update_prioritization"
-
     const val downloadedOnly = "pref_downloaded_only"
 
     const val filterDownloaded = "pref_filter_library_downloaded"

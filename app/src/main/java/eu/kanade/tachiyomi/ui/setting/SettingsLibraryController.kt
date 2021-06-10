@@ -9,6 +9,7 @@ import androidx.preference.PreferenceScreen
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateJob
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.library.LibraryUpdateJob
@@ -156,6 +157,7 @@ class SettingsLibraryController : SettingsController() {
                 onChange { newValue ->
                     val interval = (newValue as String).toInt()
                     LibraryUpdateJob.setupTask(context, interval)
+                    AnimelibUpdateJob.setupTask(context, interval)
                     true
                 }
             }
@@ -172,6 +174,7 @@ class SettingsLibraryController : SettingsController() {
                 onChange {
                     // Post to event looper to allow the preference to be updated.
                     ContextCompat.getMainExecutor(context).execute { LibraryUpdateJob.setupTask(context) }
+                    ContextCompat.getMainExecutor(context).execute { AnimelibUpdateJob.setupTask(context) }
                     true
                 }
 

@@ -190,9 +190,9 @@ object Migrations {
                     preferences.libraryUpdateInterval().set(3)
                     LibraryUpdateJob.setupTask(context, 3)
                 }
-                val animeupdateInterval = preferences.animelibUpdateInterval().get()
+                val animeupdateInterval = preferences.libraryUpdateInterval().get()
                 if (animeupdateInterval == 1 || animeupdateInterval == 2) {
-                    preferences.animelibUpdateInterval().set(3)
+                    preferences.libraryUpdateInterval().set(3)
                     AnimelibUpdateJob.setupTask(context, 3)
                 }
             }

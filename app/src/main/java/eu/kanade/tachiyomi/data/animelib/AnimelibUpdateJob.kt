@@ -27,11 +27,11 @@ class AnimelibUpdateJob(private val context: Context, workerParams: WorkerParame
     }
 
     companion object {
-        private const val TAG = "LibraryUpdate"
+        private const val TAG = "AnimelibUpdate"
 
         fun setupTask(context: Context, prefInterval: Int? = null) {
             val preferences = Injekt.get<PreferencesHelper>()
-            val interval = prefInterval ?: preferences.animelibUpdateInterval().get()
+            val interval = prefInterval ?: preferences.libraryUpdateInterval().get()
             if (interval > 0) {
                 val restrictions = preferences.libraryUpdateRestriction().get()
                 val acRestriction = CHARGING in restrictions
