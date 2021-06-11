@@ -16,7 +16,7 @@ class WhatsNewDialogController(bundle: Bundle? = null) : DialogController(bundle
             .title(text = activity!!.getString(R.string.updated_version, BuildConfig.VERSION_NAME))
             .positiveButton(android.R.string.ok)
             .neutralButton(R.string.whats_new) {
-                openInBrowser("https://github.com/jmir1/tachiyomi-mi/releases/tag/v${BuildConfig.VERSION_NAME}")
+                openInBrowser("https://github.com/jmir1/aniyomi/releases/tag/v${BuildConfig.VERSION_NAME}")
             }
     }
 }

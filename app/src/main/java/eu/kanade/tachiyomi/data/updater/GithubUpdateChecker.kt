@@ -14,9 +14,9 @@ class GithubUpdateChecker {
 
     private val repo: String by lazy {
         if (BuildConfig.DEBUG) {
-            "jmir1/tachiyomi-mi-preview"
+            "jmir1/aniyomi-preview"
         } else {
-            "jmir1/tachiyomi-mi"
+            "jmir1/aniyomi"
         }
     }
 
@@ -46,7 +46,7 @@ class GithubUpdateChecker {
             // tagged as something like "r1234"
             newVersion.toInt() > BuildConfig.COMMIT_COUNT.toInt()
         } else {
-            // Release builds: based on releases in "jmir1/tachiyomi-mi" repo
+            // Release builds: based on releases in "jmir1/aniyomi" repo
             // tagged as something like "v0.1.2-mi"
             newVersion != BuildConfig.VERSION_NAME
         }

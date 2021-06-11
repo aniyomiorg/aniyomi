@@ -41,7 +41,7 @@ class AboutLinksPreference @JvmOverloads constructor(context: Context, attrs: At
         }
         holder.findViewById(R.id.btn_github).apply {
             setTooltip(contentDescription.toString())
-            setOnClickListener { context.openInBrowser("https://github.com/jmir1/tachiyomi-mi") }
+            setOnClickListener { context.openInBrowser("https://github.com/jmir1/aniyomi") }
         }
     }
 }

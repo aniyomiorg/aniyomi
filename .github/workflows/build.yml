@@ -55,7 +55,7 @@ jobs:
       # Sign APK and create release for tags
 
       - name: Get tag name
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/tachiyomi-mi'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/aniyomi'
         id: get_tag_name
         run: |
           set -x
@@ -64,7 +64,7 @@ jobs:
       # TODO: need to support multiple APKs
 
       - name: Sign APK
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/tachiyomi-mi'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/aniyomi'
         uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: app/build/outputs/apk/standard/release
@@ -74,14 +74,14 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Clean up build artifacts
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/tachiyomi-mi'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/aniyomi'
         run: |
           cp ${{ env.SIGNED_RELEASE_FILE }} aniyomi-${{ env.VERSION_TAG }}.apk
           md5=`md5sum aniyomi-${{ env.VERSION_TAG }}.apk | awk '{ print $1 }'`
           echo "APK_MD5=$md5" >> $GITHUB_ENV
 
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/tachiyomi-mi'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/aniyomi'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.VERSION_TAG }}
