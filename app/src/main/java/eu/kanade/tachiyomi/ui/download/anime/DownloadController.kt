@@ -259,6 +259,7 @@ class DownloadController :
      */
     private fun onUpdateProgress(download: AnimeDownload) {
         getHolder(download)?.notifyProgress()
+        getHolder(download)?.notifyDownloadedPages()
     }
 
     /**

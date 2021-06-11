@@ -29,6 +29,7 @@ import com.google.android.exoplayer2.util.Util
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.Link
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
@@ -132,7 +133,7 @@ class WatcherActivity : AppCompatActivity() {
         links = EpisodeLoader.getLinks(episode, anime, source)
         if (links.lastIndex > 0) settingsBtn.visibility = View.VISIBLE
         uri = links.first().url
-        if (EpisodeLoader.isDownloaded(episode, anime)) {
+        if (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource) {
             dataSourceFactory = DefaultDataSourceFactory(this)
         } else {
             dataSourceFactory = DefaultHttpDataSource.Factory().apply {

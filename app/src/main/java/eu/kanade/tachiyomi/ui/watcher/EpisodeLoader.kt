@@ -26,7 +26,7 @@ class EpisodeLoader {
             return when {
                 isDownloaded -> mutableListOf(downloaded(episode, anime, source, downloadManager))
                 source is AnimeHttpSource -> notDownloaded(episode, anime, source)
-                source is LocalAnimeSource -> mutableListOf(Link("path", "local"))
+                source is LocalAnimeSource -> mutableListOf(local(episode, source))
                 else -> error("no worky")
             }
         }
@@ -80,6 +80,22 @@ class EpisodeLoader {
                 }
             }
             return Link(path.toString(), "download")
+        }
+
+        fun local(
+            episode: Episode,
+            source: AnimeSource
+        ): Link {
+            val link = runBlocking {
+                return@runBlocking suspendCoroutine<Link> { continuation ->
+                    launchIO {
+                        val link =
+                            source.fetchEpisodeLink(episode).awaitSingle().first()
+                        continuation.resume(link)
+                    }
+                }
+            }
+            return link
         }
     }
 }

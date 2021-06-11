@@ -7,7 +7,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.*
 import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
-import eu.kanade.tachiyomi.util.storage.AnimeFile
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.system.ImageUtil
 import rx.Observable
@@ -25,7 +24,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         const val HELP_URL = "https://tachiyomi.org/help/guides/local-anime/"
 
         private const val COVER_NAME = "cover.jpg"
-        private val SUPPORTED_ARCHIVE_TYPES = setOf("zip", "rar", "cbr", "cbz", "epub")
+        private val SUPPORTED_FILE_TYPES = setOf("mp4", "m3u8", "mkv")
 
         private val LATEST_THRESHOLD = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)
 
@@ -48,7 +47,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         }
 
         private fun getBaseDirectories(context: Context): List<File> {
-            val c = context.getString(R.string.app_name) + File.separator + "local"
+            val c = context.getString(R.string.app_name) + File.separator + "localanime"
             return DiskUtil.getExternalStorages(context).map { File(it.absolutePath, c) }
         }
     }
@@ -110,12 +109,12 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
                 val episodes = fetchEpisodeList(this).toBlocking().first()
                 if (episodes.isNotEmpty()) {
                     val episode = episodes.last()
-                    val format = getFormat(episode)
+                    /*val format = getFormat(episode)
                     if (format is Format.Anime) {
                         AnimeFile(format.file).use { epub ->
                             epub.fillAnimeMetadata(this)
                         }
-                    }
+                    }*/
 
                     // Copy the cover from the first episode found.
                     if (thumbnail_url == null) {
@@ -160,12 +159,12 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
     override fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> {
         val episodes = getBaseDirectories(context)
             .asSequence()
-            .mapNotNull { File(it, anime.url).listFiles()?.toList() }
+            .mapNotNull { file -> File(file, anime.url).listFiles()?.filter { isSupportedFile(it.extension) } }
             .flatten()
             .filter { it.isDirectory || isSupportedFile(it.extension) }
             .map { episodeFile ->
                 SEpisode.create().apply {
-                    url = "${anime.url}/${episodeFile.name}"
+                    url = episodeFile.absolutePath
                     name = if (episodeFile.isDirectory) {
                         episodeFile.name
                     } else {
@@ -173,12 +172,12 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
                     }
                     date_upload = episodeFile.lastModified()
 
-                    val format = getFormat(this)
+                    /*val format = getFormat(this)
                     if (format is Format.Anime) {
                         AnimeFile(format.file).use { epub ->
                             epub.fillEpisodeMetadata(this)
                         }
-                    }
+                    }*/
 
                     val chapNameCut = stripAnimeTitle(name, anime.title)
                     if (chapNameCut.isNotEmpty()) name = chapNameCut
@@ -235,7 +234,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
     }
 
     private fun isSupportedFile(extension: String): Boolean {
-        return extension.lowercase(Locale.ROOT) in SUPPORTED_ARCHIVE_TYPES
+        return extension.lowercase(Locale.ROOT) in SUPPORTED_FILE_TYPES
     }
 
     fun getFormat(episode: SEpisode): Format {
@@ -258,7 +257,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
             Format.Zip(file)
         } else if (extension.equals("rar", true) || extension.equals("cbr", true)) {
             Format.Rar(file)
-        } else if (extension.equals("epub", true)) {
+        } else if (isSupportedFile(extension)) {
             Format.Anime(file)
         } else {
             throw Exception(context.getString(R.string.local_invalid_episode_format))
@@ -293,13 +292,9 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
                 }
             }
             is Format.Anime -> {
-                AnimeFile(format.file).use { epub ->
-                    val entry = epub.getImagesFromPages()
-                        .firstOrNull()
-                        ?.let { epub.getEntry(it) }
-
-                    entry?.let { updateCover(context, anime, epub.getInputStream(it)) }
-                }
+                if (!anime.thumbnail_url.isNullOrBlank()) {
+                    File(anime.thumbnail_url!!)
+                } else null
             }
         }
     }
