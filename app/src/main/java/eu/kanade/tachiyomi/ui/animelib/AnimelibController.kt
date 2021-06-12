@@ -527,6 +527,16 @@ class AnimelibController(
     }
 
     /**
+     * Clear all of the anime currently selected, and
+     * invalidate the action mode to revert the top toolbar
+     */
+    fun clearSelection() {
+        selectedAnimes.clear()
+        selectionRelay.call(AnimelibSelectionEvent.Cleared())
+        invalidateActionMode()
+    }
+
+    /**
      * Move the selected anime to a list of categories.
      */
     private fun showChangeAnimeCategoriesDialog() {

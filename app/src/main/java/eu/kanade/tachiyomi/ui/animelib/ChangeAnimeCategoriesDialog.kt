@@ -9,6 +9,8 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
+import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
+import eu.kanade.tachiyomi.ui.category.CategoryController
 
 class ChangeAnimeCategoriesDialog<T>(bundle: Bundle? = null) :
     DialogController(bundle) where T : Controller, T : ChangeAnimeCategoriesDialog.Listener {
@@ -32,16 +34,30 @@ class ChangeAnimeCategoriesDialog<T>(bundle: Bundle? = null) :
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         return MaterialDialog(activity!!)
             .title(R.string.action_move_category)
-            .listItemsMultiChoice(
-                items = categories.map { it.name },
-                initialSelection = preselected.toIntArray(),
-                allowEmptySelection = true
-            ) { _, selections, _ ->
-                val newCategories = selections.map { categories[it] }
-                (targetController as? Listener)?.updateCategoriesForAnimes(animes, newCategories)
-            }
-            .positiveButton(android.R.string.ok)
             .negativeButton(android.R.string.cancel)
+            .apply {
+                if (categories.isNotEmpty()) {
+                    listItemsMultiChoice(
+                        items = categories.map { it.name },
+                        initialSelection = preselected.toIntArray(),
+                        allowEmptySelection = true
+                    ) { _, selections, _ ->
+                        val newCategories = selections.map { categories[it] }
+                        (targetController as? Listener)?.updateCategoriesForAnimes(animes, newCategories)
+                    }
+                        .positiveButton(android.R.string.ok)
+                } else {
+                    message(R.string.information_empty_category_dialog)
+                        .positiveButton(R.string.action_edit_categories) {
+                            if (targetController is AnimelibController) {
+                                val libController = targetController as AnimelibController
+                                libController.clearSelection()
+                            }
+                            router.popCurrentController()
+                            router.pushController(CategoryController().withFadeTransaction())
+                        }
+                }
+            }
     }
 
     interface Listener {
