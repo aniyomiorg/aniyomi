@@ -82,6 +82,6 @@ internal class AnimeExtensionGithubApi {
 
     companion object {
         const val BASE_URL = "https://raw.githubusercontent.com/"
-        const val REPO_URL_PREFIX = "${BASE_URL}jmir1/tachiyomi-extensions/repo/"
+        const val REPO_URL_PREFIX = "${BASE_URL}jmir1/aniyomi-extensions/repo/"
     }
 }
