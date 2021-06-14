@@ -906,7 +906,7 @@ class AnimeController :
         val activity = activity ?: return
         launchIO {
             val episodeList = ArrayList<Episode>()
-            val list = presenter.filteredAndSortedEpisodes.reversed()
+            val list = presenter.filteredAndSortedEpisodes
             val idx = list.indexOf(EpisodeItem(episode, anime!!))
             val upper = if (list.lastIndex < idx + 100) list.lastIndex else idx + 100
             val lower = if (0 > idx - 100) 0 else idx - 100

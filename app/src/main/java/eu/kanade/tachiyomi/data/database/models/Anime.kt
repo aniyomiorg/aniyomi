@@ -22,11 +22,11 @@ interface Anime : SAnime {
     var cover_last_modified: Long
 
     fun setEpisodeOrder(order: Int) {
-        setEpisodeFlags(order, EPISODE_SORTING_MASK)
+        setEpisodeFlags(order, EPISODE_SORT_MASK)
     }
 
     fun sortDescending(): Boolean {
-        return episode_flags and EPISODE_SORTING_MASK == EPISODE_SORTING_MASK
+        return episode_flags and EPISODE_SORT_MASK == EPISODE_SORT_DESC
     }
 
     fun getGenres(): List<String>? {
