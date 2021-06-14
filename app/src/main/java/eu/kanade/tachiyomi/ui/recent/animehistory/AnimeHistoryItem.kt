@@ -9,7 +9,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.AnimeEpisodeHistory
 import eu.kanade.tachiyomi.ui.recent.DateSectionItem
 
-class AnimeHistoryItem(val mch: AnimeEpisodeHistory, header: DateSectionItem) :
+class AnimeHistoryItem(val aeh: AnimeEpisodeHistory, header: DateSectionItem) :
     AbstractSectionableItem<AnimeHistoryHolder, DateSectionItem>(header) {
 
     override fun getLayoutRes(): Int {
@@ -26,17 +26,17 @@ class AnimeHistoryItem(val mch: AnimeEpisodeHistory, header: DateSectionItem) :
         position: Int,
         payloads: List<Any?>?
     ) {
-        holder.bind(mch)
+        holder.bind(aeh)
     }
 
     override fun equals(other: Any?): Boolean {
         if (other is AnimeHistoryItem) {
-            return mch.anime.id == other.mch.anime.id
+            return aeh.anime.id == other.aeh.anime.id
         }
         return false
     }
 
     override fun hashCode(): Int {
-        return mch.anime.id!!.hashCode()
+        return aeh.anime.id!!.hashCode()
     }
 }

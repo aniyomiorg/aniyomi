@@ -14,7 +14,6 @@ import eu.davidea.flexibleadapter.SelectableAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -207,8 +206,7 @@ class AnimeUpdatesController :
      */
     private fun openEpisode(item: AnimeUpdatesItem) {
         val activity = activity ?: return
-        val episodeList = ArrayList<Episode>()
-        val intent = WatcherActivity.newIntent(activity, item.anime, item.episode, episodeList)
+        val intent = WatcherActivity.newIntent(activity, item.anime, item.episode)
         startActivity(intent)
     }
 

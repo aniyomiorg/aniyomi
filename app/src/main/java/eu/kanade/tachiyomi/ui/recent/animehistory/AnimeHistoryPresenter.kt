@@ -113,12 +113,12 @@ class AnimeHistoryPresenter : BasePresenter<AnimeHistoryController>() {
     /**
      * Retrieves the next chapter of the given one.
      *
-     * @param chapter the chapter of the animehistory object.
+     * @param episode the chapter of the animehistory object.
      * @param anime the anime of the chapter.
      */
-    fun getNextEpisode(chapter: Episode, anime: Anime): Episode? {
-        if (!chapter.seen) {
-            return chapter
+    fun getNextEpisode(episode: Episode, anime: Anime): Episode? {
+        if (!episode.seen) {
+            return episode
         }
 
         val sortFunction: (Episode, Episode) -> Int = when (anime.sorting) {
@@ -129,13 +129,13 @@ class AnimeHistoryPresenter : BasePresenter<AnimeHistoryController>() {
         }
 
         val chapters = db.getEpisodes(anime).executeAsBlocking()
-            .sortedWith { c1, c2 -> sortFunction(c2, c1) }
+            .sortedWith { c1, c2 -> sortFunction(c1, c2) }
 
-        val currEpisodeIndex = chapters.indexOfFirst { chapter.id == it.id }
+        val currEpisodeIndex = chapters.indexOfFirst { episode.id == it.id }
         return when (anime.sorting) {
             Anime.EPISODE_SORTING_SOURCE -> chapters.getOrNull(currEpisodeIndex + 1)
             Anime.EPISODE_SORTING_NUMBER -> {
-                val chapterNumber = chapter.episode_number
+                val chapterNumber = episode.episode_number
 
                 ((currEpisodeIndex + 1) until chapters.size)
                     .map { chapters[it] }
@@ -146,7 +146,7 @@ class AnimeHistoryPresenter : BasePresenter<AnimeHistoryController>() {
             }
             Anime.EPISODE_SORTING_UPLOAD_DATE -> {
                 chapters.drop(currEpisodeIndex + 1)
-                    .firstOrNull { it.date_upload >= chapter.date_upload }
+                    .firstOrNull { it.date_upload >= episode.date_upload }
             }
             else -> throw NotImplementedError("Unknown sorting method")
         }

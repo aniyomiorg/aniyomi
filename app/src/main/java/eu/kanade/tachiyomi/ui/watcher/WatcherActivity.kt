@@ -83,7 +83,6 @@ class WatcherActivity : AppCompatActivity() {
     private lateinit var uri: String
     private lateinit var links: List<Link>
     private var currentQuality = 0
-    private lateinit var episodeList: ArrayList<Episode>
 
     private var duration: Long = 0
     private var currentWindow = 0
@@ -129,7 +128,6 @@ class WatcherActivity : AppCompatActivity() {
         source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
         userAgentString = WebSettings.getDefaultUserAgent(this)
         Timber.w(userAgentString)
-        episodeList = intent.getSerializableExtra("episodeList") as ArrayList<Episode>
         links = EpisodeLoader.getLinks(episode, anime, source)
         if (links.lastIndex > 0) settingsBtn.visibility = View.VISIBLE
         uri = links.first().url
@@ -183,27 +181,15 @@ class WatcherActivity : AppCompatActivity() {
             captcha()
         }
         skipBtn.setOnClickListener { exoPlayer.seekTo(exoPlayer.currentPosition + 85000) }
-        setBtnListeners()
+        nextBtn.setOnClickListener {
+            nextEpisode()
+        }
+        prevBtn.setOnClickListener {
+            previousEpisode()
+        }
         youTubeDoubleTap.player(exoPlayer)
         playerView.player = exoPlayer
         duration = exoPlayer.duration
-    }
-
-    private fun setBtnListeners() {
-        if (episodeList.indexOf(episode) != episodeList.lastIndex && episodeList.isNotEmpty()) {
-            nextBtn.setOnClickListener {
-                nextEpisode()
-            }
-        } else {
-            nextBtn.setOnClickListener(null)
-        }
-        if (episodeList.indexOf(episode) != 0 && episodeList.isNotEmpty()) {
-            prevBtn.setOnClickListener {
-                previousEpisode()
-            }
-        } else {
-            prevBtn.setOnClickListener(null)
-        }
     }
 
     override fun onBackPressed() {
@@ -224,9 +210,10 @@ class WatcherActivity : AppCompatActivity() {
     private fun nextEpisode() {
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
-        episode = episodeList[episodeList.indexOf(episode) + 1]
+        val oldEpisode = episode
+        episode = getNextEpisode(episode, anime)
+        if (oldEpisode == episode) return
         title.text = anime.title + " - " + episode.name
-        setBtnListeners()
         links = EpisodeLoader.getLinks(episode, anime, source)
         settingsBtn.visibility = if (links.lastIndex > 0) View.VISIBLE else View.GONE
         uri = links.first().url
@@ -241,9 +228,10 @@ class WatcherActivity : AppCompatActivity() {
     private fun previousEpisode() {
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
-        episode = episodeList[episodeList.indexOf(episode) - 1]
+        val oldEpisode = episode
+        episode = getPreviousEpisode(episode, anime)
+        if (oldEpisode == episode) return
         title.text = anime.title + " - " + episode.name
-        setBtnListeners()
         links = EpisodeLoader.getLinks(episode, anime, source)
         settingsBtn.visibility = if (links.lastIndex > 0) View.VISIBLE else View.GONE
         uri = links.first().url
@@ -475,13 +463,54 @@ class WatcherActivity : AppCompatActivity() {
         }
     }
 
+    private fun getNextEpisode(episode: Episode, anime: Anime): Episode {
+        val sortFunction: (Episode, Episode) -> Int = when (anime.sorting) {
+            Anime.EPISODE_SORTING_SOURCE -> { c1, c2 -> c2.source_order.compareTo(c1.source_order) }
+            Anime.EPISODE_SORTING_NUMBER -> { c1, c2 -> c1.episode_number.compareTo(c2.episode_number) }
+            Anime.EPISODE_SORTING_UPLOAD_DATE -> { c1, c2 -> c1.date_upload.compareTo(c2.date_upload) }
+            else -> throw NotImplementedError("Unknown sorting method")
+        }
+
+        val episodes = db.getEpisodes(anime).executeAsBlocking()
+            .sortedWith { e1, e2 -> sortFunction(e1, e2) }
+
+        val currEpisodeIndex = episodes.indexOfFirst { episode.id == it.id }
+        val episodeNumber = episode.episode_number
+        return ((currEpisodeIndex + 1) until episodes.size)
+            .map { episodes[it] }
+            .firstOrNull {
+                it.episode_number > episodeNumber &&
+                    it.episode_number <= episodeNumber + 1
+            } ?: episode
+    }
+
+    private fun getPreviousEpisode(episode: Episode, anime: Anime): Episode {
+        val sortFunction: (Episode, Episode) -> Int = when (anime.sorting) {
+            Anime.EPISODE_SORTING_SOURCE -> { c1, c2 -> c2.source_order.compareTo(c1.source_order) }
+            Anime.EPISODE_SORTING_NUMBER -> { c1, c2 -> c1.episode_number.compareTo(c2.episode_number) }
+            Anime.EPISODE_SORTING_UPLOAD_DATE -> { c1, c2 -> c1.date_upload.compareTo(c2.date_upload) }
+            else -> throw NotImplementedError("Unknown sorting method")
+        }
+
+        val episodes = db.getEpisodes(anime).executeAsBlocking()
+            .sortedWith { e1, e2 -> sortFunction(e2, e1) }
+
+        val currEpisodeIndex = episodes.indexOfFirst { episode.id == it.id }
+        val episodeNumber = episode.episode_number
+        return ((currEpisodeIndex + 1) until episodes.size)
+            .map { episodes[it] }
+            .firstOrNull {
+                it.episode_number < episodeNumber &&
+                    it.episode_number >= episodeNumber - 1
+            } ?: episode
+    }
+
     companion object {
-        fun newIntent(context: Context, anime: Anime, episode: Episode, episodeList: ArrayList<Episode>): Intent {
+        fun newIntent(context: Context, anime: Anime, episode: Episode): Intent {
             return Intent(context, WatcherActivity::class.java).apply {
                 putExtra("anime", anime)
                 putExtra("episode", episode)
                 putExtra("second", episode.last_second_seen)
-                putExtra("episodeList", episodeList)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }

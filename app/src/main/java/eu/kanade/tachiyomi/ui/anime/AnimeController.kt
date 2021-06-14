@@ -91,7 +91,6 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.min
 
 class AnimeController :
@@ -905,15 +904,7 @@ class AnimeController :
     fun openEpisode(episode: Episode, playerChangeRequested: Boolean = false) {
         val activity = activity ?: return
         launchIO {
-            val episodeList = ArrayList<Episode>()
-            val list = presenter.filteredAndSortedEpisodes
-            val idx = list.indexOf(EpisodeItem(episode, anime!!))
-            val upper = if (list.lastIndex < idx + 100) list.lastIndex else idx + 100
-            val lower = if (0 > idx - 100) 0 else idx - 100
-            for (episodeItem in list.slice(lower..upper)) {
-                episodeList.add(episodeItem.episode)
-            }
-            val intent = WatcherActivity.newIntent(activity, presenter.anime, episode, episodeList)
+            val intent = WatcherActivity.newIntent(activity, presenter.anime, episode)
             val useInternal = if (preferences.alwaysUseExternalPlayer()) playerChangeRequested else !playerChangeRequested
             if (useInternal) {
                 startActivity(intent)

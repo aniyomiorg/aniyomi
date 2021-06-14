@@ -17,7 +17,6 @@ import eu.kanade.tachiyomi.data.backup.BackupRestoreService
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeHistory
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.databinding.AnimeHistoryControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
@@ -31,7 +30,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.appcompat.queryTextChanges
-import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 /**
@@ -152,25 +150,24 @@ class AnimeHistoryController :
 
     override fun onResumeClick(position: Int) {
         val activity = activity ?: return
-        val (anime, chapter, _) = (adapter?.getItem(position) as? AnimeHistoryItem)?.mch ?: return
+        val (anime, chapter, _) = (adapter?.getItem(position) as? AnimeHistoryItem)?.aeh ?: return
 
         val nextEpisode = presenter.getNextEpisode(chapter, anime)
         if (nextEpisode != null) {
-            val episodeList = ArrayList<Episode>()
-            val newIntent = WatcherActivity.newIntent(activity, anime, nextEpisode, episodeList)
+            val newIntent = WatcherActivity.newIntent(activity, anime, nextEpisode)
             startActivity(newIntent)
         } else {
-            activity.toast(R.string.no_next_chapter)
+            activity.toast(R.string.no_next_episode)
         }
     }
 
     override fun onRemoveClick(position: Int) {
-        val (anime, _, animehistory) = (adapter?.getItem(position) as? AnimeHistoryItem)?.mch ?: return
-        RemoveAnimeHistoryDialog(this, anime, animehistory).showDialog(router)
+        val (anime, _, animeHistory) = (adapter?.getItem(position) as? AnimeHistoryItem)?.aeh ?: return
+        RemoveAnimeHistoryDialog(this, anime, animeHistory).showDialog(router)
     }
 
     override fun onItemClick(position: Int) {
-        val anime = (adapter?.getItem(position) as? AnimeHistoryItem)?.mch?.anime ?: return
+        val anime = (adapter?.getItem(position) as? AnimeHistoryItem)?.aeh?.anime ?: return
         router.pushController(AnimeController(anime).withFadeTransaction())
     }
 

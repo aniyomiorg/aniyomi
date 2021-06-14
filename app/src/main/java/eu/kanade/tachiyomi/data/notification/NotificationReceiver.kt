@@ -472,8 +472,7 @@ class NotificationReceiver : BroadcastReceiver() {
          * @param episode episode that needs to be opened
          */
         internal fun openEpisodePendingActivity(context: Context, anime: Anime, episode: Episode): PendingIntent {
-            val episodeList = ArrayList<Episode>()
-            val newIntent = WatcherActivity.newIntent(context, anime, episode, episodeList)
+            val newIntent = WatcherActivity.newIntent(context, anime, episode)
             return PendingIntent.getActivity(context, AnimeController.REQUEST_INTERNAL, newIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
