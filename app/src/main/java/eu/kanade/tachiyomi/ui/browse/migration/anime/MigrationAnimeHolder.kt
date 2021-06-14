@@ -27,7 +27,7 @@ class MigrationAnimeHolder(
         // Update the cover.
         val radius = itemView.context.resources.getDimension(R.dimen.card_radius)
         binding.thumbnail.clear()
-        binding.thumbnail.loadAny(item.anime.thumbnail_url) {
+        binding.thumbnail.loadAny(item.anime) {
             transformations(RoundedCornersTransformation(radius))
         }
     }

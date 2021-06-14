@@ -55,6 +55,6 @@ open class AnimelibCompactGridHolder(
 
         // Update the cover.
         binding.thumbnail.clear()
-        binding.thumbnail.loadAny(item.anime.thumbnail_url)
+        binding.thumbnail.loadAny(item.anime)
     }
 }

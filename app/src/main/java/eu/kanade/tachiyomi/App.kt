@@ -20,6 +20,7 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
+import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
 import eu.kanade.tachiyomi.data.coil.ByteBufferFetcher
 import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -121,6 +122,7 @@ open class App : Application(), LifecycleObserver, ImageLoaderFactory {
                     add(GifDecoder())
                 }
                 add(ByteBufferFetcher())
+                add(AnimeCoverFetcher())
                 add(MangaCoverFetcher())
             }
             okHttpClient(Injekt.get<NetworkHelper>().coilClient)

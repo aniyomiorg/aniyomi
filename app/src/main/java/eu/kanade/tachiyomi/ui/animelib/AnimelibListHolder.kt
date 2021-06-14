@@ -61,7 +61,7 @@ class AnimelibListHolder(
         // Update the cover.
         val radius = view.context.resources.getDimension(R.dimen.card_radius)
         binding.thumbnail.clear()
-        binding.thumbnail.loadAny(item.anime.thumbnail_url) {
+        binding.thumbnail.loadAny(item.anime) {
             transformations(RoundedCornersTransformation(radius))
         }
     }

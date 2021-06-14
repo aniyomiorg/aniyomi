@@ -244,7 +244,7 @@ class AnimeInfoHeaderAdapter(
 
             // Set cover if changed.
             listOfNotNull(binding.mangaCover, binding.backdrop).forEach {
-                it.loadAny(anime.thumbnail_url)
+                it.loadAny(anime)
             }
 
             // Anime info section

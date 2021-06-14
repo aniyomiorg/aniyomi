@@ -68,7 +68,7 @@ class AnimeHistoryHolder(
         // Set cover
         val radius = itemView.context.resources.getDimension(R.dimen.card_radius)
         binding.cover.clear()
-        binding.cover.loadAny(item.anime.thumbnail_url) {
+        binding.cover.loadAny(item.anime) {
             transformations(RoundedCornersTransformation(radius))
         }
     }
