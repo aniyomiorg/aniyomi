@@ -39,7 +39,7 @@ class GithubUpdateChecker {
 
     private fun isNewVersion(versionTag: String): Boolean {
         // Removes prefixes like "r" or "v"
-        val newVersion = versionTag.replace("[^\\d.\\-mi]".toRegex(), "")
+        val newVersion = versionTag.replace("[^\\d.]".toRegex(), "")
 
         return if (BuildConfig.DEBUG) {
             // Preview builds: based on releases in "jmir1/tachiyomi-preview" repo
@@ -47,7 +47,7 @@ class GithubUpdateChecker {
             newVersion.toInt() > BuildConfig.COMMIT_COUNT.toInt()
         } else {
             // Release builds: based on releases in "jmir1/aniyomi" repo
-            // tagged as something like "v0.1.2-mi"
+            // tagged as something like "v0.1.2"
             newVersion != BuildConfig.VERSION_NAME
         }
     }
