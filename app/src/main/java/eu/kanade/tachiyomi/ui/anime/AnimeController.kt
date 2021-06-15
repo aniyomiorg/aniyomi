@@ -1154,7 +1154,7 @@ class AnimeController :
 
     private fun markPreviousAsRead(episodes: List<EpisodeItem>) {
         val adapter = episodesAdapter ?: return
-        val prevEpisodes = if (presenter.sortDescending()) adapter.items else adapter.items.reversed()
+        val prevEpisodes = if (presenter.sortDescending()) adapter.items.reversed() else adapter.items
         val episodePos = prevEpisodes.indexOf(episodes.lastOrNull())
         if (episodePos != -1) {
             markAsRead(prevEpisodes.take(episodePos))
