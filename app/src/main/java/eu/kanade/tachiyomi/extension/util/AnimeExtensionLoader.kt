@@ -100,7 +100,7 @@ internal object AnimeExtensionLoader {
             return AnimeLoadResult.Error(error)
         }
 
-        val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Tachiyomi: ")
+        val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Aniyomi: ")
         val versionName = pkgInfo.versionName
         val versionCode = pkgInfo.versionCode
 

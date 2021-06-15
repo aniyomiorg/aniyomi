@@ -62,8 +62,8 @@ class HistoryTabsController() :
     private inner class HistoryTabsAdapter : RouterPagerAdapter(this@HistoryTabsController) {
 
         private val tabTitles = listOf(
-            R.string.label_history,
-            R.string.label_animehistory
+            R.string.label_animehistory,
+            R.string.label_history
         )
             .map { resources!!.getString(it) }
 
@@ -88,7 +88,7 @@ class HistoryTabsController() :
     }
 
     companion object {
-        const val HISTORY_CONTROLLER = 0
-        const val ANIME_HISTORY_CONTROLLER = 1
+        const val ANIME_HISTORY_CONTROLLER = 0
+        const val HISTORY_CONTROLLER = 1
     }
 }

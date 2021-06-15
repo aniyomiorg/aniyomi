@@ -63,7 +63,7 @@ internal class AnimeExtensionGithubApi {
                 libVersion >= AnimeExtensionLoader.LIB_VERSION_MIN && libVersion <= AnimeExtensionLoader.LIB_VERSION_MAX
             }
             .map { element ->
-                val name = element.jsonObject["name"]!!.jsonPrimitive.content.substringAfter("Tachiyomi: ")
+                val name = element.jsonObject["name"]!!.jsonPrimitive.content.substringAfter("Aniyomi: ")
                 val pkgName = element.jsonObject["pkg"]!!.jsonPrimitive.content
                 val apkName = element.jsonObject["apk"]!!.jsonPrimitive.content
                 val versionName = element.jsonObject["version"]!!.jsonPrimitive.content
