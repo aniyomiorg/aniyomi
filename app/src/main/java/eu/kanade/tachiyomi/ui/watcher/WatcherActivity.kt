@@ -129,6 +129,10 @@ class WatcherActivity : AppCompatActivity() {
         userAgentString = WebSettings.getDefaultUserAgent(this)
         Timber.w(userAgentString)
         links = EpisodeLoader.getLinks(episode, anime, source)
+        if (links.isEmpty()) {
+            baseContext.toast("Cannot play episode")
+            super.onBackPressed()
+        }
         if (links.lastIndex > 0) settingsBtn.visibility = View.VISIBLE
         uri = links.first().url
         if (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource) {

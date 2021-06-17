@@ -24,10 +24,24 @@ class EpisodeLoader {
             val downloadManager: AnimeDownloadManager = Injekt.get()
             val isDownloaded = downloadManager.isEpisodeDownloaded(episode, anime, true)
             return when {
-                isDownloaded -> mutableListOf(downloaded(episode, anime, source, downloadManager))
+                isDownloaded -> {
+                    val link = downloaded(episode, anime, source, downloadManager)
+                    if (link != null) {
+                        return mutableListOf(link)
+                    } else {
+                        return emptyList()
+                    }
+                }
                 source is AnimeHttpSource -> notDownloaded(episode, anime, source)
-                source is LocalAnimeSource -> mutableListOf(local(episode, source))
-                else -> error("no worky")
+                source is LocalAnimeSource -> {
+                    val link = local(episode, source)
+                    if (link != null) {
+                        return mutableListOf(link)
+                    } else {
+                        return emptyList()
+                    }
+                }
+                else -> error("source not supported")
             }
         }
 
@@ -36,7 +50,7 @@ class EpisodeLoader {
             return downloadManager.isEpisodeDownloaded(episode, anime, true)
         }
 
-        fun getLink(episode: Episode, anime: Anime, source: AnimeSource): Link {
+        fun getLink(episode: Episode, anime: Anime, source: AnimeSource): Link? {
             val downloadManager: AnimeDownloadManager = Injekt.get()
             val isDownloaded = downloadManager.isEpisodeDownloaded(episode, anime, true)
             return when {
@@ -48,20 +62,24 @@ class EpisodeLoader {
         }
 
         fun notDownloaded(episode: Episode, anime: Anime, source: AnimeSource): List<Link> {
-            val links = runBlocking {
-                return@runBlocking suspendCoroutine<List<Link>> { continuation ->
-                    var links: List<Link>
-                    launchIO {
-                        try {
-                            links = source.getEpisodeLink(episode.toEpisodeInfo())
-                            continuation.resume(links)
-                        } catch (e: Throwable) {
-                            withUIContext { throw e }
+            try {
+                val links = runBlocking {
+                    return@runBlocking suspendCoroutine<List<Link>> { continuation ->
+                        var links: List<Link>
+                        launchIO {
+                            try {
+                                links = source.getEpisodeLink(episode.toEpisodeInfo())
+                                continuation.resume(links)
+                            } catch (e: Throwable) {
+                                withUIContext { throw e }
+                            }
                         }
                     }
                 }
+                return links
+            } catch (error: Exception) {
+                return emptyList()
             }
-            return links
         }
 
         fun downloaded(
@@ -69,33 +87,41 @@ class EpisodeLoader {
             anime: Anime,
             source: AnimeSource,
             downloadManager: AnimeDownloadManager
-        ): Link {
-            val path = runBlocking {
-                return@runBlocking suspendCoroutine<Uri> { continuation ->
-                    launchIO {
-                        val link =
-                            downloadManager.buildVideo(source, anime, episode).awaitSingle().uri!!
-                        continuation.resume(link)
+        ): Link? {
+            try {
+                val path = runBlocking {
+                    return@runBlocking suspendCoroutine<Uri> { continuation ->
+                        launchIO {
+                            val link =
+                                downloadManager.buildVideo(source, anime, episode).awaitSingle().uri!!
+                            continuation.resume(link)
+                        }
                     }
                 }
+                return Link(path.toString(), "download")
+            } catch (error: Exception) {
+                return null
             }
-            return Link(path.toString(), "download")
         }
 
         fun local(
             episode: Episode,
             source: AnimeSource
-        ): Link {
-            val link = runBlocking {
-                return@runBlocking suspendCoroutine<Link> { continuation ->
-                    launchIO {
-                        val link =
-                            source.fetchEpisodeLink(episode).awaitSingle().first()
-                        continuation.resume(link)
+        ): Link? {
+            try {
+                val link = runBlocking {
+                    return@runBlocking suspendCoroutine<Link> { continuation ->
+                        launchIO {
+                            val link =
+                                source.fetchEpisodeLink(episode).awaitSingle().first()
+                            continuation.resume(link)
+                        }
                     }
                 }
+                return link
+            } catch (error: Exception) {
+                return null
             }
-            return link
         }
     }
 }

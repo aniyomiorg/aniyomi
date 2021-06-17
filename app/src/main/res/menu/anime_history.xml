@@ -11,7 +11,7 @@
         app:showAsAction="ifRoom|collapseActionView" />
 
     <item
-        android:id="@+id/action_clear_history"
+        android:id="@+id/action_clear_anime_history"
         android:title="@string/pref_clear_history"
         app:showAsAction="never" />
 

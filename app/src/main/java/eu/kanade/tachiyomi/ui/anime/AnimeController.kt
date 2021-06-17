@@ -903,20 +903,26 @@ class AnimeController :
 
     fun openEpisode(episode: Episode, playerChangeRequested: Boolean = false) {
         val activity = activity ?: return
+        val context = view?.context ?: return
         launchIO {
             val intent = WatcherActivity.newIntent(activity, presenter.anime, episode)
             val useInternal = if (preferences.alwaysUseExternalPlayer()) playerChangeRequested else !playerChangeRequested
             if (useInternal) {
                 startActivity(intent)
             } else {
-                val url = EpisodeLoader.getLink(episode, anime!!, source!!).url
-                currentExtEpisode = episode
-                val extIntent = Intent(Intent.ACTION_VIEW)
-                extIntent.setDataAndTypeAndNormalize(Uri.parse(url), "video/*")
-                extIntent.putExtra("title", episode.name)
-                extIntent.putExtra("position", episode.last_second_seen.toInt())
-                extIntent.putExtra("return_result", true)
-                startActivityForResult(extIntent, REQUEST_EXTERNAL)
+                val link = EpisodeLoader.getLink(episode, anime!!, source!!)
+                if (link != null) {
+                    val url = link.url
+                    currentExtEpisode = episode
+                    val extIntent = Intent(Intent.ACTION_VIEW)
+                    extIntent.setDataAndTypeAndNormalize(Uri.parse(url), "video/*")
+                    extIntent.putExtra("title", episode.name)
+                    extIntent.putExtra("position", episode.last_second_seen.toInt())
+                    extIntent.putExtra("return_result", true)
+                    startActivityForResult(extIntent, REQUEST_EXTERNAL)
+                } else {
+                    context.toast("Cannot open episode")
+                }
             }
         }
     }
