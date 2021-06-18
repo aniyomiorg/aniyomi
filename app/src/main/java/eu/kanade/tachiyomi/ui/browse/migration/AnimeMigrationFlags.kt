@@ -12,7 +12,7 @@ object AnimeMigrationFlags {
     private const val CATEGORIES2 = 0x2
     private const val TRACK2 = 0x4
 
-    val titles get() = arrayOf(R.string.chapters, R.string.categories, R.string.track)
+    val titles get() = arrayOf(R.string.episodes, R.string.anime_categories, R.string.track)
 
     val flags get() = arrayOf(EPISODES, CATEGORIES, TRACK)
 

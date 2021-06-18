@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchPresenter
-import eu.kanade.tachiyomi.ui.browse.migration.MigrationFlags
+import eu.kanade.tachiyomi.ui.browse.migration.AnimeMigrationFlags
 import uy.kohesive.injekt.injectLazy
 
 class AnimeSearchController(
@@ -86,19 +86,19 @@ class AnimeSearchController(
             val prefValue = preferences.migrateFlags().get()
 
             val preselected =
-                MigrationFlags.getEnabledFlagsPositions(
+                AnimeMigrationFlags.getEnabledFlagsPositions(
                     prefValue
                 )
 
             return MaterialDialog(activity!!)
                 .title(R.string.migration_dialog_what_to_include)
                 .listItemsMultiChoice(
-                    items = MigrationFlags.titles.map { resources?.getString(it) as CharSequence },
+                    items = AnimeMigrationFlags.titles.map { resources?.getString(it) as CharSequence },
                     initialSelection = preselected.toIntArray()
                 ) { _, positions, _ ->
                     // Save current settings for the next time
                     val newValue =
-                        MigrationFlags.getFlagsFromPositions(
+                        AnimeMigrationFlags.getFlagsFromPositions(
                             positions.toTypedArray()
                         )
                     preferences.migrateFlags().set(newValue)
