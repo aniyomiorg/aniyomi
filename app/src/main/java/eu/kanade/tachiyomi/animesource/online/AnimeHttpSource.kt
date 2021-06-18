@@ -274,11 +274,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param chapter the chapter whose page list has to be fetched.
      */
     fun fetchVideoList(episode: SEpisode): Observable<List<Link>> {
-        return client.newCall(episodeLinkRequest(episode))
-            .asObservableSuccess()
-            .map { response ->
-                episodeLinkParse(response)
-            }
+        return fetchEpisodeLink(episode)
     }
 
     /**

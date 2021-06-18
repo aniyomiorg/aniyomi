@@ -366,7 +366,7 @@ class AnimeDownloader(
             return Observable.just(video)
         }
 
-        val filename = download.episode.name
+        val filename = DiskUtil.buildValidFilename(download.episode.name)
         Timber.w(filename)
         val tmpFile = tmpDir.findFile("$filename.tmp")
 
