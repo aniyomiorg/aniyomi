@@ -71,10 +71,10 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
 
     private val startScreenId by lazy {
         when (preferences.startScreen()) {
-            2 -> R.id.nav_updates
-            3 -> R.id.nav_animelib
+            1 -> R.id.nav_animelib
+            2 -> R.id.nav_library
+            3 -> R.id.nav_updates
             4 -> R.id.nav_browse
-            5 -> R.id.nav_library
             else -> R.id.nav_animelib
         }
     }

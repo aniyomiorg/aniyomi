@@ -32,12 +32,12 @@ class SettingsGeneralController : SettingsController() {
             key = Keys.startScreen
             titleRes = R.string.pref_start_screen
             entriesRes = arrayOf(
-                R.string.label_library,
+                R.string.label_animelib,
+                R.string.label_manga,
                 R.string.label_recent_updates,
-                R.string.label_recent_manga,
                 R.string.browse
             )
-            entryValues = arrayOf("1", "3", "2", "4")
+            entryValues = arrayOf("1", "2", "3", "4")
             defaultValue = "1"
             summary = "%s"
         }
