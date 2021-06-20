@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.databinding.AnimeExtensionDetailHeaderBinding
+import eu.kanade.tachiyomi.databinding.ExtensionDetailHeaderBinding
 import eu.kanade.tachiyomi.ui.browse.animeextension.getApplicationIcon
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import kotlinx.coroutines.flow.launchIn
@@ -16,10 +16,10 @@ import reactivecircus.flowbinding.android.view.clicks
 class AnimeExtensionDetailsHeaderAdapter(private val presenter: AnimeExtensionDetailsPresenter) :
     RecyclerView.Adapter<AnimeExtensionDetailsHeaderAdapter.HeaderViewHolder>() {
 
-    private lateinit var binding: AnimeExtensionDetailHeaderBinding
+    private lateinit var binding: ExtensionDetailHeaderBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeaderViewHolder {
-        binding = AnimeExtensionDetailHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = ExtensionDetailHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return HeaderViewHolder(binding.root)
     }
 
@@ -46,13 +46,13 @@ class AnimeExtensionDetailsHeaderAdapter(private val presenter: AnimeExtensionDe
                 .launchIn(presenter.presenterScope)
 
             if (extension.isObsolete) {
-                binding.animeExtensionWarningBanner.isVisible = true
-                binding.animeExtensionWarningBanner.setText(R.string.obsolete_extension_message)
+                binding.extensionWarningBanner.isVisible = true
+                binding.extensionWarningBanner.setText(R.string.obsolete_extension_message)
             }
 
             if (extension.isUnofficial) {
-                binding.animeExtensionWarningBanner.isVisible = true
-                binding.animeExtensionWarningBanner.setText(R.string.unofficial_extension_message)
+                binding.extensionWarningBanner.isVisible = true
+                binding.extensionWarningBanner.setText(R.string.unofficial_extension_message)
             }
         }
     }

@@ -17,7 +17,7 @@ import eu.kanade.tachiyomi.data.backup.BackupRestoreService
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeHistory
-import eu.kanade.tachiyomi.databinding.AnimeHistoryControllerBinding
+import eu.kanade.tachiyomi.databinding.HistoryControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
@@ -36,7 +36,7 @@ import uy.kohesive.injekt.injectLazy
  * Fragment that shows recently read anime.
  */
 class AnimeHistoryController :
-    NucleusController<AnimeHistoryControllerBinding, AnimeHistoryPresenter>(),
+    NucleusController<HistoryControllerBinding, AnimeHistoryPresenter>(),
     RootController,
     FlexibleAdapter.OnUpdateListener,
     FlexibleAdapter.EndlessScrollListener,
@@ -71,7 +71,7 @@ class AnimeHistoryController :
         return AnimeHistoryPresenter()
     }
 
-    override fun createBinding(inflater: LayoutInflater) = AnimeHistoryControllerBinding.inflate(inflater)
+    override fun createBinding(inflater: LayoutInflater) = HistoryControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
@@ -182,7 +182,7 @@ class AnimeHistoryController :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.anime_history, menu)
+        inflater.inflate(R.menu.history, menu)
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
         searchView.maxWidth = Int.MAX_VALUE
@@ -207,7 +207,7 @@ class AnimeHistoryController :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_clear_anime_history -> {
+            R.id.action_clear_history -> {
                 val ctrl = ClearAnimeHistoryDialogController()
                 ctrl.targetController = this@AnimeHistoryController
                 ctrl.showDialog(router)

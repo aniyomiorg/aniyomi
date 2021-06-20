@@ -25,7 +25,7 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
-import eu.kanade.tachiyomi.databinding.AnimelibControllerBinding
+import eu.kanade.tachiyomi.databinding.LibraryControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
@@ -47,7 +47,7 @@ import uy.kohesive.injekt.api.get
 class AnimelibController(
     bundle: Bundle? = null,
     private val preferences: PreferencesHelper = Injekt.get()
-) : SearchableNucleusController<AnimelibControllerBinding, AnimelibPresenter>(bundle),
+) : SearchableNucleusController<LibraryControllerBinding, AnimelibPresenter>(bundle),
     RootController,
     TabbedController,
     ActionMode.Callback,
@@ -137,7 +137,7 @@ class AnimelibController(
 
     private fun updateTitle() {
         val showCategoryTabs = preferences.animeCategoryTabs().get()
-        val currentCategory = adapter?.categories?.getOrNull(binding.animelibPager.currentItem)
+        val currentCategory = adapter?.categories?.getOrNull(binding.libraryPager.currentItem)
 
         var title = if (showCategoryTabs) {
             resources?.getString(R.string.label_animelib)
@@ -163,7 +163,7 @@ class AnimelibController(
         return AnimelibPresenter()
     }
 
-    override fun createBinding(inflater: LayoutInflater) = AnimelibControllerBinding.inflate(inflater)
+    override fun createBinding(inflater: LayoutInflater) = LibraryControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
@@ -175,8 +175,8 @@ class AnimelibController(
         }
 
         adapter = AnimelibAdapter(this)
-        binding.animelibPager.adapter = adapter
-        binding.animelibPager.pageSelections()
+        binding.libraryPager.adapter = adapter
+        binding.libraryPager.pageSelections()
             .drop(1)
             .onEach {
                 preferences.lastUsedCategory().set(it)
@@ -219,7 +219,7 @@ class AnimelibController(
     override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
         super.onChangeStarted(handler, type)
         if (type.isEnter) {
-            (activity as? MainActivity)?.binding?.tabs?.setupWithViewPager(binding.animelibPager)
+            (activity as? MainActivity)?.binding?.tabs?.setupWithViewPager(binding.libraryPager)
             presenter.subscribeAnimelib()
         }
     }
@@ -263,7 +263,7 @@ class AnimelibController(
 
     fun showSettingsSheet() {
         if (adapter?.categories?.isNotEmpty() == true) {
-            adapter?.categories?.get(binding.animelibPager.currentItem)?.let { category ->
+            adapter?.categories?.get(binding.libraryPager.currentItem)?.let { category ->
                 settingsSheet?.show(category)
             }
         } else {
@@ -284,7 +284,7 @@ class AnimelibController(
 
         // Get the current active category.
         val activeCat = if (adapter.categories.isNotEmpty()) {
-            binding.animelibPager.currentItem
+            binding.libraryPager.currentItem
         } else {
             activeCategory
         }
@@ -296,7 +296,7 @@ class AnimelibController(
             .toMap()
 
         // Restore active category.
-        binding.animelibPager.setCurrentItem(activeCat, false)
+        binding.libraryPager.setCurrentItem(activeCat, false)
 
         // Trigger display of tabs
         onTabsSettingsChanged()
@@ -304,7 +304,7 @@ class AnimelibController(
         // Delay the scroll position to allow the view to be properly measured.
         view.post {
             if (isAttached) {
-                (activity as? MainActivity)?.binding?.tabs?.setScrollPosition(binding.animelibPager.currentItem, 0f, true)
+                (activity as? MainActivity)?.binding?.tabs?.setScrollPosition(binding.libraryPager.currentItem, 0f, true)
             }
         }
 
@@ -356,11 +356,11 @@ class AnimelibController(
     private fun reattachAdapter() {
         val adapter = adapter ?: return
 
-        val position = binding.animelibPager.currentItem
+        val position = binding.libraryPager.currentItem
 
         adapter.recycle = false
-        binding.animelibPager.adapter = adapter
-        binding.animelibPager.currentItem = position
+        binding.libraryPager.adapter = adapter
+        binding.libraryPager.currentItem = position
         adapter.recycle = true
     }
 
@@ -372,7 +372,7 @@ class AnimelibController(
             actionMode = (activity as AppCompatActivity).startSupportActionMode(this)
             binding.actionToolbar.show(
                 actionMode!!,
-                R.menu.animelib_selection
+                R.menu.library_selection
             ) { onActionItemClicked(it!!) }
             (activity as? MainActivity)?.showBottomNav(visible = false, collapse = true)
         }
@@ -386,7 +386,7 @@ class AnimelibController(
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        createOptionsMenu(menu, inflater, R.menu.animelib, R.id.action_search)
+        createOptionsMenu(menu, inflater, R.menu.library, R.id.action_search)
         // Mutate the filter icon because it needs to be tinted and the resource is shared.
         menu.findItem(R.id.action_filter).icon.mutate()
     }
@@ -422,7 +422,7 @@ class AnimelibController(
         when (item.itemId) {
             R.id.action_search -> expandActionViewFromInteraction = true
             R.id.action_filter -> showSettingsSheet()
-            R.id.action_update_animelib -> {
+            R.id.action_update_library -> {
                 activity?.let {
                     if (AnimelibUpdateService.start(it)) {
                         it.toast(R.string.updating_library)
@@ -582,13 +582,13 @@ class AnimelibController(
     }
 
     private fun selectAllCategoryAnime() {
-        adapter?.categories?.getOrNull(binding.animelibPager.currentItem)?.id?.let {
+        adapter?.categories?.getOrNull(binding.libraryPager.currentItem)?.id?.let {
             selectAllRelay.call(it)
         }
     }
 
     private fun selectInverseCategoryAnime() {
-        adapter?.categories?.getOrNull(binding.animelibPager.currentItem)?.id?.let {
+        adapter?.categories?.getOrNull(binding.libraryPager.currentItem)?.id?.let {
             selectInverseRelay.call(it)
         }
     }

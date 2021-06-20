@@ -8,7 +8,7 @@
     android:paddingEnd="4dp">
 
     <ImageView
-        android:id="@+id/anime_cover"
+        android:id="@+id/manga_cover"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -22,22 +22,22 @@
         tools:src="@mipmap/ic_launcher" />
 
     <TextView
-        android:id="@+id/anime_title"
+        android:id="@+id/manga_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="@style/TextAppearance.Medium.Body2"
-        app:layout_constraintBottom_toTopOf="@+id/episode_title"
+        app:layout_constraintBottom_toTopOf="@+id/chapter_title"
         app:layout_constraintEnd_toStartOf="@+id/download"
-        app:layout_constraintStart_toEndOf="@+id/anime_cover"
+        app:layout_constraintStart_toEndOf="@+id/manga_cover"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="Anime title" />
+        tools:text="Manga title" />
 
     <TextView
-        android:id="@+id/episode_title"
+        android:id="@+id/chapter_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -46,9 +46,9 @@
         android:textAppearance="@style/TextAppearance.Regular.Caption"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/download"
-        app:layout_constraintStart_toEndOf="@+id/anime_cover"
-        app:layout_constraintTop_toBottomOf="@+id/anime_title"
-        tools:text="Episode title" />
+        app:layout_constraintStart_toEndOf="@+id/manga_cover"
+        app:layout_constraintTop_toBottomOf="@+id/manga_title"
+        tools:text="Chapter title" />
 
     <eu.kanade.tachiyomi.ui.anime.episode.EpisodeDownloadView
         android:id="@+id/download"

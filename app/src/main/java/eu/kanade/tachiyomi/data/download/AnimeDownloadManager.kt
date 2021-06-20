@@ -95,6 +95,23 @@ class AnimeDownloadManager(private val context: Context) {
         downloader.clearQueue(isNotification)
     }
 
+    fun startDownloadNow(episode: Episode) {
+        val download = downloader.queue.find { it.episode.id == episode.id } ?: return
+        val queue = downloader.queue.toMutableList()
+        queue.remove(download)
+        queue.add(0, download)
+        reorderQueue(queue)
+        if (isPaused()) {
+            if (DownloadService.isRunning(context)) {
+                downloader.start()
+            } else {
+                DownloadService.start(context)
+            }
+        }
+    }
+
+    fun isPaused() = downloader.isPaused()
+
     /**
      * Reorders the download queue.
      *

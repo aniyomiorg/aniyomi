@@ -63,13 +63,16 @@
     <string name="action_mark_as_seen">Mark as watched</string>
     <string name="action_mark_as_unseen">Mark as unwatched</string>
     <string name="action_mark_previous_as_read">Mark previous as read</string>
+    <string name="action_mark_previous_as_seen">Mark previous as seen</string>
     <string name="action_download">Download</string>
     <string name="action_play_internally">Play internally</string>
     <string name="action_play_externally">Play externally</string>
     <string name="action_download_unread">Download unread chapters</string>
     <string name="action_download_unseen">Download unseen episodes</string>
     <string name="action_bookmark">Bookmark chapter</string>
+    <string name="action_bookmark_episode">Bookmark episode</string>
     <string name="action_remove_bookmark">Unbookmark chapter</string>
+    <string name="action_remove_bookmark_episode">Unbookmark episode</string>
     <string name="action_delete">Delete</string>
     <string name="action_update">Update</string>
     <string name="action_update_library">Update library</string>
@@ -139,6 +142,7 @@
     <string name="action_webview_back">Back</string>
     <string name="action_webview_forward">Forward</string>
     <string name="action_webview_refresh">Refresh</string>
+    <string name="action_start_downloading_now">Start downloading now</string>
 
     <!-- Operations -->
     <string name="loading">Loading…</string>
@@ -606,8 +610,11 @@
     <string name="manga_download">Download</string>
     <string name="custom_download">Download custom amount</string>
     <string name="download_1">Next chapter</string>
+    <string name="download_1_episode">Next episode</string>
     <string name="download_5">Next 5 chapters</string>
+    <string name="download_5_episodes">Next 5 episodes</string>
     <string name="download_10">Next 10 chapters</string>
+    <string name="download_10_episodes">Next 10 episodes</string>
     <string name="download_custom">Custom</string>
     <string name="download_all">All</string>
     <string name="download_unread">Unread</string>

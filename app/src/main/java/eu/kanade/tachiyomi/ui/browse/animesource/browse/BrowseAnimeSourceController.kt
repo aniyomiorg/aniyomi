@@ -31,7 +31,7 @@ import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.preference.PreferenceValues.DisplayMode
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
-import eu.kanade.tachiyomi.databinding.AnimeSourceControllerBinding
+import eu.kanade.tachiyomi.databinding.SourceControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCategoriesDialog
 import eu.kanade.tachiyomi.ui.base.controller.FabController
@@ -60,7 +60,7 @@ import uy.kohesive.injekt.injectLazy
  * Controller to manage the catalogues available in the app.
  */
 open class BrowseAnimeSourceController(bundle: Bundle) :
-    SearchableNucleusController<AnimeSourceControllerBinding, BrowseAnimeSourcePresenter>(bundle),
+    SearchableNucleusController<SourceControllerBinding, BrowseAnimeSourcePresenter>(bundle),
     FabController,
     FlexibleAdapter.OnItemClickListener,
     FlexibleAdapter.OnItemLongClickListener,
@@ -124,7 +124,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
         return BrowseAnimeSourcePresenter(args.getLong(SOURCE_ID_KEY), args.getString(SEARCH_QUERY_KEY))
     }
 
-    override fun createBinding(inflater: LayoutInflater) = AnimeSourceControllerBinding.inflate(inflater)
+    override fun createBinding(inflater: LayoutInflater) = SourceControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)

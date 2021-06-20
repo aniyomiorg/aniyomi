@@ -9,7 +9,7 @@ import coil.clear
 import coil.load
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
-import eu.kanade.tachiyomi.databinding.AnimeTrackSearchItemBinding
+import eu.kanade.tachiyomi.databinding.TrackSearchItemBinding
 import eu.kanade.tachiyomi.util.view.inflate
 
 class TrackSearchAdapter(context: Context) :
@@ -41,7 +41,7 @@ class TrackSearchAdapter(context: Context) :
 
     class TrackSearchHolder(private val view: View) {
 
-        private val binding = AnimeTrackSearchItemBinding.bind(view)
+        private val binding = TrackSearchItemBinding.bind(view)
 
         fun onSetValues(track: AnimeTrackSearch) {
             binding.trackSearchTitle.text = track.title

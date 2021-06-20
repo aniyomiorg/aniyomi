@@ -31,7 +31,7 @@ import eu.kanade.tachiyomi.data.preference.EmptyPreferenceDataStore
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.minusAssign
 import eu.kanade.tachiyomi.data.preference.plusAssign
-import eu.kanade.tachiyomi.databinding.AnimeExtensionDetailControllerBinding
+import eu.kanade.tachiyomi.databinding.ExtensionDetailControllerBinding
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.ToolbarLiftOnScrollController
@@ -49,7 +49,7 @@ import uy.kohesive.injekt.injectLazy
 
 @SuppressLint("RestrictedApi")
 class AnimeExtensionDetailsController(bundle: Bundle? = null) :
-    NucleusController<AnimeExtensionDetailControllerBinding, AnimeExtensionDetailsPresenter>(bundle),
+    NucleusController<ExtensionDetailControllerBinding, AnimeExtensionDetailsPresenter>(bundle),
     ToolbarLiftOnScrollController {
 
     private val preferences: PreferencesHelper by injectLazy()
@@ -64,9 +64,9 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
         setHasOptionsMenu(true)
     }
 
-    override fun createBinding(inflater: LayoutInflater): AnimeExtensionDetailControllerBinding {
+    override fun createBinding(inflater: LayoutInflater): ExtensionDetailControllerBinding {
         val themedInflater = inflater.cloneInContext(getPreferenceThemeContext())
-        return AnimeExtensionDetailControllerBinding.inflate(themedInflater)
+        return ExtensionDetailControllerBinding.inflate(themedInflater)
     }
 
     override fun createPresenter(): AnimeExtensionDetailsPresenter {
@@ -81,7 +81,7 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
 
-        binding.animeExtensionPrefsRecycler.applyInsetter {
+        binding.extensionPrefsRecycler.applyInsetter {
             type(navigationBars = true) {
                 padding()
             }
@@ -90,8 +90,8 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
         val extension = presenter.extension ?: return
         val context = view.context
 
-        binding.animeExtensionPrefsRecycler.layoutManager = LinearLayoutManager(context)
-        binding.animeExtensionPrefsRecycler.adapter = ConcatAdapter(
+        binding.extensionPrefsRecycler.layoutManager = LinearLayoutManager(context)
+        binding.extensionPrefsRecycler.adapter = ConcatAdapter(
             AnimeExtensionDetailsHeaderAdapter(presenter),
             initPreferencesAdapter(context, extension)
         )

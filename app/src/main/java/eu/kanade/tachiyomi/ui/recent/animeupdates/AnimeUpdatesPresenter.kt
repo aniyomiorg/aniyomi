@@ -4,6 +4,7 @@ import android.os.Bundle
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.AnimeEpisode
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -132,6 +133,10 @@ class AnimeUpdatesPresenter(
                 episode.download = download
             }
         }
+    }
+
+    fun startDownloadingNow(episode: Episode) {
+        downloadManager.startDownloadNow(episode)
     }
 
     /**

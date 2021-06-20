@@ -24,11 +24,17 @@ open class BaseEpisodeHolder(
                         // AnimeDownload.State.DOWNLOADED
                         findItem(R.id.delete_download).isVisible = item.status == AnimeDownload.State.DOWNLOADED
 
+                        // Download.State.QUEUE
+                        findItem(R.id.start_download).isVisible = item.status == AnimeDownload.State.QUEUE
                         // AnimeDownload.State.DOWNLOADING, AnimeDownload.State.QUEUE
                         findItem(R.id.cancel_download).isVisible = item.status != AnimeDownload.State.DOWNLOADED
                     },
                     onMenuItemClick = {
-                        adapter.clickListener.deleteEpisode(position)
+                        if (itemId == R.id.start_download) {
+                            adapter.clickListener.startDownloadNow(position)
+                        } else {
+                            adapter.clickListener.deleteEpisode(position)
+                        }
                     }
                 )
             }

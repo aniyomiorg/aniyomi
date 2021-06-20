@@ -25,7 +25,7 @@ class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdat
     private val binding = AnimeUpdatesItemBinding.bind(view)
 
     init {
-        binding.animeCover.setOnClickListener {
+        binding.mangaCover.setOnClickListener {
             adapter.coverClickListener.onCoverClick(bindingAdapterPosition)
         }
 
@@ -36,18 +36,18 @@ class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdat
 
     fun bind(item: AnimeUpdatesItem) {
         // Set episode title
-        binding.episodeTitle.text = item.episode.name
+        binding.chapterTitle.text = item.episode.name
 
         // Set anime title
-        binding.animeTitle.text = item.anime.title
+        binding.mangaTitle.text = item.anime.title
 
         // Check if episode is read and set correct color
         if (item.episode.seen) {
-            binding.episodeTitle.setTextColor(adapter.seenColor)
-            binding.animeTitle.setTextColor(adapter.seenColor)
+            binding.chapterTitle.setTextColor(adapter.seenColor)
+            binding.mangaTitle.setTextColor(adapter.seenColor)
         } else {
-            binding.episodeTitle.setTextColor(adapter.unseenColor)
-            binding.animeTitle.setTextColor(adapter.unseenColor)
+            binding.chapterTitle.setTextColor(adapter.unseenColor)
+            binding.mangaTitle.setTextColor(adapter.unseenColor)
         }
 
         // Set episode status
@@ -56,8 +56,8 @@ class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdat
 
         // Set cover
         val radius = itemView.context.resources.getDimension(R.dimen.card_radius)
-        binding.animeCover.clear()
-        binding.animeCover.loadAny(item.anime) {
+        binding.mangaCover.clear()
+        binding.mangaCover.loadAny(item.anime) {
             transformations(RoundedCornersTransformation(radius))
         }
     }

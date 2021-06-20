@@ -7,7 +7,7 @@ import coil.transform.RoundedCornersTransformation
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.AnimeEpisodeHistory
-import eu.kanade.tachiyomi.databinding.AnimeHistoryItemBinding
+import eu.kanade.tachiyomi.databinding.HistoryItemBinding
 import eu.kanade.tachiyomi.util.lang.toTimestampString
 import java.util.Date
 
@@ -25,7 +25,7 @@ class AnimeHistoryHolder(
     val adapter: AnimeHistoryAdapter
 ) : FlexibleViewHolder(view, adapter) {
 
-    private val binding = AnimeHistoryItemBinding.bind(view)
+    private val binding = HistoryItemBinding.bind(view)
 
     init {
         binding.holder.setOnClickListener {
@@ -51,18 +51,18 @@ class AnimeHistoryHolder(
         val (anime, chapter, animehistory) = item
 
         // Set anime title
-        binding.animeTitle.text = anime.title
+        binding.mangaTitle.text = anime.title
 
         // Set chapter number + timestamp
         if (chapter.episode_number > -1f) {
             val formattedNumber = adapter.decimalFormat.format(chapter.episode_number.toDouble())
-            binding.animeSubtitle.text = itemView.context.getString(
+            binding.mangaSubtitle.text = itemView.context.getString(
                 R.string.recent_manga_time,
                 formattedNumber,
                 Date(animehistory.last_seen).toTimestampString()
             )
         } else {
-            binding.animeSubtitle.text = Date(animehistory.last_seen).toTimestampString()
+            binding.mangaSubtitle.text = Date(animehistory.last_seen).toTimestampString()
         }
 
         // Set cover

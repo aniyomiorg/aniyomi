@@ -524,6 +524,10 @@ class AnimePresenter(
         }
     }
 
+    fun startDownloadingNow(episode: Episode) {
+        downloadManager.startDownloadNow(episode)
+    }
+
     /**
      * Mark the selected episode list as read/unread.
      * @param selectedEpisodes the list of selected episodes.

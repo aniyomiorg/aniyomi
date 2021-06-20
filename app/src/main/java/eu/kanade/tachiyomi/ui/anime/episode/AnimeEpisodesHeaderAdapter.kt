@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.databinding.AnimeEpisodesHeaderBinding
+import eu.kanade.tachiyomi.databinding.MangaChaptersHeaderBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.util.system.getResourceColor
 import kotlinx.coroutines.flow.launchIn
@@ -22,10 +22,10 @@ class AnimeEpisodesHeaderAdapter(
     private var numEpisodes: Int? = null
     private var hasActiveFilters: Boolean = false
 
-    private lateinit var binding: AnimeEpisodesHeaderBinding
+    private lateinit var binding: MangaChaptersHeaderBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeaderViewHolder {
-        binding = AnimeEpisodesHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = MangaChaptersHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return HeaderViewHolder(binding.root)
     }
 
@@ -49,7 +49,7 @@ class AnimeEpisodesHeaderAdapter(
 
     inner class HeaderViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
-            binding.episodesLabel.text = if (numEpisodes == null) {
+            binding.chaptersLabel.text = if (numEpisodes == null) {
                 view.context.getString(R.string.episodes)
             } else {
                 view.context.resources.getQuantityString(R.plurals.anime_num_episodes, numEpisodes!!, numEpisodes)
@@ -60,9 +60,9 @@ class AnimeEpisodesHeaderAdapter(
             } else {
                 view.context.getResourceColor(R.attr.colorOnBackground)
             }
-            DrawableCompat.setTint(binding.btnEpisodesFilter.drawable, filterColor)
+            DrawableCompat.setTint(binding.btnChaptersFilter.drawable, filterColor)
 
-            merge(view.clicks(), binding.btnEpisodesFilter.clicks())
+            merge(view.clicks(), binding.btnChaptersFilter.clicks())
                 .onEach { controller.showSettingsSheet() }
                 .launchIn(controller.viewScope)
         }

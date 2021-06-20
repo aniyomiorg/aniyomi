@@ -13,7 +13,7 @@ class AnimeHistoryItem(val aeh: AnimeEpisodeHistory, header: DateSectionItem) :
     AbstractSectionableItem<AnimeHistoryHolder, DateSectionItem>(header) {
 
     override fun getLayoutRes(): Int {
-        return R.layout.anime_history_item
+        return R.layout.history_item
     }
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>): AnimeHistoryHolder {

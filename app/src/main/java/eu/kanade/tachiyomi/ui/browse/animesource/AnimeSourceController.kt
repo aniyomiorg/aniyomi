@@ -23,7 +23,7 @@ import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.minusAssign
 import eu.kanade.tachiyomi.data.preference.plusAssign
-import eu.kanade.tachiyomi.databinding.AnimeSourceMainControllerBinding
+import eu.kanade.tachiyomi.databinding.SourceMainControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
 import eu.kanade.tachiyomi.ui.base.controller.requestPermissionsSafe
@@ -42,7 +42,7 @@ import uy.kohesive.injekt.api.get
  * [AnimeSourceAdapter.OnLatestClickListener] call function data on latest item click
  */
 class AnimeSourceController :
-    SearchableNucleusController<AnimeSourceMainControllerBinding, AnimeSourcePresenter>(),
+    SearchableNucleusController<SourceMainControllerBinding, AnimeSourcePresenter>(),
     FlexibleAdapter.OnItemClickListener,
     FlexibleAdapter.OnItemLongClickListener,
     AnimeSourceAdapter.OnSourceClickListener {
@@ -66,7 +66,7 @@ class AnimeSourceController :
         return AnimeSourcePresenter()
     }
 
-    override fun createBinding(inflater: LayoutInflater) = AnimeSourceMainControllerBinding.inflate(inflater)
+    override fun createBinding(inflater: LayoutInflater) = SourceMainControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)

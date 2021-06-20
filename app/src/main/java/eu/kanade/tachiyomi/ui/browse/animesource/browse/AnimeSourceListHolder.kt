@@ -8,7 +8,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.databinding.AnimeSourceListItemBinding
+import eu.kanade.tachiyomi.databinding.SourceListItemBinding
 import eu.kanade.tachiyomi.util.system.getResourceColor
 
 /**
@@ -20,9 +20,9 @@ import eu.kanade.tachiyomi.util.system.getResourceColor
  * @constructor creates a new catalogue holder.
  */
 class AnimeSourceListHolder(private val view: View, adapter: FlexibleAdapter<*>) :
-    AnimeSourceHolder<AnimeSourceListItemBinding>(view, adapter) {
+    AnimeSourceHolder<SourceListItemBinding>(view, adapter) {
 
-    override val binding = AnimeSourceListItemBinding.bind(view)
+    override val binding = SourceListItemBinding.bind(view)
 
     private val favoriteColor = view.context.getResourceColor(R.attr.colorOnSurface, 0.38f)
     private val unfavoriteColor = view.context.getResourceColor(R.attr.colorOnSurface)

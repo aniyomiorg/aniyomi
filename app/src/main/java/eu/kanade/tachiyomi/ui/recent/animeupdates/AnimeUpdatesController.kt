@@ -17,7 +17,7 @@ import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.databinding.AnimeUpdatesControllerBinding
+import eu.kanade.tachiyomi.databinding.UpdatesControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodesAdapter
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
@@ -39,7 +39,7 @@ import java.util.*
  * Fragment that shows recent episodes.
  */
 class AnimeUpdatesController :
-    NucleusController<AnimeUpdatesControllerBinding, AnimeUpdatesPresenter>(),
+    NucleusController<UpdatesControllerBinding, AnimeUpdatesPresenter>(),
     RootController,
     ActionMode.Callback,
     FlexibleAdapter.OnItemClickListener,
@@ -72,7 +72,7 @@ class AnimeUpdatesController :
         return AnimeUpdatesPresenter()
     }
 
-    override fun createBinding(inflater: LayoutInflater) = AnimeUpdatesControllerBinding.inflate(inflater)
+    override fun createBinding(inflater: LayoutInflater) = UpdatesControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
@@ -312,6 +312,11 @@ class AnimeUpdatesController :
             downloadEpisodes(listOf(item))
         }
         adapter?.updateItem(item)
+    }
+
+    override fun startDownloadNow(position: Int) {
+        val episode = adapter?.getItem(position) as? AnimeUpdatesItem ?: return
+        presenter.startDownloadingNow(episode)
     }
 
     override fun deleteEpisode(position: Int) {

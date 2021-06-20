@@ -26,13 +26,13 @@ import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.getPreferenceKey
 import eu.kanade.tachiyomi.data.preference.EmptyPreferenceDataStore
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
-import eu.kanade.tachiyomi.databinding.AnimeSourcePreferencesControllerBinding
+import eu.kanade.tachiyomi.databinding.SourcePreferencesControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import timber.log.Timber
 
 @SuppressLint("RestrictedApi")
 class SourcePreferencesController(bundle: Bundle? = null) :
-    NucleusController<AnimeSourcePreferencesControllerBinding, SourcePreferencesPresenter>(bundle),
+    NucleusController<SourcePreferencesControllerBinding, SourcePreferencesPresenter>(bundle),
     PreferenceManager.OnDisplayPreferenceDialogListener,
     DialogPreference.TargetFragment {
 
@@ -44,9 +44,9 @@ class SourcePreferencesController(bundle: Bundle? = null) :
         bundleOf(SOURCE_ID to sourceId)
     )
 
-    override fun createBinding(inflater: LayoutInflater): AnimeSourcePreferencesControllerBinding {
+    override fun createBinding(inflater: LayoutInflater): SourcePreferencesControllerBinding {
         val themedInflater = inflater.cloneInContext(getPreferenceThemeContext())
-        return AnimeSourcePreferencesControllerBinding.inflate(themedInflater)
+        return SourcePreferencesControllerBinding.inflate(themedInflater)
     }
 
     override fun createPresenter(): SourcePreferencesPresenter {

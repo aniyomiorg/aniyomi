@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
-import eu.kanade.tachiyomi.databinding.AnimeSourceFilterSheetBinding
+import eu.kanade.tachiyomi.databinding.SourceFilterSheetBinding
 import eu.kanade.tachiyomi.widget.SimpleNavigationView
 import eu.kanade.tachiyomi.widget.sheet.BaseBottomSheetDialog
 
@@ -46,7 +46,7 @@ class AnimeSourceFilterSheet(
         val adapter: FlexibleAdapter<IFlexible<*>> = FlexibleAdapter<IFlexible<*>>(null)
             .setDisplayHeadersAtStartUp(true)
 
-        private val binding = AnimeSourceFilterSheetBinding.inflate(
+        private val binding = SourceFilterSheetBinding.inflate(
             LayoutInflater.from(context),
             null,
             false

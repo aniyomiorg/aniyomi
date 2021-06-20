@@ -13,7 +13,7 @@ import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
-import eu.kanade.tachiyomi.databinding.AnimeTrackSearchDialogBinding
+import eu.kanade.tachiyomi.databinding.TrackSearchDialogBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import kotlinx.coroutines.flow.debounce
@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit
 
 class TrackSearchDialog : DialogController {
 
-    private var binding: AnimeTrackSearchDialogBinding? = null
+    private var binding: TrackSearchDialogBinding? = null
 
     private var adapter: TrackSearchAdapter? = null
 
@@ -53,7 +53,7 @@ class TrackSearchDialog : DialogController {
 
     @Suppress("DEPRECATION")
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-        binding = AnimeTrackSearchDialogBinding.inflate(LayoutInflater.from(activity!!))
+        binding = TrackSearchDialogBinding.inflate(LayoutInflater.from(activity!!))
         val dialog = MaterialDialog(activity!!)
             .customView(view = binding!!.root)
             .positiveButton(android.R.string.ok) { onPositiveButtonClick() }

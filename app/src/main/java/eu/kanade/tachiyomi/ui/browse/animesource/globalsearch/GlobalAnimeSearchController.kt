@@ -13,7 +13,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.databinding.GlobalAnimeSearchControllerBinding
+import eu.kanade.tachiyomi.databinding.GlobalSearchControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
@@ -28,7 +28,7 @@ import uy.kohesive.injekt.injectLazy
 open class GlobalAnimeSearchController(
     protected val initialQuery: String? = null,
     protected val extensionFilter: String? = null
-) : SearchableNucleusController<GlobalAnimeSearchControllerBinding, GlobalAnimeSearchPresenter>(),
+) : SearchableNucleusController<GlobalSearchControllerBinding, GlobalAnimeSearchPresenter>(),
     GlobalAnimeSearchCardAdapter.OnAnimeClickListener,
     GlobalAnimeSearchAdapter.OnTitleClickListener {
 
@@ -55,7 +55,7 @@ open class GlobalAnimeSearchController(
      * @param container containing parent views.
      * @return inflated view
      */
-    override fun createBinding(inflater: LayoutInflater) = GlobalAnimeSearchControllerBinding.inflate(inflater)
+    override fun createBinding(inflater: LayoutInflater) = GlobalSearchControllerBinding.inflate(inflater)
 
     override fun getTitle(): String? {
         return presenter.query

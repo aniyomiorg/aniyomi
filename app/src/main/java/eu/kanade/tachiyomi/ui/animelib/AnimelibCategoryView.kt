@@ -79,7 +79,7 @@ class AnimelibCategoryView @JvmOverloads constructor(context: Context, attrs: At
                 spanCount = 1
             }
         } else {
-            (binding.swipeRefresh.inflate(R.layout.animelib_grid_recycler) as AutofitRecyclerView).apply {
+            (binding.swipeRefresh.inflate(R.layout.library_grid_recycler) as AutofitRecyclerView).apply {
                 spanCount = controller.animePerRow
             }
         }

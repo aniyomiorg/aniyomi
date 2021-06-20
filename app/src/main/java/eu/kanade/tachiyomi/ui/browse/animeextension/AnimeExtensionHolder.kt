@@ -6,7 +6,7 @@ import coil.load
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.databinding.AnimeExtensionCardItemBinding
+import eu.kanade.tachiyomi.databinding.ExtensionCardItemBinding
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.model.InstallStep
 import eu.kanade.tachiyomi.util.system.LocaleHelper
@@ -16,7 +16,7 @@ import uy.kohesive.injekt.api.get
 class AnimeExtensionHolder(view: View, val adapter: AnimeExtensionAdapter) :
     FlexibleViewHolder(view, adapter) {
 
-    private val binding = AnimeExtensionCardItemBinding.bind(view)
+    private val binding = ExtensionCardItemBinding.bind(view)
 
     private val shouldLabelNsfw by lazy {
         Injekt.get<PreferencesHelper>().labelNsfwExtension()

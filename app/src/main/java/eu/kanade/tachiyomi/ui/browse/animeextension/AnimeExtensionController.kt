@@ -13,7 +13,7 @@ import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.databinding.AnimeExtensionControllerBinding
+import eu.kanade.tachiyomi.databinding.ExtensionControllerBinding
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
@@ -29,7 +29,7 @@ import reactivecircus.flowbinding.swiperefreshlayout.refreshes
  * Controller to manage the catalogues available in the app.
  */
 open class AnimeExtensionController :
-    NucleusController<AnimeExtensionControllerBinding, AnimeExtensionPresenter>(),
+    NucleusController<ExtensionControllerBinding, AnimeExtensionPresenter>(),
     AnimeExtensionAdapter.OnButtonClickListener,
     FlexibleAdapter.OnItemClickListener,
     FlexibleAdapter.OnItemLongClickListener,
@@ -56,7 +56,7 @@ open class AnimeExtensionController :
         return AnimeExtensionPresenter()
     }
 
-    override fun createBinding(inflater: LayoutInflater) = AnimeExtensionControllerBinding.inflate(inflater)
+    override fun createBinding(inflater: LayoutInflater) = ExtensionControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)

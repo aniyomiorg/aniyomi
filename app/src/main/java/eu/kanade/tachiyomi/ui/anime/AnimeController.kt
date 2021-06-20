@@ -47,7 +47,7 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.UnattendedTrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
-import eu.kanade.tachiyomi.databinding.AnimeControllerBinding
+import eu.kanade.tachiyomi.databinding.MangaControllerBinding
 import eu.kanade.tachiyomi.ui.anime.episode.*
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodesAdapter
 import eu.kanade.tachiyomi.ui.anime.info.AnimeInfoHeaderAdapter
@@ -96,7 +96,7 @@ import java.util.*
 import kotlin.math.min
 
 class AnimeController :
-    NucleusController<AnimeControllerBinding, AnimePresenter>,
+    NucleusController<MangaControllerBinding, AnimePresenter>,
     ToolbarLiftOnScrollController,
     FabController,
     ActionMode.Callback,
@@ -211,12 +211,12 @@ class AnimeController :
         )
     }
 
-    override fun createBinding(inflater: LayoutInflater) = AnimeControllerBinding.inflate(inflater)
+    override fun createBinding(inflater: LayoutInflater) = MangaControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
 
-        listOfNotNull(binding.fullRecycler, binding.infoRecycler, binding.episodesRecycler)
+        listOfNotNull(binding.fullRecycler, binding.infoRecycler, binding.chaptersRecycler)
             .forEach {
                 it.applyInsetter {
                     type(navigationBars = true) {
@@ -273,7 +273,7 @@ class AnimeController :
                 updateToolbarTitleAlpha()
             }
         }
-        binding.episodesRecycler?.let {
+        binding.chaptersRecycler?.let {
             it.adapter = ConcatAdapter(episodesHeaderAdapter, episodesAdapter)
         }
 
@@ -1191,6 +1191,11 @@ class AnimeController :
         Timber.e(error)
     }
 
+    override fun startDownloadNow(position: Int) {
+        val episode = episodesAdapter?.getItem(position) ?: return
+        presenter.startDownloadingNow(episode)
+    }
+
     // OVERFLOW MENU DIALOGS
 
     private fun downloadEpisodes(choice: Int) {
@@ -1258,7 +1263,7 @@ class AnimeController :
     // Tracker sheet - end
 
     private val episodeRecycler: RecyclerView
-        get() = binding.fullRecycler ?: binding.episodesRecycler!!
+        get() = binding.fullRecycler ?: binding.chaptersRecycler!!
 
     companion object {
         const val FROM_SOURCE_EXTRA = "from_source"

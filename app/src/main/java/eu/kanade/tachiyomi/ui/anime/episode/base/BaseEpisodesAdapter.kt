@@ -18,5 +18,6 @@ abstract class BaseEpisodesAdapter<T : IFlexible<*>>(
     interface OnEpisodeClickListener {
         fun downloadEpisode(position: Int)
         fun deleteEpisode(position: Int)
+        fun startDownloadNow(position: Int)
     }
 }
