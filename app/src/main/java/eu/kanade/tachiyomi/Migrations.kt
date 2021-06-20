@@ -11,6 +11,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.updater.UpdaterJob
 import eu.kanade.tachiyomi.extension.ExtensionUpdateJob
+import eu.kanade.tachiyomi.extension.AnimeExtensionUpdateJob
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
 import eu.kanade.tachiyomi.ui.library.LibrarySort
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
@@ -47,7 +48,9 @@ object Migrations {
                     UpdaterJob.setupTask(context)
                 }
                 ExtensionUpdateJob.setupTask(context)
+                AnimeExtensionUpdateJob.setupTask(context)
                 LibraryUpdateJob.setupTask(context)
+                AnimelibUpdateJob.setupTask(context)
                 return false
             }
 
@@ -195,6 +198,16 @@ object Migrations {
                     preferences.libraryUpdateInterval().set(3)
                     AnimelibUpdateJob.setupTask(context, 3)
                 }
+            }
+            if (oldVersion < 64) {
+                // Set up background tasks
+                if (BuildConfig.INCLUDE_UPDATER) {
+                    UpdaterJob.setupTask(context)
+                }
+                ExtensionUpdateJob.setupTask(context)
+                AnimeExtensionUpdateJob.setupTask(context)
+                LibraryUpdateJob.setupTask(context)
+                AnimelibUpdateJob.setupTask(context)
             }
             return true
         }

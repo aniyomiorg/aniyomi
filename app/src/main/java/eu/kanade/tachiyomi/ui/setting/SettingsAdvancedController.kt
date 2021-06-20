@@ -156,8 +156,8 @@ class SettingsAdvancedController : SettingsController() {
                 titleRes = R.string.pref_refresh_library_covers
 
                 onClick {
-                    LibraryUpdateService.start(context.createAttributionContext("manga"), target = Target.COVERS)
-                    AnimelibUpdateService.start(context.createAttributionContext("anime"), target = AnimelibUpdateService.Target.COVERS)
+                    LibraryUpdateService.start(context, target = Target.COVERS)
+                    AnimelibUpdateService.start(context, target = AnimelibUpdateService.Target.COVERS)
                 }
             }
             preference {
@@ -166,8 +166,8 @@ class SettingsAdvancedController : SettingsController() {
                 summaryRes = R.string.pref_refresh_library_tracking_summary
 
                 onClick {
-                    LibraryUpdateService.start(context.createAttributionContext("manga"), target = Target.TRACKING)
-                    AnimelibUpdateService.start(context.createAttributionContext("anime"), target = AnimelibUpdateService.Target.TRACKING)
+                    LibraryUpdateService.start(context, target = Target.TRACKING)
+                    AnimelibUpdateService.start(context, target = AnimelibUpdateService.Target.TRACKING)
                 }
             }
         }
