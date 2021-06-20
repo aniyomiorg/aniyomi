@@ -19,14 +19,15 @@ class AboutLinksPreference @JvmOverloads constructor(context: Context, attrs: At
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
 
+        /*
         holder.findViewById(R.id.btn_website).apply {
             setTooltip(contentDescription.toString())
             setOnClickListener { context.openInBrowser("https://tachiyomi.org") }
-        }
+        }*/
         holder.findViewById(R.id.btn_discord).apply {
             setTooltip(contentDescription.toString())
             setOnClickListener { context.openInBrowser("https://discord.gg/F32UjdJZrR") }
-        }
+        } /*
         holder.findViewById(R.id.btn_twitter).apply {
             setTooltip(contentDescription.toString())
             setOnClickListener { context.openInBrowser("https://twitter.com/tachiyomiorg") }
@@ -38,7 +39,7 @@ class AboutLinksPreference @JvmOverloads constructor(context: Context, attrs: At
         holder.findViewById(R.id.btn_reddit).apply {
             setTooltip(contentDescription.toString())
             setOnClickListener { context.openInBrowser("https://www.reddit.com/r/Tachiyomi") }
-        }
+        }*/
         holder.findViewById(R.id.btn_github).apply {
             setTooltip(contentDescription.toString())
             setOnClickListener { context.openInBrowser("https://github.com/jmir1/aniyomi") }
