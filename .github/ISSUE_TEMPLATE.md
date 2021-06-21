@@ -3,10 +3,9 @@
 I acknowledge that:
 
 - I have updated:
-  - To the latest version of the app (stable is v0.11.1)
+  - To the latest version of the app
   - All extensions
-- I have tried the troubleshooting guide: https://tachiyomi.org/help/guides/troubleshooting-problems/
-- If this is an issue with an extension, that I should be opening an issue in https://github.com/tachiyomiorg/tachiyomi-extensions
+- If this is an issue with an anime extension, that I should be opening an issue in https://github.com/jmir1/aniyomi-extensions
 - I have searched the existing issues and this is new ticket **NOT** a duplicate or related to another open issue
 - I will fill out the title and the information in this template
 
@@ -17,7 +16,7 @@ Note that the issue will be automatically closed if you do not fill out the titl
 ---
 
 ## Device information
-* Tachiyomi version: ?
+* Aniyomi version: ?
 * Android version: ?
 * Device: ?
 
