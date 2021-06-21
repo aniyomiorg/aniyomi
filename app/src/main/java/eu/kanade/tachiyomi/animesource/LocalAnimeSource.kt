@@ -193,10 +193,10 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         return Observable.just(episodes)
     }
 
-    override fun fetchEpisodeLink(episode: SEpisode): Observable<List<Link>> {
-        val link = mutableListOf(Link(episode.url, "local"))
+    override fun fetchVideoList(episode: SEpisode): Observable<List<Video>> {
+        val video = mutableListOf(Video(episode.url, "local"))
 
-        return Observable.just(link)
+        return Observable.just(video)
     }
 
     /**

@@ -1,9 +1,9 @@
 package eu.kanade.tachiyomi.animesource.online
 
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
-import eu.kanade.tachiyomi.animesource.model.Link
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
+import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.util.asJsoup
 import okhttp3.Response
 import org.jsoup.nodes.Document
@@ -160,21 +160,6 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
     protected abstract fun episodeListSelector(): String
 
     /**
-     * Parses the response from the site and returns a list of episodes.
-     *
-     * @param response the response from the site.
-     */
-    override fun episodeLinkParse(response: Response): List<Link> {
-        val document = response.asJsoup()
-        return linksFromElement(document.select(episodeLinkSelector()).first())
-    }
-
-    /**
-     * Returns the Jsoup selector that returns a list of [Element] corresponding to each episode.
-     */
-    protected abstract fun episodeLinkSelector(): String
-
-    /**
      * Returns a episode from the given element.
      *
      * @param element an element obtained from [episodeListSelector].
@@ -182,9 +167,46 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
     protected abstract fun episodeFromElement(element: Element): SEpisode
 
     /**
-     * Returns a episode from the given element.
+     * Parses the response from the site and returns the page list.
      *
-     * @param element an element obtained from [episodeListSelector].
+     * @param response the response from the site.
      */
-    protected abstract fun linksFromElement(element: Element): List<Link>
+    override fun videoListParse(response: Response): List<Video> {
+        val document = response.asJsoup()
+        return document.select(videoListSelector()).map { videoFromElement(it) }
+    }
+
+    /**
+     * Returns the Jsoup selector that returns a list of [Element] corresponding to each video.
+     */
+    protected abstract fun videoListSelector(): String
+
+    /**
+     * Returns a video from the given element.
+     *
+     * @param element an element obtained from [videoListSelector].
+     */
+    protected abstract fun videoFromElement(element: Element): Video
+
+    /**
+     * Parse the response from the site and returns the absolute url to the source video.
+     *
+     * @param response the response from the site.
+     */
+    override fun videoUrlParse(response: Response): String {
+        val document = response.asJsoup()
+        return videoUrlFromElement(document.selectFirst(videoUrlSelector()))
+    }
+
+    /**
+     * Returns the Jsoup selector that returns the [Element] corresponding to the video URL.
+     */
+    protected abstract fun videoUrlSelector(): String
+
+    /**
+     * Returns a video URL from the given element.
+     *
+     * @param element an element obtained from [videoListSelector].
+     */
+    protected abstract fun videoUrlFromElement(element: Element): String
 }

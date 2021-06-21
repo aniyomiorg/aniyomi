@@ -30,7 +30,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
-import eu.kanade.tachiyomi.animesource.model.Link
+import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeHistory
@@ -81,7 +81,7 @@ class WatcherActivity : AppCompatActivity() {
     private lateinit var source: AnimeSource
     private lateinit var userAgentString: String
     private lateinit var uri: String
-    private lateinit var links: List<Link>
+    private lateinit var videos: List<Video>
     private var currentQuality = 0
 
     private var duration: Long = 0
@@ -128,17 +128,17 @@ class WatcherActivity : AppCompatActivity() {
         source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
         userAgentString = WebSettings.getDefaultUserAgent(this)
         Timber.w(userAgentString)
-        links = EpisodeLoader.getLinks(episode, anime, source)
-        if (links.isEmpty()) {
+        videos = EpisodeLoader.getLinks(episode, anime, source)
+        if (videos.isEmpty()) {
             baseContext.toast("Cannot play episode")
             super.onBackPressed()
         }
-        if (links.lastIndex > 0) settingsBtn.visibility = View.VISIBLE
-        uri = links.first().url
-        if (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource) {
-            dataSourceFactory = DefaultDataSourceFactory(this)
+        if (videos.lastIndex > 0) settingsBtn.visibility = View.VISIBLE
+        uri = videos.first().url
+        dataSourceFactory = if (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource) {
+            DefaultDataSourceFactory(this)
         } else {
-            dataSourceFactory = DefaultHttpDataSource.Factory().apply {
+            DefaultHttpDataSource.Factory().apply {
                 setDefaultRequestProperties(mapOf(Pair("cookie", CookieManager.getInstance().getCookie(uri))))
                 setUserAgent(userAgentString)
             }
@@ -218,9 +218,9 @@ class WatcherActivity : AppCompatActivity() {
         episode = getNextEpisode(episode, anime)
         if (oldEpisode == episode) return
         title.text = anime.title + " - " + episode.name
-        links = EpisodeLoader.getLinks(episode, anime, source)
-        settingsBtn.visibility = if (links.lastIndex > 0) View.VISIBLE else View.GONE
-        uri = links.first().url
+        videos = EpisodeLoader.getLinks(episode, anime, source)
+        settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
+        uri = videos.first().url
         currentQuality = 0
         mediaItem = MediaItem.Builder()
             .setUri(uri)
@@ -236,9 +236,9 @@ class WatcherActivity : AppCompatActivity() {
         episode = getPreviousEpisode(episode, anime)
         if (oldEpisode == episode) return
         title.text = anime.title + " - " + episode.name
-        links = EpisodeLoader.getLinks(episode, anime, source)
-        settingsBtn.visibility = if (links.lastIndex > 0) View.VISIBLE else View.GONE
-        uri = links.first().url
+        videos = EpisodeLoader.getLinks(episode, anime, source)
+        settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
+        uri = videos.first().url
         currentQuality = 0
         mediaItem = MediaItem.Builder()
             .setUri(uri)
@@ -248,9 +248,9 @@ class WatcherActivity : AppCompatActivity() {
     }
 
     private fun settings() {
-        val nextQuality = if (currentQuality == links.lastIndex) 0 else currentQuality + 1
-        baseContext.toast(links[nextQuality].quality, Toast.LENGTH_SHORT)
-        uri = links[nextQuality].url
+        val nextQuality = if (currentQuality == videos.lastIndex) 0 else currentQuality + 1
+        baseContext.toast(videos[nextQuality].quality, Toast.LENGTH_SHORT)
+        uri = videos[nextQuality].url
         currentQuality = nextQuality
         mediaItem = MediaItem.Builder()
             .setUri(uri)

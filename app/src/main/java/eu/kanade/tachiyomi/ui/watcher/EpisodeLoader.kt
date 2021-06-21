@@ -3,8 +3,7 @@ package eu.kanade.tachiyomi.ui.watcher
 import android.net.Uri
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
-import eu.kanade.tachiyomi.animesource.model.Link
-import eu.kanade.tachiyomi.animesource.model.toEpisodeInfo
+import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
@@ -20,7 +19,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class EpisodeLoader {
     companion object {
-        fun getLinks(episode: Episode, anime: Anime, source: AnimeSource): List<Link> {
+        fun getLinks(episode: Episode, anime: Anime, source: AnimeSource): List<Video> {
             val downloadManager: AnimeDownloadManager = Injekt.get()
             val isDownloaded = downloadManager.isEpisodeDownloaded(episode, anime, true)
             return when {
@@ -50,25 +49,25 @@ class EpisodeLoader {
             return downloadManager.isEpisodeDownloaded(episode, anime, true)
         }
 
-        fun getLink(episode: Episode, anime: Anime, source: AnimeSource): Link? {
+        fun getLink(episode: Episode, anime: Anime, source: AnimeSource): Video? {
             val downloadManager: AnimeDownloadManager = Injekt.get()
             val isDownloaded = downloadManager.isEpisodeDownloaded(episode, anime, true)
             return when {
                 isDownloaded -> downloaded(episode, anime, source, downloadManager)
                 source is AnimeHttpSource -> notDownloaded(episode, anime, source).first()
-                source is LocalAnimeSource -> Link("path", "local")
+                source is LocalAnimeSource -> Video("path", "local")
                 else -> error("no worky")
             }
         }
 
-        fun notDownloaded(episode: Episode, anime: Anime, source: AnimeSource): List<Link> {
+        fun notDownloaded(episode: Episode, anime: Anime, source: AnimeSource): List<Video> {
             try {
                 val links = runBlocking {
-                    return@runBlocking suspendCoroutine<List<Link>> { continuation ->
-                        var links: List<Link>
+                    return@runBlocking suspendCoroutine<List<Video>> { continuation ->
+                        var links: List<Video>
                         launchIO {
                             try {
-                                links = source.getEpisodeLink(episode.toEpisodeInfo())
+                                links = source.fetchVideoList(episode).awaitSingle()
                                 continuation.resume(links)
                             } catch (e: Throwable) {
                                 withUIContext { throw e }
@@ -87,7 +86,7 @@ class EpisodeLoader {
             anime: Anime,
             source: AnimeSource,
             downloadManager: AnimeDownloadManager
-        ): Link? {
+        ): Video? {
             try {
                 val path = runBlocking {
                     return@runBlocking suspendCoroutine<Uri> { continuation ->
@@ -98,7 +97,7 @@ class EpisodeLoader {
                         }
                     }
                 }
-                return Link(path.toString(), "download")
+                return Video(path.toString(), "download")
             } catch (error: Exception) {
                 return null
             }
@@ -106,14 +105,14 @@ class EpisodeLoader {
 
         fun local(
             episode: Episode,
-            source: AnimeSource
-        ): Link? {
+            source: LocalAnimeSource
+        ): Video? {
             try {
                 val link = runBlocking {
-                    return@runBlocking suspendCoroutine<Link> { continuation ->
+                    return@runBlocking suspendCoroutine<Video> { continuation ->
                         launchIO {
                             val link =
-                                source.fetchEpisodeLink(episode).awaitSingle().first()
+                                source.fetchVideoList(episode).awaitSingle().first()
                             continuation.resume(link)
                         }
                     }
