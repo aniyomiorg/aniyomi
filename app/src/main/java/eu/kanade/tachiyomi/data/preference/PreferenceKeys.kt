@@ -115,6 +115,8 @@ object PreferenceKeys {
 
     const val lastUsedCategory = "last_used_category"
 
+    const val lastUsedAnimeCategory = "last_used_anime_category"
+
     const val sourceDisplayMode = "pref_display_mode_catalogue"
 
     const val enabledLanguages = "source_languages"

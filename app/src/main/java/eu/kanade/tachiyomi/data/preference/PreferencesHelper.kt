@@ -195,6 +195,8 @@ class PreferencesHelper(val context: Context) {
 
     fun lastUsedCategory() = flowPrefs.getInt(Keys.lastUsedCategory, 0)
 
+    fun lastUsedAnimeCategory() = flowPrefs.getInt(Keys.lastUsedAnimeCategory, 0)
+
     fun lastVersionCode() = flowPrefs.getInt("last_version_code", 0)
 
     fun sourceDisplayMode() = flowPrefs.getEnum(Keys.sourceDisplayMode, DisplayMode.COMPACT_GRID)

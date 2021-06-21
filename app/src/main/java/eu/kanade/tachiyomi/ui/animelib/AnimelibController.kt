@@ -57,7 +57,7 @@ class AnimelibController(
     /**
      * Position of the active category.
      */
-    private var activeCategory: Int = preferences.lastUsedCategory().get()
+    private var activeCategory: Int = preferences.lastUsedAnimeCategory().get()
 
     /**
      * Action mode for selections.
@@ -179,7 +179,7 @@ class AnimelibController(
         binding.libraryPager.pageSelections()
             .drop(1)
             .onEach {
-                preferences.lastUsedCategory().set(it)
+                preferences.lastUsedAnimeCategory().set(it)
                 activeCategory = it
                 updateTitle()
             }
