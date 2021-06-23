@@ -41,11 +41,14 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
+import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.hideBar
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import rx.schedulers.Schedulers
 import timber.log.Timber
 import uy.kohesive.injekt.Injekt
@@ -128,7 +131,7 @@ class WatcherActivity : AppCompatActivity() {
         source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
         userAgentString = WebSettings.getDefaultUserAgent(this)
         Timber.w(userAgentString)
-        videos = EpisodeLoader.getLinks(episode, anime, source)
+        videos = runBlocking { awaitVideoList() }
         if (videos.isEmpty()) {
             baseContext.toast("Cannot play episode")
             super.onBackPressed()
@@ -211,6 +214,10 @@ class WatcherActivity : AppCompatActivity() {
         exoPlayer.release()
     }
 
+    private suspend fun awaitVideoList(): List<Video> {
+        return withIOContext { EpisodeLoader.getLinks(episode, anime, source).awaitSingle() }
+    }
+
     private fun nextEpisode() {
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
@@ -218,7 +225,7 @@ class WatcherActivity : AppCompatActivity() {
         episode = getNextEpisode(episode, anime)
         if (oldEpisode == episode) return
         title.text = anime.title + " - " + episode.name
-        videos = EpisodeLoader.getLinks(episode, anime, source)
+        videos = runBlocking { awaitVideoList() }
         settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
         uri = videos.first().url
         currentQuality = 0
@@ -236,7 +243,7 @@ class WatcherActivity : AppCompatActivity() {
         episode = getPreviousEpisode(episode, anime)
         if (oldEpisode == episode) return
         title.text = anime.title + " - " + episode.name
-        videos = EpisodeLoader.getLinks(episode, anime, source)
+        videos = runBlocking { awaitVideoList() }
         settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
         uri = videos.first().url
         currentQuality = 0

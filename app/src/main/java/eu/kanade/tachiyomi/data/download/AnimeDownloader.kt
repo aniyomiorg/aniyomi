@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.data.download
 
 import android.content.Context
-import android.net.Uri
 import android.util.Log
 import android.webkit.MimeTypeMap
 import com.hippo.unifile.UniFile
@@ -291,7 +290,7 @@ class AnimeDownloader(
 
         val videoObservable = if (download.video == null) {
             // Pull video from network and add them to download object
-            download.source.fetchVideoList(download.episode).flatMap { it -> Observable.just(Video(it.first().url, "default", it.first().url, Uri.parse(it.first().url))) }
+            download.source.fetchVideoList(download.episode).map { it.first() }
                 .doOnNext { video ->
                     if (video == null) {
                         throw Exception(context.getString(R.string.page_list_empty_error))

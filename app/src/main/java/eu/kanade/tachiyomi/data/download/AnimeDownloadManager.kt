@@ -174,7 +174,7 @@ class AnimeDownloadManager(private val context: Context) {
             }
 
             val file = files[0]
-            Video(uri = file.uri).apply { status = Video.READY }
+            Video(file.uri.toString(), file.uri.toString(), "download", file.uri).apply { status = Video.READY }
         }
     }
 

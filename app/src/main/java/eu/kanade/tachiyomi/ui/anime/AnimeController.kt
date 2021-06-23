@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -73,6 +72,7 @@ import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.hasCustomCover
+import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.storage.getUriCompat
@@ -907,12 +907,13 @@ class AnimeController :
             if (useInternal) {
                 startActivity(intent)
             } else {
-                val link = EpisodeLoader.getLink(episode, anime!!, source!!)
-                if (link != null) {
-                    val url = link.url
+                val video = EpisodeLoader.getLink(episode, anime!!, source!!)?.awaitSingle()
+                if (video != null) {
+                    val uri = video.uri!!
+                    Timber.i(uri.toString())
                     currentExtEpisode = episode
                     val extIntent = Intent(Intent.ACTION_VIEW)
-                    extIntent.setDataAndTypeAndNormalize(Uri.parse(url), "video/*")
+                    extIntent.setDataAndTypeAndNormalize(uri, "video/*")
                     extIntent.putExtra("title", episode.name)
                     extIntent.putExtra("position", episode.last_second_seen.toInt())
                     extIntent.putExtra("return_result", true)
