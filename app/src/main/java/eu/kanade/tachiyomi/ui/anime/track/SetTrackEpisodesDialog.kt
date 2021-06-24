@@ -49,7 +49,7 @@ class SetTrackEpisodesDialog<T> : DialogController
                 val np: NumberPicker = view.findViewById(R.id.chapters_picker)
                 np.clearFocus()
 
-                listener.setEpisodesRead(item, np.value)
+                listener.setEpisodesSeen(item, np.value)
             }
             .negativeButton(android.R.string.cancel)
 
@@ -70,7 +70,7 @@ class SetTrackEpisodesDialog<T> : DialogController
     }
 
     interface Listener {
-        fun setEpisodesRead(item: TrackItem, chaptersRead: Int)
+        fun setEpisodesSeen(item: TrackItem, episodesSeen: Int)
     }
 
     private companion object {

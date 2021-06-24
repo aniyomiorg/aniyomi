@@ -14,7 +14,11 @@ import android.os.StrictMode.VmPolicy
 import android.webkit.WebView
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.multidex.MultiDex
 import coil.ImageLoader
 import coil.ImageLoaderFactory

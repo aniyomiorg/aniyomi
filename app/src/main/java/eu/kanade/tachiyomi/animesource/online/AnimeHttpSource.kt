@@ -15,7 +15,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import rx.Observable
-import timber.log.Timber
 import uy.kohesive.injekt.injectLazy
 import java.net.URI
 import java.net.URISyntaxException
@@ -242,11 +241,9 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param chapter the chapter whose page list has to be fetched.
      */
     override fun fetchVideoList(episode: SEpisode): Observable<List<Video>> {
-        Timber.i("hello4")
         return client.newCall(videoListRequest(episode))
             .asObservableSuccess()
             .map { response ->
-                Timber.i("hello5")
                 videoListParse(response)
             }
     }
@@ -258,7 +255,6 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param episode the episode to look for links.
      */
     protected open fun videoListRequest(episode: SEpisode): Request {
-        Timber.i("bruhh2")
         return GET(baseUrl + episode.url, headers)
     }
 

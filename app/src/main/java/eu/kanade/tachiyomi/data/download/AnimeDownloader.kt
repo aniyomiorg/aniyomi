@@ -371,7 +371,6 @@ class AnimeDownloader(
         }
 
         val filename = DiskUtil.buildValidFilename(download.episode.name)
-        Timber.w(filename)
         val tmpFile = tmpDir.findFile("$filename.tmp")
 
         // Delete temp file if it exists.

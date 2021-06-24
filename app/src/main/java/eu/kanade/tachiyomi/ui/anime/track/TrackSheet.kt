@@ -145,8 +145,8 @@ class TrackSheet(
         controller.presenter.setTrackerStatus(item, selection)
     }
 
-    override fun setEpisodesRead(item: TrackItem, episodesRead: Int) {
-        controller.presenter.setTrackerLastEpisodeRead(item, episodesRead)
+    override fun setEpisodesSeen(item: TrackItem, episodesSeen: Int) {
+        controller.presenter.setTrackerLastEpisodeSeen(item, episodesSeen)
     }
 
     override fun setScore(item: TrackItem, score: Int) {

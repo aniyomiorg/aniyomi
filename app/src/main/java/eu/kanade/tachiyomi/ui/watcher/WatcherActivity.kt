@@ -12,15 +12,23 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.vkay94.dtpv.DoubleTapPlayerView
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
-import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.DefaultLoadControl
+import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.PlaybackParameters
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.analytics.AnalyticsCollector
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
-import com.google.android.exoplayer2.upstream.*
+import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.google.android.exoplayer2.upstream.HttpDataSource.HttpDataSourceException
 import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException
 import com.google.android.exoplayer2.util.Clock
@@ -54,7 +62,7 @@ import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.IOException
-import java.util.*
+import java.util.Date
 
 const val STATE_RESUME_WINDOW = "resumeWindow"
 const val STATE_RESUME_POSITION = "resumePosition"
@@ -127,10 +135,9 @@ class WatcherActivity : AppCompatActivity() {
 
         anime = intent.getSerializableExtra("anime") as Anime
         episode = intent.getSerializableExtra("episode") as Episode
-        title.text = anime.title + " - " + episode.name
+        title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
         userAgentString = WebSettings.getDefaultUserAgent(this)
-        Timber.w(userAgentString)
         videos = runBlocking { awaitVideoList() }
         if (videos.isEmpty()) {
             baseContext.toast("Cannot play episode")
@@ -224,7 +231,7 @@ class WatcherActivity : AppCompatActivity() {
         val oldEpisode = episode
         episode = getNextEpisode(episode, anime)
         if (oldEpisode == episode) return
-        title.text = anime.title + " - " + episode.name
+        title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         videos = runBlocking { awaitVideoList() }
         settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
         uri = videos.first().url
@@ -242,7 +249,7 @@ class WatcherActivity : AppCompatActivity() {
         val oldEpisode = episode
         episode = getPreviousEpisode(episode, anime)
         if (oldEpisode == episode) return
-        title.text = anime.title + " - " + episode.name
+        title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         videos = runBlocking { awaitVideoList() }
         settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
         uri = videos.first().url
@@ -281,16 +288,15 @@ class WatcherActivity : AppCompatActivity() {
             dataSourceFactory = DefaultHttpDataSource.Factory()
                 .setUserAgent(userAgentString)
                 .setDefaultRequestProperties(mapOf(Pair("cookie", cookies)))
-            Timber.w(cookies)
             mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
         }
     }
 
     private fun changePlayer(resumeAt: Long) {
-        if (EpisodeLoader.isDownloaded(episode, anime)) {
-            dataSourceFactory = DefaultDataSourceFactory(this)
+        dataSourceFactory = if (EpisodeLoader.isDownloaded(episode, anime)) {
+            DefaultDataSourceFactory(this)
         } else {
-            dataSourceFactory = DefaultHttpDataSource.Factory().apply {
+            DefaultHttpDataSource.Factory().apply {
                 setDefaultRequestProperties(mapOf(Pair("cookie", CookieManager.getInstance().getCookie(uri))))
                 setUserAgent(userAgentString)
             }
@@ -318,7 +324,7 @@ class WatcherActivity : AppCompatActivity() {
         ).build()
     }
 
-    class PlayerEventListener(val playerView: DoubleTapPlayerView, val captchaBtn: TextView, val baseContext: Context) : Player.EventListener {
+    class PlayerEventListener(private val playerView: DoubleTapPlayerView, val captchaBtn: TextView, val baseContext: Context) : Player.EventListener {
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             playerView.keepScreenOn = !(
                 playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED ||
@@ -333,24 +339,23 @@ class WatcherActivity : AppCompatActivity() {
                 val cause: IOException = error.sourceException
                 if (cause is HttpDataSourceException) {
                     // An HTTP error occurred.
-                    val httpError = cause
                     // This is the request for which the error occurred.
-                    val requestDataSpec = httpError.dataSpec
+                    val requestDataSpec = cause.dataSpec
                     for (header in requestDataSpec.httpRequestHeaders) {
                         var message = ""
                         message += header.key + " - " + header.value
-                        Timber.w(message)
                     }
                     // It's possible to find out more about the error both by casting and by
                     // querying the cause.
-                    if (httpError is InvalidResponseCodeException) {
+                    if (cause is InvalidResponseCodeException) {
                         // Cast to InvalidResponseCodeException and retrieve the response code,
                         // message and headers.
-                        val errorMessage = "Error " + httpError.responseCode.toString() + ", try solving a captcha"
+                        val errorMessage =
+                            "Error " + cause.responseCode.toString() + ", try solving a captcha"
                         captchaBtn.visibility = View.VISIBLE
                         baseContext.toast(errorMessage, Toast.LENGTH_SHORT)
                     } else {
-                        httpError.cause
+                        cause.cause
                         // Try calling httpError.getCause() to retrieve the underlying cause,
                         // although note that it may be null.
                     }

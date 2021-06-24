@@ -35,6 +35,6 @@ class DeleteAnimelibAnimesDialog<T>(bundle: Bundle? = null) :
     }
 
     interface Listener {
-        fun deleteAnimes(animes: List<Anime>, deleteFromAnimelib: Boolean, deleteChapters: Boolean)
+        fun deleteAnimes(animes: List<Anime>, deleteFromAnimelib: Boolean, deleteEpisodes: Boolean)
     }
 }

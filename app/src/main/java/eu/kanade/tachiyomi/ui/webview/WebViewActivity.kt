@@ -23,12 +23,16 @@ import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.activity.BaseViewBindingActivity
 import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
-import eu.kanade.tachiyomi.util.system.*
+import eu.kanade.tachiyomi.util.system.WebViewClientCompat
+import eu.kanade.tachiyomi.util.system.WebViewUtil
+import eu.kanade.tachiyomi.util.system.getResourceColor
+import eu.kanade.tachiyomi.util.system.openInBrowser
+import eu.kanade.tachiyomi.util.system.setDefaultSettings
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.appcompat.navigationClicks
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
-import timber.log.Timber
 import uy.kohesive.injekt.injectLazy
 
 class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
@@ -102,7 +106,6 @@ class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
                 headers = source.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }.toMutableMap()
                 binding.webview.settings.userAgentString = source.headers["User-Agent"]
             }
-            Timber.w(binding.webview.settings.userAgentString)
             headers["X-Requested-With"] = WebViewUtil.REQUESTED_WITH
 
             supportActionBar?.subtitle = url

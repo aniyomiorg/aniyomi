@@ -32,8 +32,6 @@ import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
 import timber.log.Timber
-import uy.kohesive.injekt.api.get
-import java.util.*
 
 /**
  * Fragment that shows recent episodes.
@@ -202,7 +200,7 @@ class AnimeUpdatesController :
 
     /**
      * Open episode in reader
-     * @param episode selected episode
+     * @param item selected episode
      */
     private fun openEpisode(item: AnimeUpdatesItem) {
         val activity = activity ?: return
@@ -238,7 +236,7 @@ class AnimeUpdatesController :
 
     /**
      * Update download status of episode
-     * @param download [Download] object containing download progress.
+     * @param download [AnimeDownload] object containing download progress.
      */
     fun onEpisodeDownloadUpdate(download: AnimeDownload) {
         adapter?.currentItems

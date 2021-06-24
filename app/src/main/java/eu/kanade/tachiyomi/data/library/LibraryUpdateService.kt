@@ -166,7 +166,7 @@ class LibraryUpdateService(
      */
     override fun onDestroy() {
         updateJob?.cancel()
-        ioScope?.cancel()
+        ioScope.cancel()
         if (wakeLock.isHeld) {
             wakeLock.release()
         }

@@ -395,8 +395,10 @@
     <string name="pref_progress_90">90%</string>
     <string name="pref_progress_95">95%</string>
     <string name="pref_progress_100">100%</string>
+    <string name="playertitle">%1$s - %2$s</string>
 
       <!-- Downloads section -->
+    <string name="episode_download_progress">%1$d\%</string>
     <string name="pref_download_directory">Download location</string>
     <string name="pref_download_only_over_wifi">Only download over Wi-Fi</string>
     <string name="pref_category_delete_chapters">Delete chapters</string>

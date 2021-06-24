@@ -24,9 +24,7 @@ interface SAnime : Serializable {
     var initialized: Boolean
 
     fun copyFrom(other: SAnime) {
-        if (other.title != null) {
-            title = other.title
-        }
+        title = other.title
 
         if (other.author != null) {
             author = other.author

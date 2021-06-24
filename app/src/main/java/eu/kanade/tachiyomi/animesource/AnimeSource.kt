@@ -1,7 +1,14 @@
 package eu.kanade.tachiyomi.animesource
 
 import android.graphics.drawable.Drawable
-import eu.kanade.tachiyomi.animesource.model.*
+import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.animesource.model.SEpisode
+import eu.kanade.tachiyomi.animesource.model.Video
+import eu.kanade.tachiyomi.animesource.model.toAnimeInfo
+import eu.kanade.tachiyomi.animesource.model.toEpisodeInfo
+import eu.kanade.tachiyomi.animesource.model.toSAnime
+import eu.kanade.tachiyomi.animesource.model.toSEpisode
+import eu.kanade.tachiyomi.animesource.model.toVideoUrl
 import eu.kanade.tachiyomi.extension.AnimeExtensionManager
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import rx.Observable

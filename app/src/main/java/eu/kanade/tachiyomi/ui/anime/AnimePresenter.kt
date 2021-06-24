@@ -856,7 +856,7 @@ class AnimePresenter(
         updateRemote(track, item.service)
     }
 
-    fun setTrackerLastEpisodeRead(item: TrackItem, episodeNumber: Int) {
+    fun setTrackerLastEpisodeSeen(item: TrackItem, episodeNumber: Int) {
         val track = item.track!!
         track.last_episode_seen = episodeNumber
         if (track.total_episodes != 0 && track.last_episode_seen == track.total_episodes) {

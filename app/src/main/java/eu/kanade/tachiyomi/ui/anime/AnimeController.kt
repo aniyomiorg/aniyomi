@@ -47,7 +47,12 @@ import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.UnattendedTrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.databinding.MangaControllerBinding
-import eu.kanade.tachiyomi.ui.anime.episode.*
+import eu.kanade.tachiyomi.ui.anime.episode.AnimeEpisodesHeaderAdapter
+import eu.kanade.tachiyomi.ui.anime.episode.DeleteEpisodesDialog
+import eu.kanade.tachiyomi.ui.anime.episode.DownloadCustomEpisodesDialog
+import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
+import eu.kanade.tachiyomi.ui.anime.episode.EpisodesAdapter
+import eu.kanade.tachiyomi.ui.anime.episode.EpisodesSettingsSheet
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodesAdapter
 import eu.kanade.tachiyomi.ui.anime.info.AnimeInfoHeaderAdapter
 import eu.kanade.tachiyomi.ui.anime.track.TrackItem
@@ -92,7 +97,8 @@ import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import java.util.*
+import java.util.ArrayDeque
+import java.util.Date
 import kotlin.math.min
 
 class AnimeController :
@@ -331,13 +337,6 @@ class AnimeController :
         fab.setOnClickListener {
             val item = presenter.getNextUnseenEpisode()
             if (item != null) {
-                // Create animation listener
-                val revealAnimationListener: Animator.AnimatorListener = object : AnimatorListenerAdapter() {
-                    override fun onAnimationStart(animation: Animator?) {
-                        openEpisode(item.episode)
-                    }
-                }
-
                 // Get coordinates and start animation
                 actionFab?.getCoordinates()?.let { coordinates ->
                     binding.revealView.showRevealEffect(
@@ -888,10 +887,6 @@ class AnimeController :
         }
     }
 
-    fun onFetchEpisodeLinksError(error: Throwable) {
-        activity?.toast("no links found")
-    }
-
     fun onEpisodeDownloadUpdate(download: AnimeDownload) {
         episodesAdapter?.currentItems?.find { it.id == download.episode.id }?.let {
             episodesAdapter?.updateItem(it, it.status)
@@ -910,7 +905,6 @@ class AnimeController :
                 val video = EpisodeLoader.getLink(episode, anime!!, source!!)?.awaitSingle()
                 if (video != null) {
                     val uri = video.uri!!
-                    Timber.i(uri.toString())
                     currentExtEpisode = episode
                     val extIntent = Intent(Intent.ACTION_VIEW)
                     extIntent.setDataAndTypeAndNormalize(uri, "video/*")

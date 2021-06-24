@@ -60,7 +60,6 @@ class DownloadHolder(private val view: View, val adapter: DownloadAdapter) :
      * Updates the progress bar of the download.
      */
     fun notifyProgress() {
-        val pages = download.video ?: return
         if (binding.downloadProgress.max == 1) {
             binding.downloadProgress.max = 100
         }
@@ -71,7 +70,7 @@ class DownloadHolder(private val view: View, val adapter: DownloadAdapter) :
      * Updates the text field of the number of downloaded pages.
      */
     fun notifyDownloadedPages() {
-        binding.downloadProgressText.text = "${download.progress}%"
+        binding.downloadProgressText.text = view.context.getString(R.string.episode_download_progress, download.progress)
     }
 
     override fun onItemReleased(position: Int) {
