@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_animelib"
-        android:icon="@drawable/ic_collections_baseline_state"
+        android:icon="@drawable/ic_animelibrary_selector_24dp"
         android:title="@string/label_animelib" />
     <item
         android:id="@+id/nav_library"
