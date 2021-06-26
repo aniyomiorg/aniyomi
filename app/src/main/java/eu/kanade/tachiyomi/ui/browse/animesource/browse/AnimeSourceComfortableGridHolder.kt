@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.browse
 
 import android.view.View
+import androidx.core.view.isVisible
 import coil.clear
 import coil.imageLoader
 import coil.request.ImageRequest
@@ -36,6 +37,12 @@ class AnimeSourceComfortableGridHolder(private val view: View, private val adapt
 
         // Set alpha of thumbnail.
         binding.thumbnail.alpha = if (anime.favorite) 0.3f else 1.0f
+
+        // For rounded corners
+        binding.badges.clipToOutline = true
+
+        // Set favorite badge
+        binding.favoriteText.isVisible = anime.favorite
 
         setImage(anime)
     }

@@ -14,9 +14,9 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
-import eu.kanade.tachiyomi.data.preference.PreferenceValues.DisplayMode
 import eu.kanade.tachiyomi.databinding.SourceComfortableGridItemBinding
 import eu.kanade.tachiyomi.databinding.SourceCompactGridItemBinding
+import eu.kanade.tachiyomi.ui.library.setting.DisplayModeSetting
 import eu.kanade.tachiyomi.widget.AutofitRecyclerView
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -24,7 +24,7 @@ import uy.kohesive.injekt.api.get
 class AnimelibItem(
     val anime: AnimelibAnime,
     private val shouldSetFromCategory: Preference<Boolean>,
-    private val defaultLibraryDisplayMode: Preference<DisplayMode>
+    private val defaultLibraryDisplayMode: Preference<DisplayModeSetting>
 ) :
     AbstractFlexibleItem<AnimelibHolder<*>>(), IFilterable<String> {
 
@@ -35,13 +35,9 @@ class AnimelibItem(
     var unreadCount = -1
     var isLocal = false
 
-    private fun getDisplayMode(): DisplayMode {
+    private fun getDisplayMode(): DisplayModeSetting {
         return if (shouldSetFromCategory.get() && anime.category != 0) {
-            if (displayMode != -1) {
-                DisplayMode.values()[displayMode]
-            } else {
-                DisplayMode.COMPACT_GRID
-            }
+            DisplayModeSetting.fromFlag(displayMode)
         } else {
             defaultLibraryDisplayMode.get()
         }
@@ -49,15 +45,15 @@ class AnimelibItem(
 
     override fun getLayoutRes(): Int {
         return when (getDisplayMode()) {
-            DisplayMode.COMPACT_GRID -> R.layout.source_compact_grid_item
-            DisplayMode.COMFORTABLE_GRID -> R.layout.source_comfortable_grid_item
-            DisplayMode.LIST -> R.layout.source_list_item
+            DisplayModeSetting.COMPACT_GRID -> R.layout.source_compact_grid_item
+            DisplayModeSetting.COMFORTABLE_GRID -> R.layout.source_comfortable_grid_item
+            DisplayModeSetting.LIST -> R.layout.source_list_item
         }
     }
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>): AnimelibHolder<*> {
         return when (getDisplayMode()) {
-            DisplayMode.COMPACT_GRID -> {
+            DisplayModeSetting.COMPACT_GRID -> {
                 val binding = SourceCompactGridItemBinding.bind(view)
                 val parent = adapter.recyclerView as AutofitRecyclerView
                 val coverHeight = parent.itemWidth / 3 * 4
@@ -71,7 +67,7 @@ class AnimelibItem(
                 }
                 AnimelibCompactGridHolder(view, adapter)
             }
-            DisplayMode.COMFORTABLE_GRID -> {
+            DisplayModeSetting.COMFORTABLE_GRID -> {
                 val binding = SourceComfortableGridItemBinding.bind(view)
                 val parent = adapter.recyclerView as AutofitRecyclerView
                 val coverHeight = parent.itemWidth / 3 * 4
@@ -83,7 +79,7 @@ class AnimelibItem(
                 }
                 AnimelibComfortableGridHolder(view, adapter)
             }
-            DisplayMode.LIST -> {
+            DisplayModeSetting.LIST -> {
                 AnimelibListHolder(view, adapter)
             }
         }

@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Aniyomi help discord
+  - name: ⚠️ Anime extension/source issue
+    url: https://github.com/jmir1/aniyomi-extensions/issues/new/choose
+    about: Issues and requests for extensions and sources should be opened in the aniyomi-extensions repository instead.
+  - name: 📦 Aniyomi extensions
+    url: https://github.com/jmir1/aniyomi-extensions
+    about: Anime extensions and sources.
+- name: Aniyomi help discord
     url: https://discord.gg/F32UjdJZrR
     about: Common questions are answered here.
-  - name: Aniyomi extensions GitHub repository
-    url: https://github.com/jmir1/aniyomi-extensions
-    about: Issues about an anime extension/source/catalogue should be opened here instead.

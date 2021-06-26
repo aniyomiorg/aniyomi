@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.data.preference
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Environment
 import androidx.core.content.edit
 import androidx.core.net.toUri
@@ -10,9 +11,12 @@ import com.tfcporciuncula.flow.Preference
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Manga
-import eu.kanade.tachiyomi.data.preference.PreferenceValues.DisplayMode
+import eu.kanade.tachiyomi.data.preference.PreferenceValues.ThemeMode.*
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
+import eu.kanade.tachiyomi.ui.library.setting.DisplayModeSetting
+import eu.kanade.tachiyomi.ui.library.setting.SortDirectionSetting
+import eu.kanade.tachiyomi.ui.library.setting.SortModeSetting
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView
@@ -85,7 +89,7 @@ class PreferencesHelper(val context: Context) {
 
     fun showLibraryUpdateErrors() = prefs.getBoolean(Keys.showLibraryUpdateErrors, true)
 
-    fun themeMode() = flowPrefs.getEnum(Keys.themeMode, Values.ThemeMode.system)
+    fun themeMode() = flowPrefs.getEnum(Keys.themeMode, system)
 
     fun themeLight() = flowPrefs.getEnum(Keys.themeLight, Values.LightThemeVariant.default)
 
@@ -199,7 +203,8 @@ class PreferencesHelper(val context: Context) {
 
     fun lastVersionCode() = flowPrefs.getInt("last_version_code", 0)
 
-    fun sourceDisplayMode() = flowPrefs.getEnum(Keys.sourceDisplayMode, DisplayMode.COMPACT_GRID)
+    fun sourceDisplayMode() = flowPrefs.getEnum(Keys.sourceDisplayMode, DisplayModeSetting.COMPACT_GRID)
+    fun animesourceDisplayMode() = flowPrefs.getEnum(Keys.animesourceDisplayMode, DisplayModeSetting.COMPACT_GRID)
 
     fun enabledLanguages() = flowPrefs.getStringSet(Keys.enabledLanguages, setOf("en", Locale.getDefault().language))
 
@@ -255,9 +260,9 @@ class PreferencesHelper(val context: Context) {
 
     fun libraryUpdatePrioritization() = flowPrefs.getInt(Keys.libraryUpdatePrioritization, 0)
 
-    fun libraryDisplayMode() = flowPrefs.getEnum(Keys.libraryDisplayMode, DisplayMode.COMPACT_GRID)
+    fun libraryDisplayMode() = flowPrefs.getEnum(Keys.libraryDisplayMode, DisplayModeSetting.COMPACT_GRID)
 
-    fun animelibDisplayMode() = flowPrefs.getEnum(Keys.animelibDisplayMode, DisplayMode.COMPACT_GRID)
+    fun animelibDisplayMode() = flowPrefs.getEnum(Keys.animelibDisplayMode, DisplayModeSetting.COMPACT_GRID)
 
     fun downloadBadge() = flowPrefs.getBoolean(Keys.downloadBadge, false)
 
@@ -283,13 +288,11 @@ class PreferencesHelper(val context: Context) {
 
     fun filterTracking(name: Int) = flowPrefs.getInt("${Keys.filterTracked}_$name", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
 
-    fun librarySortingMode() = flowPrefs.getInt(Keys.librarySortingMode, 0)
+    fun librarySortingMode() = flowPrefs.getEnum(Keys.librarySortingMode, SortModeSetting.ALPHABETICAL)
+    fun librarySortingAscending() = flowPrefs.getEnum(Keys.librarySortingDirection, SortDirectionSetting.ASCENDING)
 
-    fun librarySortingAscending() = flowPrefs.getBoolean("library_sorting_ascending", true)
-
-    fun animelibSortingMode() = flowPrefs.getInt(Keys.animelibSortingMode, 0)
-
-    fun animelibSortingAscending() = flowPrefs.getBoolean("animelib_sorting_ascending", true)
+    fun animelibSortingMode() = flowPrefs.getEnum(Keys.animelibSortingMode, SortModeSetting.ALPHABETICAL)
+    fun animelibSortingAscending() = flowPrefs.getEnum(Keys.animelibSortingDirection, SortDirectionSetting.ASCENDING)
 
     fun automaticExtUpdates() = flowPrefs.getBoolean(Keys.automaticExtUpdates, true)
 
@@ -382,7 +385,21 @@ class PreferencesHelper(val context: Context) {
             putInt(Keys.defaultEpisodeFilterByBookmarked, anime.bookmarkedFilter)
             putInt(Keys.defaultEpisodeSortBySourceOrNumber, anime.sorting)
             putInt(Keys.defaultEpisodeDisplayByNameOrNumber, anime.displayMode)
-            putInt(Keys.defaultEpisodeSortByAscendingOrDescending, if (anime.sortDescending()) Anime.EPISODE_SORT_DESC else Anime.EPISODE_SORT_ASC)
+            putInt(
+                Keys.defaultEpisodeSortByAscendingOrDescending,
+                if (anime.sortDescending()) Anime.EPISODE_SORT_DESC else Anime.EPISODE_SORT_ASC
+            )
+        }
+    }
+
+    fun isDarkMode(): Boolean {
+        return when (themeMode().get()) {
+            light -> false
+            dark -> true
+            system -> {
+                context.applicationContext.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
+                    Configuration.UI_MODE_NIGHT_YES
+            }
         }
     }
 }

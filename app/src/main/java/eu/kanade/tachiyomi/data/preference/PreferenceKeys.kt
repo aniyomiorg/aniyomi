@@ -118,6 +118,7 @@ object PreferenceKeys {
     const val lastUsedAnimeCategory = "last_used_anime_category"
 
     const val sourceDisplayMode = "pref_display_mode_catalogue"
+    const val animesourceDisplayMode = "pref_display_mode_anime_catalogue"
 
     const val enabledLanguages = "source_languages"
 
@@ -163,8 +164,10 @@ object PreferenceKeys {
     const val filterTracked = "pref_filter_library_tracked"
 
     const val librarySortingMode = "library_sorting_mode"
+    const val librarySortingDirection = "library_sorting_ascending"
 
     const val animelibSortingMode = "animelib_sorting_mode"
+    const val animelibSortingDirection = "animelib_sorting_ascending"
 
     const val automaticExtUpdates = "automatic_ext_updates"
 

@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.globalsearch
 
 import android.view.View
+import androidx.core.view.isVisible
 import coil.clear
 import coil.imageLoader
 import coil.request.ImageRequest
@@ -36,9 +37,17 @@ class GlobalAnimeSearchCardHolder(view: View, adapter: GlobalAnimeSearchCardAdap
     fun bind(anime: Anime) {
         binding.card.clipToOutline = true
 
+        // Set anime title
         binding.title.text = anime.title
+
         // Set alpha of anime_thumbnail.
         binding.cover.alpha = if (anime.favorite) 0.3f else 1.0f
+
+        // For rounded corners
+        binding.badges.clipToOutline = true
+
+        // Set favorite badge
+        binding.favoriteText.isVisible = anime.favorite
 
         setImage(anime)
     }

@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.animelib
 
+@Deprecated("Deprecated in favor for SortModeSetting")
 object AnimelibSort {
 
     const val ALPHA = 0

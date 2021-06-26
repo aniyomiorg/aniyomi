@@ -15,6 +15,8 @@ import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
+import eu.kanade.tachiyomi.ui.library.setting.SortDirectionSetting
+import eu.kanade.tachiyomi.ui.library.setting.SortModeSetting
 import eu.kanade.tachiyomi.util.isLocal
 import eu.kanade.tachiyomi.util.lang.combineLatest
 import eu.kanade.tachiyomi.util.lang.isNullOrUnsubscribed
@@ -98,7 +100,7 @@ class AnimelibPresenter(
                     lib.copy(animeMap = applyFilters(lib.animeMap, tracks))
                 }
                 .combineLatest(sortTriggerRelay.observeOn(Schedulers.io())) { lib, _ ->
-                    lib.copy(animeMap = applySort(lib.animeMap))
+                    lib.copy(animeMap = applySort(lib.categories, lib.animeMap))
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeLatestCache({ view, (categories, animeMap) ->
@@ -228,9 +230,7 @@ class AnimelibPresenter(
      *
      * @param map the map to sort.
      */
-    private fun applySort(map: AnimelibMap): AnimelibMap {
-        val sortingMode = preferences.animelibSortingMode().get()
-
+    private fun applySort(categories: List<Category>, map: AnimelibMap): AnimelibMap {
         val lastReadAnime by lazy {
             var counter = 0
             db.getLastSeenAnime().executeAsBlocking().associate { it.id!! to counter++ }
@@ -248,55 +248,66 @@ class AnimelibPresenter(
             db.getEpisodeFetchDateAnime().executeAsBlocking().associate { it.id!! to counter++ }
         }
 
-        val sortAscending = preferences.animelibSortingAscending().get()
+        val sortingModes = categories.associate { category ->
+            (category.id ?: 0) to SortModeSetting.get(preferences, category)
+        }
+
+        val sortAscending = categories.associate { category ->
+            (category.id ?: 0) to SortDirectionSetting.get(preferences, category)
+        }
         val sortFn: (AnimelibItem, AnimelibItem) -> Int = { i1, i2 ->
+            val sortingMode = sortingModes[i1.anime.category]!!
+            val sortAscending = sortAscending[i1.anime.category]!! == SortDirectionSetting.ASCENDING
             when (sortingMode) {
-                AnimelibSort.ALPHA -> i1.anime.title.compareTo(i2.anime.title, true)
-                AnimelibSort.LAST_READ -> {
+                SortModeSetting.ALPHABETICAL -> i1.anime.title.compareTo(i2.anime.title, true)
+                SortModeSetting.LAST_READ -> {
                     // Get index of anime, set equal to list if size unknown.
                     val anime1LastRead = lastReadAnime[i1.anime.id!!] ?: lastReadAnime.size
                     val anime2LastRead = lastReadAnime[i2.anime.id!!] ?: lastReadAnime.size
                     anime1LastRead.compareTo(anime2LastRead)
                 }
-                AnimelibSort.LAST_CHECKED -> i2.anime.last_update.compareTo(i1.anime.last_update)
-                AnimelibSort.UNREAD -> when {
+                SortModeSetting.LAST_CHECKED -> i2.anime.last_update.compareTo(i1.anime.last_update)
+                SortModeSetting.UNREAD -> when {
                     // Ensure unread content comes first
                     i1.anime.unread == i2.anime.unread -> 0
                     i1.anime.unread == 0 -> if (sortAscending) 1 else -1
                     i2.anime.unread == 0 -> if (sortAscending) -1 else 1
                     else -> i1.anime.unread.compareTo(i2.anime.unread)
                 }
-                AnimelibSort.TOTAL -> {
+                SortModeSetting.TOTAL_CHAPTERS -> {
                     val anime1TotalEpisode = totalChapterAnime[i1.anime.id!!] ?: 0
                     val mange2TotalEpisode = totalChapterAnime[i2.anime.id!!] ?: 0
                     anime1TotalEpisode.compareTo(mange2TotalEpisode)
                 }
-                AnimelibSort.LATEST_CHAPTER -> {
+                SortModeSetting.LATEST_CHAPTER -> {
                     val anime1latestEpisode = latestChapterAnime[i1.anime.id!!]
                         ?: latestChapterAnime.size
                     val anime2latestEpisode = latestChapterAnime[i2.anime.id!!]
                         ?: latestChapterAnime.size
                     anime1latestEpisode.compareTo(anime2latestEpisode)
                 }
-                AnimelibSort.CHAPTER_FETCH_DATE -> {
+                SortModeSetting.DATE_FETCHED -> {
                     val anime1chapterFetchDate = chapterFetchDateAnime[i1.anime.id!!]
                         ?: chapterFetchDateAnime.size
                     val anime2chapterFetchDate = chapterFetchDateAnime[i2.anime.id!!]
                         ?: chapterFetchDateAnime.size
                     anime1chapterFetchDate.compareTo(anime2chapterFetchDate)
                 }
-                AnimelibSort.DATE_ADDED -> i2.anime.date_added.compareTo(i1.anime.date_added)
-                else -> throw Exception("Unknown sorting mode")
+                SortModeSetting.DATE_ADDED -> i2.anime.date_added.compareTo(i1.anime.date_added)
             }
         }
 
-        val comparator = if (sortAscending) {
-            Comparator(sortFn)
-        } else {
-            Collections.reverseOrder(sortFn)
-        }
+        return map.mapValues { entry ->
+            val sortAscending = sortAscending[entry.key]!! == SortDirectionSetting.ASCENDING
 
-        return map.mapValues { entry -> entry.value.sortedWith(comparator) }
+            val comparator = if (sortAscending) {
+                Comparator(sortFn)
+            } else {
+                Collections.reverseOrder(sortFn)
+            }
+
+            entry.value.sortedWith(comparator)
+        }
     }
 
     /**
