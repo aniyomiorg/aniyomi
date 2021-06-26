@@ -39,6 +39,7 @@ import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeHistory
@@ -48,7 +49,7 @@ import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
-import eu.kanade.tachiyomi.ui.webview.WebViewActivity
+import eu.kanade.tachiyomi.ui.webview.WebViewActivityAnime
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withIOContext
@@ -148,10 +149,7 @@ class WatcherActivity : AppCompatActivity() {
         dataSourceFactory = if (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource) {
             DefaultDataSourceFactory(this)
         } else {
-            DefaultHttpDataSource.Factory().apply {
-                setDefaultRequestProperties(mapOf(Pair("cookie", CookieManager.getInstance().getCookie(uri))))
-                setUserAgent(userAgentString)
-            }
+            newDataSourceFactory()
         }
         mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
         mediaItem = MediaItem.Builder()
@@ -165,6 +163,15 @@ class WatcherActivity : AppCompatActivity() {
             playbackPosition = intent.extras!!.getLong("second")
             isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
             isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
+        }
+    }
+
+    private fun newDataSourceFactory(): DefaultHttpDataSource.Factory {
+        return DefaultHttpDataSource.Factory().apply {
+            val headers = (source as AnimeHttpSource).headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }.toMutableMap()
+            userAgentString = (source as AnimeHttpSource).headers["User-Agent"] ?: ""
+            setDefaultRequestProperties(headers)
+            setUserAgent(if (userAgentString.isNotEmpty()) userAgentString else headers["User-Agent"])
         }
     }
 
@@ -275,7 +282,7 @@ class WatcherActivity : AppCompatActivity() {
 
     private fun captcha() {
         exoPlayer.release()
-        val intent = WebViewActivity.newIntent(this, uri, source.id, anime.title + episode.name, true)
+        val intent = WebViewActivityAnime.newIntent(this, uri, source.id, anime.title + episode.name, true)
         startActivityForResult(intent, REQUEST_COOKIES)
         captchaBtn.visibility = View.GONE
     }
