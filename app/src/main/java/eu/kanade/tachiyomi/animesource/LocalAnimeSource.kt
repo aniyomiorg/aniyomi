@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.animesource
 
 import android.content.Context
+import android.net.Uri
 import com.github.junrar.Archive
 import com.google.gson.JsonParser
 import eu.kanade.tachiyomi.R
@@ -199,8 +200,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
     }
 
     override fun fetchVideoList(episode: SEpisode): Observable<List<Video>> {
-        val video = mutableListOf(Video(episode.url, "local"))
-
+        val video = mutableListOf(Video(episode.url, "local", episode.url, Uri.parse(episode.url)))
         return Observable.just(video)
     }
 
