@@ -262,8 +262,6 @@ class PreferencesHelper(val context: Context) {
 
     fun libraryDisplayMode() = flowPrefs.getEnum(Keys.libraryDisplayMode, DisplayModeSetting.COMPACT_GRID)
 
-    fun animelibDisplayMode() = flowPrefs.getEnum(Keys.animelibDisplayMode, DisplayModeSetting.COMPACT_GRID)
-
     fun downloadBadge() = flowPrefs.getBoolean(Keys.downloadBadge, false)
 
     fun localBadge() = flowPrefs.getBoolean(Keys.localBadge, true)
@@ -290,9 +288,6 @@ class PreferencesHelper(val context: Context) {
 
     fun librarySortingMode() = flowPrefs.getEnum(Keys.librarySortingMode, SortModeSetting.ALPHABETICAL)
     fun librarySortingAscending() = flowPrefs.getEnum(Keys.librarySortingDirection, SortDirectionSetting.ASCENDING)
-
-    fun animelibSortingMode() = flowPrefs.getEnum(Keys.animelibSortingMode, SortModeSetting.ALPHABETICAL)
-    fun animelibSortingAscending() = flowPrefs.getEnum(Keys.animelibSortingDirection, SortDirectionSetting.ASCENDING)
 
     fun automaticExtUpdates() = flowPrefs.getBoolean(Keys.automaticExtUpdates, true)
 

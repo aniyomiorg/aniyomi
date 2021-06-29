@@ -13,7 +13,6 @@ import eu.kanade.tachiyomi.data.updater.UpdaterJob
 import eu.kanade.tachiyomi.extension.AnimeExtensionUpdateJob
 import eu.kanade.tachiyomi.extension.ExtensionUpdateJob
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
-import eu.kanade.tachiyomi.ui.animelib.AnimelibSort
 import eu.kanade.tachiyomi.ui.library.LibrarySort
 import eu.kanade.tachiyomi.ui.library.setting.SortDirectionSetting
 import eu.kanade.tachiyomi.ui.library.setting.SortModeSetting
@@ -242,39 +241,14 @@ object Migrations {
                     else -> SortDirectionSetting.DESCENDING
                 }
 
-                val oldSortingModeAnime = prefs.getInt(PreferenceKeys.animelibSortingMode, 0)
-                val oldSortingDirectionAnime = prefs.getBoolean(PreferenceKeys.animelibSortingDirection, true)
-
-                @Suppress("DEPRECATION")
-                val newSortingModeAnime = when (oldSortingModeAnime) {
-                    AnimelibSort.ALPHA -> SortModeSetting.ALPHABETICAL
-                    AnimelibSort.LAST_READ -> SortModeSetting.LAST_READ
-                    AnimelibSort.LAST_CHECKED -> SortModeSetting.LAST_CHECKED
-                    AnimelibSort.UNREAD -> SortModeSetting.UNREAD
-                    AnimelibSort.TOTAL -> SortModeSetting.TOTAL_CHAPTERS
-                    AnimelibSort.LATEST_CHAPTER -> SortModeSetting.LATEST_CHAPTER
-                    AnimelibSort.CHAPTER_FETCH_DATE -> SortModeSetting.DATE_FETCHED
-                    AnimelibSort.DATE_ADDED -> SortModeSetting.DATE_ADDED
-                    else -> SortModeSetting.ALPHABETICAL
-                }
-
-                val newSortingDirectionAnime = when (oldSortingDirectionAnime) {
-                    true -> SortDirectionSetting.ASCENDING
-                    else -> SortDirectionSetting.DESCENDING
-                }
-
                 prefs.edit(commit = true) {
                     remove(PreferenceKeys.librarySortingMode)
                     remove(PreferenceKeys.librarySortingDirection)
-                    remove(PreferenceKeys.animelibSortingMode)
-                    remove(PreferenceKeys.animelibSortingDirection)
                 }
 
                 prefs.edit {
                     putString(PreferenceKeys.librarySortingMode, newSortingMode.name)
                     putString(PreferenceKeys.librarySortingDirection, newSortingDirection.name)
-                    putString(PreferenceKeys.animelibSortingMode, newSortingModeAnime.name)
-                    putString(PreferenceKeys.animelibSortingDirection, newSortingDirectionAnime.name)
                 }
             }
             return true

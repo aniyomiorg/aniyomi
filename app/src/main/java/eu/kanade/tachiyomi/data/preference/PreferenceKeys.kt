@@ -166,9 +166,6 @@ object PreferenceKeys {
     const val librarySortingMode = "library_sorting_mode"
     const val librarySortingDirection = "library_sorting_ascending"
 
-    const val animelibSortingMode = "animelib_sorting_mode"
-    const val animelibSortingDirection = "animelib_sorting_ascending"
-
     const val automaticExtUpdates = "automatic_ext_updates"
 
     const val showNsfwSource = "show_nsfw_source"
@@ -201,8 +198,6 @@ object PreferenceKeys {
     const val downloadNewCategoriesExclude = "download_new_categories_exclude"
 
     const val libraryDisplayMode = "pref_display_mode_library"
-
-    const val animelibDisplayMode = "pref_display_mode_animelib"
 
     const val lang = "app_language"
 

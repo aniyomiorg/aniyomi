@@ -250,7 +250,7 @@ class AnimelibSettingsSheet(
 
                     db.insertCategory(currentCategory!!).executeAsBlocking()
                 } else {
-                    preferences.animelibSortingAscending().set(flag)
+                    preferences.librarySortingAscending().set(flag)
                 }
             }
 
@@ -272,7 +272,7 @@ class AnimelibSettingsSheet(
 
                     db.insertCategory(currentCategory!!).executeAsBlocking()
                 } else {
-                    preferences.animelibSortingMode().set(flag)
+                    preferences.librarySortingMode().set(flag)
                 }
             }
         }
@@ -307,7 +307,7 @@ class AnimelibSettingsSheet(
             return if (preferences.categorisedDisplaySettings().get() && currentCategory != null && currentCategory?.id != 0) {
                 DisplayModeSetting.fromFlag(currentCategory?.displayMode)
             } else {
-                preferences.animelibDisplayMode().get()
+                preferences.libraryDisplayMode().get()
             }
         }
 
@@ -358,7 +358,7 @@ class AnimelibSettingsSheet(
 
                     db.insertCategory(currentCategory!!).executeAsBlocking()
                 } else {
-                    preferences.animelibDisplayMode().set(flag)
+                    preferences.libraryDisplayMode().set(flag)
                 }
             }
         }
