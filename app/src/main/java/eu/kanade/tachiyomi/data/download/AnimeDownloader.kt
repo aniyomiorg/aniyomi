@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.data.download
 
 import android.content.Context
-import android.util.Log
 import android.webkit.MimeTypeMap
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
@@ -264,7 +263,6 @@ class AnimeDownloader(
 
             // Start downloader if needed
             if (autoStart && wasEmpty) {
-                Log.w("start", "started")
                 AnimeDownloadService.start(this@AnimeDownloader.context)
             }
         }

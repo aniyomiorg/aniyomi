@@ -141,7 +141,7 @@ class WatcherActivity : AppCompatActivity() {
             super.onBackPressed()
         }
         if (videos.lastIndex > 0) settingsBtn.visibility = View.VISIBLE
-        uri = videos.first().url
+        uri = videos.first().videoUrl!!
         dataSourceFactory = if (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource) {
             DefaultDataSourceFactory(this)
         } else {
@@ -237,7 +237,7 @@ class WatcherActivity : AppCompatActivity() {
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         videos = runBlocking { awaitVideoList() }
         settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
-        uri = videos.first().url
+        uri = videos.first().videoUrl!!
         currentQuality = 0
         mediaItem = MediaItem.Builder()
             .setUri(uri)
@@ -255,7 +255,7 @@ class WatcherActivity : AppCompatActivity() {
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         videos = runBlocking { awaitVideoList() }
         settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
-        uri = videos.first().url
+        uri = videos.first().videoUrl!!
         currentQuality = 0
         mediaItem = MediaItem.Builder()
             .setUri(uri)
@@ -267,7 +267,7 @@ class WatcherActivity : AppCompatActivity() {
     private fun settings() {
         val nextQuality = if (currentQuality == videos.lastIndex) 0 else currentQuality + 1
         baseContext.toast(videos[nextQuality].quality, Toast.LENGTH_SHORT)
-        uri = videos[nextQuality].url
+        uri = videos[nextQuality].videoUrl!!
         currentQuality = nextQuality
         mediaItem = MediaItem.Builder()
             .setUri(uri)

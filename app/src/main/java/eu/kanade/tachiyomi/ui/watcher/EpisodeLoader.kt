@@ -4,9 +4,12 @@ import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
+import eu.kanade.tachiyomi.util.lang.awaitSingle
+import kotlinx.coroutines.runBlocking
 import rx.Observable
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -27,6 +30,12 @@ class EpisodeLoader {
                     return local(episode, source) ?: Observable.just(emptyList())
                 }
                 else -> error("source not supported")
+            }.flatMap {
+                if (source is AnimeHttpSource) {
+                    Observable.just(it)
+                } else {
+                    Observable.just(it)
+                }
             }
         }
 
@@ -46,9 +55,15 @@ class EpisodeLoader {
             }
         }
 
-        fun notDownloaded(episode: Episode, source: AnimeSource): Observable<List<Video>>? {
+        fun notDownloaded(episode: Episode, source: AnimeHttpSource): Observable<List<Video>>? {
             return try {
-                source.fetchVideoList(episode)
+                source.fetchVideoList(episode).map { list ->
+                    val newList = mutableListOf<Video>()
+                    for (it in list) {
+                        newList.add(runBlocking { source.fetchUrlFromVideo(it).awaitSingle() })
+                    }
+                    newList
+                }
             } catch (error: Exception) {
                 null
             }
