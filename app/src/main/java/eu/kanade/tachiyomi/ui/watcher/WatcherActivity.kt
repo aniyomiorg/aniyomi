@@ -54,6 +54,7 @@ import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.system.toast
+import eu.kanade.tachiyomi.util.view.hideBar
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -108,6 +109,9 @@ class WatcherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.watcher_activity)
+        window.decorView.setOnSystemUiVisibilityChangeListener {
+            window.hideBar()
+        }
         playerView = findViewById(R.id.player_view)
         youTubeDoubleTap = findViewById(R.id.youtube_overlay)
         youTubeDoubleTap
