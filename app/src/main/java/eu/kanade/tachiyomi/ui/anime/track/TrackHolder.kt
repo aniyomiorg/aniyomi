@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.anime.track
 import android.annotation.SuppressLint
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.TrackItemBinding
 import uy.kohesive.injekt.injectLazy
@@ -37,38 +38,64 @@ class TrackHolder(private val binding: TrackItemBinding, adapter: TrackAdapter) 
     fun bind(item: TrackItem) {
         val track = item.track
         binding.trackLogo.setImageResource(item.service.getLogo())
-        binding.logoContainer.setBackgroundColor(item.service.getLogoColor())
+        binding.logoContainer.setCardBackgroundColor(item.service.getLogoColor())
 
         binding.trackSet.isVisible = track == null
         binding.trackTitle.isVisible = track != null
 
-        binding.topDivider.isVisible = track != null
         binding.middleRow.isVisible = track != null
         binding.bottomDivider.isVisible = track != null
         binding.bottomRow.isVisible = track != null
 
+        binding.card.isVisible = track != null
+
         if (track != null) {
+            val ctx = binding.trackTitle.context
             binding.trackTitle.text = track.title
-            binding.trackChapters.text = "${track.last_episode_seen}/" +
-                if (track.total_episodes > 0) track.total_episodes else "-"
+            binding.trackChapters.text = track.last_episode_seen.toString()
+            if (track.total_episodes > 0) {
+                binding.trackChapters.text = "${binding.trackChapters.text} / ${track.total_episodes}"
+            }
             binding.trackStatus.text = item.service.getStatus(track.status)
 
-            if (item.service.getScoreList().isEmpty()) {
-                binding.trackScore.isVisible = false
-                binding.vertDivider2.isVisible = false
-            } else {
-                binding.trackScore.text = if (track.score == 0f) "-" else item.service.displayScore(track)
+            val supportsScoring = item.service.getScoreList().isNotEmpty()
+            if (supportsScoring) {
+                if (track.score != 0F) {
+                    item.service.getScoreList()
+                    binding.trackScore.text = item.service.displayScore(track)
+                    binding.trackScore.alpha = SET_STATUS_TEXT_ALPHA
+                } else {
+                    binding.trackScore.text = ctx.getString(R.string.score)
+                    binding.trackScore.alpha = UNSET_STATUS_TEXT_ALPHA
+                }
             }
+            binding.trackScore.isVisible = supportsScoring
+            binding.vertDivider2.isVisible = supportsScoring
 
-            if (item.service.supportsReadingDates) {
-                binding.trackStartDate.text =
-                    if (track.started_watching_date != 0L) dateFormat.format(track.started_watching_date) else "-"
-                binding.trackFinishDate.text =
-                    if (track.finished_watching_date != 0L) dateFormat.format(track.finished_watching_date) else "-"
-            } else {
-                binding.bottomDivider.isVisible = false
-                binding.bottomRow.isVisible = false
+            val supportsWatchingDates = item.service.supportsReadingDates
+            if (supportsWatchingDates) {
+                if (track.started_watching_date != 0L) {
+                    binding.trackStartDate.text = dateFormat.format(track.started_watching_date)
+                    binding.trackStartDate.alpha = SET_STATUS_TEXT_ALPHA
+                } else {
+                    binding.trackStartDate.text = ctx.getString(R.string.track_started_reading_date)
+                    binding.trackStartDate.alpha = UNSET_STATUS_TEXT_ALPHA
+                }
+                if (track.finished_watching_date != 0L) {
+                    binding.trackFinishDate.text = dateFormat.format(track.finished_watching_date)
+                    binding.trackFinishDate.alpha = SET_STATUS_TEXT_ALPHA
+                } else {
+                    binding.trackFinishDate.text = ctx.getString(R.string.track_finished_reading_date)
+                    binding.trackFinishDate.alpha = UNSET_STATUS_TEXT_ALPHA
+                }
             }
+            binding.bottomDivider.isVisible = supportsWatchingDates
+            binding.bottomRow.isVisible = supportsWatchingDates
         }
+    }
+
+    companion object {
+        private const val SET_STATUS_TEXT_ALPHA = 1F
+        private const val UNSET_STATUS_TEXT_ALPHA = 0.5F
     }
 }
