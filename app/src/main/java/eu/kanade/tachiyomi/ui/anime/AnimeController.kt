@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -904,7 +905,7 @@ class AnimeController :
             } else {
                 val video = EpisodeLoader.getLink(episode, anime!!, source!!)?.awaitSingle()
                 if (video != null) {
-                    val uri = video.uri!!
+                    val uri = video.uri ?: Uri.parse(video.videoUrl)
                     currentExtEpisode = episode
                     val extIntent = Intent(Intent.ACTION_VIEW)
                     extIntent.setDataAndTypeAndNormalize(uri, "video/*")
