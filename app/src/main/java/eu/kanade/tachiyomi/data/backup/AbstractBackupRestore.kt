@@ -3,8 +3,13 @@ package eu.kanade.tachiyomi.data.backup
 import android.content.Context
 import android.net.Uri
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
+import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Chapter
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -21,6 +26,7 @@ import java.util.Locale
 abstract class AbstractBackupRestore<T : AbstractBackupManager>(protected val context: Context, protected val notifier: BackupNotifier) {
 
     protected val db: DatabaseHelper by injectLazy()
+    protected val animedb: AnimeDatabaseHelper by injectLazy()
     protected val trackManager: TrackManager by injectLazy()
 
     var job: Job? = null
@@ -80,6 +86,28 @@ abstract class AbstractBackupRestore<T : AbstractBackupManager>(protected val co
     }
 
     /**
+     * Fetches chapter information.
+     *
+     * @param source source of manga
+     * @param anime manga that needs updating
+     * @return Updated manga chapters.
+     */
+    internal suspend fun updateEpisodes(source: AnimeSource, anime: Anime, episodes: List<Episode>): Pair<List<Episode>, List<Episode>> {
+        return try {
+            backupManager.restoreEpisodes(source, anime, episodes)
+        } catch (e: Exception) {
+            // If there's any error, return empty update and continue.
+            val errorMessage = if (e is NoChaptersException) {
+                context.getString(R.string.no_chapters_error)
+            } else {
+                e.message
+            }
+            errors.add(Date() to "${anime.title} - $errorMessage")
+            Pair(emptyList(), emptyList())
+        }
+    }
+
+    /**
      * Refreshes tracking information.
      *
      * @param manga manga that needs updating.
@@ -103,6 +131,29 @@ abstract class AbstractBackupRestore<T : AbstractBackupManager>(protected val co
     }
 
     /**
+     * Refreshes tracking information.
+     *
+     * @param anime manga that needs updating.
+     * @param tracks list containing tracks from restore file.
+     */
+    internal suspend fun updateAnimeTracking(anime: Anime, tracks: List<AnimeTrack>) {
+        tracks.forEach { track ->
+            val service = trackManager.getService(track.sync_id)
+            if (service != null && service.isLogged) {
+                try {
+                    val updatedTrack = service.refresh(track)
+                    animedb.insertTrack(updatedTrack).executeAsBlocking()
+                } catch (e: Exception) {
+                    errors.add(Date() to "${anime.title} - ${e.message}")
+                }
+            } else {
+                val serviceName = service?.nameRes()?.let { context.getString(it) }
+                errors.add(Date() to "${anime.title} - ${context.getString(R.string.tracker_not_logged_in, serviceName)}")
+            }
+        }
+    }
+
+    /**
      * Called to update dialog in [BackupConst]
      *
      * @param progress restore progress
@@ -120,7 +171,7 @@ abstract class AbstractBackupRestore<T : AbstractBackupManager>(protected val co
     internal fun writeErrorLog(): File {
         try {
             if (errors.isNotEmpty()) {
-                val file = context.createFileInCacheDir("tachiyomi_restore.txt")
+                val file = context.createFileInCacheDir("aniyomi_restore.txt")
                 val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
 
                 file.bufferedWriter().use { out ->

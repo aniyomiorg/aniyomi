@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.data.backup
 import android.content.Context
 import android.net.Uri
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.toSEpisode
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
@@ -26,6 +27,7 @@ abstract class AbstractBackupManager(protected val context: Context) {
     internal val databaseHelper: DatabaseHelper by injectLazy()
     internal val animedatabaseHelper: AnimeDatabaseHelper by injectLazy()
     internal val sourceManager: SourceManager by injectLazy()
+    internal val animesourceManager: AnimeSourceManager by injectLazy()
     internal val trackManager: TrackManager by injectLazy()
     protected val preferences: PreferencesHelper by injectLazy()
 
@@ -70,8 +72,8 @@ abstract class AbstractBackupManager(protected val context: Context) {
      * Fetches chapter information.
      *
      * @param source source of manga
-     * @param manga manga that needs updating
-     * @param chapters list of chapters in the backup
+     * @param anime anime that needs updating
+     * @param episodes list of episodes in the backup
      * @return Updated manga chapters.
      */
     internal suspend fun restoreEpisodes(source: AnimeSource, anime: Anime, episodes: List<Episode>): Pair<List<Episode>, List<Episode>> {
@@ -94,9 +96,9 @@ abstract class AbstractBackupManager(protected val context: Context) {
         databaseHelper.getFavoriteMangas().executeAsBlocking()
 
     /**
-     * Returns list containing manga from library
+     * Returns list containing anime from library
      *
-     * @return [Manga] from library
+     * @return [Anime] from library
      */
     protected fun getFavoriteAnime(): List<Anime> =
         animedatabaseHelper.getFavoriteAnimes().executeAsBlocking()
