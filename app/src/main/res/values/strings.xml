@@ -396,7 +396,7 @@
     <string name="playertitle">%1$s - %2$s</string>
 
       <!-- Downloads section -->
-    <string name="episode_download_progress">%1$d\%</string>
+    <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_download_directory">Download location</string>
     <string name="pref_download_only_over_wifi">Only download over Wi-Fi</string>
     <string name="pref_category_delete_chapters">Delete chapters</string>
