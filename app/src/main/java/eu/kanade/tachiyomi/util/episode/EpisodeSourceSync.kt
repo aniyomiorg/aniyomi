@@ -96,6 +96,24 @@ fun syncEpisodesWithSource(
 
     // Return if there's nothing to add, delete or change, avoiding unnecessary db transactions.
     if (toAdd.isEmpty() && toDelete.isEmpty() && toChange.isEmpty()) {
+        val topEpisodes = dbEpisodes.sortedByDescending { it.date_upload }.take(4)
+        val newestDate = topEpisodes.getOrNull(0)?.date_upload ?: 0L
+
+        // Recalculate update rate if unset and enough chapters are present
+        if (anime.next_update == 0L && topEpisodes.size > 1) {
+            var delta = 0L
+            for (i in 0 until topEpisodes.size - 1) {
+                delta += (topEpisodes[i].date_upload - topEpisodes[i + 1].date_upload)
+            }
+            delta /= topEpisodes.size - 1
+            anime.next_update = newestDate + delta
+            db.updateNextUpdated(anime).executeAsBlocking()
+        }
+
+        if (newestDate != 0L && newestDate != anime.last_update) {
+            anime.last_update = newestDate
+            db.updateLastUpdated(anime).executeAsBlocking()
+        }
         return Pair(emptyList(), emptyList())
     }
 
@@ -140,11 +158,29 @@ fun syncEpisodesWithSource(
             db.insertEpisodes(toChange).executeAsBlocking()
         }
 
+        val topEpisodes = db.getEpisodes(anime).executeAsBlocking().sortedByDescending { it.date_upload }.take(4)
+        // Recalculate next update since episodes were changed
+        if (topEpisodes.size > 1) {
+            var delta = 0L
+            for (i in 0 until topEpisodes.size - 1) {
+                delta += (topEpisodes[i].date_upload - topEpisodes[i + 1].date_upload)
+            }
+            delta /= topEpisodes.size - 1
+            anime.next_update = topEpisodes[0].date_upload + delta
+            db.updateNextUpdated(anime).executeAsBlocking()
+        }
+
         // Fix order in source.
         db.fixEpisodesSourceOrder(sourceEpisodes).executeAsBlocking()
 
         // Set this anime as updated since episodes were changed
-        anime.last_update = Date().time
+        val newestEpisode = topEpisodes.getOrNull(0)
+        val dateFetch = newestEpisode?.date_upload ?: anime.last_update
+        if (dateFetch == 0L) {
+            if (toAdd.isNotEmpty()) {
+                anime.last_update = Date().time
+            }
+        } else anime.last_update = dateFetch
         db.updateLastUpdated(anime).executeAsBlocking()
     }
 

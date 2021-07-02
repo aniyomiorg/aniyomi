@@ -50,6 +50,7 @@
     <string name="action_sort_total">Total chapters</string>
     <string name="action_sort_last_read">Last read</string>
     <string name="action_sort_last_checked">Last checked</string>
+    <string name="action_sort_next_updated">Next expected update</string>
     <string name="action_sort_latest_chapter">Latest chapter</string>
     <string name="action_sort_chapter_fetch_date">Date fetched</string>
     <string name="action_sort_date_added">Date added</string>
@@ -167,18 +168,15 @@
     <string name="theme_system">Follow system</string>
     <string name="theme_light">Off</string>
     <string name="theme_dark">On</string>
-    <string name="pref_theme_light">Light theme</string>
-    <string name="theme_light_default">Default</string>
-    <string name="theme_light_blue">Light Blue</string>
-    <string name="theme_light_strawberrydaiquiri">Strawberry Daiquiri</string>
-    <string name="theme_light_yotsuba">Yotsuba</string>
-    <string name="pref_theme_dark">Dark theme</string>
-    <string name="theme_dark_default">Default</string>
-    <string name="theme_dark_blue">Dark Blue</string>
-    <string name="theme_dark_greenapple">Green Apple</string>
-    <string name="theme_dark_midnightdusk">Midnight Dusk</string>
-    <string name="theme_dark_amoled">AMOLED Black</string>
-    <string name="theme_dark_amoled_hotpink">AMOLED Hot Pink</string>
+    <string name="pref_app_theme">App theme</string>
+    <string name="theme_default">Default</string>
+    <string name="theme_strawberrydaiquiri">Strawberry Daiquiri</string>
+    <string name="theme_yotsuba">Yotsuba</string>
+    <string name="theme_darkblue">Dark Blue</string>
+    <string name="theme_greenapple">Green Apple</string>
+    <string name="theme_midnightdusk">Midnight Dusk</string>
+    <string name="theme_hotpink">Hot Pink</string>
+    <string name="pref_dark_theme_pure_black">Pure black dark mode</string>
     <string name="pref_start_screen">Start screen</string>
     <string name="pref_language">Language</string>
     <string name="system_default">Default</string>
@@ -243,7 +241,7 @@
 
     <string name="default_category">Default category</string>
     <string name="default_category_summary">Always ask</string>
-    <string name="categorized_display_settings">Per-category display settings</string>
+    <string name="categorized_display_settings">Per-category settings for sort and display</string>
     <plurals name="num_categories">
         <item quantity="one">%d category</item>
         <item quantity="other">%d categories</item>

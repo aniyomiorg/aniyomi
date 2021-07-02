@@ -13,6 +13,8 @@ interface Anime : SAnime {
 
     var last_update: Long
 
+    var next_update: Long
+
     var date_added: Long
 
     var viewer_flags: Int

@@ -29,6 +29,7 @@ import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_TITLE
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_URL
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable.COL_VIEWER
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable.TABLE
+import eu.kanade.tachiyomi.data.database.tables.MangaTable.COL_NEXT_UPDATE
 
 class AnimeTypeMapping : SQLiteTypeMapping<Anime>(
     AnimePutResolver(),
@@ -62,6 +63,7 @@ class AnimePutResolver : DefaultPutResolver<Anime>() {
             COL_THUMBNAIL_URL to obj.thumbnail_url,
             COL_FAVORITE to obj.favorite,
             COL_LAST_UPDATE to obj.last_update,
+            COL_NEXT_UPDATE to obj.next_update,
             COL_INITIALIZED to obj.initialized,
             COL_VIEWER to obj.viewer_flags,
             COL_EPISODE_FLAGS to obj.episode_flags,
@@ -84,6 +86,7 @@ interface BaseAnimeGetResolver {
         thumbnail_url = cursor.getString(cursor.getColumnIndex(COL_THUMBNAIL_URL))
         favorite = cursor.getInt(cursor.getColumnIndex(COL_FAVORITE)) == 1
         last_update = cursor.getLong(cursor.getColumnIndex(COL_LAST_UPDATE))
+        next_update = cursor.getLong(cursor.getColumnIndex(COL_NEXT_UPDATE))
         initialized = cursor.getInt(cursor.getColumnIndex(COL_INITIALIZED)) == 1
         viewer_flags = cursor.getInt(cursor.getColumnIndex(COL_VIEWER))
         episode_flags = cursor.getInt(cursor.getColumnIndex(COL_EPISODE_FLAGS))
