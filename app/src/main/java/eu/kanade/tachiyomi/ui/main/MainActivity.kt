@@ -229,7 +229,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             }
         )
 
-        syncActivityViewWithController(router.backstack.lastOrNull()?.controller())
+        syncActivityViewWithController(router.backstack.lastOrNull()?.controller)
 
         if (savedInstanceState == null) {
             // Reset Incognito Mode on relaunch
@@ -261,11 +261,11 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
 
                 // Close BrowseSourceController and its MangaController child when incognito mode is disabled
                 if (!it) {
-                    val fg = router.backstack.last().controller()
+                    val fg = router.backstack.last().controller
                     if (fg is BrowseSourceController || fg is MangaController && fg.fromSource) {
                         router.popToRoot()
                     }
-                    val fga = router.backstack.last().controller()
+                    val fga = router.backstack.last().controller
                     if (fga is BrowseAnimeSourceController || fga is AnimeController && fga.fromSource) {
                         router.popToRoot()
                     }

@@ -261,7 +261,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
         searchItem.fixExpand(
             onExpand = { invalidateMenuOnExpand() },
             onCollapse = {
-                if (router.backstackSize >= 2 && router.backstack[router.backstackSize - 2].controller() is GlobalAnimeSearchController) {
+                if (router.backstackSize >= 2 && router.backstack[router.backstackSize - 2].controller is GlobalAnimeSearchController) {
                     router.popController(this)
                 } else {
                     nonSubmittedQuery = ""

@@ -631,7 +631,7 @@ class AnimeController :
             return
         }
 
-        when (val previousController = router.backstack[router.backstackSize - 2].controller()) {
+        when (val previousController = router.backstack[router.backstackSize - 2].controller) {
             is AnimelibController -> {
                 router.handleBack()
                 previousController.search(query)
