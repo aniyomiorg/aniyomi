@@ -29,8 +29,10 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.text.Collator
 import java.util.Collections
 import java.util.Comparator
+import java.util.Locale
 
 /**
  * Class containing animelib information.
@@ -255,11 +257,18 @@ class AnimelibPresenter(
         val sortAscending = categories.associate { category ->
             (category.id ?: 0) to SortDirectionSetting.get(preferences, category)
         }
+
+        val locale = Locale.getDefault()
+        val collator = Collator.getInstance(locale).apply {
+            strength = Collator.PRIMARY
+        }
         val sortFn: (AnimelibItem, AnimelibItem) -> Int = { i1, i2 ->
             val sortingMode = sortingModes[i1.anime.category]!!
             val sortAscending = sortAscending[i1.anime.category]!! == SortDirectionSetting.ASCENDING
             when (sortingMode) {
-                SortModeSetting.ALPHABETICAL -> i1.anime.title.compareTo(i2.anime.title, true)
+                SortModeSetting.ALPHABETICAL -> {
+                    collator.compare(i1.anime.title.lowercase(locale), i2.anime.title.lowercase(locale))
+                }
                 SortModeSetting.LAST_READ -> {
                     // Get index of anime, set equal to list if size unknown.
                     val anime1LastRead = lastReadAnime[i1.anime.id!!] ?: lastReadAnime.size
