@@ -22,7 +22,7 @@ import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.databinding.WebviewActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseViewBindingActivity
-import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.util.system.WebViewClientCompat
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.getResourceColor
@@ -133,7 +133,7 @@ class WebViewActivityAnime : BaseViewBindingActivity<WebviewActivityBinding>() {
                     if (!cookies.isNullOrBlank()) {
                         val data = Intent().setData(Uri.parse(cookies))
                         data.putExtra("User-Agent", binding.webview.settings.userAgentString)
-                        setResult(WatcherActivity.REQUEST_COOKIES, data)
+                        setResult(PlayerActivity.REQUEST_COOKIES, data)
                     }
 
                     // Reset to top when page refreshes

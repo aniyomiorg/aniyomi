@@ -24,7 +24,7 @@ import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.util.system.notificationManager
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.launchIn
@@ -204,7 +204,7 @@ class AnimeUpdatesController :
      */
     private fun openEpisode(item: AnimeUpdatesItem) {
         val activity = activity ?: return
-        val intent = WatcherActivity.newIntent(activity, item.anime, item.episode)
+        val intent = PlayerActivity.newIntent(activity, item.anime, item.episode)
         startActivity(intent)
     }
 

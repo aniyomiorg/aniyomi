@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.watcher
+package eu.kanade.tachiyomi.ui.player
 
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource

@@ -4,7 +4,7 @@ package androidx.recyclerview.widget
 
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
-import eu.kanade.tachiyomi.ui.watcher.WatcherActivity
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
 
 /**
  * Layout manager used by the webtoon viewer. Item prefetch is disabled because the extra layout
@@ -55,7 +55,7 @@ class WebtoonLayoutManager(activity: ReaderActivity) : LinearLayoutManager(activ
     }
 }
 
-class WebttoonLayoutManagerAnime(activity: WatcherActivity) : LinearLayoutManager(activity) {
+class WebttoonLayoutManagerAnime(activity: PlayerActivity) : LinearLayoutManager(activity) {
 
     /**
      * Extra layout space is set to half the screen height.

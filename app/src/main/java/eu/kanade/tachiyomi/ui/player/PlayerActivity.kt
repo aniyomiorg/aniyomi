@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.watcher
+package eu.kanade.tachiyomi.ui.player
 
 import android.content.Context
 import android.content.Intent
@@ -70,7 +70,7 @@ const val STATE_RESUME_POSITION = "resumePosition"
 const val STATE_PLAYER_FULLSCREEN = "playerFullscreen"
 const val STATE_PLAYER_PLAYING = "playerOnPlay"
 
-class WatcherActivity : AppCompatActivity() {
+class PlayerActivity : AppCompatActivity() {
 
     private val preferences: PreferencesHelper = Injekt.get()
     private val incognitoMode = preferences.incognitoMode().get()
@@ -530,7 +530,7 @@ class WatcherActivity : AppCompatActivity() {
 
     companion object {
         fun newIntent(context: Context, anime: Anime, episode: Episode): Intent {
-            return Intent(context, WatcherActivity::class.java).apply {
+            return Intent(context, PlayerActivity::class.java).apply {
                 putExtra("anime", anime)
                 putExtra("episode", episode)
                 putExtra("second", episode.last_second_seen)
