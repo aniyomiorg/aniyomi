@@ -31,7 +31,6 @@ class VideoPlayerActivity : AppCompatActivity() {
     private var mLibVLC: LibVLC? = null
     private var mMediaPlayer: MediaPlayer? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVideoPlayerBinding.inflate(layoutInflater)

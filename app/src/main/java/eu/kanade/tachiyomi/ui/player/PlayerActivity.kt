@@ -94,6 +94,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var userAgentString: String
     private lateinit var uri: String
     private lateinit var videos: List<Video>
+    private var isLocal = false
     private var currentQuality = 0
 
     private var duration: Long = 0
@@ -145,11 +146,13 @@ class PlayerActivity : AppCompatActivity() {
             super.onBackPressed()
         }
         if (videos.lastIndex > 0) settingsBtn.visibility = View.VISIBLE
-        uri = videos.first().videoUrl ?: videos.first().uri!!.toString()
-        dataSourceFactory = if (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource) {
-            DefaultDataSourceFactory(this)
+        isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
+        if (isLocal) {
+            uri = videos.first().uri!!.toString()
+            dataSourceFactory = DefaultDataSourceFactory(this)
         } else {
-            newDataSourceFactory()
+            uri = videos.first().videoUrl!!
+            dataSourceFactory = newDataSourceFactory()
         }
         mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
         mediaItem = MediaItem.Builder()
@@ -241,13 +244,18 @@ class PlayerActivity : AppCompatActivity() {
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         videos = runBlocking { awaitVideoList() }
         settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
-        uri = videos.first().videoUrl ?: videos.first().uri!!.toString()
+        isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
+        uri = if (isLocal) {
+            videos.first().uri!!.toString()
+        } else {
+            videos.first().videoUrl!!
+        }
         currentQuality = 0
         mediaItem = MediaItem.Builder()
             .setUri(uri)
             .setMimeType(getMime(uri))
             .build()
-        changePlayer(episode.last_second_seen)
+        changePlayer(episode.last_second_seen, isLocal)
     }
 
     private fun previousEpisode() {
@@ -259,25 +267,34 @@ class PlayerActivity : AppCompatActivity() {
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         videos = runBlocking { awaitVideoList() }
         settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
-        uri = videos.first().videoUrl ?: videos.first().uri!!.toString()
+        isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
+        uri = if (isLocal) {
+            videos.first().uri!!.toString()
+        } else {
+            videos.first().videoUrl!!
+        }
         currentQuality = 0
         mediaItem = MediaItem.Builder()
             .setUri(uri)
             .setMimeType(getMime(uri))
             .build()
-        changePlayer(episode.last_second_seen)
+        changePlayer(episode.last_second_seen, isLocal)
     }
 
     private fun settings() {
         val nextQuality = if (currentQuality == videos.lastIndex) 0 else currentQuality + 1
         baseContext.toast(videos[nextQuality].quality, Toast.LENGTH_SHORT)
-        uri = videos[nextQuality].videoUrl ?: videos.first().uri!!.toString()
+        uri = if (isLocal) {
+            videos.first().uri!!.toString()
+        } else {
+            videos.first().videoUrl!!
+        }
         currentQuality = nextQuality
         mediaItem = MediaItem.Builder()
             .setUri(uri)
             .setMimeType(getMime(uri))
             .build()
-        changePlayer(exoPlayer.currentPosition)
+        changePlayer(exoPlayer.currentPosition, isLocal)
     }
 
     private fun captcha() {
@@ -299,8 +316,8 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun changePlayer(resumeAt: Long) {
-        dataSourceFactory = if (EpisodeLoader.isDownloaded(episode, anime)) {
+    private fun changePlayer(resumeAt: Long, isLocal: Boolean) {
+        dataSourceFactory = if (isLocal) {
             DefaultDataSourceFactory(this)
         } else {
             DefaultHttpDataSource.Factory().apply {

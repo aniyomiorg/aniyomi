@@ -71,10 +71,10 @@ import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchC
 import eu.kanade.tachiyomi.ui.browse.animesource.latest.LatestUpdatesController
 import eu.kanade.tachiyomi.ui.browse.migration.search.AnimeSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.recent.history.HistoryController
-import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
 import eu.kanade.tachiyomi.ui.player.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.recent.history.HistoryController
+import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivityAnime
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.hasCustomCover
@@ -901,7 +901,7 @@ class AnimeController :
             val useInternal = if (preferences.alwaysUseExternalPlayer()) playerChangeRequested else !playerChangeRequested
             if (useInternal) {
                 startActivity(intent)
-                //VideoPlayerActivity.start(context, "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
+                // VideoPlayerActivity.start(context, "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
             } else {
                 val video = EpisodeLoader.getLink(episode, anime!!, source!!)?.awaitSingle()
                 if (video != null) {
