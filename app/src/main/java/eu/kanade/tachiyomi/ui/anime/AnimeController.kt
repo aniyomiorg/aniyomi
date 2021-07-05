@@ -901,7 +901,6 @@ class AnimeController :
             val useInternal = if (preferences.alwaysUseExternalPlayer()) playerChangeRequested else !playerChangeRequested
             if (useInternal) {
                 startActivity(intent)
-                // VideoPlayerActivity.start(context, "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
             } else {
                 val video = EpisodeLoader.getLink(episode, anime!!, source!!)?.awaitSingle()
                 if (video != null) {

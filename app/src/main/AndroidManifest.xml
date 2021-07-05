@@ -96,19 +96,6 @@
                 android:resource="@xml/s_pen_actions"/>
         </activity>
         <activity
-            android:name=".ui.player.VideoPlayerActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="userLandscape"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="com.samsung.android.support.REMOTE_ACTION" />
-            </intent-filter>
-
-            <meta-data android:name="com.samsung.android.support.REMOTE_ACTION"
-                android:resource="@xml/s_pen_actions"/>
-        </activity>
-        <activity
             android:name=".ui.security.UnlockActivity"
             android:theme="@style/Theme.Tachiyomi" />
         <activity

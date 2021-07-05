@@ -293,9 +293,6 @@ dependencies {
 
     //player doubletap
     implementation("com.github.vkay94:DoubleTapPlayerView:1.0.2")
-
-    //libvlc
-    implementation("org.videolan.android:libvlc-all:3.4.0-eap4")
 }
 
 tasks {
