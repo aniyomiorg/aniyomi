@@ -144,6 +144,8 @@
     <string name="action_webview_forward">Forward</string>
     <string name="action_webview_refresh">Refresh</string>
     <string name="action_start_downloading_now">Start downloading now</string>
+    <string name="action_start_download_externally">Use external downloader</string>
+    <string name="action_start_download_internally">Use internal downloader</string>
 
     <!-- Operations -->
     <string name="loading">Loading…</string>
@@ -385,7 +387,6 @@
     <string name="pref_category_progress">Progress</string>
     <string name="pref_progress_mark_as_seen">At what point to mark the episode as seen</string>
     <string name="pref_always_use_external_player">Always use external player</string>
-    <string name="pref_use_external_downloader">Use external downloader</string>
     <string name="pref_progress_70">70%</string>
     <string name="pref_progress_75">75%</string>
     <string name="pref_progress_80">80%</string>
@@ -411,6 +412,8 @@
     <string name="fourth_to_last">Fourth to last chapter</string>
     <string name="fifth_to_last">Fifth to last chapter</string>
     <string name="pref_category_auto_download">Auto-download</string>
+    <string name="pref_category_anime_download">Anime downloads</string>
+    <string name="pref_use_external_downloader">Use external downloader for anime</string>
     <string name="pref_download_new">Download new chapters</string>
     <string name="pref_download_new_categories_details">Manga in excluded categories will not be downloaded even if they are also in included categories.</string>
 

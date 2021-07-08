@@ -581,6 +581,14 @@ class AnimePresenter(
     }
 
     /**
+     * Downloads the given list of episodes with the manager.
+     * @param episodes the list of episodes to download.
+     */
+    fun downloadEpisodesExternally(episodes: List<Episode>) {
+        downloadManager.downloadEpisodesExternally(anime, episodes)
+    }
+
+    /**
      * Bookmarks the given list of episodes.
      * @param selectedEpisodes the list of episodes to bookmark.
      */

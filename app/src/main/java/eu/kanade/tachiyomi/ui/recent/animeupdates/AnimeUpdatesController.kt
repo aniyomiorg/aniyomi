@@ -218,6 +218,15 @@ class AnimeUpdatesController :
     }
 
     /**
+     * Download selected items
+     * @param episodes list of selected [AnimeUpdatesItem]s
+     */
+    private fun downloadEpisodesExternally(episodes: List<AnimeUpdatesItem>) {
+        presenter.downloadEpisodesExternally(episodes)
+        destroyActionModeIfNeeded()
+    }
+
+    /**
      * Populate adapter with episodes
      * @param episodes list of [Any]
      */
@@ -308,6 +317,16 @@ class AnimeUpdatesController :
             AnimeDownloadService.start(activity!!)
         } else {
             downloadEpisodes(listOf(item))
+        }
+        adapter?.updateItem(item)
+    }
+
+    override fun downloadEpisodeExternally(position: Int) {
+        val item = adapter?.getItem(position) as? AnimeUpdatesItem ?: return
+        if (item.status == AnimeDownload.State.ERROR) {
+            AnimeDownloadService.start(activity!!)
+        } else {
+            downloadEpisodesExternally(listOf(item))
         }
         adapter?.updateItem(item)
     }

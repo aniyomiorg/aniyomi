@@ -186,6 +186,14 @@ class AnimeUpdatesPresenter(
     }
 
     /**
+     * Download selected episodes
+     * @param items list of recent episodes seleted.
+     */
+    fun downloadEpisodesExternally(items: List<AnimeUpdatesItem>) {
+        items.forEach { downloadManager.downloadEpisodesExternally(it.anime, listOf(it.episode)) }
+    }
+
+    /**
      * Delete selected episodes
      *
      * @param items episodes selected

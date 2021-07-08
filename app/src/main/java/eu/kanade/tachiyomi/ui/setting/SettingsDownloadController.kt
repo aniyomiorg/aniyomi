@@ -151,6 +151,14 @@ class SettingsDownloadController : SettingsController() {
                     .launchIn(viewScope)
             }
         }
+        preferenceCategory {
+            titleRes = R.string.pref_category_anime_download
+            switchPreference {
+                key = Keys.useExternalDownloader
+                titleRes = R.string.pref_use_external_downloader
+                defaultValue = false
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

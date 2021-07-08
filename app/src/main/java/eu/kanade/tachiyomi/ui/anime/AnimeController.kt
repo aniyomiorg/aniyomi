@@ -1083,6 +1083,16 @@ class AnimeController :
         episodesAdapter?.updateItem(item)
     }
 
+    override fun downloadEpisodeExternally(position: Int) {
+        val item = episodesAdapter?.getItem(position) ?: return
+        if (item.status == AnimeDownload.State.ERROR) {
+            AnimeDownloadService.start(activity!!)
+        } else {
+            downloadEpisodesExternally(listOf(item))
+        }
+        episodesAdapter?.updateItem(item)
+    }
+
     override fun deleteEpisode(position: Int) {
         val item = episodesAdapter?.getItem(position) ?: return
         deleteEpisodes(listOf(item))
@@ -1130,6 +1140,27 @@ class AnimeController :
         val view = view
         val anime = presenter.anime
         presenter.downloadEpisodes(episodes)
+        if (view != null && !anime.favorite) {
+            addSnackbar = (activity as? MainActivity)?.binding?.rootCoordinator?.snack(view.context.getString(R.string.snack_add_to_animelib), Snackbar.LENGTH_INDEFINITE) {
+                setAction(R.string.action_add) {
+                    if (!anime.favorite) {
+                        addToAnimelib(anime)
+                    }
+                }
+            }
+        }
+        destroyActionModeIfNeeded()
+    }
+
+    private fun downloadEpisodesExternally(episodes: List<EpisodeItem>) {
+        if (source is AnimeSourceManager.StubSource) {
+            activity?.toast(R.string.loader_not_implemented_error)
+            return
+        }
+
+        val view = view
+        val anime = presenter.anime
+        presenter.downloadEpisodesExternally(episodes)
         if (view != null && !anime.favorite) {
             addSnackbar = (activity as? MainActivity)?.binding?.rootCoordinator?.snack(view.context.getString(R.string.snack_add_to_animelib), Snackbar.LENGTH_INDEFINITE) {
                 setAction(R.string.action_add) {

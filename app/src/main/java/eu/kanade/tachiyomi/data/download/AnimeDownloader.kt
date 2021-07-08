@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.webkit.MimeTypeMap
-import androidx.core.content.ContextCompat.startActivity
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
@@ -241,7 +240,7 @@ class AnimeDownloader(
      * @param episodes the list of episodes to download.
      * @param autoStart whether to start the downloader after enqueing the episodes.
      */
-    fun queueEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean) = launchIO {
+    fun queueEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean, changeDownloader: Boolean = false) = launchIO {
         val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: return@launchIO
         val wasEmpty = queue.isEmpty()
         // Called in background thread, the operation can be slow with SAF.
@@ -258,7 +257,7 @@ class AnimeDownloader(
             // Filter out those already enqueued.
             .filter { episode -> queue.none { it.episode.id == episode.id } }
             // Create a download for each one.
-            .map { AnimeDownload(source, anime, it) }
+            .map { AnimeDownload(source, anime, it, changeDownloader) }
 
         if (episodesToQueue.isNotEmpty()) {
             queue.addAll(episodesToQueue)
@@ -389,7 +388,7 @@ class AnimeDownloader(
             videoFile != null -> Observable.just(videoFile)
             episodeCache.isImageInCache(video.videoUrl!!) -> copyVideoFromCache(episodeCache.getVideoFile(video.videoUrl!!), tmpDir, filename)
             else -> {
-                if (!preferences.useExternalDownloader()) {
+                if (preferences.useExternalDownloader() == download.changeDownloader) {
                     downloadVideo(video, download.source, tmpDir, filename)
                 } else {
                     downloadVideoExternal(video, download.source, tmpDir, filename)

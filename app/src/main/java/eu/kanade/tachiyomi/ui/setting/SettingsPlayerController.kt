@@ -16,28 +16,6 @@ class SettingsPlayerController : SettingsController() {
         titleRes = R.string.pref_category_player
 
         preferenceCategory {
-            titleRes = R.string.pref_category_display
-
-            /*intListPreference {
-                key = Keys.defaultPlayerOrientationType
-                titleRes = R.string.pref_rotation_type
-                entriesRes = arrayOf(
-                    R.string.rotation_free,
-                    R.string.rotation_portrait,
-                    R.string.rotation_landscape,
-                    R.string.rotation_force_portrait,
-                    R.string.rotation_force_landscape,
-                )
-                entryValues = OrientationType.values().drop(1)
-                    .map { value -> "${value.flagValue}" }.toTypedArray()
-                defaultValue = "${OrientationType.FREE.flagValue}"
-                summary = "%s"
-            }
-            switchPreference {
-                key = Keys.fullscreen
-                titleRes = R.string.pref_fullscreen
-                defaultValue = true
-            }*/
             listPreference {
                 key = Keys.progressPreference
                 titleRes = R.string.pref_progress_mark_as_seen
@@ -67,11 +45,6 @@ class SettingsPlayerController : SettingsController() {
             switchPreference {
                 key = Keys.alwaysUseExternalPlayer
                 titleRes = R.string.pref_always_use_external_player
-                defaultValue = false
-            }
-            switchPreference {
-                key = Keys.useExternalDownloader
-                titleRes = R.string.pref_use_external_downloader
                 defaultValue = false
             }
         }

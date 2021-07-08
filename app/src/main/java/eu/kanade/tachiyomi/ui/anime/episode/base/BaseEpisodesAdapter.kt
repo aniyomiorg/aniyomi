@@ -4,7 +4,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 
 abstract class BaseEpisodesAdapter<T : IFlexible<*>>(
-    controller: OnEpisodeClickListener
+    controller: OnEpisodeClickListener,
 ) : FlexibleAdapter<T>(null, controller, true) {
 
     /**
@@ -19,5 +19,6 @@ abstract class BaseEpisodesAdapter<T : IFlexible<*>>(
         fun downloadEpisode(position: Int)
         fun deleteEpisode(position: Int)
         fun startDownloadNow(position: Int)
+        fun downloadEpisodeExternally(position: Int)
     }
 }

@@ -147,6 +147,17 @@ class AnimeDownloadManager(private val context: Context) {
     }
 
     /**
+     * Tells the downloader to enqueue the given list of episodes.
+     *
+     * @param anime the anime of the episodes.
+     * @param episodes the list of episodes to enqueue.
+     * @param autoStart whether to start the downloader after enqueing the episodes.
+     */
+    fun downloadEpisodesExternally(anime: Anime, episodes: List<Episode>, autoStart: Boolean = true) {
+        downloader.queueEpisodes(anime, episodes, autoStart, true)
+    }
+
+    /**
      * Builds the page list of a downloaded episode.
      *
      * @param source the source of the episode.
