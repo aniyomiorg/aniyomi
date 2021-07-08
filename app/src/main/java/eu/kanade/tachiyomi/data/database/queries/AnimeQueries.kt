@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.data.database.queries
 
+import com.pushtorefresh.storio.sqlite.operations.get.PreparedGetListOfObjects
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery
 import com.pushtorefresh.storio.sqlite.queries.Query
 import com.pushtorefresh.storio.sqlite.queries.RawQuery
@@ -14,15 +15,6 @@ import eu.kanade.tachiyomi.data.database.tables.EpisodeTable
 
 interface AnimeQueries : DbProvider {
 
-    fun getAnimes() = db.get()
-        .listOfObjects(Anime::class.java)
-        .withQuery(
-            Query.builder()
-                .table(AnimeTable.TABLE)
-                .build()
-        )
-        .prepare()
-
     fun getAnimelibAnimes() = db.get()
         .listOfObjects(AnimelibAnime::class.java)
         .withQuery(
@@ -34,17 +26,21 @@ interface AnimeQueries : DbProvider {
         .withGetResolver(AnimelibAnimeGetResolver.INSTANCE)
         .prepare()
 
-    fun getFavoriteAnimes() = db.get()
-        .listOfObjects(Anime::class.java)
-        .withQuery(
-            Query.builder()
-                .table(AnimeTable.TABLE)
-                .where("${AnimeTable.COL_FAVORITE} = ?")
-                .whereArgs(1)
-                .orderBy(AnimeTable.COL_TITLE)
-                .build()
-        )
-        .prepare()
+    fun getFavoriteAnimes(sortByTitle: Boolean = true): PreparedGetListOfObjects<Anime> {
+        var queryBuilder = Query.builder()
+            .table(AnimeTable.TABLE)
+            .where("${AnimeTable.COL_FAVORITE} = ?")
+            .whereArgs(1)
+
+        if (sortByTitle) {
+            queryBuilder = queryBuilder.orderBy(AnimeTable.COL_TITLE)
+        }
+
+        return db.get()
+            .listOfObjects(Anime::class.java)
+            .withQuery(queryBuilder.build())
+            .prepare()
+    }
 
     fun getAnime(url: String, sourceId: Long) = db.get()
         .`object`(Anime::class.java)

@@ -18,6 +18,7 @@ object EpisodeSettingsHelper {
         anime?.let {
             prefs.setEpisodeSettingsDefault(it)
             db.updateEpisodeFlags(it).executeAsBlocking()
+            db.updateViewerFlags(it).executeAsBlocking()
         }
     }
 
@@ -42,19 +43,22 @@ object EpisodeSettingsHelper {
      */
     fun updateAllAnimesWithGlobalDefaults() {
         launchIO {
-            val updatedAnimes = db.getAnimes().executeAsBlocking().map { anime ->
-                with(anime) {
-                    seenFilter = prefs.filterEpisodeBySeen()
-                    downloadedFilter = prefs.filterEpisodeByDownloaded()
-                    bookmarkedFilter = prefs.filterEpisodeByBookmarked()
-                    sorting = prefs.sortEpisodeBySourceOrNumber()
-                    displayMode = prefs.displayEpisodeByNameOrNumber()
-                    setEpisodeOrder(prefs.sortEpisodeByAscendingOrDescending())
+            val updatedAnimes = db.getFavoriteAnimes(sortByTitle = false)
+                .executeAsBlocking()
+                .map { anime ->
+                    with(anime) {
+                        seenFilter = prefs.filterEpisodeBySeen()
+                        downloadedFilter = prefs.filterEpisodeByDownloaded()
+                        bookmarkedFilter = prefs.filterEpisodeByBookmarked()
+                        sorting = prefs.sortEpisodeBySourceOrNumber()
+                        displayMode = prefs.displayEpisodeByNameOrNumber()
+                        setEpisodeOrder(prefs.sortEpisodeByAscendingOrDescending())
+                    }
+                    anime
                 }
-                anime
-            }
 
             db.updateEpisodeFlags(updatedAnimes).executeAsBlocking()
+            db.updateViewerFlags(updatedAnimes).executeAsBlocking()
         }
     }
 }

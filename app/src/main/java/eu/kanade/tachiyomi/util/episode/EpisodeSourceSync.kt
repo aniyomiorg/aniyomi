@@ -74,6 +74,7 @@ fun syncEpisodesWithSource(
                 dbEpisode.name = sourceEpisode.name
                 dbEpisode.date_upload = sourceEpisode.date_upload
                 dbEpisode.episode_number = sourceEpisode.episode_number
+                dbEpisode.source_order = sourceEpisode.source_order
                 toChange.add(dbEpisode)
             }
         }
@@ -158,8 +159,9 @@ fun syncEpisodesWithSource(
             db.insertEpisodes(toChange).executeAsBlocking()
         }
 
-        val topEpisodes = db.getEpisodes(anime).executeAsBlocking().sortedByDescending { it.date_upload }.take(4)
-        // Recalculate next update since episodes were changed
+        val topEpisodes = db.getEpisodes(anime).executeAsBlocking()
+            .sortedByDescending { it.date_upload }
+            .take(4)        // Recalculate next update since episodes were changed
         if (topEpisodes.size > 1) {
             var delta = 0L
             for (i in 0 until topEpisodes.size - 1) {
@@ -188,10 +190,11 @@ fun syncEpisodesWithSource(
 }
 
 // checks if the episode in db needs updated
-private fun shouldUpdateDbEpisode(dbEpisode: Episode, sourceEpisode: SEpisode): Boolean {
+private fun shouldUpdateDbEpisode(dbEpisode: Episode, sourceEpisode: Episode): Boolean {
     return dbEpisode.scanlator != sourceEpisode.scanlator || dbEpisode.name != sourceEpisode.name ||
         dbEpisode.date_upload != sourceEpisode.date_upload ||
-        dbEpisode.episode_number != sourceEpisode.episode_number
+        dbEpisode.episode_number != sourceEpisode.episode_number ||
+        dbEpisode.source_order != sourceEpisode.source_order
 }
 
 class NoEpisodesException : Exception()
