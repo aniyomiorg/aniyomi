@@ -147,11 +147,8 @@ class AnimelibController(
 
         if (preferences.animeCategoryNumberOfItems().get() && animelibAnimeRelay.hasValue()) {
             animelibAnimeRelay.value.animes.let { animeMap ->
-                if (!showCategoryTabs) {
+                if (!showCategoryTabs || adapter?.categories?.size == 1) {
                     title += " (${animeMap[currentCategory?.id]?.size ?: 0})"
-                } else if (adapter?.categories?.size == 1) {
-                    // Only "Default" category
-                    title += " (${animeMap[0]?.size ?: 0})"
                 }
             }
         }

@@ -161,7 +161,7 @@ fun syncEpisodesWithSource(
 
         val topEpisodes = db.getEpisodes(anime).executeAsBlocking()
             .sortedByDescending { it.date_upload }
-            .take(4)        // Recalculate next update since episodes were changed
+            .take(4) // Recalculate next update since episodes were changed
         if (topEpisodes.size > 1) {
             var delta = 0L
             for (i in 0 until topEpisodes.size - 1) {
