@@ -69,6 +69,11 @@ class SettingsPlayerController : SettingsController() {
                 titleRes = R.string.pref_always_use_external_player
                 defaultValue = false
             }
+            switchPreference {
+                key = Keys.useExternalDownloader
+                titleRes = R.string.pref_use_external_downloader
+                defaultValue = false
+            }
         }
     }
 }

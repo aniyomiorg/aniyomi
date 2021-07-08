@@ -385,6 +385,7 @@
     <string name="pref_category_progress">Progress</string>
     <string name="pref_progress_mark_as_seen">At what point to mark the episode as seen</string>
     <string name="pref_always_use_external_player">Always use external player</string>
+    <string name="pref_use_external_downloader">Use external downloader</string>
     <string name="pref_progress_70">70%</string>
     <string name="pref_progress_75">75%</string>
     <string name="pref_progress_80">80%</string>

@@ -1,7 +1,11 @@
 package eu.kanade.tachiyomi.data.download
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.webkit.MimeTypeMap
+import androidx.core.content.ContextCompat.startActivity
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
@@ -15,6 +19,7 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.model.AnimeDownloadQueue
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.util.lang.RetryWithDelay
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNow
@@ -85,6 +90,8 @@ class AnimeDownloader(
      * Relay to subscribe to the downloader status.
      */
     val runningRelay: BehaviorRelay<Boolean> = BehaviorRelay.create(false)
+
+    private val preferences: PreferencesHelper by injectLazy()
 
     /**
      * Whether the downloader is running.
@@ -381,7 +388,13 @@ class AnimeDownloader(
         val pageObservable = when {
             videoFile != null -> Observable.just(videoFile)
             episodeCache.isImageInCache(video.videoUrl!!) -> copyVideoFromCache(episodeCache.getVideoFile(video.videoUrl!!), tmpDir, filename)
-            else -> downloadVideo(video, download.source, tmpDir, filename)
+            else -> {
+                if (!preferences.useExternalDownloader()) {
+                    downloadVideo(video, download.source, tmpDir, filename)
+                } else {
+                    downloadVideoExternal(video, download.source, tmpDir, filename)
+                }
+            }
         }
 
         return pageObservable
@@ -429,6 +442,38 @@ class AnimeDownloader(
             }
             // Retry 3 times, waiting 2, 4 and 8 seconds between attempts.
             .retryWhen(RetryWithDelay(3, { (2 shl it - 1) * 1000 }, Schedulers.trampoline()))
+    }
+
+    /**
+     * Returns the observable which downloads the image from network.
+     *
+     * @param video the page to download.
+     * @param source the source of the page.
+     * @param tmpDir the temporary directory of the download.
+     * @param filename the filename of the image.
+     */
+    private fun downloadVideoExternal(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
+        video.status = Video.DOWNLOAD_IMAGE
+        video.progress = 0
+        return Observable.just(tmpDir.createFile("$filename.mp4")).map {
+            try {
+                // TODO: support other file formats!!
+                // start download with intent
+                val pm = context.packageManager
+                val intent = pm.getLaunchIntentForPackage("idm.internet.download.manager")
+                intent!!.apply {
+                    component = ComponentName("idm.internet.download.manager", "idm.internet.download.manager.Downloader")
+                    action = Intent.ACTION_VIEW
+                    data = Uri.parse(video.videoUrl!!)
+                    putExtra("extra_filename", filename)
+                }
+                context.startActivity(intent)
+            } catch (e: Exception) {
+                it.delete()
+                throw e
+            }
+            it
+        }
     }
 
     /**

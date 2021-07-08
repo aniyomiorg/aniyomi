@@ -126,6 +126,8 @@ object PreferenceKeys {
 
     const val downloadsDirectory = "download_directory"
 
+    const val useExternalDownloader = "use_external_downloader"
+
     const val downloadOnlyOverWifi = "pref_download_only_over_wifi_key"
 
     const val folderPerManga = "create_folder_per_manga"

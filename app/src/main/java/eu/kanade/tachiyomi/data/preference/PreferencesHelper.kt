@@ -231,6 +231,8 @@ class PreferencesHelper(val context: Context) {
 
     fun downloadsDirectory() = flowPrefs.getString(Keys.downloadsDirectory, defaultDownloadsDir.toString())
 
+    fun useExternalDownloader() = prefs.getBoolean(Keys.useExternalDownloader, false)
+
     fun downloadOnlyOverWifi() = prefs.getBoolean(Keys.downloadOnlyOverWifi, true)
 
     fun folderPerManga() = prefs.getBoolean(Keys.folderPerManga, false)
