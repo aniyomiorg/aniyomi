@@ -24,6 +24,7 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
+import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
@@ -333,6 +334,54 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
         adapter?.clear()
 
         presenter.restartPager(newQuery)
+    }
+
+    /**
+     * Attempts to restart the request with a new genre-filtered query.
+     * If the genre name can't be found the filters,
+     * the standard searchWithQuery search method is used instead.
+     *
+     * @param genreName the name of the genre
+     */
+    fun searchWithGenre(genreName: String) {
+        presenter.sourceFilters = presenter.source.getFilterList()
+
+        var filterList: AnimeFilterList? = null
+
+        filter@ for (sourceFilter in presenter.sourceFilters) {
+            if (sourceFilter is AnimeFilter.Group<*>) {
+                for (filter in sourceFilter.state) {
+                    if (filter is AnimeFilter<*> && filter.name.equals(genreName, true)) {
+                        when (filter) {
+                            is AnimeFilter.TriState -> filter.state = 1
+                            is AnimeFilter.CheckBox -> filter.state = true
+                        }
+                        filterList = presenter.sourceFilters
+                        break@filter
+                    }
+                }
+            } else if (sourceFilter is AnimeFilter.Select<*>) {
+                val index = sourceFilter.values.filterIsInstance<String>()
+                    .indexOfFirst { it.equals(genreName, true) }
+
+                if (index != -1) {
+                    sourceFilter.state = index
+                    filterList = presenter.sourceFilters
+                    break
+                }
+            }
+        }
+
+        if (filterList != null) {
+            filterSheet?.setFilters(presenter.filterItems)
+
+            showProgressBar()
+
+            adapter?.clear()
+            presenter.restartPager("", filterList)
+        } else {
+            searchWithQuery(genreName)
+        }
     }
 
     /**

@@ -655,6 +655,29 @@ class AnimeController :
         }
     }
 
+    /**
+     * Performs a genre search using the provided genre name.
+     *
+     * @param genreName the search genre to the parent controller
+     */
+    fun performGenreSearch(genreName: String) {
+        if (router.backstackSize < 2) {
+            return
+        }
+
+        val previousController = router.backstack[router.backstackSize - 2].controller
+        val presenterSource = presenter.source
+
+        if (previousController is BrowseAnimeSourceController &&
+            presenterSource is AnimeHttpSource
+        ) {
+            router.handleBack()
+            previousController.searchWithGenre(genreName)
+        } else {
+            performSearch(genreName)
+        }
+    }
+
     private fun shareCover() {
         try {
             val activity = activity!!

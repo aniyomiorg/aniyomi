@@ -64,22 +64,25 @@ class AnimelibUpdateNotifier(private val context: Context) {
     /**
      * Shows the notification containing the currently updating anime and the progress.
      *
-     * @param anime the anime that's being updated.
+     * @param anime the anime that are being updated.
      * @param current the current progress.
      * @param total the total progress.
      */
-    fun showProgressNotification(anime: Anime, current: Int, total: Int) {
-        val title = if (preferences.hideNotificationContent()) {
-            context.getString(R.string.notification_check_updates)
+    fun showProgressNotification(anime: List<Anime>, current: Int, total: Int) {
+        if (preferences.hideNotificationContent()) {
+            progressNotificationBuilder
+                .setContentTitle(context.getString(R.string.notification_check_updates))
+                .setContentText("($current/$total)")
         } else {
-            anime.title
+            val updatingText = anime.joinToString("\n") { it.title }
+            progressNotificationBuilder
+                .setContentTitle(context.getString(R.string.notification_updating, current, total))
+                .setStyle(NotificationCompat.BigTextStyle().bigText(updatingText))
         }
 
         context.notificationManager.notify(
             Notifications.ID_LIBRARY_PROGRESS,
             progressNotificationBuilder
-                .setContentTitle(title.chop(40))
-                .setContentText("($current/$total)")
                 .setProgress(total, current, false)
                 .build()
         )

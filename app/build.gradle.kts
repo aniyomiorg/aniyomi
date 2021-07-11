@@ -134,7 +134,7 @@ dependencies {
 
     implementation(kotlin("reflect", version = BuildPluginsVersion.KOTLIN))
 
-    val coroutinesVersion = "1.4.3"
+    val coroutinesVersion = "1.5.1"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 
@@ -164,7 +164,7 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.6.0-beta01")
 
     // UI library
-    implementation("com.google.android.material:material:1.4.0")
+    implementation("com.google.android.material:material:1.5.0-alpha01")
 
     "standardImplementation"("com.google.firebase:firebase-core:19.0.0")
 
@@ -185,7 +185,7 @@ dependencies {
     implementation("org.conscrypt:conscrypt-android:2.5.2")
 
     // JSON
-    val kotlinSerializationVersion = "1.2.0"
+    val kotlinSerializationVersion = "1.2.2"
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$kotlinSerializationVersion")
     implementation("com.google.code.gson:gson:2.8.7")

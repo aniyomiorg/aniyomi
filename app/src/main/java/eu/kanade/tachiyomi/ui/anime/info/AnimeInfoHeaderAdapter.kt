@@ -262,11 +262,11 @@ class AnimeInfoHeaderAdapter(
                 if (!anime.genre.isNullOrBlank()) {
                     binding.mangaGenresTagsCompactChips.setChips(
                         anime.getGenres(),
-                        controller::performSearch
+                        controller::performGenreSearch
                     )
                     binding.mangaGenresTagsFullChips.setChips(
                         anime.getGenres(),
-                        controller::performSearch
+                        controller::performGenreSearch
                     )
                 } else {
                     binding.mangaGenresTagsCompactChips.isVisible = false

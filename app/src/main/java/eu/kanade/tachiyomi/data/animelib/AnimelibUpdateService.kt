@@ -30,6 +30,7 @@ import eu.kanade.tachiyomi.data.track.UnattendedTrackService
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
+import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.storage.getUriCompat
@@ -47,10 +48,14 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -270,50 +275,76 @@ class AnimelibUpdateService(
      * @return an observable delivering the progress of each update.
      */
     suspend fun updateEpisodeList() {
+        val semaphore = Semaphore(5)
         val progressCount = AtomicInteger(0)
-        val newUpdates = mutableListOf<Pair<AnimelibAnime, Array<Episode>>>()
-        val failedUpdates = mutableListOf<Pair<Anime, String?>>()
-        var hasDownloads = false
+        val currentlyUpdatingAnime = CopyOnWriteArrayList<AnimelibAnime>()
+        val newUpdates = CopyOnWriteArrayList<Pair<AnimelibAnime, Array<Episode>>>()
+        val failedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
+        val hasDownloads = AtomicBoolean(false)
         val loggedServices by lazy { trackManager.services.filter { it.isLogged } }
 
-        animeToUpdate.forEach { anime ->
-            if (updateJob?.isActive != true) {
-                return
-            }
+        withIOContext {
+            animeToUpdate.groupBy { it.source }
+                .values
+                .map { animeInSource ->
+                    async {
+                        semaphore.withPermit {
+                            animeInSource.forEach { anime ->
+                                if (updateJob?.isActive != true) {
+                                    return@async
+                                }
 
-            notifier.showProgressNotification(anime, progressCount.andIncrement, animeToUpdate.size)
+                                currentlyUpdatingAnime.add(anime)
+                                progressCount.andIncrement
+                                notifier.showProgressNotification(
+                                    currentlyUpdatingAnime,
+                                    progressCount.get(),
+                                    animeToUpdate.size
+                                )
 
-            try {
-                val (newEpisodes, _) = updateAnime(anime)
+                                try {
+                                    val (newEpisodes, _) = updateAnime(anime)
 
-                if (newEpisodes.isNotEmpty()) {
-                    if (anime.shouldDownloadNewEpisodes(db, preferences)) {
-                        downloadEpisodes(anime, newEpisodes)
-                        hasDownloads = true
+                                    if (newEpisodes.isNotEmpty()) {
+                                        if (anime.shouldDownloadNewEpisodes(db, preferences)) {
+                                            downloadEpisodes(anime, newEpisodes)
+                                            hasDownloads.set(true)
+                                        }
+
+                                        // Convert to the manga that contains new chapters
+                                        newUpdates.add(anime to newEpisodes.sortedByDescending { ep -> ep.source_order }.toTypedArray())
+                                    }
+                                } catch (e: Throwable) {
+                                    val errorMessage = if (e is NoEpisodesException) {
+                                        getString(R.string.no_chapters_error)
+                                    } else {
+                                        e.message
+                                    }
+                                    failedUpdates.add(anime to errorMessage)
+                                }
+
+                                if (preferences.autoUpdateTrackers()) {
+                                    updateTrackings(anime, loggedServices)
+                                }
+
+                                currentlyUpdatingAnime.remove(anime)
+                                notifier.showProgressNotification(
+                                    currentlyUpdatingAnime,
+                                    progressCount.get(),
+                                    animeToUpdate.size
+                                )
+                            }
+                        }
                     }
-
-                    // Convert to the anime that contains new chapters
-                    newUpdates.add(anime to newEpisodes.sortedByDescending { ep -> ep.source_order }.toTypedArray())
                 }
-            } catch (e: Throwable) {
-                val errorMessage = if (e is NoEpisodesException) {
-                    getString(R.string.no_chapters_error)
-                } else {
-                    e.message
-                }
-                failedUpdates.add(anime to errorMessage)
-            }
-
-            if (preferences.autoUpdateTrackers()) {
-                updateTrackings(anime, loggedServices)
-            }
+                .awaitAll()
         }
 
         notifier.cancelProgressNotification()
 
         if (newUpdates.isNotEmpty()) {
             notifier.showUpdateNotifications(newUpdates)
-            if (hasDownloads) {
+            if (hasDownloads.get()) {
                 AnimeDownloadService.start(this)
             }
         }
@@ -369,30 +400,58 @@ class AnimelibUpdateService(
     }
 
     private suspend fun updateCovers() {
-        var progressCount = 0
+        val semaphore = Semaphore(5)
+        val progressCount = AtomicInteger(0)
+        val currentlyUpdatingAnime = CopyOnWriteArrayList<AnimelibAnime>()
 
-        animeToUpdate.forEach { anime ->
-            if (updateJob?.isActive != true) {
-                return
-            }
+        withIOContext {
+            animeToUpdate.groupBy { it.source }
+                .values
+                .map { animeInSource ->
+                    async {
+                        semaphore.withPermit {
+                            animeInSource.forEach { anime ->
+                                if (updateJob?.isActive != true) {
+                                    return@async
+                                }
 
-            notifier.showProgressNotification(anime, progressCount++, animeToUpdate.size)
+                                currentlyUpdatingAnime.add(anime)
+                                progressCount.andIncrement
+                                notifier.showProgressNotification(
+                                    currentlyUpdatingAnime,
+                                    progressCount.get(),
+                                    animeToUpdate.size
+                                )
 
-            sourceManager.get(anime.source)?.let { source ->
-                try {
-                    val networkAnime = source.getAnimeDetails(anime.toAnimeInfo())
-                    val sAnime = networkAnime.toSAnime()
-                    anime.prepUpdateCover(coverCache, sAnime, true)
-                    sAnime.thumbnail_url?.let {
-                        anime.thumbnail_url = it
-                        db.insertAnime(anime).executeAsBlocking()
+                                sourceManager.get(anime.source)?.let { source ->
+                                    try {
+                                        val networkAnime =
+                                            source.getAnimeDetails(anime.toAnimeInfo())
+                                        val sAnime = networkAnime.toSAnime()
+                                        anime.prepUpdateCover(coverCache, sAnime, true)
+                                        sAnime.thumbnail_url?.let {
+                                            anime.thumbnail_url = it
+                                            db.insertAnime(anime).executeAsBlocking()
+                                        }
+                                    } catch (e: Throwable) {
+                                        // Ignore errors and continue
+                                        Timber.e(e)
+                                    }
+                                }
+
+                                currentlyUpdatingAnime.remove(anime)
+                                notifier.showProgressNotification(
+                                    currentlyUpdatingAnime,
+                                    progressCount.get(),
+                                    animeToUpdate.size
+                                )
+                            }
+                        }
                     }
-                } catch (e: Throwable) {
-                    // Ignore errors and continue
-                    Timber.e(e)
                 }
-            }
+                .awaitAll()
         }
+
         coverCache.clearMemoryCache()
         notifier.cancelProgressNotification()
     }
@@ -410,8 +469,7 @@ class AnimelibUpdateService(
                 return
             }
 
-            // Notify anime that will update.
-            notifier.showProgressNotification(anime, progressCount++, animeToUpdate.size)
+            notifier.showProgressNotification(listOf(anime), progressCount++, animeToUpdate.size)
 
             // Update the tracking details.
             updateTrackings(anime, loggedServices)

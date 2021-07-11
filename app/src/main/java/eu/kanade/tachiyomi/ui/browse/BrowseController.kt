@@ -60,7 +60,7 @@ class BrowseController :
         binding.pager.adapter = adapter
 
         if (toExtensions) {
-            binding.pager.currentItem = EXTENSIONS_CONTROLLER
+            binding.pager.currentItem = ANIMEEXTENSIONS_CONTROLLER
         }
     }
 

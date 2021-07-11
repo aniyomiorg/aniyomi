@@ -19,7 +19,6 @@ import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.Router
-import com.bluelinelabs.conductor.RouterTransaction
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.navigation.NavigationBarView
@@ -44,6 +43,7 @@ import eu.kanade.tachiyomi.ui.base.controller.ToolbarLiftOnScrollController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.BrowseController
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
+import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
 import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
 import eu.kanade.tachiyomi.ui.download.DownloadTabsController
@@ -331,7 +331,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                     router.popToRoot()
                 }
                 setSelectedNavItem(R.id.nav_browse)
-                router.pushController(BrowseController(true).withFadeTransaction())
+                router.pushController(BrowseController(toExtensions = true).withFadeTransaction())
             }
             SHORTCUT_MANGA -> {
                 val extras = intent.extras ?: return false
@@ -339,7 +339,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                     router.popToRoot()
                 }
                 setSelectedNavItem(R.id.nav_library)
-                router.pushController(RouterTransaction.with(MangaController(extras)))
+                router.pushController(MangaController(extras).withFadeTransaction())
             }
             SHORTCUT_ANIME -> {
                 val extras = intent.extras ?: return false
@@ -347,21 +347,21 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                     router.popToRoot()
                 }
                 setSelectedNavItem(R.id.nav_animelib)
-                router.pushController(RouterTransaction.with(AnimeController(extras)))
+                router.pushController(AnimeController(extras).withFadeTransaction())
             }
             SHORTCUT_DOWNLOADS -> {
                 if (router.backstackSize > 1) {
                     router.popToRoot()
                 }
-                setSelectedNavItem(R.id.nav_updates)
-                router.pushController(RouterTransaction.with(MangaDownloadController()))
+                setSelectedNavItem(R.id.nav_more)
+                router.pushController(MangaDownloadController().withFadeTransaction())
             }
             SHORTCUT_ANIME_DOWNLOADS -> {
                 if (router.backstackSize > 1) {
                     router.popToRoot()
                 }
-                setSelectedNavItem(R.id.nav_updates)
-                router.pushController(RouterTransaction.with(AnimeDownloadController()))
+                setSelectedNavItem(R.id.nav_more)
+                router.pushController(AnimeDownloadController().withFadeTransaction())
             }
             Intent.ACTION_SEARCH, Intent.ACTION_SEND, "com.google.android.gms.actions.SEARCH_ACTION" -> {
                 // If the intent match the "standard" Android search intent
@@ -378,12 +378,22 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             }
             INTENT_SEARCH -> {
                 val query = intent.getStringExtra(INTENT_SEARCH_QUERY)
-                val filter = intent.getStringExtra(INTENT_SEARCH_FILTER)
                 if (query != null && query.isNotEmpty()) {
+                    val filter = intent.getStringExtra(INTENT_SEARCH_FILTER)
                     if (router.backstackSize > 1) {
                         router.popToRoot()
                     }
                     router.pushController(GlobalSearchController(query, filter).withFadeTransaction())
+                }
+            }
+            INTENT_ANIMESEARCH -> {
+                val query = intent.getStringExtra(INTENT_SEARCH_QUERY)
+                if (query != null && query.isNotEmpty()) {
+                    val filter = intent.getStringExtra(INTENT_SEARCH_FILTER)
+                    if (router.backstackSize > 1) {
+                        router.popToRoot()
+                    }
+                    router.pushController(GlobalAnimeSearchController(query, filter).withFadeTransaction())
                 }
             }
             else -> {
@@ -576,6 +586,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
         const val SHORTCUT_EXTENSIONS = "eu.kanade.tachiyomi.EXTENSIONS"
 
         const val INTENT_SEARCH = "eu.kanade.tachiyomi.SEARCH"
+        const val INTENT_ANIMESEARCH = "eu.kanade.tachiyomi.ANIMESEARCH"
         const val INTENT_SEARCH_QUERY = "query"
         const val INTENT_SEARCH_FILTER = "filter"
     }
