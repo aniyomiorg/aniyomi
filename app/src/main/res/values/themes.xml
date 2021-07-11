@@ -54,6 +54,8 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Tachiyomi.BottomSheetDialog</item>
         <item name="chipStyle">@style/Widget.Tachiyomi.Chip.Action</item>
+        <item name="chipTextColor">?android:attr/textColorPrimary</item>
+        <item name="chipBackgroundColor">?attr/colorControlHighlight</item>
         <item name="snackbarStyle">@style/Widget.Tachiyomi.Snackbar</item>
         <item name="snackbarTextViewStyle">@style/Widget.Tachiyomi.Snackbar.TextView</item>
         <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
@@ -104,8 +106,8 @@
     <!--== Green Apple theme ==-->
     <style name="Theme.Tachiyomi.GreenApple">
         <!-- Theme colors -->
-        <item name="colorPrimary">@color/accent_greenapple_variant</item>
-        <item name="colorOnPrimary">@color/md_white_1000</item>
+        <item name="colorPrimary">@color/accent_greenapple</item>
+        <item name="colorOnPrimary">@color/color_on_primary_greenapple</item>
         <item name="colorTertiary">@color/md_blue_A400</item>
         <item name="colorControlHighlight">@color/ripple_colored_greenapple</item>
         <item name="lightSystemBarsOnPrimary">true</item>
@@ -119,6 +121,10 @@
         <item name="colorTertiary">@color/color_on_secondary_yinyang</item>
         <item name="colorOnTertiary">@color/accent_yinyang</item>
         <item name="colorControlHighlight">@color/ripple_colored_yinyang</item>
+
+        <!-- Themes -->
+        <item name="chipTextColor">@color/color_on_secondary_yinyang</item>
+        <item name="chipBackgroundColor">@color/accent_yinyang</item>
     </style>
 
     <!--== Midnight Dusk theme ==-->

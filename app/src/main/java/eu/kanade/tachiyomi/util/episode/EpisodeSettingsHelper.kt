@@ -14,12 +14,8 @@ object EpisodeSettingsHelper {
     /**
      * Updates the global Episode Settings in Preferences.
      */
-    fun setGlobalSettings(anime: Anime?) {
-        anime?.let {
-            prefs.setEpisodeSettingsDefault(it)
-            db.updateEpisodeFlags(it).executeAsBlocking()
-            db.updateViewerFlags(it).executeAsBlocking()
-        }
+    fun setGlobalSettings(anime: Anime) {
+        prefs.setEpisodeSettingsDefault(anime)
     }
 
     /**
@@ -58,7 +54,6 @@ object EpisodeSettingsHelper {
                 }
 
             db.updateEpisodeFlags(updatedAnimes).executeAsBlocking()
-            db.updateViewerFlags(updatedAnimes).executeAsBlocking()
         }
     }
 }
