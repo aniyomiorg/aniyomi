@@ -285,9 +285,9 @@ class PlayerActivity : AppCompatActivity() {
         val nextQuality = if (currentQuality == videos.lastIndex) 0 else currentQuality + 1
         baseContext.toast(videos[nextQuality].quality, Toast.LENGTH_SHORT)
         uri = if (isLocal) {
-            videos.first().uri!!.toString()
+            videos[nextQuality].uri!!.toString()
         } else {
-            videos.first().videoUrl!!
+            videos[nextQuality].videoUrl!!
         }
         currentQuality = nextQuality
         mediaItem = MediaItem.Builder()
