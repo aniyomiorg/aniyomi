@@ -227,7 +227,7 @@ fun getLatestEpisodeAnimeQuery() =
     """
     SELECT ${Anime.TABLE}.*, MAX(${Episode.TABLE}.${Episode.COL_DATE_UPLOAD}) AS max
     FROM ${Anime.TABLE}
-    JOIN ${Chapter.TABLE}
+    JOIN ${Episode.TABLE}
     ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
     GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
     ORDER by max DESC
