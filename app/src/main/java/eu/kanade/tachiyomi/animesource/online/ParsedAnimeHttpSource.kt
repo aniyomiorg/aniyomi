@@ -194,19 +194,13 @@ abstract class ParsedAnimeHttpSource : AnimeHttpSource() {
      * @param response the response from the site.
      */
     override fun videoUrlParse(response: Response): String {
-        val document = response.asJsoup()
-        return videoUrlFromElement(document.selectFirst(videoUrlSelector()))
+        return videoUrlParse(response.asJsoup())
     }
 
     /**
-     * Returns the Jsoup selector that returns the [Element] corresponding to the video URL.
-     */
-    protected abstract fun videoUrlSelector(): String
-
-    /**
-     * Returns a video URL from the given element.
+     * Returns the absolute url to the source image from the document.
      *
-     * @param element an element obtained from [videoListSelector].
+     * @param document the parsed document.
      */
-    protected abstract fun videoUrlFromElement(element: Element): String
+    protected abstract fun videoUrlParse(document: Document): String
 }
