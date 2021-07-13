@@ -287,6 +287,8 @@ class AnimeController :
         episodesAdapter?.fastScroller = binding.fastScroller
 
         actionFabScrollListener = actionFab?.shrinkOnScroll(episodeRecycler)
+        // Initially set FAB invisible; will become visible if unseen episodes are present
+        actionFab?.isVisible = false
 
         binding.swipeRefresh.refreshes()
             .onEach {
@@ -350,8 +352,6 @@ class AnimeController :
                         }
                     )
                 }
-            } else {
-                view?.context?.toast(R.string.no_next_episode)
             }
         }
     }
@@ -884,8 +884,11 @@ class AnimeController :
         }
 
         val context = view?.context
-        if (context != null && episodes.any { it.seen }) {
-            actionFab?.text = context.getString(R.string.action_resume)
+        if (context != null) {
+            actionFab?.isVisible = episodes.any { !it.seen }
+            if (episodes.any { it.seen }) {
+                actionFab?.text = context.getString(R.string.action_resume)
+            }
         }
     }
 
