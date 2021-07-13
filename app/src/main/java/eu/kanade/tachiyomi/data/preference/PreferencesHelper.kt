@@ -233,6 +233,8 @@ class PreferencesHelper(val context: Context) {
 
     fun useExternalDownloader() = prefs.getBoolean(Keys.useExternalDownloader, false)
 
+    fun externalDownloaderSelection() = prefs.getString(Keys.externalDownloaderSelection, "")
+
     fun downloadOnlyOverWifi() = prefs.getBoolean(Keys.downloadOnlyOverWifi, true)
 
     fun folderPerManga() = prefs.getBoolean(Keys.folderPerManga, false)

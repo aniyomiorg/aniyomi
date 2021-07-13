@@ -459,16 +459,31 @@ class AnimeDownloader(
                 // TODO: support other file formats!!
                 // start download with intent
                 val pm = context.packageManager
-                val intent = pm.getLaunchIntentForPackage("idm.internet.download.manager")
-                intent!!.apply {
-                    component = ComponentName("idm.internet.download.manager", "idm.internet.download.manager.Downloader")
-                    action = Intent.ACTION_VIEW
-                    data = Uri.parse(video.videoUrl!!)
-                    putExtra("extra_filename", filename)
+                val pkgName = preferences.externalDownloaderSelection()
+                Timber.w(pkgName)
+                val intent: Intent
+                if (!pkgName.isNullOrEmpty()) {
+                    intent = pm.getLaunchIntentForPackage(pkgName)!!
+                    intent.apply {
+                        // TODO: this only works for 1DM
+                        component = ComponentName(pkgName, "${pkgName.substringBeforeLast(".")}.Downloader")
+                        action = Intent.ACTION_VIEW
+                        data = video.uri ?: Uri.parse(video.videoUrl)
+                        putExtra("extra_filename", filename)
+                    }
+                } else {
+                    Timber.w("emtpy")
+                    intent = Intent(Intent.ACTION_VIEW)
+                    intent.apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        data = video.uri ?: Uri.parse(video.videoUrl)
+                        putExtra("extra_filename", filename)
+                    }
                 }
                 context.startActivity(intent)
             } catch (e: Exception) {
                 it.delete()
+                Timber.w(e.message)
                 throw e
             }
             it

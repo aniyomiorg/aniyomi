@@ -414,7 +414,8 @@
     <string name="fifth_to_last">Fifth to last chapter</string>
     <string name="pref_category_auto_download">Auto-download</string>
     <string name="pref_category_anime_download">Anime downloads</string>
-    <string name="pref_use_external_downloader">Use external downloader for anime</string>
+    <string name="pref_use_external_downloader">Always use external downloader for anime</string>
+    <string name="pref_external_downloader_selection">Downloader app preference</string>
     <string name="pref_download_new">Download new chapters</string>
     <string name="pref_download_new_categories_details">Manga in excluded categories will not be downloaded even if they are also in included categories.</string>
 
