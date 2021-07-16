@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.widget.ImageButton
 import android.widget.TextView
@@ -320,10 +319,7 @@ class PlayerActivity : AppCompatActivity() {
         dataSourceFactory = if (isLocal) {
             DefaultDataSourceFactory(this)
         } else {
-            DefaultHttpDataSource.Factory().apply {
-                setDefaultRequestProperties(mapOf(Pair("cookie", CookieManager.getInstance().getCookie(uri))))
-                setUserAgent(userAgentString)
-            }
+            newDataSourceFactory()
         }
         mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
         exoPlayer.release()
