@@ -40,6 +40,14 @@ abstract class TrackService(val id: Int) {
 
     abstract fun getStatus(status: Int): String
 
+    abstract fun getReadingStatus(): Int
+
+    abstract fun getWatchingStatus(): Int
+
+    abstract fun getRereadingStatus(): Int
+
+    abstract fun getRewatchingStatus(): Int
+
     abstract fun getCompletionStatus(): Int
 
     abstract fun getScoreList(): List<String>
@@ -52,13 +60,13 @@ abstract class TrackService(val id: Int) {
 
     abstract fun displayScore(track: AnimeTrack): String
 
-    abstract suspend fun update(track: Track): Track
+    abstract suspend fun update(track: Track, didReadChapter: Boolean = false): Track
 
-    abstract suspend fun update(track: AnimeTrack): AnimeTrack
+    abstract suspend fun update(track: AnimeTrack, didReadChapter: Boolean = false): AnimeTrack
 
-    abstract suspend fun bind(track: Track): Track
+    abstract suspend fun bind(track: Track, hasReadChapters: Boolean = false): Track
 
-    abstract suspend fun bind(track: AnimeTrack): AnimeTrack
+    abstract suspend fun bind(track: AnimeTrack, hasReadChapters: Boolean = false): AnimeTrack
 
     abstract suspend fun search(query: String): List<TrackSearch>
 

@@ -3,8 +3,7 @@ package eu.kanade.tachiyomi.ui.anime.episode
 import android.app.Dialog
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.customview.customView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
@@ -24,13 +23,10 @@ class SetEpisodeSettingsDialog(bundle: Bundle? = null) : DialogController(bundle
             setOptionDescription(R.string.also_set_episode_settings_for_library)
         }
 
-        return MaterialDialog(activity!!)
-            .title(R.string.episode_settings)
-            .customView(
-                view = view,
-                horizontalPadding = true
-            )
-            .positiveButton(android.R.string.ok) {
+        return MaterialAlertDialogBuilder(activity!!)
+            .setTitle(R.string.chapter_settings)
+            .setView(view)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
                 EpisodeSettingsHelper.setGlobalSettings(args.getSerializable(ANIME_KEY)!! as Anime)
                 if (view.isChecked()) {
                     EpisodeSettingsHelper.updateAllAnimesWithGlobalDefaults()
@@ -38,7 +34,8 @@ class SetEpisodeSettingsDialog(bundle: Bundle? = null) : DialogController(bundle
 
                 activity?.toast(activity!!.getString(R.string.episode_settings_updated))
             }
-            .negativeButton(android.R.string.cancel)
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
     }
 
     private companion object {

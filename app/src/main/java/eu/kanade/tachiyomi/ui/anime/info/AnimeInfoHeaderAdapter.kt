@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.loadAny
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -177,14 +178,32 @@ class AnimeInfoHeaderAdapter(
 
             binding.mangaCover.longClicks()
                 .onEach {
-                    controller.activity?.copyToClipboard(
-                        view.context.getString(R.string.title),
-                        controller.presenter.anime.title
-                    )
+                    showCoverOptionsDialog()
                 }
                 .launchIn(controller.viewScope)
 
             setAnimeInfo(anime, source)
+        }
+
+        private fun showCoverOptionsDialog() {
+            val options = listOfNotNull(
+                R.string.action_share,
+                R.string.action_save,
+                // Can only edit cover for library anime
+                if (anime.favorite) R.string.action_edit else null
+            ).map(controller.activity!!::getString).toTypedArray()
+
+            MaterialAlertDialogBuilder(controller.activity!!)
+                .setTitle(R.string.manga_cover)
+                .setItems(options) { _, item ->
+                    when (item) {
+                        0 -> controller.shareCover()
+                        1 -> controller.saveCover()
+                        2 -> controller.changeCover()
+                    }
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
         }
 
         /**

@@ -306,7 +306,7 @@ class AnimeController :
             }
         }
 
-        trackSheet = TrackSheet(this, anime!!)
+        trackSheet = TrackSheet(this, anime!!, (activity as MainActivity).supportFragmentManager)
 
         updateFilterIconState()
     }
@@ -678,7 +678,7 @@ class AnimeController :
         }
     }
 
-    private fun shareCover() {
+    fun shareCover() {
         try {
             val activity = activity!!
             val cover = presenter.shareCover(activity)
@@ -690,7 +690,7 @@ class AnimeController :
         }
     }
 
-    private fun saveCover() {
+    fun saveCover() {
         try {
             presenter.saveCover(activity!!)
             activity?.toast(R.string.cover_saved)
@@ -700,7 +700,7 @@ class AnimeController :
         }
     }
 
-    private fun changeCover() {
+    fun changeCover() {
         val anime = anime ?: return
         if (anime.hasCustomCover(coverCache)) {
             ChangeAnimeCoverDialog(this, anime).showDialog(router)

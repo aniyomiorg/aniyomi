@@ -2,8 +2,8 @@ package eu.kanade.tachiyomi.ui.recent.animeupdates
 
 import android.app.Dialog
 import android.os.Bundle
-import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 
@@ -18,12 +18,13 @@ class ConfirmDeleteEpisodesDialog<T>(bundle: Bundle? = null) : DialogController(
     }
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-        return MaterialDialog(activity!!)
-            .message(R.string.confirm_delete_episodes)
-            .positiveButton(android.R.string.ok) {
+        return MaterialAlertDialogBuilder(activity!!)
+            .setMessage(R.string.confirm_delete_episodes)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
                 (targetController as? Listener)?.deleteEpisodes(episodesToDelete)
             }
-            .negativeButton(android.R.string.cancel)
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
     }
 
     interface Listener {

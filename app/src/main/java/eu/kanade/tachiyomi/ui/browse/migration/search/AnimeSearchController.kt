@@ -3,13 +3,14 @@ package eu.kanade.tachiyomi.ui.browse.migration.search
 import android.app.Dialog
 import android.os.Bundle
 import androidx.core.view.isVisible
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.bluelinelabs.conductor.Controller
+import com.bluelinelabs.conductor.RouterTransaction
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
@@ -69,12 +70,14 @@ class AnimeSearchController(
         super.onAnimeClick(anime)
     }
 
-    fun renderIsReplacingAnime(isReplacingAnime: Boolean) {
-        if (isReplacingAnime) {
-            binding.progress.isVisible = true
-        } else {
-            binding.progress.isVisible = false
+    fun renderIsReplacingAnime(isReplacingAnime: Boolean, newAnime: Anime?) {
+        binding.progress.isVisible = isReplacingAnime
+        if (!isReplacingAnime) {
             router.popController(this)
+            if (newAnime != null) {
+                // Replaces old AnimeController
+                router.replaceTopController(RouterTransaction.with(AnimeController(newAnime)))
+            }
         }
     }
 
@@ -82,28 +85,29 @@ class AnimeSearchController(
 
         private val preferences: PreferencesHelper by injectLazy()
 
+        @Suppress("DEPRECATION")
         override fun onCreateDialog(savedViewState: Bundle?): Dialog {
             val prefValue = preferences.migrateFlags().get()
+            val enabledFlagsPositions = AnimeMigrationFlags.getEnabledFlagsPositions(prefValue)
+            val items = AnimeMigrationFlags.titles
+                .map { resources?.getString(it) }
+                .toTypedArray()
+            val selected = items
+                .mapIndexed { i, _ -> enabledFlagsPositions.contains(i) }
+                .toBooleanArray()
 
-            val preselected =
-                AnimeMigrationFlags.getEnabledFlagsPositions(
-                    prefValue
-                )
-
-            return MaterialDialog(activity!!)
-                .title(R.string.migration_dialog_what_to_include)
-                .listItemsMultiChoice(
-                    items = AnimeMigrationFlags.titles.map { resources?.getString(it) as CharSequence },
-                    initialSelection = preselected.toIntArray()
-                ) { _, positions, _ ->
-                    // Save current settings for the next time
-                    val newValue =
-                        AnimeMigrationFlags.getFlagsFromPositions(
-                            positions.toTypedArray()
-                        )
-                    preferences.migrateFlags().set(newValue)
+            return MaterialAlertDialogBuilder(activity!!)
+                .setTitle(R.string.migration_dialog_what_to_include)
+                .setMultiChoiceItems(items, selected) { _, which, checked ->
+                    selected[which] = checked
                 }
-                .positiveButton(R.string.migrate) {
+                .setPositiveButton(R.string.migrate) { _, _ ->
+                    // Save current settings for the next time
+                    val selectedIndices = mutableListOf<Int>()
+                    selected.forEachIndexed { i, b -> if (b) selectedIndices.add(i) }
+                    val newValue = AnimeMigrationFlags.getFlagsFromPositions(selectedIndices.toTypedArray())
+                    preferences.migrateFlags().set(newValue)
+
                     if (callingController != null) {
                         if (callingController.javaClass == AnimeSourceSearchController::class.java) {
                             router.popController(callingController)
@@ -111,7 +115,7 @@ class AnimeSearchController(
                     }
                     (targetController as? AnimeSearchController)?.migrateAnime(anime, newAnime)
                 }
-                .negativeButton(R.string.copy) {
+                .setNegativeButton(R.string.copy) { _, _, ->
                     if (callingController != null) {
                         if (callingController.javaClass == AnimeSourceSearchController::class.java) {
                             router.popController(callingController)
@@ -119,7 +123,8 @@ class AnimeSearchController(
                     }
                     (targetController as? AnimeSearchController)?.copyAnime(anime, newAnime)
                 }
-                .neutralButton(android.R.string.cancel)
+                .setNeutralButton(android.R.string.cancel, null)
+                .create()
         }
     }
 

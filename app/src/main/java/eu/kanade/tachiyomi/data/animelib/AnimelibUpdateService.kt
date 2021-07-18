@@ -295,7 +295,6 @@ class AnimelibUpdateService(
                                 }
 
                                 currentlyUpdatingAnime.add(anime)
-                                progressCount.andIncrement
                                 notifier.showProgressNotification(
                                     currentlyUpdatingAnime,
                                     progressCount.get(),
@@ -328,6 +327,7 @@ class AnimelibUpdateService(
                                 }
 
                                 currentlyUpdatingAnime.remove(anime)
+                                progressCount.andIncrement
                                 notifier.showProgressNotification(
                                     currentlyUpdatingAnime,
                                     progressCount.get(),
@@ -416,7 +416,6 @@ class AnimelibUpdateService(
                                 }
 
                                 currentlyUpdatingAnime.add(anime)
-                                progressCount.andIncrement
                                 notifier.showProgressNotification(
                                     currentlyUpdatingAnime,
                                     progressCount.get(),
@@ -440,6 +439,7 @@ class AnimelibUpdateService(
                                 }
 
                                 currentlyUpdatingAnime.remove(anime)
+                                progressCount.andIncrement
                                 notifier.showProgressNotification(
                                     currentlyUpdatingAnime,
                                     progressCount.get(),

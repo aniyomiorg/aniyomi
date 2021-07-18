@@ -22,7 +22,6 @@ shortcutHelper.setFilePath("./shortcuts.xml")
 
 android {
     compileSdkVersion(AndroidConfig.compileSdk)
-    buildToolsVersion(AndroidConfig.buildTools)
     ndkVersion = AndroidConfig.ndk
 
     defaultConfig {
@@ -150,6 +149,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.0-beta02")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.1.0")
     implementation("androidx.core:core-ktx:1.7.0-alpha01")
+    implementation("androidx.core:core-splashscreen:1.0.0-alpha01")
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.preference:preference-ktx:1.1.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
@@ -246,12 +246,6 @@ dependencies {
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
     implementation("com.github.tachiyomiorg:DirectionalViewPager:1.0.0")
     implementation("dev.chrisbanes.insetter:insetter:0.6.0")
-
-    // 3.2.0+ introduces weird UI blinking or cut off issues on some devices
-    val materialDialogsVersion = "3.1.1"
-    implementation("com.afollestad.material-dialogs:core:$materialDialogsVersion")
-    implementation("com.afollestad.material-dialogs:input:$materialDialogsVersion")
-    implementation("com.afollestad.material-dialogs:datetime:$materialDialogsVersion")
 
     // Conductor
     val conductorVersion = "3.0.0"

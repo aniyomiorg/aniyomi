@@ -815,7 +815,8 @@ class AnimePresenter(
             item.anime_id = anime.id!!
             launchIO {
                 try {
-                    service.bind(item)
+                    val hasReadChapters = allEpisodes.any { it.seen }
+                    service.bind(item, hasReadChapters)
                     db.insertTrack(item).executeAsBlocking()
 
                     if (service is UnattendedTrackService) {
@@ -866,6 +867,9 @@ class AnimePresenter(
 
     fun setTrackerLastEpisodeSeen(item: TrackItem, episodeNumber: Int) {
         val track = item.track!!
+        if (track.last_episode_seen == 0 && track.last_episode_seen < episodeNumber && track.status != item.service.getRereadingStatus()) {
+            track.status = item.service.getReadingStatus()
+        }
         track.last_episode_seen = episodeNumber
         if (track.total_episodes != 0 && track.last_episode_seen == track.total_episodes) {
             track.status = item.service.getCompletionStatus()

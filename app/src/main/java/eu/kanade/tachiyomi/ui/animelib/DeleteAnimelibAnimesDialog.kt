@@ -2,9 +2,8 @@ package eu.kanade.tachiyomi.ui.animelib
 
 import android.app.Dialog
 import android.os.Bundle
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import com.bluelinelabs.conductor.Controller
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
@@ -20,18 +19,22 @@ class DeleteAnimelibAnimesDialog<T>(bundle: Bundle? = null) :
     }
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-        return MaterialDialog(activity!!)
-            .title(R.string.action_remove)
-            .listItemsMultiChoice(
-                R.array.delete_selected_animes,
-                initialSelection = intArrayOf(0)
-            ) { _, selections, _ ->
-                val deleteFromAnimelib = 0 in selections
-                val deleteChapters = 1 in selections
-                (targetController as? Listener)?.deleteAnimes(animes, deleteFromAnimelib, deleteChapters)
+        val items = resources!!.getStringArray(R.array.delete_selected_animes)
+        val selected = items
+            .mapIndexed { i, _ -> i == 0 }
+            .toBooleanArray()
+        return MaterialAlertDialogBuilder(activity!!)
+            .setTitle(R.string.action_remove)
+            .setMultiChoiceItems(items, selected) { _, which, checked ->
+                selected[which] = checked
             }
-            .positiveButton(android.R.string.ok)
-            .negativeButton(android.R.string.cancel)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                val deleteFromLibrary = selected[0]
+                val deleteEpisodes = selected[1]
+                (targetController as? Listener)?.deleteAnimes(animes, deleteFromLibrary, deleteEpisodes)
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
     }
 
     interface Listener {

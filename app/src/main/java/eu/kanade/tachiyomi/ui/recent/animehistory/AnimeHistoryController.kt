@@ -9,7 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.kanade.tachiyomi.R
@@ -23,9 +23,11 @@ import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
-import eu.kanade.tachiyomi.ui.browse.source.browse.ProgressItem
+import eu.kanade.tachiyomi.ui.browse.animesource.browse.ProgressItem
+import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.util.system.toast
+import eu.kanade.tachiyomi.util.view.onAnimationsFinished
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -108,6 +110,9 @@ class AnimeHistoryController :
             adapter?.updateDataSet(animeAnimeHistory)
         } else {
             adapter?.onLoadMoreComplete(animeAnimeHistory)
+        }
+        binding.recycler.onAnimationsFinished {
+            (activity as? MainActivity)?.ready = true
         }
     }
 
@@ -219,12 +224,13 @@ class AnimeHistoryController :
 
     class ClearAnimeHistoryDialogController : DialogController() {
         override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-            return MaterialDialog(activity!!)
-                .message(R.string.clear_history_confirmation)
-                .positiveButton(android.R.string.ok) {
+            return MaterialAlertDialogBuilder(activity!!)
+                .setMessage(R.string.clear_history_confirmation)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
                     (targetController as? AnimeHistoryController)?.clearAnimeHistory()
                 }
-                .negativeButton(android.R.string.cancel)
+                .setNegativeButton(android.R.string.cancel, null)
+                .create()
         }
     }
 

@@ -3,9 +3,8 @@ package eu.kanade.tachiyomi.ui.anime.track
 import android.app.Dialog
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.bluelinelabs.conductor.Controller
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -39,19 +38,18 @@ class SetTrackStatusDialog<T> : DialogController
         val item = item
         val statusList = item.service.getStatusListAnime()
         val statusString = statusList.map { item.service.getStatus(it) }
-        val selectedIndex = statusList.indexOf(item.track?.status)
+        var selectedIndex = statusList.indexOf(item.track?.status)
 
-        return MaterialDialog(activity!!)
-            .title(R.string.status)
-            .negativeButton(android.R.string.cancel)
-            .listItemsSingleChoice(
-                items = statusString,
-                initialSelection = selectedIndex,
-                waitForPositiveButton = false
-            ) { dialog, position, _ ->
-                listener.setStatus(item, position)
-                dialog.dismiss()
+        return MaterialAlertDialogBuilder(activity!!)
+            .setTitle(R.string.status)
+            .setSingleChoiceItems(statusString.toTypedArray(), selectedIndex) { _, which ->
+                selectedIndex = which
             }
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                listener.setStatus(item, selectedIndex)
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
     }
 
     interface Listener {

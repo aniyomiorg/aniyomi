@@ -26,12 +26,16 @@ class AnimeSearchPresenter(
     private val anime: Anime
 ) : GlobalAnimeSearchPresenter(initialQuery) {
 
-    private val replacingAnimeRelay = BehaviorRelay.create<Boolean>()
+    private val replacingAnimeRelay = BehaviorRelay.create<Pair<Boolean, Anime?>>()
 
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
 
-        replacingAnimeRelay.subscribeLatestCache({ controller, isReplacingAnime -> (controller as? AnimeSearchController)?.renderIsReplacingAnime(isReplacingAnime) })
+        replacingAnimeRelay.subscribeLatestCache(
+            { controller, (isReplacingAnime, newAnime) ->
+                (controller as? AnimeSearchController)?.renderIsReplacingAnime(isReplacingAnime, newAnime)
+            }
+        )
     }
 
     override fun getEnabledSources(): List<AnimeCatalogueSource> {
@@ -55,7 +59,7 @@ class AnimeSearchPresenter(
     fun migrateAnime(prevAnime: Anime, anime: Anime, replace: Boolean) {
         val source = sourceManager.get(anime.source) ?: return
 
-        replacingAnimeRelay.call(true)
+        replacingAnimeRelay.call(Pair(true, null))
 
         presenterScope.launchIO {
             try {
@@ -67,7 +71,7 @@ class AnimeSearchPresenter(
                 withUIContext { view?.applicationContext?.toast(e.message) }
             }
 
-            presenterScope.launchUI { replacingAnimeRelay.call(false) }
+            presenterScope.launchUI { replacingAnimeRelay.call(Pair(false, anime)) }
         }
     }
 
