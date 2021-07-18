@@ -267,9 +267,7 @@ open class BrowseAnimeSourcePresenter(
         } else {
             EpisodeSettingsHelper.applySettingDefaults(anime)
 
-            if (prefs.autoAddTrack()) {
-                autoAddTrack(anime)
-            }
+            autoAddTrack(anime)
         }
 
         db.insertAnime(anime).executeAsBlocking()
