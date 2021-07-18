@@ -15,9 +15,9 @@ import eu.kanade.tachiyomi.data.database.models.AnimeCategory
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.data.track.UnattendedTrackService
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.ui.browse.animesource.filter.CheckboxItem
 import eu.kanade.tachiyomi.ui.browse.animesource.filter.CheckboxSectionItem
@@ -277,7 +277,7 @@ open class BrowseAnimeSourcePresenter(
 
     private fun autoAddTrack(anime: Anime) {
         loggedServices
-            .filterIsInstance<UnattendedTrackService>()
+            .filterIsInstance<EnhancedTrackService>()
             .filter { it.accept(source) }
             .forEach { service ->
                 launchIO {

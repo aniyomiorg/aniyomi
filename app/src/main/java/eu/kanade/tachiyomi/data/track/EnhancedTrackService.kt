@@ -19,6 +19,10 @@ interface EnhancedTrackService {
         return source::class.qualifiedName in getAcceptedSources()
     }
 
+    fun accept(source: AnimeSource): Boolean {
+        return source::class.qualifiedName in getAcceptedSources()
+    }
+
     /**
      * Fully qualified source classes that this track service is compatible with.
      */

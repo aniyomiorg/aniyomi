@@ -24,9 +24,9 @@ import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
