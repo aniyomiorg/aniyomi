@@ -45,7 +45,7 @@ import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.data.track.UnattendedTrackService
+import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.databinding.MangaControllerBinding
 import eu.kanade.tachiyomi.ui.anime.episode.AnimeEpisodesHeaderAdapter
@@ -555,7 +555,7 @@ class AnimeController :
         if (source != null && preferences.autoAddTrack()) {
             presenter.trackList
                 .map { it.service }
-                .filterIsInstance<UnattendedTrackService>()
+                .filterIsInstance<EnhancedTrackService>()
                 .filter { it.accept(source!!) }
                 .forEach { service ->
                     launchIO {

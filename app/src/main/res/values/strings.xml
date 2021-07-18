@@ -172,6 +172,7 @@
     <string name="theme_dark">On</string>
     <string name="pref_app_theme">App theme</string>
     <string name="theme_default">Default</string>
+    <string name="theme_monet">Dynamic</string>
     <string name="theme_blue">Blue</string>
     <string name="theme_greenapple">Green Apple</string>
     <string name="theme_midnightdusk">Midnight Dusk</string>
@@ -423,9 +424,11 @@
       <!-- Tracking section -->
     <string name="tracking_guide">Tracking guide</string>
     <string name="pref_auto_update_manga_sync">Update chapter progress after reading</string>
-    <string name="pref_auto_add_track">Track silently when adding manga to library</string>
     <string name="services">Services</string>
     <string name="tracking_info">One-way sync to update the chapter progress in tracking services. Set up tracking for individual manga entries from their tracking button.</string>
+    <string name="enhanced_services">Enhanced services</string>
+    <string name="pref_auto_add_track">Automatically track manga when added to library</string>
+    <string name="enhanced_tracking_info">Services that provide enhanced features for specific sources.</string>
 
       <!-- Browse section -->
     <string name="pref_enable_automatic_extension_updates">Check for extension updates</string>
@@ -461,7 +464,7 @@
     <string name="backup_choice">What do you want to backup?</string>
     <string name="creating_backup">Creating backup</string>
     <string name="creating_backup_error">Backup failed</string>
-    <string name="restore_miui_warning">MIUI Optimization must be enabled for restore to work correctly.</string>
+    <string name="restore_miui_warning">MIUI Optimization must be enabled for backup/restore to work correctly.</string>
     <string name="restore_in_progress">Restore is already in progress</string>
     <string name="restoring_backup">Restoring backup</string>
     <string name="restoring_backup_error">Restoring backup failed</string>
@@ -648,6 +651,7 @@
     <string name="tracker_myanimelist" translatable="false">MyAnimeList</string>
     <string name="tracker_kitsu" translatable="false">Kitsu</string>
     <string name="tracker_komga" translatable="false">Komga</string>
+    <string name="tracker_komga_warning">This tracker is only compatible with the Komga source.</string>
     <string name="tracker_bangumi" translatable="false">Bangumi</string>
     <string name="tracker_shikimori" translatable="false">Shikimori</string>
     <string name="manga_tracking_tab">Tracking</string>

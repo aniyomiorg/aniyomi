@@ -30,6 +30,8 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
     @StringRes
     override fun nameRes() = R.string.tracker_kitsu
 
+    override val supportsReadingDates: Boolean = true
+
     private val json: Json by injectLazy()
 
     private val interceptor by lazy { KitsuInterceptor(this) }

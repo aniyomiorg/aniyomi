@@ -21,7 +21,7 @@ import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.data.track.UnattendedTrackService
+import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.anime.track.TrackItem
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
@@ -783,7 +783,7 @@ class AnimePresenter(
                                 val track = it.service.refresh(it.track!!)
                                 db.insertTrack(track).executeAsBlocking()
 
-                                if (it.service is UnattendedTrackService) {
+                                if (it.service is EnhancedTrackService) {
                                     syncEpisodesWithTrackServiceTwoWay(db, allEpisodes, track, it.service)
                                 }
                             }
@@ -819,7 +819,7 @@ class AnimePresenter(
                     service.bind(item, hasReadChapters)
                     db.insertTrack(item).executeAsBlocking()
 
-                    if (service is UnattendedTrackService) {
+                    if (service is EnhancedTrackService) {
                         syncEpisodesWithTrackServiceTwoWay(db, allEpisodes, item, service)
                     }
                 } catch (e: Throwable) {
