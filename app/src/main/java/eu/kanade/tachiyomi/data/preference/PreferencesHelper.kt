@@ -138,6 +138,8 @@ class PreferencesHelper(val context: Context) {
 
     fun alwaysUseExternalPlayer() = prefs.getBoolean(Keys.alwaysUseExternalPlayer, false)
 
+    fun externalPlayerPreference() = prefs.getString(Keys.externalPlayerPreference, "")
+
     fun progressPreference() = prefs.getString(Keys.progressPreference, "0.85F")!!.toFloat()
 
     fun imageScaleType() = flowPrefs.getInt(Keys.imageScaleType, 1)

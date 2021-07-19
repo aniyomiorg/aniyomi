@@ -63,6 +63,8 @@ object PreferenceKeys {
 
     const val alwaysUseExternalPlayer = "pref_always_use_external_player"
 
+    const val externalPlayerPreference = "external_player_preference"
+
     const val imageScaleType = "pref_image_scale_type_key"
 
     const val zoomStart = "pref_zoom_start_key"

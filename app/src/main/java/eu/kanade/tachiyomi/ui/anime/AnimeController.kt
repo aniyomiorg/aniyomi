@@ -955,7 +955,7 @@ class AnimeController :
         val context = view?.context ?: return
         launchIO {
             val intent = PlayerActivity.newIntent(context, presenter.anime, episode)
-            val useInternal = if (preferences.alwaysUseExternalPlayer()) playerChangeRequested else !playerChangeRequested
+            val useInternal = preferences.alwaysUseExternalPlayer() == playerChangeRequested
             if (useInternal) {
                 startActivity(intent)
             } else {
@@ -963,11 +963,45 @@ class AnimeController :
                 if (video != null) {
                     val uri = video.uri ?: Uri.parse(video.videoUrl)
                     currentExtEpisode = episode
-                    val extIntent = Intent(Intent.ACTION_VIEW)
-                    extIntent.setDataAndTypeAndNormalize(uri, "video/*")
-                    extIntent.putExtra("title", episode.name)
-                    extIntent.putExtra("position", episode.last_second_seen.toInt())
-                    extIntent.putExtra("return_result", true)
+                    val pkgName = preferences.externalPlayerPreference()
+                    val extIntent = if (pkgName.isNullOrEmpty()) {
+                        Intent(Intent.ACTION_VIEW).apply {
+                            setDataAndTypeAndNormalize(uri, "video/*")
+                            putExtra("title", anime!!.title + " - " + episode.name)
+                            putExtra("position", episode.last_second_seen.toInt())
+                            putExtra("return_result", true)
+                            val headers = (source as? AnimeHttpSource)?.headers
+                            if (headers != null) {
+                                var headersArray = arrayOf<String>()
+                                for (header in headers) {
+                                    headersArray += arrayOf(header.first, header.second)
+                                }
+                                putExtra("headers", headersArray)
+                            }
+                        }
+                    } else {
+                        context.packageManager.getLaunchIntentForPackage(pkgName)!!.apply {
+                            action = Intent.ACTION_VIEW
+                            setDataAndTypeAndNormalize(uri, "video/*")
+                            putExtra("title", anime!!.title + " - " + episode.name)
+                            putExtra("position", episode.last_second_seen.toInt())
+                            putExtra("return_result", true)
+                            if (pkgName == "com.mxtech.videoplayer.pro") {
+                                setClassName(pkgName, "com.mxtech.videoplayer.ActivityScreen")
+                            } else if (pkgName.startsWith("com.mxtech.videoplayer")) {
+                                setClassName(pkgName, "$pkgName.ActivityScreen")
+                            }
+                            val headers = (source as? AnimeHttpSource)?.headers
+                            if (headers != null) {
+                                var headersArray = arrayOf<String>()
+                                for (header in headers) {
+                                    headersArray += arrayOf(header.first, header.second)
+                                }
+                                putExtra("headers", headersArray)
+                            }
+                        }
+                    }
+
                     startActivityForResult(extIntent, REQUEST_EXTERNAL)
                 } else {
                     context.toast("Cannot open episode")

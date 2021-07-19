@@ -47,6 +47,32 @@ class SettingsPlayerController : SettingsController() {
                 titleRes = R.string.pref_always_use_external_player
                 defaultValue = false
             }
+
+            listPreference {
+                key = Keys.externalPlayerPreference
+                titleRes = R.string.pref_external_player_preference
+
+                val pm = context.packageManager
+                val installedPackages = pm.getInstalledPackages(0)
+                val supportedPlayers = installedPackages.filter {
+                    when (it.packageName) {
+                        "com.mxtech.videoplayer" -> true
+                        "com.mxtech.videoplayer.ad" -> true
+                        "com.mxtech.videoplayer.pro" -> true
+                        "org.videolan.vlc" -> true
+                        else -> false
+                    }
+                }
+                val packageNames = supportedPlayers.map { it.packageName }
+                val packageNamesReadable = supportedPlayers
+                    .map { pm.getApplicationLabel(it.applicationInfo).toString() }
+
+                entries = arrayOf("None") + packageNamesReadable.toTypedArray()
+                entryValues = arrayOf("") + packageNames.toTypedArray()
+                defaultValue = ""
+
+                summary = "%s"
+            }
         }
     }
 }
