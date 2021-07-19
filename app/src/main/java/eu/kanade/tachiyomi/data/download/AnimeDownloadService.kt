@@ -90,7 +90,7 @@ class AnimeDownloadService : Service() {
      */
     override fun onCreate() {
         super.onCreate()
-        startForeground(Notifications.ID_DOWNLOAD_CHAPTER_PROGRESS, getPlaceholderNotification())
+        startForeground(Notifications.ID_DOWNLOAD_EPISODE_PROGRESS, getPlaceholderNotification())
         wakeLock = acquireWakeLock(javaClass.name)
         runningRelay.call(true)
         subscriptions = CompositeSubscription()
