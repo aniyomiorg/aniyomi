@@ -36,7 +36,6 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.google.android.exoplayer2.util.Clock
 import com.google.android.exoplayer2.util.MimeTypes
-import com.google.android.exoplayer2.util.Util
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -164,18 +163,20 @@ class PlayerActivity : AppCompatActivity() {
         if (isLocal) {
             uri = videos.first().uri!!.toString()
             dataSourceFactory = DefaultDataSourceFactory(this)
-            cacheFactory = CacheDataSourceFactory(simpleCache, dataSourceFactory)
         } else {
             uri = videos.first().videoUrl!!
             dataSourceFactory = newDataSourceFactory()
-            cacheFactory = CacheDataSourceFactory(simpleCache, dataSourceFactory)
         }
+        cacheFactory = CacheDataSourceFactory(simpleCache, dataSourceFactory)
         mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
         mediaItem = MediaItem.Builder()
             .setUri(uri)
             .setMimeType(getMime(uri))
             .build()
         playbackPosition = episode.last_second_seen
+
+        initPlayer()
+        playerView.onResume()
 
         if (savedInstanceState != null) {
             currentWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW)
@@ -244,7 +245,6 @@ class PlayerActivity : AppCompatActivity() {
         currentWindow = exoPlayer.currentWindowIndex
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
-        simpleCache.release()
         exoPlayer.release()
     }
 
@@ -414,35 +414,22 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
+        playerView.onResume()
         super.onStart()
-        if (Util.SDK_INT > 23) {
-            initPlayer()
-            playerView.onResume()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (Util.SDK_INT <= 23) {
-            initPlayer()
-            playerView.onResume()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if (Util.SDK_INT <= 23) {
-            playerView.onPause()
-            releasePlayer()
-        }
     }
 
     override fun onStop() {
+        saveEpisodeHistory(EpisodeItem(episode, anime))
+        setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
+        exoPlayer.pause()
+        playerView.onPause()
         super.onStop()
-        if (Util.SDK_INT > 23) {
-            playerView.onPause()
-            releasePlayer()
-        }
+    }
+
+    override fun onDestroy() {
+        releasePlayer()
+        simpleCache.release()
+        super.onDestroy()
     }
 
     private fun saveEpisodeHistory(episode: EpisodeItem) {
