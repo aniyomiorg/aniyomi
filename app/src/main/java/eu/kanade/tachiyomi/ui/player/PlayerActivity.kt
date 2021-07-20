@@ -19,6 +19,7 @@ import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.analytics.AnalyticsCollector
+import com.google.android.exoplayer2.database.ExoDatabaseProvider
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.TrackGroupArray
@@ -30,6 +31,9 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.google.android.exoplayer2.upstream.HttpDataSource.HttpDataSourceException
 import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException
+import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory
+import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor
+import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.google.android.exoplayer2.util.Clock
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
@@ -61,6 +65,7 @@ import rx.schedulers.Schedulers
 import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 import java.io.IOException
 import java.util.Date
 
@@ -76,6 +81,10 @@ class PlayerActivity : AppCompatActivity() {
     private val db: AnimeDatabaseHelper = Injekt.get()
     private lateinit var exoPlayer: SimpleExoPlayer
     private lateinit var dataSourceFactory: DataSource.Factory
+    private lateinit var dbProvider: ExoDatabaseProvider
+    val cacheSize = 100L * 1024L * 1024L // 100 mb
+    private lateinit var simpleCache: SimpleCache
+    private lateinit var cacheFactory: CacheDataSourceFactory
     private lateinit var mediaSourceFactory: MediaSourceFactory
     private lateinit var playerView: DoubleTapPlayerView
     private lateinit var youTubeDoubleTap: YouTubeOverlay
@@ -145,15 +154,23 @@ class PlayerActivity : AppCompatActivity() {
             super.onBackPressed()
         }
         if (videos.lastIndex > 0) settingsBtn.visibility = View.VISIBLE
+        dbProvider = ExoDatabaseProvider(baseContext)
+        simpleCache = SimpleCache(
+            File(baseContext.filesDir, "media"),
+            LeastRecentlyUsedCacheEvictor(cacheSize),
+            dbProvider
+        )
         isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
         if (isLocal) {
             uri = videos.first().uri!!.toString()
             dataSourceFactory = DefaultDataSourceFactory(this)
+            cacheFactory = CacheDataSourceFactory(simpleCache, dataSourceFactory)
         } else {
             uri = videos.first().videoUrl!!
             dataSourceFactory = newDataSourceFactory()
+            cacheFactory = CacheDataSourceFactory(simpleCache, dataSourceFactory)
         }
-        mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
+        mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
         mediaItem = MediaItem.Builder()
             .setUri(uri)
             .setMimeType(getMime(uri))
@@ -311,7 +328,8 @@ class PlayerActivity : AppCompatActivity() {
             dataSourceFactory = DefaultHttpDataSource.Factory()
                 .setUserAgent(userAgentString)
                 .setDefaultRequestProperties(mapOf(Pair("cookie", cookies)))
-            mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
+            cacheFactory = CacheDataSourceFactory(simpleCache, dataSourceFactory)
+            mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
         }
     }
 
@@ -321,7 +339,8 @@ class PlayerActivity : AppCompatActivity() {
         } else {
             newDataSourceFactory()
         }
-        mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
+        cacheFactory = CacheDataSourceFactory(simpleCache, dataSourceFactory)
+        mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
         exoPlayer.release()
         exoPlayer = newPlayer()
         exoPlayer.setMediaSource(mediaSourceFactory.createMediaSource(mediaItem), resumeAt)
