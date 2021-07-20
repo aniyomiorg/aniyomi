@@ -244,6 +244,7 @@ class PlayerActivity : AppCompatActivity() {
         currentWindow = exoPlayer.currentWindowIndex
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
+        simpleCache.release()
         exoPlayer.release()
     }
 
