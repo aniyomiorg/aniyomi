@@ -22,23 +22,11 @@ internal class AnimeExtensionGithubApi {
     private val networkService: NetworkHelper by injectLazy()
     private val preferences: PreferencesHelper by injectLazy()
 
-    private var requiresFallbackSource = false
-
     suspend fun findExtensions(): List<AnimeExtension.Available> {
         return withIOContext {
-            val response = try {
-                networkService.client
-                    .newCall(GET("${REPO_URL_PREFIX}index.min.json"))
-                    .await()
-            } catch (e: Throwable) {
-                requiresFallbackSource = true
-
-                networkService.client
-                    .newCall(GET("${FALLBACK_REPO_URL_PREFIX}index.min.json"))
-                    .await()
-            }
-
-            response
+            networkService.client
+                .newCall(GET("${REPO_URL_PREFIX}index.min.json"))
+                .await()
                 .parseAs<JsonArray>()
                 .let { parseResponse(it) }
         }
@@ -82,23 +70,15 @@ internal class AnimeExtensionGithubApi {
                 val versionCode = element.jsonObject["code"]!!.jsonPrimitive.int
                 val lang = element.jsonObject["lang"]!!.jsonPrimitive.content
                 val nsfw = element.jsonObject["nsfw"]!!.jsonPrimitive.int == 1
-                val icon = "${getUrlPrefix()}icon/${apkName.replace(".apk", ".png")}"
+                val icon = "${REPO_URL_PREFIX}icon/${apkName.replace(".apk", ".png")}"
 
                 AnimeExtension.Available(name, pkgName, versionName, versionCode, lang, nsfw, apkName, icon)
             }
     }
 
     fun getApkUrl(extension: AnimeExtension.Available): String {
-        return "${getUrlPrefix()}apk/${extension.apkName}"
-    }
-
-    private fun getUrlPrefix(): String {
-        return when (requiresFallbackSource) {
-            true -> FALLBACK_REPO_URL_PREFIX
-            false -> REPO_URL_PREFIX
-        }
+        return "${REPO_URL_PREFIX}apk/${extension.apkName}"
     }
 }
 
 private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/jmir1/aniyomi-extensions/repo/"
-private const val FALLBACK_REPO_URL_PREFIX = "https://cdn.jsdelivr.net/gh/jmir1/aniyomi-extensions@repo/"

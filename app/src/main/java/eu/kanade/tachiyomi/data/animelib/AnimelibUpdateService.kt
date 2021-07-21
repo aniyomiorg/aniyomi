@@ -509,11 +509,21 @@ class AnimelibUpdateService(
     private fun writeErrorFile(errors: List<Pair<Anime, String?>>): File {
         try {
             if (errors.isNotEmpty()) {
-                val file = createFileInCacheDir("tachiyomi_update_errors.txt")
+                val file = createFileInCacheDir("aniyomi_update_errors.txt")
                 file.bufferedWriter().use { out ->
-                    errors.forEach { (anime, error) ->
-                        val source = sourceManager.getOrStub(anime.source)
-                        out.write("${anime.title} ($source): $error\n")
+                    // Error file format:
+                    // ! Error
+                    //   # Source
+                    //     - Anime
+                    errors.groupBy({ it.second }, { it.first }).forEach { (error, animes) ->
+                        out.write("! ${error}\n")
+                        animes.groupBy { it.source }.forEach { (srcId, animes) ->
+                            val source = sourceManager.getOrStub(srcId)
+                            out.write("  # $source\n")
+                            animes.forEach {
+                                out.write("    - ${it.title}\n")
+                            }
+                        }
                     }
                 }
                 return file
