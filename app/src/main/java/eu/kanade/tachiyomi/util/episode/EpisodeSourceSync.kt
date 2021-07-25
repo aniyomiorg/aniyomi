@@ -111,10 +111,6 @@ fun syncEpisodesWithSource(
             db.updateNextUpdated(anime).executeAsBlocking()
         }
 
-        if (newestDate != 0L && newestDate != anime.last_update) {
-            anime.last_update = newestDate
-            db.updateLastUpdated(anime).executeAsBlocking()
-        }
         return Pair(emptyList(), emptyList())
     }
 
@@ -176,13 +172,8 @@ fun syncEpisodesWithSource(
         db.fixEpisodesSourceOrder(sourceEpisodes).executeAsBlocking()
 
         // Set this anime as updated since episodes were changed
-        val newestEpisode = topEpisodes.getOrNull(0)
-        val dateFetch = newestEpisode?.date_upload ?: anime.last_update
-        if (dateFetch == 0L) {
-            if (toAdd.isNotEmpty()) {
-                anime.last_update = Date().time
-            }
-        } else anime.last_update = dateFetch
+        // Note that last_update actually represents last time the chapter list changed at all
+        anime.last_update = Date().time
         db.updateLastUpdated(anime).executeAsBlocking()
     }
 

@@ -316,6 +316,9 @@ class AnimelibUpdateService(
                                 } catch (e: Throwable) {
                                     val errorMessage = if (e is NoEpisodesException) {
                                         getString(R.string.no_chapters_error)
+                                    } else if (e is AnimeSourceManager.SourceNotInstalledException) {
+                                        // failedUpdates will already have the source, don't need to copy it into the message
+                                        getString(R.string.loader_not_implemented_error)
                                     } else {
                                         e.message
                                     }

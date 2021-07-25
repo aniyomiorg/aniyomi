@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.reader
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.app.ActionBar
 import android.app.ProgressDialog
 import android.content.ClipData
 import android.content.Context
@@ -45,7 +46,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.toggle
 import eu.kanade.tachiyomi.databinding.ReaderActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
-import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyThemePreferences
+import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAppTheme
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.reader.ReaderPresenter.SetAsCoverResult.AddToLibraryFirst
@@ -140,7 +141,7 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
      * Called when the activity is created. Initializes the presenter and configuration.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        applyThemePreferences(preferences)
+        applyAppTheme(preferences)
         super.onCreate(savedInstanceState)
 
         binding = ReaderActivityBinding.inflate(layoutInflater)
@@ -189,6 +190,7 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
         readingModeToast?.cancel()
         progressDialog?.dismiss()
         progressDialog = null
+        listeners = mutableListOf()
     }
 
     /**
@@ -486,12 +488,23 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
         )
     }
 
+    private var listeners: MutableList<ActionBar.OnMenuVisibilityListener> = mutableListOf()
+
+    fun addOnMenuVisibilityListener(listener: ActionBar.OnMenuVisibilityListener) {
+        listeners.add(listener)
+    }
+
+    fun removeOnMenuVisibilityListener(listener: ActionBar.OnMenuVisibilityListener) {
+        listeners.remove(listener)
+    }
+
     /**
      * Sets the visibility of the menu according to [visible] and with an optional parameter to
      * [animate] the views.
      */
     fun setMenuVisibility(visible: Boolean, animate: Boolean = true) {
         menuVisible = visible
+        listeners.forEach { listener -> listener.onMenuVisibilityChanged(visible) }
         if (visible) {
             windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
             binding.readerMenu.isVisible = true
@@ -734,6 +747,15 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
     fun showMenu() {
         if (!menuVisible) {
             setMenuVisibility(true)
+        }
+    }
+
+    /**
+     * Called from the viewer to hide the menu.
+     */
+    fun hideMenu() {
+        if (menuVisible) {
+            setMenuVisibility(false)
         }
     }
 

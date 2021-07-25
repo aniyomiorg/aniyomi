@@ -11,8 +11,10 @@ interface Anime : SAnime {
 
     var favorite: Boolean
 
+    // last time the episode list changed in any way
     var last_update: Long
 
+    // predicted next update time based on latest (by date) 4 episodes' deltas
     var next_update: Long
 
     var date_added: Long
