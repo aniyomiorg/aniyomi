@@ -84,6 +84,7 @@ class PlayerActivity : AppCompatActivity() {
     val cacheSize = 100L * 1024L * 1024L // 100 mb
     private lateinit var simpleCache: SimpleCache
     private lateinit var cacheFactory: CacheDataSource.Factory
+    private var message: String? = null
     private lateinit var mediaSourceFactory: MediaSourceFactory
     private lateinit var playerView: DoubleTapPlayerView
     private lateinit var youTubeDoubleTap: YouTubeOverlay
@@ -149,6 +150,7 @@ class PlayerActivity : AppCompatActivity() {
         userAgentString = WebSettings.getDefaultUserAgent(this)
         videos = runBlocking { awaitVideoList() }
         if (videos.isEmpty()) {
+            baseContext.toast(message ?: "error getting links")
             mediaSourceFactory = DefaultMediaSourceFactory(DefaultDataSourceFactory(this))
             exoPlayer = newPlayer()
             dbProvider = ExoDatabaseProvider(baseContext)
@@ -264,8 +266,8 @@ class PlayerActivity : AppCompatActivity() {
             try {
                 EpisodeLoader.getLinks(episode, anime, source).awaitSingle()
             } catch (e: Exception) {
-                Timber.w(e.message ?: "error getting links")
-                baseContext.toast(e.message ?: "error getting links")
+                message = e.message ?: "error getting links"
+                Timber.w(message)
                 listOf<Video>()
             }
         }
@@ -279,6 +281,11 @@ class PlayerActivity : AppCompatActivity() {
         if (oldEpisode == episode) return
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         videos = runBlocking { awaitVideoList() }
+        if (videos.isEmpty()) {
+            baseContext.toast(message ?: "error getting links")
+            finish()
+            return
+        }
         settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
         isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
         uri = if (isLocal) {
@@ -302,6 +309,11 @@ class PlayerActivity : AppCompatActivity() {
         if (oldEpisode == episode) return
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         videos = runBlocking { awaitVideoList() }
+        if (videos.isEmpty()) {
+            baseContext.toast(message ?: "error getting links")
+            finish()
+            return
+        }
         settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
         isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
         uri = if (isLocal) {
