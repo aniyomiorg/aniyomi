@@ -31,7 +31,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.google.android.exoplayer2.upstream.HttpDataSource.HttpDataSourceException
 import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException
-import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.google.android.exoplayer2.util.Clock
@@ -83,7 +83,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var dbProvider: ExoDatabaseProvider
     val cacheSize = 100L * 1024L * 1024L // 100 mb
     private lateinit var simpleCache: SimpleCache
-    private lateinit var cacheFactory: CacheDataSourceFactory
+    private lateinit var cacheFactory: CacheDataSource.Factory
     private lateinit var mediaSourceFactory: MediaSourceFactory
     private lateinit var playerView: DoubleTapPlayerView
     private lateinit var youTubeDoubleTap: YouTubeOverlay
@@ -149,8 +149,16 @@ class PlayerActivity : AppCompatActivity() {
         userAgentString = WebSettings.getDefaultUserAgent(this)
         videos = runBlocking { awaitVideoList() }
         if (videos.isEmpty()) {
-            baseContext.toast("Cannot play episode")
-            super.onBackPressed()
+            mediaSourceFactory = DefaultMediaSourceFactory(DefaultDataSourceFactory(this))
+            exoPlayer = newPlayer()
+            dbProvider = ExoDatabaseProvider(baseContext)
+            simpleCache = SimpleCache(
+                File(baseContext.filesDir, "media"),
+                LeastRecentlyUsedCacheEvictor(cacheSize),
+                dbProvider
+            )
+            finish()
+            return
         }
         if (videos.lastIndex > 0) settingsBtn.visibility = View.VISIBLE
         dbProvider = ExoDatabaseProvider(baseContext)
@@ -167,7 +175,10 @@ class PlayerActivity : AppCompatActivity() {
             uri = videos.first().videoUrl!!
             dataSourceFactory = newDataSourceFactory()
         }
-        cacheFactory = CacheDataSourceFactory(simpleCache, dataSourceFactory)
+        cacheFactory = CacheDataSource.Factory().apply {
+            setCache(simpleCache)
+            setUpstreamDataSourceFactory(dataSourceFactory)
+        }
         mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
         mediaItem = MediaItem.Builder()
             .setUri(uri)
@@ -249,7 +260,15 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private suspend fun awaitVideoList(): List<Video> {
-        return withIOContext { EpisodeLoader.getLinks(episode, anime, source).awaitSingle() }
+        return withIOContext {
+            try {
+                EpisodeLoader.getLinks(episode, anime, source).awaitSingle()
+            } catch (e: Exception) {
+                Timber.w(e.message ?: "error getting links")
+                baseContext.toast(e.message ?: "error getting links")
+                listOf<Video>()
+            }
+        }
     }
 
     private fun nextEpisode() {
@@ -329,7 +348,10 @@ class PlayerActivity : AppCompatActivity() {
             dataSourceFactory = DefaultHttpDataSource.Factory()
                 .setUserAgent(userAgentString)
                 .setDefaultRequestProperties(mapOf(Pair("cookie", cookies)))
-            cacheFactory = CacheDataSourceFactory(simpleCache, dataSourceFactory)
+            cacheFactory = CacheDataSource.Factory().apply {
+                setCache(simpleCache)
+                setUpstreamDataSourceFactory(dataSourceFactory)
+            }
             mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
         }
     }
@@ -340,7 +362,10 @@ class PlayerActivity : AppCompatActivity() {
         } else {
             newDataSourceFactory()
         }
-        cacheFactory = CacheDataSourceFactory(simpleCache, dataSourceFactory)
+        cacheFactory = CacheDataSource.Factory().apply {
+            setCache(simpleCache)
+            setUpstreamDataSourceFactory(dataSourceFactory)
+        }
         mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
         exoPlayer.release()
         exoPlayer = newPlayer()
