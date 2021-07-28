@@ -20,7 +20,7 @@ jobs:
               },
               {
                 "type": "body",
-                "regex": ".*\\* (Tachiyomi version|Android version|Device): \\?.*",
+                "regex": ".*\\* (Aniyomi version|Android version|Device): \\?.*",
                 "message": "Requested information in the template was not filled out."
               }
             ]
