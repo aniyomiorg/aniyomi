@@ -307,9 +307,11 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
                 }
             }
             is Format.Anime -> {
-                if (!anime.thumbnail_url.isNullOrBlank()) {
-                    File(anime.thumbnail_url!!)
-                } else null
+                val entry = format.file.listFiles()
+                    ?.sortedWith { f1, f2 -> f1.name.compareToCaseInsensitiveNaturalOrder(f2.name) }
+                    ?.find { !it.isDirectory && ImageUtil.isImage(it.name) { FileInputStream(it) } }
+
+                entry?.let { updateCover(context, anime, it.inputStream()) }
             }
         }
     }
