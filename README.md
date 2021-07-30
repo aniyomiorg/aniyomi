@@ -1,6 +1,6 @@
-| Build | Preview Release | Codefactor | Stable Release | Translate Tachiyomi | Discord Server |
+| Build | Preview Release | Codefactor | Stable | Translate Tachiyomi | Discord Server |
 |-------|-----------|-------|----------|------------|---------|
-| ![CI](https://github.com/jmir1/aniyomi/workflows/CI/badge.svg?branch=master&event=push) | [![latest daily build](https://img.shields.io/github/v/release/jmir1/aniyomi-preview.svg?maxAge=3600&label=download)](https://github.com/jmir1/aniyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/jmir1/aniyomi/badge)](https://www.codefactor.io/repository/github/jmir1/aniyomi) | [![stable release](https://img.shields.io/github/release/jmir1/aniyomi.svg?maxAge=3600&label=download)](https://github.com/jmir1/aniyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/tachiyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/tachiyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
+| ![CI](https://github.com/jmir1/aniyomi/workflows/CI/badge.svg?branch=master&event=push) | [![latest preview build](https://img.shields.io/github/v/release/jmir1/aniyomi-preview.svg?maxAge=3600&label=download)](https://github.com/jmir1/aniyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/jmir1/aniyomi/badge)](https://www.codefactor.io/repository/github/jmir1/aniyomi) | [![stable release](https://img.shields.io/github/release/jmir1/aniyomi.svg?maxAge=3600&label=download)](https://github.com/jmir1/aniyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/tachiyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/tachiyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
 
 
 # ![app icon](.github/readme-images/app-icon.png)Aniyomi
@@ -11,12 +11,13 @@ Aniyomi is an unofficial fork of the free and open source manga reader [Tachiyom
 ## Features
 
 Features include:
+<<<<<<< HEAD
 * Watching anime from [a variety of sources](https://github.com/jmir1/aniyomi-extensions)
 * Everything you know and love about Tachiyomi: 
-    * Online reading from [a variety of sources](https://github.com/tachiyomiorg/aniyomi-extensions)
-    * Local reading of downloaded manga
+    * Online reading from a variety of sources
+    * Local reading of downloaded content
     * A configurable reader with multiple viewers, reading directions and other settings.
-    * [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/) support
+    * Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
     * Categories to organize your library
     * Light and dark themes
     * Schedule updating your library for new chapters
@@ -25,9 +26,52 @@ Features include:
 ## Download
 Get the app from the [releases page](https://github.com/jmir1/aniyomi/releases).
 
+If you want to try new features before they get to the stable release, you can download the preview version [here](https://github.com/jmir1/aniyomi-preview/releases).
+
 ## Issues, Feature Requests and Contributing
 
-Feel free to open an issue if anything is on your mind or if you have a question, request, suggestion, bug report etc!! 
+Please make sure to read the full guidelines. Your issue may be closed without warning if you do not.
+
+<details><summary>Issues</summary>
+
+1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/jmir1/aniyomi/issues).**
+2. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR)
+
+</details>
+
+<details><summary>Bugs</summary>
+
+* Include version (More > About > Version)
+ * If not latest, try updating, it may have already been solved
+ * Preview version is equal to the number of commits as seen in the main page
+* Include steps to reproduce (if not obvious from description)
+* Include screenshot (if needed)
+* If it could be device-dependent, try reproducing on another device (if possible)
+* Don't group unrelated requests into one issue
+
+DO: https://github.com/tachiyomiorg/tachiyomi/issues/24 https://github.com/tachiyomiorg/tachiyomi/issues/71
+
+DON'T: https://github.com/tachiyomiorg/tachiyomi/issues/75
+
+</details>
+
+<details><summary>Feature Requests</summary>
+
+* Write a detailed issue, explaining what it should do or how. Avoid writing just "like X app does"
+* Include screenshot (if needed)
+
+Source requests should be created at https://github.com/jmir1/aniyomi-extensions, they do not belong in this repository.
+</details>
+
+<details><summary>Contributing</summary>
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
+</details>
+
+<details><summary>Code of Conduct</summary>
+
+See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
+</details>
 
 
 ## License
