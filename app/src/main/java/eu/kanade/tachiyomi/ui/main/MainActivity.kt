@@ -59,6 +59,7 @@ import eu.kanade.tachiyomi.ui.library.LibraryController
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
+import eu.kanade.tachiyomi.ui.setting.SettingsMainController
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.dpToPx
@@ -201,6 +202,11 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                     R.id.nav_animelib -> {
                         val controller = router.getControllerWithTag(id.toString()) as? AnimelibController
                         controller?.showSettingsSheet()
+                    }
+                    R.id.nav_more -> {
+                        if (router.backstackSize == 1) {
+                            router.pushController(SettingsMainController().withFadeTransaction())
+                        }
                     }
                 }
             }
