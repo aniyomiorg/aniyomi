@@ -9,8 +9,9 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
---><RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/RelativeLayout01"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -19,18 +20,20 @@
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
     android:layout_alignParentTop="true"
-    android:background="#CC000000"
+    android:background="#70000000"
     android:orientation="horizontal">
-    <TextView
-        android:id="@+id/exo_overlay_back"
-        android:text="@string/player_overlay_back"
-        android:textColor="#ffffff"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:paddingHorizontal="20dp"
-        android:layout_gravity="start"
-        android:layout_height="@dimen/exo_media_button_height"
-        android:layout_width="wrap_content"/>
+
+        <TextView
+            android:id="@+id/exo_overlay_back"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/exo_media_button_height"
+            android:layout_gravity="start"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:text="@string/player_overlay_back"
+            android:textColor="@color/md_white_1000"
+            android:textStyle="bold"
+            style="@style/ExoMediaButton"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +42,7 @@
         android:orientation="horizontal">
         <TextView
             android:id="@+id/exo_overlay_title"
-            android:textColor="#ffffff"
+            android:textColor="@color/md_white_1000"
             android:textStyle="bold"
             android:gravity="center"
             android:layout_height="@dimen/exo_media_button_height"
@@ -52,7 +55,7 @@
     android:layout_gravity="bottom"
     android:layoutDirection="ltr"
     android:layout_alignParentBottom="true"
-    android:background="#CC000000"
+    android:background="#70000000"
     android:orientation="vertical">
 
     <LinearLayout
@@ -81,7 +84,7 @@
         <TextView
             android:id="@+id/watcher_controls_skip_btn"
             android:text="@string/watcher_controls_skip_text"
-            android:textColor="#ffffff"
+            android:textColor="@color/md_white_1000"
             android:textStyle="bold"
             android:gravity="center"
             style="@style/ExoMediaButton" />
@@ -90,15 +93,6 @@
             style="@style/ExoStyledControls.Button.Bottom.Settings"
             android:visibility="gone"
             android:contentDescription="@string/action_next_episode" />
-
-        <TextView
-            android:id="@+id/watcher_controls_captcha_btn"
-            android:text="captcha"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:visibility="gone"
-            style="@style/ExoMediaButton" />
     </LinearLayout>
 
     <LinearLayout
@@ -116,7 +110,7 @@
             android:paddingStart="15dp"
             android:paddingEnd="4dp"
             android:includeFontPadding="false"
-            android:textColor="#FFBEBEBE"/>
+            android:textColor="@color/md_white_1000"/>
 
         <com.google.android.exoplayer2.ui.DefaultTimeBar
             android:id="@id/exo_progress"
@@ -132,7 +126,7 @@
             android:paddingStart="4dp"
             android:paddingEnd="15dp"
             android:includeFontPadding="false"
-            android:textColor="#FFBEBEBE"/>
+            android:textColor="@color/md_white_1000"/>
 
     </LinearLayout>
 

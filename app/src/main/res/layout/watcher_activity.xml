@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             app:controller_layout_id="@layout/watcher_controls_view"
             app:fastforward_increment="85000"
-            app:dtpv_controller="@+id/youtube_overlay"
+            app:dtpv_controller="@id/youtube_overlay"
             app:show_buffering="when_playing"/>
 
         <com.github.vkay94.dtpv.youtube.YouTubeOverlay

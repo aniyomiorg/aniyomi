@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.View
 import android.webkit.WebSettings
 import android.widget.ImageButton
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.children
 import com.github.vkay94.dtpv.DoubleTapPlayerView
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
 import com.google.android.exoplayer2.DefaultLoadControl
@@ -51,7 +53,6 @@ import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
-import eu.kanade.tachiyomi.ui.webview.WebViewActivityAnime
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withIOContext
@@ -93,7 +94,6 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var prevBtn: ImageButton
     private lateinit var backBtn: TextView
     private lateinit var settingsBtn: ImageButton
-    private lateinit var captchaBtn: TextView
     private lateinit var title: TextView
 
     private lateinit var episode: Episode
@@ -141,7 +141,6 @@ class PlayerActivity : AppCompatActivity() {
         nextBtn = findViewById(R.id.watcher_controls_next)
         prevBtn = findViewById(R.id.watcher_controls_prev)
         settingsBtn = findViewById(R.id.watcher_controls_settings)
-        captchaBtn = findViewById(R.id.watcher_controls_captcha_btn)
 
         anime = intent.getSerializableExtra("anime") as Anime
         episode = intent.getSerializableExtra("episode") as Episode
@@ -224,15 +223,12 @@ class PlayerActivity : AppCompatActivity() {
             setMediaSource(mediaSourceFactory.createMediaSource(mediaItem), episode.last_second_seen)
             prepare()
         }
-        exoPlayer.addListener(PlayerEventListener(playerView, captchaBtn, baseContext))
+        exoPlayer.addListener(PlayerEventListener(playerView, baseContext))
         backBtn.setOnClickListener {
             onBackPressed()
         }
         settingsBtn.setOnClickListener {
             settings()
-        }
-        captchaBtn.setOnClickListener {
-            captcha()
         }
         skipBtn.setOnClickListener { exoPlayer.seekTo(exoPlayer.currentPosition + 85000) }
         nextBtn.setOnClickListener {
@@ -345,13 +341,6 @@ class PlayerActivity : AppCompatActivity() {
         changePlayer(exoPlayer.currentPosition, isLocal)
     }
 
-    private fun captcha() {
-        exoPlayer.release()
-        val intent = WebViewActivityAnime.newIntent(this, uri, source.id, anime.title + episode.name, true)
-        startActivityForResult(intent, REQUEST_COOKIES)
-        captchaBtn.visibility = View.GONE
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_COOKIES && resultCode == REQUEST_COOKIES) {
@@ -384,7 +373,7 @@ class PlayerActivity : AppCompatActivity() {
         exoPlayer.setMediaSource(mediaSourceFactory.createMediaSource(mediaItem), resumeAt)
         exoPlayer.prepare()
         exoPlayer.playWhenReady = true
-        exoPlayer.addListener(PlayerEventListener(playerView, captchaBtn, baseContext))
+        exoPlayer.addListener(PlayerEventListener(playerView, baseContext))
         youTubeDoubleTap.player(exoPlayer)
         playerView.player = exoPlayer
     }
@@ -401,7 +390,7 @@ class PlayerActivity : AppCompatActivity() {
         ).build()
     }
 
-    class PlayerEventListener(private val playerView: DoubleTapPlayerView, val captchaBtn: TextView, val baseContext: Context) : Player.EventListener {
+    class PlayerEventListener(private val playerView: DoubleTapPlayerView, val baseContext: Context) : Player.EventListener {
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             playerView.keepScreenOn = !(
                 playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED ||
@@ -428,8 +417,7 @@ class PlayerActivity : AppCompatActivity() {
                         // Cast to InvalidResponseCodeException and retrieve the response code,
                         // message and headers.
                         val errorMessage =
-                            "Error " + cause.responseCode.toString() + ", try solving a captcha"
-                        captchaBtn.visibility = View.VISIBLE
+                            "Error " + cause.responseCode.toString() + ": " + cause.message
                         baseContext.toast(errorMessage, Toast.LENGTH_SHORT)
                     } else {
                         cause.cause
