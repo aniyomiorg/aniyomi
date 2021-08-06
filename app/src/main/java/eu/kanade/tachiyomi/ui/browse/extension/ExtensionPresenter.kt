@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.ui.browse.extension
 
-import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -23,6 +23,7 @@ private typealias ExtensionTuple =
  * Presenter of [ExtensionController].
  */
 open class ExtensionPresenter(
+    private val context: Context,
     private val extensionManager: ExtensionManager = Injekt.get(),
     private val preferences: PreferencesHelper = Injekt.get()
 ) : BasePresenter<ExtensionController>() {
@@ -53,7 +54,6 @@ open class ExtensionPresenter(
 
     @Synchronized
     private fun toItems(tuple: ExtensionTuple): List<ExtensionItem> {
-        val context = Injekt.get<Application>()
         val activeLangs = preferences.enabledLanguages().get()
         val showNsfwExtensions = preferences.showNsfwExtension().get()
 
