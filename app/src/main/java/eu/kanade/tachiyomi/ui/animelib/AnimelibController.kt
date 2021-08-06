@@ -196,7 +196,12 @@ class AnimelibController(
             when (group) {
                 is AnimelibSettingsSheet.Filter.FilterGroup -> onFilterChanged()
                 is AnimelibSettingsSheet.Sort.SortGroup -> onSortChanged()
-                is AnimelibSettingsSheet.Display.DisplayGroup -> reattachAdapter()
+                is AnimelibSettingsSheet.Display.DisplayGroup -> {
+                    if (!preferences.categorisedDisplaySettings().get() || activeCategory == 0) {
+                        // Reattach adapter when flow preference change
+                        reattachAdapter()
+                    }
+                }
                 is AnimelibSettingsSheet.Display.BadgeGroup -> onBadgeSettingChanged()
                 is AnimelibSettingsSheet.Display.TabsGroup -> onTabsSettingsChanged()
             }
