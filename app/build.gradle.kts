@@ -38,7 +38,7 @@ android {
         buildConfigField("boolean", "INCLUDE_UPDATER", "false")
 
         // Please disable ACRA or use your own instance in forked versions of the project
-        buildConfigField("String", "ACRA_URI", "\"https://acra.jmir.xyz/report\"")
+        //buildConfigField("String", "ACRA_URI", "\"https://acra.jmir.xyz/report\"")
 
         ndk {
             abiFilters += SUPPORTED_ABIS

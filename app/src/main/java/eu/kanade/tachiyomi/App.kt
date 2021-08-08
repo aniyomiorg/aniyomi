@@ -145,17 +145,7 @@ open class App : Application(), LifecycleObserver, ImageLoaderFactory {
     }
 
     protected open fun setupAcra() {
-        if (BuildConfig.FLAVOR != "dev") {
-            initAcra {
-                buildConfigClass = BuildConfig::class.java
-                excludeMatchingSharedPreferencesKeys = arrayOf(".*username.*", ".*password.*", ".*token.*")
-
-                httpSender {
-                    uri = BuildConfig.ACRA_URI
-                    httpMethod = HttpSender.Method.PUT
-                }
-            }
-        }
+        //removed acra
     }
 
     protected open fun setupNotificationChannels() {
