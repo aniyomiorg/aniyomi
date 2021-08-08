@@ -109,4 +109,9 @@
         <item>@string/edge_nav</item>
         <item>@string/right_and_left_nav</item>
     </string-array>
+
+    <string-array name="playback_options">
+        <item>@string/playback_options_speed</item>
+        <item>@string/playback_options_quality</item>
+    </string-array>
 </resources>

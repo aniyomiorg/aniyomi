@@ -91,7 +91,6 @@
 
         <ImageButton android:id="@+id/watcher_controls_settings"
             style="@style/ExoStyledControls.Button.Bottom.Settings"
-            android:visibility="gone"
             android:contentDescription="@string/action_next_episode" />
     </LinearLayout>
 

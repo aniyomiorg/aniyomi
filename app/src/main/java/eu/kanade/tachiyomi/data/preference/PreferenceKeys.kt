@@ -59,6 +59,8 @@ object PreferenceKeys {
 
     const val defaultPlayerOrientationType = "pref_default_player_orientation_type_key"
 
+    const val playerSpeed = "pref_player_speed"
+
     const val progressPreference = "pref_progress_preference"
 
     const val alwaysUseExternalPlayer = "pref_always_use_external_player"

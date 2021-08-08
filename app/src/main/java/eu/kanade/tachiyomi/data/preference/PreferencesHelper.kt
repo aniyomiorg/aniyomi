@@ -136,6 +136,12 @@ class PreferencesHelper(val context: Context) {
 
     fun defaultPlayerOrientationType() = prefs.getInt(Keys.defaultPlayerOrientationType, OrientationType.FREE.flagValue)
 
+    fun getPlayerSpeed() = prefs.getFloat(Keys.playerSpeed, 1F)
+
+    fun setPlayerSpeed(newSpeed: Float) = prefs.edit {
+        putFloat(Keys.playerSpeed, newSpeed)
+    }
+
     fun alwaysUseExternalPlayer() = prefs.getBoolean(Keys.alwaysUseExternalPlayer, false)
 
     fun externalPlayerPreference() = prefs.getString(Keys.externalPlayerPreference, "")

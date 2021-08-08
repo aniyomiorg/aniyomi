@@ -3,14 +3,16 @@ package eu.kanade.tachiyomi.ui.player
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.webkit.WebSettings
 import android.widget.ImageButton
-import android.widget.RelativeLayout
+import android.widget.LinearLayout
+import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.children
 import com.github.vkay94.dtpv.DoubleTapPlayerView
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
 import com.google.android.exoplayer2.DefaultLoadControl
@@ -58,6 +60,7 @@ import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.hideBar
+import eu.kanade.tachiyomi.widget.listener.SimpleSeekBarListener
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -82,7 +85,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var exoPlayer: SimpleExoPlayer
     private lateinit var dataSourceFactory: DataSource.Factory
     private lateinit var dbProvider: ExoDatabaseProvider
-    val cacheSize = 100L * 1024L * 1024L // 100 mb
+    private val cacheSize = 100L * 1024L * 1024L // 100 mb
     private lateinit var simpleCache: SimpleCache
     private lateinit var cacheFactory: CacheDataSource.Factory
     private var message: String? = null
@@ -216,6 +219,10 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        return super.onCreateOptionsMenu(menu)
+    }
+
     private fun initPlayer() {
         exoPlayer = newPlayer().apply {
             playWhenReady = isPlayerPlaying
@@ -228,9 +235,11 @@ class PlayerActivity : AppCompatActivity() {
             onBackPressed()
         }
         settingsBtn.setOnClickListener {
-            settings()
+            optionsDialog()
         }
-        skipBtn.setOnClickListener { exoPlayer.seekTo(exoPlayer.currentPosition + 85000) }
+        skipBtn.setOnClickListener {
+            exoPlayer.seekTo(exoPlayer.currentPosition + 85000)
+        }
         nextBtn.setOnClickListener {
             nextEpisode()
         }
@@ -240,6 +249,106 @@ class PlayerActivity : AppCompatActivity() {
         youTubeDoubleTap.player(exoPlayer)
         playerView.player = exoPlayer
         duration = exoPlayer.duration
+    }
+
+    private fun optionsDialog() {
+        val alert = AlertDialog.Builder(this)
+
+        alert.setTitle(R.string.playback_options_title)
+        alert.setItems(R.array.playback_options) { dialog, which ->
+            when (which) {
+                0 -> {
+                    val speedAlert = AlertDialog.Builder(this)
+
+                    val linear = LinearLayout(this)
+
+                    val items = arrayOf(
+                        "10%", "25%", "40%", "50%", "60%", "70%", "75%", "80%",
+                        "85%", "90%", "95%", "100% (Normal)", "105%", "110%", "115%", "120%", "125%",
+                        "130%", "140%", "150%", "175%", "200%", "250%", "300%"
+                    )
+                    val floatItems = arrayOf(
+                        0.1F, 0.25F, 0.4F, 0.5F, 0.6F, 0.7F, 0.75F, 0.8F, 0.85F, 0.9F,
+                        0.95F, 1F, 1.05F, 1.1F, 1.15F, 1.2F, 1.25F, 1.3F, 1.4F, 1.5F, 1.75F, 2F, 2.5F, 3F
+                    )
+                    var newSpeed = preferences.getPlayerSpeed()
+
+                    speedAlert.setTitle(R.string.playback_speed_dialog_title)
+
+                    linear.orientation = LinearLayout.VERTICAL
+                    val text = TextView(this)
+                    text.text = items[floatItems.indexOf(newSpeed)]
+                    text.setPadding(30, 10, 10, 10)
+
+                    val seek = SeekBar(this).apply {
+                        max = items.lastIndex
+                        progress = floatItems.indexOf(newSpeed)
+                    }
+                    seek.setOnSeekBarChangeListener(object : SimpleSeekBarListener() {
+                        override fun onProgressChanged(seekBar: SeekBar, value: Int, fromUser: Boolean) {
+                            text.text = items[value]
+                            newSpeed = floatItems[value]
+                        }
+                    })
+
+                    linear.addView(seek)
+                    linear.addView(text)
+
+                    speedAlert.setView(linear)
+
+                    speedAlert.setPositiveButton(android.R.string.ok) { speedDialog, _ ->
+                        exoPlayer.setPlaybackParameters(PlaybackParameters(newSpeed))
+                        preferences.setPlayerSpeed(newSpeed)
+                        speedDialog.dismiss()
+                    }
+
+                    speedAlert.setNegativeButton(android.R.string.cancel) { speedDialog, _ ->
+                        speedDialog.cancel()
+                    }
+
+                    speedAlert.setNeutralButton(R.string.playback_speed_dialog_reset) { _, _ ->
+                        newSpeed = 1F
+                        val newProgress = floatItems.indexOf(newSpeed)
+                        text.text = items[newProgress]
+                        seek.progress = newProgress
+                        exoPlayer.setPlaybackParameters(PlaybackParameters(newSpeed))
+                        preferences.setPlayerSpeed(newSpeed)
+                    }
+
+                    speedAlert.show()
+                }
+                1 -> {
+                    val qualityAlert = AlertDialog.Builder(this)
+
+                    qualityAlert.setTitle(R.string.playback_quality_dialog_title)
+
+                    var requestedQuality = 0
+                    val qualities = videos.map { it.quality }.toTypedArray()
+                    qualityAlert.setSingleChoiceItems(qualities, currentQuality) { qualityDialog, selectedQuality ->
+                        if (selectedQuality > qualities.lastIndex) {
+                            qualityDialog.cancel()
+                        } else {
+                            requestedQuality = selectedQuality
+                        }
+                    }
+
+                    qualityAlert.setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
+                        changeQuality(requestedQuality)
+                        qualityDialog.dismiss()
+                    }
+
+                    qualityAlert.setNegativeButton(android.R.string.cancel) { qualityDialog, _ ->
+                        qualityDialog.cancel()
+                    }
+
+                    qualityAlert.show()
+                }
+                else -> {
+                    dialog.cancel()
+                }
+            }
+        }
+        alert.show()
     }
 
     override fun onBackPressed() {
@@ -264,7 +373,7 @@ class PlayerActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 message = e.message ?: "error getting links"
                 Timber.w(message)
-                listOf<Video>()
+                listOf()
             }
         }
     }
@@ -325,15 +434,14 @@ class PlayerActivity : AppCompatActivity() {
         changePlayer(episode.last_second_seen, isLocal)
     }
 
-    private fun settings() {
-        val nextQuality = if (currentQuality == videos.lastIndex) 0 else currentQuality + 1
-        baseContext.toast(videos[nextQuality].quality, Toast.LENGTH_SHORT)
+    private fun changeQuality(quality: Int) {
+        baseContext.toast(videos[quality].quality, Toast.LENGTH_SHORT)
         uri = if (isLocal) {
-            videos[nextQuality].uri!!.toString()
+            videos[quality].uri!!.toString()
         } else {
-            videos[nextQuality].videoUrl!!
+            videos[quality].videoUrl!!
         }
-        currentQuality = nextQuality
+        currentQuality = quality
         mediaItem = MediaItem.Builder()
             .setUri(uri)
             .setMimeType(getMime(uri))
@@ -387,7 +495,9 @@ class PlayerActivity : AppCompatActivity() {
             DefaultLoadControl(),
             DefaultBandwidthMeter.Builder(this).build(),
             AnalyticsCollector(Clock.DEFAULT)
-        ).build()
+        ).build().apply {
+            setPlaybackParameters(PlaybackParameters(preferences.getPlayerSpeed()))
+        }
     }
 
     class PlayerEventListener(private val playerView: DoubleTapPlayerView, val baseContext: Context) : Player.EventListener {

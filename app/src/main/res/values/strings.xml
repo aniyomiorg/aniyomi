@@ -867,4 +867,12 @@
     <string name="label_updates">Manga</string>
     <string name="label_animeupdates">Anime</string>
     <string name="player_overlay_back">Back</string>
+
+    <!-- Aniyomi stuff -->
+    <string name="playback_speed_dialog_title">Change playback speed:</string>
+    <string name="playback_speed_dialog_reset">Reset</string>
+    <string name="playback_quality_dialog_title">Change video quality:</string>
+    <string name="playback_options_speed">Playback speed</string>
+    <string name="playback_options_quality">Video quality</string>
+    <string name="playback_options_title">Playback options</string>
 </resources>
