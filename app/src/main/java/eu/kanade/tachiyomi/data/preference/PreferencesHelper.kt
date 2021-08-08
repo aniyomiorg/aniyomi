@@ -186,6 +186,8 @@ class PreferencesHelper(val context: Context) {
 
     fun showNavigationOverlayOnStart() = flowPrefs.getBoolean(Keys.showNavigationOverlayOnStart, false)
 
+    fun readerHideTreshold() = flowPrefs.getEnum(Keys.readerHideThreshold, Values.ReaderHideThreshold.LOW)
+
     fun portraitColumns() = flowPrefs.getInt(Keys.portraitColumns, 0)
 
     fun landscapeColumns() = flowPrefs.getInt(Keys.landscapeColumns, 0)
@@ -326,8 +328,6 @@ class PreferencesHelper(val context: Context) {
 
     fun downloadNewCategories() = flowPrefs.getStringSet(Keys.downloadNewCategories, emptySet())
     fun downloadNewCategoriesExclude() = flowPrefs.getStringSet(Keys.downloadNewCategoriesExclude, emptySet())
-
-    fun lang() = flowPrefs.getString(Keys.lang, "")
 
     fun defaultCategory() = prefs.getInt(Keys.defaultCategory, -1)
 

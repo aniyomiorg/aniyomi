@@ -29,8 +29,8 @@ android {
         minSdk = AndroidConfig.minSdk
         targetSdk = AndroidConfig.targetSdk
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        versionCode = 65
-        versionName = "0.11.1.11"
+        versionCode = 67
+        versionName = "0.12.1.1"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -141,12 +141,10 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.4.0-alpha03")
     implementation("androidx.biometric:biometric-ktx:1.2.0-alpha03")
     implementation("androidx.browser:browser:1.3.0")
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.0-rc01")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.0")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.1.0")
     implementation("androidx.core:core-ktx:1.7.0-alpha01")
     implementation("androidx.core:core-splashscreen:1.0.0-alpha01")
-    implementation("androidx.preference:preference-ktx:1.1.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
 
@@ -158,12 +156,7 @@ dependencies {
     // Job scheduling
     implementation("androidx.work:work-runtime-ktx:2.6.0-beta01")
 
-    // UI library
-    implementation("com.google.android.material:material:1.5.0-alpha01")
-
-    "standardImplementation"("com.google.firebase:firebase-core:19.0.0")
-
-    // ReactiveX
+    // RX
     implementation("io.reactivex:rxandroid:1.2.1")
     implementation("io.reactivex:rxjava:1.3.8")
     implementation("com.jakewharton.rxrelay:rxrelay:1.2.0")
@@ -179,7 +172,7 @@ dependencies {
     // TLS 1.3 support for Android < 10
     implementation("org.conscrypt:conscrypt-android:2.5.2")
 
-    // JSON
+    // Data serialization (JSON, protobuf)
     val kotlinSerializationVersion = "1.2.2"
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$kotlinSerializationVersion")
@@ -187,15 +180,15 @@ dependencies {
     implementation("com.github.salomonbrys.kotson:kotson:2.5.0")
 
     // JavaScript engine
-    implementation("com.squareup.duktape:duktape-android:1.3.0")
+    implementation("com.squareup.duktape:duktape-android:1.4.0")
+
+    // HTML parser
+    implementation("org.jsoup:jsoup:1.14.1")
 
     // Disk
     implementation("com.jakewharton:disklrucache:2.0.2")
     implementation("com.github.tachiyomiorg:unifile:17bec43")
     implementation("com.github.junrar:junrar:7.4.0")
-
-    // HTML parser
-    implementation("org.jsoup:jsoup:1.14.1")
 
     // Database
     implementation("androidx.sqlite:sqlite-ktx:2.1.0")
@@ -204,6 +197,7 @@ dependencies {
     implementation("com.github.requery:sqlite-android:3.36.0")
 
     // Preferences
+    implementation("androidx.preference:preference-ktx:1.1.1")
     implementation("com.github.tfcporciuncula.flow-preferences:flow-preferences:1.4.0")
 
     // Model View Presenter
@@ -214,8 +208,8 @@ dependencies {
     // Dependency injection
     implementation("com.github.inorichi.injekt:injekt-core:65b0440")
 
-    // Image library
-    val coilVersion = "1.3.1"
+    // Image loading
+    val coilVersion = "1.3.2"
     implementation("io.coil-kt:coil:$coilVersion")
     implementation("io.coil-kt:coil-gif:$coilVersion")
 
@@ -224,16 +218,11 @@ dependencies {
     }
     implementation("com.github.tachiyomiorg:image-decoder:7481a4a")
 
-    // Logging
-    implementation("com.jakewharton.timber:timber:4.7.1")
-
-    // Crash reports
-    implementation("ch.acra:acra-http:5.8.1")
-
     // Sort
     implementation("com.github.gpanther:java-nat-sort:natural-comparator-1.1")
 
-    // UI
+    // UI libraries
+    implementation("com.google.android.material:material:1.5.0-alpha01")
     implementation("com.github.dmytrodanylyk.android-process-button:library:1.0.4")
     implementation("eu.davidea:flexible-adapter:5.1.0")
     implementation("eu.davidea:flexible-adapter-ui:1.0.0")
@@ -256,8 +245,15 @@ dependencies {
     implementation("io.github.reactivecircus.flowbinding:flowbinding-swiperefreshlayout:$flowbindingVersion")
     implementation("io.github.reactivecircus.flowbinding:flowbinding-viewpager:$flowbindingVersion")
 
+    // Logging
+    implementation("com.jakewharton.timber:timber:4.7.1")
+
+    // Crash reports/analytics
+    implementation("ch.acra:acra-http:5.8.1")
+    "standardImplementation"("com.google.firebase:firebase-analytics:19.0.0")
+
     // Licenses
-    implementation("com.mikepenz:aboutlibraries:${BuildPluginsVersion.ABOUTLIB_PLUGIN}")
+    implementation("com.mikepenz:aboutlibraries-core:${BuildPluginsVersion.ABOUTLIB_PLUGIN}")
 
     // Tests
     testImplementation("junit:junit:4.13.2")

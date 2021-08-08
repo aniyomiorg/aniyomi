@@ -97,6 +97,8 @@ object PreferenceKeys {
 
     const val showNavigationOverlayOnStart = "reader_navigation_overlay_on_start"
 
+    const val readerHideThreshold = "reader_hide_threshold"
+
     const val webtoonSidePadding = "webtoon_side_padding"
 
     const val portraitColumns = "pref_library_columns_portrait_key"
@@ -204,8 +206,6 @@ object PreferenceKeys {
     const val downloadNewCategoriesExclude = "download_new_categories_exclude"
 
     const val libraryDisplayMode = "pref_display_mode_library"
-
-    const val lang = "app_language"
 
     const val dateFormat = "app_date_format"
 

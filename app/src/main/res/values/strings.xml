@@ -165,7 +165,6 @@
 
       <!-- General section -->
     <string name="pref_category_theme">Theme</string>
-    <string name="pref_category_locale">Locale</string>
     <string name="pref_theme_mode">Dark mode</string>
     <string name="theme_system">Follow system</string>
     <string name="theme_light">Off</string>
@@ -182,7 +181,6 @@
     <string name="theme_yotsuba">Yotsuba</string>
     <string name="pref_dark_theme_pure_black">Pure black dark mode</string>
     <string name="pref_start_screen">Start screen</string>
-    <string name="pref_language">Language</string>
     <string name="system_default">Default</string>
     <string name="pref_date_format">Date format</string>
     <string name="pref_confirm_exit">Confirm exit</string>
@@ -384,6 +382,11 @@
     <string name="webtoon_side_padding_15">15%</string>
     <string name="webtoon_side_padding_20">20%</string>
     <string name="webtoon_side_padding_25">25%</string>
+    <string name="pref_hide_threshold">Auto hide menu on scroll sensitivity</string>
+    <string name="pref_highest">Highest</string>
+    <string name="pref_high">High</string>
+    <string name="pref_low">Low</string>
+    <string name="pref_lowest">Lowest</string>
 
     <!-- Player section -->
     <string name="pref_category_player">Player</string>
