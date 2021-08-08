@@ -47,7 +47,7 @@ android {
 
     splits {
         abi {
-            isEnable = true
+            isEnable = false
             reset()
             include(*SUPPORTED_ABIS.toTypedArray())
             isUniversalApk = true
