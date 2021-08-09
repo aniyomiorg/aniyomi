@@ -81,7 +81,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
         }
 
         context.notificationManager.notify(
-            Notifications.ID_LIBRARY_PROGRESS,
+            Notifications.ID_ANIMELIB_PROGRESS,
             progressNotificationBuilder
                 .setProgress(total, current, false)
                 .build()

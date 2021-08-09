@@ -162,7 +162,7 @@ class AnimelibUpdateService(
         notifier = AnimelibUpdateNotifier(this)
         wakeLock = acquireWakeLock(javaClass.name)
 
-        startForeground(Notifications.ID_LIBRARY_PROGRESS, notifier.progressNotificationBuilder.build())
+        startForeground(Notifications.ID_ANIMELIB_PROGRESS, notifier.progressNotificationBuilder.build())
     }
 
     /**
