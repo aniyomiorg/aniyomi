@@ -36,9 +36,6 @@ import eu.kanade.tachiyomi.ui.security.SecureActivityDelegate
 import eu.kanade.tachiyomi.util.system.notification
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.acra.config.httpSender
-import org.acra.ktx.initAcra
-import org.acra.sender.HttpSender
 import org.conscrypt.Conscrypt
 import timber.log.Timber
 import uy.kohesive.injekt.Injekt
@@ -145,7 +142,7 @@ open class App : Application(), LifecycleObserver, ImageLoaderFactory {
     }
 
     protected open fun setupAcra() {
-        //removed acra
+        // removed acra
     }
 
     protected open fun setupNotificationChannels() {

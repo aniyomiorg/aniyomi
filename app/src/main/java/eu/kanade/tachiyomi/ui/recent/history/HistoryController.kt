@@ -175,7 +175,7 @@ class HistoryController :
 
     override fun onItemClick(position: Int) {
         val manga = (adapter?.getItem(position) as? HistoryItem)?.mch?.manga ?: return
-        router.pushController(MangaController(manga).withFadeTransaction())
+        parentController!!.router.pushController(MangaController(manga).withFadeTransaction())
     }
 
     override fun removeHistory(manga: Manga, history: History, all: Boolean) {

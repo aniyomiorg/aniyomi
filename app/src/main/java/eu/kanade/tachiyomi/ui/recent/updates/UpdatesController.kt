@@ -288,7 +288,7 @@ class UpdatesController :
     }
 
     private fun openManga(chapter: UpdatesItem) {
-        router.pushController(MangaController(chapter.manga).withFadeTransaction())
+        parentController!!.router.pushController(MangaController(chapter.manga).withFadeTransaction())
     }
 
     /**

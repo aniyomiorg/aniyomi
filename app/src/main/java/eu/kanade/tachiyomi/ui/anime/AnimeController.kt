@@ -78,8 +78,10 @@ import eu.kanade.tachiyomi.ui.browse.migration.search.AnimeSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.recent.history.HistoryController
-import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
+import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
+import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
+import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
+import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivityAnime
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.hasCustomCover
@@ -641,12 +643,14 @@ class AnimeController :
                 router.handleBack()
                 previousController.search(query)
             }
-            is UpdatesController,
-            is HistoryController -> {
+            is UpdatesTabsController,
+            is HistoryTabsController,
+            is AnimeUpdatesController,
+            is AnimeHistoryController -> {
                 // Manually navigate to AnimelibController
                 router.handleBack()
-                (router.activity as MainActivity).setSelectedNavItem(R.id.nav_library)
-                val controller = router.getControllerWithTag(R.id.nav_library.toString()) as AnimelibController
+                (router.activity as MainActivity).setSelectedNavItem(R.id.nav_animelib)
+                val controller = router.getControllerWithTag(R.id.nav_animelib.toString()) as AnimelibController
                 controller.search(query)
             }
             is LatestUpdatesController -> {

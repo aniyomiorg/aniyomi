@@ -297,7 +297,7 @@ class AnimeUpdatesController :
     }
 
     private fun openAnime(episode: AnimeUpdatesItem) {
-        router.pushController(AnimeController(episode.anime).withFadeTransaction())
+        parentController!!.router.pushController(AnimeController(episode.anime).withFadeTransaction())
     }
 
     /**

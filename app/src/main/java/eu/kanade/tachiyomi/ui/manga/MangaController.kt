@@ -73,6 +73,8 @@ import eu.kanade.tachiyomi.ui.manga.track.TrackItem
 import eu.kanade.tachiyomi.ui.manga.track.TrackSearchDialog
 import eu.kanade.tachiyomi.ui.manga.track.TrackSheet
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
+import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
+import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
 import eu.kanade.tachiyomi.ui.recent.history.HistoryController
 import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
@@ -624,6 +626,8 @@ class MangaController :
                 router.handleBack()
                 previousController.search(query)
             }
+            is UpdatesTabsController,
+            is HistoryTabsController,
             is UpdatesController,
             is HistoryController -> {
                 // Manually navigate to LibraryController
