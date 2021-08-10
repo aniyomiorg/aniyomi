@@ -207,6 +207,8 @@ object PreferenceKeys {
 
     const val libraryDisplayMode = "pref_display_mode_library"
 
+    const val lang = "app_language"
+
     const val dateFormat = "app_date_format"
 
     const val defaultCategory = "default_category"
