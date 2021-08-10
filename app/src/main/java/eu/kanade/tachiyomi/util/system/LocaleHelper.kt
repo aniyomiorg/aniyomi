@@ -62,6 +62,7 @@ object LocaleHelper {
         } else {
             newConfiguration.setLocale(appLocale)
         }
+        Locale.setDefault(appLocale)
         return ContextWrapper(context.createConfigurationContext(newConfiguration))
     }
 

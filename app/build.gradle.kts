@@ -87,7 +87,7 @@ android {
             dimension = "default"
         }
         create("dev") {
-            resConfigs("en", "xxhdpi")
+            resConfigs("en", "fr", "de", "ar", "xxhdpi")
             dimension = "default"
         }
     }
