@@ -53,7 +53,7 @@ open class ExtensionController :
     }
 
     override fun createPresenter(): ExtensionPresenter {
-        return ExtensionPresenter()
+        return ExtensionPresenter(activity!!)
     }
 
     override fun createBinding(inflater: LayoutInflater) = ExtensionControllerBinding.inflate(inflater)

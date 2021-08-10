@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.ui.browse.animeextension
 
-import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -23,6 +23,7 @@ private typealias AnimeExtensionTuple =
  * Presenter of [AnimeExtensionController].
  */
 open class AnimeExtensionPresenter(
+    private val context: Context,
     private val extensionManager: AnimeExtensionManager = Injekt.get(),
     private val preferences: PreferencesHelper = Injekt.get()
 ) : BasePresenter<AnimeExtensionController>() {
@@ -52,7 +53,6 @@ open class AnimeExtensionPresenter(
 
     @Synchronized
     private fun toItems(tuple: AnimeExtensionTuple): List<AnimeExtensionItem> {
-        val context = Injekt.get<Application>()
         val activeLangs = preferences.enabledLanguages().get()
         val showNsfwExtensions = preferences.showNsfwExtension().get()
 

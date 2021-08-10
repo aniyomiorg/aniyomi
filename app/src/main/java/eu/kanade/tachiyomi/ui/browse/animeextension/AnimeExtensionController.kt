@@ -53,7 +53,7 @@ open class AnimeExtensionController :
     }
 
     override fun createPresenter(): AnimeExtensionPresenter {
-        return AnimeExtensionPresenter()
+        return AnimeExtensionPresenter(activity!!)
     }
 
     override fun createBinding(inflater: LayoutInflater) = ExtensionControllerBinding.inflate(inflater)
