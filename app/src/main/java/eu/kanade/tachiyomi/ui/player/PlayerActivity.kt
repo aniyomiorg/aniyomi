@@ -164,7 +164,6 @@ class PlayerActivity : AppCompatActivity() {
             finish()
             return
         }
-        if (videos.lastIndex > 0) settingsBtn.visibility = View.VISIBLE
         dbProvider = ExoDatabaseProvider(baseContext)
         simpleCache = SimpleCache(
             File(baseContext.filesDir, "media"),
@@ -333,7 +332,7 @@ class PlayerActivity : AppCompatActivity() {
                     }
 
                     qualityAlert.setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
-                        changeQuality(requestedQuality)
+                        if (requestedQuality != currentQuality) changeQuality(requestedQuality)
                         qualityDialog.dismiss()
                     }
 
@@ -391,7 +390,6 @@ class PlayerActivity : AppCompatActivity() {
             finish()
             return
         }
-        settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
         isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
         uri = if (isLocal) {
             videos.first().uri!!.toString()
@@ -419,7 +417,6 @@ class PlayerActivity : AppCompatActivity() {
             finish()
             return
         }
-        settingsBtn.visibility = if (videos.lastIndex > 0) View.VISIBLE else View.GONE
         isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
         uri = if (isLocal) {
             videos.first().uri!!.toString()
