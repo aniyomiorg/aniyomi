@@ -8,8 +8,10 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.content.ContextCompat
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.backup.BackupRestoreService
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Chapter
@@ -108,6 +110,14 @@ class NotificationReceiver : BroadcastReceiver() {
                     intent.getLongExtra(EXTRA_CHAPTER_ID, -1)
                 )
             }
+            // Open player activity
+            ACTION_OPEN_EPISODE -> {
+                openEpisode(
+                    context,
+                    intent.getLongExtra(EXTRA_MANGA_ID, -1),
+                    intent.getLongExtra(EXTRA_CHAPTER_ID, -1)
+                )
+            }
             // Mark updated manga chapters as read
             ACTION_MARK_AS_READ -> {
                 val notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
@@ -118,6 +128,18 @@ class NotificationReceiver : BroadcastReceiver() {
                 val mangaId = intent.getLongExtra(EXTRA_MANGA_ID, -1)
                 if (mangaId > -1) {
                     markAsRead(urls, mangaId)
+                }
+            }
+            // Mark updated anime episodes as seen
+            ACTION_MARK_AS_SEEN -> {
+                val notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
+                if (notificationId > -1) {
+                    dismissNotification(context, notificationId, intent.getIntExtra(EXTRA_GROUP_ID, 0))
+                }
+                val urls = intent.getStringArrayExtra(EXTRA_CHAPTER_URL) ?: return
+                val animeId = intent.getLongExtra(EXTRA_MANGA_ID, -1)
+                if (animeId > -1) {
+                    markAsSeen(urls, animeId)
                 }
             }
             // Share crash dump file
@@ -178,6 +200,27 @@ class NotificationReceiver : BroadcastReceiver() {
         val chapter = db.getChapter(chapterId).executeAsBlocking()
         if (manga != null && chapter != null) {
             val intent = ReaderActivity.newIntent(context, manga, chapter).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
+            context.startActivity(intent)
+        } else {
+            context.toast(context.getString(R.string.chapter_error))
+        }
+    }
+
+    /**
+     * Starts player activity
+     *
+     * @param context context of application
+     * @param animeId id of anime
+     * @param episodeId id of episode
+     */
+    private fun openEpisode(context: Context, animeId: Long, episodeId: Long) {
+        val db = AnimeDatabaseHelper(context)
+        val anime = db.getAnime(animeId).executeAsBlocking()
+        val episode = db.getEpisode(episodeId).executeAsBlocking()
+        if (anime != null && episode != null) {
+            val intent = PlayerActivity.newIntent(context, anime, episode).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
             context.startActivity(intent)
@@ -266,6 +309,35 @@ class NotificationReceiver : BroadcastReceiver() {
         }
     }
 
+    /**
+     * Method called when user wants to mark anime episodes as seen
+     *
+     * @param chapterUrls URLs of episodes to mark as seen
+     * @param animeId id of anime
+     */
+    private fun markAsSeen(chapterUrls: Array<String>, animeId: Long) {
+        val db: AnimeDatabaseHelper = Injekt.get()
+        val preferences: PreferencesHelper = Injekt.get()
+        val sourceManager: AnimeSourceManager = Injekt.get()
+
+        launchIO {
+            chapterUrls.mapNotNull { db.getEpisode(it, animeId).executeAsBlocking() }
+                .forEach {
+                    it.seen = true
+                    db.updateEpisodeProgress(it).executeAsBlocking()
+                    if (preferences.removeAfterMarkedAsRead()) {
+                        val anime = db.getAnime(animeId).executeAsBlocking()
+                        if (anime != null) {
+                            val source = sourceManager.get(anime.source)
+                            if (source != null) {
+                                animedownloadManager.deleteEpisodes(listOf(it), anime, source)
+                            }
+                        }
+                    }
+                }
+        }
+    }
+
     companion object {
         private const val NAME = "NotificationReceiver"
 
@@ -282,7 +354,9 @@ class NotificationReceiver : BroadcastReceiver() {
         private const val ACTION_CANCEL_ANIMELIB_UPDATE = "$ID.$NAME.CANCEL_ANIMELIB_UPDATE"
 
         private const val ACTION_MARK_AS_READ = "$ID.$NAME.MARK_AS_READ"
+        private const val ACTION_MARK_AS_SEEN = "$ID.$NAME.MARK_AS_SEEN"
         private const val ACTION_OPEN_CHAPTER = "$ID.$NAME.ACTION_OPEN_CHAPTER"
+        private const val ACTION_OPEN_EPISODE = "$ID.$NAME.ACTION_OPEN_EPISODE"
 
         private const val ACTION_RESUME_DOWNLOADS = "$ID.$NAME.ACTION_RESUME_DOWNLOADS"
         private const val ACTION_PAUSE_DOWNLOADS = "$ID.$NAME.ACTION_PAUSE_DOWNLOADS"
@@ -508,7 +582,7 @@ class NotificationReceiver : BroadcastReceiver() {
             groupId: Int
         ): PendingIntent {
             val newIntent = Intent(context, NotificationReceiver::class.java).apply {
-                action = ACTION_MARK_AS_READ
+                action = ACTION_MARK_AS_SEEN
                 putExtra(EXTRA_CHAPTER_URL, episodes.map { it.url }.toTypedArray())
                 putExtra(EXTRA_MANGA_ID, anime.id)
                 putExtra(EXTRA_NOTIFICATION_ID, anime.id.hashCode())

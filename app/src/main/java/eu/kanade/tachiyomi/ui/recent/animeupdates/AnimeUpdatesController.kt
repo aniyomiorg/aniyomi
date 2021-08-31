@@ -392,8 +392,8 @@ class AnimeUpdatesController :
             R.id.action_delete ->
                 ConfirmDeleteEpisodesDialog(this, getSelectedEpisodes())
                     .showDialog(router)
-            R.id.action_mark_as_read -> markAsRead(getSelectedEpisodes())
-            R.id.action_mark_as_unread -> markAsUnread(getSelectedEpisodes())
+            R.id.action_mark_as_seen -> markAsRead(getSelectedEpisodes())
+            R.id.action_mark_as_unseen -> markAsUnread(getSelectedEpisodes())
             else -> return false
         }
         return true
