@@ -52,7 +52,7 @@ class SettingsLibraryController : SettingsController() {
         titleRes = R.string.pref_category_library
 
         val dbCategories = db.getCategories().executeAsBlocking()
-        val categories = listOf(Category.createDefault()) + dbCategories
+        val categories = listOf(Category.createDefault(context)) + dbCategories
 
         preferenceCategory {
             titleRes = R.string.pref_category_display
@@ -66,7 +66,7 @@ class SettingsLibraryController : SettingsController() {
 
                 fun getColumnValue(value: Int): String {
                     return if (value == 0) {
-                        context.getString(R.string.default_columns)
+                        context.getString(R.string.label_default)
                     } else {
                         value.toString()
                     }
@@ -316,7 +316,7 @@ class SettingsLibraryController : SettingsController() {
 
         fun onViewCreated(binding: PrefLibraryColumnsBinding) {
             with(binding.portraitColumns) {
-                displayedValues = arrayOf(context.getString(R.string.default_columns)) +
+                displayedValues = arrayOf(context.getString(R.string.label_default)) +
                     IntRange(1, 10).map(Int::toString)
                 value = portrait
 
@@ -325,7 +325,7 @@ class SettingsLibraryController : SettingsController() {
                 }
             }
             with(binding.landscapeColumns) {
-                displayedValues = arrayOf(context.getString(R.string.default_columns)) +
+                displayedValues = arrayOf(context.getString(R.string.label_default)) +
                     IntRange(1, 10).map(Int::toString)
                 value = landscape
 
@@ -343,7 +343,7 @@ class SettingsLibraryController : SettingsController() {
 
         override fun onCreateDialog(savedViewState: Bundle?): Dialog {
             val dbCategories = db.getCategories().executeAsBlocking()
-            val categories = listOf(Category.createDefault()) + dbCategories
+            val categories = listOf(Category.createDefault(activity!!)) + dbCategories
 
             val items = categories.map { it.name }
             var selected = categories

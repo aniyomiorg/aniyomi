@@ -15,18 +15,21 @@ import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import timber.log.Timber
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
+import java.text.DateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.TreeMap
 
-class AnimeUpdatesPresenter(
-    val preferences: PreferencesHelper = Injekt.get(),
-    private val db: AnimeDatabaseHelper = Injekt.get(),
-    private val downloadManager: AnimeDownloadManager = Injekt.get(),
-    private val sourceManager: AnimeSourceManager = Injekt.get()
-) : BasePresenter<AnimeUpdatesController>() {
+class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
+
+    val preferences: PreferencesHelper by injectLazy()
+    private val db: AnimeDatabaseHelper by injectLazy()
+    private val downloadManager: AnimeDownloadManager by injectLazy()
+    private val sourceManager: AnimeSourceManager by injectLazy()
+
+    private val relativeTime: Int = preferences.relativeTime().get()
+    private val dateFormat: DateFormat = preferences.dateFormat()
 
     /**
      * List containing episode and anime information
@@ -82,7 +85,7 @@ class AnimeUpdatesPresenter(
                 val byDay = animeEpisodes
                     .groupByTo(map, { it.episode.date_fetch.toDateKey() })
                 byDay.flatMap { entry ->
-                    val dateItem = DateSectionItem(entry.key)
+                    val dateItem = DateSectionItem(entry.key, relativeTime, dateFormat)
                     entry.value
                         .sortedWith(compareBy({ it.episode.date_fetch }, { it.episode.episode_number })).asReversed()
                         .map { AnimeUpdatesItem(it.episode, it.anime, dateItem) }

@@ -144,10 +144,9 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
         filterSheet = AnimeSourceFilterSheet(
             activity!!,
             onFilterClicked = {
-                val allDefault = presenter.sourceFilters == presenter.source.getFilterList()
                 showProgressBar()
                 adapter?.clear()
-                presenter.setSourceFilter(if (allDefault) AnimeFilterList() else presenter.sourceFilters)
+                presenter.setSourceFilter(presenter.sourceFilters)
             },
             onResetClicked = {
                 presenter.appliedFilters = AnimeFilterList()
@@ -332,7 +331,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
         showProgressBar()
         adapter?.clear()
 
-        presenter.restartPager(newQuery)
+        presenter.restartPager(newQuery, presenter.sourceFilters)
     }
 
     /**

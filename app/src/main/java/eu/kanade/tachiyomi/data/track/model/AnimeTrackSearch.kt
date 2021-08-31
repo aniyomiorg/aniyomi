@@ -16,7 +16,7 @@ class AnimeTrackSearch : AnimeTrack {
 
     override lateinit var title: String
 
-    override var last_episode_seen: Int = 0
+    override var last_episode_seen: Float = 0F
 
     override var total_episodes: Int = 0
 

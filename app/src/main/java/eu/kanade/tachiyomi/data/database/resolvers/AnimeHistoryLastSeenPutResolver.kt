@@ -27,9 +27,7 @@ class AnimeHistoryLastSeenPutResolver : AnimeHistoryPutResolver() {
                 .build()
         )
 
-        val putResult: PutResult
-
-        putResult = cursor.use { putCursor ->
+        cursor.use { putCursor ->
             if (putCursor.count == 0) {
                 val insertQuery = mapToInsertQuery(history)
                 val insertedId = db.lowLevel().insert(insertQuery, mapToContentValues(history))
@@ -39,25 +37,15 @@ class AnimeHistoryLastSeenPutResolver : AnimeHistoryPutResolver() {
                 PutResult.newUpdateResult(numberOfRowsUpdated, updateQuery.table())
             }
         }
-
-        putResult
     }
 
-    /**
-     * Creates update query
-     * @param obj history object
-     */
     override fun mapToUpdateQuery(obj: AnimeHistory) = UpdateQuery.builder()
         .table(AnimeHistoryTable.TABLE)
         .where("${AnimeHistoryTable.COL_EPISODE_ID} = ?")
         .whereArgs(obj.episode_id)
         .build()
 
-    /**
-     * Create content query
-     * @param history object
-     */
-    fun mapToUpdateContentValues(history: AnimeHistory) =
+    private fun mapToUpdateContentValues(history: AnimeHistory) =
         contentValuesOf(
             AnimeHistoryTable.COL_LAST_SEEN to history.last_seen
         )

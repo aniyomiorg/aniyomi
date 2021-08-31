@@ -2,12 +2,7 @@ package eu.kanade.tachiyomi.data.database
 
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
-import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable
-import eu.kanade.tachiyomi.data.database.tables.AnimeHistoryTable
-import eu.kanade.tachiyomi.data.database.tables.AnimeTable
-import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable
-import eu.kanade.tachiyomi.data.database.tables.CategoryTable
-import eu.kanade.tachiyomi.data.database.tables.EpisodeTable
+import eu.kanade.tachiyomi.data.database.tables.*
 
 class AnimeDbOpenCallback : SupportSQLiteOpenHelper.Callback(DATABASE_VERSION) {
 
@@ -20,7 +15,7 @@ class AnimeDbOpenCallback : SupportSQLiteOpenHelper.Callback(DATABASE_VERSION) {
         /**
          * Version of the database.
          */
-        const val DATABASE_VERSION = 112
+        const val DATABASE_VERSION = 113
     }
 
     override fun onCreate(db: SupportSQLiteDatabase) = with(db) {
@@ -84,6 +79,12 @@ class AnimeDbOpenCallback : SupportSQLiteOpenHelper.Callback(DATABASE_VERSION) {
         }
         if (oldVersion < 112) {
             db.execSQL(AnimeTable.addNextUpdateCol)
+        }
+        if (oldVersion < 113) {
+            db.execSQL(AnimeTrackTable.renameTableToTemp)
+            db.execSQL(AnimeTrackTable.createTableQuery)
+            db.execSQL(AnimeTrackTable.insertFromTempTable)
+            db.execSQL(AnimeTrackTable.dropTempTable)
         }
     }
 

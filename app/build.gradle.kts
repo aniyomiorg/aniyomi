@@ -79,7 +79,7 @@ android {
         getByName("debugFull").res.srcDirs("src/debug/res")
     }
 
-    flavorDimensions("default")
+    flavorDimensions.add("default")
 
     productFlavors {
         create("standard") {
@@ -87,18 +87,20 @@ android {
             dimension = "default"
         }
         create("dev") {
-            resConfigs("en", "fr", "de", "ar", "xxhdpi")
+            resourceConfigurations.addAll(listOf("en", "de", "ar", "xxhdpi"))
             dimension = "default"
         }
     }
 
     packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
-        exclude("LICENSE.txt")
-        exclude("META-INF/LICENSE")
-        exclude("META-INF/LICENSE.txt")
-        exclude("META-INF/NOTICE")
-        exclude("META-INF/*.kotlin_module")
+        resources.excludes.addAll(listOf(
+            "META-INF/DEPENDENCIES",
+            "LICENSE.txt",
+            "META-INF/LICENSE",
+            "META-INF/LICENSE.txt",
+            "META-INF/NOTICE",
+            "META-INF/*.kotlin_module",
+        ))
     }
 
     dependenciesInfo {
@@ -126,7 +128,6 @@ android {
 }
 
 dependencies {
-
     implementation(kotlin("reflect", version = BuildPluginsVersion.KOTLIN))
 
     val coroutinesVersion = "1.5.1"
@@ -183,7 +184,7 @@ dependencies {
     implementation("com.squareup.duktape:duktape-android:1.4.0")
 
     // HTML parser
-    implementation("org.jsoup:jsoup:1.14.1")
+    implementation("org.jsoup:jsoup:1.14.2")
 
     // Disk
     implementation("com.jakewharton:disklrucache:2.0.2")
@@ -222,7 +223,7 @@ dependencies {
     implementation("com.github.gpanther:java-nat-sort:natural-comparator-1.1")
 
     // UI libraries
-    implementation("com.google.android.material:material:1.5.0-alpha01")
+    implementation("com.google.android.material:material:1.5.0-alpha02")
     implementation("com.github.dmytrodanylyk.android-process-button:library:1.0.4")
     implementation("eu.davidea:flexible-adapter:5.1.0")
     implementation("eu.davidea:flexible-adapter-ui:1.0.0")
@@ -246,11 +247,11 @@ dependencies {
     implementation("io.github.reactivecircus.flowbinding:flowbinding-viewpager:$flowbindingVersion")
 
     // Logging
-    implementation("com.jakewharton.timber:timber:4.7.1")
+    implementation("com.jakewharton.timber:timber:5.0.1")
 
     // Crash reports/analytics
     implementation("ch.acra:acra-http:5.8.1")
-    "standardImplementation"("com.google.firebase:firebase-analytics:19.0.0")
+    "standardImplementation"("com.google.firebase:firebase-analytics:19.0.1")
 
     // Licenses
     implementation("com.mikepenz:aboutlibraries-core:${BuildPluginsVersion.ABOUTLIB_PLUGIN}")

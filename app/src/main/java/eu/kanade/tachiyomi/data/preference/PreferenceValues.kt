@@ -22,13 +22,14 @@ object PreferenceValues {
     /* ktlint-enable experimental:enum-entry-name-case */
 
     enum class AppTheme(val titleResId: Int?) {
-        DEFAULT(R.string.theme_default),
+        DEFAULT(R.string.label_default),
         MONET(R.string.theme_monet),
         BLUE(R.string.theme_blue),
         GREEN_APPLE(R.string.theme_greenapple),
         MIDNIGHT_DUSK(R.string.theme_midnightdusk),
         STRAWBERRY_DAIQUIRI(R.string.theme_strawberrydaiquiri),
         TAKO(R.string.theme_tako),
+        TEALTURQUOISE(R.string.theme_tealturquoise),
         YINYANG(R.string.theme_yinyang),
         YOTSUBA(R.string.theme_yotsuba),
 

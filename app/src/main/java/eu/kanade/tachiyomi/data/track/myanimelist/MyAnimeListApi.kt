@@ -18,6 +18,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.float
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
@@ -172,7 +173,7 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .add("status", track.toMyAnimeListStatus() ?: "reading")
                 .add("is_rereading", (track.status == MyAnimeList.REREADING).toString())
                 .add("score", track.score.toString())
-                .add("num_chapters_read", track.last_chapter_read.toString())
+                .add("num_chapters_read", track.last_chapter_read.toInt().toString())
             convertToIsoDate(track.started_reading_date)?.let {
                 formBodyBuilder.add("start_date", it)
             }
@@ -197,7 +198,7 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .add("status", track.toMyAnimeListStatus() ?: "watching")
                 .add("is_rewatching", (track.status == MyAnimeList.REWATCHING).toString())
                 .add("score", track.score.toString())
-                .add("num_watched_episodes", track.last_episode_seen.toString())
+                .add("num_watched_episodes", track.last_episode_seen.toInt().toString())
             convertToIsoDate(track.started_watching_date)?.let {
                 formBodyBuilder.add("start_date", it)
             }
@@ -330,7 +331,7 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
         return track.apply {
             val isRereading = obj["is_rereading"]!!.jsonPrimitive.boolean
             status = if (isRereading) MyAnimeList.REREADING else getStatus(obj["status"]!!.jsonPrimitive.content)
-            last_chapter_read = obj["num_chapters_read"]!!.jsonPrimitive.int
+            last_chapter_read = obj["num_chapters_read"]!!.jsonPrimitive.float
             score = obj["score"]!!.jsonPrimitive.int.toFloat()
             obj["start_date"]?.let {
                 started_reading_date = parseDate(it.jsonPrimitive.content)
@@ -346,7 +347,7 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
         return track.apply {
             val isRereading = obj["is_rewatching"]!!.jsonPrimitive.boolean
             status = if (isRereading) MyAnimeList.REWATCHING else getStatus(obj["status"]!!.jsonPrimitive.content)
-            last_episode_seen = obj["num_episodes_watched"]!!.jsonPrimitive.int
+            last_episode_seen = obj["num_episodes_watched"]!!.jsonPrimitive.float
             score = obj["score"]!!.jsonPrimitive.int.toFloat()
             obj["start_date"]?.let {
                 started_watching_date = parseDate(it.jsonPrimitive.content)

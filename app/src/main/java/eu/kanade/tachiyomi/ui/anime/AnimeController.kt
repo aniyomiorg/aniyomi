@@ -14,18 +14,24 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.FloatRange
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.bundleOf
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
+import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import coil.imageLoader
 import coil.request.ImageRequest
+import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -60,6 +66,7 @@ import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodesAdapter
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodesSettingsSheet
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodesAdapter
+import eu.kanade.tachiyomi.ui.anime.info.AnimeFullCoverDialog
 import eu.kanade.tachiyomi.ui.anime.info.AnimeInfoHeaderAdapter
 import eu.kanade.tachiyomi.ui.anime.track.TrackItem
 import eu.kanade.tachiyomi.ui.anime.track.TrackSearchDialog
@@ -69,7 +76,7 @@ import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCategoriesDialog
 import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCoverDialog
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
-import eu.kanade.tachiyomi.ui.base.controller.ToolbarLiftOnScrollController
+import eu.kanade.tachiyomi.ui.base.controller.getMainAppBarHeight
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
@@ -99,6 +106,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.recyclerview.scrollEvents
+import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
 import rx.schedulers.Schedulers
 import timber.log.Timber
@@ -111,7 +119,6 @@ import kotlin.math.min
 
 class AnimeController :
     NucleusController<MangaControllerBinding, AnimePresenter>,
-    ToolbarLiftOnScrollController,
     FabController,
     ActionMode.Callback,
     FlexibleAdapter.OnItemClickListener,
@@ -188,6 +195,8 @@ class AnimeController :
     private var isRefreshingEpisodes = false
 
     private var trackSheet: TrackSheet? = null
+
+    private var dialog: AnimeFullCoverDialog? = null
 
     private val incognitoMode = preferences.incognitoMode().get()
 
@@ -271,6 +280,37 @@ class AnimeController :
                 // Delayed in case we need to jump to chapters
                 it.post {
                     updateToolbarTitleAlpha()
+                }
+            }
+
+            it.scrollStateChanges()
+                .onEach { _ ->
+                    // Disable swipe refresh when view is not at the top
+                    val firstPos = (it.layoutManager as LinearLayoutManager)
+                        .findFirstCompletelyVisibleItemPosition()
+                    binding.swipeRefresh.isEnabled = firstPos <= 0
+                }
+                .launchIn(viewScope)
+
+            binding.fastScroller.doOnLayout { scroller ->
+                scroller.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    topMargin = getMainAppBarHeight()
+                }
+                scroller.applyInsetter {
+                    type(navigationBars = true) {
+                        margin()
+                    }
+                }
+            }
+
+            binding.swipeRefresh.doOnLayout { swipeRefresh ->
+                swipeRefresh as SwipeRefreshLayout
+                swipeRefresh.setOnApplyWindowInsetsListener { _, windowInsets ->
+                    val topStatusBarInset = WindowInsetsCompat.toWindowInsetsCompat(windowInsets)
+                        .getInsets(WindowInsetsCompat.Type.statusBars())
+                        .top
+                    swipeRefresh.setProgressViewEndTarget(false, getMainAppBarHeight() + topStatusBarInset)
+                    windowInsets
                 }
             }
         }
@@ -369,6 +409,16 @@ class AnimeController :
         actionFab = null
     }
 
+    private fun updateFabVisibility() {
+        val context = view?.context ?: return
+        val adapter = episodesAdapter ?: return
+        val fab = actionFab ?: return
+        fab.isVisible = adapter.items.any { !it.seen }
+        if (adapter.items.any { it.seen }) {
+            fab.text = context.getString(R.string.action_resume)
+        }
+    }
+
     override fun onDestroyView(view: View) {
         destroyActionModeIfNeeded()
         (activity as? MainActivity)?.clearFixViewToBottom(binding.actionToolbar)
@@ -408,7 +458,6 @@ class AnimeController :
 
         // Hide options for non-animelib anime
         menu.findItem(R.id.action_edit_categories).isVisible = presenter.anime.favorite && presenter.getCategories().isNotEmpty()
-        menu.findItem(R.id.action_edit_cover).isVisible = presenter.anime.favorite
         menu.findItem(R.id.action_migrate).isVisible = presenter.anime.favorite
     }
 
@@ -418,10 +467,6 @@ class AnimeController :
             R.id.download_next, R.id.download_next_5, R.id.download_next_10,
             R.id.download_custom, R.id.download_unread, R.id.download_all
             -> downloadEpisodes(item.itemId)
-
-            R.id.action_share_cover -> shareCover()
-            R.id.action_save_cover -> saveCover()
-            R.id.action_edit_cover -> changeCover()
 
             R.id.action_edit_categories -> onCategoriesClick()
             R.id.action_migrate -> migrateAnime()
@@ -703,6 +748,21 @@ class AnimeController :
         context.imageLoader.enqueue(req)
     }
 
+    fun showFullCoverDialog() {
+        if (dialog != null) return
+        val anime = anime ?: return
+        dialog = AnimeFullCoverDialog(this, anime)
+        dialog?.addLifecycleListener(
+            object : LifecycleListener() {
+                override fun postDestroy(controller: Controller) {
+                    super.postDestroy(controller)
+                    dialog = null
+                }
+            }
+        )
+        dialog?.showDialog(router)
+    }
+
     fun shareCover() {
         try {
             val activity = activity!!
@@ -836,7 +896,7 @@ class AnimeController :
     }
 
     private fun updateTrackEpisodeSeen(episode: Episode, anime: Anime) {
-        val episodeSeen = episode.episode_number.toInt()
+        val episodeSeen = episode.episode_number
 
         val trackManager = Injekt.get<TrackManager>()
 
@@ -867,6 +927,7 @@ class AnimeController :
 
     fun onSetCoverSuccess() {
         animeInfoAdapter?.notifyDataSetChanged()
+        dialog?.setImage(anime)
         activity?.toast(R.string.cover_updated)
     }
 
@@ -913,13 +974,7 @@ class AnimeController :
             actionMode?.invalidate()
         }
 
-        val context = view?.context
-        if (context != null) {
-            actionFab?.isVisible = episodes.any { !it.seen }
-            if (episodes.any { it.seen }) {
-                actionFab?.text = context.getString(R.string.action_resume)
-            }
-        }
+        updateFabVisibility()
     }
 
     private fun fetchEpisodesFromSource(manualFetch: Boolean = false) {
@@ -1155,7 +1210,7 @@ class AnimeController :
         episodesAdapter?.clearSelection()
         selectedEpisodes.clear()
         actionMode = null
-        actionFab?.isVisible = true
+        updateFabVisibility()
     }
 
     override fun onDetach(view: View) {

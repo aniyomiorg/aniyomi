@@ -34,7 +34,10 @@ import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
+import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
+import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
+import eu.kanade.tachiyomi.data.updater.AppUpdateResult
 import eu.kanade.tachiyomi.databinding.MainActivityBinding
 import eu.kanade.tachiyomi.extension.api.AnimeExtensionGithubApi
 import eu.kanade.tachiyomi.extension.api.ExtensionGithubApi
@@ -43,10 +46,9 @@ import eu.kanade.tachiyomi.ui.animelib.AnimelibController
 import eu.kanade.tachiyomi.ui.base.activity.BaseViewBindingActivity
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.FabController
-import eu.kanade.tachiyomi.ui.base.controller.NoToolbarElevationController
+import eu.kanade.tachiyomi.ui.base.controller.NoAppBarElevationController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.TabbedController
-import eu.kanade.tachiyomi.ui.base.controller.ToolbarLiftOnScrollController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.BrowseController
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
@@ -57,11 +59,13 @@ import eu.kanade.tachiyomi.ui.download.DownloadTabsController
 import eu.kanade.tachiyomi.ui.library.LibraryController
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.more.MoreController
+import eu.kanade.tachiyomi.ui.more.NewUpdateDialogController
 import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
 import eu.kanade.tachiyomi.ui.setting.SettingsMainController
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.dpToPx
+import eu.kanade.tachiyomi.util.system.isTablet
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setNavigationBarTransparentCompat
 import eu.kanade.tachiyomi.widget.HideBottomNavigationOnScrollBehavior
@@ -89,13 +93,17 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
         }
     }
 
-    lateinit var tabAnimator: ViewHeightAnimator
     private var bottomNavAnimator: ViewHeightAnimator? = null
 
     private var isConfirmingExit: Boolean = false
     private var isHandlingShortcut: Boolean = false
 
     private var fixedViewsToBottom = mutableMapOf<View, AppBarLayout.OnOffsetChangedListener>()
+
+    /**
+     * App bar lift state for backstack
+     */
+    private val backstackLiftState = mutableMapOf<String, Boolean>()
 
     // To be checked by splash screen. If true then splash screen will be removed.
     var ready = false
@@ -121,11 +129,6 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
 
         // Draw edge-to-edge
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        binding.appbar.applyInsetter {
-            type(navigationBars = true, statusBars = true) {
-                padding(left = true, top = true, right = true)
-            }
-        }
         binding.fabLayout.rootFab.applyInsetter {
             type(navigationBars = true) {
                 margin()
@@ -143,8 +146,6 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             elapsed <= SPLASH_MIN_DURATION || (!ready && elapsed <= SPLASH_MAX_DURATION)
         }
         setSplashScreenExitAnimation(splashScreen)
-
-        tabAnimator = ViewHeightAnimator(binding.tabs, 0L)
 
         if (binding.bottomNav != null) {
             bottomNavAnimator = ViewHeightAnimator(binding.bottomNav!!)
@@ -226,7 +227,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                     container: ViewGroup,
                     handler: ControllerChangeHandler
                 ) {
-                    syncActivityViewWithController(to, from)
+                    syncActivityViewWithController(to, from, isPush)
                 }
 
                 override fun onChangeCompleted(
@@ -353,19 +354,32 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
 
     override fun onResume() {
         super.onResume()
-        getExtensionUpdates()
-    }
 
-    private fun setExtensionsBadge() {
-        val updates = preferences.extensionUpdatesCount().get() + preferences.animeextensionUpdatesCount().get()
-        if (updates > 0) {
-            nav.getOrCreateBadge(R.id.nav_browse).number = updates
-        } else {
-            nav.removeBadge(R.id.nav_browse)
+        checkForExtensionUpdates()
+        if (BuildConfig.INCLUDE_UPDATER) {
+            checkForAppUpdates()
         }
     }
 
-    private fun getExtensionUpdates() {
+    private fun checkForAppUpdates() {
+        // Limit checks to once a day at most
+        if (Date().time < preferences.lastAppCheck().get() + TimeUnit.DAYS.toMillis(1)) {
+            return
+        }
+
+        lifecycleScope.launchIO {
+            try {
+                val result = AppUpdateChecker().checkForUpdate()
+                if (result is AppUpdateResult.NewUpdate) {
+                    NewUpdateDialogController(result).showDialog(router)
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+        }
+    }
+
+    private fun checkForExtensionUpdates() {
         // Limit checks to once a day at most
         if (Date().time < preferences.lastExtCheck().get() + TimeUnit.DAYS.toMillis(1)) {
             return
@@ -380,6 +394,15 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             } catch (e: Exception) {
                 Timber.e(e)
             }
+        }
+    }
+
+    private fun setExtensionsBadge() {
+        val updates = preferences.extensionUpdatesCount().get() + preferences.animeextensionUpdatesCount().get()
+        if (updates > 0) {
+            nav.getOrCreateBadge(R.id.nav_browse).number = updates
+        } else {
+            nav.removeBadge(R.id.nav_browse)
         }
     }
 
@@ -526,7 +549,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
         router.setRoot(controller.withFadeTransaction().tag(id.toString()))
     }
 
-    private fun syncActivityViewWithController(to: Controller?, from: Controller? = null) {
+    private fun syncActivityViewWithController(to: Controller?, from: Controller? = null, isPush: Boolean = true) {
         if (from is DialogController || to is DialogController) {
             return
         }
@@ -551,12 +574,11 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             from.cleanupTabs(binding.tabs)
         }
         if (to is TabbedController) {
-            tabAnimator.expand()
             to.configureTabs(binding.tabs)
         } else {
-            tabAnimator.collapse()
             binding.tabs.setupWithViewPager(null)
         }
+        binding.tabs.isVisible = to is TabbedController
 
         if (from is FabController) {
             binding.fabLayout.rootFab.isVisible = false
@@ -567,16 +589,32 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             to.configureFab(binding.fabLayout.rootFab)
         }
 
-        when (to) {
-            is NoToolbarElevationController -> {
-                binding.appbar.disableElevation()
+        if (!isTablet()) {
+            // Save lift state
+            if (isPush) {
+                if (router.backstackSize > 1) {
+                    // Save lift state
+                    from?.let {
+                        backstackLiftState[it.instanceId] = binding.appbar.isLifted
+                    }
+                } else {
+                    backstackLiftState.clear()
+                }
+                binding.appbar.isLifted = false
+            } else {
+                to?.let {
+                    binding.appbar.isLifted = backstackLiftState.getOrElse(it.instanceId) { false }
+                }
+                from?.let {
+                    backstackLiftState.remove(it.instanceId)
+                }
             }
-            is ToolbarLiftOnScrollController -> {
-                binding.appbar.enableElevation(true)
-            }
-            else -> {
-                binding.appbar.enableElevation(false)
-            }
+
+            binding.root.isLiftAppBarOnScroll = to !is NoAppBarElevationController
+
+            binding.appbar.isTransparentWhenNotLifted = (to is MangaController || to is AnimeController) &&
+                preferences.appTheme().get() != PreferenceValues.AppTheme.BLUE
+            binding.controllerContainer.overlapHeader = to is MangaController || to is AnimeController
         }
     }
 

@@ -36,13 +36,15 @@
 
         <!-- Themes -->
         <item name="android:windowLightStatusBar">@bool/lightStatusBar</item>
-        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@color/surface_amoled</item>
         <item name="android:navigationBarDividerColor" tools:targetApi="o_mr1">@null</item>
         <item name="android:enforceNavigationBarContrast" tools:targetApi="Q">false</item>
         <item name="android:enforceStatusBarContrast" tools:targetApi="Q">false</item>
         <item name="android:itemTextAppearance">@style/TextAppearance.Widget.Menu</item>
+        <item name="android:alertDialogTheme">@style/ThemeOverlay.Tachiyomi.MaterialAlertDialog</item>
         <item name="textAppearanceButton">@style/TextAppearance.Widget.Button</item>
+        <item name="android:buttonStyle">?attr/borderlessButtonStyle</item>
         <item name="android:backgroundDimAmount">0.32</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeStyle">@style/Widget.Tachiyomi.ActionMode</item>
@@ -55,7 +57,7 @@
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Tachiyomi.BottomSheetDialog</item>
         <item name="chipStyle">@style/Widget.Tachiyomi.Chip.Action</item>
         <item name="chipTextColor">?android:attr/textColorPrimary</item>
-        <item name="chipBackgroundColor">?attr/colorControlHighlight</item>
+        <item name="chipBackgroundColor">?android:attr/divider</item>
         <item name="snackbarStyle">@style/Widget.Tachiyomi.Snackbar</item>
         <item name="snackbarTextViewStyle">@style/Widget.Tachiyomi.Snackbar.TextView</item>
         <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
@@ -81,7 +83,9 @@
     <!--== Blue Theme ==-->
     <style name="Theme.Tachiyomi.Blue">
         <!-- Theme Colors -->
-        <item name="colorPrimary">@color/accent_blue</item>
+        <item name="colorToolbar">@color/accent_blue</item>
+        <item name="colorOnToolbar">@color/md_white_1000</item>
+        <item name="colorPrimary">@color/primary_blue</item>
         <item name="colorControlHighlight">@color/ripple_colored_blue</item>
     </style>
 
@@ -126,6 +130,17 @@
         <item name="colorFilterActive">@color/filter_tako</item>
     </style>
 
+    <!--== Teal & Turquoise Theme ==-->
+    <style name="Theme.Tachiyomi.TealTurquoise">
+        <!-- Theme Colors -->
+        <item name="colorPrimary">@color/accent_tealturquoise</item>
+        <item name="colorOnPrimary">@color/color_on_primary_tealturquoise</item>
+        <item name="colorOnSecondary">@color/color_on_primary_tealturquoise</item>
+        <item name="colorTertiary">@color/tertiary_tealturquoise</item>
+        <item name="colorOnTertiary">@color/color_on_tertiary_tealturquoise</item>
+        <item name="colorControlHighlight">@color/ripple_colored_tealturquoise</item>
+    </style>
+
     <!--== Yin & Yang Theme ==-->
     <style name="Theme.Tachiyomi.YinYang">
         <!-- Theme Colors -->
@@ -154,18 +169,14 @@
 
     <!--== Colored Bars (toolbar-navbar-navrail) Mode Overlay ==-->
     <style name="ThemeOverlay.Tachiyomi.ColoredBars" parent="">
-        <item name="colorToolbar">?attr/colorPrimary</item>
-        <item name="colorOnToolbar">?attr/colorOnPrimary</item>
-
         <!-- Base background/text colors -->
         <item name="background">?attr/colorPrimary</item>
 
         <!-- Themes -->
         <item name="actionBarTheme">@style/ThemeOverlay.Tachiyomi.ActionBar.Colored</item>
-        <item name="actionModeStyle">@style/Widget.Tachiyomi.ActionMode</item>
         <item name="toolbarNavigationButtonStyle">@style/Widget.Tachiyomi.Toolbar.Button.Navigation</item>
         <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Primary</item>
-        <item name="toolbarStyle">@style/Widget.Tachiyomi.Toolbar.Primary</item>
+        <item name="toolbarStyle">@style/Widget.Tachiyomi.Toolbar.Colored</item>
         <item name="tabStyle">@style/Widget.Tachiyomi.TabLayout.Colored</item>
         <item name="bottomNavigationStyle">@style/Widget.Tachiyomi.BottomNavigationView.Colored</item>
         <item name="navigationRailStyle">@style/Widget.Tachiyomi.NavigationRailView.Colored</item>
@@ -173,8 +184,7 @@
         <!-- Status/Navigation bar -->
         <item name="android:windowLightStatusBar" tools:targetApi="m">?attr/lightSystemBarsOnPrimary</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">?attr/lightSystemBarsOnPrimary</item>
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
-        <item name="android:navigationBarColor">?attr/colorPrimary</item>
+        <item name="android:navigationBarColor">?attr/colorToolbar</item>
     </style>
 
     <!--===============-->

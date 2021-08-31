@@ -17,7 +17,6 @@
             android:layout_height="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:contentInsetStartWithNavigation="0dp"
-            app:menu="@menu/track_search"
             app:navigationIcon="@drawable/ic_close_24dp"
             app:title="@string/add_tracking" />
 
@@ -39,7 +38,7 @@
             android:hint="@string/title"
             app:endIconMode="clear_text">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <eu.kanade.tachiyomi.widget.TachiyomiTextInputEditText
                 android:id="@+id/title_input_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -85,6 +84,19 @@
                 tools:visibility="visible" />
 
         </FrameLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/track_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:text="@string/action_track"
+            android:enabled="false" />
 
     </LinearLayout>
 

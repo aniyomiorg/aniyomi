@@ -38,7 +38,6 @@ import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.removeCovers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -90,11 +89,6 @@ open class BrowseAnimeSourcePresenter(
      * Pager containing a list of anime results.
      */
     private lateinit var pager: AnimePager
-
-    /**
-     * Flow of anime list to initialize.
-     */
-    private val animeDetailsFlow = MutableStateFlow<List<Anime>>(emptyList())
 
     /**
      * Subscription for the pager.

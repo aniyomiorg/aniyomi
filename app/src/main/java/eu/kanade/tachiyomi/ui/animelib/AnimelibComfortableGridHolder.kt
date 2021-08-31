@@ -4,11 +4,10 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.clear
-import coil.loadAny
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.databinding.SourceComfortableGridItemBinding
-import eu.kanade.tachiyomi.util.isLocal
+import eu.kanade.tachiyomi.util.view.loadAnyAutoPause
 
 /**
  * Class used to hold the displayed data of a anime in the animelib, like the cover or the title.
@@ -57,6 +56,6 @@ class AnimelibComfortableGridHolder(
 
         // Update the cover.
         binding.thumbnail.clear()
-        binding.thumbnail.loadAny(item.anime)
+        binding.thumbnail.loadAnyAutoPause(item.anime)
     }
 }

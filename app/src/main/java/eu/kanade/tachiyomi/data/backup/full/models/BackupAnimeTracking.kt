@@ -32,8 +32,7 @@ data class BackupAnimeTracking(
             media_id = this@BackupAnimeTracking.mediaId
             library_id = this@BackupAnimeTracking.libraryId
             title = this@BackupAnimeTracking.title
-            // convert from float to int because of 1.x types
-            last_episode_seen = this@BackupAnimeTracking.lastChapterRead.toInt()
+            last_episode_seen = this@BackupAnimeTracking.lastChapterRead
             total_episodes = this@BackupAnimeTracking.totalChapters
             score = this@BackupAnimeTracking.score
             status = this@BackupAnimeTracking.status
@@ -52,7 +51,7 @@ data class BackupAnimeTracking(
                 libraryId = track.library_id!!,
                 title = track.title,
                 // convert to float for 1.x
-                lastChapterRead = track.last_episode_seen.toFloat(),
+                lastChapterRead = track.last_episode_seen,
                 totalChapters = track.total_episodes,
                 score = track.score,
                 status = track.status,

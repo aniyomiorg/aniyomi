@@ -33,6 +33,8 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.ui.security.SecureActivityDelegate
+import eu.kanade.tachiyomi.util.system.AuthenticatorUtil
+import eu.kanade.tachiyomi.util.system.animatorDurationScale
 import eu.kanade.tachiyomi.util.system.notification
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -117,18 +119,18 @@ open class App : Application(), LifecycleObserver, ImageLoaderFactory {
     override fun newImageLoader(): ImageLoader {
         return ImageLoader.Builder(this).apply {
             componentRegistry {
-                add(TachiyomiImageDecoder(this@App.resources))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     add(ImageDecoderDecoder(this@App))
                 } else {
                     add(GifDecoder())
                 }
+                add(TachiyomiImageDecoder(this@App.resources))
                 add(ByteBufferFetcher())
                 add(AnimeCoverFetcher())
                 add(MangaCoverFetcher())
             }
             okHttpClient(Injekt.get<NetworkHelper>().coilClient)
-            crossfade(300)
+            crossfade((300 * this@App.animatorDurationScale).toInt())
             allowRgb565(getSystemService<ActivityManager>()!!.isLowRamDevice)
         }.build()
     }
@@ -136,7 +138,7 @@ open class App : Application(), LifecycleObserver, ImageLoaderFactory {
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     @Suppress("unused")
     fun onAppBackgrounded() {
-        if (preferences.lockAppAfter().get() >= 0) {
+        if (!AuthenticatorUtil.isAuthenticating && preferences.lockAppAfter().get() >= 0) {
             SecureActivityDelegate.locked = true
         }
     }

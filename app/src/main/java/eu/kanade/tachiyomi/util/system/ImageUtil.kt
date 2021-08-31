@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
@@ -12,13 +11,13 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import androidx.core.graphics.alpha
+import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.blue
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import tachiyomi.decoder.Format
 import tachiyomi.decoder.ImageDecoder
-import tachiyomi.decoder.ImageType
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -133,8 +132,9 @@ object ImageUtil {
             Side.RIGHT -> Rect(width - width / 2, 0, width, height)
             Side.LEFT -> Rect(0, 0, width / 2, height)
         }
-        val canvas = Canvas(half)
-        canvas.drawBitmap(imageBitmap, part, singlePage, null)
+        half.applyCanvas {
+            drawBitmap(imageBitmap, part, singlePage, null)
+        }
         val output = ByteArrayOutputStream()
         half.compress(Bitmap.CompressFormat.JPEG, 100, output)
 
@@ -152,21 +152,22 @@ object ImageUtil {
         val width = imageBitmap.width
 
         val result = createBitmap(width / 2, height * 2)
-        val canvas = Canvas(result)
-        // right -> upper
-        val rightPart = when (upperSide) {
-            Side.RIGHT -> Rect(width - width / 2, 0, width, height)
-            Side.LEFT -> Rect(0, 0, width / 2, height)
+        result.applyCanvas {
+            // right -> upper
+            val rightPart = when (upperSide) {
+                Side.RIGHT -> Rect(width - width / 2, 0, width, height)
+                Side.LEFT -> Rect(0, 0, width / 2, height)
+            }
+            val upperPart = Rect(0, 0, width / 2, height)
+            drawBitmap(imageBitmap, rightPart, upperPart, null)
+            // left -> bottom
+            val leftPart = when (upperSide) {
+                Side.LEFT -> Rect(width - width / 2, 0, width, height)
+                Side.RIGHT -> Rect(0, 0, width / 2, height)
+            }
+            val bottomPart = Rect(0, height, width / 2, height * 2)
+            drawBitmap(imageBitmap, leftPart, bottomPart, null)
         }
-        val upperPart = Rect(0, 0, width / 2, height)
-        canvas.drawBitmap(imageBitmap, rightPart, upperPart, null)
-        // left -> bottom
-        val leftPart = when (upperSide) {
-            Side.LEFT -> Rect(width - width / 2, 0, width, height)
-            Side.RIGHT -> Rect(0, 0, width / 2, height)
-        }
-        val bottomPart = Rect(0, height, width / 2, height * 2)
-        canvas.drawBitmap(imageBitmap, leftPart, bottomPart, null)
 
         val output = ByteArrayOutputStream()
         result.compress(Bitmap.CompressFormat.JPEG, 100, output)
@@ -181,11 +182,9 @@ object ImageUtil {
      * Algorithm for determining what background to accompany a comic/manga page
      */
     fun chooseBackground(context: Context, imageStream: InputStream): Drawable {
-        imageStream.mark(imageStream.available() + 1)
-
-        val image = BitmapFactory.decodeStream(imageStream)
-
-        imageStream.reset()
+        val decoder = ImageDecoder.newInstance(imageStream)
+        val image = decoder?.decode()
+        decoder?.recycle()
 
         val whiteColor = Color.WHITE
         if (image == null) return ColorDrawable(whiteColor)

@@ -16,8 +16,10 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.PowerManager
+import android.provider.Settings
 import android.util.TypedValue
 import android.view.Display
 import android.view.View
@@ -32,7 +34,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.alpha
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
@@ -40,8 +41,12 @@ import androidx.core.graphics.red
 import androidx.core.net.toUri
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity
 import eu.kanade.tachiyomi.util.lang.truncateCenter
 import timber.log.Timber
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.File
 import kotlin.math.roundToInt
 
@@ -97,7 +102,7 @@ fun Context.copyToClipboard(label: String, content: String) {
  */
 fun Context.notificationBuilder(channelId: String, block: (NotificationCompat.Builder.() -> Unit)? = null): NotificationCompat.Builder {
     val builder = NotificationCompat.Builder(this, channelId)
-        .setColor(ContextCompat.getColor(this, R.color.accent_blue))
+        .setColor(getColor(R.color.accent_blue))
     if (block != null) {
         builder.block()
     }
@@ -147,7 +152,7 @@ fun Context.hasPermission(permission: String) = ContextCompat.checkSelfPermissio
     val tv = TypedValue()
     return if (this.theme.resolveAttribute(attr, tv, true)) {
         if (tv.resourceId != 0) {
-            ContextCompat.getColor(this, tv.resourceId)
+            getColor(tv.resourceId)
         } else {
             tv.data
         }
@@ -186,6 +191,9 @@ val Context.notificationManager: NotificationManager
 val Context.connectivityManager: ConnectivityManager
     get() = getSystemService()!!
 
+val Context.wifiManager: WifiManager
+    get() = getSystemService()!!
+
 val Context.powerManager: PowerManager
     get() = getSystemService()!!
 
@@ -199,6 +207,12 @@ val Context.displayCompat: Display?
         @Suppress("DEPRECATION")
         getSystemService<WindowManager>()?.defaultDisplay
     }
+
+/** Gets the duration multiplier for general animations on the device
+ * @see Settings.Global.ANIMATOR_DURATION_SCALE
+ */
+val Context.animatorDurationScale: Float
+    get() = Settings.Global.getFloat(this.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f)
 
 /**
  * Convenience method to acquire a partial wake lock.
@@ -307,10 +321,11 @@ fun Context.isNightMode(): Boolean {
  * Context wrapping method obtained from AppCompatDelegateImpl
  * https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:appcompat/appcompat/src/main/java/androidx/appcompat/app/AppCompatDelegateImpl.java;l=348;drc=e28752c96fc3fb4d3354781469a1af3dbded4898
  */
-fun Context.createReaderThemeContext(readerThemeSelected: Int): Context {
-    val isDarkBackground = when (readerThemeSelected) {
+fun Context.createReaderThemeContext(): Context {
+    val prefs = Injekt.get<PreferencesHelper>()
+    val isDarkBackground = when (prefs.readerTheme().get()) {
         1, 2 -> true // Black, Gray
-        3 -> isNightMode() // Automatic bg uses activity background by default
+        3 -> applicationContext.isNightMode() // Automatic bg uses activity background by default
         else -> false // White
     }
     val expected = if (isDarkBackground) Configuration.UI_MODE_NIGHT_YES else Configuration.UI_MODE_NIGHT_NO
@@ -319,11 +334,10 @@ fun Context.createReaderThemeContext(readerThemeSelected: Int): Context {
         overrideConf.setTo(resources.configuration)
         overrideConf.uiMode = (overrideConf.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or expected
 
-        val wrappedContext = ContextThemeWrapper(this, R.style.Theme_AppCompat_Empty)
+        val wrappedContext = ContextThemeWrapper(this, R.style.Theme_Tachiyomi)
         wrappedContext.applyOverrideConfiguration(overrideConf)
-        if (theme != null) {
-            ResourcesCompat.ThemeCompat.rebase(wrappedContext.theme)
-        }
+        BaseThemedActivity.getThemeResIds(prefs.appTheme().get(), prefs.themeDarkAmoled().get())
+            .forEach { wrappedContext.theme.applyStyle(it, true) }
         return wrappedContext
     }
     return this

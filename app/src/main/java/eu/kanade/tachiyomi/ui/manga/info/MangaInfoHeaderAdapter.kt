@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
-import coil.loadAny
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Manga
@@ -15,8 +15,11 @@ import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.ui.base.controller.getMainAppBarHeight
 import eu.kanade.tachiyomi.ui.manga.MangaController
+import eu.kanade.tachiyomi.util.system.applySystemAnimatorScale
 import eu.kanade.tachiyomi.util.system.copyToClipboard
+import eu.kanade.tachiyomi.util.view.loadAnyAutoPause
 import eu.kanade.tachiyomi.util.view.setChips
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
@@ -44,8 +47,11 @@ class MangaInfoHeaderAdapter(
 
     private var initialLoad: Boolean = true
 
+    private val maxLines = 3
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeaderViewHolder {
         binding = MangaInfoHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        updateCoverPosition()
         return HeaderViewHolder(binding.root)
     }
 
@@ -74,8 +80,18 @@ class MangaInfoHeaderAdapter(
         notifyDataSetChanged()
     }
 
+    private fun updateCoverPosition() {
+        val appBarHeight = controller.getMainAppBarHeight()
+        binding.mangaCover.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin += appBarHeight
+        }
+    }
+
     inner class HeaderViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
+            val summaryTransition = binding.mangaSummarySection.getTransition(R.id.manga_summary_section_transition)
+            summaryTransition.applySystemAnimatorScale(view.context)
+
             // For rounded corners
             binding.mangaCover.clipToOutline = true
 
@@ -176,6 +192,12 @@ class MangaInfoHeaderAdapter(
                 }
                 .launchIn(controller.viewScope)
 
+            binding.mangaCover.clicks()
+                .onEach {
+                    controller.showFullCoverDialog()
+                }
+                .launchIn(controller.viewScope)
+
             binding.mangaCover.longClicks()
                 .onEach {
                     showCoverOptionsDialog()
@@ -262,9 +284,8 @@ class MangaInfoHeaderAdapter(
             setFavoriteButtonState(manga.favorite)
 
             // Set cover if changed.
-            listOfNotNull(binding.mangaCover, binding.backdrop).forEach {
-                it.loadAny(manga)
-            }
+            binding.backdrop.loadAnyAutoPause(manga)
+            binding.mangaCover.loadAnyAutoPause(manga)
 
             // Manga info section
             val hasInfoContent = !manga.description.isNullOrBlank() || !manga.genre.isNullOrBlank()
@@ -274,7 +295,10 @@ class MangaInfoHeaderAdapter(
                 binding.mangaSummaryText.text = if (manga.description.isNullOrBlank()) {
                     view.context.getString(R.string.unknown)
                 } else {
-                    manga.description
+                    // Max lines of 3 with a blank line looks whack so we remove
+                    // any line breaks that is 2 or more and replace it with 1
+                    manga.description!!
+                        .replace(Regex("[\\r\\n]{2,}", setOf(RegexOption.MULTILINE)), "\n")
                 }
 
                 // Update genres list
@@ -312,7 +336,7 @@ class MangaInfoHeaderAdapter(
                 }
 
                 // Refreshes will change the state and it needs to be set to correct state to display correctly
-                if (binding.mangaSummaryText.maxLines == 2) {
+                if (binding.mangaSummaryText.maxLines == maxLines) {
                     binding.mangaSummarySection.transitionToState(R.id.start)
                 } else {
                     binding.mangaSummarySection.transitionToState(R.id.end)
@@ -325,7 +349,7 @@ class MangaInfoHeaderAdapter(
         }
 
         private fun toggleMangaInfo() {
-            val isCurrentlyExpanded = binding.mangaSummaryText.maxLines != 2
+            val isCurrentlyExpanded = binding.mangaSummaryText.maxLines != maxLines
 
             if (isCurrentlyExpanded) {
                 binding.mangaSummarySection.transitionToStart()
@@ -334,7 +358,7 @@ class MangaInfoHeaderAdapter(
             }
 
             binding.mangaSummaryText.maxLines = if (isCurrentlyExpanded) {
-                2
+                maxLines
             } else {
                 Int.MAX_VALUE
             }

@@ -327,7 +327,7 @@ class AnimelibPresenter(
     private fun getAnimelibObservable(): Observable<Animelib> {
         return Observable.combineLatest(getCategoriesObservable(), getAnimelibAnimesObservable()) { dbCategories, animelibAnime ->
             val categories = if (animelibAnime.containsKey(0)) {
-                arrayListOf(Category.createDefault()) + dbCategories
+                arrayListOf(Category.createDefault(context)) + dbCategories
             } else {
                 dbCategories
             }

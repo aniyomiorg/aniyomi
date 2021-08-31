@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.data.animelib
 
 import eu.kanade.tachiyomi.data.database.models.Anime
 import java.util.Collections
-import kotlin.Comparator
 import kotlin.math.abs
 
 /**

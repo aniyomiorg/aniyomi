@@ -9,15 +9,19 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.TooltipCompat
-import androidx.core.content.ContextCompat
+import androidx.core.view.children
+import androidx.core.view.descendants
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -119,10 +123,10 @@ inline fun View.popupMenu(
 
     if (selectedItemId != null) {
         (popup.menu as? MenuBuilder)?.setOptionalIconsVisible(true)
-        val emptyIcon = ContextCompat.getDrawable(context, R.drawable.ic_blank_24dp)
+        val emptyIcon = AppCompatResources.getDrawable(context, R.drawable.ic_blank_24dp)
         popup.menu.forEach { item ->
             item.icon = when (item.itemId) {
-                selectedItemId -> ContextCompat.getDrawable(context, R.drawable.ic_check_24dp)?.mutate()?.apply {
+                selectedItemId -> AppCompatResources.getDrawable(context, R.drawable.ic_check_24dp)?.mutate()?.apply {
                     setTint(context.getResourceColor(android.R.attr.textColorPrimary))
                 }
                 else -> emptyIcon
@@ -214,3 +218,40 @@ fun RecyclerView.onAnimationsFinished(callback: (RecyclerView) -> Unit) = post(
         }
     }
 )
+
+/**
+ * Returns this ViewGroup's first child of specified class
+ */
+inline fun <reified T> ViewGroup.findChild(): T? {
+    return children.find { it is T } as? T
+}
+
+/**
+ * Returns this ViewGroup's first descendant of specified class
+ */
+inline fun <reified T> ViewGroup.findDescendant(): T? {
+    return descendants.find { it is T } as? T
+}
+
+/**
+ * Returns the active child view of a ViewPager according to the LayoutParams
+ */
+fun ViewPager.getActivePageView(): View? {
+    if (null == adapter || adapter?.count == 0 || childCount == 0) {
+        return null
+    }
+
+    val positionField = ViewPager.LayoutParams::class.java.getDeclaredField("position")
+    positionField.isAccessible = true
+    return children.find { child ->
+        val layoutParams = child.layoutParams as ViewPager.LayoutParams
+        try {
+            if (!layoutParams.isDecor && positionField.getInt(layoutParams) == currentItem) {
+                return@find true
+            }
+        } catch (e: NoSuchFieldException) {
+        } catch (e: IllegalAccessException) {
+        }
+        false
+    }
+}

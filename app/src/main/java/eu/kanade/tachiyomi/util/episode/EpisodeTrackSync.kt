@@ -22,6 +22,10 @@ fun syncEpisodesWithTrackServiceTwoWay(db: AnimeDatabaseHelper, episodes: List<E
         .forEach { it.seen = true }
     db.updateEpisodesProgress(sortedEpisodes).executeAsBlocking()
 
+    // this uses the ordinal index of chapters instead of the chapter_number
+    // it was done that way because Track.last_chapter_read was an Int at the time, and Komga
+    // could have Float for the chapter number
+    // this will be addressed later on
     val localLastRead = when {
         sortedEpisodes.all { it.seen } -> sortedEpisodes.size
         sortedEpisodes.any { !it.seen } -> sortedEpisodes.indexOfFirst { !it.seen }
@@ -29,7 +33,7 @@ fun syncEpisodesWithTrackServiceTwoWay(db: AnimeDatabaseHelper, episodes: List<E
     }
 
     // update remote
-    remoteTrack.last_episode_seen = localLastRead
+    remoteTrack.last_episode_seen = localLastRead.toFloat()
 
     launchIO {
         try {

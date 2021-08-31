@@ -17,6 +17,7 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.float
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -37,7 +38,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
                     put("user_id", user_id)
                     put("target_id", track.media_id)
                     put("target_type", "Manga")
-                    put("chapters", track.last_chapter_read)
+                    put("chapters", track.last_chapter_read.toInt())
                     put("score", track.score.toInt())
                     put("status", track.toShikimoriStatus())
                 }
@@ -59,7 +60,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
                     put("user_id", user_id)
                     put("target_id", track.media_id)
                     put("target_type", "Manga")
-                    put("chapters", track.last_episode_seen)
+                    put("chapters", track.last_episode_seen.toInt())
                     put("score", track.score.toInt())
                     put("status", track.toShikimoriStatus())
                 }
@@ -147,7 +148,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             title = mangas["name"]!!.jsonPrimitive.content
             media_id = obj["id"]!!.jsonPrimitive.int
             total_chapters = mangas["chapters"]!!.jsonPrimitive.int
-            last_chapter_read = obj["chapters"]!!.jsonPrimitive.int
+            last_chapter_read = obj["chapters"]!!.jsonPrimitive.float
             score = (obj["score"]!!.jsonPrimitive.int).toFloat()
             status = toTrackStatus(obj["status"]!!.jsonPrimitive.content)
             tracking_url = baseUrl + mangas["url"]!!.jsonPrimitive.content
@@ -159,7 +160,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             title = animes["name"]!!.jsonPrimitive.content
             media_id = obj["id"]!!.jsonPrimitive.int
             total_episodes = animes["episodes"]!!.jsonPrimitive.int
-            last_episode_seen = obj["episodes"]!!.jsonPrimitive.int
+            last_episode_seen = obj["episodes"]!!.jsonPrimitive.float
             score = (obj["score"]!!.jsonPrimitive.int).toFloat()
             status = toTrackStatus(obj["status"]!!.jsonPrimitive.content)
             tracking_url = baseUrl + animes["url"]!!.jsonPrimitive.content

@@ -53,6 +53,8 @@ object PreferenceKeys {
 
     const val grayscale = "pref_grayscale"
 
+    const val invertedColors = "pref_inverted_colors"
+
     const val defaultReadingMode = "pref_default_reading_mode_key"
 
     const val defaultOrientationType = "pref_default_orientation_type_key"
@@ -208,6 +210,8 @@ object PreferenceKeys {
     const val libraryDisplayMode = "pref_display_mode_library"
 
     const val lang = "app_language"
+
+    const val relativeTime: String = "relative_time"
 
     const val dateFormat = "app_date_format"
 

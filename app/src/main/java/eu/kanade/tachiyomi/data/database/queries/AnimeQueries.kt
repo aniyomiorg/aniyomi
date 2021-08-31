@@ -7,7 +7,13 @@ import com.pushtorefresh.storio.sqlite.queries.RawQuery
 import eu.kanade.tachiyomi.data.database.DbProvider
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
-import eu.kanade.tachiyomi.data.database.resolvers.*
+import eu.kanade.tachiyomi.data.database.resolvers.AnimeCoverLastModifiedPutResolver
+import eu.kanade.tachiyomi.data.database.resolvers.AnimeFavoritePutResolver
+import eu.kanade.tachiyomi.data.database.resolvers.AnimeFlagsPutResolver
+import eu.kanade.tachiyomi.data.database.resolvers.AnimeLastUpdatedPutResolver
+import eu.kanade.tachiyomi.data.database.resolvers.AnimeNextUpdatedPutResolver
+import eu.kanade.tachiyomi.data.database.resolvers.AnimeTitlePutResolver
+import eu.kanade.tachiyomi.data.database.resolvers.AnimelibAnimeGetResolver
 import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable
 import eu.kanade.tachiyomi.data.database.tables.CategoryTable
@@ -75,7 +81,7 @@ interface AnimeQueries : DbProvider {
 
     fun updateEpisodeFlags(animes: List<Anime>) = db.put()
         .objects(animes)
-        .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_EPISODE_FLAGS, Anime::episode_flags, true))
+        .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_EPISODE_FLAGS, Anime::episode_flags))
         .prepare()
 
     fun updateViewerFlags(anime: Anime) = db.put()
@@ -85,7 +91,7 @@ interface AnimeQueries : DbProvider {
 
     fun updateViewerFlags(anime: List<Anime>) = db.put()
         .objects(anime)
-        .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_VIEWER, Anime::viewer_flags, true))
+        .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_VIEWER, Anime::viewer_flags))
         .prepare()
 
     fun updateNextUpdated(manga: Anime) = db.put()

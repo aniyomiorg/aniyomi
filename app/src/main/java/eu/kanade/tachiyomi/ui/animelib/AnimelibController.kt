@@ -9,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
@@ -245,12 +244,7 @@ class AnimelibController(
         }
         tabsVisibilitySubscription?.unsubscribe()
         tabsVisibilitySubscription = tabsVisibilityRelay.subscribe { visible ->
-            val tabAnimator = (activity as? MainActivity)?.tabAnimator
-            if (visible) {
-                tabAnimator?.expand()
-            } else {
-                tabAnimator?.collapse()
-            }
+            tabs.isVisible = visible
         }
         animeCountVisibilitySubscription?.unsubscribe()
         animeCountVisibilitySubscription = animeCountVisibilityRelay.subscribe {
@@ -422,7 +416,7 @@ class AnimelibController(
         // Tint icon if there's a filter active
         if (settingsSheet.filters.hasActiveFilters()) {
             val filterColor = activity!!.getResourceColor(R.attr.colorFilterActive)
-            DrawableCompat.setTint(filterItem.icon, filterColor)
+            filterItem.icon.setTint(filterColor)
         }
     }
 

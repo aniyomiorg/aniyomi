@@ -6,12 +6,9 @@
 # ![app icon](.github/readme-images/app-icon.png)Aniyomi
 Aniyomi is an unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 6.0 and above.
 
-![screenshots of app](./.github/readme-images/screens.png)
-
 ## Features
 
 Features include:
-<<<<<<< HEAD
 * Watching anime from [a variety of sources](https://github.com/jmir1/aniyomi-extensions)
 * Everything you know and love about Tachiyomi: 
     * Online reading from a variety of sources

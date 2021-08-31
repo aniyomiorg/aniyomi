@@ -326,6 +326,7 @@ abstract class PagerViewer(val activity: ReaderActivity) : BaseViewer {
      */
     private fun refreshAdapter() {
         val currentItem = pager.currentItem
+        adapter.refresh()
         pager.adapter = adapter
         pager.setCurrentItem(currentItem, false)
     }

@@ -247,6 +247,7 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
     override suspend fun refresh(track: Track): Track {
         val remoteTrack = api.getLibManga(track, getUsername().toInt())
         track.copyPersonalFrom(remoteTrack)
+        track.title = remoteTrack.title
         track.total_chapters = remoteTrack.total_chapters
         return track
     }
@@ -254,6 +255,7 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
     override suspend fun refresh(track: AnimeTrack): AnimeTrack {
         val remoteTrack = api.getLibAnime(track, getUsername().toInt())
         track.copyPersonalFrom(remoteTrack)
+        track.title = remoteTrack.title
         track.total_episodes = remoteTrack.total_episodes
         return track
     }

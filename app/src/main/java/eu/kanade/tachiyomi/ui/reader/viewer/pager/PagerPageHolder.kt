@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.reader.viewer.pager
 
 import android.annotation.SuppressLint
 import android.app.ActionBar
+import android.content.Context
 import android.graphics.PointF
 import android.graphics.drawable.Animatable
 import android.view.GestureDetector
@@ -15,6 +16,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.core.view.setMargins
 import androidx.core.view.updateLayoutParams
 import coil.imageLoader
 import coil.request.CachePolicy
@@ -30,13 +32,13 @@ import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerConfig.ZoomType
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.system.ImageUtil
-import eu.kanade.tachiyomi.util.system.createReaderThemeContext
 import eu.kanade.tachiyomi.util.system.dpToPx
 import eu.kanade.tachiyomi.widget.ViewPagerAdapter
 import rx.Observable
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.nio.ByteBuffer
 import java.util.concurrent.TimeUnit
@@ -46,9 +48,10 @@ import java.util.concurrent.TimeUnit
  */
 @SuppressLint("ViewConstructor")
 class PagerPageHolder(
+    readerThemedContext: Context,
     val viewer: PagerViewer,
     val page: ReaderPage
-) : FrameLayout(viewer.activity), ViewPagerAdapter.PositionableView {
+) : FrameLayout(readerThemedContext), ViewPagerAdapter.PositionableView {
 
     /**
      * Item that identifies this view. Needed by the adapter to not recreate views.
@@ -115,8 +118,7 @@ class PagerPageHolder(
     }
 
     init {
-        val indicatorContext = context.createReaderThemeContext(viewer.config.theme)
-        progressIndicator = ReaderProgressIndicator(indicatorContext).apply {
+        progressIndicator = ReaderProgressIndicator(readerThemedContext).apply {
             updateLayoutParams<LayoutParams> {
                 gravity = Gravity.CENTER
             }
@@ -251,38 +253,47 @@ class PagerPageHolder(
      * Called when the page is ready.
      */
     private fun setImage() {
-        progressIndicator.setCompleteProgressAndHide()
+        progressIndicator.hide()
         retryButton?.isVisible = false
         decodeErrorLayout?.isVisible = false
 
         unsubscribeReadImageHeader()
         val streamFn = page.stream ?: return
 
-        var openStream: InputStream? = null
         readImageHeaderSubscription = Observable
             .fromCallable {
                 val stream = streamFn().buffered(16)
-                openStream = process(item, stream)
-
-                ImageUtil.isAnimatedAndSupported(stream)
+                val itemStream = process(item, stream)
+                try {
+                    val streamBytes = itemStream.readBytes()
+                    val isAnimated = ImageUtil.isAnimatedAndSupported(stream)
+                    val background = if (!isAnimated && viewer.config.automaticBackground) {
+                        ByteArrayInputStream(streamBytes).use { bais ->
+                            ImageUtil.chooseBackground(context, bais)
+                        }
+                    } else {
+                        null
+                    }
+                    Triple(streamBytes, isAnimated, background)
+                } finally {
+                    stream.close()
+                    itemStream.close()
+                }
             }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext { isAnimated ->
-                if (!isAnimated) {
-                    initSubsamplingImageView().apply {
-                        if (viewer.config.automaticBackground) {
-                            background = ImageUtil.chooseBackground(context, openStream!!)
+            .doOnNext { (streamBytes, isAnimated, background) ->
+                ByteArrayInputStream(streamBytes).use { bais ->
+                    if (!isAnimated) {
+                        this.background = background
+                        initSubsamplingImageView().apply {
+                            setImage(ImageSource.inputStream(bais))
                         }
-                        setImage(ImageSource.inputStream(openStream!!))
+                    } else {
+                        initImageView().setImage(bais)
                     }
-                } else {
-                    initImageView().setImage(openStream!!)
                 }
             }
-            // Keep the Rx stream alive to close the input stream only when unsubscribed
-            .flatMap { Observable.never<Unit>() }
-            .doOnUnsubscribe { openStream?.close() }
             .subscribe({}, {})
     }
 
@@ -447,7 +458,7 @@ class PagerPageHolder(
 
         TextView(context).apply {
             layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                setMargins(margins, margins, margins, margins)
+                setMargins(margins)
             }
             gravity = Gravity.CENTER
             setText(R.string.decode_image_error)
@@ -457,7 +468,7 @@ class PagerPageHolder(
 
         PagerButton(context, viewer).apply {
             layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                setMargins(margins, margins, margins, margins)
+                setMargins(margins)
             }
             setText(R.string.action_retry)
             setOnClickListener {
@@ -471,7 +482,7 @@ class PagerPageHolder(
         if (imageUrl.orEmpty().startsWith("http", true)) {
             PagerButton(context, viewer).apply {
                 layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                    setMargins(margins, margins, margins, margins)
+                    setMargins(margins)
                 }
                 setText(R.string.action_open_in_web_view)
                 setOnClickListener {

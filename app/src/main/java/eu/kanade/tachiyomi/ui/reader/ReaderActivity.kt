@@ -17,6 +17,7 @@ import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
+import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
@@ -65,6 +66,7 @@ import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.R2LPagerViewer
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.GLUtil
+import eu.kanade.tachiyomi.util.system.applySystemAnimatorScale
 import eu.kanade.tachiyomi.util.system.createReaderThemeContext
 import eu.kanade.tachiyomi.util.system.getThemeColor
 import eu.kanade.tachiyomi.util.system.hasDisplayCutout
@@ -76,6 +78,7 @@ import eu.kanade.tachiyomi.widget.listener.SimpleAnimationListener
 import eu.kanade.tachiyomi.widget.listener.SimpleSeekBarListener
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import nucleus.factory.RequiresPresenter
@@ -346,6 +349,7 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
                 override fun onProgressChanged(seekBar: SeekBar, value: Int, fromUser: Boolean) {
                     if (viewer != null && fromUser) {
                         moveToPageIndex(value)
+                        binding.pageSeekbar.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
                     }
                 }
             }
@@ -525,6 +529,7 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
 
             if (animate) {
                 val toolbarAnimation = AnimationUtils.loadAnimation(this, R.anim.enter_from_top)
+                toolbarAnimation.applySystemAnimatorScale(this)
                 toolbarAnimation.setAnimationListener(
                     object : SimpleAnimationListener() {
                         override fun onAnimationStart(animation: Animation) {
@@ -536,6 +541,7 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
                 binding.toolbar.startAnimation(toolbarAnimation)
 
                 val bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.enter_from_bottom)
+                bottomAnimation.applySystemAnimatorScale(this)
                 binding.readerMenuBottom.startAnimation(bottomAnimation)
             }
 
@@ -550,6 +556,7 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
 
             if (animate) {
                 val toolbarAnimation = AnimationUtils.loadAnimation(this, R.anim.exit_to_top)
+                toolbarAnimation.applySystemAnimatorScale(this)
                 toolbarAnimation.setAnimationListener(
                     object : SimpleAnimationListener() {
                         override fun onAnimationEnd(animation: Animation) {
@@ -560,6 +567,7 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
                 binding.toolbar.startAnimation(toolbarAnimation)
 
                 val bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.exit_to_bottom)
+                bottomAnimation.applySystemAnimatorScale(this)
                 binding.readerMenuBottom.startAnimation(bottomAnimation)
             }
 
@@ -607,7 +615,7 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
             binding.rightChapter.setTooltip(R.string.action_next_chapter)
         }
 
-        val loadingIndicatorContext = createReaderThemeContext(preferences.readerTheme().get())
+        val loadingIndicatorContext = createReaderThemeContext()
         loadingIndicator = ReaderProgressIndicator(loadingIndicatorContext).apply {
             updateLayoutParams<FrameLayout.LayoutParams> {
                 gravity = Gravity.CENTER
@@ -879,11 +887,25 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
      */
     private inner class ReaderConfig {
 
-        private val grayscalePaint by lazy {
-            Paint().apply {
+        private fun getCombinedPaint(grayscale: Boolean, invertedColors: Boolean): Paint {
+            return Paint().apply {
                 colorFilter = ColorMatrixColorFilter(
                     ColorMatrix().apply {
-                        setSaturation(0f)
+                        if (grayscale) {
+                            setSaturation(0f)
+                        }
+                        if (invertedColors) {
+                            postConcat(
+                                ColorMatrix(
+                                    floatArrayOf(
+                                        -1f, 0f, 0f, 0f, 255f,
+                                        0f, -1f, 0f, 0f, 255f,
+                                        0f, 0f, -1f, 0f, 255f,
+                                        0f, 0f, 0f, 1f, 0f
+                                    )
+                                )
+                            )
+                        }
                     }
                 )
             }
@@ -936,8 +958,8 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
                 .onEach { setColorFilter(preferences.colorFilter().get()) }
                 .launchIn(lifecycleScope)
 
-            preferences.grayscale().asFlow()
-                .onEach { setGrayscale(it) }
+            merge(preferences.grayscale().asFlow(), preferences.invertedColors().asFlow())
+                .onEach { setLayerPaint(preferences.grayscale().get(), preferences.invertedColors().get()) }
                 .launchIn(lifecycleScope)
 
             preferences.fullscreen().asFlow()
@@ -1065,8 +1087,8 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
             binding.colorOverlay.setFilterColor(value, preferences.colorFilterMode().get())
         }
 
-        private fun setGrayscale(enabled: Boolean) {
-            val paint = if (enabled) grayscalePaint else null
+        private fun setLayerPaint(grayscale: Boolean, invertedColors: Boolean) {
+            val paint = if (grayscale || invertedColors) getCombinedPaint(grayscale, invertedColors) else null
             binding.viewerContainer.setLayerType(LAYER_TYPE_HARDWARE, paint)
         }
     }

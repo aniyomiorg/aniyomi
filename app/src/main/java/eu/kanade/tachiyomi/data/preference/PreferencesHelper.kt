@@ -10,7 +10,7 @@ import com.tfcporciuncula.flow.Preference
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Manga
-import eu.kanade.tachiyomi.data.preference.PreferenceValues.ThemeMode.*
+import eu.kanade.tachiyomi.data.preference.PreferenceValues.ThemeMode.system
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.ui.library.setting.DisplayModeSetting
@@ -130,6 +130,8 @@ class PreferencesHelper(val context: Context) {
 
     fun grayscale() = flowPrefs.getBoolean(Keys.grayscale, false)
 
+    fun invertedColors() = flowPrefs.getBoolean(Keys.invertedColors, false)
+
     fun defaultReadingMode() = prefs.getInt(Keys.defaultReadingMode, ReadingModeType.RIGHT_TO_LEFT.flagValue)
 
     fun defaultOrientationType() = prefs.getInt(Keys.defaultOrientationType, OrientationType.FREE.flagValue)
@@ -232,6 +234,8 @@ class PreferencesHelper(val context: Context) {
 
     fun backupsDirectory() = flowPrefs.getString(Keys.backupDirectory, defaultBackupDir.toString())
 
+    fun relativeTime() = flowPrefs.getInt(Keys.relativeTime, 7)
+
     fun dateFormat(format: String = flowPrefs.getString(Keys.dateFormat, "").get()): DateFormat = when (format) {
         "" -> DateFormat.getDateInstance(DateFormat.SHORT)
         else -> SimpleDateFormat(format, Locale.getDefault())
@@ -309,6 +313,8 @@ class PreferencesHelper(val context: Context) {
     fun extensionUpdatesCount() = flowPrefs.getInt("ext_updates_count", 0)
 
     fun animeextensionUpdatesCount() = flowPrefs.getInt("animeext_updates_count", 0)
+
+    fun lastAppCheck() = flowPrefs.getLong("last_app_check", 0)
 
     fun lastExtCheck() = flowPrefs.getLong("last_ext_check", 0)
 

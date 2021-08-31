@@ -34,7 +34,6 @@ import eu.kanade.tachiyomi.data.preference.plusAssign
 import eu.kanade.tachiyomi.databinding.ExtensionDetailControllerBinding
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
-import eu.kanade.tachiyomi.ui.base.controller.ToolbarLiftOnScrollController
 import eu.kanade.tachiyomi.ui.base.controller.openInBrowser
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.util.preference.DSL
@@ -49,8 +48,7 @@ import uy.kohesive.injekt.injectLazy
 
 @SuppressLint("RestrictedApi")
 class AnimeExtensionDetailsController(bundle: Bundle? = null) :
-    NucleusController<ExtensionDetailControllerBinding, AnimeExtensionDetailsPresenter>(bundle),
-    ToolbarLiftOnScrollController {
+    NucleusController<ExtensionDetailControllerBinding, AnimeExtensionDetailsPresenter>(bundle) {
 
     private val preferences: PreferencesHelper by injectLazy()
 

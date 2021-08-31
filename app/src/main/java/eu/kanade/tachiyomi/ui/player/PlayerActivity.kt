@@ -612,7 +612,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun updateTrackEpisodeSeen(episode: Episode) {
-        val episodeSeen = episode.episode_number.toInt()
+        val episodeSeen = episode.episode_number
 
         val trackManager = Injekt.get<TrackManager>()
 

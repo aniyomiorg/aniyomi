@@ -3,10 +3,9 @@ package eu.kanade.tachiyomi.ui.animelib
 import android.view.View
 import androidx.core.view.isVisible
 import coil.clear
-import coil.loadAny
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.kanade.tachiyomi.databinding.SourceCompactGridItemBinding
-import eu.kanade.tachiyomi.util.isLocal
+import eu.kanade.tachiyomi.util.view.loadAnyAutoPause
 
 /**
  * Class used to hold the displayed data of a anime in the animelib, like the cover or the title.
@@ -55,6 +54,6 @@ open class AnimelibCompactGridHolder(
 
         // Update the cover.
         binding.thumbnail.clear()
-        binding.thumbnail.loadAny(item.anime)
+        binding.thumbnail.loadAnyAutoPause(item.anime)
     }
 }

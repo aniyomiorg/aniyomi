@@ -914,7 +914,7 @@ class AnimePresenter(
         val track = item.track!!
         track.status = item.service.getStatusListAnime()[index]
         if (track.status == item.service.getCompletionStatus() && track.total_episodes != 0) {
-            track.last_episode_seen = track.total_episodes
+            track.last_episode_seen = track.total_episodes.toFloat()
         }
         updateRemote(track, item.service)
     }
@@ -927,11 +927,11 @@ class AnimePresenter(
 
     fun setTrackerLastEpisodeSeen(item: TrackItem, episodeNumber: Int) {
         val track = item.track!!
-        if (track.last_episode_seen == 0 && track.last_episode_seen < episodeNumber && track.status != item.service.getRereadingStatus()) {
+        if (track.last_episode_seen == 0F && track.last_episode_seen < episodeNumber && track.status != item.service.getRereadingStatus()) {
             track.status = item.service.getReadingStatus()
         }
-        track.last_episode_seen = episodeNumber
-        if (track.total_episodes != 0 && track.last_episode_seen == track.total_episodes) {
+        track.last_episode_seen = episodeNumber.toFloat()
+        if (track.total_episodes != 0 && track.last_episode_seen.toInt() == track.total_episodes) {
             track.status = item.service.getCompletionStatus()
         }
         updateRemote(track, item.service)

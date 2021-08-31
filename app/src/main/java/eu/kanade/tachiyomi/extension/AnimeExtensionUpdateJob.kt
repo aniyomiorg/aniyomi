@@ -73,9 +73,9 @@ class AnimeExtensionUpdateJob(private val context: Context, workerParams: Worker
                     .build()
 
                 val request = PeriodicWorkRequestBuilder<AnimeExtensionUpdateJob>(
-                    12,
-                    TimeUnit.HOURS,
-                    1,
+                    2,
+                    TimeUnit.DAYS,
+                    3,
                     TimeUnit.HOURS
                 )
                     .addTag(TAG)

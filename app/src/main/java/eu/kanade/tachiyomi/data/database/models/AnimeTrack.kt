@@ -16,7 +16,7 @@ interface AnimeTrack : Serializable {
 
     var title: String
 
-    var last_episode_seen: Int
+    var last_episode_seen: Float
 
     var total_episodes: Int
 

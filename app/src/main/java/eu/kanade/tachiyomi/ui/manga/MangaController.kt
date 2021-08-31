@@ -13,18 +13,24 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.FloatRange
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.bundleOf
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
+import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import coil.imageLoader
 import coil.request.ImageRequest
+import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -51,7 +57,7 @@ import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
-import eu.kanade.tachiyomi.ui.base.controller.ToolbarLiftOnScrollController
+import eu.kanade.tachiyomi.ui.base.controller.getMainAppBarHeight
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.migration.search.SearchController
 import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
@@ -68,6 +74,7 @@ import eu.kanade.tachiyomi.ui.manga.chapter.DeleteChaptersDialog
 import eu.kanade.tachiyomi.ui.manga.chapter.DownloadCustomChaptersDialog
 import eu.kanade.tachiyomi.ui.manga.chapter.MangaChaptersHeaderAdapter
 import eu.kanade.tachiyomi.ui.manga.chapter.base.BaseChaptersAdapter
+import eu.kanade.tachiyomi.ui.manga.info.MangaFullCoverDialog
 import eu.kanade.tachiyomi.ui.manga.info.MangaInfoHeaderAdapter
 import eu.kanade.tachiyomi.ui.manga.track.TrackItem
 import eu.kanade.tachiyomi.ui.manga.track.TrackSearchDialog
@@ -91,6 +98,7 @@ import eu.kanade.tachiyomi.util.view.snack
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.recyclerview.scrollEvents
+import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
 import timber.log.Timber
 import uy.kohesive.injekt.Injekt
@@ -101,7 +109,6 @@ import kotlin.math.min
 
 class MangaController :
     NucleusController<MangaControllerBinding, MangaPresenter>,
-    ToolbarLiftOnScrollController,
     FabController,
     ActionMode.Callback,
     FlexibleAdapter.OnItemClickListener,
@@ -175,6 +182,8 @@ class MangaController :
     private var isRefreshingChapters = false
 
     private var trackSheet: TrackSheet? = null
+
+    private var dialog: MangaFullCoverDialog? = null
 
     init {
         setHasOptionsMenu(true)
@@ -254,6 +263,37 @@ class MangaController :
                 // Delayed in case we need to jump to chapters
                 it.post {
                     updateToolbarTitleAlpha()
+                }
+            }
+
+            it.scrollStateChanges()
+                .onEach { _ ->
+                    // Disable swipe refresh when view is not at the top
+                    val firstPos = (it.layoutManager as LinearLayoutManager)
+                        .findFirstCompletelyVisibleItemPosition()
+                    binding.swipeRefresh.isEnabled = firstPos <= 0
+                }
+                .launchIn(viewScope)
+
+            binding.fastScroller.doOnLayout { scroller ->
+                scroller.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    topMargin = getMainAppBarHeight()
+                }
+                scroller.applyInsetter {
+                    type(navigationBars = true) {
+                        margin()
+                    }
+                }
+            }
+
+            binding.swipeRefresh.doOnLayout { swipeRefresh ->
+                swipeRefresh as SwipeRefreshLayout
+                swipeRefresh.setOnApplyWindowInsetsListener { _, windowInsets ->
+                    val topStatusBarInset = WindowInsetsCompat.toWindowInsetsCompat(windowInsets)
+                        .getInsets(WindowInsetsCompat.Type.statusBars())
+                        .top
+                    swipeRefresh.setProgressViewEndTarget(false, getMainAppBarHeight() + topStatusBarInset)
+                    windowInsets
                 }
             }
         }
@@ -352,6 +392,16 @@ class MangaController :
         actionFab = null
     }
 
+    private fun updateFabVisibility() {
+        val context = view?.context ?: return
+        val adapter = chaptersAdapter ?: return
+        val fab = actionFab ?: return
+        fab.isVisible = adapter.items.any { !it.read }
+        if (adapter.items.any { it.read }) {
+            fab.text = context.getString(R.string.action_resume)
+        }
+    }
+
     override fun onDestroyView(view: View) {
         destroyActionModeIfNeeded()
         (activity as? MainActivity)?.clearFixViewToBottom(binding.actionToolbar)
@@ -391,7 +441,6 @@ class MangaController :
 
         // Hide options for non-library manga
         menu.findItem(R.id.action_edit_categories).isVisible = presenter.manga.favorite && presenter.getCategories().isNotEmpty()
-        menu.findItem(R.id.action_edit_cover).isVisible = presenter.manga.favorite
         menu.findItem(R.id.action_migrate).isVisible = presenter.manga.favorite
     }
 
@@ -401,10 +450,6 @@ class MangaController :
             R.id.download_next, R.id.download_next_5, R.id.download_next_10,
             R.id.download_custom, R.id.download_unread, R.id.download_all
             -> downloadChapters(item.itemId)
-
-            R.id.action_share_cover -> shareCover()
-            R.id.action_save_cover -> saveCover()
-            R.id.action_edit_cover -> changeCover()
 
             R.id.action_edit_categories -> onCategoriesClick()
             R.id.action_migrate -> migrateManga()
@@ -686,6 +731,21 @@ class MangaController :
         context.imageLoader.enqueue(req)
     }
 
+    fun showFullCoverDialog() {
+        if (dialog != null) return
+        val manga = manga ?: return
+        dialog = MangaFullCoverDialog(this, manga)
+        dialog?.addLifecycleListener(
+            object : LifecycleListener() {
+                override fun postDestroy(controller: Controller) {
+                    super.postDestroy(controller)
+                    dialog = null
+                }
+            }
+        )
+        dialog?.showDialog(router)
+    }
+
     fun shareCover() {
         try {
             val activity = activity!!
@@ -758,6 +818,7 @@ class MangaController :
 
     fun onSetCoverSuccess() {
         mangaInfoAdapter?.notifyDataSetChanged()
+        dialog?.setImage(manga)
         activity?.toast(R.string.cover_updated)
     }
 
@@ -804,13 +865,7 @@ class MangaController :
             actionMode?.invalidate()
         }
 
-        val context = view?.context
-        if (context != null) {
-            actionFab?.isVisible = chapters.any { !it.read }
-            if (chapters.any { it.read }) {
-                actionFab?.text = context.getString(R.string.action_resume)
-            }
-        }
+        updateFabVisibility()
     }
 
     private fun fetchChaptersFromSource(manualFetch: Boolean = false) {
@@ -992,7 +1047,7 @@ class MangaController :
         chaptersAdapter?.clearSelection()
         selectedChapters.clear()
         actionMode = null
-        actionFab?.isVisible = true
+        updateFabVisibility()
     }
 
     override fun onDetach(view: View) {

@@ -10,6 +10,7 @@ import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.databinding.EpisodesItemBinding
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodeHolder
+import eu.kanade.tachiyomi.util.lang.toRelativeString
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -60,7 +61,7 @@ class EpisodeHolder(
         val descriptions = mutableListOf<CharSequence>()
 
         if (episode.date_upload > 0) {
-            descriptions.add(adapter.dateFormat.format(Date(episode.date_upload)))
+            descriptions.add(Date(episode.date_upload).toRelativeString(itemView.context, adapter.relativeTime, adapter.dateFormat))
         }
         if (!episode.seen && episode.last_second_seen > 0) {
             val lastPageRead = buildSpannedString {

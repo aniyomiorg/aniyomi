@@ -21,23 +21,14 @@ data class AnimeSourceItem(
 ) :
     AbstractSectionableItem<AnimeSourceHolder, LangItem>(header) {
 
-    /**
-     * Returns the layout resource of this item.
-     */
     override fun getLayoutRes(): Int {
-        return R.layout.source_main_controller_card_item
+        return R.layout.source_main_controller_item
     }
 
-    /**
-     * Creates a new view holder for this item.
-     */
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>): AnimeSourceHolder {
         return AnimeSourceHolder(view, adapter as AnimeSourceAdapter)
     }
 
-    /**
-     * Binds this item to the given view holder.
-     */
     override fun bindViewHolder(
         adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
         holder: AnimeSourceHolder,

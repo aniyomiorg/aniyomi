@@ -20,21 +20,11 @@ class AnimeFlagsPutResolver(private val colName: String, private val fieldGetter
         PutResult.newUpdateResult(numberOfRowsUpdated, updateQuery.table())
     }
 
-    fun mapToUpdateQuery(anime: Anime): UpdateQuery {
-        val builder = UpdateQuery.builder()
-
-        return if (updateAll) {
-            builder
-                .table(AnimeTable.TABLE)
-                .build()
-        } else {
-            builder
-                .table(AnimeTable.TABLE)
-                .where("${AnimeTable.COL_ID} = ?")
-                .whereArgs(anime.id)
-                .build()
-        }
-    }
+    fun mapToUpdateQuery(anime: Anime) = UpdateQuery.builder()
+        .table(AnimeTable.TABLE)
+        .where("${AnimeTable.COL_ID} = ?")
+        .whereArgs(anime.id)
+        .build()
 
     fun mapToContentValues(anime: Anime) =
         contentValuesOf(
