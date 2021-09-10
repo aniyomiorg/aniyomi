@@ -55,9 +55,9 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
         return api.updateLibManga(track)
     }
 
-    override suspend fun update(track: AnimeTrack, didReadChapter: Boolean): AnimeTrack {
+    override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean): AnimeTrack {
         if (track.status != COMPLETED) {
-            if (didReadChapter) {
+            if (didWatchEpisode) {
                 track.status = READING
             }
         }

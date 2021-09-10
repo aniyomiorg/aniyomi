@@ -3,9 +3,7 @@ package eu.kanade.tachiyomi.ui.browse.migration.anime
 import android.view.View
 import coil.clear
 import coil.loadAny
-import coil.transform.RoundedCornersTransformation
 import eu.davidea.viewholders.FlexibleViewHolder
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.SourceListItemBinding
 
 class MigrationAnimeHolder(
@@ -24,11 +22,8 @@ class MigrationAnimeHolder(
     fun bind(item: MigrationAnimeItem) {
         binding.title.text = item.anime.title
 
-        // Update the cover.
-        val radius = itemView.context.resources.getDimension(R.dimen.card_radius)
+        // Update the cover
         binding.thumbnail.clear()
-        binding.thumbnail.loadAny(item.anime) {
-            transformations(RoundedCornersTransformation(radius))
-        }
+        binding.thumbnail.loadAny(item.anime)
     }
 }

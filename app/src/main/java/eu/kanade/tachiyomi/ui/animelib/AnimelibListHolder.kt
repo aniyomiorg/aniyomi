@@ -4,9 +4,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import coil.clear
 import coil.loadAny
-import coil.transform.RoundedCornersTransformation
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.SourceListItemBinding
 
 /**
@@ -58,10 +56,7 @@ class AnimelibListHolder(
         }
 
         // Update the cover.
-        val radius = view.context.resources.getDimension(R.dimen.card_radius)
         binding.thumbnail.clear()
-        binding.thumbnail.loadAny(item.anime) {
-            transformations(RoundedCornersTransformation(radius))
-        }
+        binding.thumbnail.loadAny(item.anime)
     }
 }

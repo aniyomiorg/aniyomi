@@ -74,8 +74,6 @@ class GlobalAnimeSearchAdapter(val controller: GlobalAnimeSearchController) :
     interface OnTitleClickListener {
         fun onTitleClick(source: AnimeCatalogueSource)
     }
-
-    private companion object {
-        const val HOLDER_BUNDLE_KEY = "holder_bundle"
-    }
 }
+
+private const val HOLDER_BUNDLE_KEY = "holder_bundle"

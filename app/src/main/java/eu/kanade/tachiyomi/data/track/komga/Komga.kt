@@ -76,7 +76,7 @@ class Komga(private val context: Context, id: Int) : TrackService(id), EnhancedT
         return api.updateProgress(track)
     }
 
-    override suspend fun update(track: AnimeTrack, didReadChapter: Boolean): AnimeTrack = throw Exception("Not used")
+    override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean): AnimeTrack = throw Exception("Not used")
 
     override suspend fun bind(track: Track, hasReadChapters: Boolean): Track {
         return track

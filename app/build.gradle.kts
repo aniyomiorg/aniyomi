@@ -130,7 +130,7 @@ android {
 dependencies {
     implementation(kotlin("reflect", version = BuildPluginsVersion.KOTLIN))
 
-    val coroutinesVersion = "1.5.1"
+    val coroutinesVersion = "1.5.2"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 
@@ -144,7 +144,7 @@ dependencies {
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.0")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.1.0")
-    implementation("androidx.core:core-ktx:1.7.0-alpha01")
+    implementation("androidx.core:core-ktx:1.7.0-alpha02")
     implementation("androidx.core:core-splashscreen:1.0.0-alpha01")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
@@ -155,13 +155,13 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
 
     // Job scheduling
-    implementation("androidx.work:work-runtime-ktx:2.6.0-beta01")
+    implementation("androidx.work:work-runtime-ktx:2.6.0")
 
     // RX
     implementation("io.reactivex:rxandroid:1.2.1")
     implementation("io.reactivex:rxjava:1.3.8")
     implementation("com.jakewharton.rxrelay:rxrelay:1.2.0")
-    implementation("com.github.pwittchen:reactivenetwork:0.13.0")
+    implementation("ru.beryukhov:flowreactivenetwork:1.0.4")
 
     // Network client
     val okhttpVersion = "4.9.1"
@@ -174,9 +174,11 @@ dependencies {
     implementation("org.conscrypt:conscrypt-android:2.5.2")
 
     // Data serialization (JSON, protobuf)
-    val kotlinSerializationVersion = "1.2.2"
+    val kotlinSerializationVersion = "1.3.0-RC"
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$kotlinSerializationVersion")
+
+    // TODO: remove these once they're no longer used in any extensions
     implementation("com.google.code.gson:gson:2.8.7")
     implementation("com.github.salomonbrys.kotson:kotson:2.5.0")
 
@@ -223,7 +225,7 @@ dependencies {
     implementation("com.github.gpanther:java-nat-sort:natural-comparator-1.1")
 
     // UI libraries
-    implementation("com.google.android.material:material:1.5.0-alpha02")
+    implementation("com.google.android.material:material:1.5.0-alpha03")
     implementation("com.github.dmytrodanylyk.android-process-button:library:1.0.4")
     implementation("eu.davidea:flexible-adapter:5.1.0")
     implementation("eu.davidea:flexible-adapter-ui:1.0.0")

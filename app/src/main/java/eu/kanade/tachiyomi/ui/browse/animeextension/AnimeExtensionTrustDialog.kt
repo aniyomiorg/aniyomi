@@ -33,13 +33,11 @@ class AnimeExtensionTrustDialog<T>(bundle: Bundle? = null) : DialogController(bu
             .create()
     }
 
-    private companion object {
-        const val SIGNATURE_KEY = "signature_key"
-        const val PKGNAME_KEY = "pkgname_key"
-    }
-
     interface Listener {
         fun trustSignature(signatureHash: String)
         fun uninstallExtension(pkgName: String)
     }
 }
+
+private const val SIGNATURE_KEY = "signature_key"
+private const val PKGNAME_KEY = "pkgname_key"

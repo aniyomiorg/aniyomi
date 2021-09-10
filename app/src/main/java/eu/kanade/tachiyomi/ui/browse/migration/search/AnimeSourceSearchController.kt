@@ -37,8 +37,6 @@ class AnimeSourceSearchController(
     override fun onItemLongClick(position: Int) {
         view?.let { super.onItemClick(it, position) }
     }
-
-    private companion object {
-        const val ANIME_KEY = "oldAnime"
-    }
 }
+
+private const val ANIME_KEY = "oldAnime"

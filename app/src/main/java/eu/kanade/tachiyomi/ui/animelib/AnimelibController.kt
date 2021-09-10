@@ -33,7 +33,10 @@ import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.system.getResourceColor
+import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
+import eu.kanade.tachiyomi.widget.EmptyView
+import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -275,7 +278,14 @@ class AnimelibController(
         if (animeMap.isNotEmpty()) {
             binding.emptyView.hide()
         } else {
-            binding.emptyView.show(R.string.information_empty_library)
+            binding.emptyView.show(
+                R.string.information_empty_library,
+                listOf(
+                    EmptyView.Action(R.string.getting_started_guide, R.drawable.ic_help_24dp) {
+                        activity?.openInBrowser("https://tachiyomi.org/help/guides/getting-started")
+                    }
+                ),
+            )
             (activity as? MainActivity)?.ready = true
         }
 
@@ -549,11 +559,17 @@ class AnimelibController(
         val categories = presenter.categories.filter { it.id != 0 }
 
         // Get indexes of the common categories to preselect.
-        val commonCategoriesIndexes = presenter.getCommonCategories(animes)
-            .map { categories.indexOf(it) }
-            .toTypedArray()
-
-        ChangeAnimeCategoriesDialog(this, animes, categories, commonCategoriesIndexes)
+        val common = presenter.getCommonCategories(animes)
+        // Get indexes of the mix categories to preselect.
+        val mix = presenter.getMixCategories(animes)
+        var preselected = categories.map {
+            when (it) {
+                in common -> QuadStateTextView.State.CHECKED.ordinal
+                in mix -> QuadStateTextView.State.INDETERMINATE.ordinal
+                else -> QuadStateTextView.State.UNCHECKED.ordinal
+            }
+        }.toTypedArray()
+        ChangeAnimeCategoriesDialog(this, animes, categories, preselected)
             .showDialog(router)
     }
 
@@ -565,7 +581,7 @@ class AnimelibController(
 
     private fun markReadStatus(read: Boolean) {
         val animes = selectedAnimes.toList()
-        presenter.markReadStatus(animes, read)
+        presenter.markSeenStatus(animes, read)
         destroyActionModeIfNeeded()
     }
 
@@ -573,8 +589,8 @@ class AnimelibController(
         DeleteAnimelibAnimesDialog(this, selectedAnimes.toList()).showDialog(router)
     }
 
-    override fun updateCategoriesForAnimes(animes: List<Anime>, categories: List<Category>) {
-        presenter.moveAnimesToCategories(categories, animes)
+    override fun updateCategoriesForAnimes(animes: List<Anime>, addCategories: List<Category>, removeCategories: List<Category>) {
+        presenter.updateAnimesToCategories(animes, addCategories, removeCategories)
         destroyActionModeIfNeeded()
     }
 

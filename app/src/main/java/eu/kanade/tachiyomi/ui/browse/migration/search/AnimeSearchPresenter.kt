@@ -150,13 +150,10 @@ class AnimeSearchPresenter(
                 db.updateAnimeFavorite(prevAnime).executeAsBlocking()
             }
             anime.favorite = true
-            db.updateAnimeFavorite(anime).executeAsBlocking()
 
             // Update reading preferences
             anime.episode_flags = prevAnime.episode_flags
-            db.updateEpisodeFlags(anime).executeAsBlocking()
             anime.viewer_flags = prevAnime.viewer_flags
-            db.updateViewerFlags(anime).executeAsBlocking()
 
             // Update date added
             if (replace) {
@@ -166,8 +163,9 @@ class AnimeSearchPresenter(
                 anime.date_added = Date().time
             }
 
-            // SearchPresenter#networkToLocalAnime may have updated the anime title, so ensure db gets updated title
-            db.updateAnimeTitle(anime).executeAsBlocking()
+            // SearchPresenter#networkToLocalManga may have updated the manga title,
+            // so ensure db gets updated title too
+            db.insertAnime(anime).executeAsBlocking()
         }
     }
 }

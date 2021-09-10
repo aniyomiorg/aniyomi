@@ -15,6 +15,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
@@ -41,6 +42,7 @@ import androidx.core.graphics.red
 import androidx.core.net.toUri
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity
 import eu.kanade.tachiyomi.util.lang.truncateCenter
@@ -49,6 +51,8 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 import kotlin.math.roundToInt
+
+private const val TABLET_UI_MIN_SCREEN_WIDTH_DP = 720
 
 /**
  * Display a toast in this context.
@@ -305,7 +309,27 @@ fun Context.createFileInCacheDir(name: String): File {
  * We consider anything with a width of >= 720dp as a tablet, i.e. with layouts in layout-sw720dp.
  */
 fun Context.isTablet(): Boolean {
-    return resources.configuration.smallestScreenWidthDp >= 720
+    return resources.configuration.smallestScreenWidthDp >= TABLET_UI_MIN_SCREEN_WIDTH_DP
+}
+
+fun Context.prepareTabletUiContext(): Context {
+    val configuration = resources.configuration
+    val expected = when (Injekt.get<PreferencesHelper>().tabletUiMode().get()) {
+        PreferenceValues.TabletUiMode.ALWAYS -> true
+        PreferenceValues.TabletUiMode.LANDSCAPE -> configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        PreferenceValues.TabletUiMode.NEVER -> false
+    }
+    if (configuration.smallestScreenWidthDp >= TABLET_UI_MIN_SCREEN_WIDTH_DP != expected) {
+        val overrideConf = Configuration()
+        overrideConf.setTo(configuration)
+        overrideConf.smallestScreenWidthDp = if (expected) {
+            overrideConf.smallestScreenWidthDp.coerceAtLeast(TABLET_UI_MIN_SCREEN_WIDTH_DP)
+        } else {
+            overrideConf.smallestScreenWidthDp.coerceAtMost(TABLET_UI_MIN_SCREEN_WIDTH_DP - 1)
+        }
+        return createConfigurationContext(overrideConf)
+    }
+    return this
 }
 
 /**
@@ -341,4 +365,15 @@ fun Context.createReaderThemeContext(): Context {
         return wrappedContext
     }
     return this
+}
+
+fun Context.isOnline(): Boolean {
+    val networkCapabilities = connectivityManager.activeNetwork ?: return false
+    val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+    val maxTransport = when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1 -> NetworkCapabilities.TRANSPORT_LOWPAN
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> NetworkCapabilities.TRANSPORT_WIFI_AWARE
+        else -> NetworkCapabilities.TRANSPORT_VPN
+    }
+    return (NetworkCapabilities.TRANSPORT_CELLULAR..maxTransport).any(actNw::hasTransport)
 }

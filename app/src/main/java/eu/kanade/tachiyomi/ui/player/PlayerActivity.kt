@@ -54,10 +54,13 @@ import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
+import eu.kanade.tachiyomi.data.track.job.DelayedTrackingUpdateJob
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withIOContext
+import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.hideBar
 import eu.kanade.tachiyomi.widget.listener.SimpleSeekBarListener
@@ -82,6 +85,7 @@ class PlayerActivity : AppCompatActivity() {
     private val preferences: PreferencesHelper = Injekt.get()
     private val incognitoMode = preferences.incognitoMode().get()
     private val db: AnimeDatabaseHelper = Injekt.get()
+    private val delayedTrackingStore: DelayedTrackingStore = Injekt.get()
     private lateinit var exoPlayer: SimpleExoPlayer
     private lateinit var dataSourceFactory: DataSource.Factory
     private lateinit var dbProvider: ExoDatabaseProvider
@@ -624,8 +628,13 @@ class PlayerActivity : AppCompatActivity() {
                         // for a while. The view can still be garbage collected.
                         async {
                             runCatching {
-                                service.update(track)
-                                db.insertTrack(track).executeAsBlocking()
+                                if (baseContext.isOnline()) {
+                                    service.update(track, true)
+                                    db.insertTrack(track).executeAsBlocking()
+                                } else {
+                                    delayedTrackingStore.addItem(track)
+                                    DelayedTrackingUpdateJob.setupTask(baseContext)
+                                }
                             }
                         }
                     } else {

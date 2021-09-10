@@ -175,7 +175,7 @@
     <string name="theme_dark">On</string>
     <string name="pref_app_theme">App theme</string>
     <string name="theme_monet">Dynamic</string>
-    <string name="theme_blue">Blue</string>
+    <string name="theme_blue">Legacy Blue</string>
     <string name="theme_greenapple">Green Apple</string>
     <string name="theme_midnightdusk">Midnight Dusk</string>
     <string name="theme_strawberrydaiquiri">Strawberry Daiquiri</string>
@@ -515,6 +515,7 @@
     <string name="battery_optimization_disabled">Battery optimization is already disabled</string>
     <string name="battery_optimization_setting_activity_not_found">Couldn\'t open device settings</string>
     <string name="about_dont_kill_my_app">Some manufacturers have additional app restrictions that kill background services. This website has more info on how to fix it.</string>
+    <string name="pref_tablet_ui_mode">Force tablet UI</string>
 
       <!-- About section -->
     <string name="website">Website</string>
@@ -842,7 +843,8 @@
     <string name="information_no_downloads">No downloads</string>
     <string name="information_no_recent">No recent updates</string>
     <string name="information_no_recent_manga">Nothing read recently</string>
-    <string name="information_empty_library">Your library is empty. Add series to your library from Browse.</string>
+    <string name="information_empty_library">Your library is empty</string>
+    <string name="getting_started_guide">Getting started guide</string>
     <string name="information_empty_category">You have no categories. Tap the plus button to create one for organizing your library.</string>
     <string name="information_empty_category_dialog">You don\'t have any categories yet.</string>
     <string name="information_cloudflare_bypass_failure">Failed to bypass Cloudflare</string>

@@ -443,6 +443,18 @@ class AnimelibPresenter(
     }
 
     /**
+     * Returns the mix (non-common) categories for the given list of manga.
+     *
+     * @param animes the list of anime.
+     */
+    fun getMixCategories(animes: List<Anime>): Collection<Category> {
+        if (animes.isEmpty()) return emptyList()
+        val animeCategories = animes.toSet().map { db.getCategoriesForAnime(it).executeAsBlocking() }
+        val common = animeCategories.reduce { set1, set2 -> set1.intersect(set2).toMutableList() }
+        return animeCategories.flatten().distinct().subtract(common).toMutableList()
+    }
+
+    /**
      * Queues all unread episodes from the given list of anime.
      *
      * @param animes the list of anime.
@@ -459,23 +471,23 @@ class AnimelibPresenter(
     }
 
     /**
-     * Marks animes' episodes read status.
+     * Marks animes' episodes seen status.
      *
      * @param animes the list of anime.
      */
-    fun markReadStatus(animes: List<Anime>, read: Boolean) {
+    fun markSeenStatus(animes: List<Anime>, seen: Boolean) {
         animes.forEach { anime ->
             launchIO {
                 val episodes = db.getEpisodes(anime).executeAsBlocking()
                 episodes.forEach {
-                    it.seen = read
-                    if (!read) {
+                    it.seen = seen
+                    if (!seen) {
                         it.last_second_seen = 0
                     }
                 }
                 db.updateEpisodesProgress(episodes).executeAsBlocking()
 
-                if (preferences.removeAfterMarkedAsRead()) {
+                if (seen && preferences.removeAfterMarkedAsRead()) {
                     deleteEpisodes(anime, episodes)
                 }
             }
@@ -532,5 +544,22 @@ class AnimelibPresenter(
         }
 
         db.setAnimeCategories(mc, animes)
+    }
+
+    /**
+     * Bulk update categories of animes using old and new common categories.
+     *
+     * @param animes the list of anime to move.
+     * @param addCategories the categories to add for all animes.
+     * @param removeCategories the categories to remove in all animes.
+     */
+    fun updateAnimesToCategories(animes: List<Anime>, addCategories: List<Category>, removeCategories: List<Category>) {
+        val animeCategories = animes.map { anime ->
+            val categories = db.getCategoriesForAnime(anime).executeAsBlocking()
+                .subtract(removeCategories).plus(addCategories).distinct()
+            categories.map { AnimeCategory.create(anime, it) }
+        }.flatten()
+
+        db.setAnimeCategories(animeCategories, animes)
     }
 }

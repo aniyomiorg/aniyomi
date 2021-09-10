@@ -226,7 +226,7 @@ class AnimeDownloadManager(private val context: Context) {
      * @param download the download to cancel.
      */
     fun deletePendingDownload(download: AnimeDownload) {
-        deleteEpisodes(listOf(download.episode), download.anime, download.source)
+        deleteEpisodes(listOf(download.episode), download.anime, download.source, true)
     }
 
     fun deletePendingDownloads(vararg downloads: AnimeDownload) {
@@ -234,7 +234,7 @@ class AnimeDownloadManager(private val context: Context) {
         downloadsByAnime.map { entry ->
             val anime = entry.value.first().anime
             val source = entry.value.first().source
-            deleteEpisodes(entry.value.map { it.episode }, anime, source)
+            deleteEpisodes(entry.value.map { it.episode }, anime, source, true)
         }
     }
 
@@ -245,8 +245,12 @@ class AnimeDownloadManager(private val context: Context) {
      * @param anime the anime of the episodes.
      * @param source the source of the episodes.
      */
-    fun deleteEpisodes(episodes: List<Episode>, anime: Anime, source: AnimeSource): List<Episode> {
-        val filteredEpisodes = getEpisodesToDelete(episodes)
+    fun deleteEpisodes(episodes: List<Episode>, anime: Anime, source: AnimeSource, isCancelling: Boolean = false): List<Episode> {
+        val filteredEpisodes = if (isCancelling) {
+            episodes
+        } else {
+            getEpisodesToDelete(episodes)
+        }
         launchIO {
             removeFromDownloadQueue(filteredEpisodes)
 

@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.animesource
 import android.content.Context
 import android.net.Uri
 import com.github.junrar.Archive
-import com.google.gson.JsonParser
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
@@ -15,8 +14,16 @@ import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.system.ImageUtil
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.intOrNull
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonPrimitive
 import rx.Observable
 import timber.log.Timber
+import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
@@ -67,6 +74,8 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
             return DiskUtil.getExternalStorages(context).map { File(it.absolutePath, c) }
         }
     }
+
+    private val json: Json by injectLazy()
 
     override val id = ID
     override val name = context.getString(R.string.local_source)
@@ -157,16 +166,15 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
             .flatten()
             .firstOrNull { it.extension == "json" }
             ?.apply {
-                val reader = this.inputStream().bufferedReader()
-                val json = JsonParser.parseReader(reader).asJsonObject
+                val obj = json.decodeFromStream<JsonObject>(inputStream())
 
-                anime.title = json["title"]?.asString ?: anime.title
-                anime.author = json["author"]?.asString ?: anime.author
-                anime.artist = json["artist"]?.asString ?: anime.artist
-                anime.description = json["description"]?.asString ?: anime.description
-                anime.genre = json["genre"]?.asJsonArray?.joinToString(", ") { it.asString }
+                anime.title = obj["title"]?.jsonPrimitive?.contentOrNull ?: anime.title
+                anime.author = obj["author"]?.jsonPrimitive?.contentOrNull ?: anime.author
+                anime.artist = obj["artist"]?.jsonPrimitive?.contentOrNull ?: anime.artist
+                anime.description = obj["description"]?.jsonPrimitive?.contentOrNull ?: anime.description
+                anime.genre = obj["genre"]?.jsonArray?.joinToString(", ") { it.jsonPrimitive.content }
                     ?: anime.genre
-                anime.status = json["status"]?.asInt ?: anime.status
+                anime.status = obj["status"]?.jsonPrimitive?.intOrNull ?: anime.status
             }
 
         return Observable.just(anime)

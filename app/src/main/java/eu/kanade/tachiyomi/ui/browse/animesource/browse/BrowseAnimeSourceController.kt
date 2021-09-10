@@ -49,6 +49,7 @@ import eu.kanade.tachiyomi.util.view.shrinkOnScroll
 import eu.kanade.tachiyomi.util.view.snack
 import eu.kanade.tachiyomi.widget.AutofitRecyclerView
 import eu.kanade.tachiyomi.widget.EmptyView
+import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
@@ -626,8 +627,12 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
                 // Choose a category
                 else -> {
                     val ids = presenter.getAnimeCategoryIds(anime)
-                    val preselected = ids.mapNotNull { id ->
-                        categories.indexOfFirst { it.id == id }.takeIf { it != -1 }
+                    val preselected = categories.map {
+                        if (it.id in ids) {
+                            QuadStateTextView.State.CHECKED.ordinal
+                        } else {
+                            QuadStateTextView.State.UNCHECKED.ordinal
+                        }
                     }.toTypedArray()
 
                     ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected)
@@ -643,11 +648,11 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
      * @param animes The list of anime to move to categories.
      * @param categories The list of categories where anime will be placed.
      */
-    override fun updateCategoriesForAnimes(animes: List<Anime>, categories: List<Category>) {
+    override fun updateCategoriesForAnimes(animes: List<Anime>, addCategories: List<Category>, removeCategories: List<Category>) {
         val anime = animes.firstOrNull() ?: return
 
         presenter.changeAnimeFavorite(anime)
-        presenter.updateAnimeCategories(anime, categories)
+        presenter.updateAnimeCategories(anime, addCategories)
 
         val position = adapter?.currentItems?.indexOfFirst { it -> (it as AnimeSourceItem).anime.id == anime.id }
         if (position != null) {

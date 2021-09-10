@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Manga
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.databinding.MangaInfoHeaderBinding
 import eu.kanade.tachiyomi.source.Source
@@ -17,7 +18,6 @@ import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.controller.getMainAppBarHeight
 import eu.kanade.tachiyomi.ui.manga.MangaController
-import eu.kanade.tachiyomi.util.system.applySystemAnimatorScale
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.view.loadAnyAutoPause
 import eu.kanade.tachiyomi.util.view.setChips
@@ -26,8 +26,6 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.view.clicks
 import reactivecircus.flowbinding.android.view.longClicks
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 class MangaInfoHeaderAdapter(
@@ -38,6 +36,8 @@ class MangaInfoHeaderAdapter(
     RecyclerView.Adapter<MangaInfoHeaderAdapter.HeaderViewHolder>() {
 
     private val trackManager: TrackManager by injectLazy()
+    private val preferences: PreferencesHelper by injectLazy()
+    private val sourceManager: SourceManager by injectLazy()
 
     private var manga: Manga = controller.presenter.manga
     private var source: Source = controller.presenter.source
@@ -89,9 +89,6 @@ class MangaInfoHeaderAdapter(
 
     inner class HeaderViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind() {
-            val summaryTransition = binding.mangaSummarySection.getTransition(R.id.manga_summary_section_transition)
-            summaryTransition.applySystemAnimatorScale(view.context)
-
             // For rounded corners
             binding.mangaCover.clipToOutline = true
 
@@ -260,9 +257,20 @@ class MangaInfoHeaderAdapter(
             val mangaSource = source?.toString()
             with(binding.mangaSource) {
                 if (mangaSource != null) {
-                    text = mangaSource
+                    val enabledLanguages = preferences.enabledLanguages().get()
+                        .filterNot { it == "all" }
+
+                    val hasOneActiveLanguages = enabledLanguages.size == 1
+                    val isInEnabledLanguages = source.lang in enabledLanguages
+                    text = when {
+                        // For edge cases where user disables a source they got manga of in their library.
+                        hasOneActiveLanguages && !isInEnabledLanguages -> mangaSource
+                        // Hide the language tag when only one language is used.
+                        hasOneActiveLanguages && isInEnabledLanguages -> source.name
+                        else -> mangaSource
+                    }
+
                     setOnClickListener {
-                        val sourceManager = Injekt.get<SourceManager>()
                         controller.performSearch(sourceManager.getOrStub(source.id).name)
                     }
                 } else {
@@ -270,15 +278,15 @@ class MangaInfoHeaderAdapter(
                 }
             }
 
-            // Update status TextView.
-            binding.mangaStatus.setText(
-                when (manga.status) {
-                    SManga.ONGOING -> R.string.ongoing
-                    SManga.COMPLETED -> R.string.completed
-                    SManga.LICENSED -> R.string.licensed
-                    else -> R.string.unknown_status
-                }
-            )
+            // Update manga status.
+            val (statusDrawable, statusString) = when (manga.status) {
+                SManga.ONGOING -> R.drawable.ic_status_ongoing_24dp to R.string.ongoing
+                SManga.COMPLETED -> R.drawable.ic_status_completed_24dp to R.string.completed
+                SManga.LICENSED -> R.drawable.ic_status_licensed_24dp to R.string.licensed
+                else -> R.drawable.ic_status_unknown_24dp to R.string.unknown
+            }
+            binding.mangaStatusIcon.setImageResource(statusDrawable)
+            binding.mangaStatus.setText(statusString)
 
             // Set the favorite drawable to the correct one.
             setFavoriteButtonState(manga.favorite)
@@ -292,14 +300,7 @@ class MangaInfoHeaderAdapter(
             showMangaInfo(hasInfoContent)
             if (hasInfoContent) {
                 // Update description TextView.
-                binding.mangaSummaryText.text = if (manga.description.isNullOrBlank()) {
-                    view.context.getString(R.string.unknown)
-                } else {
-                    // Max lines of 3 with a blank line looks whack so we remove
-                    // any line breaks that is 2 or more and replace it with 1
-                    manga.description!!
-                        .replace(Regex("[\\r\\n]{2,}", setOf(RegexOption.MULTILINE)), "\n")
-                }
+                binding.mangaSummaryText.text = updateDescription(manga.description, (fromSource || isTablet).not())
 
                 // Update genres list
                 if (!manga.genre.isNullOrBlank()) {
@@ -312,6 +313,7 @@ class MangaInfoHeaderAdapter(
                         controller::performGenreSearch
                     )
                 } else {
+                    binding.mangaGenresTagsCompact.isVisible = false
                     binding.mangaGenresTagsCompactChips.isVisible = false
                     binding.mangaGenresTagsFullChips.isVisible = false
                 }
@@ -321,25 +323,20 @@ class MangaInfoHeaderAdapter(
                     binding.mangaSummaryText.clicks(),
                     binding.mangaInfoToggleMore.clicks(),
                     binding.mangaInfoToggleLess.clicks(),
-                    binding.mangaSummarySection.clicks()
+                    binding.mangaSummarySection.clicks(),
                 )
                     .onEach { toggleMangaInfo() }
                     .launchIn(controller.viewScope)
+
+                if (initialLoad) {
+                    binding.mangaGenresTagsCompact.requestLayout()
+                }
 
                 // Expand manga info if navigated from source listing or explicitly set to
                 // (e.g. on tablets)
                 if (initialLoad && (fromSource || isTablet)) {
                     toggleMangaInfo()
                     initialLoad = false
-                    // wrap_content and autoFixTextSize can cause unwanted behaviour this tries to solve it
-                    binding.mangaFullTitle.requestLayout()
-                }
-
-                // Refreshes will change the state and it needs to be set to correct state to display correctly
-                if (binding.mangaSummaryText.maxLines == maxLines) {
-                    binding.mangaSummarySection.transitionToState(R.id.start)
-                } else {
-                    binding.mangaSummarySection.transitionToState(R.id.end)
                 }
             }
         }
@@ -351,16 +348,28 @@ class MangaInfoHeaderAdapter(
         private fun toggleMangaInfo() {
             val isCurrentlyExpanded = binding.mangaSummaryText.maxLines != maxLines
 
-            if (isCurrentlyExpanded) {
-                binding.mangaSummarySection.transitionToStart()
-            } else {
-                binding.mangaSummarySection.transitionToEnd()
-            }
+            binding.mangaInfoToggleMore.isVisible = isCurrentlyExpanded
+            binding.mangaInfoScrim.isVisible = isCurrentlyExpanded
+            binding.mangaInfoToggleMoreScrim.isVisible = isCurrentlyExpanded
+            binding.mangaGenresTagsCompact.isVisible = isCurrentlyExpanded
+            binding.mangaGenresTagsCompactChips.isVisible = isCurrentlyExpanded
 
-            binding.mangaSummaryText.maxLines = if (isCurrentlyExpanded) {
-                maxLines
-            } else {
-                Int.MAX_VALUE
+            binding.mangaInfoToggleLess.isVisible = !isCurrentlyExpanded
+            binding.mangaGenresTagsFullChips.isVisible = !isCurrentlyExpanded
+
+            binding.mangaSummaryText.text = updateDescription(manga.description, isCurrentlyExpanded)
+
+            binding.mangaSummaryText.maxLines = when {
+                isCurrentlyExpanded -> maxLines
+                else -> Int.MAX_VALUE
+            }
+        }
+
+        private fun updateDescription(description: String?, isCurrentlyExpanded: Boolean): CharSequence? {
+            return when {
+                description.isNullOrBlank() -> view.context.getString(R.string.unknown)
+                isCurrentlyExpanded -> description.replace(Regex("[\\r\\n]{2,}", setOf(RegexOption.MULTILINE)), "\n")
+                else -> description
             }
         }
 
@@ -372,10 +381,13 @@ class MangaInfoHeaderAdapter(
         private fun setFavoriteButtonState(isFavorite: Boolean) {
             // Set the Favorite drawable to the correct one.
             // Border drawable if false, filled drawable if true.
+            val (iconResource, stringResource) = when (isFavorite) {
+                true -> R.drawable.ic_favorite_24dp to R.string.in_library
+                false -> R.drawable.ic_favorite_border_24dp to R.string.add_to_library
+            }
             binding.btnFavorite.apply {
-                setIconResource(if (isFavorite) R.drawable.ic_favorite_24dp else R.drawable.ic_favorite_border_24dp)
-                text =
-                    context.getString(if (isFavorite) R.string.in_library else R.string.add_to_library)
+                setIconResource(iconResource)
+                text = context.getString(stringResource)
                 isActivated = isFavorite
             }
         }

@@ -295,8 +295,6 @@ class SettingsDownloadController : SettingsController() {
                 .create()
         }
     }
-
-    private companion object {
-        const val DOWNLOAD_DIR = 104
-    }
 }
+
+private const val DOWNLOAD_DIR = 104

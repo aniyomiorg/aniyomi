@@ -32,6 +32,7 @@ import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
 import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.prepUpdateCover
+import eu.kanade.tachiyomi.util.shouldDownloadNewChapters
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.acquireWakeLock
@@ -294,48 +295,46 @@ class AnimelibUpdateService(
                                     return@async
                                 }
 
-                                currentlyUpdatingAnime.add(anime)
-                                notifier.showProgressNotification(
+                                withUpdateNotification(
                                     currentlyUpdatingAnime,
-                                    progressCount.get(),
-                                    animeToUpdate.size
-                                )
+                                    progressCount,
+                                    anime,
+                                ) { anime ->
+                                    try {
+                                        val (newEpisodes, _) = updateAnime(anime)
 
-                                try {
-                                    val (newEpisodes, _) = updateAnime(anime)
+                                        if (newEpisodes.isNotEmpty()) {
+                                            if (anime.shouldDownloadNewEpisodes(db, preferences)) {
+                                                downloadEpisodes(anime, newEpisodes)
+                                                hasDownloads.set(true)
+                                            }
 
-                                    if (newEpisodes.isNotEmpty()) {
-                                        if (anime.shouldDownloadNewEpisodes(db, preferences)) {
-                                            downloadEpisodes(anime, newEpisodes)
-                                            hasDownloads.set(true)
+                                            // Convert to the manga that contains new chapters
+                                            newUpdates.add(
+                                                anime to newEpisodes.sortedByDescending { ep -> ep.source_order }
+                                                    .toTypedArray()
+                                            )
                                         }
-
-                                        // Convert to the manga that contains new chapters
-                                        newUpdates.add(anime to newEpisodes.sortedByDescending { ep -> ep.source_order }.toTypedArray())
+                                    } catch (e: Throwable) {
+                                        val errorMessage = when (e) {
+                                            is NoEpisodesException -> {
+                                                getString(R.string.no_episodes_error)
+                                            }
+                                            is AnimeSourceManager.SourceNotInstalledException -> {
+                                                // failedUpdates will already have the source, don't need to copy it into the message
+                                                getString(R.string.loader_not_implemented_error)
+                                            }
+                                            else -> {
+                                                e.message
+                                            }
+                                        }
+                                        failedUpdates.add(anime to errorMessage)
                                     }
-                                } catch (e: Throwable) {
-                                    val errorMessage = if (e is NoEpisodesException) {
-                                        getString(R.string.no_chapters_error)
-                                    } else if (e is AnimeSourceManager.SourceNotInstalledException) {
-                                        // failedUpdates will already have the source, don't need to copy it into the message
-                                        getString(R.string.loader_not_implemented_error)
-                                    } else {
-                                        e.message
+
+                                    if (preferences.autoUpdateTrackers()) {
+                                        updateTrackings(anime, loggedServices)
                                     }
-                                    failedUpdates.add(anime to errorMessage)
                                 }
-
-                                if (preferences.autoUpdateTrackers()) {
-                                    updateTrackings(anime, loggedServices)
-                                }
-
-                                currentlyUpdatingAnime.remove(anime)
-                                progressCount.andIncrement
-                                notifier.showProgressNotification(
-                                    currentlyUpdatingAnime,
-                                    progressCount.get(),
-                                    animeToUpdate.size
-                                )
                             }
                         }
                     }
@@ -418,36 +417,35 @@ class AnimelibUpdateService(
                                     return@async
                                 }
 
-                                currentlyUpdatingAnime.add(anime)
-                                notifier.showProgressNotification(
+                                withUpdateNotification(
                                     currentlyUpdatingAnime,
-                                    progressCount.get(),
-                                    animeToUpdate.size
-                                )
-
-                                sourceManager.get(anime.source)?.let { source ->
-                                    try {
-                                        val networkAnime =
-                                            source.getAnimeDetails(anime.toAnimeInfo())
-                                        val sAnime = networkAnime.toSAnime()
-                                        anime.prepUpdateCover(coverCache, sAnime, true)
-                                        sAnime.thumbnail_url?.let {
-                                            anime.thumbnail_url = it
-                                            db.insertAnime(anime).executeAsBlocking()
+                                    progressCount,
+                                    anime,
+                                ) { anime ->
+                                    sourceManager.get(anime.source)?.let { source ->
+                                        try {
+                                            val networkAnime =
+                                                source.getAnimeDetails(anime.toAnimeInfo())
+                                            val sAnime = networkAnime.toSAnime()
+                                            anime.prepUpdateCover(coverCache, sAnime, true)
+                                            sAnime.thumbnail_url?.let {
+                                                anime.thumbnail_url = it
+                                                db.insertAnime(anime).executeAsBlocking()
+                                            }
+                                        } catch (e: Throwable) {
+                                            // Ignore errors and continue
+                                            Timber.e(e)
                                         }
-                                    } catch (e: Throwable) {
-                                        // Ignore errors and continue
-                                        Timber.e(e)
                                     }
-                                }
 
-                                currentlyUpdatingAnime.remove(anime)
-                                progressCount.andIncrement
-                                notifier.showProgressNotification(
-                                    currentlyUpdatingAnime,
-                                    progressCount.get(),
-                                    animeToUpdate.size
-                                )
+                                    currentlyUpdatingAnime.remove(anime)
+                                    progressCount.andIncrement
+                                    notifier.showProgressNotification(
+                                        currentlyUpdatingAnime,
+                                        progressCount.get(),
+                                        animeToUpdate.size
+                                    )
+                                }
                             }
                         }
                     }
@@ -504,6 +502,38 @@ class AnimelibUpdateService(
                 }
             }
             .awaitAll()
+    }
+
+    private suspend fun withUpdateNotification(
+        updatingAnime: CopyOnWriteArrayList<AnimelibAnime>,
+        completed: AtomicInteger,
+        anime: AnimelibAnime,
+        block: suspend (AnimelibAnime) -> Unit,
+    ) {
+        if (updateJob?.isActive != true) {
+            return
+        }
+
+        updatingAnime.add(anime)
+        notifier.showProgressNotification(
+            updatingAnime,
+            completed.get(),
+            animeToUpdate.size
+        )
+
+        block(anime)
+
+        if (updateJob?.isActive != true) {
+            return
+        }
+
+        updatingAnime.remove(anime)
+        completed.andIncrement
+        notifier.showProgressNotification(
+            updatingAnime,
+            completed.get(),
+            animeToUpdate.size
+        )
     }
 
     /**

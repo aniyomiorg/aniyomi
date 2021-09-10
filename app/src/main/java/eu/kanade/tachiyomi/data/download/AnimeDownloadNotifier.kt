@@ -52,7 +52,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
     /**
      * Updated when error is thrown
      */
-    var errorThrown = false
+    private var errorThrown = false
 
     /**
      * Updated when paused

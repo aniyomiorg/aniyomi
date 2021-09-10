@@ -15,13 +15,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.FloatRange
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
@@ -101,6 +99,8 @@ import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.getCoordinates
 import eu.kanade.tachiyomi.util.view.shrinkOnScroll
 import eu.kanade.tachiyomi.util.view.snack
+import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.launchIn
@@ -162,8 +162,6 @@ class AnimeController :
     private val preferences: PreferencesHelper by injectLazy()
     private val coverCache: AnimeCoverCache by injectLazy()
 
-    private var toolbarTextView: TextView? = null
-
     private var animeInfoAdapter: AnimeInfoHeaderAdapter? = null
     private var episodesHeaderAdapter: AnimeEpisodesHeaderAdapter? = null
     private var episodesAdapter: EpisodesAdapter? = null
@@ -216,6 +214,10 @@ class AnimeController :
         // Hide toolbar title on enter
         if (type.isEnter) {
             updateToolbarTitleAlpha()
+        } else {
+            // Cancel listeners early
+            viewScope.cancel()
+            updateToolbarTitleAlpha(1F)
         }
     }
 
@@ -309,7 +311,9 @@ class AnimeController :
                     val topStatusBarInset = WindowInsetsCompat.toWindowInsetsCompat(windowInsets)
                         .getInsets(WindowInsetsCompat.Type.statusBars())
                         .top
+                    swipeRefresh.isRefreshing = false
                     swipeRefresh.setProgressViewEndTarget(false, getMainAppBarHeight() + topStatusBarInset)
+                    updateRefreshing()
                     windowInsets
                 }
             }
@@ -360,11 +364,7 @@ class AnimeController :
 
     private fun updateToolbarTitleAlpha(@FloatRange(from = 0.0, to = 1.0) alpha: Float? = null) {
         val scrolledList = binding.fullRecycler ?: binding.infoRecycler!!
-        if (toolbarTextView == null) {
-            toolbarTextView = (activity as? MainActivity)?.binding?.toolbar?.children
-                ?.find { it is TextView } as? TextView
-        }
-        toolbarTextView?.alpha = when {
+        (activity as? MainActivity)?.binding?.appbar?.titleTextAlpha = when {
             // Specific alpha provided
             alpha != null -> alpha
 
@@ -428,8 +428,6 @@ class AnimeController :
         episodesAdapter = null
         settingsSheet = null
         addSnackbar?.dismiss()
-        updateToolbarTitleAlpha(1F)
-        toolbarTextView = null
         super.onDestroyView(view)
     }
 
@@ -595,8 +593,12 @@ class AnimeController :
             // Choose a category
             else -> {
                 val ids = presenter.getAnimeCategoryIds(anime)
-                val preselected = ids.mapNotNull { id ->
-                    categories.indexOfFirst { it.id == id }.takeIf { it != -1 }
+                val preselected = categories.map {
+                    if (it.id in ids) {
+                        QuadStateTextView.State.CHECKED.ordinal
+                    } else {
+                        QuadStateTextView.State.UNCHECKED.ordinal
+                    }
                 }.toTypedArray()
 
                 ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected)
@@ -644,15 +646,19 @@ class AnimeController :
         val categories = presenter.getCategories()
 
         val ids = presenter.getAnimeCategoryIds(anime)
-        val preselected = ids.mapNotNull { id ->
-            categories.indexOfFirst { it.id == id }.takeIf { it != -1 }
+        val preselected = categories.map {
+            if (it.id in ids) {
+                QuadStateTextView.State.CHECKED.ordinal
+            } else {
+                QuadStateTextView.State.UNCHECKED.ordinal
+            }
         }.toTypedArray()
 
         ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected)
             .showDialog(router)
     }
 
-    override fun updateCategoriesForAnimes(animes: List<Anime>, categories: List<Category>) {
+    override fun updateCategoriesForAnimes(animes: List<Anime>, addCategories: List<Category>, removeCategories: List<Category>) {
         val anime = animes.firstOrNull() ?: return
 
         if (!anime.favorite) {
@@ -661,7 +667,7 @@ class AnimeController :
             activity?.invalidateOptionsMenu()
         }
 
-        presenter.moveAnimeToCategories(anime, categories)
+        presenter.moveAnimeToCategories(anime, addCategories)
     }
 
     /**

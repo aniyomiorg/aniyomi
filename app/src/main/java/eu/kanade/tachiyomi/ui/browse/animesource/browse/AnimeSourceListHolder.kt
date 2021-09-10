@@ -4,7 +4,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import coil.clear
 import coil.loadAny
-import coil.transform.RoundedCornersTransformation
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
@@ -53,10 +52,8 @@ class AnimeSourceListHolder(private val view: View, adapter: FlexibleAdapter<*>)
     override fun setImage(anime: Anime) {
         binding.thumbnail.clear()
         if (!anime.thumbnail_url.isNullOrEmpty()) {
-            val radius = view.context.resources.getDimension(R.dimen.card_radius)
             binding.thumbnail.loadAny(anime) {
                 setParameter(AnimeCoverFetcher.USE_CUSTOM_COVER, false)
-                transformations(RoundedCornersTransformation(radius))
             }
         }
     }

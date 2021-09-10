@@ -45,8 +45,6 @@ class AnimeExtensionInstallActivity : Activity() {
         val extensionManager = Injekt.get<AnimeExtensionManager>()
         extensionManager.setInstallationResult(downloadId, success)
     }
-
-    private companion object {
-        const val INSTALL_REQUEST_CODE = 500
-    }
 }
+
+private const val INSTALL_REQUEST_CODE = 500
