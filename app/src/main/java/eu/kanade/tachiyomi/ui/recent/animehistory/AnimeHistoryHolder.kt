@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.recent.animehistory
 import android.view.View
 import coil.clear
 import coil.loadAny
-import coil.transform.RoundedCornersTransformation
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.AnimeEpisodeHistory
@@ -66,10 +65,7 @@ class AnimeHistoryHolder(
         }
 
         // Set cover
-        val radius = itemView.context.resources.getDimension(R.dimen.card_radius)
         binding.cover.clear()
-        binding.cover.loadAny(item.anime) {
-            transformations(RoundedCornersTransformation(radius))
-        }
+        binding.cover.loadAny(item.anime)
     }
 }

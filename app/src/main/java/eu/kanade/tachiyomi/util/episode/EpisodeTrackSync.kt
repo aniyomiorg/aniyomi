@@ -18,22 +18,15 @@ import timber.log.Timber
 fun syncEpisodesWithTrackServiceTwoWay(db: AnimeDatabaseHelper, episodes: List<Episode>, remoteTrack: AnimeTrack, service: TrackService) {
     val sortedEpisodes = episodes.sortedBy { it.episode_number }
     sortedEpisodes
-        .filterIndexed { index, episode -> index < remoteTrack.last_episode_seen && !episode.seen }
+        .filter { episode -> episode.episode_number <= remoteTrack.last_episode_seen && !episode.seen }
         .forEach { it.seen = true }
     db.updateEpisodesProgress(sortedEpisodes).executeAsBlocking()
 
-    // this uses the ordinal index of chapters instead of the chapter_number
-    // it was done that way because Track.last_chapter_read was an Int at the time, and Komga
-    // could have Float for the chapter number
-    // this will be addressed later on
-    val localLastRead = when {
-        sortedEpisodes.all { it.seen } -> sortedEpisodes.size
-        sortedEpisodes.any { !it.seen } -> sortedEpisodes.indexOfFirst { !it.seen }
-        else -> 0
-    }
+    // only take into account continuous reading
+    val localLastSeen = sortedEpisodes.takeWhile { it.seen }.lastOrNull()?.episode_number ?: 0F
 
     // update remote
-    remoteTrack.last_episode_seen = localLastRead.toFloat()
+    remoteTrack.last_episode_seen = localLastSeen
 
     launchIO {
         try {

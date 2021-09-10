@@ -4,8 +4,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import coil.clear
 import coil.loadAny
-import coil.transform.RoundedCornersTransformation
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.databinding.AnimeUpdatesItemBinding
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodeHolder
@@ -55,10 +53,7 @@ class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdat
         binding.download.setState(item.status, item.progress)
 
         // Set cover
-        val radius = itemView.context.resources.getDimension(R.dimen.card_radius)
         binding.mangaCover.clear()
-        binding.mangaCover.loadAny(item.anime) {
-            transformations(RoundedCornersTransformation(radius))
-        }
+        binding.mangaCover.loadAny(item.anime)
     }
 }

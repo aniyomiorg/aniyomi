@@ -6,11 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-<<<<<<< HEAD
 import eu.kanade.tachiyomi.util.system.LocaleHelper
-=======
 import eu.kanade.tachiyomi.util.system.prepareTabletUiContext
->>>>>>> upstream/master
 import uy.kohesive.injekt.injectLazy
 
 abstract class BaseThemedActivity : AppCompatActivity() {
@@ -18,11 +15,11 @@ abstract class BaseThemedActivity : AppCompatActivity() {
     val preferences: PreferencesHelper by injectLazy()
 
     override fun attachBaseContext(newBase: Context) {
-<<<<<<< HEAD
-        super.attachBaseContext(LocaleHelper.createLocaleWrapper(newBase))
-=======
-        super.attachBaseContext(newBase.prepareTabletUiContext())
->>>>>>> upstream/master
+        super.attachBaseContext(
+            LocaleHelper
+                .createLocaleWrapper(newBase)
+                .prepareTabletUiContext()
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

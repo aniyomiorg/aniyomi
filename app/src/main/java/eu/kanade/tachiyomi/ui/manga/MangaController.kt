@@ -14,13 +14,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.FloatRange
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
@@ -96,6 +94,7 @@ import eu.kanade.tachiyomi.util.view.getCoordinates
 import eu.kanade.tachiyomi.util.view.shrinkOnScroll
 import eu.kanade.tachiyomi.util.view.snack
 import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.recyclerview.scrollEvents
@@ -150,8 +149,6 @@ class MangaController :
     private val preferences: PreferencesHelper by injectLazy()
     private val coverCache: CoverCache by injectLazy()
 
-    private var toolbarTextView: TextView? = null
-
     private var mangaInfoAdapter: MangaInfoHeaderAdapter? = null
     private var chaptersHeaderAdapter: MangaChaptersHeaderAdapter? = null
     private var chaptersAdapter: ChaptersAdapter? = null
@@ -200,6 +197,10 @@ class MangaController :
         // Hide toolbar title on enter
         if (type.isEnter) {
             updateToolbarTitleAlpha()
+        } else {
+            // Cancel listeners early
+            viewScope.cancel()
+            updateToolbarTitleAlpha(1F)
         }
     }
 
@@ -346,11 +347,7 @@ class MangaController :
 
     private fun updateToolbarTitleAlpha(@FloatRange(from = 0.0, to = 1.0) alpha: Float? = null) {
         val scrolledList = binding.fullRecycler ?: binding.infoRecycler!!
-        if (toolbarTextView == null) {
-            toolbarTextView = (activity as? MainActivity)?.binding?.toolbar?.children
-                ?.find { it is TextView } as? TextView
-        }
-        toolbarTextView?.alpha = when {
+        (activity as? MainActivity)?.binding?.appbar?.titleTextAlpha = when {
             // Specific alpha provided
             alpha != null -> alpha
 
@@ -414,8 +411,6 @@ class MangaController :
         chaptersAdapter = null
         settingsSheet = null
         addSnackbar?.dismiss()
-        updateToolbarTitleAlpha(1F)
-        toolbarTextView = null
         super.onDestroyView(view)
     }
 

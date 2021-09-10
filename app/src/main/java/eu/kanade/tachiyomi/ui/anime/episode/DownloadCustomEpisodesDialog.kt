@@ -69,9 +69,7 @@ class DownloadCustomEpisodesDialog<T> : DialogController
     interface Listener {
         fun downloadCustomEpisodes(amount: Int)
     }
-
-    private companion object {
-        // Key to retrieve max episodes from bundle on process death.
-        const val KEY_ITEM_MAX = "DownloadCustomEpisodesDialog.int.maxEpisodes"
-    }
 }
+
+// Key to retrieve max episodes from bundle on process death.
+private const val KEY_ITEM_MAX = "DownloadCustomEpisodesDialog.int.maxEpisodes"

@@ -37,8 +37,6 @@ class SetEpisodeSettingsDialog(bundle: Bundle? = null) : DialogController(bundle
             .setNegativeButton(android.R.string.cancel, null)
             .create()
     }
-
-    private companion object {
-        const val ANIME_KEY = "anime"
-    }
 }
+
+private const val ANIME_KEY = "anime"

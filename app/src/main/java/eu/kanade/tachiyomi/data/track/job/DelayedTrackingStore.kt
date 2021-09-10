@@ -2,8 +2,8 @@ package eu.kanade.tachiyomi.data.track.job
 
 import android.content.Context
 import androidx.core.content.edit
-import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.Track
 import timber.log.Timber
 
 class DelayedTrackingStore(context: Context) {
