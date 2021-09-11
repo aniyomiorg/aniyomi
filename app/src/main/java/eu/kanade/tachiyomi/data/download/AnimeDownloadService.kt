@@ -168,6 +168,10 @@ class AnimeDownloadService : Service() {
         }
     }
 
+    private fun stopDownloads(@StringRes string: Int) {
+        downloadManager.stopDownloads(getString(string))
+    }
+
     /**
      * Listens to downloader status. Enables or disables the wake lock depending on the status.
      */
@@ -179,17 +183,6 @@ class AnimeDownloadService : Service() {
                 wakeLock.releaseIfNeeded()
             }
         }
-
-        if (preferences.downloadOnlyOverWifi() && !wifiManager.isWifiEnabled) {
-            stopDownloads(R.string.download_notifier_text_only_wifi)
-        } else {
-            val started = downloadManager.startDownloads()
-            if (!started) stopSelf()
-        }
-    }
-
-    private fun stopDownloads(@StringRes string: Int) {
-        downloadManager.stopDownloads(getString(string))
     }
 
     /**
