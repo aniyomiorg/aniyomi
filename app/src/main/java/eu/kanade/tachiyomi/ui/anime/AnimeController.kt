@@ -214,7 +214,7 @@ class AnimeController :
         // Hide toolbar title on enter
         if (type.isEnter) {
             updateToolbarTitleAlpha()
-        } else {
+        } else if (!type.isPush) {
             // Cancel listeners early
             viewScope.cancel()
             updateToolbarTitleAlpha(1F)
@@ -254,7 +254,7 @@ class AnimeController :
             }
         binding.actionToolbar.applyInsetter {
             type(navigationBars = true) {
-                margin(bottom = true)
+                margin(bottom = true, horizontal = true)
             }
         }
 
@@ -348,8 +348,6 @@ class AnimeController :
             }
             .launchIn(viewScope)
 
-        (activity as? MainActivity)?.fixViewToBottom(binding.actionToolbar)
-
         settingsSheet = EpisodesSettingsSheet(router, presenter) { group ->
             if (group is EpisodesSettingsSheet.Filter.FilterGroup) {
                 updateFilterIconState()
@@ -421,7 +419,6 @@ class AnimeController :
 
     override fun onDestroyView(view: View) {
         destroyActionModeIfNeeded()
-        (activity as? MainActivity)?.clearFixViewToBottom(binding.actionToolbar)
         binding.actionToolbar.destroy()
         animeInfoAdapter = null
         episodesHeaderAdapter = null

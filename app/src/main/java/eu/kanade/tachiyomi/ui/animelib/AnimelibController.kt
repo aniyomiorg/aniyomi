@@ -169,7 +169,7 @@ class AnimelibController(
 
         binding.actionToolbar.applyInsetter {
             type(navigationBars = true) {
-                margin(bottom = true)
+                margin(bottom = true, horizontal = true)
             }
         }
 
@@ -216,8 +216,6 @@ class AnimelibController(
                 )
             }
             .launchIn(viewScope)
-
-        (activity as? MainActivity)?.fixViewToBottom(binding.actionToolbar)
     }
 
     override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
@@ -230,7 +228,6 @@ class AnimelibController(
 
     override fun onDestroyView(view: View) {
         destroyActionModeIfNeeded()
-        (activity as? MainActivity)?.clearFixViewToBottom(binding.actionToolbar)
         binding.actionToolbar.destroy()
         adapter?.onDestroy()
         adapter = null
