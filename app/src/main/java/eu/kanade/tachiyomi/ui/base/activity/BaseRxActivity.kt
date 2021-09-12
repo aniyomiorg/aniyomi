@@ -17,8 +17,11 @@ abstract class BaseRxActivity<VB : ViewBinding, P : BasePresenter<*>> : NucleusA
     lateinit var binding: VB
 
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(LocaleHelper.createLocaleWrapper(newBase))
-        super.attachBaseContext(newBase.prepareTabletUiContext())
+        super.attachBaseContext(
+            LocaleHelper
+                .createLocaleWrapper(newBase)
+                .prepareTabletUiContext()
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
