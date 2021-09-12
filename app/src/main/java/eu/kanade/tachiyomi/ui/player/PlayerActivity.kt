@@ -89,7 +89,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var exoPlayer: SimpleExoPlayer
     private lateinit var dataSourceFactory: DataSource.Factory
     private lateinit var dbProvider: ExoDatabaseProvider
-    private val cacheSize = 100L * 1024L * 1024L // 100 mb
+    private val cacheSize = 100L * 1024L * 1024L // 100 MB
     private lateinit var simpleCache: SimpleCache
     private lateinit var cacheFactory: CacheDataSource.Factory
     private var message: String? = null
@@ -153,27 +153,45 @@ class PlayerActivity : AppCompatActivity() {
         episode = intent.getSerializableExtra("episode") as Episode
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
-        userAgentString = WebSettings.getDefaultUserAgent(this)
-        videos = runBlocking { awaitVideoList() }
-        if (videos.isEmpty()) {
-            baseContext.toast(message ?: "error getting links")
-            mediaSourceFactory = DefaultMediaSourceFactory(DefaultDataSourceFactory(this))
-            exoPlayer = newPlayer()
-            dbProvider = ExoDatabaseProvider(baseContext)
-            simpleCache = SimpleCache(
-                File(baseContext.filesDir, "media"),
-                LeastRecentlyUsedCacheEvictor(cacheSize),
-                dbProvider
-            )
-            finish()
-            return
+        initDummyPlayer()
+
+        if (savedInstanceState != null) {
+            currentWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW)
+            playbackPosition = intent.extras!!.getLong("second")
+            isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
+            isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
         }
+    }
+
+    private fun initDummyPlayer() {
+        userAgentString = WebSettings.getDefaultUserAgent(this)
+        mediaSourceFactory = DefaultMediaSourceFactory(DefaultDataSourceFactory(this))
+        exoPlayer = newPlayer()
         dbProvider = ExoDatabaseProvider(baseContext)
         simpleCache = SimpleCache(
             File(baseContext.filesDir, "media"),
             LeastRecentlyUsedCacheEvictor(cacheSize),
             dbProvider
         )
+        initPlayer()
+        playerView.player = exoPlayer
+
+        videos = runBlocking { awaitVideoList() }
+        onGetLinks()
+    }
+
+    private fun onGetLinksError() {
+        baseContext.toast(message ?: "error getting links")
+        finish()
+        return
+    }
+
+    private fun onGetLinks() {
+        if (videos.isEmpty()) {
+            onGetLinksError()
+            return
+        }
+        dbProvider = ExoDatabaseProvider(baseContext)
         isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
         if (isLocal) {
             uri = videos.first().uri!!.toString()
@@ -192,16 +210,7 @@ class PlayerActivity : AppCompatActivity() {
             .setMimeType(getMime(uri))
             .build()
         playbackPosition = episode.last_second_seen
-
-        initPlayer()
-        playerView.onResume()
-
-        if (savedInstanceState != null) {
-            currentWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW)
-            playbackPosition = intent.extras!!.getLong("second")
-            isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
-            isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
-        }
+        changePlayer(playbackPosition, isLocal)
     }
 
     private fun newDataSourceFactory(): DefaultHttpDataSource.Factory {
@@ -229,8 +238,6 @@ class PlayerActivity : AppCompatActivity() {
     private fun initPlayer() {
         exoPlayer = newPlayer().apply {
             playWhenReady = isPlayerPlaying
-            seekTo(currentWindow, playbackPosition)
-            setMediaSource(mediaSourceFactory.createMediaSource(mediaItem), episode.last_second_seen)
             prepare()
         }
         exoPlayer.addListener(PlayerEventListener(playerView, baseContext))
