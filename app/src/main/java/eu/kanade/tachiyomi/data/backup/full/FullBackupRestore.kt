@@ -5,8 +5,20 @@ import android.net.Uri
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.AbstractBackupRestore
 import eu.kanade.tachiyomi.data.backup.BackupNotifier
-import eu.kanade.tachiyomi.data.backup.full.models.*
-import eu.kanade.tachiyomi.data.database.models.*
+import eu.kanade.tachiyomi.data.backup.full.models.BackupAnime
+import eu.kanade.tachiyomi.data.backup.full.models.BackupAnimeHistory
+import eu.kanade.tachiyomi.data.backup.full.models.BackupAnimeSource
+import eu.kanade.tachiyomi.data.backup.full.models.BackupCategory
+import eu.kanade.tachiyomi.data.backup.full.models.BackupHistory
+import eu.kanade.tachiyomi.data.backup.full.models.BackupManga
+import eu.kanade.tachiyomi.data.backup.full.models.BackupSerializer
+import eu.kanade.tachiyomi.data.backup.full.models.BackupSource
+import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.Chapter
+import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.data.database.models.Manga
+import eu.kanade.tachiyomi.data.database.models.Track
 import okio.buffer
 import okio.gzip
 import okio.source
@@ -33,8 +45,10 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         }
 
         // Store source mapping for error messages
-        sourceMapping = backup.backupSources.map { it.sourceId to it.name }.toMap() +
-            backup.backupAnimeSources.map { it.sourceId to it.name }.toMap()
+        val backupMaps = backup.backupBrokenSources.map { BackupSource(it.name, it.sourceId) } + backup.backupSources
+        val backupMapsAnime = backup.backupBrokenAnimeSources.map { BackupAnimeSource(it.name, it.sourceId) } + backup.backupAnimeSources
+        sourceMapping = backupMaps.map { it.sourceId to it.name }.toMap() +
+            backupMapsAnime.map { it.sourceId to it.name }.toMap()
 
         // Restore individual manga
         backup.backupManga.forEach {
@@ -81,7 +95,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         val manga = backupManga.getMangaImpl()
         val chapters = backupManga.getChaptersImpl()
         val categories = backupManga.categories
-        val history = backupManga.history
+        val history = backupManga.brokenHistory.map { BackupHistory(it.url, it.lastRead) } + backupManga.history
         val tracks = backupManga.getTrackingImpl()
 
         try {
@@ -99,7 +113,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         val anime = backupAnime.getAnimeImpl()
         val episodes = backupAnime.getEpisodesImpl()
         val categories = backupAnime.categories
-        val history = backupAnime.history
+        val history = backupAnime.brokenHistory.map { BackupAnimeHistory(it.url, it.lastSeen) } + backupAnime.history
         val tracks = backupAnime.getTrackingImpl()
 
         try {

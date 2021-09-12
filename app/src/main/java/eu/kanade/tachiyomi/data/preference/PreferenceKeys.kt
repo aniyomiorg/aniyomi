@@ -152,8 +152,6 @@ object PreferenceKeys {
 
     const val removeBookmarkedChapters = "pref_remove_bookmarked"
 
-    const val removeBookmarkedEpisodes = "pref_remove_bookmarked_episodes"
-
     const val libraryUpdateInterval = "pref_library_update_interval_key"
 
     const val libraryUpdateRestriction = "library_update_restriction"
@@ -205,7 +203,11 @@ object PreferenceKeys {
     const val downloadNew = "download_new"
 
     const val downloadNewCategories = "download_new_categories"
+    const val downloadNewCategoriesAnime = "download_new_categories_anime"
     const val downloadNewCategoriesExclude = "download_new_categories_exclude"
+    const val downloadNewCategoriesExcludeAnime = "download_new_categories_exclude_anime"
+    const val removeExcludeCategories = "remove_exclude_categories"
+    const val removeExcludeCategoriesAnime = "remove_exclude_categories_anime"
 
     const val libraryDisplayMode = "pref_display_mode_library"
 

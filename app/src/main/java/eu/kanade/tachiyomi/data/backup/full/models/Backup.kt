@@ -10,6 +10,8 @@ data class Backup(
     @ProtoNumber(3) val backupAnime: List<BackupAnime> = emptyList(),
     @ProtoNumber(4) var backupCategoriesAnime: List<BackupCategory> = emptyList(),
     // Bump by 100 to specify this is a 0.x value
+    @ProtoNumber(100) var backupBrokenSources: List<BrokenBackupSource> = emptyList(),
+    @ProtoNumber(100) var backupBrokenAnimeSources: List<BrokenBackupAnimeSource> = emptyList(),
     @ProtoNumber(100) var backupSources: List<BackupSource> = emptyList(),
-    @ProtoNumber(101) var backupAnimeSources: List<BackupAnimeSource> = emptyList(),
+    @ProtoNumber(101) var backupAnimeSources: List<BackupAnimeSource> = emptyList()
 )

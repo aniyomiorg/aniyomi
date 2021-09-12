@@ -51,7 +51,6 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeHistory
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
@@ -85,6 +84,7 @@ class PlayerActivity : AppCompatActivity() {
     private val preferences: PreferencesHelper = Injekt.get()
     private val incognitoMode = preferences.incognitoMode().get()
     private val db: AnimeDatabaseHelper = Injekt.get()
+    private val downloadManager: AnimeDownloadManager = Injekt.get()
     private val delayedTrackingStore: DelayedTrackingStore = Injekt.get()
     private lateinit var exoPlayer: SimpleExoPlayer
     private lateinit var dataSourceFactory: DataSource.Factory
@@ -363,6 +363,9 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         releasePlayer()
+        deletePendingEpisodes()
+        saveEpisodeHistory(EpisodeItem(episode, anime))
+        setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
         super.onBackPressed()
     }
 
@@ -371,8 +374,6 @@ class PlayerActivity : AppCompatActivity() {
         isPlayerPlaying = exoPlayer.playWhenReady
         playbackPosition = exoPlayer.currentPosition
         currentWindow = exoPlayer.currentWindowIndex
-        saveEpisodeHistory(EpisodeItem(episode, anime))
-        setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
         exoPlayer.release()
     }
 
@@ -598,24 +599,57 @@ class PlayerActivity : AppCompatActivity() {
                     if (preferences.autoUpdateTrack() && episode.seen) {
                         updateTrackEpisodeSeen(episode)
                     }
-                    if (preferences.removeAfterMarkedAsRead()) {
-                        launchIO {
-                            try {
-                                val downloadManager: AnimeDownloadManager = Injekt.get()
-                                val source: AnimeSource = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
-                                downloadManager.deleteEpisodes(episodes, anime, source).forEach {
-                                    if (it is EpisodeItem) {
-                                        it.status = AnimeDownload.State.NOT_DOWNLOADED
-                                        it.download = null
-                                    }
-                                }
-                            } catch (e: Throwable) {
-                                throw e
-                            }
-                        }
-                    }
+                    deleteEpisodeIfNeeded(episode)
+                    deleteEpisodeFromDownloadQueue(episode)
                 }
             }
+        }
+    }
+
+    private fun deleteEpisodeFromDownloadQueue(episode: Episode) {
+        downloadManager.getEpisodeDownloadOrNull(episode)?.let { download ->
+            downloadManager.deletePendingDownload(download)
+        }
+    }
+
+    private fun enqueueDeleteSeenEpisodes(episode: Episode) {
+        if (!episode.seen) return
+        val anime = anime
+
+        launchIO {
+            downloadManager.enqueueDeleteEpisodes(listOf(episode), anime)
+        }
+    }
+
+    private fun deleteEpisodeIfNeeded(episode: Episode) {
+        // Determine which chapter should be deleted and enqueue
+        val sortFunction: (Episode, Episode) -> Int = when (anime.sorting) {
+            Anime.EPISODE_SORTING_SOURCE -> { c1, c2 -> c2.source_order.compareTo(c1.source_order) }
+            Anime.EPISODE_SORTING_NUMBER -> { c1, c2 -> c1.episode_number.compareTo(c2.episode_number) }
+            Anime.EPISODE_SORTING_UPLOAD_DATE -> { c1, c2 -> c1.date_upload.compareTo(c2.date_upload) }
+            else -> throw NotImplementedError("Unknown sorting method")
+        }
+
+        val episodes = db.getEpisodes(anime).executeAsBlocking()
+            .sortedWith { e1, e2 -> sortFunction(e1, e2) }
+
+        val currentEpisodePosition = episodes.indexOf(episode)
+        val removeAfterReadSlots = preferences.removeAfterReadSlots()
+        val episodeToDelete = episodes.getOrNull(currentEpisodePosition - removeAfterReadSlots)
+
+        // Check if deleting option is enabled and chapter exists
+        if (removeAfterReadSlots != -1 && episodeToDelete != null) {
+            enqueueDeleteSeenEpisodes(episodeToDelete)
+        }
+    }
+
+    /**
+     * Deletes all the pending episodes. This operation will run in a background thread and errors
+     * are ignored.
+     */
+    private fun deletePendingEpisodes() {
+        launchIO {
+            downloadManager.deletePendingEpisodes()
         }
     }
 

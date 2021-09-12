@@ -13,12 +13,22 @@ import androidx.preference.PreferenceScreen
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
-import eu.kanade.tachiyomi.util.preference.*
+import eu.kanade.tachiyomi.util.preference.defaultValue
+import eu.kanade.tachiyomi.util.preference.entriesRes
+import eu.kanade.tachiyomi.util.preference.intListPreference
+import eu.kanade.tachiyomi.util.preference.listPreference
+import eu.kanade.tachiyomi.util.preference.multiSelectListPreference
+import eu.kanade.tachiyomi.util.preference.onClick
+import eu.kanade.tachiyomi.util.preference.preference
+import eu.kanade.tachiyomi.util.preference.preferenceCategory
+import eu.kanade.tachiyomi.util.preference.switchPreference
+import eu.kanade.tachiyomi.util.preference.titleRes
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
 import eu.kanade.tachiyomi.widget.materialdialogs.setQuadStateMultiChoiceItems
@@ -33,9 +43,15 @@ import eu.kanade.tachiyomi.data.preference.PreferenceKeys as Keys
 class SettingsDownloadController : SettingsController() {
 
     private val db: DatabaseHelper by injectLazy()
+    private val adb: AnimeDatabaseHelper by injectLazy()
 
     override fun setupPreferenceScreen(screen: PreferenceScreen) = screen.apply {
         titleRes = R.string.pref_category_downloads
+
+        val dbCategories = db.getCategories().executeAsBlocking()
+        val dbAnimeCategories = adb.getCategories().executeAsBlocking()
+        val mangaCategories = listOf(Category.createDefault(context)) + dbCategories
+        val animeCategories = listOf(Category.createDefault(context)) + dbAnimeCategories
 
         preference {
             key = Keys.downloadsDirectory
@@ -86,10 +102,45 @@ class SettingsDownloadController : SettingsController() {
                 titleRes = R.string.pref_remove_bookmarked_chapters
                 defaultValue = false
             }
-        }
+            multiSelectListPreference {
+                key = Keys.removeExcludeCategoriesAnime
+                titleRes = R.string.pref_remove_exclude_categories_anime
+                entries = animeCategories.map { it.name }.toTypedArray()
+                entryValues = animeCategories.map { it.id.toString() }.toTypedArray()
 
-        val dbCategories = db.getCategories().executeAsBlocking()
-        val categories = listOf(Category.createDefault(context)) + dbCategories
+                preferences.removeExcludeAnimeCategories().asFlow()
+                    .onEach { mutable ->
+                        val selected = mutable
+                            .mapNotNull { id -> animeCategories.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+
+                        summary = if (selected.isEmpty()) {
+                            resources?.getString(R.string.none)
+                        } else {
+                            selected.joinToString { it.name }
+                        }
+                    }.launchIn(viewScope)
+            }
+            multiSelectListPreference {
+                key = Keys.removeExcludeCategories
+                titleRes = R.string.pref_remove_exclude_categories_manga
+                entries = mangaCategories.map { it.name }.toTypedArray()
+                entryValues = mangaCategories.map { it.id.toString() }.toTypedArray()
+
+                preferences.removeExcludeCategories().asFlow()
+                    .onEach { mutable ->
+                        val selected = mutable
+                            .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+
+                        summary = if (selected.isEmpty()) {
+                            resources?.getString(R.string.none)
+                        } else {
+                            selected.joinToString { it.name }
+                        }
+                    }.launchIn(viewScope)
+            }
+        }
 
         preferenceCategory {
             titleRes = R.string.pref_category_auto_download
@@ -98,6 +149,49 @@ class SettingsDownloadController : SettingsController() {
                 key = Keys.downloadNew
                 titleRes = R.string.pref_download_new
                 defaultValue = false
+            }
+            preference {
+                key = Keys.downloadNewCategoriesAnime
+                titleRes = R.string.anime_categories
+                onClick {
+                    DownloadAnimeCategoriesDialog().showDialog(router)
+                }
+
+                preferences.downloadNew().asImmediateFlow { isVisible = it }
+                    .launchIn(viewScope)
+
+                fun updateSummary() {
+                    val selectedCategories = preferences.downloadNewCategoriesAnime().get()
+                        .mapNotNull { id -> animeCategories.find { it.id == id.toInt() } }
+                        .sortedBy { it.order }
+                    val includedItemsText = if (selectedCategories.isEmpty()) {
+                        context.getString(R.string.all)
+                    } else {
+                        selectedCategories.joinToString { it.name }
+                    }
+
+                    val excludedCategories = preferences.downloadNewCategoriesAnimeExclude().get()
+                        .mapNotNull { id -> animeCategories.find { it.id == id.toInt() } }
+                        .sortedBy { it.order }
+                    val excludedItemsText = if (excludedCategories.isEmpty()) {
+                        context.getString(R.string.none)
+                    } else {
+                        excludedCategories.joinToString { it.name }
+                    }
+
+                    summary = buildSpannedString {
+                        append(context.getString(R.string.include, includedItemsText))
+                        appendLine()
+                        append(context.getString(R.string.exclude, excludedItemsText))
+                    }
+                }
+
+                preferences.downloadNewCategoriesAnime().asFlow()
+                    .onEach { updateSummary() }
+                    .launchIn(viewScope)
+                preferences.downloadNewCategoriesAnimeExclude().asFlow()
+                    .onEach { updateSummary() }
+                    .launchIn(viewScope)
             }
             preference {
                 key = Keys.downloadNewCategories
@@ -111,7 +205,7 @@ class SettingsDownloadController : SettingsController() {
 
                 fun updateSummary() {
                     val selectedCategories = preferences.downloadNewCategories().get()
-                        .mapNotNull { id -> categories.find { it.id == id.toInt() } }
+                        .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
                         .sortedBy { it.order }
                     val includedItemsText = if (selectedCategories.isEmpty()) {
                         context.getString(R.string.all)
@@ -120,7 +214,7 @@ class SettingsDownloadController : SettingsController() {
                     }
 
                     val excludedCategories = preferences.downloadNewCategoriesExclude().get()
-                        .mapNotNull { id -> categories.find { it.id == id.toInt() } }
+                        .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
                         .sortedBy { it.order }
                     val excludedItemsText = if (excludedCategories.isEmpty()) {
                         context.getString(R.string.none)
@@ -290,6 +384,54 @@ class SettingsDownloadController : SettingsController() {
 
                     preferences.downloadNewCategories().set(included)
                     preferences.downloadNewCategoriesExclude().set(excluded)
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .create()
+        }
+    }
+    class DownloadAnimeCategoriesDialog : DialogController() {
+
+        private val preferences: PreferencesHelper = Injekt.get()
+        private val db: AnimeDatabaseHelper = Injekt.get()
+
+        override fun onCreateDialog(savedViewState: Bundle?): Dialog {
+            val dbCategories = db.getCategories().executeAsBlocking()
+            val categories = listOf(Category.createDefault(activity!!)) + dbCategories
+
+            val items = categories.map { it.name }
+            var selected = categories
+                .map {
+                    when (it.id.toString()) {
+                        in preferences.downloadNewCategoriesAnime().get() -> QuadStateTextView.State.CHECKED.ordinal
+                        in preferences.downloadNewCategoriesAnimeExclude().get() -> QuadStateTextView.State.INVERSED.ordinal
+                        else -> QuadStateTextView.State.UNCHECKED.ordinal
+                    }
+                }
+                .toIntArray()
+
+            return MaterialAlertDialogBuilder(activity!!)
+                .setTitle(R.string.anime_categories)
+                .setQuadStateMultiChoiceItems(
+                    message = R.string.pref_download_new_categories_details,
+                    items = items,
+                    initialSelected = selected
+                ) { selections ->
+                    selected = selections
+                }
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    val included = selected
+                        .mapIndexed { index, value -> if (value == QuadStateTextView.State.CHECKED.ordinal) index else null }
+                        .filterNotNull()
+                        .map { categories[it].id.toString() }
+                        .toSet()
+                    val excluded = selected
+                        .mapIndexed { index, value -> if (value == QuadStateTextView.State.INVERSED.ordinal) index else null }
+                        .filterNotNull()
+                        .map { categories[it].id.toString() }
+                        .toSet()
+
+                    preferences.downloadNewCategoriesAnime().set(included)
+                    preferences.downloadNewCategoriesAnimeExclude().set(excluded)
                 }
                 .setNegativeButton(android.R.string.cancel, null)
                 .create()

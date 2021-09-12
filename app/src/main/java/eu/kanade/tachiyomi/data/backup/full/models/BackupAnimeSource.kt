@@ -5,6 +5,12 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 
 @Serializable
+data class BrokenBackupAnimeSource(
+    @ProtoNumber(0) var name: String = "",
+    @ProtoNumber(1) var sourceId: Long
+)
+
+@Serializable
 data class BackupAnimeSource(
     @ProtoNumber(0) var name: String = "",
     @ProtoNumber(1) var sourceId: Long

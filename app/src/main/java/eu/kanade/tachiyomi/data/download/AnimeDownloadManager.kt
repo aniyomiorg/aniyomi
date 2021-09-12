@@ -7,6 +7,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
@@ -15,6 +16,8 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.util.lang.launchIO
 import rx.Observable
 import timber.log.Timber
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 /**
@@ -24,7 +27,10 @@ import uy.kohesive.injekt.injectLazy
  *
  * @param context the application context.
  */
-class AnimeDownloadManager(private val context: Context) {
+class AnimeDownloadManager(
+    private val context: Context,
+    private val db: AnimeDatabaseHelper = Injekt.get()
+) {
 
     private val sourceManager: AnimeSourceManager by injectLazy()
     private val preferences: PreferencesHelper by injectLazy()
@@ -249,7 +255,7 @@ class AnimeDownloadManager(private val context: Context) {
         val filteredEpisodes = if (isCancelling) {
             episodes
         } else {
-            getEpisodesToDelete(episodes)
+            getEpisodesToDelete(episodes, anime)
         }
         launchIO {
             removeFromDownloadQueue(filteredEpisodes)
@@ -303,7 +309,7 @@ class AnimeDownloadManager(private val context: Context) {
      * @param anime the anime of the episodes.
      */
     fun enqueueDeleteEpisodes(episodes: List<Episode>, anime: Anime) {
-        pendingDeleter.addEpisodes(getEpisodesToDelete(episodes), anime)
+        pendingDeleter.addEpisodes(getEpisodesToDelete(episodes, anime), anime)
     }
 
     /**
@@ -343,8 +349,17 @@ class AnimeDownloadManager(private val context: Context) {
         }
     }
 
-    private fun getEpisodesToDelete(episodes: List<Episode>): List<Episode> {
-        return if (!preferences.removeBookmarkedEpisodes()) {
+    private fun getEpisodesToDelete(episodes: List<Episode>, anime: Anime): List<Episode> {
+        // Retrieve the categories that are set to exclude from being deleted on read
+        val categoriesToExclude = preferences.removeExcludeAnimeCategories().get().map(String::toInt)
+        val categoriesForAnime = db.getCategoriesForAnime(anime).executeAsBlocking()
+            .mapNotNull { it.id }
+            .takeUnless { it.isEmpty() }
+            ?: listOf(0)
+
+        return if (categoriesForAnime.intersect(categoriesToExclude).isNotEmpty()) {
+            episodes.filterNot { it.seen }
+        } else if (!preferences.removeBookmarkedChapters()) {
             episodes.filterNot { it.bookmark }
         } else {
             episodes

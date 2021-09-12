@@ -424,7 +424,11 @@
     <string name="pref_category_delete_chapters">Delete chapters</string>
     <string name="pref_remove_after_marked_as_read">After marked as read</string>
     <string name="pref_remove_after_read">Automatically after reading</string>
-    <string name="pref_remove_bookmarked_chapters">Allow deleting bookmarked chapters</string>
+    <string name="pref_remove_bookmarked_chapters">Allow deleting bookmarked chapters/episodes</string>
+    <string name="pref_remove_exclude_categories_manga">Excluded manga categories</string>
+    <string name="pref_remove_exclude_categories_anime">Excluded anime categories</string>
+    <string name="pref_remove_exclude_categories_anime_prefix">Anime: </string>
+    <string name="pref_remove_exclude_categories_manga_prefix">Manga: </string>
     <string name="custom_dir">Custom location</string>
     <string name="disabled">Disabled</string>
     <string name="last_read_chapter">Last read chapter</string>
@@ -438,6 +442,7 @@
     <string name="pref_external_downloader_selection">Downloader app preference</string>
     <string name="pref_download_new">Download new chapters</string>
     <string name="pref_download_new_categories_details">Manga in excluded categories will not be downloaded even if they are also in included categories.</string>
+    <string name="pref_download_new_anime_categories_details">Anime in excluded categories will not be downloaded even if they are also in included categories.</string>
 
       <!-- Tracking section -->
     <string name="tracking_guide">Tracking guide</string>

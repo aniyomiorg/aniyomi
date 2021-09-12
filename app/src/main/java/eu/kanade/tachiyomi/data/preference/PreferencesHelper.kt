@@ -264,7 +264,8 @@ class PreferencesHelper(val context: Context) {
 
     fun removeBookmarkedChapters() = prefs.getBoolean(Keys.removeBookmarkedChapters, false)
 
-    fun removeBookmarkedEpisodes() = prefs.getBoolean(Keys.removeBookmarkedEpisodes, false)
+    fun removeExcludeCategories() = flowPrefs.getStringSet(Keys.removeExcludeCategories, emptySet())
+    fun removeExcludeAnimeCategories() = flowPrefs.getStringSet(Keys.removeExcludeCategoriesAnime, emptySet())
 
     fun libraryUpdateInterval() = flowPrefs.getInt(Keys.libraryUpdateInterval, 24)
 
@@ -334,7 +335,9 @@ class PreferencesHelper(val context: Context) {
     fun downloadNew() = flowPrefs.getBoolean(Keys.downloadNew, false)
 
     fun downloadNewCategories() = flowPrefs.getStringSet(Keys.downloadNewCategories, emptySet())
+    fun downloadNewCategoriesAnime() = flowPrefs.getStringSet(Keys.downloadNewCategoriesAnime, emptySet())
     fun downloadNewCategoriesExclude() = flowPrefs.getStringSet(Keys.downloadNewCategoriesExclude, emptySet())
+    fun downloadNewCategoriesAnimeExclude() = flowPrefs.getStringSet(Keys.downloadNewCategoriesExcludeAnime, emptySet())
 
     fun lang() = flowPrefs.getString(Keys.lang, "")
 
