@@ -71,7 +71,7 @@ open class AnimeExtensionPresenter(
                     (avail.lang in activeLangs || avail.lang == "all") &&
                     (showNsfwExtensions || !avail.isNsfw)
             }
-            .sortedBy { it.pkgName }
+            .sortedBy { it.name }
 
         if (updatesSorted.isNotEmpty()) {
             val header = AnimeExtensionGroupItem(context.getString(R.string.ext_updates_pending), updatesSorted.size, true)
