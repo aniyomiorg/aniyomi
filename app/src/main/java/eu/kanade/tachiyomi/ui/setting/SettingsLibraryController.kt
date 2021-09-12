@@ -9,6 +9,7 @@ import androidx.preference.PreferenceScreen
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateJob
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.library.LibraryUpdateJob
@@ -42,17 +43,21 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import eu.kanade.tachiyomi.data.preference.PreferenceKeys as Keys
+import eu.kanade.tachiyomi.ui.animecategory.CategoryController as AnimeCategoryController
 
 class SettingsLibraryController : SettingsController() {
 
     private val db: DatabaseHelper = Injekt.get()
+    private val adb: AnimeDatabaseHelper = Injekt.get()
     private val trackManager: TrackManager by injectLazy()
 
     override fun setupPreferenceScreen(screen: PreferenceScreen) = screen.apply {
         titleRes = R.string.pref_category_library
 
         val dbCategories = db.getCategories().executeAsBlocking()
+        val dbCategoriesAnime = adb.getCategories().executeAsBlocking()
         val categories = listOf(Category.createDefault(context)) + dbCategories
+        val categoriesAnime = listOf(Category.createDefault(context)) + dbCategoriesAnime
 
         preferenceCategory {
             titleRes = R.string.pref_category_display
@@ -91,7 +96,39 @@ class SettingsLibraryController : SettingsController() {
         }
 
         preferenceCategory {
-            titleRes = R.string.categories
+            titleRes = R.string.general_categories
+
+            preference {
+                key = "pref_action_edit_anime_categories"
+                titleRes = R.string.action_edit_anime_categories
+
+                val catCount = dbCategoriesAnime.size
+                summary = context.resources.getQuantityString(R.plurals.num_categories, catCount, catCount)
+
+                onClick {
+                    router.pushController(AnimeCategoryController().withFadeTransaction())
+                }
+            }
+
+            intListPreference {
+                key = Keys.defaultAnimeCategory
+                titleRes = R.string.default_anime_category
+
+                entries = arrayOf(context.getString(R.string.default_category_summary)) +
+                    categoriesAnime.map { it.name }.toTypedArray()
+                entryValues = arrayOf("-1") + categoriesAnime.map { it.id.toString() }.toTypedArray()
+                defaultValue = "-1"
+
+                val selectedCategory = categoriesAnime.find { it.id == preferences.defaultCategory() }
+                summary = selectedCategory?.name
+                    ?: context.getString(R.string.default_category_summary)
+                onChange { newValue ->
+                    summary = categoriesAnime.find {
+                        it.id == (newValue as String).toInt()
+                    }?.name ?: context.getString(R.string.default_category_summary)
+                    true
+                }
+            }
 
             preference {
                 key = "pref_action_edit_categories"
@@ -204,6 +241,46 @@ class SettingsLibraryController : SettingsController() {
                 key = Keys.updateOnlyNonCompleted
                 titleRes = R.string.pref_update_only_non_completed
                 defaultValue = false
+            }
+            preference {
+                key = Keys.animelibUpdateCategories
+                titleRes = R.string.anime_categories
+                onClick {
+                    AnimelibGlobalUpdateCategoriesDialog().showDialog(router)
+                }
+
+                fun updateSummary() {
+                    val selectedCategories = preferences.animelibUpdateCategories().get()
+                        .mapNotNull { id -> categories.find { it.id == id.toInt() } }
+                        .sortedBy { it.order }
+                    val includedItemsText = if (selectedCategories.isEmpty()) {
+                        context.getString(R.string.all)
+                    } else {
+                        selectedCategories.joinToString { it.name }
+                    }
+
+                    val excludedCategories = preferences.animelibUpdateCategoriesExclude().get()
+                        .mapNotNull { id -> categories.find { it.id == id.toInt() } }
+                        .sortedBy { it.order }
+                    val excludedItemsText = if (excludedCategories.isEmpty()) {
+                        context.getString(R.string.none)
+                    } else {
+                        excludedCategories.joinToString { it.name }
+                    }
+
+                    summary = buildSpannedString {
+                        append(context.getString(R.string.include, includedItemsText))
+                        appendLine()
+                        append(context.getString(R.string.exclude, excludedItemsText))
+                    }
+                }
+
+                preferences.animelibUpdateCategories().asFlow()
+                    .onEach { updateSummary() }
+                    .launchIn(viewScope)
+                preferences.animelibUpdateCategoriesExclude().asFlow()
+                    .onEach { updateSummary() }
+                    .launchIn(viewScope)
             }
             preference {
                 key = Keys.libraryUpdateCategories
@@ -333,6 +410,55 @@ class SettingsLibraryController : SettingsController() {
                     landscape = newValue
                 }
             }
+        }
+    }
+
+    class AnimelibGlobalUpdateCategoriesDialog : DialogController() {
+
+        private val preferences: PreferencesHelper = Injekt.get()
+        private val db: AnimeDatabaseHelper = Injekt.get()
+
+        override fun onCreateDialog(savedViewState: Bundle?): Dialog {
+            val dbCategories = db.getCategories().executeAsBlocking()
+            val categories = listOf(Category.createDefault(activity!!)) + dbCategories
+
+            val items = categories.map { it.name }
+            var selected = categories
+                .map {
+                    when (it.id.toString()) {
+                        in preferences.animelibUpdateCategories().get() -> QuadStateTextView.State.CHECKED.ordinal
+                        in preferences.animelibUpdateCategoriesExclude().get() -> QuadStateTextView.State.INVERSED.ordinal
+                        else -> QuadStateTextView.State.UNCHECKED.ordinal
+                    }
+                }
+                .toIntArray()
+
+            return MaterialAlertDialogBuilder(activity!!)
+                .setTitle(R.string.categories)
+                .setQuadStateMultiChoiceItems(
+                    message = R.string.pref_animelib_update_categories_details,
+                    items = items,
+                    initialSelected = selected
+                ) { selections ->
+                    selected = selections
+                }
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    val included = selected
+                        .mapIndexed { index, value -> if (value == QuadStateTextView.State.CHECKED.ordinal) index else null }
+                        .filterNotNull()
+                        .map { categories[it].id.toString() }
+                        .toSet()
+                    val excluded = selected
+                        .mapIndexed { index, value -> if (value == QuadStateTextView.State.INVERSED.ordinal) index else null }
+                        .filterNotNull()
+                        .map { categories[it].id.toString() }
+                        .toSet()
+
+                    preferences.animelibUpdateCategories().set(included)
+                    preferences.animelibUpdateCategoriesExclude().set(excluded)
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .create()
         }
     }
 

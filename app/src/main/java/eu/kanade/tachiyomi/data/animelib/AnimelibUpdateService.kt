@@ -239,14 +239,14 @@ class AnimelibUpdateService(
         var listToUpdate = if (categoryId != -1) {
             animelibAnime.filter { it.category == categoryId }
         } else {
-            val categoriesToUpdate = preferences.libraryUpdateCategories().get().map(String::toInt)
+            val categoriesToUpdate = preferences.animelibUpdateCategories().get().map(String::toInt)
             val listToInclude = if (categoriesToUpdate.isNotEmpty()) {
                 animelibAnime.filter { it.category in categoriesToUpdate }
             } else {
                 animelibAnime
             }
 
-            val categoriesToExclude = preferences.libraryUpdateCategoriesExclude().get().map(String::toInt)
+            val categoriesToExclude = preferences.animelibUpdateCategoriesExclude().get().map(String::toInt)
             val listToExclude = if (categoriesToExclude.isNotEmpty()) {
                 animelibAnime.filter { it.category in categoriesToExclude }
             } else {

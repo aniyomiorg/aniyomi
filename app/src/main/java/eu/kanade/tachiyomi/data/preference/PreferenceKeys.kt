@@ -157,7 +157,9 @@ object PreferenceKeys {
     const val libraryUpdateRestriction = "library_update_restriction"
 
     const val libraryUpdateCategories = "library_update_categories"
+    const val animelibUpdateCategories = "animelib_update_categories"
     const val libraryUpdateCategoriesExclude = "library_update_categories_exclude"
+    const val animelibUpdateCategoriesExclude = "animelib_update_categories_exclude"
 
     const val libraryUpdatePrioritization = "library_update_prioritization"
 
@@ -218,6 +220,7 @@ object PreferenceKeys {
     const val dateFormat = "app_date_format"
 
     const val defaultCategory = "default_category"
+    const val defaultAnimeCategory = "default_anime_category"
 
     const val categorizedDisplay = "categorized_display"
 

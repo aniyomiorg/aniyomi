@@ -272,8 +272,10 @@ class PreferencesHelper(val context: Context) {
     fun libraryUpdateRestriction() = flowPrefs.getStringSet(Keys.libraryUpdateRestriction, setOf(UNMETERED_NETWORK))
 
     fun libraryUpdateCategories() = flowPrefs.getStringSet(Keys.libraryUpdateCategories, emptySet())
+    fun animelibUpdateCategories() = flowPrefs.getStringSet(Keys.animelibUpdateCategories, emptySet())
 
     fun libraryUpdateCategoriesExclude() = flowPrefs.getStringSet(Keys.libraryUpdateCategoriesExclude, emptySet())
+    fun animelibUpdateCategoriesExclude() = flowPrefs.getStringSet(Keys.animelibUpdateCategoriesExclude, emptySet())
 
     fun libraryUpdatePrioritization() = flowPrefs.getInt(Keys.libraryUpdatePrioritization, 0)
 
@@ -342,6 +344,7 @@ class PreferencesHelper(val context: Context) {
     fun lang() = flowPrefs.getString(Keys.lang, "")
 
     fun defaultCategory() = prefs.getInt(Keys.defaultCategory, -1)
+    fun defaultAnimeCategory() = prefs.getInt(Keys.defaultAnimeCategory, -1)
 
     fun categorisedDisplaySettings() = flowPrefs.getBoolean(Keys.categorizedDisplay, false)
 

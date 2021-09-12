@@ -5,6 +5,7 @@
     <!-- Models -->
     <string name="name">Name</string>
     <string name="categories">Manga Categories</string>
+    <string name="general_categories">Categories</string>
     <string name="anime_categories">Anime Categories</string>
     <string name="manga">Manga</string>
     <string name="chapters">Chapters</string>
@@ -84,7 +85,8 @@
     <string name="action_edit">Edit</string>
     <string name="action_add">Add</string>
     <string name="action_add_category">Add category</string>
-    <string name="action_edit_categories">Edit categories</string>
+    <string name="action_edit_categories">Edit manga categories</string>
+    <string name="action_edit_anime_categories">Edit anime categories</string>
     <string name="action_rename_category">Rename category</string>
     <string name="action_move_category">Set categories</string>
     <string name="action_edit_cover">Edit cover</string>
@@ -251,14 +253,15 @@
     <string name="network_unmetered">Unmetered network</string>
     <string name="charging">Charging</string>
     <string name="restrictions">Restrictions: %s</string>
-    <string name="pref_update_only_non_completed">Only update ongoing manga</string>
+    <string name="pref_update_only_non_completed">Only update ongoing series</string>
     <string name="pref_library_update_refresh_metadata">Automatically refresh metadata</string>
     <string name="pref_library_update_refresh_metadata_summary">Check for new cover and details when updating library</string>
     <string name="pref_library_update_refresh_trackers">Automatically refresh trackers</string>
     <string name="pref_library_update_refresh_trackers_summary">Update trackers when updating library</string>
     <string name="pref_library_update_error_notification">Show update errors notifications</string>
 
-    <string name="default_category">Default category</string>
+    <string name="default_category">Default manga category</string>
+    <string name="default_anime_category">Default anime category</string>
     <string name="default_category_summary">Always ask</string>
     <string name="categorized_display_settings">Per-category settings for sort and display</string>
     <plurals name="num_categories">
@@ -266,6 +269,7 @@
         <item quantity="other">%d categories</item>
     </plurals>
     <string name="pref_library_update_categories_details">Manga in excluded categories will not be updated even if they are also in included categories.</string>
+    <string name="pref_animelib_update_categories_details">Anime in excluded categories will not be updated even if they are also in included categories.</string>
     <string name="all">All</string>
     <string name="none">None</string>
     <string name="include">Include: %s</string>
@@ -421,9 +425,9 @@
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_download_directory">Download location</string>
     <string name="pref_download_only_over_wifi">Only download over Wi-Fi</string>
-    <string name="pref_category_delete_chapters">Delete chapters</string>
-    <string name="pref_remove_after_marked_as_read">After marked as read</string>
-    <string name="pref_remove_after_read">Automatically after reading</string>
+    <string name="pref_category_delete_chapters">Delete chapters/episodes</string>
+    <string name="pref_remove_after_marked_as_read">After marked as read/watched</string>
+    <string name="pref_remove_after_read">Automatically after reading/watching</string>
     <string name="pref_remove_bookmarked_chapters">Allow deleting bookmarked chapters/episodes</string>
     <string name="pref_remove_exclude_categories_manga">Excluded manga categories</string>
     <string name="pref_remove_exclude_categories_anime">Excluded anime categories</string>
