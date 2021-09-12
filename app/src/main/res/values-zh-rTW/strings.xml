@@ -356,7 +356,7 @@
     <string name="lock_never">永不</string>
     <string name="lock_always">立即</string>
     <string name="lock_when_idle">閒置時鎖定</string>
-    <string name="unlock_app">解除鎖定 Tachiyomi</string>
+    <string name="unlock_app">解除鎖定 Aniyomi</string>
     <string name="lock_with_biometrics">需要解鎖</string>
     <string name="secure_screen_summary">在切換應用程式時隱藏預覽，並禁止擷取螢幕畫面</string>
     <string name="secure_screen">防窺畫面</string>

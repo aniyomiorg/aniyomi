@@ -354,7 +354,7 @@
     <string name="pref_manage_notifications">Setări notificări</string>
     <string name="pref_category_security">Securitate</string>
     <string name="lock_with_biometrics">Necesită deblocare</string>
-    <string name="unlock_app">Deblochează Tachiyomi</string>
+    <string name="unlock_app">Deblochează Aniyomi</string>
     <string name="action_sort_latest_chapter">Ultimul capitol</string>
     <string name="lock_when_idle">Blocați când este inactiv</string>
     <string name="lock_always">Întotdeauna</string>

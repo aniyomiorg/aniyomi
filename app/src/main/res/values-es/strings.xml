@@ -400,7 +400,7 @@
     <string name="information_cloudflare_bypass_failure">Fallo al evitar Cloudflare</string>
     <string name="information_webview_outdated">Actualice la aplicación WebView para mejor compatibilidad</string>
     <string name="channel_new_chapters">Capítulos actualizados</string>
-    <string name="unlock_app">Desbloquear Tachiyomi</string>
+    <string name="unlock_app">Desbloquear Aniyomi</string>
     <string name="secure_screen_summary">Ocultar contenido de la aplicación al cambiar de aplicación y bloquear capturas de pantalla</string>
     <string name="pref_category_display">Monitor</string>
     <plurals name="notification_chapters_generic">

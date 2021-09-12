@@ -363,7 +363,7 @@
     </plurals>
     <string name="secure_screen">Sikker skjerm</string>
     <string name="channel_new_chapters">Kapitteloppdateringer</string>
-    <string name="unlock_app">Lås opp Tachiyomi</string>
+    <string name="unlock_app">Lås opp Aniyomi</string>
     <string name="notification_chapters_single">Kapittel %1$s</string>
     <string name="email">E-postadresse</string>
     <string name="in_library">I biblioteket</string>

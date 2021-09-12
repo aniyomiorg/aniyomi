@@ -286,7 +286,7 @@
     </plurals>
     <string name="secure_screen">Bezbedan ekran</string>
     <string name="ext_updates_pending">Apdejti koji čekaju</string>
-    <string name="unlock_app">Otključaj Tachiyomi</string>
+    <string name="unlock_app">Otključaj Aniyomi</string>
     <string name="pref_category_display">Prikaži</string>
     <string name="hide_notification_content">Sakri notifikacije</string>
     <string name="pref_disable_battery_optimization">Isključi optimizaciju korišćenja baterije</string>

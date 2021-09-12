@@ -398,7 +398,7 @@
     <string name="label_backup">რეზერვი</string>
     <string name="label_extensions">გავრცობები</string>
     <string name="label_extension_info">გავრცობის შესახებ</string>
-    <string name="unlock_app">Tachiyomi-ს განბლოკვა</string>
+    <string name="unlock_app">Aniyomi-ს განბლოკვა</string>
     <string name="confirm_exit">დააჭირე ისებ ღილაკს \"უკან\" გამოსასვლელად</string>
     <string name="action_global_search">გლობალური ძებნა</string>
     <string name="action_move_category">კატეგორიების მინიჭება</string>

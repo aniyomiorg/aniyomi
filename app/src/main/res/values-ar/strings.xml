@@ -335,7 +335,7 @@
     <string name="pref_category_library">المكتبة</string>
     <string name="invalid_download_dir">موقع تنزيل غير صالح</string>
     <string name="label_more">المزيد</string>
-    <string name="unlock_app">افتح Tachiyomi</string>
+    <string name="unlock_app">افتح Aniyomi</string>
     <string name="action_move_to_top">نقل إلى الأعلى</string>
     <string name="action_oldest">الأقدم</string>
     <string name="action_newest">الأجدد</string>

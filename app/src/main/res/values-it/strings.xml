@@ -401,7 +401,7 @@
     <string name="information_cloudflare_bypass_failure">Impossibile bypassare Cloudflare</string>
     <string name="information_webview_outdated">Per favore aggiorna l\'app WebView per una migliore compatibilità</string>
     <string name="channel_new_chapters">Aggiornamenti capitoli</string>
-    <string name="unlock_app">Sblocca Tachiyomi</string>
+    <string name="unlock_app">Sblocca Aniyomi</string>
     <string name="secure_screen_summary">Nascondi i contenuti dell\'app quando cambi applicazione e blocca gli screenshot</string>
     <string name="pref_category_display">Visualizzazione</string>
     <string name="action_reorganize_by">Riordina</string>

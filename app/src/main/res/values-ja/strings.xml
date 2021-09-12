@@ -357,7 +357,7 @@
         <item quantity="other">後%1$s分</item>
     </plurals>
     <string name="secure_screen">セキュア画面</string>
-    <string name="unlock_app">Tachiyomiのロックを解除する</string>
+    <string name="unlock_app">Aniyomiのロックを解除する</string>
     <plurals name="notification_chapters_generic">
         <item quantity="other">%1$d新しい章</item>
     </plurals>

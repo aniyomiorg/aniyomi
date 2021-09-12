@@ -363,7 +363,7 @@
     <string name="action_view_chapters">Zobrazit kapitoly</string>
     <string name="action_download_unread">Stáhnout nepřečtené kapitoly</string>
     <string name="action_sort_latest_chapter">Poslední kapitola</string>
-    <string name="unlock_app">Odemknout Tachiyomi</string>
+    <string name="unlock_app">Odemknout Aniyomi</string>
     <string name="want_to_read">Chci číst</string>
     <string name="add_tracking">Přidat sledování</string>
     <string name="no_chapters_error">Nebyly nalezeny žádné kapitoly</string>

@@ -368,7 +368,7 @@
     <string name="information_cloudflare_bypass_failure">No s\'ha pogut evitar Cloudflare</string>
     <string name="information_webview_outdated">Actualitzeu l\'aplicació WebView per obtenir millor compatibilitat</string>
     <string name="channel_new_chapters">Novetats de capítols</string>
-    <string name="unlock_app">Desbloca Tachiyomi</string>
+    <string name="unlock_app">Desbloca Aniyomi</string>
     <string name="secure_screen_summary">Amaga el contingut de l\'aplicació en canviar entre aplicacions i bloca les captures de pantalla</string>
     <string name="pref_category_display">Visualització</string>
     <plurals name="notification_chapters_generic">

@@ -385,7 +385,7 @@
     <string name="action_sort_latest_chapter">Ostatni rozdział</string>
     <string name="action_sort_last_checked">Ostatnio sprawdzane</string>
     <string name="action_menu">Menu</string>
-    <string name="unlock_app">Odblokuj Tachiyomi</string>
+    <string name="unlock_app">Odblokuj Aniyomi</string>
     <string name="label_sources">Źródła</string>
     <string name="notification_chapters_single">Rozdział %1$s</string>
     <string name="updating_library">Aktualizowanie biblioteki</string>

@@ -430,7 +430,7 @@
     <string name="action_sort_latest_chapter">Chương mới nhất</string>
     <string name="action_sort_last_checked">Lần kiểm tra gần nhất</string>
     <string name="action_menu">Menu</string>
-    <string name="unlock_app">Mở Khoá Tachiyomi</string>
+    <string name="unlock_app">Mở Khoá Aniyomi</string>
     <string name="label_sources">Nguồn</string>
     <string name="label_more">Thêm</string>
     <string name="tracker_not_logged_in">Chưa đăng nhập: %1$s</string>

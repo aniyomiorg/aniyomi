@@ -364,7 +364,7 @@
     <string name="ext_updates_pending">待更新</string>
     <string name="information_cloudflare_bypass_failure">无法绕过 Cloudflare</string>
     <string name="information_webview_outdated">请更新 WebView 应用以获得更好的兼容性</string>
-    <string name="unlock_app">解锁 Tachiyomi</string>
+    <string name="unlock_app">解锁 Aniyomi</string>
     <string name="secure_screen_summary">在切换应用时隐藏预览，并禁止截取屏幕截图</string>
     <string name="pref_category_display">显示</string>
     <string name="channel_new_chapters">章节更新</string>
