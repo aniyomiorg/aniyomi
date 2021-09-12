@@ -207,7 +207,7 @@ fun getTotalEpisodeAnimeQuery() =
     """
     SELECT ${Anime.TABLE}.*
     FROM ${Anime.TABLE}
-    JOIN ${Anime.TABLE}
+    JOIN ${Episode.TABLE}
     ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
     GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
     ORDER by COUNT(*)

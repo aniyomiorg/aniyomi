@@ -237,7 +237,7 @@ class AnimelibPresenter(
             var counter = 0
             db.getLastSeenAnime().executeAsBlocking().associate { it.id!! to counter++ }
         }
-        val totalChapterAnime by lazy {
+        val totalEpisodeAnime by lazy {
             var counter = 0
             db.getTotalEpisodeAnime().executeAsBlocking().associate { it.id!! to counter++ }
         }
@@ -284,9 +284,9 @@ class AnimelibPresenter(
                     else -> i1.anime.unread.compareTo(i2.anime.unread)
                 }
                 SortModeSetting.TOTAL_CHAPTERS -> {
-                    val anime1TotalEpisode = totalChapterAnime[i1.anime.id!!] ?: 0
-                    val mange2TotalEpisode = totalChapterAnime[i2.anime.id!!] ?: 0
-                    anime1TotalEpisode.compareTo(mange2TotalEpisode)
+                    val anime1TotalEpisode = totalEpisodeAnime[i1.anime.id!!] ?: 0
+                    val anime2TotalEpisode = totalEpisodeAnime[i2.anime.id!!] ?: 0
+                    anime1TotalEpisode.compareTo(anime2TotalEpisode)
                 }
                 SortModeSetting.LATEST_CHAPTER -> {
                     val anime1latestEpisode = latestChapterAnime[i1.anime.id!!]
