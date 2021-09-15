@@ -111,7 +111,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var source: AnimeSource
     private lateinit var userAgentString: String
     private lateinit var uri: String
-    private lateinit var videos: List<Video>
+    private var videos = emptyList<Video>()
     private lateinit var videoListObservable: Observable<Observable<List<Video>>>
     private var isBuffering = true
     private var isLocal = false
@@ -361,30 +361,32 @@ class PlayerActivity : AppCompatActivity() {
                     speedAlert.show()
                 }
                 1 -> {
-                    val qualityAlert = AlertDialog.Builder(this)
+                    if (videos.isNotEmpty()) {
+                        val qualityAlert = AlertDialog.Builder(this)
 
-                    qualityAlert.setTitle(R.string.playback_quality_dialog_title)
+                        qualityAlert.setTitle(R.string.playback_quality_dialog_title)
 
-                    var requestedQuality = 0
-                    val qualities = videos.map { it.quality }.toTypedArray()
-                    qualityAlert.setSingleChoiceItems(qualities, currentQuality) { qualityDialog, selectedQuality ->
-                        if (selectedQuality > qualities.lastIndex) {
-                            qualityDialog.cancel()
-                        } else {
-                            requestedQuality = selectedQuality
+                        var requestedQuality = 0
+                        val qualities = videos.map { it.quality }.toTypedArray()
+                        qualityAlert.setSingleChoiceItems(qualities, currentQuality) { qualityDialog, selectedQuality ->
+                            if (selectedQuality > qualities.lastIndex) {
+                                qualityDialog.cancel()
+                            } else {
+                                requestedQuality = selectedQuality
+                            }
                         }
-                    }
 
-                    qualityAlert.setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
-                        if (requestedQuality != currentQuality) changeQuality(requestedQuality)
-                        qualityDialog.dismiss()
-                    }
+                        qualityAlert.setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
+                            if (requestedQuality != currentQuality) changeQuality(requestedQuality)
+                            qualityDialog.dismiss()
+                        }
 
-                    qualityAlert.setNegativeButton(android.R.string.cancel) { qualityDialog, _ ->
-                        qualityDialog.cancel()
-                    }
+                        qualityAlert.setNegativeButton(android.R.string.cancel) { qualityDialog, _ ->
+                            qualityDialog.cancel()
+                        }
 
-                    qualityAlert.show()
+                        qualityAlert.show()
+                    }
                 }
                 else -> {
                     dialog.cancel()
