@@ -179,8 +179,6 @@ object PreferenceKeys {
     const val automaticExtUpdates = "automatic_ext_updates"
 
     const val showNsfwSource = "show_nsfw_source"
-    const val showNsfwExtension = "show_nsfw_extension"
-    const val labelNsfwExtension = "label_nsfw_extension"
 
     const val startScreen = "start_screen"
 

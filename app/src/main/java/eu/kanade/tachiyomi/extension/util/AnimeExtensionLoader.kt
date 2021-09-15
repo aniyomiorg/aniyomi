@@ -9,7 +9,6 @@ import dalvik.system.PathClassLoader
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceFactory
-import eu.kanade.tachiyomi.annotations.Nsfw
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.model.AnimeLoadResult
@@ -153,13 +152,7 @@ internal object AnimeExtensionLoader {
                 try {
                     when (val obj = Class.forName(it, false, classLoader).newInstance()) {
                         is AnimeSource -> listOf(obj)
-                        is AnimeSourceFactory -> {
-                            if (isSourceNsfw(obj)) {
-                                emptyList()
-                            } else {
-                                obj.createSources()
-                            }
-                        }
+                        is AnimeSourceFactory -> obj.createSources()
                         else -> throw Exception("Unknown source class type! ${obj.javaClass}")
                     }
                 } catch (e: Throwable) {
@@ -167,7 +160,6 @@ internal object AnimeExtensionLoader {
                     return AnimeLoadResult.Error(e)
                 }
             }
-            .filter { !isSourceNsfw(it) }
 
         val langs = sources.filterIsInstance<AnimeCatalogueSource>()
             .map { it.lang }
@@ -213,23 +205,5 @@ internal object AnimeExtensionLoader {
         } else {
             null
         }
-    }
-
-    /**
-     * Checks whether a Source or SourceFactory is annotated with @Nsfw.
-     */
-    private fun isSourceNsfw(clazz: Any): Boolean {
-        if (loadNsfwSource) {
-            return false
-        }
-
-        if (clazz !is AnimeSource && clazz !is AnimeSourceFactory) {
-            return false
-        }
-
-        // Annotations are proxied, hence this janky way of checking for them
-        return clazz.javaClass.annotations
-            .flatMap { it.javaClass.interfaces.map { it.simpleName } }
-            .firstOrNull { it == Nsfw::class.java.simpleName } != null
     }
 }

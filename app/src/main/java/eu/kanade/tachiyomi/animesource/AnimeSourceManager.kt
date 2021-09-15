@@ -11,7 +11,6 @@ import rx.Observable
 open class AnimeSourceManager(private val context: Context) {
 
     private val sourcesMap = mutableMapOf<Long, AnimeSource>()
-
     private val stubSourcesMap = mutableMapOf<Long, StubSource>()
 
     init {
