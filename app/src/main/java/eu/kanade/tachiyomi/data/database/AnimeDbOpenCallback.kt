@@ -2,7 +2,12 @@ package eu.kanade.tachiyomi.data.database
 
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
-import eu.kanade.tachiyomi.data.database.tables.*
+import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable
+import eu.kanade.tachiyomi.data.database.tables.AnimeHistoryTable
+import eu.kanade.tachiyomi.data.database.tables.AnimeTable
+import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable
+import eu.kanade.tachiyomi.data.database.tables.CategoryTable
+import eu.kanade.tachiyomi.data.database.tables.EpisodeTable
 
 class AnimeDbOpenCallback : SupportSQLiteOpenHelper.Callback(DATABASE_VERSION) {
 
