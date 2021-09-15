@@ -6,11 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.webkit.WebSettings
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.SeekBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.github.vkay94.dtpv.DoubleTapPlayerView
@@ -56,9 +52,7 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingUpdateJob
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
-import eu.kanade.tachiyomi.util.lang.awaitSingle
-import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.withIOContext
+import eu.kanade.tachiyomi.util.lang.*
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.hideBar
@@ -66,13 +60,14 @@ import eu.kanade.tachiyomi.widget.listener.SimpleSeekBarListener
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import rx.Observable
 import rx.schedulers.Schedulers
 import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 import java.io.IOException
-import java.util.Date
+import java.util.*
 
 const val STATE_RESUME_WINDOW = "resumeWindow"
 const val STATE_RESUME_POSITION = "resumePosition"
@@ -102,6 +97,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var backBtn: TextView
     private lateinit var settingsBtn: ImageButton
     private lateinit var title: TextView
+    private lateinit var bufferingView: ProgressBar
 
     private lateinit var episode: Episode
     private lateinit var anime: Anime
@@ -109,6 +105,8 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var userAgentString: String
     private lateinit var uri: String
     private lateinit var videos: List<Video>
+    private lateinit var videoListObservable: Observable<Observable<List<Video>>>
+    private var isBuffering = true
     private var isLocal = false
     private var currentQuality = 0
 
@@ -148,6 +146,7 @@ class PlayerActivity : AppCompatActivity() {
         nextBtn = findViewById(R.id.watcher_controls_next)
         prevBtn = findViewById(R.id.watcher_controls_prev)
         settingsBtn = findViewById(R.id.watcher_controls_settings)
+        bufferingView = findViewById(R.id.exo_buffering)
 
         anime = intent.getSerializableExtra("anime") as Anime
         episode = intent.getSerializableExtra("episode") as Episode
@@ -173,11 +172,10 @@ class PlayerActivity : AppCompatActivity() {
             LeastRecentlyUsedCacheEvictor(cacheSize),
             dbProvider
         )
+        videoListObservable = Observable.fromCallable {
+            awaitVideoList()
+        }
         initPlayer()
-        playerView.player = exoPlayer
-
-        videos = runBlocking { awaitVideoList() }
-        onGetLinks()
     }
 
     private fun onGetLinksError() {
@@ -187,30 +185,34 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun onGetLinks() {
-        if (videos.isEmpty()) {
-            onGetLinksError()
-            return
+        val context = this
+        launchUI {
+            isBuffering(false)
+            if (videos.isEmpty()) {
+                onGetLinksError()
+                return@launchUI
+            }
+            dbProvider = ExoDatabaseProvider(baseContext)
+            isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
+            if (isLocal) {
+                uri = videos.first().uri!!.toString()
+                dataSourceFactory = DefaultDataSourceFactory(context)
+            } else {
+                uri = videos.first().videoUrl!!
+                dataSourceFactory = newDataSourceFactory()
+            }
+            cacheFactory = CacheDataSource.Factory().apply {
+                setCache(simpleCache)
+                setUpstreamDataSourceFactory(dataSourceFactory)
+            }
+            mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
+            mediaItem = MediaItem.Builder()
+                .setUri(uri)
+                .setMimeType(getMime(uri))
+                .build()
+            playbackPosition = episode.last_second_seen
+            changePlayer(playbackPosition, isLocal)
         }
-        dbProvider = ExoDatabaseProvider(baseContext)
-        isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
-        if (isLocal) {
-            uri = videos.first().uri!!.toString()
-            dataSourceFactory = DefaultDataSourceFactory(this)
-        } else {
-            uri = videos.first().videoUrl!!
-            dataSourceFactory = newDataSourceFactory()
-        }
-        cacheFactory = CacheDataSource.Factory().apply {
-            setCache(simpleCache)
-            setUpstreamDataSourceFactory(dataSourceFactory)
-        }
-        mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
-        mediaItem = MediaItem.Builder()
-            .setUri(uri)
-            .setMimeType(getMime(uri))
-            .build()
-        playbackPosition = episode.last_second_seen
-        changePlayer(playbackPosition, isLocal)
     }
 
     private fun newDataSourceFactory(): DefaultHttpDataSource.Factory {
@@ -259,6 +261,30 @@ class PlayerActivity : AppCompatActivity() {
         youTubeDoubleTap.player(exoPlayer)
         playerView.player = exoPlayer
         duration = exoPlayer.duration
+        Timber.i("hello")
+        getVideoList()
+    }
+
+    private fun isBuffering(param: Boolean) {
+        isBuffering = param
+        if (param) {
+            bufferingView.visibility = View.VISIBLE
+        } else {
+            bufferingView.visibility = View.GONE
+        }
+    }
+
+    private fun getVideoList() {
+        launchUI {
+            isBuffering(true)
+        }
+        videoListObservable
+            .subscribeOn(Schedulers.io())
+            .doOnCompleted { onGetLinks() }
+            .doOnError { onGetLinksError() }
+            .subscribe {
+                videos = runBlocking { it.awaitSingle() }
+            }
     }
 
     private fun optionsDialog() {
@@ -377,15 +403,13 @@ class PlayerActivity : AppCompatActivity() {
         exoPlayer.release()
     }
 
-    private suspend fun awaitVideoList(): List<Video> {
-        return withIOContext {
-            try {
-                EpisodeLoader.getLinks(episode, anime, source).awaitSingle()
-            } catch (e: Exception) {
-                message = e.message ?: "error getting links"
-                Timber.w(message)
-                listOf()
-            }
+    private fun awaitVideoList(): Observable<List<Video>> {
+        return try {
+            EpisodeLoader.getLinks(episode, anime, source)
+        } catch (e: Exception) {
+            message = e.message ?: "error getting links"
+            Timber.w(message)
+            Observable.just(emptyList())
         }
     }
 
@@ -396,24 +420,8 @@ class PlayerActivity : AppCompatActivity() {
         episode = getNextEpisode(episode, anime)
         if (oldEpisode == episode) return
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
-        videos = runBlocking { awaitVideoList() }
-        if (videos.isEmpty()) {
-            baseContext.toast(message ?: "error getting links")
-            finish()
-            return
-        }
-        isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
-        uri = if (isLocal) {
-            videos.first().uri!!.toString()
-        } else {
-            videos.first().videoUrl!!
-        }
         currentQuality = 0
-        mediaItem = MediaItem.Builder()
-            .setUri(uri)
-            .setMimeType(getMime(uri))
-            .build()
-        changePlayer(episode.last_second_seen, isLocal)
+        getVideoList()
     }
 
     private fun previousEpisode() {
@@ -423,24 +431,8 @@ class PlayerActivity : AppCompatActivity() {
         episode = getPreviousEpisode(episode, anime)
         if (oldEpisode == episode) return
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
-        videos = runBlocking { awaitVideoList() }
-        if (videos.isEmpty()) {
-            baseContext.toast(message ?: "error getting links")
-            finish()
-            return
-        }
-        isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
-        uri = if (isLocal) {
-            videos.first().uri!!.toString()
-        } else {
-            videos.first().videoUrl!!
-        }
         currentQuality = 0
-        mediaItem = MediaItem.Builder()
-            .setUri(uri)
-            .setMimeType(getMime(uri))
-            .build()
-        changePlayer(episode.last_second_seen, isLocal)
+        getVideoList()
     }
 
     private fun changeQuality(quality: Int) {
@@ -565,7 +557,7 @@ class PlayerActivity : AppCompatActivity() {
     override fun onStop() {
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
-        exoPlayer.pause()
+        if (exoPlayer.isPlaying) exoPlayer.pause()
         playerView.onPause()
         super.onStop()
     }
@@ -577,7 +569,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun saveEpisodeHistory(episode: EpisodeItem) {
-        if (!incognitoMode) {
+        if (!incognitoMode && !isBuffering) {
             val history = AnimeHistory.create(episode.episode).apply { last_seen = Date().time }
             db.updateAnimeHistoryLastSeen(history).asRxCompletable()
                 .onErrorComplete()
@@ -587,7 +579,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun setEpisodeProgress(episode: Episode, anime: Anime, seconds: Long, totalSeconds: Long) {
-        if (!incognitoMode) {
+        if (!incognitoMode && !isBuffering) {
             if (totalSeconds > 0L) {
                 episode.last_second_seen = seconds
                 episode.total_seconds = totalSeconds

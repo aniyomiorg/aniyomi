@@ -1016,7 +1016,7 @@ class AnimeController :
             if (useInternal) {
                 startActivity(intent)
             } else {
-                val video = EpisodeLoader.getLink(episode, anime!!, source!!)?.awaitSingle()
+                val video = EpisodeLoader.getLink(episode, anime!!, source!!).awaitSingle()
                 if (video != null) {
                     val uri = video.uri ?: Uri.parse(video.videoUrl)
                     currentExtEpisode = episode
