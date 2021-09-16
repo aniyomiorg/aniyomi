@@ -600,8 +600,10 @@ class PlayerActivity : AppCompatActivity() {
                     if (preferences.autoUpdateTrack() && episode.seen) {
                         updateTrackEpisodeSeen(episode)
                     }
-                    deleteEpisodeIfNeeded(episode)
-                    deleteEpisodeFromDownloadQueue(episode)
+                    if (episode.seen) {
+                        deleteEpisodeIfNeeded(episode)
+                        deleteEpisodeFromDownloadQueue(episode)
+                    }
                 }
             }
         }
