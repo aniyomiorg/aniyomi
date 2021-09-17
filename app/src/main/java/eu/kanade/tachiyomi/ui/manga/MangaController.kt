@@ -94,10 +94,8 @@ import eu.kanade.tachiyomi.util.view.getCoordinates
 import eu.kanade.tachiyomi.util.view.shrinkOnScroll
 import eu.kanade.tachiyomi.util.view.snack
 import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import reactivecircus.flowbinding.recyclerview.scrollEvents
 import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
 import timber.log.Timber
@@ -183,6 +181,16 @@ class MangaController :
 
     private var dialog: MangaFullCoverDialog? = null
 
+    /**
+     * For [recyclerViewUpdatesToolbarTitleAlpha]
+     */
+    private var recyclerViewToolbarTitleAlphaUpdaterAdded = false
+    private val recyclerViewToolbarTitleAlphaUpdater = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            updateToolbarTitleAlpha()
+        }
+    }
+
     init {
         setHasOptionsMenu(true)
     }
@@ -193,15 +201,12 @@ class MangaController :
 
     override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
         super.onChangeStarted(handler, type)
-
         // Hide toolbar title on enter
-        if (type.isEnter) {
-            updateToolbarTitleAlpha()
-        } else if (!type.isPush) {
-            // Cancel listeners early
-            viewScope.cancel()
-            updateToolbarTitleAlpha(1F)
+        // No need to update alpha for cover dialog
+        if (dialog == null) {
+            updateToolbarTitleAlpha(if (type.isEnter) 0F else 1F)
         }
+        recyclerViewUpdatesToolbarTitleAlpha(type.isEnter)
     }
 
     override fun onChangeEnded(handler: ControllerChangeHandler, type: ControllerChangeType) {
@@ -252,19 +257,15 @@ class MangaController :
         binding.fullRecycler?.let {
             it.adapter = ConcatAdapter(mangaInfoAdapter, chaptersHeaderAdapter, chaptersAdapter)
 
-            it.scrollEvents()
-                .onEach { updateToolbarTitleAlpha() }
-                .launchIn(viewScope)
-
             // Skips directly to chapters list if navigated to from the library
             it.post {
                 if (!fromSource && preferences.jumpToChapters()) {
-                    (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(1, 0)
-                }
-
-                // Delayed in case we need to jump to chapters
-                it.post {
-                    updateToolbarTitleAlpha()
+                    val mainActivityAppBar = (activity as? MainActivity)?.binding?.appbar
+                    (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
+                        1,
+                        mainActivityAppBar?.height ?: 0
+                    )
+                    mainActivityAppBar?.isLifted = true
                 }
             }
 
@@ -301,22 +302,10 @@ class MangaController :
                 }
             }
         }
+
         // Tablet layout
-        binding.infoRecycler?.let {
-            it.adapter = mangaInfoAdapter
-
-            it.scrollEvents()
-                .onEach { updateToolbarTitleAlpha() }
-                .launchIn(viewScope)
-
-            // Delayed in case we need to jump to chapters
-            it.post {
-                updateToolbarTitleAlpha()
-            }
-        }
-        binding.chaptersRecycler?.let {
-            it.adapter = ConcatAdapter(chaptersHeaderAdapter, chaptersAdapter)
-        }
+        binding.infoRecycler?.adapter = mangaInfoAdapter
+        binding.chaptersRecycler?.adapter = ConcatAdapter(chaptersHeaderAdapter, chaptersAdapter)
 
         chaptersAdapter?.fastScroller = binding.fastScroller
 
@@ -341,6 +330,20 @@ class MangaController :
         trackSheet = TrackSheet(this, manga!!, (activity as MainActivity).supportFragmentManager)
 
         updateFilterIconState()
+        recyclerViewUpdatesToolbarTitleAlpha(true)
+    }
+
+    private fun recyclerViewUpdatesToolbarTitleAlpha(enable: Boolean) {
+        val recycler = binding.fullRecycler ?: binding.infoRecycler ?: return
+        if (enable) {
+            if (!recyclerViewToolbarTitleAlphaUpdaterAdded) {
+                recycler.addOnScrollListener(recyclerViewToolbarTitleAlphaUpdater)
+                recyclerViewToolbarTitleAlphaUpdaterAdded = true
+            }
+        } else if (recyclerViewToolbarTitleAlphaUpdaterAdded) {
+            recycler.removeOnScrollListener(recyclerViewToolbarTitleAlphaUpdater)
+            recyclerViewToolbarTitleAlphaUpdaterAdded = false
+        }
     }
 
     private fun updateToolbarTitleAlpha(@FloatRange(from = 0.0, to = 1.0) alpha: Float? = null) {
@@ -401,6 +404,7 @@ class MangaController :
     }
 
     override fun onDestroyView(view: View) {
+        recyclerViewUpdatesToolbarTitleAlpha(false)
         destroyActionModeIfNeeded()
         binding.actionToolbar.destroy()
         mangaInfoAdapter = null

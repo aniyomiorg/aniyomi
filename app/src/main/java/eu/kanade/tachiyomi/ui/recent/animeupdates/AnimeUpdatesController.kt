@@ -180,7 +180,7 @@ class AnimeUpdatesController :
                 actionMode!!,
                 R.menu.updates_episode_selection
             ) { onActionItemClicked(it!!) }
-            (activity as? MainActivity)?.showBottomNav(visible = false, expand = true)
+            (activity as? MainActivity)?.showBottomNav(false)
         }
 
         toggleSelection(position)
@@ -405,7 +405,7 @@ class AnimeUpdatesController :
         adapter?.clearSelection()
 
         binding.actionToolbar.hide()
-        (activity as? MainActivity)?.showBottomNav(visible = true, expand = true)
+        (activity as? MainActivity)?.showBottomNav(true)
 
         actionMode = null
     }

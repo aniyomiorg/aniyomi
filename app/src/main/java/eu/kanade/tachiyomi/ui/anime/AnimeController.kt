@@ -102,10 +102,8 @@ import eu.kanade.tachiyomi.util.view.snack
 import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import reactivecircus.flowbinding.recyclerview.scrollEvents
 import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
 import rx.schedulers.Schedulers
@@ -200,6 +198,16 @@ class AnimeController :
 
     private val db: AnimeDatabaseHelper = Injekt.get()
 
+    /**
+     * For [recyclerViewUpdatesToolbarTitleAlpha]
+     */
+    private var recyclerViewToolbarTitleAlphaUpdaterAdded = false
+    private val recyclerViewToolbarTitleAlphaUpdater = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            updateToolbarTitleAlpha()
+        }
+    }
+
     init {
         setHasOptionsMenu(true)
     }
@@ -210,15 +218,12 @@ class AnimeController :
 
     override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
         super.onChangeStarted(handler, type)
-
         // Hide toolbar title on enter
-        if (type.isEnter) {
-            updateToolbarTitleAlpha()
-        } else if (!type.isPush) {
-            // Cancel listeners early
-            viewScope.cancel()
-            updateToolbarTitleAlpha(1F)
+        // No need to update alpha for cover dialog
+        if (dialog == null) {
+            updateToolbarTitleAlpha(if (type.isEnter) 0F else 1F)
         }
+        recyclerViewUpdatesToolbarTitleAlpha(type.isEnter)
     }
 
     override fun onChangeEnded(handler: ControllerChangeHandler, type: ControllerChangeType) {
@@ -269,19 +274,15 @@ class AnimeController :
         binding.fullRecycler?.let {
             it.adapter = ConcatAdapter(animeInfoAdapter, episodesHeaderAdapter, episodesAdapter)
 
-            it.scrollEvents()
-                .onEach { updateToolbarTitleAlpha() }
-                .launchIn(viewScope)
-
             // Skips directly to chapters list if navigated to from the library
             it.post {
                 if (!fromSource && preferences.jumpToChapters()) {
-                    (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(1, 0)
-                }
-
-                // Delayed in case we need to jump to chapters
-                it.post {
-                    updateToolbarTitleAlpha()
+                    val mainActivityAppBar = (activity as? MainActivity)?.binding?.appbar
+                    (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
+                        1,
+                        mainActivityAppBar?.height ?: 0
+                    )
+                    mainActivityAppBar?.isLifted = true
                 }
             }
 
@@ -318,22 +319,10 @@ class AnimeController :
                 }
             }
         }
+
         // Tablet layout
-        binding.infoRecycler?.let {
-            it.adapter = animeInfoAdapter
-
-            it.scrollEvents()
-                .onEach { updateToolbarTitleAlpha() }
-                .launchIn(viewScope)
-
-            // Delayed in case we need to jump to episodes
-            it.post {
-                updateToolbarTitleAlpha()
-            }
-        }
-        binding.chaptersRecycler?.let {
-            it.adapter = ConcatAdapter(episodesHeaderAdapter, episodesAdapter)
-        }
+        binding.infoRecycler?.adapter = animeInfoAdapter
+        binding.chaptersRecycler?.adapter = ConcatAdapter(episodesHeaderAdapter, episodesAdapter)
 
         episodesAdapter?.fastScroller = binding.fastScroller
 
@@ -358,6 +347,20 @@ class AnimeController :
         trackSheet = TrackSheet(this, anime!!, (activity as MainActivity).supportFragmentManager)
 
         updateFilterIconState()
+        recyclerViewUpdatesToolbarTitleAlpha(true)
+    }
+
+    private fun recyclerViewUpdatesToolbarTitleAlpha(enable: Boolean) {
+        val recycler = binding.fullRecycler ?: binding.infoRecycler ?: return
+        if (enable) {
+            if (!recyclerViewToolbarTitleAlphaUpdaterAdded) {
+                recycler.addOnScrollListener(recyclerViewToolbarTitleAlphaUpdater)
+                recyclerViewToolbarTitleAlphaUpdaterAdded = true
+            }
+        } else if (recyclerViewToolbarTitleAlphaUpdaterAdded) {
+            recycler.removeOnScrollListener(recyclerViewToolbarTitleAlphaUpdater)
+            recyclerViewToolbarTitleAlphaUpdaterAdded = false
+        }
     }
 
     private fun updateToolbarTitleAlpha(@FloatRange(from = 0.0, to = 1.0) alpha: Float? = null) {
@@ -418,6 +421,7 @@ class AnimeController :
     }
 
     override fun onDestroyView(view: View) {
+        recyclerViewUpdatesToolbarTitleAlpha(false)
         destroyActionModeIfNeeded()
         binding.actionToolbar.destroy()
         animeInfoAdapter = null

@@ -383,7 +383,7 @@ class AnimelibController(
                 actionMode!!,
                 R.menu.library_selection
             ) { onActionItemClicked(it!!) }
-            (activity as? MainActivity)?.showBottomNav(visible = false, expand = true)
+            (activity as? MainActivity)?.showBottomNav(false)
         }
     }
 
@@ -492,7 +492,7 @@ class AnimelibController(
         selectionRelay.call(AnimelibSelectionEvent.Cleared())
 
         binding.actionToolbar.hide()
-        (activity as? MainActivity)?.showBottomNav(visible = true, expand = true)
+        (activity as? MainActivity)?.showBottomNav(true)
 
         actionMode = null
     }

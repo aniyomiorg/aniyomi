@@ -32,7 +32,7 @@ class DownloadTabsController() :
     override fun createBinding(inflater: LayoutInflater) = PagerControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
-        (activity as? MainActivity)?.showBottomNav(visible = false, expand = true)
+        (activity as? MainActivity)?.showBottomNav(false)
         super.onViewCreated(view)
 
         adapter = DownloadTabsAdapter()
@@ -42,7 +42,7 @@ class DownloadTabsController() :
     override fun onDestroyView(view: View) {
         super.onDestroyView(view)
         adapter = null
-        (activity as? MainActivity)?.showBottomNav(visible = true, expand = true)
+        (activity as? MainActivity)?.showBottomNav(true)
     }
 
     override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
