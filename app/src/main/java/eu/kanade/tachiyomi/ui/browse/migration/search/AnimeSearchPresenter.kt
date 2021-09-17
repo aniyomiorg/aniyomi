@@ -108,19 +108,18 @@ class AnimeSearchPresenter(
                 val prevAnimeEpisodes = db.getEpisodes(prevAnime).executeAsBlocking()
                 val maxEpisodeRead = prevAnimeEpisodes
                     .filter { it.seen }
-                    .maxOfOrNull { it.episode_number }
-                if (maxEpisodeRead != null) {
-                    val dbEpisodes = db.getEpisodes(anime).executeAsBlocking()
-                    for (episode in dbEpisodes) {
-                        if (episode.isRecognizedNumber) {
-                            val prevEpisode = prevAnimeEpisodes
-                                .find { it.isRecognizedNumber && it.episode_number == episode.episode_number }
-                            if (prevEpisode != null) {
-                                episode.date_fetch = prevEpisode.date_fetch
-                                episode.bookmark = prevEpisode.bookmark
-                            } else if (episode.episode_number <= maxEpisodeRead) {
-                                episode.seen = true
-                            }
+                    .maxOfOrNull { it.episode_number } ?: 0f
+                val dbEpisodes = db.getEpisodes(anime).executeAsBlocking()
+                for (episode in dbEpisodes) {
+                    if (episode.isRecognizedNumber) {
+                        val prevEpisode = prevAnimeEpisodes
+                            .find { it.isRecognizedNumber && it.episode_number == episode.episode_number }
+                        if (prevEpisode != null) {
+                            episode.date_fetch = prevEpisode.date_fetch
+                            episode.bookmark = prevEpisode.bookmark
+                        }
+                        if (episode.episode_number <= maxEpisodeRead) {
+                            episode.seen = true
                         }
                     }
                     db.insertEpisodes(dbEpisodes).executeAsBlocking()
