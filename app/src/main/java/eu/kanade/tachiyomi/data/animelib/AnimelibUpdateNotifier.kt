@@ -51,7 +51,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
      * Cached progress notification to avoid creating a lot.
      */
     val progressNotificationBuilder by lazy {
-        context.notificationBuilder(Notifications.CHANNEL_LIBRARY) {
+        context.notificationBuilder(Notifications.CHANNEL_LIBRARY_PROGRESS) {
             setContentTitle(context.getString(R.string.app_name))
             setSmallIcon(R.drawable.ic_refresh_24dp)
             setLargeIcon(notificationBitmap)
@@ -81,7 +81,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
         }
 
         context.notificationManager.notify(
-            Notifications.ID_ANIMELIB_PROGRESS,
+            Notifications.ID_LIBRARY_PROGRESS,
             progressNotificationBuilder
                 .setProgress(total, current, false)
                 .build()
@@ -101,7 +101,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
 
         context.notificationManager.notify(
             Notifications.ID_LIBRARY_ERROR,
-            context.notificationBuilder(Notifications.CHANNEL_LIBRARY) {
+            context.notificationBuilder(Notifications.CHANNEL_LIBRARY_ERROR) {
                 setContentTitle(context.resources.getQuantityString(R.plurals.notification_update_error, errors.size, errors.size))
                 setStyle(
                     NotificationCompat.BigTextStyle().bigText(
@@ -232,7 +232,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
      * Cancels the progress notification.
      */
     fun cancelProgressNotification() {
-        context.notificationManager.cancel(Notifications.ID_ANIMELIB_PROGRESS)
+        context.notificationManager.cancel(Notifications.ID_LIBRARY_PROGRESS)
     }
 
     private suspend fun getAnimeIcon(anime: Anime): Bitmap? {

@@ -44,6 +44,9 @@ class AnimeExtensionDetailsHeaderAdapter(private val presenter: AnimeExtensionDe
             binding.btnUninstall.clicks()
                 .onEach { presenter.uninstallExtension() }
                 .launchIn(presenter.presenterScope)
+            binding.btnAppInfo.clicks()
+                .onEach { presenter.openInSettings() }
+                .launchIn(presenter.presenterScope)
 
             if (extension.isObsolete) {
                 binding.warningBanner.isVisible = true

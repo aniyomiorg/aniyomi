@@ -162,7 +162,7 @@ class AnimelibUpdateService(
         notifier = AnimelibUpdateNotifier(this)
         wakeLock = acquireWakeLock(javaClass.name)
 
-        startForeground(Notifications.ID_ANIMELIB_PROGRESS, notifier.progressNotificationBuilder.build())
+        startForeground(Notifications.ID_LIBRARY_PROGRESS, notifier.progressNotificationBuilder.build())
     }
 
     /**
@@ -350,7 +350,7 @@ class AnimelibUpdateService(
             }
         }
 
-        if (preferences.showLibraryUpdateErrors() && failedUpdates.isNotEmpty()) {
+        if (failedUpdates.isNotEmpty()) {
             val errorFile = writeErrorFile(failedUpdates)
             notifier.showUpdateErrorNotification(
                 failedUpdates.map { it.first.title },
