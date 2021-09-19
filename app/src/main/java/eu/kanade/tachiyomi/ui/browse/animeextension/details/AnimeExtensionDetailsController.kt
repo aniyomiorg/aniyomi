@@ -206,7 +206,7 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
     }
 
     private fun openCommitHistory() {
-        val pkgName = presenter.extension!!.pkgName.substringAfter("eu.kanade.tachiyomi.extension.")
+        val pkgName = presenter.extension!!.pkgName.substringAfter("eu.kanade.tachiyomi.animeextension.")
         val pkgFactory = presenter.extension!!.pkgFactory
         val url = when {
             !pkgFactory.isNullOrEmpty() -> "$URL_EXTENSION_COMMITS/multisrc/src/main/java/eu/kanade/tachiyomi/multisrc/$pkgFactory"
@@ -227,4 +227,4 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
 }
 
 private const val PKGNAME_KEY = "pkg_name"
-private const val URL_EXTENSION_COMMITS = "https://github.com/tachiyomiorg/tachiyomi-extensions/commits/master"
+private const val URL_EXTENSION_COMMITS = "https://github.com/jmir1/aniyomi-extensions/commits/master"
