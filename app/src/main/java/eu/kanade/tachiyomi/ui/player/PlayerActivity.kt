@@ -109,7 +109,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var episode: Episode
     private lateinit var anime: Anime
     private lateinit var source: AnimeSource
-    private lateinit var userAgentString: String
+    private val defaultUserAgentString = WebSettings.getDefaultUserAgent(this)
     private lateinit var uri: String
     private var videos = emptyList<Video>()
     private lateinit var videoListObservable: Observable<Observable<List<Video>>>
@@ -170,7 +170,6 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun initDummyPlayer() {
-        userAgentString = WebSettings.getDefaultUserAgent(this)
         mediaSourceFactory = DefaultMediaSourceFactory(DefaultDataSourceFactory(this))
         exoPlayer = newPlayer()
         dbProvider = ExoDatabaseProvider(baseContext)
@@ -224,10 +223,15 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun newDataSourceFactory(): DefaultHttpDataSource.Factory {
         return DefaultHttpDataSource.Factory().apply {
-            val headers = (source as AnimeHttpSource).headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }.toMutableMap()
-            userAgentString = (source as AnimeHttpSource).headers["User-Agent"] ?: ""
+            val currentHeaders = videos[currentQuality].headers
+            val headers = currentHeaders?.toMultimap()
+                ?.mapValues { it.value.getOrNull(0) ?: "" }
+                ?.toMutableMap()
+                ?: (source as AnimeHttpSource).headers.toMultimap()
+                    .mapValues { it.value.getOrNull(0) ?: "" }
+                    .toMutableMap()
             setDefaultRequestProperties(headers)
-            setUserAgent(if (userAgentString.isNotEmpty()) userAgentString else headers["User-Agent"])
+            setUserAgent(headers["user-agent"] ?: defaultUserAgentString)
         }
     }
 
@@ -457,22 +461,6 @@ class PlayerActivity : AppCompatActivity() {
             .setMimeType(getMime(uri))
             .build()
         changePlayer(exoPlayer.currentPosition, isLocal)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_COOKIES && resultCode == REQUEST_COOKIES) {
-            val cookies = data?.data.toString()
-            userAgentString = data?.getStringExtra("User-Agent")!!
-            dataSourceFactory = DefaultHttpDataSource.Factory()
-                .setUserAgent(userAgentString)
-                .setDefaultRequestProperties(mapOf(Pair("cookie", cookies)))
-            cacheFactory = CacheDataSource.Factory().apply {
-                setCache(simpleCache)
-                setUpstreamDataSourceFactory(dataSourceFactory)
-            }
-            mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
-        }
     }
 
     private fun changePlayer(resumeAt: Long, isLocal: Boolean) {

@@ -244,7 +244,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         return client.newCall(videoListRequest(episode))
             .asObservableSuccess()
             .map { response ->
-                videoListParse(response)
+                videoListParse(response).sort()
             }
     }
 
@@ -264,6 +264,13 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param response the response from the site.
      */
     protected abstract fun videoListParse(response: Response): List<Video>
+
+    /**
+     * Sorts the video list. Override this according to the user's preference.
+     */
+    protected open fun List<Video>.sort(): List<Video> {
+        return this
+    }
 
     /**
      * Returns an observable with the page containing the source url of the image. If there's any

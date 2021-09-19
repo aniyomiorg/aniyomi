@@ -1033,7 +1033,7 @@ class AnimeController :
                             putExtra("title", anime!!.title + " - " + episode.name)
                             putExtra("position", episode.last_second_seen.toInt())
                             putExtra("return_result", true)
-                            val headers = (source as? AnimeHttpSource)?.headers
+                            val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
                             if (headers != null) {
                                 var headersArray = arrayOf<String>()
                                 for (header in headers) {
@@ -1054,7 +1054,7 @@ class AnimeController :
                             } else if (pkgName.startsWith("com.mxtech.videoplayer")) {
                                 setClassName(pkgName, "$pkgName.ActivityScreen")
                             }
-                            val headers = (source as? AnimeHttpSource)?.headers
+                            val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
                             if (headers != null) {
                                 var headersArray = arrayOf<String>()
                                 for (header in headers) {

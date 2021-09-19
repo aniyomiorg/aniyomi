@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.animesource.model
 
 import android.net.Uri
 import eu.kanade.tachiyomi.network.ProgressListener
+import okhttp3.Headers
 import rx.subjects.Subject
 import tachiyomi.animesource.model.VideoUrl
 
@@ -9,7 +10,8 @@ open class Video(
     val url: String = "",
     val quality: String = "",
     var videoUrl: String? = null,
-    @Transient var uri: Uri? = null // Deprecated but can't be deleted due to extensions
+    @Transient var uri: Uri? = null, // Deprecated but can't be deleted due to extensions
+    val headers: Headers? = null
 ) : ProgressListener {
 
     @Transient
