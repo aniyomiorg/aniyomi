@@ -272,18 +272,13 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         throw Exception(context.getString(R.string.episode_not_found))
     }
 
-    private fun getFormat(file: File): Format {
-        val extension = file.extension
-        return if (file.isDirectory) {
-            Format.Directory(file)
-        } else if (extension.equals("zip", true) || extension.equals("cbz", true)) {
-            Format.Zip(file)
-        } else if (extension.equals("rar", true) || extension.equals("cbr", true)) {
-            Format.Rar(file)
-        } else if (isSupportedFile(extension)) {
-            Format.Anime(file)
-        } else {
-            throw Exception(context.getString(R.string.local_invalid_episode_format))
+    private fun getFormat(file: File) = with(file) {
+        when {
+            isDirectory -> Format.Directory(this)
+            extension.equals("zip", true) || extension.equals("cbz", true) -> Format.Zip(this)
+            extension.equals("rar", true) || extension.equals("cbr", true) -> Format.Rar(this)
+            SUPPORTED_FILE_TYPES.contains(extension.lowercase(Locale.ENGLISH)) -> Format.Anime(this)
+            else -> throw Exception(context.getString(R.string.local_invalid_episode_format))
         }
     }
 

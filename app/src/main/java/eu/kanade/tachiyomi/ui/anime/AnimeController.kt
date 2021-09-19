@@ -631,6 +631,9 @@ class AnimeController :
      */
     private fun toggleFavorite() {
         val isNowFavorite = presenter.toggleFavorite()
+        if (isNowFavorite) {
+            addSnackbar?.dismiss()
+        }
         if (activity != null && !isNowFavorite && presenter.hasDownloads()) {
             (activity as? MainActivity)?.binding?.rootCoordinator?.snack(activity!!.getString(R.string.delete_downloads_for_anime)) {
                 setAction(R.string.action_delete) {
@@ -638,7 +641,6 @@ class AnimeController :
                 }
             }
         }
-
         animeInfoAdapter?.notifyDataSetChanged()
     }
 
@@ -1293,7 +1295,7 @@ class AnimeController :
         val anime = presenter.anime
         presenter.downloadEpisodes(episodes)
         if (view != null && !anime.favorite) {
-            addSnackbar = (activity as? MainActivity)?.binding?.rootCoordinator?.snack(view.context.getString(R.string.snack_add_to_animelib), Snackbar.LENGTH_INDEFINITE) {
+            addSnackbar = (activity as? MainActivity)?.binding?.rootCoordinator?.snack(view.context.getString(R.string.snack_add_to_animelib)) {
                 setAction(R.string.action_add) {
                     if (!anime.favorite) {
                         addToAnimelib(anime)
@@ -1314,7 +1316,7 @@ class AnimeController :
         val anime = presenter.anime
         presenter.downloadEpisodesExternally(episodes)
         if (view != null && !anime.favorite) {
-            addSnackbar = (activity as? MainActivity)?.binding?.rootCoordinator?.snack(view.context.getString(R.string.snack_add_to_animelib), Snackbar.LENGTH_INDEFINITE) {
+            addSnackbar = (activity as? MainActivity)?.binding?.rootCoordinator?.snack(view.context.getString(R.string.snack_add_to_animelib)) {
                 setAction(R.string.action_add) {
                     if (!anime.favorite) {
                         addToAnimelib(anime)
