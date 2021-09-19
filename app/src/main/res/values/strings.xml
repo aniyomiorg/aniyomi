@@ -8,7 +8,9 @@
     <string name="general_categories">Categories</string>
     <string name="anime_categories">Anime Categories</string>
     <string name="manga">Manga</string>
+    <string name="manga_anime">Library entries</string>
     <string name="chapters">Chapters</string>
+    <string name="chapters_episodes">Chapters and episodes</string>
     <string name="episodes">Episodes</string>
     <string name="track">Tracking</string>
     <string name="history">History</string>
