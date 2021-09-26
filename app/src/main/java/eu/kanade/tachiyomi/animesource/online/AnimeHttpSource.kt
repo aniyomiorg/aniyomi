@@ -318,7 +318,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param video the video whose link has to be fetched
      */
     protected open fun videoRequest(video: Video): Request {
-        return GET(video.videoUrl!!, headers)
+        return GET(video.videoUrl!!, video.headers ?: headers)
     }
 
     /**
