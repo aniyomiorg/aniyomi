@@ -144,7 +144,7 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
                                         block()
                                         onSettingsClick = View.OnClickListener {
                                             router.pushController(
-                                                SourcePreferencesController(source.id).withFadeTransaction()
+                                                AnimeSourcePreferencesController(source.id).withFadeTransaction()
                                             )
                                         }
                                     }

@@ -5,10 +5,10 @@ import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class SourcePreferencesPresenter(
+class AnimeSourcePreferencesPresenter(
     val sourceId: Long,
     sourceManager: AnimeSourceManager = Injekt.get()
-) : BasePresenter<SourcePreferencesController>() {
+) : BasePresenter<AnimeSourcePreferencesController>() {
 
     val source = sourceManager.get(sourceId)
 }

@@ -44,8 +44,9 @@ open class AnimeExtensionPresenter(
         val untrustedObservable = extensionManager.getUntrustedExtensionsObservable()
         val availableObservable = extensionManager.getAvailableExtensionsObservable()
             .startWith(emptyList<AnimeExtension.Available>())
+
         return Observable.combineLatest(installedObservable, untrustedObservable, availableObservable) { installed, untrusted, available -> Triple(installed, untrusted, available) }
-            .debounce(500, TimeUnit.MILLISECONDS)
+            .debounce(100, TimeUnit.MILLISECONDS)
             .map(::toItems)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeLatestCache({ view, _ -> view.setExtensions(extensions) })

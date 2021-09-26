@@ -13,7 +13,7 @@ import androidx.core.net.toUri
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.extension.installer.Installer
+import eu.kanade.tachiyomi.extension.installer.InstallerAnime
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.model.InstallStep
 import eu.kanade.tachiyomi.util.storage.getUriCompat
@@ -142,7 +142,7 @@ internal class AnimeExtensionInstaller(private val context: Context) {
                 context.startActivity(intent)
             }
             else -> {
-                val intent = ExtensionInstallService.getIntent(context, downloadId, uri, installer)
+                val intent = AnimeExtensionInstallService.getIntent(context, downloadId, uri, installer)
                 ContextCompat.startForegroundService(context, intent)
             }
         }
@@ -154,7 +154,7 @@ internal class AnimeExtensionInstaller(private val context: Context) {
     fun cancelInstall(pkgName: String) {
         val downloadId = activeDownloads.remove(pkgName) ?: return
         downloadManager.remove(downloadId)
-        Installer.cancelInstallQueue(context, downloadId)
+        InstallerAnime.cancelInstallQueue(context, downloadId)
     }
 
     /**

@@ -24,7 +24,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.getPreferenceKey
-import eu.kanade.tachiyomi.data.preference.EmptyPreferenceDataStore
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
 import eu.kanade.tachiyomi.databinding.SourcePreferencesControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
@@ -32,8 +31,8 @@ import eu.kanade.tachiyomi.widget.TachiyomiTextInputEditText.Companion.setIncogn
 import timber.log.Timber
 
 @SuppressLint("RestrictedApi")
-class SourcePreferencesController(bundle: Bundle? = null) :
-    NucleusController<SourcePreferencesControllerBinding, SourcePreferencesPresenter>(bundle),
+class AnimeSourcePreferencesController(bundle: Bundle? = null) :
+    NucleusController<SourcePreferencesControllerBinding, AnimeSourcePreferencesPresenter>(bundle),
     PreferenceManager.OnDisplayPreferenceDialogListener,
     DialogPreference.TargetFragment {
 
@@ -50,8 +49,8 @@ class SourcePreferencesController(bundle: Bundle? = null) :
         return SourcePreferencesControllerBinding.inflate(themedInflater)
     }
 
-    override fun createPresenter(): SourcePreferencesPresenter {
-        return SourcePreferencesPresenter(args.getLong(SOURCE_ID))
+    override fun createPresenter(): AnimeSourcePreferencesPresenter {
+        return AnimeSourcePreferencesPresenter(args.getLong(SOURCE_ID))
     }
 
     override fun getTitle(): String? {
@@ -67,7 +66,10 @@ class SourcePreferencesController(bundle: Bundle? = null) :
 
         val themedContext by lazy { getPreferenceThemeContext() }
         val manager = PreferenceManager(themedContext)
-        manager.preferenceDataStore = EmptyPreferenceDataStore()
+        val dataStore = SharedPreferencesDataStore(
+            context.getSharedPreferences(source.getPreferenceKey(), Context.MODE_PRIVATE)
+        )
+        manager.preferenceDataStore = dataStore
         manager.onDisplayPreferenceDialogListener = this
         val screen = manager.createPreferenceScreen(themedContext)
         preferenceScreen = screen
@@ -102,10 +104,6 @@ class SourcePreferencesController(bundle: Bundle? = null) :
     private fun addPreferencesForSource(screen: PreferenceScreen, source: AnimeSource) {
         val context = screen.context
 
-        val dataStore = SharedPreferencesDataStore(
-            context.getSharedPreferences(source.getPreferenceKey(), Context.MODE_PRIVATE)
-        )
-
         if (source is ConfigurableAnimeSource) {
             val newScreen = screen.preferenceManager.createPreferenceScreen(context)
             source.setupPreferenceScreen(newScreen)
@@ -114,7 +112,6 @@ class SourcePreferencesController(bundle: Bundle? = null) :
             while (newScreen.preferenceCount != 0) {
                 val pref = newScreen.getPreference(0)
                 pref.isIconSpaceReserved = false
-                pref.preferenceDataStore = dataStore
                 pref.order = Int.MAX_VALUE // reset to default order
 
                 // Apply incognito IME for EditTextPreference
