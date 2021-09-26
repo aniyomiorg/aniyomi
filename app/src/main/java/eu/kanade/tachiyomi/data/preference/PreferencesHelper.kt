@@ -18,6 +18,7 @@ import eu.kanade.tachiyomi.ui.library.setting.SortDirectionSetting
 import eu.kanade.tachiyomi.ui.library.setting.SortModeSetting
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
+import eu.kanade.tachiyomi.util.system.MiuiUtil
 import eu.kanade.tachiyomi.util.system.isTablet
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView
 import kotlinx.coroutines.flow.Flow
@@ -385,6 +386,11 @@ class PreferencesHelper(val context: Context) {
     fun tabletUiMode() = flowPrefs.getEnum(
         Keys.tabletUiMode,
         if (context.applicationContext.isTablet()) Values.TabletUiMode.ALWAYS else Values.TabletUiMode.NEVER
+    )
+
+    fun extensionInstaller() = flowPrefs.getEnum(
+        Keys.extensionInstaller,
+        if (MiuiUtil.isMiui()) Values.ExtensionInstaller.LEGACY else Values.ExtensionInstaller.PACKAGEINSTALLER
     )
 
     fun setChapterSettingsDefault(manga: Manga) {

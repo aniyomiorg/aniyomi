@@ -76,14 +76,14 @@ open class AnimeExtensionPresenter(
         if (updatesSorted.isNotEmpty()) {
             val header = AnimeExtensionGroupItem(context.getString(R.string.ext_updates_pending), updatesSorted.size, true)
             items += updatesSorted.map { extension ->
-                AnimeExtensionItem(extension, header, currentDownloads[extension.pkgName])
+                AnimeExtensionItem(extension, header, currentDownloads[extension.pkgName] ?: InstallStep.Idle)
             }
         }
         if (installedSorted.isNotEmpty() || untrustedSorted.isNotEmpty()) {
             val header = AnimeExtensionGroupItem(context.getString(R.string.ext_installed), installedSorted.size + untrustedSorted.size)
 
             items += installedSorted.map { extension ->
-                AnimeExtensionItem(extension, header, currentDownloads[extension.pkgName])
+                AnimeExtensionItem(extension, header, currentDownloads[extension.pkgName] ?: InstallStep.Idle)
             }
 
             items += untrustedSorted.map { extension ->
@@ -99,7 +99,7 @@ open class AnimeExtensionPresenter(
                 .forEach {
                     val header = AnimeExtensionGroupItem(it.key, it.value.size)
                     items += it.value.map { extension ->
-                        AnimeExtensionItem(extension, header, currentDownloads[extension.pkgName])
+                        AnimeExtensionItem(extension, header, currentDownloads[extension.pkgName] ?: InstallStep.Idle)
                     }
                 }
         }
@@ -130,6 +130,10 @@ open class AnimeExtensionPresenter(
 
     fun updateExtension(extension: AnimeExtension.Installed) {
         extensionManager.updateExtension(extension).subscribeToInstallUpdate(extension)
+    }
+
+    fun cancelInstallUpdateExtension(extension: AnimeExtension) {
+        extensionManager.cancelInstallUpdateExtension(extension)
     }
 
     private fun Observable<InstallStep>.subscribeToInstallUpdate(extension: AnimeExtension) {

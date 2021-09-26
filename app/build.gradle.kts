@@ -175,7 +175,7 @@ dependencies {
     implementation("org.conscrypt:conscrypt-android:2.5.2")
 
     // Data serialization (JSON, protobuf)
-    val kotlinSerializationVersion = "1.3.0-RC"
+    val kotlinSerializationVersion = "1.3.0"
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$kotlinSerializationVersion")
 
@@ -260,6 +260,11 @@ dependencies {
 
     // Licenses
     implementation("com.mikepenz:aboutlibraries-core:${BuildPluginsVersion.ABOUTLIB_PLUGIN}")
+
+    // Shizuku
+    val shizukuVersion = "12.0.0"
+    implementation("dev.rikka.shizuku:api:$shizukuVersion")
+    implementation("dev.rikka.shizuku:provider:$shizukuVersion")
 
     // Tests
     testImplementation("junit:junit:4.13.2")

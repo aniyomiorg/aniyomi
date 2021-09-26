@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.browse.animeextension
 
 import android.view.View
+import androidx.core.view.isVisible
 import coil.clear
 import coil.load
 import eu.davidea.viewholders.FlexibleViewHolder
@@ -9,7 +10,6 @@ import eu.kanade.tachiyomi.databinding.ExtensionCardItemBinding
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.model.InstallStep
 import eu.kanade.tachiyomi.util.system.LocaleHelper
-import uy.kohesive.injekt.api.get
 
 class AnimeExtensionHolder(view: View, val adapter: AnimeExtensionAdapter) :
     FlexibleViewHolder(view, adapter) {
@@ -19,6 +19,9 @@ class AnimeExtensionHolder(view: View, val adapter: AnimeExtensionAdapter) :
     init {
         binding.extButton.setOnClickListener {
             adapter.buttonClickListener.onButtonClick(bindingAdapterPosition)
+        }
+        binding.cancelButton.setOnClickListener {
+            adapter.buttonClickListener.onCancelButtonClick(bindingAdapterPosition)
         }
     }
 
@@ -42,44 +45,40 @@ class AnimeExtensionHolder(view: View, val adapter: AnimeExtensionAdapter) :
         } else {
             extension.getApplicationIcon(itemView.context)?.let { binding.image.setImageDrawable(it) }
         }
-        bindButton(item)
+        bindButtons(item)
     }
 
     @Suppress("ResourceType")
-    fun bindButton(item: AnimeExtensionItem) = with(binding.extButton) {
-        isEnabled = true
-        isClickable = true
-
+    fun bindButtons(item: AnimeExtensionItem) = with(binding.extButton) {
         val extension = item.extension
 
         val installStep = item.installStep
-        if (installStep != null) {
-            setText(
-                when (installStep) {
-                    InstallStep.Pending -> R.string.ext_pending
-                    InstallStep.Downloading -> R.string.ext_downloading
-                    InstallStep.Installing -> R.string.ext_installing
-                    InstallStep.Installed -> R.string.ext_installed
-                    InstallStep.Error -> R.string.action_retry
-                }
-            )
-            if (installStep != InstallStep.Error) {
-                isEnabled = false
-                isClickable = false
-            }
-        } else if (extension is AnimeExtension.Installed) {
-            when {
-                extension.hasUpdate -> {
-                    setText(R.string.ext_update)
-                }
-                else -> {
-                    setText(R.string.action_settings)
+        setText(
+            when (installStep) {
+                InstallStep.Pending -> R.string.ext_pending
+                InstallStep.Downloading -> R.string.ext_downloading
+                InstallStep.Installing -> R.string.ext_installing
+                InstallStep.Installed -> R.string.ext_installed
+                InstallStep.Error -> R.string.action_retry
+                InstallStep.Idle -> {
+                    when (extension) {
+                        is AnimeExtension.Installed -> {
+                            if (extension.hasUpdate) {
+                                R.string.ext_update
+                            } else {
+                                R.string.action_settings
+                            }
+                        }
+                        is AnimeExtension.Untrusted -> R.string.ext_trust
+                        is AnimeExtension.Available -> R.string.ext_install
+                    }
                 }
             }
-        } else if (extension is AnimeExtension.Untrusted) {
-            setText(R.string.ext_trust)
-        } else {
-            setText(R.string.ext_install)
-        }
+        )
+
+        val isIdle = installStep == InstallStep.Idle || installStep == InstallStep.Error
+        binding.cancelButton.isVisible = !isIdle
+        isEnabled = isIdle
+        isClickable = isIdle
     }
 }

@@ -19,7 +19,7 @@ import eu.kanade.tachiyomi.extension.model.InstallStep
 data class AnimeExtensionItem(
     val extension: AnimeExtension,
     val header: AnimeExtensionGroupItem? = null,
-    val installStep: InstallStep? = null
+    val installStep: InstallStep = InstallStep.Idle
 ) :
     AbstractSectionableItem<AnimeExtensionHolder, AnimeExtensionGroupItem>(header) {
 
@@ -49,7 +49,7 @@ data class AnimeExtensionItem(
         if (payloads == null || payloads.isEmpty()) {
             holder.bind(this)
         } else {
-            holder.bindButton(this)
+            holder.bindButtons(this)
         }
     }
 

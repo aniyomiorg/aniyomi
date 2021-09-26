@@ -22,5 +22,6 @@ class AnimeExtensionAdapter(controller: AnimeExtensionController) :
 
     interface OnButtonClickListener {
         fun onButtonClick(position: Int)
+        fun onCancelButtonClick(position: Int)
     }
 }

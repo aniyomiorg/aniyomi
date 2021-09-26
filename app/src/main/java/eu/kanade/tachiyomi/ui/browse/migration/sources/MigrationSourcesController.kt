@@ -64,10 +64,24 @@ class MigrationSourcesController :
     }
 
     fun setSources(sourcesWithManga: List<SourceItem>) {
+        // Show empty view if needed
+        if (sourcesWithManga.isNotEmpty()) {
+            binding.emptyView.hide()
+        } else {
+            binding.emptyView.show(R.string.information_empty_library)
+        }
+
         adapter?.updateDataSet(sourcesWithManga)
     }
 
     fun setAnimeSources(sourcesWithAnime: List<AnimeSourceItem>) {
+        // Show empty view if needed
+        if (sourcesWithAnime.isNotEmpty()) {
+            binding.emptyView.hide()
+        } else {
+            binding.emptyView.show(R.string.information_empty_library)
+        }
+
         adapter?.addItems(adapter?.itemCount!!, sourcesWithAnime)
     }
 

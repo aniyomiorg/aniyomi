@@ -119,6 +119,11 @@ open class AnimeExtensionController :
         }
     }
 
+    override fun onCancelButtonClick(position: Int) {
+        val extension = (adapter?.getItem(position) as? AnimeExtensionItem)?.extension ?: return
+        presenter.cancelInstallUpdateExtension(extension)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.browse_extensions, menu)
 
