@@ -306,8 +306,8 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param page the page whose source image has to be downloaded.
      */
-    fun fetchVideo(video: Video, bytes: Long = 0L): Observable<Response> {
-        return client.newCallWithProgress(videoRequest(video, bytes), video)
+    fun fetchVideo(video: Video): Observable<Response> {
+        return client.newCallWithProgress(videoRequest(video, video.totalBytesDownloaded), video)
             .asObservableSuccess()
     }
 

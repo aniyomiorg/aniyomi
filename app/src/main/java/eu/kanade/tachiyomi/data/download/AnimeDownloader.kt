@@ -429,7 +429,7 @@ class AnimeDownloader(
     private fun downloadVideo(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
         video.status = Video.DOWNLOAD_IMAGE
         video.progress = 0
-        return source.fetchVideo(video, video.totalBytesDownloaded)
+        return source.fetchVideo(video)
             .map { response ->
                 val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
                 try {
