@@ -306,8 +306,8 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param page the page whose source image has to be downloaded.
      */
-    fun fetchVideo(video: Video): Observable<Response> {
-        return client.newCallWithProgress(videoRequest(video), video)
+    fun fetchVideo(video: Video, bytes: Long = 0L): Observable<Response> {
+        return client.newCallWithProgress(videoRequest(video, bytes), video)
             .asObservableSuccess()
     }
 
@@ -317,8 +317,12 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param video the video whose link has to be fetched
      */
-    protected open fun videoRequest(video: Video): Request {
-        return GET(video.videoUrl!!, video.headers ?: headers)
+    protected open fun videoRequest(video: Video, bytes: Long = 0L): Request {
+        val headers = video.headers ?: headers
+        val newHeaders = if (bytes > 0L) {
+            Headers.Builder().addAll(headers).add("Range", "bytes=$bytes-").build()
+        } else null
+        return GET(video.videoUrl!!, newHeaders ?: headers)
     }
 
     /**

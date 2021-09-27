@@ -308,10 +308,12 @@ class AnimeDownloader(
 
         videoObservable
             .doOnNext { _ ->
-                // Delete all temporary (unfinished) files
-                tmpDir.listFiles()
-                    ?.filter { it.name!!.endsWith(".tmp") }
-                    ?.forEach { it.delete() }
+                if (download.video?.bytesDownloaded == 0L) {
+                    // Delete all temporary (unfinished) files
+                    tmpDir.listFiles()
+                        ?.filter { it.name!!.endsWith(".tmp") }
+                        ?.forEach { it.delete() }
+                }
 
                 download.downloadedImages = 0
                 download.status = AnimeDownload.State.DOWNLOADING
@@ -375,13 +377,16 @@ class AnimeDownloader(
         }
 
         val filename = DiskUtil.buildValidFilename(download.episode.name)
-        val tmpFile = tmpDir.findFile("$filename.tmp")
 
-        // Delete temp file if it exists.
-        tmpFile?.delete()
+        if (video.bytesDownloaded == 0L) {
+            val tmpFile = tmpDir.findFile("$filename.tmp")
+
+            // Delete temp file if it exists.
+            tmpFile?.delete()
+        }
 
         // Try to find the image file.
-        val videoFile = tmpDir.listFiles()!!.find { it.name!!.startsWith("$filename.") }
+        val videoFile = tmpDir.listFiles()!!.find { it.name!!.startsWith("$filename.mp4") }
 
         // If the video is already downloaded, do nothing. Otherwise download from network
         val pageObservable = when {
@@ -424,17 +429,17 @@ class AnimeDownloader(
     private fun downloadVideo(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
         video.status = Video.DOWNLOAD_IMAGE
         video.progress = 0
-        return source.fetchVideo(video)
+        return source.fetchVideo(video, video.totalBytesDownloaded)
             .map { response ->
-                val file = tmpDir.createFile("$filename.tmp")
+                val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
                 try {
-                    response.body!!.source().saveTo(file.openOutputStream())
+                    response.body!!.source().saveTo(file.openOutputStream(true))
                     // val extension = getImageExtension(response, file)
                     // TODO: support other file formats!!
                     file.renameTo("$filename.mp4")
                 } catch (e: Exception) {
                     response.close()
-                    file.delete()
+                    // file.delete()
                     throw e
                 }
                 file

@@ -32,14 +32,39 @@ open class Video(
         }
 
     @Transient
+    @Volatile
+    var totalBytesDownloaded: Long = 0L
+
+    @Transient
+    @Volatile
+    var totalContentLength: Long = 0L
+
+    @Transient
+    @Volatile
+    var bytesDownloaded: Long = 0L
+        set(value) {
+            totalBytesDownloaded += if (value < field) {
+                value
+            } else {
+                value - field
+            }
+            field = value
+            statusCallback?.invoke(this)
+        }
+
+    @Transient
     private var statusSubject: Subject<Int, Int>? = null
 
     @Transient
     private var statusCallback: ((Video) -> Unit)? = null
 
     override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
-        progress = if (contentLength > 0) {
-            (100 * bytesRead / contentLength).toInt()
+        bytesDownloaded = bytesRead
+        if (contentLength > totalContentLength) {
+            totalContentLength = contentLength
+        }
+        progress = if (totalContentLength > 0) {
+            (100 * totalBytesDownloaded / totalContentLength).toInt()
         } else {
             -1
         }
