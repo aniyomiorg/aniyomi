@@ -65,6 +65,8 @@ object PreferenceKeys {
 
     const val progressPreference = "pref_progress_preference"
 
+    const val skipLengthPreference = "pref_skip_length_preference"
+
     const val alwaysUseExternalPlayer = "pref_always_use_external_player"
 
     const val externalPlayerPreference = "external_player_preference"

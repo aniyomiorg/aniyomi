@@ -42,6 +42,26 @@ class SettingsPlayerController : SettingsController() {
 
                 summary = "%s"
             }
+            listPreference {
+                key = Keys.skipLengthPreference
+                titleRes = R.string.pref_skip_length
+
+                entriesRes = arrayOf(
+                    R.string.pref_skip_30,
+                    R.string.pref_skip_20,
+                    R.string.pref_skip_10,
+                    R.string.pref_skip_5
+                )
+                entryValues = arrayOf(
+                    "30",
+                    "20",
+                    "10",
+                    "5"
+                )
+                defaultValue = "10"
+
+                summary = "%s"
+            }
             switchPreference {
                 key = Keys.alwaysUseExternalPlayer
                 titleRes = R.string.pref_always_use_external_player

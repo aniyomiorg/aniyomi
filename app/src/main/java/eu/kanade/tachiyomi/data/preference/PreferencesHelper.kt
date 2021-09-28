@@ -150,6 +150,8 @@ class PreferencesHelper(val context: Context) {
 
     fun progressPreference() = prefs.getString(Keys.progressPreference, "0.85F")!!.toFloat()
 
+    fun skipLengthPreference() = prefs.getString(Keys.skipLengthPreference, "10")!!.toInt()
+
     fun imageScaleType() = flowPrefs.getInt(Keys.imageScaleType, 1)
 
     fun zoomStart() = flowPrefs.getInt(Keys.zoomStart, 1)

@@ -135,6 +135,7 @@ class PlayerActivity : AppCompatActivity() {
         }
         playerView = findViewById(R.id.player_view)
         youTubeDoubleTap = findViewById(R.id.youtube_overlay)
+        youTubeDoubleTap.seekSeconds(preferences.skipLengthPreference())
         youTubeDoubleTap
             .performListener(object : YouTubeOverlay.PerformListener {
                 override fun onAnimationStart() {
