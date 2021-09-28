@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.ui.base.controller.NoAppBarElevationController
@@ -46,8 +48,11 @@ class MoreController :
     NoAppBarElevationController {
 
     private val downloadManager: DownloadManager by injectLazy()
+    private val animedownloadManager: AnimeDownloadManager by injectLazy()
     private var isDownloading: Boolean = false
+    private var isDownloadingAnime: Boolean = false
     private var downloadQueueSize: Int = 0
+    private var downloadQueueSizeAnime: Int = 0
 
     private var untilDestroySubscriptions = CompositeSubscription()
         private set
@@ -93,7 +98,7 @@ class MoreController :
             preference {
                 titleRes = R.string.label_download_queue
 
-                if (downloadManager.queue.isNotEmpty()) {
+                if (downloadManager.queue.isNotEmpty() || animedownloadManager.queue.isNotEmpty()) {
                     initDownloadQueueSummary(this)
                 }
 
@@ -179,6 +184,13 @@ class MoreController :
                 updateDownloadQueueSummary(preference)
             }
 
+        AnimeDownloadService.runningRelay
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeUntilDestroy { isRunning ->
+                isDownloadingAnime = isRunning
+                updateDownloadQueueSummary(preference)
+            }
+
         // Handle queue progress updating
         downloadManager.queue.getUpdatedObservable()
             .observeOn(AndroidSchedulers.mainThread())
@@ -186,13 +198,20 @@ class MoreController :
                 downloadQueueSize = it.size
                 updateDownloadQueueSummary(preference)
             }
+
+        animedownloadManager.queue.getUpdatedObservable()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeUntilDestroy {
+                downloadQueueSizeAnime = it.size
+                updateDownloadQueueSummary(preference)
+            }
     }
 
     private fun updateDownloadQueueSummary(preference: Preference) {
         preference.summary = when {
-            downloadQueueSize == 0 -> null
-            !isDownloading -> resources?.getString(R.string.paused)
-            else -> resources?.getQuantityString(R.plurals.download_queue_summary, downloadQueueSize, downloadQueueSize)
+            downloadQueueSize + downloadQueueSizeAnime == 0 -> null
+            !isDownloading && !isDownloadingAnime -> resources?.getString(R.string.paused)
+            else -> resources?.getQuantityString(R.plurals.download_queue_summary, downloadQueueSize + downloadQueueSizeAnime, downloadQueueSize + downloadQueueSizeAnime)
         }
     }
 

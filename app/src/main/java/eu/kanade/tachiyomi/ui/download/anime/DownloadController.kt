@@ -284,7 +284,7 @@ class DownloadController :
     /**
      * Set information view when queue is empty
      */
-    private fun setInformationView() {
+    fun setInformationView() {
         if (presenter.downloadQueue.isEmpty()) {
             binding.emptyView.show(R.string.information_no_downloads)
             actionFab?.isVisible = false
