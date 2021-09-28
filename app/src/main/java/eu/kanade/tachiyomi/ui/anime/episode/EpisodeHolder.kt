@@ -11,6 +11,8 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.databinding.EpisodesItemBinding
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodeHolder
 import eu.kanade.tachiyomi.util.lang.toRelativeString
+import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -98,6 +100,16 @@ class EpisodeHolder(
         }
 
         binding.animedownload.isVisible = item.anime.source != LocalAnimeSource.ID
-        binding.animedownload.setState(item.status, item.progress)
+        Observable.interval(50, TimeUnit.MILLISECONDS)
+            .flatMap {
+                Observable.just(item)
+            }
+            // Keep only the latest emission to avoid backpressure.
+            .onBackpressureLatest()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                // Update the view
+                binding.animedownload.setState(item.status, it.progress)
+            }
     }
 }
