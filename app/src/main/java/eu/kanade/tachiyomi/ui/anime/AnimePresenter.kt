@@ -110,6 +110,7 @@ class AnimePresenter(
      */
     private var observeDownloadsStatusSubscription: Subscription? = null
     private var observeDownloadsPageSubscription: Subscription? = null
+    private var observeDownloadsProgressSubscription: Subscription? = null
 
     private var _trackList: List<TrackItem> = emptyList()
     val trackList get() = _trackList
@@ -443,6 +444,16 @@ class AnimePresenter(
         observeDownloadsPageSubscription = downloadManager.queue.getProgressObservable()
             .observeOn(Schedulers.io())
             .onBackpressureBuffer()
+            .filter { download -> download.anime.id == anime.id }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeLatestAnimeCache(AnimeController::onEpisodeDownloadUpdate) { _, error ->
+                Timber.e(error)
+            }
+
+        observeDownloadsProgressSubscription?.let { remove(it) }
+        observeDownloadsProgressSubscription = downloadManager.queue.getPreciseProgressObservable()
+            .observeOn(Schedulers.io())
+            .onBackpressureLatest()
             .filter { download -> download.anime.id == anime.id }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeLatestAnimeCache(AnimeController::onEpisodeDownloadUpdate) { _, error ->

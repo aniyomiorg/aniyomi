@@ -16,12 +16,16 @@ class AnimeDownloadQueue(
 
     private val statusSubject = PublishSubject.create<AnimeDownload>()
 
+    private val progressSubject = PublishSubject.create<AnimeDownload>()
+
     private val updatedRelay = PublishRelay.create<Unit>()
 
     fun addAll(downloads: List<AnimeDownload>) {
         downloads.forEach { download ->
             download.setStatusSubject(statusSubject)
+            download.setProgressSubject(progressSubject)
             download.setStatusCallback(::setPagesFor)
+            download.setProgressCallback(::setProgressFor)
             download.status = AnimeDownload.State.QUEUE
         }
         queue.addAll(downloads)
@@ -33,7 +37,9 @@ class AnimeDownloadQueue(
         val removed = queue.remove(download)
         store.remove(download)
         download.setStatusSubject(null)
+        download.setProgressSubject(null)
         download.setStatusCallback(null)
+        download.setProgressCallback(null)
         if (download.status == AnimeDownload.State.DOWNLOADING || download.status == AnimeDownload.State.QUEUE) {
             download.status = AnimeDownload.State.NOT_DOWNLOADED
         }
@@ -59,7 +65,9 @@ class AnimeDownloadQueue(
     fun clear() {
         queue.forEach { download ->
             download.setStatusSubject(null)
+            download.setProgressSubject(null)
             download.setStatusCallback(null)
+            download.setProgressCallback(null)
             if (download.status == AnimeDownload.State.DOWNLOADING || download.status == AnimeDownload.State.QUEUE) {
                 download.status = AnimeDownload.State.NOT_DOWNLOADED
             }
@@ -103,7 +111,21 @@ class AnimeDownloadQueue(
             .filter { it.status == AnimeDownload.State.DOWNLOADING }
     }
 
+    fun getPreciseProgressObservable(): Observable<AnimeDownload> {
+        return progressSubject.onBackpressureLatest()
+    }
+
     private fun setPagesSubject(video: Video?, subject: PublishSubject<Int>?) {
         video?.setStatusSubject(subject)
+    }
+
+    private fun setProgressFor(download: AnimeDownload) {
+        if (download.status == AnimeDownload.State.DOWNLOADED || download.status == AnimeDownload.State.ERROR) {
+            setProgressSubject(download.video, null)
+        }
+    }
+
+    private fun setProgressSubject(video: Video?, subject: PublishSubject<Int>?) {
+        video?.setProgressSubject(subject)
     }
 }

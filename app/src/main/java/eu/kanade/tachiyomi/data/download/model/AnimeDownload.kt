@@ -13,6 +13,11 @@ class AnimeDownload(val source: AnimeHttpSource, val anime: Anime, val episode: 
     @Volatile
     @Transient
     var totalProgress: Int = 0
+        set(progress) {
+            field = progress
+            progressSubject?.onNext(this)
+            progressCallback?.invoke(this)
+        }
 
     @Volatile
     @Transient
@@ -31,7 +36,13 @@ class AnimeDownload(val source: AnimeHttpSource, val anime: Anime, val episode: 
     private var statusSubject: PublishSubject<AnimeDownload>? = null
 
     @Transient
+    private var progressSubject: PublishSubject<AnimeDownload>? = null
+
+    @Transient
     private var statusCallback: ((AnimeDownload) -> Unit)? = null
+
+    @Transient
+    private var progressCallback: ((AnimeDownload) -> Unit)? = null
 
     val progress: Int
         get() {
@@ -43,8 +54,16 @@ class AnimeDownload(val source: AnimeHttpSource, val anime: Anime, val episode: 
         statusSubject = subject
     }
 
+    fun setProgressSubject(subject: PublishSubject<AnimeDownload>?) {
+        progressSubject = subject
+    }
+
     fun setStatusCallback(f: ((AnimeDownload) -> Unit)?) {
         statusCallback = f
+    }
+
+    fun setProgressCallback(f: ((AnimeDownload) -> Unit)?) {
+        progressCallback = f
     }
 
     enum class State(val value: Int) {

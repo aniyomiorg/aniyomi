@@ -64,6 +64,14 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
             .subscribeLatestCache(AnimeUpdatesController::onEpisodeDownloadUpdate) { _, error ->
                 Timber.e(error)
             }
+
+        downloadManager.queue.getPreciseProgressObservable()
+            .observeOn(Schedulers.io())
+            .onBackpressureLatest()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeLatestCache(AnimeUpdatesController::onEpisodeDownloadUpdate) { _, error ->
+                Timber.e(error)
+            }
     }
 
     /**

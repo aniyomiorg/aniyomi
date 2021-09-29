@@ -27,6 +27,7 @@ open class Video(
     @Volatile
     var progress: Int = 0
         set(value) {
+            progressSubject?.onNext(value)
             field = value
             statusCallback?.invoke(this)
         }
@@ -56,6 +57,9 @@ open class Video(
     private var statusSubject: Subject<Int, Int>? = null
 
     @Transient
+    private var progressSubject: Subject<Int, Int>? = null
+
+    @Transient
     private var statusCallback: ((Video) -> Unit)? = null
 
     override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
@@ -63,15 +67,20 @@ open class Video(
         if (contentLength > totalContentLength) {
             totalContentLength = contentLength
         }
-        progress = if (totalContentLength > 0) {
+        val newProgress = if (totalContentLength > 0) {
             (100 * totalBytesDownloaded / totalContentLength).toInt()
         } else {
             -1
         }
+        if (progress != newProgress) progress = newProgress
     }
 
     fun setStatusSubject(subject: Subject<Int, Int>?) {
         this.statusSubject = subject
+    }
+
+    fun setProgressSubject(subject: Subject<Int, Int>?) {
+        this.progressSubject = subject
     }
 
     fun setStatusCallback(f: ((Video) -> Unit)?) {

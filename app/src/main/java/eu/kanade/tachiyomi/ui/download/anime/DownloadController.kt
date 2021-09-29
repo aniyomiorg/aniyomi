@@ -17,10 +17,7 @@ import eu.kanade.tachiyomi.databinding.DownloadControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.util.view.shrinkOnScroll
-import rx.Observable
-import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
-import java.util.concurrent.TimeUnit
 
 /**
  * Controller that shows the currently active downloads.
@@ -38,11 +35,6 @@ class DownloadController :
 
     private var actionFab: ExtendedFloatingActionButton? = null
     private var actionFabScrollListener: RecyclerView.OnScrollListener? = null
-
-    /**
-     * Map of subscriptions for active downloads.
-     */
-    private val progressSubscriptions by lazy { mutableMapOf<AnimeDownload, Subscription>() }
 
     /**
      * Whether the download queue is running or not.
@@ -99,6 +91,10 @@ class DownloadController :
         presenter.getDownloadProgressObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeUntilDestroy { onUpdateDownloadedPages(it) }
+
+        presenter.getDownloadPreciseProgressObservable()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeUntilDestroy { onUpdateProgress(it) }
     }
 
     override fun configureFab(fab: ExtendedFloatingActionButton) {
@@ -124,10 +120,6 @@ class DownloadController :
     }
 
     override fun onDestroyView(view: View) {
-        for (subscription in progressSubscriptions.values) {
-            subscription.unsubscribe()
-        }
-        progressSubscriptions.clear()
         adapter = null
         super.onDestroyView(view)
     }
@@ -177,55 +169,16 @@ class DownloadController :
     private fun onStatusChange(download: AnimeDownload) {
         when (download.status) {
             AnimeDownload.State.DOWNLOADING -> {
-                observeProgress(download)
                 // Initial update of the downloaded pages
-                onUpdateDownloadedPages(download)
-            }
-            AnimeDownload.State.DOWNLOADED -> {
-                unsubscribeProgress(download)
                 onUpdateProgress(download)
                 onUpdateDownloadedPages(download)
             }
-            AnimeDownload.State.ERROR -> unsubscribeProgress(download)
+            AnimeDownload.State.DOWNLOADED -> {
+                onUpdateProgress(download)
+                onUpdateDownloadedPages(download)
+            }
             else -> { /* unused */ }
         }
-    }
-
-    /**
-     * Observe the progress of a download and notify the view.
-     *
-     * @param download the download to observe its progress.
-     */
-    private fun observeProgress(download: AnimeDownload) {
-        val subscription = Observable.interval(50, TimeUnit.MILLISECONDS)
-            // Get the sum of percentages for all the pages.
-            .flatMap {
-                Observable.just(download.video!!.progress)
-            }
-            // Keep only the latest emission to avoid backpressure.
-            .onBackpressureLatest()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { progress ->
-                // Update the view only if the progress has changed.
-                if (download.totalProgress != progress) {
-                    download.totalProgress = progress
-                    onUpdateProgress(download)
-                }
-            }
-
-        // Avoid leaking subscriptions
-        progressSubscriptions.remove(download)?.unsubscribe()
-
-        progressSubscriptions[download] = subscription
-    }
-
-    /**
-     * Unsubscribes the given download from the progress subscriptions.
-     *
-     * @param download the download to unsubscribe.
-     */
-    private fun unsubscribeProgress(download: AnimeDownload) {
-        progressSubscriptions.remove(download)?.unsubscribe()
     }
 
     /**

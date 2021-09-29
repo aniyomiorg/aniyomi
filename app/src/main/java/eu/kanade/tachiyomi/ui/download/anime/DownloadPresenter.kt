@@ -44,6 +44,12 @@ class DownloadPresenter : BasePresenter<DownloadController>() {
             .onBackpressureBuffer()
     }
 
+    fun getDownloadPreciseProgressObservable(): Observable<AnimeDownload> {
+        return downloadQueue.getPreciseProgressObservable()
+            .filter { it.status == AnimeDownload.State.DOWNLOADING }
+            .onBackpressureLatest()
+    }
+
     /**
      * Pauses the download queue.
      */

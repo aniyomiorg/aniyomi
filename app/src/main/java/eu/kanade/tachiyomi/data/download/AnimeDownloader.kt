@@ -19,7 +19,6 @@ import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.model.AnimeDownloadQueue
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.util.lang.RetryWithDelay
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNow
 import eu.kanade.tachiyomi.util.lang.plusAssign
@@ -291,6 +290,7 @@ class AnimeDownloader(
 
         val episodeDirname = provider.getEpisodeDirName(download.episode)
         val tmpDir = animeDir.createDirectory(episodeDirname + TMP_DIR_SUFFIX)
+        notifier.onProgressChange(download)
 
         val videoObservable = if (download.video == null) {
             // Pull video from network and add them to download object
@@ -327,6 +327,7 @@ class AnimeDownloader(
                         Observable.just(download.video)
                             .flatMap { Observable.just(it!!.progress) }
                     }
+                    .takeUntil { download.status != AnimeDownload.State.DOWNLOADING }
                     // Keep only the latest emission to avoid backpressure.
                     .onBackpressureLatest()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -429,6 +430,20 @@ class AnimeDownloader(
     private fun downloadVideo(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
         video.status = Video.DOWNLOAD_IMAGE
         video.progress = 0
+        var tries = 0
+        return newObservable(video, source, tmpDir, filename)
+            // Retry 3 times, waiting 2, 4 and 8 seconds between attempts.
+            .onErrorResumeNext {
+                if (tries >= 2) {
+                    return@onErrorResumeNext Observable.error(it)
+                }
+                tries++
+                return@onErrorResumeNext Observable.timer((2 shl tries - 1) * 1000L, TimeUnit.MILLISECONDS)
+                    .flatMap { newObservable(video, source, tmpDir, filename) }
+            }
+    }
+
+    private fun newObservable(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
         return source.fetchVideo(video)
             .map { response ->
                 val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
@@ -444,8 +459,6 @@ class AnimeDownloader(
                 }
                 file
             }
-            // Retry 3 times, waiting 2, 4 and 8 seconds between attempts.
-            .retryWhen(RetryWithDelay(3, { (2 shl it - 1) * 1000 }, Schedulers.trampoline()))
     }
 
     /**

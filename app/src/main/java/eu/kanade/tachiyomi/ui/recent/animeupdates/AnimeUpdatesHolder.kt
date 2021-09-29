@@ -7,9 +7,6 @@ import coil.loadAny
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.databinding.AnimeUpdatesItemBinding
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodeHolder
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import java.util.concurrent.TimeUnit
 
 /**
  * Holder that contains episode item
@@ -53,17 +50,7 @@ class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdat
 
         // Set episode status
         binding.download.isVisible = item.anime.source != LocalAnimeSource.ID
-        Observable.interval(50, TimeUnit.MILLISECONDS)
-            .flatMap {
-                Observable.just(item)
-            }
-            // Keep only the latest emission to avoid backpressure.
-            .onBackpressureLatest()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                // Update the view
-                binding.download.setState(item.status, it.progress)
-            }
+        binding.download.setState(item.status, item.progress)
 
         // Set cover
         binding.mangaCover.clear()
