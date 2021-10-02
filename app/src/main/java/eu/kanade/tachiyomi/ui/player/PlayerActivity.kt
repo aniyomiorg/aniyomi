@@ -185,8 +185,8 @@ class PlayerActivity : AppCompatActivity() {
         initPlayer()
     }
 
-    private fun onGetLinksError() {
-        baseContext.toast(message ?: "error getting links")
+    private fun onGetLinksError(e: Throwable? = null) {
+        baseContext.toast(e?.message ?: "error getting links")
         finish()
         return
     }
@@ -208,6 +208,7 @@ class PlayerActivity : AppCompatActivity() {
                 uri = videos.first().videoUrl!!
                 dataSourceFactory = newDataSourceFactory()
             }
+            Timber.i("playing $uri")
             cacheFactory = CacheDataSource.Factory().apply {
                 setCache(simpleCache)
                 setUpstreamDataSourceFactory(dataSourceFactory)
@@ -293,7 +294,7 @@ class PlayerActivity : AppCompatActivity() {
         videoListObservable
             .subscribeOn(Schedulers.io())
             .doOnCompleted { onGetLinks() }
-            .doOnError { onGetLinksError() }
+            .doOnError { onGetLinksError(it) }
             .subscribe {
                 videos = runBlocking { it.awaitSingle() }
             }
