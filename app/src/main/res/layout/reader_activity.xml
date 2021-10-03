@@ -13,15 +13,16 @@
         <FrameLayout
             android:id="@+id/viewer_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants" />
 
         <eu.kanade.tachiyomi.ui.reader.PageIndicatorTextView
             android:id="@+id/page_number"
-            style="@style/TextAppearance.Regular.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:padding="4dp"
+            android:textAppearance="?attr/textAppearanceSubtitle2"
             android:textDirection="ltr"
             android:textStyle="bold" />
 
@@ -107,8 +108,8 @@
                         Wonky way of setting height due to issues with horizontally centering the thumb in Android 5.
                         See https://stackoverflow.com/questions/15701767/android-thumb-is-not-centered-in-seekbar
                     -->
-                    <eu.kanade.tachiyomi.ui.reader.ReaderSeekBar
-                        android:id="@+id/page_seekbar"
+                    <eu.kanade.tachiyomi.ui.reader.ReaderSlider
+                        android:id="@+id/page_slider"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

@@ -76,6 +76,7 @@ import eu.kanade.tachiyomi.ui.anime.track.TrackSheet
 import eu.kanade.tachiyomi.ui.animelib.AnimelibController
 import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCategoriesDialog
 import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCoverDialog
+import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.getMainAppBarHeight
@@ -196,7 +197,7 @@ class AnimeController :
 
     private var trackSheet: TrackSheet? = null
 
-    private var dialog: AnimeFullCoverDialog? = null
+    private var dialog: DialogController? = null
 
     private val incognitoMode = preferences.incognitoMode().get()
 
@@ -302,11 +303,6 @@ class AnimeController :
             binding.fastScroller.doOnLayout { scroller ->
                 scroller.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     topMargin = getMainAppBarHeight()
-                }
-                scroller.applyInsetter {
-                    type(navigationBars = true) {
-                        margin()
-                    }
                 }
             }
 
@@ -606,8 +602,7 @@ class AnimeController :
                     }
                 }.toTypedArray()
 
-                ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected)
-                    .showDialog(router)
+                showChangeCategoryDialog(anime, categories, preselected)
             }
         }
 
@@ -661,8 +656,21 @@ class AnimeController :
             }
         }.toTypedArray()
 
-        ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected)
-            .showDialog(router)
+        showChangeCategoryDialog(anime, categories, preselected)
+    }
+
+    private fun showChangeCategoryDialog(anime: Anime, categories: List<Category>, preselected: Array<Int>) {
+        if (dialog != null) return
+        dialog = ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected)
+        dialog?.addLifecycleListener(
+            object : LifecycleListener() {
+                override fun postDestroy(controller: Controller) {
+                    super.postDestroy(controller)
+                    dialog = null
+                }
+            }
+        )
+        dialog?.showDialog(router)
     }
 
     override fun updateCategoriesForAnimes(animes: List<Anime>, addCategories: List<Category>, removeCategories: List<Category>) {
@@ -940,7 +948,7 @@ class AnimeController :
 
     fun onSetCoverSuccess() {
         animeInfoAdapter?.notifyDataSetChanged()
-        dialog?.setImage(anime)
+        (dialog as? AnimeFullCoverDialog)?.setImage(anime)
         activity?.toast(R.string.cover_updated)
     }
 

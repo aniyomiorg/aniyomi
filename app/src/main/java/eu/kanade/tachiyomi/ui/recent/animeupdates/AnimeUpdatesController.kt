@@ -337,6 +337,11 @@ class AnimeUpdatesController :
         presenter.startDownloadingNow(episode)
     }
 
+    private fun bookmarkEpisodes(episodes: List<AnimeUpdatesItem>, bookmarked: Boolean) {
+        presenter.bookmarkEpisodes(episodes, bookmarked)
+        destroyActionModeIfNeeded()
+    }
+
     override fun deleteEpisode(position: Int) {
         val item = adapter?.getItem(position) as? AnimeUpdatesItem ?: return
         deleteEpisodes(listOf(item))
@@ -365,6 +370,8 @@ class AnimeUpdatesController :
             val episodes = getSelectedEpisodes()
             binding.actionToolbar.findItem(R.id.action_download)?.isVisible = episodes.any { !it.isDownloaded }
             binding.actionToolbar.findItem(R.id.action_delete)?.isVisible = episodes.any { it.isDownloaded }
+            binding.actionToolbar.findItem(R.id.action_bookmark)?.isVisible = episodes.any { !it.bookmark }
+            binding.actionToolbar.findItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.bookmark }
             binding.actionToolbar.findItem(R.id.action_mark_as_seen)?.isVisible = episodes.any { !it.episode.seen }
             binding.actionToolbar.findItem(R.id.action_mark_as_unseen)?.isVisible = episodes.all { it.episode.seen }
         }
@@ -389,6 +396,8 @@ class AnimeUpdatesController :
             R.id.action_delete ->
                 ConfirmDeleteEpisodesDialog(this, getSelectedEpisodes())
                     .showDialog(router)
+            R.id.action_bookmark -> bookmarkEpisodes(getSelectedEpisodes(), true)
+            R.id.action_remove_bookmark -> bookmarkEpisodes(getSelectedEpisodes(), false)
             R.id.action_mark_as_seen -> markAsRead(getSelectedEpisodes())
             R.id.action_mark_as_unseen -> markAsUnread(getSelectedEpisodes())
             else -> return false

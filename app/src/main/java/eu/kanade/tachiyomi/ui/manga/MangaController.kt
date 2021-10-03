@@ -53,6 +53,7 @@ import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.getMainAppBarHeight
@@ -179,7 +180,7 @@ class MangaController :
 
     private var trackSheet: TrackSheet? = null
 
-    private var dialog: MangaFullCoverDialog? = null
+    private var dialog: DialogController? = null
 
     /**
      * For [recyclerViewUpdatesToolbarTitleAlpha]
@@ -281,11 +282,6 @@ class MangaController :
             binding.fastScroller.doOnLayout { scroller ->
                 scroller.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     topMargin = getMainAppBarHeight()
-                }
-                scroller.applyInsetter {
-                    type(navigationBars = true) {
-                        margin()
-                    }
                 }
             }
 
@@ -585,8 +581,7 @@ class MangaController :
                     }
                 }.toTypedArray()
 
-                ChangeMangaCategoriesDialog(this, listOf(manga), categories, preselected)
-                    .showDialog(router)
+                showChangeCategoryDialog(manga, categories, preselected)
             }
         }
 
@@ -639,8 +634,21 @@ class MangaController :
                 QuadStateTextView.State.UNCHECKED.ordinal
             }
         }.toTypedArray()
-        ChangeMangaCategoriesDialog(this, listOf(manga), categories, preselected)
-            .showDialog(router)
+        showChangeCategoryDialog(manga, categories, preselected)
+    }
+
+    private fun showChangeCategoryDialog(manga: Manga, categories: List<Category>, preselected: Array<Int>) {
+        if (dialog != null) return
+        dialog = ChangeMangaCategoriesDialog(this, listOf(manga), categories, preselected)
+        dialog?.addLifecycleListener(
+            object : LifecycleListener() {
+                override fun postDestroy(controller: Controller) {
+                    super.postDestroy(controller)
+                    dialog = null
+                }
+            }
+        )
+        dialog?.showDialog(router)
     }
 
     override fun updateCategoriesForMangas(mangas: List<Manga>, addCategories: List<Category>, removeCategories: List<Category>) {
@@ -826,7 +834,7 @@ class MangaController :
 
     fun onSetCoverSuccess() {
         mangaInfoAdapter?.notifyDataSetChanged()
-        dialog?.setImage(manga)
+        (dialog as? MangaFullCoverDialog)?.setImage(manga)
         activity?.toast(R.string.cover_updated)
     }
 

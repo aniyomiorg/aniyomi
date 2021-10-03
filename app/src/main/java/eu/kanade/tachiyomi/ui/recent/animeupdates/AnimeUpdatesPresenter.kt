@@ -189,6 +189,22 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
     }
 
     /**
+     * Mark selected episodes as bookmarked
+     * @param items list of selected episodes
+     * @param bookmarked bookmark status
+     */
+    fun bookmarkEpisodes(items: List<AnimeUpdatesItem>, bookmarked: Boolean) {
+        val episodes = items.map { it.episode }
+        episodes.forEach {
+            it.bookmark = bookmarked
+        }
+
+        Observable.fromCallable { db.updateEpisodesProgress(episodes).executeAsBlocking() }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
+    }
+
+    /**
      * Download selected episodes
      * @param items list of recent episodes seleted.
      */
