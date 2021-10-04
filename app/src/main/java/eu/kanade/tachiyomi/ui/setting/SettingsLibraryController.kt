@@ -429,7 +429,7 @@ class SettingsLibraryController : SettingsController() {
                 .toIntArray()
 
             return MaterialAlertDialogBuilder(activity!!)
-                .setTitle(R.string.categories)
+                .setTitle(R.string.anime_categories)
                 .setQuadStateMultiChoiceItems(
                     message = R.string.pref_animelib_update_categories_details,
                     items = items,
