@@ -1041,7 +1041,7 @@ class AnimeController :
                     currentExtEpisode = episode
                     val pkgName = preferences.externalPlayerPreference()
 
-                    val uri = if (videoUri != null && Build.VERSION.SDK_INT >= 24) {
+                    val uri = if (videoUri != null && Build.VERSION.SDK_INT >= 24 && videoUri.scheme == "file") {
                         FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", videoUri.toFile())
                     } else videoUri ?: videoUrl
 
