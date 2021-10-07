@@ -208,10 +208,15 @@ class MoreController :
     }
 
     private fun updateDownloadQueueSummary(preference: Preference) {
+        val pendingDownloadExists = downloadQueueSize + downloadQueueSizeAnime != 0
+        val pauseMessage = resources?.getString(R.string.paused)
+        val numberOfPendingDownloads = resources?.getQuantityString(R.plurals.download_queue_summary, downloadQueueSize + downloadQueueSizeAnime, downloadQueueSize + downloadQueueSizeAnime)
+
         preference.summary = when {
-            downloadQueueSize + downloadQueueSizeAnime == 0 -> null
-            !isDownloading && !isDownloadingAnime -> resources?.getString(R.string.paused)
-            else -> resources?.getQuantityString(R.plurals.download_queue_summary, downloadQueueSize + downloadQueueSizeAnime, downloadQueueSize + downloadQueueSizeAnime)
+            !pendingDownloadExists -> null
+            !isDownloading  && !isDownloadingAnime && !pendingDownloadExists -> pauseMessage
+            !isDownloading  && !isDownloadingAnime && pendingDownloadExists -> "$pauseMessage • $numberOfPendingDownloads"
+            else -> numberOfPendingDownloads
         }
     }
 
