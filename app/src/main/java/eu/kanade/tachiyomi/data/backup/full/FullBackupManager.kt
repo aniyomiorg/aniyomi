@@ -45,8 +45,8 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
                 backupAnime(databaseAnime, flags),
                 backupCategoriesAnime(),
                 emptyList(),
-                emptyList(),
                 backupExtensionInfo(databaseManga),
+                emptyList(),
                 backupAnimeExtensionInfo(databaseAnime)
             )
         }

@@ -11,7 +11,7 @@ data class Backup(
     @ProtoNumber(4) var backupCategoriesAnime: List<BackupCategory> = emptyList(),
     // Bump by 100 to specify this is a 0.x value
     @ProtoNumber(100) var backupBrokenSources: List<BrokenBackupSource> = emptyList(),
-    @ProtoNumber(101) var backupBrokenAnimeSources: List<BrokenBackupAnimeSource> = emptyList(),
-    @ProtoNumber(102) var backupSources: List<BackupSource> = emptyList(),
+    @ProtoNumber(101) var backupSources: List<BackupSource> = emptyList(),
+    @ProtoNumber(102) var backupBrokenAnimeSources: List<BrokenBackupAnimeSource> = emptyList(),
     @ProtoNumber(103) var backupAnimeSources: List<BackupAnimeSource> = emptyList()
 )
