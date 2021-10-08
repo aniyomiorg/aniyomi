@@ -15,6 +15,7 @@ import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.databinding.DownloadControllerBinding
 import eu.kanade.tachiyomi.source.model.Page
+import eu.kanade.tachiyomi.ui.base.controller.BaseController
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.util.view.shrinkOnScroll
@@ -36,9 +37,9 @@ class DownloadController :
      * Adapter containing the active downloads.
      */
     private var adapter: DownloadAdapter? = null
-
     private var actionFab: ExtendedFloatingActionButton? = null
     private var actionFabScrollListener: RecyclerView.OnScrollListener? = null
+    private var isTabSelected: Boolean = false
 
     /**
      * Map of subscriptions for active downloads.
@@ -100,6 +101,12 @@ class DownloadController :
         presenter.getDownloadProgressObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeUntilDestroy { onUpdateDownloadedPages(it) }
+
+        presenter.downloadQueue.getUpdatedObservable()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeUntilDestroy {
+                updateTitle(it.size)
+            }
     }
 
     override fun configureFab(fab: ExtendedFloatingActionButton) {
@@ -290,6 +297,7 @@ class DownloadController :
         if (presenter.downloadQueue.isEmpty()) {
             binding.emptyView.show(R.string.information_no_downloads)
             actionFab?.isVisible = false
+            updateTitle()
         } else {
             binding.emptyView.hide()
             actionFab?.apply {
@@ -311,6 +319,7 @@ class DownloadController :
                     }
                 )
             }
+            updateTitle(presenter.downloadQueue.size)
         }
     }
 
@@ -367,5 +376,24 @@ class DownloadController :
                 }
             }
         }
+    }
+
+    private fun updateTitle(queueSize: Int = 0) {
+        if (!isTabSelected) return
+        val defaultTitle = getTitle()
+
+        if (queueSize == 0) {
+            (parentController as BaseController<*>).setTitle(defaultTitle)
+        } else {
+            (parentController as BaseController<*>).setTitle("$defaultTitle ($queueSize)")
+        }
+    }
+
+    fun selectTab() {
+        isTabSelected = true
+    }
+
+    fun unselectTab() {
+        isTabSelected = false
     }
 }

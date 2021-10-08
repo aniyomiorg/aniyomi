@@ -43,6 +43,7 @@ import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.getPicturesDir
 import eu.kanade.tachiyomi.util.storage.getTempShareDir
 import eu.kanade.tachiyomi.util.system.ImageUtil
+import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.updateCoverLastModified
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.State
@@ -50,11 +51,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.supervisorScope
+import logcat.LogPriority
 import rx.Observable
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -136,7 +137,7 @@ class AnimePresenter(
 
         getTrackingObservable()
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeLatestCache(AnimeController::onTrackingCount) { _, error -> Timber.e(error) }
+            .subscribeLatestCache(AnimeController::onTrackingCount) { _, error -> logcat(LogPriority.ERROR, error) }
 
         // Prepare the relay.
         episodesRelay.flatMap { applyEpisodeFilters(it) }
@@ -146,7 +147,7 @@ class AnimePresenter(
                     filteredAndSortedEpisodes = episodes
                     view?.onNextEpisodes(episodes)
                 },
-                { _, error -> Timber.e(error) }
+                { _, error -> logcat(LogPriority.ERROR, error) }
             )
 
         // Anime info - end
@@ -436,7 +437,7 @@ class AnimePresenter(
                     view.onEpisodeDownloadUpdate(it)
                 },
                 { _, error ->
-                    Timber.e(error)
+                    logcat(LogPriority.ERROR, error)
                 }
             )
 
@@ -447,7 +448,7 @@ class AnimePresenter(
             .filter { download -> download.anime.id == anime.id }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeLatestAnimeCache(AnimeController::onEpisodeDownloadUpdate) { _, error ->
-                Timber.e(error)
+                logcat(LogPriority.ERROR, error)
             }
 
         observeDownloadsProgressSubscription?.let { remove(it) }
@@ -457,7 +458,7 @@ class AnimePresenter(
             .filter { download -> download.anime.id == anime.id }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeLatestAnimeCache(AnimeController::onEpisodeDownloadUpdate) { _, error ->
-                Timber.e(error)
+                logcat(LogPriority.ERROR, error)
             }
     }
 

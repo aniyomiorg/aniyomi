@@ -16,12 +16,13 @@ import eu.kanade.tachiyomi.extension.AnimeExtensionManager
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourcePresenter
 import eu.kanade.tachiyomi.util.lang.runAsObservable
+import eu.kanade.tachiyomi.util.system.logcat
+import logcat.LogPriority
 import rx.Observable
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subjects.PublishSubject
-import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -198,7 +199,7 @@ open class GlobalAnimeSearchPresenter(
                     view.setItems(anime)
                 },
                 { _, error ->
-                    Timber.e(error)
+                    logcat(LogPriority.ERROR, error)
                 }
             )
     }
@@ -233,7 +234,7 @@ open class GlobalAnimeSearchPresenter(
                     view?.onAnimeInitialized(source, anime)
                 },
                 { error ->
-                    Timber.e(error)
+                    logcat(LogPriority.ERROR, error)
                 }
             )
     }

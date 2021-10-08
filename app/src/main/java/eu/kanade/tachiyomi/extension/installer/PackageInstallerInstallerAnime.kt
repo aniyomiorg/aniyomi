@@ -11,7 +11,8 @@ import android.os.Build
 import eu.kanade.tachiyomi.extension.model.InstallStep
 import eu.kanade.tachiyomi.util.lang.use
 import eu.kanade.tachiyomi.util.system.getUriSize
-import timber.log.Timber
+import eu.kanade.tachiyomi.util.system.logcat
+import logcat.LogPriority
 
 class PackageInstallerInstallerAnime(private val service: Service) : InstallerAnime(service) {
 
@@ -23,7 +24,7 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
                 PackageInstaller.STATUS_PENDING_USER_ACTION -> {
                     val userAction = intent.getParcelableExtra<Intent>(Intent.EXTRA_INTENT)
                     if (userAction == null) {
-                        Timber.e("Fatal error for $intent")
+                        logcat(LogPriority.ERROR) { "Fatal error for $intent" }
                         continueQueue(InstallStep.Error)
                         return
                     }
@@ -74,7 +75,7 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
                 session.commit(intentSender)
             }
         } catch (e: Exception) {
-            Timber.e(e, "Failed to install extension ${entry.downloadId} ${entry.uri}")
+            logcat(LogPriority.ERROR, e) { "Failed to install extension ${entry.downloadId} ${entry.uri}" }
             activeSession?.let { (_, sessionId) ->
                 packageInstaller.abandonSession(sessionId)
             }

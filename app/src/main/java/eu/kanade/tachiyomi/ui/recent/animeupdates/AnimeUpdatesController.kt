@@ -25,14 +25,15 @@ import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.notificationManager
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.onAnimationsFinished
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import logcat.LogPriority
 import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
-import timber.log.Timber
 
 /**
  * Fragment that shows recent episodes.
@@ -309,7 +310,7 @@ class AnimeUpdatesController :
      * @param error error message
      */
     fun onEpisodesDeletedError(error: Throwable) {
-        Timber.e(error)
+        logcat(LogPriority.ERROR, error)
     }
 
     override fun downloadEpisode(position: Int) {

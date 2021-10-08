@@ -99,6 +99,7 @@ import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.storage.getUriCompat
+import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.getCoordinates
@@ -109,10 +110,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import logcat.LogPriority
 import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
 import rx.schedulers.Schedulers
-import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -618,7 +619,7 @@ class AnimeController :
                                 presenter.registerTracking(track, service as TrackService)
                             }
                         } catch (e: Exception) {
-                            Timber.w(e, "Could not match anime: ${anime.title} with service $service")
+                            logcat(LogPriority.WARN, e) { "Could not match anime: ${anime.title} with service $service" }
                         }
                     }
                 }
@@ -793,7 +794,7 @@ class AnimeController :
                 startActivity(uri.toShareIntent(activity))
             }
         } catch (e: Exception) {
-            Timber.e(e)
+            logcat(LogPriority.ERROR, e)
             activity?.toast(R.string.error_sharing_cover)
         }
     }
@@ -806,7 +807,7 @@ class AnimeController :
                 activity.toast(R.string.cover_saved)
             }
         } catch (e: Exception) {
-            Timber.e(e)
+            logcat(LogPriority.ERROR, e)
             activity?.toast(R.string.error_saving_cover)
         }
     }
@@ -942,7 +943,7 @@ class AnimeController :
                 }
                 .awaitAll()
                 .mapNotNull { it.exceptionOrNull() }
-                .forEach { Timber.w(it) }
+                .forEach { logcat(LogPriority.WARN, it) }
         }
     }
 
@@ -954,7 +955,7 @@ class AnimeController :
 
     fun onSetCoverError(error: Throwable) {
         activity?.toast(R.string.notification_cover_update_failed)
-        Timber.e(error)
+        logcat(LogPriority.ERROR, error)
     }
 
     /**
@@ -1391,7 +1392,7 @@ class AnimeController :
     }
 
     fun onEpisodesDeletedError(error: Throwable) {
-        Timber.e(error)
+        logcat(LogPriority.ERROR, error)
     }
 
     override fun startDownloadNow(position: Int) {
@@ -1445,7 +1446,7 @@ class AnimeController :
     }
 
     fun onTrackingRefreshError(error: Throwable) {
-        Timber.e(error)
+        logcat(LogPriority.ERROR, error)
         activity?.toast(error.message)
     }
 
@@ -1454,7 +1455,7 @@ class AnimeController :
     }
 
     fun onTrackingSearchResultsError(error: Throwable) {
-        Timber.e(error)
+        logcat(LogPriority.ERROR, error)
         getTrackingSearchDialog()?.onSearchResultsError(error.message)
     }
 

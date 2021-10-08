@@ -214,8 +214,8 @@ class MoreController :
 
         preference.summary = when {
             !pendingDownloadExists -> null
-            !isDownloading  && !isDownloadingAnime && !pendingDownloadExists -> pauseMessage
-            !isDownloading  && !isDownloadingAnime && pendingDownloadExists -> "$pauseMessage • $numberOfPendingDownloads"
+            !isDownloading && !isDownloadingAnime && !pendingDownloadExists -> pauseMessage
+            !isDownloading && !isDownloadingAnime && pendingDownloadExists -> "$pauseMessage • $numberOfPendingDownloads"
             else -> numberOfPendingDownloads
         }
     }

@@ -27,8 +27,9 @@ import eu.kanade.tachiyomi.animesource.getPreferenceKey
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
 import eu.kanade.tachiyomi.databinding.SourcePreferencesControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
+import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.widget.TachiyomiTextInputEditText.Companion.setIncognito
-import timber.log.Timber
+import logcat.LogPriority
 
 @SuppressLint("RestrictedApi")
 class AnimeSourcePreferencesController(bundle: Bundle? = null) :
@@ -77,7 +78,7 @@ class AnimeSourcePreferencesController(bundle: Bundle? = null) :
         try {
             addPreferencesForSource(screen, source)
         } catch (e: AbstractMethodError) {
-            Timber.e("Source did not implement [addPreferencesForSource]: ${source.name}")
+            logcat(LogPriority.ERROR) { "Source did not implement [addPreferencesForSource]: ${source.name}" }
         }
 
         manager.setPreferences(screen)

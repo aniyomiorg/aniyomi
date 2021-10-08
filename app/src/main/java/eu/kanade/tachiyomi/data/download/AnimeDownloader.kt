@@ -25,13 +25,14 @@ import eu.kanade.tachiyomi.util.lang.plusAssign
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.system.ImageUtil
+import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.async
+import logcat.LogPriority
 import okhttp3.Response
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
-import timber.log.Timber
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -215,7 +216,7 @@ class AnimeDownloader(
                 },
                 { error ->
                     AnimeDownloadService.stop(context)
-                    Timber.e(error)
+                    logcat(LogPriority.ERROR, error)
                     notifier.onError(error.message)
                 }
             )
@@ -350,10 +351,7 @@ class AnimeDownloader(
             .doOnNext {
                 ensureSuccessfulAnimeDownload(download, animeDir, tmpDir, episodeDirname)
 
-                if (download.status == AnimeDownload.State.DOWNLOADED) {
-                    Timber.w(download.status.name)
-                    notifier.dismissProgress()
-                }
+                if (download.status == AnimeDownload.State.DOWNLOADED) notifier.dismissProgress()
             }
             // If the page list threw, it will resume here
             .onErrorReturn { error ->
@@ -478,7 +476,6 @@ class AnimeDownloader(
                 // start download with intent
                 val pm = context.packageManager
                 val pkgName = preferences.externalDownloaderSelection()
-                Timber.w(pkgName)
                 val intent: Intent
                 if (!pkgName.isNullOrEmpty()) {
                     intent = pm.getLaunchIntentForPackage(pkgName)!!
@@ -490,7 +487,6 @@ class AnimeDownloader(
                         putExtra("extra_filename", filename)
                     }
                 } else {
-                    Timber.w("emtpy")
                     intent = Intent(Intent.ACTION_VIEW)
                     intent.apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -501,7 +497,6 @@ class AnimeDownloader(
                 context.startActivity(intent)
             } catch (e: Exception) {
                 it.delete()
-                Timber.w(e.message)
                 throw e
             }
             it

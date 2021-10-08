@@ -37,6 +37,7 @@ import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.removeCovers
+import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
@@ -44,10 +45,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import logcat.LogPriority
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
@@ -155,7 +156,7 @@ open class BrowseAnimeSourcePresenter(
                     view.onAddPage(page, animes)
                 },
                 { _, error ->
-                    Timber.e(error)
+                    logcat(LogPriority.ERROR, error)
                 }
             )
 
@@ -221,7 +222,7 @@ open class BrowseAnimeSourcePresenter(
                         view?.onAnimeInitialized(it)
                     }
                 }
-                .catch { e -> Timber.e(e) }
+                .catch { e -> logcat(LogPriority.ERROR, e) }
                 .collect()
         }
     }
@@ -239,7 +240,7 @@ open class BrowseAnimeSourcePresenter(
             anime.initialized = true
             db.insertAnime(anime).executeAsBlocking()
         } catch (e: Exception) {
-            Timber.e(e)
+            logcat(LogPriority.ERROR, e)
         }
         return anime
     }
@@ -282,7 +283,7 @@ open class BrowseAnimeSourcePresenter(
                             syncEpisodesWithTrackServiceTwoWay(db, db.getEpisodes(anime).executeAsBlocking(), track, service as TrackService)
                         }
                     } catch (e: Exception) {
-                        Timber.w(e, "Could not match anime: ${anime.title} with service $service")
+                        logcat(LogPriority.WARN, e) { "Could not match anime: ${anime.title} with service $service" }
                     }
                 }
             }

@@ -5,7 +5,8 @@ import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.util.lang.launchIO
-import timber.log.Timber
+import eu.kanade.tachiyomi.util.system.logcat
+import logcat.LogPriority
 
 /**
  * Helper method for syncing a remote track with the local episodes, and back
@@ -33,7 +34,7 @@ fun syncEpisodesWithTrackServiceTwoWay(db: AnimeDatabaseHelper, episodes: List<E
             service.update(remoteTrack)
             db.insertTrack(remoteTrack).executeAsBlocking()
         } catch (e: Throwable) {
-            Timber.w(e)
+            logcat(LogPriority.WARN, e)
         }
     }
 }

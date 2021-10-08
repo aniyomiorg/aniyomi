@@ -35,7 +35,6 @@ import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.notificationManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
-import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -275,7 +274,6 @@ class NotificationReceiver : BroadcastReceiver() {
      * @param notificationId id of notification
      */
     private fun cancelAnimelibUpdate(context: Context, notificationId: Int) {
-        Timber.w("bruh")
         AnimelibUpdateService.stop(context)
         ContextCompat.getMainExecutor(context).execute { dismissNotification(context, notificationId) }
     }

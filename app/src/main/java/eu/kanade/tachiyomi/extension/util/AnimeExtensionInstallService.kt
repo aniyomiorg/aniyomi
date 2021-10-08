@@ -12,8 +12,9 @@ import eu.kanade.tachiyomi.extension.installer.InstallerAnime
 import eu.kanade.tachiyomi.extension.installer.PackageInstallerInstallerAnime
 import eu.kanade.tachiyomi.extension.installer.ShizukuInstallerAnime
 import eu.kanade.tachiyomi.extension.util.ExtensionInstaller.Companion.EXTRA_DOWNLOAD_ID
+import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.notificationBuilder
-import timber.log.Timber
+import logcat.LogPriority
 
 class AnimeExtensionInstallService : Service() {
 
@@ -46,7 +47,7 @@ class AnimeExtensionInstallService : Service() {
                 PreferenceValues.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstallerAnime(this)
                 PreferenceValues.ExtensionInstaller.SHIZUKU -> ShizukuInstallerAnime(this)
                 else -> {
-                    Timber.e("Not implemented for installer $installerUsed")
+                    logcat(LogPriority.ERROR) { "Not implemented for installer $installerUsed" }
                     stopSelf()
                     return START_NOT_STICKY
                 }

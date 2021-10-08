@@ -61,15 +61,16 @@ import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.isOnline
+import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.hideBar
 import eu.kanade.tachiyomi.widget.listener.SimpleSeekBarListener
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import logcat.LogPriority
 import rx.Observable
 import rx.schedulers.Schedulers
-import timber.log.Timber
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -208,7 +209,7 @@ class PlayerActivity : AppCompatActivity() {
                 uri = videos.first().videoUrl!!
                 dataSourceFactory = newDataSourceFactory()
             }
-            Timber.i("playing $uri")
+            logcat(LogPriority.INFO) { "playing $uri" }
             cacheFactory = CacheDataSource.Factory().apply {
                 setCache(simpleCache)
                 setUpstreamDataSourceFactory(dataSourceFactory)
@@ -274,7 +275,6 @@ class PlayerActivity : AppCompatActivity() {
         youTubeDoubleTap.player(exoPlayer)
         playerView.player = exoPlayer
         duration = exoPlayer.duration
-        Timber.i("hello")
         getVideoList()
     }
 
@@ -423,7 +423,7 @@ class PlayerActivity : AppCompatActivity() {
             EpisodeLoader.getLinks(episode, anime, source)
         } catch (e: Exception) {
             message = e.message ?: "error getting links"
-            Timber.w(message)
+            logcat(LogPriority.WARN, e) { e.message ?: "error getting links" }
             Observable.just(emptyList())
         }
     }
@@ -677,7 +677,7 @@ class PlayerActivity : AppCompatActivity() {
                 }
                 .awaitAll()
                 .mapNotNull { it.exceptionOrNull() }
-                .forEach { Timber.w(it) }
+                .forEach { logcat(LogPriority.WARN, it) }
         }
     }
 

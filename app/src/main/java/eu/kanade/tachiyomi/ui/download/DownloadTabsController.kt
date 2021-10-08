@@ -43,10 +43,12 @@ class DownloadTabsController :
             when (tab?.position) {
                 ANIMEDOWNLOAD_CONTROLLER -> {
                     animeController.configureFab(thisFab)
+                    animeController.selectTab()
                     if (!firstOpen) animeController.setInformationView()
                 }
                 MANGADOWNLOAD_CONTROLLER -> {
                     mangaController.configureFab(thisFab)
+                    mangaController.selectTab()
                     if (!firstOpen) mangaController.setInformationView()
                 }
             }
@@ -57,9 +59,11 @@ class DownloadTabsController :
             thisFab.isVisible = false
             when (tab?.position) {
                 ANIMEDOWNLOAD_CONTROLLER -> {
+                    animeController.unselectTab()
                     animeController.cleanupFab(thisFab)
                 }
                 MANGADOWNLOAD_CONTROLLER -> {
+                    mangaController.unselectTab()
                     mangaController.cleanupFab(thisFab)
                 }
             }

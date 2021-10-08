@@ -13,9 +13,10 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.model.AnimeLoadResult
 import eu.kanade.tachiyomi.util.lang.Hash
+import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import timber.log.Timber
+import logcat.LogPriority
 import uy.kohesive.injekt.injectLazy
 
 /**
@@ -106,7 +107,7 @@ internal object AnimeExtensionLoader {
 
         if (versionName.isNullOrEmpty()) {
             val exception = Exception("Missing versionName for extension $extName")
-            Timber.w(exception)
+            logcat(LogPriority.WARN, exception)
             return AnimeLoadResult.Error(exception)
         }
 
@@ -117,7 +118,7 @@ internal object AnimeExtensionLoader {
                 "Lib version is $libVersion, while only versions " +
                     "$LIB_VERSION_MIN to $LIB_VERSION_MAX are allowed"
             )
-            Timber.w(exception)
+            logcat(LogPriority.WARN, exception)
             return AnimeLoadResult.Error(exception)
         }
 
@@ -127,7 +128,7 @@ internal object AnimeExtensionLoader {
             return AnimeLoadResult.Error("Package $pkgName isn't signed")
         } else if (signatureHash !in trustedSignatures) {
             val extension = AnimeExtension.Untrusted(extName, pkgName, versionName, versionCode, signatureHash)
-            Timber.w("Extension $pkgName isn't trusted")
+            logcat(LogPriority.WARN, message = { "Extension $pkgName isn't trusted" })
             return AnimeLoadResult.Untrusted(extension)
         }
 
@@ -156,7 +157,7 @@ internal object AnimeExtensionLoader {
                         else -> throw Exception("Unknown source class type! ${obj.javaClass}")
                     }
                 } catch (e: Throwable) {
-                    Timber.e(e, "Extension load error: $extName ($it)")
+                    logcat(LogPriority.ERROR, e) { "Extension load error: $extName ($it)" }
                     return AnimeLoadResult.Error(e)
                 }
             }
