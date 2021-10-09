@@ -144,7 +144,7 @@ open class AnimeExtensionController :
             .filter { router.backstack.lastOrNull()?.controller == this }
             .onEach {
                 query = it.toString()
-                drawExtensions()
+                updateExtensionsList()
             }
             .launchIn(viewScope)
     }
@@ -179,7 +179,7 @@ open class AnimeExtensionController :
     fun setExtensions(extensions: List<AnimeExtensionItem>) {
         binding.swipeRefresh.isRefreshing = false
         this.extensions = extensions
-        drawExtensions()
+        updateExtensionsList()
 
         // Update badge on parent controller tab
         val ctrl = parentController as BrowseController
@@ -187,11 +187,14 @@ open class AnimeExtensionController :
         ctrl.extensionListUpdateRelay.call(true)
     }
 
-    private fun drawExtensions() {
+    private fun updateExtensionsList() {
         if (query.isNotBlank()) {
+            val extensionNames = query.split(",")
             adapter?.updateDataSet(
                 extensions.filter {
-                    it.extension.name.contains(query, ignoreCase = true)
+                    extensionNames.any { queriedName ->
+                        it.extension.name.contains(queriedName, ignoreCase = true)
+                    }
                 }
             )
         } else {
