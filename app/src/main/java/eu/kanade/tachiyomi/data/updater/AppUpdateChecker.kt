@@ -16,7 +16,7 @@ class AppUpdateChecker {
     private val preferences: PreferencesHelper by injectLazy()
 
     private val repo: String by lazy {
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.PREVIEW) {
             "jmir1/aniyomi-preview"
         } else {
             "jmir1/aniyomi"
@@ -46,7 +46,7 @@ class AppUpdateChecker {
         // Removes prefixes like "r" or "v"
         val newVersion = versionTag.replace("[^\\d.]".toRegex(), "")
 
-        return if (BuildConfig.DEBUG) {
+        return if (BuildConfig.PREVIEW) {
             // Preview builds: based on releases in "jmir1/tachiyomi-preview" repo
             // tagged as something like "r1234"
             newVersion.toInt() > BuildConfig.COMMIT_COUNT.toInt()

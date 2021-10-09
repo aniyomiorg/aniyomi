@@ -34,7 +34,8 @@ open class AnimelibCompactGridHolder(
         binding.title.text = item.anime.title
 
         // For rounded corners
-        binding.badges.clipToOutline = true
+        binding.leftBadges.clipToOutline = true
+        binding.rightBadges.clipToOutline = true
 
         // Update the unread count and its visibility.
         with(binding.unreadText) {
@@ -45,6 +46,11 @@ open class AnimelibCompactGridHolder(
         with(binding.downloadText) {
             isVisible = item.downloadCount > 0
             text = item.downloadCount.toString()
+        }
+        // Update the source language and its visibility
+        with(binding.languageText) {
+            isVisible = item.sourceLanguage.isNotEmpty()
+            text = item.sourceLanguage
         }
         // set local visibility if its local anime
         binding.localText.isVisible = item.isLocal

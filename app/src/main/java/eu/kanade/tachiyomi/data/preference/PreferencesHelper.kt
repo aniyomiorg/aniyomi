@@ -291,6 +291,8 @@ class PreferencesHelper(val context: Context) {
 
     fun unreadBadge() = flowPrefs.getBoolean(Keys.unreadBadge, true)
 
+    fun languageBadge() = flowPrefs.getBoolean(Keys.languageBadge, false)
+
     fun categoryTabs() = flowPrefs.getBoolean(Keys.categoryTabs, true)
 
     fun animeCategoryTabs() = flowPrefs.getBoolean(Keys.animeCategoryTabs, true)

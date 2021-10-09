@@ -185,9 +185,9 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      */
     fun onWarning(reason: String) {
         with(errorNotificationBuilder) {
-            setContentTitle(context.getString(R.string.download_notifier_downloader_title))
-            setContentText(reason)
-            setSmallIcon(android.R.drawable.stat_sys_warning)
+            setContentTitle(context.getString(R.string.label_warning))
+            setStyle(NotificationCompat.BigTextStyle().bigText(reason))
+            setSmallIcon(R.drawable.ic_warning_white_24dp)
             setAutoCancel(true)
             clearActions()
             setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
@@ -215,7 +215,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                     ?: context.getString(R.string.download_notifier_downloader_title)
             )
             setContentText(error ?: context.getString(R.string.download_notifier_unknown_error))
-            setSmallIcon(android.R.drawable.stat_sys_warning)
+            setSmallIcon(R.drawable.ic_warning_white_24dp)
             clearActions()
             setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
             setProgress(0, 0, false)

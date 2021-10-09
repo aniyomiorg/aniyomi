@@ -159,13 +159,17 @@ class DownloadController :
 
     private fun <R : Comparable<R>> reorderQueue(selector: (DownloadItem) -> R, reverse: Boolean = false) {
         val adapter = adapter ?: return
-        val items = adapter.currentItems.sortedBy(selector).toMutableList()
-        if (reverse) {
-            items.reverse()
+        val newDownloads = mutableListOf<AnimeDownload>()
+        adapter.headerItems.forEach { headerItem ->
+            headerItem as DownloadHeaderItem
+            headerItem.subItems = headerItem.subItems.sortedBy(selector).toMutableList().apply {
+                if (reverse) {
+                    reverse()
+                }
+            }
+            newDownloads.addAll(headerItem.subItems.map { it.download })
         }
-        adapter.updateDataSet(items)
-        val downloads = items.mapNotNull { it.download }
-        presenter.reorder(downloads)
+        presenter.reorder(newDownloads)
     }
 
     /**
@@ -206,7 +210,7 @@ class DownloadController :
      *
      * @param downloads the downloads from the queue.
      */
-    fun onNextDownloads(downloads: List<DownloadItem>) {
+    fun onNextDownloads(downloads: List<DownloadHeaderItem>) {
         activity?.invalidateOptionsMenu()
         setInformationView()
         adapter?.updateDataSet(downloads)
@@ -281,7 +285,11 @@ class DownloadController :
      */
     override fun onItemReleased(position: Int) {
         val adapter = adapter ?: return
-        val downloads = (0 until adapter.itemCount).mapNotNull { adapter.getItem(it)?.download }
+        val downloads = adapter.headerItems.flatMap { header ->
+            adapter.getSectionItems(header).map { item ->
+                (item as DownloadItem).download
+            }
+        }
         presenter.reorder(downloads)
     }
 
@@ -292,38 +300,37 @@ class DownloadController :
      * @param menuItem The menu Item pressed
      */
     override fun onMenuItemClick(position: Int, menuItem: MenuItem) {
-        when (menuItem.itemId) {
-            R.id.move_to_top, R.id.move_to_bottom -> {
-                val download = adapter?.getItem(position) ?: return
-                val items = adapter?.currentItems?.toMutableList() ?: return
-                items.remove(download)
-                if (menuItem.itemId == R.id.move_to_top) {
-                    items.add(0, download)
-                } else {
-                    items.add(download)
+        val item = adapter?.getItem(position) ?: return
+        if (item is DownloadItem) {
+            when (menuItem.itemId) {
+                R.id.move_to_top, R.id.move_to_bottom -> {
+                    val headerItems = adapter?.headerItems ?: return
+                    val newDownloads = mutableListOf<AnimeDownload>()
+                    headerItems.forEach { headerItem ->
+                        headerItem as DownloadHeaderItem
+                        if (headerItem == item.header) {
+                            headerItem.removeSubItem(item)
+                            if (menuItem.itemId == R.id.move_to_top) {
+                                headerItem.addSubItem(0, item)
+                            } else {
+                                headerItem.addSubItem(item)
+                            }
+                        }
+                        newDownloads.addAll(headerItem.subItems.map { it.download })
+                    }
+                    presenter.reorder(newDownloads)
                 }
-
-                val adapter = adapter ?: return
-                adapter.updateDataSet(items)
-                val downloads = adapter.currentItems.mapNotNull { it?.download }
-                presenter.reorder(downloads)
-            }
-            R.id.cancel_download -> {
-                val download = adapter?.getItem(position)?.download ?: return
-                presenter.cancelDownload(download)
-
-                val adapter = adapter ?: return
-                adapter.removeItem(position)
-                val downloads = adapter.currentItems.mapNotNull { it?.download }
-                presenter.reorder(downloads)
-            }
-            R.id.cancel_series -> {
-                val download = adapter?.getItem(position)?.download ?: return
-                val allDownloadsForSeries = adapter?.currentItems
-                    ?.filter { download.anime.id == it.download.anime.id }
-                    ?.map(DownloadItem::download)
-                if (!allDownloadsForSeries.isNullOrEmpty()) {
-                    presenter.cancelDownloads(allDownloadsForSeries)
+                R.id.cancel_download -> {
+                    presenter.cancelDownload(item.download)
+                }
+                R.id.cancel_series -> {
+                    val allDownloadsForSeries = adapter?.currentItems
+                        ?.filterIsInstance<DownloadItem>()
+                        ?.filter { item.download.anime.id == it.download.anime.id }
+                        ?.map(DownloadItem::download)
+                    if (!allDownloadsForSeries.isNullOrEmpty()) {
+                        presenter.cancelDownloads(allDownloadsForSeries)
+                    }
                 }
             }
         }

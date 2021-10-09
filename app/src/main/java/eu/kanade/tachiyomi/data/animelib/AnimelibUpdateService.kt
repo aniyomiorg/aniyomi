@@ -264,6 +264,10 @@ class AnimelibUpdateService(
         animeToUpdate = listToUpdate
             .distinctBy { it.id }
             .sortedWith(rankingScheme[selectedScheme])
+
+        if (animeToUpdate.size > QUEUE_SIZE_WARNING_THRESHOLD) {
+            notifier.showQueueSizeWarningNotification()
+        }
     }
 
     /**
@@ -567,3 +571,5 @@ class AnimelibUpdateService(
         return File("")
     }
 }
+
+const val QUEUE_SIZE_WARNING_THRESHOLD = 100

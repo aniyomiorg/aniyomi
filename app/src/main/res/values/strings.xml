@@ -36,6 +36,7 @@
     <string name="label_extension_info">Extension info</string>
     <string name="label_help">Help</string>
     <string name="label_default">Default</string>
+    <string name="label_warning">Warning</string>
 
     <string name="unlock_app">Unlock Aniyomi</string>
     <string name="confirm_lock_change">Authenticate to confirm change</string>
@@ -119,6 +120,7 @@
     <string name="action_display_download_badge">Download badges</string>
     <string name="action_display_unread_badge">Unread badges</string>
     <string name="action_display_local_badge">Local badges</string>
+    <string name="action_display_language_badge">Language badges</string>
     <string name="action_display_show_tabs">Show category tabs</string>
     <string name="action_display_show_number_of_items">Show number of items</string>
     <string name="action_disable">Disable</string>
@@ -797,6 +799,7 @@
     <!-- Library update service notifications -->
     <string name="notification_check_updates">Checking for new chapters</string>
     <string name="notification_updating">Updating library… (%1$d/%2$d)</string>
+    <string name="notification_size_warning">Large updates may lead to increased battery usage and sources becoming slower</string>
     <string name="notification_new_chapters">New chapters found</string>
     <string name="notification_new_episodes">New episodes found</string>
     <plurals name="notification_new_chapters_summary">

@@ -120,10 +120,9 @@ class AnimeSourcePresenter(
         val disabledSourceIds = preferences.disabledSources().get()
 
         return sourceManager.getCatalogueSources()
-            .filter { it.lang in languages }
+            .filter { it.lang in languages || it.id == LocalAnimeSource.ID }
             .filterNot { it.id.toString() in disabledSourceIds }
-            .sortedBy { "(${it.lang}) ${it.name.lowercase()}" } +
-            sourceManager.get(LocalAnimeSource.ID) as LocalAnimeSource
+            .sortedBy { "(${it.lang}) ${it.name.lowercase()}" }
     }
 
     companion object {

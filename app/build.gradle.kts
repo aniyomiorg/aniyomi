@@ -30,12 +30,13 @@ android {
         targetSdk = AndroidConfig.targetSdk
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         versionCode = 69
-        versionName = "0.12.3.1"
+        versionName = "0.12.3.2"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
         buildConfigField("String", "BUILD_TIME", "\"${getBuildTime()}\"")
         buildConfigField("boolean", "INCLUDE_UPDATER", "false")
+        buildConfigField("boolean", "PREVIEW", "false")
 
         // Please disable ACRA or use your own instance in forked versions of the project
         //buildConfigField("String", "ACRA_URI", "\"https://acra.jmir.xyz/report\"")
@@ -58,25 +59,25 @@ android {
         named("debug") {
             versionNameSuffix = "-${getCommitCount()}"
             applicationIdSuffix = ".debug"
-
-            isShrinkResources = true
-            isMinifyEnabled = true
-            proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
-        }
-        create("debugFull") { // Debug without R8
-            initWith(getByName("debug"))
-            isShrinkResources = false
-            isMinifyEnabled = false
         }
         named("release") {
             isShrinkResources = true
             isMinifyEnabled = true
             proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
         }
+        create("preview") {
+            initWith(getByName("release"))
+            buildConfigField("boolean", "PREVIEW", "true")
+
+            val debugType = getByName("debug")
+            signingConfig = debugType.signingConfig
+            versionNameSuffix = debugType.versionNameSuffix
+            applicationIdSuffix = debugType.applicationIdSuffix
+        }
     }
 
     sourceSets {
-        getByName("debugFull").res.srcDirs("src/debug/res")
+        getByName("preview").res.srcDirs("src/debug/res")
     }
 
     flavorDimensions.add("default")
@@ -139,7 +140,7 @@ dependencies {
 
     // AndroidX libraries
     implementation("androidx.annotation:annotation:1.3.0-beta01")
-    implementation("androidx.appcompat:appcompat:1.4.0-alpha03")
+    implementation("androidx.appcompat:appcompat:1.4.0-beta01")
     implementation("androidx.biometric:biometric-ktx:1.2.0-alpha03")
     implementation("androidx.browser:browser:1.4.0-beta01")
     implementation("androidx.constraintlayout:constraintlayout:2.1.1")
@@ -187,7 +188,7 @@ dependencies {
     implementation("com.squareup.duktape:duktape-android:1.4.0")
 
     // HTML parser
-    implementation("org.jsoup:jsoup:1.14.2")
+    implementation("org.jsoup:jsoup:1.14.3")
 
     // Disk
     implementation("com.jakewharton:disklrucache:2.0.2")
@@ -213,7 +214,7 @@ dependencies {
     implementation("com.github.inorichi.injekt:injekt-core:65b0440")
 
     // Image loading
-    val coilVersion = "1.3.2"
+    val coilVersion = "1.4.0"
     implementation("io.coil-kt:coil:$coilVersion")
     implementation("io.coil-kt:coil-gif:$coilVersion")
 
@@ -256,7 +257,7 @@ dependencies {
 
     // Crash reports/analytics
     implementation("ch.acra:acra-http:5.8.1")
-    "standardImplementation"("com.google.firebase:firebase-analytics:19.0.1")
+    "standardImplementation"("com.google.firebase:firebase-analytics:19.0.2")
 
     // Licenses
     implementation("com.mikepenz:aboutlibraries-core:${BuildPluginsVersion.ABOUTLIB_PLUGIN}")

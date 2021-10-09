@@ -34,6 +34,7 @@ class AnimelibItem(
     var downloadCount = -1
     var unreadCount = -1
     var isLocal = false
+    var sourceLanguage = ""
 
     private fun getDisplayMode(): DisplayModeSetting {
         return if (shouldSetFromCategory.get() && anime.category != 0) {

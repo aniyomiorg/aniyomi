@@ -80,7 +80,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
 
     override val id = ID
     override val name = context.getString(R.string.local_source)
-    override val lang = ""
+    override val lang = "other"
     override val supportsLatest = true
 
     override fun toString() = context.getString(R.string.local_source)

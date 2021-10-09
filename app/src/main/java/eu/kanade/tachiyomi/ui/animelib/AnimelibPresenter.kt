@@ -200,6 +200,7 @@ class AnimelibPresenter(
         val showDownloadBadges = preferences.downloadBadge().get()
         val showUnreadBadges = preferences.unreadBadge().get()
         val showLocalBadges = preferences.localBadge().get()
+        val showLanguageBadges = preferences.languageBadge().get()
 
         for ((_, itemList) in map) {
             for (item in itemList) {
@@ -222,6 +223,13 @@ class AnimelibPresenter(
                 } else {
                     // Hide / Unset local badge if not enabled
                     false
+                }
+
+                item.sourceLanguage = if (showLanguageBadges) {
+                    sourceManager.getOrStub(item.anime.source).lang.uppercase()
+                } else {
+                    // Unset source language if not enabled
+                    ""
                 }
             }
         }

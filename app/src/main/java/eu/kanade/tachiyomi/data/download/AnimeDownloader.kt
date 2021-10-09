@@ -18,6 +18,7 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.model.AnimeDownloadQueue
+import eu.kanade.tachiyomi.data.library.QUEUE_SIZE_WARNING_THRESHOLD
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNow
@@ -268,9 +269,10 @@ class AnimeDownloader(
             }
 
             // Start downloader if needed
-            if (autoStart && wasEmpty) {
-                AnimeDownloadService.start(this@AnimeDownloader.context)
+            if (queue.size > QUEUE_SIZE_WARNING_THRESHOLD) {
+                notifier.onWarning(context.getString(R.string.notification_size_warning))
             }
+            AnimeDownloadService.start(context)
         }
     }
 
