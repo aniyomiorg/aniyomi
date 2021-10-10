@@ -48,7 +48,7 @@ class AnimeSourceItem(val anime: Anime, private val displayMode: Preference<Disp
                         Gravity.BOTTOM
                     )
                 }
-                AnimeSourceGridHolder(view, adapter)
+                AnimeSourceCompactGridHolder(view, adapter)
             }
             DisplayModeSetting.COMFORTABLE_GRID -> {
                 val binding = SourceComfortableGridItemBinding.bind(view)
