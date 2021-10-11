@@ -15,6 +15,7 @@ import eu.kanade.tachiyomi.ui.setting.SettingsController
 import eu.kanade.tachiyomi.ui.setting.SettingsDownloadController
 import eu.kanade.tachiyomi.ui.setting.SettingsGeneralController
 import eu.kanade.tachiyomi.ui.setting.SettingsLibraryController
+import eu.kanade.tachiyomi.ui.setting.SettingsPlayerController
 import eu.kanade.tachiyomi.ui.setting.SettingsReaderController
 import eu.kanade.tachiyomi.ui.setting.SettingsSecurityController
 import eu.kanade.tachiyomi.ui.setting.SettingsTrackingController
@@ -39,7 +40,8 @@ object SettingsSearchHelper {
         SettingsLibraryController::class,
         SettingsReaderController::class,
         SettingsSecurityController::class,
-        SettingsTrackingController::class
+        SettingsTrackingController::class,
+        SettingsPlayerController::class
     )
 
     /**
