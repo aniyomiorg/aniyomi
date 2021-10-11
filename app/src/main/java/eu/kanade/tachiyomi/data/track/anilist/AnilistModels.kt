@@ -112,19 +112,19 @@ data class ALUserAnime(
     val episodes_seen: Int,
     val start_date_fuzzy: Long,
     val completed_date_fuzzy: Long,
-    val manga: ALManga
+    val anime: ALAnime
 ) {
 
     fun toTrack() = AnimeTrack.create(TrackManager.ANILIST).apply {
-        media_id = manga.media_id
-        title = manga.title_user_pref
+        media_id = anime.media_id
+        title = anime.title_user_pref
         status = toTrackStatus()
         score = score_raw.toFloat()
         started_watching_date = start_date_fuzzy
         finished_watching_date = completed_date_fuzzy
         last_episode_seen = episodes_seen.toFloat()
         library_id = this@ALUserAnime.library_id
-        total_episodes = manga.total_chapters
+        total_episodes = anime.total_episodes
     }
 
     fun toTrackStatus() = when (list_status) {
@@ -133,7 +133,7 @@ data class ALUserAnime(
         "PAUSED" -> Anilist.PAUSED
         "DROPPED" -> Anilist.DROPPED
         "PLANNING" -> Anilist.PLANNING
-        "REPEATING" -> Anilist.REPEATING
+        "REPEATING" -> Anilist.REPEATING_ANIME
         else -> throw NotImplementedError("Unknown status: $list_status")
     }
 }
@@ -154,7 +154,7 @@ fun AnimeTrack.toAnilistStatus() = when (status) {
     Anilist.PAUSED -> "PAUSED"
     Anilist.DROPPED -> "DROPPED"
     Anilist.PLANNING -> "PLANNING"
-    Anilist.REPEATING -> "REPEATING"
+    Anilist.REPEATING_ANIME -> "REPEATING"
     else -> throw NotImplementedError("Unknown status: $status")
 }
 

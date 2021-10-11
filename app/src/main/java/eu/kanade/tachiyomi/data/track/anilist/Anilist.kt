@@ -199,6 +199,12 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
             track.library_id = libManga.library_id
         }
 
+        if (track.status != COMPLETED) {
+            if (track.status != REPEATING_ANIME && didWatchEpisode) {
+                track.status = WATCHING
+            }
+        }
+
         return api.updateLibAnime(track)
     }
 
@@ -227,10 +233,16 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         return if (remoteTrack != null) {
             track.copyPersonalFrom(remoteTrack)
             track.library_id = remoteTrack.library_id
+
+            if (track.status != COMPLETED) {
+                val isRereading = track.status == REPEATING_ANIME
+                track.status = if (isRereading.not() && hasReadChapters) WATCHING else track.status
+            }
+
             update(track)
         } else {
             // Set default fields if it's not found in the list
-            track.status = WATCHING
+            track.status = if (hasReadChapters) WATCHING else PLANNING
             track.score = 0F
             add(track)
         }

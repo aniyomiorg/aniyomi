@@ -342,9 +342,9 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
     suspend fun findLibAnime(track: AnimeTrack, userid: Int): AnimeTrack? {
         return withIOContext {
             val query = """
-            |query (${'$'}id: Int!, ${'$'}manga_id: Int!) {
+            |query (${'$'}id: Int!, ${'$'}anime_id: Int!) {
                 |Page {
-                    |mediaList(userId: ${'$'}id, type: ANIME, mediaId: ${'$'}manga_id) {
+                    |mediaList(userId: ${'$'}id, type: ANIME, mediaId: ${'$'}anime_id) {
                         |id
                         |status
                         |scoreRaw: score(format: POINT_100)
@@ -369,7 +369,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                             |}
                             |format
                             |status
-                            |chapters
+                            |episodes
                             |description
                             |startDate {
                                 |year
@@ -385,7 +385,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                 put("query", query)
                 putJsonObject("variables") {
                     put("id", userid)
-                    put("manga_id", track.media_id)
+                    put("anime_id", track.media_id)
                 }
             }
             authClient.newCall(
@@ -498,7 +498,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             struct["progress"]!!.jsonPrimitive.int,
             parseDate(struct, "startedAt"),
             parseDate(struct, "completedAt"),
-            jsonToALManga(struct["media"]!!.jsonObject)
+            jsonToALAnime(struct["media"]!!.jsonObject)
         )
     }
 
