@@ -40,7 +40,7 @@ import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchC
 import eu.kanade.tachiyomi.ui.library.setting.DisplayModeSetting
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.more.MoreController
-import eu.kanade.tachiyomi.ui.webview.WebViewActivityAnime
+import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.system.connectivityManager
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.openInBrowser
@@ -311,7 +311,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
         val source = presenter.source as? AnimeHttpSource ?: return
 
         val activity = activity ?: return
-        val intent = WebViewActivityAnime.newIntent(activity, source.baseUrl, source.id, presenter.source.name)
+        val intent = WebViewActivity.newIntent(activity, source.baseUrl, source.id, presenter.source.name)
         startActivity(intent)
     }
 

@@ -92,7 +92,7 @@ import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
 import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
 import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
 import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesController
-import eu.kanade.tachiyomi.ui.webview.WebViewActivityAnime
+import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.hasCustomCover
 import eu.kanade.tachiyomi.util.lang.awaitSingle
@@ -534,7 +534,7 @@ class AnimeController :
         }
 
         val activity = activity ?: return
-        val intent = WebViewActivityAnime.newIntent(activity, url, source.id, presenter.anime.title)
+        val intent = WebViewActivity.newIntent(activity, url, source.id, presenter.anime.title)
         startActivity(intent)
     }
 

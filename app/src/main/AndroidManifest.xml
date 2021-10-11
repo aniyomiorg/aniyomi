@@ -114,11 +114,6 @@
             android:exported="false" />
 
         <activity
-            android:name=".ui.webview.WebViewActivityAnime"
-            android:configChanges="uiMode|orientation|screenSize"
-            android:exported="false" />
-
-        <activity
             android:name=".extension.util.ExtensionInstallActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="false" />
