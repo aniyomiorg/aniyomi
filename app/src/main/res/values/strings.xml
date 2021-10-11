@@ -782,6 +782,7 @@
 
     <!-- History fragment -->
     <string name="recent_manga_time">Ch. %1$s - %2$s</string>
+    <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="pref_clear_history">Clear history</string>
     <string name="clear_history_completed">History deleted</string>
     <string name="clear_history_confirmation">Are you sure? All history will be lost.</string>
@@ -838,7 +839,7 @@
         <item quantity="other">%1$d updates failed</item>
     </plurals>
     <string name="notification_cover_update_failed">Failed to update cover</string>
-    <string name="notification_first_add_to_library">Please add the manga to your library before doing this</string>
+    <string name="notification_first_add_to_library">Please add the title to your library before doing this</string>
 
     <!-- File Picker Titles -->
     <string name="file_select_cover">Select cover image</string>

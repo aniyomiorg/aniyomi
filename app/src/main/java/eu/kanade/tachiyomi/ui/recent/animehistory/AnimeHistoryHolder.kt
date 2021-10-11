@@ -56,7 +56,7 @@ class AnimeHistoryHolder(
         if (chapter.episode_number > -1f) {
             val formattedNumber = adapter.decimalFormat.format(chapter.episode_number.toDouble())
             binding.mangaSubtitle.text = itemView.context.getString(
-                R.string.recent_manga_time,
+                R.string.recent_anime_time,
                 formattedNumber,
                 Date(animehistory.last_seen).toTimestampString()
             )
