@@ -265,7 +265,9 @@ class AnimelibUpdateService(
             .distinctBy { it.id }
             .sortedWith(rankingScheme[selectedScheme])
 
-        if (animeToUpdate.size > QUEUE_SIZE_WARNING_THRESHOLD) {
+        // Warn when excessively checking a single source
+        val maxUpdatesFromSource = animeToUpdate.groupBy { it.source }.maxOf { it.value.size }
+        if (maxUpdatesFromSource > PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
             notifier.showQueueSizeWarningNotification()
         }
     }
@@ -572,4 +574,4 @@ class AnimelibUpdateService(
     }
 }
 
-const val QUEUE_SIZE_WARNING_THRESHOLD = 100
+const val PER_SOURCE_QUEUE_WARNING_THRESHOLD = 50
