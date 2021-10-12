@@ -103,6 +103,7 @@
     <string name="action_play">Play</string>
     <string name="action_next_chapter">Next chapter</string>
     <string name="action_next_episode">Next episode</string>
+    <string name="action_screen_fit">Screen fit mode</string>
     <string name="action_retry">Retry</string>
     <string name="action_remove">Remove</string>
     <string name="action_start">Start</string>

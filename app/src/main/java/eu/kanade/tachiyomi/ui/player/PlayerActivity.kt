@@ -30,6 +30,7 @@ import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -104,6 +105,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var prevBtn: ImageButton
     private lateinit var backBtn: TextView
     private lateinit var settingsBtn: ImageButton
+    private lateinit var fitScreenBtn: ImageButton
     private lateinit var title: TextView
     private lateinit var bufferingView: ProgressBar
 
@@ -135,6 +137,7 @@ class PlayerActivity : AppCompatActivity() {
             window.hideBar()
         }
         playerView = findViewById(R.id.player_view)
+        playerView.resizeMode = preferences.getPlayerViewMode()
         youTubeDoubleTap = findViewById(R.id.youtube_overlay)
         youTubeDoubleTap.seekSeconds(preferences.skipLengthPreference())
         youTubeDoubleTap
@@ -155,6 +158,7 @@ class PlayerActivity : AppCompatActivity() {
         nextBtn = findViewById(R.id.watcher_controls_next)
         prevBtn = findViewById(R.id.watcher_controls_prev)
         settingsBtn = findViewById(R.id.watcher_controls_settings)
+        fitScreenBtn = findViewById(R.id.watcher_controls_fit_screen)
         bufferingView = findViewById(R.id.exo_buffering)
 
         anime = intent.getSerializableExtra("anime") as Anime
@@ -260,6 +264,9 @@ class PlayerActivity : AppCompatActivity() {
         backBtn.setOnClickListener {
             onBackPressed()
         }
+        fitScreenBtn.setOnClickListener {
+            onClickFitScreen()
+        }
         settingsBtn.setOnClickListener {
             optionsDialog()
         }
@@ -298,6 +305,16 @@ class PlayerActivity : AppCompatActivity() {
             .subscribe {
                 videos = runBlocking { it.awaitSingle() }
             }
+    }
+
+    private fun onClickFitScreen() {
+        playerView.resizeMode = when (playerView.resizeMode) {
+            AspectRatioFrameLayout.RESIZE_MODE_FILL -> AspectRatioFrameLayout.RESIZE_MODE_FIT
+            AspectRatioFrameLayout.RESIZE_MODE_FIT -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+            AspectRatioFrameLayout.RESIZE_MODE_ZOOM -> AspectRatioFrameLayout.RESIZE_MODE_FILL
+            else -> AspectRatioFrameLayout.RESIZE_MODE_FIT
+        }
+        preferences.setPlayerViewMode(playerView.resizeMode)
     }
 
     private fun optionsDialog() {

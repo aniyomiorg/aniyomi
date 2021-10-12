@@ -63,6 +63,8 @@ object PreferenceKeys {
 
     const val playerSpeed = "pref_player_speed"
 
+    const val playerViewMode = "pref_player_view_mode"
+
     const val progressPreference = "pref_progress_preference"
 
     const val skipLengthPreference = "pref_skip_length_preference"

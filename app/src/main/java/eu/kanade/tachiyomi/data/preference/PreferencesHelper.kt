@@ -145,6 +145,12 @@ class PreferencesHelper(val context: Context) {
         putFloat(Keys.playerSpeed, newSpeed)
     }
 
+    fun getPlayerViewMode() = prefs.getInt(Keys.playerViewMode, 0)
+
+    fun setPlayerViewMode(newMode: Int) = prefs.edit {
+        putInt(Keys.playerViewMode, newMode)
+    }
+
     fun alwaysUseExternalPlayer() = prefs.getBoolean(Keys.alwaysUseExternalPlayer, false)
 
     fun externalPlayerPreference() = prefs.getString(Keys.externalPlayerPreference, "")

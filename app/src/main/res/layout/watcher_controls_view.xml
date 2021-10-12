@@ -65,6 +65,10 @@
         android:paddingTop="4dp"
         android:orientation="horizontal">
 
+        <ImageButton android:id="@+id/watcher_controls_fit_screen"
+            style="@style/ExoStyledControls.Button.Bottom.FullScreen"
+            android:contentDescription="@string/action_screen_fit" />
+
         <ImageButton android:id="@+id/watcher_controls_prev"
             style="@style/ExoMediaButton.Previous"
             android:contentDescription="@string/action_previous_episode" />
