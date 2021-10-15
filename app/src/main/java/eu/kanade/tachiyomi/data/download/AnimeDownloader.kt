@@ -5,6 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.webkit.MimeTypeMap
+import com.arthenica.ffmpegkit.ExecuteCallback
+import com.arthenica.ffmpegkit.FFmpegKitConfig
+import com.arthenica.ffmpegkit.FFmpegSession
+import com.arthenica.ffmpegkit.LogCallback
+import com.arthenica.ffmpegkit.SessionState
+import com.arthenica.ffmpegkit.StatisticsCallback
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
@@ -29,6 +35,7 @@ import eu.kanade.tachiyomi.util.system.ImageUtil
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.async
 import logcat.LogPriority
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Response
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -99,6 +106,12 @@ class AnimeDownloader(
     @Volatile
     var isRunning: Boolean = false
         private set
+
+    /**
+     * Whether FFmpeg is running.
+     */
+    @Volatile
+    var isFFmpegRunning: Boolean = false
 
     init {
         launchNow {
@@ -230,6 +243,12 @@ class AnimeDownloader(
         if (!isRunning) return
         isRunning = false
         runningRelay.call(false)
+
+        isFFmpegRunning = false
+        FFmpegKitConfig.getSessions().forEach {
+            it.executeCallback.apply(it)
+            it.cancel()
+        }
 
         subscriptions.clear()
     }
@@ -446,8 +465,62 @@ class AnimeDownloader(
             }
     }
 
+    private fun isHls(video: Video): Boolean {
+        return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
+    }
+
+    private fun hlsObservable(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
+        isFFmpegRunning = true
+        val headers = video.headers ?: source.headers
+        val headerOptions = headers.joinToString("-headers ", "-headers ", " ") { "\"${it.first}: ${it.second}\"" }
+        // TODO: Support other file formats here as well (ffprobe or something, idk)
+        val ffmpegOptions = FFmpegKitConfig.parseArguments(headerOptions + "-i \"${video.videoUrl}\"  -c copy \"${tmpDir.filePath}/$filename.mp4\"")
+        val executeCallback = ExecuteCallback {
+            if (it.state != SessionState.COMPLETED) tmpDir.findFile("$filename.mp4")?.delete()
+        }
+        var duration = 0L
+        var nextLineIsDuration = false
+        val logCallback = LogCallback { log ->
+            if (nextLineIsDuration) {
+                duration = parseDuration(log.message)
+                nextLineIsDuration = false
+            }
+            if (log.message == "  Duration: ") nextLineIsDuration = true
+        }
+        val statisticsCallback = StatisticsCallback {
+            if (duration > 0L) {
+                video.progress = (100 * it.time.toLong() / duration).toInt()
+            }
+        }
+        val session = FFmpegSession(ffmpegOptions, executeCallback, logCallback, statisticsCallback)
+
+        FFmpegKitConfig.ffmpegExecute(session)
+        return Observable.just(session)
+            .map {
+                tmpDir.findFile("$filename.mp4") ?: throw Exception("Downloaded file not found")
+            }
+    }
+
+    /**
+     * Returns the parsed duration in milliseconds
+     *
+     * @param durationString the string formatted in HOURS:MINUTES:SECONDS.HUNDREDTHS
+     */
+    private fun parseDuration(durationString: String): Long {
+        val splitString = durationString.split(":")
+        assert(splitString.lastIndex == 2)
+        val hours = splitString[0].toLong()
+        val minutes = splitString[1].toLong()
+        val secondsString = splitString[2].split(".")
+        assert(secondsString.lastIndex == 1)
+        val fullSeconds = secondsString[0].toLong()
+        val hundredths = secondsString[1].toLong()
+        return hours * 3600000L + minutes * 60000L + fullSeconds * 1000L + hundredths * 10L
+    }
+
     private fun newObservable(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
-        return source.fetchVideo(video)
+        return if (isHls(video)) hlsObservable(video, source, tmpDir, filename)
+        else source.fetchVideo(video)
             .map { response ->
                 val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
                 try {
