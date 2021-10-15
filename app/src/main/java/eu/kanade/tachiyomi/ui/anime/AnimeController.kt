@@ -97,7 +97,6 @@ import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.hasCustomCover
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toShareIntent
@@ -272,13 +271,21 @@ class AnimeController :
         if (anime == null || source == null) return
 
         // Init RecyclerView and adapter
-        animeInfoAdapter = AnimeInfoHeaderAdapter(this, fromSource, binding.infoRecycler != null)
-        episodesHeaderAdapter = AnimeEpisodesHeaderAdapter(this)
+        animeInfoAdapter = AnimeInfoHeaderAdapter(this, fromSource, binding.infoRecycler != null).apply {
+            setHasStableIds(true)
+        }
+        episodesHeaderAdapter = AnimeEpisodesHeaderAdapter(this).apply {
+            setHasStableIds(true)
+        }
         episodesAdapter = EpisodesAdapter(this, view.context)
 
         // Phone layout
         binding.fullRecycler?.let {
-            it.adapter = ConcatAdapter(animeInfoAdapter, episodesHeaderAdapter, episodesAdapter)
+            val config = ConcatAdapter.Config.Builder()
+                .setIsolateViewTypes(true)
+                .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
+                .build()
+            it.adapter = ConcatAdapter(config, animeInfoAdapter, episodesHeaderAdapter, episodesAdapter)
 
             // Skips directly to chapters list if navigated to from the library
             it.post {
@@ -303,7 +310,7 @@ class AnimeController :
 
             binding.fastScroller.doOnLayout { scroller ->
                 scroller.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    topMargin = getMainAppBarHeight()
+                    topMargin += getMainAppBarHeight()
                 }
             }
 
@@ -341,7 +348,6 @@ class AnimeController :
         settingsSheet = EpisodesSettingsSheet(router, presenter) { group ->
             if (group is EpisodesSettingsSheet.Filter.FilterGroup) {
                 updateFilterIconState()
-                episodesAdapter?.notifyDataSetChanged()
             }
         }
 
@@ -641,7 +647,7 @@ class AnimeController :
                 }
             }
         }
-        animeInfoAdapter?.notifyDataSetChanged()
+        animeInfoAdapter?.update()
     }
 
     fun onCategoriesClick() {
@@ -842,7 +848,7 @@ class AnimeController :
 
     override fun deleteAnimeCover(anime: Anime) {
         presenter.deleteCustomCover(anime)
-        animeInfoAdapter?.notifyDataSetChanged()
+        animeInfoAdapter?.notifyItemChanged(0, anime)
         destroyActionModeIfNeeded()
     }
 
@@ -948,7 +954,7 @@ class AnimeController :
     }
 
     fun onSetCoverSuccess() {
-        animeInfoAdapter?.notifyDataSetChanged()
+        animeInfoAdapter?.notifyItemChanged(0, this)
         (dialog as? AnimeFullCoverDialog)?.setImage(anime)
         activity?.toast(R.string.cover_updated)
     }
@@ -1120,19 +1126,20 @@ class AnimeController :
         val lastClickPosition = lastClickPositionStack.peek()!!
         when {
             lastClickPosition == -1 -> setSelection(position)
-            lastClickPosition > position ->
-                for (i in position until lastClickPosition)
-                    setSelection(i)
-            lastClickPosition < position ->
-                for (i in lastClickPosition + 1..position)
-                    setSelection(i)
+            lastClickPosition > position -> {
+                for (i in position until lastClickPosition) setSelection(i)
+                episodesAdapter?.notifyItemRangeChanged(position, lastClickPosition, position)
+            }
+            lastClickPosition < position -> {
+                for (i in lastClickPosition + 1..position) setSelection(i)
+                episodesAdapter?.notifyItemRangeChanged(lastClickPosition + 1, position, position)
+            }
             else -> setSelection(position)
         }
         if (lastClickPosition != position) {
             lastClickPositionStack.remove(position) // move to top if already exists
             lastClickPositionStack.push(position)
         }
-        episodesAdapter?.notifyDataSetChanged()
     }
 
     fun showSettingsSheet() {
@@ -1145,7 +1152,6 @@ class AnimeController :
         val adapter = episodesAdapter ?: return
         val item = adapter.getItem(position) ?: return
         adapter.toggleSelection(position)
-        adapter.notifyDataSetChanged()
         if (adapter.isSelected(position)) {
             selectedEpisodes.add(item)
         } else {
@@ -1292,11 +1298,11 @@ class AnimeController :
         selectedEpisodes.clear()
         for (i in 0..adapter.itemCount) {
             adapter.toggleSelection(i)
+            adapter.notifyItemChanged(i, i)
         }
         selectedEpisodes.addAll(adapter.selectedPositions.mapNotNull { adapter.getItem(it) })
 
         actionMode?.invalidate()
-        adapter.notifyDataSetChanged()
     }
 
     private fun markAsRead(episodes: List<EpisodeItem>) {
@@ -1384,10 +1390,7 @@ class AnimeController :
     fun onEpisodesDeleted(episodes: List<EpisodeItem>) {
         // this is needed so the downloaded text gets removed from the item
         episodes.forEach {
-            episodesAdapter?.updateItem(it)
-        }
-        launchUI {
-            episodesAdapter?.notifyDataSetChanged()
+            episodesAdapter?.updateItem(it, it)
         }
     }
 

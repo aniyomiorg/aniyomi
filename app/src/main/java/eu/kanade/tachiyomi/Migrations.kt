@@ -8,6 +8,7 @@ import eu.kanade.tachiyomi.data.backup.BackupCreatorJob
 import eu.kanade.tachiyomi.data.library.LibraryUpdateJob
 import eu.kanade.tachiyomi.data.preference.PreferenceKeys
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.preference.plusAssign
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.updater.UpdaterJob
 import eu.kanade.tachiyomi.extension.AnimeExtensionUpdateJob
@@ -248,9 +249,9 @@ object Migrations {
                     putString(PreferenceKeys.librarySortingDirection, newSortingDirection.name)
                 }
             }
-            if (oldVersion < 65) {
-                if (preferences.lang().get() in listOf("en-US", "en-GB")) {
-                    preferences.lang().set("en")
+            if (oldVersion < 70) {
+                if (preferences.enabledLanguages().isSet()) {
+                    preferences.enabledLanguages() += "all"
                 }
             }
             return true

@@ -763,6 +763,7 @@ class AnimePresenter(
     fun setDisplayMode(mode: Int) {
         anime.displayMode = mode
         db.updateEpisodeFlags(anime).executeAsBlocking()
+        refreshEpisodes()
     }
 
     /**
