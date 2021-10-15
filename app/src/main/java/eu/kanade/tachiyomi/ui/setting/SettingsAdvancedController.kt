@@ -13,6 +13,8 @@ import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.cache.ChapterCache
+import eu.kanade.tachiyomi.data.cache.EpisodeCache
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService.Target
@@ -49,8 +51,10 @@ class SettingsAdvancedController : SettingsController() {
     private val network: NetworkHelper by injectLazy()
 
     private val chapterCache: ChapterCache by injectLazy()
+    private val episodeCache: EpisodeCache by injectLazy()
 
     private val db: DatabaseHelper by injectLazy()
+    private val animedb: AnimeDatabaseHelper by injectLazy()
 
     @SuppressLint("BatteryLife")
     override fun setupPreferenceScreen(screen: PreferenceScreen) = screen.apply {
@@ -130,9 +134,9 @@ class SettingsAdvancedController : SettingsController() {
             preference {
                 key = CLEAR_CACHE_KEY
                 titleRes = R.string.pref_clear_chapter_cache
-                summary = context.getString(R.string.used_cache, chapterCache.readableSize)
+                summary = context.getString(R.string.used_cache_both, episodeCache.readableSize, chapterCache.readableSize)
 
-                onClick { clearChapterCache() }
+                onClick { clearChapterAndEpisodeCache() }
             }
             preference {
                 key = "pref_clear_database"
@@ -270,15 +274,15 @@ class SettingsAdvancedController : SettingsController() {
         }
     }
 
-    private fun clearChapterCache() {
+    private fun clearChapterAndEpisodeCache() {
         if (activity == null) return
         launchIO {
             try {
-                val deletedFiles = chapterCache.clear()
+                val deletedFiles = chapterCache.clear() + episodeCache.clear()
                 withUIContext {
                     activity?.toast(resources?.getString(R.string.cache_deleted, deletedFiles))
                     findPreference(CLEAR_CACHE_KEY)?.summary =
-                        resources?.getString(R.string.used_cache, chapterCache.readableSize)
+                        resources?.getString(R.string.used_cache_both, episodeCache.readableSize, chapterCache.readableSize)
                 }
             } catch (e: Throwable) {
                 withUIContext { activity?.toast(R.string.cache_delete_error) }
@@ -300,7 +304,9 @@ class SettingsAdvancedController : SettingsController() {
 
     private fun clearDatabase() {
         db.deleteMangasNotInLibrary().executeAsBlocking()
+        animedb.deleteAnimesNotInAnimelib().executeAsBlocking()
         db.deleteHistoryNoLastRead().executeAsBlocking()
+        animedb.deleteHistoryNoLastSeen().executeAsBlocking()
         activity?.toast(R.string.clear_database_completed)
     }
 }

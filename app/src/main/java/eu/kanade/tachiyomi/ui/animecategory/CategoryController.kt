@@ -64,7 +64,7 @@ class CategoryController :
      * Returns the toolbar title to show when this controller is attached.
      */
     override fun getTitle(): String? {
-        return resources?.getString(R.string.action_edit_categories)
+        return resources?.getString(R.string.action_edit_anime_categories)
     }
 
     override fun createBinding(inflater: LayoutInflater) = CategoriesControllerBinding.inflate(inflater)

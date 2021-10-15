@@ -88,7 +88,7 @@ class AnimelibSettingsSheet(
         inner class FilterGroup : Group {
 
             private val downloaded = Item.TriStateGroup(R.string.action_filter_downloaded, this)
-            private val unread = Item.TriStateGroup(R.string.action_filter_unread, this)
+            private val unread = Item.TriStateGroup(R.string.action_filter_unseen, this)
             private val completed = Item.TriStateGroup(R.string.completed, this)
             private val trackFilters: Map<Int, Item.TriStateGroup>
 
@@ -177,17 +177,17 @@ class AnimelibSettingsSheet(
         inner class SortGroup : Group {
 
             private val alphabetically = Item.MultiSort(R.string.action_sort_alpha, this)
-            private val total = Item.MultiSort(R.string.action_sort_total, this)
-            private val lastRead = Item.MultiSort(R.string.action_sort_last_read, this)
+            private val total = Item.MultiSort(R.string.action_sort_total_episodes, this)
+            private val lastSeen = Item.MultiSort(R.string.action_sort_last_seen, this)
             private val lastChecked = Item.MultiSort(R.string.action_sort_last_checked, this)
-            private val unread = Item.MultiSort(R.string.action_filter_unread, this)
-            private val latestChapter = Item.MultiSort(R.string.action_sort_latest_chapter, this)
-            private val chapterFetchDate = Item.MultiSort(R.string.action_sort_chapter_fetch_date, this)
+            private val unseen = Item.MultiSort(R.string.action_filter_unseen, this)
+            private val latestEpisode = Item.MultiSort(R.string.action_sort_latest_episode, this)
+            private val episodeFetchDate = Item.MultiSort(R.string.action_sort_chapter_fetch_date, this)
             private val dateAdded = Item.MultiSort(R.string.action_sort_date_added, this)
 
             override val header = null
             override val items =
-                listOf(alphabetically, lastRead, lastChecked, unread, total, latestChapter, chapterFetchDate, dateAdded)
+                listOf(alphabetically, lastSeen, lastChecked, unseen, total, latestEpisode, episodeFetchDate, dateAdded)
             override val footer = null
 
             override fun initModels() {
@@ -200,17 +200,17 @@ class AnimelibSettingsSheet(
 
                 alphabetically.state =
                     if (sorting == SortModeSetting.ALPHABETICAL) order else Item.MultiSort.SORT_NONE
-                lastRead.state =
+                lastSeen.state =
                     if (sorting == SortModeSetting.LAST_READ) order else Item.MultiSort.SORT_NONE
                 lastChecked.state =
                     if (sorting == SortModeSetting.LAST_CHECKED) order else Item.MultiSort.SORT_NONE
-                unread.state =
+                unseen.state =
                     if (sorting == SortModeSetting.UNREAD) order else Item.MultiSort.SORT_NONE
                 total.state =
                     if (sorting == SortModeSetting.TOTAL_CHAPTERS) order else Item.MultiSort.SORT_NONE
-                latestChapter.state =
+                latestEpisode.state =
                     if (sorting == SortModeSetting.LATEST_CHAPTER) order else Item.MultiSort.SORT_NONE
-                chapterFetchDate.state =
+                episodeFetchDate.state =
                     if (sorting == SortModeSetting.DATE_FETCHED) order else Item.MultiSort.SORT_NONE
                 dateAdded.state =
                     if (sorting == SortModeSetting.DATE_ADDED) order else Item.MultiSort.SORT_NONE
@@ -257,12 +257,12 @@ class AnimelibSettingsSheet(
             private fun setSortModePreference(item: Item) {
                 val flag = when (item) {
                     alphabetically -> SortModeSetting.ALPHABETICAL
-                    lastRead -> SortModeSetting.LAST_READ
+                    lastSeen -> SortModeSetting.LAST_READ
                     lastChecked -> SortModeSetting.LAST_CHECKED
-                    unread -> SortModeSetting.UNREAD
+                    unseen -> SortModeSetting.UNREAD
                     total -> SortModeSetting.TOTAL_CHAPTERS
-                    latestChapter -> SortModeSetting.LATEST_CHAPTER
-                    chapterFetchDate -> SortModeSetting.DATE_FETCHED
+                    latestEpisode -> SortModeSetting.LATEST_CHAPTER
+                    episodeFetchDate -> SortModeSetting.DATE_FETCHED
                     dateAdded -> SortModeSetting.DATE_ADDED
                     else -> throw NotImplementedError("Unknown display mode")
                 }
@@ -364,18 +364,18 @@ class AnimelibSettingsSheet(
         }
 
         inner class BadgeGroup : Group {
-            private val downloadBadge = Item.CheckboxGroup(R.string.action_display_download_badge, this)
-            private val unreadBadge = Item.CheckboxGroup(R.string.action_display_unread_badge, this)
-            private val localBadge = Item.CheckboxGroup(R.string.action_display_local_badge, this)
+            private val downloadBadge = Item.CheckboxGroup(R.string.action_display_download_badge_anime, this)
+            private val unseenBadge = Item.CheckboxGroup(R.string.action_display_unseen_badge, this)
+            private val localBadge = Item.CheckboxGroup(R.string.action_display_local_badge_anime, this)
             private val languageBadge = Item.CheckboxGroup(R.string.action_display_language_badge, this)
 
             override val header = Item.Header(R.string.badges_header)
-            override val items = listOf(downloadBadge, unreadBadge, localBadge, languageBadge)
+            override val items = listOf(downloadBadge, unseenBadge, localBadge, languageBadge)
             override val footer = null
 
             override fun initModels() {
                 downloadBadge.checked = preferences.downloadBadge().get()
-                unreadBadge.checked = preferences.unreadBadge().get()
+                unseenBadge.checked = preferences.unreadBadge().get()
                 localBadge.checked = preferences.localBadge().get()
                 languageBadge.checked = preferences.languageBadge().get()
             }
@@ -385,7 +385,7 @@ class AnimelibSettingsSheet(
                 item.checked = !item.checked
                 when (item) {
                     downloadBadge -> preferences.downloadBadge().set((item.checked))
-                    unreadBadge -> preferences.unreadBadge().set((item.checked))
+                    unseenBadge -> preferences.unreadBadge().set((item.checked))
                     localBadge -> preferences.localBadge().set((item.checked))
                     languageBadge -> preferences.languageBadge().set((item.checked))
                 }

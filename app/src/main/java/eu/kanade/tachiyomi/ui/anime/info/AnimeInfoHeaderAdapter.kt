@@ -235,7 +235,7 @@ class AnimeInfoHeaderAdapter(
 
             // Update author TextView.
             binding.mangaAuthor.text = if (anime.author.isNullOrBlank()) {
-                view.context.getString(R.string.unknown_author)
+                view.context.getString(R.string.unknown_studio)
             } else {
                 anime.author
             }
