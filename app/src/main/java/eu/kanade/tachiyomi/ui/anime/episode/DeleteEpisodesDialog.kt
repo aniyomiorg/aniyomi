@@ -16,7 +16,7 @@ class DeleteEpisodesDialog<T>(bundle: Bundle? = null) : DialogController(bundle)
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(activity!!)
-            .setMessage(R.string.confirm_delete_chapters)
+            .setMessage(R.string.confirm_delete_episodes)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 (targetController as? Listener)?.deleteEpisodes()
             }

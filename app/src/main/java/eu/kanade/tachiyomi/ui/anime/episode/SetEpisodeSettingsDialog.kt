@@ -24,7 +24,7 @@ class SetEpisodeSettingsDialog(bundle: Bundle? = null) : DialogController(bundle
         }
 
         return MaterialAlertDialogBuilder(activity!!)
-            .setTitle(R.string.chapter_settings)
+            .setTitle(R.string.episode_settings)
             .setView(view)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 EpisodeSettingsHelper.setGlobalSettings(args.getSerializable(ANIME_KEY)!! as Anime)
