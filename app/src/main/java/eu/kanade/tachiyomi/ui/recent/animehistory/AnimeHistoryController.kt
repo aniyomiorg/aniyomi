@@ -103,7 +103,7 @@ class AnimeHistoryController :
      * @param animeAnimeHistory list of anime history
      */
     fun onNextAnime(animeAnimeHistory: List<AnimeHistoryItem>, cleanBatch: Boolean = false) {
-        if (adapter?.itemCount ?: 0 == 0 || cleanBatch) {
+        if (adapter?.itemCount ?: 0 == 0) {
             resetProgressItem()
         }
         if (cleanBatch) {

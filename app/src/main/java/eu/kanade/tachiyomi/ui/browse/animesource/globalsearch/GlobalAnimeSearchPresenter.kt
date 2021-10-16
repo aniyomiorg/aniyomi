@@ -4,7 +4,6 @@ import android.os.Bundle
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
-import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.toSAnime
@@ -165,7 +164,7 @@ open class GlobalAnimeSearchPresenter(
         fetchSourcesSubscription = Observable.from(sources)
             .flatMap(
                 { source ->
-                    Observable.defer { source.fetchSearchAnime(1, query, AnimeFilterList()) }
+                    Observable.defer { source.fetchSearchAnime(1, query, source.getFilterList()) }
                         .subscribeOn(Schedulers.io())
                         .onErrorReturn { AnimesPage(emptyList(), false) } // Ignore timeouts or other exceptions
                         .map { it.animes }
