@@ -20,8 +20,8 @@ import java.io.InputStream
 class AnimeCoverCache(private val context: Context) {
 
     companion object {
-        private const val COVERS_DIR = "covers"
-        private const val CUSTOM_COVERS_DIR = "covers/custom"
+        private const val COVERS_DIR = "animecovers"
+        private const val CUSTOM_COVERS_DIR = "animecovers/custom"
     }
 
     /**
