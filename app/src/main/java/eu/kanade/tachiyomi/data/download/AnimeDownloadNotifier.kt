@@ -104,6 +104,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
 
             if (preferences.hideNotificationContent()) {
                 setContentTitle(downloadingProgressText)
+                setContentText(null)
             } else {
                 val title = download.anime.title.chop(15)
                 val quotedTitle = Pattern.quote(title)
