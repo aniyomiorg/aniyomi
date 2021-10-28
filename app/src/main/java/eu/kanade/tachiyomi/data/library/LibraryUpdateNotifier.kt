@@ -88,20 +88,6 @@ class LibraryUpdateNotifier(private val context: Context) {
         )
     }
 
-    fun showQueueSizeWarningNotification() {
-        val notification = context.notificationBuilder(Notifications.CHANNEL_LIBRARY_PROGRESS) {
-            setContentTitle(context.getString(R.string.label_warning))
-            setSmallIcon(R.drawable.ic_warning_white_24dp)
-            setStyle(NotificationCompat.BigTextStyle().bigText(context.getString(R.string.notification_size_warning)))
-        }
-            .build()
-
-        context.notificationManager.notify(
-            Notifications.ID_LIBRARY_SIZE_WARNING,
-            notification,
-        )
-    }
-
     /**
      * Shows notification containing update entries that failed with action to open full log.
      *
@@ -117,23 +103,10 @@ class LibraryUpdateNotifier(private val context: Context) {
             Notifications.ID_LIBRARY_ERROR,
             context.notificationBuilder(Notifications.CHANNEL_LIBRARY_ERROR) {
                 setContentTitle(context.resources.getQuantityString(R.plurals.notification_update_error, errors.size, errors.size))
-                setStyle(
-                    NotificationCompat.BigTextStyle().bigText(
-                        errors.joinToString("\n") {
-                            it.chop(NOTIF_TITLE_MAX_LEN)
-                        }
-                    )
-                )
+                setContentText(context.getString(R.string.action_show_errors))
                 setSmallIcon(R.drawable.ic_tachi)
 
-                val errorLogIntent = NotificationReceiver.openErrorLogPendingActivity(context, uri)
-
-                setContentIntent(errorLogIntent)
-                addAction(
-                    R.drawable.ic_folder_24dp,
-                    context.getString(R.string.action_show_errors),
-                    errorLogIntent
-                )
+                setContentIntent(NotificationReceiver.openErrorLogPendingActivity(context, uri))
             }
                 .build()
         )

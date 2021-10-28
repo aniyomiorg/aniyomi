@@ -13,6 +13,7 @@ import eu.kanade.tachiyomi.util.lang.withIOContext
 import kotlinx.serialization.Serializable
 import uy.kohesive.injekt.injectLazy
 import java.util.Date
+import java.util.concurrent.TimeUnit
 
 internal class AnimeExtensionGithubApi {
 
@@ -30,6 +31,11 @@ internal class AnimeExtensionGithubApi {
     }
 
     suspend fun checkForUpdates(context: Context): List<AnimeExtension.Installed> {
+        // Limit checks to once a day at most
+        if (Date().time < preferences.lastExtCheck().get() + TimeUnit.DAYS.toMillis(1)) {
+            return emptyList()
+        }
+
         val extensions = findExtensions()
 
         preferences.lastAnimeExtCheck().set(Date().time)

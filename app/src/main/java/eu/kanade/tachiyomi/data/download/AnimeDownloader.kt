@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.webkit.MimeTypeMap
+import android.widget.Toast
 import com.arthenica.ffmpegkit.ExecuteCallback
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFmpegSession
@@ -19,7 +20,6 @@ import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
-import eu.kanade.tachiyomi.data.animelib.PER_SOURCE_QUEUE_WARNING_THRESHOLD
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
@@ -29,10 +29,12 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNow
 import eu.kanade.tachiyomi.util.lang.plusAssign
+import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.system.ImageUtil
 import eu.kanade.tachiyomi.util.system.logcat
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -290,8 +292,10 @@ class AnimeDownloader(
             // Start downloader if needed
             if (autoStart && wasEmpty) {
                 val maxDownloadsFromSource = queue.groupBy { it.source }.maxOf { it.value.size }
-                if (maxDownloadsFromSource > PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
-                    notifier.onWarning(context.getString(R.string.notification_size_warning))
+                if (maxDownloadsFromSource > EPISODES_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
+                    withUIContext {
+                        context.toast(R.string.download_queue_size_warning, Toast.LENGTH_LONG)
+                    }
                 }
                 AnimeDownloadService.start(context)
             }
@@ -676,8 +680,10 @@ class AnimeDownloader(
 
     companion object {
         const val TMP_DIR_SUFFIX = "_tmp"
-
-        // Arbitrary minimum required space to start a download: 50 MB
-        const val MIN_DISK_SPACE = 50 * 1024 * 1024
     }
 }
+
+private const val EPISODES_PER_SOURCE_QUEUE_WARNING_THRESHOLD = 15
+
+// Arbitrary minimum required space to start a download: 50 MB
+private const val MIN_DISK_SPACE = 50 * 1024 * 1024

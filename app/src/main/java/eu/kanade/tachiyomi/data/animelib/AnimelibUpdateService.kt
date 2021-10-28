@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -38,6 +39,7 @@ import eu.kanade.tachiyomi.util.system.acquireWakeLock
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import eu.kanade.tachiyomi.util.system.isServiceRunning
 import eu.kanade.tachiyomi.util.system.logcat
+import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -267,8 +269,8 @@ class AnimelibUpdateService(
 
         // Warn when excessively checking a single source
         val maxUpdatesFromSource = animeToUpdate.groupBy { it.source }.maxOf { it.value.size }
-        if (maxUpdatesFromSource > PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
-            notifier.showQueueSizeWarningNotification()
+        if (maxUpdatesFromSource > ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
+            toast(R.string.notification_size_warning, Toast.LENGTH_LONG)
         }
     }
 
@@ -443,14 +445,6 @@ class AnimelibUpdateService(
                                             logcat(LogPriority.ERROR, e)
                                         }
                                     }
-
-                                    currentlyUpdatingAnime.remove(anime)
-                                    progressCount.andIncrement
-                                    notifier.showProgressNotification(
-                                        currentlyUpdatingAnime,
-                                        progressCount.get(),
-                                        animeToUpdate.size
-                                    )
                                 }
                             }
                         }
@@ -574,4 +568,4 @@ class AnimelibUpdateService(
     }
 }
 
-const val PER_SOURCE_QUEUE_WARNING_THRESHOLD = 60
+private const val ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD = 60
