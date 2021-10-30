@@ -39,7 +39,7 @@
 
     <item
         android:id="@+id/action_edit_categories"
-        android:title="@string/action_edit_categories"
+        android:title="@string/action_edit_anime_categories"
         app:showAsAction="never" />
 
     <item

@@ -58,7 +58,7 @@ class ChangeAnimeCategoriesDialog<T>(bundle: Bundle? = null) :
                     }
                 } else {
                     setMessage(R.string.information_empty_category_dialog)
-                    setPositiveButton(R.string.action_edit_categories) { _, _ ->
+                    setPositiveButton(R.string.action_edit_anime_categories) { _, _ ->
                         if (targetController is AnimelibController) {
                             val libController = targetController as AnimelibController
                             libController.clearSelection()
