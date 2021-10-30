@@ -2,7 +2,9 @@ package eu.kanade.tachiyomi.ui.browse.animeextension
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.extension.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
@@ -76,6 +78,14 @@ open class AnimeExtensionPresenter(
 
         if (updatesSorted.isNotEmpty()) {
             val header = AnimeExtensionGroupItem(context.getString(R.string.ext_updates_pending), updatesSorted.size, true)
+            if (preferences.extensionInstaller().get() != PreferenceValues.ExtensionInstaller.LEGACY) {
+                header.actionLabel = context.getString(R.string.ext_update_all)
+                header.actionOnClick = View.OnClickListener { _ ->
+                    extensions
+                        .filter { it.extension is AnimeExtension.Installed && it.extension.hasUpdate }
+                        .forEach { updateExtension(it.extension as AnimeExtension.Installed) }
+                }
+            }
             items += updatesSorted.map { extension ->
                 AnimeExtensionItem(extension, header, currentDownloads[extension.pkgName] ?: InstallStep.Idle)
             }

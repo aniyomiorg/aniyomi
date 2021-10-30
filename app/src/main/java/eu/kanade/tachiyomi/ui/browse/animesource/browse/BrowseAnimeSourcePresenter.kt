@@ -202,6 +202,10 @@ open class BrowseAnimeSourcePresenter(
             val result = db.insertAnime(newAnime).executeAsBlocking()
             newAnime.id = result.insertedId()
             localAnime = newAnime
+        } else if (!localAnime.favorite) {
+            // if the anime isn't a favorite, set its display title from source
+            // if it later becomes a favorite, updated title will go to db
+            localAnime.title = sAnime.title
         }
         return localAnime
     }

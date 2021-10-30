@@ -39,6 +39,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
 
         private val SUPPORTED_FILE_TYPES = setOf("mp4", "m3u8", "mkv")
 
+        private const val COVER_NAME = "cover.jpg"
         private val LATEST_THRESHOLD = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)
 
         fun updateCover(context: Context, anime: SAnime, input: InputStream): File? {
@@ -47,9 +48,11 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
                 input.close()
                 return null
             }
-            val cover = getCoverFile(File("${dir.absolutePath}/${anime.url}"))
-
-            if (cover != null && cover.exists()) {
+            var cover = getCoverFile(File("${dir.absolutePath}/${anime.url}"))
+            if (cover == null) {
+                cover = File("${dir.absolutePath}/${anime.url}", COVER_NAME)
+            }
+            if (cover != null && !cover.exists()) {
                 // It might not exist if using the external SD card
                 cover.parentFile?.mkdirs()
                 input.use {

@@ -210,6 +210,10 @@ class AnimePresenter(
                 val sAnime = networkAnime.toSAnime()
                 anime.prepUpdateCover(coverCache, sAnime, manualFetch)
                 anime.copyFrom(sAnime)
+                if (!anime.favorite) {
+                    // if the anime isn't a favorite, set its title from source and update in db
+                    anime.title = sAnime.title
+                }
                 anime.initialized = true
                 db.insertAnime(anime).executeAsBlocking()
 

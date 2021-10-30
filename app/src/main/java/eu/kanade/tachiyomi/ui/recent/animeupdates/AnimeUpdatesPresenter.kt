@@ -113,6 +113,9 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
                 }
                 setDownloadedEpisodes(list)
                 episodes = list
+
+                // Set unseen episode count for bottom bar badge
+                preferences.unseenUpdatesCount().set(list.count { !it.seen })
             }
     }
 

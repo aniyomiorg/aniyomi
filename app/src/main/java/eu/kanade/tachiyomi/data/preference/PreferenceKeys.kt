@@ -160,6 +160,8 @@ object PreferenceKeys {
 
     const val libraryUpdateRestriction = "library_update_restriction"
 
+    const val showUpdatesNavBadge = "library_update_show_tab_badge"
+
     const val libraryUpdateCategories = "library_update_categories"
     const val animelibUpdateCategories = "animelib_update_categories"
     const val libraryUpdateCategoriesExclude = "library_update_categories_exclude"

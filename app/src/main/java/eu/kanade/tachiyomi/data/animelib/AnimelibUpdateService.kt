@@ -291,6 +291,7 @@ class AnimelibUpdateService(
         val failedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val hasDownloads = AtomicBoolean(false)
         val loggedServices by lazy { trackManager.services.filter { it.isLogged } }
+        val currentUnseenUpdatesCount = preferences.unseenUpdatesCount().get()
 
         withIOContext {
             animeToUpdate.groupBy { it.source }
@@ -354,6 +355,8 @@ class AnimelibUpdateService(
 
         if (newUpdates.isNotEmpty()) {
             notifier.showUpdateNotifications(newUpdates)
+            val newEpisodeCount = newUpdates.sumOf { it.second.size }
+            preferences.unseenUpdatesCount().set(currentUnseenUpdatesCount + newEpisodeCount)
             if (hasDownloads.get()) {
                 AnimeDownloadService.start(this)
             }
