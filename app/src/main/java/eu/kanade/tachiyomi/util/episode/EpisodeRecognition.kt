@@ -11,7 +11,7 @@ object EpisodeRecognition {
      * All cases with Ch.xx
      * Mokushiroku Alice Vol.1 Ch. 4: Misrepresentation -R> 4
      */
-    private val basic = Regex("""(?<=ch\.) *([0-9]+)(\.[0-9]+)?(\.?[a-z]+)?""")
+    private val basic = Regex("""(?<=ep\.) *([0-9]+)(\.[0-9]+)?(\.?[a-z]+)?""")
 
     /**
      * Regex used when only one number occurrence
@@ -39,7 +39,7 @@ object EpisodeRecognition {
 
     fun parseEpisodeNumber(episode: SEpisode, anime: SAnime) {
         // If episode number is known return.
-        if (episode.episode_number == -2f || episode.episode_number > -1f) {
+        if (episode.episode_number == -2F || episode.episode_number > -1F) {
             return
         }
 
@@ -59,7 +59,7 @@ object EpisodeRecognition {
             it.forEach { occurrence -> name = name.replace(occurrence.value, "") }
         }
 
-        // Check base case ch.xx
+        // Check base case ep.xx
         if (updateEpisode(basic.find(name), episode)) {
             return
         }
