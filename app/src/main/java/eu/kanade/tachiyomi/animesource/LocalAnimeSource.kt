@@ -37,8 +37,6 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         const val ID = 0L
         const val HELP_URL = "https://tachiyomi.org/help/guides/local-anime/"
 
-        private val SUPPORTED_FILE_TYPES = setOf("mp4", "m3u8", "mkv")
-
         private const val COVER_NAME = "cover.jpg"
         private val LATEST_THRESHOLD = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)
 
@@ -52,7 +50,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
             if (cover == null) {
                 cover = File("${dir.absolutePath}/${anime.url}", COVER_NAME)
             }
-            if (cover != null && !cover.exists()) {
+            if (!cover.exists()) {
                 // It might not exist if using the external SD card
                 cover.parentFile?.mkdirs()
                 input.use {
@@ -86,7 +84,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
     override val lang = "other"
     override val supportsLatest = true
 
-    override fun toString() = context.getString(R.string.local_source)
+    override fun toString() = name
 
     override fun fetchPopularAnime(page: Int) = fetchSearchAnime(page, "", POPULAR_FILTERS)
 
@@ -168,7 +166,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
             .asSequence()
             .mapNotNull { File(it, anime.url).listFiles()?.toList() }
             .flatten()
-            .firstOrNull { it.extension == "json" }
+            .firstOrNull { it.extension.lowercase() == "json" }
             ?.apply {
                 val obj = json.decodeFromStream<JsonObject>(inputStream())
 
@@ -207,8 +205,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
                         }
                     }*/
 
-                    val chapNameCut = stripAnimeTitle(name, anime.title)
-                    if (chapNameCut.isNotEmpty()) name = chapNameCut
+                    name = getCleanEpisodeTitle(name, anime.title)
                     EpisodeRecognition.parseEpisodeNumber(this, anime)
                 }
             }
@@ -227,37 +224,12 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
     }
 
     /**
-     * Strips the anime title from a episode name, matching only based on alphanumeric and whitespace
-     * characters.
+     * Strips the anime title from a chapter name and trim whitespace/delimiter characters.
      */
-    private fun stripAnimeTitle(episodeName: String, animeTitle: String): String {
-        var episodeNameIndex = 0
-        var animeTitleIndex = 0
-        while (episodeNameIndex < episodeName.length && animeTitleIndex < animeTitle.length) {
-            val episodeChar = episodeName[episodeNameIndex]
-            val animeChar = animeTitle[animeTitleIndex]
-            if (!episodeChar.equals(animeChar, true)) {
-                val invalidEpisodeChar = !episodeChar.isLetterOrDigit() && !episodeChar.isWhitespace()
-                val invalidAnimeChar = !animeChar.isLetterOrDigit() && !animeChar.isWhitespace()
-
-                if (!invalidEpisodeChar && !invalidAnimeChar) {
-                    return episodeName
-                }
-
-                if (invalidEpisodeChar) {
-                    episodeNameIndex++
-                }
-
-                if (invalidAnimeChar) {
-                    animeTitleIndex++
-                }
-            } else {
-                episodeNameIndex++
-                animeTitleIndex++
-            }
-        }
-
-        return episodeName.substring(episodeNameIndex).trimStart(' ', '-', '_', ',', ':')
+    private fun getCleanEpisodeTitle(episodeName: String, animeTitle: String): String {
+        return episodeName
+            .replace(animeTitle, "")
+            .trim(*WHITESPACE_CHARS.toCharArray(), '-', '_', ',', ':')
     }
 
     private fun isSupportedFile(extension: String): Boolean {
@@ -341,3 +313,34 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         data class Anime(val file: File) : Format()
     }
 }
+
+private val SUPPORTED_FILE_TYPES = listOf("zip", "cbz", "rar", "cbr", "epub")
+
+private val WHITESPACE_CHARS = arrayOf(
+    ' ',
+    '\u0009',
+    '\u000A',
+    '\u000B',
+    '\u000C',
+    '\u000D',
+    '\u0020',
+    '\u0085',
+    '\u00A0',
+    '\u1680',
+    '\u2000',
+    '\u2001',
+    '\u2002',
+    '\u2003',
+    '\u2004',
+    '\u2005',
+    '\u2006',
+    '\u2007',
+    '\u2008',
+    '\u2009',
+    '\u200A',
+    '\u2028',
+    '\u2029',
+    '\u202F',
+    '\u205F',
+    '\u3000',
+)
