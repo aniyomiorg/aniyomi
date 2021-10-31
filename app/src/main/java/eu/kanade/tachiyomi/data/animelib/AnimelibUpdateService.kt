@@ -268,7 +268,7 @@ class AnimelibUpdateService(
             .sortedWith(rankingScheme[selectedScheme])
 
         // Warn when excessively checking a single source
-        val maxUpdatesFromSource = animeToUpdate.groupBy { it.source }.maxOf { it.value.size }
+        val maxUpdatesFromSource = animeToUpdate.groupBy { it.source }.maxOfOrNull { it.value.size } ?: 0
         if (maxUpdatesFromSource > ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
             toast(R.string.notification_size_warning, Toast.LENGTH_LONG)
         }
