@@ -132,7 +132,7 @@ data class ALUserAnime(
         "COMPLETED" -> Anilist.COMPLETED
         "PAUSED" -> Anilist.PAUSED
         "DROPPED" -> Anilist.DROPPED
-        "PLANNING" -> Anilist.PLANNING
+        "PLANNING" -> Anilist.PLANNING_ANIME
         "REPEATING" -> Anilist.REPEATING_ANIME
         else -> throw NotImplementedError("Unknown status: $list_status")
     }
@@ -153,7 +153,7 @@ fun AnimeTrack.toAnilistStatus() = when (status) {
     Anilist.COMPLETED -> "COMPLETED"
     Anilist.PAUSED -> "PAUSED"
     Anilist.DROPPED -> "DROPPED"
-    Anilist.PLANNING -> "PLANNING"
+    Anilist.PLANNING_ANIME -> "PLANNING"
     Anilist.REPEATING_ANIME -> "REPEATING"
     else -> throw NotImplementedError("Unknown status: $status")
 }

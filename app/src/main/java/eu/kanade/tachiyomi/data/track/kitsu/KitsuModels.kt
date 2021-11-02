@@ -138,6 +138,8 @@ class KitsuLibAnime(obj: JsonObject, anime: JsonObject) {
     val original = anime["attributes"]!!.jsonObject["posterImage"]!!.jsonObject["original"]!!.jsonPrimitive.content
     private val synopsis = anime["attributes"]!!.jsonObject["synopsis"]!!.jsonPrimitive.content
     private val startDate = anime["attributes"]!!.jsonObject["startDate"]?.jsonPrimitive?.contentOrNull.orEmpty()
+    private val startedAt = obj["attributes"]!!.jsonObject["startedAt"]?.jsonPrimitive?.contentOrNull
+    private val finishedAt = obj["attributes"]!!.jsonObject["finishedAt"]?.jsonPrimitive?.contentOrNull
     private val libraryId = obj["id"]!!.jsonPrimitive.int
     val status = obj["attributes"]!!.jsonObject["status"]!!.jsonPrimitive.content
     private val ratingTwenty = obj["attributes"]!!.jsonObject["ratingTwenty"]?.jsonPrimitive?.contentOrNull
@@ -153,6 +155,8 @@ class KitsuLibAnime(obj: JsonObject, anime: JsonObject) {
         publishing_status = this@KitsuLibAnime.status
         publishing_type = type
         start_date = startDate
+        started_watching_date = KitsuDateHelper.parse(startedAt)
+        finished_watching_date = KitsuDateHelper.parse(finishedAt)
         status = toTrackStatus()
         score = ratingTwenty?.let { it.toInt() / 2f } ?: 0f
         last_episode_seen = progress.toFloat()

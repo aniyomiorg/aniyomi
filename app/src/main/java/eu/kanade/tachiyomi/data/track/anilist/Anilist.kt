@@ -23,6 +23,7 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         const val PAUSED = 3
         const val DROPPED = 4
         const val PLANNING = 5
+        const val PLANNING_ANIME = 15
         const val REPEATING = 6
         const val REPEATING_ANIME = 16
 
@@ -65,14 +66,15 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
     }
 
     override fun getStatusListAnime(): List<Int> {
-        return listOf(WATCHING, PLANNING, COMPLETED, REPEATING_ANIME, PAUSED, DROPPED)
+        return listOf(WATCHING, PLANNING_ANIME, COMPLETED, REPEATING_ANIME, PAUSED, DROPPED)
     }
 
     override fun getStatus(status: Int): String = with(context) {
         when (status) {
             WATCHING -> getString(R.string.watching)
             READING -> getString(R.string.reading)
-            PLANNING -> getString(R.string.plan_to_watch)
+            PLANNING -> getString(R.string.plan_to_read)
+            PLANNING_ANIME -> getString(R.string.plan_to_watch)
             COMPLETED -> getString(R.string.completed)
             REPEATING -> getString(R.string.repeating)
             REPEATING_ANIME -> getString(R.string.repeating_anime)
@@ -242,7 +244,7 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
             update(track)
         } else {
             // Set default fields if it's not found in the list
-            track.status = if (hasReadChapters) WATCHING else PLANNING
+            track.status = if (hasReadChapters) WATCHING else PLANNING_ANIME
             track.score = 0F
             add(track)
         }
