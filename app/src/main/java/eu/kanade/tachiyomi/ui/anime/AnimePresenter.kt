@@ -944,8 +944,8 @@ class AnimePresenter(
 
     fun setTrackerLastEpisodeSeen(item: TrackItem, episodeNumber: Int) {
         val track = item.track!!
-        if (track.last_episode_seen == 0F && track.last_episode_seen < episodeNumber && track.status != item.service.getRereadingStatus()) {
-            track.status = item.service.getReadingStatus()
+        if (track.last_episode_seen == 0F && track.last_episode_seen < episodeNumber && track.status != item.service.getRewatchingStatus()) {
+            track.status = item.service.getWatchingStatus()
         }
         track.last_episode_seen = episodeNumber.toFloat()
         if (track.total_episodes != 0 && track.last_episode_seen.toInt() == track.total_episodes) {
