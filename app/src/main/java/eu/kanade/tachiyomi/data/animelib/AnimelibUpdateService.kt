@@ -43,7 +43,6 @@ import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
@@ -386,24 +385,19 @@ class AnimelibUpdateService(
     suspend fun updateAnime(anime: Anime): Pair<List<Episode>, List<Episode>> {
         val source = sourceManager.getOrStub(anime.source)
 
-        // Update anime details metadata in the background
+        // Update anime details metadata
         if (preferences.autoUpdateMetadata()) {
-            val handler = CoroutineExceptionHandler { _, exception ->
-                logcat(LogPriority.ERROR, exception)
+            val updatedAnime = source.getAnimeDetails(anime.toAnimeInfo())
+            val sAnime = updatedAnime.toSAnime()
+            // Avoid "losing" existing cover
+            if (!sAnime.thumbnail_url.isNullOrEmpty()) {
+                anime.prepUpdateCover(coverCache, sAnime, false)
+            } else {
+                sAnime.thumbnail_url = anime.thumbnail_url
             }
-            GlobalScope.launch(Dispatchers.IO + handler) {
-                val updatedAnime = source.getAnimeDetails(anime.toAnimeInfo())
-                val sAnime = updatedAnime.toSAnime()
-                // Avoid "losing" existing cover
-                if (!sAnime.thumbnail_url.isNullOrEmpty()) {
-                    anime.prepUpdateCover(coverCache, sAnime, false)
-                } else {
-                    sAnime.thumbnail_url = anime.thumbnail_url
-                }
 
-                anime.copyFrom(sAnime)
-                db.insertAnime(anime).executeAsBlocking()
-            }
+            anime.copyFrom(sAnime)
+            db.insertAnime(anime).executeAsBlocking()
         }
 
         val chapters = source.getEpisodeList(anime.toAnimeInfo())
