@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.animesource
 
 import android.content.Context
 import android.net.Uri
-import com.github.junrar.Archive
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
@@ -30,7 +29,6 @@ import java.io.FileInputStream
 import java.io.InputStream
 import java.util.Locale
 import java.util.concurrent.TimeUnit
-import java.util.zip.ZipFile
 
 class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
     companion object {
@@ -224,7 +222,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
     }
 
     /**
-     * Strips the anime title from a chapter name and trim whitespace/delimiter characters.
+     * Strips the anime title from a episode name and trim whitespace/delimiter characters.
      */
     private fun getCleanEpisodeTitle(episodeName: String, animeTitle: String): String {
         return episodeName
@@ -240,10 +238,10 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
         val baseDirs = getBaseDirectories(context)
 
         for (dir in baseDirs) {
-            val chapFile = File(dir, episode.url)
-            if (!chapFile.exists()) continue
+            val episodeFile = File(dir, episode.url)
+            if (!episodeFile.exists()) continue
 
-            return getFormat(chapFile)
+            return getFormat(episodeFile)
         }
         throw Exception(context.getString(R.string.episode_not_found))
     }
@@ -251,8 +249,6 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
     private fun getFormat(file: File) = with(file) {
         when {
             isDirectory -> Format.Directory(this)
-            extension.equals("zip", true) || extension.equals("cbz", true) -> Format.Zip(this)
-            extension.equals("rar", true) || extension.equals("cbr", true) -> Format.Rar(this)
             SUPPORTED_FILE_TYPES.contains(extension.lowercase(Locale.ENGLISH)) -> Format.Anime(this)
             else -> throw Exception(context.getString(R.string.local_invalid_episode_format))
         }
@@ -266,24 +262,6 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
                     ?.find { !it.isDirectory && ImageUtil.isImage(it.name) { FileInputStream(it) } }
 
                 entry?.let { updateCover(context, anime, it.inputStream()) }
-            }
-            is Format.Zip -> {
-                ZipFile(format.file).use { zip ->
-                    val entry = zip.entries().toList()
-                        .sortedWith { f1, f2 -> f1.name.compareToCaseInsensitiveNaturalOrder(f2.name) }
-                        .find { !it.isDirectory && ImageUtil.isImage(it.name) { zip.getInputStream(it) } }
-
-                    entry?.let { updateCover(context, anime, zip.getInputStream(it)) }
-                }
-            }
-            is Format.Rar -> {
-                Archive(format.file).use { archive ->
-                    val entry = archive.fileHeaders
-                        .sortedWith { f1, f2 -> f1.fileName.compareToCaseInsensitiveNaturalOrder(f2.fileName) }
-                        .find { !it.isDirectory && ImageUtil.isImage(it.fileName) { archive.getInputStream(it) } }
-
-                    entry?.let { updateCover(context, anime, archive.getInputStream(it)) }
-                }
             }
             is Format.Anime -> {
                 val entry = format.file.listFiles()
@@ -308,13 +286,11 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
 
     sealed class Format {
         data class Directory(val file: File) : Format()
-        data class Zip(val file: File) : Format()
-        data class Rar(val file: File) : Format()
         data class Anime(val file: File) : Format()
     }
 }
 
-private val SUPPORTED_FILE_TYPES = listOf("zip", "cbz", "rar", "cbr", "epub")
+private val SUPPORTED_FILE_TYPES = listOf("mp4", "mkv")
 
 private val WHITESPACE_CHARS = arrayOf(
     ' ',
