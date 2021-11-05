@@ -279,7 +279,7 @@ class PreferencesHelper(val context: Context) {
 
     fun libraryUpdateRestriction() = flowPrefs.getStringSet(Keys.libraryUpdateRestriction, setOf(ONLY_ON_WIFI))
 
-    fun showUpdatesNavBadge() = flowPrefs.getBoolean(Keys.showUpdatesNavBadge, true)
+    fun showUpdatesNavBadge() = flowPrefs.getBoolean(Keys.showUpdatesNavBadge, false)
     fun unreadUpdatesCount() = flowPrefs.getInt("library_unread_updates_count", 0)
     fun unseenUpdatesCount() = flowPrefs.getInt("library_unseen_updates_count", 0)
 
