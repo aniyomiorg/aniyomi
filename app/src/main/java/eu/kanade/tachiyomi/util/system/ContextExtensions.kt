@@ -183,7 +183,7 @@ val Int.dpToPx: Int
  */
 val Float.dpToPxEnd: Float
     get() = this * Resources.getSystem().displayMetrics.density *
-            if (Resources.getSystem().isLTR) 1 else -1
+        if (Resources.getSystem().isLTR) 1 else -1
 
 val Resources.isLTR
     get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR
