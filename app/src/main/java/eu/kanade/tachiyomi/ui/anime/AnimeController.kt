@@ -22,6 +22,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
@@ -314,17 +315,13 @@ class AnimeController :
                 }
             }
 
-            binding.swipeRefresh.doOnLayout { swipeRefresh ->
+            ViewCompat.setOnApplyWindowInsetsListener(binding.swipeRefresh) { swipeRefresh, windowInsets ->
                 swipeRefresh as SwipeRefreshLayout
-                swipeRefresh.setOnApplyWindowInsetsListener { _, windowInsets ->
-                    val topStatusBarInset = WindowInsetsCompat.toWindowInsetsCompat(windowInsets)
-                        .getInsets(WindowInsetsCompat.Type.statusBars())
-                        .top
-                    swipeRefresh.isRefreshing = false
-                    swipeRefresh.setProgressViewEndTarget(false, getMainAppBarHeight() + topStatusBarInset)
-                    updateRefreshing()
-                    windowInsets
-                }
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
+                swipeRefresh.isRefreshing = false
+                swipeRefresh.setProgressViewEndTarget(false, getMainAppBarHeight() + insets.top)
+                updateRefreshing()
+                windowInsets
             }
         }
 

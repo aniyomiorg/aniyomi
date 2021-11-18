@@ -41,7 +41,6 @@ import eu.kanade.tachiyomi.util.preference.switchPreference
 import eu.kanade.tachiyomi.util.preference.titleRes
 import eu.kanade.tachiyomi.util.system.MiuiUtil
 import eu.kanade.tachiyomi.util.system.isPackageInstalled
-import eu.kanade.tachiyomi.util.system.isTablet
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toast
 import uy.kohesive.injekt.injectLazy
@@ -258,13 +257,9 @@ class SettingsAdvancedController : SettingsController() {
                 key = Keys.tabletUiMode
                 titleRes = R.string.pref_tablet_ui_mode
                 summary = "%s"
-                entriesRes = arrayOf(R.string.lock_always, R.string.landscape, R.string.lock_never)
+                entriesRes = arrayOf(R.string.automatic_background, R.string.lock_always, R.string.landscape, R.string.lock_never)
                 entryValues = PreferenceValues.TabletUiMode.values().map { it.name }.toTypedArray()
-                defaultValue = if (context.isTablet()) {
-                    PreferenceValues.TabletUiMode.ALWAYS
-                } else {
-                    PreferenceValues.TabletUiMode.NEVER
-                }.name
+                defaultValue = PreferenceValues.TabletUiMode.AUTOMATIC.name
 
                 onChange {
                     activity?.toast(R.string.requires_app_restart)

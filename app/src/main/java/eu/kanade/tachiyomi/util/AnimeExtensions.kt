@@ -60,7 +60,10 @@ fun Anime.shouldDownloadNewEpisodes(db: AnimeDatabaseHelper, prefs: PreferencesH
     if (!downloadNew) return false
 
     val categoriesToDownload = prefs.downloadNewCategoriesAnime().get().map(String::toInt)
-    if (categoriesToDownload.isEmpty()) return true
+    val categoriesToExclude = prefs.downloadNewCategoriesAnimeExclude().get().map(String::toInt)
+
+    // Default: download from all categories
+    if (categoriesToDownload.isEmpty() && categoriesToExclude.isEmpty()) return true
 
     // Get all categories, else default category (0)
     val categoriesForAnime =
@@ -68,8 +71,9 @@ fun Anime.shouldDownloadNewEpisodes(db: AnimeDatabaseHelper, prefs: PreferencesH
             .mapNotNull { it.id }
             .takeUnless { it.isEmpty() } ?: listOf(0)
 
-    val categoriesToExclude = prefs.downloadNewCategoriesAnimeExclude().get().map(String::toInt)
+    // In excluded category
     if (categoriesForAnime.intersect(categoriesToExclude).isNotEmpty()) return false
 
+    // In included category
     return categoriesForAnime.intersect(categoriesToDownload).isNotEmpty()
 }

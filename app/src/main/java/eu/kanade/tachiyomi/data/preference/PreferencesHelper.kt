@@ -20,7 +20,6 @@ import eu.kanade.tachiyomi.ui.library.setting.SortModeSetting
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import eu.kanade.tachiyomi.util.system.MiuiUtil
-import eu.kanade.tachiyomi.util.system.isTablet
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
@@ -207,7 +206,7 @@ class PreferencesHelper(val context: Context) {
 
     fun jumpToEpisodes() = prefs.getBoolean(Keys.jumpToEpisodes, false)
 
-    fun updateOnlyNonCompleted() = prefs.getBoolean(Keys.updateOnlyNonCompleted, false)
+    fun updateOnlyNonCompleted() = prefs.getBoolean(Keys.updateOnlyNonCompleted, true)
 
     fun autoUpdateTrack() = prefs.getBoolean(Keys.autoUpdateTrack, true)
 
@@ -401,10 +400,7 @@ class PreferencesHelper(val context: Context) {
 
     fun incognitoMode() = flowPrefs.getBoolean(Keys.incognitoMode, false)
 
-    fun tabletUiMode() = flowPrefs.getEnum(
-        Keys.tabletUiMode,
-        if (context.applicationContext.isTablet()) Values.TabletUiMode.ALWAYS else Values.TabletUiMode.NEVER
-    )
+    fun tabletUiMode() = flowPrefs.getEnum(Keys.tabletUiMode, Values.TabletUiMode.AUTOMATIC)
 
     fun extensionInstaller() = flowPrefs.getEnum(
         Keys.extensionInstaller,

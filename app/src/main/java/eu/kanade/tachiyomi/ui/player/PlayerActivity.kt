@@ -18,13 +18,13 @@ import com.github.vkay94.dtpv.DoubleTapPlayerView
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.analytics.AnalyticsCollector
-import com.google.android.exoplayer2.database.ExoDatabaseProvider
+import com.google.android.exoplayer2.database.StandaloneDatabaseProvider
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.TrackGroupArray
@@ -33,7 +33,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.google.android.exoplayer2.upstream.HttpDataSource.HttpDataSourceException
 import com.google.android.exoplayer2.upstream.HttpDataSource.InvalidResponseCodeException
@@ -75,10 +75,8 @@ import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
-import java.io.IOException
 import java.util.Date
 
-const val STATE_RESUME_WINDOW = "resumeWindow"
 const val STATE_RESUME_POSITION = "resumePosition"
 const val STATE_PLAYER_FULLSCREEN = "playerFullscreen"
 const val STATE_PLAYER_PLAYING = "playerOnPlay"
@@ -90,9 +88,9 @@ class PlayerActivity : AppCompatActivity() {
     private val db: AnimeDatabaseHelper = Injekt.get()
     private val downloadManager: AnimeDownloadManager = Injekt.get()
     private val delayedTrackingStore: DelayedTrackingStore = Injekt.get()
-    private lateinit var exoPlayer: SimpleExoPlayer
+    private lateinit var exoPlayer: ExoPlayer
     private lateinit var dataSourceFactory: DataSource.Factory
-    private lateinit var dbProvider: ExoDatabaseProvider
+    private lateinit var dbProvider: StandaloneDatabaseProvider
     private val cacheSize = 100L * 1024L * 1024L // 100 MB
     private lateinit var simpleCache: SimpleCache
     private lateinit var cacheFactory: CacheDataSource.Factory
@@ -121,7 +119,6 @@ class PlayerActivity : AppCompatActivity() {
     private var currentQuality = 0
 
     private var duration: Long = 0
-    private var currentWindow = 0
     private var playbackPosition = 0L
     private var isFullscreen = false
     private var isPlayerPlaying = true
@@ -168,7 +165,6 @@ class PlayerActivity : AppCompatActivity() {
         initDummyPlayer()
 
         if (savedInstanceState != null) {
-            currentWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW)
             playbackPosition = intent.extras!!.getLong("second")
             isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
             isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
@@ -176,9 +172,9 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun initDummyPlayer() {
-        mediaSourceFactory = DefaultMediaSourceFactory(DefaultDataSourceFactory(this))
+        mediaSourceFactory = DefaultMediaSourceFactory(DefaultDataSource.Factory(this))
         exoPlayer = newPlayer()
-        dbProvider = ExoDatabaseProvider(baseContext)
+        dbProvider = StandaloneDatabaseProvider(baseContext)
         simpleCache = SimpleCache(
             File(baseContext.filesDir, "media"),
             LeastRecentlyUsedCacheEvictor(cacheSize),
@@ -204,11 +200,11 @@ class PlayerActivity : AppCompatActivity() {
                 onGetLinksError()
                 return@launchUI
             }
-            dbProvider = ExoDatabaseProvider(baseContext)
+            dbProvider = StandaloneDatabaseProvider(baseContext)
             isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
             if (isLocal) {
                 uri = videos.first().uri!!.toString()
-                dataSourceFactory = DefaultDataSourceFactory(context)
+                dataSourceFactory = DefaultDataSource.Factory(context)
             } else {
                 uri = videos.first().videoUrl!!
                 dataSourceFactory = newDataSourceFactory()
@@ -363,7 +359,7 @@ class PlayerActivity : AppCompatActivity() {
                     speedAlert.setView(linear)
 
                     speedAlert.setPositiveButton(android.R.string.ok) { speedDialog, _ ->
-                        exoPlayer.setPlaybackParameters(PlaybackParameters(newSpeed))
+                        exoPlayer.playbackParameters = PlaybackParameters(newSpeed)
                         preferences.setPlayerSpeed(newSpeed)
                         speedDialog.dismiss()
                     }
@@ -377,7 +373,7 @@ class PlayerActivity : AppCompatActivity() {
                         val newProgress = floatItems.indexOf(newSpeed)
                         text.text = items[newProgress]
                         seek.progress = newProgress
-                        exoPlayer.setPlaybackParameters(PlaybackParameters(newSpeed))
+                        exoPlayer.playbackParameters = PlaybackParameters(newSpeed)
                         preferences.setPlayerSpeed(newSpeed)
                     }
 
@@ -431,7 +427,6 @@ class PlayerActivity : AppCompatActivity() {
         youTubeDoubleTap.player(exoPlayer)
         isPlayerPlaying = exoPlayer.playWhenReady
         playbackPosition = exoPlayer.currentPosition
-        currentWindow = exoPlayer.currentWindowIndex
         exoPlayer.release()
     }
 
@@ -484,7 +479,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun changePlayer(resumeAt: Long, isLocal: Boolean) {
         dataSourceFactory = if (isLocal) {
-            DefaultDataSourceFactory(this)
+            DefaultDataSource.Factory(this)
         } else {
             newDataSourceFactory()
         }
@@ -503,21 +498,22 @@ class PlayerActivity : AppCompatActivity() {
         playerView.player = exoPlayer
     }
 
-    private fun newPlayer(): SimpleExoPlayer {
-        return SimpleExoPlayer.Builder(
+    private fun newPlayer(): ExoPlayer {
+        return ExoPlayer.Builder(
             this,
             DefaultRenderersFactory(this),
-            DefaultTrackSelector(this),
             mediaSourceFactory,
+            DefaultTrackSelector(this),
             DefaultLoadControl(),
             DefaultBandwidthMeter.Builder(this).build(),
             AnalyticsCollector(Clock.DEFAULT)
-        ).build().apply {
-            setPlaybackParameters(PlaybackParameters(preferences.getPlayerSpeed()))
-        }
+        ).setSeekForwardIncrementMs(85000L)
+            .build().apply {
+                playbackParameters = PlaybackParameters(preferences.getPlayerSpeed())
+            }
     }
 
-    class PlayerEventListener(private val playerView: DoubleTapPlayerView, val baseContext: Context) : Player.EventListener {
+    class PlayerEventListener(private val playerView: DoubleTapPlayerView, val baseContext: Context) : Player.Listener {
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             playerView.keepScreenOn = !(
                 playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED ||
@@ -527,30 +523,28 @@ class PlayerActivity : AppCompatActivity() {
         override fun onTracksChanged(trackGroups: TrackGroupArray, trackSelections: TrackSelectionArray) {}
         override fun onLoadingChanged(isLoading: Boolean) {}
         override fun onRepeatModeChanged(repeatMode: Int) {}
-        override fun onPlayerError(error: ExoPlaybackException) {
-            if (error.type == ExoPlaybackException.TYPE_SOURCE) {
-                val cause: IOException = error.sourceException
-                if (cause is HttpDataSourceException) {
-                    // An HTTP error occurred.
-                    // This is the request for which the error occurred.
-                    val requestDataSpec = cause.dataSpec
-                    for (header in requestDataSpec.httpRequestHeaders) {
-                        var message = ""
-                        message += header.key + " - " + header.value
-                    }
-                    // It's possible to find out more about the error both by casting and by
-                    // querying the cause.
-                    if (cause is InvalidResponseCodeException) {
-                        // Cast to InvalidResponseCodeException and retrieve the response code,
-                        // message and headers.
-                        val errorMessage =
-                            "Error " + cause.responseCode.toString() + ": " + cause.message
-                        baseContext.toast(errorMessage, Toast.LENGTH_SHORT)
-                    } else {
-                        cause.cause
-                        // Try calling httpError.getCause() to retrieve the underlying cause,
-                        // although note that it may be null.
-                    }
+        override fun onPlayerError(error: PlaybackException) {
+            val cause: Throwable? = error.cause
+            if (cause is HttpDataSourceException) {
+                // An HTTP error occurred.
+                // This is the request for which the error occurred.
+                val requestDataSpec = cause.dataSpec
+                for (header in requestDataSpec.httpRequestHeaders) {
+                    var message = ""
+                    message += header.key + " - " + header.value
+                }
+                // It's possible to find out more about the error both by casting and by
+                // querying the cause.
+                if (cause is InvalidResponseCodeException) {
+                    // Cast to InvalidResponseCodeException and retrieve the response code,
+                    // message and headers.
+                    val errorMessage =
+                        "Error " + cause.responseCode.toString() + ": " + cause.message
+                    baseContext.toast(errorMessage, Toast.LENGTH_SHORT)
+                } else {
+                    cause.cause
+                    // Try calling httpError.getCause() to retrieve the underlying cause,
+                    // although note that it may be null.
                 }
             }
         }
@@ -558,7 +552,6 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt(STATE_RESUME_WINDOW, exoPlayer.currentWindowIndex)
         outState.putLong(STATE_RESUME_POSITION, exoPlayer.currentPosition)
         outState.putBoolean(STATE_PLAYER_FULLSCREEN, isFullscreen)
         outState.putBoolean(STATE_PLAYER_PLAYING, isPlayerPlaying)
@@ -749,6 +742,5 @@ class PlayerActivity : AppCompatActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
-        const val REQUEST_COOKIES = 1337
     }
 }

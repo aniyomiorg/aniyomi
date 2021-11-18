@@ -59,7 +59,7 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:paddingHorizontal="16dp"
-                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
                 tools:text="Title" />
 
             <ImageButton
@@ -78,6 +78,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
+        style="@style/Widget.Material3.CardView.Outlined"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -105,7 +106,7 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:padding="12dp"
-                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
                     tools:text="Reading" />
 
                 <View
@@ -124,7 +125,7 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:padding="12dp"
-                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
                     tools:text="12/24" />
 
                 <View
@@ -143,7 +144,7 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:padding="12dp"
-                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
                     tools:text="10" />
 
             </LinearLayout>
@@ -170,7 +171,7 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:padding="12dp"
-                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
                     tools:text="4/16/2020" />
 
                 <View
@@ -189,7 +190,7 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:padding="12dp"
-                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
                     tools:text="4/16/2020" />
 
             </LinearLayout>

@@ -188,7 +188,6 @@
     <string name="theme_dark">On</string>
     <string name="pref_app_theme">App theme</string>
     <string name="theme_monet">Dynamic</string>
-    <string name="theme_blue">Legacy Blue</string>
     <string name="theme_greenapple">Green Apple</string>
     <string name="theme_midnightdusk">Midnight Dusk</string>
     <string name="theme_strawberrydaiquiri">Strawberry Daiquiri</string>
@@ -297,7 +296,6 @@
     <string name="ext_unofficial">Unofficial</string>
     <string name="ext_untrusted">Untrusted</string>
     <string name="ext_uninstall">Uninstall</string>
-    <string name="ext_available">Available</string>
     <string name="ext_app_info">App info</string>
     <string name="untrusted_extension">Untrusted extension</string>
     <string name="untrusted_extension_message">This extension was signed with an untrusted certificate and wasn\'t activated.\n\nA malicious extension could read any login credentials stored in Tachiyomi or execute arbitrary code.\n\nBy trusting this certificate you accept these risks.</string>
@@ -323,7 +321,6 @@
     <string name="pref_dual_page_invert">Invert dual page split placement</string>
     <string name="pref_dual_page_invert_summary">If the placement of the dual page split doesn\'t match reading direction</string>
     <string name="pref_cutout_short">Show content in cutout area</string>
-    <string name="pref_lock_orientation">Lock orientation</string>
     <string name="pref_page_transitions">Animate page transitions</string>
     <string name="pref_double_tap_anim_speed">Double tap animation speed</string>
     <string name="pref_show_page_number">Show page number</string>
@@ -546,7 +543,7 @@
     <string name="battery_optimization_disabled">Battery optimization is already disabled</string>
     <string name="battery_optimization_setting_activity_not_found">Couldn\'t open device settings</string>
     <string name="about_dont_kill_my_app">Some manufacturers have additional app restrictions that kill background services. This website has more info on how to fix it.</string>
-    <string name="pref_tablet_ui_mode">Force tablet UI</string>
+    <string name="pref_tablet_ui_mode">Tablet UI</string>
     <string name="pref_verbose_logging">Verbose logging</string>
     <string name="pref_verbose_logging_summary">Print verbose logs to system log (reduces app performance)</string>
 
@@ -581,7 +578,6 @@
     <string name="username">Username</string>
     <string name="email">Email address</string>
     <string name="password">Password</string>
-    <string name="show_password">Show password</string>
     <string name="login">Login</string>
     <string name="login_success">Logged in</string>
     <string name="logout_title">Log out from %1$s?</string>
