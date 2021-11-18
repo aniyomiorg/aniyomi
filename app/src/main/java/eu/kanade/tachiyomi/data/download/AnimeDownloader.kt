@@ -197,7 +197,13 @@ class AnimeDownloader(
         if (isNotification) {
             queue
                 .filter { it.status == AnimeDownload.State.QUEUE }
-                .forEach { it.status = AnimeDownload.State.NOT_DOWNLOADED }
+                .forEach {
+                    val animeDir = provider.getAnimeDir(it.anime, it.source)
+                    val episodeDirname = provider.getEpisodeDirName(it.episode)
+                    val tmpDir = animeDir.findFile(episodeDirname + TMP_DIR_SUFFIX)
+                    tmpDir?.delete()
+                    it.status = AnimeDownload.State.NOT_DOWNLOADED
+                }
         }
         queue.clear()
         notifier.dismissProgress()
@@ -368,11 +374,11 @@ class AnimeDownloader(
                         }
                     }
             }
-            // Start downloading images, consider we can have downloaded images already
-            // Concurrently do 5 pages at a time
-            .flatMap({ video -> getOrAnimeDownloadImage(video, download, tmpDir) }, 5)
+            // Start downloading videos, consider we can have downloaded images already
+            // Concurrently do 5 videos at a time (a fossil of the manga downloads)
+            .flatMap({ video -> getOrAnimeDownloadVideo(video, download, tmpDir) }, 5)
             .onBackpressureLatest()
-            // Do when page is downloaded.
+            // Do when video is downloaded.
             .toList()
             .map { download }
             // Do after download completes
@@ -381,7 +387,7 @@ class AnimeDownloader(
 
                 if (download.status == AnimeDownload.State.DOWNLOADED) notifier.dismissProgress()
             }
-            // If the page list threw, it will resume here
+            // If the video list threw, it will resume here
             .onErrorReturn { error ->
                 download.status = AnimeDownload.State.ERROR
                 notifier.onError(error.message, download.episode.name)
@@ -393,12 +399,12 @@ class AnimeDownloader(
      * Returns the observable which gets the image from the filesystem if it exists or downloads it
      * otherwise.
      *
-     * @param video the page to download.
-     * @param download the download of the page.
+     * @param video the video to download.
+     * @param download the download of the video.
      * @param tmpDir the temporary directory of the download.
      */
-    private fun getOrAnimeDownloadImage(video: Video, download: AnimeDownload, tmpDir: UniFile): Observable<Video> {
-        // If the image URL is empty, do nothing
+    private fun getOrAnimeDownloadVideo(video: Video, download: AnimeDownload, tmpDir: UniFile): Observable<Video> {
+        // If the video URL is empty, do nothing
         if (video.videoUrl == null) {
             return Observable.just(video)
         }
@@ -412,7 +418,7 @@ class AnimeDownloader(
             tmpFile?.delete()
         }
 
-        // Try to find the image file.
+        // Try to find the video file.
         val videoFile = tmpDir.listFiles()!!.find { it.name!!.startsWith("$filename.mp4") }
 
         // If the video is already downloaded, do nothing. Otherwise download from network
@@ -421,7 +427,7 @@ class AnimeDownloader(
             episodeCache.isImageInCache(video.videoUrl!!) -> copyVideoFromCache(episodeCache.getVideoFile(video.videoUrl!!), tmpDir, filename)
             else -> {
                 if (preferences.useExternalDownloader() == download.changeDownloader) {
-                    downloadVideo(video, download.source, tmpDir, filename)
+                    downloadVideo(video, download, tmpDir, filename)
                 } else {
                     downloadVideoExternal(video, download.source, tmpDir, filename)
                 }
@@ -429,7 +435,7 @@ class AnimeDownloader(
         }
 
         return pageObservable
-            // When the image is ready, set image path, progress (just in case) and status
+            // When the video is ready, set image path, progress (just in case) and status
             .doOnNext { file ->
                 video.uri = file.uri
                 video.progress = 100
@@ -437,7 +443,7 @@ class AnimeDownloader(
                 video.status = Video.READY
             }
             .map { video }
-            // Mark this page as error and allow to download the remaining
+            // Mark this video as error and allow to download the remaining
             .onErrorReturn {
                 video.progress = 0
                 video.status = Video.ERROR
@@ -446,18 +452,18 @@ class AnimeDownloader(
     }
 
     /**
-     * Returns the observable which downloads the image from network.
+     * Returns the observable which downloads the video from network.
      *
-     * @param video the page to download.
-     * @param source the source of the page.
+     * @param video the video to download.
+     * @param download the AnimeDownload.
      * @param tmpDir the temporary directory of the download.
-     * @param filename the filename of the image.
+     * @param filename the filename of the video.
      */
-    private fun downloadVideo(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
+    private fun downloadVideo(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
         video.status = Video.DOWNLOAD_IMAGE
         video.progress = 0
         var tries = 0
-        return newObservable(video, source, tmpDir, filename)
+        return newObservable(video, download, tmpDir, filename)
             // Retry 3 times, waiting 2, 4 and 8 seconds between attempts.
             .onErrorResumeNext {
                 if (tries >= 2) {
@@ -465,7 +471,7 @@ class AnimeDownloader(
                 }
                 tries++
                 return@onErrorResumeNext Observable.timer((2 shl tries - 1) * 1000L, TimeUnit.MILLISECONDS)
-                    .flatMap { newObservable(video, source, tmpDir, filename) }
+                    .flatMap { newObservable(video, download, tmpDir, filename) }
             }
     }
 
@@ -522,9 +528,9 @@ class AnimeDownloader(
         return hours * 3600000L + minutes * 60000L + fullSeconds * 1000L + hundredths * 10L
     }
 
-    private fun newObservable(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
-        return if (isHls(video)) hlsObservable(video, source, tmpDir, filename)
-        else source.fetchVideo(video)
+    private fun newObservable(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
+        return if (isHls(video)) hlsObservable(video, download.source, tmpDir, filename)
+        else download.source.fetchVideo(video)
             .map { response ->
                 val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
                 try {
@@ -534,6 +540,7 @@ class AnimeDownloader(
                     file.renameTo("$filename.mp4")
                 } catch (e: Exception) {
                     response.close()
+                    if (!queue.contains(download)) file.delete()
                     // file.delete()
                     throw e
                 }
@@ -542,12 +549,12 @@ class AnimeDownloader(
     }
 
     /**
-     * Returns the observable which downloads the image from network.
+     * Returns the observable which downloads the video with an external downloader.
      *
-     * @param video the page to download.
-     * @param source the source of the page.
+     * @param video the video to download.
+     * @param source the source of the video.
      * @param tmpDir the temporary directory of the download.
-     * @param filename the filename of the image.
+     * @param filename the filename of the video.
      */
     private fun downloadVideoExternal(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
         video.status = Video.DOWNLOAD_IMAGE
@@ -586,11 +593,11 @@ class AnimeDownloader(
     }
 
     /**
-     * Return the observable which copies the image from cache.
+     * Return the observable which copies the video from cache.
      *
      * @param cacheFile the file from cache.
      * @param tmpDir the temporary directory of the download.
-     * @param filename the filename of the image.
+     * @param filename the filename of the video.
      */
     private fun copyVideoFromCache(cacheFile: File, tmpDir: UniFile, filename: String): Observable<UniFile> {
         return Observable.just(cacheFile).map {
