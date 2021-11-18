@@ -18,19 +18,19 @@ class ChangeMangaCategoriesDialog<T>(bundle: Bundle? = null) :
 
     private var mangas = emptyList<Manga>()
     private var categories = emptyList<Category>()
-    private var preselected = emptyArray<Int>()
-    private var selected = emptyArray<Int>().toIntArray()
+    private var preselected = intArrayOf()
+    private var selected = intArrayOf()
 
     constructor(
         target: T,
         mangas: List<Manga>,
         categories: List<Category>,
-        preselected: Array<Int>
+        preselected: IntArray
     ) : this() {
         this.mangas = mangas
         this.categories = categories
         this.preselected = preselected
-        this.selected = preselected.toIntArray()
+        this.selected = preselected
         targetController = target
     }
 
@@ -43,7 +43,7 @@ class ChangeMangaCategoriesDialog<T>(bundle: Bundle? = null) :
                     setQuadStateMultiChoiceItems(
                         items = categories.map { it.name },
                         isActionList = false,
-                        initialSelected = preselected.toIntArray()
+                        initialSelected = preselected
                     ) { selections ->
                         selected = selections
                     }

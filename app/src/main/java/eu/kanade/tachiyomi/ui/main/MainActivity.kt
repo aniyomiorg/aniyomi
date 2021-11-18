@@ -137,7 +137,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
         val startTime = System.currentTimeMillis()
         splashScreen?.setKeepVisibleCondition {
             val elapsed = System.currentTimeMillis() - startTime
-            elapsed <= SPLASH_MIN_DURATION || (!ready && elapsed <= SPLASH_MAX_DURATION)
+            elapsed <= SPLASH_MIN_DURATION || !ready && elapsed <= SPLASH_MAX_DURATION
         }
         setSplashScreenExitAnimation(splashScreen)
 
@@ -521,7 +521,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
 
     override fun onSupportActionModeFinished(mode: ActionMode) {
         binding.appbar.apply {
-            isTransparentWhenNotLifted = (tag as? Boolean) ?: false
+            isTransparentWhenNotLifted = tag as? Boolean ?: false
             tag = null
         }
         setToolbarScrolls(true)
@@ -593,32 +593,34 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             to.configureFab(binding.fabLayout.rootFab)
         }
 
-        if (!isTablet()) {
-            // Save lift state
-            if (isPush) {
-                if (router.backstackSize > 1) {
-                    // Save lift state
-                    from?.let {
-                        backstackLiftState[it.instanceId] = binding.appbar.isLifted
-                    }
-                } else {
-                    backstackLiftState.clear()
-                }
-                binding.appbar.isLifted = false
-            } else {
-                to?.let {
-                    binding.appbar.isLifted = backstackLiftState.getOrElse(it.instanceId) { false }
-                }
+        if (!isTablet()) noTabletActivityView(isPush, from, to)
+    }
+
+    private fun noTabletActivityView(isPush: Boolean, from: Controller?, to: Controller?) {
+        // Save lift state
+        if (isPush) {
+            if (router.backstackSize > 1) {
+                // Save lift state
                 from?.let {
-                    backstackLiftState.remove(it.instanceId)
+                    backstackLiftState[it.instanceId] = binding.appbar.isLifted
                 }
+            } else {
+                backstackLiftState.clear()
             }
-
-            binding.root.isLiftAppBarOnScroll = to !is NoAppBarElevationController
-
-            binding.appbar.isTransparentWhenNotLifted = to is MangaController || to is AnimeController
-            binding.controllerContainer.overlapHeader = to is MangaController || to is AnimeController
+            binding.appbar.isLifted = false
+        } else {
+            to?.let {
+                binding.appbar.isLifted = backstackLiftState.getOrElse(it.instanceId) { false }
+            }
+            from?.let {
+                backstackLiftState.remove(it.instanceId)
+            }
         }
+
+        binding.root.isLiftAppBarOnScroll = to !is NoAppBarElevationController
+
+        binding.appbar.isTransparentWhenNotLifted = to is MangaController || to is AnimeController
+        binding.controllerContainer.overlapHeader = to is MangaController || to is AnimeController
     }
 
     private fun showNav(visible: Boolean) {

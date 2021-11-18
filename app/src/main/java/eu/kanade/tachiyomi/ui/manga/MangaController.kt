@@ -353,7 +353,7 @@ class MangaController :
             alpha != null -> alpha
 
             // First item isn't in view, full opacity
-            ((scrolledList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() > 0) -> 1F
+            (scrolledList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() > 0 -> 1F
 
             // Based on scroll amount when first item is in view
             else -> min(scrolledList.computeVerticalScrollOffset(), 255) / 255F
@@ -578,12 +578,12 @@ class MangaController :
             else -> {
                 val ids = presenter.getMangaCategoryIds(manga)
                 val preselected = categories.map {
-                    if (it.id in ids) {
+                    if (it.id!! in ids) {
                         QuadStateTextView.State.CHECKED.ordinal
                     } else {
                         QuadStateTextView.State.UNCHECKED.ordinal
                     }
-                }.toTypedArray()
+                }.toIntArray()
 
                 showChangeCategoryDialog(manga, categories, preselected)
             }
@@ -634,16 +634,16 @@ class MangaController :
 
         val ids = presenter.getMangaCategoryIds(manga)
         val preselected = categories.map {
-            if (it.id in ids) {
+            if (it.id!! in ids) {
                 QuadStateTextView.State.CHECKED.ordinal
             } else {
                 QuadStateTextView.State.UNCHECKED.ordinal
             }
-        }.toTypedArray()
+        }.toIntArray()
         showChangeCategoryDialog(manga, categories, preselected)
     }
 
-    private fun showChangeCategoryDialog(manga: Manga, categories: List<Category>, preselected: Array<Int>) {
+    private fun showChangeCategoryDialog(manga: Manga, categories: List<Category>, preselected: IntArray) {
         if (dialog != null) return
         dialog = ChangeMangaCategoriesDialog(this, listOf(manga), categories, preselected)
         dialog?.addLifecycleListener(
@@ -1232,9 +1232,6 @@ class MangaController :
     // Tracker sheet - start
     fun onNextTrackers(trackers: List<TrackItem>) {
         trackSheet?.onNextTrackers(trackers)
-    }
-
-    fun onTrackingRefreshDone() {
     }
 
     fun onTrackingRefreshError(error: Throwable) {

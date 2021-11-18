@@ -634,7 +634,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
                         } else {
                             QuadStateTextView.State.UNCHECKED.ordinal
                         }
-                    }.toTypedArray()
+                    }.toIntArray()
 
                     ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected)
                         .showDialog(router)

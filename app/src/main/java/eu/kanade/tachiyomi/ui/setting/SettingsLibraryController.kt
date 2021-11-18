@@ -340,7 +340,7 @@ class SettingsLibraryController : SettingsController() {
                 summaryRes = selectedPriority?.second ?: defaultPriority.second
                 onChange { newValue ->
                     summaryRes = priorities.find {
-                        it.first == (newValue as String)
+                        it.first == newValue as String
                     }?.second ?: defaultPriority.second
                     true
                 }

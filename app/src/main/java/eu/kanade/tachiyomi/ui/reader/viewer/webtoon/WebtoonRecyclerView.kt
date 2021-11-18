@@ -126,11 +126,11 @@ open class WebtoonRecyclerView @JvmOverloads constructor(
         var newY: Float? = null
 
         if (velocityX != 0) {
-            val dx = (distanceTimeFactor * velocityX / 2)
+            val dx = distanceTimeFactor * velocityX / 2
             newX = getPositionX(x + dx)
         }
         if (velocityY != 0 && (atFirstPosition || atLastPosition)) {
-            val dy = (distanceTimeFactor * velocityY / 2)
+            val dy = distanceTimeFactor * velocityY / 2
             newY = getPositionY(y + dy)
         }
 

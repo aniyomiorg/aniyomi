@@ -559,13 +559,13 @@ class AnimelibController(
         val common = presenter.getCommonCategories(animes)
         // Get indexes of the mix categories to preselect.
         val mix = presenter.getMixCategories(animes)
-        var preselected = categories.map {
+        val preselected = categories.map {
             when (it) {
                 in common -> QuadStateTextView.State.CHECKED.ordinal
                 in mix -> QuadStateTextView.State.INDETERMINATE.ordinal
                 else -> QuadStateTextView.State.UNCHECKED.ordinal
             }
-        }.toTypedArray()
+        }.toIntArray()
         ChangeAnimeCategoriesDialog(this, animes, categories, preselected)
             .showDialog(router)
     }

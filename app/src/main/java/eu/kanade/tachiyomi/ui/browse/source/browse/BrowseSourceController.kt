@@ -634,7 +634,7 @@ open class BrowseSourceController(bundle: Bundle) :
                         } else {
                             QuadStateTextView.State.UNCHECKED.ordinal
                         }
-                    }.toTypedArray()
+                    }.toIntArray()
 
                     ChangeMangaCategoriesDialog(this, listOf(manga), categories, preselected)
                         .showDialog(router)

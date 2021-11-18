@@ -182,10 +182,8 @@ val Int.dpToPx: Int
  * Converts to px and takes into account LTR/RTL layout.
  */
 val Float.dpToPxEnd: Float
-    get() = (
-        this * Resources.getSystem().displayMetrics.density *
+    get() = this * Resources.getSystem().displayMetrics.density *
             if (Resources.getSystem().isLTR) 1 else -1
-        )
 
 val Resources.isLTR
     get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR
@@ -358,7 +356,7 @@ fun Context.createReaderThemeContext(): Context {
     if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK != expected) {
         val overrideConf = Configuration()
         overrideConf.setTo(resources.configuration)
-        overrideConf.uiMode = (overrideConf.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or expected
+        overrideConf.uiMode = overrideConf.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv() or expected
 
         val wrappedContext = ContextThemeWrapper(this, R.style.Theme_Tachiyomi)
         wrappedContext.applyOverrideConfiguration(overrideConf)

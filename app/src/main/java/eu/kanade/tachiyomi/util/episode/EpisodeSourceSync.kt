@@ -104,7 +104,7 @@ fun syncEpisodesWithSource(
         if (anime.next_update == 0L && topEpisodes.size > 1) {
             var delta = 0L
             for (i in 0 until topEpisodes.size - 1) {
-                delta += (topEpisodes[i].date_upload - topEpisodes[i + 1].date_upload)
+                delta += topEpisodes[i].date_upload - topEpisodes[i + 1].date_upload
             }
             delta /= topEpisodes.size - 1
             anime.next_update = newestDate + delta
@@ -161,7 +161,7 @@ fun syncEpisodesWithSource(
         if (topEpisodes.size > 1) {
             var delta = 0L
             for (i in 0 until topEpisodes.size - 1) {
-                delta += (topEpisodes[i].date_upload - topEpisodes[i + 1].date_upload)
+                delta += topEpisodes[i].date_upload - topEpisodes[i + 1].date_upload
             }
             delta /= topEpisodes.size - 1
             anime.next_update = topEpisodes[0].date_upload + delta

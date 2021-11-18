@@ -201,7 +201,7 @@ class PlayerActivity : AppCompatActivity() {
                 return@launchUI
             }
             dbProvider = StandaloneDatabaseProvider(baseContext)
-            isLocal = (EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource)
+            isLocal = EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource
             if (isLocal) {
                 uri = videos.first().uri!!.toString()
                 dataSourceFactory = DefaultDataSource.Factory(context)
@@ -704,7 +704,7 @@ class PlayerActivity : AppCompatActivity() {
 
         val currEpisodeIndex = episodes.indexOfFirst { episode.id == it.id }
         val episodeNumber = episode.episode_number
-        return ((currEpisodeIndex + 1) until episodes.size)
+        return (currEpisodeIndex + 1 until episodes.size)
             .map { episodes[it] }
             .firstOrNull {
                 it.episode_number > episodeNumber &&
@@ -725,7 +725,7 @@ class PlayerActivity : AppCompatActivity() {
 
         val currEpisodeIndex = episodes.indexOfFirst { episode.id == it.id }
         val episodeNumber = episode.episode_number
-        return ((currEpisodeIndex + 1) until episodes.size)
+        return (currEpisodeIndex + 1 until episodes.size)
             .map { episodes[it] }
             .firstOrNull {
                 it.episode_number < episodeNumber &&

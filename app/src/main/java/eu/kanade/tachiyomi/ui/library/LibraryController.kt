@@ -559,13 +559,13 @@ class LibraryController(
         val common = presenter.getCommonCategories(mangas)
         // Get indexes of the mix categories to preselect.
         val mix = presenter.getMixCategories(mangas)
-        var preselected = categories.map {
+        val preselected = categories.map {
             when (it) {
                 in common -> QuadStateTextView.State.CHECKED.ordinal
                 in mix -> QuadStateTextView.State.INDETERMINATE.ordinal
                 else -> QuadStateTextView.State.UNCHECKED.ordinal
             }
-        }.toTypedArray()
+        }.toIntArray()
         ChangeMangaCategoriesDialog(this, mangas, categories, preselected)
             .showDialog(router)
     }

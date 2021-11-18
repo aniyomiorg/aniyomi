@@ -265,9 +265,9 @@ class MangaPresenter(
      * @param manga the manga to get categories from.
      * @return Array of category ids the manga is in, if none returns default id
      */
-    fun getMangaCategoryIds(manga: Manga): Array<Int> {
+    fun getMangaCategoryIds(manga: Manga): IntArray {
         val categories = db.getCategoriesForManga(manga).executeAsBlocking()
-        return categories.mapNotNull { it.id }.toTypedArray()
+        return categories.mapNotNull { it.id }.toIntArray()
     }
 
     /**
@@ -821,8 +821,6 @@ class MangaPresenter(
                             }
                         }
                         .awaitAll()
-
-                    withUIContext { view?.onTrackingRefreshDone() }
                 } catch (e: Throwable) {
                     withUIContext { view?.onTrackingRefreshError(e) }
                 }
@@ -872,7 +870,6 @@ class MangaPresenter(
             try {
                 service.update(track)
                 db.insertTrack(track).executeAsBlocking()
-                withUIContext { view?.onTrackingRefreshDone() }
             } catch (e: Throwable) {
                 withUIContext { view?.onTrackingRefreshError(e) }
 

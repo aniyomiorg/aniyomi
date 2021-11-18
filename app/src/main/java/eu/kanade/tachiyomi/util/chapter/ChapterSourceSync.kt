@@ -104,7 +104,7 @@ fun syncChaptersWithSource(
         if (manga.next_update == 0L && topChapters.size > 1) {
             var delta = 0L
             for (i in 0 until topChapters.size - 1) {
-                delta += (topChapters[i].date_upload - topChapters[i + 1].date_upload)
+                delta += topChapters[i].date_upload - topChapters[i + 1].date_upload
             }
             delta /= topChapters.size - 1
             manga.next_update = newestDate + delta
@@ -162,7 +162,7 @@ fun syncChaptersWithSource(
         if (topChapters.size > 1) {
             var delta = 0L
             for (i in 0 until topChapters.size - 1) {
-                delta += (topChapters[i].date_upload - topChapters[i + 1].date_upload)
+                delta += topChapters[i].date_upload - topChapters[i + 1].date_upload
             }
             delta /= topChapters.size - 1
             manga.next_update = topChapters[0].date_upload + delta

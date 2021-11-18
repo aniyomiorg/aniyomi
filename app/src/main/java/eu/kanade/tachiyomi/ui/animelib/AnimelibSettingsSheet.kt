@@ -384,10 +384,10 @@ class AnimelibSettingsSheet(
                 item as Item.CheckboxGroup
                 item.checked = !item.checked
                 when (item) {
-                    downloadBadge -> preferences.downloadBadge().set((item.checked))
-                    unseenBadge -> preferences.unreadBadge().set((item.checked))
-                    localBadge -> preferences.localBadge().set((item.checked))
-                    languageBadge -> preferences.languageBadge().set((item.checked))
+                    downloadBadge -> preferences.downloadBadge().set(item.checked)
+                    unseenBadge -> preferences.unreadBadge().set(item.checked)
+                    localBadge -> preferences.localBadge().set(item.checked)
+                    languageBadge -> preferences.languageBadge().set(item.checked)
                 }
                 adapter.notifyItemChanged(item)
             }

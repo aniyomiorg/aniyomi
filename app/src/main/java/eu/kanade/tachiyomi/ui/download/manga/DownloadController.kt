@@ -389,7 +389,7 @@ class DownloadController :
         if (!isTabSelected) return
         val defaultTitle = getTitle()
 
-        val controller = (parentController as? BaseController<*>) ?: this
+        val controller = parentController as? BaseController<*> ?: this
 
         if (queueSize == 0) {
             controller.setTitle(defaultTitle)

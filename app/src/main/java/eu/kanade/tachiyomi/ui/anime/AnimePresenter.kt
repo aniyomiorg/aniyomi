@@ -271,9 +271,9 @@ class AnimePresenter(
      * @param anime the anime to get categories from.
      * @return Array of category ids the anime is in, if none returns default id
      */
-    fun getAnimeCategoryIds(anime: Anime): Array<Int> {
+    fun getAnimeCategoryIds(anime: Anime): IntArray {
         val categories = db.getCategoriesForAnime(anime).executeAsBlocking()
-        return categories.mapNotNull { it.id }.toTypedArray()
+        return categories.mapNotNull { it.id }.toIntArray()
     }
 
     /**
@@ -866,8 +866,6 @@ class AnimePresenter(
                             }
                         }
                         .awaitAll()
-
-                    withUIContext { view?.onTrackingRefreshDone() }
                 } catch (e: Throwable) {
                     withUIContext { view?.onTrackingRefreshError(e) }
                 }
@@ -917,7 +915,6 @@ class AnimePresenter(
             try {
                 service.update(track)
                 db.insertTrack(track).executeAsBlocking()
-                withUIContext { view?.onTrackingRefreshDone() }
             } catch (e: Throwable) {
                 withUIContext { view?.onTrackingRefreshError(e) }
 
