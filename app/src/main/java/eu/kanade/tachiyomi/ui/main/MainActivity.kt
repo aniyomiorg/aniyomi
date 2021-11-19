@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.view.ActionMode
 import androidx.core.animation.doOnEnd
@@ -28,10 +29,13 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.Router
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import dev.chrisbanes.insetter.applyInsetter
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.cache.ChapterCache
+import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.preference.asImmediateFlow
 import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
@@ -74,6 +78,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
+import uy.kohesive.injekt.injectLazy
 import eu.kanade.tachiyomi.ui.download.anime.DownloadController as AnimeDownloadController
 import eu.kanade.tachiyomi.ui.download.manga.DownloadController as MangaDownloadController
 
@@ -99,12 +104,20 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
      */
     private val backstackLiftState = mutableMapOf<String, Boolean>()
 
+    private val chapterCache: ChapterCache by injectLazy()
+    private val episodeCache: EpisodeCache by injectLazy()
+
     // To be checked by splash screen. If true then splash screen will be removed.
     var ready = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Prevent splash screen showing up on configuration changes
         val splashScreen = if (savedInstanceState == null) installSplashScreen() else null
+
+        // Set up shared element transition and disable overlay so views don't show above system bars
+        window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+        window.sharedElementsUseOverlay = false
 
         super.onCreate(savedInstanceState)
 
@@ -124,6 +137,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
         // Draw edge-to-edge
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding.fabLayout.rootFab.applyInsetter {
+            ignoreVisibility(true)
             type(navigationBars = true) {
                 margin()
             }
@@ -493,7 +507,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
 
         // Binding sometimes isn't actually instantiated yet somehow
         nav?.setOnItemSelectedListener(null)
-        binding?.toolbar.setNavigationOnClickListener(null)
+        binding?.toolbar?.setNavigationOnClickListener(null)
     }
 
     override fun onBackPressed() {
@@ -505,7 +519,11 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             // Exit confirmation (resets after 2 seconds)
             lifecycleScope.launchUI { resetExitConfirmation() }
         } else if (backstackSize == 1 || !router.handleBack()) {
-            // Regular back
+            // Regular back (i.e. closing the app)
+            if (preferences.autoClearChapterCache()) {
+                chapterCache.clear()
+                episodeCache.clear()
+            }
             super.onBackPressed()
         }
     }

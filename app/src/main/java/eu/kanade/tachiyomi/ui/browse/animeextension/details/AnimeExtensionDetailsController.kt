@@ -23,12 +23,14 @@ import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.getPreferenceKey
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.preference.EmptyPreferenceDataStore
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.preference.minusAssign
 import eu.kanade.tachiyomi.data.preference.plusAssign
 import eu.kanade.tachiyomi.databinding.ExtensionDetailControllerBinding
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
+import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.openInBrowser
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
@@ -38,8 +40,10 @@ import eu.kanade.tachiyomi.util.preference.preferenceCategory
 import eu.kanade.tachiyomi.util.preference.switchPreference
 import eu.kanade.tachiyomi.util.preference.switchSettingsPreference
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import uy.kohesive.injekt.injectLazy
 
 @SuppressLint("RestrictedApi")
@@ -47,6 +51,7 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
     NucleusController<ExtensionDetailControllerBinding, AnimeExtensionDetailsPresenter>(bundle) {
 
     private val preferences: PreferencesHelper by injectLazy()
+    private val network: NetworkHelper by injectLazy()
 
     private var preferenceScreen: PreferenceScreen? = null
 
@@ -199,6 +204,7 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
             R.id.action_history -> openCommitHistory()
             R.id.action_enable_all -> toggleAllSources(true)
             R.id.action_disable_all -> toggleAllSources(false)
+            R.id.action_clear_cookies -> clearCookies()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -227,6 +233,19 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
             else -> "$URL_EXTENSION_COMMITS/src/${pkgName.replace(".", "/")}"
         }
         openInBrowser(url)
+    }
+
+    private fun clearCookies() {
+        val urls = presenter.extension?.sources
+            ?.filterIsInstance<AnimeHttpSource>()
+            ?.map { it.baseUrl }
+            ?.distinct() ?: emptyList()
+
+        urls.forEach {
+            network.cookieManager.remove(it.toHttpUrl())
+        }
+
+        logcat { "Cleared cookies for: ${urls.joinToString()}" }
     }
 
     private fun AnimeSource.isEnabled(): Boolean {

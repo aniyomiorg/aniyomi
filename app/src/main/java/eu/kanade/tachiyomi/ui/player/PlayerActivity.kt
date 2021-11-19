@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.view.Window
 import android.webkit.WebSettings
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -42,6 +43,8 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.google.android.exoplayer2.util.Clock
 import com.google.android.exoplayer2.util.MimeTypes
+import com.google.android.material.transition.platform.MaterialContainerTransform
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -128,6 +131,16 @@ class PlayerActivity : AppCompatActivity() {
         .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Setup shared element transitions
+        window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+        findViewById<View>(android.R.id.content).transitionName = SHARED_ELEMENT_NAME
+        setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+        window.sharedElementEnterTransition = buildContainerTransform(true)
+        window.sharedElementReturnTransition = buildContainerTransform(false)
+
+        // Postpone custom transition until anime ready
+        postponeEnterTransition()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.watcher_activity)
         window.decorView.setOnSystemUiVisibilityChangeListener {
@@ -168,6 +181,14 @@ class PlayerActivity : AppCompatActivity() {
             playbackPosition = intent.extras!!.getLong("second")
             isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
             isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
+        }
+
+        startPostponedEnterTransition()
+    }
+
+    private fun buildContainerTransform(entering: Boolean): MaterialContainerTransform {
+        return MaterialContainerTransform(this, entering).apply {
+            addTarget(android.R.id.content)
         }
     }
 
@@ -742,5 +763,6 @@ class PlayerActivity : AppCompatActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
+        const val SHARED_ELEMENT_NAME = "reader_shared_element_root"
     }
 }

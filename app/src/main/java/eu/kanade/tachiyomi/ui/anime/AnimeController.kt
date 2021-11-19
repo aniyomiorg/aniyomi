@@ -1,8 +1,7 @@
 package eu.kanade.tachiyomi.ui.anime
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -102,7 +101,6 @@ import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
-import eu.kanade.tachiyomi.util.view.getCoordinates
 import eu.kanade.tachiyomi.util.view.shrinkOnScroll
 import eu.kanade.tachiyomi.util.view.snack
 import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
@@ -392,18 +390,7 @@ class AnimeController :
         fab.setOnClickListener {
             val item = presenter.getNextUnseenEpisode()
             if (item != null) {
-                // Get coordinates and start animation
-                actionFab?.getCoordinates()?.let { coordinates ->
-                    binding.revealView.showRevealEffect(
-                        coordinates.x,
-                        coordinates.y,
-                        object : AnimatorListenerAdapter() {
-                            override fun onAnimationStart(animation: Animator?) {
-                                openEpisode(item.episode)
-                            }
-                        }
-                    )
-                }
+                openEpisode(item.episode, it)
             }
         }
     }
@@ -434,20 +421,6 @@ class AnimeController :
         settingsSheet = null
         addSnackbar?.dismiss()
         super.onDestroyView(view)
-    }
-
-    override fun onActivityResumed(activity: Activity) {
-        if (view == null) return
-
-        // Check if animation view is visible
-        if (binding.revealView.isVisible) {
-            // Show the unreveal effect
-            actionFab?.getCoordinates()?.let { coordinates ->
-                binding.revealView.hideRevealEffect(coordinates.x, coordinates.y, 1920)
-            }
-        }
-
-        super.onActivityResumed(activity)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -1030,29 +1003,40 @@ class AnimeController :
         }
     }
 
-    fun openEpisode(episode: Episode, playerChangeRequested: Boolean = false) {
+    private fun openEpisode(episode: Episode, sharedElement: View? = null, playerChangeRequested: Boolean = false) {
         val context = view?.context ?: return
-        launchIO {
-            val intent = PlayerActivity.newIntent(context, presenter.anime, episode)
-            val useInternal = preferences.alwaysUseExternalPlayer() == playerChangeRequested
-            if (useInternal) {
-                startActivity(intent)
+        val activity = activity ?: return
+        val intent = PlayerActivity.newIntent(context, presenter.anime, episode)
+        val useInternal = preferences.alwaysUseExternalPlayer() == playerChangeRequested
+
+        if (!useInternal) launchIO {
+            val video = EpisodeLoader.getLink(episode, anime!!, source!!).awaitSingle()
+            if (video != null) {
+                val videoUri = video.uri
+                val videoUrl = Uri.parse(video.videoUrl)
+                currentExtEpisode = episode
+                val pkgName = preferences.externalPlayerPreference()
+
+                val uri = if (videoUri != null && Build.VERSION.SDK_INT >= 24 && videoUri.scheme == "file") {
+                    FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", videoUri.toFile())
+                } else videoUri ?: videoUrl
+
+                val extIntent = getExternalIntent(pkgName, uri, episode, video, context)
+                startActivityForResult(extIntent, REQUEST_EXTERNAL)
             } else {
-                val video = EpisodeLoader.getLink(episode, anime!!, source!!).awaitSingle()
-                if (video != null) {
-                    val videoUri = video.uri
-                    val videoUrl = Uri.parse(video.videoUrl)
-                    currentExtEpisode = episode
-                    val pkgName = preferences.externalPlayerPreference()
-
-                    val uri = if (videoUri != null && Build.VERSION.SDK_INT >= 24 && videoUri.scheme == "file") {
-                        FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", videoUri.toFile())
-                    } else videoUri ?: videoUrl
-
-                    val extIntent = getExternalIntent(pkgName, uri, episode, video, context)
-                    startActivityForResult(extIntent, REQUEST_EXTERNAL)
+                context.toast("Cannot open episode")
+            }
+        } else {
+            activity.apply {
+                if (sharedElement != null) {
+                    val activityOptions = ActivityOptions.makeSceneTransitionAnimation(
+                        activity,
+                        sharedElement,
+                        PlayerActivity.SHARED_ELEMENT_NAME
+                    )
+                    startActivity(intent, activityOptions.toBundle())
                 } else {
-                    context.toast("Cannot open episode")
+                    startActivity(intent)
                 }
             }
         }
@@ -1233,8 +1217,8 @@ class AnimeController :
             R.id.action_mark_as_read -> markAsRead(getSelectedEpisodes())
             R.id.action_mark_as_unread -> markAsUnread(getSelectedEpisodes())
             R.id.action_mark_previous_as_read -> markPreviousAsRead(getSelectedEpisodes())
-            R.id.action_play_internally -> openEpisode(getSelectedEpisodes().last().episode, true)
-            R.id.action_play_externally -> openEpisode(getSelectedEpisodes().last().episode, true)
+            R.id.action_play_internally -> openEpisode(getSelectedEpisodes().last().episode, playerChangeRequested = true)
+            R.id.action_play_externally -> openEpisode(getSelectedEpisodes().last().episode, playerChangeRequested = true)
             else -> return false
         }
         return true

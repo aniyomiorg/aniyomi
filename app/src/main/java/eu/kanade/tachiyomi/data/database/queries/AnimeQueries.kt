@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.data.database.queries
 
+import com.pushtorefresh.storio.Queries
 import com.pushtorefresh.storio.sqlite.operations.get.PreparedGetListOfObjects
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery
 import com.pushtorefresh.storio.sqlite.queries.Query
@@ -7,6 +8,7 @@ import com.pushtorefresh.storio.sqlite.queries.RawQuery
 import eu.kanade.tachiyomi.data.database.DbProvider
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
+import eu.kanade.tachiyomi.data.database.models.SourceIdAnimeCount
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeCoverLastModifiedPutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeFavoritePutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeFlagsPutResolver
@@ -14,6 +16,7 @@ import eu.kanade.tachiyomi.data.database.resolvers.AnimeLastUpdatedPutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeNextUpdatedPutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeTitlePutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimelibAnimeGetResolver
+import eu.kanade.tachiyomi.data.database.resolvers.SourceIdAnimeCountGetResolver
 import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable
 import eu.kanade.tachiyomi.data.database.tables.CategoryTable
@@ -70,6 +73,17 @@ interface AnimeQueries : DbProvider {
         )
         .prepare()
 
+    fun getSourceIdsWithNonLibraryAnime() = db.get()
+        .listOfObjects(SourceIdAnimeCount::class.java)
+        .withQuery(
+            RawQuery.builder()
+                .query(getSourceIdsWithNonLibraryAnimeQuery())
+                .observesTables(AnimeTable.TABLE)
+                .build()
+        )
+        .withGetResolver(SourceIdAnimeCountGetResolver.INSTANCE)
+        .prepare()
+
     fun insertAnime(anime: Anime) = db.put().`object`(anime).prepare()
 
     fun insertAnimes(animes: List<Anime>) = db.put().objects(animes).prepare()
@@ -123,12 +137,12 @@ interface AnimeQueries : DbProvider {
 
     fun deleteAnimes(animes: List<Anime>) = db.delete().objects(animes).prepare()
 
-    fun deleteAnimesNotInAnimelib() = db.delete()
+    fun deleteAnimesNotInLibraryBySourceIds(sourceIds: List<Long>) = db.delete()
         .byQuery(
             DeleteQuery.builder()
                 .table(AnimeTable.TABLE)
-                .where("${AnimeTable.COL_FAVORITE} = ?")
-                .whereArgs(0)
+                .where("${AnimeTable.COL_FAVORITE} = ? AND ${AnimeTable.COL_SOURCE} IN (${Queries.placeholders(sourceIds.size)})")
+                .whereArgs(0, *sourceIds.toTypedArray())
                 .build()
         )
         .prepare()
