@@ -14,6 +14,8 @@ import uy.kohesive.injekt.api.get
 
 class EpisodeLoader {
     companion object {
+        var errorMessage = ""
+
         fun getLinks(episode: Episode, anime: Anime, source: AnimeSource): Observable<List<Video>> {
             val downloadManager: AnimeDownloadManager = Injekt.get()
             val isDownloaded = downloadManager.isEpisodeDownloaded(episode, anime, true)
@@ -38,11 +40,11 @@ class EpisodeLoader {
                     it?.first()
                 }
                 source is AnimeHttpSource -> isHttp(episode, source).map {
-                    if (it.isEmpty()) null
+                    if (it.isEmpty()) error(errorMessage)
                     else it.first()
                 }
                 source is LocalAnimeSource -> isLocal(episode, source).map {
-                    if (it.isEmpty()) null
+                    if (it.isEmpty()) error(errorMessage)
                     else it.first()
                 }
                 else -> error("source not supported")
@@ -51,7 +53,10 @@ class EpisodeLoader {
 
         private fun isHttp(episode: Episode, source: AnimeHttpSource): Observable<List<Video>> {
             return source.fetchVideoList(episode)
-                .onErrorReturn { emptyList() }
+                .onErrorReturn {
+                    errorMessage = it.message ?: "error getting links"
+                    emptyList()
+                }
                 .flatMapIterable { it }
                 .flatMap {
                     source.fetchUrlFromVideo(it)
