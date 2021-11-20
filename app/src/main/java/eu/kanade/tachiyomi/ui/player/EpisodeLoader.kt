@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.player
 
+import android.net.Uri
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -11,6 +12,7 @@ import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import rx.Observable
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.lang.Exception
 
 class EpisodeLoader {
     companion object {
@@ -22,7 +24,7 @@ class EpisodeLoader {
             return when {
                 isDownloaded -> isDownloaded(episode, anime, source, downloadManager).map { it ?: emptyList() }
                 source is AnimeHttpSource -> isHttp(episode, source)
-                source is LocalAnimeSource -> source.fetchVideoList(episode)
+                source is LocalAnimeSource -> isLocal(episode)
                 else -> error("source not supported")
             }
         }
@@ -43,7 +45,7 @@ class EpisodeLoader {
                     if (it.isEmpty()) error(errorMessage)
                     else it.first()
                 }
-                source is LocalAnimeSource -> isLocal(episode, source).map {
+                source is LocalAnimeSource -> isLocal(episode).map {
                     if (it.isEmpty()) error(errorMessage)
                     else it.first()
                 }
@@ -75,11 +77,15 @@ class EpisodeLoader {
         }
 
         fun isLocal(
-            episode: Episode,
-            source: LocalAnimeSource
+            episode: Episode
         ): Observable<List<Video>> {
-            return source.fetchVideoList(episode)
-                .onErrorReturn { emptyList() }
+            return try {
+                val video = Video(episode.url, "Local source: ${episode.url}", episode.url, Uri.parse(episode.url))
+                Observable.just(listOf(video))
+            } catch (e: Exception) {
+                errorMessage = e.message ?: "error getting links"
+                Observable.just(emptyList())
+            }
         }
     }
 }

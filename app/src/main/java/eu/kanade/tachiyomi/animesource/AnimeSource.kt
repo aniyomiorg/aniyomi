@@ -42,7 +42,7 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
      * @param anime the anime to update.
      */
     @Deprecated("Use getAnimeDetails instead")
-    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime>
+    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> = Observable.empty()
 
     /**
      * Returns an observable with all the available episodes for an anime.
@@ -50,7 +50,7 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
      * @param anime the anime to update.
      */
     @Deprecated("Use getEpisodeList instead")
-    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>>
+    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> = Observable.empty()
 
     /**
      * Returns an observable with a list of video for the episode of an anime.
@@ -58,7 +58,7 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
      * @param episode the episode to get the link for.
      */
     @Deprecated("Use getVideoList instead")
-    fun fetchVideoList(episode: SEpisode): Observable<List<Video>>
+    fun fetchVideoList(episode: SEpisode): Observable<List<Video>> = Observable.empty()
 
     /**
      * [1.x API] Get the updated details for a anime.
