@@ -18,11 +18,14 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.Payload
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
+import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.ClearDatabaseControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
+import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.toast
 
 class ClearDatabaseController :
@@ -32,7 +35,7 @@ class ClearDatabaseController :
     FabController {
 
     private var recycler: RecyclerView? = null
-    private var adapter: FlexibleAdapter<ClearDatabaseSourceItem>? = null
+    private var adapter: FlexibleAdapter<AbstractFlexibleItem<out FlexibleViewHolder>>? = null
 
     private var menu: Menu? = null
 
@@ -64,7 +67,7 @@ class ClearDatabaseController :
             }
         }
 
-        adapter = FlexibleAdapter<ClearDatabaseSourceItem>(null, this, true)
+        adapter = FlexibleAdapter<AbstractFlexibleItem<out FlexibleViewHolder>>(null, this, true)
         binding.recycler.adapter = adapter
         binding.recycler.layoutManager = LinearLayoutManager(activity)
         binding.recycler.setHasFixedSize(true)
@@ -118,8 +121,10 @@ class ClearDatabaseController :
         return true
     }
 
-    fun setItems(items: List<ClearDatabaseSourceItem>) {
-        adapter?.updateDataSet(items)
+    fun setItems(items: List<AbstractFlexibleItem<out FlexibleViewHolder>>) {
+        launchUI {
+            adapter?.addItems(adapter?.itemCount ?: 0, items)
+        }
     }
 
     override fun configureFab(fab: ExtendedFloatingActionButton) {
@@ -160,10 +165,18 @@ class ClearDatabaseController :
     @SuppressLint("NotifyDataSetChanged")
     private fun clearDatabaseForSelectedSources() {
         val adapter = adapter ?: return
-        val selectedSourceIds = adapter.selectedPositions.mapNotNull { position ->
-            adapter.getItem(position)?.source?.id
+        val selectedAnimeSourceIds = adapter.selectedPositions.filter { position ->
+            adapter.getItem(position) is ClearDatabaseAnimeSourceItem
+        }.mapNotNull { position ->
+            (adapter.getItem(position) as? ClearDatabaseAnimeSourceItem)?.source?.id
+        }
+        val selectedSourceIds = adapter.selectedPositions.filter { position ->
+            adapter.getItem(position) is ClearDatabaseSourceItem
+        }.mapNotNull { position ->
+            (adapter.getItem(position) as? ClearDatabaseSourceItem)?.source?.id
         }
         presenter.clearDatabaseForSourceIds(selectedSourceIds)
+        presenter.clearDatabaseForAnimeSourceIds(selectedAnimeSourceIds)
         actionFab!!.isVisible = false
         adapter.clearSelection()
         adapter.notifyDataSetChanged()

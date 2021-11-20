@@ -6,9 +6,9 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.Source
+import eu.kanade.tachiyomi.animesource.AnimeSource
 
-data class ClearDatabaseSourceItem(val source: Source, private val mangaCount: Int) : AbstractFlexibleItem<ClearDatabaseSourceItemHolder>() {
+data class ClearDatabaseAnimeSourceItem(val source: AnimeSource, private val animeCount: Int) : AbstractFlexibleItem<ClearDatabaseSourceItemHolder>() {
 
     override fun getLayoutRes(): Int {
         return R.layout.clear_database_source_item
@@ -20,7 +20,7 @@ data class ClearDatabaseSourceItem(val source: Source, private val mangaCount: I
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?, holder: ClearDatabaseSourceItemHolder?, position: Int, payloads: MutableList<Any>?) {
         if (payloads.isNullOrEmpty()) {
-            holder?.bind(source, mangaCount)
+            holder?.bind(source, animeCount)
         } else {
             holder?.updateCheckbox()
         }
