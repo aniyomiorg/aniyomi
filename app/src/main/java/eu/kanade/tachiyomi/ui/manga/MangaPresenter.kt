@@ -388,6 +388,7 @@ class MangaPresenter(
                     if (manga.isLocal()) {
                         LocalSource.updateCover(context, manga, it)
                         manga.updateCoverLastModified(db)
+                        coverCache.clearMemoryCache()
                     } else if (manga.favorite) {
                         coverCache.setCustomCoverToCache(manga, it)
                         manga.updateCoverLastModified(db)

@@ -53,13 +53,11 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
             if (cover == null) {
                 cover = File("${dir.absolutePath}/${anime.url}", COVER_NAME)
             }
-            if (!cover.exists()) {
-                // It might not exist if using the external SD card
-                cover.parentFile?.mkdirs()
-                input.use {
-                    cover.outputStream().use {
-                        input.copyTo(it)
-                    }
+            // It might not exist if using the external SD card
+            cover.parentFile?.mkdirs()
+            input.use {
+                cover.outputStream().use {
+                    input.copyTo(it)
                 }
             }
             return cover
@@ -244,7 +242,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
     private fun getFormat(file: File) = with(file) {
         when {
             isDirectory -> Format.Directory(this)
-            SUPPORTED_FILE_TYPES.contains(extension.lowercase(Locale.ENGLISH)) -> Format.Anime(this)
+            isSupportedFile(extension) -> Format.Anime(this.parentFile!!)
             else -> throw Exception(context.getString(R.string.local_invalid_episode_format))
         }
     }
