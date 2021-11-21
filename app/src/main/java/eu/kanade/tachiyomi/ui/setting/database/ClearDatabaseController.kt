@@ -123,7 +123,21 @@ class ClearDatabaseController :
 
     fun setItems(items: List<AbstractFlexibleItem<out FlexibleViewHolder>>) {
         launchUI {
+            val animeItems = adapter?.currentItems?.filterIsInstance<ClearDatabaseAnimeSourceItem>()
+                ?: emptyList()
+            adapter?.clear()
+            adapter?.addItems(0, animeItems)
             adapter?.addItems(adapter?.itemCount ?: 0, items)
+        }
+    }
+
+    fun setItemsAnime(items: List<AbstractFlexibleItem<out FlexibleViewHolder>>) {
+        launchUI {
+            val mangaItems = adapter?.currentItems?.filterIsInstance<ClearDatabaseSourceItem>()
+                ?: emptyList()
+            adapter?.clear()
+            adapter?.addItems(0, items)
+            adapter?.addItems(adapter?.itemCount ?: 0, mangaItems)
         }
     }
 

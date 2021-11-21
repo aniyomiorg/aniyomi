@@ -530,7 +530,10 @@
     <string name="pref_auto_clear_chapter_cache">Clear chapter/episode cache on app close</string>
     <string name="pref_clear_database">Clear database</string>
     <string name="pref_clear_database_summary">Delete history for anime and manga that are not saved in your library</string>
-    <string name="clear_database_source_item_count">%1$d non-library entries in database</string>
+    <plurals name="clear_database_source_item_count">
+        <item quantity="one">1 non-library entry in database</item>
+        <item quantity="other">%1$d non-library entries in database</item>
+    </plurals>
     <string name="clear_database_confirmation">Are you sure? Completed episodes and chapters and progress of non-library entries will be lost</string>
     <string name="clear_database_completed">Entries deleted</string>
     <string name="database_clean">Database clean</string>
@@ -605,6 +608,8 @@
     <!-- Do not translate "WebView" -->
     <string name="http_error_hint">Check website in WebView</string>
     <string name="local_source">Local source</string>
+    <string name="local_manga_source">Local manga source</string>
+    <string name="local_anime_source">Local anime source</string>
     <string name="other_source">Other</string>
     <string name="last_used_source">Last used</string>
     <string name="pinned_sources">Pinned</string>

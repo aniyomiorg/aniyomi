@@ -84,7 +84,7 @@ class LocalSource(private val context: Context) : CatalogueSource {
     private val json: Json by injectLazy()
 
     override val id = ID
-    override val name = context.getString(R.string.local_source)
+    override val name = context.getString(R.string.local_manga_source)
     override val lang = "other"
     override val supportsLatest = true
 

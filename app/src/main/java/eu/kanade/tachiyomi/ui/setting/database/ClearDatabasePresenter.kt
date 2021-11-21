@@ -23,7 +23,7 @@ class ClearDatabasePresenter : BasePresenter<ClearDatabaseController>() {
         super.onCreate(savedState)
         getDatabaseAnimeSourcesObservable()
             .subscribeOn(Schedulers.io())
-            .subscribeLatestCache(ClearDatabaseController::setItems)
+            .subscribeLatestCache(ClearDatabaseController::setItemsAnime)
         getDatabaseSourcesObservable()
             .subscribeOn(Schedulers.io())
             .subscribeLatestCache(ClearDatabaseController::setItems)
