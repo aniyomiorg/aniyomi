@@ -13,6 +13,8 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.github.vkay94.dtpv.DoubleTapPlayerView
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
 import com.google.android.exoplayer2.DefaultLoadControl
@@ -65,7 +67,6 @@ import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
-import eu.kanade.tachiyomi.util.view.hideBar
 import eu.kanade.tachiyomi.widget.listener.SimpleSeekBarListener
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -132,9 +133,10 @@ class PlayerActivity : AppCompatActivity() {
         applyAppTheme(preferences)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.watcher_activity)
-        window.decorView.setOnSystemUiVisibilityChangeListener {
-            window.hideBar()
-        }
+        val windowInsetsController = WindowInsetsControllerCompat(window, findViewById(R.id.watcher_activity))
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
         playerView = findViewById(R.id.player_view)
         playerView.resizeMode = preferences.getPlayerViewMode()
         youTubeDoubleTap = findViewById(R.id.youtube_overlay)
