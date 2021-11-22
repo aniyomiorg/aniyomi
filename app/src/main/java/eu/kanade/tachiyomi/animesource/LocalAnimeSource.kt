@@ -7,16 +7,12 @@ import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
-import eu.kanade.tachiyomi.animesource.model.toAnimeInfo
 import eu.kanade.tachiyomi.animesource.model.toEpisodeInfo
 import eu.kanade.tachiyomi.animesource.model.toSAnime
-import eu.kanade.tachiyomi.animesource.model.toSEpisode
 import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.system.ImageUtil
-import eu.kanade.tachiyomi.util.system.logcat
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
@@ -24,7 +20,6 @@ import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
-import logcat.LogPriority
 import rx.Observable
 import tachiyomi.animesource.model.AnimeInfo
 import tachiyomi.animesource.model.EpisodeInfo
@@ -60,6 +55,8 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
                     input.copyTo(it)
                 }
             }
+            // If no cover is set in the db
+            anime.thumbnail_url = cover.absolutePath
             return cover
         }
 
@@ -131,25 +128,6 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
                     if (cover != null && cover.exists()) {
                         thumbnail_url = cover.absolutePath
                         break
-                    }
-                }
-
-                val sAnime = this
-                val animeInfo = this.toAnimeInfo()
-                runBlocking {
-                    val episodes = getEpisodeList(animeInfo)
-                    if (episodes.isNotEmpty()) {
-                        val episode = episodes.last().toSEpisode()
-
-                        // Copy the cover from the first chapter found.
-                        if (thumbnail_url == null) {
-                            try {
-                                val dest = updateCover(episode, sAnime)
-                                thumbnail_url = dest?.absolutePath
-                            } catch (e: Exception) {
-                                logcat(LogPriority.ERROR, e)
-                            }
-                        }
                     }
                 }
             }

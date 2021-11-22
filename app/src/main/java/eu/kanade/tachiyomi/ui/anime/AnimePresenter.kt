@@ -394,6 +394,7 @@ class AnimePresenter(
                     if (anime.isLocal()) {
                         LocalAnimeSource.updateCover(context, anime, it)
                         anime.updateCoverLastModified(db)
+                        db.insertAnime(anime).executeAsBlocking()
                         coverCache.clearMemoryCache()
                     } else if (anime.favorite) {
                         coverCache.setCustomCoverToCache(anime, it)

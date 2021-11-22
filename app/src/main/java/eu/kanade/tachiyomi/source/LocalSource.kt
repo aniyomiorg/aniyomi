@@ -63,6 +63,7 @@ class LocalSource(private val context: Context) : CatalogueSource {
                     input.copyTo(it)
                 }
             }
+            manga.thumbnail_url = cover.absolutePath
             return cover
         }
 
