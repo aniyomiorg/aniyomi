@@ -12,7 +12,6 @@ import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.github.vkay94.dtpv.DoubleTapPlayerView
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
@@ -42,6 +41,7 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.google.android.exoplayer2.util.Clock
 import com.google.android.exoplayer2.util.MimeTypes
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -58,6 +58,7 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingUpdateJob
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
+import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAppTheme
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
@@ -128,6 +129,7 @@ class PlayerActivity : AppCompatActivity() {
         .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        applyAppTheme(preferences)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.watcher_activity)
         window.decorView.setOnSystemUiVisibilityChangeListener {
@@ -315,13 +317,13 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun optionsDialog() {
-        val alert = AlertDialog.Builder(this)
+        val alert = MaterialAlertDialogBuilder(this)
 
         alert.setTitle(R.string.playback_options_title)
         alert.setItems(R.array.playback_options) { dialog, which ->
             when (which) {
                 0 -> {
-                    val speedAlert = AlertDialog.Builder(this)
+                    val speedAlert = MaterialAlertDialogBuilder(this)
 
                     val linear = LinearLayout(this)
 
@@ -382,7 +384,7 @@ class PlayerActivity : AppCompatActivity() {
                 }
                 1 -> {
                     if (videos.isNotEmpty()) {
-                        val qualityAlert = AlertDialog.Builder(this)
+                        val qualityAlert = MaterialAlertDialogBuilder(this)
 
                         qualityAlert.setTitle(R.string.playback_quality_dialog_title)
 
