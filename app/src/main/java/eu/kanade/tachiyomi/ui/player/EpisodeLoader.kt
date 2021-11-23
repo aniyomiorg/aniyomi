@@ -42,11 +42,11 @@ class EpisodeLoader {
                     it?.first()
                 }
                 source is AnimeHttpSource -> isHttp(episode, source).map {
-                    if (it.isEmpty()) error(errorMessage)
+                    if (it.isEmpty()) null
                     else it.first()
                 }
                 source is LocalAnimeSource -> isLocal(episode).map {
-                    if (it.isEmpty()) error(errorMessage)
+                    if (it.isEmpty()) null
                     else it.first()
                 }
                 else -> error("source not supported")
