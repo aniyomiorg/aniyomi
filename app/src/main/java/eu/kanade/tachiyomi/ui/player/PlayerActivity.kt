@@ -1,7 +1,10 @@
 package eu.kanade.tachiyomi.ui.player
 
+import android.app.PictureInPictureParams
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -562,6 +565,11 @@ class PlayerActivity : AppCompatActivity() {
         super.onStart()
     }
 
+    override fun onResume() {
+        playerView.useController = true
+        super.onResume()
+    }
+
     override fun onStop() {
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
@@ -575,6 +583,22 @@ class PlayerActivity : AppCompatActivity() {
         releasePlayer()
         simpleCache.release()
         super.onDestroy()
+    }
+
+    override fun onUserLeaveHint() {
+        startPiP()
+        super.onUserLeaveHint()
+    }
+
+    private fun startPiP() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+            playerView.useController = false
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                this.enterPictureInPictureMode(PictureInPictureParams.Builder().build())
+            } else {
+                this.enterPictureInPictureMode()
+            }
+        }
     }
 
     private fun saveEpisodeHistory(episode: EpisodeItem) {
