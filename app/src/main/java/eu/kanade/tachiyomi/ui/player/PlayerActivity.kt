@@ -1,7 +1,11 @@
 package eu.kanade.tachiyomi.ui.player
 
+import android.app.PictureInPictureParams
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -128,6 +132,8 @@ class PlayerActivity : AppCompatActivity() {
         .setUri("bruh")
         .setMimeType(MimeTypes.VIDEO_MP4)
         .build()
+
+    private var isInPipMode: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         applyAppTheme(preferences)
@@ -562,10 +568,15 @@ class PlayerActivity : AppCompatActivity() {
         super.onStart()
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     override fun onStop() {
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
         if (exoPlayer.isPlaying) exoPlayer.pause()
+        if (isInPipMode) finish()
         playerView.onPause()
         super.onStop()
     }
@@ -574,7 +585,33 @@ class PlayerActivity : AppCompatActivity() {
         deletePendingEpisodes()
         releasePlayer()
         simpleCache.release()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) finishAndRemoveTask()
         super.onDestroy()
+    }
+
+    override fun onUserLeaveHint() {
+        if (exoPlayer.isPlaying) {
+            startPiP()
+        }
+
+        super.onUserLeaveHint()
+    }
+
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+        isInPipMode = isInPictureInPictureMode
+        playerView.useController = !isInPictureInPictureMode
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+    }
+
+    private fun startPiP() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+            playerView.useController = false
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                this.enterPictureInPictureMode(PictureInPictureParams.Builder().build())
+            } else {
+                this.enterPictureInPictureMode()
+            }
+        }
     }
 
     private fun saveEpisodeHistory(episode: EpisodeItem) {

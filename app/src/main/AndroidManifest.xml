@@ -92,7 +92,11 @@
         <activity
             android:name=".ui.player.PlayerActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:supportsPictureInPicture="true"
+            android:resizeableActivity="true"
+            android:excludeFromRecents="true"
+            android:taskAffinity=".PlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
             android:screenOrientation="userLandscape"
             android:launchMode="singleTask"
             android:exported="false">
@@ -187,6 +191,12 @@
         <receiver
             android:name=".data.notification.NotificationReceiver"
             android:exported="false" />
+
+        <receiver android:name="androidx.media.session.MediaButtonReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".data.library.LibraryUpdateService"
