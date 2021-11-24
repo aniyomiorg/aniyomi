@@ -16,6 +16,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import androidx.annotation.FloatRange
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -36,6 +37,7 @@ import coil.request.ImageRequest
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
+import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dev.chrisbanes.insetter.applyInsetter
@@ -1065,7 +1067,7 @@ class AnimeController :
     private fun getExternalIntent(pkgName: String?, uri: Uri, episode: Episode, video: Video, context: Context): Intent {
         return if (pkgName.isNullOrEmpty()) {
             Intent(Intent.ACTION_VIEW).apply {
-                setDataAndTypeAndNormalize(uri, "video/*")
+                setDataAndTypeAndNormalize(uri, getMime(uri))
                 putExtra("title", anime!!.title + " - " + episode.name)
                 putExtra("position", episode.last_second_seen.toInt())
                 putExtra("return_result", true)
@@ -1082,7 +1084,7 @@ class AnimeController :
         } else {
             context.packageManager.getLaunchIntentForPackage(pkgName)!!.apply {
                 action = Intent.ACTION_VIEW
-                setDataAndTypeAndNormalize(uri, "video/*")
+                setDataAndTypeAndNormalize(uri, getMime(uri))
                 putExtra("title", anime!!.title + " - " + episode.name)
                 putExtra("position", episode.last_second_seen.toInt())
                 putExtra("return_result", true)
@@ -1102,6 +1104,11 @@ class AnimeController :
                 }
             }
         }
+    }
+
+    private fun getMime(uri: Uri): String {
+        val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) ?: MimeTypes.VIDEO_MP4
     }
 
     override fun onItemClick(view: View?, position: Int): Boolean {
