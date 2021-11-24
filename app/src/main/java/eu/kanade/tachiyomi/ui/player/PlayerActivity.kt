@@ -84,10 +84,6 @@ import uy.kohesive.injekt.api.get
 import java.io.File
 import java.util.Date
 
-const val STATE_RESUME_POSITION = "resumePosition"
-const val STATE_PLAYER_FULLSCREEN = "playerFullscreen"
-const val STATE_PLAYER_PLAYING = "playerOnPlay"
-
 class PlayerActivity : AppCompatActivity() {
 
     private val preferences: PreferencesHelper = Injekt.get()
@@ -176,7 +172,7 @@ class PlayerActivity : AppCompatActivity() {
         initDummyPlayer()
 
         if (savedInstanceState != null) {
-            playbackPosition = intent.extras!!.getLong("second")
+            playbackPosition = savedInstanceState.getLong(STATE_RESUME_POSITION)
             isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
             isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
         }
@@ -565,10 +561,6 @@ class PlayerActivity : AppCompatActivity() {
         super.onStart()
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     override fun onStop() {
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
@@ -600,7 +592,9 @@ class PlayerActivity : AppCompatActivity() {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
     }
 
+    @Suppress("DEPRECATION")
     private fun startPiP() {
+        if (!preferences.pipPlayerPreference()) return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
             playerView.useController = false
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -778,3 +772,7 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 }
+
+private const val STATE_RESUME_POSITION = "resumePosition"
+private const val STATE_PLAYER_FULLSCREEN = "playerFullscreen"
+private const val STATE_PLAYER_PLAYING = "playerOnPlay"

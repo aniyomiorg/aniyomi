@@ -150,6 +150,8 @@ class PreferencesHelper(val context: Context) {
         putInt(Keys.playerViewMode, newMode)
     }
 
+    fun pipPlayerPreference() = prefs.getBoolean(Keys.pipPlayerPreference, false)
+
     fun alwaysUseExternalPlayer() = prefs.getBoolean(Keys.alwaysUseExternalPlayer, false)
 
     fun externalPlayerPreference() = prefs.getString(Keys.externalPlayerPreference, "")
