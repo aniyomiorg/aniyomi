@@ -19,7 +19,7 @@ class ClearDatabaseSourceItemHolder(view: View, adapter: FlexibleAdapter<*>) : F
 
     fun bind(source: AnimeSource, count: Int) {
         binding.title.text = source.toString()
-        binding.description.text = itemView.context.resources.getQuantityString(R.plurals.clear_database_source_item_count, count)
+        binding.description.text = itemView.context.resources.getQuantityString(R.plurals.clear_database_source_item_count, count, count)
 
         itemView.post {
             when {
@@ -32,7 +32,7 @@ class ClearDatabaseSourceItemHolder(view: View, adapter: FlexibleAdapter<*>) : F
 
     fun bind(source: Source, count: Int) {
         binding.title.text = source.toString()
-        binding.description.text = itemView.context.resources.getQuantityString(R.plurals.clear_database_source_item_count, count)
+        binding.description.text = itemView.context.resources.getQuantityString(R.plurals.clear_database_source_item_count, count, count)
 
         itemView.post {
             when {

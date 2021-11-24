@@ -25,7 +25,6 @@ import eu.kanade.tachiyomi.databinding.ClearDatabaseControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
-import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.toast
 
 class ClearDatabaseController :
@@ -122,23 +121,19 @@ class ClearDatabaseController :
     }
 
     fun setItems(items: List<AbstractFlexibleItem<out FlexibleViewHolder>>) {
-        launchUI {
-            val animeItems = adapter?.currentItems?.filterIsInstance<ClearDatabaseAnimeSourceItem>()
-                ?: emptyList()
-            adapter?.clear()
-            adapter?.addItems(0, animeItems)
-            adapter?.addItems(adapter?.itemCount ?: 0, items)
-        }
+        val animeItems = adapter?.currentItems?.filterIsInstance<ClearDatabaseAnimeSourceItem>()
+            ?: emptyList()
+        adapter?.clear()
+        adapter?.addItems(0, animeItems)
+        adapter?.addItems(adapter?.itemCount ?: 0, items)
     }
 
     fun setItemsAnime(items: List<AbstractFlexibleItem<out FlexibleViewHolder>>) {
-        launchUI {
-            val mangaItems = adapter?.currentItems?.filterIsInstance<ClearDatabaseSourceItem>()
-                ?: emptyList()
-            adapter?.clear()
-            adapter?.addItems(0, items)
-            adapter?.addItems(adapter?.itemCount ?: 0, mangaItems)
-        }
+        val mangaItems = adapter?.currentItems?.filterIsInstance<ClearDatabaseSourceItem>()
+            ?: emptyList()
+        adapter?.clear()
+        adapter?.addItems(0, items)
+        adapter?.addItems(adapter?.itemCount ?: 0, mangaItems)
     }
 
     override fun configureFab(fab: ExtendedFloatingActionButton) {
