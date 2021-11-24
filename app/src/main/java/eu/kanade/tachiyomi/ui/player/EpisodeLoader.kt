@@ -22,7 +22,7 @@ class EpisodeLoader {
             val downloadManager: AnimeDownloadManager = Injekt.get()
             val isDownloaded = downloadManager.isEpisodeDownloaded(episode, anime, true)
             return when {
-                isDownloaded -> isDownloaded(episode, anime, source, downloadManager).map { it ?: emptyList() }
+                isDownloaded -> isDownloaded(episode, anime, source, downloadManager)
                 source is AnimeHttpSource -> isHttp(episode, source)
                 source is LocalAnimeSource -> isLocal(episode)
                 else -> error("source not supported")
@@ -39,7 +39,8 @@ class EpisodeLoader {
             val isDownloaded = downloadManager.isEpisodeDownloaded(episode, anime, true)
             return when {
                 isDownloaded -> isDownloaded(episode, anime, source, downloadManager).map {
-                    it?.first()
+                    if (it.isEmpty()) null
+                    else it.first()
                 }
                 source is AnimeHttpSource -> isHttp(episode, source).map {
                     if (it.isEmpty()) null
@@ -70,10 +71,13 @@ class EpisodeLoader {
             anime: Anime,
             source: AnimeSource,
             downloadManager: AnimeDownloadManager
-        ): Observable<List<Video>?> {
+        ): Observable<List<Video>> {
             return downloadManager.buildVideo(source, anime, episode)
                 .onErrorReturn { null }
-                .toList()
+                .map {
+                    if (it == null) emptyList()
+                    else listOf(it)
+                }
         }
 
         fun isLocal(
