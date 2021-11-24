@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import android.webkit.WebSettings
 import android.widget.ImageButton
@@ -17,6 +18,7 @@ import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -64,6 +66,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingUpdateJob
+import eu.kanade.tachiyomi.databinding.WatcherActivityBinding
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAppTheme
 import eu.kanade.tachiyomi.util.lang.awaitSingle
@@ -86,6 +89,8 @@ import java.util.Date
 
 class PlayerActivity : AppCompatActivity() {
 
+    private lateinit var binding: WatcherActivityBinding
+    private val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
     private val preferences: PreferencesHelper = Injekt.get()
     private val incognitoMode = preferences.incognitoMode().get()
     private val db: AnimeDatabaseHelper = Injekt.get()
@@ -133,16 +138,16 @@ class PlayerActivity : AppCompatActivity() {
     private var isInPipMode: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        binding = WatcherActivityBinding.inflate(layoutInflater)
         applyAppTheme(preferences)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.watcher_activity)
-        val windowInsetsController = WindowInsetsControllerCompat(window, findViewById(R.id.watcher_activity))
-        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
-        playerView = findViewById(R.id.player_view)
+        setContentView(binding.root)
+
+        setVisibilities()
+        playerView = binding.playerView
         playerView.resizeMode = preferences.getPlayerViewMode()
-        youTubeDoubleTap = findViewById(R.id.youtube_overlay)
+        youTubeDoubleTap = binding.youtubeOverlay
         youTubeDoubleTap.seekSeconds(preferences.skipLengthPreference())
         youTubeDoubleTap
             .performListener(object : YouTubeOverlay.PerformListener {
@@ -176,6 +181,11 @@ class PlayerActivity : AppCompatActivity() {
             isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
             isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
         }
+    }
+
+    private fun setVisibilities() {
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     }
 
     private fun initDummyPlayer() {
@@ -317,14 +327,22 @@ class PlayerActivity : AppCompatActivity() {
         preferences.setPlayerViewMode(playerView.resizeMode)
     }
 
+    private inner class NotFocusableMaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(context) {
+        override fun create(): AlertDialog {
+            return super.create().apply {
+                this.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+            }
+        }
+    }
+
     private fun optionsDialog() {
-        val alert = MaterialAlertDialogBuilder(this)
+        val alert = NotFocusableMaterialAlertDialogBuilder(this)
 
         alert.setTitle(R.string.playback_options_title)
         alert.setItems(R.array.playback_options) { dialog, which ->
             when (which) {
                 0 -> {
-                    val speedAlert = MaterialAlertDialogBuilder(this)
+                    val speedAlert = NotFocusableMaterialAlertDialogBuilder(this)
 
                     val linear = LinearLayout(this)
 
@@ -385,7 +403,7 @@ class PlayerActivity : AppCompatActivity() {
                 }
                 1 -> {
                     if (videos.isNotEmpty()) {
-                        val qualityAlert = MaterialAlertDialogBuilder(this)
+                        val qualityAlert = NotFocusableMaterialAlertDialogBuilder(this)
 
                         qualityAlert.setTitle(R.string.playback_quality_dialog_title)
 
