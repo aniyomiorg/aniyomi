@@ -220,10 +220,10 @@ class PlayerActivity : AppCompatActivity() {
             dbProvider = StandaloneDatabaseProvider(baseContext)
             isLocal = EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource
             if (isLocal) {
-                uri = videos.first().uri!!.toString()
+                uri = videos.firstOrNull()?.uri?.toString() ?: return@launchUI onGetLinksError()
                 dataSourceFactory = DefaultDataSource.Factory(context)
             } else {
-                uri = videos.first().videoUrl!!
+                uri = videos.firstOrNull()?.videoUrl ?: return@launchUI onGetLinksError()
                 dataSourceFactory = newDataSourceFactory()
             }
             logcat(LogPriority.INFO) { "playing $uri" }
@@ -243,7 +243,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun newDataSourceFactory(): DefaultHttpDataSource.Factory {
         return DefaultHttpDataSource.Factory().apply {
-            val currentHeaders = videos[currentQuality].headers
+            val currentHeaders = videos.getOrNull(currentQuality)?.headers
             val headers = currentHeaders?.toMultimap()
                 ?.mapValues { it.value.getOrNull(0) ?: "" }
                 ?.toMutableMap()
@@ -490,11 +490,11 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun changeQuality(quality: Int) {
-        baseContext.toast(videos[quality].quality, Toast.LENGTH_SHORT)
+        baseContext.toast(videos.getOrNull(quality)?.quality, Toast.LENGTH_SHORT)
         uri = if (isLocal) {
-            videos[quality].uri!!.toString()
+            videos.getOrNull(quality)?.uri?.toString() ?: return
         } else {
-            videos[quality].videoUrl!!
+            videos.getOrNull(quality)?.videoUrl ?: return
         }
         currentQuality = quality
         mediaItem = MediaItem.Builder()
