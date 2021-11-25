@@ -14,6 +14,7 @@ plugins {
 
 if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
     apply(plugin = "com.google.gms.google-services")
+    apply(plugin = "com.google.firebase.crashlytics")
 }
 
 shortcutHelper.setFilePath("./shortcuts.xml")
@@ -265,6 +266,7 @@ dependencies {
 
     // Crash reports/analytics
     implementation("ch.acra:acra-http:5.8.1")
+    "standardImplementation"("com.google.firebase:firebase-crashlytics-ktx:18.2.4")
     "standardImplementation"("com.google.firebase:firebase-analytics-ktx:20.0.0")
 
     // Licenses
