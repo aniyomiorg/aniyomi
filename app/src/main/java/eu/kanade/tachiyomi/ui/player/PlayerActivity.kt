@@ -191,6 +191,9 @@ class PlayerActivity : AppCompatActivity() {
         mediaSourceFactory = DefaultMediaSourceFactory(DefaultDataSource.Factory(this))
         exoPlayer = newPlayer()
         dbProvider = StandaloneDatabaseProvider(baseContext)
+        if (SimpleCache.isCacheFolderLocked(baseContext.filesDir)) {
+            SimpleCache.delete(baseContext.filesDir, dbProvider)
+        }
         simpleCache = SimpleCache(
             File(baseContext.filesDir, "media"),
             LeastRecentlyUsedCacheEvictor(cacheSize),
