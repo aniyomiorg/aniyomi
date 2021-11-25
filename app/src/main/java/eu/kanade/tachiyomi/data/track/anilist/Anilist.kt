@@ -4,11 +4,13 @@ import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.source.model.SManga
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -176,7 +178,7 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         return api.addLibAnime(track)
     }
 
-    override suspend fun update(track: Track, didReadChapter: Boolean): Track {
+    override suspend fun update(track: Track, didReadChapter: Boolean, mangaStatus: Int): Track {
         // If user was using API v1 fetch library_id
         if (track.library_id == null || track.library_id!! == 0L) {
             val libManga = api.findLibManga(track, getUsername().toInt())
@@ -185,15 +187,22 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         }
 
         if (track.status != COMPLETED) {
-            if (track.status != REPEATING && didReadChapter) {
-                track.status = READING
+            if (didReadChapter) {
+                if (track.last_chapter_read == track.total_chapters.toFloat() &&
+                    track.total_chapters > 0 &&
+                    mangaStatus == SManga.COMPLETED
+                ) {
+                    track.status = COMPLETED
+                } else if (track.status != REPEATING) {
+                    track.status = READING
+                }
             }
         }
 
         return api.updateLibManga(track)
     }
 
-    override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean): AnimeTrack {
+    override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean, animeStatus: Int): AnimeTrack {
         // If user was using API v1 fetch library_id
         if (track.library_id == null || track.library_id!! == 0L) {
             val libManga = api.findLibAnime(track, getUsername().toInt())
@@ -202,8 +211,15 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
         }
 
         if (track.status != COMPLETED) {
-            if (track.status != REPEATING_ANIME && didWatchEpisode) {
-                track.status = WATCHING
+            if (didWatchEpisode) {
+                if (track.last_episode_seen == track.total_episodes.toFloat() &&
+                    track.total_episodes > 0 &&
+                    animeStatus == SAnime.COMPLETED
+                ) {
+                    track.status = COMPLETED
+                } else if (track.status != REPEATING_ANIME) {
+                    track.status = WATCHING
+                }
             }
         }
 

@@ -60,9 +60,9 @@ abstract class TrackService(val id: Int) {
 
     abstract fun displayScore(track: AnimeTrack): String
 
-    abstract suspend fun update(track: Track, didReadChapter: Boolean = false): Track
+    abstract suspend fun update(track: Track, didReadChapter: Boolean = false, mangaStatus: Int = 0): Track
 
-    abstract suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean = false): AnimeTrack
+    abstract suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean = false, animeStatus: Int = 0): AnimeTrack
 
     abstract suspend fun bind(track: Track, hasReadChapters: Boolean = false): Track
 

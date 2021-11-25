@@ -719,7 +719,7 @@ class PlayerActivity : AppCompatActivity() {
                         async {
                             runCatching {
                                 if (baseContext.isOnline()) {
-                                    service.update(track, true)
+                                    service.update(track, true, anime.status)
                                     db.insertTrack(track).executeAsBlocking()
                                 } else {
                                     delayedTrackingStore.addItem(track)

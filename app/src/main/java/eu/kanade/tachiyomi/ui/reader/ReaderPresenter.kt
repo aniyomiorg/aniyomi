@@ -720,7 +720,7 @@ class ReaderPresenter(
                         async {
                             runCatching {
                                 if (context.isOnline()) {
-                                    service.update(track, true)
+                                    service.update(track, true, manga.status)
                                     db.insertTrack(track).executeAsBlocking()
                                 } else {
                                     delayedTrackingStore.addItem(track)

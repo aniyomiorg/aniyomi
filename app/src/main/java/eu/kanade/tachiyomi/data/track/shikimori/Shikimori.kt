@@ -4,11 +4,13 @@ import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.source.model.SManga
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -54,20 +56,34 @@ class Shikimori(private val context: Context, id: Int) : TrackService(id) {
         return api.addLibAnime(track, getUsername())
     }
 
-    override suspend fun update(track: Track, didReadChapter: Boolean): Track {
+    override suspend fun update(track: Track, didReadChapter: Boolean, mangaStatus: Int): Track {
         if (track.status != COMPLETED) {
-            if (track.status != REPEATING && didReadChapter) {
-                track.status = READING
+            if (didReadChapter) {
+                if (track.last_chapter_read == track.total_chapters.toFloat() &&
+                    track.total_chapters > 0 &&
+                    mangaStatus == SManga.COMPLETED
+                ) {
+                    track.status = COMPLETED
+                } else {
+                    track.status = READING
+                }
             }
         }
 
         return api.updateLibManga(track, getUsername())
     }
 
-    override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean): AnimeTrack {
+    override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean, animeStatus: Int): AnimeTrack {
         if (track.status != COMPLETED) {
-            if (track.status != REPEATING && didWatchEpisode) {
-                track.status = READING
+            if (didWatchEpisode) {
+                if (track.last_episode_seen == track.total_episodes.toFloat() &&
+                    track.total_episodes > 0 &&
+                    animeStatus == SAnime.COMPLETED
+                ) {
+                    track.status = COMPLETED
+                } else {
+                    track.status = READING
+                }
             }
         }
 
