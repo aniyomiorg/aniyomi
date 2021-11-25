@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikepenz.aboutlibraries.Libs
+import com.mikepenz.aboutlibraries.util.toStringArray
 import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.kanade.tachiyomi.R
@@ -44,13 +45,28 @@ class LicensesController :
 
         viewScope.launchUI {
             val licenseItems = withIOContext {
-                Libs(view.context).libraries
+                val fields = resolveTachiRClass()?.fields?.toStringArray()
+                    ?: return@withIOContext null
+                Libs(view.context, fields).libraries
                     .sortedBy { it.libraryName.lowercase() }
                     .map { LicensesItem(it) }
-            }
+            } ?: return@launchUI
             binding.progress.hide()
             adapter?.updateDataSet(licenseItems)
         }
+    }
+
+    private fun resolveTachiRClass(): Class<*>? {
+        var packageName = "eu.kanade.tachiyomi"
+        do {
+            try {
+                return Class.forName("$packageName.R\$string")
+            } catch (e: ClassNotFoundException) {
+                packageName = if (packageName.contains(".")) packageName.substring(0, packageName.lastIndexOf('.')) else ""
+            }
+        } while (packageName.isNotEmpty())
+
+        return null
     }
 
     override fun onDestroyView(view: View) {
