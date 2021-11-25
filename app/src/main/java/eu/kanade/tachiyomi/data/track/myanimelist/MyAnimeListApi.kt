@@ -78,7 +78,7 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                             async { getMangaDetails(id) }
                         }
                         .awaitAll()
-                        .filter { trackSearch -> trackSearch.publishing_type != "novel" }
+                        .filter { trackSearch -> !trackSearch.publishing_type.contains("novel") }
                 }
         }
     }
@@ -100,7 +100,6 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                             async { getAnimeDetails(id) }
                         }
                         .awaitAll()
-                        .filter { trackSearch -> trackSearch.publishing_type != "novel" }
                 }
         }
     }
