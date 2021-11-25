@@ -16,7 +16,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
 import androidx.annotation.FloatRange
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -1107,8 +1106,12 @@ class AnimeController :
     }
 
     private fun getMime(uri: Uri): String {
-        val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
-        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) ?: MimeTypes.VIDEO_MP4
+        return when (uri.path?.substringAfterLast(".")) {
+            "mp4" -> MimeTypes.VIDEO_MP4
+            "mkv" -> MimeTypes.APPLICATION_MATROSKA
+            "m3u8" -> MimeTypes.APPLICATION_M3U8
+            else -> MimeTypes.VIDEO_MP4
+        }
     }
 
     override fun onItemClick(view: View?, position: Int): Boolean {

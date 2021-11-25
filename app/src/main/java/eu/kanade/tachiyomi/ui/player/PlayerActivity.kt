@@ -5,11 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import android.webkit.MimeTypeMap
 import android.webkit.WebSettings
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -256,8 +256,12 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun getMime(uri: String): String {
-        val extension = MimeTypeMap.getFileExtensionFromUrl(uri)
-        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) ?: MimeTypes.VIDEO_MP4
+        return when (Uri.parse(uri).path?.substringAfterLast(".")) {
+            "mp4" -> MimeTypes.VIDEO_MP4
+            "mkv" -> MimeTypes.APPLICATION_MATROSKA
+            "m3u8" -> MimeTypes.APPLICATION_M3U8
+            else -> MimeTypes.VIDEO_MP4
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
