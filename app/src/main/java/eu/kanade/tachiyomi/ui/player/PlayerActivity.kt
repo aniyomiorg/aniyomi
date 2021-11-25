@@ -77,9 +77,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.widget.listener.SimpleSeekBarListener
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import rx.Observable
 import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -101,7 +99,6 @@ class PlayerActivity : AppCompatActivity() {
     private val cacheSize = 100L * 1024L * 1024L // 100 MB
     private lateinit var simpleCache: SimpleCache
     private lateinit var cacheFactory: CacheDataSource.Factory
-    private var message: String? = null
     private lateinit var mediaSourceFactory: MediaSourceFactory
     private lateinit var playerView: DoubleTapPlayerView
     private lateinit var youTubeDoubleTap: YouTubeOverlay
@@ -120,7 +117,6 @@ class PlayerActivity : AppCompatActivity() {
     private val defaultUserAgentString = WebSettings.getDefaultUserAgent(this)
     private lateinit var uri: String
     private var videos = emptyList<Video>()
-    private lateinit var videoListObservable: Observable<Observable<List<Video>>>
     private var isBuffering = true
     private var isLocal = false
     private var currentQuality = 0
@@ -191,25 +187,24 @@ class PlayerActivity : AppCompatActivity() {
         mediaSourceFactory = DefaultMediaSourceFactory(DefaultDataSource.Factory(this))
         exoPlayer = newPlayer()
         dbProvider = StandaloneDatabaseProvider(baseContext)
-        if (SimpleCache.isCacheFolderLocked(baseContext.filesDir)) {
-            SimpleCache.delete(baseContext.filesDir, dbProvider)
+        val cacheFile = File(baseContext.filesDir, "media")
+        if (SimpleCache.isCacheFolderLocked(cacheFile)) {
+            SimpleCache.delete(cacheFile, dbProvider)
         }
         simpleCache = SimpleCache(
-            File(baseContext.filesDir, "media"),
+            cacheFile,
             LeastRecentlyUsedCacheEvictor(cacheSize),
             dbProvider
         )
 
-        videoListObservable = Observable.fromCallable {
-            awaitVideoList()
-        }
         initPlayer()
     }
 
     private fun onGetLinksError(e: Throwable? = null) {
-        baseContext.toast(e?.message ?: "error getting links")
-        finish()
-        return
+        launchUI {
+            baseContext.toast(e?.message ?: "error getting links", Toast.LENGTH_LONG)
+            finish()
+        }
     }
 
     private fun onGetLinks() {
@@ -217,16 +212,16 @@ class PlayerActivity : AppCompatActivity() {
         launchUI {
             isBuffering(false)
             if (videos.isEmpty()) {
-                onGetLinksError()
+                onGetLinksError(Exception("Couldn't find any video links."))
                 return@launchUI
             }
             dbProvider = StandaloneDatabaseProvider(baseContext)
             isLocal = EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource
             if (isLocal) {
-                uri = videos.firstOrNull()?.uri?.toString() ?: return@launchUI onGetLinksError()
+                uri = videos.firstOrNull()?.uri?.toString() ?: return@launchUI onGetLinksError(Exception("URI is null."))
                 dataSourceFactory = DefaultDataSource.Factory(context)
             } else {
-                uri = videos.firstOrNull()?.videoUrl ?: return@launchUI onGetLinksError()
+                uri = videos.firstOrNull()?.videoUrl ?: return@launchUI onGetLinksError(Exception("video URL is null."))
                 dataSourceFactory = newDataSourceFactory()
             }
             logcat(LogPriority.INFO) { "playing $uri" }
@@ -298,7 +293,7 @@ class PlayerActivity : AppCompatActivity() {
         youTubeDoubleTap.player(exoPlayer)
         playerView.player = exoPlayer
         duration = exoPlayer.duration
-        getVideoList()
+        awaitVideoList()
     }
 
     private fun isBuffering(param: Boolean) {
@@ -308,19 +303,6 @@ class PlayerActivity : AppCompatActivity() {
         } else {
             bufferingView.visibility = View.GONE
         }
-    }
-
-    private fun getVideoList() {
-        launchUI {
-            isBuffering(true)
-        }
-        videoListObservable
-            .subscribeOn(Schedulers.io())
-            .doOnCompleted { onGetLinks() }
-            .doOnError { onGetLinksError(it) }
-            .subscribe {
-                videos = runBlocking { it.awaitSingle() }
-            }
     }
 
     private fun onClickFitScreen() {
@@ -458,13 +440,19 @@ class PlayerActivity : AppCompatActivity() {
         exoPlayer.release()
     }
 
-    private fun awaitVideoList(): Observable<List<Video>> {
-        return try {
-            EpisodeLoader.getLinks(episode, anime, source)
-        } catch (e: Exception) {
-            message = e.message ?: "error getting links"
-            logcat(LogPriority.WARN, e) { e.message ?: "error getting links" }
-            Observable.just(emptyList())
+    private fun awaitVideoList() {
+        isBuffering(true)
+        launchIO {
+            try {
+                EpisodeLoader.getLinks(episode, anime, source)
+                    .doOnNext {
+                        videos = it
+                        onGetLinks()
+                    }.awaitSingle()
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
+                onGetLinksError(e)
+            }
         }
     }
 
@@ -477,7 +465,7 @@ class PlayerActivity : AppCompatActivity() {
         if (oldEpisode == episode) return
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         currentQuality = 0
-        getVideoList()
+        awaitVideoList()
     }
 
     private fun previousEpisode() {
@@ -489,7 +477,7 @@ class PlayerActivity : AppCompatActivity() {
         if (oldEpisode == episode) return
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         currentQuality = 0
-        getVideoList()
+        awaitVideoList()
     }
 
     private fun changeQuality(quality: Int) {

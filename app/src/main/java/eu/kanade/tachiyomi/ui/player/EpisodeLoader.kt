@@ -39,16 +39,13 @@ class EpisodeLoader {
             val isDownloaded = downloadManager.isEpisodeDownloaded(episode, anime, true)
             return when {
                 isDownloaded -> isDownloaded(episode, anime, source, downloadManager).map {
-                    if (it.isEmpty()) null
-                    else it.first()
+                    it.firstOrNull()
                 }
                 source is AnimeHttpSource -> isHttp(episode, source).map {
-                    if (it.isEmpty()) null
-                    else it.first()
+                    it.firstOrNull()
                 }
                 source is LocalAnimeSource -> isLocal(episode).map {
-                    if (it.isEmpty()) null
-                    else it.first()
+                    it.firstOrNull()
                 }
                 else -> error("source not supported")
             }
@@ -56,10 +53,6 @@ class EpisodeLoader {
 
         private fun isHttp(episode: Episode, source: AnimeHttpSource): Observable<List<Video>> {
             return source.fetchVideoList(episode)
-                .onErrorReturn {
-                    errorMessage = it.message ?: "error getting links"
-                    emptyList()
-                }
                 .flatMapIterable { it }
                 .flatMap {
                     source.fetchUrlFromVideo(it)

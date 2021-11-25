@@ -1043,10 +1043,14 @@ class AnimeController :
         }
 
         if (!useInternal) launchIO {
-            val video = EpisodeLoader.getLink(episode, anime!!, source!!).awaitSingle()
+            val video = try {
+                EpisodeLoader.getLink(episode, anime!!, source!!).awaitSingle()
+            } catch (e: Exception) {
+                return@launchIO makeErrorToast(context, e)
+            }
             if (video != null) {
                 val videoUri = video.uri
-                val videoUrl = Uri.parse(video.videoUrl)
+                val videoUrl = Uri.parse(video.videoUrl ?: return@launchIO makeErrorToast(context, Exception("video URL is null.")))
                 currentExtEpisode = episode
                 val pkgName = preferences.externalPlayerPreference()
 
@@ -1055,13 +1059,21 @@ class AnimeController :
                 } else videoUri ?: videoUrl
 
                 val extIntent = getExternalIntent(pkgName, uri, episode, video, context)
-                try { startActivityForResult(extIntent, REQUEST_EXTERNAL) } catch (t: Throwable) { launchUI { context.toast("Cannot open episode") } }
+                try {
+                    startActivityForResult(extIntent, REQUEST_EXTERNAL)
+                } catch (e: Exception) {
+                    makeErrorToast(context, e)
+                }
             } else {
-                launchUI { context.toast("Cannot open episode") }
+                makeErrorToast(context, Exception("Couldn't find any video links."))
             }
         } else {
             startActivity(intent)
         }
+    }
+
+    private fun makeErrorToast(context: Context, e: Exception?) {
+        launchUI { context.toast(e?.message ?: "Cannot open episode") }
     }
 
     private fun getExternalIntent(pkgName: String?, uri: Uri, episode: Episode, video: Video, context: Context): Intent {
