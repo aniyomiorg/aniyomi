@@ -99,6 +99,7 @@ import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.hasCustomCover
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toShareIntent
@@ -1054,9 +1055,9 @@ class AnimeController :
                 } else videoUri ?: videoUrl
 
                 val extIntent = getExternalIntent(pkgName, uri, episode, video, context)
-                try { startActivityForResult(extIntent, REQUEST_EXTERNAL) } catch (t: Throwable) { context.toast("Cannot open episode") }
+                try { startActivityForResult(extIntent, REQUEST_EXTERNAL) } catch (t: Throwable) { launchUI { context.toast("Cannot open episode") } }
             } else {
-                context.toast("Cannot open episode")
+                launchUI { context.toast("Cannot open episode") }
             }
         } else {
             startActivity(intent)
