@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import android.webkit.WebSettings
 import android.widget.ImageButton
@@ -330,7 +329,15 @@ class PlayerActivity : AppCompatActivity() {
     private inner class NotFocusableMaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(context) {
         override fun create(): AlertDialog {
             return super.create().apply {
-                this.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+                val window = this.window ?: return@apply
+                val alertWindowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
+                alertWindowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+                alertWindowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+                // val alertWindowInsetsController = WindowInsetsControllerCompat(window, binding.root)
+                // alertWindowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+                // alertWindowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                // window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
             }
         }
     }
