@@ -1054,7 +1054,7 @@ class AnimeController :
                 } else videoUri ?: videoUrl
 
                 val extIntent = getExternalIntent(pkgName, uri, episode, video, context)
-                startActivityForResult(extIntent, REQUEST_EXTERNAL)
+                try { startActivityForResult(extIntent, REQUEST_EXTERNAL) } catch (t: Throwable) { context.toast("Cannot open episode") }
             } else {
                 context.toast("Cannot open episode")
             }
@@ -1108,7 +1108,7 @@ class AnimeController :
     private fun getMime(uri: Uri): String {
         return when (uri.path?.substringAfterLast(".")) {
             "mp4" -> MimeTypes.VIDEO_MP4
-            "mkv" -> MimeTypes.APPLICATION_MATROSKA
+            "mkv" -> MimeTypes.VIDEO_MATROSKA
             "m3u8" -> MimeTypes.APPLICATION_M3U8
             else -> MimeTypes.VIDEO_MP4
         }

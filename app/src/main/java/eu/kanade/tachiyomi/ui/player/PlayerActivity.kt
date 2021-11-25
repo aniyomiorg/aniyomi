@@ -258,7 +258,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun getMime(uri: String): String {
         return when (Uri.parse(uri).path?.substringAfterLast(".")) {
             "mp4" -> MimeTypes.VIDEO_MP4
-            "mkv" -> MimeTypes.APPLICATION_MATROSKA
+            "mkv" -> MimeTypes.VIDEO_MATROSKA
             "m3u8" -> MimeTypes.APPLICATION_M3U8
             else -> MimeTypes.VIDEO_MP4
         }
