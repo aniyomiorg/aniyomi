@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:gravity="center">
 
-    <!--<ImageButton
+    <ImageButton
         android:id="@+id/btn_website"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         android:contentDescription="@string/website"
         android:padding="16dp"
         android:src="@drawable/ic_public_24dp"
-        app:tint="?attr/colorAccent" />-->
+        app:tint="?attr/colorAccent" />
 
     <ImageButton
         android:id="@+id/btn_discord"

@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit
 class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
     companion object {
         const val ID = 0L
-        const val HELP_URL = "https://tachiyomi.org/help/guides/local-anime/"
+        const val HELP_URL = "https://aniyomi.jmir.xyz/help/guides/local-anime/"
 
         private const val COVER_NAME = "cover.jpg"
         private val LATEST_THRESHOLD = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)

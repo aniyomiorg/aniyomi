@@ -19,11 +19,10 @@ class AboutLinksPreference @JvmOverloads constructor(context: Context, attrs: At
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
 
-        /*
         holder.findViewById(R.id.btn_website).apply {
             setTooltip(contentDescription.toString())
-            setOnClickListener { context.openInBrowser("https://tachiyomi.org") }
-        }*/
+            setOnClickListener { context.openInBrowser("https://aniyomi.jmir.xyz") }
+        }
         holder.findViewById(R.id.btn_discord).apply {
             setTooltip(contentDescription.toString())
             setOnClickListener { context.openInBrowser("https://discord.gg/F32UjdJZrR") }
