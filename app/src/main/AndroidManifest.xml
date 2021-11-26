@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="eu.kanade.tachiyomi">
 
     <!-- Internet -->
@@ -95,9 +94,10 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:supportsPictureInPicture="true"
             android:resizeableActivity="true"
+            android:excludeFromRecents="true"
+            android:taskAffinity=".ui.player.PlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
             android:screenOrientation="userLandscape"
-            android:launchMode="singleTask"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.samsung.android.support.REMOTE_ACTION" />

@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.view.WindowManager
 import android.webkit.WebSettings
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -19,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.github.vkay94.dtpv.DoubleTapPlayerView
@@ -71,6 +73,8 @@ import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAp
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
+import eu.kanade.tachiyomi.util.system.getThemeColor
+import eu.kanade.tachiyomi.util.system.isNightMode
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
@@ -179,20 +183,26 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun setVisibilities() {
+        val alpha = if (isNightMode()) 230 else 242 // 90% dark 95% light
+        val toolbarColor = ColorUtils.setAlphaComponent(getThemeColor(R.attr.colorToolbar), alpha)
+        window.statusBarColor = toolbarColor
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            window.navigationBarColor = toolbarColor
+        }
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        }
     }
 
     private fun initDummyPlayer() {
         mediaSourceFactory = DefaultMediaSourceFactory(DefaultDataSource.Factory(this))
         exoPlayer = newPlayer()
         dbProvider = StandaloneDatabaseProvider(baseContext)
-        val cacheFile = File(baseContext.filesDir, "media")
-        if (SimpleCache.isCacheFolderLocked(cacheFile)) {
-            SimpleCache.delete(cacheFile, dbProvider)
-        }
+        val cacheFolder = File(baseContext.filesDir, "media")
         simpleCache = SimpleCache(
-            cacheFile,
+            cacheFolder,
             LeastRecentlyUsedCacheEvictor(cacheSize),
             dbProvider
         )
@@ -315,30 +325,25 @@ class PlayerActivity : AppCompatActivity() {
         preferences.setPlayerViewMode(playerView.resizeMode)
     }
 
-    private inner class NotFocusableMaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(context) {
+    private inner class HideBarsMaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(context) {
         override fun create(): AlertDialog {
             return super.create().apply {
                 val window = this.window ?: return@apply
                 val alertWindowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
                 alertWindowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
                 alertWindowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-
-                // val alertWindowInsetsController = WindowInsetsControllerCompat(window, binding.root)
-                // alertWindowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-                // alertWindowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                // window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
             }
         }
     }
 
     private fun optionsDialog() {
-        val alert = NotFocusableMaterialAlertDialogBuilder(this)
+        val alert = HideBarsMaterialAlertDialogBuilder(this)
 
         alert.setTitle(R.string.playback_options_title)
         alert.setItems(R.array.playback_options) { dialog, which ->
             when (which) {
                 0 -> {
-                    val speedAlert = NotFocusableMaterialAlertDialogBuilder(this)
+                    val speedAlert = HideBarsMaterialAlertDialogBuilder(this)
 
                     val linear = LinearLayout(this)
 
@@ -399,7 +404,7 @@ class PlayerActivity : AppCompatActivity() {
                 }
                 1 -> {
                     if (videos.isNotEmpty()) {
-                        val qualityAlert = NotFocusableMaterialAlertDialogBuilder(this)
+                        val qualityAlert = HideBarsMaterialAlertDialogBuilder(this)
 
                         qualityAlert.setTitle(R.string.playback_quality_dialog_title)
 
@@ -594,7 +599,9 @@ class PlayerActivity : AppCompatActivity() {
         deletePendingEpisodes()
         releasePlayer()
         simpleCache.release()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) finishAndRemoveTask()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+            finishAndRemoveTask()
+        }
         super.onDestroy()
     }
 
@@ -604,6 +611,20 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         super.onUserLeaveHint()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val oldAnime = anime
+        anime = intent?.getSerializableExtra("anime") as? Anime ?: return
+        val oldEpisode = episode
+        episode = intent.getSerializableExtra("episode") as Episode
+        if (oldEpisode == episode) return
+        saveEpisodeHistory(EpisodeItem(oldEpisode, oldAnime))
+        setEpisodeProgress(oldEpisode, oldAnime, exoPlayer.currentPosition, exoPlayer.duration)
+        title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
+        source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
+        awaitVideoList()
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
@@ -788,6 +809,7 @@ class PlayerActivity : AppCompatActivity() {
                 putExtra("episode", episode)
                 putExtra("second", episode.last_second_seen)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
         }
     }
