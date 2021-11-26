@@ -861,6 +861,8 @@ class AnimeController :
             presenter.editCover(anime!!, activity, dataUri)
         }
         if (requestCode == REQUEST_EXTERNAL && resultCode == Activity.RESULT_OK) {
+            val anime = anime ?: return
+            val currentExtEpisode = currentExtEpisode ?: return
             val currentPosition: Long
             val duration: Long
             val cause = data!!.getStringExtra("end_by") ?: ""
@@ -872,11 +874,11 @@ class AnimeController :
                 duration = data.getLongExtra("extra_duration", 0L)
             }
             if (cause == "playback_completion") {
-                setEpisodeProgress(currentExtEpisode!!, anime!!, 1L, 1L)
+                setEpisodeProgress(currentExtEpisode, anime, 1L, 1L)
             } else {
-                setEpisodeProgress(currentExtEpisode!!, anime!!, currentPosition, duration)
+                setEpisodeProgress(currentExtEpisode, anime, currentPosition, duration)
             }
-            saveEpisodeHistory(EpisodeItem(currentExtEpisode!!, anime!!))
+            saveEpisodeHistory(EpisodeItem(currentExtEpisode, anime))
         }
     }
 
@@ -1077,10 +1079,11 @@ class AnimeController :
     }
 
     private fun getExternalIntent(pkgName: String?, uri: Uri, episode: Episode, video: Video, context: Context): Intent {
+        val anime = anime ?: return Intent()
         return if (pkgName.isNullOrEmpty()) {
             Intent(Intent.ACTION_VIEW).apply {
                 setDataAndTypeAndNormalize(uri, getMime(uri))
-                putExtra("title", anime!!.title + " - " + episode.name)
+                putExtra("title", anime.title + " - " + episode.name)
                 putExtra("position", episode.last_second_seen.toInt())
                 putExtra("return_result", true)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -1097,7 +1100,7 @@ class AnimeController :
             context.packageManager.getLaunchIntentForPackage(pkgName)!!.apply {
                 action = Intent.ACTION_VIEW
                 setDataAndTypeAndNormalize(uri, getMime(uri))
-                putExtra("title", anime!!.title + " - " + episode.name)
+                putExtra("title", anime.title + " - " + episode.name)
                 putExtra("position", episode.last_second_seen.toInt())
                 putExtra("return_result", true)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

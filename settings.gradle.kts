@@ -16,5 +16,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = "Tachiyomi"
+rootProject.name = "Aniyomi"
 include(":app")

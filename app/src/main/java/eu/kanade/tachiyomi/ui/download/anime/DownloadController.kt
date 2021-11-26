@@ -254,6 +254,7 @@ class DownloadController :
             actionFab?.isVisible = false
             updateTitle()
         } else {
+            if (view == null) return
             binding.emptyView.hide()
             actionFab?.apply {
                 isVisible = true

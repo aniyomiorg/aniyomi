@@ -313,7 +313,10 @@ class SettingsDownloadController : SettingsController() {
             val activity = activity!!
             val currentDir = preferences.downloadsDirectory().get()
             val externalDirs = (getExternalDirs() + File(activity.getString(R.string.custom_dir))).map(File::toString)
-            var selectedIndex = externalDirs.indexOfFirst { it in currentDir }
+            var selectedIndex = externalDirs.indexOfFirst { it in currentDir }.let {
+                if (it == -1) 0
+                else it
+            }
 
             return MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.pref_download_directory)
