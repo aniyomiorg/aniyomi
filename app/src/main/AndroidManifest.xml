@@ -95,8 +95,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:supportsPictureInPicture="true"
             android:resizeableActivity="true"
-            android:excludeFromRecents="true"
-            android:taskAffinity=".PlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
             android:screenOrientation="userLandscape"
             android:launchMode="singleTask"

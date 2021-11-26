@@ -429,6 +429,7 @@
     <string name="pref_skip_10">10s</string>
     <string name="pref_skip_5">5s</string>
     <string name="pref_pip_player">Enable picture in picture mode</string>
+    <string name="pref_pip_player_summary">Note: this is still an experimental feature!</string>
     <string name="pref_always_use_external_player">Always use external player</string>
     <string name="pref_external_player_preference">External player preference</string>
     <string name="pref_progress_70">70%</string>
