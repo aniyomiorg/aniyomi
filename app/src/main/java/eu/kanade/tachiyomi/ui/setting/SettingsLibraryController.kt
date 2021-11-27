@@ -248,7 +248,7 @@ class SettingsLibraryController : SettingsController() {
 
                 fun updateSummary() {
                     val selectedCategories = preferences.animelibUpdateCategories().get()
-                        .mapNotNull { id -> categories.find { it.id == id.toInt() } }
+                        .mapNotNull { id -> categoriesAnime.find { it.id == id.toInt() } }
                         .sortedBy { it.order }
                     val includedItemsText = if (selectedCategories.isEmpty()) {
                         context.getString(R.string.all)
@@ -257,7 +257,7 @@ class SettingsLibraryController : SettingsController() {
                     }
 
                     val excludedCategories = preferences.animelibUpdateCategoriesExclude().get()
-                        .mapNotNull { id -> categories.find { it.id == id.toInt() } }
+                        .mapNotNull { id -> categoriesAnime.find { it.id == id.toInt() } }
                         .sortedBy { it.order }
                     val excludedItemsText = if (excludedCategories.isEmpty()) {
                         context.getString(R.string.none)
