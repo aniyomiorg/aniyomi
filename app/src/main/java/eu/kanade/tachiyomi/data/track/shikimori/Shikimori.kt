@@ -64,7 +64,7 @@ class Shikimori(private val context: Context, id: Int) : TrackService(id) {
                     mangaStatus == SManga.COMPLETED
                 ) {
                     track.status = COMPLETED
-                } else {
+                } else if (track.status != REPEATING) {
                     track.status = READING
                 }
             }
@@ -81,7 +81,7 @@ class Shikimori(private val context: Context, id: Int) : TrackService(id) {
                     animeStatus == SAnime.COMPLETED
                 ) {
                     track.status = COMPLETED
-                } else {
+                } else if (track.status != REPEATING) {
                     track.status = READING
                 }
             }

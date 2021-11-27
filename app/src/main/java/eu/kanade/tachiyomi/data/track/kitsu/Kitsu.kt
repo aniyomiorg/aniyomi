@@ -110,6 +110,7 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
                     mangaStatus == SManga.COMPLETED
                 ) {
                     track.status = COMPLETED
+                    track.finished_reading_date = System.currentTimeMillis()
                 } else {
                     track.status = READING
                 }
@@ -127,6 +128,7 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
                     animeStatus == SAnime.COMPLETED
                 ) {
                     track.status = COMPLETED
+                    track.finished_watching_date = System.currentTimeMillis()
                 } else {
                     track.status = WATCHING
                 }
