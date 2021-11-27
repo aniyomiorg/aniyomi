@@ -196,6 +196,9 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
                     track.finished_reading_date = System.currentTimeMillis()
                 } else if (track.status != REPEATING) {
                     track.status = READING
+                    if (track.last_chapter_read == 1F) {
+                        track.started_reading_date = System.currentTimeMillis()
+                    }
                 }
             }
         }
@@ -221,6 +224,9 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
                     track.finished_watching_date = System.currentTimeMillis()
                 } else if (track.status != REPEATING_ANIME) {
                     track.status = WATCHING
+                    if (track.last_episode_seen == 1F) {
+                        track.started_watching_date = System.currentTimeMillis()
+                    }
                 }
             }
         }

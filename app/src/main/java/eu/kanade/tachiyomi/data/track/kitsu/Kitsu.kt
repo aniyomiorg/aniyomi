@@ -113,6 +113,9 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
                     track.finished_reading_date = System.currentTimeMillis()
                 } else {
                     track.status = READING
+                    if (track.last_chapter_read == 1F) {
+                        track.started_reading_date = System.currentTimeMillis()
+                    }
                 }
             }
         }
@@ -131,6 +134,9 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
                     track.finished_watching_date = System.currentTimeMillis()
                 } else {
                     track.status = WATCHING
+                    if (track.last_episode_seen == 1F) {
+                        track.started_watching_date = System.currentTimeMillis()
+                    }
                 }
             }
         }
