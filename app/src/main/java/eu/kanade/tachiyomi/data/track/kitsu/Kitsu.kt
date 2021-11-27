@@ -105,7 +105,7 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
     override suspend fun update(track: Track, didReadChapter: Boolean, mangaStatus: Int): Track {
         if (track.status != COMPLETED) {
             if (didReadChapter) {
-                if (track.last_chapter_read == track.total_chapters.toFloat() &&
+                if (track.last_chapter_read.toInt() == track.total_chapters &&
                     track.total_chapters > 0 &&
                     mangaStatus == SManga.COMPLETED
                 ) {
@@ -123,7 +123,7 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
     override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean, animeStatus: Int): AnimeTrack {
         if (track.status != COMPLETED) {
             if (didWatchEpisode) {
-                if (track.last_episode_seen == track.total_episodes.toFloat() &&
+                if (track.last_episode_seen.toInt() == track.total_episodes &&
                     track.total_episodes > 0 &&
                     animeStatus == SAnime.COMPLETED
                 ) {

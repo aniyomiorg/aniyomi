@@ -70,7 +70,7 @@ class Komga(private val context: Context, id: Int) : TrackService(id), EnhancedT
     override suspend fun update(track: Track, didReadChapter: Boolean, mangaStatus: Int): Track {
         if (track.status != COMPLETED) {
             if (didReadChapter) {
-                if (track.last_chapter_read == track.total_chapters.toFloat() &&
+                if (track.last_chapter_read.toInt() == track.total_chapters &&
                     track.total_chapters > 0 &&
                     mangaStatus == SManga.COMPLETED
                 ) {

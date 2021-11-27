@@ -188,7 +188,7 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
 
         if (track.status != COMPLETED) {
             if (didReadChapter) {
-                if (track.last_chapter_read == track.total_chapters.toFloat() &&
+                if (track.last_chapter_read.toInt() == track.total_chapters &&
                     track.total_chapters > 0 &&
                     mangaStatus == SManga.COMPLETED
                 ) {
@@ -213,7 +213,7 @@ class Anilist(private val context: Context, id: Int) : TrackService(id) {
 
         if (track.status != COMPLETED) {
             if (didWatchEpisode) {
-                if (track.last_episode_seen == track.total_episodes.toFloat() &&
+                if (track.last_episode_seen.toInt() == track.total_episodes &&
                     track.total_episodes > 0 &&
                     animeStatus == SAnime.COMPLETED
                 ) {
