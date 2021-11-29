@@ -13,7 +13,6 @@ import eu.kanade.tachiyomi.data.track.NoLoginTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
-import eu.kanade.tachiyomi.source.model.SManga
 import okhttp3.Dns
 import okhttp3.OkHttpClient
 
@@ -67,13 +66,10 @@ class Komga(private val context: Context, id: Int) : TrackService(id), EnhancedT
     override fun displayScore(track: Track): String = ""
     override fun displayScore(track: AnimeTrack): String = throw Exception("Not used")
 
-    override suspend fun update(track: Track, didReadChapter: Boolean, mangaStatus: Int): Track {
+    override suspend fun update(track: Track, didReadChapter: Boolean): Track {
         if (track.status != COMPLETED) {
             if (didReadChapter) {
-                if (track.last_chapter_read.toInt() == track.total_chapters &&
-                    track.total_chapters > 0 &&
-                    mangaStatus == SManga.COMPLETED
-                ) {
+                if (track.last_chapter_read.toInt() == track.total_chapters && track.total_chapters > 0) {
                     track.status = COMPLETED
                 } else {
                     track.status = READING
@@ -84,7 +80,7 @@ class Komga(private val context: Context, id: Int) : TrackService(id), EnhancedT
         return api.updateProgress(track)
     }
 
-    override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean, animeStatus: Int): AnimeTrack = throw Exception("Not used")
+    override suspend fun update(track: AnimeTrack, didWatchEpisode: Boolean): AnimeTrack = throw Exception("Not used")
 
     override suspend fun bind(track: Track, hasReadChapters: Boolean): Track {
         return track

@@ -44,7 +44,7 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
                     val service = trackManager.getService(track.sync_id)
                     if (service != null && service.isLogged) {
                         val manga = db.getManga(track.manga_id).executeAsBlocking() ?: return@withContext
-                        service.update(track, true, manga.status)
+                        service.update(track, true)
                         db.insertTrack(track).executeAsBlocking()
                     }
                 } catch (e: Exception) {
@@ -66,7 +66,7 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
                     val service = trackManager.getService(track.sync_id)
                     if (service != null && service.isLogged) {
                         val anime = animedb.getAnime(track.anime_id).executeAsBlocking() ?: return@withContext
-                        service.update(track, true, anime.status)
+                        service.update(track, true)
                         animedb.insertTrack(track).executeAsBlocking()
                     }
                 } catch (e: Exception) {
