@@ -22,11 +22,19 @@ internal class AnimeExtensionGithubApi {
 
     suspend fun findExtensions(): List<AnimeExtension.Available> {
         return withIOContext {
-            networkService.client
+            val extensions = networkService.client
                 .newCall(GET("${REPO_URL_PREFIX}index.min.json"))
                 .await()
                 .parseAs<List<AnimeExtensionJsonObject>>()
                 .toExtensions()
+
+            // Sanity check - a small number of extensions probably means something broke
+            // with the repo generator
+            if (extensions.size < 10) {
+                throw Exception()
+            }
+
+            extensions
         }
     }
 

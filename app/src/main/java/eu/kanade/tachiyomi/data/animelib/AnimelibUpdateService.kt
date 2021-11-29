@@ -28,6 +28,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
@@ -267,7 +268,10 @@ class AnimelibUpdateService(
             .sortedWith(rankingScheme[selectedScheme])
 
         // Warn when excessively checking a single source
-        val maxUpdatesFromSource = animeToUpdate.groupBy { it.source }.maxOfOrNull { it.value.size } ?: 0
+        val maxUpdatesFromSource = animeToUpdate
+            .groupBy { it.source }
+            .filterKeys { sourceManager.get(it) !is UnmeteredSource }
+            .maxOfOrNull { it.value.size } ?: 0
         if (maxUpdatesFromSource > ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
             toast(R.string.notification_size_warning, Toast.LENGTH_LONG)
         }

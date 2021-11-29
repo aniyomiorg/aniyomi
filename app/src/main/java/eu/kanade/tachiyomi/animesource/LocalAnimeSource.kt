@@ -9,6 +9,7 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.toEpisodeInfo
 import eu.kanade.tachiyomi.animesource.model.toSAnime
+import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.DiskUtil
@@ -30,7 +31,7 @@ import java.io.InputStream
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource {
+class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource, UnmeteredSource {
     companion object {
         const val ID = 0L
         const val HELP_URL = "https://aniyomi.jmir.xyz/help/guides/local-anime/"

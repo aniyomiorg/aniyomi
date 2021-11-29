@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.extension
 import android.content.Context
 import android.graphics.drawable.Drawable
 import com.jakewharton.rxrelay.BehaviorRelay
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -15,8 +16,10 @@ import eu.kanade.tachiyomi.extension.util.AnimeExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.util.AnimeExtensionInstaller
 import eu.kanade.tachiyomi.extension.util.AnimeExtensionLoader
 import eu.kanade.tachiyomi.util.lang.launchNow
+import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
+import logcat.LogPriority
 import rx.Observable
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -160,7 +163,8 @@ class AnimeExtensionManager(
             val extensions: List<AnimeExtension.Available> = try {
                 api.findExtensions()
             } catch (e: Exception) {
-                context.toast(e.message)
+                logcat(LogPriority.ERROR, e)
+                context.toast(R.string.extension_api_error)
                 emptyList()
             }
 

@@ -41,23 +41,32 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
      *
      * @param anime the anime to update.
      */
-    @Deprecated("Use getAnimeDetails instead")
-    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> = Observable.empty()
+    @Deprecated(
+        "Use the 1.x API instead",
+        ReplaceWith("getAnimeDetails")
+    )
+    fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> = throw IllegalStateException("Not used")
 
     /**
      * Returns an observable with all the available episodes for an anime.
      *
      * @param anime the anime to update.
      */
-    @Deprecated("Use getEpisodeList instead")
-    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> = Observable.empty()
+    @Deprecated(
+        "Use the 1.x API instead",
+        ReplaceWith("getEpisodeList")
+    )
+    fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> = throw IllegalStateException("Not used")
 
     /**
      * Returns an observable with a list of video for the episode of an anime.
      *
      * @param episode the episode to get the link for.
      */
-    @Deprecated("Use getVideoList instead")
+    @Deprecated(
+        "Use the 1.x API instead",
+        ReplaceWith("getVideoList")
+    )
     fun fetchVideoList(episode: SEpisode): Observable<List<Video>> = Observable.empty()
 
     /**

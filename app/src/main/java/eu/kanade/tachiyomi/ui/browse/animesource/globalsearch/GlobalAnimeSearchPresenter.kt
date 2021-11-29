@@ -222,7 +222,7 @@ open class GlobalAnimeSearchPresenter(
                 Observable.from(first)
                     .filter { it.thumbnail_url == null && !it.initialized }
                     .map { Pair(it, source) }
-                    .concatMap { runAsObservable({ getAnimeDetails(it.first, it.second) }) }
+                    .concatMap { runAsObservable { getAnimeDetails(it.first, it.second) } }
                     .map { Pair(source as AnimeCatalogueSource, it) }
             }
             .onBackpressureBuffer()
