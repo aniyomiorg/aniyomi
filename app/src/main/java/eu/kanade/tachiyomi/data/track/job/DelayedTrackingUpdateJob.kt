@@ -43,7 +43,6 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
                 try {
                     val service = trackManager.getService(track.sync_id)
                     if (service != null && service.isLogged) {
-                        val manga = db.getManga(track.manga_id).executeAsBlocking() ?: return@withContext
                         service.update(track, true)
                         db.insertTrack(track).executeAsBlocking()
                     }
@@ -65,7 +64,6 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
                 try {
                     val service = trackManager.getService(track.sync_id)
                     if (service != null && service.isLogged) {
-                        val anime = animedb.getAnime(track.anime_id).executeAsBlocking() ?: return@withContext
                         service.update(track, true)
                         animedb.insertTrack(track).executeAsBlocking()
                     }
