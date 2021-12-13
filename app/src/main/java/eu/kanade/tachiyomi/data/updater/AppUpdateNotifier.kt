@@ -39,6 +39,7 @@ internal class AppUpdateNotifier(private val context: Context) {
 
         with(notificationBuilder) {
             setContentTitle(context.getString(R.string.update_check_notification_update_available))
+            setContentText(release.version)
             setSmallIcon(android.R.drawable.stat_sys_download_done)
             setContentIntent(updateIntent)
 

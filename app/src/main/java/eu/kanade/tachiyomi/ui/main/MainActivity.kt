@@ -300,7 +300,8 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             // Make sure navigation bar is on bottom before we modify it
             ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
                 if (insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom > 0) {
-                    window.setNavigationBarTransparentCompat(this@MainActivity)
+                    val elevation = binding.bottomNav?.elevation ?: 0F
+                    window.setNavigationBarTransparentCompat(this@MainActivity, elevation)
                 }
                 insets
             }
@@ -522,7 +523,6 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             // Regular back (i.e. closing the app)
             if (preferences.autoClearChapterCache()) {
                 chapterCache.clear()
-                episodeCache.clear()
             }
             super.onBackPressed()
         }

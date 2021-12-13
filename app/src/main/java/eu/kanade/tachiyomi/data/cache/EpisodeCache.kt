@@ -2,12 +2,13 @@ package eu.kanade.tachiyomi.data.cache
 
 import android.content.Context
 import android.text.format.Formatter
-import com.google.gson.Gson
 import com.jakewharton.disklrucache.DiskLruCache
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import okhttp3.Response
 import okio.buffer
 import okio.sink
@@ -40,8 +41,7 @@ class EpisodeCache(private val context: Context) {
         const val PARAMETER_CACHE_SIZE = 1000L * 1024 * 1024
     }
 
-    /** Google Json class used for parsing JSON files.  */
-    private val gson: Gson by injectLazy()
+    private val json: Json by injectLazy()
 
     /** Cache class used for cache management.  */
     private val diskCache = DiskLruCache.open(
@@ -109,7 +109,7 @@ class EpisodeCache(private val context: Context) {
      */
     fun putPageListToCache(episode: Episode, video: Video) {
         // Convert list of pages to json string.
-        val cachedValue = gson.toJson(video)
+        val cachedValue = json.encodeToString(video)
 
         // Initialize the editor (edits the values for an entry).
         var editor: DiskLruCache.Editor? = null

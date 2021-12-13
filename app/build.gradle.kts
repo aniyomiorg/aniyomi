@@ -154,7 +154,7 @@ dependencies {
     implementation("androidx.browser:browser:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.2")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0-beta01")
-    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.core:core-ktx:1.8.0-alpha01")
     implementation("androidx.core:core-splashscreen:1.0.0-alpha02")
     implementation("androidx.recyclerview:recyclerview:1.3.0-alpha01")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
@@ -189,10 +189,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$kotlinSerializationVersion")
 
-    // TODO: remove these once they're no longer used in any extensions
-    implementation("com.google.code.gson:gson:2.8.7")
-    implementation("com.github.salomonbrys.kotson:kotson:2.5.0")
-
     // JavaScript engine
     implementation("com.squareup.duktape:duktape-android:1.4.0")
 
@@ -205,7 +201,7 @@ dependencies {
     implementation("com.github.junrar:junrar:7.4.0")
 
     // Database
-    implementation("androidx.sqlite:sqlite-ktx:2.2.0-beta01")
+    implementation("androidx.sqlite:sqlite-ktx:2.2.0-rc01")
     implementation("com.github.inorichi.storio:storio-common:8be19de@aar")
     implementation("com.github.inorichi.storio:storio-sqlite:8be19de@aar")
     implementation("com.github.requery:sqlite-android:3.36.0")
@@ -236,7 +232,7 @@ dependencies {
     implementation("com.github.gpanther:java-nat-sort:natural-comparator-1.1")
 
     // UI libraries
-    implementation("com.google.android.material:material:1.5.0-beta01")
+    implementation("com.google.android.material:material:1.6.0-alpha01")
     implementation("com.github.dmytrodanylyk.android-process-button:library:1.0.4")
     implementation("com.github.arkon.FlexibleAdapter:flexible-adapter:c8013533")
     implementation("com.github.arkon.FlexibleAdapter:flexible-adapter-ui:c8013533")
@@ -273,7 +269,7 @@ dependencies {
     implementation("com.mikepenz:aboutlibraries-core:${BuildPluginsVersion.ABOUTLIB_PLUGIN}")
 
     // Shizuku
-    val shizukuVersion = "12.0.0"
+    val shizukuVersion = "12.1.0"
     implementation("dev.rikka.shizuku:api:$shizukuVersion")
     implementation("dev.rikka.shizuku:provider:$shizukuVersion")
 
