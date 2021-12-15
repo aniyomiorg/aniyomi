@@ -7,8 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -19,8 +17,6 @@ import android.view.ViewGroup
 import androidx.annotation.FloatRange
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.core.content.FileProvider
-import androidx.core.net.toFile
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -36,7 +32,6 @@ import coil.request.ImageRequest
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
-import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dev.chrisbanes.insetter.applyInsetter
@@ -46,7 +41,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
-import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
@@ -89,6 +83,7 @@ import eu.kanade.tachiyomi.ui.browse.animesource.latest.LatestUpdatesController
 import eu.kanade.tachiyomi.ui.browse.migration.search.AnimeSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.EpisodeLoader
+import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
 import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
@@ -867,11 +862,26 @@ class AnimeController :
             val duration: Long
             val cause = data!!.getStringExtra("end_by") ?: ""
             if (cause.isNotEmpty()) {
-                currentPosition = data.getLongExtra("position", 0L)
-                duration = data.getLongExtra("duration", 0L)
+                val positionExtra = data.extras?.get("position")
+                currentPosition = if (positionExtra is Int) {
+                    positionExtra.toLong()
+                } else {
+                    positionExtra as? Long ?: 0L
+                }
+                val durationExtra = data.extras?.get("duration")
+                duration = if (durationExtra is Int) {
+                    durationExtra.toLong()
+                } else {
+                    durationExtra as? Long ?: 0L
+                }
             } else {
-                currentPosition = data.getLongExtra("extra_position", 0L)
-                duration = data.getLongExtra("extra_duration", 0L)
+                if (data.extras?.get("extra_position") != null) {
+                    currentPosition = data.getLongExtra("extra_position", 0L)
+                    duration = data.getLongExtra("extra_duration", 0L)
+                } else {
+                    currentPosition = data.getIntExtra("position", 0).toLong()
+                    duration = 1440000L
+                }
             }
             if (cause == "playback_completion") {
                 setEpisodeProgress(currentExtEpisode, anime, 1L, 1L)
@@ -1051,17 +1061,12 @@ class AnimeController :
                 return@launchIO makeErrorToast(context, e)
             }
             if (video != null) {
-                val videoUri = video.uri
-                val videoUrl = Uri.parse(video.videoUrl ?: return@launchIO makeErrorToast(context, Exception("video URL is null.")))
                 currentExtEpisode = episode
-                val pkgName = preferences.externalPlayerPreference()
 
-                val uri = if (videoUri != null && Build.VERSION.SDK_INT >= 24 && videoUri.scheme == "file") {
-                    FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", videoUri.toFile())
-                } else videoUri ?: videoUrl
-
-                val extIntent = getExternalIntent(pkgName, uri, episode, video, context)
-                try {
+                val anime = anime ?: return@launchIO
+                val source = source ?: return@launchIO
+                val extIntent = ExternalIntents(anime, source).getExternalIntent(episode, video, context)
+                if (extIntent != null) try {
                     startActivityForResult(extIntent, REQUEST_EXTERNAL)
                 } catch (e: Exception) {
                     makeErrorToast(context, e)
@@ -1076,58 +1081,6 @@ class AnimeController :
 
     private fun makeErrorToast(context: Context, e: Exception?) {
         launchUI { context.toast(e?.message ?: "Cannot open episode") }
-    }
-
-    private fun getExternalIntent(pkgName: String?, uri: Uri, episode: Episode, video: Video, context: Context): Intent {
-        val anime = anime ?: return Intent()
-        return if (pkgName.isNullOrEmpty()) {
-            Intent(Intent.ACTION_VIEW).apply {
-                setDataAndTypeAndNormalize(uri, getMime(uri))
-                putExtra("title", anime.title + " - " + episode.name)
-                putExtra("position", episode.last_second_seen.toInt())
-                putExtra("return_result", true)
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
-                if (headers != null) {
-                    var headersArray = arrayOf<String>()
-                    for (header in headers) {
-                        headersArray += arrayOf(header.first, header.second)
-                    }
-                    putExtra("headers", headersArray)
-                }
-            }
-        } else {
-            context.packageManager.getLaunchIntentForPackage(pkgName)!!.apply {
-                action = Intent.ACTION_VIEW
-                setDataAndTypeAndNormalize(uri, getMime(uri))
-                putExtra("title", anime.title + " - " + episode.name)
-                putExtra("position", episode.last_second_seen.toInt())
-                putExtra("return_result", true)
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                if (pkgName == "com.mxtech.videoplayer.pro") {
-                    setClassName(pkgName, "com.mxtech.videoplayer.ActivityScreen")
-                } else if (pkgName.startsWith("com.mxtech.videoplayer")) {
-                    setClassName(pkgName, "$pkgName.ActivityScreen")
-                }
-                val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
-                if (headers != null) {
-                    var headersArray = arrayOf<String>()
-                    for (header in headers) {
-                        headersArray += arrayOf(header.first, header.second)
-                    }
-                    putExtra("headers", headersArray)
-                }
-            }
-        }
-    }
-
-    private fun getMime(uri: Uri): String {
-        return when (uri.path?.substringAfterLast(".")) {
-            "mp4" -> MimeTypes.VIDEO_MP4
-            "mkv" -> MimeTypes.VIDEO_MATROSKA
-            "m3u8" -> MimeTypes.APPLICATION_M3U8
-            else -> MimeTypes.VIDEO_MP4
-        }
     }
 
     override fun onItemClick(view: View?, position: Int): Boolean {

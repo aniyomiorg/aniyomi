@@ -77,6 +77,7 @@ class SettingsPlayerController : SettingsController() {
             val installedPackages = pm.getInstalledPackages(0)
             val supportedPlayers = installedPackages.filter {
                 when (it.packageName) {
+                    "is.xyz.mpv" -> true
                     "com.mxtech.videoplayer" -> true
                     "com.mxtech.videoplayer.ad" -> true
                     "com.mxtech.videoplayer.pro" -> true
