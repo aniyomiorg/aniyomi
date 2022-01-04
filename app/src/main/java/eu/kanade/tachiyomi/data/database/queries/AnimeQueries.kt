@@ -13,7 +13,6 @@ import eu.kanade.tachiyomi.data.database.resolvers.AnimeCoverLastModifiedPutReso
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeFavoritePutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeFlagsPutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeLastUpdatedPutResolver
-import eu.kanade.tachiyomi.data.database.resolvers.AnimeNextUpdatedPutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeTitlePutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimelibAnimeGetResolver
 import eu.kanade.tachiyomi.data.database.resolvers.SourceIdAnimeCountGetResolver
@@ -106,11 +105,6 @@ interface AnimeQueries : DbProvider {
     fun updateViewerFlags(anime: List<Anime>) = db.put()
         .objects(anime)
         .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_VIEWER, Anime::viewer_flags))
-        .prepare()
-
-    fun updateNextUpdated(manga: Anime) = db.put()
-        .`object`(manga)
-        .withPutResolver(AnimeNextUpdatedPutResolver())
         .prepare()
 
     fun updateLastUpdated(anime: Anime) = db.put()

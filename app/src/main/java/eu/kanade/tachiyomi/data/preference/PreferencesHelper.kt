@@ -1,16 +1,16 @@
 package eu.kanade.tachiyomi.data.preference
 
 import android.content.Context
+import android.os.Build
 import android.os.Environment
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
+import com.google.android.material.color.DynamicColors
 import com.tfcporciuncula.flow.FlowSharedPreferences
-import com.tfcporciuncula.flow.Preference
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Manga
-import eu.kanade.tachiyomi.data.preference.PreferenceValues.ThemeMode.system
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.ui.browse.migration.sources.MigrationSourcesController
@@ -19,35 +19,14 @@ import eu.kanade.tachiyomi.ui.library.setting.SortDirectionSetting
 import eu.kanade.tachiyomi.ui.library.setting.SortModeSetting
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
-import eu.kanade.tachiyomi.util.system.MiuiUtil
+import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onEach
 import java.io.File
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
 import eu.kanade.tachiyomi.data.preference.PreferenceKeys as Keys
 import eu.kanade.tachiyomi.data.preference.PreferenceValues as Values
-
-fun <T> Preference<T>.asImmediateFlow(block: (T) -> Unit): Flow<T> {
-    block(get())
-    return asFlow()
-        .onEach { block(it) }
-}
-
-operator fun <T> Preference<Set<T>>.plusAssign(item: T) {
-    set(get() + item)
-}
-
-operator fun <T> Preference<Set<T>>.minusAssign(item: T) {
-    set(get() - item)
-}
-
-fun Preference<Boolean>.toggle(): Boolean {
-    set(!get())
-    return get()
-}
 
 class PreferencesHelper(val context: Context) {
 
@@ -70,17 +49,17 @@ class PreferencesHelper(val context: Context) {
 
     fun confirmExit() = prefs.getBoolean(Keys.confirmExit, false)
 
-    fun hideBottomBarOnScroll() = flowPrefs.getBoolean(Keys.hideBottomBarOnScroll, true)
+    fun hideBottomBarOnScroll() = flowPrefs.getBoolean("pref_hide_bottom_bar_on_scroll", true)
 
-    fun sideNavIconAlignment() = flowPrefs.getInt(Keys.sideNavIconAlignment, 0)
+    fun sideNavIconAlignment() = flowPrefs.getInt("pref_side_nav_icon_alignment", 0)
 
-    fun useAuthenticator() = flowPrefs.getBoolean(Keys.useAuthenticator, false)
+    fun useAuthenticator() = flowPrefs.getBoolean("use_biometric_lock", false)
 
-    fun lockAppAfter() = flowPrefs.getInt(Keys.lockAppAfter, 0)
+    fun lockAppAfter() = flowPrefs.getInt("lock_app_after", 0)
 
-    fun lastAppUnlock() = flowPrefs.getLong(Keys.lastAppUnlock, 0)
+    fun lastAppUnlock() = flowPrefs.getLong("last_app_unlock", 0)
 
-    fun secureScreen() = flowPrefs.getBoolean(Keys.secureScreen, false)
+    fun secureScreen() = flowPrefs.getBoolean("secure_screen", false)
 
     fun hideNotificationContent() = prefs.getBoolean(Keys.hideNotificationContent, false)
 
@@ -88,49 +67,55 @@ class PreferencesHelper(val context: Context) {
 
     fun autoUpdateTrackers() = prefs.getBoolean(Keys.autoUpdateTrackers, false)
 
-    fun themeMode() = flowPrefs.getEnum(Keys.themeMode, system)
+    fun themeMode() = flowPrefs.getEnum(
+        "pref_theme_mode_key",
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { Values.ThemeMode.system } else { Values.ThemeMode.light }
+    )
 
-    fun appTheme() = flowPrefs.getEnum(Keys.appTheme, Values.AppTheme.DEFAULT)
+    fun appTheme() = flowPrefs.getEnum(
+        "pref_app_theme",
+        if (DynamicColors.isDynamicColorAvailable()) { Values.AppTheme.MONET } else { Values.AppTheme.DEFAULT }
+    )
 
-    fun themeDarkAmoled() = flowPrefs.getBoolean(Keys.themeDarkAmoled, false)
+    fun themeDarkAmoled() = flowPrefs.getBoolean("pref_theme_dark_amoled_key", false)
 
-    fun pageTransitions() = flowPrefs.getBoolean(Keys.enableTransitions, true)
+    fun pageTransitions() = flowPrefs.getBoolean("pref_enable_transitions_key", true)
 
-    fun doubleTapAnimSpeed() = flowPrefs.getInt(Keys.doubleTapAnimationSpeed, 500)
+    fun doubleTapAnimSpeed() = flowPrefs.getInt("pref_double_tap_anim_speed", 500)
 
-    fun showPageNumber() = flowPrefs.getBoolean(Keys.showPageNumber, true)
+    fun showPageNumber() = flowPrefs.getBoolean("pref_show_page_number_key", true)
 
-    fun dualPageSplitPaged() = flowPrefs.getBoolean(Keys.dualPageSplitPaged, false)
+    fun dualPageSplitPaged() = flowPrefs.getBoolean("pref_dual_page_split", false)
 
-    fun dualPageSplitWebtoon() = flowPrefs.getBoolean(Keys.dualPageSplitWebtoon, false)
+    fun dualPageSplitWebtoon() = flowPrefs.getBoolean("pref_dual_page_split_webtoon", false)
 
-    fun dualPageInvertPaged() = flowPrefs.getBoolean(Keys.dualPageInvertPaged, false)
+    fun dualPageInvertPaged() = flowPrefs.getBoolean("pref_dual_page_invert", false)
 
-    fun dualPageInvertWebtoon() = flowPrefs.getBoolean(Keys.dualPageInvertWebtoon, false)
+    fun dualPageInvertWebtoon() = flowPrefs.getBoolean("pref_dual_page_invert_webtoon", false)
 
     fun showReadingMode() = prefs.getBoolean(Keys.showReadingMode, true)
 
-    fun trueColor() = flowPrefs.getBoolean(Keys.trueColor, false)
+    fun trueColor() = flowPrefs.getBoolean("pref_true_color_key", false)
 
-    fun fullscreen() = flowPrefs.getBoolean(Keys.fullscreen, true)
+    fun fullscreen() = flowPrefs.getBoolean("fullscreen", true)
 
-    fun cutoutShort() = flowPrefs.getBoolean(Keys.cutoutShort, true)
+    fun cutoutShort() = flowPrefs.getBoolean("cutout_short", true)
 
-    fun keepScreenOn() = flowPrefs.getBoolean(Keys.keepScreenOn, true)
+    fun keepScreenOn() = flowPrefs.getBoolean("pref_keep_screen_on_key", true)
 
-    fun customBrightness() = flowPrefs.getBoolean(Keys.customBrightness, false)
+    fun customBrightness() = flowPrefs.getBoolean("pref_custom_brightness_key", false)
 
-    fun customBrightnessValue() = flowPrefs.getInt(Keys.customBrightnessValue, 0)
+    fun customBrightnessValue() = flowPrefs.getInt("custom_brightness_value", 0)
 
-    fun colorFilter() = flowPrefs.getBoolean(Keys.colorFilter, false)
+    fun colorFilter() = flowPrefs.getBoolean("pref_color_filter_key", false)
 
-    fun colorFilterValue() = flowPrefs.getInt(Keys.colorFilterValue, 0)
+    fun colorFilterValue() = flowPrefs.getInt("color_filter_value", 0)
 
-    fun colorFilterMode() = flowPrefs.getInt(Keys.colorFilterMode, 0)
+    fun colorFilterMode() = flowPrefs.getInt("color_filter_mode", 0)
 
-    fun grayscale() = flowPrefs.getBoolean(Keys.grayscale, false)
+    fun grayscale() = flowPrefs.getBoolean("pref_grayscale", false)
 
-    fun invertedColors() = flowPrefs.getBoolean(Keys.invertedColors, false)
+    fun invertedColors() = flowPrefs.getBoolean("pref_inverted_colors", false)
 
     fun defaultReadingMode() = prefs.getInt(Keys.defaultReadingMode, ReadingModeType.RIGHT_TO_LEFT.flagValue)
 
@@ -160,72 +145,63 @@ class PreferencesHelper(val context: Context) {
 
     fun skipLengthPreference() = prefs.getString(Keys.skipLengthPreference, "10")!!.toInt()
 
-    fun imageScaleType() = flowPrefs.getInt(Keys.imageScaleType, 1)
+    fun imageScaleType() = flowPrefs.getInt("pref_image_scale_type_key", 1)
 
-    fun zoomStart() = flowPrefs.getInt(Keys.zoomStart, 1)
+    fun zoomStart() = flowPrefs.getInt("pref_zoom_start_key", 1)
 
-    fun readerTheme() = flowPrefs.getInt(Keys.readerTheme, 1)
+    fun readerTheme() = flowPrefs.getInt("pref_reader_theme_key", 1)
 
-    fun watcherTheme() = flowPrefs.getInt(Keys.readerTheme, 1)
+    fun alwaysShowChapterTransition() = flowPrefs.getBoolean("always_show_chapter_transition", true)
 
-    fun alwaysShowChapterTransition() = flowPrefs.getBoolean(Keys.alwaysShowChapterTransition, true)
+    fun cropBorders() = flowPrefs.getBoolean("crop_borders", false)
 
-    fun alwaysShowEpisodeTransition() = flowPrefs.getBoolean(Keys.alwaysShowChapterTransition, true)
+    fun cropBordersWebtoon() = flowPrefs.getBoolean("crop_borders_webtoon", false)
 
-    fun cropBorders() = flowPrefs.getBoolean(Keys.cropBorders, false)
+    fun webtoonSidePadding() = flowPrefs.getInt("webtoon_side_padding", 0)
 
-    fun cropBordersWebtoon() = flowPrefs.getBoolean(Keys.cropBordersWebtoon, false)
+    fun readWithTapping() = flowPrefs.getBoolean("reader_tap", true)
 
-    fun webtoonSidePadding() = flowPrefs.getInt(Keys.webtoonSidePadding, 0)
+    fun pagerNavInverted() = flowPrefs.getEnum("reader_tapping_inverted", Values.TappingInvertMode.NONE)
 
-    fun readWithTapping() = flowPrefs.getBoolean(Keys.readWithTapping, true)
+    fun webtoonNavInverted() = flowPrefs.getEnum("reader_tapping_inverted_webtoon", Values.TappingInvertMode.NONE)
 
-    fun pagerNavInverted() = flowPrefs.getEnum(Keys.pagerNavInverted, Values.TappingInvertMode.NONE)
+    fun readWithLongTap() = flowPrefs.getBoolean("reader_long_tap", true)
 
-    fun webtoonNavInverted() = flowPrefs.getEnum(Keys.webtoonNavInverted, Values.TappingInvertMode.NONE)
+    fun readWithVolumeKeys() = flowPrefs.getBoolean("reader_volume_keys", false)
 
-    fun readWithLongTap() = flowPrefs.getBoolean(Keys.readWithLongTap, true)
+    fun readWithVolumeKeysInverted() = flowPrefs.getBoolean("reader_volume_keys_inverted", false)
 
-    fun readWithVolumeKeys() = flowPrefs.getBoolean(Keys.readWithVolumeKeys, false)
+    fun navigationModePager() = flowPrefs.getInt("reader_navigation_mode_pager", 0)
 
-    fun readWithVolumeKeysInverted() = flowPrefs.getBoolean(Keys.readWithVolumeKeysInverted, false)
+    fun navigationModeWebtoon() = flowPrefs.getInt("reader_navigation_mode_webtoon", 0)
 
-    fun navigationModePager() = flowPrefs.getInt(Keys.navigationModePager, 0)
+    fun showNavigationOverlayNewUser() = flowPrefs.getBoolean("reader_navigation_overlay_new_user", true)
 
-    fun navigationModeWebtoon() = flowPrefs.getInt(Keys.navigationModeWebtoon, 0)
+    fun showNavigationOverlayOnStart() = flowPrefs.getBoolean("reader_navigation_overlay_on_start", false)
 
-    fun showNavigationOverlayNewUser() = flowPrefs.getBoolean(Keys.showNavigationOverlayNewUser, true)
+    fun readerHideThreshold() = flowPrefs.getEnum("reader_hide_threshold", Values.ReaderHideThreshold.LOW)
 
-    fun showNavigationOverlayOnStart() = flowPrefs.getBoolean(Keys.showNavigationOverlayOnStart, false)
+    fun portraitColumns() = flowPrefs.getInt("pref_library_columns_portrait_key", 0)
 
-    fun readerHideTreshold() = flowPrefs.getEnum(Keys.readerHideThreshold, Values.ReaderHideThreshold.LOW)
-
-    fun portraitColumns() = flowPrefs.getInt(Keys.portraitColumns, 0)
-
-    fun landscapeColumns() = flowPrefs.getInt(Keys.landscapeColumns, 0)
+    fun landscapeColumns() = flowPrefs.getInt("pref_library_columns_landscape_key", 0)
 
     fun jumpToChapters() = prefs.getBoolean(Keys.jumpToChapters, false)
 
-    fun jumpToEpisodes() = prefs.getBoolean(Keys.jumpToEpisodes, false)
-
-    fun updateOnlyNonCompleted() = prefs.getBoolean(Keys.updateOnlyNonCompleted, true)
-
     fun autoUpdateTrack() = prefs.getBoolean(Keys.autoUpdateTrack, true)
 
-    fun lastUsedSource() = flowPrefs.getLong(Keys.lastUsedSource, -1)
+    fun lastUsedSource() = flowPrefs.getLong("last_catalogue_source", -1)
 
-    fun lastUsedAnimeSource() = flowPrefs.getLong(Keys.lastUsedAnimeSource, -1)
+    fun lastUsedAnimeSource() = flowPrefs.getLong("last_anime_catalogue_source", -1)
 
-    fun lastUsedCategory() = flowPrefs.getInt(Keys.lastUsedCategory, 0)
+    fun lastUsedCategory() = flowPrefs.getInt("last_used_category", 0)
 
-    fun lastUsedAnimeCategory() = flowPrefs.getInt(Keys.lastUsedAnimeCategory, 0)
+    fun lastUsedAnimeCategory() = flowPrefs.getInt("last_used_anime_category", 0)
 
     fun lastVersionCode() = flowPrefs.getInt("last_version_code", 0)
 
-    fun sourceDisplayMode() = flowPrefs.getEnum(Keys.sourceDisplayMode, DisplayModeSetting.COMPACT_GRID)
-    fun animesourceDisplayMode() = flowPrefs.getEnum(Keys.animesourceDisplayMode, DisplayModeSetting.COMPACT_GRID)
+    fun sourceDisplayMode() = flowPrefs.getEnum("pref_display_mode_catalogue", DisplayModeSetting.COMPACT_GRID)
 
-    fun enabledLanguages() = flowPrefs.getStringSet(Keys.enabledLanguages, setOf("all", "en", Locale.getDefault().language))
+    fun enabledLanguages() = flowPrefs.getStringSet("source_languages", setOf("all", "en", Locale.getDefault().language))
 
     fun trackUsername(sync: TrackService) = prefs.getString(Keys.trackUsername(sync.id), "")
 
@@ -242,16 +218,16 @@ class PreferencesHelper(val context: Context) {
 
     fun anilistScoreType() = flowPrefs.getString("anilist_score_type", Anilist.POINT_10)
 
-    fun backupsDirectory() = flowPrefs.getString(Keys.backupDirectory, defaultBackupDir.toString())
+    fun backupsDirectory() = flowPrefs.getString("backup_directory", defaultBackupDir.toString())
 
-    fun relativeTime() = flowPrefs.getInt(Keys.relativeTime, 7)
+    fun relativeTime() = flowPrefs.getInt("relative_time", 7)
 
     fun dateFormat(format: String = flowPrefs.getString(Keys.dateFormat, "").get()): DateFormat = when (format) {
         "" -> DateFormat.getDateInstance(DateFormat.SHORT)
         else -> SimpleDateFormat(format, Locale.getDefault())
     }
 
-    fun downloadsDirectory() = flowPrefs.getString(Keys.downloadsDirectory, defaultDownloadsDir.toString())
+    fun downloadsDirectory() = flowPrefs.getString("download_directory", defaultDownloadsDir.toString())
 
     fun useExternalDownloader() = prefs.getBoolean(Keys.useExternalDownloader, false)
 
@@ -259,13 +235,13 @@ class PreferencesHelper(val context: Context) {
 
     fun downloadOnlyOverWifi() = prefs.getBoolean(Keys.downloadOnlyOverWifi, true)
 
+    fun saveChaptersAsCBZ() = flowPrefs.getBoolean("save_chapter_as_cbz", false)
+
     fun folderPerManga() = prefs.getBoolean(Keys.folderPerManga, false)
 
-    fun folderPerAnime() = prefs.getBoolean(Keys.folderPerAnime, false)
+    fun numberOfBackups() = flowPrefs.getInt("backup_slots", 1)
 
-    fun numberOfBackups() = flowPrefs.getInt(Keys.numberOfBackups, 1)
-
-    fun backupInterval() = flowPrefs.getInt(Keys.backupInterval, 0)
+    fun backupInterval() = flowPrefs.getInt("backup_interval", 0)
 
     fun removeAfterReadSlots() = prefs.getInt(Keys.removeAfterReadSlots, -1)
 
@@ -273,44 +249,43 @@ class PreferencesHelper(val context: Context) {
 
     fun removeBookmarkedChapters() = prefs.getBoolean(Keys.removeBookmarkedChapters, false)
 
-    fun removeExcludeCategories() = flowPrefs.getStringSet(Keys.removeExcludeCategories, emptySet())
-    fun removeExcludeAnimeCategories() = flowPrefs.getStringSet(Keys.removeExcludeCategoriesAnime, emptySet())
+    fun removeExcludeCategories() = flowPrefs.getStringSet("remove_exclude_categories", emptySet())
+    fun removeExcludeAnimeCategories() = flowPrefs.getStringSet("remove_exclude_categories_anime", emptySet())
 
-    fun libraryUpdateInterval() = flowPrefs.getInt(Keys.libraryUpdateInterval, 24)
+    fun libraryUpdateInterval() = flowPrefs.getInt("pref_library_update_interval_key", 24)
 
-    fun libraryUpdateRestriction() = flowPrefs.getStringSet(Keys.libraryUpdateRestriction, setOf(ONLY_ON_WIFI))
+    fun libraryUpdateDeviceRestriction() = flowPrefs.getStringSet("library_update_restriction", setOf(DEVICE_ONLY_ON_WIFI))
+    fun libraryUpdateMangaRestriction() = flowPrefs.getStringSet("library_update_manga_restriction", setOf(MANGA_FULLY_READ, MANGA_ONGOING))
 
-    fun showUpdatesNavBadge() = flowPrefs.getBoolean(Keys.showUpdatesNavBadge, false)
+    fun showUpdatesNavBadge() = flowPrefs.getBoolean("library_update_show_tab_badge", false)
     fun unreadUpdatesCount() = flowPrefs.getInt("library_unread_updates_count", 0)
     fun unseenUpdatesCount() = flowPrefs.getInt("library_unseen_updates_count", 0)
 
-    fun libraryUpdateCategories() = flowPrefs.getStringSet(Keys.libraryUpdateCategories, emptySet())
-    fun animelibUpdateCategories() = flowPrefs.getStringSet(Keys.animelibUpdateCategories, emptySet())
+    fun libraryUpdateCategories() = flowPrefs.getStringSet("library_update_categories", emptySet())
+    fun animelibUpdateCategories() = flowPrefs.getStringSet("animelib_update_categories", emptySet())
 
-    fun libraryUpdateCategoriesExclude() = flowPrefs.getStringSet(Keys.libraryUpdateCategoriesExclude, emptySet())
-    fun animelibUpdateCategoriesExclude() = flowPrefs.getStringSet(Keys.animelibUpdateCategoriesExclude, emptySet())
+    fun libraryUpdateCategoriesExclude() = flowPrefs.getStringSet("library_update_categories_exclude", emptySet())
+    fun animelibUpdateCategoriesExclude() = flowPrefs.getStringSet("animelib_update_categories_exclude", emptySet())
 
-    fun libraryUpdatePrioritization() = flowPrefs.getInt(Keys.libraryUpdatePrioritization, 0)
+    fun libraryDisplayMode() = flowPrefs.getEnum("pref_display_mode_library", DisplayModeSetting.COMPACT_GRID)
 
-    fun libraryDisplayMode() = flowPrefs.getEnum(Keys.libraryDisplayMode, DisplayModeSetting.COMPACT_GRID)
+    fun downloadBadge() = flowPrefs.getBoolean("display_download_badge", false)
 
-    fun downloadBadge() = flowPrefs.getBoolean(Keys.downloadBadge, false)
+    fun localBadge() = flowPrefs.getBoolean("display_local_badge", true)
 
-    fun localBadge() = flowPrefs.getBoolean(Keys.localBadge, true)
+    fun downloadedOnly() = flowPrefs.getBoolean("pref_downloaded_only", false)
 
-    fun downloadedOnly() = flowPrefs.getBoolean(Keys.downloadedOnly, false)
+    fun unreadBadge() = flowPrefs.getBoolean("display_unread_badge", true)
 
-    fun unreadBadge() = flowPrefs.getBoolean(Keys.unreadBadge, true)
+    fun languageBadge() = flowPrefs.getBoolean("display_language_badge", false)
 
-    fun languageBadge() = flowPrefs.getBoolean(Keys.languageBadge, false)
+    fun categoryTabs() = flowPrefs.getBoolean("display_category_tabs", true)
 
-    fun categoryTabs() = flowPrefs.getBoolean(Keys.categoryTabs, true)
+    fun animeCategoryTabs() = flowPrefs.getBoolean("display_anime_category_tabs", true)
 
-    fun animeCategoryTabs() = flowPrefs.getBoolean(Keys.animeCategoryTabs, true)
+    fun categoryNumberOfItems() = flowPrefs.getBoolean("display_number_of_items", false)
 
-    fun categoryNumberOfItems() = flowPrefs.getBoolean(Keys.categoryNumberOfItems, false)
-
-    fun animeCategoryNumberOfItems() = flowPrefs.getBoolean(Keys.animeCategoryNumberOfItems, false)
+    fun animeCategoryNumberOfItems() = flowPrefs.getBoolean("display_number_of_items_anime", false)
 
     fun filterDownloaded() = flowPrefs.getInt(Keys.filterDownloaded, ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
 
@@ -326,9 +301,9 @@ class PreferencesHelper(val context: Context) {
     fun migrationSortingMode() = flowPrefs.getEnum(Keys.migrationSortingMode, MigrationSourcesController.SortSetting.ALPHABETICAL)
     fun migrationSortingDirection() = flowPrefs.getEnum(Keys.migrationSortingDirection, MigrationSourcesController.DirectionSetting.ASCENDING)
 
-    fun automaticExtUpdates() = flowPrefs.getBoolean(Keys.automaticExtUpdates, true)
+    fun automaticExtUpdates() = flowPrefs.getBoolean("automatic_ext_updates", true)
 
-    fun showNsfwSource() = flowPrefs.getBoolean(Keys.showNsfwSource, true)
+    fun showNsfwSource() = flowPrefs.getBoolean("show_nsfw_source", true)
 
     fun extensionUpdatesCount() = flowPrefs.getInt("ext_updates_count", 0)
 
@@ -350,19 +325,19 @@ class PreferencesHelper(val context: Context) {
 
     fun pinnedAnimeSources() = flowPrefs.getStringSet("pinned_anime_catalogues", emptySet())
 
-    fun downloadNew() = flowPrefs.getBoolean(Keys.downloadNew, false)
+    fun downloadNew() = flowPrefs.getBoolean("download_new", false)
 
-    fun downloadNewCategories() = flowPrefs.getStringSet(Keys.downloadNewCategories, emptySet())
-    fun downloadNewCategoriesAnime() = flowPrefs.getStringSet(Keys.downloadNewCategoriesAnime, emptySet())
-    fun downloadNewCategoriesExclude() = flowPrefs.getStringSet(Keys.downloadNewCategoriesExclude, emptySet())
-    fun downloadNewCategoriesAnimeExclude() = flowPrefs.getStringSet(Keys.downloadNewCategoriesExcludeAnime, emptySet())
+    fun downloadNewCategories() = flowPrefs.getStringSet("download_new_categories", emptySet())
+    fun downloadNewCategoriesAnime() = flowPrefs.getStringSet("download_new_categories_anime", emptySet())
+    fun downloadNewCategoriesExclude() = flowPrefs.getStringSet("download_new_categories_exclude", emptySet())
+    fun downloadNewCategoriesAnimeExclude() = flowPrefs.getStringSet("download_new_categories_exclude_anime", emptySet())
 
-    fun lang() = flowPrefs.getString(Keys.lang, "")
+    fun lang() = flowPrefs.getString("app_language", "")
 
     fun defaultCategory() = prefs.getInt(Keys.defaultCategory, -1)
     fun defaultAnimeCategory() = prefs.getInt(Keys.defaultAnimeCategory, -1)
 
-    fun categorisedDisplaySettings() = flowPrefs.getBoolean(Keys.categorizedDisplay, false)
+    fun categorizedDisplaySettings() = flowPrefs.getBoolean("categorized_display", false)
 
     fun skipRead() = prefs.getBoolean(Keys.skipRead, false)
 
@@ -400,13 +375,13 @@ class PreferencesHelper(val context: Context) {
 
     fun sortEpisodeByAscendingOrDescending() = prefs.getInt(Keys.defaultEpisodeSortByAscendingOrDescending, Anime.EPISODE_SORT_DESC)
 
-    fun incognitoMode() = flowPrefs.getBoolean(Keys.incognitoMode, false)
+    fun incognitoMode() = flowPrefs.getBoolean("incognito_mode", false)
 
-    fun tabletUiMode() = flowPrefs.getEnum(Keys.tabletUiMode, Values.TabletUiMode.AUTOMATIC)
+    fun tabletUiMode() = flowPrefs.getEnum("tablet_ui_mode", Values.TabletUiMode.AUTOMATIC)
 
     fun extensionInstaller() = flowPrefs.getEnum(
-        Keys.extensionInstaller,
-        if (MiuiUtil.isMiui()) Values.ExtensionInstaller.LEGACY else Values.ExtensionInstaller.PACKAGEINSTALLER
+        "extension_installer",
+        if (DeviceUtil.isMiui) Values.ExtensionInstaller.LEGACY else Values.ExtensionInstaller.PACKAGEINSTALLER
     )
 
     fun verboseLogging() = prefs.getBoolean(Keys.verboseLogging, false)

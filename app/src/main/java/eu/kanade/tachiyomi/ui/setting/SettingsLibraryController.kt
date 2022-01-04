@@ -13,15 +13,17 @@ import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.library.LibraryUpdateJob
-import eu.kanade.tachiyomi.data.preference.CHARGING
-import eu.kanade.tachiyomi.data.preference.ONLY_ON_WIFI
+import eu.kanade.tachiyomi.data.preference.DEVICE_CHARGING
+import eu.kanade.tachiyomi.data.preference.DEVICE_ONLY_ON_WIFI
+import eu.kanade.tachiyomi.data.preference.MANGA_FULLY_READ
+import eu.kanade.tachiyomi.data.preference.MANGA_ONGOING
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.data.preference.asImmediateFlow
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.databinding.PrefLibraryColumnsBinding
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.category.CategoryController
+import eu.kanade.tachiyomi.util.preference.bindTo
 import eu.kanade.tachiyomi.util.preference.defaultValue
 import eu.kanade.tachiyomi.util.preference.entriesRes
 import eu.kanade.tachiyomi.util.preference.intListPreference
@@ -163,9 +165,8 @@ class SettingsLibraryController : SettingsController() {
             }
 
             switchPreference {
-                key = Keys.categorizedDisplay
+                bindTo(preferences.categorizedDisplaySettings())
                 titleRes = R.string.categorized_display_settings
-                defaultValue = false
             }
         }
 
@@ -173,7 +174,7 @@ class SettingsLibraryController : SettingsController() {
             titleRes = R.string.pref_category_library_update
 
             intListPreference {
-                key = Keys.libraryUpdateInterval
+                bindTo(preferences.libraryUpdateInterval())
                 titleRes = R.string.pref_library_update_interval
                 entriesRes = arrayOf(
                     R.string.update_never,
@@ -184,7 +185,6 @@ class SettingsLibraryController : SettingsController() {
                     R.string.update_weekly
                 )
                 entryValues = arrayOf("0", "12", "24", "48", "72", "168")
-                defaultValue = "24"
                 summary = "%s"
 
                 onChange { newValue ->
@@ -195,14 +195,12 @@ class SettingsLibraryController : SettingsController() {
                 }
             }
             multiSelectListPreference {
-                key = Keys.libraryUpdateRestriction
+                bindTo(preferences.libraryUpdateDeviceRestriction())
                 titleRes = R.string.pref_library_update_restriction
                 entriesRes = arrayOf(R.string.connected_to_wifi, R.string.charging)
-                entryValues = arrayOf(ONLY_ON_WIFI, CHARGING)
-                defaultValue = setOf(ONLY_ON_WIFI)
+                entryValues = arrayOf(DEVICE_ONLY_ON_WIFI, DEVICE_CHARGING)
 
-                preferences.libraryUpdateInterval().asImmediateFlow { isVisible = it > 0 }
-                    .launchIn(viewScope)
+                visibleIf(preferences.libraryUpdateInterval()) { it > 0 }
 
                 onChange {
                     // Post to event looper to allow the preference to be updated.
@@ -212,12 +210,12 @@ class SettingsLibraryController : SettingsController() {
                 }
 
                 fun updateSummary() {
-                    val restrictions = preferences.libraryUpdateRestriction().get()
+                    val restrictions = preferences.libraryUpdateDeviceRestriction().get()
                         .sorted()
                         .map {
                             when (it) {
-                                ONLY_ON_WIFI -> context.getString(R.string.connected_to_wifi)
-                                CHARGING -> context.getString(R.string.charging)
+                                DEVICE_ONLY_ON_WIFI -> context.getString(R.string.connected_to_wifi)
+                                DEVICE_CHARGING -> context.getString(R.string.charging)
                                 else -> it
                             }
                         }
@@ -230,39 +228,68 @@ class SettingsLibraryController : SettingsController() {
                     summary = context.getString(R.string.restrictions, restrictionsText)
                 }
 
-                preferences.libraryUpdateRestriction().asFlow()
+                preferences.libraryUpdateDeviceRestriction().asFlow()
                     .onEach { updateSummary() }
                     .launchIn(viewScope)
             }
-            switchPreference {
-                key = Keys.updateOnlyNonCompleted
-                titleRes = R.string.pref_update_only_non_completed
-                defaultValue = true
+            multiSelectListPreference {
+                bindTo(preferences.libraryUpdateMangaRestriction())
+                titleRes = R.string.pref_library_update_manga_restriction
+                entriesRes = arrayOf(R.string.pref_update_only_completely_read, R.string.pref_update_only_non_completed)
+                entryValues = arrayOf(MANGA_FULLY_READ, MANGA_ONGOING)
+
+                fun updateSummary() {
+                    val restrictions = preferences.libraryUpdateMangaRestriction().get()
+                        .sorted()
+                        .map {
+                            when (it) {
+                                MANGA_ONGOING -> context.getString(R.string.pref_update_only_non_completed)
+                                MANGA_FULLY_READ -> context.getString(R.string.pref_update_only_completely_read)
+                                else -> it
+                            }
+                        }
+                    val restrictionsText = if (restrictions.isEmpty()) {
+                        context.getString(R.string.none)
+                    } else {
+                        restrictions.joinToString()
+                    }
+
+                    summary = context.getString(R.string.only_update_restrictions, restrictionsText)
+                }
+
+                preferences.libraryUpdateMangaRestriction().asFlow()
+                    .onEach { updateSummary() }
+                    .launchIn(viewScope)
             }
             preference {
-                key = Keys.animelibUpdateCategories
+                bindTo(preferences.animelibUpdateCategories())
                 titleRes = R.string.anime_categories
+
                 onClick {
                     AnimelibGlobalUpdateCategoriesDialog().showDialog(router)
                 }
 
                 fun updateSummary() {
-                    val selectedCategories = preferences.animelibUpdateCategories().get()
+                    val includedCategories = preferences.animelibUpdateCategories().get()
                         .mapNotNull { id -> categoriesAnime.find { it.id == id.toInt() } }
                         .sortedBy { it.order }
-                    val includedItemsText = if (selectedCategories.isEmpty()) {
-                        context.getString(R.string.all)
-                    } else {
-                        selectedCategories.joinToString { it.name }
-                    }
 
                     val excludedCategories = preferences.animelibUpdateCategoriesExclude().get()
                         .mapNotNull { id -> categoriesAnime.find { it.id == id.toInt() } }
                         .sortedBy { it.order }
+
+                    val includedItemsText = if (includedCategories.isEmpty()) {
+                        context.getString(R.string.none)
+                    } else {
+                        if (includedCategories.size == categories.size) context.getString(R.string.all)
+                        else includedCategories.joinToString { it.name }
+                    }
+
                     val excludedItemsText = if (excludedCategories.isEmpty()) {
                         context.getString(R.string.none)
                     } else {
-                        excludedCategories.joinToString { it.name }
+                        if (excludedCategories.size == categories.size) context.getString(R.string.all)
+                        else excludedCategories.joinToString { it.name }
                     }
 
                     summary = buildSpannedString {
@@ -280,29 +307,34 @@ class SettingsLibraryController : SettingsController() {
                     .launchIn(viewScope)
             }
             preference {
-                key = Keys.libraryUpdateCategories
+                bindTo(preferences.libraryUpdateCategories())
                 titleRes = R.string.categories
+
                 onClick {
                     LibraryGlobalUpdateCategoriesDialog().showDialog(router)
                 }
 
                 fun updateSummary() {
-                    val selectedCategories = preferences.libraryUpdateCategories().get()
+                    val includedCategories = preferences.libraryUpdateCategories().get()
                         .mapNotNull { id -> categories.find { it.id == id.toInt() } }
                         .sortedBy { it.order }
-                    val includedItemsText = if (selectedCategories.isEmpty()) {
-                        context.getString(R.string.all)
-                    } else {
-                        selectedCategories.joinToString { it.name }
-                    }
 
                     val excludedCategories = preferences.libraryUpdateCategoriesExclude().get()
                         .mapNotNull { id -> categories.find { it.id == id.toInt() } }
                         .sortedBy { it.order }
+
+                    val includedItemsText = if (includedCategories.isEmpty()) {
+                        context.getString(R.string.none)
+                    } else {
+                        if (includedCategories.size == categories.size) context.getString(R.string.all)
+                        else includedCategories.joinToString { it.name }
+                    }
+
                     val excludedItemsText = if (excludedCategories.isEmpty()) {
                         context.getString(R.string.none)
                     } else {
-                        excludedCategories.joinToString { it.name }
+                        if (excludedCategories.size == categories.size) context.getString(R.string.all)
+                        else excludedCategories.joinToString { it.name }
                     }
 
                     summary = buildSpannedString {
@@ -318,32 +350,6 @@ class SettingsLibraryController : SettingsController() {
                 preferences.libraryUpdateCategoriesExclude().asFlow()
                     .onEach { updateSummary() }
                     .launchIn(viewScope)
-            }
-            intListPreference {
-                key = Keys.libraryUpdatePrioritization
-                titleRes = R.string.pref_library_update_prioritization
-
-                // The following array lines up with the list rankingScheme in:
-                // ../../data/library/LibraryUpdateRanker.kt
-                val priorities = arrayOf(
-                    Pair("0", R.string.action_sort_alpha),
-                    Pair("1", R.string.action_sort_last_checked),
-                    Pair("2", R.string.action_sort_next_updated)
-                )
-                val defaultPriority = priorities[0]
-
-                entriesRes = priorities.map { it.second }.toTypedArray()
-                entryValues = priorities.map { it.first }.toTypedArray()
-                defaultValue = defaultPriority.first
-
-                val selectedPriority = priorities.find { it.first.toInt() == preferences.libraryUpdatePrioritization().get() }
-                summaryRes = selectedPriority?.second ?: defaultPriority.second
-                onChange { newValue ->
-                    summaryRes = priorities.find {
-                        it.first == newValue as String
-                    }?.second ?: defaultPriority.second
-                    true
-                }
             }
             switchPreference {
                 key = Keys.autoUpdateMetadata

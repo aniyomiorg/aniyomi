@@ -13,7 +13,7 @@ import android.graphics.Color
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
-import android.graphics.PorterDuff
+import android.graphics.drawable.RippleDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -50,7 +50,6 @@ import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.data.preference.toggle
 import eu.kanade.tachiyomi.databinding.ReaderActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
 import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAppTheme
@@ -68,6 +67,7 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import eu.kanade.tachiyomi.ui.reader.viewer.BaseViewer
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.R2LPagerViewer
+import eu.kanade.tachiyomi.util.preference.toggle
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.applySystemAnimatorScale
 import eu.kanade.tachiyomi.util.system.createReaderThemeContext
@@ -76,6 +76,7 @@ import eu.kanade.tachiyomi.util.system.hasDisplayCutout
 import eu.kanade.tachiyomi.util.system.isNightMode
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
+import eu.kanade.tachiyomi.util.view.copy
 import eu.kanade.tachiyomi.util.view.popupMenu
 import eu.kanade.tachiyomi.util.view.setTooltip
 import eu.kanade.tachiyomi.widget.listener.SimpleAnimationListener
@@ -158,14 +159,16 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
         applyAppTheme(preferences)
 
         // Setup shared element transitions
-        window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
-        findViewById<View>(android.R.id.content).transitionName = SHARED_ELEMENT_NAME
-        setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
-        window.sharedElementEnterTransition = buildContainerTransform(true)
-        window.sharedElementReturnTransition = buildContainerTransform(false)
+        findViewById<View>(android.R.id.content)?.let { contentView ->
+            window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+            contentView.transitionName = SHARED_ELEMENT_NAME
+            setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+            window.sharedElementEnterTransition = buildContainerTransform(true)
+            window.sharedElementReturnTransition = buildContainerTransform(false)
 
-        // Postpone custom transition until manga ready
-        postponeEnterTransition()
+            // Postpone custom transition until manga ready
+            postponeEnterTransition()
+        }
 
         super.onCreate(savedInstanceState)
 
@@ -389,23 +392,32 @@ class ReaderActivity : BaseRxActivity<ReaderActivityBinding, ReaderPresenter>() 
 
         initBottomShortcuts()
 
-        val alpha = if (isNightMode()) 230 else 242 // 90% dark 95% light
-        val toolbarColor = ColorUtils.setAlphaComponent(getThemeColor(R.attr.colorToolbar), alpha)
-        listOf(
-            binding.toolbarBottom,
-            binding.leftChapter,
-            binding.readerSeekbar,
-            binding.rightChapter
-        ).forEach {
-            it.backgroundTintMode = PorterDuff.Mode.DST_IN
-            it.backgroundTintList = ColorStateList.valueOf(toolbarColor)
+        val toolbarBackground = (binding.toolbar.background as MaterialShapeDrawable).apply {
+            elevation = resources.getDimension(R.dimen.m3_sys_elevation_level2)
+            alpha = if (isNightMode()) 230 else 242 // 90% dark 95% light
+        }
+        binding.toolbarBottom.background = toolbarBackground.copy(this@ReaderActivity)
+
+        binding.readerSeekbar.background = toolbarBackground.copy(this@ReaderActivity)?.apply {
+            setCornerSize(999F)
+        }
+        listOf(binding.leftChapter, binding.rightChapter).forEach {
+            it.background = binding.readerSeekbar.background.copy(this)
+            it.foreground = RippleDrawable(
+                ColorStateList.valueOf(getThemeColor(android.R.attr.colorControlHighlight)),
+                null,
+                it.background
+            )
         }
 
+        val toolbarColor = ColorUtils.setAlphaComponent(
+            toolbarBackground.resolvedTintColor,
+            toolbarBackground.alpha
+        )
         window.statusBarColor = toolbarColor
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             window.navigationBarColor = toolbarColor
         }
-        (binding.toolbar.background as MaterialShapeDrawable).fillColor = ColorStateList.valueOf(toolbarColor)
 
         // Set initial visibility
         setMenuVisibility(menuVisible)

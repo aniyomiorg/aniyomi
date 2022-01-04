@@ -65,4 +65,7 @@ object EpisodeTable {
 
     val addScanlator: String
         get() = "ALTER TABLE $TABLE ADD COLUMN $COL_SCANLATOR TEXT DEFAULT NULL"
+
+    val fixDateUploadIfNeeded: String
+        get() = "UPDATE $TABLE SET $COL_DATE_UPLOAD = $COL_DATE_FETCH WHERE $COL_DATE_UPLOAD = 0"
 }

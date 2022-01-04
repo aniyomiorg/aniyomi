@@ -9,10 +9,10 @@ import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.getPreferenceKey
 import eu.kanade.tachiyomi.animesource.icon
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.data.preference.minusAssign
-import eu.kanade.tachiyomi.data.preference.plusAssign
 import eu.kanade.tachiyomi.ui.setting.SettingsController
+import eu.kanade.tachiyomi.util.preference.minusAssign
 import eu.kanade.tachiyomi.util.preference.onChange
+import eu.kanade.tachiyomi.util.preference.plusAssign
 import eu.kanade.tachiyomi.util.preference.switchPreferenceCategory
 import eu.kanade.tachiyomi.util.preference.titleRes
 import eu.kanade.tachiyomi.util.system.LocaleHelper
@@ -42,7 +42,7 @@ class AnimeSourceFilterController : SettingsController() {
         )
 
         orderedLangs.forEach { lang ->
-            val sources = sourcesByLang[lang].orEmpty().sortedBy { it.name.lowercase() }
+            val sources = sourcesByLang[lang].orEmpty().sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, { it.name }))
 
             // Create a preference group and set initial state and change listener
             switchPreferenceCategory {

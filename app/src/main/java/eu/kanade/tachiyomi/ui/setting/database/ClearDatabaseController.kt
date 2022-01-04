@@ -139,7 +139,7 @@ class ClearDatabaseController :
     override fun configureFab(fab: ExtendedFloatingActionButton) {
         fab.setIconResource(R.drawable.ic_delete_24dp)
         fab.setText(R.string.action_delete)
-        fab.isVisible = false
+        fab.hide()
         fab.setOnClickListener {
             val ctrl = ClearDatabaseSourcesDialog()
             ctrl.targetController = this
@@ -150,7 +150,11 @@ class ClearDatabaseController :
 
     private fun updateFab() {
         val adapter = adapter ?: return
-        actionFab?.isVisible = adapter.selectedItemCount > 0
+        if (adapter.selectedItemCount > 0) {
+            actionFab?.show()
+        } else {
+            actionFab?.hide()
+        }
     }
 
     override fun cleanupFab(fab: ExtendedFloatingActionButton) {

@@ -12,7 +12,6 @@ import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.toSAnime
 import eu.kanade.tachiyomi.animesource.model.toSEpisode
-import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateRanker.rankingScheme
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService.Companion.start
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
@@ -24,6 +23,8 @@ import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.preference.MANGA_FULLY_READ
+import eu.kanade.tachiyomi.data.preference.MANGA_ONGOING
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -258,14 +259,20 @@ class AnimelibUpdateService(
 
             listToInclude.minus(listToExclude)
         }
-        if (target == Target.CHAPTERS && preferences.updateOnlyNonCompleted()) {
-            listToUpdate = listToUpdate.filterNot { it.status == SAnime.COMPLETED }
+
+        if (target == Target.CHAPTERS) {
+            val restrictions = preferences.libraryUpdateMangaRestriction().get()
+            if (MANGA_ONGOING in restrictions) {
+                listToUpdate = listToUpdate.filterNot { it.status == SAnime.COMPLETED }
+            }
+            if (MANGA_FULLY_READ in restrictions) {
+                listToUpdate = listToUpdate.filter { it.unseen == 0 }
+            }
         }
 
-        val selectedScheme = preferences.libraryUpdatePrioritization().get()
         animeToUpdate = listToUpdate
             .distinctBy { it.id }
-            .sortedWith(rankingScheme[selectedScheme])
+            .sortedBy { it.title }
 
         // Warn when excessively checking a single source
         val maxUpdatesFromSource = animeToUpdate
@@ -545,6 +552,7 @@ class AnimelibUpdateService(
             if (errors.isNotEmpty()) {
                 val file = createFileInCacheDir("aniyomi_update_errors.txt")
                 file.bufferedWriter().use { out ->
+                    out.write(getString(R.string.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n")
                     // Error file format:
                     // ! Error
                     //   # Source
@@ -570,3 +578,4 @@ class AnimelibUpdateService(
 }
 
 private const val ANIME_PER_SOURCE_QUEUE_WARNING_THRESHOLD = 60
+private const val ERROR_LOG_HELP_URL = "https://aniyomi.jmir.xyz/help/guides/troubleshooting"

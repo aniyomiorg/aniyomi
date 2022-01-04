@@ -206,14 +206,13 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      * being overwritten.
      *
      * @param error string containing error information.
-     * @param chapter string containing chapter title.
+     * @param episode string containing episode title.
      */
-    fun onError(error: String? = null, chapter: String? = null) {
+    fun onError(error: String? = null, episode: String? = null, animeTitle: String? = null) {
         // Create notification
         with(errorNotificationBuilder) {
             setContentTitle(
-                chapter
-                    ?: context.getString(R.string.download_notifier_downloader_title)
+                animeTitle?.plus(": $episode") ?: context.getString(R.string.download_notifier_downloader_title)
             )
             setContentText(error ?: context.getString(R.string.download_notifier_unknown_error))
             setSmallIcon(R.drawable.ic_warning_white_24dp)

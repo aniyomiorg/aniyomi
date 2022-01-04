@@ -42,7 +42,7 @@ class AnimeEpisodeHistoryGetResolver : DefaultGetResolver<AnimeEpisodeHistory>()
 
         // Make certain column conflicts are dealt with
         anime.id = episode.anime_id
-        anime.url = cursor.getString(cursor.getColumnIndex("animeUrl"))
+        anime.url = cursor.getString(cursor.getColumnIndexOrThrow("animeUrl"))
         episode.id = history.episode_id
 
         // Return result

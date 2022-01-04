@@ -16,8 +16,8 @@ class AnimelibAnimeGetResolver : DefaultGetResolver<AnimelibAnime>(), BaseAnimeG
         val manga = AnimelibAnime()
 
         mapBaseFromCursor(manga, cursor)
-        manga.unread = cursor.getInt(cursor.getColumnIndex(AnimeTable.COL_UNREAD))
-        manga.category = cursor.getInt(cursor.getColumnIndex(AnimeTable.COL_CATEGORY))
+        manga.unseen = cursor.getInt(cursor.getColumnIndexOrThrow(AnimeTable.COL_UNREAD))
+        manga.category = cursor.getInt(cursor.getColumnIndexOrThrow(AnimeTable.COL_CATEGORY))
 
         return manga
     }

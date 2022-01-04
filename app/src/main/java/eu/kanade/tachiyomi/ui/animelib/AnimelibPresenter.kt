@@ -129,7 +129,7 @@ class AnimelibPresenter(
 
         val filterFnUnread: (AnimelibItem) -> Boolean = unread@{ item ->
             if (filterUnread == State.IGNORE.value) return@unread true
-            val isUnread = item.anime.unread != 0
+            val isUnread = item.anime.unseen != 0
 
             return@unread if (filterUnread == State.INCLUDE.value) isUnread
             else !isUnread
@@ -212,7 +212,7 @@ class AnimelibPresenter(
                 }
 
                 item.unreadCount = if (showUnreadBadges) {
-                    item.anime.unread
+                    item.anime.unseen
                 } else {
                     // Unset unread count if not enabled
                     -1
@@ -286,10 +286,10 @@ class AnimelibPresenter(
                 SortModeSetting.LAST_CHECKED -> i2.anime.last_update.compareTo(i1.anime.last_update)
                 SortModeSetting.UNREAD -> when {
                     // Ensure unread content comes first
-                    i1.anime.unread == i2.anime.unread -> 0
-                    i1.anime.unread == 0 -> if (sortAscending) 1 else -1
-                    i2.anime.unread == 0 -> if (sortAscending) -1 else 1
-                    else -> i1.anime.unread.compareTo(i2.anime.unread)
+                    i1.anime.unseen == i2.anime.unseen -> 0
+                    i1.anime.unseen == 0 -> if (sortAscending) 1 else -1
+                    i2.anime.unseen == 0 -> if (sortAscending) -1 else 1
+                    else -> i1.anime.unseen.compareTo(i2.anime.unseen)
                 }
                 SortModeSetting.TOTAL_CHAPTERS -> {
                     val anime1TotalEpisode = totalEpisodeAnime[i1.anime.id!!] ?: 0
@@ -369,7 +369,7 @@ class AnimelibPresenter(
      */
     private fun getAnimelibAnimesObservable(): Observable<AnimelibMap> {
         val defaultLibraryDisplayMode = preferences.libraryDisplayMode()
-        val shouldSetFromCategory = preferences.categorisedDisplaySettings()
+        val shouldSetFromCategory = preferences.categorizedDisplaySettings()
         return db.getAnimelibAnimes().asRxObservable()
             .map { list ->
                 list.map { animelibAnime ->

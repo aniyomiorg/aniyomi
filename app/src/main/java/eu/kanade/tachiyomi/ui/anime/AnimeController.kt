@@ -15,7 +15,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.FloatRange
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -102,6 +101,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.getCoordinates
 import eu.kanade.tachiyomi.util.view.shrinkOnScroll
 import eu.kanade.tachiyomi.util.view.snack
+import eu.kanade.tachiyomi.widget.ActionModeWithToolbar
 import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -121,7 +121,7 @@ import kotlin.math.min
 class AnimeController :
     NucleusController<MangaControllerBinding, AnimePresenter>,
     FabController,
-    ActionMode.Callback,
+    ActionModeWithToolbar.Callback,
     FlexibleAdapter.OnItemClickListener,
     FlexibleAdapter.OnItemLongClickListener,
     BaseEpisodesAdapter.OnEpisodeClickListener,
@@ -179,7 +179,7 @@ class AnimeController :
     /**
      * Action mode for multiple selection.
      */
-    private var actionMode: ActionMode? = null
+    private var actionMode: ActionModeWithToolbar? = null
 
     /**
      * Selected items. Used to restore selections after a rotation.
@@ -260,11 +260,6 @@ class AnimeController :
                 it.layoutManager = LinearLayoutManager(view.context)
                 it.setHasFixedSize(true)
             }
-        binding.actionToolbar.applyInsetter {
-            type(navigationBars = true) {
-                margin(bottom = true, horizontal = true)
-            }
-        }
 
         if (anime == null || source == null) return
 
@@ -330,7 +325,7 @@ class AnimeController :
 
         actionFabScrollListener = actionFab?.shrinkOnScroll(episodeRecycler)
         // Initially set FAB invisible; will become visible if unseen episodes are present
-        actionFab?.isVisible = false
+        actionFab?.hide()
 
         binding.swipeRefresh.refreshes()
             .onEach {
@@ -365,6 +360,9 @@ class AnimeController :
     }
 
     private fun updateToolbarTitleAlpha(@FloatRange(from = 0.0, to = 1.0) alpha: Float? = null) {
+        // Controller may actually already be destroyed by the time this gets run
+        binding ?: return
+
         val scrolledList = binding.fullRecycler ?: binding.infoRecycler!!
         (activity as? MainActivity)?.binding?.appbar?.titleTextAlpha = when {
             // Specific alpha provided
@@ -417,16 +415,19 @@ class AnimeController :
         val context = view?.context ?: return
         val adapter = episodesAdapter ?: return
         val fab = actionFab ?: return
-        fab.isVisible = adapter.items.any { !it.seen }
         if (adapter.items.any { it.seen }) {
             fab.text = context.getString(R.string.action_resume)
+        }
+        if (adapter.items.any { !it.seen }) {
+            fab.show()
+        } else {
+            fab.hide()
         }
     }
 
     override fun onDestroyView(view: View) {
         recyclerViewUpdatesToolbarTitleAlpha(false)
         destroyActionModeIfNeeded()
-        binding.actionToolbar.destroy()
         animeInfoAdapter = null
         episodesHeaderAdapter = null
         episodesAdapter = null
@@ -1157,11 +1158,7 @@ class AnimeController :
 
     private fun createActionModeIfNeeded() {
         if (actionMode == null) {
-            actionMode = (activity as? AppCompatActivity)?.startSupportActionMode(this)
-            binding.actionToolbar.show(
-                actionMode!!,
-                R.menu.episode_selection
-            ) { onActionItemClicked(it!!) }
+            actionMode = (activity as MainActivity).startActionModeAndToolbar(this)
         }
     }
 
@@ -1177,6 +1174,10 @@ class AnimeController :
         return true
     }
 
+    override fun onCreateActionToolbar(menuInflater: MenuInflater, menu: Menu) {
+        menuInflater.inflate(R.menu.chapter_selection, menu)
+    }
+
     override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
         val count = episodesAdapter?.selectedItemCount ?: 0
         if (count == 0) {
@@ -1185,27 +1186,24 @@ class AnimeController :
         } else {
             mode.title = count.toString()
 
-            val episodes = getSelectedEpisodes()
-            binding.actionToolbar.findItem(R.id.action_download)?.isVisible = !isLocalSource && episodes.any { !it.isDownloaded }
-            binding.actionToolbar.findItem(R.id.action_delete)?.isVisible = !isLocalSource && episodes.any { it.isDownloaded }
-            binding.actionToolbar.findItem(R.id.action_bookmark)?.isVisible = episodes.any { !it.episode.bookmark }
-            binding.actionToolbar.findItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.episode.bookmark }
-            binding.actionToolbar.findItem(R.id.action_mark_as_read)?.isVisible = episodes.any { !it.episode.seen }
-            binding.actionToolbar.findItem(R.id.action_mark_as_unread)?.isVisible = episodes.all { it.episode.seen }
-            binding.actionToolbar.findItem(R.id.action_play_externally)?.isVisible = !preferences.alwaysUseExternalPlayer()
-            binding.actionToolbar.findItem(R.id.action_play_internally)?.isVisible = preferences.alwaysUseExternalPlayer()
-
             // Hide FAB to avoid interfering with the bottom action toolbar
-            actionFab?.isVisible = false
+            actionFab?.hide()
         }
-        return false
+        return true
+    }
+
+    override fun onPrepareActionToolbar(toolbar: ActionModeWithToolbar, menu: Menu) {
+        val episodes = getSelectedEpisodes()
+        if (episodes.isEmpty()) return
+        toolbar.findToolbarItem(R.id.action_download)?.isVisible = !isLocalSource && episodes.any { !it.isDownloaded }
+        toolbar.findToolbarItem(R.id.action_delete)?.isVisible = !isLocalSource && episodes.any { it.isDownloaded }
+        toolbar.findToolbarItem(R.id.action_bookmark)?.isVisible = episodes.any { !it.episode.bookmark }
+        toolbar.findToolbarItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.episode.bookmark }
+        toolbar.findToolbarItem(R.id.action_mark_as_read)?.isVisible = episodes.any { !it.episode.seen }
+        toolbar.findToolbarItem(R.id.action_mark_as_unread)?.isVisible = episodes.all { it.episode.seen }
     }
 
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-        return onActionItemClicked(item)
-    }
-
-    private fun onActionItemClicked(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_select_all -> selectAll()
             R.id.action_select_inverse -> selectInverse()
@@ -1224,11 +1222,13 @@ class AnimeController :
     }
 
     override fun onDestroyActionMode(mode: ActionMode) {
-        binding.actionToolbar.hide()
         episodesAdapter?.mode = SelectableAdapter.Mode.SINGLE
         episodesAdapter?.clearSelection()
         selectedEpisodes.clear()
         actionMode = null
+    }
+
+    override fun onDestroyActionToolbar() {
         updateFabVisibility()
     }
 

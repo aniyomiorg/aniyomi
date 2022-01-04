@@ -64,7 +64,8 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
     suspend fun search(query: String): List<TrackSearch> {
         return withIOContext {
             val url = "$baseApiUrl/manga".toUri().buildUpon()
-                .appendQueryParameter("q", query)
+                // MAL API throws a 400 when the query is over 64 characters...
+                .appendQueryParameter("q", query.take(64))
                 .appendQueryParameter("nsfw", "true")
                 .build()
             authClient.newCall(GET(url.toString()))
@@ -86,6 +87,8 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
     suspend fun searchAnime(query: String): List<AnimeTrackSearch> {
         return withIOContext {
             val url = "$baseApiUrl/anime".toUri().buildUpon()
+                // MAL API throws a 400 when the query is over 64 characters...
+                .appendQueryParameter("q", query.take(64))
                 .appendQueryParameter("q", query)
                 .appendQueryParameter("nsfw", "true")
                 .build()

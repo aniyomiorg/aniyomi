@@ -47,10 +47,10 @@ open class AnimeHistoryPutResolver : DefaultPutResolver<AnimeHistory>() {
 class AnimeHistoryGetResolver : DefaultGetResolver<AnimeHistory>() {
 
     override fun mapFromCursor(cursor: Cursor): AnimeHistory = AnimeHistoryImpl().apply {
-        id = cursor.getLong(cursor.getColumnIndex(COL_ID))
-        episode_id = cursor.getLong(cursor.getColumnIndex(COL_EPISODE_ID))
-        last_seen = cursor.getLong(cursor.getColumnIndex(COL_LAST_SEEN))
-        time_seen = cursor.getLong(cursor.getColumnIndex(COL_TIME_SEEN))
+        id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_ID))
+        episode_id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_EPISODE_ID))
+        last_seen = cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_SEEN))
+        time_seen = cursor.getLong(cursor.getColumnIndexOrThrow(COL_TIME_SEEN))
     }
 }
 

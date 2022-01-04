@@ -23,10 +23,9 @@ import eu.kanade.tachiyomi.data.backup.BackupRestoreService
 import eu.kanade.tachiyomi.data.backup.full.FullBackupRestoreValidator
 import eu.kanade.tachiyomi.data.backup.full.models.BackupFull
 import eu.kanade.tachiyomi.data.backup.legacy.LegacyBackupRestoreValidator
-import eu.kanade.tachiyomi.data.preference.asImmediateFlow
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.requestPermissionsSafe
-import eu.kanade.tachiyomi.util.preference.defaultValue
+import eu.kanade.tachiyomi.util.preference.bindTo
 import eu.kanade.tachiyomi.util.preference.entriesRes
 import eu.kanade.tachiyomi.util.preference.infoPreference
 import eu.kanade.tachiyomi.util.preference.intListPreference
@@ -36,11 +35,10 @@ import eu.kanade.tachiyomi.util.preference.preference
 import eu.kanade.tachiyomi.util.preference.preferenceCategory
 import eu.kanade.tachiyomi.util.preference.summaryRes
 import eu.kanade.tachiyomi.util.preference.titleRes
-import eu.kanade.tachiyomi.util.system.MiuiUtil
+import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import eu.kanade.tachiyomi.data.preference.PreferenceKeys as Keys
 
 class SettingsBackupController : SettingsController() {
 
@@ -63,7 +61,7 @@ class SettingsBackupController : SettingsController() {
             summaryRes = R.string.pref_create_backup_summ
 
             onClick {
-                if (MiuiUtil.isMiui() && MiuiUtil.isMiuiOptimizationDisabled()) {
+                if (DeviceUtil.isMiui && DeviceUtil.isMiuiOptimizationDisabled()) {
                     context.toast(R.string.restore_miui_warning, Toast.LENGTH_LONG)
                 }
 
@@ -82,7 +80,7 @@ class SettingsBackupController : SettingsController() {
             summaryRes = R.string.pref_restore_backup_summ
 
             onClick {
-                if (MiuiUtil.isMiui() && MiuiUtil.isMiuiOptimizationDisabled()) {
+                if (DeviceUtil.isMiui && DeviceUtil.isMiuiOptimizationDisabled()) {
                     context.toast(R.string.restore_miui_warning, Toast.LENGTH_LONG)
                 }
 
@@ -104,7 +102,7 @@ class SettingsBackupController : SettingsController() {
             titleRes = R.string.pref_backup_service_category
 
             intListPreference {
-                key = Keys.backupInterval
+                bindTo(preferences.backupInterval())
                 titleRes = R.string.pref_backup_interval
                 entriesRes = arrayOf(
                     R.string.update_never,
@@ -115,7 +113,6 @@ class SettingsBackupController : SettingsController() {
                     R.string.update_weekly
                 )
                 entryValues = arrayOf("0", "6", "12", "24", "48", "168")
-                defaultValue = "0"
                 summary = "%s"
 
                 onChange { newValue ->
@@ -125,7 +122,7 @@ class SettingsBackupController : SettingsController() {
                 }
             }
             preference {
-                key = Keys.backupDirectory
+                bindTo(preferences.backupsDirectory())
                 titleRes = R.string.pref_backup_directory
 
                 onClick {
@@ -137,8 +134,7 @@ class SettingsBackupController : SettingsController() {
                     }
                 }
 
-                preferences.backupInterval().asImmediateFlow { isVisible = it > 0 }
-                    .launchIn(viewScope)
+                visibleIf(preferences.backupInterval()) { it > 0 }
 
                 preferences.backupsDirectory().asFlow()
                     .onEach { path ->
@@ -148,15 +144,13 @@ class SettingsBackupController : SettingsController() {
                     .launchIn(viewScope)
             }
             intListPreference {
-                key = Keys.numberOfBackups
+                bindTo(preferences.numberOfBackups())
                 titleRes = R.string.pref_backup_slots
                 entries = arrayOf("1", "2", "3", "4", "5")
                 entryValues = entries
-                defaultValue = "1"
                 summary = "%s"
 
-                preferences.backupInterval().asImmediateFlow { isVisible = it > 0 }
-                    .launchIn(viewScope)
+                visibleIf(preferences.backupInterval()) { it > 0 }
             }
         }
 

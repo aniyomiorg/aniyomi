@@ -48,7 +48,7 @@ class LicensesController :
                 val fields = resolveTachiRClass()?.fields?.toStringArray()
                     ?: return@withIOContext null
                 Libs(view.context, fields).libraries
-                    .sortedBy { it.libraryName.lowercase() }
+                    .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, { it.libraryName }))
                     .map { LicensesItem(it) }
             } ?: return@launchUI
             binding.progress.hide()

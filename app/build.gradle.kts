@@ -29,7 +29,7 @@ android {
         applicationId = "xyz.jmir.tachiyomi.mi"
         minSdk = AndroidConfig.minSdk
         targetSdk = AndroidConfig.targetSdk
-        versionCode = 71
+        versionCode = 72
         versionName = "0.12.3.5"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -140,7 +140,7 @@ android {
 dependencies {
     implementation(kotlin("reflect", version = BuildPluginsVersion.KOTLIN))
 
-    val coroutinesVersion = "1.5.2"
+    val coroutinesVersion = "1.6.0"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 
@@ -148,13 +148,13 @@ dependencies {
     implementation("org.tachiyomi:source-api:1.1")
 
     // AndroidX libraries
-    implementation("androidx.annotation:annotation:1.3.0")
+    implementation("androidx.annotation:annotation:1.4.0-alpha01")
     implementation("androidx.appcompat:appcompat:1.4.0")
     implementation("androidx.biometric:biometric-ktx:1.2.0-alpha04")
     implementation("androidx.browser:browser:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.2")
-    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0-beta01")
-    implementation("androidx.core:core-ktx:1.8.0-alpha01")
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0-rc01")
+    implementation("androidx.core:core-ktx:1.8.0-alpha02")
     implementation("androidx.core:core-splashscreen:1.0.0-alpha02")
     implementation("androidx.recyclerview:recyclerview:1.3.0-alpha01")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
@@ -185,11 +185,13 @@ dependencies {
     implementation("org.conscrypt:conscrypt-android:2.5.2")
 
     // Data serialization (JSON, protobuf)
-    val kotlinSerializationVersion = "1.3.1"
+    val kotlinSerializationVersion = "1.3.2"
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$kotlinSerializationVersion")
 
     // JavaScript engine
+    implementation("app.cash.quickjs:quickjs-android:0.9.2")
+    // TODO: remove Duktape once all extensions are using QuickJS
     implementation("com.squareup.duktape:duktape-android:1.4.0")
 
     // HTML parser
@@ -201,13 +203,13 @@ dependencies {
     implementation("com.github.junrar:junrar:7.4.0")
 
     // Database
-    implementation("androidx.sqlite:sqlite-ktx:2.2.0-rc01")
+    implementation("androidx.sqlite:sqlite-ktx:2.2.0")
     implementation("com.github.inorichi.storio:storio-common:8be19de@aar")
     implementation("com.github.inorichi.storio:storio-sqlite:8be19de@aar")
     implementation("com.github.requery:sqlite-android:3.36.0")
 
     // Preferences
-    implementation("androidx.preference:preference-ktx:1.2.0-beta01")
+    implementation("androidx.preference:preference-ktx:1.2.0-rc01")
     implementation("com.github.tfcporciuncula.flow-preferences:flow-preferences:1.4.0")
 
     // Model View Presenter
@@ -261,9 +263,9 @@ dependencies {
     implementation("com.squareup.logcat:logcat:0.1")
 
     // Crash reports/analytics
-    implementation("ch.acra:acra-http:5.8.1")
-    "standardImplementation"("com.google.firebase:firebase-crashlytics-ktx:18.2.4")
-    "standardImplementation"("com.google.firebase:firebase-analytics-ktx:20.0.0")
+    implementation("ch.acra:acra-http:5.8.4")
+    "standardImplementation"("com.google.firebase:firebase-crashlytics-ktx:18.2.6")
+    "standardImplementation"("com.google.firebase:firebase-analytics-ktx:20.0.2")
 
     // Licenses
     implementation("com.mikepenz:aboutlibraries-core:${BuildPluginsVersion.ABOUTLIB_PLUGIN}")

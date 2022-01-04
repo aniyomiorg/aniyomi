@@ -29,7 +29,6 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.data.preference.asImmediateFlow
 import eu.kanade.tachiyomi.databinding.SourceControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCategoriesDialog
@@ -41,6 +40,7 @@ import eu.kanade.tachiyomi.ui.library.setting.DisplayModeSetting
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
+import eu.kanade.tachiyomi.util.preference.asImmediateFlow
 import eu.kanade.tachiyomi.util.system.connectivityManager
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.openInBrowser
@@ -159,13 +159,12 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
         )
         filterSheet?.setFilters(presenter.filterItems)
 
-        // TODO: [ExtendedFloatingActionButton] hide/show methods don't work properly
-        filterSheet?.setOnShowListener { actionFab?.isVisible = false }
-        filterSheet?.setOnDismissListener { actionFab?.isVisible = true }
+        filterSheet?.setOnShowListener { actionFab?.hide() }
+        filterSheet?.setOnDismissListener { actionFab?.show() }
 
         actionFab?.setOnClickListener { filterSheet?.show() }
 
-        actionFab?.isVisible = true
+        actionFab?.show()
     }
 
     override fun configureFab(fab: ExtendedFloatingActionButton) {
@@ -175,7 +174,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
         fab.setIconResource(R.drawable.ic_filter_list_24dp)
 
         // Controlled by initFilterSheet()
-        fab.isVisible = false
+        fab.hide()
         initFilterSheet()
     }
 

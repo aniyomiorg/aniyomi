@@ -52,65 +52,48 @@ fun syncEpisodesWithSource(
     // Episodes whose metadata have changed.
     val toChange = mutableListOf<Episode>()
 
-    for (sourceEpisode in sourceEpisodes) {
-        val dbEpisode = dbEpisodes.find { it.url == sourceEpisode.url }
-
-        // Add the episode if not in db already, or update if the metadata changed.
-        if (dbEpisode == null) {
-            toAdd.add(sourceEpisode)
-        } else {
-            // this forces metadata update for the main viewable things in the episode list
-            if (source is AnimeHttpSource) {
-                source.prepareNewEpisode(sourceEpisode, anime)
-            }
-
-            EpisodeRecognition.parseEpisodeNumber(sourceEpisode, anime)
-
-            if (shouldUpdateDbEpisode(dbEpisode, sourceEpisode)) {
-                if (dbEpisode.name != sourceEpisode.name && downloadManager.isEpisodeDownloaded(dbEpisode, anime)) {
-                    downloadManager.renameEpisode(source, anime, dbEpisode, sourceEpisode)
-                }
-                dbEpisode.scanlator = sourceEpisode.scanlator
-                dbEpisode.name = sourceEpisode.name
-                dbEpisode.date_upload = sourceEpisode.date_upload
-                dbEpisode.episode_number = sourceEpisode.episode_number
-                dbEpisode.source_order = sourceEpisode.source_order
-                toChange.add(dbEpisode)
-            }
-        }
-    }
-
-    // Recognize number for new episodes.
-    toAdd.forEach {
-        if (source is AnimeHttpSource) {
-            source.prepareNewEpisode(it, anime)
-        }
-        EpisodeRecognition.parseEpisodeNumber(it, anime)
-    }
-
-    // Episodes from the db not in the source.
+    // Episodes from the db not in source.
     val toDelete = dbEpisodes.filterNot { dbEpisode ->
         sourceEpisodes.any { sourceEpisode ->
             dbEpisode.url == sourceEpisode.url
         }
     }
 
+    for (sourceEpisode in sourceEpisodes) {
+        // This forces metadata update for the main viewable things in the episode list.
+        if (source is AnimeHttpSource) {
+            source.prepareNewEpisode(sourceEpisode, anime)
+        }
+        // Recognize episode number for the episode.
+        EpisodeRecognition.parseEpisodeNumber(sourceEpisode, anime)
+
+        val dbEpisode = dbEpisodes.find { it.url == sourceEpisode.url }
+
+        // Add the episode if not in db already, or update if the metadata changed.
+        if (dbEpisode == null) {
+            if (sourceEpisode.date_upload == 0L) {
+                sourceEpisode.date_upload = Date().time
+            }
+            toAdd.add(sourceEpisode)
+        } else {
+            if (shouldUpdateDbEpisode(dbEpisode, sourceEpisode)) {
+                if (dbEpisode.name != sourceEpisode.name && downloadManager.isEpisodeDownloaded(dbEpisode, anime)) {
+                    downloadManager.renameEpisode(source, anime, dbEpisode, sourceEpisode)
+                }
+                dbEpisode.scanlator = sourceEpisode.scanlator
+                dbEpisode.name = sourceEpisode.name
+                dbEpisode.episode_number = sourceEpisode.episode_number
+                dbEpisode.source_order = sourceEpisode.source_order
+                if (sourceEpisode.date_upload != 0L) {
+                    dbEpisode.date_upload = sourceEpisode.date_upload
+                }
+                toChange.add(dbEpisode)
+            }
+        }
+    }
+
     // Return if there's nothing to add, delete or change, avoiding unnecessary db transactions.
     if (toAdd.isEmpty() && toDelete.isEmpty() && toChange.isEmpty()) {
-        val topEpisodes = dbEpisodes.sortedByDescending { it.date_upload }.take(4)
-        val newestDate = topEpisodes.getOrNull(0)?.date_upload ?: 0L
-
-        // Recalculate update rate if unset and enough chapters are present
-        if (anime.next_update == 0L && topEpisodes.size > 1) {
-            var delta = 0L
-            for (i in 0 until topEpisodes.size - 1) {
-                delta += topEpisodes[i].date_upload - topEpisodes[i + 1].date_upload
-            }
-            delta /= topEpisodes.size - 1
-            anime.next_update = newestDate + delta
-            db.updateNextUpdated(anime).executeAsBlocking()
-        }
-
         return Pair(emptyList(), emptyList())
     }
 
@@ -118,13 +101,14 @@ fun syncEpisodesWithSource(
 
     db.inTransaction {
         val deletedEpisodeNumbers = TreeSet<Float>()
-        val deletedReadEpisodeNumbers = TreeSet<Float>()
+        val deletedSeenEpisodeNumbers = TreeSet<Float>()
+
         if (toDelete.isNotEmpty()) {
-            for (c in toDelete) {
-                if (c.seen) {
-                    deletedReadEpisodeNumbers.add(c.episode_number)
+            for (episode in toDelete) {
+                if (episode.seen) {
+                    deletedSeenEpisodeNumbers.add(episode.episode_number)
                 }
-                deletedEpisodeNumbers.add(c.episode_number)
+                deletedEpisodeNumbers.add(episode.episode_number)
             }
             db.deleteEpisodes(toDelete).executeAsBlocking()
         }
@@ -135,14 +119,20 @@ fun syncEpisodesWithSource(
             var now = Date().time
 
             for (i in toAdd.indices.reversed()) {
-                val c = toAdd[i]
-                c.date_fetch = now++
-                // Try to mark already read episodes as read when the source deletes them
-                if (c.isRecognizedNumber && c.episode_number in deletedReadEpisodeNumbers) {
-                    c.seen = true
-                }
-                if (c.isRecognizedNumber && c.episode_number in deletedEpisodeNumbers) {
-                    readded.add(c)
+                val episode = toAdd[i]
+                episode.date_fetch = now++
+
+                if (episode.isRecognizedNumber && episode.episode_number in deletedEpisodeNumbers) {
+                    // Try to mark already read episodes as seen when the source deletes them
+                    if (episode.episode_number in deletedSeenEpisodeNumbers) {
+                        episode.seen = true
+                    }
+                    // Try to to use the fetch date it originally had to not pollute 'Updates' tab
+                    toDelete.filter { it.episode_number == episode.episode_number }
+                        .minByOrNull { it.date_fetch }!!.let {
+                        episode.date_fetch = it.date_fetch
+                    }
+                    readded.add(episode)
                 }
             }
             val episodes = db.insertEpisodes(toAdd).executeAsBlocking()
@@ -153,19 +143,6 @@ fun syncEpisodesWithSource(
 
         if (toChange.isNotEmpty()) {
             db.insertEpisodes(toChange).executeAsBlocking()
-        }
-
-        val topEpisodes = db.getEpisodes(anime).executeAsBlocking()
-            .sortedByDescending { it.date_upload }
-            .take(4) // Recalculate next update since episodes were changed
-        if (topEpisodes.size > 1) {
-            var delta = 0L
-            for (i in 0 until topEpisodes.size - 1) {
-                delta += topEpisodes[i].date_upload - topEpisodes[i + 1].date_upload
-            }
-            delta /= topEpisodes.size - 1
-            anime.next_update = topEpisodes[0].date_upload + delta
-            db.updateNextUpdated(anime).executeAsBlocking()
         }
 
         // Fix order in source.

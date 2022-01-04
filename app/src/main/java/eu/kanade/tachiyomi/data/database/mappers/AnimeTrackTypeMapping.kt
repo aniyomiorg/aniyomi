@@ -65,19 +65,19 @@ class AnimeTrackPutResolver : DefaultPutResolver<AnimeTrack>() {
 class AnimeTrackGetResolver : DefaultGetResolver<AnimeTrack>() {
 
     override fun mapFromCursor(cursor: Cursor): AnimeTrack = AnimeTrackImpl().apply {
-        id = cursor.getLong(cursor.getColumnIndex(COL_ID))
-        anime_id = cursor.getLong(cursor.getColumnIndex(COL_ANIME_ID))
-        sync_id = cursor.getInt(cursor.getColumnIndex(COL_SYNC_ID))
-        media_id = cursor.getInt(cursor.getColumnIndex(COL_MEDIA_ID))
-        library_id = cursor.getLong(cursor.getColumnIndex(COL_LIBRARY_ID))
-        title = cursor.getString(cursor.getColumnIndex(COL_TITLE))
-        last_episode_seen = cursor.getFloat(cursor.getColumnIndex(COL_LAST_EPISODE_SEEN))
-        total_episodes = cursor.getInt(cursor.getColumnIndex(COL_TOTAL_EPISODES))
-        status = cursor.getInt(cursor.getColumnIndex(COL_STATUS))
-        score = cursor.getFloat(cursor.getColumnIndex(COL_SCORE))
-        tracking_url = cursor.getString(cursor.getColumnIndex(COL_TRACKING_URL))
-        started_watching_date = cursor.getLong(cursor.getColumnIndex(COL_START_DATE))
-        finished_watching_date = cursor.getLong(cursor.getColumnIndex(COL_FINISH_DATE))
+        id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_ID))
+        anime_id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_ANIME_ID))
+        sync_id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_SYNC_ID))
+        media_id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_MEDIA_ID))
+        library_id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_LIBRARY_ID))
+        title = cursor.getString(cursor.getColumnIndexOrThrow(COL_TITLE))
+        last_episode_seen = cursor.getFloat(cursor.getColumnIndexOrThrow(COL_LAST_EPISODE_SEEN))
+        total_episodes = cursor.getInt(cursor.getColumnIndexOrThrow(COL_TOTAL_EPISODES))
+        status = cursor.getInt(cursor.getColumnIndexOrThrow(COL_STATUS))
+        score = cursor.getFloat(cursor.getColumnIndexOrThrow(COL_SCORE))
+        tracking_url = cursor.getString(cursor.getColumnIndexOrThrow(COL_TRACKING_URL))
+        started_watching_date = cursor.getLong(cursor.getColumnIndexOrThrow(COL_START_DATE))
+        finished_watching_date = cursor.getLong(cursor.getColumnIndexOrThrow(COL_FINISH_DATE))
     }
 }
 

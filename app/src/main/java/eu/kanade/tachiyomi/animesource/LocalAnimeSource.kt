@@ -28,7 +28,6 @@ import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
-import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource, UnmeteredSource {
@@ -104,9 +103,9 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource, Unm
         when (state?.index) {
             0 -> {
                 animeDirs = if (state.ascending) {
-                    animeDirs.sortedBy { it.name.lowercase(Locale.ENGLISH) }
+                    animeDirs.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, { it.name }))
                 } else {
-                    animeDirs.sortedByDescending { it.name.lowercase(Locale.ENGLISH) }
+                    animeDirs.sortedWith(compareByDescending(String.CASE_INSENSITIVE_ORDER, { it.name }))
                 }
             }
             1 -> {
@@ -144,7 +143,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource, Unm
             .asSequence()
             .mapNotNull { File(it, anime.key).listFiles()?.toList() }
             .flatten()
-            .firstOrNull { it.extension.lowercase() == "json" }
+            .firstOrNull { it.extension.equals("json", ignoreCase = true) }
 
         return if (localDetails != null) {
             val obj = json.decodeFromStream<JsonObject>(localDetails.inputStream())
@@ -203,7 +202,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource, Unm
     }
 
     private fun isSupportedFile(extension: String): Boolean {
-        return extension.lowercase(Locale.ROOT) in SUPPORTED_FILE_TYPES
+        return extension.lowercase() in SUPPORTED_FILE_TYPES
     }
 
     fun getFormat(episode: SEpisode): Format {

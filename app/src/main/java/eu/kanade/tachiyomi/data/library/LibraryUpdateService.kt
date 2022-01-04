@@ -17,9 +17,10 @@ import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.database.models.toMangaInfo
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadService
-import eu.kanade.tachiyomi.data.library.LibraryUpdateRanker.rankingScheme
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService.Companion.start
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.preference.MANGA_FULLY_READ
+import eu.kanade.tachiyomi.data.preference.MANGA_ONGOING
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -258,14 +259,20 @@ class LibraryUpdateService(
 
             listToInclude.minus(listToExclude)
         }
-        if (target == Target.CHAPTERS && preferences.updateOnlyNonCompleted()) {
-            listToUpdate = listToUpdate.filterNot { it.status == SManga.COMPLETED }
+
+        if (target == Target.CHAPTERS) {
+            val restrictions = preferences.libraryUpdateMangaRestriction().get()
+            if (MANGA_ONGOING in restrictions) {
+                listToUpdate = listToUpdate.filterNot { it.status == SManga.COMPLETED }
+            }
+            if (MANGA_FULLY_READ in restrictions) {
+                listToUpdate = listToUpdate.filter { it.unread == 0 }
+            }
         }
 
-        val selectedScheme = preferences.libraryUpdatePrioritization().get()
         mangaToUpdate = listToUpdate
             .distinctBy { it.id }
-            .sortedWith(rankingScheme[selectedScheme])
+            .sortedBy { it.title }
 
         // Warn when excessively checking a single source
         val maxUpdatesFromSource = mangaToUpdate
@@ -545,6 +552,7 @@ class LibraryUpdateService(
             if (errors.isNotEmpty()) {
                 val file = createFileInCacheDir("tachiyomi_update_errors.txt")
                 file.bufferedWriter().use { out ->
+                    out.write(getString(R.string.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n")
                     // Error file format:
                     // ! Error
                     //   # Source
@@ -570,3 +578,4 @@ class LibraryUpdateService(
 }
 
 private const val MANGA_PER_SOURCE_QUEUE_WARNING_THRESHOLD = 60
+private const val ERROR_LOG_HELP_URL = "https://tachiyomi.org/help/guides/troubleshooting"

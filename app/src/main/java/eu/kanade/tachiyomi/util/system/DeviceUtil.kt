@@ -1,12 +1,13 @@
 package eu.kanade.tachiyomi.util.system
 
 import android.annotation.SuppressLint
+import android.os.Build
 import logcat.LogPriority
 
-object MiuiUtil {
+object DeviceUtil {
 
-    fun isMiui(): Boolean {
-        return getSystemProperty("ro.miui.ui.version.name")?.isNotEmpty() ?: false
+    val isMiui by lazy {
+        getSystemProperty("ro.miui.ui.version.name")?.isNotEmpty() ?: false
     }
 
     @SuppressLint("PrivateApi")
@@ -23,6 +24,10 @@ object MiuiUtil {
         } catch (e: Exception) {
             false
         }
+    }
+
+    val isSamsung by lazy {
+        Build.MANUFACTURER.equals("samsung", ignoreCase = true)
     }
 
     @SuppressLint("PrivateApi")

@@ -5,6 +5,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.preference.PreferenceScreen
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.util.preference.bindTo
 import eu.kanade.tachiyomi.util.preference.defaultValue
 import eu.kanade.tachiyomi.util.preference.entriesRes
 import eu.kanade.tachiyomi.util.preference.intListPreference
@@ -38,9 +39,8 @@ class SettingsGeneralController : SettingsController() {
             summary = "%s"
         }
         switchPreference {
-            key = Keys.showUpdatesNavBadge
+            bindTo(preferences.showUpdatesNavBadge())
             titleRes = R.string.pref_library_update_show_tab_badge
-            defaultValue = false
         }
         switchPreference {
             key = Keys.confirmExit
@@ -64,7 +64,7 @@ class SettingsGeneralController : SettingsController() {
             titleRes = R.string.pref_category_locale
 
             listPreference {
-                key = Keys.lang
+                bindTo(preferences.lang())
                 titleRes = R.string.pref_language
 
                 val langs = mutableListOf<Pair<String, String>>()

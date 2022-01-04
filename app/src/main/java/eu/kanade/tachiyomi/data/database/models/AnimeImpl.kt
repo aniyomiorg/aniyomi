@@ -26,8 +26,6 @@ open class AnimeImpl : Anime {
 
     override var last_update: Long = 0
 
-    override var next_update: Long = 0
-
     override var date_added: Long = 0
 
     override var initialized: Boolean = false

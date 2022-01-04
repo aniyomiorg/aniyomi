@@ -209,7 +209,9 @@ open class GlobalAnimeSearchController(
      * Opens a catalogue with the given search.
      */
     override fun onTitleClick(source: AnimeCatalogueSource) {
-        presenter.preferences.lastUsedAnimeSource().set(source.id)
+        if (!preferences.incognitoMode().get()) {
+            preferences.lastUsedSource().set(source.id)
+        }
         router.pushController(BrowseAnimeSourceController(source, presenter.query).withFadeTransaction())
     }
 }

@@ -20,7 +20,7 @@ class AnimeEpisodeGetResolver : DefaultGetResolver<AnimeEpisode>() {
         val anime = animeGetResolver.mapFromCursor(cursor)
         val episode = episodeGetResolver.mapFromCursor(cursor)
         anime.id = episode.anime_id
-        anime.url = cursor.getString(cursor.getColumnIndex("animeUrl"))
+        anime.url = cursor.getString(cursor.getColumnIndexOrThrow("animeUrl"))
 
         return AnimeEpisode(anime, episode)
     }

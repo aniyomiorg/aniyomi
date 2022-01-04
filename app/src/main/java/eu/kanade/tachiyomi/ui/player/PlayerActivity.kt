@@ -184,7 +184,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun setVisibilities() {
         val alpha = if (isNightMode()) 230 else 242 // 90% dark 95% light
-        val toolbarColor = ColorUtils.setAlphaComponent(getThemeColor(R.attr.colorToolbar), alpha)
+        val toolbarColor = ColorUtils.setAlphaComponent(getThemeColor(R.attr.colorSurface), alpha)
         window.statusBarColor = toolbarColor
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             window.navigationBarColor = toolbarColor

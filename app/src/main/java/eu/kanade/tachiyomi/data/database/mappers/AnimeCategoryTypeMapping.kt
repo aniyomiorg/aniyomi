@@ -44,9 +44,9 @@ class AnimeCategoryPutResolver : DefaultPutResolver<AnimeCategory>() {
 class AnimeCategoryGetResolver : DefaultGetResolver<AnimeCategory>() {
 
     override fun mapFromCursor(cursor: Cursor): AnimeCategory = AnimeCategory().apply {
-        id = cursor.getLong(cursor.getColumnIndex(COL_ID))
-        anime_id = cursor.getLong(cursor.getColumnIndex(COL_ANIME_ID))
-        category_id = cursor.getInt(cursor.getColumnIndex(COL_CATEGORY_ID))
+        id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_ID))
+        anime_id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_ANIME_ID))
+        category_id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_CATEGORY_ID))
     }
 }
 

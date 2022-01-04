@@ -65,19 +65,19 @@ class EpisodePutResolver : DefaultPutResolver<Episode>() {
 class EpisodeGetResolver : DefaultGetResolver<Episode>() {
 
     override fun mapFromCursor(cursor: Cursor): Episode = EpisodeImpl().apply {
-        id = cursor.getLong(cursor.getColumnIndex(COL_ID))
-        anime_id = cursor.getLong(cursor.getColumnIndex(COL_ANIME_ID))
-        url = cursor.getString(cursor.getColumnIndex(COL_URL))
-        name = cursor.getString(cursor.getColumnIndex(COL_NAME))
-        scanlator = cursor.getString(cursor.getColumnIndex(COL_SCANLATOR))
-        seen = cursor.getInt(cursor.getColumnIndex(COL_SEEN)) == 1
-        bookmark = cursor.getInt(cursor.getColumnIndex(COL_BOOKMARK)) == 1
-        date_fetch = cursor.getLong(cursor.getColumnIndex(COL_DATE_FETCH))
-        date_upload = cursor.getLong(cursor.getColumnIndex(COL_DATE_UPLOAD))
-        last_second_seen = cursor.getLong(cursor.getColumnIndex(COL_LAST_SECOND_SEEN))
-        total_seconds = cursor.getLong(cursor.getColumnIndex(COL_TOTAL_SECONDS))
-        episode_number = cursor.getFloat(cursor.getColumnIndex(COL_EPISODE_NUMBER))
-        source_order = cursor.getInt(cursor.getColumnIndex(COL_SOURCE_ORDER))
+        id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_ID))
+        anime_id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_ANIME_ID))
+        url = cursor.getString(cursor.getColumnIndexOrThrow(COL_URL))
+        name = cursor.getString(cursor.getColumnIndexOrThrow(COL_NAME))
+        scanlator = cursor.getString(cursor.getColumnIndexOrThrow(COL_SCANLATOR))
+        seen = cursor.getInt(cursor.getColumnIndexOrThrow(COL_SEEN)) == 1
+        bookmark = cursor.getInt(cursor.getColumnIndexOrThrow(COL_BOOKMARK)) == 1
+        date_fetch = cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_FETCH))
+        date_upload = cursor.getLong(cursor.getColumnIndexOrThrow(COL_DATE_UPLOAD))
+        last_second_seen = cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_SECOND_SEEN))
+        total_seconds = cursor.getLong(cursor.getColumnIndexOrThrow(COL_TOTAL_SECONDS))
+        episode_number = cursor.getFloat(cursor.getColumnIndexOrThrow(COL_EPISODE_NUMBER))
+        source_order = cursor.getInt(cursor.getColumnIndexOrThrow(COL_SOURCE_ORDER))
     }
 }
 

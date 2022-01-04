@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            app:layout_scrollFlags="scroll|enterAlways|snap" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
@@ -73,6 +73,12 @@
     <include
         android:id="@+id/fab_layout"
         layout="@layout/main_activity_fab" />
+
+    <eu.kanade.tachiyomi.widget.ActionModeWithToolbar
+        android:id="@+id/action_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
     <eu.kanade.tachiyomi.widget.TachiyomiBottomNavigationView
         android:id="@+id/bottom_nav"

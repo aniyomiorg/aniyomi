@@ -12,6 +12,7 @@ import eu.kanade.tachiyomi.data.database.models.Chapter
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.download.model.DownloadQueue
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.Page
@@ -35,7 +36,11 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import uy.kohesive.injekt.injectLazy
+import java.io.BufferedOutputStream
 import java.io.File
+import java.util.zip.CRC32
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 /**
  * This class is the one in charge of downloading chapters.
@@ -59,6 +64,8 @@ class Downloader(
 ) {
 
     private val chapterCache: ChapterCache by injectLazy()
+
+    private val preferences: PreferencesHelper by injectLazy()
 
     /**
      * Store for persisting downloads across restarts.
@@ -292,7 +299,7 @@ class Downloader(
         val availSpace = DiskUtil.getAvailableStorageSpace(mangaDir)
         if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
             download.status = Download.State.ERROR
-            notifier.onError(context.getString(R.string.download_insufficient_space), download.chapter.name)
+            notifier.onError(context.getString(R.string.download_insufficient_space), download.chapter.name, download.manga.title)
             return@defer Observable.just(download)
         }
 
@@ -338,7 +345,7 @@ class Downloader(
             // If the page list threw, it will resume here
             .onErrorReturn { error ->
                 download.status = Download.State.ERROR
-                notifier.onError(error.message, download.chapter.name)
+                notifier.onError(error.message, download.chapter.name, download.manga.title)
                 download
             }
     }
@@ -484,11 +491,49 @@ class Downloader(
 
         // Only rename the directory if it's downloaded.
         if (download.status == Download.State.DOWNLOADED) {
-            tmpDir.renameTo(dirname)
+            if (preferences.saveChaptersAsCBZ().get()) {
+                archiveChapter(mangaDir, dirname, tmpDir)
+            } else {
+                tmpDir.renameTo(dirname)
+            }
             cache.addChapter(dirname, mangaDir, download.manga)
 
             DiskUtil.createNoMediaFile(tmpDir, context)
         }
+    }
+
+    /**
+     * Archive the chapter pages as a CBZ.
+     */
+    private fun archiveChapter(
+        mangaDir: UniFile,
+        dirname: String,
+        tmpDir: UniFile,
+    ) {
+        val zip = mangaDir.createFile("$dirname.cbz.tmp")
+        ZipOutputStream(BufferedOutputStream(zip.openOutputStream())).use { zipOut ->
+            zipOut.setMethod(ZipEntry.STORED)
+
+            tmpDir.listFiles()?.forEach { img ->
+                img.openInputStream().use { input ->
+                    val data = input.readBytes()
+                    val size = img.length()
+                    val entry = ZipEntry(img.name).apply {
+                        val crc = CRC32().apply {
+                            update(data)
+                        }
+                        setCrc(crc.value)
+
+                        compressedSize = size
+                        setSize(size)
+                    }
+                    zipOut.putNextEntry(entry)
+                    zipOut.write(data)
+                }
+            }
+        }
+        zip.renameTo("$dirname.cbz")
+        tmpDir.delete()
     }
 
     /**

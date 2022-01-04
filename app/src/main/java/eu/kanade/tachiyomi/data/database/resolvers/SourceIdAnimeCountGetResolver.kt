@@ -15,8 +15,8 @@ class SourceIdAnimeCountGetResolver : DefaultGetResolver<SourceIdAnimeCount>() {
 
     @SuppressLint("Range")
     override fun mapFromCursor(cursor: Cursor): SourceIdAnimeCount {
-        val sourceID = cursor.getLong(cursor.getColumnIndex(AnimeTable.COL_SOURCE))
-        val count = cursor.getInt(cursor.getColumnIndex(COL_COUNT))
+        val sourceID = cursor.getLong(cursor.getColumnIndexOrThrow(AnimeTable.COL_SOURCE))
+        val count = cursor.getInt(cursor.getColumnIndexOrThrow(COL_COUNT))
 
         return SourceIdAnimeCount(sourceID, count)
     }
