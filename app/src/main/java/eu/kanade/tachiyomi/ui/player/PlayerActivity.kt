@@ -118,7 +118,6 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var episode: Episode
     private lateinit var anime: Anime
     private lateinit var source: AnimeSource
-    private val defaultUserAgentString = WebSettings.getDefaultUserAgent(this)
     private lateinit var uri: String
     private var videos = emptyList<Video>()
     private var isBuffering = true
@@ -250,6 +249,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun newDataSourceFactory(): DefaultHttpDataSource.Factory {
+        val defaultUserAgentString = WebSettings.getDefaultUserAgent(baseContext)
         return DefaultHttpDataSource.Factory().apply {
             val currentHeaders = videos.getOrNull(currentQuality)?.headers
             val headers = currentHeaders?.toMultimap()
