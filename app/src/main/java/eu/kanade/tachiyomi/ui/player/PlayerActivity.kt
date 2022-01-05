@@ -101,7 +101,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var dataSourceFactory: DataSource.Factory
     private lateinit var dbProvider: StandaloneDatabaseProvider
     private val cacheSize = 100L * 1024L * 1024L // 100 MB
-    private lateinit var simpleCache: SimpleCache
+    private var simpleCache: SimpleCache? = null
     private lateinit var cacheFactory: CacheDataSource.Factory
     private lateinit var mediaSourceFactory: MediaSourceFactory
     private lateinit var playerView: DoubleTapPlayerView
@@ -200,11 +200,15 @@ class PlayerActivity : AppCompatActivity() {
         exoPlayer = newPlayer()
         dbProvider = StandaloneDatabaseProvider(baseContext)
         val cacheFolder = File(baseContext.filesDir, "media")
-        simpleCache = SimpleCache(
-            cacheFolder,
-            LeastRecentlyUsedCacheEvictor(cacheSize),
-            dbProvider
-        )
+        simpleCache = if (SimpleCache.isCacheFolderLocked(cacheFolder)) {
+            null
+        } else {
+            SimpleCache(
+                cacheFolder,
+                LeastRecentlyUsedCacheEvictor(cacheSize),
+                dbProvider
+            )
+        }
 
         initPlayer()
     }
@@ -234,11 +238,15 @@ class PlayerActivity : AppCompatActivity() {
                 dataSourceFactory = newDataSourceFactory()
             }
             logcat(LogPriority.INFO) { "playing $uri" }
-            cacheFactory = CacheDataSource.Factory().apply {
-                setCache(simpleCache)
-                setUpstreamDataSourceFactory(dataSourceFactory)
+            if (simpleCache != null) {
+                cacheFactory = CacheDataSource.Factory().apply {
+                    setCache(simpleCache!!)
+                    setUpstreamDataSourceFactory(dataSourceFactory)
+                }
+                mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
+            } else {
+                mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
             }
-            mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
             mediaItem = MediaItem.Builder()
                 .setUri(uri)
                 .setMimeType(getMime(uri))
@@ -506,11 +514,15 @@ class PlayerActivity : AppCompatActivity() {
         } else {
             newDataSourceFactory()
         }
-        cacheFactory = CacheDataSource.Factory().apply {
-            setCache(simpleCache)
-            setUpstreamDataSourceFactory(dataSourceFactory)
+        if (simpleCache != null) {
+            cacheFactory = CacheDataSource.Factory().apply {
+                setCache(simpleCache!!)
+                setUpstreamDataSourceFactory(dataSourceFactory)
+            }
+            mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
+        } else {
+            mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
         }
-        mediaSourceFactory = DefaultMediaSourceFactory(cacheFactory)
         exoPlayer.release()
         exoPlayer = newPlayer()
         exoPlayer.setMediaSource(mediaSourceFactory.createMediaSource(mediaItem), resumeAt)
@@ -598,7 +610,7 @@ class PlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         deletePendingEpisodes()
         releasePlayer()
-        simpleCache.release()
+        simpleCache?.release()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
             finishAndRemoveTask()
         }
