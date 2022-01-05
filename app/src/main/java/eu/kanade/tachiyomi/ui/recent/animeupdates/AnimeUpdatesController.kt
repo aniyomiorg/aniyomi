@@ -351,7 +351,7 @@ class AnimeUpdatesController :
     }
 
     override fun onCreateActionToolbar(menuInflater: MenuInflater, menu: Menu) {
-        menuInflater.inflate(R.menu.updates_chapter_selection, menu)
+        menuInflater.inflate(R.menu.updates_episode_selection, menu)
     }
 
     override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {

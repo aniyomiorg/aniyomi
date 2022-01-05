@@ -1175,7 +1175,7 @@ class AnimeController :
     }
 
     override fun onCreateActionToolbar(menuInflater: MenuInflater, menu: Menu) {
-        menuInflater.inflate(R.menu.chapter_selection, menu)
+        menuInflater.inflate(R.menu.episode_selection, menu)
     }
 
     override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
@@ -1201,6 +1201,8 @@ class AnimeController :
         toolbar.findToolbarItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.episode.bookmark }
         toolbar.findToolbarItem(R.id.action_mark_as_read)?.isVisible = episodes.any { !it.episode.seen }
         toolbar.findToolbarItem(R.id.action_mark_as_unread)?.isVisible = episodes.all { it.episode.seen }
+        toolbar.findToolbarItem(R.id.action_play_externally)?.isVisible = !preferences.alwaysUseExternalPlayer()
+        toolbar.findToolbarItem(R.id.action_play_internally)?.isVisible = preferences.alwaysUseExternalPlayer()
     }
 
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
