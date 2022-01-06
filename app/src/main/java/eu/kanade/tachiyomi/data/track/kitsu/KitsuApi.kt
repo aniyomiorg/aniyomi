@@ -26,6 +26,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) {
 
@@ -220,7 +222,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
     private suspend fun algoliaSearch(key: String, query: String): List<TrackSearch> {
         return withIOContext {
             val jsonObject = buildJsonObject {
-                put("params", "query=$query$algoliaFilter")
+                put("params", "query=${URLEncoder.encode(query, StandardCharsets.UTF_8.name())}$algoliaFilter")
             }
 
             client.newCall(
@@ -249,7 +251,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
     private suspend fun algoliaSearchAnime(key: String, query: String): List<AnimeTrackSearch> {
         return withIOContext {
             val jsonObject = buildJsonObject {
-                put("params", "query=$query$algoliaFilterAnime")
+                put("params", "query=${URLEncoder.encode(query, StandardCharsets.UTF_8.name())}$algoliaFilterAnime")
             }
 
             client.newCall(
