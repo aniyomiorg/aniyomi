@@ -20,7 +20,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.github.vkay94.dtpv.DoubleTapPlayerView
@@ -73,8 +72,6 @@ import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAp
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
-import eu.kanade.tachiyomi.util.system.getThemeColor
-import eu.kanade.tachiyomi.util.system.isNightMode
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
@@ -91,7 +88,6 @@ import java.util.Date
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: WatcherActivityBinding
-    private val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
     private val preferences: PreferencesHelper = Injekt.get()
     private val incognitoMode = preferences.incognitoMode().get()
     private val db: AnimeDatabaseHelper = Injekt.get()
@@ -181,15 +177,16 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun setVisibilities() {
-        val alpha = if (isNightMode()) 230 else 242 // 90% dark 95% light
-        val toolbarColor = ColorUtils.setAlphaComponent(getThemeColor(R.attr.colorSurface), alpha)
-        window.statusBarColor = toolbarColor
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            window.navigationBarColor = toolbarColor
-        }
-        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        // TODO: replace this atrocity
+        binding.root.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LOW_PROFILE or
+            View.SYSTEM_UI_FLAG_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
