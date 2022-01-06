@@ -276,7 +276,7 @@ class AnimelibController(
                 R.string.information_empty_library,
                 listOf(
                     EmptyView.Action(R.string.getting_started_guide, R.drawable.ic_help_24dp) {
-                        activity?.openInBrowser("https://tachiyomi.org/help/guides/getting-started")
+                        activity?.openInBrowser("https://aniyomi.jmir.xyz/help/guides/getting-started")
                     }
                 ),
             )

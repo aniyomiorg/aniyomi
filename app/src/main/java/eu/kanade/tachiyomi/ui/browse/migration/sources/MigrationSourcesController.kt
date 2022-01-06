@@ -133,4 +133,4 @@ class MigrationSourcesController :
     }
 }
 
-private const val HELP_URL = "https://tachiyomi.org/help/guides/source-migration/"
+private const val HELP_URL = "https://aniyomi.jmir.xyz/help/guides/source-migration/"

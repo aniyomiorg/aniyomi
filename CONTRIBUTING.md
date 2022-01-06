@@ -14,7 +14,7 @@ If you're interested in taking on [an open issue](https://github.com/tachiyomior
 
 # Translations
 
-Translations are done externally via Weblate. See [our website](https://tachiyomi.org/help/contribution/#translation) for more details.
+Translations are done externally via Weblate. See [our website](https://aniyomi.jmir.xyz/help/contribution/#translation) for more details.
 
 
 # Forks

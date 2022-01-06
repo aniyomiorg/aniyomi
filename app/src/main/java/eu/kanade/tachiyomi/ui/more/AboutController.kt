@@ -83,7 +83,7 @@ class AboutController : SettingsController(), NoAppBarElevationController {
             titleRes = R.string.help_translate
 
             onClick {
-                openInBrowser("https://tachiyomi.org/help/contribution/#translation")
+                openInBrowser("https://aniyomi.jmir.xyz/help/contribution/#translation")
             }
         }
         preference {
