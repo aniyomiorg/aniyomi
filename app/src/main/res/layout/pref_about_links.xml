@@ -47,7 +47,7 @@
         android:padding="16dp"
         android:src="@drawable/ic_facebook_24dp"
         app:tint="?attr/colorAccent"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText" />-->
 
     <ImageButton
         android:id="@+id/btn_reddit"
@@ -58,7 +58,7 @@
         android:padding="16dp"
         android:src="@drawable/ic_reddit_24dp"
         app:tint="?attr/colorAccent"
-        tools:ignore="HardcodedText" />-->
+        tools:ignore="HardcodedText" />
 
     <ImageButton
         android:id="@+id/btn_github"
