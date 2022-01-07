@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import androidx.core.content.FileProvider
 import com.google.android.exoplayer2.util.MimeTypes
 import eu.kanade.tachiyomi.animesource.AnimeSource
@@ -33,7 +32,7 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
             videoUrl = Uri.parse(video.videoUrl)
         }
         val uri = if (videoUri != null && Build.VERSION.SDK_INT >= 24 && videoUri.scheme != "content") {
-            FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", File(videoUri.toString()))
+            FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", File(videoUri.path!!))
         } else videoUri ?: videoUrl
         val pkgName = preferences.externalPlayerPreference()
         val anime = anime
@@ -67,7 +66,6 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
             if (isPackageInstalled(pkgName, context.packageManager)) {
                 component = getComponent(pkgName)
             }
-            Log.i("bruh", uri.toString())
             setDataAndType(uri, "video/*")
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             putExtra("title", episode.name)
