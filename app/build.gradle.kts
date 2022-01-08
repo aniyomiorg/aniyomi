@@ -299,7 +299,10 @@ dependencies {
     implementation("com.github.vkay94:DoubleTapPlayerView:1.0.2")
 
     // FFmpeg
-    implementation("com.arthenica:ffmpeg-kit-https:4.5.LTS")
+    // implementation("com.arthenica:ffmpeg-kit-https:4.5.LTS")
+
+    // mpv-android
+    implementation("com.github.jmir1:mpv-android:v0.2")
 }
 
 tasks {

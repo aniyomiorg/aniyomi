@@ -83,7 +83,7 @@ import eu.kanade.tachiyomi.ui.browse.migration.search.AnimeSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
-import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.player.NewPlayerActivity
 import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
 import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
 import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
@@ -1049,7 +1049,7 @@ class AnimeController :
 
     private fun openEpisode(episode: Episode, hasAnimation: Boolean = false, playerChangeRequested: Boolean = false) {
         val context = view?.context ?: return
-        val intent = PlayerActivity.newIntent(context, presenter.anime, episode)
+        val intent = NewPlayerActivity.newIntent(context, presenter.anime, episode)
         val useInternal = preferences.alwaysUseExternalPlayer() == playerChangeRequested
         if (hasAnimation) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)

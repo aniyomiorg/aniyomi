@@ -111,6 +111,17 @@
                 android:resource="@xml/s_pen_actions"/>
         </activity>
         <activity
+            android:name=".ui.player.NewPlayerActivity"
+            android:launchMode="singleTask"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.samsung.android.support.REMOTE_ACTION" />
+            </intent-filter>
+
+            <meta-data android:name="com.samsung.android.support.REMOTE_ACTION"
+                android:resource="@xml/s_pen_actions"/>
+        </activity>
+        <activity
             android:name=".ui.security.UnlockActivity"
             android:theme="@style/Theme.Tachiyomi"
             android:exported="false" />

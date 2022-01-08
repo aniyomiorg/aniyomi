@@ -36,27 +36,27 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory { DatabaseHelper(app) }
 
+        addSingletonFactory { AnimeDatabaseHelper(app) }
+
         addSingletonFactory { ChapterCache(app) }
 
+        addSingletonFactory { EpisodeCache(app) }
+
         addSingletonFactory { CoverCache(app) }
+
+        addSingletonFactory { AnimeCoverCache(app) }
 
         addSingletonFactory { NetworkHelper(app) }
 
         addSingletonFactory { SourceManager(app).also { get<ExtensionManager>().init(it) } }
+
+        addSingletonFactory { AnimeSourceManager(app).also { get<AnimeExtensionManager>().init(it) } }
 
         addSingletonFactory { ExtensionManager(app) }
 
         addSingletonFactory { AnimeExtensionManager(app) }
 
         addSingletonFactory { DownloadManager(app) }
-
-        addSingletonFactory { AnimeDatabaseHelper(app) }
-
-        addSingletonFactory { EpisodeCache(app) }
-
-        addSingletonFactory { AnimeCoverCache(app) }
-
-        addSingletonFactory { AnimeSourceManager(app).also { get<AnimeExtensionManager>().init(it) } }
 
         addSingletonFactory { AnimeDownloadManager(app) }
 
@@ -71,10 +71,13 @@ class AppModule(val app: Application) : InjektModule {
             get<NetworkHelper>()
 
             get<SourceManager>()
+            get<AnimeSourceManager>()
 
             get<DatabaseHelper>()
+            get<AnimeDatabaseHelper>()
 
             get<DownloadManager>()
+            get<AnimeDownloadManager>()
         }
     }
 }
