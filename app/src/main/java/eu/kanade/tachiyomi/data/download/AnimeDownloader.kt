@@ -6,12 +6,12 @@ import android.content.Intent
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import android.widget.Toast
-// import com.arthenica.ffmpegkit.ExecuteCallback
-// import com.arthenica.ffmpegkit.FFmpegKitConfig
-// import com.arthenica.ffmpegkit.FFmpegSession
-// import com.arthenica.ffmpegkit.LogCallback
-// import com.arthenica.ffmpegkit.SessionState
-// import com.arthenica.ffmpegkit.StatisticsCallback
+import com.arthenica.ffmpegkit.ExecuteCallback
+import com.arthenica.ffmpegkit.FFmpegKitConfig
+import com.arthenica.ffmpegkit.FFmpegSession
+import com.arthenica.ffmpegkit.LogCallback
+import com.arthenica.ffmpegkit.SessionState
+import com.arthenica.ffmpegkit.StatisticsCallback
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
@@ -38,7 +38,7 @@ import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
 import logcat.LogPriority
-// import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Response
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -254,10 +254,10 @@ class AnimeDownloader(
         runningRelay.call(false)
 
         isFFmpegRunning = false
-        /*FFmpegKitConfig.getSessions().forEach {
+        FFmpegKitConfig.getSessions().forEach {
             it.executeCallback.apply(it)
             it.cancel()
-        }*/
+        }
 
         subscriptions.clear()
     }
@@ -480,10 +480,10 @@ class AnimeDownloader(
     }
 
     private fun isHls(video: Video): Boolean {
-        return false // video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
+        return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
     }
 
-    /*private fun hlsObservable(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
+    private fun hlsObservable(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
         isFFmpegRunning = true
         val headers = video.headers ?: source.headers
         val headerOptions = headers.joinToString("-headers ", "-headers ", " ") { "\"${it.first}: ${it.second}\"" }
@@ -513,7 +513,7 @@ class AnimeDownloader(
             .map {
                 tmpDir.findFile("$filename.mp4") ?: throw Exception("Downloaded file not found")
             }
-    }*/
+    }
 
     /**
      * Returns the parsed duration in milliseconds
@@ -533,7 +533,7 @@ class AnimeDownloader(
     }
 
     private fun newObservable(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
-        return if (isHls(video)) Observable.just(tmpDir) // hlsObservable(video, download.source, tmpDir, filename)
+        return if (isHls(video)) hlsObservable(video, download.source, tmpDir, filename)
         else download.source.fetchVideo(video)
             .map { response ->
                 val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")

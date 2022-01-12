@@ -75,7 +75,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
-                android:onClick="playlistPrev"
                 android:src="@drawable/ic_skip_previous_black_24dp"
                 app:tint="@color/tint_normal" />
 

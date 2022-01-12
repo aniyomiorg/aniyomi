@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.SeekBar
@@ -133,6 +132,50 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         binding.cycleSpeedBtn.text = getString(R.string.ui_speed, player.playbackSpeed)
     }
 
+    @Suppress("UNUSED_PARAMETER")
+    fun playPause(view: View) = player.cyclePause()
+
+    data class TrackData(val track_id: Int, val track_type: String)
+    private fun trackSwitchNotification(f: () -> TrackData) {
+        val (track_id, track_type) = f()
+        val trackPrefix = when (track_type) {
+            "audio" -> getString(R.string.track_audio)
+            "sub" -> getString(R.string.track_subs)
+            "video" -> "Video"
+            else -> "???"
+        }
+
+        if (track_id == -1) {
+            toast("$trackPrefix ${getString(R.string.track_off)}")
+            return
+        }
+
+        val trackName = player.tracks[track_type]?.firstOrNull { it.mpvId == track_id }?.name ?: "???"
+        toast("$trackPrefix $trackName")
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun cycleAudio(view: View) = trackSwitchNotification {
+        player.cycleAudio(); TrackData(player.aid, "audio")
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun cycleSub(view: View) = trackSwitchNotification {
+        player.cycleSub(); TrackData(player.sid, "sub")
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun switchDecoder(view: View) {
+        player.cycleHwdec()
+        updateDecoderButton()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun cycleSpeed(view: View) {
+        player.cycleSpeed()
+        updateSpeedButton()
+    }
+
     private fun refreshUi() {
         // forces update of entire UI, used when resuming the activity
         val paused = player.paused ?: return
@@ -193,7 +236,7 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         currentVideoList = videos
         currentVideoList?.first()?.videoUrl.let {
             MPVLib.command(arrayOf("loadfile", it))
-            presenter.currentEpisode?.last_second_seen?.let { pos -> player.timePos = (pos / 1000L).toInt() }
+            // presenter.currentEpisode?.last_second_seen?.let { pos -> player.timePos = (pos / 1000L).toInt() }
         }
         refreshUi()
     }
@@ -221,9 +264,17 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         }
     }
 
+    private fun eventPropertyUi(property: String, value: Boolean) {
+        when (property) {
+            "pause" -> updatePlaybackStatus(value)
+        }
+    }
+
     override fun eventProperty(property: String) {}
 
-    override fun eventProperty(property: String, value: Boolean) {}
+    override fun eventProperty(property: String, value: Boolean) {
+        runOnUiThread { eventPropertyUi(property, value) }
+    }
 
     override fun eventProperty(property: String, value: Long) {
         runOnUiThread { eventPropertyUi(property, value) }

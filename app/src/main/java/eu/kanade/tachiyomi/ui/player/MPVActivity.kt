@@ -925,7 +925,7 @@ class MPVActivity : BaseRxActivity<MpvActivityBinding, MPVPresenter>(), MPVLib.E
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun playPause(view: View) = player.cyclePause()
+    fun playPauser(view: View) = player.cyclePause()
 
     @Suppress("UNUSED_PARAMETER")
     fun playlistPrev(view: View) = MPVLib.command(arrayOf("playlist-prev"))
@@ -1787,7 +1787,7 @@ class MPVActivity : BaseRxActivity<MpvActivityBinding, MPVPresenter>(), MPVLib.E
 
     fun setVideoList(videos: List<Video>) {
         logcat(LogPriority.INFO) { "loaded!!" }
-        videos.first().videoUrl?.let { player.playFile(it) }
+        videos.first().videoUrl?.let { MPVLib.command(arrayOf("loadfile", it)) }
     }
 
     companion object {

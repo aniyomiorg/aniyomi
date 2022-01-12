@@ -106,6 +106,16 @@ android {
             "META-INF/*.kotlin_module",
             "META-INF/*.version",
         ))
+
+        jniLibs.pickFirsts.addAll(listOf(
+            "**/libavcodec.so",
+            "**/libavdevice.so",
+            "**/libavfilter.so",
+            "**/libavformat.so",
+            "**/libavutil.so",
+            "**/libswresample.so",
+            "**/libswscale.so",
+        ))
     }
 
     dependenciesInfo {
@@ -299,10 +309,10 @@ dependencies {
     implementation("com.github.vkay94:DoubleTapPlayerView:1.0.2")
 
     // FFmpeg
-    // implementation("com.arthenica:ffmpeg-kit-https:4.5.LTS")
+    implementation("com.arthenica:ffmpeg-kit-https:4.5.LTS")
 
     // mpv-android
-    implementation("com.github.jmir1:mpv-android:v0.1")
+    implementation("com.github.jmir1:aniyomi-mpv-lib:0.1")
 }
 
 tasks {
