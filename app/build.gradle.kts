@@ -302,7 +302,7 @@ dependencies {
     // implementation("com.arthenica:ffmpeg-kit-https:4.5.LTS")
 
     // mpv-android
-    implementation("com.github.jmir1:mpv-android:v0.2")
+    implementation("com.github.jmir1:mpv-android:v0.1")
 }
 
 tasks {

@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -83,7 +84,7 @@ import eu.kanade.tachiyomi.ui.browse.migration.search.AnimeSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
-import eu.kanade.tachiyomi.ui.player.NewPlayerActivity
+import eu.kanade.tachiyomi.ui.player.MPVActivity
 import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
 import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
 import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
@@ -1049,7 +1050,7 @@ class AnimeController :
 
     private fun openEpisode(episode: Episode, hasAnimation: Boolean = false, playerChangeRequested: Boolean = false) {
         val context = view?.context ?: return
-        val intent = NewPlayerActivity.newIntent(context, presenter.anime, episode)
+        val intent = Intent(Intent.ACTION_VIEW).setClass(context, MPVActivity::class.java).setData(Uri.parse("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")) // NewPlayerActivity.newIntent(context, presenter.anime, episode)
         val useInternal = preferences.alwaysUseExternalPlayer() == playerChangeRequested
         if (hasAnimation) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
