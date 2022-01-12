@@ -19,14 +19,14 @@ import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class NewPlayerPresenter(
+class MPVPresenter(
     private val db: AnimeDatabaseHelper = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val preferences: PreferencesHelper = Injekt.get(),
     private val delayedTrackingStore: DelayedTrackingStore = Injekt.get(),
-) : BasePresenter<NewPlayerActivity>() {
+) : BasePresenter<MPVActivity>() {
     /**
      * The anime loaded in the player. It can be null when instantiated for a short time.
      */
@@ -38,7 +38,7 @@ class NewPlayerPresenter(
      */
     private var episodeId = -1L
 
-    var currentEpisode: Episode? = null
+    private var currentEpisode: Episode? = null
 
     private var currentVideoList: List<Video>? = null
 
@@ -46,7 +46,7 @@ class NewPlayerPresenter(
      * Episode list for the active anime. It's retrieved lazily and should be accessed for the first
      * time in a background thread to avoid blocking the UI.
      */
-    val episodeList by lazy {
+    private val episodeList by lazy {
         val anime = anime!!
         val dbEpisodes = db.getEpisodes(anime).executeAsBlocking()
 
@@ -81,10 +81,6 @@ class NewPlayerPresenter(
 
         episodesForPlayer
             .sortedWith(getEpisodeSort(anime, sortDescending = false))
-    }
-
-    fun getCurrentEpisodeIndex(): Int {
-        return episodeList.indexOfFirst { currentEpisode?.id == it.id }
     }
 
     private var hasTrackers: Boolean = false
@@ -156,7 +152,7 @@ class NewPlayerPresenter(
                 { _, _ ->
                     // Ignore onNext event
                 },
-                NewPlayerActivity::setInitialEpisodeError
+                MPVActivity::setInitialEpisodeError
             )
     }
 
@@ -184,7 +180,7 @@ class NewPlayerPresenter(
                             currentVideoList = it
                             activity.setVideoList(it)
                         },
-                        NewPlayerActivity::setInitialEpisodeError
+                        MPVActivity::setInitialEpisodeError
                     )
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }

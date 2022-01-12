@@ -2,8 +2,18 @@ package eu.kanade.tachiyomi.ui.player
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.WindowManager
+import android.widget.SeekBar
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
@@ -14,12 +24,14 @@ import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAp
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
+import `is`.xyz.mpv.Utils
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
 import uy.kohesive.injekt.injectLazy
+import kotlin.math.abs
 
 @RequiresPresenter(NewPlayerPresenter::class)
-class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPresenter>() {
+class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPresenter>(), MPVLib.EventObserver {
 
     companion object {
         fun newIntent(context: Context, anime: Anime, episode: Episode): Intent {
@@ -35,8 +47,33 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
 
     private val player get() = binding.player
 
-    var currentVideoList: List<Video>? = null
+    private var userIsOperatingSeekbar = false
 
+    private var lockedUI = false
+
+    private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+            if (!fromUser) {
+                return
+            }
+            player.timePos = progress
+            updatePlaybackPos(progress)
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar) {
+            userIsOperatingSeekbar = true
+        }
+
+        override fun onStopTrackingTouch(seekBar: SeekBar) {
+            userIsOperatingSeekbar = false
+        }
+    }
+
+    private val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
+
+    private var currentVideoList: List<Video>? = null
+
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         logcat { "bruh" }
         applyAppTheme(preferences)
@@ -44,6 +81,16 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
 
         binding = NewPlayerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+
+        player.initialize(applicationContext.filesDir.path)
+        player.addObserver(this)
+
+        binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
+        // player.playFile(currentVideoList!!.first().videoUrl!!.toString())
 
         if (presenter?.needsInit() == true) {
             val anime = intent.extras!!.getLong("anime", -1)
@@ -55,14 +102,74 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
             presenter.init(anime, episode)
         }
 
-        binding.button.setOnClickListener {
-            Log.i("bruh", currentVideoList!!.first().uri!!.toString())
-            player.playFile(currentVideoList!!.first().uri!!.toString())
-            MPVLib.command(arrayOf("loadfile", currentVideoList!!.first().uri!!.toString()))
+        binding.nextBtn.setOnClickListener { refreshUi() }
+    }
+
+    fun updatePlaybackPos(position: Int) {
+        binding.playbackPositionTxt.text = prettyTime(position)
+        if (!userIsOperatingSeekbar) {
+            binding.playbackSeekbar.progress = position
         }
 
-        binding.button2.setOnClickListener {
-            player.initialize(applicationContext.filesDir.path)
+        updateDecoderButton()
+        updateSpeedButton()
+    }
+
+    private fun updatePlaybackDuration(duration: Int) {
+        binding.playbackDurationTxt.text = Utils.prettyTime(duration)
+        if (!userIsOperatingSeekbar) {
+            binding.playbackSeekbar.max = duration
+        }
+    }
+
+    private fun updateDecoderButton() {
+        if (binding.cycleDecoderBtn.visibility != View.VISIBLE) {
+            return
+        }
+        binding.cycleDecoderBtn.text = if (player.hwdecActive) "HW" else "SW"
+    }
+
+    private fun updateSpeedButton() {
+        binding.cycleSpeedBtn.text = getString(R.string.ui_speed, player.playbackSpeed)
+    }
+
+    private fun refreshUi() {
+        // forces update of entire UI, used when resuming the activity
+        val paused = player.paused ?: return
+        updatePlaybackStatus(paused)
+        player.timePos?.let { updatePlaybackPos(it) }
+        player.duration?.let { updatePlaybackDuration(it) }
+        updatePlaylistButtons()
+        player.loadTracks()
+    }
+
+    private fun updatePlaylistButtons() {
+        val plCount = presenter.episodeList.size
+        val plPos = presenter.getCurrentEpisodeIndex()
+
+        if (plCount == 1) {
+            // use View.GONE so the buttons won't take up any space
+            binding.prevBtn.visibility = View.GONE
+            binding.nextBtn.visibility = View.GONE
+            return
+        }
+        binding.prevBtn.visibility = View.VISIBLE
+        binding.nextBtn.visibility = View.VISIBLE
+
+        val g = ContextCompat.getColor(this, R.color.tint_disabled)
+        val w = ContextCompat.getColor(this, R.color.tint_normal)
+        binding.prevBtn.imageTintList = ColorStateList.valueOf(if (plPos == 0) g else w)
+        binding.nextBtn.imageTintList = ColorStateList.valueOf(if (plPos == plCount - 1) g else w)
+    }
+
+    private fun updatePlaybackStatus(paused: Boolean) {
+        val r = if (paused) R.drawable.ic_play_arrow_black_24dp else R.drawable.ic_pause_black_24dp
+        binding.playBtn.setImageResource(r)
+
+        if (paused) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
     }
 
@@ -84,5 +191,45 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
     fun setVideoList(videos: List<Video>) {
         logcat(LogPriority.INFO) { "loaded!!" }
         currentVideoList = videos
+        currentVideoList?.first()?.videoUrl.let {
+            MPVLib.command(arrayOf("loadfile", it))
+            presenter.currentEpisode?.last_second_seen?.let { pos -> player.timePos = (pos / 1000L).toInt() }
+        }
+        refreshUi()
     }
+
+    private fun prettyTime(d: Int, sign: Boolean = false): String {
+        if (sign) {
+            return (if (d >= 0) "+" else "-") + prettyTime(abs(d))
+        }
+
+        val hours = d / 3600
+        val minutes = d % 3600 / 60
+        val seconds = d % 60
+        if (hours == 0) {
+            return "%02d:%02d".format(minutes, seconds)
+        }
+        return "%d:%02d:%02d".format(hours, minutes, seconds)
+    }
+
+    // mpv events
+
+    private fun eventPropertyUi(property: String, value: Long) {
+        when (property) {
+            "time-pos" -> updatePlaybackPos(value.toInt())
+            "duration" -> updatePlaybackDuration(value.toInt())
+        }
+    }
+
+    override fun eventProperty(property: String) {}
+
+    override fun eventProperty(property: String, value: Boolean) {}
+
+    override fun eventProperty(property: String, value: Long) {
+        runOnUiThread { eventPropertyUi(property, value) }
+    }
+
+    override fun eventProperty(property: String, value: String) {}
+
+    override fun event(eventId: Int) {}
 }

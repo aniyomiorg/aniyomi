@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.player.NewPlayerActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <is.xyz.mpv.MPVView
         android:id="@+id/player"
@@ -18,6 +16,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="60dp"
         android:background="#bf000000"
         android:orientation="vertical">
 
@@ -26,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <!-- These two are only used for audio -->
             <TextView
@@ -108,6 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
+                android:onClick="playlistNext"
                 android:src="@drawable/ic_skip_next_black_24dp"
                 app:tint="@color/tint_normal" />
 
@@ -172,5 +175,99 @@
 
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="stats"
+        android:id="@+id/statsTextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#ffffff"
+        android:shadowColor="#000000"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/gestureTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:shadowColor="#000000"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="4"
+        android:text="[gesture]"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/top_controls"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:alpha="0.5"
+        android:background="#bf000000"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/topLockBtn"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="40dp"
+            android:minHeight="40dp"
+            android:onClick="lockUI"
+            android:padding="4dp"
+            android:src="@drawable/ic_lock_24dp"
+            app:tint="@color/tint_normal" />
+
+        <ImageButton
+            android:id="@+id/topPiPBtn"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="40dp"
+            android:minHeight="40dp"
+            android:onClick="goIntoPiP"
+            android:padding="4dp"
+            android:src="@drawable/ic_picture_in_picture_24dp"
+            app:tint="@color/tint_normal" />
+
+        <ImageButton
+            android:id="@+id/topMenuBtn"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="40dp"
+            android:minHeight="40dp"
+            android:onClick="openTopMenu"
+            android:padding="4dp"
+            android:src="@drawable/ic_settings_black_24dp"
+            app:tint="@color/tint_normal" />
+
+    </LinearLayout>
+
+    <!-- mismatching width/height so that the button appears exactly square-->
+    <ImageButton
+        android:id="@+id/unlockBtn"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="48dp"
+        android:layout_height="52dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="24dp"
+        android:backgroundTint="@color/background_material_dark"
+        android:onClick="unlockUI"
+        android:src="@drawable/ic_lock_open_24dp"
+        app:tint="@android:color/white"
+        android:visibility="gone" />
 
 </RelativeLayout>
