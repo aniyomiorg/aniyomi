@@ -881,7 +881,7 @@ class AnimeController :
                     duration = data.getLongExtra("extra_duration", 0L)
                 } else {
                     currentPosition = data.getIntExtra("position", 0).toLong()
-                    duration = 1440000L
+                    duration = data.getIntExtra("duration", 0).toLong()
                 }
             }
             if (cause == "playback_completion") {
