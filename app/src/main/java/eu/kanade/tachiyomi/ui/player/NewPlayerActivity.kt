@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.SeekBar
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.database.models.Anime
@@ -80,6 +81,8 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         setVisibilities()
         player.initialize(applicationContext.filesDir.path)
         player.addObserver(this)
+
+        player.setOnClickListener { binding.controls.isVisible = !binding.controls.isVisible }
 
         binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
         // player.playFile(currentVideoList!!.first().videoUrl!!.toString())
