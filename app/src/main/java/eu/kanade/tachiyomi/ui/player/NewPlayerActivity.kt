@@ -26,6 +26,7 @@ import `is`.xyz.mpv.Utils
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
 import uy.kohesive.injekt.injectLazy
+import java.io.File
 import kotlin.math.abs
 
 @RequiresPresenter(NewPlayerPresenter::class)
@@ -202,6 +203,8 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         val plCount = presenter.episodeList.size
         val plPos = presenter.getCurrentEpisodeIndex()
 
+        logcat(LogPriority.ERROR) { "count: $plCount, pos: $plPos" }
+
         if (plCount == 1) {
             // use View.GONE so the buttons won't take up any space
             binding.prevBtn.visibility = View.GONE
@@ -254,12 +257,15 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         updatePlaylistButtons()
     }
 
-    fun setHttpHeaders(headers: Map<String, String>) {
+    fun setHttpOptions(headers: Map<String, String>) {
         val httpHeaderString = headers.map {
             it.key + ": " + it.value
         }.joinToString(",")
         MPVLib.setOptionString("http-header-fields", httpHeaderString)
         MPVLib.setOptionString("tls-verify", "no")
+        MPVLib.setOptionString("cache-on-disk", "yes")
+        val cacheDir = File(applicationContext.filesDir, "media").path
+        MPVLib.setOptionString("cache-dir", cacheDir)
     }
 
     private fun prettyTime(d: Int, sign: Boolean = false): String {

@@ -185,7 +185,7 @@ class NewPlayerPresenter(
                         { activity, it ->
                             currentVideoList = it
                             if (source is AnimeHttpSource) {
-                                activity.setHttpHeaders(getHeaders(it, source, activity))
+                                activity.setHttpOptions(getHeaders(it, source, activity))
                             }
                             activity.setVideoList(it)
                         },
