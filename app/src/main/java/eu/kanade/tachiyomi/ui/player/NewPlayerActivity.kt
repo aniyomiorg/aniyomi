@@ -10,8 +10,6 @@ import android.view.WindowManager
 import android.widget.SeekBar
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.database.models.Anime
@@ -48,7 +46,7 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
 
     private var userIsOperatingSeekbar = false
 
-    private var lockedUI = false
+    // private var lockedUI = false
 
     private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -68,8 +66,6 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         }
     }
 
-    private val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
-
     private var currentVideoList: List<Video>? = null
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -81,15 +77,15 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         binding = NewPlayerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-
+        setVisibilities()
         player.initialize(applicationContext.filesDir.path)
         player.addObserver(this)
 
         binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
         // player.playFile(currentVideoList!!.first().videoUrl!!.toString())
+
+        binding.nextBtn.setOnClickListener { presenter.nextEpisode() }
+        binding.prevBtn.setOnClickListener { presenter.previousEpisode() }
 
         if (presenter?.needsInit() == true) {
             val anime = intent.extras!!.getLong("anime", -1)
@@ -100,8 +96,21 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
             }
             presenter.init(anime, episode)
         }
+    }
 
-        binding.nextBtn.setOnClickListener { refreshUi() }
+    @Suppress("DEPRECATION")
+    private fun setVisibilities() {
+        // TODO: replace this atrocity
+        binding.root.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LOW_PROFILE or
+            View.SYSTEM_UI_FLAG_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        }
     }
 
     fun updatePlaybackPos(position: Int) {
@@ -239,6 +248,14 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
             // presenter.currentEpisode?.last_second_seen?.let { pos -> player.timePos = (pos / 1000L).toInt() }
         }
         refreshUi()
+        updatePlaylistButtons()
+    }
+
+    fun setHttpHeaders(headers: Map<String, String>) {
+        val httpHeaderString = headers.map {
+            it.key + ": " + it.value
+        }.joinToString(",")
+        MPVLib.setOptionString("http-header-fields", httpHeaderString)
     }
 
     private fun prettyTime(d: Int, sign: Boolean = false): String {

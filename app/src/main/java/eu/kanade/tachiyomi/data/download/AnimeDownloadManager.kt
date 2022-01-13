@@ -193,7 +193,7 @@ class AnimeDownloadManager(
             }
 
             val file = files[0]
-            Video(file.uri.toString(), file.uri.toString(), "download", file.uri).apply { status = Video.READY }
+            Video(file.uri.toString(), "download: " + file.uri.toString(), file.uri.toString(), file.uri).apply { status = Video.READY }
         }
     }
 

@@ -312,7 +312,7 @@ dependencies {
     implementation("com.arthenica:ffmpeg-kit-https:4.5.LTS")
 
     // mpv-android
-    implementation("com.github.jmir1:aniyomi-mpv-lib:0.1")
+    implementation("com.github.jmir1:aniyomi-mpv-lib:0.2")
 }
 
 tasks {

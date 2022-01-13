@@ -1,8 +1,10 @@
 package eu.kanade.tachiyomi.ui.player
 
 import android.os.Bundle
+import android.webkit.WebSettings
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
@@ -175,6 +177,71 @@ class NewPlayerPresenter(
         val source = sourceManager.getOrStub(anime.source)
 
         currentEpisode = episodeList.first { initialEpisodeId == it.id }
+        launchIO {
+            try {
+                val currentEpisode = currentEpisode ?: throw Exception("bruh")
+                EpisodeLoader.getLinks(currentEpisode, anime, source)
+                    .subscribeFirst(
+                        { activity, it ->
+                            currentVideoList = it
+                            if (source is AnimeHttpSource) {
+                                activity.setHttpHeaders(getHeaders(it, source, activity))
+                            }
+                            activity.setVideoList(it)
+                        },
+                        NewPlayerActivity::setInitialEpisodeError
+                    )
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
+            }
+        }
+    }
+
+    private fun getHeaders(videos: List<Video>, source: AnimeHttpSource, activity: NewPlayerActivity): Map<String, String> {
+        val currentHeaders = videos.firstOrNull()?.headers
+        val headers = currentHeaders?.toMultimap()
+            ?.mapValues { it.value.getOrNull(0) ?: "" }
+            ?.toMutableMap()
+            ?: source.headers.toMultimap()
+                .mapValues { it.value.getOrNull(0) ?: "" }
+                .toMutableMap()
+        if (headers["user-agent"] == null) {
+            headers["user-agent"] = WebSettings.getDefaultUserAgent(activity)
+        }
+        return headers
+    }
+
+    fun nextEpisode() {
+        val anime = anime ?: return
+        val source = sourceManager.getOrStub(anime.source)
+
+        val index = getCurrentEpisodeIndex()
+        if (index == episodeList.lastIndex) return
+        currentEpisode = episodeList[index + 1]
+        launchIO {
+            try {
+                val currentEpisode = currentEpisode ?: throw Exception("bruh")
+                EpisodeLoader.getLinks(currentEpisode, anime, source)
+                    .subscribeFirst(
+                        { activity, it ->
+                            currentVideoList = it
+                            activity.setVideoList(it)
+                        },
+                        NewPlayerActivity::setInitialEpisodeError
+                    )
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
+            }
+        }
+    }
+
+    fun previousEpisode() {
+        val anime = anime ?: return
+        val source = sourceManager.getOrStub(anime.source)
+
+        val index = getCurrentEpisodeIndex()
+        if (index == 0) return
+        currentEpisode = episodeList[index - 1]
         launchIO {
             try {
                 val currentEpisode = currentEpisode ?: throw Exception("bruh")
