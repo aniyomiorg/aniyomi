@@ -256,6 +256,7 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
             it.key + ": " + it.value
         }.joinToString(",")
         MPVLib.setOptionString("http-header-fields", httpHeaderString)
+        MPVLib.setOptionString("tls-verify", "no")
     }
 
     private fun prettyTime(d: Int, sign: Boolean = false): String {
