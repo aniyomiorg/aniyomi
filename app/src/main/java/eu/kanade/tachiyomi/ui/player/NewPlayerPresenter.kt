@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.player
 
 import android.os.Bundle
 import android.webkit.WebSettings
+import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -39,6 +40,8 @@ class NewPlayerPresenter(
      * The episode id of the currently loaded episode. Used to restore from process kill.
      */
     private var episodeId = -1L
+
+    private var source: AnimeSource? = null
 
     var currentEpisode: Episode? = null
 
@@ -174,18 +177,20 @@ class NewPlayerPresenter(
 
         checkTrackers(anime)
 
-        val source = sourceManager.getOrStub(anime.source)
+        source = sourceManager.getOrStub(anime.source)
 
         currentEpisode = episodeList.first { initialEpisodeId == it.id }
         launchIO {
             try {
                 val currentEpisode = currentEpisode ?: throw Exception("bruh")
-                EpisodeLoader.getLinks(currentEpisode, anime, source)
+                EpisodeLoader.getLinks(currentEpisode, anime, source!!)
                     .subscribeFirst(
                         { activity, it ->
                             currentVideoList = it
-                            if (source is AnimeHttpSource) {
-                                activity.setHttpOptions(getHeaders(it, source, activity))
+                            if (source is AnimeHttpSource &&
+                                !EpisodeLoader.isDownloaded(currentEpisode, anime)
+                            ) {
+                                activity.setHttpOptions(getHeaders(it, source as AnimeHttpSource, activity))
                             }
                             activity.setVideoList(it)
                         },

@@ -11,6 +11,7 @@ import android.widget.SeekBar
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.database.models.Anime
@@ -19,6 +20,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.NewPlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
 import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAppTheme
+import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
@@ -27,7 +29,6 @@ import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
 import uy.kohesive.injekt.injectLazy
 import java.io.File
-import kotlin.math.abs
 
 @RequiresPresenter(NewPlayerPresenter::class)
 class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPresenter>(), MPVLib.EventObserver {
@@ -70,6 +71,8 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
 
     private var currentVideoList: List<Video>? = null
 
+    private var playerViewMode: Int = preferences.getPlayerViewMode()
+
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         logcat { "bruh" }
@@ -100,6 +103,22 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
             }
             presenter.init(anime, episode)
         }
+
+        setViewMode()
+    }
+
+    private fun setViewMode() {
+        when (playerViewMode) {
+            2 -> {
+                MPVLib.setOptionString("keepaspect", "yes")
+                MPVLib.setOptionString("panscan", "1.0")
+            }
+            1 -> {
+                MPVLib.setOptionString("keepaspect", "yes")
+                MPVLib.setOptionString("panscan", "0.0")
+            }
+            0 -> MPVLib.setOptionString("keepaspect", "no")
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -118,7 +137,7 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
     }
 
     fun updatePlaybackPos(position: Int) {
-        binding.playbackPositionTxt.text = prettyTime(position)
+        binding.playbackPositionTxt.text = Utils.prettyTime(position)
         if (!userIsOperatingSeekbar) {
             binding.playbackSeekbar.progress = position
         }
@@ -178,8 +197,57 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
     }
 
     @Suppress("UNUSED_PARAMETER")
+    fun cycleViewMode(view: View) {
+        playerViewMode = when (playerViewMode) {
+            0 -> 1
+            1 -> 2
+            2 -> 0
+            else -> 1
+        }
+        preferences.setPlayerViewMode(playerViewMode)
+        setViewMode()
+    }
+
+    private var currentQuality = 0
+
+    @Suppress("UNUSED_PARAMETER")
+    fun openSettings(view: View) {
+        if (currentVideoList?.isNotEmpty() == true) {
+            val qualityAlert = MaterialAlertDialogBuilder(this)
+
+            qualityAlert.setTitle(R.string.playback_quality_dialog_title)
+
+            var requestedQuality = 0
+            val qualities = currentVideoList!!.map { it.quality }.toTypedArray()
+            qualityAlert.setSingleChoiceItems(qualities, currentQuality) { qualityDialog, selectedQuality ->
+                if (selectedQuality > qualities.lastIndex) {
+                    qualityDialog.cancel()
+                } else {
+                    requestedQuality = selectedQuality
+                }
+            }
+
+            qualityAlert.setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
+                if (requestedQuality != currentQuality) changeQuality(requestedQuality)
+                qualityDialog.dismiss()
+            }
+
+            qualityAlert.setNegativeButton(android.R.string.cancel) { qualityDialog, _ ->
+                qualityDialog.cancel()
+            }
+
+            qualityAlert.show()
+        }
+    }
+
+    private fun changeQuality(quality: Int) {
+        setVideoList(null, quality, player.timePos)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
     fun switchDecoder(view: View) {
         player.cycleHwdec()
+        preferences.getPlayerViewMode()
         updateDecoderButton()
     }
 
@@ -202,8 +270,6 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
     private fun updatePlaylistButtons() {
         val plCount = presenter.episodeList.size
         val plPos = presenter.getCurrentEpisodeIndex()
-
-        logcat(LogPriority.ERROR) { "count: $plCount, pos: $plPos" }
 
         if (plCount == 1) {
             // use View.GONE so the buttons won't take up any space
@@ -246,15 +312,19 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         toast(error.message)
     }
 
-    fun setVideoList(videos: List<Video>) {
+    fun setVideoList(videos: List<Video>?, videoPos: Int = 0, timePos: Int? = null) {
         logcat(LogPriority.INFO) { "loaded!!" }
-        currentVideoList = videos
-        currentVideoList?.first()?.videoUrl.let {
+        currentVideoList = videos ?: currentVideoList
+        currentVideoList?.getOrNull(videoPos)?.videoUrl.let {
+            timePos?.let {
+                MPVLib.command(arrayOf("set", "start", "$timePos"))
+            } ?: presenter.currentEpisode?.last_second_seen?.let { pos ->
+                val intPos = pos / 1000F
+                MPVLib.command(arrayOf("set", "start", "$intPos"))
+            }
             MPVLib.command(arrayOf("loadfile", it))
-            // presenter.currentEpisode?.last_second_seen?.let { pos -> player.timePos = (pos / 1000L).toInt() }
         }
-        refreshUi()
-        updatePlaylistButtons()
+        launchUI { refreshUi() }
     }
 
     fun setHttpOptions(headers: Map<String, String>) {
@@ -266,20 +336,6 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         MPVLib.setOptionString("cache-on-disk", "yes")
         val cacheDir = File(applicationContext.filesDir, "media").path
         MPVLib.setOptionString("cache-dir", cacheDir)
-    }
-
-    private fun prettyTime(d: Int, sign: Boolean = false): String {
-        if (sign) {
-            return (if (d >= 0) "+" else "-") + prettyTime(abs(d))
-        }
-
-        val hours = d / 3600
-        val minutes = d % 3600 / 60
-        val seconds = d % 60
-        if (hours == 0) {
-            return "%02d:%02d".format(minutes, seconds)
-        }
-        return "%d:%02d:%02d".format(hours, minutes, seconds)
     }
 
     // mpv events
@@ -310,4 +366,9 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
     override fun eventProperty(property: String, value: String) {}
 
     override fun event(eventId: Int) {}
+
+    override fun onStop() {
+        player.paused = true
+        super.onStop()
+    }
 }

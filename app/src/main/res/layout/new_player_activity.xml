@@ -74,12 +74,14 @@
 
             <ImageButton
                 android:id="@+id/prevBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:background="#00000000"
-                android:src="@drawable/ic_skip_previous_black_24dp"
-                app:tint="@color/tint_normal" />
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/action_previous_chapter"
+                android:padding="@dimen/screen_edge_margin"
+                app:srcCompat="@drawable/ic_skip_previous_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="?attr/colorOnPrimarySurface" />
 
             <TextView
                 android:id="@+id/playbackPositionTxt"
@@ -107,16 +109,19 @@
 
             <ImageButton
                 android:id="@+id/nextBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:background="#00000000"
-                android:src="@drawable/ic_skip_next_black_24dp"
-                app:tint="@color/tint_normal" />
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/action_previous_chapter"
+                android:padding="@dimen/screen_edge_margin"
+                app:srcCompat="@drawable/ic_skip_next_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="?attr/colorOnPrimarySurface" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:dividerPadding="47dp"
             android:id="@+id/controls_button_group"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -124,54 +129,76 @@
             android:orientation="horizontal">
 
             <ImageButton
+                android:layout_marginHorizontal="5dp"
                 android:id="@+id/playBtn"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
                 android:onClick="playPause"
-                android:text="play"
                 android:textColor="@android:color/white"
-                app:tint="@color/tint_normal" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="?attr/colorOnPrimarySurface"
+                tools:src="@drawable/ic_play_arrow_black_24dp"/>
 
             <ImageButton
+                android:layout_marginHorizontal="5dp"
                 android:id="@+id/cycleAudioBtn"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
                 android:onClick="cycleAudio"
                 android:src="@drawable/ic_audiotrack_black_24dp"
-                android:text="..."
-                android:textColor="@android:color/white"
-                app:tint="@color/tint_normal" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="?attr/colorOnPrimarySurface" />
 
             <ImageButton
+                android:layout_marginHorizontal="5dp"
                 android:id="@+id/cycleSubsBtn"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
                 android:onClick="cycleSub"
                 android:src="@drawable/ic_subtitles_black_24dp"
-                android:text="..."
-                android:textColor="@android:color/white"
-                app:tint="@color/tint_normal" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="?attr/colorOnPrimarySurface" />
+
+            <ImageButton
+                android:layout_marginHorizontal="5dp"
+                android:id="@+id/cycleViewModeBtn"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:onClick="cycleViewMode"
+                android:src="@drawable/ic_fullscreen_black_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="?attr/colorOnPrimarySurface"
+                android:contentDescription="cycleViewMode">
+            </ImageButton>
 
             <Button
                 android:id="@+id/cycleDecoderBtn"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:onClick="switchDecoder"
                 android:text=".."
-                android:textColor="@android:color/white" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:textColor="?attr/colorOnPrimarySurface" />
 
             <Button
                 android:id="@+id/cycleSpeedBtn"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:onClick="cycleSpeed"
                 android:text=".."
-                android:textColor="@android:color/white" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:textColor="?attr/colorOnPrimarySurface" />
+
+            <ImageButton
+                android:layout_marginHorizontal="5dp"
+                android:id="@+id/settingsBtn"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:onClick="openSettings"
+                android:src="@drawable/ic_settings_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="?attr/colorOnPrimarySurface"
+                android:contentDescription="cycleViewMode" />
 
         </LinearLayout>
     </LinearLayout>
