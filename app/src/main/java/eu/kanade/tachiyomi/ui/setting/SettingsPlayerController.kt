@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.setting
 
+import android.os.Build
 import androidx.preference.PreferenceScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.preference.defaultValue
@@ -61,6 +62,14 @@ class SettingsPlayerController : SettingsController() {
             defaultValue = "10"
 
             summary = "%s"
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            switchPreference {
+                key = "player_fullscreen"
+                titleRes = R.string.pref_player_fullscreen
+                defaultValue = true
+            }
         }
 
         switchPreference {

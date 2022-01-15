@@ -114,6 +114,7 @@
         <activity
             android:name=".ui.player.NewPlayerActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="userLandscape"
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize|keyboardHidden|keyboard"
             android:supportsPictureInPicture="true"
             android:resizeableActivity="true"

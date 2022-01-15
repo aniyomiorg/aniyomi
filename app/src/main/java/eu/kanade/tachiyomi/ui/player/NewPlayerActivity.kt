@@ -73,6 +73,8 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
 
     private var playerViewMode: Int = preferences.getPlayerViewMode()
 
+    private var playerIsDestroyed = true
+
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         logcat { "bruh" }
@@ -104,20 +106,24 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
             presenter.init(anime, episode)
         }
 
-        setViewMode()
+        playerIsDestroyed = false
     }
 
     private fun setViewMode() {
         when (playerViewMode) {
             2 -> {
-                MPVLib.setOptionString("keepaspect", "yes")
+                MPVLib.setOptionString("video-aspect-override", "-1")
                 MPVLib.setOptionString("panscan", "1.0")
             }
             1 -> {
-                MPVLib.setOptionString("keepaspect", "yes")
+                MPVLib.setOptionString("video-aspect-override", "-1")
                 MPVLib.setOptionString("panscan", "0.0")
             }
-            0 -> MPVLib.setOptionString("keepaspect", "no")
+            0 -> {
+                val newAspect = "${binding.root.width}/${binding.root.height}"
+                MPVLib.setOptionString("video-aspect-override", newAspect)
+                MPVLib.setOptionString("panscan", "0.0")
+            }
         }
     }
 
@@ -131,7 +137,7 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
             View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && preferences.playerFullscreen()) {
             window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
     }
@@ -264,7 +270,16 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         player.timePos?.let { updatePlaybackPos(it) }
         player.duration?.let { updatePlaybackDuration(it) }
         updatePlaylistButtons()
+        updateEpisodeText()
         player.loadTracks()
+    }
+
+    private fun updateEpisodeText() {
+        binding.fullTitleTextView.text = applicationContext.getString(
+            R.string.playertitle,
+            presenter.anime?.title,
+            presenter.currentEpisode?.name
+        )
     }
 
     private fun updatePlaylistButtons() {
@@ -298,8 +313,16 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
     }
 
     override fun onDestroy() {
-        player.destroy()
         super.onDestroy()
+        if (!playerIsDestroyed) {
+            player.destroy()
+            playerIsDestroyed = true
+        }
+    }
+
+    override fun onStop() {
+        if (!playerIsDestroyed) player.paused = true
+        super.onStop()
     }
 
     /**
@@ -313,6 +336,7 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
     }
 
     fun setVideoList(videos: List<Video>?, videoPos: Int = 0, timePos: Int? = null) {
+        if (playerIsDestroyed) return
         logcat(LogPriority.INFO) { "loaded!!" }
         currentVideoList = videos ?: currentVideoList
         currentVideoList?.getOrNull(videoPos)?.videoUrl.let {
@@ -322,6 +346,7 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
                 val intPos = pos / 1000F
                 MPVLib.command(arrayOf("set", "start", "$intPos"))
             }
+            setViewMode()
             MPVLib.command(arrayOf("loadfile", it))
         }
         launchUI { refreshUi() }
@@ -366,9 +391,4 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
     override fun eventProperty(property: String, value: String) {}
 
     override fun event(eventId: Int) {}
-
-    override fun onStop() {
-        player.paused = true
-        super.onStop()
-    }
 }
