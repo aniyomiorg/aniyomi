@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.player
 
+import android.app.Application
 import android.os.Bundle
 import android.webkit.WebSettings
 import eu.kanade.tachiyomi.animesource.AnimeSource
@@ -9,18 +10,27 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.AnimeHistory
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
+import eu.kanade.tachiyomi.data.track.job.DelayedTrackingUpdateJob
+import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.episode.getEpisodeSort
 import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.logcat
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import logcat.LogPriority
 import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.*
 
 class NewPlayerPresenter(
     private val db: AnimeDatabaseHelper = Injekt.get(),
@@ -109,33 +119,6 @@ class NewPlayerPresenter(
         super.onCreate(savedState)
         if (savedState != null) {
             episodeId = savedState.getLong(::episodeId.name, -1)
-        }
-    }
-
-    /**
-     * Called when the presenter is destroyed. It saves the current progress and cleans up
-     * references on the currently active episodes.
-     */
-    override fun onDestroy() {
-        super.onDestroy()
-        /*val currentEpisode = currentEpisode
-        if (currentEpisode != null) {
-            saveEpisodeProgress(currentEpisode)
-            saveEpisodeHistory(currentEpisode)
-        }*/
-    }
-
-    /**
-     * Called when the presenter instance is being saved. It saves the currently active episode
-     * id and the last page seen.
-     */
-    override fun onSave(state: Bundle) {
-        super.onSave(state)
-        val currentEpisode = currentEpisode
-        if (currentEpisode != null) {
-            // saveEpisodeProgress(currentEpisode)
-            // saveEpisodeHistory(currentEpisode)
-            state.putLong(::episodeId.name, currentEpisode.id!!)
         }
     }
 
@@ -261,6 +244,127 @@ class NewPlayerPresenter(
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
             }
+        }
+    }
+
+    fun saveEpisodeHistory() {
+        val episode = currentEpisode ?: return
+        val history = AnimeHistory.create(episode).apply { last_seen = Date().time }
+        db.updateAnimeHistoryLastSeen(history).asRxCompletable()
+            .onErrorComplete()
+            .subscribeOn(Schedulers.io())
+            .subscribe()
+    }
+
+    fun saveEpisodeProgress(pos: Int?, duration: Int?) {
+        if (incognitoMode) return
+        val episode = currentEpisode ?: return
+        val anime = anime ?: return
+        val seconds = (pos ?: return) * 1000L
+        val totalSeconds = (duration ?: return) * 1000L
+        if (totalSeconds > 0L) {
+            episode.last_second_seen = seconds
+            episode.total_seconds = totalSeconds
+            val progress = preferences.progressPreference()
+            if (!episode.seen) episode.seen = episode.last_second_seen >= episode.total_seconds * progress
+            val episodes = listOf(EpisodeItem(episode, anime))
+            launchIO {
+                db.updateEpisodesProgress(episodes).executeAsBlocking()
+                if (preferences.autoUpdateTrack() && episode.seen) {
+                    updateTrackEpisodeSeen(episode)
+                }
+                if (episode.seen) {
+                    deleteEpisodeIfNeeded(episode)
+                    deleteEpisodeFromDownloadQueue(episode)
+                }
+            }
+        }
+    }
+
+    private fun deleteEpisodeFromDownloadQueue(episode: Episode) {
+        downloadManager.getEpisodeDownloadOrNull(episode)?.let { download ->
+            downloadManager.deletePendingDownload(download)
+        }
+    }
+
+    private fun deleteEpisodeIfNeeded(episode: Episode) {
+        val anime = anime ?: return
+        // Determine which chapter should be deleted and enqueue
+        val sortFunction: (Episode, Episode) -> Int = when (anime.sorting) {
+            Anime.EPISODE_SORTING_SOURCE -> { c1, c2 -> c2.source_order.compareTo(c1.source_order) }
+            Anime.EPISODE_SORTING_NUMBER -> { c1, c2 -> c1.episode_number.compareTo(c2.episode_number) }
+            Anime.EPISODE_SORTING_UPLOAD_DATE -> { c1, c2 -> c1.date_upload.compareTo(c2.date_upload) }
+            else -> throw NotImplementedError("Unknown sorting method")
+        }
+
+        val episodes = db.getEpisodes(anime).executeAsBlocking()
+            .sortedWith { e1, e2 -> sortFunction(e1, e2) }
+
+        val currentEpisodePosition = episodes.indexOf(episode)
+        val removeAfterReadSlots = preferences.removeAfterReadSlots()
+        val episodeToDelete = episodes.getOrNull(currentEpisodePosition - removeAfterReadSlots)
+
+        // Check if deleting option is enabled and chapter exists
+        if (removeAfterReadSlots != -1 && episodeToDelete != null) {
+            enqueueDeleteSeenEpisodes(episodeToDelete)
+        }
+    }
+
+    private fun enqueueDeleteSeenEpisodes(episode: Episode) {
+        val anime = anime ?: return
+        if (!episode.seen) return
+
+        launchIO {
+            downloadManager.enqueueDeleteEpisodes(listOf(episode), anime)
+        }
+    }
+
+    private fun updateTrackEpisodeSeen(episode: Episode) {
+        if (!preferences.autoUpdateTrack()) return
+        val anime = anime ?: return
+
+        val episodeSeen = episode.episode_number
+
+        val trackManager = Injekt.get<TrackManager>()
+        val context = Injekt.get<Application>()
+
+        launchIO {
+            db.getTracks(anime).executeAsBlocking()
+                .mapNotNull { track ->
+                    val service = trackManager.getService(track.sync_id)
+                    if (service != null && service.isLogged && episodeSeen > track.last_episode_seen) {
+                        track.last_episode_seen = episodeSeen
+
+                        // We want these to execute even if the presenter is destroyed and leaks
+                        // for a while. The view can still be garbage collected.
+                        async {
+                            runCatching {
+                                if (context.isOnline()) {
+                                    service.update(track, true)
+                                    db.insertTrack(track).executeAsBlocking()
+                                } else {
+                                    delayedTrackingStore.addItem(track)
+                                    DelayedTrackingUpdateJob.setupTask(context)
+                                }
+                            }
+                        }
+                    } else {
+                        null
+                    }
+                }
+                .awaitAll()
+                .mapNotNull { it.exceptionOrNull() }
+                .forEach { logcat(LogPriority.INFO, it) }
+        }
+    }
+
+    /**
+     * Deletes all the pending episodes. This operation will run in a background thread and errors
+     * are ignored.
+     */
+    fun deletePendingEpisodes() {
+        launchIO {
+            downloadManager.deletePendingEpisodes()
         }
     }
 }

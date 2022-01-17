@@ -441,7 +441,7 @@ class AnimeDownloader(
         return pageObservable
             // When the video is ready, set image path, progress (just in case) and status
             .doOnNext { file ->
-                video.uri = file.uri
+                video.videoUrl = file.uri.path
                 video.progress = 100
                 download.downloadedImages++
                 video.status = Video.READY
@@ -576,14 +576,14 @@ class AnimeDownloader(
                         // TODO: this only works for 1DM
                         component = ComponentName(pkgName, "${pkgName.substringBeforeLast(".")}.Downloader")
                         action = Intent.ACTION_VIEW
-                        data = video.uri ?: Uri.parse(video.videoUrl)
+                        data = Uri.parse(video.videoUrl)
                         putExtra("extra_filename", filename)
                     }
                 } else {
                     intent = Intent(Intent.ACTION_VIEW)
                     intent.apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        data = video.uri ?: Uri.parse(video.videoUrl)
+                        data = Uri.parse(video.videoUrl)
                         putExtra("extra_filename", filename)
                     }
                 }

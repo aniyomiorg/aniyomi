@@ -9,6 +9,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.SeekBar
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -24,6 +26,8 @@ import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
+import `is`.xyz.mpv.PickerDialog
+import `is`.xyz.mpv.SpeedPickerDialog
 import `is`.xyz.mpv.Utils
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
@@ -31,7 +35,10 @@ import uy.kohesive.injekt.injectLazy
 import java.io.File
 
 @RequiresPresenter(NewPlayerPresenter::class)
-class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPresenter>(), MPVLib.EventObserver {
+class NewPlayerActivity :
+    BaseRxActivity<NewPlayerActivityBinding,
+        NewPlayerPresenter>(),
+    MPVLib.EventObserver {
 
     companion object {
         fun newIntent(context: Context, anime: Anime, episode: Episode): Intent {
@@ -89,6 +96,9 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         player.addObserver(this)
 
         player.setOnClickListener { binding.controls.isVisible = !binding.controls.isVisible }
+        binding.cycleAudioBtn.setOnLongClickListener { pickAudio(); true }
+        binding.cycleSpeedBtn.setOnLongClickListener { pickSpeed(); true }
+        binding.cycleSubsBtn.setOnLongClickListener { pickSub(); true }
 
         binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
         // player.playFile(currentVideoList!!.first().videoUrl!!.toString())
@@ -107,6 +117,77 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         }
 
         playerIsDestroyed = false
+    }
+
+    private fun pickAudio() = selectTrack("audio", { player.aid }, { player.aid = it })
+
+    private fun pickSub() = selectTrack("sub", { player.sid }, { player.sid = it })
+
+    private fun selectTrack(type: String, get: () -> Int, set: (Int) -> Unit) {
+        val tracks = player.tracks.getValue(type)
+        val selectedMpvId = get()
+        val selectedIndex = tracks.indexOfFirst { it.mpvId == selectedMpvId }
+        val restore = pauseForDialog()
+
+        with(MaterialAlertDialogBuilder(this)) {
+            setSingleChoiceItems(tracks.map { it.name }.toTypedArray(), selectedIndex) { dialog, item ->
+                val trackId = tracks[item].mpvId
+
+                set(trackId)
+                dialog.dismiss()
+                trackSwitchNotification { TrackData(trackId, type) }
+            }
+            setOnDismissListener { restore() }
+            create().show()
+        }
+    }
+
+    private fun pauseForDialog(): StateRestoreCallback {
+        val wasPlayerPaused = player.paused ?: true // default to not changing state
+        player.paused = true
+        return {
+            if (!wasPlayerPaused) {
+                player.paused = false
+            }
+        }
+    }
+
+    private fun pickSpeed() {
+        // TODO: replace this with SliderPickerDialog
+        val picker = SpeedPickerDialog()
+
+        val restore = pauseForDialog()
+        genericPickerDialog(picker, R.string.title_speed_dialog, "speed") {
+            updateSpeedButton()
+            restore()
+        }
+    }
+
+    private fun genericPickerDialog(
+        picker: PickerDialog,
+        @StringRes titleRes: Int,
+        property: String,
+        restoreState: StateRestoreCallback
+    ) {
+        val dialog = with(AlertDialog.Builder(this)) {
+            setTitle(titleRes)
+            setView(picker.buildView(layoutInflater))
+            setPositiveButton(R.string.dialog_ok) { _, _ ->
+                picker.number?.let {
+                    if (picker.isInteger()) {
+                        MPVLib.setPropertyInt(property, it.toInt())
+                    } else {
+                        MPVLib.setPropertyDouble(property, it)
+                    }
+                }
+            }
+            setNegativeButton(R.string.dialog_cancel) { dialog, _ -> dialog.cancel() }
+            setOnDismissListener { restoreState() }
+            create()
+        }
+
+        picker.number = MPVLib.getPropertyDouble(property)
+        dialog.show()
     }
 
     private fun setViewMode() {
@@ -234,7 +315,10 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
             }
 
             qualityAlert.setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
-                if (requestedQuality != currentQuality) changeQuality(requestedQuality)
+                if (requestedQuality != currentQuality) {
+                    currentQuality = requestedQuality
+                    changeQuality(requestedQuality)
+                }
                 qualityDialog.dismiss()
             }
 
@@ -313,15 +397,20 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        presenter.deletePendingEpisodes()
         if (!playerIsDestroyed) {
-            player.destroy()
             playerIsDestroyed = true
+            player.destroy()
         }
+        super.onDestroy()
     }
 
     override fun onStop() {
-        if (!playerIsDestroyed) player.paused = true
+        presenter.saveEpisodeHistory()
+        if (!playerIsDestroyed) {
+            presenter.saveEpisodeProgress(player.timePos, player.duration)
+            player.paused = true
+        }
         super.onStop()
     }
 
@@ -339,7 +428,7 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
         if (playerIsDestroyed) return
         logcat(LogPriority.INFO) { "loaded!!" }
         currentVideoList = videos ?: currentVideoList
-        currentVideoList?.getOrNull(videoPos)?.videoUrl.let {
+        currentVideoList?.getOrNull(videoPos)?.let {
             timePos?.let {
                 MPVLib.command(arrayOf("set", "start", "$timePos"))
             } ?: presenter.currentEpisode?.last_second_seen?.let { pos ->
@@ -347,7 +436,15 @@ class NewPlayerActivity : BaseRxActivity<NewPlayerActivityBinding, NewPlayerPres
                 MPVLib.command(arrayOf("set", "start", "$intPos"))
             }
             setViewMode()
-            MPVLib.command(arrayOf("loadfile", it))
+            MPVLib.command(arrayOf("loadfile", it.videoUrl))
+            it.subtitleTracks.forEachIndexed { i, sub ->
+                val select = if (i == 0) "select" else "auto"
+                MPVLib.command(arrayOf("sub-add", sub.url, select, sub.lang))
+            }
+            it.audioTracks.forEachIndexed { i, audio ->
+                val select = if (i == 0) "select" else "auto"
+                MPVLib.command(arrayOf("audio-add", audio.url, select, audio.lang))
+            }
         }
         launchUI { refreshUi() }
     }

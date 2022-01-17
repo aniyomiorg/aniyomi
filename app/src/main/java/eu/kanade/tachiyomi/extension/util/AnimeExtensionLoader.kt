@@ -35,7 +35,7 @@ internal object AnimeExtensionLoader {
     private const val METADATA_SOURCE_FACTORY = "tachiyomi.animeextension.factory"
     private const val METADATA_NSFW = "tachiyomi.animeextension.nsfw"
     const val LIB_VERSION_MIN = 12
-    const val LIB_VERSION_MAX = 13
+    const val LIB_VERSION_MAX = 14
 
     private const val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or PackageManager.GET_SIGNATURES
 

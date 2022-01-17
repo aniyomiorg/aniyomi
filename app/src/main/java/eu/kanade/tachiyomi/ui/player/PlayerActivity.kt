@@ -228,7 +228,7 @@ class PlayerActivity : AppCompatActivity() {
             dbProvider = StandaloneDatabaseProvider(baseContext)
             isLocal = EpisodeLoader.isDownloaded(episode, anime) || source is LocalAnimeSource
             if (isLocal) {
-                uri = videos.firstOrNull()?.uri?.toString() ?: return@launchUI onGetLinksError(Exception("URI is null."))
+                uri = videos.firstOrNull()?.videoUrl ?: return@launchUI onGetLinksError(Exception("URI is null."))
                 dataSourceFactory = DefaultDataSource.Factory(context)
             } else {
                 uri = videos.firstOrNull()?.videoUrl ?: return@launchUI onGetLinksError(Exception("video URL is null."))
@@ -493,7 +493,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun changeQuality(quality: Int) {
         baseContext.toast(videos.getOrNull(quality)?.quality, Toast.LENGTH_SHORT)
         uri = if (isLocal) {
-            videos.getOrNull(quality)?.uri?.toString() ?: return
+            videos.getOrNull(quality)?.videoUrl ?: return
         } else {
             videos.getOrNull(quality)?.videoUrl ?: return
         }

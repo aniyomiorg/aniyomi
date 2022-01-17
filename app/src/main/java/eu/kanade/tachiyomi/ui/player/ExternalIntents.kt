@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
-import androidx.core.content.FileProvider
 import com.google.android.exoplayer2.util.MimeTypes
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -17,13 +15,11 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.toast
 import uy.kohesive.injekt.injectLazy
-import java.io.File
 
 class ExternalIntents(val anime: Anime, val source: AnimeSource) {
     private val preferences: PreferencesHelper by injectLazy()
 
     fun getExternalIntent(episode: Episode, video: Video, context: Context): Intent? {
-        val videoUri = video.uri
         val videoUrl: Uri
         if (video.videoUrl == null) {
             makeErrorToast(context, Exception("video URL is null."))
@@ -31,14 +27,11 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
         } else {
             videoUrl = Uri.parse(video.videoUrl)
         }
-        val uri = if (videoUri != null && Build.VERSION.SDK_INT >= 24 && videoUri.scheme != "content") {
-            FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", File(videoUri.path!!))
-        } else videoUri ?: videoUrl
         val pkgName = preferences.externalPlayerPreference()
         val anime = anime
         return if (pkgName.isNullOrEmpty()) {
             Intent(Intent.ACTION_VIEW).apply {
-                setDataAndTypeAndNormalize(uri, getMime(uri))
+                setDataAndTypeAndNormalize(videoUrl, getMime(videoUrl))
                 putExtra("title", anime.title + " - " + episode.name)
                 putExtra("position", episode.last_second_seen.toInt())
                 putExtra("return_result", true)
@@ -54,7 +47,7 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
                     putExtra("http-header-fields", headersString)
                 }
             }
-        } else standardIntentForPackage(pkgName, context, uri, episode, video)
+        } else standardIntentForPackage(pkgName, context, videoUrl, episode, video)
     }
 
     private fun makeErrorToast(context: Context, e: Exception?) {

@@ -6,13 +6,26 @@ import okhttp3.Headers
 import rx.subjects.Subject
 import tachiyomi.animesource.model.VideoUrl
 
+data class Track(val url: String, val lang: String)
+
 open class Video(
     val url: String = "",
     val quality: String = "",
     var videoUrl: String? = null,
-    @Transient var uri: Uri? = null, // Deprecated but can't be deleted due to extensions
-    val headers: Headers? = null
+    val headers: Headers? = null,
+    // "url", "language-label-2", "url2", "language-label-2"
+    val subtitleTracks: List<Track> = emptyList(),
+    val audioTracks: List<Track> = emptyList()
 ) : ProgressListener {
+
+    @Suppress("UNUSED_PARAMETER")
+    constructor(
+        url: String,
+        quality: String,
+        videoUrl: String?,
+        uri: Uri? = null,
+        headers: Headers? = null
+    ) : this(url, quality, videoUrl, headers)
 
     @Transient
     @Volatile
