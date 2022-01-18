@@ -1,6 +1,7 @@
 | Build | Preview Release | Codefactor | Stable | Translate Tachiyomi | Discord Server |
 |-------|-----------|-------|----------|------------|---------|
-| ![CI](https://github.com/jmir1/aniyomi/workflows/CI/badge.svg?branch=master&event=push) | [![latest preview build](https://img.shields.io/github/v/release/jmir1/aniyomi-preview.svg?maxAge=3600&label=download)](https://github.com/jmir1/aniyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/jmir1/aniyomi/badge)](https://www.codefactor.io/repository/github/jmir1/aniyomi) | [![stable release](https://img.shields.io/github/release/jmir1/aniyomi.svg?maxAge=3600&label=download)](https://github.com/jmir1/aniyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/tachiyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/tachiyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
+| ![CI](https://github.com/jmir1/aniyomi/workflows/CI/badge.svg?branch=master&event=push) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjmir1%2Faniyomi.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjmir1%2Faniyomi?ref=badge_shield)
+| [![latest preview build](https://img.shields.io/github/v/release/jmir1/aniyomi-preview.svg?maxAge=3600&label=download)](https://github.com/jmir1/aniyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/jmir1/aniyomi/badge)](https://www.codefactor.io/repository/github/jmir1/aniyomi) | [![stable release](https://img.shields.io/github/release/jmir1/aniyomi.svg?maxAge=3600&label=download)](https://github.com/jmir1/aniyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/tachiyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/tachiyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
 
 
 # ![app icon](.github/readme-images/app-icon.png)Aniyomi
@@ -86,6 +87,9 @@ See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjmir1%2Faniyomi.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjmir1%2Faniyomi?ref=badge_large)
 
 ## Disclaimer
 
