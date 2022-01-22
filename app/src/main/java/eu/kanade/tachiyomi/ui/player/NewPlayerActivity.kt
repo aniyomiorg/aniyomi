@@ -35,6 +35,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.PickerDialog
 import `is`.xyz.mpv.SpeedPickerDialog
+import `is`.xyz.mpv.StateRestoreCallback
 import `is`.xyz.mpv.Utils
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter

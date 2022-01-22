@@ -297,17 +297,6 @@ dependencies {
     // For detecting memory leaks; see https://square.github.io/leakcanary/
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.7")
 
-    // Exoplayer
-    val exoplayerVersion = "2.16.0"
-    implementation("com.google.android.exoplayer:exoplayer:$exoplayerVersion")
-    implementation("com.google.android.exoplayer:exoplayer-core:$exoplayerVersion")
-    implementation("com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion")
-    implementation("com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion")
-    implementation("com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion")
-
-    // Doubletap Player
-    implementation("com.github.vkay94:DoubleTapPlayerView:1.0.2")
-
     // FFmpeg
     implementation("com.arthenica:ffmpeg-kit-https:4.5.LTS")
 

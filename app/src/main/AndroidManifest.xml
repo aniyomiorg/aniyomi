@@ -93,24 +93,6 @@
             <meta-data android:name="com.samsung.android.support.REMOTE_ACTION"
                 android:resource="@xml/s_pen_actions"/>
         </activity>
-
-        <activity
-            android:name=".ui.player.PlayerActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:supportsPictureInPicture="true"
-            android:resizeableActivity="true"
-            android:excludeFromRecents="true"
-            android:taskAffinity=".ui.player.PlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
-            android:screenOrientation="userLandscape"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.samsung.android.support.REMOTE_ACTION" />
-            </intent-filter>
-
-            <meta-data android:name="com.samsung.android.support.REMOTE_ACTION"
-                android:resource="@xml/s_pen_actions"/>
-        </activity>
         <activity
             android:name=".ui.player.NewPlayerActivity"
             android:launchMode="singleTask"
@@ -118,17 +100,6 @@
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize|keyboardHidden|keyboard"
             android:supportsPictureInPicture="true"
             android:resizeableActivity="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.samsung.android.support.REMOTE_ACTION" />
-            </intent-filter>
-
-            <meta-data android:name="com.samsung.android.support.REMOTE_ACTION"
-                android:resource="@xml/s_pen_actions"/>
-        </activity>
-        <activity
-            android:name=".ui.player.MPVActivity"
-            android:launchMode="singleTask"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.samsung.android.support.REMOTE_ACTION" />

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import com.google.android.exoplayer2.util.MimeTypes
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -99,9 +98,9 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
 
     private fun getMime(uri: Uri): String {
         return when (uri.path?.substringAfterLast(".")) {
-            "mp4" -> MimeTypes.VIDEO_MP4
-            "mkv" -> MimeTypes.VIDEO_MATROSKA
-            "m3u8" -> MimeTypes.APPLICATION_M3U8
+            "mp4" -> "video/mp4"
+            "mkv" -> "video/x-matroska"
+            "m3u8" -> "application/x-mpegURL"
             else -> "video/any"
         }
     }
