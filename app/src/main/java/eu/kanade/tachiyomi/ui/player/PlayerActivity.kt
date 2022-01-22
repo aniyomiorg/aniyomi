@@ -26,7 +26,7 @@ import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.databinding.NewPlayerActivityBinding
+import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
 import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAppTheme
 import eu.kanade.tachiyomi.util.lang.launchUI
@@ -42,15 +42,15 @@ import nucleus.factory.RequiresPresenter
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 
-@RequiresPresenter(NewPlayerPresenter::class)
-class NewPlayerActivity :
-    BaseRxActivity<NewPlayerActivityBinding,
-        NewPlayerPresenter>(),
+@RequiresPresenter(PlayerPresenter::class)
+class PlayerActivity :
+    BaseRxActivity<PlayerActivityBinding,
+        PlayerPresenter>(),
     MPVLib.EventObserver {
 
     companion object {
         fun newIntent(context: Context, anime: Anime, episode: Episode): Intent {
-            return Intent(context, NewPlayerActivity::class.java).apply {
+            return Intent(context, PlayerActivity::class.java).apply {
                 putExtra("anime", anime.id)
                 putExtra("episode", episode.id)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -112,7 +112,7 @@ class NewPlayerActivity :
         applyAppTheme(preferences)
         super.onCreate(savedInstanceState)
 
-        binding = NewPlayerActivityBinding.inflate(layoutInflater)
+        binding = PlayerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setVisibilities()

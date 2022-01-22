@@ -4,7 +4,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 
 class Gestures(
-    private val activity: NewPlayerActivity,
+    private val activity: PlayerActivity,
     private val width: Float,
     private val height: Float
 ) : GestureDetector.SimpleOnGestureListener() {

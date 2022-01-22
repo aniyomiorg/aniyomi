@@ -25,7 +25,7 @@ import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.ProgressItem
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.player.NewPlayerActivity
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.onAnimationsFinished
 import kotlinx.coroutines.flow.filter
@@ -159,7 +159,7 @@ class AnimeHistoryController :
 
         val nextEpisode = presenter.getNextEpisode(chapter, anime)
         if (nextEpisode != null) {
-            val newIntent = NewPlayerActivity.newIntent(activity, anime, nextEpisode)
+            val newIntent = PlayerActivity.newIntent(activity, anime, nextEpisode)
             startActivity(newIntent)
         } else {
             activity.toast(R.string.no_next_episode)

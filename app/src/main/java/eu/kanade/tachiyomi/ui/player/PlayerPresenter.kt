@@ -32,14 +32,14 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.*
 
-class NewPlayerPresenter(
+class PlayerPresenter(
     private val db: AnimeDatabaseHelper = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val preferences: PreferencesHelper = Injekt.get(),
     private val delayedTrackingStore: DelayedTrackingStore = Injekt.get(),
-) : BasePresenter<NewPlayerActivity>() {
+) : BasePresenter<PlayerActivity>() {
     /**
      * The anime loaded in the player. It can be null when instantiated for a short time.
      */
@@ -144,7 +144,7 @@ class NewPlayerPresenter(
                 { _, _ ->
                     // Ignore onNext event
                 },
-                NewPlayerActivity::setInitialEpisodeError
+                PlayerActivity::setInitialEpisodeError
             )
     }
 
@@ -177,7 +177,7 @@ class NewPlayerPresenter(
                             }
                             activity.setVideoList(it)
                         },
-                        NewPlayerActivity::setInitialEpisodeError
+                        PlayerActivity::setInitialEpisodeError
                     )
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
@@ -185,7 +185,7 @@ class NewPlayerPresenter(
         }
     }
 
-    private fun getHeaders(videos: List<Video>, source: AnimeHttpSource, activity: NewPlayerActivity): Map<String, String> {
+    private fun getHeaders(videos: List<Video>, source: AnimeHttpSource, activity: PlayerActivity): Map<String, String> {
         val currentHeaders = videos.firstOrNull()?.headers
         val headers = currentHeaders?.toMultimap()
             ?.mapValues { it.value.getOrNull(0) ?: "" }
@@ -215,7 +215,7 @@ class NewPlayerPresenter(
                             currentVideoList = it
                             activity.setVideoList(it)
                         },
-                        NewPlayerActivity::setInitialEpisodeError
+                        PlayerActivity::setInitialEpisodeError
                     )
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
@@ -239,7 +239,7 @@ class NewPlayerPresenter(
                             currentVideoList = it
                             activity.setVideoList(it)
                         },
-                        NewPlayerActivity::setInitialEpisodeError
+                        PlayerActivity::setInitialEpisodeError
                     )
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }

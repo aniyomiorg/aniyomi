@@ -94,7 +94,7 @@
                 android:resource="@xml/s_pen_actions"/>
         </activity>
         <activity
-            android:name=".ui.player.NewPlayerActivity"
+            android:name=".ui.player.PlayerActivity"
             android:launchMode="singleTask"
             android:screenOrientation="userLandscape"
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize|keyboardHidden|keyboard"

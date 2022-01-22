@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:clipChildren="false"
     android:clipToPadding="false"
-    tools:context=".ui.player.NewPlayerActivity">
+    tools:context=".ui.player.PlayerActivity">
 
     <is.xyz.mpv.MPVView
         android:id="@+id/player"
