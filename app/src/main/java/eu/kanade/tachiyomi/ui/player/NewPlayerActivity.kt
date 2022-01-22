@@ -1,17 +1,24 @@
 package eu.kanade.tachiyomi.ui.player
 
+import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.DisplayMetrics
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewAnimationUtils
 import android.view.WindowManager
 import android.widget.SeekBar
-import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
@@ -57,6 +64,21 @@ class NewPlayerActivity :
     private var userIsOperatingSeekbar = false
 
     // private var lockedUI = false
+    private lateinit var mDetector: GestureDetectorCompat
+
+    private val animationHandler = Handler(Looper.getMainLooper())
+
+    // Fade out gesture text
+    private val gestureTextRunnable = Runnable {
+        binding.gestureTextView.visibility = View.GONE
+    }
+
+    private fun showGestureText() {
+        animationHandler.removeCallbacks(gestureTextRunnable)
+        binding.gestureTextView.visibility = View.VISIBLE
+
+        animationHandler.postDelayed(gestureTextRunnable, 500L)
+    }
 
     private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -82,7 +104,8 @@ class NewPlayerActivity :
 
     private var playerIsDestroyed = true
 
-    @RequiresApi(Build.VERSION_CODES.P)
+    @SuppressLint("ClickableViewAccessibility")
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         logcat { "bruh" }
         applyAppTheme(preferences)
@@ -93,9 +116,19 @@ class NewPlayerActivity :
 
         setVisibilities()
         player.initialize(applicationContext.filesDir.path)
+        MPVLib.setOptionString("keep-open", "always")
         player.addObserver(this)
 
-        player.setOnClickListener { binding.controls.isVisible = !binding.controls.isVisible }
+        val dm = DisplayMetrics()
+        windowManager.defaultDisplay.getRealMetrics(dm)
+        val width = dm.widthPixels.toFloat()
+        val height = dm.heightPixels.toFloat()
+
+        mDetector = GestureDetectorCompat(this, Gestures(this, width, height))
+        // player.setOnClickListener { binding.controls.isVisible = !binding.controls.isVisible }
+        player.setOnTouchListener { _, event ->
+            mDetector.onTouchEvent(event)
+        }
         binding.cycleAudioBtn.setOnLongClickListener { pickAudio(); true }
         binding.cycleSpeedBtn.setOnLongClickListener { pickSpeed(); true }
         binding.cycleSubsBtn.setOnLongClickListener { pickSub(); true }
@@ -119,6 +152,10 @@ class NewPlayerActivity :
         playerIsDestroyed = false
     }
 
+    fun toggleControls() {
+        binding.controls.isVisible = !binding.controls.isVisible
+    }
+
     private fun pickAudio() = selectTrack("audio", { player.aid }, { player.aid = it })
 
     private fun pickSub() = selectTrack("sub", { player.sid }, { player.sid = it })
@@ -130,7 +167,10 @@ class NewPlayerActivity :
         val restore = pauseForDialog()
 
         with(MaterialAlertDialogBuilder(this)) {
-            setSingleChoiceItems(tracks.map { it.name }.toTypedArray(), selectedIndex) { dialog, item ->
+            setSingleChoiceItems(
+                tracks.map { it.name }.toTypedArray(),
+                selectedIndex
+            ) { dialog, item ->
                 val trackId = tracks[item].mpvId
 
                 set(trackId)
@@ -219,7 +259,8 @@ class NewPlayerActivity :
             View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && preferences.playerFullscreen()) {
-            window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            window.attributes.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
     }
 
@@ -254,7 +295,35 @@ class NewPlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     fun playPause(view: View) = player.cyclePause()
 
+    fun playPause() = player.cyclePause()
+
+    fun doubleTapSeek(time: Int, event: MotionEvent) {
+        val v = if (time < 0) binding.rewBg else binding.ffwdBg
+        val x = event.x.toInt()
+        val y = event.y.toInt()
+        ViewAnimationUtils.createCircularReveal(v, x, y, 0f, kotlin.math.max(v.height, v.width).toFloat()).setDuration(300).start()
+
+        ObjectAnimator.ofFloat(v, "alpha", 0f, 0.3f).setDuration(300).start()
+        ObjectAnimator.ofFloat(v, "alpha", 0.3f, 0.3f, 0f).setDuration(600).start()
+        // disable seeking when timePos is not available
+        val duration = player.duration ?: 0
+        val initialSeek = player.timePos ?: -1
+        if (duration == 0) {
+            return
+        }
+        val newPos = (initialSeek + time).coerceIn(0, duration)
+        val newDiff = newPos - initialSeek
+        // seek faster than assigning to timePos but less precise
+        MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
+        updatePlaybackPos(newPos)
+
+        val diffText = Utils.prettyTime(newDiff, true)
+        binding.gestureTextView.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
+        showGestureText()
+    }
+
     data class TrackData(val track_id: Int, val track_type: String)
+
     private fun trackSwitchNotification(f: () -> TrackData) {
         val (track_id, track_type) = f()
         val trackPrefix = when (track_type) {
@@ -269,7 +338,8 @@ class NewPlayerActivity :
             return
         }
 
-        val trackName = player.tracks[track_type]?.firstOrNull { it.mpvId == track_id }?.name ?: "???"
+        val trackName =
+            player.tracks[track_type]?.firstOrNull { it.mpvId == track_id }?.name ?: "???"
         toast("$trackPrefix $trackName")
     }
 
@@ -306,7 +376,10 @@ class NewPlayerActivity :
 
             var requestedQuality = 0
             val qualities = currentVideoList!!.map { it.quality }.toTypedArray()
-            qualityAlert.setSingleChoiceItems(qualities, currentQuality) { qualityDialog, selectedQuality ->
+            qualityAlert.setSingleChoiceItems(
+                qualities,
+                currentQuality
+            ) { qualityDialog, selectedQuality ->
                 if (selectedQuality > qualities.lastIndex) {
                     qualityDialog.cancel()
                 } else {

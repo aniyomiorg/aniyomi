@@ -4,12 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     tools:context=".ui.player.NewPlayerActivity">
 
     <is.xyz.mpv.MPVView
         android:id="@+id/player"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <!-- This LinearLayout only exists to prevent clipping -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/rew_bg"
+            android:layout_width="1000dp"
+            android:layout_height="1000dp"
+            android:layout_marginStart="-700dp"
+            android:layout_marginEnd="275dp"
+            android:layout_gravity="center_vertical"
+            android:alpha="0"
+            android:contentDescription="@string/fab_transformation_scrim_behavior"
+            android:src="@drawable/ic_circle_right_200dp"
+            app:tint="?attr/colorAccent" />
+
+        <ImageView
+            android:id="@+id/ffwd_bg"
+            android:layout_width="1000dp"
+            android:layout_height="1000dp"
+            android:layout_gravity="center_vertical"
+            android:alpha="0"
+            android:contentDescription="@string/fab_transformation_scrim_behavior"
+            android:src="@drawable/ic_circle_200dp"
+            app:tint="?attr/colorAccent" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/controls"
@@ -202,5 +234,21 @@
 
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/gestureTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:shadowColor="#000000"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="4"
+        android:text="[gesture]"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
 </RelativeLayout>
