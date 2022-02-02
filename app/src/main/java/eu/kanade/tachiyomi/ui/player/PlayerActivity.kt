@@ -138,7 +138,6 @@ class PlayerActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        setVisibilities()
         playerView = binding.playerView
         playerView.resizeMode = preferences.getPlayerViewMode()
         youTubeDoubleTap = binding.youtubeOverlay
@@ -334,6 +333,8 @@ class PlayerActivity : AppCompatActivity() {
         override fun create(): AlertDialog {
             return super.create().apply {
                 val window = this.window ?: return@apply
+                window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+
                 val alertWindowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
                 alertWindowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
                 alertWindowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
@@ -593,6 +594,11 @@ class PlayerActivity : AppCompatActivity() {
     override fun onStart() {
         playerView.onResume()
         super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setVisibilities()
     }
 
     override fun onStop() {
