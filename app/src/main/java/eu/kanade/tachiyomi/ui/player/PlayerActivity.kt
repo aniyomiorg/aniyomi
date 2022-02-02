@@ -333,6 +333,8 @@ class PlayerActivity : AppCompatActivity() {
         override fun create(): AlertDialog {
             return super.create().apply {
                 val window = this.window ?: return@apply
+                window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+
                 val alertWindowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
                 alertWindowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
                 alertWindowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
