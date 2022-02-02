@@ -138,7 +138,6 @@ class PlayerActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        setVisibilities()
         playerView = binding.playerView
         playerView.resizeMode = preferences.getPlayerViewMode()
         youTubeDoubleTap = binding.youtubeOverlay
@@ -593,6 +592,11 @@ class PlayerActivity : AppCompatActivity() {
     override fun onStart() {
         playerView.onResume()
         super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setVisibilities()
     }
 
     override fun onStop() {
