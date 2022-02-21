@@ -23,6 +23,7 @@ import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -40,7 +41,6 @@ import `is`.xyz.mpv.Utils
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
 import uy.kohesive.injekt.injectLazy
-import java.io.File
 
 @RequiresPresenter(PlayerPresenter::class)
 class PlayerActivity :
@@ -503,6 +503,7 @@ class PlayerActivity :
         logcat(LogPriority.INFO) { "loaded!!" }
         currentVideoList = videos ?: currentVideoList
         currentVideoList?.getOrNull(videoPos)?.let {
+            setHttpOptions(it)
             timePos?.let {
                 MPVLib.command(arrayOf("set", "start", "$timePos"))
             } ?: presenter.currentEpisode?.last_second_seen?.let { pos ->
@@ -513,25 +514,40 @@ class PlayerActivity :
             MPVLib.command(arrayOf("loadfile", it.videoUrl))
             it.subtitleTracks.forEachIndexed { i, sub ->
                 val select = if (i == 0) "select" else "auto"
+                // sub-add <url> <flags> <title>
                 MPVLib.command(arrayOf("sub-add", sub.url, select, sub.lang))
             }
             it.audioTracks.forEachIndexed { i, audio ->
                 val select = if (i == 0) "select" else "auto"
+                // audio-add <url> <flags> <title>
                 MPVLib.command(arrayOf("audio-add", audio.url, select, audio.lang))
             }
         }
         launchUI { refreshUi() }
     }
 
-    fun setHttpOptions(headers: Map<String, String>) {
+    private fun setHttpOptions(video: Video) {
+        if (presenter.isEpisodeOnline() != true) return
+        val source = presenter.source as AnimeHttpSource
+
+        val headers = video.headers?.toMultimap()
+            ?.mapValues { it.value.getOrNull(0) ?: "" }
+            ?.toMutableMap()
+            ?: source.headers.toMultimap()
+                .mapValues { it.value.getOrNull(0) ?: "" }
+                .toMutableMap()
+
         val httpHeaderString = headers.map {
-            it.key + ": " + it.value
+            it.key + ": " + it.value.replace(",", "\\,")
         }.joinToString(",")
+
         MPVLib.setOptionString("http-header-fields", httpHeaderString)
-        MPVLib.setOptionString("tls-verify", "no")
-        MPVLib.setOptionString("cache-on-disk", "yes")
-        val cacheDir = File(applicationContext.filesDir, "media").path
-        MPVLib.setOptionString("cache-dir", cacheDir)
+        headers["user-agent"]?.let { MPVLib.setOptionString("user-agent", it) }
+
+        // need to fix the cache
+        // MPVLib.setOptionString("cache-on-disk", "yes")
+        // val cacheDir = File(applicationContext.filesDir, "media").path
+        // MPVLib.setOptionString("cache-dir", cacheDir)
     }
 
     // mpv events

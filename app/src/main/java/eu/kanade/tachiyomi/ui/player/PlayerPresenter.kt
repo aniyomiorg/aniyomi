@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.ui.player
 
 import android.app.Application
 import android.os.Bundle
-import android.webkit.WebSettings
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -30,7 +29,7 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.*
+import java.util.Date
 
 class PlayerPresenter(
     private val db: AnimeDatabaseHelper = Injekt.get(),
@@ -51,7 +50,7 @@ class PlayerPresenter(
      */
     private var episodeId = -1L
 
-    private var source: AnimeSource? = null
+    var source: AnimeSource? = null
 
     var currentEpisode: Episode? = null
 
@@ -170,11 +169,6 @@ class PlayerPresenter(
                     .subscribeFirst(
                         { activity, it ->
                             currentVideoList = it
-                            if (source is AnimeHttpSource &&
-                                !EpisodeLoader.isDownloaded(currentEpisode, anime)
-                            ) {
-                                activity.setHttpOptions(getHeaders(it, source as AnimeHttpSource, activity))
-                            }
                             activity.setVideoList(it)
                         },
                         PlayerActivity::setInitialEpisodeError
@@ -185,18 +179,10 @@ class PlayerPresenter(
         }
     }
 
-    private fun getHeaders(videos: List<Video>, source: AnimeHttpSource, activity: PlayerActivity): Map<String, String> {
-        val currentHeaders = videos.firstOrNull()?.headers
-        val headers = currentHeaders?.toMultimap()
-            ?.mapValues { it.value.getOrNull(0) ?: "" }
-            ?.toMutableMap()
-            ?: source.headers.toMultimap()
-                .mapValues { it.value.getOrNull(0) ?: "" }
-                .toMutableMap()
-        if (headers["user-agent"] == null) {
-            headers["user-agent"] = WebSettings.getDefaultUserAgent(activity)
-        }
-        return headers
+    fun isEpisodeOnline(): Boolean? {
+        val anime = anime ?: return null
+        val currentEpisode = currentEpisode ?: return null
+        return source is AnimeHttpSource && !EpisodeLoader.isDownloaded(currentEpisode, anime)
     }
 
     fun nextEpisode() {

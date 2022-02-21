@@ -19,7 +19,7 @@ if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
 
 shortcutHelper.setFilePath("./shortcuts.xml")
 
-val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86")
+val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
 
 android {
     compileSdk = AndroidConfig.compileSdk
@@ -301,7 +301,7 @@ dependencies {
     implementation("com.arthenica:ffmpeg-kit-https:4.5.LTS")
 
     // mpv-android
-    implementation("com.github.jmir1:aniyomi-mpv-lib:0.2")
+    implementation("com.github.jmir1:aniyomi-mpv-lib:0.6")
 }
 
 tasks {
