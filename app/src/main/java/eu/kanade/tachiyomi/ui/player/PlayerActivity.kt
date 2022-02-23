@@ -108,7 +108,7 @@ class PlayerActivity :
     @SuppressLint("ClickableViewAccessibility")
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
-        logcat { "bruh" }
+        Utils.copyAssets(this)
         applyAppTheme(preferences)
         super.onCreate(savedInstanceState)
 
