@@ -110,24 +110,12 @@ class PlayerActivity :
     private var playerIsDestroyed = true
 
     private var subTracks: Array<Track> = emptyArray()
-        get() {
-            return field + player.tracks.getValue("sub")
-                .drop(1).map { track ->
-                    Track(track.mpvId.toString(), track.name)
-                }.toTypedArray()
-        }
 
     private var selectedSub = 0
 
     private var hadPreviousSubs = false
 
     private var audioTracks: Array<Track> = emptyArray()
-        get() {
-            return field + player.tracks.getValue("audio")
-                .drop(1).map { track ->
-                    Track(track.mpvId.toString(), track.name)
-                }.toTypedArray()
-        }
 
     private var selectedAudio = 0
 
@@ -186,7 +174,6 @@ class PlayerActivity :
     }
 
     private fun pickAudio() {
-        val tracks = player.tracks.getValue("audio")
         val restore = pauseForDialog()
 
         with(MaterialAlertDialogBuilder(this)) {
@@ -196,7 +183,8 @@ class PlayerActivity :
             ) { dialog, item ->
                 if (item == selectedSub) return@setSingleChoiceItems
                 if (item == 0) {
-                    player.aid = tracks[0].mpvId
+                    selectedAudio = 0
+                    player.aid = -1
                     return@setSingleChoiceItems
                 }
                 setAudio(item)
@@ -208,7 +196,6 @@ class PlayerActivity :
     }
 
     private fun pickSub() {
-        val tracks = player.tracks.getValue("sub")
         val restore = pauseForDialog()
 
         with(MaterialAlertDialogBuilder(this)) {
@@ -217,7 +204,8 @@ class PlayerActivity :
                 selectedSub
             ) { dialog, item ->
                 if (item == 0) {
-                    player.sid = tracks[0].mpvId
+                    selectedSub = 0
+                    player.sid = -1
                     return@setSingleChoiceItems
                 }
                 setSub(item)
@@ -229,21 +217,35 @@ class PlayerActivity :
     }
 
     private fun setSub(index: Int) {
-        if (selectedSub == index) return
+        if (selectedSub == index || selectedSub > subTracks.lastIndex) return
         selectedSub = index
+        if (index == 0) {
+            player.sid = -1
+            return
+        }
         val tracks = player.tracks.getValue("sub")
-        val selectedLoadedTrack = tracks.firstOrNull { it.name == subTracks[index].lang }
+        val selectedLoadedTrack = tracks.firstOrNull {
+            it.name == subTracks[index].url ||
+                it.mpvId.toString() == subTracks[index].url
+        }
         selectedLoadedTrack?.let { player.sid = it.mpvId }
-            ?: MPVLib.command(arrayOf("sub-add", subTracks[index].url, "select", subTracks[index].lang))
+            ?: MPVLib.command(arrayOf("sub-add", subTracks[index].url, "select", subTracks[index].url))
     }
 
     private fun setAudio(index: Int) {
-        if (selectedAudio == index) return
+        if (selectedAudio == index || selectedAudio > audioTracks.lastIndex) return
         selectedAudio = index
+        if (index == 0) {
+            player.aid = -1
+            return
+        }
         val tracks = player.tracks.getValue("audio")
-        val selectedLoadedTrack = tracks.firstOrNull { it.name == audioTracks[index].lang }
+        val selectedLoadedTrack = tracks.firstOrNull {
+            it.name == audioTracks[index].url ||
+                it.mpvId.toString() == audioTracks[index].url
+        }
         selectedLoadedTrack?.let { player.aid = it.mpvId }
-            ?: MPVLib.command(arrayOf("audio-add", audioTracks[index].url, "select", audioTracks[index].lang))
+            ?: MPVLib.command(arrayOf("audio-add", audioTracks[index].url, "select", audioTracks[index].url))
     }
 
     private fun pauseForDialog(): StateRestoreCallback {
@@ -603,9 +605,17 @@ class PlayerActivity :
 
     private fun fileLoaded() {
         player.loadTracks()
+        subTracks += player.tracks.getValue("sub")
+            .drop(1).map { track ->
+                Track(track.mpvId.toString(), track.name)
+            }.toTypedArray()
+        audioTracks += player.tracks.getValue("audio")
+            .drop(1).map { track ->
+                Track(track.mpvId.toString(), track.name)
+            }.toTypedArray()
         if (hadPreviousSubs) {
             subTracks.getOrNull(selectedSub)?.let { sub ->
-                MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.lang))
+                MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.url))
             }
         } else {
             currentVideoList?.getOrNull(currentQuality)
@@ -617,16 +627,16 @@ class PlayerActivity :
                     tracks.getOrNull(requestedLanguage)?.let { sub ->
                         hadPreviousSubs = true
                         selectedSub = requestedLanguage + 1
-                        MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.lang))
+                        MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.url))
                     }
                 } ?: run {
                 val mpvSub = player.tracks.getValue("sub").first { player.sid == it.mpvId }
-                selectedSub = subTracks.indexOfFirst { it.lang == mpvSub.name }
+                selectedSub = subTracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
             }
         }
         if (hadPreviousAudio) {
             audioTracks.getOrNull(selectedAudio)?.let { audio ->
-                MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.lang))
+                MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
             }
         } else {
             currentVideoList?.getOrNull(currentQuality)
@@ -638,11 +648,11 @@ class PlayerActivity :
                     tracks.getOrNull(requestedLanguage)?.let { audio ->
                         hadPreviousAudio = true
                         selectedAudio = requestedLanguage + 1
-                        MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.lang))
+                        MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
                     }
                 } ?: run {
                 val mpvAudio = player.tracks.getValue("audio").first { player.aid == it.mpvId }
-                selectedAudio = audioTracks.indexOfFirst { it.lang == mpvAudio.name }
+                selectedAudio = audioTracks.indexOfFirst { it.url == mpvAudio.mpvId.toString() }
             }
         }
     }
