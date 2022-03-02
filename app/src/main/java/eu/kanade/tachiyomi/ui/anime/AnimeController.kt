@@ -575,7 +575,7 @@ class AnimeController :
 
     private fun addToAnimelib(anime: Anime) {
         val categories = presenter.getCategories()
-        val defaultCategoryId = preferences.defaultCategory()
+        val defaultCategoryId = preferences.defaultAnimeCategory()
         val defaultCategory = categories.find { it.id == defaultCategoryId }
 
         when {

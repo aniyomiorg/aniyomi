@@ -22,6 +22,7 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
@@ -31,6 +32,7 @@ import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
 import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAppTheme
 import eu.kanade.tachiyomi.util.lang.launchUI
+import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
@@ -59,6 +61,8 @@ class PlayerActivity :
     }
 
     private val preferences: PreferencesHelper by injectLazy()
+
+    private val langName = LocaleHelper.getSimpleLocaleDisplay(preferences.lang().get())
 
     private val player get() = binding.player
 
@@ -104,6 +108,30 @@ class PlayerActivity :
     private var playerViewMode: Int = preferences.getPlayerViewMode()
 
     private var playerIsDestroyed = true
+
+    private var subTracks: Array<Track> = emptyArray()
+        get() {
+            return field + player.tracks.getValue("sub")
+                .drop(1).map { track ->
+                    Track(track.mpvId.toString(), track.name)
+                }.toTypedArray()
+        }
+
+    private var selectedSub = 0
+
+    private var hadPreviousSubs = false
+
+    private var audioTracks: Array<Track> = emptyArray()
+        get() {
+            return field + player.tracks.getValue("audio")
+                .drop(1).map { track ->
+                    Track(track.mpvId.toString(), track.name)
+                }.toTypedArray()
+        }
+
+    private var selectedAudio = 0
+
+    private var hadPreviousAudio = false
 
     @SuppressLint("ClickableViewAccessibility")
     @Suppress("DEPRECATION")
@@ -157,30 +185,65 @@ class PlayerActivity :
         binding.controls.isVisible = !binding.controls.isVisible
     }
 
-    private fun pickAudio() = selectTrack("audio", { player.aid }, { player.aid = it })
-
-    private fun pickSub() = selectTrack("sub", { player.sid }, { player.sid = it })
-
-    private fun selectTrack(type: String, get: () -> Int, set: (Int) -> Unit) {
-        val tracks = player.tracks.getValue(type)
-        val selectedMpvId = get()
-        val selectedIndex = tracks.indexOfFirst { it.mpvId == selectedMpvId }
+    private fun pickAudio() {
+        val tracks = player.tracks.getValue("audio")
         val restore = pauseForDialog()
 
         with(MaterialAlertDialogBuilder(this)) {
             setSingleChoiceItems(
-                tracks.map { it.name }.toTypedArray(),
-                selectedIndex
+                audioTracks.map { it.lang }.toTypedArray(),
+                selectedAudio
             ) { dialog, item ->
-                val trackId = tracks[item].mpvId
-
-                set(trackId)
+                if (item == selectedSub) return@setSingleChoiceItems
+                if (item == 0) {
+                    player.aid = tracks[0].mpvId
+                    return@setSingleChoiceItems
+                }
+                setAudio(item)
                 dialog.dismiss()
-                trackSwitchNotification { TrackData(trackId, type) }
             }
             setOnDismissListener { restore() }
             create().show()
         }
+    }
+
+    private fun pickSub() {
+        val tracks = player.tracks.getValue("sub")
+        val restore = pauseForDialog()
+
+        with(MaterialAlertDialogBuilder(this)) {
+            setSingleChoiceItems(
+                subTracks.map { it.lang }.toTypedArray(),
+                selectedSub
+            ) { dialog, item ->
+                if (item == 0) {
+                    player.sid = tracks[0].mpvId
+                    return@setSingleChoiceItems
+                }
+                setSub(item)
+                dialog.dismiss()
+            }
+            setOnDismissListener { restore() }
+            create().show()
+        }
+    }
+
+    private fun setSub(index: Int) {
+        if (selectedSub == index) return
+        selectedSub = index
+        val tracks = player.tracks.getValue("sub")
+        val selectedLoadedTrack = tracks.firstOrNull { it.name == subTracks[index].lang }
+        selectedLoadedTrack?.let { player.sid = it.mpvId }
+            ?: MPVLib.command(arrayOf("sub-add", subTracks[index].url, "select", subTracks[index].lang))
+    }
+
+    private fun setAudio(index: Int) {
+        if (selectedAudio == index) return
+        selectedAudio = index
+        val tracks = player.tracks.getValue("audio")
+        val selectedLoadedTrack = tracks.firstOrNull { it.name == audioTracks[index].lang }
+        selectedLoadedTrack?.let { player.aid = it.mpvId }
+            ?: MPVLib.command(arrayOf("audio-add", audioTracks[index].url, "select", audioTracks[index].lang))
     }
 
     private fun pauseForDialog(): StateRestoreCallback {
@@ -323,35 +386,16 @@ class PlayerActivity :
         showGestureText()
     }
 
-    data class TrackData(val track_id: Int, val track_type: String)
-
-    private fun trackSwitchNotification(f: () -> TrackData) {
-        val (track_id, track_type) = f()
-        val trackPrefix = when (track_type) {
-            "audio" -> getString(R.string.track_audio)
-            "sub" -> getString(R.string.track_subs)
-            "video" -> "Video"
-            else -> "???"
-        }
-
-        if (track_id == -1) {
-            toast("$trackPrefix ${getString(R.string.track_off)}")
-            return
-        }
-
-        val trackName =
-            player.tracks[track_type]?.firstOrNull { it.mpvId == track_id }?.name ?: "???"
-        toast("$trackPrefix $trackName")
+    @Suppress("UNUSED_PARAMETER")
+    fun cycleAudio(view: View) {
+        setAudio(if (selectedAudio < audioTracks.lastIndex) selectedAudio + 1 else 0)
+        toast("Audio: ${audioTracks[selectedAudio].lang}")
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun cycleAudio(view: View) = trackSwitchNotification {
-        player.cycleAudio(); TrackData(player.aid, "audio")
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun cycleSub(view: View) = trackSwitchNotification {
-        player.cycleSub(); TrackData(player.sid, "sub")
+    fun cycleSub(view: View) {
+        setSub(if (selectedSub < subTracks.lastIndex) selectedSub + 1 else 0)
+        toast("Sub: ${subTracks[selectedSub].lang}")
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -405,7 +449,24 @@ class PlayerActivity :
     }
 
     private fun changeQuality(quality: Int) {
-        setVideoList(null, quality, player.timePos)
+        if (playerIsDestroyed) return
+        logcat(LogPriority.INFO) { "changing quality" }
+        currentVideoList?.getOrNull(quality)?.let {
+            setHttpOptions(it)
+            player.timePos?.let {
+                MPVLib.command(arrayOf("set", "start", "${player.timePos}"))
+            }
+            MPVLib.command(arrayOf("loadfile", it.videoUrl))
+            subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray() +
+                player.tracks.getValue("sub").map { track ->
+                    Track("mpv", track.name)
+                }.toTypedArray()
+            subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray() +
+                player.tracks.getValue("audio").map { track ->
+                    Track("mpv", track.name)
+                }.toTypedArray()
+        }
+        launchUI { refreshUi() }
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -498,30 +559,20 @@ class PlayerActivity :
         toast(error.message)
     }
 
-    fun setVideoList(videos: List<Video>?, videoPos: Int = 0, timePos: Int? = null) {
+    fun setVideoList(videos: List<Video>) {
         if (playerIsDestroyed) return
         logcat(LogPriority.INFO) { "loaded!!" }
-        currentVideoList = videos ?: currentVideoList
-        currentVideoList?.getOrNull(videoPos)?.let {
+        currentVideoList = videos
+        currentVideoList?.firstOrNull()?.let {
             setHttpOptions(it)
-            timePos?.let {
-                MPVLib.command(arrayOf("set", "start", "$timePos"))
-            } ?: presenter.currentEpisode?.last_second_seen?.let { pos ->
+            presenter.currentEpisode?.last_second_seen?.let { pos ->
                 val intPos = pos / 1000F
                 MPVLib.command(arrayOf("set", "start", "$intPos"))
             }
             setViewMode()
             MPVLib.command(arrayOf("loadfile", it.videoUrl))
-            it.subtitleTracks.forEachIndexed { i, sub ->
-                val select = if (i == 0) "select" else "auto"
-                // sub-add <url> <flags> <title>
-                MPVLib.command(arrayOf("sub-add", sub.url, select, sub.lang))
-            }
-            it.audioTracks.forEachIndexed { i, audio ->
-                val select = if (i == 0) "select" else "auto"
-                // audio-add <url> <flags> <title>
-                MPVLib.command(arrayOf("audio-add", audio.url, select, audio.lang))
-            }
+            subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
+            audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
         }
         launchUI { refreshUi() }
     }
@@ -548,6 +599,52 @@ class PlayerActivity :
         // MPVLib.setOptionString("cache-on-disk", "yes")
         // val cacheDir = File(applicationContext.filesDir, "media").path
         // MPVLib.setOptionString("cache-dir", cacheDir)
+    }
+
+    private fun fileLoaded() {
+        player.loadTracks()
+        if (hadPreviousSubs) {
+            subTracks.getOrNull(selectedSub)?.let { sub ->
+                MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.lang))
+            }
+        } else {
+            currentVideoList?.getOrNull(currentQuality)
+                ?.subtitleTracks?.let { tracks ->
+                    val langIndex = tracks.indexOfFirst {
+                        it.lang.contains(langName)
+                    }
+                    val requestedLanguage = if (langIndex == -1) 0 else langIndex
+                    tracks.getOrNull(requestedLanguage)?.let { sub ->
+                        hadPreviousSubs = true
+                        selectedSub = requestedLanguage + 1
+                        MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.lang))
+                    }
+                } ?: run {
+                val mpvSub = player.tracks.getValue("sub").first { player.sid == it.mpvId }
+                selectedSub = subTracks.indexOfFirst { it.lang == mpvSub.name }
+            }
+        }
+        if (hadPreviousAudio) {
+            audioTracks.getOrNull(selectedAudio)?.let { audio ->
+                MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.lang))
+            }
+        } else {
+            currentVideoList?.getOrNull(currentQuality)
+                ?.audioTracks?.let { tracks ->
+                    val langIndex = tracks.indexOfFirst {
+                        it.lang.contains(langName)
+                    }
+                    val requestedLanguage = if (langIndex == -1) 0 else langIndex
+                    tracks.getOrNull(requestedLanguage)?.let { audio ->
+                        hadPreviousAudio = true
+                        selectedAudio = requestedLanguage + 1
+                        MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.lang))
+                    }
+                } ?: run {
+                val mpvAudio = player.tracks.getValue("audio").first { player.aid == it.mpvId }
+                selectedAudio = audioTracks.indexOfFirst { it.lang == mpvAudio.name }
+            }
+        }
     }
 
     // mpv events
@@ -577,5 +674,9 @@ class PlayerActivity :
 
     override fun eventProperty(property: String, value: String) {}
 
-    override fun event(eventId: Int) {}
+    override fun event(eventId: Int) {
+        when (eventId) {
+            MPVLib.mpvEventId.MPV_EVENT_FILE_LOADED -> fileLoaded()
+        }
+    }
 }

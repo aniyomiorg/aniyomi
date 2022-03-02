@@ -121,7 +121,7 @@ class SettingsLibraryController : SettingsController() {
                 entryValues = arrayOf("-1") + categoriesAnime.map { it.id.toString() }.toTypedArray()
                 defaultValue = "-1"
 
-                val selectedCategory = categoriesAnime.find { it.id == preferences.defaultCategory() }
+                val selectedCategory = categoriesAnime.find { it.id == preferences.defaultAnimeCategory() }
                 summary = selectedCategory?.name
                     ?: context.getString(R.string.default_category_summary)
                 onChange { newValue ->

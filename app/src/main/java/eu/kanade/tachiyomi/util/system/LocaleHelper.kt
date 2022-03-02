@@ -79,6 +79,14 @@ object LocaleHelper {
     }
 
     /**
+     * Return English display string from string language code
+     */
+    fun getSimpleLocaleDisplay(lang: String): String {
+        val sp = lang.split("_", "-")
+        return Locale(sp[0]).getDisplayLanguage(getLocaleFromString(null))
+    }
+
+    /**
      * Returns the locale for the value stored in preferences, defaults to main system language.
      *
      * @param pref the string value stored in preferences.
