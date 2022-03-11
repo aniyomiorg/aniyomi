@@ -9,19 +9,19 @@ Aniyomi is an unofficial fork of the free and open source manga reader [Tachiyom
 ## Features
 
 Features include:
-* Watching anime from [a variety of sources](https://github.com/jmir1/aniyomi-extensions)
-* Everything you know and love about Tachiyomi: 
-    * Online reading from a variety of sources
-    * Local reading of downloaded content
-    * A configurable reader with multiple viewers, reading directions and other settings.
+
+* Everything you know and love about Tachiyomi but for anime 
+    * Watching anime from [a variety of sources](https://github.com/jmir1/aniyomi-extensions)
+    * Local watching of downloaded content
+    * A configurable player with inbuilt PiP, Playback options and other settings.
     * Tracker support: [MyAnimeList](https://myanimelist.net/), [AniList](https://anilist.co/), [Kitsu](https://kitsu.io/), [Shikimori](https://shikimori.one), and [Bangumi](https://bgm.tv/)
     * Categories to organize your library
     * Light and dark themes
-    * Schedule updating your library for new chapters
-    * Create backups locally to read offline or to your desired cloud service
+    * Schedule updating your library for new episodes
+    * Create backups locally to watch offline or to your desired cloud service
 
 ## Download
-Get the app from the [releases page](https://github.com/Quickdesh/animite/releases).
+Get the app from the [releases page](https://github.com/Quickdesh/Animite/releases).
 
 ## Issues, Feature Requests and Contributing
 
@@ -29,7 +29,7 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 
 <details><summary>Issues</summary>
 
-1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/Quickdesh/animite/issues).**
+1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/Quickdesh/Animite/issues).**
 2. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR)
 
 </details>
