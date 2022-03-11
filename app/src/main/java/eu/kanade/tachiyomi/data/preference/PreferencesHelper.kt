@@ -104,6 +104,8 @@ class PreferencesHelper(val context: Context) {
 
     fun progressPreference() = prefs.getString(Keys.progressPreference, "0.85F")!!.toFloat()
 
+    fun unseenProgressPreference() = prefs.getString(Keys.unseenProgressPreference, "0L")!!.toLong()
+
     fun skipLengthPreference() = prefs.getString(Keys.skipLengthPreference, "10")!!.toInt()
 
     fun readerTheme() = flowPrefs.getInt("pref_reader_theme_key", 1)

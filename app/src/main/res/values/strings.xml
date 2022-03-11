@@ -430,6 +430,7 @@
     <string name="pref_category_player">Player</string>
     <string name="pref_category_progress">Progress</string>
     <string name="pref_progress_mark_as_seen">At what point to mark the episode as seen</string>
+    <string name="pref_progress_mark_as_unseen">Till how many seconds should the episode be marked as unseen</string>
     <string name="pref_skip_length">Double tap to skip length</string>
     <string name="pref_skip_30">30s</string>
     <string name="pref_skip_20">20s</string>
@@ -439,13 +440,22 @@
     <string name="pref_pip_player_summary">Note: this is still an experimental feature!</string>
     <string name="pref_always_use_external_player">Always use external player</string>
     <string name="pref_external_player_preference">External player preference</string>
-    <string name="pref_progress_70">70%</string>
-    <string name="pref_progress_75">75%</string>
-    <string name="pref_progress_80">80%</string>
-    <string name="pref_progress_85">85%</string>
-    <string name="pref_progress_90">90%</string>
-    <string name="pref_progress_95">95%</string>
-    <string name="pref_progress_100">100%</string>
+
+    <string name="pref_progress_seen_70">70%</string>
+    <string name="pref_progress_seen_75">75%</string>
+    <string name="pref_progress_seen_80">80%</string>
+    <string name="pref_progress_seen_85">85%</string>
+    <string name="pref_progress_seen_90">90%</string>
+    <string name="pref_progress_seen_95">95%</string>
+    <string name="pref_progress_seen_100">100%</string>
+
+    <string name="pref_progress_unseen_0s">Disabled</string>
+    <string name="pref_progress_unseen_5s">5 seconds</string>
+    <string name="pref_progress_unseen_10s">10 seconds</string>
+    <string name="pref_progress_unseen_15s">15 seconds</string>
+    <string name="pref_progress_unseen_20s">20 seconds</string>
+    <string name="pref_progress_unseen_25s">25 seconds</string>
+    <string name="pref_progress_unseen_30s">30 seconds</string>
     <string name="playertitle">%1$s - %2$s</string>
 
       <!-- Downloads section -->

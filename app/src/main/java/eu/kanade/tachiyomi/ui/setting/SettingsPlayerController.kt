@@ -20,13 +20,13 @@ class SettingsPlayerController : SettingsController() {
             titleRes = R.string.pref_progress_mark_as_seen
 
             entriesRes = arrayOf(
-                R.string.pref_progress_100,
-                R.string.pref_progress_95,
-                R.string.pref_progress_90,
-                R.string.pref_progress_85,
-                R.string.pref_progress_80,
-                R.string.pref_progress_75,
-                R.string.pref_progress_70
+                R.string.pref_progress_seen_100,
+                R.string.pref_progress_seen_95,
+                R.string.pref_progress_seen_90,
+                R.string.pref_progress_seen_85,
+                R.string.pref_progress_seen_80,
+                R.string.pref_progress_seen_75,
+                R.string.pref_progress_seen_70
             )
             entryValues = arrayOf(
                 "1.00F",
@@ -41,6 +41,33 @@ class SettingsPlayerController : SettingsController() {
 
             summary = "%s"
         }
+
+        /**listPreference {
+         key = Keys.unseenProgressPreference
+         titleRes = R.string.pref_progress_mark_as_unseen
+
+         entriesRes = arrayOf(
+         R.string.pref_progress_unseen_0s,
+         R.string.pref_progress_unseen_5s,
+         R.string.pref_progress_unseen_10s,
+         R.string.pref_progress_unseen_15s,
+         R.string.pref_progress_unseen_20s,
+         R.string.pref_progress_unseen_25s,
+         R.string.pref_progress_unseen_30s
+         )
+         entryValues = arrayOf(
+         "0L",
+         "5000L",
+         "10000L",
+         "15000L",
+         "20000L",
+         "25000L",
+         "30000L"
+         )
+         defaultValue = "0L"
+
+         summary = "%s"
+         }*/
 
         listPreference {
             key = Keys.skipLengthPreference
