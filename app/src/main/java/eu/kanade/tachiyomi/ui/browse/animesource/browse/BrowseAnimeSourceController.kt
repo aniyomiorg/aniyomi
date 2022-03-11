@@ -602,7 +602,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
                 .show()
         } else {
             val categories = presenter.getCategories()
-            val defaultCategoryId = preferences.defaultCategory()
+            val defaultCategoryId = preferences.defaultAnimeCategory()
             val defaultCategory = categories.find { it.id == defaultCategoryId }
 
             when {

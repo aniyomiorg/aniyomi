@@ -5,16 +5,11 @@ import android.net.Uri
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Chapter
 import eu.kanade.tachiyomi.data.database.models.Episode
-import eu.kanade.tachiyomi.data.database.models.Manga
-import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.source.Source
-import eu.kanade.tachiyomi.util.chapter.NoChaptersException
+import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import kotlinx.coroutines.Job
 import uy.kohesive.injekt.injectLazy
@@ -25,7 +20,6 @@ import java.util.Locale
 
 abstract class AbstractBackupRestore<T : AbstractBackupManager>(protected val context: Context, protected val notifier: BackupNotifier) {
 
-    protected val db: DatabaseHelper by injectLazy()
     protected val animedb: AnimeDatabaseHelper by injectLazy()
     protected val trackManager: TrackManager by injectLazy()
 
@@ -67,28 +61,6 @@ abstract class AbstractBackupRestore<T : AbstractBackupManager>(protected val co
      * Fetches chapter information.
      *
      * @param source source of manga
-     * @param manga manga that needs updating
-     * @return Updated manga chapters.
-     */
-    internal suspend fun updateChapters(source: Source, manga: Manga, chapters: List<Chapter>): Pair<List<Chapter>, List<Chapter>> {
-        return try {
-            backupManager.restoreChapters(source, manga, chapters)
-        } catch (e: Exception) {
-            // If there's any error, return empty update and continue.
-            val errorMessage = if (e is NoChaptersException) {
-                context.getString(R.string.no_chapters_error)
-            } else {
-                e.message
-            }
-            errors.add(Date() to "${manga.title} - $errorMessage")
-            Pair(emptyList(), emptyList())
-        }
-    }
-
-    /**
-     * Fetches chapter information.
-     *
-     * @param source source of manga
      * @param anime manga that needs updating
      * @return Updated manga chapters.
      */
@@ -97,36 +69,13 @@ abstract class AbstractBackupRestore<T : AbstractBackupManager>(protected val co
             backupManager.restoreEpisodes(source, anime, episodes)
         } catch (e: Exception) {
             // If there's any error, return empty update and continue.
-            val errorMessage = if (e is NoChaptersException) {
-                context.getString(R.string.no_chapters_error)
+            val errorMessage = if (e is NoEpisodesException) {
+                context.getString(R.string.no_episodes_error)
             } else {
                 e.message
             }
             errors.add(Date() to "${anime.title} - $errorMessage")
             Pair(emptyList(), emptyList())
-        }
-    }
-
-    /**
-     * Refreshes tracking information.
-     *
-     * @param manga manga that needs updating.
-     * @param tracks list containing tracks from restore file.
-     */
-    internal suspend fun updateTracking(manga: Manga, tracks: List<Track>) {
-        tracks.forEach { track ->
-            val service = trackManager.getService(track.sync_id)
-            if (service != null && service.isLogged) {
-                try {
-                    val updatedTrack = service.refresh(track)
-                    db.insertTrack(updatedTrack).executeAsBlocking()
-                } catch (e: Exception) {
-                    errors.add(Date() to "${manga.title} - ${e.message}")
-                }
-            } else {
-                val serviceName = service?.nameRes()?.let { context.getString(it) }
-                errors.add(Date() to "${manga.title} - ${context.getString(R.string.tracker_not_logged_in, serviceName)}")
-            }
         }
     }
 
@@ -171,7 +120,7 @@ abstract class AbstractBackupRestore<T : AbstractBackupManager>(protected val co
     internal fun writeErrorLog(): File {
         try {
             if (errors.isNotEmpty()) {
-                val file = context.createFileInCacheDir("aniyomi_restore.txt")
+                val file = context.createFileInCacheDir("animite_restore.txt")
                 val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
 
                 file.bufferedWriter().use { out ->

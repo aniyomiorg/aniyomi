@@ -16,9 +16,8 @@ import eu.kanade.tachiyomi.ui.base.controller.RxController
 import eu.kanade.tachiyomi.ui.base.controller.TabbedController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
-import eu.kanade.tachiyomi.ui.recent.history.HistoryController
 
-class HistoryTabsController() :
+class HistoryTabsController :
     RxController<PagerControllerBinding>(),
     RootController,
     TabbedController {
@@ -63,7 +62,6 @@ class HistoryTabsController() :
 
         private val tabTitles = listOf(
             R.string.label_animehistory,
-            R.string.label_history
         )
             .map { resources!!.getString(it) }
 
@@ -74,7 +72,6 @@ class HistoryTabsController() :
         override fun configureRouter(router: Router, position: Int) {
             if (!router.hasRootController()) {
                 val controller: Controller = when (position) {
-                    HISTORY_CONTROLLER -> HistoryController()
                     ANIME_HISTORY_CONTROLLER -> AnimeHistoryController()
                     else -> error("Wrong position $position")
                 }
@@ -89,6 +86,5 @@ class HistoryTabsController() :
 
     companion object {
         const val ANIME_HISTORY_CONTROLLER = 0
-        const val HISTORY_CONTROLLER = 1
     }
 }

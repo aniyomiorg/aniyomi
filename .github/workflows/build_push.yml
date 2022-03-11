@@ -43,13 +43,13 @@ jobs:
 
       - name: Get tag name
 
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/aniyomi'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Quickdesh/aniyomi'
         run: |
           set -x
           echo "VERSION_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
       - name: Sign APK
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/aniyomi'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Quickdesh/aniyomi'
         uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: app/build/outputs/apk/standard/release
@@ -59,7 +59,7 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Clean up build artifacts
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/aniyomi'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Quickdesh/aniyomi'
         run: |
           set -e
 
@@ -80,7 +80,7 @@ jobs:
           echo "APK_X86_SHA=$sha" >> $GITHUB_ENV
 
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'jmir1/aniyomi'
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Quickdesh/aniyomi'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.VERSION_TAG }}

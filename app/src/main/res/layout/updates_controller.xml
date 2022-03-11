@@ -17,7 +17,7 @@
             android:clipToPadding="false"
             android:paddingTop="4dp"
             android:paddingBottom="@dimen/action_toolbar_list_padding"
-            tools:listitem="@layout/updates_item" />
+            tools:listitem="@layout/anime_updates_item" />
 
         <eu.kanade.tachiyomi.widget.MaterialFastScroll
             android:id="@+id/fast_scroller"

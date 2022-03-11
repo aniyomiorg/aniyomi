@@ -16,9 +16,8 @@ import eu.kanade.tachiyomi.ui.base.controller.RxController
 import eu.kanade.tachiyomi.ui.base.controller.TabbedController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesController
-import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
 
-class UpdatesTabsController() :
+class UpdatesTabsController :
     RxController<PagerControllerBinding>(),
     RootController,
     TabbedController {
@@ -63,7 +62,6 @@ class UpdatesTabsController() :
 
         private val tabTitles = listOf(
             R.string.label_animeupdates,
-            R.string.label_updates
         )
             .map { resources!!.getString(it) }
 
@@ -74,7 +72,6 @@ class UpdatesTabsController() :
         override fun configureRouter(router: Router, position: Int) {
             if (!router.hasRootController()) {
                 val controller: Controller = when (position) {
-                    UPDATES_CONTROLLER -> UpdatesController()
                     ANIME_UPDATES_CONTROLLER -> AnimeUpdatesController()
                     else -> error("Wrong position $position")
                 }
@@ -88,7 +85,6 @@ class UpdatesTabsController() :
     }
 
     companion object {
-        const val UPDATES_CONTROLLER = 1
         const val ANIME_UPDATES_CONTROLLER = 0
     }
 }

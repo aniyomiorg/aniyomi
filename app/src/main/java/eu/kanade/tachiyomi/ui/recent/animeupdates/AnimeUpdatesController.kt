@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.recent.animeupdates
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -421,6 +422,7 @@ class AnimeUpdatesController :
         actionMode?.invalidate()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun selectInverse() {
         val adapter = adapter ?: return
         for (i in 0..adapter.itemCount) {

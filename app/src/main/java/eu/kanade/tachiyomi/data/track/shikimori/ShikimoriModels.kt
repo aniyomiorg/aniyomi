@@ -1,17 +1,6 @@
 package eu.kanade.tachiyomi.data.track.shikimori
 
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Track
-
-fun Track.toShikimoriStatus() = when (status) {
-    Shikimori.READING -> "watching"
-    Shikimori.COMPLETED -> "completed"
-    Shikimori.ON_HOLD -> "on_hold"
-    Shikimori.DROPPED -> "dropped"
-    Shikimori.PLANNING -> "planned"
-    Shikimori.REPEATING -> "rewatching"
-    else -> throw NotImplementedError("Unknown status: $status")
-}
 
 fun AnimeTrack.toShikimoriStatus() = when (status) {
     Shikimori.READING -> "watching"

@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.data.database.tables
 
 object AnimeCategoryTable {
 
-    const val TABLE = "animes_categories"
+    const val TABLE = "anime_categories"
 
     const val COL_ID = "_id"
 

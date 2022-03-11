@@ -550,7 +550,7 @@ class AnimelibUpdateService(
     private fun writeErrorFile(errors: List<Pair<Anime, String?>>): File {
         try {
             if (errors.isNotEmpty()) {
-                val file = createFileInCacheDir("aniyomi_update_errors.txt")
+                val file = createFileInCacheDir("animite_update_errors.txt")
                 file.bufferedWriter().use { out ->
                     out.write(getString(R.string.library_errors_help, ERROR_LOG_HELP_URL) + "\n\n")
                     // Error file format:

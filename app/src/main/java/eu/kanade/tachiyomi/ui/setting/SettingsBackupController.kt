@@ -22,7 +22,6 @@ import eu.kanade.tachiyomi.data.backup.BackupCreatorJob
 import eu.kanade.tachiyomi.data.backup.BackupRestoreService
 import eu.kanade.tachiyomi.data.backup.full.FullBackupRestoreValidator
 import eu.kanade.tachiyomi.data.backup.full.models.BackupFull
-import eu.kanade.tachiyomi.data.backup.legacy.LegacyBackupRestoreValidator
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.requestPermissionsSafe
 import eu.kanade.tachiyomi.util.preference.bindTo
@@ -219,7 +218,7 @@ class SettingsBackupController : SettingsController() {
         override fun onCreateDialog(savedViewState: Bundle?): Dialog {
             val activity = activity!!
             val options = arrayOf(
-                R.string.manga_anime,
+                R.string.anime_library_entries,
                 R.string.general_categories,
                 R.string.chapters_episodes,
                 R.string.track,
@@ -270,9 +269,6 @@ class SettingsBackupController : SettingsController() {
                 var type = BackupConst.BACKUP_TYPE_FULL
                 val results = runCatching {
                     FullBackupRestoreValidator().validate(activity, uri)
-                }.recoverCatching {
-                    type = BackupConst.BACKUP_TYPE_LEGACY
-                    LegacyBackupRestoreValidator().validate(activity, uri)
                 }.getOrThrow()
 
                 var message = if (type == BackupConst.BACKUP_TYPE_FULL) {

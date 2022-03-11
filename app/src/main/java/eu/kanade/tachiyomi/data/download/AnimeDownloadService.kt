@@ -110,7 +110,7 @@ class AnimeDownloadService : Service() {
      * Called when the service is destroyed.
      */
     override fun onDestroy() {
-        ioScope?.cancel()
+        ioScope.cancel()
         runningRelay.call(false)
         subscriptions.unsubscribe()
         downloadManager.stopDownloads()

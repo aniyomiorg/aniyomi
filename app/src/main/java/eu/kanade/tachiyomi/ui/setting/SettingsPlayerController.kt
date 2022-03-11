@@ -100,7 +100,7 @@ class SettingsPlayerController : SettingsController() {
             key = Keys.pipPlayerPreference
             titleRes = R.string.pref_pip_player
             summaryRes = R.string.pref_pip_player_summary
-            defaultValue = false
+            defaultValue = true
         }
     }
 }

@@ -13,7 +13,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
@@ -41,15 +40,12 @@ import eu.kanade.tachiyomi.data.preference.PreferenceKeys as Keys
 
 class SettingsDownloadController : SettingsController() {
 
-    private val db: DatabaseHelper by injectLazy()
     private val adb: AnimeDatabaseHelper by injectLazy()
 
     override fun setupPreferenceScreen(screen: PreferenceScreen) = screen.apply {
         titleRes = R.string.pref_category_downloads
 
-        val dbCategories = db.getCategories().executeAsBlocking()
         val dbAnimeCategories = adb.getCategories().executeAsBlocking()
-        val mangaCategories = listOf(Category.createDefault(context)) + dbCategories
         val animeCategories = listOf(Category.createDefault(context)) + dbAnimeCategories
 
         preference {
@@ -124,25 +120,6 @@ class SettingsDownloadController : SettingsController() {
                         }
                     }.launchIn(viewScope)
             }
-            multiSelectListPreference {
-                bindTo(preferences.removeExcludeCategories())
-                titleRes = R.string.pref_remove_exclude_categories_manga
-                entries = mangaCategories.map { it.name }.toTypedArray()
-                entryValues = mangaCategories.map { it.id.toString() }.toTypedArray()
-
-                preferences.removeExcludeCategories().asFlow()
-                    .onEach { mutable ->
-                        val selected = mutable
-                            .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
-                            .sortedBy { it.order }
-
-                        summary = if (selected.isEmpty()) {
-                            resources?.getString(R.string.none)
-                        } else {
-                            selected.joinToString { it.name }
-                        }
-                    }.launchIn(viewScope)
-            }
         }
 
         preferenceCategory {
@@ -191,48 +168,6 @@ class SettingsDownloadController : SettingsController() {
                     .onEach { updateSummary() }
                     .launchIn(viewScope)
                 preferences.downloadNewCategoriesAnimeExclude().asFlow()
-                    .onEach { updateSummary() }
-                    .launchIn(viewScope)
-            }
-            preference {
-                bindTo(preferences.downloadNewCategories())
-                titleRes = R.string.categories
-                onClick {
-                    DownloadCategoriesDialog().showDialog(router)
-                }
-
-                visibleIf(preferences.downloadNew()) { it }
-
-                fun updateSummary() {
-                    val selectedCategories = preferences.downloadNewCategories().get()
-                        .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
-                        .sortedBy { it.order }
-                    val includedItemsText = if (selectedCategories.isEmpty()) {
-                        context.getString(R.string.all)
-                    } else {
-                        selectedCategories.joinToString { it.name }
-                    }
-
-                    val excludedCategories = preferences.downloadNewCategoriesExclude().get()
-                        .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
-                        .sortedBy { it.order }
-                    val excludedItemsText = if (excludedCategories.isEmpty()) {
-                        context.getString(R.string.none)
-                    } else {
-                        excludedCategories.joinToString { it.name }
-                    }
-
-                    summary = buildSpannedString {
-                        append(context.getString(R.string.include, includedItemsText))
-                        appendLine()
-                        append(context.getString(R.string.exclude, excludedItemsText))
-                    }
-                }
-
-                preferences.downloadNewCategories().asFlow()
-                    .onEach { updateSummary() }
-                    .launchIn(viewScope)
-                preferences.downloadNewCategoriesExclude().asFlow()
                     .onEach { updateSummary() }
                     .launchIn(viewScope)
             }
@@ -340,54 +275,6 @@ class SettingsDownloadController : SettingsController() {
         }
     }
 
-    class DownloadCategoriesDialog : DialogController() {
-
-        private val preferences: PreferencesHelper = Injekt.get()
-        private val db: DatabaseHelper = Injekt.get()
-
-        override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-            val dbCategories = db.getCategories().executeAsBlocking()
-            val categories = listOf(Category.createDefault(activity!!)) + dbCategories
-
-            val items = categories.map { it.name }
-            var selected = categories
-                .map {
-                    when (it.id.toString()) {
-                        in preferences.downloadNewCategories().get() -> QuadStateTextView.State.CHECKED.ordinal
-                        in preferences.downloadNewCategoriesExclude().get() -> QuadStateTextView.State.INVERSED.ordinal
-                        else -> QuadStateTextView.State.UNCHECKED.ordinal
-                    }
-                }
-                .toIntArray()
-
-            return MaterialAlertDialogBuilder(activity!!)
-                .setTitle(R.string.categories)
-                .setQuadStateMultiChoiceItems(
-                    message = R.string.pref_download_new_categories_details,
-                    items = items,
-                    initialSelected = selected
-                ) { selections ->
-                    selected = selections
-                }
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    val included = selected
-                        .mapIndexed { index, value -> if (value == QuadStateTextView.State.CHECKED.ordinal) index else null }
-                        .filterNotNull()
-                        .map { categories[it].id.toString() }
-                        .toSet()
-                    val excluded = selected
-                        .mapIndexed { index, value -> if (value == QuadStateTextView.State.INVERSED.ordinal) index else null }
-                        .filterNotNull()
-                        .map { categories[it].id.toString() }
-                        .toSet()
-
-                    preferences.downloadNewCategories().set(included)
-                    preferences.downloadNewCategoriesExclude().set(excluded)
-                }
-                .setNegativeButton(android.R.string.cancel, null)
-                .create()
-        }
-    }
     class DownloadAnimeCategoriesDialog : DialogController() {
 
         private val preferences: PreferencesHelper = Injekt.get()

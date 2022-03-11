@@ -23,7 +23,6 @@ import coil.decode.ImageDecoderDecoder
 import coil.util.DebugLogger
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
 import eu.kanade.tachiyomi.data.coil.ByteBufferFetcher
-import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher
 import eu.kanade.tachiyomi.data.coil.TachiyomiImageDecoder
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
@@ -128,7 +127,6 @@ open class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
                 add(TachiyomiImageDecoder(this@App.resources))
                 add(ByteBufferFetcher())
                 add(AnimeCoverFetcher())
-                add(MangaCoverFetcher())
             }
             okHttpClient(Injekt.get<NetworkHelper>().coilClient)
             crossfade((300 * this@App.animatorDurationScale).toInt())

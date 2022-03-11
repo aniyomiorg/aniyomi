@@ -3,10 +3,8 @@ package eu.kanade.tachiyomi.data.track.bangumi
 import android.net.Uri
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.await
@@ -34,18 +32,6 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
 
     private val authClient = client.newBuilder().addInterceptor(interceptor).build()
 
-    suspend fun addLibManga(track: Track): Track {
-        return withIOContext {
-            val body = FormBody.Builder()
-                .add("rating", track.score.toInt().toString())
-                .add("status", track.toBangumiStatus())
-                .build()
-            authClient.newCall(POST("$apiUrl/collection/${track.media_id}/update", body = body))
-                .await()
-            track
-        }
-    }
-
     suspend fun addLibAnime(track: AnimeTrack): AnimeTrack {
         return withIOContext {
             val body = FormBody.Builder()
@@ -54,31 +40,6 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
                 .build()
             authClient.newCall(POST("$apiUrl/collection/${track.media_id}/update", body = body))
                 .await()
-            track
-        }
-    }
-
-    suspend fun updateLibManga(track: Track): Track {
-        return withIOContext {
-            // read status update
-            val sbody = FormBody.Builder()
-                .add("rating", track.score.toInt().toString())
-                .add("status", track.toBangumiStatus())
-                .build()
-            authClient.newCall(POST("$apiUrl/collection/${track.media_id}/update", body = sbody))
-                .await()
-
-            // chapter update
-            val body = FormBody.Builder()
-                .add("watched_eps", track.last_chapter_read.toInt().toString())
-                .build()
-            authClient.newCall(
-                POST(
-                    "$apiUrl/subject/${track.media_id}/update/watched_eps",
-                    body = body
-                )
-            ).await()
-
             track
         }
     }
@@ -108,30 +69,6 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         }
     }
 
-    suspend fun search(search: String): List<TrackSearch> {
-        return withIOContext {
-            val url = "$apiUrl/search/subject/${URLEncoder.encode(search, StandardCharsets.UTF_8.name())}"
-                .toUri()
-                .buildUpon()
-                .appendQueryParameter("max_results", "20")
-                .build()
-            authClient.newCall(GET(url.toString()))
-                .await()
-                .use {
-                    var responseBody = it.body?.string().orEmpty()
-                    if (responseBody.isEmpty()) {
-                        throw Exception("Null Response")
-                    }
-                    if (responseBody.contains("\"code\":404")) {
-                        responseBody = "{\"results\":0,\"list\":[]}"
-                    }
-                    val response = json.decodeFromString<JsonObject>(responseBody)["list"]?.jsonArray
-                    response?.filter { it.jsonObject["type"]?.jsonPrimitive?.int == 1 }
-                        ?.map { jsonToSearch(it.jsonObject) }.orEmpty()
-                }
-        }
-    }
-
     suspend fun searchAnime(search: String): List<AnimeTrackSearch> {
         return withIOContext {
             val url = "$apiUrl/search/subject/${URLEncoder.encode(search, StandardCharsets.UTF_8.name())}"
@@ -153,28 +90,6 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
                     response?.filter { it.jsonObject["type"]?.jsonPrimitive?.int == 1 }
                         ?.map { jsonToSearchAnime(it.jsonObject) }.orEmpty()
                 }
-        }
-    }
-
-    private fun jsonToSearch(obj: JsonObject): TrackSearch {
-        val coverUrl = if (obj["images"] is JsonObject) {
-            obj["images"]?.jsonObject?.get("common")?.jsonPrimitive?.contentOrNull ?: ""
-        } else {
-            // Sometimes JsonNull
-            ""
-        }
-        val totalChapters = if (obj["eps_count"] != null) {
-            obj["eps_count"]!!.jsonPrimitive.int
-        } else {
-            0
-        }
-        return TrackSearch.create(TrackManager.BANGUMI).apply {
-            media_id = obj["id"]!!.jsonPrimitive.int
-            title = obj["name_cn"]!!.jsonPrimitive.content
-            cover_url = coverUrl
-            summary = obj["name"]!!.jsonPrimitive.content
-            tracking_url = obj["url"]!!.jsonPrimitive.content
-            total_chapters = totalChapters
         }
     }
 
@@ -200,49 +115,12 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         }
     }
 
-    suspend fun findLibManga(track: Track): Track? {
-        return withIOContext {
-            authClient.newCall(GET("$apiUrl/subject/${track.media_id}"))
-                .await()
-                .parseAs<JsonObject>()
-                .let { jsonToSearch(it) }
-        }
-    }
-
     suspend fun findLibAnime(track: AnimeTrack): AnimeTrack? {
         return withIOContext {
             authClient.newCall(GET("$apiUrl/subject/${track.media_id}"))
                 .await()
                 .parseAs<JsonObject>()
                 .let { jsonToSearchAnime(it) }
-        }
-    }
-
-    suspend fun statusLibManga(track: Track): Track? {
-        return withIOContext {
-            val urlUserRead = "$apiUrl/collection/${track.media_id}"
-            val requestUserRead = Request.Builder()
-                .url(urlUserRead)
-                .cacheControl(CacheControl.FORCE_NETWORK)
-                .get()
-                .build()
-
-            // TODO: get user readed chapter here
-            var response = authClient.newCall(requestUserRead).await()
-            var responseBody = response.body?.string().orEmpty()
-            if (responseBody.isEmpty()) {
-                throw Exception("Null Response")
-            }
-            if (responseBody.contains("\"code\":400")) {
-                null
-            } else {
-                json.decodeFromString<Collection>(responseBody).let {
-                    track.status = it.status?.id!!
-                    track.last_chapter_read = it.ep_status!!.toFloat()
-                    track.score = it.rating!!
-                    track
-                }
-            }
         }
     }
 

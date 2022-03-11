@@ -49,7 +49,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/info_recycler"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/chapters_item" />
+                tools:listitem="@layout/episodes_item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

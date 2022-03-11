@@ -9,7 +9,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.forEach
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -120,20 +119,12 @@ class ClearDatabaseController :
         return true
     }
 
-    fun setItems(items: List<AbstractFlexibleItem<out FlexibleViewHolder>>) {
+    fun setItemsAnime(items: List<AbstractFlexibleItem<out FlexibleViewHolder>>) {
         val animeItems = adapter?.currentItems?.filterIsInstance<ClearDatabaseAnimeSourceItem>()
             ?: emptyList()
         adapter?.clear()
         adapter?.addItems(0, animeItems)
         adapter?.addItems(adapter?.itemCount ?: 0, items)
-    }
-
-    fun setItemsAnime(items: List<AbstractFlexibleItem<out FlexibleViewHolder>>) {
-        val mangaItems = adapter?.currentItems?.filterIsInstance<ClearDatabaseSourceItem>()
-            ?: emptyList()
-        adapter?.clear()
-        adapter?.addItems(0, items)
-        adapter?.addItems(adapter?.itemCount ?: 0, mangaItems)
     }
 
     override fun configureFab(fab: ExtendedFloatingActionButton) {
@@ -183,12 +174,6 @@ class ClearDatabaseController :
         }.mapNotNull { position ->
             (adapter.getItem(position) as? ClearDatabaseAnimeSourceItem)?.source?.id
         }
-        val selectedSourceIds = adapter.selectedPositions.filter { position ->
-            adapter.getItem(position) is ClearDatabaseSourceItem
-        }.mapNotNull { position ->
-            (adapter.getItem(position) as? ClearDatabaseSourceItem)?.source?.id
-        }
-        presenter.clearDatabaseForSourceIds(selectedSourceIds)
         presenter.clearDatabaseForAnimeSourceIds(selectedAnimeSourceIds)
         actionFab!!.isVisible = false
         adapter.clearSelection()

@@ -361,7 +361,7 @@ class AnimeController :
 
     private fun updateToolbarTitleAlpha(@FloatRange(from = 0.0, to = 1.0) alpha: Float? = null) {
         // Controller may actually already be destroyed by the time this gets run
-        binding ?: return
+        binding
 
         val scrolledList = binding.fullRecycler ?: binding.infoRecycler!!
         (activity as? MainActivity)?.binding?.appbar?.titleTextAlpha = when {
@@ -575,7 +575,7 @@ class AnimeController :
 
     private fun addToAnimelib(anime: Anime) {
         val categories = presenter.getCategories()
-        val defaultCategoryId = preferences.defaultCategory()
+        val defaultCategoryId = preferences.defaultAnimeCategory()
         val defaultCategory = categories.find { it.id == defaultCategoryId }
 
         when {

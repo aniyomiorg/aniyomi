@@ -134,14 +134,6 @@
                 android:textColor="@color/md_white_1000"
                 android:textStyle="bold" />
 
-            <ImageButton android:id="@+id/watcher_controls_pip"
-                android:layout_height="50dp"
-                android:layout_width="50dp"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_picture_in_picture_alt_24dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:contentDescription="@string/action_player_pip" />
-
         </RelativeLayout>
 
         <LinearLayout

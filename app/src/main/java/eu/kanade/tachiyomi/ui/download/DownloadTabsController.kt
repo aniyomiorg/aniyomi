@@ -20,7 +20,6 @@ import eu.kanade.tachiyomi.ui.base.controller.TabbedController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.widget.listener.SimpleTabSelectedListener
 import eu.kanade.tachiyomi.ui.download.anime.DownloadController as AnimeDownloadController
-import eu.kanade.tachiyomi.ui.download.manga.DownloadController as MangaDownloadController
 
 class DownloadTabsController :
     RxController<PagerControllerBinding>(),
@@ -31,8 +30,6 @@ class DownloadTabsController :
     private var adapter: DownloadTabsAdapter? = null
 
     private val animeController = AnimeDownloadController()
-
-    private val mangaController = MangaDownloadController()
 
     private lateinit var thisFab: ExtendedFloatingActionButton
 
@@ -46,11 +43,6 @@ class DownloadTabsController :
                     animeController.selectTab()
                     if (!firstOpen) animeController.setInformationView()
                 }
-                MANGADOWNLOAD_CONTROLLER -> {
-                    mangaController.configureFab(thisFab)
-                    mangaController.selectTab()
-                    if (!firstOpen) mangaController.setInformationView()
-                }
             }
             firstOpen = false
         }
@@ -61,10 +53,6 @@ class DownloadTabsController :
                 ANIMEDOWNLOAD_CONTROLLER -> {
                     animeController.unselectTab()
                     animeController.cleanupFab(thisFab)
-                }
-                MANGADOWNLOAD_CONTROLLER -> {
-                    mangaController.unselectTab()
-                    mangaController.cleanupFab(thisFab)
                 }
             }
         }
@@ -115,7 +103,6 @@ class DownloadTabsController :
 
         private val tabTitles = listOf(
             R.string.label_animehistory,
-            R.string.label_history
         )
             .map { resources!!.getString(it) }
 
@@ -127,7 +114,6 @@ class DownloadTabsController :
             if (!router.hasRootController()) {
                 val controller: Controller = when (position) {
                     ANIMEDOWNLOAD_CONTROLLER -> animeController
-                    MANGADOWNLOAD_CONTROLLER -> mangaController
                     else -> error("Wrong position $position")
                 }
                 router.setRoot(RouterTransaction.with(controller))
@@ -146,12 +132,10 @@ class DownloadTabsController :
     override fun cleanupFab(fab: ExtendedFloatingActionButton) {
         thisFab = fab
         animeController.cleanupFab(thisFab)
-        mangaController.cleanupFab(thisFab)
         thisFab.isVisible = false
     }
 
     companion object {
         const val ANIMEDOWNLOAD_CONTROLLER = 0
-        const val MANGADOWNLOAD_CONTROLLER = 1
     }
 }

@@ -9,7 +9,6 @@ import android.os.PowerManager
 import androidx.core.content.ContextCompat
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.full.FullBackupRestore
-import eu.kanade.tachiyomi.data.backup.legacy.LegacyBackupRestore
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.util.system.acquireWakeLock
 import eu.kanade.tachiyomi.util.system.isServiceRunning
@@ -125,7 +124,7 @@ class BackupRestoreService : Service() {
 
         backupRestore = when (mode) {
             BackupConst.BACKUP_TYPE_FULL -> FullBackupRestore(this, notifier)
-            else -> LegacyBackupRestore(this, notifier)
+            else -> return START_STICKY_COMPATIBILITY
         }
 
         val handler = CoroutineExceptionHandler { _, exception ->

@@ -2,13 +2,13 @@ package eu.kanade.tachiyomi.data.database.queries
 
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery
 import com.pushtorefresh.storio.sqlite.queries.Query
-import eu.kanade.tachiyomi.data.database.DbProvider
+import eu.kanade.tachiyomi.data.database.AnimeDbProvider
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable
 import eu.kanade.tachiyomi.data.track.TrackService
 
-interface AnimeTrackQueries : DbProvider {
+interface AnimeTrackQueries : AnimeDbProvider {
 
     fun getTracks() = db.get()
         .listOfObjects(AnimeTrack::class.java)

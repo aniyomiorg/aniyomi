@@ -45,9 +45,6 @@ class AboutController : SettingsController(), NoAppBarElevationController {
                 BuildConfig.DEBUG -> {
                     "Debug ${BuildConfig.COMMIT_SHA} (${getFormattedBuildTime()})"
                 }
-                BuildConfig.PREVIEW -> {
-                    "Preview r${BuildConfig.COMMIT_COUNT} (${BuildConfig.COMMIT_SHA}, ${getFormattedBuildTime()})"
-                }
                 else -> {
                     "Stable ${BuildConfig.VERSION_NAME} (${getFormattedBuildTime()})"
                 }

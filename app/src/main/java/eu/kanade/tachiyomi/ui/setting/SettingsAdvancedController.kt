@@ -10,12 +10,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
-import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
-import eu.kanade.tachiyomi.data.library.LibraryUpdateService
-import eu.kanade.tachiyomi.data.library.LibraryUpdateService.Target
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.PREF_DOH_ADGUARD
@@ -49,10 +44,7 @@ import eu.kanade.tachiyomi.data.preference.PreferenceKeys as Keys
 class SettingsAdvancedController : SettingsController() {
 
     private val network: NetworkHelper by injectLazy()
-    private val chapterCache: ChapterCache by injectLazy()
     private val episodeCache: EpisodeCache by injectLazy()
-    private val db: DatabaseHelper by injectLazy()
-    private val animedb: AnimeDatabaseHelper by injectLazy()
 
     @SuppressLint("BatteryLife")
     override fun setupPreferenceScreen(screen: PreferenceScreen) = screen.apply {
@@ -132,7 +124,7 @@ class SettingsAdvancedController : SettingsController() {
             preference {
                 key = CLEAR_CACHE_KEY
                 titleRes = R.string.pref_clear_chapter_cache
-                summary = context.getString(R.string.used_cache_both, episodeCache.readableSize, chapterCache.readableSize)
+                summary = context.getString(R.string.used_cache, episodeCache.readableSize)
 
                 onClick { clearChapterAndEpisodeCache() }
             }
@@ -197,7 +189,6 @@ class SettingsAdvancedController : SettingsController() {
                 titleRes = R.string.pref_refresh_library_covers
 
                 onClick {
-                    LibraryUpdateService.start(context, target = Target.COVERS)
                     AnimelibUpdateService.start(context, target = AnimelibUpdateService.Target.COVERS)
                 }
             }
@@ -207,7 +198,6 @@ class SettingsAdvancedController : SettingsController() {
                 summaryRes = R.string.pref_refresh_library_tracking_summary
 
                 onClick {
-                    LibraryUpdateService.start(context, target = Target.TRACKING)
                     AnimelibUpdateService.start(context, target = AnimelibUpdateService.Target.TRACKING)
                 }
             }
@@ -269,11 +259,11 @@ class SettingsAdvancedController : SettingsController() {
         if (activity == null) return
         launchIO {
             try {
-                val deletedFiles = chapterCache.clear() + episodeCache.clear()
+                val deletedFiles = episodeCache.clear()
                 withUIContext {
                     activity?.toast(resources?.getString(R.string.cache_deleted, deletedFiles))
                     findPreference(CLEAR_CACHE_KEY)?.summary =
-                        resources?.getString(R.string.used_cache_both, episodeCache.readableSize, chapterCache.readableSize)
+                        resources?.getString(R.string.used_cache, episodeCache.readableSize)
                 }
             } catch (e: Throwable) {
                 withUIContext { activity?.toast(R.string.cache_delete_error) }

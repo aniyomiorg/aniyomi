@@ -5,7 +5,7 @@ import com.pushtorefresh.storio.sqlite.operations.get.PreparedGetListOfObjects
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery
 import com.pushtorefresh.storio.sqlite.queries.Query
 import com.pushtorefresh.storio.sqlite.queries.RawQuery
-import eu.kanade.tachiyomi.data.database.DbProvider
+import eu.kanade.tachiyomi.data.database.AnimeDbProvider
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
 import eu.kanade.tachiyomi.data.database.models.SourceIdAnimeCount
@@ -21,7 +21,7 @@ import eu.kanade.tachiyomi.data.database.tables.AnimeTable
 import eu.kanade.tachiyomi.data.database.tables.CategoryTable
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable
 
-interface AnimeQueries : DbProvider {
+interface AnimeQueries : AnimeDbProvider {
 
     fun getAnimelibAnimes() = db.get()
         .listOfObjects(AnimelibAnime::class.java)

@@ -2,13 +2,13 @@ package eu.kanade.tachiyomi.data.database.queries
 
 import com.pushtorefresh.storio.Queries
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery
-import eu.kanade.tachiyomi.data.database.DbProvider
+import eu.kanade.tachiyomi.data.database.AnimeDbProvider
 import eu.kanade.tachiyomi.data.database.inTransaction
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeCategory
 import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable
 
-interface AnimeCategoryQueries : DbProvider {
+interface AnimeCategoryQueries : AnimeDbProvider {
 
     fun insertAnimeCategory(animeCategory: AnimeCategory) = db.put().`object`(animeCategory).prepare()
 

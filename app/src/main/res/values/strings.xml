@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Aniyomi</string>
+    <string name="app_name" translatable="false">Animite</string>
 
     <!-- Models -->
     <string name="name">Name</string>
-    <string name="categories">Manga Categories</string>
     <string name="general_categories">Categories</string>
     <string name="anime_categories">Anime Categories</string>
     <string name="manga">Manga</string>
-    <string name="manga_anime">Library entries</string>
+    <string name="anime_library_entries">Library entries</string>
     <string name="chapters">Chapters</string>
     <string name="chapters_episodes">Chapters and episodes</string>
     <string name="episodes">Episodes</string>
@@ -38,7 +37,7 @@
     <string name="label_default">Default</string>
     <string name="label_warning">Warning</string>
 
-    <string name="unlock_app">Unlock Aniyomi</string>
+    <string name="unlock_app">Unlock Animite</string>
     <string name="confirm_lock_change">Authenticate to confirm change</string>
     <string name="confirm_exit">Press back again to exit</string>
 
@@ -106,11 +105,17 @@
     <string name="action_next_chapter">Next chapter</string>
     <string name="action_next_episode">Next episode</string>
     <string name="action_screen_fit">Screen fit mode</string>
+    <string name="action_player_pip">PiP mode</string>
     <string name="action_retry">Retry</string>
     <string name="action_remove">Remove</string>
     <string name="action_start">Start</string>
     <string name="action_resume">Resume</string>
     <string name="action_open_in_browser">Open in browser</string>
+    <string name="action_player_lock">Lock player</string>
+    <string name="action_player_unlock">Unlock player</string>
+    <string name="action_player_settings">Player settings</string>
+    <string name="action_player_information">Player information</string>
+
     <!-- Do not translate "WebView" -->
     <string name="action_open_in_web_view">Open in WebView</string>
     <string name="action_web_view" translatable="false">WebView</string>
@@ -465,7 +470,7 @@
     <string name="pref_category_anime_download">Anime downloads</string>
     <string name="pref_use_external_downloader">Always use external downloader for anime</string>
     <string name="pref_external_downloader_selection">Downloader app preference</string>
-    <string name="pref_download_new">Download new chapters</string>
+    <string name="pref_download_new">Download new episodes</string>
     <string name="pref_download_new_categories_details">Manga in excluded categories will not be downloaded even if they are also in included categories.</string>
     <string name="pref_download_new_anime_categories_details">Anime in excluded categories will not be downloaded even if they are also in included categories.</string>
     <string name="save_chapter_as_cbz">Save as CBZ archive</string>
@@ -533,7 +538,7 @@
     <string name="cache_delete_error">An error occurred while clearing cache</string>
     <string name="pref_auto_clear_chapter_cache">Clear chapter/episode cache on app close</string>
     <string name="pref_clear_database">Clear database</string>
-    <string name="pref_clear_database_summary">Delete history for anime and manga that are not saved in your library</string>
+    <string name="pref_clear_database_summary">Delete history for anime that are not saved in your library</string>
     <plurals name="clear_database_source_item_count">
         <item quantity="one">1 non-library entry in database</item>
         <item quantity="other">%1$s non-library entries in database</item>
@@ -817,7 +822,7 @@
     <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Tachiyomi</string>
 
     <!-- Library update service notifications -->
-    <string name="notification_check_updates">Checking for new chapters</string>
+    <string name="notification_check_updates">Checking for new episodes</string>
     <string name="notification_updating">Updating library… (%1$d/%2$d)</string>
     <string name="notification_size_warning">Warning: large updates harm sources and may lead to slower updates and also increased battery usage</string>
     <string name="notification_new_chapters">New chapters found</string>
@@ -917,7 +922,7 @@
     <string name="channel_progress">Progress</string>
     <string name="channel_complete">Complete</string>
     <string name="channel_errors">Errors</string>
-    <string name="channel_new_chapters">Chapter updates</string>
+    <string name="channel_new_episodes">Episode updates</string>
     <string name="channel_app_updates">App updates</string>
     <string name="channel_ext_updates">Extension updates</string>
     <string name="channel_crash_logs">Crash logs</string>
@@ -927,6 +932,7 @@
     <string name="spen_next_page">Next page</string>
     <string name="watcher_controls_skip_text">+85 s</string>
     <string name="no_next_episode">Next Episode not found!</string>
+    <string name="no_previous_episode">Previous Episode not found!</string>
     <string name="anime_description_cover">Cover of Anime</string>
     <string name="label_history">Manga</string>
     <string name="label_animehistory">Anime</string>

@@ -13,12 +13,12 @@ class AnimelibAnimeGetResolver : DefaultGetResolver<AnimelibAnime>(), BaseAnimeG
     }
 
     override fun mapFromCursor(cursor: Cursor): AnimelibAnime {
-        val manga = AnimelibAnime()
+        val anime = AnimelibAnime()
 
-        mapBaseFromCursor(manga, cursor)
-        manga.unseen = cursor.getInt(cursor.getColumnIndexOrThrow(AnimeTable.COL_UNREAD))
-        manga.category = cursor.getInt(cursor.getColumnIndexOrThrow(AnimeTable.COL_CATEGORY))
+        mapBaseFromCursor(anime, cursor)
+        anime.unseen = cursor.getInt(cursor.getColumnIndexOrThrow(AnimeTable.COL_UNREAD))
+        anime.category = cursor.getInt(cursor.getColumnIndexOrThrow(AnimeTable.COL_CATEGORY))
 
-        return manga
+        return anime
     }
 }

@@ -10,7 +10,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.Dispatchers
@@ -24,33 +23,11 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
     CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        val db = Injekt.get<DatabaseHelper>()
         val animedb = Injekt.get<AnimeDatabaseHelper>()
         val trackManager = Injekt.get<TrackManager>()
         val delayedTrackingStore = Injekt.get<DelayedTrackingStore>()
 
         withContext(Dispatchers.IO) {
-            val tracks = delayedTrackingStore.getItems().mapNotNull {
-                val manga = db.getManga(it.mangaId).executeAsBlocking() ?: return@withContext
-                db.getTracks(manga).executeAsBlocking()
-                    .find { track -> track.id == it.trackId }
-                    ?.also { track ->
-                        track.last_chapter_read = it.lastChapterRead
-                    }
-            }
-
-            tracks.forEach { track ->
-                try {
-                    val service = trackManager.getService(track.sync_id)
-                    if (service != null && service.isLogged) {
-                        service.update(track, true)
-                        db.insertTrack(track).executeAsBlocking()
-                    }
-                } catch (e: Exception) {
-                    logcat(LogPriority.ERROR, e)
-                }
-            }
-
             val animeTracks = delayedTrackingStore.getAnimeItems().mapNotNull {
                 val anime = animedb.getAnime(it.animeId).executeAsBlocking() ?: return@withContext
                 animedb.getTracks(anime).executeAsBlocking()

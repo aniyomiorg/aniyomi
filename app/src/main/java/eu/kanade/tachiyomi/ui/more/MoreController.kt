@@ -9,27 +9,15 @@ import androidx.preference.PreferenceScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
-import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.ui.base.controller.NoAppBarElevationController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
-import eu.kanade.tachiyomi.ui.category.CategoryController
 import eu.kanade.tachiyomi.ui.download.DownloadTabsController
 import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
 import eu.kanade.tachiyomi.ui.setting.SettingsBackupController
 import eu.kanade.tachiyomi.ui.setting.SettingsController
 import eu.kanade.tachiyomi.ui.setting.SettingsMainController
-import eu.kanade.tachiyomi.util.preference.add
-import eu.kanade.tachiyomi.util.preference.bindTo
-import eu.kanade.tachiyomi.util.preference.iconRes
-import eu.kanade.tachiyomi.util.preference.iconTint
-import eu.kanade.tachiyomi.util.preference.onClick
-import eu.kanade.tachiyomi.util.preference.preference
-import eu.kanade.tachiyomi.util.preference.preferenceCategory
-import eu.kanade.tachiyomi.util.preference.summaryRes
-import eu.kanade.tachiyomi.util.preference.switchPreference
-import eu.kanade.tachiyomi.util.preference.titleRes
+import eu.kanade.tachiyomi.util.preference.*
 import eu.kanade.tachiyomi.util.system.getResourceColor
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import kotlinx.coroutines.flow.launchIn
@@ -46,7 +34,6 @@ class MoreController :
     RootController,
     NoAppBarElevationController {
 
-    private val downloadManager: DownloadManager by injectLazy()
     private val animedownloadManager: AnimeDownloadManager by injectLazy()
     private var isDownloading: Boolean = false
     private var isDownloadingAnime: Boolean = false
@@ -54,7 +41,6 @@ class MoreController :
     private var downloadQueueSizeAnime: Int = 0
 
     private var untilDestroySubscriptions = CompositeSubscription()
-        private set
 
     override fun setupPreferenceScreen(screen: PreferenceScreen) = screen.apply {
         titleRes = R.string.label_more
@@ -96,7 +82,7 @@ class MoreController :
             preference {
                 titleRes = R.string.label_download_queue
 
-                if (downloadManager.queue.isNotEmpty() || animedownloadManager.queue.isNotEmpty()) {
+                if (animedownloadManager.queue.isNotEmpty()) {
                     initDownloadQueueSummary(this)
                 }
 
@@ -112,14 +98,6 @@ class MoreController :
                 iconTint = tintColor
                 onClick {
                     router.pushController(AnimeCategoryController().withFadeTransaction())
-                }
-            }
-            preference {
-                titleRes = R.string.categories
-                iconRes = R.drawable.ic_label_24dp
-                iconTint = tintColor
-                onClick {
-                    router.pushController(CategoryController().withFadeTransaction())
                 }
             }
             preference {
@@ -175,12 +153,6 @@ class MoreController :
 
     private fun initDownloadQueueSummary(preference: Preference) {
         // Handle running/paused status change
-        DownloadService.runningRelay
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeUntilDestroy { isRunning ->
-                isDownloading = isRunning
-                updateDownloadQueueSummary(preference)
-            }
 
         AnimeDownloadService.runningRelay
             .observeOn(AndroidSchedulers.mainThread())
@@ -190,12 +162,6 @@ class MoreController :
             }
 
         // Handle queue progress updating
-        downloadManager.queue.getUpdatedObservable()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeUntilDestroy {
-                downloadQueueSize = it.size
-                updateDownloadQueueSummary(preference)
-            }
 
         animedownloadManager.queue.getUpdatedObservable()
             .observeOn(AndroidSchedulers.mainThread())

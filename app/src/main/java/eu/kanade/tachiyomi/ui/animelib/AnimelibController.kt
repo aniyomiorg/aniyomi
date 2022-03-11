@@ -445,7 +445,7 @@ class AnimelibController(
     }
 
     override fun onCreateActionToolbar(menuInflater: MenuInflater, menu: Menu) {
-        menuInflater.inflate(R.menu.library_selection, menu)
+        menuInflater.inflate(R.menu.animelib_selection, menu)
     }
 
     override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
@@ -461,7 +461,7 @@ class AnimelibController(
 
     override fun onPrepareActionToolbar(toolbar: ActionModeWithToolbar, menu: Menu) {
         if (selectedAnimes.isEmpty()) return
-        toolbar.findToolbarItem(R.id.action_download_unread)?.isVisible =
+        toolbar.findToolbarItem(R.id.action_download_unseen)?.isVisible =
             selectedAnimes.any { it.source != LocalAnimeSource.ID }
     }
 

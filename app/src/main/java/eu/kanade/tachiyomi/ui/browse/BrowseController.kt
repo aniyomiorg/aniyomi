@@ -21,9 +21,7 @@ import eu.kanade.tachiyomi.ui.base.controller.RxController
 import eu.kanade.tachiyomi.ui.base.controller.TabbedController
 import eu.kanade.tachiyomi.ui.browse.animeextension.AnimeExtensionController
 import eu.kanade.tachiyomi.ui.browse.animesource.AnimeSourceController
-import eu.kanade.tachiyomi.ui.browse.extension.ExtensionController
 import eu.kanade.tachiyomi.ui.browse.migration.sources.MigrationSourcesController
-import eu.kanade.tachiyomi.ui.browse.source.SourceController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import uy.kohesive.injekt.injectLazy
 
@@ -76,7 +74,6 @@ class BrowseController :
                 setupWithViewPager(binding.pager)
 
                 // Show badges on tabs for extension updates
-                setExtensionUpdateBadge()
                 setAnimeExtensionUpdateBadge()
             }
         }
@@ -91,25 +88,7 @@ class BrowseController :
 
     override fun cleanupTabs(tabs: TabLayout) {
         // Remove extension update badge
-        tabs.getTabAt(EXTENSIONS_CONTROLLER)?.removeBadge()
         tabs.getTabAt(ANIMEEXTENSIONS_CONTROLLER)?.removeBadge()
-    }
-
-    fun setExtensionUpdateBadge() {
-        /* It's possible to switch to the Library controller by the time setExtensionUpdateBadge
-        is called, resulting in a badge being put on the category tabs (if enabled).
-        This check prevents that from happening */
-        if (router.backstack.last().controller !is BrowseController) return
-
-        (activity as? MainActivity)?.binding?.tabs?.apply {
-            val updates = preferences.extensionUpdatesCount().get()
-            if (updates > 0) {
-                val badge: BadgeDrawable? = getTabAt(EXTENSIONS_CONTROLLER)?.orCreateBadge
-                badge?.isVisible = true
-            } else {
-                getTabAt(EXTENSIONS_CONTROLLER)?.removeBadge()
-            }
-        }
     }
 
     fun setAnimeExtensionUpdateBadge() {
@@ -133,9 +112,7 @@ class BrowseController :
 
         private val tabTitles = listOf(
             R.string.label_animesources,
-            R.string.label_mangasources,
             R.string.label_animeextensions,
-            R.string.label_mangaextensions,
             R.string.label_migration
         )
             .map { resources!!.getString(it) }
@@ -147,9 +124,7 @@ class BrowseController :
         override fun configureRouter(router: Router, position: Int) {
             if (!router.hasRootController()) {
                 val controller: Controller = when (position) {
-                    SOURCES_CONTROLLER -> SourceController()
                     ANIMESOURCES_CONTROLLER -> AnimeSourceController()
-                    EXTENSIONS_CONTROLLER -> ExtensionController()
                     ANIMEEXTENSIONS_CONTROLLER -> AnimeExtensionController()
                     MIGRATION_CONTROLLER -> MigrationSourcesController()
                     else -> error("Wrong position $position")
@@ -166,10 +141,8 @@ class BrowseController :
     companion object {
         const val TO_EXTENSIONS_EXTRA = "to_extensions"
 
-        const val SOURCES_CONTROLLER = 1
         const val ANIMESOURCES_CONTROLLER = 0
-        const val EXTENSIONS_CONTROLLER = 3
-        const val ANIMEEXTENSIONS_CONTROLLER = 2
-        const val MIGRATION_CONTROLLER = 4
+        const val ANIMEEXTENSIONS_CONTROLLER = 1
+        const val MIGRATION_CONTROLLER = 2
     }
 }

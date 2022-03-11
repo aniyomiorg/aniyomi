@@ -1,6 +1,6 @@
-| Build | Preview Release | Codefactor | Stable | Translate Tachiyomi | Discord Server |
-|-------|-----------|-------|----------|------------|---------|
-| ![CI](https://github.com/jmir1/aniyomi/workflows/CI/badge.svg?branch=master&event=push) | [![latest preview build](https://img.shields.io/github/v/release/jmir1/aniyomi-preview.svg?maxAge=3600&label=download)](https://github.com/jmir1/aniyomi-preview/releases) | [![CodeFactor](https://www.codefactor.io/repository/github/jmir1/aniyomi/badge)](https://www.codefactor.io/repository/github/jmir1/aniyomi) | [![stable release](https://img.shields.io/github/release/jmir1/aniyomi.svg?maxAge=3600&label=download)](https://github.com/jmir1/aniyomi/releases) | [![Translation status](https://hosted.weblate.org/widgets/tachiyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/tachiyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
+| Stable | Translate Tachiyomi | Discord Server |
+|------------|---------|
+[![stable release](https://img.shields.io/github/release/jmir1/aniyomi.svg?maxAge=3600&label=download)](https://github.com/Quickdesh/animite/releases) | [![Translation status](https://hosted.weblate.org/widgets/tachiyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/tachiyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
 
 
 # ![app icon](.github/readme-images/app-icon.png)Aniyomi
@@ -21,9 +21,7 @@ Features include:
     * Create backups locally to read offline or to your desired cloud service
 
 ## Download
-Get the app from the [releases page](https://github.com/jmir1/aniyomi/releases).
-
-If you want to try new features before they get to the stable release, you can download the preview version [here](https://github.com/jmir1/aniyomi-preview/releases).
+Get the app from the [releases page](https://github.com/Quickdesh/animite/releases).
 
 ## Issues, Feature Requests and Contributing
 
@@ -31,7 +29,7 @@ Please make sure to read the full guidelines. Your issue may be closed without w
 
 <details><summary>Issues</summary>
 
-1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/jmir1/aniyomi/issues).**
+1. **Before reporting a new issue, take a look at the already opened [issues](https://github.com/Quickdesh/animite/issues).**
 2. If you are unsure, ask here: [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR)
 
 </details>

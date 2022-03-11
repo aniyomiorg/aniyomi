@@ -5,19 +5,16 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateJob
 import eu.kanade.tachiyomi.data.backup.BackupCreatorJob
-import eu.kanade.tachiyomi.data.library.LibraryUpdateJob
 import eu.kanade.tachiyomi.data.preference.MANGA_ONGOING
 import eu.kanade.tachiyomi.data.preference.PreferenceKeys
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.updater.AppUpdateJob
 import eu.kanade.tachiyomi.extension.AnimeExtensionUpdateJob
-import eu.kanade.tachiyomi.extension.ExtensionUpdateJob
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
 import eu.kanade.tachiyomi.ui.library.LibrarySort
 import eu.kanade.tachiyomi.ui.library.setting.SortDirectionSetting
 import eu.kanade.tachiyomi.ui.library.setting.SortModeSetting
-import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.util.preference.minusAssign
 import eu.kanade.tachiyomi.util.preference.plusAssign
 import eu.kanade.tachiyomi.util.system.toast
@@ -45,9 +42,7 @@ object Migrations {
             if (BuildConfig.INCLUDE_UPDATER) {
                 AppUpdateJob.setupTask(context)
             }
-            ExtensionUpdateJob.setupTask(context)
             AnimeExtensionUpdateJob.setupTask(context)
-            LibraryUpdateJob.setupTask(context)
             AnimelibUpdateJob.setupTask(context)
             BackupCreatorJob.setupTask(context)
 
@@ -63,7 +58,6 @@ object Migrations {
                 if (BuildConfig.INCLUDE_UPDATER) {
                     AppUpdateJob.setupTask(context)
                 }
-                LibraryUpdateJob.setupTask(context)
             }
             if (oldVersion < 15) {
                 // Delete internal chapter cache dir.
@@ -96,11 +90,9 @@ object Migrations {
                 if (BuildConfig.INCLUDE_UPDATER) {
                     AppUpdateJob.setupTask(context)
                 }
-                LibraryUpdateJob.setupTask(context)
                 BackupCreatorJob.setupTask(context)
 
                 // New extension update check job
-                ExtensionUpdateJob.setupTask(context)
             }
             if (oldVersion < 44) {
                 // Reset sorting preference if using removed sort by source
@@ -170,33 +162,16 @@ object Migrations {
                     AppUpdateJob.setupTask(context)
                 }
 
-                // Migrate Rotation and Viewer values to default values for viewer_flags
-                val newOrientation = when (prefs.getInt("pref_rotation_type_key", 1)) {
-                    1 -> OrientationType.FREE.flagValue
-                    2 -> OrientationType.PORTRAIT.flagValue
-                    3 -> OrientationType.LANDSCAPE.flagValue
-                    4 -> OrientationType.LOCKED_PORTRAIT.flagValue
-                    5 -> OrientationType.LOCKED_LANDSCAPE.flagValue
-                    else -> OrientationType.FREE.flagValue
-                }
-
                 // Reading mode flag and prefValue is the same value
                 val newReadingMode = prefs.getInt("pref_default_viewer_key", 1)
 
                 prefs.edit {
-                    putInt("pref_default_orientation_type_key", newOrientation)
-                    remove("pref_rotation_type_key")
                     putInt("pref_default_reading_mode_key", newReadingMode)
                     remove("pref_default_viewer_key")
                 }
             }
             if (oldVersion < 61) {
                 // Handle removed every 1 or 2 hour library updates
-                val updateInterval = preferences.libraryUpdateInterval().get()
-                if (updateInterval == 1 || updateInterval == 2) {
-                    preferences.libraryUpdateInterval().set(3)
-                    LibraryUpdateJob.setupTask(context, 3)
-                }
                 val animeupdateInterval = preferences.libraryUpdateInterval().get()
                 if (animeupdateInterval == 1 || animeupdateInterval == 2) {
                     preferences.libraryUpdateInterval().set(3)
@@ -208,9 +183,7 @@ object Migrations {
                 if (BuildConfig.INCLUDE_UPDATER) {
                     AppUpdateJob.setupTask(context)
                 }
-                ExtensionUpdateJob.setupTask(context)
                 AnimeExtensionUpdateJob.setupTask(context)
-                LibraryUpdateJob.setupTask(context)
                 AnimelibUpdateJob.setupTask(context)
             }
             if (oldVersion < 64) {
@@ -255,7 +228,6 @@ object Migrations {
                 val updateInterval = preferences.libraryUpdateInterval().get()
                 if (updateInterval in listOf(3, 4, 6, 8)) {
                     preferences.libraryUpdateInterval().set(12)
-                    LibraryUpdateJob.setupTask(context, 12)
                     AnimelibUpdateJob.setupTask(context, 12)
                 }
             }

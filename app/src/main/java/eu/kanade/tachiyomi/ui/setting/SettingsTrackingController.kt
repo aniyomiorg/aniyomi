@@ -4,10 +4,10 @@ import android.app.Activity
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.preference.PreferenceGroup
 import androidx.preference.PreferenceScreen
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.track.NoLoginTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
@@ -15,7 +15,6 @@ import eu.kanade.tachiyomi.data.track.anilist.AnilistApi
 import eu.kanade.tachiyomi.data.track.bangumi.BangumiApi
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeListApi
 import eu.kanade.tachiyomi.data.track.shikimori.ShikimoriApi
-import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.ui.setting.track.TrackLoginDialog
 import eu.kanade.tachiyomi.ui.setting.track.TrackLogoutDialog
 import eu.kanade.tachiyomi.util.preference.add
@@ -27,7 +26,6 @@ import eu.kanade.tachiyomi.util.preference.preferenceCategory
 import eu.kanade.tachiyomi.util.preference.switchPreference
 import eu.kanade.tachiyomi.util.preference.titleRes
 import eu.kanade.tachiyomi.util.system.openInBrowser
-import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.widget.preference.TrackerPreference
 import uy.kohesive.injekt.injectLazy
 import eu.kanade.tachiyomi.data.preference.PreferenceKeys as Keys
@@ -38,7 +36,7 @@ class SettingsTrackingController :
     TrackLogoutDialog.Listener {
 
     private val trackManager: TrackManager by injectLazy()
-    private val sourceManager: SourceManager by injectLazy()
+    private val animeSourceManager: AnimeSourceManager by injectLazy()
 
     override fun setupPreferenceScreen(screen: PreferenceScreen) = screen.apply {
         titleRes = R.string.pref_category_tracking
@@ -71,25 +69,6 @@ class SettingsTrackingController :
             }
 
             infoPreference(R.string.tracking_info)
-        }
-
-        preferenceCategory {
-            titleRes = R.string.enhanced_services
-
-            trackPreference(trackManager.komga) {
-                val acceptedSources = trackManager.komga.getAcceptedSources()
-                val hasValidSourceInstalled = sourceManager.getCatalogueSources()
-                    .any { it::class.qualifiedName in acceptedSources }
-
-                if (hasValidSourceInstalled) {
-                    trackManager.komga.loginNoop()
-                    updatePreference(trackManager.komga.id)
-                } else {
-                    context.toast(R.string.tracker_komga_warning, Toast.LENGTH_LONG)
-                }
-            }
-
-            infoPreference(R.string.enhanced_tracking_info)
         }
     }
 

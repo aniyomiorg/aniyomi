@@ -16,9 +16,9 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.databinding.WebviewActivityBinding
-import eu.kanade.tachiyomi.source.SourceManager
-import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.activity.BaseViewBindingActivity
 import eu.kanade.tachiyomi.util.system.WebViewClientCompat
 import eu.kanade.tachiyomi.util.system.WebViewUtil
@@ -34,7 +34,7 @@ import uy.kohesive.injekt.injectLazy
 
 class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
 
-    private val sourceManager: SourceManager by injectLazy()
+    private val sourceManager: AnimeSourceManager by injectLazy()
 
     private var bundle: Bundle? = null
 
@@ -98,7 +98,7 @@ class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
             val url = intent.extras!!.getString(URL_KEY) ?: return
 
             var headers = mutableMapOf<String, String>()
-            val source = sourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? HttpSource
+            val source = sourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? AnimeHttpSource
             if (source != null) {
                 headers = source.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }.toMutableMap()
                 binding.webview.settings.userAgentString = source.headers["User-Agent"]

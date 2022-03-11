@@ -2,17 +2,6 @@
 
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/sc_collections_bookmark_48dp"
-        android:shortcutDisabledMessage="@string/app_not_available"
-        android:shortcutId="show_library"
-        android:shortcutLongLabel="@string/label_manga"
-        android:shortcutShortLabel="@string/label_manga">
-        <intent
-            android:action="eu.kanade.tachiyomi.SHOW_LIBRARY"
-            android:targetClass="eu.kanade.tachiyomi.ui.main.MainActivity" />
-    </shortcut>
-    <shortcut
-        android:enabled="true"
         android:icon="@drawable/sc_collections_baseline_48dp"
         android:shortcutDisabledMessage="@string/app_not_available"
         android:shortcutId="show_animelib"

@@ -5,10 +5,8 @@ import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -82,39 +80,13 @@ class MyAnimeList(private val context: Context, id: Int) : TrackService(id) {
         return IntRange(0, 10).map(Int::toString)
     }
 
-    override fun displayScore(track: Track): String {
-        return track.score.toInt().toString()
-    }
-
     override fun displayScore(track: AnimeTrack): String {
         return track.score.toInt().toString()
-    }
-
-    private suspend fun add(track: Track): Track {
-        return api.updateItem(track)
     }
 
     private suspend fun add(track: AnimeTrack): AnimeTrack {
         track.status = WATCHING
         track.score = 0F
-        return api.updateItem(track)
-    }
-
-    override suspend fun update(track: Track, didReadChapter: Boolean): Track {
-        if (track.status != COMPLETED) {
-            if (didReadChapter) {
-                if (track.last_chapter_read.toInt() == track.total_chapters && track.total_chapters > 0) {
-                    track.status = COMPLETED
-                    track.finished_reading_date = System.currentTimeMillis()
-                } else if (track.status != REREADING) {
-                    track.status = READING
-                    if (track.last_chapter_read == 1F) {
-                        track.started_reading_date = System.currentTimeMillis()
-                    }
-                }
-            }
-        }
-
         return api.updateItem(track)
     }
 
@@ -134,26 +106,6 @@ class MyAnimeList(private val context: Context, id: Int) : TrackService(id) {
         }
 
         return api.updateItem(track)
-    }
-
-    override suspend fun bind(track: Track, hasReadChapters: Boolean): Track {
-        val remoteTrack = api.findListItem(track)
-        return if (remoteTrack != null) {
-            track.copyPersonalFrom(remoteTrack)
-            track.media_id = remoteTrack.media_id
-
-            if (track.status != COMPLETED) {
-                val isRereading = track.status == REREADING
-                track.status = if (isRereading.not() && hasReadChapters) READING else track.status
-            }
-
-            update(track)
-        } else {
-            // Set default fields if it's not found in the list
-            track.status = if (hasReadChapters) READING else PLAN_TO_READ
-            track.score = 0F
-            add(track)
-        }
     }
 
     override suspend fun bind(track: AnimeTrack, hasReadChapters: Boolean): AnimeTrack {
@@ -176,22 +128,6 @@ class MyAnimeList(private val context: Context, id: Int) : TrackService(id) {
         }
     }
 
-    override suspend fun search(query: String): List<TrackSearch> {
-        if (query.startsWith(SEARCH_ID_PREFIX)) {
-            query.substringAfter(SEARCH_ID_PREFIX).toIntOrNull()?.let { id ->
-                return listOf(api.getMangaDetails(id))
-            }
-        }
-
-        if (query.startsWith(SEARCH_LIST_PREFIX)) {
-            query.substringAfter(SEARCH_LIST_PREFIX).let { title ->
-                return api.findListItems(title)
-            }
-        }
-
-        return api.search(query)
-    }
-
     override suspend fun searchAnime(query: String): List<AnimeTrackSearch> {
         if (query.startsWith(SEARCH_ID_PREFIX)) {
             query.substringAfter(SEARCH_ID_PREFIX).toIntOrNull()?.let { id ->
@@ -206,10 +142,6 @@ class MyAnimeList(private val context: Context, id: Int) : TrackService(id) {
         }
 
         return api.searchAnime(query)
-    }
-
-    override suspend fun refresh(track: Track): Track {
-        return api.findListItem(track) ?: add(track)
     }
 
     override suspend fun refresh(track: AnimeTrack): AnimeTrack {

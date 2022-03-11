@@ -34,7 +34,6 @@ object Notifications {
      */
     private const val GROUP_DOWNLOADER = "group_downloader"
     const val CHANNEL_DOWNLOADER_PROGRESS = "downloader_progress_channel"
-    const val ID_DOWNLOAD_CHAPTER_PROGRESS = -201
     const val ID_DOWNLOAD_EPISODE_PROGRESS = -204
     const val CHANNEL_DOWNLOADER_COMPLETE = "downloader_complete_channel"
     const val ID_DOWNLOAD_CHAPTER_COMPLETE = -203
@@ -136,7 +135,7 @@ object Notifications {
                     setShowBadge(false)
                 },
                 buildNotificationChannel(CHANNEL_NEW_CHAPTERS, IMPORTANCE_DEFAULT) {
-                    setName(context.getString(R.string.channel_new_chapters))
+                    setName(context.getString(R.string.channel_new_episodes))
                 },
                 buildNotificationChannel(CHANNEL_DOWNLOADER_PROGRESS, IMPORTANCE_LOW) {
                     setName(context.getString(R.string.channel_progress))

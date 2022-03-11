@@ -28,7 +28,7 @@
             android:layout_marginEnd="16dp"
             android:clipToPadding="false"
             android:paddingBottom="@dimen/fab_list_padding"
-            tools:listitem="@layout/chapters_item" />
+            tools:listitem="@layout/episodes_item" />
 
     </eu.kanade.tachiyomi.widget.ThemedSwipeRefreshLayout>
 

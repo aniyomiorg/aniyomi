@@ -18,7 +18,7 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.databinding.MangaFullCoverDialogBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
-import eu.kanade.tachiyomi.ui.reader.viewer.ReaderPageImageView
+import eu.kanade.tachiyomi.ui.player.viewer.ReaderPageImageView
 import eu.kanade.tachiyomi.util.view.setNavigationBarTransparentCompat
 import eu.kanade.tachiyomi.widget.TachiyomiFullscreenDialog
 import uy.kohesive.injekt.Injekt
@@ -67,13 +67,6 @@ class AnimeFullCoverDialog : DialogController {
         binding?.appbar?.applyInsetter {
             type(navigationBars = true, statusBars = true) {
                 padding(left = true, top = true, right = true)
-            }
-        }
-
-        binding?.container?.onViewClicked = { dialog?.dismiss() }
-        binding?.container?.applyInsetter {
-            type(navigationBars = true) {
-                padding(bottom = true)
             }
         }
 

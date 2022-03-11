@@ -1,10 +1,15 @@
 package eu.kanade.tachiyomi.ui.player
 
+import android.app.PendingIntent
 import android.app.PictureInPictureParams
+import android.app.RemoteAction
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,25 +17,14 @@ import android.view.Menu
 import android.view.View
 import android.view.WindowManager
 import android.webkit.WebSettings
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.SeekBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.github.vkay94.dtpv.DoubleTapPlayerView
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
-import com.google.android.exoplayer2.DefaultLoadControl
-import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackException
-import com.google.android.exoplayer2.PlaybackParameters
-import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.analytics.AnalyticsCollector
 import com.google.android.exoplayer2.database.StandaloneDatabaseProvider
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
@@ -67,6 +61,7 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingUpdateJob
 import eu.kanade.tachiyomi.databinding.WatcherActivityBinding
+import eu.kanade.tachiyomi.databinding.WatcherActivityNoPipBinding
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAppTheme
 import eu.kanade.tachiyomi.util.lang.awaitSingle
@@ -83,12 +78,28 @@ import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
-import java.util.Date
+import java.util.*
 
 class PlayerActivity : AppCompatActivity() {
 
-    private lateinit var binding: WatcherActivityBinding
+    private val ACTION_MEDIA_CONTROL = "media_control"
+    private val EXTRA_CONTROL_TYPE = "control_type"
+    private val REQUEST_PLAY = 1
+    private val REQUEST_PAUSE = 2
+    private val CONTROL_TYPE_PLAY = 1
+    private val CONTROL_TYPE_PAUSE = 2
+    private val REQUEST_PREVIOUS = 3
+    private val REQUEST_NEXT = 4
+    private val CONTROL_TYPE_PREVIOUS = 3
+    private val CONTROL_TYPE_NEXT = 4
+
+    /**
+     private val REQUEST_INFORMATION = 5
+     private val CONTROL_TYPE_INFORMATION = 5 */
+    private var mReceiver: BroadcastReceiver? = null
     private val preferences: PreferencesHelper = Injekt.get()
+    private lateinit var binding_no_pip: WatcherActivityNoPipBinding
+    private lateinit var binding_yes_pip: WatcherActivityBinding
     private val incognitoMode = preferences.incognitoMode().get()
     private val db: AnimeDatabaseHelper = Injekt.get()
     private val downloadManager: AnimeDownloadManager = Injekt.get()
@@ -108,6 +119,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var backBtn: TextView
     private lateinit var settingsBtn: ImageButton
     private lateinit var fitScreenBtn: ImageButton
+    private lateinit var pipBtn: ImageButton
     private lateinit var title: TextView
     private lateinit var bufferingView: ProgressBar
 
@@ -132,60 +144,117 @@ class PlayerActivity : AppCompatActivity() {
     private var isInPipMode: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = WatcherActivityBinding.inflate(layoutInflater)
-        applyAppTheme(preferences)
-        super.onCreate(savedInstanceState)
+        if (!preferences.pipPlayerPreference()) {
+            binding_no_pip = WatcherActivityNoPipBinding.inflate(layoutInflater)
+            applyAppTheme(preferences)
+            super.onCreate(savedInstanceState)
 
-        setContentView(binding.root)
+            setContentView(binding_no_pip.root)
 
-        playerView = binding.playerView
-        playerView.resizeMode = preferences.getPlayerViewMode()
-        youTubeDoubleTap = binding.youtubeOverlay
-        youTubeDoubleTap.seekSeconds(preferences.skipLengthPreference())
-        youTubeDoubleTap
-            .performListener(object : YouTubeOverlay.PerformListener {
-                override fun onAnimationStart() {
-                    // Do UI changes when circle scaling animation starts (e.g. hide controller views)
-                    youTubeDoubleTap.visibility = View.VISIBLE
-                }
+            playerView = binding_no_pip.playerView
+            playerView.resizeMode = preferences.getPlayerViewMode()
+            youTubeDoubleTap = binding_no_pip.youtubeOverlay
+            youTubeDoubleTap.seekSeconds(preferences.skipLengthPreference())
+            youTubeDoubleTap
+                .performListener(object : YouTubeOverlay.PerformListener {
+                    override fun onAnimationStart() {
+                        // Do UI changes when circle scaling animation starts (e.g. hide controller views)
+                        youTubeDoubleTap.visibility = View.VISIBLE
+                    }
 
-                override fun onAnimationEnd() {
-                    // Do UI changes when circle scaling animation starts (e.g. show controller views)
-                    youTubeDoubleTap.visibility = View.GONE
-                }
-            })
-        backBtn = findViewById(R.id.exo_overlay_back)
-        title = findViewById(R.id.exo_overlay_title)
-        skipBtn = findViewById(R.id.watcher_controls_skip_btn)
-        nextBtn = findViewById(R.id.watcher_controls_next)
-        prevBtn = findViewById(R.id.watcher_controls_prev)
-        settingsBtn = findViewById(R.id.watcher_controls_settings)
-        fitScreenBtn = findViewById(R.id.watcher_controls_fit_screen)
-        bufferingView = findViewById(R.id.exo_buffering)
+                    override fun onAnimationEnd() {
+                        // Do UI changes when circle scaling animation starts (e.g. show controller views)
+                        youTubeDoubleTap.visibility = View.GONE
+                    }
+                })
+            backBtn = findViewById(R.id.exo_overlay_back)
+            title = findViewById(R.id.exo_overlay_title)
+            skipBtn = findViewById(R.id.watcher_controls_skip_btn)
+            nextBtn = findViewById(R.id.watcher_controls_next)
+            prevBtn = findViewById(R.id.watcher_controls_prev)
+            settingsBtn = findViewById(R.id.watcher_controls_settings)
+            fitScreenBtn = findViewById(R.id.watcher_controls_fit_screen)
+            bufferingView = findViewById(R.id.exo_buffering)
 
-        anime = intent.getSerializableExtra("anime") as Anime
-        episode = intent.getSerializableExtra("episode") as Episode
-        title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
-        source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
-        initDummyPlayer()
+            anime = intent.getSerializableExtra("anime") as Anime
+            episode = intent.getSerializableExtra("episode") as Episode
+            title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
+            source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
+            initDummyPlayer()
 
-        if (savedInstanceState != null) {
-            playbackPosition = savedInstanceState.getLong(STATE_RESUME_POSITION)
-            isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
-            isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
+            if (savedInstanceState != null) {
+                playbackPosition = savedInstanceState.getLong(STATE_RESUME_POSITION)
+                isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
+                isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
+            }
+        } else {
+            binding_yes_pip = WatcherActivityBinding.inflate(layoutInflater)
+            applyAppTheme(preferences)
+            super.onCreate(savedInstanceState)
+
+            setContentView(binding_yes_pip.root)
+
+            playerView = binding_yes_pip.playerView
+            playerView.resizeMode = preferences.getPlayerViewMode()
+            youTubeDoubleTap = binding_yes_pip.youtubeOverlay
+            youTubeDoubleTap.seekSeconds(preferences.skipLengthPreference())
+            youTubeDoubleTap
+                .performListener(object : YouTubeOverlay.PerformListener {
+                    override fun onAnimationStart() {
+                        // Do UI changes when circle scaling animation starts (e.g. hide controller views)
+                        youTubeDoubleTap.visibility = View.VISIBLE
+                    }
+
+                    override fun onAnimationEnd() {
+                        // Do UI changes when circle scaling animation starts (e.g. show controller views)
+                        youTubeDoubleTap.visibility = View.GONE
+                    }
+                })
+            backBtn = findViewById(R.id.exo_overlay_back)
+            title = findViewById(R.id.exo_overlay_title)
+            skipBtn = findViewById(R.id.watcher_controls_skip_btn)
+            nextBtn = findViewById(R.id.watcher_controls_next)
+            prevBtn = findViewById(R.id.watcher_controls_prev)
+            settingsBtn = findViewById(R.id.watcher_controls_settings)
+            fitScreenBtn = findViewById(R.id.watcher_controls_fit_screen)
+            pipBtn = findViewById(R.id.watcher_controls_pip)
+            bufferingView = findViewById(R.id.exo_buffering)
+
+            anime = intent.getSerializableExtra("anime") as Anime
+            episode = intent.getSerializableExtra("episode") as Episode
+            title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
+            source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
+            initDummyPlayer()
+
+            if (savedInstanceState != null) {
+                playbackPosition = savedInstanceState.getLong(STATE_RESUME_POSITION)
+                isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
+                isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
+            }
         }
     }
 
     @Suppress("DEPRECATION")
     private fun setVisibilities() {
         // TODO: replace this atrocity
-        binding.root.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LOW_PROFILE or
-            View.SYSTEM_UI_FLAG_FULLSCREEN or
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        if (!preferences.pipPlayerPreference()) {
+            binding_no_pip.root.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LOW_PROFILE or
+                View.SYSTEM_UI_FLAG_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        } else {
+            binding_yes_pip.root.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LOW_PROFILE or
+                View.SYSTEM_UI_FLAG_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
@@ -286,11 +355,17 @@ class PlayerActivity : AppCompatActivity() {
             prepare()
         }
         exoPlayer.addListener(PlayerEventListener(playerView, baseContext))
+
         backBtn.setOnClickListener {
             onBackPressed()
         }
         fitScreenBtn.setOnClickListener {
             onClickFitScreen()
+        }
+        if (preferences.pipPlayerPreference()) {
+            pipBtn.setOnClickListener {
+                startPiP()
+            }
         }
         settingsBtn.setOnClickListener {
             optionsDialog()
@@ -346,7 +421,10 @@ class PlayerActivity : AppCompatActivity() {
         val alert = HideBarsMaterialAlertDialogBuilder(this)
 
         alert.setTitle(R.string.playback_options_title)
-        alert.setItems(R.array.playback_options) { dialog, which ->
+        alert.setPositiveButton(android.R.string.ok) { dialog, _ ->
+            dialog.cancel()
+        }
+        alert.setItems(R.array.playback_options) { _, which ->
             when (which) {
                 0 -> {
                     val speedAlert = HideBarsMaterialAlertDialogBuilder(this)
@@ -437,7 +515,6 @@ class PlayerActivity : AppCompatActivity() {
                     }
                 }
                 else -> {
-                    dialog.cancel()
                 }
             }
         }
@@ -473,7 +550,13 @@ class PlayerActivity : AppCompatActivity() {
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
         val oldEpisode = episode
         episode = getNextEpisode(episode, anime)
-        if (oldEpisode == episode) return
+        if (oldEpisode == episode) {
+            launchUI {
+                baseContext.toast(R.string.no_next_episode, Toast.LENGTH_SHORT)
+            }
+            return
+        }
+
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         currentQuality = 0
         awaitVideoList()
@@ -485,7 +568,12 @@ class PlayerActivity : AppCompatActivity() {
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
         val oldEpisode = episode
         episode = getPreviousEpisode(episode, anime)
-        if (oldEpisode == episode) return
+        if (oldEpisode == episode) {
+            launchUI {
+                baseContext.toast(R.string.no_previous_episode, Toast.LENGTH_SHORT)
+            }
+            return
+        }
         title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
         currentQuality = 0
         awaitVideoList()
@@ -599,14 +687,16 @@ class PlayerActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         setVisibilities()
+        updatePictureInPictureActions(exoPlayer.isPlaying)
     }
 
     override fun onStop() {
         saveEpisodeHistory(EpisodeItem(episode, anime))
         setEpisodeProgress(episode, anime, exoPlayer.currentPosition, exoPlayer.duration)
         if (exoPlayer.isPlaying) exoPlayer.pause()
-        if (isInPipMode) finish()
+        // if (isInPipMode) finish()
         playerView.onPause()
+        updatePictureInPictureActions(exoPlayer.isPlaying)
         super.onStop()
     }
 
@@ -614,7 +704,7 @@ class PlayerActivity : AppCompatActivity() {
         deletePendingEpisodes()
         releasePlayer()
         simpleCache?.release()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
             finishAndRemoveTask()
         }
         super.onDestroy()
@@ -646,21 +736,140 @@ class PlayerActivity : AppCompatActivity() {
         isInPipMode = isInPictureInPictureMode
         playerView.useController = !isInPictureInPictureMode
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+
+        if (isInPictureInPictureMode) {
+            // On Android TV it is required to hide controller in this PIP change callback
+            playerView.hideController()
+            mReceiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    if (intent == null || ACTION_MEDIA_CONTROL != intent.action) {
+                        return
+                    }
+                    when (intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)) {
+                        CONTROL_TYPE_PLAY -> {
+                            exoPlayer.play()
+                            updatePictureInPictureActions(exoPlayer.isPlaying)
+                        }
+                        CONTROL_TYPE_PAUSE -> {
+                            exoPlayer.pause()
+                            updatePictureInPictureActions(exoPlayer.isPlaying)
+                        }
+                        CONTROL_TYPE_PREVIOUS -> {
+                            previousEpisode()
+                            updatePictureInPictureActions(exoPlayer.isPlaying)
+                        }
+                        CONTROL_TYPE_NEXT -> {
+                            nextEpisode()
+                            updatePictureInPictureActions(exoPlayer.isPlaying)
+                        }
+                        /**CONTROL_TYPE_INFORMATION -> {
+                         baseContext.toast(baseContext.getString(R.string.playertitle, anime.title, episode.name), Toast.LENGTH_SHORT)
+                         updatePictureInPictureActions(exoPlayer.isPlaying)
+                         }         */
+                    }
+                }
+            }
+            registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
+        } else {
+            if (mReceiver != null) {
+                unregisterReceiver(mReceiver)
+                mReceiver = null
+            }
+            playerView.controllerAutoShow = true
+
+            /**if (exoPlayer != null) {
+             if (exoPlayer.isPlaying()) Utils.toggleSystemUi(
+             this,
+             playerView,
+             false
+             ) else playerView.showController()
+             }*/
+        }
     }
 
     @Suppress("DEPRECATION")
     private fun startPiP() {
         if (!preferences.pipPlayerPreference()) return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
             playerView.useController = false
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                this.enterPictureInPictureMode(PictureInPictureParams.Builder().build())
-            } else {
-                this.enterPictureInPictureMode()
-            }
+            this.enterPictureInPictureMode(updatePictureInPictureActions(exoPlayer.isPlaying))
         }
     }
 
+    private fun createRemoteAction(
+        iconResId: Int,
+        titleResId: Int,
+        requestCode: Int,
+        controlType: Int
+    ): RemoteAction {
+        return RemoteAction(
+            Icon.createWithResource(this, iconResId),
+            getString(titleResId),
+            getString(titleResId),
+            PendingIntent.getBroadcast(
+                this,
+                requestCode,
+                Intent(ACTION_MEDIA_CONTROL)
+                    .putExtra(EXTRA_CONTROL_TYPE, controlType),
+                PendingIntent.FLAG_IMMUTABLE
+            )
+        )
+    }
+
+    fun updatePictureInPictureActions(
+        playing: Boolean
+    ): PictureInPictureParams {
+        val mPictureInPictureParams = PictureInPictureParams.Builder()
+            // Set action items for the picture-in-picture mode. These are the only custom controls
+            // available during the picture-in-picture mode.
+            .setActions(
+                arrayListOf(
+                    /**
+                     createRemoteAction(
+                     R.drawable.ic_watcher_info_32dp,
+                     R.string.action_previous_episode,
+                     CONTROL_TYPE_INFORMATION,
+                     REQUEST_INFORMATION
+                     ),    */
+
+                    createRemoteAction(
+                        R.drawable.exo_controls_previous,
+                        R.string.action_next_episode,
+                        CONTROL_TYPE_PREVIOUS,
+                        REQUEST_PREVIOUS
+                    ),
+
+                    if (playing) {
+                        // "Pause" action when the stopwatch is already started.
+                        createRemoteAction(
+                            R.drawable.exo_controls_pause,
+                            R.string.exo_controls_pause_description,
+                            CONTROL_TYPE_PAUSE,
+                            REQUEST_PAUSE
+                        )
+                    } else {
+                        // "Start" action when the stopwatch is not started.
+                        createRemoteAction(
+                            R.drawable.exo_controls_play,
+                            R.string.exo_controls_play_description,
+                            CONTROL_TYPE_PLAY,
+                            REQUEST_PLAY
+                        )
+                    },
+                    createRemoteAction(
+                        R.drawable.exo_controls_next,
+                        R.string.action_player_information,
+                        CONTROL_TYPE_NEXT,
+                        REQUEST_NEXT
+                    )
+
+                )
+            )
+            .build()
+        setPictureInPictureParams(mPictureInPictureParams)
+        return mPictureInPictureParams
+    }
     private fun saveEpisodeHistory(episode: EpisodeItem) {
         if (!incognitoMode && !isBuffering) {
             val history = AnimeHistory.create(episode.episode).apply { last_seen = Date().time }

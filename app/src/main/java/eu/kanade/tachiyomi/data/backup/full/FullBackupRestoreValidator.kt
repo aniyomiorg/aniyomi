@@ -22,25 +22,17 @@ class FullBackupRestoreValidator : AbstractBackupRestoreValidator() {
         val backupString = context.contentResolver.openInputStream(uri)!!.source().gzip().buffer().use { it.readByteArray() }
         val backup = backupManager.parser.decodeFromByteArray(BackupSerializer, backupString)
 
-        if (backup.backupManga.isEmpty() && backup.backupAnime.isEmpty()) {
+        if (backup.backupAnime.isEmpty()) {
             throw Exception(context.getString(R.string.invalid_backup_file_missing_manga))
         }
 
-        val sources = backup.backupSources.map { it.sourceId to it.name }.toMap()
         val animesources = backup.backupAnimeSources.map { it.sourceId to it.name }.toMap()
-        val missingSources = sources
-            .filter { sourceManager.get(it.key) == null }
+        val missingSources = animesources
+            .filter { animesourceManager.get(it.key) == null }
             .values
-            .sorted() +
-            animesources
-                .filter { animesourceManager.get(it.key) == null }
-                .values
-                .sorted()
+            .sorted()
 
-        val trackers = backup.backupManga
-            .flatMap { it.tracking }
-            .map { it.syncId }
-            .distinct() + backup.backupAnime
+        val trackers = backup.backupAnime
             .flatMap { it.tracking }
             .map { it.syncId }
             .distinct()

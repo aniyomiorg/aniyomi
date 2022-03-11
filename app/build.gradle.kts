@@ -12,10 +12,10 @@ plugins {
     id("com.github.zellius.shortcut-helper")
 }
 
-if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
-    apply(plugin = "com.google.gms.google-services")
-    apply(plugin = "com.google.firebase.crashlytics")
-}
+//if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
+//    apply(plugin = "com.google.gms.google-services")
+//    apply(plugin = "com.google.firebase.crashlytics")
+//}
 
 shortcutHelper.setFilePath("./shortcuts.xml")
 
@@ -26,17 +26,16 @@ android {
     ndkVersion = AndroidConfig.ndk
 
     defaultConfig {
-        applicationId = "xyz.jmir.tachiyomi.mi"
+        applicationId = "xyz.Quickdev.Animite.mi"
         minSdk = AndroidConfig.minSdk
         targetSdk = AndroidConfig.targetSdk
         versionCode = 72
-        versionName = "0.12.3.6"
+        versionName = "0.12.0.0"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
         buildConfigField("String", "BUILD_TIME", "\"${getBuildTime()}\"")
         buildConfigField("boolean", "INCLUDE_UPDATER", "false")
-        buildConfigField("boolean", "PREVIEW", "false")
 
         // Please disable ACRA or use your own instance in forked versions of the project
         //buildConfigField("String", "ACRA_URI", "\"https://acra.jmir.xyz/report\"")
@@ -67,19 +66,6 @@ android {
             isMinifyEnabled = true
             proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
         }
-        create("preview") {
-            initWith(getByName("release"))
-            buildConfigField("boolean", "PREVIEW", "true")
-
-            val debugType = getByName("debug")
-            signingConfig = debugType.signingConfig
-            versionNameSuffix = debugType.versionNameSuffix
-            applicationIdSuffix = debugType.applicationIdSuffix
-        }
-    }
-
-    sourceSets {
-        getByName("preview").res.srcDirs("src/debug/res")
     }
 
     flavorDimensions.add("default")
@@ -127,10 +113,6 @@ android {
         isCheckReleaseBuilds = false
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
@@ -294,6 +276,7 @@ dependencies {
     implementation("com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion")
     implementation("com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion")
     implementation("com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion")
+    implementation("com.google.android.exoplayer:extension-mediasession:$exoplayerVersion")
 
     // Doubletap Player
     implementation("com.github.vkay94:DoubleTapPlayerView:1.0.2")

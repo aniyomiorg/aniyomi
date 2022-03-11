@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.data.database.queries
 
 import com.pushtorefresh.storio.sqlite.queries.Query
 import com.pushtorefresh.storio.sqlite.queries.RawQuery
-import eu.kanade.tachiyomi.data.database.DbProvider
+import eu.kanade.tachiyomi.data.database.AnimeDbProvider
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeEpisode
 import eu.kanade.tachiyomi.data.database.models.Episode
@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.data.database.resolvers.EpisodeSourceOrderPutResolver
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable
 import java.util.Date
 
-interface EpisodeQueries : DbProvider {
+interface EpisodeQueries : AnimeDbProvider {
 
     fun getEpisodes(anime: Anime) = db.get()
         .listOfObjects(Episode::class.java)
