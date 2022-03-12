@@ -12,8 +12,8 @@ import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.ui.base.controller.NoAppBarElevationController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
-import eu.kanade.tachiyomi.ui.download.DownloadTabsController
-import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
+import eu.kanade.tachiyomi.ui.download.DownloadController
+import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
 import eu.kanade.tachiyomi.ui.setting.SettingsBackupController
 import eu.kanade.tachiyomi.ui.setting.SettingsController
 import eu.kanade.tachiyomi.ui.setting.SettingsMainController
@@ -76,7 +76,7 @@ class MoreController :
                 iconRes = R.drawable.ic_history_24dp
                 iconTint = tintColor
                 onClick {
-                    router.pushController(HistoryTabsController().withFadeTransaction())
+                    router.pushController(AnimeHistoryController().withFadeTransaction())
                 }
             }
             preference {
@@ -89,7 +89,7 @@ class MoreController :
                 iconRes = R.drawable.ic_get_app_24dp
                 iconTint = tintColor
                 onClick {
-                    router.pushController(DownloadTabsController().withFadeTransaction())
+                    router.pushController(DownloadController().withFadeTransaction())
                 }
             }
             preference {

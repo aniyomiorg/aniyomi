@@ -51,10 +51,10 @@ import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.BrowseController
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
-import eu.kanade.tachiyomi.ui.download.DownloadTabsController
+import eu.kanade.tachiyomi.ui.download.DownloadController
 import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.more.NewUpdateDialogController
-import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
+import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesController
 import eu.kanade.tachiyomi.ui.setting.SettingsMainController
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
@@ -73,7 +73,6 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
 import uy.kohesive.injekt.injectLazy
-import eu.kanade.tachiyomi.ui.download.anime.DownloadController as AnimeDownloadController
 
 class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
 
@@ -165,7 +164,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             if (currentRoot?.tag()?.toIntOrNull() != id) {
                 when (id) {
                     R.id.nav_animelib -> router.setRoot(AnimelibController(), id)
-                    R.id.nav_updates -> router.setRoot(UpdatesTabsController(), id)
+                    R.id.nav_updates -> router.setRoot(AnimeUpdatesController(), id)
                     R.id.nav_browse -> router.setRoot(BrowseController(), id)
                     R.id.nav_more -> router.setRoot(MoreController(), id)
                 }
@@ -173,7 +172,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                 when (id) {
                     R.id.nav_updates -> {
                         if (router.backstackSize == 1) {
-                            router.pushController(DownloadTabsController().withFadeTransaction())
+                            router.pushController(DownloadController().withFadeTransaction())
                         }
                     }
                     R.id.nav_animelib -> {
@@ -420,7 +419,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
                     router.popToRoot()
                 }
                 setSelectedNavItem(R.id.nav_more)
-                router.pushController(AnimeDownloadController().withFadeTransaction())
+                router.pushController(DownloadController().withFadeTransaction())
             }
 
             INTENT_ANIMESEARCH -> {

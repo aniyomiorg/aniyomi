@@ -84,8 +84,6 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
-import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
 import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
 import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
@@ -713,8 +711,6 @@ class AnimeController :
                 router.handleBack()
                 previousController.search(query)
             }
-            is UpdatesTabsController,
-            is HistoryTabsController,
             is AnimeUpdatesController,
             is AnimeHistoryController -> {
                 // Manually navigate to AnimelibController

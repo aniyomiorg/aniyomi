@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.download.anime
+package eu.kanade.tachiyomi.ui.download
 
 import android.os.Bundle
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
