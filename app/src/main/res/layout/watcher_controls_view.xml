@@ -140,6 +140,7 @@
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_picture_in_picture_alt_24dp"
                 android:background="?android:attr/selectableItemBackground"
+                android:visibility="invisible"
                 android:contentDescription="@string/action_player_pip" />
 
         </RelativeLayout>

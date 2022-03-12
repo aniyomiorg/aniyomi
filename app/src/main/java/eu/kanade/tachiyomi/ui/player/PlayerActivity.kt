@@ -61,7 +61,6 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingUpdateJob
 import eu.kanade.tachiyomi.databinding.WatcherActivityBinding
-import eu.kanade.tachiyomi.databinding.WatcherActivityNoPipBinding
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAppTheme
 import eu.kanade.tachiyomi.util.lang.awaitSingle
@@ -98,8 +97,7 @@ class PlayerActivity : AppCompatActivity() {
      private val CONTROL_TYPE_INFORMATION = 5 */
     private var mReceiver: BroadcastReceiver? = null
     private val preferences: PreferencesHelper = Injekt.get()
-    private lateinit var binding_no_pip: WatcherActivityNoPipBinding
-    private lateinit var binding_yes_pip: WatcherActivityBinding
+    private lateinit var bindingPip: WatcherActivityBinding
     private val incognitoMode = preferences.incognitoMode().get()
     private val db: AnimeDatabaseHelper = Injekt.get()
     private val downloadManager: AnimeDownloadManager = Injekt.get()
@@ -144,116 +142,66 @@ class PlayerActivity : AppCompatActivity() {
     private var isInPipMode: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (!preferences.pipPlayerPreference()) {
-            binding_no_pip = WatcherActivityNoPipBinding.inflate(layoutInflater)
-            applyAppTheme(preferences)
-            super.onCreate(savedInstanceState)
+        bindingPip = WatcherActivityBinding.inflate(layoutInflater)
+        applyAppTheme(preferences)
+        super.onCreate(savedInstanceState)
 
-            setContentView(binding_no_pip.root)
+        setContentView(bindingPip.root)
 
-            playerView = binding_no_pip.playerView
-            playerView.resizeMode = preferences.getPlayerViewMode()
-            youTubeDoubleTap = binding_no_pip.youtubeOverlay
-            youTubeDoubleTap.seekSeconds(preferences.skipLengthPreference())
-            youTubeDoubleTap
-                .performListener(object : YouTubeOverlay.PerformListener {
-                    override fun onAnimationStart() {
-                        // Do UI changes when circle scaling animation starts (e.g. hide controller views)
-                        youTubeDoubleTap.visibility = View.VISIBLE
-                    }
+        playerView = bindingPip.playerView
+        playerView.resizeMode = preferences.getPlayerViewMode()
+        youTubeDoubleTap = bindingPip.youtubeOverlay
+        youTubeDoubleTap.seekSeconds(preferences.skipLengthPreference())
+        youTubeDoubleTap
+            .performListener(object : YouTubeOverlay.PerformListener {
+                override fun onAnimationStart() {
+                    // Do UI changes when circle scaling animation starts (e.g. hide controller views)
+                    youTubeDoubleTap.visibility = View.VISIBLE
+                }
 
-                    override fun onAnimationEnd() {
-                        // Do UI changes when circle scaling animation starts (e.g. show controller views)
-                        youTubeDoubleTap.visibility = View.GONE
-                    }
-                })
-            backBtn = findViewById(R.id.exo_overlay_back)
-            title = findViewById(R.id.exo_overlay_title)
-            skipBtn = findViewById(R.id.watcher_controls_skip_btn)
-            nextBtn = findViewById(R.id.watcher_controls_next)
-            prevBtn = findViewById(R.id.watcher_controls_prev)
-            settingsBtn = findViewById(R.id.watcher_controls_settings)
-            fitScreenBtn = findViewById(R.id.watcher_controls_fit_screen)
-            bufferingView = findViewById(R.id.exo_buffering)
-
-            anime = intent.getSerializableExtra("anime") as Anime
-            episode = intent.getSerializableExtra("episode") as Episode
-            title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
-            source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
-            initDummyPlayer()
-
-            if (savedInstanceState != null) {
-                playbackPosition = savedInstanceState.getLong(STATE_RESUME_POSITION)
-                isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
-                isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
-            }
+                override fun onAnimationEnd() {
+                    // Do UI changes when circle scaling animation starts (e.g. show controller views)
+                    youTubeDoubleTap.visibility = View.GONE
+                }
+            })
+        backBtn = findViewById(R.id.exo_overlay_back)
+        title = findViewById(R.id.exo_overlay_title)
+        skipBtn = findViewById(R.id.watcher_controls_skip_btn)
+        nextBtn = findViewById(R.id.watcher_controls_next)
+        prevBtn = findViewById(R.id.watcher_controls_prev)
+        settingsBtn = findViewById(R.id.watcher_controls_settings)
+        fitScreenBtn = findViewById(R.id.watcher_controls_fit_screen)
+        pipBtn = findViewById(R.id.watcher_controls_pip)
+        if (preferences.pipPlayerPreference()) {
+            pipBtn.visibility = View.VISIBLE
         } else {
-            binding_yes_pip = WatcherActivityBinding.inflate(layoutInflater)
-            applyAppTheme(preferences)
-            super.onCreate(savedInstanceState)
+            pipBtn.visibility = View.GONE
+        }
+        bufferingView = findViewById(R.id.exo_buffering)
 
-            setContentView(binding_yes_pip.root)
+        anime = intent.getSerializableExtra("anime") as Anime
+        episode = intent.getSerializableExtra("episode") as Episode
+        title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
+        source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
+        initDummyPlayer()
 
-            playerView = binding_yes_pip.playerView
-            playerView.resizeMode = preferences.getPlayerViewMode()
-            youTubeDoubleTap = binding_yes_pip.youtubeOverlay
-            youTubeDoubleTap.seekSeconds(preferences.skipLengthPreference())
-            youTubeDoubleTap
-                .performListener(object : YouTubeOverlay.PerformListener {
-                    override fun onAnimationStart() {
-                        // Do UI changes when circle scaling animation starts (e.g. hide controller views)
-                        youTubeDoubleTap.visibility = View.VISIBLE
-                    }
-
-                    override fun onAnimationEnd() {
-                        // Do UI changes when circle scaling animation starts (e.g. show controller views)
-                        youTubeDoubleTap.visibility = View.GONE
-                    }
-                })
-            backBtn = findViewById(R.id.exo_overlay_back)
-            title = findViewById(R.id.exo_overlay_title)
-            skipBtn = findViewById(R.id.watcher_controls_skip_btn)
-            nextBtn = findViewById(R.id.watcher_controls_next)
-            prevBtn = findViewById(R.id.watcher_controls_prev)
-            settingsBtn = findViewById(R.id.watcher_controls_settings)
-            fitScreenBtn = findViewById(R.id.watcher_controls_fit_screen)
-            pipBtn = findViewById(R.id.watcher_controls_pip)
-            bufferingView = findViewById(R.id.exo_buffering)
-
-            anime = intent.getSerializableExtra("anime") as Anime
-            episode = intent.getSerializableExtra("episode") as Episode
-            title.text = baseContext.getString(R.string.playertitle, anime.title, episode.name)
-            source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
-            initDummyPlayer()
-
-            if (savedInstanceState != null) {
-                playbackPosition = savedInstanceState.getLong(STATE_RESUME_POSITION)
-                isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
-                isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
-            }
+        if (savedInstanceState != null) {
+            playbackPosition = savedInstanceState.getLong(STATE_RESUME_POSITION)
+            isFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN)
+            isPlayerPlaying = savedInstanceState.getBoolean(STATE_PLAYER_PLAYING)
         }
     }
 
     @Suppress("DEPRECATION")
     private fun setVisibilities() {
         // TODO: replace this atrocity
-        if (!preferences.pipPlayerPreference()) {
-            binding_no_pip.root.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                View.SYSTEM_UI_FLAG_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        } else {
-            binding_yes_pip.root.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                View.SYSTEM_UI_FLAG_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        }
+        bindingPip.root.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LOW_PROFILE or
+            View.SYSTEM_UI_FLAG_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
@@ -634,7 +582,7 @@ class PlayerActivity : AppCompatActivity() {
             }
     }
 
-    class PlayerEventListener(private val playerView: DoubleTapPlayerView, val baseContext: Context) : Player.Listener {
+    class PlayerEventListener(private val playerView: DoubleTapPlayerView, private val baseContext: Context) : Player.Listener {
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             playerView.keepScreenOn = !(
                 playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED ||
