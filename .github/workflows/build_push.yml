@@ -1,6 +1,7 @@
 name: Release Builder
 on:
   release:
+    types: [published]
     branches:
       - master
     tags:
