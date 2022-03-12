@@ -8,7 +8,7 @@
     <string name="label_settings">設定</string>
     <string name="label_download_queue">ダウンロードキュー</string>
     <string name="label_library">ライブラリ</string>
-    <string name="label_recent_manga">履歴</string>
+    <string name="label_recent_history">履歴</string>
     <string name="label_recent_updates">アップデート</string>
     <string name="label_backup">バックアップと復元</string>
     <string name="action_settings">設定</string>
@@ -241,7 +241,7 @@
     <string name="download_all">すべて</string>
     <string name="download_unread">未読</string>
     <string name="confirm_delete_chapters">選択した章を削除してもよろしいですか？</string>
-    <string name="manga_tracking_tab">同期</string>
+    <string name="tracking_tab">同期</string>
     <string name="reading">読書中</string>
     <string name="completed">完結済み</string>
     <string name="dropped">放棄済み</string>
@@ -464,7 +464,7 @@
         <item quantity="other">%d件のタイトル</item>
     </plurals>
     <string name="recent_manga_time">第%1$s章 - %2$s</string>
-    <string name="page_list_empty_error">ページが見つかりません</string>
+    <string name="video_list_empty_error">ページが見つかりません</string>
     <string name="pref_category_for_this_series">このシリーズでは</string>
     <string name="add_tracking">追跡サービスを追加</string>
     <string name="add_to_library">ライブラリに追加</string>
@@ -509,8 +509,8 @@
     <string name="action_sort_date_added">ライブラリへの追加日付順</string>
     <string name="channel_errors">エラー</string>
     <string name="backup_restore_missing_trackers">ログインしていないトラッカー：</string>
-    <string name="pref_remove_bookmarked_chapters">ブックマークした章の削除を許可</string>
-    <string name="pref_category_delete_chapters">章を削除</string>
+    <string name="pref_remove_bookmarked_episodes">ブックマークした章の削除を許可</string>
+    <string name="pref_category_delete_episodes">章を削除</string>
     <string name="ext_nsfw_warning">成人向けのコンテンツが含まれる可能性があります</string>
     <string name="ext_nsfw_short">成人向け</string>
     <string name="parental_controls_info">非公式や誤ってフラグ付けされた可能性のある拡張機能の成人向けのコンテンツはこれからも表示される恐れがあります。</string>
@@ -522,7 +522,7 @@
     <string name="share_page_info">%1$s：%2$s、第%3$dページ</string>
     <string name="set_chapter_settings_as_default">デフォルトとして設定</string>
     <string name="also_set_chapter_settings_for_library">ライブラリにあるすべてのマンガにも適用</string>
-    <string name="confirm_set_chapter_settings">デフォルト設定として保存しますか？</string>
+    <string name="confirm_set_episode_settings">デフォルト設定として保存しますか？</string>
     <string name="chapter_settings">章の設定</string>
     <string name="action_search_settings">検索設定</string>
     <string name="downloaded_chapters">ダウンロードした章</string>
@@ -681,7 +681,7 @@
     <string name="extension_api_error">拡張機能リストを取得できませんでした</string>
     <string name="privacy_policy">プライバシーポリシー</string>
     <string name="pref_library_update_manga_restriction">マンガ更新制限</string>
-    <string name="pref_update_only_completely_read">読了済みのシリーズ</string>
+    <string name="pref_update_only_completely_seen">読了済みのシリーズ</string>
     <string name="only_update_restrictions">下記のみ更新：%s</string>
     <string name="library_errors_help">ライブラリ更新エラーの修正については、%1$sをご覧ください</string>
 </resources>

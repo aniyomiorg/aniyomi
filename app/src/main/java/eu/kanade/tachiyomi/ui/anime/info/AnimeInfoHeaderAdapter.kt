@@ -119,7 +119,7 @@ class AnimeInfoHeaderAdapter(
                         isActivated = true
                     } else {
                         setIconResource(R.drawable.ic_sync_24dp)
-                        text = view.context.getString(R.string.manga_tracking_tab)
+                        text = view.context.getString(R.string.tracking_tab)
                         isActivated = false
                     }
 

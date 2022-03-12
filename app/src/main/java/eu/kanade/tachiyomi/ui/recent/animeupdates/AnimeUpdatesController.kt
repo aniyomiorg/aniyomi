@@ -371,8 +371,8 @@ class AnimeUpdatesController :
         if (episodes.isEmpty()) return
         toolbar.findToolbarItem(R.id.action_download)?.isVisible = episodes.any { !it.isDownloaded }
         toolbar.findToolbarItem(R.id.action_delete)?.isVisible = episodes.any { it.isDownloaded }
-        toolbar.findToolbarItem(R.id.action_bookmark)?.isVisible = episodes.any { !it.bookmark }
-        toolbar.findToolbarItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.bookmark }
+        toolbar.findToolbarItem(R.id.action_bookmark_episode)?.isVisible = episodes.any { !it.bookmark }
+        toolbar.findToolbarItem(R.id.action_remove_bookmark_episode)?.isVisible = episodes.all { it.bookmark }
         toolbar.findToolbarItem(R.id.action_mark_as_seen)?.isVisible = episodes.any { !it.episode.seen }
         toolbar.findToolbarItem(R.id.action_mark_as_unseen)?.isVisible = episodes.all { it.episode.seen }
     }
@@ -394,8 +394,8 @@ class AnimeUpdatesController :
             R.id.action_delete ->
                 ConfirmDeleteEpisodesDialog(this, getSelectedEpisodes())
                     .showDialog(router)
-            R.id.action_bookmark -> bookmarkEpisodes(getSelectedEpisodes(), true)
-            R.id.action_remove_bookmark -> bookmarkEpisodes(getSelectedEpisodes(), false)
+            R.id.action_bookmark_episode -> bookmarkEpisodes(getSelectedEpisodes(), true)
+            R.id.action_remove_bookmark_episode -> bookmarkEpisodes(getSelectedEpisodes(), false)
             R.id.action_mark_as_seen -> markAsRead(getSelectedEpisodes())
             R.id.action_mark_as_unseen -> markAsUnread(getSelectedEpisodes())
             else -> return false

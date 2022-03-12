@@ -92,7 +92,7 @@
     <string name="label_migration">Migracija</string>
     <string name="label_backup">Sigurnosna kopija i obnavljanje</string>
     <string name="label_sources">Izvori</string>
-    <string name="label_recent_manga">Povijest</string>
+    <string name="label_recent_history">Povijest</string>
     <string name="label_recent_updates">Ažuriranja</string>
     <string name="label_library">Biblioteka</string>
     <string name="label_download_queue">Popis preuzimanja</string>
@@ -334,7 +334,7 @@
     <string name="currently_reading">Trenutačno se čita</string>
     <string name="reading">Čitanje</string>
     <string name="add_tracking">Dodaj praćenje</string>
-    <string name="manga_tracking_tab">Praćenje</string>
+    <string name="tracking_tab">Praćenje</string>
     <string name="invalid_download_dir">Neispravno mjesto za preuzimanja</string>
     <string name="confirm_delete_chapters">Stvarno želiš izbrisati odabrana poglavlja\?</string>
     <string name="download_unread">Nepročitano</string>
@@ -487,7 +487,7 @@
     </plurals>
     <string name="action_disable_all">Deaktiviraj sve</string>
     <string name="action_enable_all">Aktiviraj sve</string>
-    <string name="page_list_empty_error">Nema stranica</string>
+    <string name="video_list_empty_error">Nema stranica</string>
     <string name="badges_header">Značke</string>
     <string name="tabs_header">Kartice</string>
     <string name="pref_show_reading_mode_summary">Nakratko prikaži trenutačni modus kad se čitač otvori</string>
@@ -530,8 +530,8 @@
     <string name="channel_progress">Napredak</string>
     <string name="download_notifier_download_finish">Preuzimanje gotovo</string>
     <string name="channel_errors">Greške</string>
-    <string name="pref_remove_bookmarked_chapters">Dozvoli brisanje označenih poglavlja</string>
-    <string name="pref_category_delete_chapters">Izbriši poglavlja</string>
+    <string name="pref_remove_bookmarked_episodes">Dozvoli brisanje označenih poglavlja</string>
+    <string name="pref_category_delete_episodes">Izbriši poglavlja</string>
     <string name="ext_nsfw_warning">Može sadržavati neprikladan sadržaj (18+)</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="backup_restore_missing_trackers">Praćenja bez prijave:</string>
@@ -546,7 +546,7 @@
     <string name="share_page_info">%1$s: %2$s, %3$d. stranica</string>
     <string name="set_chapter_settings_as_default">Postavi kao standardno</string>
     <string name="also_set_chapter_settings_for_library">Također primijeni na sve mange u mojoj biblioteci</string>
-    <string name="confirm_set_chapter_settings">Stvarno želiš spremiti ove postavke kao standardne\?</string>
+    <string name="confirm_set_episode_settings">Stvarno želiš spremiti ove postavke kao standardne\?</string>
     <string name="chapter_settings">Postavke poglavlja</string>
     <string name="action_search_settings">Postavke pretrage</string>
     <string name="manga_from_library">Manga iz biblioteke</string>
@@ -696,7 +696,7 @@
     <string name="pref_auto_clear_chapter_cache">Izbriši predmemoriju poglavlja tijekom zatvaranja aplikacije</string>
     <string name="channel_app_updates">Ažuriranja aplikacije</string>
     <string name="database_clean">Čišćenje baze podataka</string>
-    <string name="pref_update_only_completely_read">Potpuno pročitane serije</string>
+    <string name="pref_update_only_completely_seen">Potpuno pročitane serije</string>
     <string name="enhanced_services">Poboljšane usluge</string>
     <string name="enhanced_tracking_info">Usluge koje pružaju poboljšane funkcije za određene izvore. Manga se automatski prati kad se doda u tvoju biblioteku.</string>
     <string name="action_track">Prati</string>

@@ -96,8 +96,6 @@
                 <action android:name="com.samsung.android.support.REMOTE_ACTION" />
             </intent-filter>
 
-            <meta-data android:name="com.samsung.android.support.REMOTE_ACTION"
-                android:resource="@xml/s_pen_actions"/>
         </activity>
         <activity
             android:name=".ui.security.UnlockActivity"

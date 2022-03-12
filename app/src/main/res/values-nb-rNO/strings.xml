@@ -8,7 +8,7 @@
     <string name="label_settings">Innstillinger</string>
     <string name="label_download_queue">Nedlastingskø</string>
     <string name="label_library">Bibliotek</string>
-    <string name="label_recent_manga">Historikk</string>
+    <string name="label_recent_history">Historikk</string>
     <string name="label_recent_updates">Oppdateringer</string>
     <string name="label_backup">Sikkerhetskopier og gjenopprett</string>
     <string name="label_migration">Flytte</string>
@@ -235,7 +235,7 @@
     <string name="download_all">Alle</string>
     <string name="download_unread">Ulest</string>
     <string name="confirm_delete_chapters">Er du sikker på at du vil slette de valgte kapitlene\?</string>
-    <string name="manga_tracking_tab">Sporing</string>
+    <string name="tracking_tab">Sporing</string>
     <string name="reading">Leser</string>
     <string name="completed">Fullført</string>
     <string name="dropped">Droppet</string>
@@ -400,7 +400,7 @@
     <string name="viewer">Lesemodus</string>
     <string name="information_cloudflare_bypass_failure">Klarte ikke bypassere Cloudflare</string>
     <string name="updating_library">Oppdaterer bibliotek</string>
-    <string name="page_list_empty_error">Fant ingen sider</string>
+    <string name="video_list_empty_error">Fant ingen sider</string>
     <string name="sort_by_upload_date">Etter opplastingsdato</string>
     <string name="last_used_source">Sist brukt</string>
     <string name="tabs_header">Faner</string>
@@ -493,8 +493,8 @@
     <string name="no_pinned_sources">Du har ingen festede kilder</string>
     <string name="channel_progress">Framdrift</string>
     <string name="download_notifier_download_finish">Nedlastet</string>
-    <string name="pref_remove_bookmarked_chapters">Tillat sletting av bokmerkede kapitler</string>
-    <string name="pref_category_delete_chapters">Slett kapittel</string>
+    <string name="pref_remove_bookmarked_episodes">Tillat sletting av bokmerkede kapitler</string>
+    <string name="pref_category_delete_episodes">Slett kapittel</string>
     <string name="ext_nsfw_warning">Kan inneholde innhold for 18+</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Dette forhindrer ikke uoffisielle eller potensielt feilaktig kategoriserte tillegg fra å vise innhold for 18+ i appen.</string>
@@ -513,7 +513,7 @@
     </plurals>
     <string name="information_webview_outdated">Oppdater WebView-programmet for bedre kompabilitet</string>
     <string name="chapter_settings_updated">Oppdaterte forvalgte kapittelinnstillinger</string>
-    <string name="confirm_set_chapter_settings">Er du sikker på at du vil lagre disse innstillingene som forvalg\?</string>
+    <string name="confirm_set_episode_settings">Er du sikker på at du vil lagre disse innstillingene som forvalg\?</string>
     <string name="action_search_settings">Søkeinnstillinger</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">Utvidelsesoppdatering tilgjengelig</item>

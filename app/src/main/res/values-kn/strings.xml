@@ -120,7 +120,7 @@
     <string name="label_migration">ಮೂಲ ಸ್ಥಳಾಂತರ</string>
     <string name="label_backup">ಬ್ಯಾಕಪ್ ಮತ್ತು ಮರುಸ್ಥಾಪನೆ</string>
     <string name="label_sources">ಮೂಲಗಳು</string>
-    <string name="label_recent_manga">ಇತಿಹಾಸ</string>
+    <string name="label_recent_history">ಇತಿಹಾಸ</string>
     <string name="label_recent_updates">ನವೀಕರಣಗಳು</string>
     <string name="label_library">ಗ್ರಂಥಾಲಯ</string>
     <string name="label_download_queue">ಡೌನ್‌ಲೋಡ್ ಸಾಲು</string>
@@ -357,7 +357,7 @@
     <string name="currently_reading">ಪ್ರಸ್ತುತ ಓದುತ್ತಿರುವ</string>
     <string name="reading">ಓದುತ್ತಿರುವ</string>
     <string name="add_tracking">ಟ್ರ್ಯಾಕಿಂಗ್ ಸೇರಿಸಿ</string>
-    <string name="manga_tracking_tab">ಟ್ರ್ಯಾಕಿಂಗ್</string>
+    <string name="tracking_tab">ಟ್ರ್ಯಾಕಿಂಗ್</string>
     <string name="invalid_download_dir">ಡೌನ್‌ಲೋಡ್ ಸ್ಥಳ ಅಮಾನ್ಯವಾಗಿದೆ</string>
     <string name="confirm_delete_chapters">ಆಯ್ದ ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ\?</string>
     <string name="download_unread">ಓದದ</string>
@@ -476,7 +476,7 @@
     <string name="pref_library_update_refresh_metadata_summary">ಗ್ರಂಥಾಲಯವನ್ನು ನವೀಕರಿಸುವಾಗ ಹೊಸ ಕವರ್ ಮತ್ತು ವಿವರಗಳಿಗಾಗಿ ಪರಿಶೀಲಿಸಿ</string>
     <string name="pref_library_update_refresh_metadata">ಮೆಟಾಡೇಟಾವನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಿಫ್ರೆಶ್ ಮಾಡಿ</string>
     <string name="action_migrate">ಮೂಲ ಸ್ಥಳಾಂತರ</string>
-    <string name="page_list_empty_error">ಯಾವುದೇ ಪುಟಗಳು ಸಿಕ್ಕಿಲ್ಲ</string>
+    <string name="video_list_empty_error">ಯಾವುದೇ ಪುಟಗಳು ಸಿಕ್ಕಿಲ್ಲ</string>
     <string name="tabs_header">ಟ್ಯಾಬ್‌ಗಳು</string>
     <string name="badges_header">ಬ್ಯಾಡ್ಜ್‌ಗಳು</string>
     <string name="pref_show_reading_mode_summary">ರೀಡರ್ ತೆರೆದಾಗ ಪ್ರಸ್ತುತ ಮೋಡ್ ಅನ್ನು ಸಂಕ್ಷಿಪ್ತವಾಗಿ ತೋರಿಸಿ</string>
@@ -529,13 +529,13 @@
     <string name="no_chapters_error">ಯಾವುದೇ ಅಧ್ಯಾಯಗಳು ಕಂಡುಬಂದಿಲ್ಲ</string>
     <string name="set_chapter_settings_as_default">ಡೀಫಾಲ್ಟ್ ಆಗಿ ಹೊಂದಿಸಿ</string>
     <string name="also_set_chapter_settings_for_library">ನನ್ನ ಗ್ರಂಥಾಲಯದಲ್ಲಿರುವ ಎಲ್ಲಾ ಮಾಂಗಾಗಳಿಗೂ ಅನ್ವಯಿಸಿ</string>
-    <string name="confirm_set_chapter_settings">ಈ ಸೆಟ್ಟಿಂಗ್ ಗಳನ್ನು ಡೀಫಾಲ್ಟ್ ರೂಪದಲ್ಲಿ ಉಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ\?</string>
+    <string name="confirm_set_episode_settings">ಈ ಸೆಟ್ಟಿಂಗ್ ಗಳನ್ನು ಡೀಫಾಲ್ಟ್ ರೂಪದಲ್ಲಿ ಉಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ\?</string>
     <string name="chapter_settings">ಅಧ್ಯಾಯದ ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
     <string name="downloaded_chapters">ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಅಧ್ಯಾಯಗಳು</string>
     <string name="manga_from_library">ಗ್ರಂಥಾಲಯದಿಂದ ಮಾಂಗಾ</string>
     <string name="backup_restore_missing_trackers">ಟ್ರ್ಯಾಕರ್ ಗಳು ಲಾಗಿನ್ ಆಗಿಲ್ಲ:</string>
-    <string name="pref_remove_bookmarked_chapters">ಬುಕ್ ಮಾರ್ಕ್ ಮಾಡಿದ ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಿ</string>
-    <string name="pref_category_delete_chapters">ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಿ</string>
+    <string name="pref_remove_bookmarked_episodes">ಬುಕ್ ಮಾರ್ಕ್ ಮಾಡಿದ ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಿ</string>
+    <string name="pref_category_delete_episodes">ಅಧ್ಯಾಯಗಳನ್ನು ಅಳಿಸಿ</string>
     <string name="ext_nsfw_warning">NSFW (18+) ವಿಷಯವನ್ನು ಹೊಂದಿರಬಹುದು</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="pref_hide_bottom_bar_on_scroll">ಸ್ಕ್ರಾಲ್‌ ಮಾಡಿದಾಗ ಕೆಳಗಿನ ಪಟ್ಟಿಯನ್ನು ಮರೆಮಾಡಿ</string>

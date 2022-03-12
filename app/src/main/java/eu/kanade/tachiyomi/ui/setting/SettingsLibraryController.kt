@@ -85,14 +85,14 @@ class SettingsLibraryController : SettingsController() {
             if (!context.isTablet()) {
                 switchPreference {
                     key = Keys.jumpToChapters
-                    titleRes = R.string.pref_jump_to_chapters
+                    titleRes = R.string.pref_jump_to_episodes
                     defaultValue = false
                 }
             }
         }
 
         preferenceCategory {
-            titleRes = R.string.general_categories
+            titleRes = R.string.anime_categories
 
             preference {
                 key = "pref_action_edit_anime_categories"
@@ -195,7 +195,7 @@ class SettingsLibraryController : SettingsController() {
             multiSelectListPreference {
                 bindTo(preferences.libraryUpdateMangaRestriction())
                 titleRes = R.string.pref_library_update_manga_restriction
-                entriesRes = arrayOf(R.string.pref_update_only_completely_read, R.string.pref_update_only_non_completed)
+                entriesRes = arrayOf(R.string.pref_update_only_completely_seen, R.string.pref_update_only_non_completed)
                 entryValues = arrayOf(MANGA_FULLY_READ, MANGA_ONGOING)
 
                 fun updateSummary() {
@@ -204,7 +204,7 @@ class SettingsLibraryController : SettingsController() {
                         .map {
                             when (it) {
                                 MANGA_ONGOING -> context.getString(R.string.pref_update_only_non_completed)
-                                MANGA_FULLY_READ -> context.getString(R.string.pref_update_only_completely_read)
+                                MANGA_FULLY_READ -> context.getString(R.string.pref_update_only_completely_seen)
                                 else -> it
                             }
                         }

@@ -5,7 +5,7 @@
     <string name="label_settings">Definições</string>
     <string name="label_download_queue">Fila de Transferências</string>
     <string name="label_library">Biblioteca</string>
-    <string name="label_recent_manga">Histórico</string>
+    <string name="label_recent_history">Histórico</string>
     <string name="label_recent_updates">Atualizações</string>
     <string name="label_backup">Cópia de segurança e restauração</string>
     <!-- Actions -->
@@ -312,7 +312,7 @@
     <string name="source_not_installed">Fonte não instalada: %1$s</string>
     <string name="chapter_paused">Pausado</string>
     <string name="custom_download">Transferir quantidade personalizada</string>
-    <string name="manga_tracking_tab">Monitorização</string>
+    <string name="tracking_tab">Monitorização</string>
     <string name="repeating">Relendo</string>
     <string name="track_status">Situação</string>
     <string name="track_start_date">Começado</string>
@@ -491,7 +491,7 @@
     <string name="tracking_info">Sincronização unidirecional para atualizar o progresso dos capítulos nos serviços de monitorização. Defina a monitorização para entradas individuais das mangás no seu botão de monitorização.</string>
     <string name="unofficial_extension_message">Esta extensão não vem da lista oficial de extensões do Tachiyomi.</string>
     <string name="pref_show_reading_mode_summary">Mostra brevemente o modo atual quando o leitor é aberto</string>
-    <string name="page_list_empty_error">Nenhuma página encontrada</string>
+    <string name="video_list_empty_error">Nenhuma página encontrada</string>
     <plurals name="notification_update_error">
         <item quantity="one">1 atualização falhou</item>
         <item quantity="other">%1$d atualizações falharam</item>
@@ -550,8 +550,8 @@
     <string name="download_notifier_download_finish">Transferência concluída</string>
     <string name="channel_errors">Erros</string>
     <string name="backup_restore_missing_trackers">Monitorizadores sem sessão iniciada:</string>
-    <string name="pref_remove_bookmarked_chapters">Permitir a eliminação de capítulos marcados</string>
-    <string name="pref_category_delete_chapters">Eliminar capítulos</string>
+    <string name="pref_remove_bookmarked_episodes">Permitir a eliminação de capítulos marcados</string>
+    <string name="pref_category_delete_episodes">Eliminar capítulos</string>
     <string name="ext_nsfw_warning">Pode conter conteúdo NSFW (18+)</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Isto não impede extensões não oficiais ou incorretamente marcadas de mostrarem counteúdo NSFW (18+) dentro do aplicativo.</string>
@@ -561,7 +561,7 @@
     </plurals>
     <string name="no_chapters_error">Nenhum capítulo encontrado</string>
     <string name="chapter_settings_updated">Definições padrão de capítulo atualizadas</string>
-    <string name="confirm_set_chapter_settings">Tem certeza de que quer guardar estas definições como padrão\?</string>
+    <string name="confirm_set_episode_settings">Tem certeza de que quer guardar estas definições como padrão\?</string>
     <string name="chapter_settings">Definições dos capítulos</string>
     <string name="share_page_info">%1$s: %2$s, página %3$d</string>
     <string name="set_chapter_settings_as_default">Definir como padrão</string>

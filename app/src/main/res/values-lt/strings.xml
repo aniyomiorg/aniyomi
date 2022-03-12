@@ -22,7 +22,7 @@
     <string name="label_migration">Migruoti</string>
     <string name="label_backup">Atsarginė kopija ir atkūrimas</string>
     <string name="label_sources">Šaltiniai</string>
-    <string name="label_recent_manga">Istorija</string>
+    <string name="label_recent_history">Istorija</string>
     <string name="label_recent_updates">Atnaujinimai</string>
     <string name="label_library">Biblioteka</string>
     <string name="label_download_queue">Atsiuntimų eilė</string>

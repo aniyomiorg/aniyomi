@@ -123,14 +123,14 @@ class SettingsAdvancedController : SettingsController() {
 
             preference {
                 key = CLEAR_CACHE_KEY
-                titleRes = R.string.pref_clear_chapter_cache
+                titleRes = R.string.pref_clear_episode_cache
                 summary = context.getString(R.string.used_cache, episodeCache.readableSize)
 
                 onClick { clearChapterAndEpisodeCache() }
             }
             switchPreference {
                 key = Keys.autoClearChapterCache
-                titleRes = R.string.pref_auto_clear_chapter_cache
+                titleRes = R.string.pref_auto_clear_episode_cache
                 defaultValue = false
             }
             preference {

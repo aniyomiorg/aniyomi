@@ -9,7 +9,7 @@
     <string name="label_settings">اﻹعدادات</string>
     <string name="label_download_queue">قائمة التنزيلات</string>
     <string name="label_library">المكتبة</string>
-    <string name="label_recent_manga">السجل</string>
+    <string name="label_recent_history">السجل</string>
     <string name="label_recent_updates">التحديثات</string>
     <string name="label_backup">النسخ الاحتياطي والإستعادة</string>
     <string name="action_settings">اﻹعدادات</string>
@@ -207,7 +207,7 @@
     <string name="download_all">الكل</string>
     <string name="download_unread">غير مقروء</string>
     <string name="confirm_delete_chapters">هل أنت متأكد من أنك تريد حذف الفصول المحددة؟</string>
-    <string name="manga_tracking_tab">التتبع</string>
+    <string name="tracking_tab">التتبع</string>
     <string name="reading">أقرأها</string>
     <string name="completed">مكتملة</string>
     <string name="dropped">متروكة</string>
@@ -516,7 +516,7 @@
     <string name="tabs_header">قوائم</string>
     <string name="badges_header">شارات</string>
     <string name="action_display_show_tabs">إظهار قوائم الفئة</string>
-    <string name="page_list_empty_error">لم يتم العثور على أيّة صفحات</string>
+    <string name="video_list_empty_error">لم يتم العثور على أيّة صفحات</string>
     <string name="action_enable_all">تفعيل الكل</string>
     <string name="action_disable_all">تعطيل الكل</string>
     <string name="pref_show_reading_mode_summary">إظهار الوضع الحالي لفترةٍ وجيزةٍ عند فتح القارئ</string>
@@ -529,8 +529,8 @@
     <string name="requires_app_restart">يتطلب إعادة تشغيل التطبيق ليتم تفعيله</string>
     <string name="label_network">شبكة الاتصال</string>
     <string name="backup_restore_missing_trackers">أجهزة التتبع التي لم يتم تسجيل الدخول إليها:</string>
-    <string name="pref_remove_bookmarked_chapters">حذف الفصول ذات العلامة المرجعية</string>
-    <string name="pref_category_delete_chapters">حذف الفصول</string>
+    <string name="pref_remove_bookmarked_episodes">حذف الفصول ذات العلامة المرجعية</string>
+    <string name="pref_category_delete_episodes">حذف الفصول</string>
     <string name="pref_category_reading_mode">وضع القراءة</string>
     <string name="ext_nsfw_warning">قد يحتوى على محتوى للبالغين</string>
     <string name="ext_nsfw_short">محتوى غير لائق</string>
@@ -582,7 +582,7 @@
     <string name="chapter_settings_updated">إعدادات الفصل الإفتراضية المُحدثة</string>
     <string name="set_chapter_settings_as_default">تعيين كافتراضي</string>
     <string name="also_set_chapter_settings_for_library">تطبيق أيضًا على جميع المانجا في المكتبة</string>
-    <string name="confirm_set_chapter_settings">هل أنت متأكد أنك تريد حفظ هذه الإعدادات كافتراضي؟</string>
+    <string name="confirm_set_episode_settings">هل أنت متأكد أنك تريد حفظ هذه الإعدادات كافتراضي؟</string>
     <string name="chapter_settings">إعدادات الفصل</string>
     <string name="action_search_settings">إعدادات البحث</string>
     <string name="downloaded_chapters">الفصول المنزّلة</string>

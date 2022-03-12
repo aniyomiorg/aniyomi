@@ -29,7 +29,7 @@ class SettingsGeneralController : SettingsController() {
             key = Keys.startScreen
             titleRes = R.string.pref_start_screen
             entriesRes = arrayOf(
-                R.string.label_animelib,
+                R.string.label_anime,
                 R.string.label_recent_updates,
                 R.string.browse
             )

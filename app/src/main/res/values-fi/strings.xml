@@ -8,13 +8,13 @@
     <string name="label_settings">Asetukset</string>
     <string name="label_download_queue">Latausjono</string>
     <string name="label_library">Kirjasto</string>
-    <string name="label_recent_manga">Historia</string>
+    <string name="label_recent_history">Historia</string>
     <string name="action_settings">Asetukset</string>
     <string name="action_sort_last_read">Viimeksi luettu</string>
     <string name="action_mark_as_read">Merkitse luetuksi</string>
     <string name="action_download">Lataa</string>
     <string name="pref_category_tracking">Seuranta</string>
-    <string name="manga_tracking_tab">Seuranta</string>
+    <string name="tracking_tab">Seuranta</string>
     <string name="chapters">Luvut</string>
     <string name="label_recent_updates">Päivitykset</string>
     <string name="action_sort_total">Lukuja yhteensä</string>
@@ -480,7 +480,7 @@
     <string name="tabs_header">Välilehdet</string>
     <string name="badges_header">Merkit</string>
     <string name="action_display_show_tabs">Näytä kategorioiden välilehdet</string>
-    <string name="page_list_empty_error">Sivuja ei löytynyt</string>
+    <string name="video_list_empty_error">Sivuja ei löytynyt</string>
     <string name="action_disable_all">Poista kaikki käytöstä</string>
     <string name="action_enable_all">Ota kaikki käyttöön</string>
     <string name="pref_show_reading_mode_summary">Näytä nykyinen tila lyhyesti, kun lukija avataan</string>
@@ -520,8 +520,8 @@
     <string name="download_notifier_download_finish">Lataus valmis</string>
     <string name="channel_errors">Virheet</string>
     <string name="backup_restore_missing_trackers">Seurantapalvelimet joihin et ole kirjautunut sisään:</string>
-    <string name="pref_remove_bookmarked_chapters">Poista kirjanmerkityt luvut</string>
-    <string name="pref_category_delete_chapters">Poista luvut</string>
+    <string name="pref_remove_bookmarked_episodes">Poista kirjanmerkityt luvut</string>
+    <string name="pref_category_delete_episodes">Poista luvut</string>
     <string name="ext_nsfw_warning">Voi sisältää NSFW (18+) -sisältöä</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Tämä ei estä epävirallisia tai mahdollisesti väärin merkittyjä laajennuksia näyttämästä NSFW 18+ sisältöä sovelluksessa.</string>
@@ -533,7 +533,7 @@
     <string name="chapter_settings_updated">Päivitetyt luvun oletusasetukset</string>
     <string name="set_chapter_settings_as_default">Aseta oletukseksi</string>
     <string name="also_set_chapter_settings_for_library">Koskee myös kaikkia kirjastoni mangoja</string>
-    <string name="confirm_set_chapter_settings">Haluatko varmasti tallentaa nämä asetukset oletuksena\?</string>
+    <string name="confirm_set_episode_settings">Haluatko varmasti tallentaa nämä asetukset oletuksena\?</string>
     <string name="chapter_settings">Luvun asetukset</string>
     <string name="share_page_info">%1$s: %2$s, sivu %3$d</string>
     <string name="action_search_settings">Hakuasetukset</string>

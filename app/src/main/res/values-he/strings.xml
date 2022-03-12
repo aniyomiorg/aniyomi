@@ -373,7 +373,7 @@
     <string name="label_migration">להעביר</string>
     <string name="label_backup">גיבוי ושחזור</string>
     <string name="label_sources">מקורות</string>
-    <string name="label_recent_manga">היסטורייה</string>
+    <string name="label_recent_history">היסטורייה</string>
     <string name="label_recent_updates">עדכונים</string>
     <string name="label_library">ספרייה</string>
     <string name="label_download_queue">תור הורדות</string>

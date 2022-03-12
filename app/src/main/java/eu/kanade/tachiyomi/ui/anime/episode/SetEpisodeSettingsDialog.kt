@@ -19,7 +19,7 @@ class SetEpisodeSettingsDialog(bundle: Bundle? = null) : DialogController(bundle
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
         val view = DialogCheckboxView(activity!!).apply {
-            setDescription(R.string.confirm_set_chapter_settings)
+            setDescription(R.string.confirm_set_episode_settings)
             setOptionDescription(R.string.also_set_episode_settings_for_library)
         }
 

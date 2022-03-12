@@ -11,7 +11,7 @@
     <string name="label_download_queue">قطارِ ڈاؤنلوڈ</string>
     <string name="label_library">لائبریری</string>
     <string name="label_recent_updates">اپڈیٹس</string>
-    <string name="label_recent_manga">ہسٹری</string>
+    <string name="label_recent_history">ہسٹری</string>
     <string name="label_backup">بیک اپ</string>
     <string name="label_migration">ماخذ منتقلی</string>
     <string name="label_extensions">ایکسٹینشنز</string>

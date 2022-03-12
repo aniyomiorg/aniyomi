@@ -9,7 +9,7 @@
     <string name="label_settings">Inställningar</string>
     <string name="label_download_queue">Nedladdningskö</string>
     <string name="label_library">Bibliotek</string>
-    <string name="label_recent_manga">Historik</string>
+    <string name="label_recent_history">Historik</string>
     <string name="label_recent_updates">Nytt</string>
     <string name="label_backup">Säkerhetskopiering och återställning</string>
     <string name="label_migration">Migrera</string>
@@ -243,7 +243,7 @@
     <string name="download_all">Alla</string>
     <string name="download_unread">Olästa</string>
     <string name="confirm_delete_chapters">Är du säker på att du vill radera valda kapitel\?</string>
-    <string name="manga_tracking_tab">Spårning</string>
+    <string name="tracking_tab">Spårning</string>
     <string name="reading">Läser</string>
     <string name="completed">Färdig</string>
     <string name="dropped">Slutat läsa</string>
@@ -477,7 +477,7 @@
     <string name="pref_library_update_refresh_metadata">Uppdatera metadata automatiskt</string>
     <string name="action_migrate">Migrera</string>
     <string name="action_disable_all">Inaktivera alla</string>
-    <string name="page_list_empty_error">Hittade inga sidor</string>
+    <string name="video_list_empty_error">Hittade inga sidor</string>
     <string name="tabs_header">Flikar</string>
     <string name="badges_header">Emblem</string>
     <string name="pref_show_reading_mode_summary">Visa nuvarande läge när läsaren öppnas</string>
@@ -518,15 +518,15 @@
         <item quantity="other">%d spårare</item>
     </plurals>
     <string name="no_pinned_sources">Du har inga fästa källor</string>
-    <string name="pref_remove_bookmarked_chapters">Tillåt att radera bokmärkta kapitel</string>
-    <string name="pref_category_delete_chapters">Ta bort kapitel</string>
+    <string name="pref_remove_bookmarked_episodes">Tillåt att radera bokmärkta kapitel</string>
+    <string name="pref_category_delete_episodes">Ta bort kapitel</string>
     <string name="ext_nsfw_warning">Kan innehålla NSFW(18+) innehåll</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="backup_restore_missing_trackers">Spårare som inte har loggats in:</string>
     <string name="parental_controls_info">Detta förhindrar inte inofficiella eller potentiellt felaktigt flaggade tillägg från att visa NSFW(18+) innehåll i appen.</string>
     <string name="channel_errors">Fel</string>
     <string name="chapter_settings_updated">Uppdaterade standardinställningar för kapitel</string>
-    <string name="confirm_set_chapter_settings">Vill du spara de här inställningarna som standard\?</string>
+    <string name="confirm_set_episode_settings">Vill du spara de här inställningarna som standard\?</string>
     <plurals name="missing_chapters_warning">
         <item quantity="one">Hoppar över ett kapitel, antingen saknar källan det eller så har det filtrerats bort</item>
         <item quantity="other">Hoppar över %d kapitel, antingen saknar källan det eller så har det filtrerats bort</item>

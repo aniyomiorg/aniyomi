@@ -24,7 +24,7 @@
     <string name="label_backup">یەدەگ کردن و گەڕانەوە بۆ باری سەرەکی</string>
     <string name="label_migration">گواستنەوە</string>
     <string name="label_extensions">زیادکراوەکان</string>
-    <string name="label_recent_manga">تۆماری ڕابردوو</string>
+    <string name="label_recent_history">تۆماری ڕابردوو</string>
     <string name="manga">مانگا</string>
     <string name="chapters">چاپتەرەکان</string>
     <string name="track">بەدواداچوون</string>

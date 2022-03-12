@@ -9,7 +9,7 @@
     <string name="label_download_queue">გადმოწერის რიგი</string>
     <string name="label_library">ბიბლიოთეკა</string>
     <string name="label_recent_updates">განახლებები</string>
-    <string name="label_recent_manga">ისტორია</string>
+    <string name="label_recent_history">ისტორია</string>
     <string name="label_help">დახმარება</string>
     <string name="action_settings">პარამეტრები</string>
     <string name="action_menu">მენიუ</string>
@@ -313,7 +313,7 @@
     <string name="download_unread">წაუკითხავი</string>
     <string name="confirm_delete_chapters">დარწმუნებული ხართ რომ გსურთ არჩეული თავების წაშლა?</string>
     <string name="invalid_download_dir">არასწორი გადმოწერის ლოკაცია</string>
-    <string name="manga_tracking_tab">თვალტყურის დევნება</string>
+    <string name="tracking_tab">თვალტყურის დევნება</string>
     <string name="add_tracking">თვალი ადევნე</string>
     <string name="reading">ვკითხულობ</string>
     <string name="currently_reading">ამჟამად ვკითხულობ</string>
@@ -350,7 +350,7 @@
     <string name="transition_no_previous">წინა თავი არ არის</string>
     <string name="transition_pages_loading">გვერდები იტვირთება…</string>
     <string name="transition_pages_error">გვერდების ჩატვირთვა ვერ მოხერხდა: %1$s</string>
-    <string name="page_list_empty_error">ვერცერთი გვერდი ვერ მოიძევნა</string>
+    <string name="video_list_empty_error">ვერცერთი გვერდი ვერ მოიძევნა</string>
     <string name="updating_library">ბიბლიოთეკის განახლება</string>
     <string name="recent_manga_time">თავ. %1$s - %2$s</string>
     <string name="migration_dialog_what_to_include">ამოირჩიე მონაცემები შესაყვანად</string>
@@ -512,8 +512,8 @@
     <string name="action_download_unread">გადმოიწეროს წაუკითხავი თავები</string>
     <string name="ext_nsfw_warning">შეიძლება შეიჩაცდეს უცენზურო(18+) კონტენტს</string>
     <string name="ext_nsfw_short">18+</string>
-    <string name="pref_remove_bookmarked_chapters">მონიშნული თავების წაშლა</string>
-    <string name="pref_category_delete_chapters">თავების წაშლა</string>
+    <string name="pref_remove_bookmarked_episodes">მონიშნული თავების წაშლა</string>
+    <string name="pref_category_delete_episodes">თავების წაშლა</string>
     <string name="right_and_left_nav">მარჯვენა და მარცხენა</string>
     <string name="pref_dual_page_split">გვერდების ორმაგი გაყოფა (ალფა)</string>
     <string name="parental_controls_info">ეს არ აღმოფხვრავს პროგრამაში NSFW (18+) შიგთავსის არაოფიციალურ, ან შესაძლო არასწორად მონიშნული გაფართოებებოიდან გამოჩენას.</string>

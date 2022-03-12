@@ -5,7 +5,7 @@
     <string name="label_settings">Impostazioni</string>
     <string name="label_download_queue">Coda scaricamenti</string>
     <string name="label_library">Libreria</string>
-    <string name="label_recent_manga">Cronologia</string>
+    <string name="label_recent_history">Cronologia</string>
     <string name="label_recent_updates">Ultimi</string>
     <string name="label_backup">Backup e ripristino</string>
     <!-- Actions -->
@@ -278,7 +278,7 @@
     <string name="local_source">Fonte locale</string>
     <string name="delete_downloads_for_manga">Eliminare i capitoli scaricati?</string>
     <string name="chapter_paused">In pausa</string>
-    <string name="manga_tracking_tab">Tracciamento</string>
+    <string name="tracking_tab">Tracciamento</string>
     <string name="snack_add_to_library">Aggiungere manga alla libreria\?</string>
     <string name="download_notifier_download_paused">Scaricamento in pausa</string>
     <string name="label_migration">Migra</string>
@@ -496,7 +496,7 @@
         <item quantity="one">Un aggiornamento fallito</item>
         <item quantity="other">%1$d aggiornamenti falliti</item>
     </plurals>
-    <string name="page_list_empty_error">Nessuna pagina trovata</string>
+    <string name="video_list_empty_error">Nessuna pagina trovata</string>
     <string name="sort_by_upload_date">Per data di caricamento</string>
     <string name="tabs_header">Schede</string>
     <string name="badges_header">Etichette</string>
@@ -552,8 +552,8 @@
     <string name="channel_complete">Completo</string>
     <string name="download_notifier_download_finish">Scaricamento completato</string>
     <string name="no_pinned_sources">Non hai fonti fissate</string>
-    <string name="pref_remove_bookmarked_chapters">Consenti eliminazione capitoli con segnalibro</string>
-    <string name="pref_category_delete_chapters">Elimina capitoli</string>
+    <string name="pref_remove_bookmarked_episodes">Consenti eliminazione capitoli con segnalibro</string>
+    <string name="pref_category_delete_episodes">Elimina capitoli</string>
     <string name="ext_nsfw_warning">Potrebbe contenere materiale NSFW (18+)</string>
     <string name="ext_nsfw_short">18+</string>
     <plurals name="missing_chapters_warning">
@@ -567,7 +567,7 @@
     <string name="share_page_info">%1$s: %2$s, pagina %3$d</string>
     <string name="set_chapter_settings_as_default">Imposta come predefinito</string>
     <string name="also_set_chapter_settings_for_library">Applica anche a tutti i manga nella mia libreria</string>
-    <string name="confirm_set_chapter_settings">Sei sicuro di voler salvare queste impostazioni come predefinite\?</string>
+    <string name="confirm_set_episode_settings">Sei sicuro di voler salvare queste impostazioni come predefinite\?</string>
     <string name="chapter_settings">Impostazioni del capitolo</string>
     <string name="action_search_settings">Ricerca impostazioni</string>
     <string name="downloaded_chapters">Capitoli scaricati</string>
@@ -726,7 +726,7 @@
     <string name="database_clean">Database pulito</string>
     <string name="extension_api_error">Impossibile ottenere l\'elenco estensioni</string>
     <string name="privacy_policy">Politica sulla privacy</string>
-    <string name="pref_update_only_completely_read">Serie completamente lette</string>
+    <string name="pref_update_only_completely_seen">Serie completamente lette</string>
     <string name="pref_library_update_manga_restriction">Restrizioni agli aggiornamenti della libreria</string>
     <string name="only_update_restrictions">Aggiorna solo: %s</string>
     <string name="library_errors_help">Per un aiuto su come risolvere gli errori di aggiornamento della libreria vedi %1$s</string>

@@ -52,7 +52,7 @@ class SetTrackEpisodesDialog<T> : DialogController
         np.wrapSelectorWheel = false
 
         return MaterialAlertDialogBuilder(activity!!)
-            .setTitle(R.string.chapters)
+            .setTitle(R.string.episodes)
             .setView(pickerView.root)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 np.clearFocus()

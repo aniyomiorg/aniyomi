@@ -66,7 +66,7 @@ class AnimeHistoryController :
     private var query = ""
 
     override fun getTitle(): String? {
-        return resources?.getString(R.string.label_recent_manga)
+        return resources?.getString(R.string.label_recent_history)
     }
 
     override fun createPresenter(): AnimeHistoryPresenter {

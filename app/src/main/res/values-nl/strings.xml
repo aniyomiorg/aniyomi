@@ -8,7 +8,7 @@
     <string name="history">Geschiedenis</string>
     <string name="label_settings">Instellingen</string>
     <string name="label_library">Bibliotheek</string>
-    <string name="label_recent_manga">Geschiedenis</string>
+    <string name="label_recent_history">Geschiedenis</string>
     <string name="label_backup">Back-up en herstel</string>
     <string name="action_settings">Instellingen</string>
     <string name="action_filter">Filter</string>
@@ -160,7 +160,7 @@
     <string name="download_all">Alles</string>
     <string name="download_unread">Ongelezen</string>
     <string name="confirm_delete_chapters">Weet je zeker dat je de geselecteerde hoofdstukken wilt verwijderen\?</string>
-    <string name="manga_tracking_tab">Tracking</string>
+    <string name="tracking_tab">Tracking</string>
     <string name="completed">Voltooid</string>
     <string name="score">Score</string>
     <string name="title">Titel</string>
@@ -467,7 +467,7 @@
     <string name="ext_unofficial">Niet officieel</string>
     <string name="pref_library_update_refresh_metadata_summary">Controleer bij het bijwerken van de bibliotheek op nieuwe omslag en details</string>
     <string name="loader_not_implemented_error">Bron niet gevonden</string>
-    <string name="page_list_empty_error">Geen pagina\'s gevonden</string>
+    <string name="video_list_empty_error">Geen pagina\'s gevonden</string>
     <string name="sort_by_upload_date">Op uploaddatum</string>
     <string name="tabs_header">Tabbladen</string>
     <string name="badges_header">Badges</string>
@@ -520,8 +520,8 @@
     <string name="download_notifier_download_finish">Download voltooid</string>
     <string name="channel_errors">Fouten</string>
     <string name="backup_restore_missing_trackers">Niet-ingelogde trackers:</string>
-    <string name="pref_remove_bookmarked_chapters">Verwijderen van hoofdstukken met bladwijzers toestaan</string>
-    <string name="pref_category_delete_chapters">Hoofdstukken verwijderen</string>
+    <string name="pref_remove_bookmarked_episodes">Verwijderen van hoofdstukken met bladwijzers toestaan</string>
+    <string name="pref_category_delete_episodes">Hoofdstukken verwijderen</string>
     <string name="ext_nsfw_warning">Kan NSFW-inhoud (18+) bevatten</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Dit voorkomt niet dat onofficiële of mogelijk incorrect gemarkeerde extensies NSFW-inhoud (18+) kunnen laten zien in de app.</string>
@@ -533,7 +533,7 @@
     <string name="chapter_settings_updated">Standaard hoofdstukinstellingen bijgewerkt</string>
     <string name="set_chapter_settings_as_default">Instellen als standaard</string>
     <string name="also_set_chapter_settings_for_library">Ook toepassen op alle manga in mijn bibliotheek</string>
-    <string name="confirm_set_chapter_settings">Weet je zeker dat je deze instellingen als standaardinstellingen wilt opslaan\?</string>
+    <string name="confirm_set_episode_settings">Weet je zeker dat je deze instellingen als standaardinstellingen wilt opslaan\?</string>
     <string name="chapter_settings">Hoofdstukinstellingen</string>
     <string name="share_page_info">%1$s: %2$s, pagina %3$d</string>
     <string name="action_search_settings">Zoekinstellingen</string>

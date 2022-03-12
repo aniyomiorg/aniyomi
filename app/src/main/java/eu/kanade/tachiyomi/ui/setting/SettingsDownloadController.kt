@@ -74,19 +74,19 @@ class SettingsDownloadController : SettingsController() {
             titleRes = R.string.save_chapter_as_cbz
         }
         preferenceCategory {
-            titleRes = R.string.pref_category_delete_chapters
+            titleRes = R.string.pref_category_delete_episodes
 
             switchPreference {
                 key = Keys.removeAfterMarkedAsRead
-                titleRes = R.string.pref_remove_after_marked_as_read
+                titleRes = R.string.pref_remove_after_marked_as_seen
                 defaultValue = false
             }
             intListPreference {
                 key = Keys.removeAfterReadSlots
-                titleRes = R.string.pref_remove_after_read
+                titleRes = R.string.pref_remove_after_seen
                 entriesRes = arrayOf(
                     R.string.disabled,
-                    R.string.last_read_chapter,
+                    R.string.last_seen_episode,
                     R.string.second_to_last,
                     R.string.third_to_last,
                     R.string.fourth_to_last,
@@ -98,12 +98,12 @@ class SettingsDownloadController : SettingsController() {
             }
             switchPreference {
                 key = Keys.removeBookmarkedChapters
-                titleRes = R.string.pref_remove_bookmarked_chapters
+                titleRes = R.string.pref_remove_bookmarked_episodes
                 defaultValue = false
             }
             multiSelectListPreference {
                 bindTo(preferences.removeExcludeAnimeCategories())
-                titleRes = R.string.pref_remove_exclude_categories_anime
+                titleRes = R.string.pref_remove_exclude_categories
                 entries = animeCategories.map { it.name }.toTypedArray()
                 entryValues = animeCategories.map { it.id.toString() }.toTypedArray()
 

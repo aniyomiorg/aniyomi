@@ -85,7 +85,7 @@
     <string name="label_download_queue">Deskarga-ilara</string>
     <string name="label_library">Liburutegia</string>
     <string name="label_recent_updates">Eguneraketak</string>
-    <string name="label_recent_manga">Historiala</string>
+    <string name="label_recent_history">Historiala</string>
     <string name="label_sources">Iturriak</string>
     <string name="error_saving_cover">Errorea azala gordetzean</string>
     <string name="error_sharing_cover">Errorea azala partekatzean</string>
@@ -133,7 +133,7 @@
     <string name="pref_always_show_chapter_transition">Erakutsi beti kapituluaren trantsizioa</string>
     <string name="last_read_chapter">Azkenik irakurritako kapitulua</string>
     <string name="pref_download_directory">Deskarga kokapena</string>
-    <string name="pref_category_delete_chapters">Ezabatu kapituluak</string>
+    <string name="pref_category_delete_episodes">Ezabatu kapituluak</string>
     <string name="fourth_to_last">Atzetik hasita laugarren irakurritako kapitulua</string>
     <string name="source_not_found_name">Iturria ez da aurkitu: %1$s</string>
     <string name="invalid_backup_file_missing_data">Fitxategiari datuak falta zaizkio.</string>
@@ -187,7 +187,7 @@
     <string name="viewer">Irakurketa modua</string>
     <string name="transition_current">Oraingoa:</string>
     <string name="transition_previous">Aurrekoa:</string>
-    <string name="page_list_empty_error">Ez dira orrialderik aurkitu</string>
+    <string name="video_list_empty_error">Ez dira orrialderik aurkitu</string>
     <string name="loader_not_implemented_error">Ez da iturria aurkitu</string>
     <string name="update_check_confirm">Deskargatu</string>
     <string name="update_check_look_for_updates">Eguneraketak bilatzen…</string>
@@ -255,7 +255,7 @@
     <string name="rotation_landscape">Horizontala</string>
     <string name="rotation_force_portrait">Bertikal blokeatua</string>
     <string name="pref_remove_after_marked_as_read">Irakurria bezala markatu ondoren</string>
-    <string name="pref_remove_bookmarked_chapters">Baimendu laster-markadun kapituluak ezabatzea</string>
+    <string name="pref_remove_bookmarked_episodes">Baimendu laster-markadun kapituluak ezabatzea</string>
     <string name="pref_remove_after_read">Irakurri ondoren automatikoki ezabatu</string>
     <string name="custom_dir">Kokapen pertsonalizatua</string>
     <string name="enhanced_services">Zerbitzu hobetuak</string>
@@ -360,7 +360,7 @@
     <string name="sort_by_source">Iturriaren arabera</string>
     <string name="download_10">Hurrengo 10 kapituluak</string>
     <string name="download_all">Denak</string>
-    <string name="confirm_set_chapter_settings">Ziur ezarpen hauek lehenetsi gisa gorde nahi dituzula\?</string>
+    <string name="confirm_set_episode_settings">Ziur ezarpen hauek lehenetsi gisa gorde nahi dituzula\?</string>
     <string name="update_check_ignore">Kasurik ez egin</string>
     <string name="information_webview_outdated">Mesedez, eguneratu WebView aplikazioa bateragarritasun hobea izateko</string>
     <string name="channel_complete">Bukatua</string>
@@ -489,7 +489,7 @@
     <string name="pref_jump_to_chapters">Joan kapituluetara irekitzean</string>
     <string name="pref_category_library_update">Eguneraketa globalak</string>
     <string name="pref_library_update_interval">Eguneratze automatikoak</string>
-    <string name="pref_update_only_completely_read">Guztiz irakurritako argitalpenak</string>
+    <string name="pref_update_only_completely_seen">Guztiz irakurritako argitalpenak</string>
     <string name="include">Sartu: %s</string>
     <string name="color_filter_r_value">G</string>
     <string name="http_error_hint">Ikusi webgunea WebView-n</string>
@@ -616,7 +616,7 @@
     <string name="pref_library_update_refresh_trackers">Freskatu jarraitzaileak automatikoki</string>
     <string name="pref_library_update_refresh_trackers_summary">Eguneratu jarraitzaileak liburutegia eguneratzean</string>
     <string name="invalid_backup_file_missing_manga">Babeskopiak ez du mangarik.</string>
-    <string name="manga_tracking_tab">Jarraitzen</string>
+    <string name="tracking_tab">Jarraitzen</string>
     <string name="currently_reading">Une honetan irakurtzen</string>
     <string name="want_to_read">Irakurri nahi dut</string>
     <string name="repeating">Berrirakurtzen</string>

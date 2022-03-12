@@ -9,7 +9,7 @@
     <string name="label_settings">Подешавања</string>
     <string name="label_download_queue">Редослед преузимања</string>
     <string name="label_library">Колекција</string>
-    <string name="label_recent_manga">Историја</string>
+    <string name="label_recent_history">Историја</string>
     <string name="label_recent_updates">Ново</string>
     <string name="label_backup">Резервна копија и враћање</string>
     <string name="label_migration">Миграција</string>
@@ -368,7 +368,7 @@
     <string name="currently_reading">Тренутно се чита</string>
     <string name="reading">Читање</string>
     <string name="add_tracking">Додај пратиоца</string>
-    <string name="manga_tracking_tab">Праћење</string>
+    <string name="tracking_tab">Праћење</string>
     <string name="invalid_download_dir">Nevažeća lokacija za preuzimanje</string>
     <string name="snack_add_to_library">Додај мангу у колекцију\?</string>
     <string name="manga_info_collapse">Manje</string>
@@ -572,7 +572,7 @@
     <string name="cover_saved">Omot sačuvan</string>
     <string name="error_sharing_cover">Greška pri deljenju omota</string>
     <string name="set_chapter_settings_as_default">Постави као подразумевано</string>
-    <string name="confirm_set_chapter_settings">Да ли сте сигурни да желите да сачувате ова подешавања као подразумевана\?</string>
+    <string name="confirm_set_episode_settings">Да ли сте сигурни да желите да сачувате ова подешавања као подразумевана\?</string>
     <string name="also_set_chapter_settings_for_library">Такође примени на све манге у колекцији</string>
     <string name="no_chapters_error">Nije pronadjeni nijedno poglavlje</string>
     <string name="track_started_reading_date">Датум почетка</string>
@@ -677,8 +677,8 @@
     <string name="pref_high">Висока</string>
     <string name="pref_low">Ниска</string>
     <string name="pref_lowest">Најнижа</string>
-    <string name="pref_category_delete_chapters">Избриши поглавља</string>
-    <string name="pref_remove_bookmarked_chapters">Дозволи брисање забележених поглавља</string>
+    <string name="pref_category_delete_episodes">Избриши поглавља</string>
+    <string name="pref_remove_bookmarked_episodes">Дозволи брисање забележених поглавља</string>
     <string name="pref_remove_exclude_categories">Искључене категорије</string>
     <string name="pref_download_new_categories_details">Манге у искљученим категоријама се неће преузети иако су такође у укљученим категоријама.</string>
     <string name="tracking_info">Једносмерна синхронизација за ажурирање броја прочитаних поглавља у пратиоцима. Пратиоц за појединачни серијал се може подесити путем дугмића за пратиоце у том серијалу.</string>
@@ -689,7 +689,7 @@
     <string name="share_page_info">%1$s: %2$s, %3$d. страница</string>
     <string name="pref_category_for_this_series">За овај серијал</string>
     <string name="viewer">Модус читања</string>
-    <string name="page_list_empty_error">Нема страница</string>
+    <string name="video_list_empty_error">Нема страница</string>
     <string name="loader_not_implemented_error">Извор није пронађен</string>
     <string name="pref_clear_history">Избриши историју</string>
     <string name="clear_history_completed">Историја је избрисана</string>
@@ -706,7 +706,7 @@
     <string name="pref_auto_clear_chapter_cache">Испразни кеш меморију при изласку из апликације</string>
     <string name="database_clean">Čišćenje baze podataka</string>
     <string name="pref_library_update_manga_restriction">Ograničenja ažuriranje biblioteka</string>
-    <string name="pref_update_only_completely_read">Kompletno pročitane serije</string>
+    <string name="pref_update_only_completely_seen">Kompletno pročitane serije</string>
     <string name="privacy_policy">Политика приватности</string>
     <string name="only_update_restrictions">Samo ažuriranja: %s</string>
 </resources>

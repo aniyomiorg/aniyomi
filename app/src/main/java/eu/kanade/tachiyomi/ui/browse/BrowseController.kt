@@ -111,8 +111,8 @@ class BrowseController :
     private inner class BrowseAdapter : RouterPagerAdapter(this@BrowseController) {
 
         private val tabTitles = listOf(
-            R.string.label_animesources,
-            R.string.label_animeextensions,
+            R.string.label_sources,
+            R.string.label_extensions,
             R.string.label_migration
         )
             .map { resources!!.getString(it) }

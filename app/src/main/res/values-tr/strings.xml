@@ -9,7 +9,7 @@
     <string name="label_settings">Ayarlar</string>
     <string name="label_download_queue">İndirme kuyruğu</string>
     <string name="label_library">Kitaplık</string>
-    <string name="label_recent_manga">Geçmiş</string>
+    <string name="label_recent_history">Geçmiş</string>
     <string name="label_recent_updates">Güncellemeler</string>
     <string name="label_backup">Yedekle ve geri yükle</string>
     <string name="label_migration">Taşın</string>
@@ -243,7 +243,7 @@
     <string name="download_all">Hepsi</string>
     <string name="download_unread">Okunmayan</string>
     <string name="confirm_delete_chapters">Seçilen bölümleri silmek istediğinize emin misiniz?</string>
-    <string name="manga_tracking_tab">İzleme</string>
+    <string name="tracking_tab">İzleme</string>
     <string name="reading">Okunuyor</string>
     <string name="completed">Tamamlandı</string>
     <string name="dropped">Bırakıldı</string>
@@ -480,7 +480,7 @@
     <string name="tabs_header">Sekmeler</string>
     <string name="badges_header">Rozetler</string>
     <string name="action_display_show_tabs">Kategori sekmelerini göster</string>
-    <string name="page_list_empty_error">Sayfa bulunamadı</string>
+    <string name="video_list_empty_error">Sayfa bulunamadı</string>
     <string name="action_disable_all">Tümünü devre dışı bırak</string>
     <string name="action_enable_all">Tümünü etkinleştir</string>
     <string name="pref_show_reading_mode_summary">Okuyucu açılınca, kısaca o anki kipi göster</string>
@@ -520,8 +520,8 @@
     <string name="download_notifier_download_finish">İndirme tamamlandı</string>
     <string name="channel_errors">Hatalar</string>
     <string name="backup_restore_missing_trackers">İzleyiciler giriş yapmadı:</string>
-    <string name="pref_remove_bookmarked_chapters">İşaretli bölümleri silmeye izin ver</string>
-    <string name="pref_category_delete_chapters">Bölümleri sil</string>
+    <string name="pref_remove_bookmarked_episodes">İşaretli bölümleri silmeye izin ver</string>
+    <string name="pref_category_delete_episodes">Bölümleri sil</string>
     <string name="ext_nsfw_warning">Yetişkin (18+) içerik içerebilir</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Bu, resmi olmayan veya yanlış işaretlenmiş uzantıların, uygulama içinde yetişkin (18+) içeriği göstermesini engellemez.</string>
@@ -533,7 +533,7 @@
     <string name="chapter_settings_updated">Öntanımlı bölüm ayarları güncellendi</string>
     <string name="set_chapter_settings_as_default">Öntanımlı olarak ayarla</string>
     <string name="also_set_chapter_settings_for_library">Kitaplığımdaki tüm mangalara da uygula</string>
-    <string name="confirm_set_chapter_settings">Bu ayarları öntanımlı olarak kaydetmek istediğinizden emin misiniz\?</string>
+    <string name="confirm_set_episode_settings">Bu ayarları öntanımlı olarak kaydetmek istediğinizden emin misiniz\?</string>
     <string name="chapter_settings">Bölüm ayarları</string>
     <string name="share_page_info">%1$s: %2$s, sayfa %3$d</string>
     <string name="action_search_settings">Arama ayarları</string>

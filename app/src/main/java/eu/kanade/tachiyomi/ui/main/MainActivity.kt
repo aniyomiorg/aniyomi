@@ -259,7 +259,7 @@ class MainActivity : BaseViewBindingActivity<MainActivityBinding>() {
             .onEach {
                 binding.incognitoMode.isVisible = it
 
-                // Close BrowseSourceController and its MangaController child when incognito mode is disabled
+                // Close BrowseAnimeSourceController and its MangaController child when incognito mode is disabled
                 if (!it) {
                     val fga = router.backstack.last().controller
                     if (fga is BrowseAnimeSourceController || fga is AnimeController && fga.fromSource) {

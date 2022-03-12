@@ -9,7 +9,7 @@
     <string name="label_settings">Configurações</string>
     <string name="label_download_queue">Fila de downloads</string>
     <string name="label_library">Biblioteca</string>
-    <string name="label_recent_manga">Histórico</string>
+    <string name="label_recent_history">Histórico</string>
     <string name="label_recent_updates">Atualizações</string>
     <string name="label_backup">Backup e restauração</string>
     <string name="action_settings">Configurações</string>
@@ -202,7 +202,7 @@
     <string name="download_all">Todos</string>
     <string name="download_unread">Não lidos</string>
     <string name="confirm_delete_chapters">Você tem certeza que quer excluir os capítulos selecionados\?</string>
-    <string name="manga_tracking_tab">Monitoramento</string>
+    <string name="tracking_tab">Monitoramento</string>
     <string name="reading">Lendo</string>
     <string name="completed">Concluído</string>
     <string name="dropped">Abandonado</string>
@@ -480,7 +480,7 @@
     <string name="badges_header">Selos</string>
     <string name="action_display_show_tabs">Mostrar abas de categoria</string>
     <string name="tabs_header">Abas</string>
-    <string name="page_list_empty_error">Nenhuma página encontrada</string>
+    <string name="video_list_empty_error">Nenhuma página encontrada</string>
     <string name="action_disable_all">Desativar todas</string>
     <string name="action_enable_all">Ativar todas</string>
     <string name="pref_show_reading_mode_summary">Mostra de forma resumida o modo atual quando o leitor for aberto</string>
@@ -520,8 +520,8 @@
     <string name="channel_complete">Concluído</string>
     <string name="channel_errors">Erros</string>
     <string name="backup_restore_missing_trackers">Monitoradores sem login realizado:</string>
-    <string name="pref_remove_bookmarked_chapters">Permitir a exclusão de capítulos favoritos</string>
-    <string name="pref_category_delete_chapters">Excluir capítulos</string>
+    <string name="pref_remove_bookmarked_episodes">Permitir a exclusão de capítulos favoritos</string>
+    <string name="pref_category_delete_episodes">Excluir capítulos</string>
     <string name="ext_nsfw_warning">Pode haver conteúdo NSFW (+18)</string>
     <string name="ext_nsfw_short">+18</string>
     <string name="parental_controls_info">Isso não impede que extensões não oficiais ou potencialmente sinalizadas de maneira incorreta apresentem conteúdo NSFW (+18) no aplicativo.</string>
@@ -533,7 +533,7 @@
     <string name="chapter_settings_updated">Configurações padrões de capítulo atualizadas</string>
     <string name="set_chapter_settings_as_default">Definir como padrão</string>
     <string name="also_set_chapter_settings_for_library">Também aplicar a todos os mangás na minha biblioteca</string>
-    <string name="confirm_set_chapter_settings">Você tem certeza que quer salvar como padrão essas configurações\?</string>
+    <string name="confirm_set_episode_settings">Você tem certeza que quer salvar como padrão essas configurações\?</string>
     <string name="chapter_settings">Configurações de capítulo</string>
     <string name="share_page_info">%1$s: %2$s, página %3$d</string>
     <string name="action_search_settings">Pesquisar nas configurações</string>
@@ -693,7 +693,7 @@
     <string name="database_clean">Banco de dados limpo</string>
     <string name="extension_api_error">Erro ao obter a lista de extensões</string>
     <string name="privacy_policy">Política de privacidade</string>
-    <string name="pref_update_only_completely_read">Séries lidas completamente</string>
+    <string name="pref_update_only_completely_seen">Séries lidas completamente</string>
     <string name="pref_library_update_manga_restriction">Restrições de atualização da biblioteca</string>
     <string name="only_update_restrictions">Somente atualizar: %s</string>
     <string name="library_errors_help">Para obter ajuda sobre como corrigir erros de atualização da biblioteca, veja %1$s</string>

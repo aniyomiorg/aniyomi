@@ -78,7 +78,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource, Unm
     private val json: Json by injectLazy()
 
     override val id = ID
-    override val name = context.getString(R.string.local_anime_source)
+    override val name = context.getString(R.string.local_source)
     override val lang = "other"
     override val supportsLatest = true
 

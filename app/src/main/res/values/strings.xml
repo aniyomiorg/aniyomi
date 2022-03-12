@@ -4,12 +4,8 @@
 
     <!-- Models -->
     <string name="name">Name</string>
-    <string name="general_categories">Categories</string>
-    <string name="anime_categories">Anime Categories</string>
-    <string name="manga">Manga</string>
+    <string name="anime_categories">Categories</string>
     <string name="anime_library_entries">Library entries</string>
-    <string name="chapters">Chapters</string>
-    <string name="chapters_episodes">Chapters and episodes</string>
     <string name="episodes">Episodes</string>
     <string name="track">Tracking</string>
     <string name="history">History</string>
@@ -19,19 +15,13 @@
     <string name="label_settings">Settings</string>
     <string name="label_download_queue">Download queue</string>
     <string name="label_library">Library</string>
-    <string name="label_mangalibrary">Manga</string>
-    <string name="label_animelib">Anime</string>
-    <string name="label_manga">Manga</string>
+    <string name="label_anime">Anime</string>
     <string name="label_recent_updates">Updates</string>
-    <string name="label_recent_manga">History</string>
-    <string name="label_sources">Sources</string>
-    <string name="label_mangasources">Manga Sources</string>
-    <string name="label_animesources">Anime Sources</string>
+    <string name="label_recent_history">History</string>
+    <string name="label_sources">Anime Sources</string>
     <string name="label_backup">Backup and restore</string>
     <string name="label_migration">Migrate</string>
-    <string name="label_extensions">Extensions</string>
-    <string name="label_mangaextensions">Manga Extensions</string>
-    <string name="label_animeextensions">Anime Extensions</string>
+    <string name="label_extensions">Anime Extensions</string>
     <string name="label_extension_info">Extension info</string>
     <string name="label_help">Help</string>
     <string name="label_default">Default</string>
@@ -48,17 +38,13 @@
     <string name="action_filter_downloaded">Downloaded</string>
     <string name="action_filter_bookmarked">Bookmarked</string>
     <string name="action_filter_tracked">Tracked</string>
-    <string name="action_filter_unread">Unread</string>
     <string name="action_filter_unseen">Unseen</string>
     <string name="action_filter_empty">Remove filter</string>
     <string name="action_sort_alpha">Alphabetically</string>
-    <string name="action_sort_count">Total manga</string>
-    <string name="action_sort_total">Total chapters</string>
+    <string name="action_sort_count">Total anime</string>
     <string name="action_sort_total_episodes">Total episodes</string>
-    <string name="action_sort_last_read">Last read</string>
     <string name="action_sort_last_seen">Last seen</string>
     <string name="action_sort_last_checked">Last checked</string>
-    <string name="action_sort_latest_chapter">Latest chapter</string>
     <string name="action_sort_latest_episode">Latest episode</string>
     <string name="action_sort_chapter_fetch_date">Date fetched</string>
     <string name="action_sort_date_added">Date added</string>
@@ -67,20 +53,14 @@
     <string name="action_global_search">Global search</string>
     <string name="action_select_all">Select all</string>
     <string name="action_select_inverse">Select inverse</string>
-    <string name="action_mark_as_read">Mark as read</string>
-    <string name="action_mark_as_unread">Mark as unread</string>
     <string name="action_mark_as_seen">Mark as watched</string>
     <string name="action_mark_as_unseen">Mark as unwatched</string>
-    <string name="action_mark_previous_as_read">Mark previous as read</string>
     <string name="action_mark_previous_as_seen">Mark previous as seen</string>
     <string name="action_download">Download</string>
     <string name="action_play_internally">Play internally</string>
     <string name="action_play_externally">Play externally</string>
-    <string name="action_download_unread">Download unread chapters</string>
     <string name="action_download_unseen">Download unseen episodes</string>
-    <string name="action_bookmark">Bookmark chapter</string>
     <string name="action_bookmark_episode">Bookmark episode</string>
-    <string name="action_remove_bookmark">Unbookmark chapter</string>
     <string name="action_remove_bookmark_episode">Unbookmark episode</string>
     <string name="action_delete">Delete</string>
     <string name="action_update">Update</string>
@@ -90,19 +70,15 @@
     <string name="action_edit">Edit</string>
     <string name="action_add">Add</string>
     <string name="action_add_category">Add category</string>
-    <string name="action_edit_categories">Edit manga categories</string>
-    <string name="action_edit_anime_categories">Edit anime categories</string>
+    <string name="action_edit_anime_categories">Edit categories</string>
     <string name="action_rename_category">Rename category</string>
     <string name="action_move_category">Set categories</string>
     <string name="action_edit_cover">Edit cover</string>
-    <string name="action_view_chapters">View chapters</string>
     <string name="action_view_episodes">View episodes</string>
     <string name="action_stop">Stop</string>
     <string name="action_pause">Pause</string>
-    <string name="action_previous_chapter">Previous chapter</string>
     <string name="action_previous_episode">Previous episode</string>
     <string name="action_play">Play</string>
-    <string name="action_next_chapter">Next chapter</string>
     <string name="action_next_episode">Next episode</string>
     <string name="action_screen_fit">Screen fit mode</string>
     <string name="action_player_pip">PiP mode</string>
@@ -125,11 +101,8 @@
     <string name="action_display_grid">Compact grid</string>
     <string name="action_display_comfortable_grid">Comfortable grid</string>
     <string name="action_display_list">List</string>
-    <string name="action_display_download_badge">Downloaded chapters</string>
     <string name="action_display_download_badge_anime">Downloaded episodes</string>
-    <string name="action_display_unread_badge">Unread chapters</string>
     <string name="action_display_unseen_badge">Unseen episodes</string>
-    <string name="action_display_local_badge">Local manga</string>
     <string name="action_display_local_badge_anime">Local anime</string>
     <string name="action_display_language_badge">Language</string>
     <string name="action_display_show_tabs">Show category tabs</string>
@@ -247,8 +220,7 @@
     <string name="pref_library_columns">Items per row</string>
     <string name="portrait">Portrait</string>
     <string name="landscape">Landscape</string>
-    <string name="pref_jump_to_chapters">Jump to chapters on open</string>
-
+    <string name="pref_jump_to_episodes">Jump to episodes on open</string>
     <string name="pref_category_library_update">Global update</string>
     <string name="pref_library_update_interval">Automatic updates</string>
     <string name="update_never">Off</string>
@@ -263,24 +235,22 @@
     <string name="charging">Charging</string>
     <string name="restrictions">Restrictions: %s</string>
     <string name="pref_update_only_non_completed">Only update ongoing series</string>
-    <string name="pref_library_update_show_tab_badge">Show unread/unseen count on Updates icon</string>
+    <string name="pref_library_update_show_tab_badge">Show unseen count on Updates icon</string>
     <string name="pref_library_update_manga_restriction">Library update restrictions</string>
     <string name="only_update_restrictions">Only update: %s</string>
-    <string name="pref_update_only_completely_read">Completely read/seen series</string>
+    <string name="pref_update_only_completely_seen">Completely seen series</string>
     <string name="pref_library_update_refresh_metadata">Automatically refresh metadata</string>
     <string name="pref_library_update_refresh_metadata_summary">Check for new cover and details when updating library</string>
     <string name="pref_library_update_refresh_trackers">Automatically refresh trackers</string>
     <string name="pref_library_update_refresh_trackers_summary">Update trackers when updating library</string>
 
-    <string name="default_category">Default manga category</string>
-    <string name="default_anime_category">Default anime category</string>
+    <string name="default_anime_category">Default category</string>
     <string name="default_category_summary">Always ask</string>
     <string name="categorized_display_settings">Per-category settings for sort and display</string>
     <plurals name="num_categories">
         <item quantity="one">%d category</item>
         <item quantity="other">%d categories</item>
     </plurals>
-    <string name="pref_library_update_categories_details">Manga in excluded categories will not be updated even if they are also in included categories.</string>
     <string name="pref_animelib_update_categories_details">Anime in excluded categories will not be updated even if they are also in included categories.</string>
     <string name="all">All</string>
     <string name="none">None</string>
@@ -320,112 +290,6 @@
     <string name="ext_installer_shizuku_stopped">Shizuku is not running</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Install and start Shizuku to use Shizuku as extension installer.</string>
 
-      <!-- Reader section -->
-    <string name="pref_fullscreen">Fullscreen</string>
-    <string name="pref_show_navigation_mode">Show navigation layout overlay</string>
-    <string name="pref_show_navigation_mode_summary">Show tap zones when reader is opened</string>
-    <string name="pref_dual_page_split">Dual page split</string>
-    <string name="pref_dual_page_invert">Invert dual page split placement</string>
-    <string name="pref_dual_page_invert_summary">If the placement of the dual page split doesn\'t match reading direction</string>
-    <string name="pref_cutout_short">Show content in cutout area</string>
-    <string name="pref_page_transitions">Animate page transitions</string>
-    <string name="pref_double_tap_anim_speed">Double tap animation speed</string>
-    <string name="pref_show_page_number">Show page number</string>
-    <string name="pref_show_reading_mode">Show reading mode</string>
-    <string name="pref_show_reading_mode_summary">Briefly show current mode when reader is opened</string>
-    <string name="pref_true_color">32-bit color</string>
-    <string name="pref_true_color_summary">Reduces banding, but impacts performance</string>
-    <string name="pref_crop_borders">Crop borders</string>
-    <string name="on">On</string>
-    <string name="off">Off</string>
-    <string name="pref_custom_brightness">Custom brightness</string>
-    <string name="pref_grayscale">Grayscale</string>
-    <string name="pref_inverted_colors">Inverted</string>
-    <string name="pref_custom_color_filter">Custom color filter</string>
-    <string name="pref_color_filter_mode">Color filter blend mode</string>
-    <string name="filter_mode_overlay">Overlay</string>
-    <string name="filter_mode_multiply">Multiply</string>
-    <string name="filter_mode_screen">Screen</string>
-    <string name="filter_mode_lighten">Dodge / Lighten</string>
-    <string name="filter_mode_darken">Burn / Darken</string>
-    <string name="pref_keep_screen_on">Keep screen on</string>
-    <string name="pref_skip_read_chapters">Skip chapters marked read</string>
-    <string name="pref_skip_filtered_chapters">Skip filtered chapters</string>
-    <string name="pref_reader_navigation">Navigation</string>
-    <string name="pref_read_with_volume_keys">Volume keys</string>
-    <string name="pref_read_with_volume_keys_inverted">Invert volume keys</string>
-    <string name="pref_read_with_tapping">Tapping</string>
-    <string name="pref_read_with_tapping_inverted">Invert tapping</string>
-    <string name="tapping_inverted_none">None</string>
-    <string name="tapping_inverted_horizontal">Horizontal</string>
-    <string name="tapping_inverted_vertical">Vertical</string>
-    <string name="tapping_inverted_both">Both</string>
-    <string name="pref_reader_actions">Actions</string>
-    <string name="pref_read_with_long_tap">Show on long tap</string>
-    <string name="pref_create_folder_per_manga">Save pages into separate folders</string>
-    <string name="pref_create_folder_per_manga_summary">Creates folders according to manga title</string>
-    <string name="pref_reader_theme">Background color</string>
-    <string name="white_background">White</string>
-    <string name="gray_background">Gray</string>
-    <string name="black_background">Black</string>
-    <string name="automatic_background">Automatic</string>
-    <string name="pref_viewer_type">Default reading mode</string>
-    <string name="l_nav">L shaped</string>
-    <string name="kindlish_nav">Kindle-ish</string>
-    <string name="edge_nav">Edge</string>
-    <string name="right_and_left_nav">Right and Left</string>
-    <string name="nav_zone_prev">Prev</string>
-    <string name="nav_zone_next">Next</string>
-    <string name="nav_zone_left">Left</string>
-    <string name="nav_zone_right">Right</string>
-    <string name="left_to_right_viewer">Left to right</string>
-    <string name="right_to_left_viewer">Right to left</string>
-    <string name="vertical_viewer">Vertical</string>
-    <string name="webtoon_viewer">Webtoon</string>
-    <string name="vertical_plus_viewer">Continuous vertical</string>
-    <string name="pager_viewer">Paged</string>
-    <string name="pref_viewer_nav">Navigation layout</string>
-    <string name="pref_image_scale_type">Scale type</string>
-    <string name="scale_type_fit_screen">Fit screen</string>
-    <string name="scale_type_stretch">Stretch</string>
-    <string name="scale_type_fit_width">Fit width</string>
-    <string name="scale_type_fit_height">Fit height</string>
-    <string name="scale_type_original_size">Original size</string>
-    <string name="scale_type_smart_fit">Smart fit</string>
-    <string name="pref_zoom_start">Zoom start position</string>
-    <string name="zoom_start_automatic">Automatic</string>
-    <string name="zoom_start_left">Left</string>
-    <string name="zoom_start_right">Right</string>
-    <string name="zoom_start_center">Center</string>
-    <string name="double_tap_anim_speed_0">No animation</string>
-    <string name="double_tap_anim_speed_normal">Normal</string>
-    <string name="double_tap_anim_speed_fast">Fast</string>
-    <string name="pref_rotation_type">Default rotation type</string>
-    <string name="rotation_type">Rotation type</string>
-    <string name="rotation_free">Free</string>
-    <string name="rotation_portrait">Portrait</string>
-    <string name="rotation_landscape">Landscape</string>
-    <string name="rotation_force_portrait">Locked portrait</string>
-    <string name="rotation_force_landscape">Locked landscape</string>
-    <string name="color_filter_r_value">R</string>
-    <string name="color_filter_g_value">G</string>
-    <string name="color_filter_b_value">B</string>
-    <string name="color_filter_a_value">A</string>
-    <string name="pref_always_show_chapter_transition">Always show chapter transition</string>
-    <string name="pref_category_reading_mode">Reading mode</string>
-    <string name="pref_category_reading">Reading</string>
-    <string name="pref_webtoon_side_padding">Side padding</string>
-    <string name="webtoon_side_padding_0">None</string>
-    <string name="webtoon_side_padding_10">10%</string>
-    <string name="webtoon_side_padding_15">15%</string>
-    <string name="webtoon_side_padding_20">20%</string>
-    <string name="webtoon_side_padding_25">25%</string>
-    <string name="pref_hide_threshold">Sensitivity for hiding menu on scroll</string>
-    <string name="pref_highest">Highest</string>
-    <string name="pref_high">High</string>
-    <string name="pref_low">Low</string>
-    <string name="pref_lowest">Lowest</string>
-
     <!-- Player section -->
     <string name="pref_category_player">Player</string>
     <string name="pref_category_progress">Progress</string>
@@ -458,30 +322,37 @@
     <string name="pref_progress_unseen_30s">30 seconds</string>
     <string name="playertitle">%1$s - %2$s</string>
 
+    <string name="watcher_controls_skip_text">+85 s</string>
+    <string name="no_next_episode">Next Episode not found!</string>
+    <string name="no_previous_episode">Previous Episode not found!</string>
+    <string name="player_overlay_back">Back</string>
+    <string name="playback_speed_dialog_title">Change playback speed:</string>
+    <string name="playback_speed_dialog_reset">Reset</string>
+    <string name="playback_quality_dialog_title">Change video quality:</string>
+    <string name="playback_options_speed">Playback speed</string>
+    <string name="playback_options_quality">Video quality</string>
+    <string name="playback_options_title">Playback options</string>
+
       <!-- Downloads section -->
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_download_directory">Download location</string>
-    <string name="pref_category_delete_chapters">Delete chapters/episodes</string>
-    <string name="pref_remove_after_marked_as_read">After manually marked as read/watched</string>
-    <string name="pref_remove_after_read">After reading/watching automatically delete</string>
-    <string name="pref_remove_bookmarked_chapters">Allow deleting bookmarked chapters/episodes</string>
-    <string name="pref_remove_exclude_categories_manga">Excluded manga categories</string>
-    <string name="pref_remove_exclude_categories_anime">Excluded anime categories</string>
-    <string name="pref_remove_exclude_categories_anime_prefix">Anime: </string>
-    <string name="pref_remove_exclude_categories_manga_prefix">Manga: </string>
+    <string name="pref_category_delete_episodes">Delete episodes</string>
+    <string name="pref_remove_after_marked_as_seen">After manually marked as watched</string>
+    <string name="pref_remove_after_seen">After watching automatically delete</string>
+    <string name="pref_remove_bookmarked_episodes">Allow deleting bookmarked episodes</string>
+    <string name="pref_remove_exclude_categories">Excluded categories</string>
     <string name="custom_dir">Custom location</string>
     <string name="disabled">Disabled</string>
-    <string name="last_read_chapter">Last read chapter</string>
-    <string name="second_to_last">Second to last read chapter</string>
-    <string name="third_to_last">Third to last read chapter</string>
-    <string name="fourth_to_last">Fourth to last read chapter</string>
-    <string name="fifth_to_last">Fifth to last read chapter</string>
+    <string name="last_seen_episode">Last seen episode</string>
+    <string name="second_to_last">Second to last seen chapter</string>
+    <string name="third_to_last">Third to last seen chapter</string>
+    <string name="fourth_to_last">Fourth to last seen chapter</string>
+    <string name="fifth_to_last">Fifth to last seen chapter</string>
     <string name="pref_category_auto_download">Auto-download</string>
     <string name="pref_category_anime_download">Anime downloads</string>
     <string name="pref_use_external_downloader">Always use external downloader for anime</string>
     <string name="pref_external_downloader_selection">Downloader app preference</string>
     <string name="pref_download_new">Download new episodes</string>
-    <string name="pref_download_new_categories_details">Manga in excluded categories will not be downloaded even if they are also in included categories.</string>
     <string name="pref_download_new_anime_categories_details">Anime in excluded categories will not be downloaded even if they are also in included categories.</string>
     <string name="save_chapter_as_cbz">Save as CBZ archive</string>
 
@@ -489,9 +360,9 @@
     <string name="tracking_guide">Tracking guide</string>
     <string name="pref_auto_update_manga_sync">Update progress after reading</string>
     <string name="services">Services</string>
-    <string name="tracking_info">One-way sync to update the chapter progress in tracking services. Set up tracking for individual manga entries from their tracking button.</string>
+    <string name="tracking_info">One-way sync to update the episode progress in tracking services. Set up tracking for individual anime entries from their tracking button.</string>
     <string name="enhanced_services">Enhanced services</string>
-    <string name="enhanced_tracking_info">Services that provide enhanced features for specific sources. Manga are automatically tracked when added to your library.</string>
+    <string name="enhanced_tracking_info">Services that provide enhanced features for specific sources. Anime are automatically tracked when added to your library.</string>
     <string name="action_track">Track</string>
 
       <!-- Browse section -->
@@ -541,19 +412,18 @@
     <string name="requires_app_restart">Requires app restart to take effect</string>
     <string name="cookies_cleared">Cookies cleared</string>
     <string name="label_data">Data</string>
-    <string name="pref_clear_chapter_cache">Clear chapter and episode cache</string>
+    <string name="pref_clear_episode_cache">Clear episode cache</string>
     <string name="used_cache">Used: %1$s</string>
-    <string name="used_cache_both">Used by anime: %1$s, used by manga; %2$s</string>
     <string name="cache_deleted">Cache cleared. %1$d files have been deleted</string>
     <string name="cache_delete_error">An error occurred while clearing cache</string>
-    <string name="pref_auto_clear_chapter_cache">Clear chapter/episode cache on app close</string>
+    <string name="pref_auto_clear_episode_cache">Clear episode cache on app close</string>
     <string name="pref_clear_database">Clear database</string>
     <string name="pref_clear_database_summary">Delete history for anime that are not saved in your library</string>
     <plurals name="clear_database_source_item_count">
         <item quantity="one">1 non-library entry in database</item>
         <item quantity="other">%1$s non-library entries in database</item>
     </plurals>
-    <string name="clear_database_confirmation">Are you sure? Completed episodes and chapters and progress of non-library entries will be lost</string>
+    <string name="clear_database_confirmation">Are you sure? Completed episodes and progress of non-library entries will be lost</string>
     <string name="clear_database_completed">Entries deleted</string>
     <string name="database_clean">Database clean</string>
     <string name="pref_refresh_library_covers">Refresh library covers</string>
@@ -615,9 +485,7 @@
     <!-- Library fragment -->
     <string name="updating_category">Updating category</string>
     <string name="local_source_badge">Local</string>
-    <string name="manga_from_library">Manga from library</string>
     <string name="anime_from_library">Anime from library</string>
-    <string name="downloaded_chapters">Downloaded chapters</string>
     <string name="downloaded_episodes">Downloaded episodes</string>
     <string name="badges_header">Badges</string>
     <string name="tabs_header">Tabs</string>
@@ -628,8 +496,6 @@
     <!-- Do not translate "WebView" -->
     <string name="http_error_hint">Check website in WebView</string>
     <string name="local_source">Local source</string>
-    <string name="local_manga_source">Local manga source</string>
-    <string name="local_anime_source">Local anime source</string>
     <string name="other_source">Other</string>
     <string name="last_used_source">Last used</string>
     <string name="pinned_sources">Pinned</string>
@@ -639,15 +505,11 @@
     <string name="browse">Browse</string>
     <string name="local_source_help_guide">Local source guide</string>
     <string name="no_pinned_sources">You have no pinned sources</string>
-    <string name="chapter_not_found">Chapter not found</string>
     <string name="episode_not_found">Episode not found</string>
     <string name="local_invalid_format">Invalid chapter format</string>
     <string name="local_invalid_episode_format">Invalid episode format</string>
     <string name="local_filter_order_by">Order by</string>
     <string name="date">Date</string>
-
-    <!-- Manga activity -->
-    <string name="manga_not_in_db">This manga has been removed from the database.</string>
     <string name="anime_not_in_db">This anime has been removed from the database.</string>
 
     <!-- Manga info fragment -->
@@ -666,74 +528,55 @@
     <string name="manga_removed_library">Removed from library</string>
     <string name="manga_info_expand">More</string>
     <string name="manga_info_collapse">Less</string>
-    <plurals name="manga_num_chapters">
-        <item quantity="one">1 chapter</item>
-        <item quantity="other">%1$s chapters</item>
-    </plurals>
     <plurals name="anime_num_episodes">
         <item quantity="one">1 episode</item>
         <item quantity="other">%1$s episodes</item>
     </plurals>
-    <string name="delete_downloads_for_manga">Delete downloaded chapters?</string>
     <string name="delete_downloads_for_anime">Delete downloaded episodes?</string>
     <string name="copied_to_clipboard">Copied to clipboard:\n%1$s</string>
     <string name="clipboard_copy_error">Failed to copy to clipboard</string>
     <string name="source_not_installed">Source not installed: %1$s</string>
-    <string name="snack_add_to_library">Add manga to library?</string>
     <string name="snack_add_to_animelib">Add anime to library?</string>
 
     <!-- Manga chapters fragment -->
-    <string name="display_mode_chapter">Chapter %1$s</string>
     <string name="display_mode_episode">Episode %1$s</string>
     <string name="chapter_downloading_progress">Downloading (%1$d/%2$d)</string>
     <string name="episode_downloading_progress">Downloading (%d%%)</string>
     <string name="chapter_error">Error</string>
     <string name="chapter_paused">Paused</string>
     <string name="show_title">Source title</string>
-    <string name="show_chapter_number">Chapter number</string>
     <string name="show_episode_number">Episode number</string>
     <string name="sorting_mode">Sorting mode</string>
     <string name="sort_by_source">By source</string>
-    <string name="sort_by_number">By chapter number</string>
     <string name="sort_by_episode_number">By episode number</string>
     <string name="sort_by_upload_date">By upload date</string>
     <string name="manga_download">Download</string>
     <string name="custom_download">Download custom amount</string>
-    <string name="download_1">Next chapter</string>
     <string name="download_1_episode">Next episode</string>
-    <string name="download_5">Next 5 chapters</string>
     <string name="download_5_episodes">Next 5 episodes</string>
-    <string name="download_10">Next 10 chapters</string>
     <string name="download_10_episodes">Next 10 episodes</string>
     <string name="download_custom">Custom</string>
     <string name="download_all">All</string>
-    <string name="download_unread">Unread</string>
     <string name="download_unseen">Unseen</string>
     <string name="manga_cover">Cover</string>
     <string name="cover_saved">Cover saved</string>
     <string name="error_saving_cover">Error saving cover</string>
     <string name="error_sharing_cover">Error sharing cover</string>
-    <string name="confirm_delete_chapters">Are you sure you want to delete the selected chapters?</string>
     <string name="confirm_delete_episodes">Are you sure you want to delete the selected episodes?</string>
     <string name="invalid_download_dir">Invalid download location</string>
-    <string name="chapter_settings">Chapter settings</string>
     <string name="episode_settings">Episode settings</string>
-    <string name="confirm_set_chapter_settings">Are you sure you want to save these settings as default?</string>
-    <string name="also_set_chapter_settings_for_library">Also apply to all manga in my library</string>
+    <string name="confirm_set_episode_settings">Are you sure you want to save these settings as default?</string>
     <string name="also_set_episode_settings_for_library">Also apply to all anime in my library</string>
     <string name="set_chapter_settings_as_default">Set as default</string>
-    <string name="no_chapters_error">No chapters found</string>
     <string name="no_episodes_error">No episodes found</string>
 
     <!-- Tracking Screen -->
     <string name="tracker_anilist" translatable="false">AniList</string>
     <string name="tracker_myanimelist" translatable="false">MyAnimeList</string>
     <string name="tracker_kitsu" translatable="false">Kitsu</string>
-    <string name="tracker_komga" translatable="false">Komga</string>
-    <string name="tracker_komga_warning">This tracker is only compatible with the Komga source.</string>
     <string name="tracker_bangumi" translatable="false">Bangumi</string>
     <string name="tracker_shikimori" translatable="false">Shikimori</string>
-    <string name="manga_tracking_tab">Tracking</string>
+    <string name="tracking_tab">Tracking</string>
     <plurals name="num_trackers">
         <item quantity="one">1 tracker</item>
         <item quantity="other">%d trackers</item>
@@ -774,46 +617,21 @@
 
     <!-- Dialog option with checkbox view -->
     <string name="dialog_with_checkbox_remove_description_anime">This will remove the watch date of this episode. Are you sure?</string>
-    <string name="dialog_with_checkbox_remove_description">This will remove the read date of this chapter. Are you sure?</string>
     <string name="dialog_with_checkbox_reset_anime">Reset all episodes for this anime</string>
-    <string name="dialog_with_checkbox_reset">Reset all chapters for this manga</string>
 
     <!-- Image notifier -->
     <string name="picture_saved">Picture saved</string>
 
     <!-- Reader activity -->
-    <string name="custom_filter">Custom filter</string>
     <string name="set_as_cover">Set as cover</string>
     <string name="cover_updated">Cover updated</string>
-    <string name="share_page_info">%1$s: %2$s, page %3$d</string>
-    <string name="chapter_progress">Page: %1$d</string>
     <string name="episode_progress">Progress: %1$s/%2$s</string>
-    <string name="no_next_chapter">Next chapter not found</string>
-    <string name="no_previous_chapter">Previous chapter not found</string>
-    <string name="decode_image_error">The image couldn\'t be loaded</string>
-    <string name="confirm_set_image_as_cover">Use this image as cover art?</string>
-    <string name="pref_category_for_this_series">For this series</string>
-    <string name="viewer">Reading mode</string>
-    <string name="transition_finished">Finished:</string>
-    <string name="transition_current">Current:</string>
-    <string name="transition_next">Next:</string>
-    <string name="transition_previous">Previous:</string>
-    <string name="transition_no_next">There\'s no next chapter</string>
-    <string name="transition_no_previous">There\'s no previous chapter</string>
-    <string name="transition_pages_loading">Loading pages…</string>
-    <string name="transition_pages_error">Failed to load pages: %1$s</string>
-    <string name="page_list_empty_error">No pages found</string>
     <string name="loader_not_implemented_error">Source not found</string>
-    <plurals name="missing_chapters_warning">
-        <item quantity="one">Skipping 1 chapter, either the source is missing it or it has been filtered out</item>
-        <item quantity="other">Skipping %d chapters, either the source is missing them or they have been filtered out</item>
-    </plurals>
 
     <!-- Updates fragment -->
     <string name="updating_library">Updating library</string>
 
     <!-- History fragment -->
-    <string name="recent_manga_time">Ch. %1$s - %2$s</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
     <string name="pref_clear_history">Clear history</string>
     <string name="clear_history_completed">History deleted</string>
@@ -827,38 +645,22 @@
     <string name="copy">Copy</string>
 
     <!-- Downloads activity and service -->
-    <string name="download_queue_error">Couldn\'t download chapters. You can try again in the downloads section</string>
-    <string name="download_insufficient_space">Couldn\'t download chapters due to low storage space</string>
-    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Tachiyomi</string>
+    <string name="download_queue_error">Couldn\'t download episodes. You can try again in the downloads section</string>
+    <string name="download_insufficient_space">Couldn\'t download episodes due to low storage space</string>
+    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Animite</string>
 
     <!-- Library update service notifications -->
     <string name="notification_check_updates">Checking for new episodes</string>
     <string name="notification_updating">Updating library… (%1$d/%2$d)</string>
     <string name="notification_size_warning">Warning: large updates harm sources and may lead to slower updates and also increased battery usage</string>
-    <string name="notification_new_chapters">New chapters found</string>
     <string name="notification_new_episodes">New episodes found</string>
-    <plurals name="notification_new_chapters_summary">
-        <item quantity="one">For 1 title</item>
-        <item quantity="other">For %d titles</item>
-    </plurals>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one">For 1 title</item>
         <item quantity="other">For %d titles</item>
     </plurals>
-    <plurals name="notification_chapters_generic">
-        <item quantity="one">1 new chapter</item>
-        <item quantity="other">%1$d new chapters</item>
-    </plurals>
     <plurals name="notification_episodes_generic">
         <item quantity="one">1 new episode</item>
         <item quantity="other">%1$d new episode</item>
-    </plurals>
-    <string name="notification_chapters_single">Chapter %1$s</string>
-    <string name="notification_chapters_single_and_more">Chapter %1$s and %2$d more</string>
-    <string name="notification_chapters_multiple">Chapters %1$s</string>
-    <plurals name="notification_chapters_multiple_and_more">
-        <item quantity="one">Chapters %1$s and 1 more</item>
-        <item quantity="other">Chapters %1$s and %2$d more</item>
     </plurals>
     <string name="notification_episodes_single">Episode %1$s</string>
     <string name="notification_episodes_single_and_more">Episode %1$s and %2$d more</string>
@@ -900,7 +702,7 @@
     </plurals>
 
     <!--Content Description-->
-    <string name="description_cover">Cover of manga</string>
+    <string name="description_cover">Cover of anime</string>
 
     <!-- Information Text -->
     <string name="information_no_downloads">No downloads</string>
@@ -915,13 +717,12 @@
     <string name="information_webview_required">WebView is required for Tachiyomi</string>
     <!-- Do not translate "WebView" -->
     <string name="information_webview_outdated">Please update the WebView app for better compatibility</string>
-    <string name="chapter_settings_updated">Updated default chapter settings</string>
     <string name="episode_settings_updated">Updated default episode settings</string>
 
     <!-- Download Notification -->
     <string name="download_notifier_downloader_title">Downloader</string>
     <string name="download_notifier_title_error">Error</string>
-    <string name="download_notifier_unknown_error">Could not download chapter due to unexpected error</string>
+    <string name="download_notifier_unknown_error">Could not download episode due to unexpected error</string>
     <string name="download_notifier_text_only_wifi">No Wi-Fi connection available</string>
     <string name="download_notifier_no_network">No network connection available</string>
     <string name="download_notifier_download_paused">Download paused</string>
@@ -937,24 +738,15 @@
     <string name="channel_ext_updates">Extension updates</string>
     <string name="channel_crash_logs">Crash logs</string>
 
-    <!-- S Pen actions -->
-    <string name="spen_previous_page">Previous page</string>
-    <string name="spen_next_page">Next page</string>
-    <string name="watcher_controls_skip_text">+85 s</string>
-    <string name="no_next_episode">Next Episode not found!</string>
-    <string name="no_previous_episode">Previous Episode not found!</string>
-    <string name="anime_description_cover">Cover of Anime</string>
-    <string name="label_history">Manga</string>
-    <string name="label_animehistory">Anime</string>
-    <string name="label_updates">Manga</string>
-    <string name="label_animeupdates">Anime</string>
-    <string name="player_overlay_back">Back</string>
+    <!-- Extra Strings -->
+    <string name="off">Off</string>
+    <string name="automatic_background">Automatic</string>
+    <string name="video_list_empty_error">No videos found</string>
+    <string-array name="playback_options">
+        <item>@string/playback_options_speed</item>
+        <item>@string/playback_options_quality</item>
+    </string-array>
 
-    <!-- Aniyomi stuff -->
-    <string name="playback_speed_dialog_title">Change playback speed:</string>
-    <string name="playback_speed_dialog_reset">Reset</string>
-    <string name="playback_quality_dialog_title">Change video quality:</string>
-    <string name="playback_options_speed">Playback speed</string>
-    <string name="playback_options_quality">Video quality</string>
-    <string name="playback_options_title">Playback options</string>
+
+
 </resources>

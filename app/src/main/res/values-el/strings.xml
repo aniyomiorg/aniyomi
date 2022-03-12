@@ -9,7 +9,7 @@
     <string name="label_settings">Ρυθμίσεις</string>
     <string name="label_download_queue">Ουρά λήψεων</string>
     <string name="label_library">Βιβλιοθήκη</string>
-    <string name="label_recent_manga">Ιστορικό</string>
+    <string name="label_recent_history">Ιστορικό</string>
     <string name="label_recent_updates">Ενημερώσεις</string>
     <string name="label_backup">Αντίγραφο ασφαλείας και επαναφορά</string>
     <string name="label_migration">Μεταφορά</string>
@@ -243,7 +243,7 @@
     <string name="download_all">Όλα</string>
     <string name="download_unread">Αδιάβαστα</string>
     <string name="confirm_delete_chapters">Είστε βέβαιοι ότι θέλετε να διαγράψετε τα επιλεγμένα κεφάλαια;</string>
-    <string name="manga_tracking_tab">Tracking</string>
+    <string name="tracking_tab">Tracking</string>
     <string name="reading">Ανάγνωση</string>
     <string name="completed">Ολοκληρωμένο</string>
     <string name="dropped">Παραλείφθηκε</string>
@@ -480,7 +480,7 @@
     <string name="tabs_header">Καρτέλες</string>
     <string name="badges_header">Σήματα</string>
     <string name="action_display_show_tabs">Εμφάνιση καρτελών κατηγοριών</string>
-    <string name="page_list_empty_error">Δεν βρέθηκαν σελίδες</string>
+    <string name="video_list_empty_error">Δεν βρέθηκαν σελίδες</string>
     <string name="action_disable_all">Απενεργοποίηση όλων</string>
     <string name="action_enable_all">Ενεργοποίηση όλων</string>
     <string name="pref_show_reading_mode_summary">Σύντομη εμφάνιση της τρέχουσας κατάστασης λειτουργίας κατά το άνοιγμα του προγράμματος ανάγνωσης</string>
@@ -520,10 +520,10 @@
     <string name="download_notifier_download_finish">Η λήψη ολοκληρώθηκε</string>
     <string name="channel_errors">Σφάλματα</string>
     <string name="backup_restore_missing_trackers">Trackers που δεν έχουν συνδεθεί:</string>
-    <string name="pref_category_delete_chapters">Διαγραφή κεφαλαίων</string>
+    <string name="pref_category_delete_episodes">Διαγραφή κεφαλαίων</string>
     <string name="ext_nsfw_warning">Μπορεί να περιέχει NSFW (18+) περιεχόμενο</string>
     <string name="ext_nsfw_short">18+</string>
-    <string name="pref_remove_bookmarked_chapters">Να επιτρέπεται η διαγραφή κεφαλαίων με σελιδοδείκτη</string>
+    <string name="pref_remove_bookmarked_episodes">Να επιτρέπεται η διαγραφή κεφαλαίων με σελιδοδείκτη</string>
     <string name="parental_controls_info">Αυτό δεν εμποδίζει τις ανεπίσημες ή ενδεχομένως εσφαλμένα επισημασμένες επεκτάσεις να εμφανίζουν περιεχόμενο NSFW (18+) μέσα στην εφαρμογή.</string>
     <plurals name="missing_chapters_warning">
         <item quantity="one">Παραλείπεται 1 κεφάλαιο, είτε λείπει από την πηγή είτε έχει φιλτραριστεί</item>
@@ -533,7 +533,7 @@
     <string name="chapter_settings_updated">Ενημερώθηκαν οι προεπιλεγμένες ρυθμίσεις κεφαλαίου</string>
     <string name="set_chapter_settings_as_default">Ορισμός ως προεπιλογής</string>
     <string name="also_set_chapter_settings_for_library">Εφαρμογή επίσης σε όλα τα manga στη βιβλιοθήκη μου</string>
-    <string name="confirm_set_chapter_settings">Είστε σίγουροι ότι θέλετε να αποθηκεύσετε αυτές τις ρυθμίσεις ως προεπιλεγμένες;</string>
+    <string name="confirm_set_episode_settings">Είστε σίγουροι ότι θέλετε να αποθηκεύσετε αυτές τις ρυθμίσεις ως προεπιλεγμένες;</string>
     <string name="chapter_settings">Ρυθμίσεις κεφαλαίου</string>
     <string name="share_page_info">%1$s: %2$s, σελίδα %3$d</string>
     <string name="action_search_settings">Αναζήτηση ρυθμίσεων</string>
@@ -694,7 +694,7 @@
     <string name="extension_api_error">Απέτυχε η λήψη λίστας επεκτάσεων</string>
     <string name="privacy_policy">Πολιτική απορρήτου</string>
     <string name="pref_library_update_manga_restriction">Περιορισμοί ενημέρωσης βιβλιοθήκης</string>
-    <string name="pref_update_only_completely_read">Πλήρως διαβασμένη σειρά</string>
+    <string name="pref_update_only_completely_seen">Πλήρως διαβασμένη σειρά</string>
     <string name="only_update_restrictions">Μόνο ενημέρωση: %s</string>
     <string name="library_errors_help">Για βοήθεια σχετικά με τον τρόπο διόρθωσης σφαλμάτων ενημέρωσης βιβλιοθήκης, ανατρέξτε στο %1$s</string>
 </resources>

@@ -9,7 +9,7 @@
     <string name="label_settings">Налаштування</string>
     <string name="label_download_queue">Черга завантаження</string>
     <string name="label_library">Бібліотека</string>
-    <string name="label_recent_manga">Історія</string>
+    <string name="label_recent_history">Історія</string>
     <string name="label_recent_updates">Оновлення</string>
     <string name="label_backup">Резервування та відновлення</string>
     <string name="label_migration">Міграція</string>
@@ -243,7 +243,7 @@
     <string name="download_all">Завантажити все</string>
     <string name="download_unread">Непрочитані</string>
     <string name="confirm_delete_chapters">Ви впевнені, що бажаєте видалити вибрані глави\?</string>
-    <string name="manga_tracking_tab">Відслідковувати</string>
+    <string name="tracking_tab">Відслідковувати</string>
     <string name="reading">В процесі читання</string>
     <string name="completed">Завершено</string>
     <string name="dropped">Кинуто</string>
@@ -494,7 +494,7 @@
     <string name="viewer">Режим читання</string>
     <string name="pref_category_for_this_series">Для цієї серії</string>
     <string name="error_invalid_date_supplied">Вказано невірну дату</string>
-    <string name="page_list_empty_error">Сторінки не знайдено</string>
+    <string name="video_list_empty_error">Сторінки не знайдено</string>
     <string name="action_disable_all">Вимкнути все</string>
     <string name="action_enable_all">Увімкнути все</string>
     <string name="pref_show_reading_mode_summary">Стисло відобразити поточний режим, коли читалку відкрито</string>
@@ -538,8 +538,8 @@
     <string name="channel_progress">Поступ</string>
     <string name="download_notifier_download_finish">Завантаження завершено</string>
     <string name="backup_restore_missing_trackers">Трекери не авторизовано:</string>
-    <string name="pref_remove_bookmarked_chapters">Дозволити видалення глав з закладок</string>
-    <string name="pref_category_delete_chapters">Видалити глави</string>
+    <string name="pref_remove_bookmarked_episodes">Дозволити видалення глав з закладок</string>
+    <string name="pref_category_delete_episodes">Видалити глави</string>
     <string name="ext_nsfw_warning">Може містити контент NSFW (18+)</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Це не заважає неофіційним або потенційно невірним розширенням розміщувати вміст NSFW (18+) у додатку.</string>
@@ -554,7 +554,7 @@
     <string name="share_page_info">%1$s: %2$s, сторінка %3$d</string>
     <string name="set_chapter_settings_as_default">За замовчуванням</string>
     <string name="also_set_chapter_settings_for_library">Також застосувати для усієї манги в моїй бібліотеці</string>
-    <string name="confirm_set_chapter_settings">Ви впевнені, що бажаєте зберегти ці налаштування за замовчуванням\?</string>
+    <string name="confirm_set_episode_settings">Ви впевнені, що бажаєте зберегти ці налаштування за замовчуванням\?</string>
     <string name="chapter_settings">Налаштування глави</string>
     <string name="downloaded_chapters">Завантажені глави</string>
     <string name="manga_from_library">Манга з бібліотеки</string>
@@ -716,6 +716,6 @@
     <string name="database_clean">Очищення бази даних</string>
     <string name="privacy_policy">Політика конфіденційності</string>
     <string name="pref_library_update_manga_restriction">Обмеження оновлення бібліотеки</string>
-    <string name="pref_update_only_completely_read">Повністю прочитані серії</string>
+    <string name="pref_update_only_completely_seen">Повністю прочитані серії</string>
     <string name="only_update_restrictions">Оновлювати тільки: %s</string>
 </resources>

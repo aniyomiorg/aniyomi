@@ -37,7 +37,7 @@
     <string name="migration_dialog_what_to_include">اطلاعاتی که می‌خواهید منتقل شود را انتخاب کنید</string>
     <string name="recent_manga_time">قسمت %1$s - %2$s</string>
     <string name="updating_library">درحال آپدیت کتابخانه</string>
-    <string name="page_list_empty_error">صفحه ای یافت نشد</string>
+    <string name="video_list_empty_error">صفحه ای یافت نشد</string>
     <string name="transition_pages_error">لود صفحات با خطا مواجه شد: %1$s</string>
     <string name="transition_pages_loading">درحال لود صفحات…</string>
     <string name="transition_no_previous">قسمت قبلی وجود ندارد</string>
@@ -75,7 +75,7 @@
     <string name="currently_reading">درحال حاضر خواندن(Currently reading)</string>
     <string name="reading">درحال خواندن(Reading)</string>
     <string name="add_tracking">اضافه کردن ردیابی</string>
-    <string name="manga_tracking_tab">ردیابی</string>
+    <string name="tracking_tab">ردیابی</string>
     <string name="invalid_download_dir">مکان دانلود نامعتبر است</string>
     <string name="confirm_delete_chapters">آیا مطمئنید که می خواهید قسمت های انتخاب شده را حذف کنید؟</string>
     <string name="download_unread">خوانده نشده</string>
@@ -129,7 +129,7 @@
     <string name="label_migration">تغییر منبع</string>
     <string name="label_backup">پشتیبان گیری</string>
     <string name="label_sources">منابع</string>
-    <string name="label_recent_manga">سابقه</string>
+    <string name="label_recent_history">سابقه</string>
     <string name="label_recent_updates">آپدیت ها</string>
     <string name="label_library">کتابخانه</string>
     <string name="label_download_queue">صف دانلود</string>
@@ -529,9 +529,9 @@
     <string name="no_chapters_error">هیچ قسمتی پیدا نشد</string>
     <string name="set_chapter_settings_as_default">تنظیم به عنوان پیشفرض</string>
     <string name="also_set_chapter_settings_for_library">همچنین برای تمام مانگاهای موجود در کتابخانه من اعمال شود</string>
-    <string name="confirm_set_chapter_settings">آیا مطمئن هستید که می خواهید این تنظیمات را به صورت پیش فرض ذخیره کنید؟</string>
-    <string name="pref_remove_bookmarked_chapters">حذف قسمت های نشانه گذاری شده</string>
-    <string name="pref_category_delete_chapters">حذف قسمت ها</string>
+    <string name="confirm_set_episode_settings">آیا مطمئن هستید که می خواهید این تنظیمات را به صورت پیش فرض ذخیره کنید؟</string>
+    <string name="pref_remove_bookmarked_episodes">حذف قسمت های نشانه گذاری شده</string>
+    <string name="pref_category_delete_episodes">حذف قسمت ها</string>
     <string name="ext_nsfw_warning">ممکن است شامل محتوای +18 باشد</string>
     <string name="spen_next_page">صفحه بعدی</string>
     <string name="spen_previous_page">صفحه قبلی</string>

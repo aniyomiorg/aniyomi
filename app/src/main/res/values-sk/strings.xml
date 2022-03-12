@@ -9,7 +9,7 @@
     <string name="label_settings">Nastavenia</string>
     <string name="label_download_queue">Sťahujúce sa</string>
     <string name="label_library">Knižnica</string>
-    <string name="label_recent_manga">Nedávno čítané</string>
+    <string name="label_recent_history">Nedávno čítané</string>
     <string name="label_recent_updates">Updaty</string>
     <string name="label_backup">Záloha a obnova</string>
     <string name="label_migration">Presun zdrojov</string>
@@ -260,7 +260,7 @@
     <string name="download_all">Stiahnuť všetko</string>
     <string name="download_unread">Neprečítané</string>
     <string name="confirm_delete_chapters">Naozaj chcete odstrániť vybrané kapitoly\?</string>
-    <string name="manga_tracking_tab">Sledovanie</string>
+    <string name="tracking_tab">Sledovanie</string>
     <string name="reading">Čítanie</string>
     <string name="completed">Dokončený</string>
     <string name="dropped">Upustený</string>

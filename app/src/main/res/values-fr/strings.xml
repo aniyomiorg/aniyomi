@@ -5,7 +5,7 @@
     <string name="label_settings">Paramètres</string>
     <string name="label_download_queue">File de téléchargement</string>
     <string name="label_library">Bibliothèque</string>
-    <string name="label_recent_manga">Historique</string>
+    <string name="label_recent_history">Historique</string>
     <string name="label_recent_updates">Nouveautés</string>
     <string name="label_backup">Sauvegarder et restaurer</string>
     <!-- Actions -->
@@ -173,7 +173,7 @@
     <string name="download_all">Tout télécharger</string>
     <string name="download_unread">Non lus</string>
     <!-- MyAnimeList fragment -->
-    <string name="manga_tracking_tab">Suivi</string>
+    <string name="tracking_tab">Suivi</string>
     <string name="reading">En cours</string>
     <string name="completed">Complété</string>
     <string name="dropped">Abandonné</string>
@@ -514,7 +514,7 @@
     <string name="tabs_header">Onglets</string>
     <string name="badges_header">Badges</string>
     <string name="action_display_show_tabs">Afficher les onglets des catégories</string>
-    <string name="page_list_empty_error">Aucune page trouvée</string>
+    <string name="video_list_empty_error">Aucune page trouvée</string>
     <string name="action_disable_all">Tout désactiver</string>
     <string name="action_enable_all">Tout activer</string>
     <string name="pref_show_reading_mode_summary">Afficher la liste des modes de lecture lorsque le lecteur est ouvert</string>
@@ -554,8 +554,8 @@
     <string name="download_notifier_download_finish">Téléchargement terminé</string>
     <string name="channel_errors">Erreurs</string>
     <string name="backup_restore_missing_trackers">Traceurs non connectés :</string>
-    <string name="pref_remove_bookmarked_chapters">Permettre la suppression des chapitres marqués d\'un maque-page</string>
-    <string name="pref_category_delete_chapters">Supprimer des chapitres</string>
+    <string name="pref_remove_bookmarked_episodes">Permettre la suppression des chapitres marqués d\'un maque-page</string>
+    <string name="pref_category_delete_episodes">Supprimer des chapitres</string>
     <string name="ext_nsfw_warning">Peut contenir du contenu +18</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Cela n\'empêche pas les extensions non officielles ou potentiellement mal signalées de diffuser du contenu +18 dans l\'application.</string>
@@ -564,7 +564,7 @@
         <item quantity="other">%d chapitres ont été sautés, soit la source ne l\'a pas, soit il ont été filtrés</item>
     </plurals>
     <string name="no_chapters_error">Aucun chapitre trouvé</string>
-    <string name="confirm_set_chapter_settings">Appliquer ce paramétrage par défaut \?</string>
+    <string name="confirm_set_episode_settings">Appliquer ce paramétrage par défaut \?</string>
     <string name="chapter_settings">Paramètres du chapitre</string>
     <string name="pref_hide_bottom_bar_on_scroll">Cacher la barre inférieure lors du défilement</string>
     <string name="also_set_chapter_settings_for_library">Appliquer à ma librairie</string>
@@ -728,6 +728,6 @@
     <string name="extension_api_error">Échec de la récupération de la liste des extensions</string>
     <string name="privacy_policy">Politique de confidentialité</string>
     <string name="pref_library_update_manga_restriction">Restrictions de mise à jour de la bibliothèque</string>
-    <string name="pref_update_only_completely_read">Séries entièrement lues</string>
+    <string name="pref_update_only_completely_seen">Séries entièrement lues</string>
     <string name="only_update_restrictions">Mise à jour uniquement de : %s</string>
 </resources>

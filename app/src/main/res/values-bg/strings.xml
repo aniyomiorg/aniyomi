@@ -5,7 +5,7 @@
     <string name="label_settings">Настройки</string>
     <string name="label_download_queue">Изтегляния</string>
     <string name="label_library">Библиотека</string>
-    <string name="label_recent_manga">История</string>
+    <string name="label_recent_history">История</string>
     <string name="label_recent_updates">Нови глави</string>
     <string name="label_backup">Запази и възстанови</string>
     <!-- Actions -->
@@ -185,7 +185,7 @@
     <string name="download_unread">Непрочетени</string>
     <string name="confirm_delete_chapters">Сигурни ли сте, че искате да изтриете избраните глави?</string>
     <!-- MyAnimeList fragment -->
-    <string name="manga_tracking_tab">Следене</string>
+    <string name="tracking_tab">Следене</string>
     <string name="reading">Чета</string>
     <string name="completed">Завършена</string>
     <string name="dropped">Изоставена</string>
@@ -499,7 +499,7 @@
         <item quantity="other">%1$d актуализации не бяха успешни</item>
     </plurals>
     <string name="loader_not_implemented_error">Източникът не е намерен</string>
-    <string name="page_list_empty_error">Няма намерени страници</string>
+    <string name="video_list_empty_error">Няма намерени страници</string>
     <string name="sort_by_upload_date">По дата на качване</string>
     <plurals name="manga_num_chapters">
         <item quantity="one">1 глава</item>
@@ -548,8 +548,8 @@
     <string name="whats_new">Какво е новото</string>
     <string name="backup_restore_missing_trackers">Не сте влезли като потребител в:</string>
     <string name="tracker_not_logged_in">Не сте влезли като потребител: %1$s</string>
-    <string name="pref_remove_bookmarked_chapters">Позволи изтриване на отметнати глави</string>
-    <string name="pref_category_delete_chapters">Изтрий глави</string>
+    <string name="pref_remove_bookmarked_episodes">Позволи изтриване на отметнати глави</string>
+    <string name="pref_category_delete_episodes">Изтрий глави</string>
     <string name="pref_category_reading_mode">Режим на четене</string>
     <string name="ext_nsfw_warning">Може да съдържа неприлично (18+) съдържание</string>
     <string name="ext_nsfw_short">18+</string>
@@ -677,7 +677,7 @@
     <string name="downloaded_chapters">Изтеглени глави</string>
     <string name="clipboard_copy_error">Не можа да се копира върху клипборда</string>
     <string name="cover_saved">Корицата запазена</string>
-    <string name="confirm_set_chapter_settings">Сигурни ли сте, че искате да наложите тези настройки\?</string>
+    <string name="confirm_set_episode_settings">Сигурни ли сте, че искате да наложите тези настройки\?</string>
     <string name="also_set_chapter_settings_for_library">Също приложи към всяка манга в библиотеката ми</string>
     <string name="set_chapter_settings_as_default">Направи по подразбиране</string>
     <string name="tracker_komga_warning">Този тракер е съвместим само с източника Komga.</string>
@@ -721,7 +721,7 @@
     <string name="channel_app_updates">Актуализации на приложението</string>
     <string name="pref_auto_clear_chapter_cache">Изчистване на кеша на главата при затваряне на приложението</string>
     <string name="privacy_policy">Политика за поверителност</string>
-    <string name="pref_update_only_completely_read">Прочети напълно поредицата</string>
+    <string name="pref_update_only_completely_seen">Прочети напълно поредицата</string>
     <string name="pref_library_update_show_tab_badge">Покажи броя на непрочетените в иконата за ъпдейти</string>
     <string name="ext_update_all">Обнови всички</string>
     <string name="pref_library_update_manga_restriction">Ограничения за актуализиране на библиотеката</string>

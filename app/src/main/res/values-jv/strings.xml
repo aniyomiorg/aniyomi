@@ -104,7 +104,7 @@
     <string name="label_migration">Pindah</string>
     <string name="label_backup">Serep lan mulihake</string>
     <string name="label_sources">Sumber</string>
-    <string name="label_recent_manga">Sejarah</string>
+    <string name="label_recent_history">Sejarah</string>
     <string name="label_recent_updates">Nganyari</string>
     <string name="label_library">Perpustakaan</string>
     <string name="label_download_queue">Antrian Donlot</string>

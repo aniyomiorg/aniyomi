@@ -8,7 +8,7 @@
     <string name="label_settings">设置</string>
     <string name="label_download_queue">下载队列</string>
     <string name="label_library">书架</string>
-    <string name="label_recent_manga">历史</string>
+    <string name="label_recent_history">历史</string>
     <string name="label_recent_updates">更新</string>
     <string name="label_backup">备份和还原</string>
     <string name="label_extensions">扩展插件</string>
@@ -243,7 +243,7 @@
     <string name="download_all">全部</string>
     <string name="download_unread">下载未读</string>
     <string name="confirm_delete_chapters">你确定删除所选章节吗？</string>
-    <string name="manga_tracking_tab">追踪</string>
+    <string name="tracking_tab">追踪</string>
     <string name="reading">阅读中</string>
     <string name="completed">已完结</string>
     <string name="dropped">已放弃</string>
@@ -471,7 +471,7 @@
     <string name="tabs_header">标签</string>
     <string name="badges_header">标记</string>
     <string name="action_display_show_tabs">显示分类标签</string>
-    <string name="page_list_empty_error">没有找到页面</string>
+    <string name="video_list_empty_error">没有找到页面</string>
     <string name="action_disable_all">全部禁用</string>
     <string name="action_enable_all">全部启用</string>
     <string name="pref_show_reading_mode_summary">开始阅读时，短暂显示当前阅读模式</string>
@@ -509,8 +509,8 @@
     <string name="download_notifier_download_finish">下载完毕</string>
     <string name="channel_errors">错误</string>
     <string name="backup_restore_missing_trackers">尚未登录的追踪源：</string>
-    <string name="pref_remove_bookmarked_chapters">允许删除已添加书签的章节</string>
-    <string name="pref_category_delete_chapters">删除章节</string>
+    <string name="pref_remove_bookmarked_episodes">允许删除已添加书签的章节</string>
+    <string name="pref_category_delete_episodes">删除章节</string>
     <string name="ext_nsfw_warning">可能包含 NSFW (18+) 内容</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">这并不能防止非官方或可能被错误标记的扩展插件在应用中显示 NSFW (18+) 内容。</string>
@@ -521,7 +521,7 @@
     <string name="chapter_settings_updated">已更新默认章节设置</string>
     <string name="set_chapter_settings_as_default">设为默认</string>
     <string name="also_set_chapter_settings_for_library">同时应用至书架里的所有漫画</string>
-    <string name="confirm_set_chapter_settings">你确定要将当前设置保存为默认吗？</string>
+    <string name="confirm_set_episode_settings">你确定要将当前设置保存为默认吗？</string>
     <string name="chapter_settings">章节设置</string>
     <string name="share_page_info">%1$s：%2$s，第 %3$d 页</string>
     <string name="action_search_settings">搜索设置</string>
@@ -680,7 +680,7 @@
     <string name="clear_database_source_item_count">数据库有 %1$d 本漫画不在书架中</string>
     <string name="extension_api_error">无法获取扩展插件列表</string>
     <string name="privacy_policy">隐私政策</string>
-    <string name="pref_update_only_completely_read">全读完的连载</string>
+    <string name="pref_update_only_completely_seen">全读完的连载</string>
     <string name="pref_library_update_manga_restriction">漫画库更新限制</string>
     <string name="only_update_restrictions">仅更新：%s</string>
     <string name="library_errors_help">有关如何修复库更新错误的帮助，请参阅 %1$s</string>

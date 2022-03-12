@@ -9,7 +9,7 @@
     <string name="label_settings">সেটিংস</string>
     <string name="label_download_queue">ডাউনলোড ক্রম</string>
     <string name="label_library">সংগ্রহশালা</string>
-    <string name="label_recent_manga">ইতিহাস</string>
+    <string name="label_recent_history">ইতিহাস</string>
     <string name="label_recent_updates">হালনাগাদ সমূহ</string>
     <string name="label_backup">ব্যাকআপ এবং পুনরুদ্ধার</string>
     <string name="action_settings">সেটিংস</string>
@@ -209,7 +209,7 @@
     <string name="download_all">সব</string>
     <string name="download_unread">অপঠিত</string>
     <string name="confirm_delete_chapters">আপনি কি নিশ্চিত যে আপনি নির্বাচিত অধ্যায়গুলো মুছে ফেলতে চান?</string>
-    <string name="manga_tracking_tab">অনুসরিত</string>
+    <string name="tracking_tab">অনুসরিত</string>
     <string name="reading">পড়া হচ্ছে</string>
     <string name="completed">সম্পন্ন</string>
     <string name="dropped">বাদ পড়েছে</string>
@@ -385,7 +385,7 @@
     <string name="pref_hide_bottom_bar_on_scroll">স্ক্রোলের সময় নিচের বার লুকান</string>
     <string name="chapter_settings_updated">হালনাগাদকৃত প্রকৃত শ্রেণির সেটিংস</string>
     <string name="set_chapter_settings_as_default">প্রকৃত হিসেবে সংরক্ষণ করুন</string>
-    <string name="confirm_set_chapter_settings">আপনি কি নিশ্চিত সেটিংসগুলো প্রকৃত হিসেবে সংরক্ষণ করবেন\?</string>
+    <string name="confirm_set_episode_settings">আপনি কি নিশ্চিত সেটিংসগুলো প্রকৃত হিসেবে সংরক্ষণ করবেন\?</string>
     <string name="label_data">তথ্য</string>
     <string name="requires_app_restart">কার্যকর করতে অ্যাপ পুনরারম্ভ করা লাগে</string>
     <string name="label_network">নেটওয়ার্ক</string>
@@ -403,8 +403,8 @@
     <string name="source_not_found_name">উৎস পাওয়া যায়নি: %1$s</string>
     <string name="pref_search_pinned_sources_only">শুধু আটকানো উৎস যোগ করুন</string>
     <string name="pref_enable_automatic_extension_updates">এক্সটেনশনের হালনাগাদ সমূহ</string>
-    <string name="pref_remove_bookmarked_chapters">বুকমার্ক করা অধ্যায়গুলি মুছে ফেলার অনুমতি দিন</string>
-    <string name="pref_category_delete_chapters">অধ্যায় মুছুন</string>
+    <string name="pref_remove_bookmarked_episodes">বুকমার্ক করা অধ্যায়গুলি মুছে ফেলার অনুমতি দিন</string>
+    <string name="pref_category_delete_episodes">অধ্যায় মুছুন</string>
     <string name="webtoon_side_padding_25">২৫%</string>
     <string name="webtoon_side_padding_20">২০%</string>
     <string name="webtoon_side_padding_15">১৫%</string>
@@ -488,7 +488,7 @@
         <item quantity="other">%d অধ্যায় কিপ করা হচ্ছে, হয় উৎসটি তাদের অনুপস্থিত অথবা সেগুলি ফিল্টার করা হয়েছে</item>
     </plurals>
     <string name="loader_not_implemented_error">উৎস খুঁজে পাওয়া যায়নি</string>
-    <string name="page_list_empty_error">কোনও পৃষ্ঠা পাওয়া যায় নি</string>
+    <string name="video_list_empty_error">কোনও পৃষ্ঠা পাওয়া যায় নি</string>
     <string name="viewer">পঠন ধরন</string>
     <string name="pref_category_for_this_series">এই সিরিজের জন্য</string>
     <string name="share_page_info">%1$s: %2$s, পৃষ্ঠা %3$d</string>

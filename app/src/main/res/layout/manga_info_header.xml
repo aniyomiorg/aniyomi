@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".ui.browse.source.browse.BrowseSourceController">
+    tools:context=".ui.browse.animesource.browse.BrowseAnimeSourceController">
 
     <ImageView
         android:id="@+id/backdrop"
@@ -182,7 +182,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/manga_tracking_tab"
+            android:text="@string/tracking_tab"
             android:visibility="gone"
             app:icon="@drawable/ic_sync_24dp"
             tools:visibility="visible" />

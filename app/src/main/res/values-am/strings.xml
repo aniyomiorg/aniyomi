@@ -173,7 +173,7 @@
     <string name="label_migration">ፍልሰት</string>
     <string name="label_backup">ምትኬ</string>
     <string name="label_sources">ምንጮች</string>
-    <string name="label_recent_manga">ታሪክ</string>
+    <string name="label_recent_history">ታሪክ</string>
     <string name="label_recent_updates">ዝመናዎች</string>
     <string name="label_library">ቤተ መጻሕፍት</string>
     <string name="label_download_queue">የሚወርድ ወረፋ</string>
@@ -181,10 +181,10 @@
     <string name="label_more">ተጨማሪ</string>
     <string name="name">ስም</string>
     <string name="custom_dir">ብጁ አካባቢ</string>
-    <string name="pref_remove_bookmarked_chapters">ዕልባት የተደረገባቸውን ምዕራፎች ሰርዝ</string>
+    <string name="pref_remove_bookmarked_episodes">ዕልባት የተደረገባቸውን ምዕራፎች ሰርዝ</string>
     <string name="pref_remove_after_read">ካነበብኩ በኋላ</string>
     <string name="pref_remove_after_marked_as_read">በእጅ እንደተነበበ ምልክት ከተደረገ በኋላ</string>
-    <string name="pref_category_delete_chapters">ምዕራፎችን ሰርዝ</string>
+    <string name="pref_category_delete_episodes">ምዕራፎችን ሰርዝ</string>
     <string name="pref_download_directory">አካባቢን ያውርዱ</string>
     <string name="webtoon_side_padding_25">25%</string>
     <string name="webtoon_side_padding_20">20%</string>

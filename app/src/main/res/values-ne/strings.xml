@@ -112,7 +112,7 @@
     <string name="label_migration">स्थानान्तरण</string>
     <string name="label_backup">ब्याकअप र पुनर्स्थापना</string>
     <string name="label_sources">स्रोतहरू</string>
-    <string name="label_recent_manga">इतिहास</string>
+    <string name="label_recent_history">इतिहास</string>
     <string name="label_recent_updates">अपडेटहरु</string>
     <string name="label_library">पुस्तकालय</string>
     <string name="label_settings">सेटिंग्स</string>

@@ -5,7 +5,7 @@
     <string name="label_settings">Cài đặt</string>
     <string name="label_download_queue">Hàng chờ tải xuống</string>
     <string name="label_library">Thư Viện</string>
-    <string name="label_recent_manga">Lịch sử</string>
+    <string name="label_recent_history">Lịch sử</string>
     <string name="label_recent_updates">Cập nhật mới</string>
     <string name="label_backup">Sao lưu và khôi phục</string>
     <!-- Actions -->
@@ -186,7 +186,7 @@
     <string name="download_unread">Chưa đọc</string>
     <string name="confirm_delete_chapters">Bạn có chắc muốn xóa các chương đã chọn?</string>
     <!-- MyAnimeList fragment -->
-    <string name="manga_tracking_tab">Theo dõi</string>
+    <string name="tracking_tab">Theo dõi</string>
     <string name="reading">Đang đọc</string>
     <string name="completed">Đã hoàn thành</string>
     <string name="dropped">Đã dừng</string>
@@ -521,7 +521,7 @@
         <item quantity="other">Đã bỏ qua %d chương, vì nguồn đang bị thiếu hoặc chúng đã bị lọc ra</item>
     </plurals>
     <string name="loader_not_implemented_error">Nguồn không tìm thấy</string>
-    <string name="page_list_empty_error">Trang không tìm thấy</string>
+    <string name="video_list_empty_error">Trang không tìm thấy</string>
     <string name="viewer">Chế độ đọc</string>
     <string name="pref_category_for_this_series">Dành cho phần truyện này</string>
     <string name="share_page_info">%1$s:%2$s,trang %3$d</string>
@@ -533,7 +533,7 @@
     <string name="no_chapters_error">Không tìm thấy chương</string>
     <string name="set_chapter_settings_as_default">Đặt mặc định</string>
     <string name="also_set_chapter_settings_for_library">Ngoài ra có hiệu lực với tất cả truyện trong thư viện</string>
-    <string name="confirm_set_chapter_settings">Bạn có chắc chắn muốn lưu lại tuỳ chỉnh này hay không\?</string>
+    <string name="confirm_set_episode_settings">Bạn có chắc chắn muốn lưu lại tuỳ chỉnh này hay không\?</string>
     <string name="chapter_settings">Tuỳ chỉnh chương</string>
     <string name="sort_by_upload_date">Bởi ngày đăng</string>
     <string name="clipboard_copy_error">Lưu vào bộ nhớ tạm thất bại</string>
@@ -580,8 +580,8 @@
     <string name="backup_restore_missing_sources">Nguồn không tìm thấy :</string>
     <string name="pref_download_new_categories_details">Manga trong các danh mục bị loại trừ sẽ không được tải xuống.</string>
     <string name="pref_category_auto_download">Tự động tải xuống</string>
-    <string name="pref_remove_bookmarked_chapters">Cho phép xóa các chương đã đánh dấu</string>
-    <string name="pref_category_delete_chapters">Xoá chương</string>
+    <string name="pref_remove_bookmarked_episodes">Cho phép xóa các chương đã đánh dấu</string>
+    <string name="pref_category_delete_episodes">Xoá chương</string>
     <string name="pref_webtoon_side_padding">Kích cỡ hai bên</string>
     <string name="webtoon_side_padding_0">Không</string>
     <string name="rotation_landscape">Chế độ nằm ngang</string>
@@ -715,6 +715,6 @@
     <string name="extension_api_error">Không tải được danh sách tiện ích mở rộng</string>
     <string name="privacy_policy">Chính sách quyền riêng tư</string>
     <string name="pref_library_update_manga_restriction">Những hạn chế về cập nhật thư viện</string>
-    <string name="pref_update_only_completely_read">Bộ truyện được đọc toàn bộ</string>
+    <string name="pref_update_only_completely_seen">Bộ truyện được đọc toàn bộ</string>
     <string name="only_update_restrictions">Chỉ cập nhật: %s</string>
 </resources>

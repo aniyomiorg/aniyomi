@@ -195,7 +195,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
             // Mark episodes as read action
             addAction(
                 R.drawable.ic_glasses_24dp,
-                context.getString(R.string.action_mark_as_read),
+                context.getString(R.string.action_mark_as_seen),
                 NotificationReceiver.markAsReadPendingBroadcast(
                     context,
                     anime,

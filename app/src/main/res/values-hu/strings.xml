@@ -7,7 +7,7 @@
     <string name="track">Követés</string>
     <string name="history">Előzmények</string>
     <string name="label_settings">Beállítások</string>
-    <string name="label_recent_manga">Előzmények</string>
+    <string name="label_recent_history">Előzmények</string>
     <string name="label_backup">Biztonsági mentés és visszaállítás</string>
     <string name="action_settings">Beállítások</string>
     <string name="action_search">Keresés</string>
@@ -244,7 +244,7 @@
     <string name="information_empty_category">Nincsenek kategóriái. Érintse meg a plusz gombot, hogy létrehozzon egyet a könyvtára rendezéséhez.</string>
     <string name="pinned_sources">Kitűzött</string>
     <string name="other_source">Egyéb</string>
-    <string name="manga_tracking_tab">Nyilvántartás</string>
+    <string name="tracking_tab">Nyilvántartás</string>
     <string name="copied_to_clipboard">Vágólapra másolva:
 \n%1$s</string>
     <string name="delete_downloads_for_manga">Törli a kijelölt fejezeteket\?</string>
@@ -414,10 +414,10 @@
     <string name="disabled">Kikapcsolva</string>
     <string name="custom_dir">Egyedi hely</string>
     <string name="pref_remove_exclude_categories">Tiltott kategóriák</string>
-    <string name="pref_remove_bookmarked_chapters">Könyvjelzőzött fejezetek törlésének engedélyezése</string>
+    <string name="pref_remove_bookmarked_episodes">Könyvjelzőzött fejezetek törlésének engedélyezése</string>
     <string name="pref_remove_after_read">Olvasás után automatikusan</string>
     <string name="pref_remove_after_marked_as_read">Olvasottnak jelölés után</string>
-    <string name="pref_category_delete_chapters">Fejezetek törlése</string>
+    <string name="pref_category_delete_episodes">Fejezetek törlése</string>
     <string name="pref_lowest">Legalacsonyabb</string>
     <string name="pref_low">Alacsony</string>
     <string name="pref_high">Magas</string>

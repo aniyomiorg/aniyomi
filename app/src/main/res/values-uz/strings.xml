@@ -57,7 +57,7 @@
     <string name="label_migration">Kõchish</string>
     <string name="label_backup">Saqlash</string>
     <string name="label_sources">Manbalar</string>
-    <string name="label_recent_manga">Tarix</string>
+    <string name="label_recent_history">Tarix</string>
     <string name="label_recent_updates">Yangilanishlar</string>
     <string name="label_library">Biblioteka</string>
     <string name="label_download_queue">Yuklash navbati</string>

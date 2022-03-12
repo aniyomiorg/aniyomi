@@ -9,13 +9,13 @@
     android:paddingTop="4dp"
     android:paddingEnd="12dp"
     android:paddingBottom="4dp"
-    tools:context=".ui.browse.source.browse.BrowseSourceController">
+    tools:context=".ui.browse.animesource.browse.BrowseAnimeSourceController">
 
     <TextView
         android:id="@+id/chapters_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/chapters"
+        android:text="@string/episodes"
         android:textAppearance="?attr/textAppearanceTitleMedium"
         android:textIsSelectable="false"
         app:layout_constraintBottom_toBottomOf="parent"

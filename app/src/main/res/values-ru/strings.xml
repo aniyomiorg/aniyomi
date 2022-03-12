@@ -98,7 +98,7 @@
     <string name="label_backup">Резервная копия &amp; Восстановление</string>
     <string name="label_download_queue">Очередь загрузки</string>
     <string name="label_library">Библиотека</string>
-    <string name="label_recent_manga">История</string>
+    <string name="label_recent_history">История</string>
     <string name="label_recent_updates">Обновления</string>
     <string name="label_settings">Настройки</string>
     <string name="landscape">Альбомная</string>
@@ -111,7 +111,7 @@
     <string name="login_title">Войти в %1$s</string>
     <string name="manga_download">Загрузить</string>
     <string name="manga_not_in_db">Эта серия, была удалена из базы данных.</string>
-    <string name="manga_tracking_tab">Отслеживание</string>
+    <string name="tracking_tab">Отслеживание</string>
     <string name="name">Название</string>
     <string name="no_next_chapter">Следующая глава не найдена</string>
     <string name="no_previous_chapter">Предыдущая глава не найдена</string>
@@ -497,7 +497,7 @@
     <string name="tabs_header">Вкладки</string>
     <string name="badges_header">Значки</string>
     <string name="action_display_show_tabs">Показать вкладки категорий</string>
-    <string name="page_list_empty_error">Страницы не найдены</string>
+    <string name="video_list_empty_error">Страницы не найдены</string>
     <string name="action_enable_all">Включить всё</string>
     <string name="action_disable_all">Выключить всё</string>
     <string name="pref_show_reading_mode_summary">Ненадолго показать режим чтения после открытия читалки</string>
@@ -541,8 +541,8 @@
     <string name="channel_progress">Прогресс</string>
     <string name="channel_errors">Ошибки</string>
     <string name="backup_restore_missing_trackers">Сервис(ы) отслеживания, в которые(й) не выполнен вход:</string>
-    <string name="pref_remove_bookmarked_chapters">Главы с закладками</string>
-    <string name="pref_category_delete_chapters">Удаление глав</string>
+    <string name="pref_remove_bookmarked_episodes">Главы с закладками</string>
+    <string name="pref_category_delete_episodes">Удаление глав</string>
     <string name="ext_nsfw_warning">Может содержать контент NSFW (18+)</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Это не предотвращает, появление внутри приложения, контента NSFW (18+) из неофициальных, или потенциально неправильно помеченных расширений.</string>
@@ -556,7 +556,7 @@
     <string name="chapter_settings_updated">Настройки главы по умолчанию, были обновлены</string>
     <string name="set_chapter_settings_as_default">Установить по умолчанию</string>
     <string name="also_set_chapter_settings_for_library">Также применить, для всех серий в моей библиотеке</string>
-    <string name="confirm_set_chapter_settings">Вы уверены, что хотите сохранить эти настройки по умолчанию\?</string>
+    <string name="confirm_set_episode_settings">Вы уверены, что хотите сохранить эти настройки по умолчанию\?</string>
     <string name="chapter_settings">Настройки главы</string>
     <string name="share_page_info">%1$s: %2$s, страница %3$d</string>
     <string name="action_search_settings">Настройки поиска</string>
@@ -718,7 +718,7 @@
     <string name="database_clean">Очистка базы данных</string>
     <string name="extension_api_error">Не удалось получить список расширений</string>
     <string name="privacy_policy">Политика конфиденциальности</string>
-    <string name="pref_update_only_completely_read">Прочитано</string>
+    <string name="pref_update_only_completely_seen">Прочитано</string>
     <string name="pref_library_update_manga_restriction">Ограничения обновлений для библиотеки</string>
     <string name="only_update_restrictions">Только обновлять: %s</string>
     <string name="library_errors_help">Для помощи в исправлении ошибок библиотеки, нажать %1$s</string>

@@ -6,7 +6,7 @@
     <string name="history">Historia</string>
     <string name="label_settings">Ustawienia</string>
     <string name="label_download_queue">Kolejka pobierania</string>
-    <string name="label_recent_manga">Historia</string>
+    <string name="label_recent_history">Historia</string>
     <string name="action_settings">Ustawienia</string>
     <string name="action_filter">Filtrowanie</string>
     <string name="action_filter_downloaded">Pobrane</string>
@@ -230,7 +230,7 @@
     <string name="sorting_mode">Tryb sortowania</string>
     <string name="sort_by_source">Według źródła</string>
     <string name="sort_by_number">Według numeru rozdziału</string>
-    <string name="manga_tracking_tab">Śledzenie</string>
+    <string name="tracking_tab">Śledzenie</string>
     <string name="status">Status</string>
     <string name="snack_categories_deleted">Usunięto kategorie</string>
     <string name="dialog_with_checkbox_remove_description">To usunie datę przeczytania tego rozdziału. Na pewno?</string>
@@ -494,7 +494,7 @@
     <string name="pref_library_update_refresh_metadata">Automatycznie odświeżaj metadane</string>
     <string name="action_display_comfortable_grid">Wygodna siatka</string>
     <string name="action_migrate">Migracja</string>
-    <string name="page_list_empty_error">Nie znaleziono żadnych stron</string>
+    <string name="video_list_empty_error">Nie znaleziono żadnych stron</string>
     <string name="tabs_header">Karty</string>
     <string name="badges_header">Plakietki</string>
     <string name="action_display_show_tabs">Pokaż karty kategorii</string>
@@ -554,7 +554,7 @@
     <string name="no_chapters_error">Nie znaleziono rozdziałów</string>
     <string name="set_chapter_settings_as_default">Ustaw jako domyślne</string>
     <string name="also_set_chapter_settings_for_library">Dodatkowo zastosuj do wszystkich tytułów w mojej bibliotece</string>
-    <string name="confirm_set_chapter_settings">Jesteś pewien, że chcesz zapisać te ustawienia jako domyślne\?</string>
+    <string name="confirm_set_episode_settings">Jesteś pewien, że chcesz zapisać te ustawienia jako domyślne\?</string>
     <string name="chapter_settings">Ustawienia rozdziałów</string>
     <string name="no_pinned_sources">Nie masz podpiętych źródeł</string>
     <string name="downloaded_chapters">Pobrane rozdziały</string>
@@ -565,9 +565,9 @@
     <string name="clear_history_confirmation">Jesteś pewien\? CAŁA historia zostanie usunięta.</string>
     <string name="clear_history_completed">Historia usunięta</string>
     <string name="backup_restore_missing_trackers">Serwisy, do których nie zalogowono:</string>
-    <string name="pref_remove_bookmarked_chapters">Usuwaj rozdziały dodane do zakładek</string>
+    <string name="pref_remove_bookmarked_episodes">Usuwaj rozdziały dodane do zakładek</string>
     <string name="pref_hide_bottom_bar_on_scroll">Ukryj dolny pasek podczas przewijania</string>
-    <string name="pref_category_delete_chapters">Usuń rozdziały</string>
+    <string name="pref_category_delete_episodes">Usuń rozdziały</string>
     <string name="ext_nsfw_warning">Może zawierać treści NSFW (18+)</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Nie zapobiega to nieoficjalnym lub potencjalnie niepoprawnie oflagowanym rozszerzeniom przed pokazywaniem zwartości NSFW(18+) w aplikacji.</string>

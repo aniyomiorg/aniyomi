@@ -8,7 +8,7 @@
     <string name="label_settings">Einstellungen</string>
     <string name="label_download_queue">Downloadwarteschlange</string>
     <string name="label_library">Bibliothek</string>
-    <string name="label_recent_manga">Verlauf</string>
+    <string name="label_recent_history">Verlauf</string>
     <string name="label_backup">Sichern und Wiederherstellen</string>
     <string name="action_settings">Einstellungen</string>
     <string name="action_filter">Filter</string>
@@ -200,7 +200,7 @@
     <string name="download_all">Alle</string>
     <string name="download_unread">Ungelesen</string>
     <string name="confirm_delete_chapters">Bist du sicher, dass du die ausgewählten Kapitel löschen willst\?</string>
-    <string name="manga_tracking_tab">Tracking</string>
+    <string name="tracking_tab">Tracking</string>
     <string name="reading">Am Lesen</string>
     <string name="completed">Abgeschlossen</string>
     <string name="dropped">Abgebrochen</string>
@@ -480,7 +480,7 @@
     <string name="tabs_header">Registerkarten</string>
     <string name="badges_header">Abzeichen</string>
     <string name="action_display_show_tabs">Kategorienreiter anzeigen</string>
-    <string name="page_list_empty_error">Keine Seiten gefunden</string>
+    <string name="video_list_empty_error">Keine Seiten gefunden</string>
     <string name="action_disable_all">Alles deaktivieren</string>
     <string name="action_enable_all">Alles aktivieren</string>
     <string name="pref_show_reading_mode_summary">Kurz den aktuellen Modus anzeigen, wenn der Leser geöffnet wird</string>
@@ -520,8 +520,8 @@
     <string name="channel_progress">Fortschritt</string>
     <string name="channel_errors">Fehler</string>
     <string name="backup_restore_missing_trackers">Nicht-angemeldete Tracker:</string>
-    <string name="pref_remove_bookmarked_chapters">Erlauben, mit Lesezeichen versehene Kapitel zu löschen</string>
-    <string name="pref_category_delete_chapters">Kapitel löschen</string>
+    <string name="pref_remove_bookmarked_episodes">Erlauben, mit Lesezeichen versehene Kapitel zu löschen</string>
+    <string name="pref_category_delete_episodes">Kapitel löschen</string>
     <string name="ext_nsfw_warning">Kann NSFW/Ü18-Inhalte enthalten</string>
     <string name="ext_nsfw_short">Ü18</string>
     <string name="parental_controls_info">Dies verhindert nicht, dass inoffizielle oder möglicherweise falsch gekennzeichnete Erweiterungen NSFW/Ü18-Inhalte in der App anzeigen.</string>
@@ -533,7 +533,7 @@
     <string name="chapter_settings_updated">Standard-Kapiteleinstellungen aktualisiert</string>
     <string name="set_chapter_settings_as_default">Als Standard setzen</string>
     <string name="also_set_chapter_settings_for_library">Auch für alle Manga in meiner Bibliothek anwenden</string>
-    <string name="confirm_set_chapter_settings">Bist du sicher, dass du diese Einstellungen als Standard speichern willst\?</string>
+    <string name="confirm_set_episode_settings">Bist du sicher, dass du diese Einstellungen als Standard speichern willst\?</string>
     <string name="chapter_settings">Kapiteleinstellungen</string>
     <string name="share_page_info">%1$s: %2$s, Seite %3$d</string>
     <string name="action_search_settings">Einstellungen durchsuchen</string>
@@ -693,7 +693,7 @@
     <string name="database_clean">Datenbank bereinigt</string>
     <string name="extension_api_error">Herunterladen der Erweiterungsliste ist fehlgeschlagen</string>
     <string name="privacy_policy">Datenschutzbestimmungen</string>
-    <string name="pref_update_only_completely_read">Vollständig gelesene Serien</string>
+    <string name="pref_update_only_completely_seen">Vollständig gelesene Serien</string>
     <string name="pref_library_update_manga_restriction">Bibliotheksaktualisierungsbeschränkungen</string>
     <string name="only_update_restrictions">Nur aktualisieren: %s</string>
     <string name="library_errors_help">Für Hilfe zum Beheben von Fehlern bei Bibliotheksaktualisierungen, siehe %1$s</string>

@@ -7,7 +7,7 @@
     <string name="label_extension_info">Información de extensión</string>
     <string name="confirm_exit">Pulse Atrás de nuevo para salir</string>
     <string name="label_backup">Respaldar y restaurar</string>
-    <string name="label_recent_manga">Historial</string>
+    <string name="label_recent_history">Historial</string>
     <string name="history">Historial</string>
     <string name="action_display_list">Lista</string>
     <string name="action_migrate">Migrar</string>
@@ -393,7 +393,7 @@
     <string name="currently_reading">Leyendo actualmente</string>
     <string name="reading">Leyendo</string>
     <string name="add_tracking">Añadir seguimiento</string>
-    <string name="manga_tracking_tab">Seguimiento</string>
+    <string name="tracking_tab">Seguimiento</string>
     <string name="invalid_download_dir">Directorio de descarga inválido</string>
     <string name="confirm_delete_chapters">¿Estás seguro de que deseas eliminar los capítulos seleccionados\?</string>
     <string name="download_unread">No leídos</string>
@@ -471,7 +471,7 @@
     <string name="recent_manga_time">Caps. %1$s-%2$s</string>
     <string name="updating_library">Actualizando biblioteca</string>
     <string name="loader_not_implemented_error">Fuente no encontrada</string>
-    <string name="page_list_empty_error">No hay páginas</string>
+    <string name="video_list_empty_error">No hay páginas</string>
     <string name="transition_pages_error">Error al cargar páginas: %1$s</string>
     <string name="transition_pages_loading">Cargando páginas…</string>
     <string name="transition_no_previous">No hay capítulo anterior</string>
@@ -520,8 +520,8 @@
     <string name="download_notifier_download_finish">Descarga completada</string>
     <string name="no_pinned_sources">No tienes fuentes fijadas</string>
     <string name="backup_restore_missing_trackers">Páginas de seguimiento donde no has iniciado sesion:</string>
-    <string name="pref_remove_bookmarked_chapters">Eliminar capítulos guardados</string>
-    <string name="pref_category_delete_chapters">Eliminar capítulos</string>
+    <string name="pref_remove_bookmarked_episodes">Eliminar capítulos guardados</string>
+    <string name="pref_category_delete_episodes">Eliminar capítulos</string>
     <string name="ext_nsfw_warning">Puede contener contenido para mayores de 18 años</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Esto no evita que las extensiones no oficiales o potencialmente marcadas incorrectamente muestren contenido para mayores de 18 años dentro de la aplicación.</string>
@@ -534,7 +534,7 @@
     <string name="no_chapters_error">No se encontraron capitulos</string>
     <string name="set_chapter_settings_as_default">Establecer predeterminado</string>
     <string name="also_set_chapter_settings_for_library">Aplicar también a todos los mangas en mi biblioteca</string>
-    <string name="confirm_set_chapter_settings">¿Estás seguro de que quieres guardar como predeterminadas estas configuraciones\?</string>
+    <string name="confirm_set_episode_settings">¿Estás seguro de que quieres guardar como predeterminadas estas configuraciones\?</string>
     <string name="chapter_settings">Ajustes del capítulo</string>
     <string name="downloaded_chapters">Capítulos descargardos</string>
     <string name="manga_from_library">Manga de la biblioteca</string>

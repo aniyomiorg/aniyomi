@@ -59,7 +59,7 @@ abstract class SearchableNucleusController<VB : ViewBinding, P : BasePresenter<*
                 if (newText.isNotBlank() or acceptEmptyQuery()) {
                     if (it is QueryTextEvent.QuerySubmitted) {
                         // Abstract function for implementation
-                        // Run it first in case the old query data is needed (like BrowseSourceController)
+                        // Run it first in case the old query data is needed (like BrowseAnimeSourceController)
                         onSearchViewQueryTextSubmit(newText)
                         presenter.query = newText
                         nonSubmittedQuery = ""

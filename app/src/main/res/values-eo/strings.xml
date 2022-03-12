@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="label_sources">Fontoj</string>
-    <string name="label_recent_manga">Historio</string>
+    <string name="label_recent_history">Historio</string>
     <string name="label_recent_updates">Ĝisdatigoj</string>
     <string name="label_library">Biblioteko</string>
     <string name="label_download_queue">Elŝutvico</string>
@@ -130,7 +130,7 @@
     <string name="pref_create_backup">Krei savkopion</string>
     <string name="pref_download_new">Elŝuti novajn ĉapitrojn</string>
     <string name="disabled">Malŝaltita</string>
-    <string name="pref_category_delete_chapters">Forigi ĉapitrojn</string>
+    <string name="pref_category_delete_episodes">Forigi ĉapitrojn</string>
     <string name="pref_download_directory">Elŝutejo</string>
     <string name="double_tap_anim_speed_0">Sen animacioj</string>
     <string name="scale_type_original_size">Originala grando</string>
@@ -285,7 +285,7 @@
         <item quantity="other">Mankas %d ĉapitrojn</item>
     </plurals>
     <string name="loader_not_implemented_error">Fonto ne trovita</string>
-    <string name="page_list_empty_error">Neniu paĝo trovita</string>
+    <string name="video_list_empty_error">Neniu paĝo trovita</string>
     <string name="transition_no_previous">Ne estas antaŭa ĉapitro</string>
     <string name="transition_no_next">Ne estas sekva ĉapitro</string>
     <string name="transition_previous">Antaŭa:</string>
@@ -316,7 +316,7 @@
         <item quantity="one">1 ŝanĝspurilo</item>
         <item quantity="other">%d ŝanĝspuriloj</item>
     </plurals>
-    <string name="manga_tracking_tab">Ŝanĝspurado</string>
+    <string name="tracking_tab">Ŝanĝspurado</string>
     <string name="no_chapters_error">Neniu ĉapitro trovita</string>
     <string name="set_chapter_settings_as_default">Agordi kiel defaŭlta</string>
     <string name="chapter_settings">Ĉapitrajn agordojn</string>
@@ -469,7 +469,7 @@
     <string name="on_hold">Haltetita</string>
     <string name="unread">Nelegita</string>
     <string name="also_set_chapter_settings_for_library">Ankaŭ apliki al ĉiuj mangaoj en mia biblioteko</string>
-    <string name="confirm_set_chapter_settings">Ĉu vi certe volas konservi ĉi-agordoj kiel defaŭltaj\?</string>
+    <string name="confirm_set_episode_settings">Ĉu vi certe volas konservi ĉi-agordoj kiel defaŭltaj\?</string>
     <string name="date">Dato</string>
     <string name="local_filter_order_by">Ordigi laŭ</string>
     <string name="local_invalid_format">Nevalida ĉapitra formato</string>

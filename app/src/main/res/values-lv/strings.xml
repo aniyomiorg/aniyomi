@@ -9,7 +9,7 @@
     <string name="label_settings">Iestatījumi</string>
     <string name="label_download_queue">Lejupieladēšanas rinda</string>
     <string name="label_library">Bibliotēka</string>
-    <string name="label_recent_manga">Vēsture</string>
+    <string name="label_recent_history">Vēsture</string>
     <string name="label_recent_updates">Atjauninājumi</string>
     <string name="label_backup">Rezerves kopija</string>
     <string name="action_settings">Iestatījumi</string>
@@ -192,7 +192,7 @@
     <string name="ongoing">Vēl turpinās</string>
     <string name="description">Apraksts</string>
     <string name="title">Nosaukums</string>
-    <string name="pref_category_delete_chapters">Izdzēst nodaļas</string>
+    <string name="pref_category_delete_episodes">Izdzēst nodaļas</string>
     <string name="pref_download_directory">Lejuplādes vieta</string>
     <string name="pref_category_auto_download">Automātiska lejuplāde</string>
     <string name="pref_restore_backup">Atjaunot dublējumu</string>

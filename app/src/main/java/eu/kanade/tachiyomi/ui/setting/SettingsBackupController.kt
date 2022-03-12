@@ -219,8 +219,8 @@ class SettingsBackupController : SettingsController() {
             val activity = activity!!
             val options = arrayOf(
                 R.string.anime_library_entries,
-                R.string.general_categories,
-                R.string.chapters_episodes,
+                R.string.anime_categories,
+                R.string.episodes,
                 R.string.track,
                 R.string.history
             )

@@ -141,7 +141,7 @@
     <string name="chapters">Сыпӑксем</string>
     <string name="categories">Пухмӑшсем</string>
     <string name="information_empty_library">Санӑн вулавӑш пушӑ. Шыравран вулавӑша кӗнекесем хуш.</string>
-    <string name="label_recent_manga">Кун-ҫул</string>
+    <string name="label_recent_history">Кун-ҫул</string>
     <string name="label_download_queue">Тиев черечӗ</string>
     <string name="name">Ят</string>
     <string name="download_notifier_no_network">Тетел ҫыхӑну ҫук</string>
@@ -287,7 +287,7 @@
 \n
 \nТавӑрас умӗн кирлӗ хушмасене тата сӑнану сервиссене лартнине, тата вӗсене кӗнине тӗрӗсле.</string>
     <string name="add_tracking">Сӑнану хуш</string>
-    <string name="manga_tracking_tab">Сӑна</string>
+    <string name="tracking_tab">Сӑна</string>
     <string name="pref_refresh_library_tracking_summary">Сӑнану сервиссенчен халне, шутне тата юлашки вуланӑ сыпӑка илсе ҫӗнет</string>
     <string name="pref_refresh_library_tracking">Сӑнанӑва ҫӗнет</string>
     <string name="custom_filter">Усӑҫ али</string>
@@ -350,7 +350,7 @@
     <string name="recent_manga_time">%1$s-мӗш сыпӑка %2$s</string>
     <string name="updating_library">Вулавӑша ҫӗнетни</string>
     <string name="loader_not_implemented_error">Ҫӑл куҫ тупӑнман</string>
-    <string name="page_list_empty_error">Элсем тупӑнман</string>
+    <string name="video_list_empty_error">Элсем тупӑнман</string>
     <string name="transition_pages_error">Элсем тиенеймерӗҫ: %1$s</string>
     <string name="transition_pages_loading">Элсем тиевӗ…</string>
     <string name="transition_no_previous">Умӗнхи сыпӑк ҫук</string>
@@ -520,8 +520,8 @@
     <string name="download_notifier_download_finish">Тиев вӗҫленӗ</string>
     <string name="channel_errors">Йӑнӑшсем</string>
     <string name="backup_restore_missing_trackers">Кӗмен сӑнанусем:</string>
-    <string name="pref_remove_bookmarked_chapters">Картнӑ сыпӑксене катерт</string>
-    <string name="pref_category_delete_chapters">Сыпӑксене катерт</string>
+    <string name="pref_remove_bookmarked_episodes">Картнӑ сыпӑксене катерт</string>
+    <string name="pref_category_delete_episodes">Сыпӑксене катерт</string>
     <string name="ext_nsfw_warning">NSFW (18+) шалаш пулма пултарать</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Ҫакӑ хушӑмра официаллӑ мар е тӗрӗс мар палӑртнӑ хушмасен NSFW (18+) шалашне кӑтартма чӑрмантармасть.</string>
@@ -533,7 +533,7 @@
     <string name="also_set_chapter_settings_for_library">Тата манӑн вулавăшри пур манкӑ валли усӑ кур</string>
     <string name="chapter_settings_updated">Яланхилле сыпӑк ӗнерлев ҫӗнетнӗ</string>
     <string name="set_chapter_settings_as_default">Яланхилле</string>
-    <string name="confirm_set_chapter_settings">Ҫак ӗнерелевсене яланхилле упрасшӑнах-и\?</string>
+    <string name="confirm_set_episode_settings">Ҫак ӗнерелевсене яланхилле упрасшӑнах-и\?</string>
     <string name="share_page_info">%1$s: %2$s, %3$d эл</string>
     <string name="chapter_settings">Сыпӑк ӗнерлеве</string>
     <string name="action_search_settings">Шырав ӗнерлевӗ</string>

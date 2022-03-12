@@ -6,7 +6,7 @@
     <string name="history">Historie</string>
     <string name="label_settings">Nastavení</string>
     <string name="label_library">Knihovna</string>
-    <string name="label_recent_manga">Historie</string>
+    <string name="label_recent_history">Historie</string>
     <string name="label_backup">Záloha a obnovení</string>
     <string name="label_migration">Migrovat</string>
     <string name="label_extensions">Rozšíření</string>
@@ -265,7 +265,7 @@
     <string name="sorting_mode">Režim seřazení</string>
     <string name="sort_by_number">Podle čísla kapitoly</string>
     <string name="custom_download">Stažení vlastního počtu</string>
-    <string name="manga_tracking_tab">Sledování</string>
+    <string name="tracking_tab">Sledování</string>
     <string name="dropped">Již nečtu</string>
     <string name="on_hold">Pozastaveno</string>
     <string name="status">Stav</string>
@@ -361,7 +361,7 @@
     <string name="add_tracking">Přidat sledování</string>
     <string name="no_chapters_error">Nebyly nalezeny žádné kapitoly</string>
     <string name="set_chapter_settings_as_default">Nastavit jako výchozí</string>
-    <string name="confirm_set_chapter_settings">Jsi si jistý, že chceš tato nastavení uložit jako výchozí\?</string>
+    <string name="confirm_set_episode_settings">Jsi si jistý, že chceš tato nastavení uložit jako výchozí\?</string>
     <string name="chapter_settings">Nastavení kapitoly</string>
     <string name="sort_by_upload_date">Podle data nahrání</string>
     <plurals name="manga_num_chapters">
@@ -432,8 +432,8 @@
     <string name="source_not_found_name">Zdroj nenalezen: %1$s</string>
     <string name="pref_enable_automatic_extension_updates">Kontrolovat dostupnost aktualizací rozšíření</string>
     <string name="tracking_info">Jednosměrná synchronizace pro aktualizaci počtu přečtených kapitol ve sledovacích službách. Nastavení sledování pro každou mangu je možné z jejich tlačítka sledování.</string>
-    <string name="pref_remove_bookmarked_chapters">Povolit mazání založených kapitol</string>
-    <string name="pref_category_delete_chapters">Smazat kapitoly</string>
+    <string name="pref_remove_bookmarked_episodes">Povolit mazání založených kapitol</string>
+    <string name="pref_category_delete_episodes">Smazat kapitoly</string>
     <string name="webtoon_side_padding_25">25%</string>
     <string name="webtoon_side_padding_20">20%</string>
     <string name="webtoon_side_padding_15">15%</string>
@@ -535,7 +535,7 @@
         <item quantity="other">Přeskočeno %d kapitol, buď chybí ve zdroji nebo byly vyfiltrovány.</item>
     </plurals>
     <string name="loader_not_implemented_error">Zdroj nenalezen</string>
-    <string name="page_list_empty_error">Žádné stránky nenalezeny</string>
+    <string name="video_list_empty_error">Žádné stránky nenalezeny</string>
     <string name="myanimelist_relogin">Prosím přihlašte se do MAL znovu</string>
     <string name="track_finished_reading_date">Datum dokončení čtení</string>
     <string name="track_started_reading_date">Datum zahájení čtení</string>
@@ -707,6 +707,6 @@
     <string name="clear_database_source_item_count">v databázi je manga %1$d mimo knihovnu</string>
     <string name="pref_true_color_summary">Snižuje proužkování, ale ovlivňuje výkon</string>
     <string name="pref_library_update_manga_restriction">Omezení aktualizace knihovny</string>
-    <string name="pref_update_only_completely_read">Plně přečtené série</string>
+    <string name="pref_update_only_completely_seen">Plně přečtené série</string>
     <string name="database_clean">vyčištění databáze</string>
 </resources>

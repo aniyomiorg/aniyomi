@@ -136,7 +136,7 @@ class AnimelibController(
         }
 
     override fun getTitle(): String? {
-        return currentTitle ?: resources?.getString(R.string.label_animelib)
+        return currentTitle ?: resources?.getString(R.string.label_anime)
     }
 
     private fun updateTitle() {
@@ -144,7 +144,7 @@ class AnimelibController(
         val currentCategory = adapter?.categories?.getOrNull(binding.libraryPager.currentItem)
 
         var title = if (showCategoryTabs) {
-            resources?.getString(R.string.label_animelib)
+            resources?.getString(R.string.label_anime)
         } else {
             currentCategory?.name
         }
@@ -469,8 +469,8 @@ class AnimelibController(
         when (item.itemId) {
             R.id.action_move_to_category -> showChangeAnimeCategoriesDialog()
             R.id.action_download_unseen -> downloadUnseenEpisodes()
-            R.id.action_mark_as_read -> markReadStatus(true)
-            R.id.action_mark_as_unread -> markReadStatus(false)
+            R.id.action_mark_as_seen -> markReadStatus(true)
+            R.id.action_mark_as_unseen -> markReadStatus(false)
             R.id.action_delete -> showDeleteAnimeDialog()
             R.id.action_select_all -> selectAllCategoryAnime()
             R.id.action_select_inverse -> selectInverseCategoryAnime()

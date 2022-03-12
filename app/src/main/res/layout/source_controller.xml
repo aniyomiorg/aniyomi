@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.browse.source.browse.BrowseSourceController">
+        tools:context=".ui.browse.animesource.browse.BrowseAnimeSourceController">
 
         <FrameLayout
             android:id="@+id/progress"

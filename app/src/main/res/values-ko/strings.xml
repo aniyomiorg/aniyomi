@@ -47,7 +47,7 @@
     <string name="history">기록</string>
     <string name="label_download_queue">다운로드 대기열</string>
     <string name="label_library">서재</string>
-    <string name="label_recent_manga">기록</string>
+    <string name="label_recent_history">기록</string>
     <string name="label_recent_updates">업데이트</string>
     <string name="action_sort_total">모든 챕터</string>
     <string name="action_previous_chapter">이전 챕터</string>
@@ -202,7 +202,7 @@
     <string name="download_all">전부</string>
     <string name="download_unread">읽지 않은 챕터</string>
     <string name="confirm_delete_chapters">선택된 챕터를 정말로 삭제하겠습니까\?</string>
-    <string name="manga_tracking_tab">동기화</string>
+    <string name="tracking_tab">동기화</string>
     <string name="score">평점</string>
     <string name="title">제목</string>
     <string name="status">상태</string>
@@ -328,7 +328,7 @@
     <string name="label_more">더보기</string>
     <string name="label_sources">소스</string>
     <string name="channel_complete">완료</string>
-    <string name="confirm_set_chapter_settings">이 설정을 기본설정으로 저장 하시겠습니까\?</string>
+    <string name="confirm_set_episode_settings">이 설정을 기본설정으로 저장 하시겠습니까\?</string>
     <string name="chapter_settings">챕터 설정</string>
     <string name="invalid_download_dir">유효하지 않은 다운로드 위치</string>
     <string name="error_sharing_cover">표지 이미지 공유 오류</string>
@@ -364,8 +364,8 @@
     <string name="invalid_backup_file">부적합한 백업 파일</string>
     <string name="pref_enable_automatic_extension_updates">확장 프로그램 업데이트 확인</string>
     <string name="pref_category_auto_download">자동 다운로드</string>
-    <string name="pref_remove_bookmarked_chapters">북마크된 챕터도 지우기</string>
-    <string name="pref_category_delete_chapters">챕터 지우기</string>
+    <string name="pref_remove_bookmarked_episodes">북마크된 챕터도 지우기</string>
+    <string name="pref_category_delete_episodes">챕터 지우기</string>
     <string name="rotation_landscape">가로</string>
     <string name="rotation_portrait">세로</string>
     <string name="nav_zone_right">오른쪽</string>

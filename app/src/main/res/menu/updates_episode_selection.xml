@@ -20,17 +20,17 @@
         tools:ignore="AlwaysShowAction" />
 
     <item
-        android:id="@+id/action_bookmark"
+        android:id="@+id/action_bookmark_episode"
         android:icon="@drawable/ic_bookmark_border_24dp"
-        android:title="@string/action_bookmark"
+        android:title="@string/action_bookmark_episode"
         app:iconTint="?attr/colorOnSurface"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
     <item
-        android:id="@+id/action_remove_bookmark"
+        android:id="@+id/action_remove_bookmark_episode"
         android:icon="@drawable/ic_bookmark_24dp"
-        android:title="@string/action_remove_bookmark"
+        android:title="@string/action_remove_bookmark_episode"
         app:iconTint="?attr/colorOnSurface"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />

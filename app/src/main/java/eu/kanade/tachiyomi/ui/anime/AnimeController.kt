@@ -1193,10 +1193,10 @@ class AnimeController :
         if (episodes.isEmpty()) return
         toolbar.findToolbarItem(R.id.action_download)?.isVisible = !isLocalSource && episodes.any { !it.isDownloaded }
         toolbar.findToolbarItem(R.id.action_delete)?.isVisible = !isLocalSource && episodes.any { it.isDownloaded }
-        toolbar.findToolbarItem(R.id.action_bookmark)?.isVisible = episodes.any { !it.episode.bookmark }
-        toolbar.findToolbarItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.episode.bookmark }
-        toolbar.findToolbarItem(R.id.action_mark_as_read)?.isVisible = episodes.any { !it.episode.seen }
-        toolbar.findToolbarItem(R.id.action_mark_as_unread)?.isVisible = episodes.all { it.episode.seen }
+        toolbar.findToolbarItem(R.id.action_bookmark_episode)?.isVisible = episodes.any { !it.episode.bookmark }
+        toolbar.findToolbarItem(R.id.action_remove_bookmark_episode)?.isVisible = episodes.all { it.episode.bookmark }
+        toolbar.findToolbarItem(R.id.action_mark_as_seen)?.isVisible = episodes.any { !it.episode.seen }
+        toolbar.findToolbarItem(R.id.action_mark_as_unseen)?.isVisible = episodes.all { it.episode.seen }
         toolbar.findToolbarItem(R.id.action_play_externally)?.isVisible = !preferences.alwaysUseExternalPlayer()
         toolbar.findToolbarItem(R.id.action_play_internally)?.isVisible = preferences.alwaysUseExternalPlayer()
     }
@@ -1207,11 +1207,11 @@ class AnimeController :
             R.id.action_select_inverse -> selectInverse()
             R.id.action_download -> downloadEpisodes(getSelectedEpisodes())
             R.id.action_delete -> showDeleteEpisodesConfirmationDialog()
-            R.id.action_bookmark -> bookmarkEpisodes(getSelectedEpisodes(), true)
-            R.id.action_remove_bookmark -> bookmarkEpisodes(getSelectedEpisodes(), false)
-            R.id.action_mark_as_read -> markAsRead(getSelectedEpisodes())
-            R.id.action_mark_as_unread -> markAsUnread(getSelectedEpisodes())
-            R.id.action_mark_previous_as_read -> markPreviousAsRead(getSelectedEpisodes())
+            R.id.action_bookmark_episode -> bookmarkEpisodes(getSelectedEpisodes(), true)
+            R.id.action_remove_bookmark_episode -> bookmarkEpisodes(getSelectedEpisodes(), false)
+            R.id.action_mark_as_seen -> markAsRead(getSelectedEpisodes())
+            R.id.action_mark_as_unseen -> markAsUnread(getSelectedEpisodes())
+            R.id.action_mark_previous_as_seen -> markPreviousAsRead(getSelectedEpisodes())
             R.id.action_play_internally -> openEpisode(getSelectedEpisodes().last().episode, playerChangeRequested = true)
             R.id.action_play_externally -> openEpisode(getSelectedEpisodes().last().episode, playerChangeRequested = true)
             else -> return false

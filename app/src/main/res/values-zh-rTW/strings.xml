@@ -7,7 +7,7 @@
     <string name="label_settings">設定</string>
     <string name="label_download_queue">下載佇列</string>
     <string name="label_library">書櫃</string>
-    <string name="label_recent_manga">記錄</string>
+    <string name="label_recent_history">記錄</string>
     <string name="label_recent_updates">新刊</string>
     <string name="label_backup">備份和還原</string>
     <string name="label_migration">遷移</string>
@@ -301,7 +301,7 @@
     <string name="pref_refresh_library_tracking_summary">與歷程平台同步處理閱讀狀態、評分以及進度</string>
     <string name="latest">新上架</string>
     <string name="manga_not_in_db">該漫畫已從資料庫中移除。</string>
-    <string name="manga_tracking_tab">歷程</string>
+    <string name="tracking_tab">歷程</string>
     <string name="reading">閱讀中</string>
     <string name="plan_to_read">準備讀</string>
     <string name="repeating">重溫中</string>
@@ -495,7 +495,7 @@
     <string name="loader_not_implemented_error">找不到來源</string>
     <string name="tracker_not_logged_in">尚未登入：%1$s</string>
     <string name="no_pinned_sources">你尚未釘選任何來源</string>
-    <string name="page_list_empty_error">沒有任何頁面</string>
+    <string name="video_list_empty_error">沒有任何頁面</string>
     <string name="backup_restore_missing_sources">未安裝擴充套件：</string>
     <string name="invalid_backup_file_missing_data">檔案遺失資料。</string>
     <string name="source_not_found_name">找不到來源：%1$s</string>
@@ -508,8 +508,8 @@
     <string name="parental_controls_info">即使啟用監護限制，還是可能有漏網之魚。使用者仍可藉由非官方或未正確標幟的擴充套件在本應用程式中瀏覽未滿十八歲之人不宜觀賞的內容。</string>
     <string name="ext_nsfw_warning">可能包含未滿十八歲之人不宜觀賞的內容</string>
     <string name="invalid_backup_file_missing_manga">備份檔並未包含任何漫畫。</string>
-    <string name="pref_remove_bookmarked_chapters">允許刪除有書籤的章節</string>
-    <string name="pref_category_delete_chapters">刪除章節</string>
+    <string name="pref_remove_bookmarked_episodes">允許刪除有書籤的章節</string>
+    <string name="pref_category_delete_episodes">刪除章節</string>
     <string name="chapter_settings_updated">已更新章節設定預設值</string>
     <plurals name="missing_chapters_warning">
         <item quantity="other">略過了 %d 章，也許是來源沒有這些章節，或其已被你的篩選規則排除</item>
@@ -517,7 +517,7 @@
     <string name="action_search_settings">搜尋設定</string>
     <string name="chapter_settings">章節設定</string>
     <string name="also_set_chapter_settings_for_library">同時套用至其餘在書櫃中的漫畫</string>
-    <string name="confirm_set_chapter_settings">確定要將目前的選項保存為預設值嗎？</string>
+    <string name="confirm_set_episode_settings">確定要將目前的選項保存為預設值嗎？</string>
     <string name="no_chapters_error">沒有章節</string>
     <string name="set_chapter_settings_as_default">保存為預設值</string>
     <string name="clear_history_completed">已刪除記錄</string>
@@ -680,7 +680,7 @@
     <string name="database_clean">資料庫一塵不染</string>
     <string name="extension_api_error">擴充套件清單取得失敗</string>
     <string name="privacy_policy">隱私權政策</string>
-    <string name="pref_update_only_completely_read">全數閱畢</string>
+    <string name="pref_update_only_completely_seen">全數閱畢</string>
     <string name="pref_library_update_manga_restriction">書櫃更新限制</string>
     <string name="only_update_restrictions">僅更新：%s</string>
 </resources>
