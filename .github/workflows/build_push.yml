@@ -1,6 +1,6 @@
-name: CI
+name: Release Builder
 on:
-  push:
+  release:
     branches:
       - master
     tags:
