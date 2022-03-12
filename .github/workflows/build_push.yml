@@ -67,18 +67,6 @@ jobs:
           sha=`sha256sum Animite-${{ env.VERSION_TAG }}.apk | awk '{ print $1 }'`
           echo "APK_UNIVERSAL_SHA=$sha" >> $GITHUB_ENV
 
-          cp app/build/outputs/apk/standard/release/app-standard-arm64-v8a-release-unsigned-signed.apk Animite-arm64-v8a-${{ env.VERSION_TAG }}.apk
-          sha=`sha256sum Animite-arm64-v8a-${{ env.VERSION_TAG }}.apk | awk '{ print $1 }'`
-          echo "APK_ARM64_V8A_SHA=$sha" >> $GITHUB_ENV
-
-          cp app/build/outputs/apk/standard/release/app-standard-armeabi-v7a-release-unsigned-signed.apk Animite-armeabi-v7a-${{ env.VERSION_TAG }}.apk
-          sha=`sha256sum Animite-armeabi-v7a-${{ env.VERSION_TAG }}.apk | awk '{ print $1 }'`
-          echo "APK_ARMEABI_V7A_SHA=$sha" >> $GITHUB_ENV
-
-          cp app/build/outputs/apk/standard/release/app-standard-x86-release-unsigned-signed.apk Animite-x86-${{ env.VERSION_TAG }}.apk
-          sha=`sha256sum Animite-x86-${{ env.VERSION_TAG }}.apk | awk '{ print $1 }'`
-          echo "APK_X86_SHA=$sha" >> $GITHUB_ENV
-
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/') && github.repository == 'Quickdesh/Animite'
         uses: softprops/action-gh-release@v1
@@ -93,14 +81,9 @@ jobs:
             | Variant | SHA-256 |
             | ------- | ------- |
             | Universal | ${{ env.APK_UNIVERSAL_SHA }}
-            | arm64-v8a | ${{ env.APK_ARM64_V8A_SHA }}
-            | armeabi-v7a | ${{ env.APK_ARMEABI_V7A_SHA }}
-            | x86 | ${{ env.APK_X86_SHA }} |
+
           files: |
             Animite-${{ env.VERSION_TAG }}.apk
-            Animite-arm64-v8a-${{ env.VERSION_TAG }}.apk
-            Animite-armeabi-v7a-${{ env.VERSION_TAG }}.apk
-            Animite-x86-${{ env.VERSION_TAG }}.apk
           draft: true
           prerelease: false
         env:
