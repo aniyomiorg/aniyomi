@@ -1,10 +1,11 @@
 | Stable | Translate Tachiyomi | Discord Server |
 |------------|---------|---------|
-[![stable release](https://img.shields.io/github/release/jmir1/aniyomi.svg?maxAge=3600&label=download)](https://github.com/Quickdesh/animite/releases) | [![Translation status](https://hosted.weblate.org/widgets/tachiyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/tachiyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
+[![stable release](https://img.shields.io/github/release/Quickdesh/Animite.svg?maxAge=3600&label=download)](https://github.com/Quickdesh/animite/releases) | [![Translation status](https://hosted.weblate.org/widgets/tachiyomi/-/svg-badge.svg)](https://hosted.weblate.org/engage/tachiyomi/?utm_source=widget) | [![Discord](https://img.shields.io/discord/841701076242530374?label=discord&labelColor=7289da&color=2c2f33&style=flat)](https://discord.gg/F32UjdJZrR) |
 
 
-# ![app icon](.github/readme-images/app-icon.png)Aniyomi
-Animite is an unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) that adds anime capabilities! For Android 6.0 and above.
+# ![app icon](.github/readme-images/app-icon.png)Animite
+Animite is an unofficial fork of [Aniyomi](https://github.com/jmir1/aniyomi), which is yet another unofficial fork of the free and open source manga reader [Tachiyomi](https://github.com/tachiyomiorg/tachiyomi) 
+Animite strips the manga capabilities of Aniyomi, to make it an anime only app for Android 8.0+
 
 ## Features
 

@@ -18,7 +18,7 @@ import eu.kanade.tachiyomi.util.system.toast
 class CrashLogUtil(private val context: Context) {
 
     private val notificationBuilder = context.notificationBuilder(Notifications.CHANNEL_CRASH_LOGS) {
-        setSmallIcon(R.drawable.ic_tachi)
+        setSmallIcon(R.drawable.ic_ani)
     }
 
     fun dumpLogs() {

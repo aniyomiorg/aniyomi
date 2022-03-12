@@ -21,7 +21,7 @@ class BackupNotifier(private val context: Context) {
 
     private val progressNotificationBuilder = context.notificationBuilder(Notifications.CHANNEL_BACKUP_RESTORE_PROGRESS) {
         setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
-        setSmallIcon(R.drawable.ic_tachi)
+        setSmallIcon(R.drawable.ic_ani)
         setAutoCancel(false)
         setOngoing(true)
         setOnlyAlertOnce(true)
@@ -29,7 +29,7 @@ class BackupNotifier(private val context: Context) {
 
     private val completeNotificationBuilder = context.notificationBuilder(Notifications.CHANNEL_BACKUP_RESTORE_COMPLETE) {
         setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
-        setSmallIcon(R.drawable.ic_tachi)
+        setSmallIcon(R.drawable.ic_ani)
         setAutoCancel(false)
     }
 
