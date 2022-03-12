@@ -52,7 +52,7 @@ body:
       label: Animite version
       description: You can find your Animite version in **More → About**.
       placeholder: |
-        Example: "0.12.0.5"
+        Example: "0.12.0.6"
     validations:
       required: true
 
@@ -97,7 +97,7 @@ body:
           required: true
         - label: I have tried the [troubleshooting guide](https://aniyomi.jmir.xyz/help/guides/troubleshooting/).
           required: true
-        - label: I have updated the app to version **[0.12.0.5](https://github.com/Quickdesh/animite/releases/latest)**.
+        - label: I have updated the app to version **[0.12.0.6](https://github.com/Quickdesh/animite/releases/latest)**.
           required: true
         - label: I have updated all installed extensions.
           required: true
