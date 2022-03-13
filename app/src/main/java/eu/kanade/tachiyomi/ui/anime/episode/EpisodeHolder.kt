@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.anime.episode
 
 import android.text.SpannableStringBuilder
+import android.text.SpannedString
 import android.view.View
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
@@ -64,28 +65,57 @@ class EpisodeHolder(
             descriptions.add(Date(episode.date_upload).toRelativeString(itemView.context, adapter.relativeTime, adapter.dateFormat))
         }
         if (!episode.seen && episode.last_second_seen > 0) {
-            val lastPageRead = buildSpannedString {
-                color(adapter.readColor) {
-                    append(
-                        itemView.context.getString(
-                            R.string.episode_progress,
-                            String.format(
-                                "%d:%02d",
-                                TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen),
-                                TimeUnit.MILLISECONDS.toSeconds(episode.last_second_seen) -
-                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen))
-                            ),
-                            String.format(
-                                "%d:%02d",
-                                TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds),
-                                TimeUnit.MILLISECONDS.toSeconds(episode.total_seconds) -
-                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds))
+            val lastSecondSeen: SpannedString
+            if (episode.total_seconds > 3600000) {
+                lastSecondSeen = buildSpannedString {
+                    color(adapter.readColor) {
+                        append(
+                            itemView.context.getString(
+                                R.string.episode_progress,
+                                String.format(
+                                    "%d:%02d:%02d",
+                                    TimeUnit.MILLISECONDS.toHours(episode.last_second_seen),
+                                    TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen) -
+                                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(episode.last_second_seen)),
+                                    TimeUnit.MILLISECONDS.toSeconds(episode.last_second_seen) -
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen))
+                                ),
+                                String.format(
+                                    "%d:%02d:%02d",
+                                    TimeUnit.MILLISECONDS.toHours(episode.total_seconds),
+                                    TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds) -
+                                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(episode.total_seconds)),
+                                    TimeUnit.MILLISECONDS.toSeconds(episode.total_seconds) -
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds))
+                                )
                             )
                         )
-                    )
+                    }
+                }
+            } else {
+                lastSecondSeen = buildSpannedString {
+                    color(adapter.readColor) {
+                        append(
+                            itemView.context.getString(
+                                R.string.episode_progress,
+                                String.format(
+                                    "%d:%02d",
+                                    TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen),
+                                    TimeUnit.MILLISECONDS.toSeconds(episode.last_second_seen) -
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen))
+                                ),
+                                String.format(
+                                    "%d:%02d",
+                                    TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds),
+                                    TimeUnit.MILLISECONDS.toSeconds(episode.total_seconds) -
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds))
+                                )
+                            )
+                        )
+                    }
                 }
             }
-            descriptions.add(lastPageRead)
+            descriptions.add(lastSecondSeen)
         }
         if (!episode.scanlator.isNullOrBlank()) {
             descriptions.add(episode.scanlator!!)
