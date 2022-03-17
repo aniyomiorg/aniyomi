@@ -121,6 +121,7 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
             MPV_PLAYER -> ComponentName(packageName, "$packageName.MPVActivity")
             MX_PLAYER_FREE, MX_PLAYER_PRO -> ComponentName(packageName, "$packageName.ActivityScreen")
             VLC_PLAYER -> ComponentName(packageName, "$packageName.gui.video.VideoPlayerActivity")
+            MPV_REMOTE -> ComponentName(packageName, "$packageName.MainActivity")
             else -> null
         }
     }
@@ -139,3 +140,4 @@ private const val MPV_PLAYER = "is.xyz.mpv"
 private const val MX_PLAYER_FREE = "com.mxtech.videoplayer.ad"
 private const val MX_PLAYER_PRO = "com.mxtech.videoplayer.pro"
 private const val VLC_PLAYER = "org.videolan.vlc"
+private const val MPV_REMOTE = "com.husudosu.mpvremote"
