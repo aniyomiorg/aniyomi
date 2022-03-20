@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.util.episode
 
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
@@ -27,7 +28,7 @@ fun syncEpisodesWithSource(
     anime: Anime,
     source: AnimeSource
 ): Pair<List<Episode>, List<Episode>> {
-    if (rawSourceEpisodes.isEmpty()) {
+    if (rawSourceEpisodes.isEmpty() && source !is LocalAnimeSource) {
         throw NoEpisodesException()
     }
 
