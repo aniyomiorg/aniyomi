@@ -43,6 +43,21 @@
             app:tint="?attr/colorAccent" />
     </LinearLayout>
 
+
+    <ImageButton
+        android:id="@+id/playBtn"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:maxWidth="50dp"
+        android:maxHeight="50dp"
+        android:onClick="playPause"
+        android:textColor="@android:color/white"
+        app:tint="?attr/colorOnPrimarySurface"
+        tools:src="@drawable/ic_play_arrow_100dp" />
+
+
     <LinearLayout
         android:id="@+id/controls"
         style="?android:attr/buttonBarStyle"
@@ -160,16 +175,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:layout_marginHorizontal="5dp"
-                android:id="@+id/playBtn"
-                android:layout_width="48dp"
-                android:layout_height="match_parent"
-                android:onClick="playPause"
-                android:textColor="@android:color/white"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="?attr/colorOnPrimarySurface"
-                tools:src="@drawable/ic_play_arrow_black_24dp"/>
+
 
             <ImageButton
                 android:layout_marginHorizontal="5dp"
