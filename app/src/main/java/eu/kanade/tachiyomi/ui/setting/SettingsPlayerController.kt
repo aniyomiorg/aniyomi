@@ -82,6 +82,7 @@ class SettingsPlayerController : SettingsController() {
                     "com.mxtech.videoplayer.ad" -> true
                     "com.mxtech.videoplayer.pro" -> true
                     "org.videolan.vlc" -> true
+                    "com.husudosu.mpvremote" -> true
                     else -> false
                 }
             }
