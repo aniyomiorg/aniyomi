@@ -100,7 +100,7 @@ class AnimeDownloadCache(
             val animeDir = sourceDir.files[provider.getAnimeDirName(anime)]
             if (animeDir != null) {
                 return animeDir.files
-                    .filter { !it.endsWith(Downloader.TMP_DIR_SUFFIX) }
+                    .filter { !it.endsWith(AnimeDownloader.TMP_DIR_SUFFIX) }
                     .size
             }
         }
