@@ -40,7 +40,7 @@ internal class AnimeExtensionGithubApi {
 
     suspend fun checkForUpdates(context: Context): List<AnimeExtension.Installed> {
         // Limit checks to once a day at most
-        if (Date().time < preferences.lastExtCheck().get() + TimeUnit.DAYS.toMillis(1)) {
+        if (Date().time < preferences.lastAnimeExtCheck().get() + TimeUnit.DAYS.toMillis(1)) {
             return emptyList()
         }
 

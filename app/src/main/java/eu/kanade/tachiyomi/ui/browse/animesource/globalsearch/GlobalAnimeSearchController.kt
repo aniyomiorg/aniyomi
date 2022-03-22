@@ -210,7 +210,7 @@ open class GlobalAnimeSearchController(
      */
     override fun onTitleClick(source: AnimeCatalogueSource) {
         if (!preferences.incognitoMode().get()) {
-            preferences.lastUsedSource().set(source.id)
+            preferences.lastUsedAnimeSource().set(source.id)
         }
         router.pushController(BrowseAnimeSourceController(source, presenter.query).withFadeTransaction())
     }

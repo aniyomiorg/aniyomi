@@ -151,7 +151,7 @@ class AnimeSourceController :
     }
 
     private fun toggleSourcePin(source: AnimeSource) {
-        val isPinned = source.id.toString() in preferences.pinnedSources().get()
+        val isPinned = source.id.toString() in preferences.pinnedAnimeSources().get()
         if (isPinned) {
             preferences.pinnedAnimeSources() -= source.id.toString()
         } else {

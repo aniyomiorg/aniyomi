@@ -52,7 +52,7 @@ class AnimeSourcePresenter(
         sourceSubscription?.unsubscribe()
 
         val pinnedSources = mutableListOf<AnimeSourceItem>()
-        val pinnedSourceIds = preferences.pinnedSources().get()
+        val pinnedSourceIds = preferences.pinnedAnimeSources().get()
 
         val map = TreeMap<String, MutableList<AnimeCatalogueSource>> { d1, d2 ->
             // Catalogues without a lang defined will be placed at the end
@@ -85,10 +85,10 @@ class AnimeSourcePresenter(
 
     private fun loadLastUsedSource() {
         // Immediate initial load
-        preferences.lastUsedSource().get().let { updateLastUsedSource(it) }
+        preferences.lastUsedAnimeSource().get().let { updateLastUsedSource(it) }
 
         // Subsequent updates
-        preferences.lastUsedSource().asFlow()
+        preferences.lastUsedAnimeSource().asFlow()
             .drop(1)
             .onStart { delay(500) }
             .distinctUntilChanged()
@@ -98,7 +98,7 @@ class AnimeSourcePresenter(
 
     private fun updateLastUsedSource(sourceId: Long) {
         val source = (sourceManager.get(sourceId) as? AnimeCatalogueSource)?.let {
-            val isPinned = it.id.toString() in preferences.pinnedSources().get()
+            val isPinned = it.id.toString() in preferences.pinnedAnimeSources().get()
             AnimeSourceItem(it, null, isPinned)
         }
         source?.let { view?.setLastUsedSource(it) }
