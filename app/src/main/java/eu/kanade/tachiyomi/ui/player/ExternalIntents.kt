@@ -37,24 +37,35 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
         val pkgName = preferences.externalPlayerPreference()
         val anime = anime
         return if (pkgName.isNullOrEmpty()) {
-            Intent(Intent.ACTION_VIEW).apply {
-                setDataAndTypeAndNormalize(uri, getMime(uri))
-                putExtra("title", anime.title + " - " + episode.name)
-                putExtra("position", episode.last_second_seen.toInt())
-                putExtra("return_result", true)
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
-                if (headers != null) {
-                    var headersArray = arrayOf<String>()
-                    for (header in headers) {
-                        headersArray += arrayOf(header.first, header.second)
+            if (videoUrl.toString().contains("magnet")) {
+                torrentIntent(uri)
+            } else {
+                Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndTypeAndNormalize(uri, getMime(uri))
+                    putExtra("title", anime.title + " - " + episode.name)
+                    putExtra("position", episode.last_second_seen.toInt())
+                    putExtra("return_result", true)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
+                    if (headers != null) {
+                        var headersArray = arrayOf<String>()
+                        for (header in headers) {
+                            headersArray += arrayOf(header.first, header.second)
+                        }
+                        val headersString = headersArray.drop(2).joinToString(": ")
+                        putExtra("headers", headersArray)
+                        putExtra("http-header-fields", headersString)
                     }
-                    val headersString = headersArray.drop(2).joinToString(": ")
-                    putExtra("headers", headersArray)
-                    putExtra("http-header-fields", headersString)
                 }
             }
         } else standardIntentForPackage(pkgName, context, uri, episode, video)
+    }
+
+    private fun torrentIntent(uri: Uri): Intent {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setData(uri)
+        }
+        return intent
     }
 
     private fun makeErrorToast(context: Context, e: Exception?) {
