@@ -37,7 +37,7 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
         val pkgName = preferences.externalPlayerPreference()
         val anime = anime
         return if (pkgName.isNullOrEmpty()) {
-            if (videoUrl.toString().contains("magnet")) {
+            if (videoUrl.toString().contains("magnet") or videoUrl.toString().contains(".torrent")) {
                 torrentIntent(uri)
             } else {
                 Intent(Intent.ACTION_VIEW).apply {
