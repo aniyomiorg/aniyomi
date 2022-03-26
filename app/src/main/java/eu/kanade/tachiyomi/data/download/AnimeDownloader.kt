@@ -336,7 +336,7 @@ class AnimeDownloader(
             download.source.fetchVideoList(download.episode).map { it.first() }
                 .doOnNext { video ->
                     if (video == null) {
-                        throw Exception(context.getString(R.string.page_list_empty_error))
+                        throw Exception(context.getString(R.string.video_list_empty_error))
                     }
                     download.video = video
                 }
