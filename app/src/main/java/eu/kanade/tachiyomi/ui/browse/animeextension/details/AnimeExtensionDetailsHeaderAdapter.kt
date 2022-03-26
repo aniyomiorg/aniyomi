@@ -55,7 +55,7 @@ class AnimeExtensionDetailsHeaderAdapter(private val presenter: AnimeExtensionDe
 
             if (extension.isUnofficial) {
                 binding.warningBanner.isVisible = true
-                binding.warningBanner.setText(R.string.unofficial_extension_message)
+                binding.warningBanner.setText(R.string.unofficial_extension_message_aniyomi)
             }
         }
     }
