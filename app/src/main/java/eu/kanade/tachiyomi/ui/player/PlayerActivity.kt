@@ -458,15 +458,9 @@ class PlayerActivity :
             player.timePos?.let {
                 MPVLib.command(arrayOf("set", "start", "${player.timePos}"))
             }
+            subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
+            audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
             MPVLib.command(arrayOf("loadfile", it.videoUrl))
-            subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray() +
-                player.tracks.getValue("sub").map { track ->
-                    Track("mpv", track.name)
-                }.toTypedArray()
-            subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray() +
-                player.tracks.getValue("audio").map { track ->
-                    Track("mpv", track.name)
-                }.toTypedArray()
         }
         launchUI { refreshUi() }
     }
@@ -572,9 +566,9 @@ class PlayerActivity :
                 MPVLib.command(arrayOf("set", "start", "$intPos"))
             }
             setViewMode()
-            MPVLib.command(arrayOf("loadfile", it.videoUrl))
             subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
+            MPVLib.command(arrayOf("loadfile", it.videoUrl))
         }
         launchUI { refreshUi() }
     }
@@ -603,7 +597,26 @@ class PlayerActivity :
         // MPVLib.setOptionString("cache-dir", cacheDir)
     }
 
+    private fun clearTracks() {
+        val count = MPVLib.getPropertyInt("track-list/count")!!
+        // Note that because events are async, properties might disappear at any moment
+        // so use ?: continue instead of !!
+        for (i in 0 until count) {
+            val type = MPVLib.getPropertyString("track-list/$i/type") ?: continue
+            if (!player.tracks.containsKey(type)) {
+                continue
+            }
+            val mpvId = MPVLib.getPropertyInt("track-list/$i/id") ?: continue
+            when (type) {
+                "video" -> MPVLib.command(arrayOf("video-remove", "$mpvId"))
+                "audio" -> MPVLib.command(arrayOf("audio-remove", "$mpvId"))
+                "sub" -> MPVLib.command(arrayOf("sub-remove", "$mpvId"))
+            }
+        }
+    }
+
     private fun fileLoaded() {
+        clearTracks()
         player.loadTracks()
         subTracks += player.tracks.getValue("sub")
             .drop(1).map { track ->
