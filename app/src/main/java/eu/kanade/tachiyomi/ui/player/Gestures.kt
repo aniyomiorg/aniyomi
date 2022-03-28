@@ -12,8 +12,23 @@ class Gestures(
         return true
     }
 
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        if (e.y < height * 0.05F || e.y > height * 0.95F) return false
+        when {
+            e.x < width * 0.4F -> return false
+            e.x > width * 0.6F -> return false
+            else -> activity.toggleControls()
+        }
+        return true
+    }
+
     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-        activity.toggleControls()
+        if (e.y < height * 0.05F || e.y > height * 0.95F) return false
+        when {
+            e.x < width * 0.4F -> activity.toggleControls()
+            e.x > width * 0.6F -> activity.toggleControls()
+            else -> return false
+        }
         return true
     }
 
@@ -22,7 +37,7 @@ class Gestures(
         when {
             e.x < width * 0.4F -> activity.doubleTapSeek(-10, e)
             e.x > width * 0.6F -> activity.doubleTapSeek(10, e)
-            else -> activity.playPause()
+            else -> return false
         }
         return true
     }

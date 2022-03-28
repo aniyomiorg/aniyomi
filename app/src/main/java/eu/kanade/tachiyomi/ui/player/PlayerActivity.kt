@@ -359,18 +359,19 @@ class PlayerActivity :
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun playPause(view: View) = player.cyclePause()
-
-    fun playPause() = player.cyclePause()
+    fun playPause(view: View) {
+        player.paused?.let { updatePlaybackStatus(it) }
+        player.cyclePause()
+    }
 
     fun doubleTapSeek(time: Int, event: MotionEvent) {
         val v = if (time < 0) binding.rewBg else binding.ffwdBg
-        val x = event.x.toInt()
-        val y = event.y.toInt()
-        ViewAnimationUtils.createCircularReveal(v, x, y, 0f, kotlin.math.max(v.height, v.width).toFloat()).setDuration(300).start()
+        val x = event.x.toInt() - v.x.toInt()
+        val y = event.y.toInt() - v.y.toInt()
+        ViewAnimationUtils.createCircularReveal(v, x, y, 0f, kotlin.math.max(v.height, v.width).toFloat()).setDuration(500).start()
 
-        ObjectAnimator.ofFloat(v, "alpha", 0f, 0.3f).setDuration(300).start()
-        ObjectAnimator.ofFloat(v, "alpha", 0.3f, 0.3f, 0f).setDuration(600).start()
+        ObjectAnimator.ofFloat(v, "alpha", 0f, 0.2f).setDuration(500).start()
+        ObjectAnimator.ofFloat(v, "alpha", 0.2f, 0.2f, 0f).setDuration(1000).start()
         // disable seeking when timePos is not available
         val duration = player.duration ?: 0
         val initialSeek = player.timePos ?: -1
