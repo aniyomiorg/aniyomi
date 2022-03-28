@@ -109,10 +109,10 @@ class AnimeDownloadManager(
         queue.add(0, download)
         reorderQueue(queue)
         if (isPaused()) {
-            if (DownloadService.isRunning(context)) {
+            if (AnimeDownloadService.isRunning(context)) {
                 downloader.start()
             } else {
-                DownloadService.start(context)
+                AnimeDownloadService.start(context)
             }
         }
     }

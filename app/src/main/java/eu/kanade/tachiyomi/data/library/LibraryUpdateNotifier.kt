@@ -105,7 +105,7 @@ class LibraryUpdateNotifier(private val context: Context) {
             context.notificationBuilder(Notifications.CHANNEL_LIBRARY_ERROR) {
                 setContentTitle(context.resources.getQuantityString(R.plurals.notification_update_error, errors.size, errors.size))
                 setContentText(context.getString(R.string.action_show_errors))
-                setSmallIcon(R.drawable.ic_tachi)
+                setSmallIcon(R.drawable.ic_ani)
 
                 setContentIntent(NotificationReceiver.openErrorLogPendingActivity(context, uri))
             }
@@ -145,7 +145,7 @@ class LibraryUpdateNotifier(private val context: Context) {
                         }
                     }
 
-                    setSmallIcon(R.drawable.ic_tachi)
+                    setSmallIcon(R.drawable.ic_ani)
                     setLargeIcon(notificationBitmap)
 
                     setGroup(Notifications.GROUP_NEW_CHAPTERS)
@@ -178,7 +178,7 @@ class LibraryUpdateNotifier(private val context: Context) {
             setContentText(description)
             setStyle(NotificationCompat.BigTextStyle().bigText(description))
 
-            setSmallIcon(R.drawable.ic_tachi)
+            setSmallIcon(R.drawable.ic_ani)
 
             if (icon != null) {
                 setLargeIcon(icon)

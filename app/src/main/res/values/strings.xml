@@ -299,9 +299,10 @@
     <string name="ext_uninstall">Uninstall</string>
     <string name="ext_app_info">App info</string>
     <string name="untrusted_extension">Untrusted extension</string>
-    <string name="untrusted_extension_message">This extension was signed with an untrusted certificate and wasn\'t activated.\n\nA malicious extension could read any login credentials stored in Tachiyomi or execute arbitrary code.\n\nBy trusting this certificate you accept these risks.</string>
+    <string name="untrusted_extension_message">This extension was signed with an untrusted certificate and wasn\'t activated.\n\nA malicious extension could read any login credentials stored in Aniyomi or execute arbitrary code.\n\nBy trusting this certificate you accept these risks.</string>
     <string name="obsolete_extension_message">This extension is no longer available.</string>
-    <string name="unofficial_extension_message">This extension is not from the official Tachiyomi extensions list.</string>
+    <string name="unofficial_extension_message_tachiyomi">This extension is not from the official Tachiyomi extensions list.</string>
+    <string name="unofficial_extension_message_aniyomi">This extension is not from the official Aniyomi extensions list.</string>
     <string name="extension_api_error">Failed to get extensions list</string>
     <string name="ext_version_info">Version: %1$s</string>
     <string name="ext_language_info">Language: %1$s</string>
@@ -814,8 +815,9 @@
 
     <!-- Downloads activity and service -->
     <string name="download_queue_error">Couldn\'t download chapters. You can try again in the downloads section</string>
-    <string name="download_insufficient_space">Couldn\'t download chapters due to low storage space</string>
-    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Tachiyomi</string>
+    <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
+    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi</string>
+    <string name="video_list_empty_error">No video found</string>
 
     <!-- Library update service notifications -->
     <string name="notification_check_updates">Checking for new chapters</string>
@@ -898,7 +900,7 @@
     <string name="information_empty_category_dialog">You don\'t have any categories yet.</string>
     <string name="information_cloudflare_bypass_failure">Failed to bypass Cloudflare</string>
     <!-- Do not translate "WebView" -->
-    <string name="information_webview_required">WebView is required for Tachiyomi</string>
+    <string name="information_webview_required">WebView is required for Aniyomi</string>
     <!-- Do not translate "WebView" -->
     <string name="information_webview_outdated">Please update the WebView app for better compatibility</string>
     <string name="chapter_settings_updated">Updated default chapter settings</string>

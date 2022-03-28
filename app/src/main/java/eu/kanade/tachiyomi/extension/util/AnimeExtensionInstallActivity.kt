@@ -40,7 +40,7 @@ class AnimeExtensionInstallActivity : Activity() {
     }
 
     private fun checkInstallationResult(resultCode: Int) {
-        val downloadId = intent.extras!!.getLong(ExtensionInstaller.EXTRA_DOWNLOAD_ID)
+        val downloadId = intent.extras!!.getLong(AnimeExtensionInstaller.EXTRA_DOWNLOAD_ID)
         val extensionManager = Injekt.get<AnimeExtensionManager>()
         val newStep = when (resultCode) {
             RESULT_OK -> InstallStep.Installed

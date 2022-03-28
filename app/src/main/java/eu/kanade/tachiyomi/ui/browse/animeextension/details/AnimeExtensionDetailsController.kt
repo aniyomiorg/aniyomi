@@ -152,7 +152,7 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
             }
 
             // React to enable/disable all changes
-            preferences.disabledSources().asFlow()
+            preferences.disabledAnimeSources().asFlow()
                 .onEach {
                     val enabled = source.isEnabled()
                     isChecked = enabled

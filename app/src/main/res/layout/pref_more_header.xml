@@ -9,10 +9,10 @@
     android:padding="32dp">
 
     <ImageView
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_gravity="center"
-        app:srcCompat="@drawable/ic_tachi"
+        app:srcCompat="@drawable/ic_ani"
         app:tint="?attr/colorOnSurface"
         tools:ignore="ContentDescription" />
 
