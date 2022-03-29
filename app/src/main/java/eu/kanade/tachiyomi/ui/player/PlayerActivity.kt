@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -43,6 +44,7 @@ import `is`.xyz.mpv.Utils
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
 import uy.kohesive.injekt.injectLazy
+import kotlin.math.roundToInt
 
 @RequiresPresenter(PlayerPresenter::class)
 class PlayerActivity :
@@ -65,6 +67,12 @@ class PlayerActivity :
     private val langName = LocaleHelper.getSimpleLocaleDisplay(preferences.lang().get())
 
     private val player get() = binding.player
+
+    private var audioManager: AudioManager? = null
+    private var fineVolume = 0F
+    private var maxVolume = 0
+
+    private var initialSeek = -1
 
     private var userIsOperatingSeekbar = false
 
@@ -136,14 +144,20 @@ class PlayerActivity :
         MPVLib.setOptionString("keep-open", "always")
         player.addObserver(this)
 
+        audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        fineVolume = audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
+        maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+
         val dm = DisplayMetrics()
         windowManager.defaultDisplay.getRealMetrics(dm)
         val width = dm.widthPixels.toFloat()
         val height = dm.heightPixels.toFloat()
 
-        mDetector = GestureDetectorCompat(this, Gestures(this, width, height))
+        val gestures = Gestures(this, width, height)
+        mDetector = GestureDetectorCompat(this, gestures)
         // player.setOnClickListener { binding.controls.isVisible = !binding.controls.isVisible }
-        player.setOnTouchListener { _, event ->
+        player.setOnTouchListener { v, event ->
+            gestures.onTouch(v, event)
             mDetector.onTouchEvent(event)
         }
         binding.cycleAudioBtn.setOnLongClickListener { pickAudio(); true }
@@ -372,13 +386,44 @@ class PlayerActivity :
 
         ObjectAnimator.ofFloat(v, "alpha", 0f, 0.2f).setDuration(500).start()
         ObjectAnimator.ofFloat(v, "alpha", 0.2f, 0.2f, 0f).setDuration(1000).start()
+        val newPos = (player.timePos ?: 0) + time // only for display
+        MPVLib.command(arrayOf("seek", time.toString(), "relative"))
+
+        val diffText = Utils.prettyTime(time, true)
+        binding.gestureTextView.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
+        showGestureText()
+    }
+
+    fun verticalScrollLeft(diff: Float) {
+        val initialBright = Utils.getScreenBrightness(this) ?: 0.5f
+        val newBright = (initialBright + diff).coerceIn(0f, 1f)
+        window.attributes.screenBrightness = newBright
+
+        binding.gestureTextView.text = getString(R.string.ui_brightness, (newBright * 100).roundToInt())
+        showGestureText()
+    }
+
+    fun verticalScrollRight(diff: Float) {
+        fineVolume = (fineVolume + (diff * maxVolume)).coerceIn(0F, maxVolume.toFloat())
+        val newVolume = fineVolume.toInt()
+        val newVolumePercent = 100 * newVolume / maxVolume
+        audioManager!!.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
+
+        binding.gestureTextView.text = getString(R.string.ui_volume, newVolumePercent)
+        showGestureText()
+    }
+
+    fun initSeek() {
+        initialSeek = player.timePos ?: -1
+    }
+
+    fun horizontalScroll(diff: Float) {
         // disable seeking when timePos is not available
         val duration = player.duration ?: 0
-        val initialSeek = player.timePos ?: -1
-        if (duration == 0) {
+        if (duration == 0 || initialSeek < 0) {
             return
         }
-        val newPos = (initialSeek + time).coerceIn(0, duration)
+        val newPos = (initialSeek + diff.toInt()).coerceIn(0, duration)
         val newDiff = newPos - initialSeek
         // seek faster than assigning to timePos but less precise
         MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
