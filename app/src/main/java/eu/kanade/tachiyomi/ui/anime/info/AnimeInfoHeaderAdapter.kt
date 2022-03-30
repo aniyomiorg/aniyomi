@@ -19,7 +19,7 @@ import eu.kanade.tachiyomi.databinding.MangaInfoHeaderBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.getMainAppBarHeight
 import eu.kanade.tachiyomi.util.system.copyToClipboard
-import eu.kanade.tachiyomi.util.view.loadAnyAutoPause
+import eu.kanade.tachiyomi.util.view.loadAutoPause
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.view.clicks
@@ -281,8 +281,8 @@ class AnimeInfoHeaderAdapter(
             setFavoriteButtonState(anime.favorite)
 
             // Set cover if changed.
-            binding.backdrop.loadAnyAutoPause(anime)
-            binding.mangaCover.loadAnyAutoPause(anime)
+            binding.backdrop.loadAutoPause(anime)
+            binding.mangaCover.loadAutoPause(anime)
 
             // Anime info section
             binding.mangaSummarySection.isVisible = !anime.description.isNullOrBlank() || !anime.genre.isNullOrBlank()

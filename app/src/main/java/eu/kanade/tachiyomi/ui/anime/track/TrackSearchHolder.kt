@@ -2,11 +2,11 @@ package eu.kanade.tachiyomi.ui.anime.track
 
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import coil.clear
-import coil.loadAny
+import coil.dispose
+import coil.load
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.databinding.TrackSearchItemBinding
-import java.util.Locale
+import java.util.*
 
 class TrackSearchHolder(
     private val binding: TrackSearchItemBinding,
@@ -20,9 +20,9 @@ class TrackSearchHolder(
         }
 
         binding.trackSearchTitle.text = track.title
-        binding.trackSearchCover.clear()
+        binding.trackSearchCover.dispose()
         if (track.cover_url.isNotEmpty()) {
-            binding.trackSearchCover.loadAny(track.cover_url)
+            binding.trackSearchCover.load(track.cover_url)
         }
 
         val hasStatus = track.publishing_status.isNotBlank()

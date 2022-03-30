@@ -2,8 +2,8 @@ package eu.kanade.tachiyomi.ui.animelib
 
 import android.view.View
 import androidx.core.view.isVisible
-import coil.clear
-import coil.loadAny
+import coil.dispose
+import coil.load
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.kanade.tachiyomi.databinding.SourceListItemBinding
 
@@ -61,7 +61,7 @@ class AnimelibListHolder(
         }
 
         // Update the cover.
-        binding.thumbnail.clear()
-        binding.thumbnail.loadAny(item.anime)
+        binding.thumbnail.dispose()
+        binding.thumbnail.load(item.anime)
     }
 }

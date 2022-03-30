@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.ui.recent.animehistory
 
 import android.view.View
-import coil.clear
-import coil.loadAny
+import coil.dispose
+import coil.load
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.AnimeEpisodeHistory
@@ -65,7 +65,7 @@ class AnimeHistoryHolder(
         }
 
         // Set cover
-        binding.cover.clear()
-        binding.cover.loadAny(item.anime)
+        binding.cover.dispose()
+        binding.cover.load(item.anime)
     }
 }

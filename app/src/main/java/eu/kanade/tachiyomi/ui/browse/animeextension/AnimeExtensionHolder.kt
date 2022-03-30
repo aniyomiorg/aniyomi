@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.browse.animeextension
 
 import android.view.View
 import androidx.core.view.isVisible
-import coil.clear
+import coil.dispose
 import coil.load
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
@@ -39,7 +39,7 @@ class AnimeExtensionHolder(view: View, val adapter: AnimeExtensionAdapter) :
             else -> ""
         }.uppercase()
 
-        binding.icon.clear()
+        binding.icon.dispose()
         if (extension is AnimeExtension.Available) {
             binding.icon.load(extension.iconUrl)
         } else {

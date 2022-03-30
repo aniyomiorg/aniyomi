@@ -2,8 +2,8 @@ package eu.kanade.tachiyomi.ui.recent.animeupdates
 
 import android.view.View
 import androidx.core.view.isVisible
-import coil.clear
-import coil.loadAny
+import coil.dispose
+import coil.load
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.databinding.AnimeUpdatesItemBinding
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodeHolder
@@ -58,7 +58,7 @@ class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdat
         binding.download.setState(item.status, item.progress)
 
         // Set cover
-        binding.mangaCover.clear()
-        binding.mangaCover.loadAny(item.anime)
+        binding.mangaCover.dispose()
+        binding.mangaCover.load(item.anime)
     }
 }

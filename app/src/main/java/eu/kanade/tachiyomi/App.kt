@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi
 
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.Application
 import android.app.PendingIntent
@@ -20,11 +21,9 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
+import coil.disk.DiskCache
 import coil.util.DebugLogger
-import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
-import eu.kanade.tachiyomi.data.coil.ByteBufferFetcher
-import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher
-import eu.kanade.tachiyomi.data.coil.TachiyomiImageDecoder
+import eu.kanade.tachiyomi.data.coil.*
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -52,6 +51,7 @@ open class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
 
     private val disableIncognitoReceiver = DisableIncognitoReceiver()
 
+    @SuppressLint("LaunchActivityFromNotification")
     override fun onCreate() {
         super<Application>.onCreate()
 
@@ -119,18 +119,22 @@ open class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
 
     override fun newImageLoader(): ImageLoader {
         return ImageLoader.Builder(this).apply {
-            componentRegistry {
+            val callFactoryInit = { Injekt.get<NetworkHelper>().client }
+            val diskCacheInit = { CoilDiskCache.get(this@App) }
+            components {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    add(ImageDecoderDecoder(this@App))
+                    add(ImageDecoderDecoder.Factory())
                 } else {
-                    add(GifDecoder())
+                    add(GifDecoder.Factory())
                 }
-                add(TachiyomiImageDecoder(this@App.resources))
-                add(ByteBufferFetcher())
-                add(AnimeCoverFetcher())
-                add(MangaCoverFetcher())
+                add(TachiyomiImageDecoder.Factory())
+                add(MangaCoverFetcher.Factory(lazy(callFactoryInit), lazy(diskCacheInit)))
+                add(AnimeCoverFetcher.Factory(lazy(callFactoryInit), lazy(diskCacheInit)))
+                add(MangaCoverKeyer())
+                add(AnimeCoverKeyer())
             }
-            okHttpClient(Injekt.get<NetworkHelper>().coilClient)
+            callFactory(callFactoryInit)
+            diskCache(diskCacheInit)
             crossfade((300 * this@App.animatorDurationScale).toInt())
             allowRgb565(getSystemService<ActivityManager>()!!.isLowRamDevice)
             if (preferences.verboseLogging()) logger(DebugLogger())
@@ -179,3 +183,21 @@ open class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
 }
 
 private const val ACTION_DISABLE_INCOGNITO_MODE = "tachi.action.DISABLE_INCOGNITO_MODE"
+
+internal object CoilDiskCache {
+
+    private const val FOLDER_NAME = "image_cache"
+    private var instance: DiskCache? = null
+
+    @Synchronized
+    fun get(context: Context): DiskCache {
+        return instance ?: run {
+            val safeCacheDir = context.cacheDir.apply { mkdirs() }
+            // Create the singleton disk cache instance.
+            DiskCache.Builder()
+                .directory(safeCacheDir.resolve(FOLDER_NAME))
+                .build()
+                .also { instance = it }
+        }
+    }
+}

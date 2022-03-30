@@ -2,15 +2,12 @@ package eu.kanade.tachiyomi.ui.browse.source.browse
 
 import android.view.View
 import androidx.core.view.isVisible
-import coil.clear
-import coil.imageLoader
-import coil.request.ImageRequest
-import coil.transition.CrossfadeTransition
+import coil.dispose
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.databinding.SourceComfortableGridItemBinding
-import eu.kanade.tachiyomi.widget.StateImageViewTarget
+import eu.kanade.tachiyomi.util.view.loadAutoPause
 
 /**
  * Class used to hold the displayed data of a manga in the catalogue, like the cover or the title.
@@ -49,20 +46,9 @@ class SourceComfortableGridHolder(private val view: View, private val adapter: F
     }
 
     override fun setImage(manga: Manga) {
-        // For rounded corners
-        binding.card.clipToOutline = true
-
-        binding.thumbnail.clear()
-        if (!manga.thumbnail_url.isNullOrEmpty()) {
-            val crossfadeDuration = view.context.imageLoader.defaults.transition.let {
-                if (it is CrossfadeTransition) it.durationMillis else 0
-            }
-            val request = ImageRequest.Builder(view.context)
-                .data(manga)
-                .setParameter(MangaCoverFetcher.USE_CUSTOM_COVER, false)
-                .target(StateImageViewTarget(binding.thumbnail, binding.progress, crossfadeDuration))
-                .build()
-            itemView.context.imageLoader.enqueue(request)
+        binding.thumbnail.dispose()
+        binding.thumbnail.loadAutoPause(manga) {
+            setParameter(MangaCoverFetcher.USE_CUSTOM_COVER, false)
         }
     }
 }

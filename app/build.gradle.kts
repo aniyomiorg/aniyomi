@@ -222,7 +222,7 @@ dependencies {
 
     // Image loading
     implementation("io.coil-kt:coil:2.0.0-rc02")
-
+    implementation("io.coil-kt:coil-gif:2.0.0-rc02")
 
     implementation("com.github.tachiyomiorg:subsampling-scale-image-view:846abe0") {
         exclude(module = "image-decoder")
