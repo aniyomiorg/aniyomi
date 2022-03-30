@@ -243,6 +243,15 @@
                     app:tint="?attr/colorOnPrimarySurface"
                     android:contentDescription="cycleViewMode" />
 
+                <Button
+                    android:id="@+id/controls_skip_intro_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:onClick="skipIntro"
+                    android:text="@string/player_controls_skip_intro_text"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textColor="?attr/colorOnPrimarySurface" />
+
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

@@ -76,6 +76,9 @@ class PlayerActivity :
 
     private var brightness = 0F
 
+    private var width = 0
+    private var height = 0
+
     private var audioFocusRestore: () -> Unit = {}
 
     private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { type ->
@@ -190,10 +193,10 @@ class PlayerActivity :
 
         val dm = DisplayMetrics()
         windowManager.defaultDisplay.getRealMetrics(dm)
-        val width = dm.widthPixels.toFloat()
-        val height = dm.heightPixels.toFloat()
+        width = dm.widthPixels
+        height = dm.heightPixels
 
-        val gestures = Gestures(this, width, height)
+        val gestures = Gestures(this, width.toFloat(), height.toFloat())
         mDetector = GestureDetectorCompat(this, gestures)
         // player.setOnClickListener { binding.controls.isVisible = !binding.controls.isVisible }
         player.setOnTouchListener { v, event ->
@@ -418,10 +421,11 @@ class PlayerActivity :
         player.cyclePause()
     }
 
-    fun doubleTapSeek(time: Int, event: MotionEvent) {
+    fun doubleTapSeek(time: Int, event: MotionEvent? = null) {
         val v = if (time < 0) binding.rewBg else binding.ffwdBg
-        val x = event.x.toInt() - v.x.toInt()
-        val y = event.y.toInt() - v.y.toInt()
+        val w = if (time < 0) width * 0.2F else width * 0.8F
+        val x = (event?.x?.toInt() ?: w.toInt()) - v.x.toInt()
+        val y = (event?.y?.toInt() ?: height / 2) - v.y.toInt()
         ViewAnimationUtils.createCircularReveal(v, x, y, 0f, kotlin.math.max(v.height, v.width).toFloat()).setDuration(500).start()
 
         ObjectAnimator.ofFloat(v, "alpha", 0f, 0.2f).setDuration(500).start()
@@ -571,6 +575,11 @@ class PlayerActivity :
     fun cycleSpeed(view: View) {
         player.cycleSpeed()
         updateSpeedButton()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun skipIntro(view: View) {
+        doubleTapSeek(85)
     }
 
     private fun refreshUi() {
