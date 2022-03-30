@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
@@ -44,6 +45,7 @@ import `is`.xyz.mpv.Utils
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
 import uy.kohesive.injekt.injectLazy
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 @RequiresPresenter(PlayerPresenter::class)
@@ -71,6 +73,36 @@ class PlayerActivity :
     private var audioManager: AudioManager? = null
     private var fineVolume = 0F
     private var maxVolume = 0
+
+    private var brightness = 0F
+
+    private var audioFocusRestore: () -> Unit = {}
+
+    private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { type ->
+        when (type) {
+            AudioManager.AUDIOFOCUS_LOSS,
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                // loss can occur in addition to ducking, so remember the old callback
+                val oldRestore = audioFocusRestore
+                val wasPlayerPaused = player.paused ?: false
+                player.paused = true
+                audioFocusRestore = {
+                    oldRestore()
+                    if (!wasPlayerPaused) player.paused = false
+                }
+            }
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                MPVLib.command(arrayOf("multiply", "volume", 0.5F.toString()))
+                audioFocusRestore = {
+                    MPVLib.command(arrayOf("multiply", "volume", 2F.toString()))
+                }
+            }
+            AudioManager.AUDIOFOCUS_GAIN -> {
+                audioFocusRestore()
+                audioFocusRestore = {}
+            }
+        }
+    }
 
     private var initialSeek = -1
 
@@ -147,6 +179,14 @@ class PlayerActivity :
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         fineVolume = audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
         maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+
+        brightness = Utils.getScreenBrightness(this) ?: 0.5F
+
+        volumeControlStream = AudioManager.STREAM_MUSIC
+
+        audioManager!!.requestAudioFocus(
+            audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN
+        )
 
         val dm = DisplayMetrics()
         windowManager.defaultDisplay.getRealMetrics(dm)
@@ -395,11 +435,20 @@ class PlayerActivity :
     }
 
     fun verticalScrollLeft(diff: Float) {
-        val initialBright = Utils.getScreenBrightness(this) ?: 0.5f
-        val newBright = (initialBright + diff).coerceIn(0f, 1f)
-        window.attributes.screenBrightness = newBright
+        brightness = (brightness + diff).coerceIn(-0.75F, 1F)
+        window.attributes = window.attributes.apply {
+            // value of 0 and 0.01 is broken somehow
+            screenBrightness = brightness.coerceAtLeast(0.02F)
+        }
+        if (brightness < 0) {
+            binding.brightnessOverlay.isVisible = true
+            val alpha = (abs(brightness) * 256).toInt()
+            binding.brightnessOverlay.setBackgroundColor(Color.argb(alpha, 0, 0, 0))
+        } else {
+            binding.brightnessOverlay.isVisible = false
+        }
 
-        binding.gestureTextView.text = getString(R.string.ui_brightness, (newBright * 100).roundToInt())
+        binding.gestureTextView.text = getString(R.string.ui_brightness, (brightness * 100).roundToInt())
         showGestureText()
     }
 
@@ -579,6 +628,8 @@ class PlayerActivity :
             playerIsDestroyed = true
             player.destroy()
         }
+        @Suppress("DEPRECATION")
+        audioManager?.abandonAudioFocus(audioFocusChangeListener)
         super.onDestroy()
     }
 
@@ -725,9 +776,15 @@ class PlayerActivity :
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun eventPropertyUi(property: String, value: Boolean) {
         when (property) {
-            "pause" -> updatePlaybackStatus(value)
+            "pause" -> {
+                if (!value) audioManager!!.requestAudioFocus(
+                    audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN
+                )
+                updatePlaybackStatus(value)
+            }
         }
     }
 

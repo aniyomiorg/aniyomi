@@ -65,11 +65,15 @@ class Gestures(
         val dy = e1.y - e2.y
         when (scrollState) {
             STATE_UP -> {
-                if (abs(dx) > trigger) {
+                if (abs(dx) >= trigger) {
                     scrollState = STATE_HORIZONTAL
                     activity.initSeek()
                 } else if (abs(dy) > trigger) {
-                    scrollState = if (e1.x > width / 2) STATE_VERTICAL_R else STATE_VERTICAL_L
+                    scrollState = when {
+                        e1.x > width * 0.6F -> STATE_VERTICAL_R
+                        e1.x < width * 0.4F -> STATE_VERTICAL_L
+                        else -> STATE_UP
+                    }
                 }
             }
             STATE_VERTICAL_L -> {
