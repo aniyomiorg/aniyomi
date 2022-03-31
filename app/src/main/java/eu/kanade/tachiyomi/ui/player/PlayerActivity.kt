@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
@@ -107,6 +108,48 @@ class PlayerActivity :
         }
     }
 
+    private var hasAudioFocus = false
+
+    private val audioFocusRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+            .setOnAudioFocusChangeListener(audioFocusChangeListener)
+            .build()
+    } else null
+
+    @Suppress("DEPRECATION")
+    private fun requestAudioFocus() {
+        if (hasAudioFocus) return
+        hasAudioFocus = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            audioManager!!.requestAudioFocus(audioFocusRequest!!)
+        } else {
+            audioManager!!.requestAudioFocus(
+                audioFocusChangeListener,
+                AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN
+            )
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun abandonAudioFocus() {
+        if (!hasAudioFocus) return
+        hasAudioFocus = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            audioManager!!.abandonAudioFocusRequest(audioFocusRequest!!)
+        } else {
+            audioManager!!.abandonAudioFocus(audioFocusChangeListener)
+        }
+    }
+
+    private fun setAudioFocus(paused: Boolean) {
+        if (paused) {
+            abandonAudioFocus()
+        } else {
+            requestAudioFocus()
+        }
+    }
+
     private var initialSeek = -1
 
     private var userIsOperatingSeekbar = false
@@ -179,6 +222,11 @@ class PlayerActivity :
         MPVLib.setOptionString("keep-open", "always")
         player.addObserver(this)
 
+        Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+            logcat(LogPriority.ERROR, throwable)
+            finish()
+        }
+
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         fineVolume = audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
         maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
@@ -186,10 +234,6 @@ class PlayerActivity :
         brightness = Utils.getScreenBrightness(this) ?: 0.5F
 
         volumeControlStream = AudioManager.STREAM_MUSIC
-
-        audioManager!!.requestAudioFocus(
-            audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN
-        )
 
         val dm = DisplayMetrics()
         windowManager.defaultDisplay.getRealMetrics(dm)
@@ -417,7 +461,6 @@ class PlayerActivity :
 
     @Suppress("UNUSED_PARAMETER")
     fun playPause(view: View) {
-        player.paused?.let { updatePlaybackStatus(it) }
         player.cyclePause()
     }
 
@@ -635,10 +678,10 @@ class PlayerActivity :
         presenter.deletePendingEpisodes()
         if (!playerIsDestroyed) {
             playerIsDestroyed = true
+            player.removeObserver(this)
             player.destroy()
         }
-        @Suppress("DEPRECATION")
-        audioManager?.abandonAudioFocus(audioFocusChangeListener)
+        abandonAudioFocus()
         super.onDestroy()
     }
 
@@ -656,14 +699,13 @@ class PlayerActivity :
      * this case the activity is closed and a toast is shown to the user.
      */
     fun setInitialEpisodeError(error: Throwable) {
+        launchUI { toast(error.message) }
         logcat(LogPriority.ERROR, error)
         finish()
-        toast(error.message)
     }
 
     fun setVideoList(videos: List<Video>) {
         if (playerIsDestroyed) return
-        logcat(LogPriority.INFO) { "loaded!!" }
         currentVideoList = videos
         currentVideoList?.firstOrNull()?.let {
             setHttpOptions(it)
@@ -789,9 +831,7 @@ class PlayerActivity :
     private fun eventPropertyUi(property: String, value: Boolean) {
         when (property) {
             "pause" -> {
-                if (!value) audioManager!!.requestAudioFocus(
-                    audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN
-                )
+                setAudioFocus(value)
                 updatePlaybackStatus(value)
             }
         }
