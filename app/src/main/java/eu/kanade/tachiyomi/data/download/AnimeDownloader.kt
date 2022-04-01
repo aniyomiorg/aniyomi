@@ -485,10 +485,11 @@ class AnimeDownloader(
 
     private fun hlsObservable(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
         isFFmpegRunning = true
+        val escapedFilename = "${tmpDir.filePath}/$filename.mp4".replace("\"", "\\\"")
         val headers = video.headers ?: source.headers
-        val headerOptions = headers.joinToString("-headers ", "-headers ", " ") { "\"${it.first}: ${it.second}\"" }
+        val headerOptions = headers.joinToString("", "-headers '", "'") { "${it.first}: ${it.second}\r\n" }
         // TODO: Support other file formats here as well (ffprobe or something, idk)
-        val ffmpegOptions = FFmpegKitConfig.parseArguments(headerOptions + "-i \"${video.videoUrl}\"  -c copy \"${tmpDir.filePath}/$filename.mp4\"")
+        val ffmpegOptions = FFmpegKitConfig.parseArguments(headerOptions + " -i '${video.videoUrl}' -c copy \"$escapedFilename\"")
         val executeCallback = ExecuteCallback {
             if (it.state != SessionState.COMPLETED) tmpDir.findFile("$filename.mp4")?.delete()
         }
