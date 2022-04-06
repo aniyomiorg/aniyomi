@@ -44,6 +44,8 @@ class Gestures(
     }
 
     override fun onDoubleTap(e: MotionEvent): Boolean {
+        if (activity.isLocked) return false
+
         if (e.y < height * 0.05F || e.y > height * 0.95F) return false
         val interval = preferences.skipLengthPreference()
         when {
@@ -60,6 +62,8 @@ class Gestures(
         distanceX: Float,
         distanceY: Float
     ): Boolean {
+        if (activity.isLocked) return false
+
         if (e1.y < height * 0.05F || e1.y > height * 0.95F) return false
         val dx = e1.x - e2.x
         val dy = e1.y - e2.y
