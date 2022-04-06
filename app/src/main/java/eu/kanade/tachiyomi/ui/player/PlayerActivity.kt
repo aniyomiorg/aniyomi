@@ -80,6 +80,8 @@ class PlayerActivity :
     private var width = 0
     private var height = 0
 
+    internal var isLocked = false
+
     private var audioFocusRestore: () -> Unit = {}
 
     private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { type ->
@@ -247,6 +249,12 @@ class PlayerActivity :
             gestures.onTouch(v, event)
             mDetector.onTouchEvent(event)
         }
+
+        // Lock and Unlock controls
+        binding.lockControls.setOnClickListener { isLocked = true; toggleControls() }
+        binding.unlockControls.setOnClickListener { isLocked = false; toggleControls() }
+
+        // Cycle, Long click controls
         binding.cycleAudioBtn.setOnLongClickListener { pickAudio(); true }
         binding.cycleSpeedBtn.setOnLongClickListener { pickSpeed(); true }
         binding.cycleSubsBtn.setOnLongClickListener { pickSub(); true }
@@ -271,7 +279,13 @@ class PlayerActivity :
     }
 
     fun toggleControls() {
-        binding.controls.isVisible = !binding.controls.isVisible
+        if (isLocked) {
+            binding.unlockControls.isVisible = !binding.unlockControls.isVisible
+            binding.controls.isVisible = false
+        } else {
+            binding.unlockControls.isVisible = false
+            binding.controls.isVisible = !binding.controls.isVisible
+        }
     }
 
     private fun pickAudio() {

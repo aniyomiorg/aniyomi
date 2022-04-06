@@ -13,6 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <ImageButton
+        android:layout_marginHorizontal="5dp"
+        android:id="@+id/unlockControls"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_lock_open_24dp"
+        android:visibility="gone"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:tint="?attr/colorOnPrimarySurface" />
+
     <!-- This LinearLayout only exists to prevent clipping -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -180,7 +190,15 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-
+                <ImageButton
+                    android:layout_marginHorizontal="5dp"
+                    android:id="@+id/lockControls"
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent"
+                    android:onClick="cycleAudio"
+                    android:src="@drawable/ic_lock_24dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:tint="?attr/colorOnPrimarySurface" />
 
                 <ImageButton
                     android:layout_marginHorizontal="5dp"
