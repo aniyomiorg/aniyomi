@@ -24,7 +24,7 @@ class Gestures(
     }
 
     override fun onSingleTapUp(e: MotionEvent): Boolean {
-        if (e.y < height * 0.05F || e.y > height * 0.95F) return false
+        if (e.y < height * 0.05F || e.y > height * 0.95F || e.x < width * 0.05F || e.x > width * 0.95F) return false
         when {
             e.x < width * 0.4F -> return false
             e.x > width * 0.6F -> return false
@@ -34,7 +34,7 @@ class Gestures(
     }
 
     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-        if (e.y < height * 0.05F || e.y > height * 0.95F) return false
+        if (e.y < height * 0.05F || e.y > height * 0.95F || e.x < width * 0.05F || e.x > width * 0.95F) return false
         when {
             e.x < width * 0.4F -> activity.toggleControls()
             e.x > width * 0.6F -> activity.toggleControls()
@@ -45,7 +45,7 @@ class Gestures(
 
     override fun onDoubleTap(e: MotionEvent): Boolean {
         if (activity.isLocked) return false
-        if (e.y < height * 0.05F || e.y > height * 0.95F) return false
+        if (e.y < height * 0.05F || e.y > height * 0.95F || e.x < width * 0.05F || e.x > width * 0.95F) return false
         val interval = preferences.skipLengthPreference()
         when {
             e.x < width * 0.4F -> activity.doubleTapSeek(-interval, e)
@@ -62,7 +62,7 @@ class Gestures(
         distanceY: Float
     ): Boolean {
         if (activity.isLocked) return false
-        if (e1.y < height * 0.05F || e1.y > height * 0.95F) return false
+        if (e1.y < height * 0.05F || e1.y > height * 0.95F || e1.x < width * 0.05F || e1.x > width * 0.95F) return false
         val dx = e1.x - e2.x
         val dy = e1.y - e2.y
         when (scrollState) {
