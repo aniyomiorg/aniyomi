@@ -56,8 +56,6 @@
         android:layout_height="48dp"
         android:src="@drawable/ic_lock_open_24dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="50dp"
         android:visibility="gone"
         android:background="?attr/selectableItemBackgroundBorderless"
         app:tint="?attr/colorOnPrimarySurface" />
@@ -66,7 +64,6 @@
         android:id="@+id/controls_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
         android:gravity="center">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -79,7 +76,6 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_back_24dp"
-                android:layout_marginLeft="50dp"
                 android:layout_marginRight="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="?attr/colorOnPrimarySurface"
@@ -121,7 +117,6 @@
                 android:id="@+id/settingsBtn"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_marginRight="50dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:onClick="openSettings"
                 android:src="@drawable/ic_settings_24dp"
@@ -246,7 +241,6 @@
                         android:id="@+id/lockBtn"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:layout_marginLeft="50dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:src="@drawable/ic_lock_24dp"
                         app:tint="?attr/colorOnPrimarySurface" />
@@ -280,7 +274,6 @@
                         android:id="@+id/cycleViewModeBtn"
                         android:layout_width="48dp"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="50dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="Cycle view modes"
                         android:onClick="cycleViewMode"
@@ -302,7 +295,6 @@
                     android:id="@+id/prevBtn"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_marginLeft="50dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/action_previous_episode"
                     android:padding="@dimen/screen_edge_margin"
@@ -339,7 +331,6 @@
                     android:id="@+id/nextBtn"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_marginRight="50dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/action_next_episode"
                     android:padding="@dimen/screen_edge_margin"
