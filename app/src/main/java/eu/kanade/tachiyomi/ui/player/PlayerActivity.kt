@@ -85,7 +85,7 @@ class PlayerActivity :
     internal var isLocked = false
 
     private val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
-
+    
     private var audioFocusRestore: () -> Unit = {}
 
     private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { type ->
@@ -288,6 +288,7 @@ class PlayerActivity :
     }
 
     fun toggleControls() {
+
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         if (isLocked) {
             // Hide controls
