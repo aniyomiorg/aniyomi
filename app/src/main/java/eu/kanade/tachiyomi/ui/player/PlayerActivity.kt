@@ -22,6 +22,8 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
@@ -81,6 +83,8 @@ class PlayerActivity :
     private var height = 0
 
     internal var isLocked = false
+
+    private val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
 
     private var audioFocusRestore: () -> Unit = {}
 
@@ -219,6 +223,10 @@ class PlayerActivity :
         binding = PlayerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        window.statusBarColor = 70000000
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            window.navigationBarColor = 70000000
+        }
         setVisibilities()
         player.initialize(applicationContext.filesDir.path)
         MPVLib.setOptionString("keep-open", "always")
@@ -244,15 +252,16 @@ class PlayerActivity :
 
         val gestures = Gestures(this, width.toFloat(), height.toFloat())
         mDetector = GestureDetectorCompat(this, gestures)
-        // player.setOnClickListener { binding.controls.isVisible = !binding.controls.isVisible }
         player.setOnTouchListener { v, event ->
             gestures.onTouch(v, event)
             mDetector.onTouchEvent(event)
         }
 
+        binding.backArrowBtn.setOnClickListener { onBackPressed() }
+
         // Lock and Unlock controls
-        binding.lockControls.setOnClickListener { isLocked = true; toggleControls() }
-        binding.unlockControls.setOnClickListener { isLocked = false; toggleControls() }
+        binding.lockBtn.setOnClickListener { isLocked = true; toggleControls() }
+        binding.unlockBtn.setOnClickListener { isLocked = false; toggleControls() }
 
         // Cycle, Long click controls
         binding.cycleAudioBtn.setOnLongClickListener { pickAudio(); true }
@@ -280,11 +289,25 @@ class PlayerActivity :
 
     fun toggleControls() {
         if (isLocked) {
-            binding.unlockControls.isVisible = !binding.unlockControls.isVisible
-            binding.controls.isVisible = false
+            // Hide controls
+            binding.controlsTop.isVisible = false
+            binding.controlsBottom.isVisible = false
+            binding.background.isVisible = false
+            // Toggle unlock button
+            binding.unlockBtn.isVisible = !binding.unlockBtn.isVisible
         } else {
-            binding.unlockControls.isVisible = false
-            binding.controls.isVisible = !binding.controls.isVisible
+            // Toggle controls
+            binding.controlsTop.isVisible = !binding.controlsTop.isVisible
+            binding.controlsBottom.isVisible = !binding.controlsBottom.isVisible
+            binding.background.isVisible = !binding.background.isVisible
+            // Hide unlock button
+            binding.unlockBtn.isVisible = false
+        }
+
+        if (binding.background.isVisible) {
+            windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
+        } else {
+            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         }
     }
 
@@ -433,12 +456,10 @@ class PlayerActivity :
     private fun setVisibilities() {
         // TODO: replace this atrocity
         binding.root.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LOW_PROFILE or
-            View.SYSTEM_UI_FLAG_FULLSCREEN or
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            View.SYSTEM_UI_FLAG_IMMERSIVE or
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && preferences.playerFullscreen()) {
             window.attributes.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
@@ -651,11 +672,8 @@ class PlayerActivity :
     }
 
     private fun updateEpisodeText() {
-        binding.fullTitleTextView.text = applicationContext.getString(
-            R.string.playertitle,
-            presenter.anime?.title,
-            presenter.currentEpisode?.name
-        )
+        binding.titleMainTxt.text = presenter.anime?.title
+        binding.titleSecondaryTxt.text = presenter.currentEpisode?.name
     }
 
     private fun updatePlaylistButtons() {
