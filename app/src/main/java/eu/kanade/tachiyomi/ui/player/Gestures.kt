@@ -15,7 +15,7 @@ class Gestures(
 ) : GestureDetector.SimpleOnGestureListener(), View.OnTouchListener {
     private var scrollState = STATE_UP
 
-    private val trigger = width.coerceAtMost(height) / 30
+    private val trigger = width.coerceAtMost(height) / 20
 
     private val preferences: PreferencesHelper by injectLazy()
 
@@ -50,9 +50,18 @@ class Gestures(
         when {
             e.x < width * 0.4F -> activity.doubleTapSeek(-interval, e)
             e.x > width * 0.6F -> activity.doubleTapSeek(interval, e)
-            else -> return false
         }
         return true
+    }
+
+    override fun onDoubleTapEvent(e: MotionEvent): Boolean {
+        if (activity.isLocked) return false
+        if (e.y < height * 0.05F || e.y > height * 0.95F || e.x < width * 0.05F || e.x > width * 0.95F) return false
+        if (e.action == MotionEvent.ACTION_UP && e.x > width * 0.4F && e.x < width * 0.6F) {
+            activity.toggleControls()
+            return true
+        }
+        return false
     }
 
     override fun onScroll(
@@ -62,12 +71,13 @@ class Gestures(
         distanceY: Float
     ): Boolean {
         if (activity.isLocked) return false
-        if (e1.y < height * 0.05F || e1.y > height * 0.95F || e1.x < width * 0.05F || e1.x > width * 0.95F) return false
+        if (e1.y < height * 0.05F || e1.y > height * 0.95F) return false
         val dx = e1.x - e2.x
         val dy = e1.y - e2.y
         when (scrollState) {
             STATE_UP -> {
                 if (abs(dx) >= trigger) {
+                    if (e1.x < width * 0.05F || e1.x > width * 0.95F) return false
                     scrollState = STATE_HORIZONTAL
                     activity.initSeek()
                 } else if (abs(dy) > trigger) {

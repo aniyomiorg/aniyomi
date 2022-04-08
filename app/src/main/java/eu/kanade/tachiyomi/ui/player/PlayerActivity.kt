@@ -85,7 +85,7 @@ class PlayerActivity :
     internal var isLocked = false
 
     private val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
-    
+
     private var audioFocusRestore: () -> Unit = {}
 
     private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { type ->
@@ -271,8 +271,26 @@ class PlayerActivity :
         binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
         // player.playFile(currentVideoList!!.first().videoUrl!!.toString())
 
-        binding.nextBtn.setOnClickListener { presenter.nextEpisode() }
-        binding.prevBtn.setOnClickListener { presenter.previousEpisode() }
+        binding.nextBtn.setOnClickListener {
+            val wasPlayerPaused = player.paused
+            player.paused = true
+            showLoadingIndicator(true)
+            presenter.nextEpisode {
+                if (wasPlayerPaused == false) {
+                    player.paused = false
+                }
+            }
+        }
+        binding.prevBtn.setOnClickListener {
+            val wasPlayerPaused = player.paused
+            player.paused = true
+            showLoadingIndicator(true)
+            presenter.previousEpisode {
+                if (wasPlayerPaused == false) {
+                    player.paused = false
+                }
+            }
+        }
 
         if (presenter?.needsInit() == true) {
             val anime = intent.extras!!.getLong("anime", -1)
@@ -288,7 +306,6 @@ class PlayerActivity :
     }
 
     fun toggleControls() {
-
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         if (isLocked) {
             // Hide controls
@@ -305,6 +322,12 @@ class PlayerActivity :
             // Hide unlock button
             binding.unlockBtn.isVisible = false
         }
+    }
+
+    private fun showLoadingIndicator(visible: Boolean) {
+        if (binding.loadingIndicator.isVisible == visible) return
+        binding.playBtn.isVisible = !visible
+        binding.loadingIndicator.isVisible = visible
     }
 
     private fun pickAudio() {
@@ -397,16 +420,15 @@ class PlayerActivity :
         val picker = SpeedPickerDialog()
 
         val restore = pauseForDialog()
-        genericPickerDialog(picker, R.string.title_speed_dialog, "speed") {
+        speedPickerDialog(picker, R.string.title_speed_dialog) {
             updateSpeedButton()
             restore()
         }
     }
 
-    private fun genericPickerDialog(
+    private fun speedPickerDialog(
         picker: PickerDialog,
         @StringRes titleRes: Int,
-        property: String,
         restoreState: StateRestoreCallback
     ) {
         val dialog = with(AlertDialog.Builder(this)) {
@@ -415,9 +437,9 @@ class PlayerActivity :
             setPositiveButton(R.string.dialog_ok) { _, _ ->
                 picker.number?.let {
                     if (picker.isInteger()) {
-                        MPVLib.setPropertyInt(property, it.toInt())
+                        MPVLib.setPropertyInt("speed", it.toInt())
                     } else {
-                        MPVLib.setPropertyDouble(property, it)
+                        MPVLib.setPropertyDouble("speed", it)
                     }
                 }
             }
@@ -426,7 +448,7 @@ class PlayerActivity :
             create()
         }
 
-        picker.number = MPVLib.getPropertyDouble(property)
+        picker.number = MPVLib.getPropertyDouble("speed")
         dialog.show()
     }
 
@@ -451,8 +473,8 @@ class PlayerActivity :
     @Suppress("DEPRECATION")
     private fun setVisibilities() {
         binding.root.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-            View.SYSTEM_UI_FLAG_IMMERSIVE or
             View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -792,6 +814,7 @@ class PlayerActivity :
     }
 
     private fun fileLoaded() {
+        launchUI { showLoadingIndicator(false) }
         clearTracks()
         player.loadTracks()
         subTracks += player.tracks.getValue("sub")
