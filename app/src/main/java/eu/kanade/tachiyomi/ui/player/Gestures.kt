@@ -15,7 +15,7 @@ class Gestures(
 ) : GestureDetector.SimpleOnGestureListener(), View.OnTouchListener {
     private var scrollState = STATE_UP
 
-    private val trigger = width.coerceAtMost(height) / 30
+    private val trigger = width.coerceAtMost(height) / 20
 
     private val preferences: PreferencesHelper by injectLazy()
 
@@ -71,12 +71,13 @@ class Gestures(
         distanceY: Float
     ): Boolean {
         if (activity.isLocked) return false
-        if (e1.y < height * 0.05F || e1.y > height * 0.95F || e1.x < width * 0.05F || e1.x > width * 0.95F) return false
+        if (e1.y < height * 0.05F || e1.y > height * 0.95F) return false
         val dx = e1.x - e2.x
         val dy = e1.y - e2.y
         when (scrollState) {
             STATE_UP -> {
                 if (abs(dx) >= trigger) {
+                    if (e1.x < width * 0.05F || e1.x > width * 0.95F) return false
                     scrollState = STATE_HORIZONTAL
                     activity.initSeek()
                 } else if (abs(dy) > trigger) {
