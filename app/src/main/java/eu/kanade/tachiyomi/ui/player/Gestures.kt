@@ -50,9 +50,18 @@ class Gestures(
         when {
             e.x < width * 0.4F -> activity.doubleTapSeek(-interval, e)
             e.x > width * 0.6F -> activity.doubleTapSeek(interval, e)
-            else -> return false
         }
         return true
+    }
+
+    override fun onDoubleTapEvent(e: MotionEvent): Boolean {
+        if (activity.isLocked) return false
+        if (e.y < height * 0.05F || e.y > height * 0.95F || e.x < width * 0.05F || e.x > width * 0.95F) return false
+        if (e.action == MotionEvent.ACTION_UP && e.x > width * 0.4F && e.x < width * 0.6F) {
+            activity.toggleControls()
+            return true
+        }
+        return false
     }
 
     override fun onScroll(

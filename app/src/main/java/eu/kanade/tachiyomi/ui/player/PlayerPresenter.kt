@@ -185,7 +185,7 @@ class PlayerPresenter(
         return source is AnimeHttpSource && !EpisodeLoader.isDownloaded(currentEpisode, anime)
     }
 
-    fun nextEpisode() {
+    fun nextEpisode(callback: () -> Unit) {
         val anime = anime ?: return
         val source = sourceManager.getOrStub(anime.source)
 
@@ -200,6 +200,7 @@ class PlayerPresenter(
                         { activity, it ->
                             currentVideoList = it
                             activity.setVideoList(it)
+                            callback()
                         },
                         PlayerActivity::setInitialEpisodeError
                     )
@@ -209,7 +210,7 @@ class PlayerPresenter(
         }
     }
 
-    fun previousEpisode() {
+    fun previousEpisode(callback: () -> Unit) {
         val anime = anime ?: return
         val source = sourceManager.getOrStub(anime.source)
 
@@ -224,6 +225,7 @@ class PlayerPresenter(
                         { activity, it ->
                             currentVideoList = it
                             activity.setVideoList(it)
+                            callback()
                         },
                         PlayerActivity::setInitialEpisodeError
                     )

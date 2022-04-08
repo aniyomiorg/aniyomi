@@ -176,25 +176,25 @@
 
     </RelativeLayout>
 
-
     <RelativeLayout
         android:id="@+id/controls_bottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:visibility="visible">
 
         <ImageButton
-            android:id="@+id/playBtn"
+            android:id="@+id/play_btn"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_centerInParent="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Play/Pause"
-            android:maxWidth="50dp"
-            android:maxHeight="50dp"
             android:onClick="playPause"
             android:textColor="@android:color/white"
+            android:visibility="gone"
             app:tint="?attr/colorOnPrimarySurface"
-            tools:src="@drawable/ic_play_arrow_100dp" />
+            tools:src="@drawable/ic_play_arrow_100dp"
+            tools:visibility="visible" />
 
 
         <LinearLayout
@@ -351,6 +351,15 @@
         </LinearLayout>
 
     </RelativeLayout>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_indicator"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        app:indicatorColor="?attr/colorAccent"
+        app:indicatorSize="65dp" />
 
 
     <TextView
