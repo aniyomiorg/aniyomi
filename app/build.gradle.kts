@@ -242,8 +242,8 @@ dependencies {
 
     // Crash reports/analytics
     implementation(libs.acra.http)
-    "standardImplementation"(libs.firebase.analytics)
-    "standardImplementation"(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
     // Licenses
     implementation(libs.aboutlibraries.core)
