@@ -26,6 +26,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.WindowManager
+import android.view.animation.AnimationUtils
+import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
@@ -364,10 +366,21 @@ class PlayerActivity :
             // Toggle unlock button
             binding.unlockBtn.isVisible = !binding.unlockBtn.isVisible
         } else {
+            var animation = R.anim.fade_in_medium
+            if (binding.background.isVisible) {
+                animation = R.anim.fade_out_medium
+            }
+            AnimationUtils.loadAnimation(this, animation).also { fadeAnimation ->
+                findViewById<RelativeLayout>(R.id.controls_top).startAnimation(fadeAnimation)
+                findViewById<RelativeLayout>(R.id.controls_bottom).startAnimation(fadeAnimation)
+                findViewById<View>(R.id.background).startAnimation(fadeAnimation)
+
+                binding.controlsTop.isVisible = !binding.controlsTop.isVisible
+                binding.controlsBottom.isVisible = !binding.controlsBottom.isVisible
+                binding.background.isVisible = !binding.background.isVisible
+            }
             // Toggle controls
-            binding.controlsTop.isVisible = !binding.controlsTop.isVisible
-            binding.controlsBottom.isVisible = !binding.controlsBottom.isVisible
-            binding.background.isVisible = !binding.background.isVisible
+
             // Hide unlock button
             binding.unlockBtn.isVisible = false
         }
