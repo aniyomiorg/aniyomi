@@ -49,7 +49,6 @@ class BottomSheetViewPager @JvmOverloads constructor(
             override fun onPageSelected(position: Int) {
                 requestLayout()
             }
-        },
-        )
+        },)
     }
 }

@@ -363,8 +363,7 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
             override fun onStopTrackingTouch(slider: Slider) {
                 isScrollingThroughPages = false
             }
-        },
-        )
+        },)
         binding.pageSlider.addOnChangeListener { slider, value, fromUser ->
             if (viewer != null && fromUser) {
                 isScrollingThroughPages = true

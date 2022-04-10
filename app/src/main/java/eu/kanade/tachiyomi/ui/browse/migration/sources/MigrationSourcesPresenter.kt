@@ -49,6 +49,10 @@ class MigrationSourcesPresenter(
             .subscribeLatestCache(MigrationSourcesController::setAnimeSources)
     }
 
+    fun requestSortUpdate() {
+        sortRelay.call(Unit)
+    }
+
     private fun findSourcesWithManga(library: List<Manga>): List<SourceItem> {
         val header = SelectionHeader()
         return library
@@ -74,7 +78,7 @@ class MigrationSourcesPresenter(
             .toList()
     }
 
-    fun sortFn(): java.util.Comparator<SourceItem> {
+    private fun sortFn(): java.util.Comparator<SourceItem> {
         val sort by lazy {
             preferences.migrationSortingMode().get()
         }
@@ -99,7 +103,7 @@ class MigrationSourcesPresenter(
         }
     }
 
-    fun sortFnAnime(): java.util.Comparator<AnimeSourceItem> {
+    private fun sortFnAnime(): java.util.Comparator<AnimeSourceItem> {
         val sort by lazy {
             preferences.migrationSortingMode().get()
         }
@@ -122,9 +126,5 @@ class MigrationSourcesPresenter(
             MigrationSourcesController.DirectionSetting.ASCENDING -> Comparator(sortFn)
             MigrationSourcesController.DirectionSetting.DESCENDING -> Collections.reverseOrder(sortFn)
         }
-    }
-
-    fun requestSortUpdate() {
-        sortRelay.call(Unit)
     }
 }

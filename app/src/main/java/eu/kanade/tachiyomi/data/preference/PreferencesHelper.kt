@@ -164,8 +164,6 @@ class PreferencesHelper(val context: Context) {
 
     fun webtoonSidePadding() = flowPrefs.getInt("webtoon_side_padding", 0)
 
-    fun readWithTapping() = flowPrefs.getBoolean("reader_tap", true)
-
     fun pagerNavInverted() = flowPrefs.getEnum("reader_tapping_inverted", Values.TappingInvertMode.NONE)
 
     fun webtoonNavInverted() = flowPrefs.getEnum("reader_tapping_inverted_webtoon", Values.TappingInvertMode.NONE)

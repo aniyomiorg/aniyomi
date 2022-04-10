@@ -54,8 +54,7 @@ class ReaderSettingsSheet(
                     activity.setMenuVisibility(!isFilterTab)
                 }
             }
-        },
-        )
+        },)
 
         if (showColorFilterSettings) {
             binding.tabs.getTabAt(filterTabIndex)?.select()
