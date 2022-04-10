@@ -107,6 +107,7 @@
     <string name="action_next_chapter">Next chapter</string>
     <string name="action_next_episode">Next episode</string>
     <string name="action_screen_fit">Screen fit mode</string>
+    <string name="action_player_pip">PiP mode</string>
     <string name="action_retry">Retry</string>
     <string name="action_remove">Remove</string>
     <string name="action_start">Start</string>
@@ -441,8 +442,6 @@
     <string name="pref_skip_20">20s</string>
     <string name="pref_skip_10">10s</string>
     <string name="pref_skip_5">5s</string>
-    <string name="pref_pip_player">Enable picture in picture mode</string>
-    <string name="pref_pip_player_summary">Note: this is still an experimental feature!</string>
     <string name="pref_always_use_external_player">Always use external player</string>
     <string name="pref_player_fullscreen">Show content in display cutout</string>
     <string name="pref_external_player_preference">External player preference</string>
@@ -953,6 +952,7 @@
 
     <string name="player_controls_skip_intro_text">+85 s</string>
     <string name="no_next_episode">Next Episode not found!</string>
+    <string name="no_previous_episode">Previous Episode not found!</string>
     <string name="anime_description_cover">Cover of Anime</string>
     <string name="label_history">Manga</string>
     <string name="label_animehistory">Anime</string>
