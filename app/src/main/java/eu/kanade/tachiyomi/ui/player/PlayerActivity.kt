@@ -78,6 +78,10 @@ class PlayerActivity :
             }
         }
     }
+    override fun onNewIntent(intent: Intent?) {
+        finish()
+        super.onNewIntent(intent)
+    }
 
     private val ACTION_MEDIA_CONTROL = "media_control"
     private val EXTRA_CONTROL_TYPE = "control_type"
@@ -90,7 +94,7 @@ class PlayerActivity :
     private val CONTROL_TYPE_PREVIOUS = 3
     private val CONTROL_TYPE_NEXT = 4
 
-    internal var isInPipMode: Boolean = false
+    private var isInPipMode: Boolean = false
 
     private var mReceiver: BroadcastReceiver? = null
 
@@ -809,7 +813,7 @@ class PlayerActivity :
             presenter.saveEpisodeProgress(player.timePos, player.duration)
             player.paused = true
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) finishAndRemoveTask()
         super.onStop()
     }
 
