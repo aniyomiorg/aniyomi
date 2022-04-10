@@ -185,12 +185,12 @@ class PlayerPresenter(
         return source is AnimeHttpSource && !EpisodeLoader.isDownloaded(currentEpisode, anime)
     }
 
-    fun nextEpisode(callback: () -> Unit) {
-        val anime = anime ?: return
+    fun nextEpisode(callback: () -> Unit): String? {
+        val anime = anime ?: return "Invalid"
         val source = sourceManager.getOrStub(anime.source)
 
         val index = getCurrentEpisodeIndex()
-        if (index == episodeList.lastIndex) return
+        if (index == episodeList.lastIndex) return null
         currentEpisode = episodeList[index + 1]
         launchIO {
             try {
@@ -208,14 +208,15 @@ class PlayerPresenter(
                 logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
             }
         }
+        return anime.title + " - " + episodeList[index + 1].name
     }
 
-    fun previousEpisode(callback: () -> Unit) {
-        val anime = anime ?: return
+    fun previousEpisode(callback: () -> Unit): String? {
+        val anime = anime ?: return "Invalid"
         val source = sourceManager.getOrStub(anime.source)
 
         val index = getCurrentEpisodeIndex()
-        if (index == 0) return
+        if (index == 0) return null
         currentEpisode = episodeList[index - 1]
         launchIO {
             try {
@@ -233,6 +234,7 @@ class PlayerPresenter(
                 logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
             }
         }
+        return anime.title + " - " + episodeList[index - 1].name
     }
 
     fun saveEpisodeHistory() {

@@ -25,8 +25,6 @@ object PreferenceKeys {
 
     const val alwaysUseExternalPlayer = "pref_always_use_external_player"
 
-    const val pipPlayerPreference = "pref_pip_player"
-
     const val externalPlayerPreference = "external_player_preference"
 
     const val jumpToChapters = "jump_to_chapters"

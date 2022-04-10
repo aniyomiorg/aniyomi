@@ -2,10 +2,18 @@ package eu.kanade.tachiyomi.ui.player
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.PendingIntent
+import android.app.PictureInPictureParams
+import android.app.RemoteAction
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.drawable.Icon
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.os.Build
@@ -13,11 +21,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
+import android.util.Rational
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.WindowManager
 import android.widget.SeekBar
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -66,6 +76,21 @@ class PlayerActivity :
             }
         }
     }
+
+    private val ACTION_MEDIA_CONTROL = "media_control"
+    private val EXTRA_CONTROL_TYPE = "control_type"
+    private val REQUEST_PLAY = 1
+    private val REQUEST_PAUSE = 2
+    private val CONTROL_TYPE_PLAY = 1
+    private val CONTROL_TYPE_PAUSE = 2
+    private val REQUEST_PREVIOUS = 3
+    private val REQUEST_NEXT = 4
+    private val CONTROL_TYPE_PREVIOUS = 3
+    private val CONTROL_TYPE_NEXT = 4
+
+    internal var isInPipMode: Boolean = false
+
+    private var mReceiver: BroadcastReceiver? = null
 
     private val preferences: PreferencesHelper by injectLazy()
 
@@ -257,7 +282,13 @@ class PlayerActivity :
             mDetector.onTouchEvent(event)
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            binding.pipBtn.isVisible = packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        }
+
         binding.backArrowBtn.setOnClickListener { onBackPressed() }
+
+        binding.pipBtn.setOnClickListener { startPiP() }
 
         // Lock and Unlock controls
         binding.lockBtn.setOnClickListener { isLocked = true; toggleControls() }
@@ -271,26 +302,8 @@ class PlayerActivity :
         binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
         // player.playFile(currentVideoList!!.first().videoUrl!!.toString())
 
-        binding.nextBtn.setOnClickListener {
-            val wasPlayerPaused = player.paused
-            player.paused = true
-            showLoadingIndicator(true)
-            presenter.nextEpisode {
-                if (wasPlayerPaused == false) {
-                    player.paused = false
-                }
-            }
-        }
-        binding.prevBtn.setOnClickListener {
-            val wasPlayerPaused = player.paused
-            player.paused = true
-            showLoadingIndicator(true)
-            presenter.previousEpisode {
-                if (wasPlayerPaused == false) {
-                    player.paused = false
-                }
-            }
-        }
+        binding.nextBtn.setOnClickListener { goNextEpisode() }
+        binding.prevBtn.setOnClickListener { goPreviousEpisode() }
 
         if (presenter?.needsInit() == true) {
             val anime = intent.extras!!.getLong("anime", -1)
@@ -303,6 +316,42 @@ class PlayerActivity :
         }
 
         playerIsDestroyed = false
+    }
+
+    private fun goNextEpisode() {
+        val wasPlayerPaused = player.paused
+        player.paused = true
+        showLoadingIndicator(true)
+
+        val nEpTxt = presenter.nextEpisode {
+            if (wasPlayerPaused == false) {
+                player.paused = false
+            }
+        }
+
+        when {
+            nEpTxt == "Invalid" -> return
+            nEpTxt == null -> { launchUI { toast(R.string.no_next_episode) }; showLoadingIndicator(false) }
+            isInPipMode -> launchUI { toast(nEpTxt) }
+        }
+    }
+
+    private fun goPreviousEpisode() {
+        val wasPlayerPaused = player.paused
+        player.paused = true
+        showLoadingIndicator(true)
+
+        val pEpTxt = presenter.previousEpisode {
+            if (wasPlayerPaused == false) {
+                player.paused = false
+            }
+        }
+
+        when {
+            pEpTxt == "Invalid" -> return
+            pEpTxt == null -> { launchUI { toast(R.string.no_previous_episode) }; showLoadingIndicator(false) }
+            isInPipMode -> launchUI { toast(pEpTxt) }
+        }
     }
 
     fun toggleControls() {
@@ -321,6 +370,18 @@ class PlayerActivity :
             binding.background.isVisible = !binding.background.isVisible
             // Hide unlock button
             binding.unlockBtn.isVisible = false
+        }
+    }
+
+    private fun hideControls(hide: Boolean) {
+        if (hide) {
+            binding.controlsTop.isVisible = false
+            binding.controlsBottom.isVisible = false
+            binding.background.isVisible = false
+        } else {
+            binding.controlsTop.isVisible = true
+            binding.controlsBottom.isVisible = true
+            binding.background.isVisible = true
         }
     }
 
@@ -698,15 +759,6 @@ class PlayerActivity :
         val plCount = presenter.episodeList.size
         val plPos = presenter.getCurrentEpisodeIndex()
 
-        if (plCount == 1) {
-            // use View.GONE so the buttons won't take up any space
-            binding.prevBtn.visibility = View.GONE
-            binding.nextBtn.visibility = View.GONE
-            return
-        }
-        binding.prevBtn.visibility = View.VISIBLE
-        binding.nextBtn.visibility = View.VISIBLE
-
         val g = ContextCompat.getColor(this, R.color.tint_disabled)
         val w = ContextCompat.getColor(this, R.color.tint_normal)
         binding.prevBtn.imageTintList = ColorStateList.valueOf(if (plPos == 0) g else w)
@@ -732,6 +784,9 @@ class PlayerActivity :
             player.destroy()
         }
         abandonAudioFocus()
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            finishAndRemoveTask()
+        }
         super.onDestroy()
     }
 
@@ -741,7 +796,137 @@ class PlayerActivity :
             presenter.saveEpisodeProgress(player.timePos, player.duration)
             player.paused = true
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
         super.onStop()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setVisibilities()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+        isInPipMode = isInPictureInPictureMode
+        hideControls(!isInPictureInPictureMode)
+        if (isInPictureInPictureMode) binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize / 2
+        else binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize * 2
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+
+        if (isInPictureInPictureMode) {
+            // On Android TV it is required to hide controller in this PIP change callback
+            hideControls(true)
+            mReceiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    if (intent == null || ACTION_MEDIA_CONTROL != intent.action) {
+                        return
+                    }
+                    when (intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)) {
+                        CONTROL_TYPE_PLAY -> {
+                            player.paused = false
+                            updatePictureInPictureActions(true)
+                        }
+                        CONTROL_TYPE_PAUSE -> {
+                            player.paused = true
+                            updatePictureInPictureActions(false)
+                        }
+                        CONTROL_TYPE_PREVIOUS -> {
+                            goPreviousEpisode()
+                            player.paused?.let { updatePictureInPictureActions(!it) }
+                        }
+                        CONTROL_TYPE_NEXT -> {
+                            goNextEpisode()
+                            player.paused?.let { updatePictureInPictureActions(!it) }
+                        }
+                    }
+                }
+            }
+            registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
+        } else {
+            if (mReceiver != null) {
+                unregisterReceiver(mReceiver)
+                mReceiver = null
+            }
+            hideControls(false)
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun startPiP() {
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            hideControls(true)
+            player.paused?.let { updatePictureInPictureActions(!it) }
+                ?.let { this.enterPictureInPictureMode(it) }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createRemoteAction(
+        iconResId: Int,
+        titleResId: Int,
+        requestCode: Int,
+        controlType: Int
+    ): RemoteAction {
+        return RemoteAction(
+            Icon.createWithResource(this, iconResId),
+            getString(titleResId),
+            getString(titleResId),
+            PendingIntent.getBroadcast(
+                this,
+                requestCode,
+                Intent(ACTION_MEDIA_CONTROL)
+                    .putExtra(EXTRA_CONTROL_TYPE, controlType),
+                PendingIntent.FLAG_IMMUTABLE
+            )
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun updatePictureInPictureActions(
+        playing: Boolean
+    ): PictureInPictureParams {
+        val mPictureInPictureParams = PictureInPictureParams.Builder()
+            // Set action items for the picture-in-picture mode. These are the only custom controls
+            // available during the picture-in-picture mode.
+            .setActions(
+                arrayListOf(
+
+                    createRemoteAction(
+                        R.drawable.ic_skip_previous_24dp,
+                        R.string.action_previous_episode,
+                        CONTROL_TYPE_PREVIOUS,
+                        REQUEST_PREVIOUS
+                    ),
+
+                    if (playing) {
+                        createRemoteAction(
+                            R.drawable.ic_pause_24dp,
+                            R.string.action_pause,
+                            CONTROL_TYPE_PAUSE,
+                            REQUEST_PAUSE
+                        )
+                    } else {
+                        createRemoteAction(
+                            R.drawable.ic_play_arrow_24dp,
+                            R.string.action_play,
+                            CONTROL_TYPE_PLAY,
+                            REQUEST_PLAY
+                        )
+                    },
+                    createRemoteAction(
+                        R.drawable.ic_skip_next_24dp,
+                        R.string.action_next_episode,
+                        CONTROL_TYPE_NEXT,
+                        REQUEST_NEXT
+                    )
+
+                )
+            )
+            .setAspectRatio(player.videoAspect?.times(10000)?.let { Rational(it.toInt(), 10000) })
+            .build()
+        setPictureInPictureParams(mPictureInPictureParams)
+        return mPictureInPictureParams
     }
 
     /**
@@ -814,7 +999,6 @@ class PlayerActivity :
     }
 
     private fun fileLoaded() {
-        launchUI { showLoadingIndicator(false) }
         clearTracks()
         player.loadTracks()
         subTracks += player.tracks.getValue("sub")
@@ -867,6 +1051,8 @@ class PlayerActivity :
                 selectedAudio = audioTracks.indexOfFirst { it.url == mpvAudio.mpvId.toString() }
             }
         }
+        launchUI { showLoadingIndicator(false) }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
     }
 
     // mpv events
