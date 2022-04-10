@@ -681,7 +681,7 @@ class PlayerActivity :
             0 -> 1
             1 -> 2
             2 -> 0
-            else -> 1
+            else -> 0
         }
         preferences.setPlayerViewMode(playerViewMode)
         setViewMode()
