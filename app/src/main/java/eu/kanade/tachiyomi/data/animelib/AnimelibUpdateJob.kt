@@ -49,7 +49,7 @@ class AnimelibUpdateJob(private val context: Context, workerParams: WorkerParame
                     interval.toLong(),
                     TimeUnit.HOURS,
                     10,
-                    TimeUnit.MINUTES
+                    TimeUnit.MINUTES,
                 )
                     .addTag(TAG)
                     .setConstraints(constraints)

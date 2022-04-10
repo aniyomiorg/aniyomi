@@ -15,8 +15,10 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.extension.api.AnimeExtensionGithubApi
+import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.notification
 import kotlinx.coroutines.coroutineScope
+import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.concurrent.TimeUnit
@@ -28,10 +30,11 @@ class AnimeExtensionUpdateJob(private val context: Context, workerParams: Worker
         val pendingUpdates = try {
             AnimeExtensionGithubApi().checkForUpdates(context)
         } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e)
             return@coroutineScope Result.failure()
         }
 
-        if (pendingUpdates.isNotEmpty()) {
+        if (!pendingUpdates.isNullOrEmpty()) {
             createUpdateNotification(pendingUpdates.map { it.name })
         }
 
@@ -47,8 +50,8 @@ class AnimeExtensionUpdateJob(private val context: Context, workerParams: Worker
                         context.resources.getQuantityString(
                             R.plurals.update_check_notification_ext_updates,
                             names.size,
-                            names.size
-                        )
+                            names.size,
+                        ),
                     )
                     val extNames = names.joinToString(", ")
                     setContentText(extNames)
@@ -56,7 +59,7 @@ class AnimeExtensionUpdateJob(private val context: Context, workerParams: Worker
                     setSmallIcon(R.drawable.ic_extension_24dp)
                     setContentIntent(NotificationReceiver.openExtensionsPendingActivity(context))
                     setAutoCancel(true)
-                }
+                },
             )
         }
     }
@@ -76,7 +79,7 @@ class AnimeExtensionUpdateJob(private val context: Context, workerParams: Worker
                     2,
                     TimeUnit.DAYS,
                     3,
-                    TimeUnit.HOURS
+                    TimeUnit.HOURS,
                 )
                     .addTag(TAG)
                     .setConstraints(constraints)

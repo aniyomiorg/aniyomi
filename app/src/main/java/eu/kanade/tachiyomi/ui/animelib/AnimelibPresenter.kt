@@ -53,7 +53,7 @@ class AnimelibPresenter(
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
-    private val trackManager: TrackManager = Injekt.get()
+    private val trackManager: TrackManager = Injekt.get(),
 ) : BasePresenter<AnimelibController>() {
 
     private val context = preferences.context
@@ -107,7 +107,7 @@ class AnimelibPresenter(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeLatestCache({ view, (categories, animeMap) ->
                     view.onNextAnimelibUpdate(categories, animeMap)
-                })
+                },)
         }
     }
 
@@ -119,29 +119,14 @@ class AnimelibPresenter(
     private fun applyFilters(map: AnimelibMap, trackMap: Map<Long, Map<Int, Boolean>>): AnimelibMap {
         val downloadedOnly = preferences.downloadedOnly().get()
         val filterDownloaded = preferences.filterDownloaded().get()
-        val filterUnread = preferences.filterUnread().get()
+        val filterUnseen = preferences.filterUnread().get()
+        val filterStarted = preferences.filterStarted().get()
         val filterCompleted = preferences.filterCompleted().get()
         val loggedInServices = trackManager.services.filter { trackService -> trackService.isLogged }
             .associate { trackService ->
                 Pair(trackService.id, preferences.filterTracking(trackService.id).get())
             }
         val isNotAnyLoggedIn = !loggedInServices.values.any()
-
-        val filterFnUnread: (AnimelibItem) -> Boolean = unread@{ item ->
-            if (filterUnread == State.IGNORE.value) return@unread true
-            val isUnread = item.anime.unseen != 0
-
-            return@unread if (filterUnread == State.INCLUDE.value) isUnread
-            else !isUnread
-        }
-
-        val filterFnCompleted: (AnimelibItem) -> Boolean = completed@{ item ->
-            if (filterCompleted == State.IGNORE.value) return@completed true
-            val isCompleted = item.anime.status == SAnime.COMPLETED
-
-            return@completed if (filterCompleted == State.INCLUDE.value) isCompleted
-            else !isCompleted
-        }
 
         val filterFnDownloaded: (AnimelibItem) -> Boolean = downloaded@{ item ->
             if (!downloadedOnly && filterDownloaded == State.IGNORE.value) return@downloaded true
@@ -153,6 +138,30 @@ class AnimelibPresenter(
 
             return@downloaded if (downloadedOnly || filterDownloaded == State.INCLUDE.value) isDownloaded
             else !isDownloaded
+        }
+
+        val filterFnUnseen: (AnimelibItem) -> Boolean = unread@{ item ->
+            if (filterUnseen == State.IGNORE.value) return@unread true
+            val isUnread = item.anime.unseenCount != 0
+
+            return@unread if (filterUnseen == State.INCLUDE.value) isUnread
+            else !isUnread
+        }
+
+        val filterFnStarted: (AnimelibItem) -> Boolean = started@{ item ->
+            if (filterStarted == State.IGNORE.value) return@started true
+            val hasStarted = item.anime.hasStarted
+
+            return@started if (filterStarted == State.INCLUDE.value) hasStarted
+            else !hasStarted
+        }
+
+        val filterFnCompleted: (AnimelibItem) -> Boolean = completed@{ item ->
+            if (filterCompleted == State.IGNORE.value) return@completed true
+            val isCompleted = item.anime.status == SAnime.COMPLETED
+
+            return@completed if (filterCompleted == State.INCLUDE.value) isCompleted
+            else !isCompleted
         }
 
         val filterFnTracking: (AnimelibItem) -> Boolean = tracking@{ item ->
@@ -181,7 +190,9 @@ class AnimelibPresenter(
 
         val filterFn: (AnimelibItem) -> Boolean = filter@{ item ->
             return@filter !(
-                !filterFnUnread(item) ||
+                !filterFnDownloaded(item) ||
+                    !filterFnUnseen(item) ||
+                    !filterFnStarted(item) ||
                     !filterFnCompleted(item) ||
                     !filterFnDownloaded(item) ||
                     !filterFnTracking(item)
@@ -212,7 +223,7 @@ class AnimelibPresenter(
                 }
 
                 item.unreadCount = if (showUnreadBadges) {
-                    item.anime.unseen
+                    item.anime.unseenCount
                 } else {
                     // Unset unread count if not enabled
                     -1
@@ -245,10 +256,6 @@ class AnimelibPresenter(
             var counter = 0
             db.getLastSeenAnime().executeAsBlocking().associate { it.id!! to counter++ }
         }
-        val totalEpisodeAnime by lazy {
-            var counter = 0
-            db.getTotalEpisodeAnime().executeAsBlocking().associate { it.id!! to counter++ }
-        }
         val latestChapterAnime by lazy {
             var counter = 0
             db.getLatestEpisodeAnime().executeAsBlocking().associate { it.id!! to counter++ }
@@ -262,7 +269,7 @@ class AnimelibPresenter(
             (category.id ?: 0) to SortModeSetting.get(preferences, category)
         }
 
-        val sortAscending = categories.associate { category ->
+        val sortDirections = categories.associate { category ->
             (category.id ?: 0) to SortDirectionSetting.get(preferences, category)
         }
 
@@ -272,7 +279,7 @@ class AnimelibPresenter(
         }
         val sortFn: (AnimelibItem, AnimelibItem) -> Int = { i1, i2 ->
             val sortingMode = sortingModes[i1.anime.category]!!
-            val sortAscending = sortAscending[i1.anime.category]!! == SortDirectionSetting.ASCENDING
+            val sortAscending = sortDirections[i1.anime.category]!! == SortDirectionSetting.ASCENDING
             when (sortingMode) {
                 SortModeSetting.ALPHABETICAL -> {
                     collator.compare(i1.anime.title.lowercase(locale), i2.anime.title.lowercase(locale))
@@ -286,15 +293,13 @@ class AnimelibPresenter(
                 SortModeSetting.LAST_CHECKED -> i2.anime.last_update.compareTo(i1.anime.last_update)
                 SortModeSetting.UNREAD -> when {
                     // Ensure unread content comes first
-                    i1.anime.unseen == i2.anime.unseen -> 0
-                    i1.anime.unseen == 0 -> if (sortAscending) 1 else -1
-                    i2.anime.unseen == 0 -> if (sortAscending) -1 else 1
-                    else -> i1.anime.unseen.compareTo(i2.anime.unseen)
+                    i1.anime.unseenCount == i2.anime.unseenCount -> 0
+                    i1.anime.unseenCount == 0 -> if (sortAscending) 1 else -1
+                    i2.anime.unseenCount == 0 -> if (sortAscending) -1 else 1
+                    else -> i1.anime.unseenCount.compareTo(i2.anime.unseenCount)
                 }
                 SortModeSetting.TOTAL_CHAPTERS -> {
-                    val anime1TotalEpisode = totalEpisodeAnime[i1.anime.id!!] ?: 0
-                    val anime2TotalEpisode = totalEpisodeAnime[i2.anime.id!!] ?: 0
-                    anime1TotalEpisode.compareTo(anime2TotalEpisode)
+                    i1.anime.totalEpisodes.compareTo(i2.anime.totalEpisodes)
                 }
                 SortModeSetting.LATEST_CHAPTER -> {
                     val anime1latestEpisode = latestChapterAnime[i1.anime.id!!]
@@ -315,7 +320,7 @@ class AnimelibPresenter(
         }
 
         return map.mapValues { entry ->
-            val sortAscending = sortAscending[entry.key]!! == SortDirectionSetting.ASCENDING
+            val sortAscending = sortDirections[entry.key]!! == SortDirectionSetting.ASCENDING
 
             val comparator = if (sortAscending) {
                 Comparator(sortFn)
@@ -377,7 +382,7 @@ class AnimelibPresenter(
                     AnimelibItem(
                         animelibAnime,
                         shouldSetFromCategory,
-                        defaultLibraryDisplayMode
+                        defaultLibraryDisplayMode,
                     )
                 }.groupBy { it.anime.category }
             }

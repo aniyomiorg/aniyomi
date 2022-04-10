@@ -2,8 +2,8 @@ package eu.kanade.tachiyomi.ui.library
 
 import android.view.View
 import androidx.core.view.isVisible
-import coil.clear
-import coil.loadAny
+import coil.dispose
+import coil.load
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.kanade.tachiyomi.databinding.SourceListItemBinding
 
@@ -18,7 +18,7 @@ import eu.kanade.tachiyomi.databinding.SourceListItemBinding
  */
 class LibraryListHolder(
     private val view: View,
-    private val adapter: FlexibleAdapter<*>
+    private val adapter: FlexibleAdapter<*>,
 ) : LibraryHolder<SourceListItemBinding>(view, adapter) {
 
     override val binding = SourceListItemBinding.bind(view)
@@ -61,7 +61,7 @@ class LibraryListHolder(
         }
 
         // Update the cover
-        binding.thumbnail.clear()
-        binding.thumbnail.loadAny(item.manga)
+        binding.thumbnail.dispose()
+        binding.thumbnail.load(item.manga)
     }
 }

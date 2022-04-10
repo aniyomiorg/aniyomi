@@ -138,7 +138,7 @@ class AnimeDownloadProvider(private val context: Context) {
             when {
                 episode.scanlator != null -> "${episode.scanlator}_${episode.name}"
                 else -> episode.name
-            }
+            },
         )
     }
 
@@ -152,7 +152,7 @@ class AnimeDownloadProvider(private val context: Context) {
             getEpisodeDirName(episode),
             // TODO: remove this
             // Legacy episode directory name used in v0.9.2 and before
-            DiskUtil.buildValidFilename(episode.name)
+            DiskUtil.buildValidFilename(episode.name),
         )
     }
 }

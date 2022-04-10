@@ -43,7 +43,7 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
      */
     @Deprecated(
         "Use the 1.x API instead",
-        ReplaceWith("getAnimeDetails")
+        ReplaceWith("getAnimeDetails"),
     )
     fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> = throw IllegalStateException("Not used")
 
@@ -54,7 +54,7 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
      */
     @Deprecated(
         "Use the 1.x API instead",
-        ReplaceWith("getEpisodeList")
+        ReplaceWith("getEpisodeList"),
     )
     fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> = throw IllegalStateException("Not used")
 
@@ -65,7 +65,7 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
      */
     @Deprecated(
         "Use the 1.x API instead",
-        ReplaceWith("getVideoList")
+        ReplaceWith("getVideoList"),
     )
     fun fetchVideoList(episode: SEpisode): Observable<List<Video>> = Observable.empty()
 

@@ -7,7 +7,7 @@ import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 
 abstract class BaseEpisodeItem<T : BaseEpisodeHolder, H : AbstractHeaderItem<*>>(
     val episode: Episode,
-    header: H? = null
+    header: H? = null,
 ) :
     AbstractSectionableItem<T, H?>(header),
     Episode by episode {

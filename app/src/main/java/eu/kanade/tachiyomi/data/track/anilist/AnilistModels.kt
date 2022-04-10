@@ -18,7 +18,7 @@ data class ALManga(
     val format: String,
     val publishing_status: String,
     val start_date_fuzzy: Long,
-    val total_chapters: Int
+    val total_chapters: Int,
 ) {
 
     fun toTrack() = TrackSearch.create(TrackManager.ANILIST).apply {
@@ -49,7 +49,7 @@ data class ALAnime(
     val format: String,
     val publishing_status: String,
     val start_date_fuzzy: Long,
-    val total_episodes: Int
+    val total_episodes: Int,
 ) {
 
     fun toTrack() = AnimeTrackSearch.create(TrackManager.ANILIST).apply {
@@ -79,7 +79,7 @@ data class ALUserManga(
     val chapters_read: Int,
     val start_date_fuzzy: Long,
     val completed_date_fuzzy: Long,
-    val manga: ALManga
+    val manga: ALManga,
 ) {
 
     fun toTrack() = Track.create(TrackManager.ANILIST).apply {
@@ -112,7 +112,7 @@ data class ALUserAnime(
     val episodes_seen: Int,
     val start_date_fuzzy: Long,
     val completed_date_fuzzy: Long,
-    val anime: ALAnime
+    val anime: ALAnime,
 ) {
 
     fun toTrack() = AnimeTrack.create(TrackManager.ANILIST).apply {

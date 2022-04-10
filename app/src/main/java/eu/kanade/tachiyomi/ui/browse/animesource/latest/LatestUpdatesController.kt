@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourcePresent
 class LatestUpdatesController(bundle: Bundle) : BrowseAnimeSourceController(bundle) {
 
     constructor(source: AnimeCatalogueSource) : this(
-        bundleOf(SOURCE_ID_KEY to source.id)
+        bundleOf(SOURCE_ID_KEY to source.id),
     )
 
     override fun createPresenter(): BrowseAnimeSourcePresenter {

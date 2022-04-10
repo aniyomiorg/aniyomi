@@ -38,10 +38,10 @@ internal class AnimeExtensionGithubApi {
         }
     }
 
-    suspend fun checkForUpdates(context: Context): List<AnimeExtension.Installed> {
+    suspend fun checkForUpdates(context: Context): List<AnimeExtension.Installed>? {
         // Limit checks to once a day at most
         if (Date().time < preferences.lastAnimeExtCheck().get() + TimeUnit.DAYS.toMillis(1)) {
-            return emptyList()
+            return null
         }
 
         val extensions = findExtensions()
@@ -80,8 +80,11 @@ internal class AnimeExtensionGithubApi {
                     versionCode = it.code,
                     lang = it.lang,
                     isNsfw = it.nsfw == 1,
+                    // need to implement new extension stuff
+                    hasReadme = false,
+                    hasChangelog = false,
                     apkName = it.apk,
-                    iconUrl = "${REPO_URL_PREFIX}icon/${it.apk.replace(".apk", ".png")}"
+                    iconUrl = "${REPO_URL_PREFIX}icon/${it.apk.replace(".apk", ".png")}",
                 )
             }
     }

@@ -64,10 +64,10 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                     "${baseUrl}library-entries",
                     headers = headersOf(
                         "Content-Type",
-                        "application/vnd.api+json"
+                        "application/vnd.api+json",
                     ),
-                    body = data.toString().toRequestBody("application/vnd.api+json".toMediaType())
-                )
+                    body = data.toString().toRequestBody("application/vnd.api+json".toMediaType()),
+                ),
             )
                 .await()
                 .parseAs<JsonObject>()
@@ -109,10 +109,10 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                     "${baseUrl}library-entries",
                     headers = headersOf(
                         "Content-Type",
-                        "application/vnd.api+json"
+                        "application/vnd.api+json",
                     ),
-                    body = data.toString().toRequestBody("application/vnd.api+json".toMediaType())
-                )
+                    body = data.toString().toRequestBody("application/vnd.api+json".toMediaType()),
+                ),
             )
                 .await()
                 .parseAs<JsonObject>()
@@ -145,11 +145,11 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                     .headers(
                         headersOf(
                             "Content-Type",
-                            "application/vnd.api+json"
-                        )
+                            "application/vnd.api+json",
+                        ),
                     )
                     .patch(data.toString().toRequestBody("application/vnd.api+json".toMediaType()))
-                    .build()
+                    .build(),
             )
                 .await()
                 .parseAs<JsonObject>()
@@ -181,11 +181,11 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                     .headers(
                         headersOf(
                             "Content-Type",
-                            "application/vnd.api+json"
-                        )
+                            "application/vnd.api+json",
+                        ),
                     )
                     .patch(data.toString().toRequestBody("application/vnd.api+json".toMediaType()))
-                    .build()
+                    .build(),
             )
                 .await()
                 .parseAs<JsonObject>()
@@ -234,8 +234,8 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                         "X-Algolia-API-Key",
                         key,
                     ),
-                    body = jsonObject.toString().toRequestBody(jsonMime)
-                )
+                    body = jsonObject.toString().toRequestBody(jsonMime),
+                ),
             )
                 .await()
                 .parseAs<JsonObject>()
@@ -263,8 +263,8 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                         "X-Algolia-API-Key",
                         key,
                     ),
-                    body = jsonObject.toString().toRequestBody(jsonMime)
-                )
+                    body = jsonObject.toString().toRequestBody(jsonMime),
+                ),
             )
                 .await()
                 .parseAs<JsonObject>()
@@ -425,7 +425,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                 .add("refresh_token", token)
                 .add("client_id", clientId)
                 .add("client_secret", clientSecret)
-                .build()
+                .build(),
         )
     }
 }

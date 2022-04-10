@@ -75,8 +75,8 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
             authClient.newCall(
                 POST(
                     "$apiUrl/subject/${track.media_id}/update/watched_eps",
-                    body = body
-                )
+                    body = body,
+                ),
             ).await()
 
             track
@@ -100,8 +100,8 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
             authClient.newCall(
                 POST(
                     "$apiUrl/subject/${track.media_id}/update/watched_eps",
-                    body = body
-                )
+                    body = body,
+                ),
             ).await()
 
             track
@@ -290,7 +290,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
             .add("client_secret", clientSecret)
             .add("code", code)
             .add("redirect_uri", redirectUrl)
-            .build()
+            .build(),
     )
 
     companion object {
@@ -323,7 +323,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
                 .add("client_secret", clientSecret)
                 .add("refresh_token", token)
                 .add("redirect_uri", redirectUrl)
-                .build()
+                .build(),
         )
     }
 }

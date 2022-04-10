@@ -19,7 +19,7 @@ import eu.kanade.tachiyomi.ui.browse.migration.AnimeMigrationFlags
 import uy.kohesive.injekt.injectLazy
 
 class AnimeSearchController(
-    private var anime: Anime? = null
+    private var anime: Anime? = null,
 ) : GlobalAnimeSearchController(anime?.title) {
 
     private var newAnime: Anime? = null
@@ -27,7 +27,7 @@ class AnimeSearchController(
     override fun createPresenter(): GlobalAnimeSearchPresenter {
         return AnimeSearchPresenter(
             initialQuery,
-            anime!!
+            anime!!,
         )
     }
 
@@ -76,7 +76,7 @@ class AnimeSearchController(
             router.popController(this)
             if (newAnime != null) {
                 val newAnimeController = RouterTransaction.with(AnimeController(newAnime))
-                if (router.backstack.last().controller is AnimeController) {
+                if (router.backstack.lastOrNull()?.controller is AnimeController) {
                     // Replace old AnimeController
                     router.replaceTopController(newAnimeController)
                 } else {
@@ -121,7 +121,7 @@ class AnimeSearchController(
                     }
                     (targetController as? AnimeSearchController)?.migrateAnime(anime, newAnime)
                 }
-                .setNegativeButton(R.string.copy) { _, _, ->
+                .setNegativeButton(R.string.copy) { _, _ ->
                     if (callingController != null) {
                         if (callingController.javaClass == AnimeSourceSearchController::class.java) {
                             router.popController(callingController)

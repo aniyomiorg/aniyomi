@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.ui.recent.animehistory
 
 import android.view.View
-import coil.clear
-import coil.loadAny
+import coil.dispose
+import coil.load
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.AnimeEpisodeHistory
@@ -21,7 +21,7 @@ import java.util.Date
  */
 class AnimeHistoryHolder(
     view: View,
-    val adapter: AnimeHistoryAdapter
+    val adapter: AnimeHistoryAdapter,
 ) : FlexibleViewHolder(view, adapter) {
 
     private val binding = HistoryItemBinding.bind(view)
@@ -58,14 +58,14 @@ class AnimeHistoryHolder(
             binding.mangaSubtitle.text = itemView.context.getString(
                 R.string.recent_anime_time,
                 formattedNumber,
-                Date(animehistory.last_seen).toTimestampString()
+                Date(animehistory.last_seen).toTimestampString(),
             )
         } else {
             binding.mangaSubtitle.text = Date(animehistory.last_seen).toTimestampString()
         }
 
         // Set cover
-        binding.cover.clear()
-        binding.cover.loadAny(item.anime)
+        binding.cover.dispose()
+        binding.cover.load(item.anime)
     }
 }

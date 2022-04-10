@@ -93,13 +93,13 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                 addAction(
                     R.drawable.ic_pause_24dp,
                     context.getString(R.string.action_pause),
-                    NotificationReceiver.pauseAnimeDownloadsPendingBroadcast(context)
+                    NotificationReceiver.pauseAnimeDownloadsPendingBroadcast(context),
                 )
             }
 
             val downloadingProgressText = context.getString(
                 R.string.episode_downloading_progress,
-                download.progress
+                download.progress,
             )
 
             if (preferences.hideNotificationContent()) {
@@ -137,13 +137,13 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             addAction(
                 R.drawable.ic_play_arrow_24dp,
                 context.getString(R.string.action_resume),
-                NotificationReceiver.resumeAnimeDownloadsPendingBroadcast(context)
+                NotificationReceiver.resumeAnimeDownloadsPendingBroadcast(context),
             )
             // Clear action
             addAction(
                 R.drawable.ic_close_24dp,
                 context.getString(R.string.action_cancel_all),
-                NotificationReceiver.clearAnimeDownloadsPendingBroadcast(context)
+                NotificationReceiver.clearAnimeDownloadsPendingBroadcast(context),
             )
 
             show(Notifications.ID_DOWNLOAD_EPISODE_PROGRESS)
@@ -212,7 +212,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
         // Create notification
         with(errorNotificationBuilder) {
             setContentTitle(
-                animeTitle?.plus(": $episode") ?: context.getString(R.string.download_notifier_downloader_title)
+                animeTitle?.plus(": $episode") ?: context.getString(R.string.download_notifier_downloader_title),
             )
             setContentText(error ?: context.getString(R.string.download_notifier_unknown_error))
             setSmallIcon(R.drawable.ic_warning_white_24dp)

@@ -19,7 +19,7 @@ import eu.kanade.tachiyomi.extension.model.InstallStep
 data class AnimeExtensionItem(
     val extension: AnimeExtension,
     val header: AnimeExtensionGroupItem? = null,
-    val installStep: InstallStep = InstallStep.Idle
+    val installStep: InstallStep = InstallStep.Idle,
 ) :
     AbstractSectionableItem<AnimeExtensionHolder, AnimeExtensionGroupItem>(header) {
 
@@ -44,7 +44,7 @@ data class AnimeExtensionItem(
         adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
         holder: AnimeExtensionHolder,
         position: Int,
-        payloads: List<Any?>?
+        payloads: List<Any?>?,
     ) {
         if (payloads == null || payloads.isEmpty()) {
             holder.bind(this)

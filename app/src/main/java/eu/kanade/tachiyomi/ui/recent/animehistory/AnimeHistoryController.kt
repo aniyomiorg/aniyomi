@@ -28,6 +28,7 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.onAnimationsFinished
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -148,7 +149,7 @@ class AnimeHistoryController :
             return
         }
         val adapter = adapter ?: return
-        presenter.requestNext(adapter.itemCount, query)
+        presenter.requestNext(adapter.itemCount - adapter.headerItems.size, query)
     }
 
     override fun noMoreLoad(newItemsSize: Int) {}
@@ -197,6 +198,7 @@ class AnimeHistoryController :
             searchView.clearFocus()
         }
         searchView.queryTextChanges()
+            .drop(1) // Drop first event after subscribed
             .filter { router.backstack.lastOrNull()?.controller == this }
             .onEach {
                 query = it.toString()
@@ -206,7 +208,7 @@ class AnimeHistoryController :
 
         // Fixes problem with the overflow icon showing up in lieu of search
         searchItem.fixExpand(
-            onExpand = { invalidateMenuOnExpand() }
+            onExpand = { invalidateMenuOnExpand() },
         )
     }
 

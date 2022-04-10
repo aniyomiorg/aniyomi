@@ -19,7 +19,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.WebviewActivityBinding
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
-import eu.kanade.tachiyomi.ui.base.activity.BaseViewBindingActivity
+import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.util.system.WebViewClientCompat
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.getResourceColor
@@ -32,7 +32,9 @@ import reactivecircus.flowbinding.appcompat.navigationClicks
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
 import uy.kohesive.injekt.injectLazy
 
-class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
+class WebViewActivity : BaseActivity() {
+
+    private lateinit var binding: WebviewActivityBinding
 
     private val sourceManager: SourceManager by injectLazy()
 
@@ -103,7 +105,6 @@ class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
                 headers = source.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }.toMutableMap()
                 binding.webview.settings.userAgentString = source.headers["User-Agent"]
             }
-            headers["X-Requested-With"] = WebViewUtil.REQUESTED_WITH
 
             supportActionBar?.subtitle = url
 
@@ -151,16 +152,19 @@ class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
         return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        val backItem = menu?.findItem(R.id.action_web_back)
-        val forwardItem = menu?.findItem(R.id.action_web_forward)
-        backItem?.isEnabled = binding.webview.canGoBack()
-        forwardItem?.isEnabled = binding.webview.canGoForward()
-
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val iconTintColor = getResourceColor(R.attr.colorOnSurface)
         val translucentIconTintColor = ColorUtils.setAlphaComponent(iconTintColor, 127)
-        backItem?.icon?.setTint(if (binding.webview.canGoBack()) iconTintColor else translucentIconTintColor)
-        forwardItem?.icon?.setTint(if (binding.webview.canGoForward()) iconTintColor else translucentIconTintColor)
+
+        menu.findItem(R.id.action_web_back).apply {
+            isEnabled = binding.webview.canGoBack()
+            icon.setTint(if (binding.webview.canGoBack()) iconTintColor else translucentIconTintColor)
+        }
+
+        menu.findItem(R.id.action_web_forward).apply {
+            isEnabled = binding.webview.canGoForward()
+            icon.setTint(if (binding.webview.canGoForward()) iconTintColor else translucentIconTintColor)
+        }
 
         return super.onPrepareOptionsMenu(menu)
     }
@@ -200,7 +204,11 @@ class WebViewActivity : BaseViewBindingActivity<WebviewActivityBinding>() {
     }
 
     private fun openInBrowser() {
-        openInBrowser(binding.webview.url!!)
+        openInBrowser(binding.webview.url!!, forceDefaultBrowser = true)
+    }
+
+    init {
+        registerSecureActivity(this)
     }
 
     companion object {

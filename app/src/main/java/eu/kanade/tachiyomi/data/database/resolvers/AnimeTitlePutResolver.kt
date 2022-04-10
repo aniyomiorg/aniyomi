@@ -27,6 +27,6 @@ class AnimeTitlePutResolver : PutResolver<Anime>() {
 
     fun mapToContentValues(anime: Anime) =
         contentValuesOf(
-            AnimeTable.COL_TITLE to anime.title
+            AnimeTable.COL_TITLE to anime.title,
         )
 }

@@ -43,7 +43,7 @@ class GlobalAnimeSearchItem(val source: AnimeCatalogueSource, val results: List<
         adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
         holder: GlobalAnimeSearchHolder,
         position: Int,
-        payloads: List<Any?>?
+        payloads: List<Any?>?,
     ) {
         holder.bind(this)
     }

@@ -32,7 +32,7 @@ class SettingsGeneralController : SettingsController() {
                 R.string.label_animelib,
                 R.string.label_manga,
                 R.string.label_recent_updates,
-                R.string.browse
+                R.string.browse,
             )
             entryValues = arrayOf("1", "2", "3", "4")
             defaultValue = "1"
@@ -70,7 +70,7 @@ class SettingsGeneralController : SettingsController() {
                 val langs = mutableListOf<Pair<String, String>>()
                 langs += Pair(
                     "",
-                    "${context.getString(R.string.system_default)} (${LocaleHelper.getDisplayName("")})"
+                    "${context.getString(R.string.system_default)} (${LocaleHelper.getDisplayName("")})",
                 )
                 // Due to compatibility issues:
                 // - Hebrew: `he` is copied into `iw` at build time
@@ -131,7 +131,7 @@ class SettingsGeneralController : SettingsController() {
                     "vi",
                     "uz",
                     "zh-rCN",
-                    "zh-rTW"
+                    "zh-rTW",
                 )
                     .map {
                         Pair(it, LocaleHelper.getDisplayName(it))

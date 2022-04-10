@@ -26,7 +26,7 @@ class MigrationSourcesPresenter(
     private val sourceManager: SourceManager = Injekt.get(),
     private val animesourceManager: AnimeSourceManager = Injekt.get(),
     private val db: DatabaseHelper = Injekt.get(),
-    private val animedb: AnimeDatabaseHelper = Injekt.get()
+    private val animedb: AnimeDatabaseHelper = Injekt.get(),
 ) : BasePresenter<MigrationSourcesController>() {
 
     private val preferences: PreferencesHelper by injectLazy()

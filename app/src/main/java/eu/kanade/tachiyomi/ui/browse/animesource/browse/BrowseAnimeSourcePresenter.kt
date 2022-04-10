@@ -62,7 +62,7 @@ open class BrowseAnimeSourcePresenter(
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val db: AnimeDatabaseHelper = Injekt.get(),
     private val prefs: PreferencesHelper = Injekt.get(),
-    private val coverCache: AnimeCoverCache = Injekt.get()
+    private val coverCache: AnimeCoverCache = Injekt.get(),
 ) : BasePresenter<BrowseAnimeSourceController>() {
 
     /**
@@ -157,7 +157,7 @@ open class BrowseAnimeSourcePresenter(
                 },
                 { _, error ->
                     logcat(LogPriority.ERROR, error)
-                }
+                },
             )
 
         // Request first page.

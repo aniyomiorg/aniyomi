@@ -30,13 +30,6 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      */
     protected val network: NetworkHelper by injectLazy()
 
-//    /**
-//     * Preferences that a source may need.
-//     */
-//    val preferences: SharedPreferences by lazy {
-//        Injekt.get<Application>().getSharedPreferences(source.getPreferenceKey(), Context.MODE_PRIVATE)
-//    }
-
     /**
      * Base url of the website without the trailing slash, like: http://mysite.com
      */
@@ -119,8 +112,15 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param filters the list of filters to apply.
      */
     override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
-        return client.newCall(searchAnimeRequest(page, query, filters))
-            .asObservableSuccess()
+        return Observable.defer {
+            try {
+                client.newCall(searchAnimeRequest(page, query, filters)).asObservableSuccess()
+            } catch (e: NoClassDefFoundError) {
+                // RxJava doesn't handle Errors, which tends to happen during global searches
+                // if an old extension using non-existent classes is still around
+                throw RuntimeException(e)
+            }
+        }
             .map { response ->
                 searchAnimeParse(response)
             }

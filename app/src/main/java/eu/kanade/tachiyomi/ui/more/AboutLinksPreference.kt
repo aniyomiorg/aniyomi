@@ -35,7 +35,7 @@ class AboutLinksPreference @JvmOverloads constructor(context: Context, attrs: At
             setTooltip(contentDescription.toString())
             setOnClickListener { context.openInBrowser("https://facebook.com/tachiyomiorg") }
         }
-        */
+         */
         holder.findViewById(R.id.btn_reddit).apply {
             setTooltip(contentDescription.toString())
             setOnClickListener { context.openInBrowser("https://www.reddit.com/r/Aniyomi") }

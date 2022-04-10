@@ -13,6 +13,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.model.AnimeLoadResult
 import eu.kanade.tachiyomi.util.lang.Hash
+import eu.kanade.tachiyomi.util.system.getApplicationIcon
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -34,6 +35,8 @@ internal object AnimeExtensionLoader {
     private const val METADATA_SOURCE_CLASS = "tachiyomi.animeextension.class"
     private const val METADATA_SOURCE_FACTORY = "tachiyomi.animeextension.factory"
     private const val METADATA_NSFW = "tachiyomi.animeextension.nsfw"
+    private const val METADATA_HAS_README = "tachiyomi.animeextension.hasReadme"
+    private const val METADATA_HAS_CHANGELOG = "tachiyomi.animeextension.hasChangelog"
     const val LIB_VERSION_MIN = 12
     const val LIB_VERSION_MAX = 14
 
@@ -116,7 +119,7 @@ internal object AnimeExtensionLoader {
         if (libVersion < LIB_VERSION_MIN || libVersion > LIB_VERSION_MAX) {
             val exception = Exception(
                 "Lib version is $libVersion, while only versions " +
-                    "$LIB_VERSION_MIN to $LIB_VERSION_MAX are allowed"
+                    "$LIB_VERSION_MIN to $LIB_VERSION_MAX are allowed",
             )
             logcat(LogPriority.WARN, exception)
             return AnimeLoadResult.Error(exception)
@@ -136,6 +139,9 @@ internal object AnimeExtensionLoader {
         if (!loadNsfwSource && isNsfw) {
             return AnimeLoadResult.Error("NSFW extension $pkgName not allowed")
         }
+
+        val hasReadme = appInfo.metaData.getInt(METADATA_HAS_README, 0) == 1
+        val hasChangelog = appInfo.metaData.getInt(METADATA_HAS_CHANGELOG, 0) == 1
 
         val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
 
@@ -178,9 +184,12 @@ internal object AnimeExtensionLoader {
             versionCode,
             lang,
             isNsfw,
+            hasReadme,
+            hasChangelog,
             sources = sources,
             pkgFactory = appInfo.metaData.getString(METADATA_SOURCE_FACTORY),
-            isUnofficial = signatureHash != officialSignature
+            isUnofficial = signatureHash != officialSignature,
+            icon = context.getApplicationIcon(pkgName),
         )
         return AnimeLoadResult.Success(extension)
     }

@@ -13,7 +13,7 @@ data class AnimeInfo(
     val description: String = "",
     val genres: List<String> = emptyList(),
     val status: Int = UNKNOWN,
-    val cover: String = ""
+    val cover: String = "",
 ) {
 
     companion object {

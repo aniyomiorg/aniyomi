@@ -45,7 +45,7 @@ open class AnimeSourceManager(private val context: Context) {
     }
 
     private fun createInternalSources(): List<AnimeSource> = listOf(
-        LocalAnimeSource(context)
+        LocalAnimeSource(context),
     )
 
     inner class StubSource(override val id: Long) : AnimeSource {

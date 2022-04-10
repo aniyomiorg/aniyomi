@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.view.clicks
 
 class AnimeEpisodesHeaderAdapter(
-    private val controller: AnimeController
+    private val controller: AnimeController,
 ) :
     RecyclerView.Adapter<AnimeEpisodesHeaderAdapter.HeaderViewHolder>() {
 

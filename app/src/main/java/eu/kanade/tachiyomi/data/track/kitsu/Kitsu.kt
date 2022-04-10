@@ -43,7 +43,7 @@ class Kitsu(private val context: Context, id: Int) : TrackService(id) {
     override fun getLogoColor() = Color.rgb(51, 37, 50)
 
     override fun getStatusList(): List<Int> {
-        return listOf(READING, PLAN_TO_READ, COMPLETED, ON_HOLD, DROPPED)
+        return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_READ)
     }
 
     override fun getStatusListAnime(): List<Int> {

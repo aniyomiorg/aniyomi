@@ -25,7 +25,7 @@ import eu.kanade.tachiyomi.R as TR
 open class SimpleNavigationView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     /**
@@ -40,7 +40,7 @@ open class SimpleNavigationView @JvmOverloads constructor(
             attrs,
             R.styleable.NavigationView,
             defStyleAttr,
-            R.style.Widget_Design_NavigationView
+            R.style.Widget_Design_NavigationView,
         )
 
         a.recycle()

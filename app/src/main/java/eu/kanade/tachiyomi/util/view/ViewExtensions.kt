@@ -4,7 +4,9 @@ package eu.kanade.tachiyomi.util.view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Point
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import android.view.Gravity
@@ -50,7 +52,7 @@ fun View.getCoordinates() = Point((left + right) / 2, (top + bottom) / 2)
 inline fun View.snack(
     message: String,
     length: Int = 10_000,
-    f: Snackbar.() -> Unit = {}
+    f: Snackbar.() -> Unit = {},
 ): Snackbar {
     val snack = Snackbar.make(this, message, length)
     snack.f()
@@ -86,7 +88,7 @@ inline fun View.setTooltip(text: String) {
 inline fun View.popupMenu(
     @MenuRes menuRes: Int,
     noinline initMenu: (Menu.() -> Unit)? = null,
-    noinline onMenuItemClick: MenuItem.() -> Unit
+    noinline onMenuItemClick: MenuItem.() -> Unit,
 ): PopupMenu {
     val popup = PopupMenu(context, this, Gravity.NO_GRAVITY, R.attr.actionOverflowMenuStyle, 0)
     popup.menuInflater.inflate(menuRes, popup.menu)
@@ -114,7 +116,7 @@ inline fun View.popupMenu(
 inline fun View.popupMenu(
     items: List<Pair<Int, Int>>,
     selectedItemId: Int? = null,
-    noinline onMenuItemClick: MenuItem.() -> Unit
+    noinline onMenuItemClick: MenuItem.() -> Unit,
 ): PopupMenu {
     val popup = PopupMenu(context, this, Gravity.NO_GRAVITY, R.attr.actionOverflowMenuStyle, 0)
     items.forEach { (id, stringRes) ->
@@ -172,7 +174,7 @@ inline fun ExtendedFloatingActionButton.shrinkOnScroll(recycler: RecyclerView): 
 inline fun ChipGroup.setChips(
     items: List<String>?,
     noinline onClick: ((item: String) -> Unit)? = null,
-    noinline onLongClick: ((item: String) -> Unit)? = null
+    noinline onLongClick: ((item: String) -> Unit)? = null,
 ) {
     removeAllViews()
 
@@ -209,7 +211,7 @@ fun RecyclerView.onAnimationsFinished(callback: (RecyclerView) -> Unit) = post(
                 callback(this@onAnimationsFinished)
             }
         }
-    }
+    },
 )
 
 /**
@@ -258,4 +260,17 @@ inline fun <reified T : Drawable> T.copy(context: Context): T? {
             initializeElevationOverlay(context)
         }
     }
+}
+
+fun View?.isVisibleOnScreen(): Boolean {
+    if (this == null) {
+        return false
+    }
+    if (!this.isShown) {
+        return false
+    }
+    val actualPosition = Rect()
+    this.getGlobalVisibleRect(actualPosition)
+    val screen = Rect(0, 0, Resources.getSystem().displayMetrics.widthPixels, Resources.getSystem().displayMetrics.heightPixels)
+    return actualPosition.intersect(screen)
 }

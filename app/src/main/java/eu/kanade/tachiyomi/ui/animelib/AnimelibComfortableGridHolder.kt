@@ -1,29 +1,26 @@
 package eu.kanade.tachiyomi.ui.animelib
 
-import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import coil.clear
+import coil.dispose
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.databinding.SourceComfortableGridItemBinding
-import eu.kanade.tachiyomi.util.view.loadAnyAutoPause
+import eu.kanade.tachiyomi.util.view.loadAutoPause
 
 /**
  * Class used to hold the displayed data of a anime in the animelib, like the cover or the title.
  * All the elements from the layout file "item_source_grid" are available in this class.
  *
- * @param view the inflated view for this holder.
+ * @param binding the inflated view for this holder.
  * @param adapter the adapter handling this holder.
  * @param listener a listener to react to single tap and long tap events.
  * @constructor creates a new animelib holder.
  */
 class AnimelibComfortableGridHolder(
-    private val view: View,
-    adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>
-) : AnimelibHolder<SourceComfortableGridItemBinding>(view, adapter) {
-
-    override val binding = SourceComfortableGridItemBinding.bind(view)
+    override val binding: SourceComfortableGridItemBinding,
+    adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
+) : AnimelibHolder<SourceComfortableGridItemBinding>(binding.root, adapter) {
 
     /**
      * Method called from [AnimelibCategoryAdapter.onBindViewHolder]. It updates the data for this
@@ -57,11 +54,8 @@ class AnimelibComfortableGridHolder(
         // set local visibility if its local anime
         binding.badges.localText.isVisible = item.isLocal
 
-        // For rounded corners
-        binding.card.clipToOutline = true
-
         // Update the cover.
-        binding.thumbnail.clear()
-        binding.thumbnail.loadAnyAutoPause(item.anime)
+        binding.thumbnail.dispose()
+        binding.thumbnail.loadAutoPause(item.anime)
     }
 }

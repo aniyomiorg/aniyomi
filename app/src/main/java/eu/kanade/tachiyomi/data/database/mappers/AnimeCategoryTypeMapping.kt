@@ -18,7 +18,7 @@ import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable.TABLE
 class AnimeCategoryTypeMapping : SQLiteTypeMapping<AnimeCategory>(
     AnimeCategoryPutResolver(),
     AnimeCategoryGetResolver(),
-    AnimeCategoryDeleteResolver()
+    AnimeCategoryDeleteResolver(),
 )
 
 class AnimeCategoryPutResolver : DefaultPutResolver<AnimeCategory>() {
@@ -37,7 +37,7 @@ class AnimeCategoryPutResolver : DefaultPutResolver<AnimeCategory>() {
         contentValuesOf(
             COL_ID to obj.id,
             COL_ANIME_ID to obj.anime_id,
-            COL_CATEGORY_ID to obj.category_id
+            COL_CATEGORY_ID to obj.category_id,
         )
 }
 

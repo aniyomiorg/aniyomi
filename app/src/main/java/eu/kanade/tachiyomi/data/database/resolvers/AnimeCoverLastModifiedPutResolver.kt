@@ -27,6 +27,6 @@ class AnimeCoverLastModifiedPutResolver : PutResolver<Anime>() {
 
     fun mapToContentValues(anime: Anime) =
         contentValuesOf(
-            AnimeTable.COL_COVER_LAST_MODIFIED to anime.cover_last_modified
+            AnimeTable.COL_COVER_LAST_MODIFIED to anime.cover_last_modified,
         )
 }

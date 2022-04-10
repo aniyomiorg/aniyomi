@@ -27,7 +27,7 @@ private typealias AnimeExtensionTuple =
 open class AnimeExtensionPresenter(
     private val context: Context,
     private val extensionManager: AnimeExtensionManager = Injekt.get(),
-    private val preferences: PreferencesHelper = Injekt.get()
+    private val preferences: PreferencesHelper = Injekt.get(),
 ) : BasePresenter<AnimeExtensionController>() {
 
     private var extensions = emptyList<AnimeExtensionItem>()
@@ -48,7 +48,7 @@ open class AnimeExtensionPresenter(
             .startWith(emptyList<AnimeExtension.Available>())
 
         return Observable.combineLatest(installedObservable, untrustedObservable, availableObservable) { installed, untrusted, available -> Triple(installed, untrusted, available) }
-            .debounce(100, TimeUnit.MILLISECONDS)
+            .debounce(500, TimeUnit.MILLISECONDS)
             .map(::toItems)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeLatestCache({ view, _ -> view.setExtensions(extensions) })
@@ -64,15 +64,15 @@ open class AnimeExtensionPresenter(
         val items = mutableListOf<AnimeExtensionItem>()
 
         val updatesSorted = installed.filter { it.hasUpdate && (showNsfwSources || !it.isNsfw) }
-            .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, { it.name }))
+            .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
 
         val installedSorted = installed.filter { !it.hasUpdate && (showNsfwSources || !it.isNsfw) }
             .sortedWith(
                 compareBy<AnimeExtension.Installed> { !it.isObsolete }
-                    .thenBy(String.CASE_INSENSITIVE_ORDER) { it.name }
+                    .thenBy(String.CASE_INSENSITIVE_ORDER) { it.name },
             )
 
-        val untrustedSorted = untrusted.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, { it.name }))
+        val untrustedSorted = untrusted.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
 
         val availableSorted = available
             // Filter out already installed extensions and disabled languages
@@ -82,7 +82,7 @@ open class AnimeExtensionPresenter(
                     avail.lang in activeLangs &&
                     (showNsfwSources || !avail.isNsfw)
             }
-            .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER, { it.name }))
+            .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
 
         if (updatesSorted.isNotEmpty()) {
             val header = AnimeExtensionGroupItem(context.getString(R.string.ext_updates_pending), updatesSorted.size, true)
@@ -163,7 +163,7 @@ open class AnimeExtensionPresenter(
                 if (item != null) {
                     view.downloadUpdate(item)
                 }
-            })
+            },)
     }
 
     fun uninstallExtension(pkgName: String) {

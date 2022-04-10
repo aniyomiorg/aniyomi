@@ -33,7 +33,7 @@ class AnimeFullCoverDialog : DialogController {
     private var disposable: Disposable? = null
 
     private val animeController
-        get() = targetController as AnimeController
+        get() = targetController as AnimeController?
 
     constructor(targetController: AnimeController, anime: Anime) : super(bundleOf("animeId" to anime.id)) {
         this.targetController = targetController
@@ -53,9 +53,9 @@ class AnimeFullCoverDialog : DialogController {
             setNavigationOnClickListener { dialog?.dismiss() }
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.action_share_cover -> animeController.shareCover()
-                    R.id.action_save_cover -> animeController.saveCover()
-                    R.id.action_edit_cover -> animeController.changeCover()
+                    R.id.action_share_cover -> animeController?.shareCover()
+                    R.id.action_save_cover -> animeController?.saveCover()
+                    R.id.action_edit_cover -> animeController?.changeCover()
                 }
                 true
             }
@@ -107,8 +107,8 @@ class AnimeFullCoverDialog : DialogController {
                 binding?.container?.setImage(
                     it,
                     ReaderPageImageView.Config(
-                        zoomDuration = 500
-                    )
+                        zoomDuration = 500,
+                    ),
                 )
             }
             .build()

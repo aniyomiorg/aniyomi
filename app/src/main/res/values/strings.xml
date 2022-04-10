@@ -51,6 +51,7 @@
     <string name="action_filter_tracked">Tracked</string>
     <string name="action_filter_unread">Unread</string>
     <string name="action_filter_unseen">Unseen</string>
+    <string name="action_filter_started">Started</string>
     <string name="action_filter_empty">Remove filter</string>
     <string name="action_sort_alpha">Alphabetically</string>
     <string name="action_sort_count">Total manga</string>
@@ -111,6 +112,8 @@
     <string name="action_start">Start</string>
     <string name="action_resume">Resume</string>
     <string name="action_open_in_browser">Open in browser</string>
+    <string name="action_show_manga">Show manga</string>
+    <string name="action_show_anime">Show anime</string>
     <!-- Do not translate "WebView" -->
     <string name="action_open_in_web_view">Open in WebView</string>
     <string name="action_web_view" translatable="false">WebView</string>
@@ -120,6 +123,7 @@
     <string name="action_display_grid">Compact grid</string>
     <string name="action_display_comfortable_grid">Comfortable grid</string>
     <string name="action_display_list">List</string>
+    <string name="action_display_cover_only_grid">Cover-only grid</string>
     <string name="action_display_download_badge">Downloaded chapters</string>
     <string name="action_display_download_badge_anime">Downloaded episodes</string>
     <string name="action_display_unread_badge">Unread chapters</string>
@@ -144,6 +148,7 @@
     <string name="action_asc">Ascending</string>
     <string name="action_desc">Descending</string>
     <string name="action_move_to_top">Move to top</string>
+    <string name="action_move_to_top_all_for_series">Move series to top</string>
     <string name="action_move_to_bottom">Move to bottom</string>
     <string name="action_install">Install</string>
     <string name="action_share">Share</string>
@@ -151,7 +156,7 @@
     <string name="action_reset">Reset</string>
     <string name="action_undo">Undo</string>
     <string name="action_open_log">Open log</string>
-    <string name="action_show_errors">Tap to see error details</string>
+    <string name="action_show_errors">Tap to see details</string>
     <string name="action_create">Create</string>
     <string name="action_restore">Restore</string>
     <string name="action_webview_back">Back</string>
@@ -160,6 +165,7 @@
     <string name="action_start_downloading_now">Start downloading now</string>
     <string name="action_start_download_externally">Use external downloader</string>
     <string name="action_start_download_internally">Use internal downloader</string>
+    <string name="action_faq_and_guides">FAQ and Guides</string>
 
     <!-- Operations -->
     <string name="loading">Loading…</string>
@@ -219,12 +225,12 @@
     <string name="lock_always">Always</string>
     <string name="lock_never">Never</string>
     <plurals name="lock_after_mins">
-        <item quantity="one">After 1 minute</item>
+        <item quantity="one">After %1$s minute</item>
         <item quantity="other">After %1$s minutes</item>
     </plurals>
-    <string name="secure_screen">Secure screen</string>
-    <string name="secure_screen_summary">Hide app contents when switching apps and block screenshots</string>
     <string name="hide_notification_content">Hide notification content</string>
+    <string name="secure_screen">Secure screen</string>
+    <string name="secure_screen_summary">Secure screen hides app contents when switching apps and block screenshots</string>
 
     <string name="pref_category_nsfw_content">NSFW (18+) sources</string>
     <string name="pref_show_nsfw_source">Show in sources and extensions lists</string>
@@ -257,11 +263,13 @@
     <string name="connected_to_wifi">Only on Wi-Fi</string>
     <string name="charging">Charging</string>
     <string name="restrictions">Restrictions: %s</string>
-    <string name="pref_update_only_non_completed">Only update ongoing series</string>
-    <string name="pref_library_update_show_tab_badge">Show unread/unseen count on Updates icon</string>
-    <string name="pref_library_update_manga_restriction">Library update restrictions</string>
     <string name="only_update_restrictions">Only update: %s</string>
-    <string name="pref_update_only_completely_read">Completely read/seen series</string>
+
+    <string name="pref_library_update_manga_restriction">Skip updating</string>
+    <string name="pref_update_only_completely_read">Has unseen episodes/unread chapters</string>
+    <string name="pref_update_only_non_completed">Is completed series</string>
+    <string name="pref_update_only_started">No seen episodes/read chapters</string>
+    <string name="pref_library_update_show_tab_badge">Show unread/unseen count on Updates icon</string>
     <string name="pref_library_update_refresh_metadata">Automatically refresh metadata</string>
     <string name="pref_library_update_refresh_metadata_summary">Check for new cover and details when updating library</string>
     <string name="pref_library_update_refresh_trackers">Automatically refresh trackers</string>
@@ -400,6 +408,7 @@
     <string name="rotation_type">Rotation type</string>
     <string name="rotation_free">Free</string>
     <string name="rotation_portrait">Portrait</string>
+    <string name="rotation_reverse_portrait">Reverse portrait</string>
     <string name="rotation_landscape">Landscape</string>
     <string name="rotation_force_portrait">Locked portrait</string>
     <string name="rotation_force_landscape">Locked landscape</string>
@@ -412,6 +421,7 @@
     <string name="pref_category_reading">Reading</string>
     <string name="pref_webtoon_side_padding">Side padding</string>
     <string name="webtoon_side_padding_0">None</string>
+    <string name="webtoon_side_padding_5">5%</string>
     <string name="webtoon_side_padding_10">10%</string>
     <string name="webtoon_side_padding_15">15%</string>
     <string name="webtoon_side_padding_20">20%</string>
@@ -496,6 +506,7 @@
     <string name="pref_backup_slots">Maximum backups</string>
     <string name="source_not_found_name">Source not found: %1$s</string>
     <string name="tracker_not_logged_in">Not logged in: %1$s</string>
+    <string name="backup_restore_invalid_uri">Error: empty URI</string>
     <string name="backup_created">Backup created</string>
     <string name="invalid_backup_file">Invalid backup file</string>
     <string name="invalid_backup_file_missing_data">File is missing data.</string>
@@ -581,7 +592,7 @@
     <string name="notification_incognito_text">Disable incognito mode</string>
     <string name="downloaded_only_summary">Filters all library entries</string>
     <plurals name="download_queue_summary">
-        <item quantity="one">1 remaining</item>
+        <item quantity="one">%1$s remaining</item>
         <item quantity="other">%1$s remaining</item>
     </plurals>
 
@@ -645,16 +656,20 @@
     <string name="unknown_studio">Unknown studio</string>
     <string name="unknown_status">Unknown status</string>
     <string name="licensed">Licensed</string>
+    <string name="publishing_finished">Publishing finished</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="on_hiatus">On hiatus</string>
     <string name="add_to_library">Add to library</string>
     <string name="in_library">In library</string>
     <string name="remove_from_library">Remove from library</string>
     <string name="manga_info_full_title_label">Title</string>
+    <string name="confirm_manga_add_duplicate">You have an entry in your library with the same name but from a different source (%1$s).\n\nDo you still wish to continue?</string>
     <string name="manga_added_library">Added to library</string>
     <string name="manga_removed_library">Removed from library</string>
     <string name="manga_info_expand">More</string>
     <string name="manga_info_collapse">Less</string>
     <plurals name="manga_num_chapters">
-        <item quantity="one">1 chapter</item>
+        <item quantity="one">%1$s chapter</item>
         <item quantity="other">%1$s chapters</item>
     </plurals>
     <plurals name="anime_num_episodes">
@@ -722,7 +737,7 @@
     <string name="tracker_shikimori" translatable="false">Shikimori</string>
     <string name="manga_tracking_tab">Tracking</string>
     <plurals name="num_trackers">
-        <item quantity="one">1 tracker</item>
+        <item quantity="one">%d tracker</item>
         <item quantity="other">%d trackers</item>
     </plurals>
     <string name="add_tracking">Add tracking</string>
@@ -792,7 +807,7 @@
     <string name="page_list_empty_error">No pages found</string>
     <string name="loader_not_implemented_error">Source not found</string>
     <plurals name="missing_chapters_warning">
-        <item quantity="one">Skipping 1 chapter, either the source is missing it or it has been filtered out</item>
+        <item quantity="one">Skipping %d chapter, either the source is missing it or it has been filtered out</item>
         <item quantity="other">Skipping %d chapters, either the source is missing them or they have been filtered out</item>
     </plurals>
 
@@ -826,7 +841,7 @@
     <string name="notification_new_chapters">New chapters found</string>
     <string name="notification_new_episodes">New episodes found</string>
     <plurals name="notification_new_chapters_summary">
-        <item quantity="one">For 1 title</item>
+        <item quantity="one">For %d title</item>
         <item quantity="other">For %d titles</item>
     </plurals>
     <plurals name="notification_new_episodes_summary">
@@ -834,7 +849,7 @@
         <item quantity="other">For %d titles</item>
     </plurals>
     <plurals name="notification_chapters_generic">
-        <item quantity="one">1 new chapter</item>
+        <item quantity="one">%1$d new chapter</item>
         <item quantity="other">%1$d new chapters</item>
     </plurals>
     <plurals name="notification_episodes_generic">
@@ -859,9 +874,15 @@
         <item quantity="one">1 update failed</item>
         <item quantity="other">%1$d updates failed</item>
     </plurals>
+    <string name="notification_update_error">%1$d update(s) failed</string>
+    <string name="notification_update_skipped">%1$d update(s) skipped</string>
+    <string name="learn_more">Learn more</string>
     <string name="notification_cover_update_failed">Failed to update cover</string>
     <string name="notification_first_add_to_library">Please add the title to your library before doing this</string>
     <string name="library_errors_help">For help on how to fix library update errors, see %1$s</string>
+    <string name="skipped_reason_completed">Skipped because series is complete</string>
+    <string name="skipped_reason_not_caught_up">Skipped because there are unread chapters</string>
+    <string name="skipped_reason_not_started">Skipped because no chapters are read</string>
 
     <!-- File Picker Titles -->
     <string name="file_select_cover">Select cover image</string>
@@ -920,6 +941,7 @@
     <string name="channel_progress">Progress</string>
     <string name="channel_complete">Complete</string>
     <string name="channel_errors">Errors</string>
+    <string name="channel_skipped">Skipped</string>
     <string name="channel_new_chapters">Chapter updates</string>
     <string name="channel_app_updates">App updates</string>
     <string name="channel_ext_updates">Extension updates</string>
@@ -928,6 +950,7 @@
     <!-- S Pen actions -->
     <string name="spen_previous_page">Previous page</string>
     <string name="spen_next_page">Next page</string>
+
     <string name="player_controls_skip_intro_text">+85 s</string>
     <string name="no_next_episode">Next Episode not found!</string>
     <string name="anime_description_cover">Cover of Anime</string>
@@ -944,4 +967,7 @@
     <string name="playback_options_speed">Playback speed</string>
     <string name="playback_options_quality">Video quality</string>
     <string name="playback_options_title">Playback options</string>
+
+    <string name="pref_navigate_pan">Navigate to pan</string>
+    <string name="pref_landscape_zoom">Zoom landscape image</string>
 </resources>

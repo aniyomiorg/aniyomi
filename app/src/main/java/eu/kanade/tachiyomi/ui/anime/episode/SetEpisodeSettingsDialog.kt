@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.widget.DialogCheckboxView
 class SetEpisodeSettingsDialog(bundle: Bundle? = null) : DialogController(bundle) {
 
     constructor(anime: Anime) : this(
-        bundleOf(ANIME_KEY to anime)
+        bundleOf(ANIME_KEY to anime),
     )
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {

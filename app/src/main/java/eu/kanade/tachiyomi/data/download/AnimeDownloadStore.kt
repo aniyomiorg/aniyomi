@@ -20,7 +20,7 @@ import uy.kohesive.injekt.injectLazy
  */
 class AnimeDownloadStore(
     context: Context,
-    private val sourceManager: AnimeSourceManager
+    private val sourceManager: AnimeSourceManager,
 ) {
 
     /**

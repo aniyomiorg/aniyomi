@@ -14,7 +14,7 @@ import eu.davidea.viewholders.FlexibleViewHolder
 
 abstract class AnimelibHolder<VB : ViewBinding>(
     view: View,
-    adapter: FlexibleAdapter<*>
+    adapter: FlexibleAdapter<*>,
 ) : FlexibleViewHolder(view, adapter) {
 
     abstract val binding: VB

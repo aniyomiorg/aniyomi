@@ -27,7 +27,7 @@ class AnimeDownloadCache(
     private val context: Context,
     private val provider: AnimeDownloadProvider,
     private val sourceManager: AnimeSourceManager,
-    private val preferences: PreferencesHelper = Injekt.get()
+    private val preferences: PreferencesHelper = Injekt.get(),
 ) {
 
     /**
@@ -236,7 +236,7 @@ class AnimeDownloadCache(
      */
     private class RootDirectory(
         val dir: UniFile,
-        var files: Map<Long, SourceDirectory> = hashMapOf()
+        var files: Map<Long, SourceDirectory> = hashMapOf(),
     )
 
     /**
@@ -244,7 +244,7 @@ class AnimeDownloadCache(
      */
     private class SourceDirectory(
         val dir: UniFile,
-        var files: Map<String, AnimeDirectory> = hashMapOf()
+        var files: Map<String, AnimeDirectory> = hashMapOf(),
     )
 
     /**
@@ -252,7 +252,7 @@ class AnimeDownloadCache(
      */
     private class AnimeDirectory(
         val dir: UniFile,
-        var files: Set<String> = hashSetOf()
+        var files: Set<String> = hashSetOf(),
     )
 
     /**

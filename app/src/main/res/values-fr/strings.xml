@@ -21,7 +21,7 @@
     <string name="action_select_all">Tout sélectionner</string>
     <string name="action_mark_as_read">Marquer comme lu</string>
     <string name="action_mark_as_unread">Marquer comme non lu</string>
-    <string name="action_mark_previous_as_read">Marquer précédent comme lu</string>
+    <string name="action_mark_previous_as_read">Marquer les précédents comme lus</string>
     <string name="action_download">Télécharger</string>
     <string name="action_bookmark">Marquer le chapitre</string>
     <string name="action_remove_bookmark">Enlever le signet</string>
@@ -64,7 +64,7 @@
     <string name="pref_category_advanced">Avancé</string>
     <string name="pref_category_about">À propos</string>
     <!-- General section -->
-    <string name="pref_library_columns">Affichage par liste</string>
+    <string name="pref_library_columns">Nombre d\'éléments par ligne</string>
     <string name="portrait">Portrait</string>
     <string name="landscape">Paysage</string>
     <string name="pref_library_update_interval">Mises à jour automatiques</string>
@@ -74,9 +74,9 @@
     <string name="update_24hour">Tous les jours</string>
     <string name="update_48hour">Tous les 2 jours</string>
     <string name="all">Tout</string>
-    <string name="pref_library_update_restriction">Mises à jour automatiques des restrictions des dispositifs</string>
-    <string name="charging">En charge</string>
-    <string name="pref_update_only_non_completed">Séries en cours</string>
+    <string name="pref_library_update_restriction">Restrictions matérielles pour les mises à jour automatiques</string>
+    <string name="charging">Appareil en charge</string>
+    <string name="pref_update_only_non_completed">Est une série complète</string>
     <string name="pref_auto_update_manga_sync">Synchroniser la progression après lecture</string>
     <string name="pref_start_screen">Page d\'accueil</string>
     <!-- Reader section -->
@@ -175,7 +175,7 @@
     <!-- MyAnimeList fragment -->
     <string name="manga_tracking_tab">Suivi</string>
     <string name="reading">En cours</string>
-    <string name="completed">Complété</string>
+    <string name="completed">Terminé</string>
     <string name="dropped">Abandonné</string>
     <string name="on_hold">En pause</string>
     <string name="plan_to_read">À lire</string>
@@ -242,7 +242,7 @@
     <string name="fifth_to_last">Cinquième chapitre avant le dernier lu</string>
     <string name="login_success">Connecté</string>
     <string name="pref_clear_chapter_cache">Effacer le cache des chapitres</string>
-    <string name="pref_remove_after_marked_as_read">Après avoir été marqué comme lu</string>
+    <string name="pref_remove_after_marked_as_read">Après avoir été marqué manuellement comme lu</string>
     <string name="sort_by_source">Par source</string>
     <string name="updating_category">Mise à jour de la catégorie</string>
     <string name="no_more_results">Pas d\'autres résultats</string>
@@ -368,9 +368,7 @@
     <string name="logout_title">Se déconnecter de %1$s \?</string>
     <string name="logout">Se déconnecter</string>
     <string name="logout_success">Vous êtes maintenant déconnecté(e)</string>
-    <string name="currently_reading">En cours de lecture</string>
     <string name="paused">En pause</string>
-    <string name="want_to_read">À lire plus tard</string>
     <string name="label_more">Plus</string>
     <string name="action_sort_latest_chapter">Dernier chapitre</string>
     <string name="action_view_chapters">Voir les chapitres</string>
@@ -396,7 +394,7 @@
     <string name="information_webview_outdated">Veuillez mettre à jour l\'application WebView pour une meilleure compatibilité</string>
     <string name="channel_new_chapters">Mises à jour des chapitres</string>
     <string name="unlock_app">Débloquer Aniyomi</string>
-    <string name="secure_screen_summary">Cacher le contenu lors du changement d\'application et bloquer les captures d\'écran</string>
+    <string name="secure_screen_summary">L\'écran sécurisé cache le contenu lors du changement d\'application et bloque les captures d\'écran</string>
     <string name="pref_category_display">Affichage</string>
     <plurals name="notification_chapters_generic">
         <item quantity="one">1 nouveau chapitre</item>
@@ -495,10 +493,6 @@
     <string name="tracking_info">Permet de synchroniser automatiquement les chapitres lus avec les services externes proposés. Allez dans le bouton « Suivi » d\'une série pour activer son suivi.</string>
     <string name="unofficial_extension_message">Cette extension ne fait pas partie de la liste des extensions officielles de Tachiyomi.</string>
     <string name="ext_unofficial">Non officiel</string>
-    <plurals name="notification_update_error">
-        <item quantity="one">1 mise à jour a échoué</item>
-        <item quantity="other">%1$d mises à jour ont échoué</item>
-    </plurals>
     <string name="tracker_not_logged_in">Non connecté à : %1$s</string>
     <string name="pref_library_update_refresh_metadata_summary">Vérifier s\'il y a une nouvelle couverture ou synopsis lors des mises à jour de la bibliothèque</string>
     <string name="sort_by_upload_date">Par date de téléversement</string>
@@ -610,7 +604,7 @@
 \n
 \nVous devrez installer les extensions manquantes et vous connecter ensuite aux services de suivi pour les utiliser.</string>
     <string name="nav_zone_prev">Précédent</string>
-    <string name="pref_dns_over_https">DNS via HTTPS</string>
+    <string name="pref_dns_over_https">DNS via HTTPS (DoH)</string>
     <string name="nav_zone_right">Droite</string>
     <string name="nav_zone_left">Gauche</string>
     <string name="nav_zone_next">Suivant</string>
@@ -623,7 +617,7 @@
     <string name="pref_library_update_categories_details">Les mangas dans les catégories exclues ne seront pas mis à jour même s\'ils sont aussi dans les catégories inclues.</string>
     <string name="pref_download_new_categories_details">Les mangas des catégories exclues ne seront pas mis à jour même s\'ils appartiennent aussi à des catégories incluses.</string>
     <string name="pref_category_auto_download">Téléchargement automatique</string>
-    <string name="action_show_errors">Voir tous les détails de l\'erreur</string>
+    <string name="action_show_errors">Appuyez pour voir les détails</string>
     <string name="update_check_eol">Cette version d\'Android n\'est plus supportée</string>
     <string name="clipboard_copy_error">Échec de la copie dans le presse-papiers</string>
     <string name="rotation_landscape">Paysage</string>
@@ -658,7 +652,7 @@
     <string name="tracking_guide">Manuel de suivi</string>
     <string name="off">Désactivé</string>
     <string name="on">Activé</string>
-    <string name="categorized_display_settings">Paramètres de tri et d\'affichage par catégorie</string>
+    <string name="categorized_display_settings">Rendre les réglages de tri et d\'affichage propres à chaque catégorie</string>
     <string name="information_empty_category_dialog">Vous n\'avez pas encore de catégories.</string>
     <string name="action_start_downloading_now">Commencer à télécharger</string>
     <string name="notification_updating">Mise à jour de la bibliothèque… (%1$d/%2$d)</string>
@@ -727,7 +721,31 @@
     <string name="database_clean">Base de données effacée</string>
     <string name="extension_api_error">Échec de la récupération de la liste des extensions</string>
     <string name="privacy_policy">Politique de confidentialité</string>
-    <string name="pref_library_update_manga_restriction">Restrictions de mise à jour de la bibliothèque</string>
-    <string name="pref_update_only_completely_read">Séries entièrement lues</string>
-    <string name="only_update_restrictions">Mise à jour uniquement de : %s</string>
+    <string name="pref_library_update_manga_restriction">Ignorer la mise à jour</string>
+    <string name="pref_update_only_completely_read">A des chapitres non lus</string>
+    <string name="save_chapter_as_cbz">Enregistrer comme archive CBZ</string>
+    <string name="library_errors_help">Pour savoir comment corriger les erreurs de mise à jour de la bibliothèque, voir %1$s</string>
+    <string name="on_hiatus">En attente</string>
+    <string name="publishing_finished">Publication terminée</string>
+    <string name="cancelled">Annulé</string>
+    <string name="action_faq_and_guides">FAQ et guides</string>
+    <string name="backup_restore_invalid_uri">Erreur : URI vide</string>
+    <string name="webtoon_side_padding_5">5 %</string>
+    <string name="action_show_manga">Afficher le manga</string>
+    <string name="action_display_cover_only_grid">Grille avec seulement la couverture</string>
+    <string name="confirm_manga_add_duplicate">Vous avez une entrée dans votre bibliothèque portant le même nom mais provenant d\'une source différente (%1$s).
+\n
+\nSouhaitez-vous toujours continuer \?</string>
+    <string name="pref_navigate_pan">Naviguer jusqu\'au panoramique</string>
+    <string name="pref_landscape_zoom">Agrandir les images en paysage</string>
+    <string name="pref_update_only_started">Aucun chapitre lu</string>
+    <string name="action_filter_started">Commencé</string>
+    <string name="skipped_reason_completed">Sauté car la série est complète</string>
+    <string name="skipped_reason_not_started">Sauté car aucun chapitre n\'est lu</string>
+    <string name="skipped_reason_not_caught_up">Sauté car il y a des chapitres non lus</string>
+    <string name="learn_more">En savoir plus</string>
+    <string name="notification_update_skipped">%1$d mise à jour(s) ignorée(s)</string>
+    <string name="notification_update_error">Échec de %1$d mise(s) à jour</string>
+    <string name="channel_skipped">Ignoré</string>
+    <string name="rotation_reverse_portrait">Portrait inversé</string>
 </resources>

@@ -42,7 +42,7 @@ class CloudflareInterceptor(private val context: Context) : Interceptor {
         // Crashes on some devices. We skip this in some cases since the only impact is slower
         // WebView init in those rare cases.
         // See https://bugs.chromium.org/p/chromium/issues/detail?id=1279562
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.S && DeviceUtil.isSamsung) {
+        if (DeviceUtil.isMiui || Build.VERSION.SDK_INT == Build.VERSION_CODES.S && DeviceUtil.isSamsung) {
             return@lazy
         }
 
@@ -101,7 +101,6 @@ class CloudflareInterceptor(private val context: Context) : Interceptor {
 
         val origRequestUrl = request.url.toString()
         val headers = request.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }.toMutableMap()
-        headers["X-Requested-With"] = WebViewUtil.REQUESTED_WITH
 
         executor.execute {
             val webview = WebView(context)
@@ -136,7 +135,7 @@ class CloudflareInterceptor(private val context: Context) : Interceptor {
                     errorCode: Int,
                     description: String?,
                     failingUrl: String,
-                    isMainFrame: Boolean
+                    isMainFrame: Boolean,
                 ) {
                     if (isMainFrame) {
                         if (errorCode in ERROR_CODES) {

@@ -32,10 +32,8 @@ import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
-import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity.Companion.applyAppTheme
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.logcat
@@ -47,14 +45,12 @@ import `is`.xyz.mpv.StateRestoreCallback
 import `is`.xyz.mpv.Utils
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
-import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
 @RequiresPresenter(PlayerPresenter::class)
 class PlayerActivity :
-    BaseRxActivity<PlayerActivityBinding,
-        PlayerPresenter>(),
+    BaseRxActivity<PlayerPresenter>(),
     MPVLib.EventObserver {
 
     companion object {
@@ -67,7 +63,7 @@ class PlayerActivity :
         }
     }
 
-    private val preferences: PreferencesHelper by injectLazy()
+    lateinit var binding: PlayerActivityBinding
 
     private val langName = LocaleHelper.getSimpleLocaleDisplay(preferences.lang().get())
 
@@ -91,7 +87,8 @@ class PlayerActivity :
     private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { type ->
         when (type) {
             AudioManager.AUDIOFOCUS_LOSS,
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
+            -> {
                 // loss can occur in addition to ducking, so remember the old callback
                 val oldRestore = audioFocusRestore
                 val wasPlayerPaused = player.paused ?: false
@@ -132,7 +129,7 @@ class PlayerActivity :
             audioManager!!.requestAudioFocus(
                 audioFocusChangeListener,
                 AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN
+                AudioManager.AUDIOFOCUS_GAIN,
             )
         }
     }
@@ -216,8 +213,8 @@ class PlayerActivity :
     @SuppressLint("ClickableViewAccessibility")
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
+        registerSecureActivity(this)
         Utils.copyAssets(this)
-        applyAppTheme(preferences)
         super.onCreate(savedInstanceState)
 
         binding = PlayerActivityBinding.inflate(layoutInflater)
@@ -336,7 +333,7 @@ class PlayerActivity :
         with(MaterialAlertDialogBuilder(this)) {
             setSingleChoiceItems(
                 audioTracks.map { it.lang }.toTypedArray(),
-                selectedAudio
+                selectedAudio,
             ) { dialog, item ->
                 if (item == selectedSub) return@setSingleChoiceItems
                 if (item == 0) {
@@ -358,7 +355,7 @@ class PlayerActivity :
         with(MaterialAlertDialogBuilder(this)) {
             setSingleChoiceItems(
                 subTracks.map { it.lang }.toTypedArray(),
-                selectedSub
+                selectedSub,
             ) { dialog, item ->
                 if (item == 0) {
                     selectedSub = 0
@@ -429,7 +426,7 @@ class PlayerActivity :
     private fun speedPickerDialog(
         picker: PickerDialog,
         @StringRes titleRes: Int,
-        restoreState: StateRestoreCallback
+        restoreState: StateRestoreCallback,
     ) {
         val dialog = with(AlertDialog.Builder(this)) {
             setTitle(titleRes)
@@ -620,7 +617,7 @@ class PlayerActivity :
             val qualities = currentVideoList!!.map { it.quality }.toTypedArray()
             qualityAlert.setSingleChoiceItems(
                 qualities,
-                currentQuality
+                currentQuality,
             ) { qualityDialog, selectedQuality ->
                 if (selectedQuality > qualities.lastIndex) {
                     qualityDialog.cancel()

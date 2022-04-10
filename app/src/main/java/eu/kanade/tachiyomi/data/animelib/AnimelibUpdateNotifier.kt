@@ -17,6 +17,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloader
+import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -85,31 +86,52 @@ class AnimelibUpdateNotifier(private val context: Context) {
             Notifications.ID_LIBRARY_PROGRESS,
             progressNotificationBuilder
                 .setProgress(total, current, false)
-                .build()
+                .build(),
         )
     }
 
     /**
      * Shows notification containing update entries that failed with action to open full log.
      *
-     * @param errors List of entry titles that failed to update.
+     * @param failed Number of entries that failed to update.
      * @param uri Uri for error log file containing all titles that failed.
      */
-    fun showUpdateErrorNotification(errors: List<String>, uri: Uri) {
-        if (errors.isEmpty()) {
+    fun showUpdateErrorNotification(failed: Int, uri: Uri) {
+        if (failed == 0) {
             return
         }
 
         context.notificationManager.notify(
             Notifications.ID_LIBRARY_ERROR,
             context.notificationBuilder(Notifications.CHANNEL_LIBRARY_ERROR) {
-                setContentTitle(context.resources.getQuantityString(R.plurals.notification_update_error, errors.size, errors.size))
+                setContentTitle(context.resources.getString(R.string.notification_update_error, failed))
                 setContentText(context.getString(R.string.action_show_errors))
                 setSmallIcon(R.drawable.ic_ani)
 
                 setContentIntent(NotificationReceiver.openErrorLogPendingActivity(context, uri))
             }
-                .build()
+                .build(),
+        )
+    }
+
+    /**
+     * Shows notification containing update entries that were skipped.
+     *
+     * @param skipped Number of entries that were skipped during the update.
+     */
+    fun showUpdateSkippedNotification(skipped: Int) {
+        if (skipped == 0) {
+            return
+        }
+
+        context.notificationManager.notify(
+            Notifications.ID_LIBRARY_SKIPPED,
+            context.notificationBuilder(Notifications.CHANNEL_LIBRARY_SKIPPED) {
+                setContentTitle(context.resources.getString(R.string.notification_update_skipped, skipped))
+                setSmallIcon(R.drawable.ic_ani)
+                addAction(R.drawable.ic_help_24dp, context.getString(R.string.learn_more), NotificationHandler.openUrl(context, HELP_SKIPPED_URL))
+            }
+                .build(),
         )
     }
 
@@ -139,8 +161,8 @@ class AnimelibUpdateNotifier(private val context: Context) {
                                 NotificationCompat.BigTextStyle().bigText(
                                     updates.joinToString("\n") {
                                         it.first.title.chop(NOTIF_TITLE_MAX_LEN)
-                                    }
-                                )
+                                    },
+                                ),
                             )
                         }
                     }
@@ -155,7 +177,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
 
                     setContentIntent(getNotificationIntent())
                     setAutoCancel(true)
-                }
+                },
             )
 
             // Per-anime notification
@@ -200,8 +222,8 @@ class AnimelibUpdateNotifier(private val context: Context) {
                     context,
                     anime,
                     episodes,
-                    Notifications.ID_NEW_EPISODES
-                )
+                    Notifications.ID_NEW_EPISODES,
+                ),
             )
             // View episodes action
             addAction(
@@ -210,8 +232,8 @@ class AnimelibUpdateNotifier(private val context: Context) {
                 NotificationReceiver.openEpisodePendingActivity(
                     context,
                     anime,
-                    Notifications.ID_NEW_EPISODES
-                )
+                    Notifications.ID_NEW_EPISODES,
+                ),
             )
             // Download chapters action
             // Only add the action when chapters is within threshold
@@ -223,8 +245,8 @@ class AnimelibUpdateNotifier(private val context: Context) {
                         context,
                         anime,
                         episodes,
-                        Notifications.ID_NEW_CHAPTERS
-                    )
+                        Notifications.ID_NEW_CHAPTERS,
+                    ),
                 )
             }
         }
@@ -241,7 +263,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
         val request = ImageRequest.Builder(context)
             .data(anime)
             .transformations(CircleCropTransformation())
-            .size(AnimelibUpdateNotifier.NOTIF_ICON_SIZE)
+            .size(NOTIF_ICON_SIZE)
             .build()
         val drawable = context.imageLoader.execute(request).drawable
         return (drawable as? BitmapDrawable)?.bitmap
@@ -251,7 +273,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
         val formatter = DecimalFormat(
             "#.###",
             DecimalFormatSymbols()
-                .apply { decimalSeparator = '.' }
+                .apply { decimalSeparator = '.' },
         )
 
         val displayableEpisodeNumbers = episodes
@@ -303,10 +325,9 @@ class AnimelibUpdateNotifier(private val context: Context) {
         }
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
-
-    companion object {
-        private const val NOTIF_MAX_EPISODES = 5
-        private const val NOTIF_TITLE_MAX_LEN = 45
-        private const val NOTIF_ICON_SIZE = 192
-    }
 }
+
+private const val NOTIF_MAX_EPISODES = 5
+private const val NOTIF_TITLE_MAX_LEN = 45
+private const val NOTIF_ICON_SIZE = 192
+private const val HELP_SKIPPED_URL = "https://aniyomi.jmir.xyz/help/faq/#why-does-global-update-skip-some-entries"

@@ -12,7 +12,7 @@ import uy.kohesive.injekt.api.get
 open class BaseEpisodeHolder(
     view: View,
     private val adapter: BaseEpisodesAdapter<*>,
-    private val preferences: PreferencesHelper = Injekt.get()
+    private val preferences: PreferencesHelper = Injekt.get(),
 ) : FlexibleViewHolder(view, adapter) {
 
     fun onAnimeDownloadClick(view: View, position: Int) {
@@ -39,7 +39,7 @@ open class BaseEpisodeHolder(
                         } else {
                             adapter.clickListener.deleteEpisode(position)
                         }
-                    }
+                    },
                 )
             }
         }
@@ -73,7 +73,7 @@ open class BaseEpisodeHolder(
                                 adapter.clickListener.deleteEpisode(position)
                             }
                         }
-                    }
+                    },
                 )
                 return true
             }

@@ -57,7 +57,7 @@ data class BackupAnimeTracking(
                 status = track.status,
                 startedWatchingDate = track.started_watching_date,
                 finishedWatchingDate = track.finished_watching_date,
-                trackingUrl = track.tracking_url
+                trackingUrl = track.tracking_url,
             )
         }
     }

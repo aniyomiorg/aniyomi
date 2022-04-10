@@ -5,7 +5,8 @@ import eu.davidea.flexibleadapter.items.IFlexible
 
 abstract class BaseEpisodesAdapter<T : IFlexible<*>>(
     controller: OnEpisodeClickListener,
-) : FlexibleAdapter<T>(null, controller, true) {
+    items: List<T>? = null,
+) : FlexibleAdapter<T>(items, controller, true) {
 
     /**
      * Listener for browse item clicks.

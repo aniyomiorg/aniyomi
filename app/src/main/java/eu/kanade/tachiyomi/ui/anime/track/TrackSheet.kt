@@ -31,7 +31,7 @@ class TrackSheet(
     val controller: AnimeController,
     val anime: Anime,
     val fragmentManager: FragmentManager,
-    private val sourceManager: AnimeSourceManager = Injekt.get()
+    private val sourceManager: AnimeSourceManager = Injekt.get(),
 ) : BaseBottomSheetDialog(controller.activity!!),
     TrackAdapter.OnClickListener,
     SetTrackStatusDialog.Listener,

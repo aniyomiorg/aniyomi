@@ -115,6 +115,6 @@ fun Anime.toAnimeInfo(): AnimeInfo {
         genres = this.getGenres() ?: emptyList(),
         key = this.url,
         status = this.status,
-        title = this.title
+        title = this.title,
     )
 }

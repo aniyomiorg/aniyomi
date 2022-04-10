@@ -47,8 +47,8 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             authClient.newCall(
                 POST(
                     "$apiUrl/v2/user_rates",
-                    body = payload.toString().toRequestBody(jsonMime)
-                )
+                    body = payload.toString().toRequestBody(jsonMime),
+                ),
             ).await()
             track
         }
@@ -69,8 +69,8 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             authClient.newCall(
                 POST(
                     "$apiUrl/v2/user_rates",
-                    body = payload.toString().toRequestBody(jsonMime)
-                )
+                    body = payload.toString().toRequestBody(jsonMime),
+                ),
             ).await()
             track
         }
@@ -253,7 +253,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             .add("client_secret", clientSecret)
             .add("code", code)
             .add("redirect_uri", redirectUrl)
-            .build()
+            .build(),
     )
 
     companion object {
@@ -286,7 +286,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
                 .add("client_id", clientId)
                 .add("client_secret", clientSecret)
                 .add("refresh_token", token)
-                .build()
+                .build(),
         )
     }
 }

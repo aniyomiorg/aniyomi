@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Manga
@@ -13,6 +14,7 @@ import eu.kanade.tachiyomi.data.track.NoLoginTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.source.Source
 import okhttp3.Dns
 import okhttp3.OkHttpClient
 
@@ -45,7 +47,7 @@ class Komga(private val context: Context, id: Int) : TrackService(id), EnhancedT
     override fun getStatus(status: Int): String = with(context) {
         when (status) {
             UNREAD -> getString(R.string.unread)
-            READING -> getString(R.string.currently_reading)
+            READING -> getString(R.string.reading)
             COMPLETED -> getString(R.string.completed)
             else -> ""
         }
@@ -122,5 +124,19 @@ class Komga(private val context: Context, id: Int) : TrackService(id), EnhancedT
             null
         }
 
-    override suspend fun match(anime: Anime): AnimeTrackSearch? = throw Exception("Not used")
+    override suspend fun match(anime: Anime) = throw Exception("Not used")
+
+    override fun isTrackFrom(track: Track, manga: Manga, source: Source?): Boolean =
+        track.tracking_url == manga.url && source?.let { accept(it) } == true
+
+    override fun migrateTrack(track: Track, manga: Manga, newSource: Source): Track? =
+        if (accept(newSource)) {
+            track.also { track.tracking_url = manga.url }
+        } else {
+            null
+        }
+
+    override fun isTrackFrom(track: AnimeTrack, anime: Anime, source: AnimeSource?) = throw Exception("Not used")
+
+    override fun migrateTrack(track: AnimeTrack, anime: Anime, newSource: AnimeSource) = throw Exception("Not used")
 }

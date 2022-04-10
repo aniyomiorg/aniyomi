@@ -30,7 +30,7 @@ data class AnimeSourceItem(val source: AnimeSource, val animeCount: Int) :
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>): SourceHolder {
         return SourceHolder(
             view,
-            adapter as SourceAdapter
+            adapter as SourceAdapter,
         )
     }
 
@@ -41,7 +41,7 @@ data class AnimeSourceItem(val source: AnimeSource, val animeCount: Int) :
         adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
         holder: SourceHolder,
         position: Int,
-        payloads: List<Any?>?
+        payloads: List<Any?>?,
     ) {
         holder.bind(this)
     }

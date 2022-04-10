@@ -27,6 +27,6 @@ class EpisodeSourceOrderPutResolver : PutResolver<Episode>() {
 
     fun mapToContentValues(episode: Episode) =
         contentValuesOf(
-            EpisodeTable.COL_SOURCE_ORDER to episode.source_order
+            EpisodeTable.COL_SOURCE_ORDER to episode.source_order,
         )
 }

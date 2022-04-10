@@ -19,7 +19,7 @@ import eu.kanade.tachiyomi.ui.manga.MangaController
 import uy.kohesive.injekt.injectLazy
 
 class SearchController(
-    private var manga: Manga? = null
+    private var manga: Manga? = null,
 ) : GlobalSearchController(manga?.title) {
 
     private var newManga: Manga? = null
@@ -27,7 +27,7 @@ class SearchController(
     override fun createPresenter(): GlobalSearchPresenter {
         return SearchPresenter(
             initialQuery,
-            manga!!
+            manga!!,
         )
     }
 
@@ -76,7 +76,7 @@ class SearchController(
             router.popController(this)
             if (newManga != null) {
                 val newMangaController = RouterTransaction.with(MangaController(newManga))
-                if (router.backstack.last().controller is MangaController) {
+                if (router.backstack.lastOrNull()?.controller is MangaController) {
                     // Replace old MangaController
                     router.replaceTopController(newMangaController)
                 } else {
@@ -121,7 +121,7 @@ class SearchController(
                     }
                     (targetController as? SearchController)?.migrateManga(manga, newManga)
                 }
-                .setNegativeButton(R.string.copy) { _, _, ->
+                .setNegativeButton(R.string.copy) { _, _ ->
                     if (callingController != null) {
                         if (callingController.javaClass == SourceSearchController::class.java) {
                             router.popController(callingController)

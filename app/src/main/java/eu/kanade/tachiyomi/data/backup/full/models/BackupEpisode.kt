@@ -49,7 +49,7 @@ data class BackupEpisode(
                 lastSecondSeen = episode.last_second_seen,
                 dateFetch = episode.date_fetch,
                 dateUpload = episode.date_upload,
-                sourceOrder = episode.source_order
+                sourceOrder = episode.source_order,
             )
         }
     }

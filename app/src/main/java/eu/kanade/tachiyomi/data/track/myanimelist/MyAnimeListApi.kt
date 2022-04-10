@@ -264,7 +264,7 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .filter {
                     it.jsonObject["node"]!!.jsonObject["title"]!!.jsonPrimitive.content.contains(
                         query,
-                        ignoreCase = true
+                        ignoreCase = true,
                     )
                 }
                 .map {
@@ -291,7 +291,7 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .filter {
                     it.jsonObject["node"]!!.jsonObject["title"]!!.jsonPrimitive.content.contains(
                         query,
-                        ignoreCase = true
+                        ignoreCase = true,
                     )
                 }
                 .map {

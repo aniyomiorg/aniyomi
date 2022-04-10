@@ -8,7 +8,7 @@ fun Track.toBangumiStatus() = when (status) {
     Bangumi.COMPLETED -> "collect"
     Bangumi.ON_HOLD -> "on_hold"
     Bangumi.DROPPED -> "dropped"
-    Bangumi.PLANNING -> "wish"
+    Bangumi.PLAN_TO_READ -> "wish"
     else -> throw NotImplementedError("Unknown status: $status")
 }
 
@@ -17,7 +17,7 @@ fun AnimeTrack.toBangumiStatus() = when (status) {
     Bangumi.COMPLETED -> "collect"
     Bangumi.ON_HOLD -> "on_hold"
     Bangumi.DROPPED -> "dropped"
-    Bangumi.PLANNING -> "wish"
+    Bangumi.PLAN_TO_READ -> "wish"
     else -> throw NotImplementedError("Unknown status: $status")
 }
 
@@ -26,6 +26,6 @@ fun toTrackStatus(status: String) = when (status) {
     "collect" -> Bangumi.COMPLETED
     "on_hold" -> Bangumi.ON_HOLD
     "dropped" -> Bangumi.DROPPED
-    "wish" -> Bangumi.PLANNING
+    "wish" -> Bangumi.PLAN_TO_READ
     else -> throw NotImplementedError("Unknown status: $status")
 }

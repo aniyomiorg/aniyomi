@@ -21,7 +21,7 @@ import uy.kohesive.injekt.api.get
 class PagerConfig(
     private val viewer: PagerViewer,
     scope: CoroutineScope,
-    preferences: PreferencesHelper = Injekt.get()
+    preferences: PreferencesHelper = Injekt.get(),
 ) : ViewerConfig(preferences, scope) {
 
     var theme = preferences.readerTheme().get()
@@ -41,6 +41,12 @@ class PagerConfig(
     var imageCropBorders = false
         private set
 
+    var navigateToPan = false
+        private set
+
+    var landscapeZoom = false
+        private set
+
     init {
         preferences.readerTheme()
             .register(
@@ -48,7 +54,7 @@ class PagerConfig(
                     theme = it
                     automaticBackground = it == 3
                 },
-                { imagePropertyChangedListener?.invoke() }
+                { imagePropertyChangedListener?.invoke() },
             )
 
         preferences.imageScaleType()
@@ -59,6 +65,12 @@ class PagerConfig(
 
         preferences.cropBorders()
             .register({ imageCropBorders = it }, { imagePropertyChangedListener?.invoke() })
+
+        preferences.navigateToPan()
+            .register({ navigateToPan = it })
+
+        preferences.landscapeZoom()
+            .register({ landscapeZoom = it }, { imagePropertyChangedListener?.invoke() })
 
         preferences.navigationModePager()
             .register({ navigationMode = it }, { updateNavigation(navigationMode) })
@@ -76,7 +88,7 @@ class PagerConfig(
                 {
                     imagePropertyChangedListener?.invoke()
                     dualPageSplitChangedListener?.invoke(it)
-                }
+                },
             )
 
         preferences.dualPageInvertPaged()

@@ -72,7 +72,7 @@ class AnimeExtensionInstallService : Service() {
             context: Context,
             downloadId: Long,
             uri: Uri,
-            installer: PreferenceValues.ExtensionInstaller
+            installer: PreferenceValues.ExtensionInstaller,
         ): Intent {
             return Intent(context, AnimeExtensionInstallService::class.java)
                 .setDataAndType(uri, AnimeExtensionInstaller.APK_MIME)

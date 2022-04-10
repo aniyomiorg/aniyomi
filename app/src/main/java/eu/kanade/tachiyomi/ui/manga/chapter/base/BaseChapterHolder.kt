@@ -8,7 +8,7 @@ import eu.kanade.tachiyomi.util.view.popupMenu
 
 open class BaseChapterHolder(
     view: View,
-    private val adapter: BaseChaptersAdapter<*>
+    private val adapter: BaseChaptersAdapter<*>,
 ) : FlexibleViewHolder(view, adapter) {
 
     fun onDownloadClick(view: View, position: Int) {
@@ -36,7 +36,7 @@ open class BaseChapterHolder(
                         } else {
                             adapter.clickListener.deleteChapter(position)
                         }
-                    }
+                    },
                 )
             }
         }

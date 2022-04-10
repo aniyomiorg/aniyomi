@@ -10,6 +10,8 @@ import eu.kanade.tachiyomi.animesource.model.toSEpisode
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeCategory
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
+import eu.kanade.tachiyomi.data.track.EnhancedTrackService
+import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchCardItem
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchItem
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchPresenter
@@ -19,14 +21,18 @@ import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.toast
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.util.Date
 
 class AnimeSearchPresenter(
     initialQuery: String? = "",
-    private val anime: Anime
+    private val anime: Anime,
 ) : GlobalAnimeSearchPresenter(initialQuery) {
 
     private val replacingAnimeRelay = BehaviorRelay.create<Pair<Boolean, Anime?>>()
+
+    private val enhancedServices by lazy { Injekt.get<TrackManager>().services.filterIsInstance<EnhancedTrackService>() }
 
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
@@ -34,7 +40,7 @@ class AnimeSearchPresenter(
         replacingAnimeRelay.subscribeLatestCache(
             { controller, (isReplacingAnime, newAnime) ->
                 (controller as? AnimeSearchController)?.renderIsReplacingAnime(isReplacingAnime, newAnime)
-            }
+            },
         )
     }
 
@@ -58,6 +64,7 @@ class AnimeSearchPresenter(
 
     fun migrateAnime(prevAnime: Anime, anime: Anime, replace: Boolean) {
         val source = sourceManager.get(anime.source) ?: return
+        val prevSource = sourceManager.get(prevAnime.source)
 
         replacingAnimeRelay.call(Pair(true, null))
 
@@ -66,7 +73,7 @@ class AnimeSearchPresenter(
                 val episodes = source.getEpisodeList(anime.toAnimeInfo())
                     .map { it.toSEpisode() }
 
-                migrateAnimeInternal(source, episodes, prevAnime, anime, replace)
+                migrateAnimeInternal(prevSource, source, episodes, prevAnime, anime, replace)
             } catch (e: Throwable) {
                 withUIContext { view?.applicationContext?.toast(e.message) }
             }
@@ -76,24 +83,25 @@ class AnimeSearchPresenter(
     }
 
     private fun migrateAnimeInternal(
+        prevSource: AnimeSource?,
         source: AnimeSource,
         sourceEpisodes: List<SEpisode>,
         prevAnime: Anime,
         anime: Anime,
-        replace: Boolean
+        replace: Boolean,
     ) {
         val flags = preferences.migrateFlags().get()
         val migrateEpisodes =
             AnimeMigrationFlags.hasEpisodes(
-                flags
+                flags,
             )
         val migrateCategories =
             AnimeMigrationFlags.hasCategories(
-                flags
+                flags,
             )
         val migrateTracks =
             AnimeMigrationFlags.hasTracks(
-                flags
+                flags,
             )
 
         db.inTransaction {
@@ -135,12 +143,16 @@ class AnimeSearchPresenter(
 
             // Update track
             if (migrateTracks) {
-                val tracks = db.getTracks(prevAnime).executeAsBlocking()
-                for (track in tracks) {
+                val tracksToUpdate = db.getTracks(prevAnime).executeAsBlocking().mapNotNull { track ->
                     track.id = null
                     track.anime_id = anime.id!!
+
+                    val service = enhancedServices
+                        .firstOrNull { it.isTrackFrom(track, prevAnime, prevSource) }
+                    if (service != null) service.migrateTrack(track, anime, source)
+                    else track
                 }
-                db.insertTracks(tracks).executeAsBlocking()
+                db.insertTracks(tracksToUpdate).executeAsBlocking()
             }
 
             // Update favorite status

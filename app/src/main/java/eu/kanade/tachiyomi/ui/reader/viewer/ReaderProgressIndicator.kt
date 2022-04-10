@@ -19,7 +19,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 class ReaderProgressIndicator @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val indicator: CircularProgressIndicator
@@ -31,7 +31,7 @@ class ReaderProgressIndicator @JvmOverloads constructor(
             Animation.RELATIVE_TO_SELF,
             0.5F,
             Animation.RELATIVE_TO_SELF,
-            0.5F
+            0.5F,
         ).apply {
             interpolator = LinearInterpolator()
             repeatCount = Animation.INFINITE

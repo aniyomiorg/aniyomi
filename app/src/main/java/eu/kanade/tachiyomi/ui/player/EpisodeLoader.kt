@@ -63,7 +63,7 @@ class EpisodeLoader {
             episode: Episode,
             anime: Anime,
             source: AnimeSource,
-            downloadManager: AnimeDownloadManager
+            downloadManager: AnimeDownloadManager,
         ): Observable<List<Video>> {
             return downloadManager.buildVideo(source, anime, episode)
                 .onErrorReturn { null }
@@ -74,7 +74,7 @@ class EpisodeLoader {
         }
 
         fun isLocal(
-            episode: Episode
+            episode: Episode,
         ): Observable<List<Video>> {
             return try {
                 val video = Video(episode.url, "Local source: ${episode.url}", episode.url, Uri.parse(episode.url))

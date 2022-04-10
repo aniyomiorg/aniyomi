@@ -32,7 +32,7 @@ interface AnimeHistoryQueries : AnimeDbProvider {
                 .query(getRecentAnimesQuery(search))
                 .args(date.time, limit, offset)
                 .observesTables(AnimeHistoryTable.TABLE)
-                .build()
+                .build(),
         )
         .withGetResolver(AnimeEpisodeHistoryGetResolver.INSTANCE)
         .prepare()
@@ -44,7 +44,7 @@ interface AnimeHistoryQueries : AnimeDbProvider {
                 .query(getHistoryByAnimeId())
                 .args(animeId)
                 .observesTables(AnimeHistoryTable.TABLE)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -55,7 +55,7 @@ interface AnimeHistoryQueries : AnimeDbProvider {
                 .query(getHistoryByEpisodeUrl())
                 .args(chapterUrl)
                 .observesTables(AnimeHistoryTable.TABLE)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -83,7 +83,7 @@ interface AnimeHistoryQueries : AnimeDbProvider {
         .byQuery(
             DeleteQuery.builder()
                 .table(AnimeHistoryTable.TABLE)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -93,7 +93,7 @@ interface AnimeHistoryQueries : AnimeDbProvider {
                 .table(AnimeHistoryTable.TABLE)
                 .where("${AnimeHistoryTable.COL_LAST_SEEN} = ?")
                 .whereArgs(0)
-                .build()
+                .build(),
         )
         .prepare()
 }

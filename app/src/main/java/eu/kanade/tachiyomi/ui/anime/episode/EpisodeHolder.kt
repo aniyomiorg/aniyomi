@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 
 class EpisodeHolder(
     view: View,
-    private val adapter: EpisodesAdapter
+    private val adapter: EpisodesAdapter,
 ) : BaseEpisodeHolder(view, adapter) {
 
     private val binding = EpisodesItemBinding.bind(view)
@@ -78,7 +78,7 @@ class EpisodeHolder(
                                     TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen) -
                                         TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(episode.last_second_seen)),
                                     TimeUnit.MILLISECONDS.toSeconds(episode.last_second_seen) -
-                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen))
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen)),
                                 ),
                                 String.format(
                                     "%d:%02d:%02d",
@@ -86,9 +86,9 @@ class EpisodeHolder(
                                     TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds) -
                                         TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(episode.total_seconds)),
                                     TimeUnit.MILLISECONDS.toSeconds(episode.total_seconds) -
-                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds))
-                                )
-                            )
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds)),
+                                ),
+                            ),
                         )
                     }
                 }
@@ -102,15 +102,15 @@ class EpisodeHolder(
                                     "%d:%02d",
                                     TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen),
                                     TimeUnit.MILLISECONDS.toSeconds(episode.last_second_seen) -
-                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen))
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.last_second_seen)),
                                 ),
                                 String.format(
                                     "%d:%02d",
                                     TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds),
                                     TimeUnit.MILLISECONDS.toSeconds(episode.total_seconds) -
-                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds))
-                                )
-                            )
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(episode.total_seconds)),
+                                ),
+                            ),
                         )
                     }
                 }

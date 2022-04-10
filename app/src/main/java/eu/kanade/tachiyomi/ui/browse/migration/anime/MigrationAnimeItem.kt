@@ -22,7 +22,7 @@ class MigrationAnimeItem(val anime: Anime) : AbstractFlexibleItem<MigrationAnime
         adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
         holder: MigrationAnimeHolder,
         position: Int,
-        payloads: List<Any?>?
+        payloads: List<Any?>?,
     ) {
         holder.bind(this)
     }

@@ -30,7 +30,7 @@ class AnimeHistoryAdapter(controller: AnimeHistoryController) :
     val decimalFormat = DecimalFormat(
         "#.###",
         DecimalFormatSymbols()
-            .apply { decimalSeparator = '.' }
+            .apply { decimalSeparator = '.' },
     )
 
     init {

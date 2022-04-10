@@ -8,8 +8,9 @@ import eu.kanade.tachiyomi.util.system.getResourceColor
 
 class AnimeUpdatesAdapter(
     val controller: AnimeUpdatesController,
-    context: Context
-) : BaseEpisodesAdapter<IFlexible<*>>(controller) {
+    context: Context,
+    val items: List<IFlexible<*>>?,
+) : BaseEpisodesAdapter<IFlexible<*>>(controller, items) {
 
     var seenColor = context.getResourceColor(R.attr.colorOnSurface, 0.38f)
     var unseenColor = context.getResourceColor(R.attr.colorOnSurface)

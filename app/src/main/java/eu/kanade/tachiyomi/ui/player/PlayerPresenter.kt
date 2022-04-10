@@ -143,7 +143,7 @@ class PlayerPresenter(
                 { _, _ ->
                     // Ignore onNext event
                 },
-                PlayerActivity::setInitialEpisodeError
+                PlayerActivity::setInitialEpisodeError,
             )
     }
 
@@ -171,7 +171,7 @@ class PlayerPresenter(
                             currentVideoList = it
                             activity.setVideoList(it)
                         },
-                        PlayerActivity::setInitialEpisodeError
+                        PlayerActivity::setInitialEpisodeError,
                     )
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
@@ -202,7 +202,7 @@ class PlayerPresenter(
                             activity.setVideoList(it)
                             callback()
                         },
-                        PlayerActivity::setInitialEpisodeError
+                        PlayerActivity::setInitialEpisodeError,
                     )
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
@@ -227,7 +227,7 @@ class PlayerPresenter(
                             activity.setVideoList(it)
                             callback()
                         },
-                        PlayerActivity::setInitialEpisodeError
+                        PlayerActivity::setInitialEpisodeError,
                     )
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }

@@ -16,7 +16,7 @@ import eu.kanade.tachiyomi.R
 data class AnimeExtensionGroupItem(
     val name: String,
     val size: Int,
-    val showSize: Boolean = false
+    val showSize: Boolean = false,
 ) : AbstractHeaderItem<AnimeExtensionGroupHolder>() {
 
     var actionLabel: String? = null
@@ -43,7 +43,7 @@ data class AnimeExtensionGroupItem(
         adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
         holder: AnimeExtensionGroupHolder,
         position: Int,
-        payloads: List<Any?>?
+        payloads: List<Any?>?,
     ) {
         holder.bind(this)
     }

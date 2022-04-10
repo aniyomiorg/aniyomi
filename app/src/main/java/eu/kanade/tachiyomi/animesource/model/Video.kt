@@ -15,7 +15,7 @@ open class Video(
     val headers: Headers? = null,
     // "url", "language-label-2", "url2", "language-label-2"
     val subtitleTracks: List<Track> = emptyList(),
-    val audioTracks: List<Track> = emptyList()
+    val audioTracks: List<Track> = emptyList(),
 ) : ProgressListener {
 
     @Suppress("UNUSED_PARAMETER")
@@ -24,7 +24,7 @@ open class Video(
         quality: String,
         videoUrl: String?,
         uri: Uri? = null,
-        headers: Headers? = null
+        headers: Headers? = null,
     ) : this(url, quality, videoUrl, headers)
 
     @Transient
@@ -111,12 +111,12 @@ open class Video(
 
 fun Video.toVideoUrl(): VideoUrl {
     return VideoUrl(
-        url = this.videoUrl ?: this.url
+        url = this.videoUrl ?: this.url,
     )
 }
 
 fun VideoUrl.toVideo(index: Int): Video {
     return Video(
-        videoUrl = this.url
+        videoUrl = this.url,
     )
 }

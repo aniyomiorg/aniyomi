@@ -26,7 +26,7 @@ fun syncEpisodesWithSource(
     db: AnimeDatabaseHelper,
     rawSourceEpisodes: List<SEpisode>,
     anime: Anime,
-    source: AnimeSource
+    source: AnimeSource,
 ): Pair<List<Episode>, List<Episode>> {
     if (rawSourceEpisodes.isEmpty() && source !is LocalAnimeSource) {
         throw NoEpisodesException()

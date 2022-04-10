@@ -105,12 +105,12 @@ internal class AppUpdateNotifier(private val context: Context) {
             addAction(
                 R.drawable.ic_system_update_alt_white_24dp,
                 context.getString(R.string.action_install),
-                installIntent
+                installIntent,
             )
             addAction(
                 R.drawable.ic_close_24dp,
                 context.getString(R.string.action_cancel),
-                NotificationReceiver.dismissNotificationPendingBroadcast(context, Notifications.ID_APP_UPDATER)
+                NotificationReceiver.dismissNotificationPendingBroadcast(context, Notifications.ID_APP_UPDATER),
             )
         }
         notificationBuilder.show()
@@ -132,12 +132,12 @@ internal class AppUpdateNotifier(private val context: Context) {
             addAction(
                 R.drawable.ic_refresh_24dp,
                 context.getString(R.string.action_retry),
-                AppUpdateService.downloadApkPendingService(context, url)
+                AppUpdateService.downloadApkPendingService(context, url),
             )
             addAction(
                 R.drawable.ic_close_24dp,
                 context.getString(R.string.action_cancel),
-                NotificationReceiver.dismissNotificationPendingBroadcast(context, Notifications.ID_APP_UPDATER)
+                NotificationReceiver.dismissNotificationPendingBroadcast(context, Notifications.ID_APP_UPDATER),
             )
         }
         notificationBuilder.show(Notifications.ID_APP_UPDATER)

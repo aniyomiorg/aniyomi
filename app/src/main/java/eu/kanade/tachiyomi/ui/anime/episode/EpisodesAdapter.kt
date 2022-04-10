@@ -13,7 +13,7 @@ import java.text.DecimalFormatSymbols
 
 class EpisodesAdapter(
     controller: AnimeController,
-    context: Context
+    context: Context,
 ) : BaseEpisodesAdapter<EpisodeItem>(controller) {
 
     private val preferences: PreferencesHelper by injectLazy()
@@ -29,7 +29,7 @@ class EpisodesAdapter(
     val decimalFormat = DecimalFormat(
         "#.###",
         DecimalFormatSymbols()
-            .apply { decimalSeparator = '.' }
+            .apply { decimalSeparator = '.' },
     )
 
     val relativeTime: Int = preferences.relativeTime().get()

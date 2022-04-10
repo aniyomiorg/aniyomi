@@ -2,15 +2,12 @@ package eu.kanade.tachiyomi.ui.browse.animesource.globalsearch
 
 import android.view.View
 import androidx.core.view.isVisible
-import coil.clear
-import coil.imageLoader
-import coil.request.ImageRequest
-import coil.transition.CrossfadeTransition
+import coil.dispose
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.databinding.GlobalSearchControllerCardItemBinding
-import eu.kanade.tachiyomi.widget.StateImageViewTarget
+import eu.kanade.tachiyomi.util.view.loadAutoPause
 
 class GlobalAnimeSearchCardHolder(view: View, adapter: GlobalAnimeSearchCardAdapter) :
     FlexibleViewHolder(view, adapter) {
@@ -53,17 +50,9 @@ class GlobalAnimeSearchCardHolder(view: View, adapter: GlobalAnimeSearchCardAdap
     }
 
     fun setImage(anime: Anime) {
-        binding.cover.clear()
-        if (!anime.thumbnail_url.isNullOrEmpty()) {
-            val crossfadeDuration = itemView.context.imageLoader.defaults.transition.let {
-                if (it is CrossfadeTransition) it.durationMillis else 0
-            }
-            val request = ImageRequest.Builder(itemView.context)
-                .data(anime.thumbnail_url)
-                .setParameter(AnimeCoverFetcher.USE_CUSTOM_COVER, false)
-                .target(StateImageViewTarget(binding.cover, binding.progress, crossfadeDuration))
-                .build()
-            itemView.context.imageLoader.enqueue(request)
+        binding.cover.dispose()
+        binding.cover.loadAutoPause(anime) {
+            setParameter(AnimeCoverFetcher.USE_CUSTOM_COVER, false)
         }
     }
 }

@@ -20,7 +20,7 @@ import eu.kanade.tachiyomi.data.database.tables.AnimeHistoryTable.TABLE
 class AnimeHistoryTypeMapping : SQLiteTypeMapping<AnimeHistory>(
     AnimeHistoryPutResolver(),
     AnimeHistoryGetResolver(),
-    AnimeHistoryDeleteResolver()
+    AnimeHistoryDeleteResolver(),
 )
 
 open class AnimeHistoryPutResolver : DefaultPutResolver<AnimeHistory>() {
@@ -40,7 +40,7 @@ open class AnimeHistoryPutResolver : DefaultPutResolver<AnimeHistory>() {
             COL_ID to obj.id,
             COL_EPISODE_ID to obj.episode_id,
             COL_LAST_SEEN to obj.last_seen,
-            COL_TIME_SEEN to obj.time_seen
+            COL_TIME_SEEN to obj.time_seen,
         )
 }
 

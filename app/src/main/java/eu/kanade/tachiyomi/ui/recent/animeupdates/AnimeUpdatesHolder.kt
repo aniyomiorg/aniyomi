@@ -2,8 +2,8 @@ package eu.kanade.tachiyomi.ui.recent.animeupdates
 
 import android.view.View
 import androidx.core.view.isVisible
-import coil.clear
-import coil.loadAny
+import coil.dispose
+import coil.load
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.databinding.AnimeUpdatesItemBinding
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodeHolder
@@ -14,7 +14,6 @@ import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodeHolder
  *
  * @param view the inflated view for this holder.
  * @param adapter the adapter handling this holder.
- * @param listener a listener to react to single tap and long tap events.
  * @constructor creates a new recent episode holder.
  */
 class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdatesAdapter) :
@@ -46,7 +45,7 @@ class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdat
         } else {
             binding.mangaTitle.setTextColor(adapter.unseenColor)
             binding.chapterTitle.setTextColor(
-                if (item.bookmark) adapter.bookmarkedColor else adapter.unseenColorSecondary
+                if (item.bookmark) adapter.bookmarkedColor else adapter.unseenColorSecondary,
             )
         }
 
@@ -58,7 +57,7 @@ class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdat
         binding.download.setState(item.status, item.progress)
 
         // Set cover
-        binding.mangaCover.clear()
-        binding.mangaCover.loadAny(item.anime)
+        binding.mangaCover.dispose()
+        binding.mangaCover.load(item.anime)
     }
 }

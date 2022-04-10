@@ -5,8 +5,9 @@ import eu.kanade.tachiyomi.R
 const val DEVICE_ONLY_ON_WIFI = "wifi"
 const val DEVICE_CHARGING = "ac"
 
-const val MANGA_ONGOING = "manga_ongoing"
-const val MANGA_FULLY_READ = "manga_fully_read"
+const val MANGA_NON_COMPLETED = "manga_ongoing"
+const val MANGA_HAS_UNREAD = "manga_fully_read"
+const val MANGA_NON_READ = "manga_started"
 
 /**
  * This class stores the values for the preferences in the application.
@@ -55,16 +56,22 @@ object PreferenceValues {
         LOWEST(47),
     }
 
-    enum class TabletUiMode {
-        AUTOMATIC,
-        ALWAYS,
-        LANDSCAPE,
-        NEVER,
+    enum class TabletUiMode(val titleResId: Int) {
+        AUTOMATIC(R.string.automatic_background),
+        ALWAYS(R.string.lock_always),
+        LANDSCAPE(R.string.landscape),
+        NEVER(R.string.lock_never),
     }
 
-    enum class ExtensionInstaller {
-        LEGACY,
-        PACKAGEINSTALLER,
-        SHIZUKU,
+    enum class ExtensionInstaller(val titleResId: Int) {
+        LEGACY(R.string.ext_installer_legacy),
+        PACKAGEINSTALLER(R.string.ext_installer_packageinstaller),
+        SHIZUKU(R.string.ext_installer_shizuku),
+    }
+
+    enum class SecureScreenMode(val titleResId: Int) {
+        ALWAYS(R.string.lock_always),
+        INCOGNITO(R.string.pref_incognito_mode),
+        NEVER(R.string.lock_never),
     }
 }
