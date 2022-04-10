@@ -179,8 +179,8 @@
 
         <ImageButton
             android:id="@+id/play_btn"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_centerInParent="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Play/Pause"
@@ -188,7 +188,7 @@
             android:textColor="@android:color/white"
             android:visibility="gone"
             app:tint="?attr/colorOnPrimarySurface"
-            tools:src="@drawable/ic_play_arrow_100dp"
+            tools:src="@drawable/ic_play_arrow_80dp"
             tools:visibility="visible" />
 
 
