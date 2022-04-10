@@ -307,8 +307,8 @@ class PlayerActivity :
         binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
         // player.playFile(currentVideoList!!.first().videoUrl!!.toString())
 
-        binding.nextBtn.setOnClickListener { goNextEpisode() }
-        binding.prevBtn.setOnClickListener { goPreviousEpisode() }
+        binding.nextBtn.setOnClickListener { switchEpisode(false) }
+        binding.prevBtn.setOnClickListener { switchEpisode(true) }
 
         if (presenter?.needsInit() == true) {
             val anime = intent.extras!!.getLong("anime", -1)
@@ -323,39 +323,30 @@ class PlayerActivity :
         playerIsDestroyed = false
     }
 
-    private fun goNextEpisode() {
+    /**
+     * Switches to the previous episode if [previous] is true,
+     * to the next episode if [previous] is false
+     */
+    private fun switchEpisode(previous: Boolean) {
+        val switchMethod = if (previous) presenter::previousEpisode else presenter::nextEpisode
+        val errorRes = if (previous) R.string.no_previous_episode else R.string.no_next_episode
+
+        presenter.saveEpisodeProgress(player.timePos, player.duration)
+        presenter.saveEpisodeHistory()
         val wasPlayerPaused = player.paused
         player.paused = true
         showLoadingIndicator(true)
 
-        val nEpTxt = presenter.nextEpisode {
+        val epTxt = switchMethod {
             if (wasPlayerPaused == false) {
                 player.paused = false
             }
         }
 
         when {
-            nEpTxt == "Invalid" -> return
-            nEpTxt == null -> { launchUI { toast(R.string.no_next_episode) }; showLoadingIndicator(false) }
-            isInPipMode -> launchUI { toast(nEpTxt) }
-        }
-    }
-
-    private fun goPreviousEpisode() {
-        val wasPlayerPaused = player.paused
-        player.paused = true
-        showLoadingIndicator(true)
-
-        val pEpTxt = presenter.previousEpisode {
-            if (wasPlayerPaused == false) {
-                player.paused = false
-            }
-        }
-
-        when {
-            pEpTxt == "Invalid" -> return
-            pEpTxt == null -> { launchUI { toast(R.string.no_previous_episode) }; showLoadingIndicator(false) }
-            isInPipMode -> launchUI { toast(pEpTxt) }
+            epTxt == "Invalid" -> return
+            epTxt == null -> { launchUI { toast(errorRes) }; showLoadingIndicator(false) }
+            isInPipMode -> launchUI { toast(epTxt) }
         }
     }
 
@@ -848,11 +839,11 @@ class PlayerActivity :
                             updatePictureInPictureActions(false)
                         }
                         CONTROL_TYPE_PREVIOUS -> {
-                            goPreviousEpisode()
+                            switchEpisode(true)
                             player.paused?.let { updatePictureInPictureActions(!it) }
                         }
                         CONTROL_TYPE_NEXT -> {
-                            goNextEpisode()
+                            switchEpisode(false)
                             player.paused?.let { updatePictureInPictureActions(!it) }
                         }
                     }
@@ -882,7 +873,7 @@ class PlayerActivity :
         iconResId: Int,
         titleResId: Int,
         requestCode: Int,
-        controlType: Int
+        controlType: Int,
     ): RemoteAction {
         return RemoteAction(
             Icon.createWithResource(this, iconResId),
@@ -893,14 +884,14 @@ class PlayerActivity :
                 requestCode,
                 Intent(ACTION_MEDIA_CONTROL)
                     .putExtra(EXTRA_CONTROL_TYPE, controlType),
-                PendingIntent.FLAG_IMMUTABLE
-            )
+                PendingIntent.FLAG_IMMUTABLE,
+            ),
         )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun updatePictureInPictureActions(
-        playing: Boolean
+        playing: Boolean,
     ): PictureInPictureParams {
         val mPictureInPictureParams = PictureInPictureParams.Builder()
             // Set action items for the picture-in-picture mode. These are the only custom controls
@@ -912,7 +903,7 @@ class PlayerActivity :
                         R.drawable.ic_skip_previous_24dp,
                         R.string.action_previous_episode,
                         CONTROL_TYPE_PREVIOUS,
-                        REQUEST_PREVIOUS
+                        REQUEST_PREVIOUS,
                     ),
 
                     if (playing) {
@@ -920,24 +911,24 @@ class PlayerActivity :
                             R.drawable.ic_pause_24dp,
                             R.string.action_pause,
                             CONTROL_TYPE_PAUSE,
-                            REQUEST_PAUSE
+                            REQUEST_PAUSE,
                         )
                     } else {
                         createRemoteAction(
                             R.drawable.ic_play_arrow_24dp,
                             R.string.action_play,
                             CONTROL_TYPE_PLAY,
-                            REQUEST_PLAY
+                            REQUEST_PLAY,
                         )
                     },
                     createRemoteAction(
                         R.drawable.ic_skip_next_24dp,
                         R.string.action_next_episode,
                         CONTROL_TYPE_NEXT,
-                        REQUEST_NEXT
-                    )
+                        REQUEST_NEXT,
+                    ),
 
-                )
+                ),
             )
             .setAspectRatio(player.videoAspect?.times(10000)?.let { Rational(it.toInt(), 10000) })
             .build()
