@@ -79,6 +79,8 @@ class PlayerActivity :
         }
     }
     override fun onNewIntent(intent: Intent?) {
+        // TODO: When in PiP mode, selecting an episode from list should load new episode
+        // Currently, below finish simply closes the activity. I don't know how to return a new Intent to update the activity
         finish()
         super.onNewIntent(intent)
     }
