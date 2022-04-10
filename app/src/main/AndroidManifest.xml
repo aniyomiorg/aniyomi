@@ -96,11 +96,12 @@
         <activity
             android:name=".ui.player.PlayerActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="userLandscape"
+            android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize|keyboardHidden|keyboard"
             android:supportsPictureInPicture="true"
             android:resizeableActivity="true"
-            android:exported="false">
+            android:exported="false"
+            tools:targetApi="n">
             <intent-filter>
                 <action android:name="com.samsung.android.support.REMOTE_ACTION" />
             </intent-filter>
