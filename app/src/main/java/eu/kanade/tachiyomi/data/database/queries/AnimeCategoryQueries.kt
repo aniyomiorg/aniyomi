@@ -20,7 +20,7 @@ interface AnimeCategoryQueries : DbProvider {
                 .table(AnimeCategoryTable.TABLE)
                 .where("${AnimeCategoryTable.COL_ANIME_ID} IN (${Queries.placeholders(animes.size)})")
                 .whereArgs(*animes.map { it.id }.toTypedArray())
-                .build()
+                .build(),
         )
         .prepare()
 

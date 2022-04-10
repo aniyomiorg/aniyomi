@@ -39,7 +39,7 @@ open class GlobalAnimeSearchPresenter(
     val initialExtensionFilter: String? = null,
     val sourceManager: AnimeSourceManager = Injekt.get(),
     val db: AnimeDatabaseHelper = Injekt.get(),
-    val preferences: PreferencesHelper = Injekt.get()
+    val preferences: PreferencesHelper = Injekt.get(),
 ) : BasePresenter<GlobalAnimeSearchController>() {
 
     /**
@@ -75,7 +75,7 @@ open class GlobalAnimeSearchPresenter(
         // Perform a search with previous or initial state
         search(
             savedState?.getString(BrowseAnimeSourcePresenter::query.name)
-                ?: initialQuery.orEmpty()
+                ?: initialQuery.orEmpty(),
         )
     }
 
@@ -172,7 +172,7 @@ open class GlobalAnimeSearchPresenter(
                         .doOnNext { fetchImage(it, source) } // Load anime covers
                         .map { list -> createCatalogueSearchItem(source, list.map { GlobalAnimeSearchCardItem(it) }) }
                 },
-                5
+                5,
             )
             .observeOn(AndroidSchedulers.mainThread())
             // Update matching source with the obtained results
@@ -185,8 +185,8 @@ open class GlobalAnimeSearchPresenter(
                             { it.results.isNullOrEmpty() },
                             // Same as initial sort, i.e. pinned first then alphabetically
                             { it.source.id.toString() !in pinnedSourceIds },
-                            { "${it.source.name.lowercase()} (${it.source.lang})" }
-                        )
+                            { "${it.source.name.lowercase()} (${it.source.lang})" },
+                        ),
                     )
             }
             // Update current state
@@ -199,7 +199,7 @@ open class GlobalAnimeSearchPresenter(
                 },
                 { _, error ->
                     logcat(LogPriority.ERROR, error)
-                }
+                },
             )
     }
 
@@ -234,7 +234,7 @@ open class GlobalAnimeSearchPresenter(
                 },
                 { error ->
                     logcat(LogPriority.ERROR, error)
-                }
+                },
             )
     }
 

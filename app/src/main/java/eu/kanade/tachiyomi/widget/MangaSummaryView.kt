@@ -27,7 +27,7 @@ class MangaSummaryView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
-    @StyleRes defStyleRes: Int = 0
+    @StyleRes defStyleRes: Int = 0,
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     private val binding = MangaSummaryBinding.inflate(LayoutInflater.from(context), this, true)
@@ -59,7 +59,9 @@ class MangaSummaryView @JvmOverloads constructor(
                 doOnNextLayout {
                     updateExpandState()
                 }
-                requestLayout()
+                if (!isInLayout) {
+                    requestLayout()
+                }
             }
         }
 
@@ -83,7 +85,7 @@ class MangaSummaryView @JvmOverloads constructor(
 
         val toggleDrawable = ContextCompat.getDrawable(
             context,
-            if (expanded) R.drawable.anim_caret_up else R.drawable.anim_caret_down
+            if (expanded) R.drawable.anim_caret_up else R.drawable.anim_caret_down,
         )
         toggleMore.setImageDrawable(toggleDrawable)
 
@@ -141,7 +143,10 @@ class MangaSummaryView @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        if (!recalculateHeights) {
+        // Wait until parent view has determined the exact width
+        // because this affect the description line count
+        val measureWidthFreely = MeasureSpec.getMode(widthMeasureSpec) != MeasureSpec.EXACTLY
+        if (!recalculateHeights || measureWidthFreely) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec)
             return
         }
@@ -164,10 +169,12 @@ class MangaSummaryView @JvmOverloads constructor(
             minLines = DESC_MIN_LINES
 
             setOnLongClickListener {
-                context.copyToClipboard(
-                    context.getString(R.string.description),
-                    text.toString()
-                )
+                description?.let {
+                    context.copyToClipboard(
+                        context.getString(R.string.description),
+                        it.toString(),
+                    )
+                }
                 true
             }
         }
@@ -176,7 +183,7 @@ class MangaSummaryView @JvmOverloads constructor(
             binding.descriptionText,
             binding.descriptionScrim,
             binding.toggleMoreScrim,
-            binding.toggleMore
+            binding.toggleMore,
         ).forEach {
             it.setOnClickListener { expanded = !expanded }
         }

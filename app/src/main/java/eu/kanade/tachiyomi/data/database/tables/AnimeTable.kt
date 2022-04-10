@@ -39,11 +39,14 @@ object AnimeTable {
 
     const val COL_EPISODE_FLAGS = "episode_flags"
 
-    const val COL_UNREAD = "unread"
-
     const val COL_CATEGORY = "category"
 
     const val COL_COVER_LAST_MODIFIED = "cover_last_modified"
+
+    // Not an actual value but computed when created
+    const val COMPUTED_COL_UNSEEN_COUNT = "unseen_count"
+
+    const val COMPUTED_COL_SEEN_COUNT = "seen_count"
 
     val createTableQuery: String
         get() =

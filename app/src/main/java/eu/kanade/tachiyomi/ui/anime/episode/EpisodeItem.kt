@@ -26,7 +26,7 @@ class EpisodeItem(episode: Episode, val anime: Anime) :
         adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
         holder: EpisodeHolder,
         position: Int,
-        payloads: List<Any?>?
+        payloads: List<Any?>?,
     ) {
         holder.bind(this, anime)
     }

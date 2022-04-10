@@ -9,9 +9,9 @@ import android.webkit.WebView
 import logcat.LogPriority
 
 object WebViewUtil {
-    const val REQUESTED_WITH = "com.android.browser"
+    const val SPOOF_PACKAGE_NAME = "org.chromium.chrome"
 
-    const val MINIMUM_WEBVIEW_VERSION = 88
+    const val MINIMUM_WEBVIEW_VERSION = 95
 
     fun supportsWebView(context: Context): Boolean {
         try {
@@ -37,7 +37,6 @@ fun WebView.setDefaultSettings() {
         javaScriptEnabled = true
         domStorageEnabled = true
         databaseEnabled = true
-        setAppCacheEnabled(true)
         useWideViewPort = true
         loadWithOverviewMode = true
         cacheMode = WebSettings.LOAD_DEFAULT

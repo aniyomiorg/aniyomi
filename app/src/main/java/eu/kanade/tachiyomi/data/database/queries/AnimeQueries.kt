@@ -29,9 +29,24 @@ interface AnimeQueries : DbProvider {
             RawQuery.builder()
                 .query(animelibQuery)
                 .observesTables(AnimeTable.TABLE, EpisodeTable.TABLE, AnimeCategoryTable.TABLE, CategoryTable.TABLE)
-                .build()
+                .build(),
         )
         .withGetResolver(AnimelibAnimeGetResolver.INSTANCE)
+        .prepare()
+
+    fun getDuplicateAnimelibAnime(anime: Anime) = db.get()
+        .`object`(Anime::class.java)
+        .withQuery(
+            Query.builder()
+                .table(AnimeTable.TABLE)
+                .where("${AnimeTable.COL_FAVORITE} = 1 AND LOWER(${AnimeTable.COL_TITLE}) = ? AND ${AnimeTable.COL_SOURCE} != ?")
+                .whereArgs(
+                    anime.title.lowercase(),
+                    anime.source,
+                )
+                .limit(1)
+                .build(),
+        )
         .prepare()
 
     fun getFavoriteAnimes(sortByTitle: Boolean = true): PreparedGetListOfObjects<Anime> {
@@ -57,7 +72,7 @@ interface AnimeQueries : DbProvider {
                 .table(AnimeTable.TABLE)
                 .where("${AnimeTable.COL_URL} = ? AND ${AnimeTable.COL_SOURCE} = ?")
                 .whereArgs(url, sourceId)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -68,7 +83,7 @@ interface AnimeQueries : DbProvider {
                 .table(AnimeTable.TABLE)
                 .where("${AnimeTable.COL_ID} = ?")
                 .whereArgs(id)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -78,7 +93,7 @@ interface AnimeQueries : DbProvider {
             RawQuery.builder()
                 .query(getSourceIdsWithNonLibraryAnimeQuery())
                 .observesTables(AnimeTable.TABLE)
-                .build()
+                .build(),
         )
         .withGetResolver(SourceIdAnimeCountGetResolver.INSTANCE)
         .prepare()
@@ -137,7 +152,7 @@ interface AnimeQueries : DbProvider {
                 .table(AnimeTable.TABLE)
                 .where("${AnimeTable.COL_FAVORITE} = ? AND ${AnimeTable.COL_SOURCE} IN (${Queries.placeholders(sourceIds.size)})")
                 .whereArgs(0, *sourceIds.toTypedArray())
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -145,7 +160,7 @@ interface AnimeQueries : DbProvider {
         .byQuery(
             DeleteQuery.builder()
                 .table(AnimeTable.TABLE)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -155,7 +170,7 @@ interface AnimeQueries : DbProvider {
             RawQuery.builder()
                 .query(getLastSeenAnimeQuery())
                 .observesTables(AnimeTable.TABLE)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -165,7 +180,7 @@ interface AnimeQueries : DbProvider {
             RawQuery.builder()
                 .query(getTotalEpisodeAnimeQuery())
                 .observesTables(AnimeTable.TABLE)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -175,7 +190,7 @@ interface AnimeQueries : DbProvider {
             RawQuery.builder()
                 .query(getLatestEpisodeAnimeQuery())
                 .observesTables(AnimeTable.TABLE)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -185,7 +200,7 @@ interface AnimeQueries : DbProvider {
             RawQuery.builder()
                 .query(getEpisodeFetchDateAnimeQuery())
                 .observesTables(AnimeTable.TABLE)
-                .build()
+                .build(),
         )
         .prepare()
 }

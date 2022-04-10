@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.browse.animesource
 
-import android.os.Bundle
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
@@ -12,45 +11,26 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import rx.Observable
-import rx.Subscription
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.TreeMap
 
 /**
- * Presenter of [SourceController]
+ * Presenter of [AnimeSourceController]
  * Function calls should be done from here. UI calls should be done from the controller.
  *
- * @param sourceManager manages the different sources.
- * @param preferences application preferences.
  */
 class AnimeSourcePresenter(
     val sourceManager: AnimeSourceManager = Injekt.get(),
-    private val preferences: PreferencesHelper = Injekt.get()
+    private val preferences: PreferencesHelper = Injekt.get(),
 ) : BasePresenter<AnimeSourceController>() {
 
     var sources = getEnabledSources()
 
     /**
-     * Subscription for retrieving enabled sources.
-     */
-    private var sourceSubscription: Subscription? = null
-
-    override fun onCreate(savedState: Bundle?) {
-        super.onCreate(savedState)
-
-        // Load enabled and last used sources
-        loadSources()
-        loadLastUsedSource()
-    }
-
-    /**
      * Unsubscribe and create a new subscription to fetch enabled sources.
      */
     private fun loadSources() {
-        sourceSubscription?.unsubscribe()
-
         val pinnedSources = mutableListOf<AnimeSourceItem>()
         val pinnedSourceIds = preferences.pinnedAnimeSources().get()
 
@@ -62,7 +42,7 @@ class AnimeSourcePresenter(
                 else -> d1.compareTo(d2)
             }
         }
-        val byLang = sources.groupByTo(map, { it.lang })
+        val byLang = sources.groupByTo(map) { it.lang }
         var sourceItems = byLang.flatMap {
             val langItem = LangItem(it.key)
             it.value.map { source ->
@@ -79,8 +59,7 @@ class AnimeSourcePresenter(
             sourceItems = pinnedSources + sourceItems
         }
 
-        sourceSubscription = Observable.just(sourceItems)
-            .subscribeLatestCache(AnimeSourceController::setSources)
+        view?.setSources(sourceItems)
     }
 
     private fun loadLastUsedSource() {

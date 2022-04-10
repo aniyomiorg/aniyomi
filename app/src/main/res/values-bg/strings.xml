@@ -89,7 +89,6 @@
     <string name="pref_keep_screen_on">Не изключвай екрана</string>
     <string name="pref_reader_navigation">Навигация</string>
     <string name="pref_read_with_volume_keys">Бутони за звука</string>
-    <string name="pref_read_with_tapping">Докосване</string>
     <string name="pref_reader_theme">Цвят на фона</string>
     <string name="white_background">Бял</string>
     <string name="black_background">Черен</string>
@@ -368,9 +367,7 @@
     <string name="logout_title">Искате ли да излезете от %1$s\?</string>
     <string name="logout">Излез</string>
     <string name="logout_success">Излязохте успешно</string>
-    <string name="currently_reading">В прочит сега</string>
     <string name="paused">На пауза</string>
-    <string name="want_to_read">Искам да чета</string>
     <string name="secure_screen">Сигурност</string>
     <string name="channel_ext_updates">Ъпдейти на разширенията</string>
     <string name="channel_new_chapters">Нови глави</string>
@@ -494,10 +491,6 @@
     </plurals>
     <string name="action_display_unread_badge">Непрочетени глави</string>
     <string name="action_migrate">Мигрирай</string>
-    <plurals name="notification_update_error">
-        <item quantity="one">1 актуализация не бе успешна</item>
-        <item quantity="other">%1$d актуализации не бяха успешни</item>
-    </plurals>
     <string name="loader_not_implemented_error">Източникът не е намерен</string>
     <string name="page_list_empty_error">Няма намерени страници</string>
     <string name="sort_by_upload_date">По дата на качване</string>
@@ -729,5 +722,5 @@
     <string name="update_72hour">На всеки 3 дена</string>
     <string name="connected_to_wifi">Само през Wi-Fi</string>
     <string name="download_queue_size_warning">Предупреждение: големите масови изтегляния могат да доведат до забавяне на източниците и/или блокиране на Tachiyomi</string>
-    <string name="only_update_restrictions">Актуализирай само: %s</string>
+    <string name="action_filter_started">Започнати</string>
 </resources>

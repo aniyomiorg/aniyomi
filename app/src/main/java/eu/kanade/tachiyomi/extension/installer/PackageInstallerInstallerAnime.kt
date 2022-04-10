@@ -70,7 +70,7 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
                     service,
                     activeSession!!.second,
                     Intent(INSTALL_ACTION),
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0,
                 ).intentSender
                 session.commit(intentSender)
             }

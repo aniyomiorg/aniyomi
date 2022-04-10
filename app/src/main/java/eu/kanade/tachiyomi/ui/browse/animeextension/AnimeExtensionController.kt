@@ -20,6 +20,7 @@ import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.BrowseController
 import eu.kanade.tachiyomi.ui.browse.animeextension.details.AnimeExtensionDetailsController
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -92,7 +93,7 @@ open class AnimeExtensionController :
             R.id.action_search -> expandActionViewFromInteraction = true
             R.id.action_settings -> {
                 parentController!!.router.pushController(
-                    AnimeExtensionFilterController().withFadeTransaction()
+                    AnimeExtensionFilterController().withFadeTransaction(),
                 )
             }
         }
@@ -143,6 +144,7 @@ open class AnimeExtensionController :
         }
 
         searchView.queryTextChanges()
+            .drop(1) // Drop first event after subscribed
             .filter { router.backstack.lastOrNull()?.controller == this }
             .onEach {
                 query = it.toString()
@@ -208,7 +210,7 @@ open class AnimeExtensionController :
                             }
                         }
                     }
-                }
+                },
             )
         } else {
             adapter?.updateDataSet(extensions)

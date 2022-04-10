@@ -44,7 +44,7 @@ inline fun PreferenceGroup.infoPreference(@StringRes infoRes: Int): Preference {
             iconTint = context.getResourceColor(android.R.attr.textColorHint)
             summaryRes = infoRes
             isSelectable = false
-        }
+        },
     )
 }
 
@@ -114,12 +114,12 @@ inline fun <P : Preference> PreferenceGroup.addThenInit(p: P, block: P.() -> Uni
     }
 }
 
-inline fun <T> Preference.bindTo(preference: com.tfcporciuncula.flow.Preference<T>) {
+inline fun <T> Preference.bindTo(preference: com.fredporciuncula.flow.preferences.Preference<T>) {
     key = preference.key
     defaultValue = preference.defaultValue
 }
 
-inline fun <T> ListPreference.bindTo(preference: com.tfcporciuncula.flow.Preference<T>) {
+inline fun <T> ListPreference.bindTo(preference: com.fredporciuncula.flow.preferences.Preference<T>) {
     key = preference.key
     // ListPreferences persist values as strings, even when we're using our IntListPreference
     defaultValue = preference.defaultValue.toString()
@@ -142,7 +142,7 @@ inline fun SwitchPreferenceCompat.requireAuthentication(activity: FragmentActivi
                 callback = object : AuthenticatorUtil.AuthenticationCallback() {
                     override fun onAuthenticationSucceeded(
                         activity: FragmentActivity?,
-                        result: BiometricPrompt.AuthenticationResult
+                        result: BiometricPrompt.AuthenticationResult,
                     ) {
                         super.onAuthenticationSucceeded(activity, result)
                         isChecked = newValue as Boolean
@@ -151,12 +151,12 @@ inline fun SwitchPreferenceCompat.requireAuthentication(activity: FragmentActivi
                     override fun onAuthenticationError(
                         activity: FragmentActivity?,
                         errorCode: Int,
-                        errString: CharSequence
+                        errString: CharSequence,
                     ) {
                         super.onAuthenticationError(activity, errorCode, errString)
                         activity?.toast(errString.toString())
                     }
-                }
+                },
             )
         }
 

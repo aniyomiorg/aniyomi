@@ -41,7 +41,7 @@ object SettingsSearchHelper {
         SettingsReaderController::class,
         SettingsSecurityController::class,
         SettingsTrackingController::class,
-        SettingsPlayerController::class
+        SettingsPlayerController::class,
     )
 
     /**
@@ -83,7 +83,7 @@ object SettingsSearchHelper {
     private fun getSettingSearchResult(
         ctrl: SettingsController,
         pref: Preference,
-        breadcrumbs: String = ""
+        breadcrumbs: String = "",
     ) {
         when {
             pref is PreferenceGroup -> {
@@ -115,8 +115,8 @@ object SettingsSearchHelper {
                         title = title,
                         summary = summary,
                         breadcrumb = breadcrumbsStr,
-                        searchController = ctrl
-                    )
+                        searchController = ctrl,
+                    ),
                 )
             }
         }
@@ -137,6 +137,6 @@ object SettingsSearchHelper {
         val title: String,
         val summary: String,
         val breadcrumb: String,
-        val searchController: SettingsController
+        val searchController: SettingsController,
     )
 }

@@ -34,7 +34,7 @@ data class BackupAnime(
     @ProtoNumber(101) var episodeFlags: Int = 0,
     @ProtoNumber(102) var brokenHistory: List<BrokenBackupAnimeHistory> = emptyList(),
     @ProtoNumber(103) var viewer_flags: Int = 0,
-    @ProtoNumber(104) var history: List<BackupAnimeHistory> = emptyList()
+    @ProtoNumber(104) var history: List<BackupAnimeHistory> = emptyList(),
 ) {
     fun getAnimeImpl(): AnimeImpl {
         return AnimeImpl().apply {
@@ -81,7 +81,7 @@ data class BackupAnime(
                 source = anime.source,
                 dateAdded = anime.date_added,
                 viewer_flags = anime.viewer_flags,
-                episodeFlags = anime.episode_flags
+                episodeFlags = anime.episode_flags,
             )
         }
     }

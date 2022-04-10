@@ -253,10 +253,6 @@
     <string name="update_check_no_new_updates">Neniu nova ĝisdatigo disponebla</string>
     <string name="update_check_confirm">Elŝuti</string>
     <string name="file_select_backup">Elekti savkopian dosieron</string>
-    <plurals name="notification_update_error">
-        <item quantity="one">1 ĝisdatigo malsukcesis</item>
-        <item quantity="other">%1$d ĝisdatigoj malsukcesis</item>
-    </plurals>
     <plurals name="notification_chapters_multiple_and_more">
         <item quantity="one">Ĉapitroj %1$s kaj 1 pli</item>
         <item quantity="other">Ĉapitroj %1$s kaj %2$d pli</item>
@@ -309,7 +305,6 @@
     <string name="repeating">Legataj denove</string>
     <string name="dropped">Forĵetitaj</string>
     <string name="completed">Finitaj</string>
-    <string name="currently_reading">Aktuale legataj</string>
     <string name="reading">Legata</string>
     <string name="add_tracking">Aldoni ŝanospuron</string>
     <plurals name="num_trackers">
@@ -423,7 +418,6 @@
     <string name="pref_viewer_type">Defaŭlta legada reĝimo</string>
     <string name="automatic_background">Aŭtomate</string>
     <string name="pref_reader_actions">Agoj</string>
-    <string name="pref_read_with_tapping">Tuŝetado</string>
     <string name="pref_custom_color_filter">Propra kolorfiltrilo</string>
     <string name="off">Malŝaltita</string>
     <string name="on">Ŝaltita</string>
@@ -463,7 +457,6 @@
     <string name="source_unsupported">Fonto ne subtenita</string>
     <string name="myanimelist_relogin">Bonvole ensalutu al MAL denove</string>
     <string name="track_start_date">Komencita</string>
-    <string name="want_to_read">Volas legi</string>
     <string name="plan_to_read">Planas legi</string>
     <string name="paused">Paŭzita</string>
     <string name="on_hold">Haltetita</string>
@@ -571,7 +564,6 @@
     <string name="pref_library_update_refresh_metadata_summary">Kontroli ĉu estas nova kovrio kaj detaloj kiam ĝisdatigas bibliotekon</string>
     <string name="cover_saved">Kovrilo konservita</string>
     <string name="manga_cover">Kovrilo</string>
-    <string name="licensed"/>
     <string name="pref_skip_filtered_chapters">Preterpasi filtritajn ĉapitroj</string>
     <string name="pref_show_navigation_mode_summary">Montri tuŝetzonojn kiam malfermas legilon</string>
     <string name="pref_library_update_refresh_metadata">Aŭtomate aktualigi metadatumoj</string>

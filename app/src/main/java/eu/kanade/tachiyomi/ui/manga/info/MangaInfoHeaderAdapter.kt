@@ -19,7 +19,7 @@ import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.controller.getMainAppBarHeight
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.util.system.copyToClipboard
-import eu.kanade.tachiyomi.util.view.loadAnyAutoPause
+import eu.kanade.tachiyomi.util.view.loadAutoPause
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.view.clicks
@@ -84,6 +84,7 @@ class MangaInfoHeaderAdapter(
     }
 
     private fun updateCoverPosition() {
+        if (isTablet) return
         val appBarHeight = controller.getMainAppBarHeight()
         binding.mangaCover.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin += appBarHeight
@@ -114,7 +115,7 @@ class MangaInfoHeaderAdapter(
                         text = view.context.resources.getQuantityString(
                             R.plurals.num_trackers,
                             trackCount,
-                            trackCount
+                            trackCount,
                         )
                         isActivated = true
                     } else {
@@ -142,7 +143,7 @@ class MangaInfoHeaderAdapter(
                 .onEach {
                     controller.activity?.copyToClipboard(
                         view.context.getString(R.string.title),
-                        binding.mangaFullTitle.text.toString()
+                        binding.mangaFullTitle.text.toString(),
                     )
                 }
                 .launchIn(controller.viewScope)
@@ -157,7 +158,7 @@ class MangaInfoHeaderAdapter(
                 .onEach {
                     controller.activity?.copyToClipboard(
                         binding.mangaAuthor.text.toString(),
-                        binding.mangaAuthor.text.toString()
+                        binding.mangaAuthor.text.toString(),
                     )
                 }
                 .launchIn(controller.viewScope)
@@ -172,7 +173,7 @@ class MangaInfoHeaderAdapter(
                 .onEach {
                     controller.activity?.copyToClipboard(
                         binding.mangaArtist.text.toString(),
-                        binding.mangaArtist.text.toString()
+                        binding.mangaArtist.text.toString(),
                     )
                 }
                 .launchIn(controller.viewScope)
@@ -203,7 +204,7 @@ class MangaInfoHeaderAdapter(
                 R.string.action_share,
                 R.string.action_save,
                 // Can only edit cover for library manga
-                if (manga.favorite) R.string.action_edit else null
+                if (manga.favorite) R.string.action_edit else null,
             ).map(controller.activity!!::getString).toTypedArray()
 
             MaterialAlertDialogBuilder(controller.activity!!)
@@ -273,6 +274,9 @@ class MangaInfoHeaderAdapter(
                 SManga.ONGOING -> R.drawable.ic_status_ongoing_24dp to R.string.ongoing
                 SManga.COMPLETED -> R.drawable.ic_status_completed_24dp to R.string.completed
                 SManga.LICENSED -> R.drawable.ic_status_licensed_24dp to R.string.licensed
+                SManga.PUBLISHING_FINISHED -> R.drawable.ic_done_24dp to R.string.publishing_finished
+                SManga.CANCELLED -> R.drawable.ic_close_24dp to R.string.cancelled
+                SManga.ON_HIATUS -> R.drawable.ic_pause_24dp to R.string.on_hiatus
                 else -> R.drawable.ic_status_unknown_24dp to R.string.unknown
             }
             binding.mangaStatusIcon.setImageResource(statusDrawable)
@@ -282,13 +286,13 @@ class MangaInfoHeaderAdapter(
             setFavoriteButtonState(manga.favorite)
 
             // Set cover if changed.
-            binding.backdrop.loadAnyAutoPause(manga)
-            binding.mangaCover.loadAnyAutoPause(manga)
+            binding.backdrop.loadAutoPause(manga)
+            binding.mangaCover.loadAutoPause(manga)
 
             // Manga info section
-            binding.mangaSummarySection.isVisible = !manga.description.isNullOrBlank() || !manga.genre.isNullOrBlank()
-            binding.mangaSummarySection.description = manga.description
             binding.mangaSummarySection.setTags(manga.getGenres(), controller::performGenreSearch)
+            binding.mangaSummarySection.description = manga.description
+            binding.mangaSummarySection.isVisible = !manga.description.isNullOrBlank() || !manga.genre.isNullOrBlank()
         }
 
         /**

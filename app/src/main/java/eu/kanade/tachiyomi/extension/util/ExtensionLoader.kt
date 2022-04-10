@@ -13,6 +13,7 @@ import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceFactory
 import eu.kanade.tachiyomi.util.lang.Hash
+import eu.kanade.tachiyomi.util.system.getApplicationIcon
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -34,6 +35,8 @@ internal object ExtensionLoader {
     private const val METADATA_SOURCE_CLASS = "tachiyomi.extension.class"
     private const val METADATA_SOURCE_FACTORY = "tachiyomi.extension.factory"
     private const val METADATA_NSFW = "tachiyomi.extension.nsfw"
+    private const val METADATA_HAS_README = "tachiyomi.extension.hasReadme"
+    private const val METADATA_HAS_CHANGELOG = "tachiyomi.extension.hasChangelog"
     const val LIB_VERSION_MIN = 1.2
     const val LIB_VERSION_MAX = 1.3
 
@@ -117,7 +120,7 @@ internal object ExtensionLoader {
         if (libVersion < LIB_VERSION_MIN || libVersion > LIB_VERSION_MAX) {
             val exception = Exception(
                 "Lib version is $libVersion, while only versions " +
-                    "$LIB_VERSION_MIN to $LIB_VERSION_MAX are allowed"
+                    "$LIB_VERSION_MIN to $LIB_VERSION_MAX are allowed",
             )
             logcat(LogPriority.WARN, exception)
             return LoadResult.Error(exception)
@@ -137,6 +140,9 @@ internal object ExtensionLoader {
         if (!loadNsfwSource && isNsfw) {
             return LoadResult.Error("NSFW extension $pkgName not allowed")
         }
+
+        val hasReadme = appInfo.metaData.getInt(METADATA_HAS_README, 0) == 1
+        val hasChangelog = appInfo.metaData.getInt(METADATA_HAS_CHANGELOG, 0) == 1
 
         val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
 
@@ -179,9 +185,12 @@ internal object ExtensionLoader {
             versionCode,
             lang,
             isNsfw,
+            hasReadme,
+            hasChangelog,
             sources = sources,
             pkgFactory = appInfo.metaData.getString(METADATA_SOURCE_FACTORY),
-            isUnofficial = signatureHash != officialSignature
+            isUnofficial = signatureHash != officialSignature,
+            icon = context.getApplicationIcon(pkgName),
         )
         return LoadResult.Success(extension)
     }

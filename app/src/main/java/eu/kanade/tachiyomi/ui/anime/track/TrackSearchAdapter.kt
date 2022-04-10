@@ -8,7 +8,7 @@ import eu.kanade.tachiyomi.databinding.TrackSearchItemBinding
 
 class TrackSearchAdapter(
     private val currentTrackUrl: String?,
-    private val onSelectionChanged: (AnimeTrackSearch?) -> Unit
+    private val onSelectionChanged: (AnimeTrackSearch?) -> Unit,
 ) : RecyclerView.Adapter<TrackSearchHolder>() {
     var selectedItemPosition = -1
         set(value) {

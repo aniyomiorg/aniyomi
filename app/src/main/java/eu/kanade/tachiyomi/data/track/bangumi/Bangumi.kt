@@ -90,7 +90,7 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
             refresh(track)
         } else {
             // Set default fields if it's not found in the list
-            track.status = if (hasReadChapters) READING else PLANNING
+            track.status = if (hasReadChapters) READING else PLAN_TO_READ
             track.score = 0F
             add(track)
             update(track)
@@ -115,7 +115,7 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
             refresh(track)
         } else {
             // Set default fields if it's not found in the list
-            track.status = if (hasReadChapters) READING else PLANNING
+            track.status = if (hasReadChapters) READING else PLAN_TO_READ
             track.score = 0F
             add(track)
             update(track)
@@ -153,20 +153,20 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
     override fun getLogoColor() = Color.rgb(240, 145, 153)
 
     override fun getStatusList(): List<Int> {
-        return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLANNING)
+        return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_READ)
     }
 
     override fun getStatusListAnime(): List<Int> {
-        return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLANNING)
+        return listOf(READING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_READ)
     }
 
     override fun getStatus(status: Int): String = with(context) {
         when (status) {
             READING -> getString(R.string.reading)
+            PLAN_TO_READ -> getString(R.string.plan_to_read)
             COMPLETED -> getString(R.string.completed)
             ON_HOLD -> getString(R.string.on_hold)
             DROPPED -> getString(R.string.dropped)
-            PLANNING -> getString(R.string.plan_to_read)
             else -> ""
         }
     }
@@ -216,6 +216,6 @@ class Bangumi(private val context: Context, id: Int) : TrackService(id) {
         const val COMPLETED = 2
         const val ON_HOLD = 4
         const val DROPPED = 5
-        const val PLANNING = 1
+        const val PLAN_TO_READ = 1
     }
 }

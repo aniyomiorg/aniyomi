@@ -1,14 +1,14 @@
 package eu.kanade.tachiyomi.ui.browse.migration.manga
 
 import android.view.View
-import coil.clear
-import coil.loadAny
+import coil.dispose
+import coil.load
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.databinding.SourceListItemBinding
 
 class MigrationMangaHolder(
     view: View,
-    private val adapter: MigrationMangaAdapter
+    private val adapter: MigrationMangaAdapter,
 ) : FlexibleViewHolder(view, adapter) {
 
     private val binding = SourceListItemBinding.bind(view)
@@ -23,7 +23,7 @@ class MigrationMangaHolder(
         binding.title.text = item.manga.title
 
         // Update the cover
-        binding.thumbnail.clear()
-        binding.thumbnail.loadAny(item.manga)
+        binding.thumbnail.dispose()
+        binding.thumbnail.load(item.manga)
     }
 }

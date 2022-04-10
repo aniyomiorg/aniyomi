@@ -21,31 +21,20 @@ import uy.kohesive.injekt.api.get
  */
 class AnimelibAdapter(
     private val controller: AnimelibController,
-    private val preferences: PreferencesHelper = Injekt.get()
+    private val preferences: PreferencesHelper = Injekt.get(),
 ) : RecyclerViewPagerAdapter() {
 
     /**
      * The categories to bind in the adapter.
      */
     var categories: List<Category> = emptyList()
-        // This setter helps to not refresh the adapter if the reference to the list doesn't change.
-        set(value) {
-            if (field !== value) {
-                field = value
-                notifyDataSetChanged()
-            }
-        }
+        private set
 
     /**
      * The number of anime in each category.
+     * List order must be the same as [categories]
      */
-    var itemsPerCategory: Map<Int, Int> = emptyMap()
-        set(value) {
-            if (field !== value) {
-                field = value
-                notifyDataSetChanged()
-            }
-        }
+    private var itemsPerCategory: List<Int> = emptyList()
 
     private var boundViews = arrayListOf<View>()
 
@@ -60,6 +49,29 @@ class AnimelibAdapter(
                 currentDisplayMode = it
             }
             .launchIn(controller.viewScope)
+    }
+
+    /**
+     * Pair of category and size of category
+     */
+    fun updateCategories(new: List<Pair<Category, Int>>) {
+        var updated = false
+
+        val newCategories = new.map { it.first }
+        if (categories != newCategories) {
+            categories = newCategories
+            updated = true
+        }
+
+        val newItemsPerCategory = new.map { it.second }
+        if (itemsPerCategory !== newItemsPerCategory) {
+            itemsPerCategory = newItemsPerCategory
+            updated = true
+        }
+
+        if (updated) {
+            notifyDataSetChanged()
+        }
     }
 
     /**
@@ -112,10 +124,11 @@ class AnimelibAdapter(
      * @return the title to display.
      */
     override fun getPageTitle(position: Int): CharSequence {
-        if (preferences.animeCategoryNumberOfItems().get()) {
-            return categories[position].let { "${it.name} (${itemsPerCategory[it.id]})" }
+        return if (!preferences.animeCategoryNumberOfItems().get()) {
+            categories[position].name
+        } else {
+            categories[position].let { "${it.name} (${itemsPerCategory[position]})" }
         }
-        return categories[position].name
     }
 
     /**

@@ -52,18 +52,19 @@ class HistoryTabsController() :
         }
     }
 
-    override fun configureTabs(tabs: TabLayout) {
+    override fun configureTabs(tabs: TabLayout): Boolean {
         with(tabs) {
             tabGravity = TabLayout.GRAVITY_FILL
             tabMode = TabLayout.MODE_FIXED
         }
+        return true
     }
 
     private inner class HistoryTabsAdapter : RouterPagerAdapter(this@HistoryTabsController) {
 
         private val tabTitles = listOf(
             R.string.label_animehistory,
-            R.string.label_history
+            R.string.label_history,
         )
             .map { resources!!.getString(it) }
 

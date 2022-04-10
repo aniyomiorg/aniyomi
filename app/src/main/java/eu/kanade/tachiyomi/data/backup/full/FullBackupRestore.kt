@@ -142,7 +142,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         categories: List<Int>,
         history: List<BackupHistory>,
         tracks: List<Track>,
-        backupCategories: List<BackupCategory>
+        backupCategories: List<BackupCategory>,
     ) {
         db.inTransaction {
             val dbManga = backupManager.getMangaFromDatabase(manga)
@@ -174,7 +174,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         categories: List<Int>,
         history: List<BackupAnimeHistory>,
         tracks: List<AnimeTrack>,
-        backupCategories: List<BackupCategory>
+        backupCategories: List<BackupCategory>,
     ) {
         animedb.inTransaction {
             val dbAnime = backupManager.getAnimeFromDatabase(anime)
@@ -204,7 +204,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         categories: List<Int>,
         history: List<BackupHistory>,
         tracks: List<Track>,
-        backupCategories: List<BackupCategory>
+        backupCategories: List<BackupCategory>,
     ) {
         try {
             val fetchedManga = backupManager.restoreManga(manga)
@@ -231,7 +231,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         categories: List<Int>,
         history: List<BackupAnimeHistory>,
         tracks: List<AnimeTrack>,
-        backupCategories: List<BackupCategory>
+        backupCategories: List<BackupCategory>,
     ) {
         try {
             val fetchedAnime = backupManager.restoreAnime(anime)
@@ -251,7 +251,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         categories: List<Int>,
         history: List<BackupHistory>,
         tracks: List<Track>,
-        backupCategories: List<BackupCategory>
+        backupCategories: List<BackupCategory>,
     ) {
         backupManager.restoreChaptersForManga(backupManga, chapters)
 
@@ -264,7 +264,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         categories: List<Int>,
         history: List<BackupAnimeHistory>,
         tracks: List<AnimeTrack>,
-        backupCategories: List<BackupCategory>
+        backupCategories: List<BackupCategory>,
     ) {
         backupManager.restoreEpisodesForAnime(backupAnime, episodes)
 

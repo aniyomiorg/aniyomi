@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.ui.reader.viewer.GestureDetectorWithLongTap
  */
 open class Pager(
     context: Context,
-    isHorizontal: Boolean = true
+    isHorizontal: Boolean = true,
 ) : DirectionalViewPager(context, isHorizontal) {
 
     /**
@@ -84,6 +84,8 @@ open class Pager(
     override fun onTouchEvent(ev: MotionEvent): Boolean {
         return try {
             super.onTouchEvent(ev)
+        } catch (e: NullPointerException) {
+            false
         } catch (e: IndexOutOfBoundsException) {
             false
         } catch (e: IllegalArgumentException) {

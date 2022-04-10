@@ -23,7 +23,7 @@ interface EpisodeQueries : DbProvider {
                 .table(EpisodeTable.TABLE)
                 .where("${EpisodeTable.COL_ANIME_ID} = ?")
                 .whereArgs(anime.id)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -34,7 +34,7 @@ interface EpisodeQueries : DbProvider {
                 .query(getRecentsQueryAnime())
                 .args(date.time)
                 .observesTables(EpisodeTable.TABLE)
-                .build()
+                .build(),
         )
         .withGetResolver(AnimeEpisodeGetResolver.INSTANCE)
         .prepare()
@@ -46,7 +46,7 @@ interface EpisodeQueries : DbProvider {
                 .table(EpisodeTable.TABLE)
                 .where("${EpisodeTable.COL_ID} = ?")
                 .whereArgs(id)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -57,7 +57,7 @@ interface EpisodeQueries : DbProvider {
                 .table(EpisodeTable.TABLE)
                 .where("${EpisodeTable.COL_URL} = ?")
                 .whereArgs(url)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -68,7 +68,7 @@ interface EpisodeQueries : DbProvider {
                 .table(EpisodeTable.TABLE)
                 .where("${EpisodeTable.COL_URL} = ? AND ${EpisodeTable.COL_ANIME_ID} = ?")
                 .whereArgs(url, animeId)
-                .build()
+                .build(),
         )
         .prepare()
 

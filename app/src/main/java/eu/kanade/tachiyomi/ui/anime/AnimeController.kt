@@ -31,6 +31,7 @@ import coil.request.ImageRequest
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dev.chrisbanes.insetter.applyInsetter
@@ -51,11 +52,14 @@ import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.saver.Image
+import eu.kanade.tachiyomi.data.saver.Location
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.databinding.MangaControllerBinding
+import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.ui.anime.episode.AnimeEpisodesHeaderAdapter
 import eu.kanade.tachiyomi.ui.anime.episode.DeleteEpisodesDialog
 import eu.kanade.tachiyomi.ui.anime.episode.DownloadCustomEpisodesDialog
@@ -94,7 +98,6 @@ import eu.kanade.tachiyomi.util.hasCustomCover
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
-import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
@@ -133,8 +136,8 @@ class AnimeController :
     constructor(anime: Anime?, fromSource: Boolean = false) : super(
         bundleOf(
             ANIME_EXTRA to (anime?.id ?: 0),
-            FROM_SOURCE_EXTRA to fromSource
-        )
+            FROM_SOURCE_EXTRA to fromSource,
+        ),
     ) {
         this.anime = anime
         if (anime != null) {
@@ -143,7 +146,7 @@ class AnimeController :
     }
 
     constructor(animeId: Long) : this(
-        Injekt.get<AnimeDatabaseHelper>().getAnime(animeId).executeAsBlocking()
+        Injekt.get<AnimeDatabaseHelper>().getAnime(animeId).executeAsBlocking(),
     )
 
     @Suppress("unused")
@@ -162,6 +165,7 @@ class AnimeController :
 
     private val preferences: PreferencesHelper by injectLazy()
     private val coverCache: AnimeCoverCache by injectLazy()
+    private val sourceManager: AnimeSourceManager by injectLazy()
 
     private var animeInfoAdapter: AnimeInfoHeaderAdapter? = null
     private var episodesHeaderAdapter: AnimeEpisodesHeaderAdapter? = null
@@ -240,7 +244,7 @@ class AnimeController :
     override fun createPresenter(): AnimePresenter {
         return AnimePresenter(
             anime!!,
-            source!!
+            source!!,
         )
     }
 
@@ -286,7 +290,7 @@ class AnimeController :
                     val mainActivityAppBar = (activity as? MainActivity)?.binding?.appbar
                     (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
                         1,
-                        mainActivityAppBar?.height ?: 0
+                        mainActivityAppBar?.height ?: 0,
                     )
                     mainActivityAppBar?.isLifted = true
                 }
@@ -361,7 +365,7 @@ class AnimeController :
 
     private fun updateToolbarTitleAlpha(@FloatRange(from = 0.0, to = 1.0) alpha: Float? = null) {
         // Controller may actually already be destroyed by the time this gets run
-        binding ?: return
+        if (!isAttached) return
 
         val scrolledList = binding.fullRecycler ?: binding.infoRecycler!!
         (activity as? MainActivity)?.binding?.appbar?.titleTextAlpha = when {
@@ -396,7 +400,7 @@ class AnimeController :
                             override fun onAnimationStart(animation: Animator?) {
                                 openEpisode(item.episode)
                             }
-                        }
+                        },
                     )
                 }
             } else {
@@ -417,6 +421,8 @@ class AnimeController :
         val fab = actionFab ?: return
         if (adapter.items.any { it.seen }) {
             fab.text = context.getString(R.string.action_resume)
+        } else {
+            fab.text = context.getString(R.string.action_start)
         }
         if (adapter.items.any { !it.seen }) {
             fab.show()
@@ -468,7 +474,7 @@ class AnimeController :
         when (item.itemId) {
             R.id.action_share -> shareAnime()
             R.id.download_next, R.id.download_next_5, R.id.download_next_10,
-            R.id.download_custom, R.id.download_unread, R.id.download_all
+            R.id.download_custom, R.id.download_unread, R.id.download_all,
             -> downloadEpisodes(item.itemId)
 
             R.id.action_edit_categories -> onCategoriesClick()
@@ -520,6 +526,12 @@ class AnimeController :
     fun onFetchAnimeInfoError(error: Throwable) {
         isRefreshingInfo = false
         updateRefreshing()
+
+        // Ignore early hints "errors" that aren't handled by OkHttp
+        if (error is HttpException && error.code == 103) {
+            return
+        }
+
         activity?.toast(error.message)
     }
 
@@ -565,7 +577,32 @@ class AnimeController :
             activity?.toast(activity?.getString(R.string.manga_removed_library))
             activity?.invalidateOptionsMenu()
         } else {
-            addToAnimelib(anime)
+            val duplicateAnime = presenter.getDuplicateAnimelibAnime(anime)
+            if (duplicateAnime != null) {
+                showAddDuplicateDialog(
+                    anime,
+                    duplicateAnime,
+                )
+            } else {
+                addToAnimelib(anime)
+            }
+        }
+    }
+
+    private fun showAddDuplicateDialog(newAnime: Anime, animelibAnime: Anime) {
+        activity?.let {
+            val source = sourceManager.getOrStub(animelibAnime.source)
+            MaterialAlertDialogBuilder(it).apply {
+                setMessage(activity?.getString(R.string.confirm_manga_add_duplicate, source.name))
+                setPositiveButton(activity?.getString(R.string.action_add)) { _, _ ->
+                    addToAnimelib(newAnime)
+                }
+                setNegativeButton(activity?.getString(R.string.action_cancel)) { _, _ -> }
+                setNeutralButton(activity?.getString(R.string.action_show_anime)) { _, _ ->
+                    router.pushController(AnimeController(animelibAnime).withFadeTransaction())
+                }
+                setCancelable(true)
+            }.create().show()
         }
     }
 
@@ -672,7 +709,7 @@ class AnimeController :
                     super.postDestroy(controller)
                     dialog = null
                 }
-            }
+            },
         )
         dialog?.showDialog(router)
     }
@@ -716,7 +753,7 @@ class AnimeController :
             is UpdatesTabsController,
             is HistoryTabsController,
             is AnimeUpdatesController,
-            is AnimeHistoryController -> {
+            is AnimeHistoryController, -> {
                 // Manually navigate to AnimelibController
                 router.handleBack()
                 (router.activity as MainActivity).setSelectedNavItem(R.id.nav_animelib)
@@ -783,20 +820,30 @@ class AnimeController :
                     super.postDestroy(controller)
                     dialog = null
                 }
-            }
+            },
         )
         dialog?.showDialog(router)
     }
 
     fun shareCover() {
         try {
+            val anime = anime!!
             val activity = activity!!
             useCoverAsBitmap(activity) { coverBitmap ->
-                val cover = presenter.shareCover(activity, coverBitmap)
-                val uri = cover.getUriCompat(activity)
-                startActivity(uri.toShareIntent(activity))
+                viewScope.launchIO {
+                    val uri = presenter.saveImage(
+                        image = Image.Cover(
+                            bitmap = coverBitmap,
+                            name = anime.title,
+                            location = Location.Cache,
+                        ),
+                    )
+                    launchUI {
+                        startActivity(uri.toShareIntent(activity))
+                    }
+                }
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e)
             activity?.toast(R.string.error_sharing_cover)
         }
@@ -804,12 +851,23 @@ class AnimeController :
 
     fun saveCover() {
         try {
+            val anime = anime!!
             val activity = activity!!
             useCoverAsBitmap(activity) { coverBitmap ->
-                presenter.saveCover(activity, coverBitmap)
-                activity.toast(R.string.cover_saved)
+                viewScope.launchIO {
+                    presenter.saveImage(
+                        image = Image.Cover(
+                            bitmap = coverBitmap,
+                            name = anime.title,
+                            location = Location.Pictures.create(),
+                        ),
+                    )
+                    launchUI {
+                        activity.toast(R.string.cover_saved)
+                    }
+                }
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e)
             activity?.toast(R.string.error_saving_cover)
         }
@@ -832,9 +890,9 @@ class AnimeController :
             startActivityForResult(
                 Intent.createChooser(
                     intent,
-                    resources?.getString(R.string.file_select_cover)
+                    resources?.getString(R.string.file_select_cover),
                 ),
-                REQUEST_IMAGE_OPEN
+                REQUEST_IMAGE_OPEN,
             )
         } else {
             activity?.toast(R.string.notification_first_add_to_library)
@@ -1048,9 +1106,8 @@ class AnimeController :
     }
 
     private fun openEpisode(episode: Episode, hasAnimation: Boolean = false, playerChangeRequested: Boolean = false) {
-        val context = view?.context ?: return
-        val anime = anime ?: return
-        val intent = PlayerActivity.newIntent(context, anime, episode) // Intent(Intent.ACTION_VIEW).setClass(context, MPVActivity::class.java).setData(Uri.parse("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")) // NewPlayerActivity.newIntent(context, presenter.anime, episode)
+        val activity = activity ?: return
+        val intent = PlayerActivity.newIntent(activity, presenter.anime, episode) // Intent(Intent.ACTION_VIEW).setClass(context, MPVActivity::class.java).setData(Uri.parse("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")) // NewPlayerActivity.newIntent(context, presenter.anime, episode)
         val useInternal = preferences.alwaysUseExternalPlayer() == playerChangeRequested
         if (hasAnimation) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
@@ -1058,22 +1115,22 @@ class AnimeController :
 
         if (!useInternal) launchIO {
             val video = try {
-                EpisodeLoader.getLink(episode, anime, source!!).awaitSingle()
+                EpisodeLoader.getLink(episode, presenter.anime, source!!).awaitSingle()
             } catch (e: Exception) {
-                return@launchIO makeErrorToast(context, e)
+                return@launchIO makeErrorToast(activity, e)
             }
             if (video != null) {
                 currentExtEpisode = episode
 
                 val source = source ?: return@launchIO
-                val extIntent = ExternalIntents(anime, source).getExternalIntent(episode, video, context)
+                val extIntent = ExternalIntents(presenter.anime, source).getExternalIntent(episode, video, activity)
                 if (extIntent != null) try {
                     startActivityForResult(extIntent, REQUEST_EXTERNAL)
                 } catch (e: Exception) {
-                    makeErrorToast(context, e)
+                    makeErrorToast(activity, e)
                 }
             } else {
-                makeErrorToast(context, Exception("Couldn't find any video links."))
+                makeErrorToast(activity, Exception("Couldn't find any video links."))
             }
         } else {
             startActivity(intent)
@@ -1200,7 +1257,8 @@ class AnimeController :
         toolbar.findToolbarItem(R.id.action_bookmark)?.isVisible = episodes.any { !it.episode.bookmark }
         toolbar.findToolbarItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.episode.bookmark }
         toolbar.findToolbarItem(R.id.action_mark_as_read)?.isVisible = episodes.any { !it.episode.seen }
-        toolbar.findToolbarItem(R.id.action_mark_as_unread)?.isVisible = episodes.all { it.episode.seen }
+        toolbar.findToolbarItem(R.id.action_mark_as_unread)?.isVisible = episodes.any { it.episode.seen }
+        toolbar.findToolbarItem(R.id.action_mark_previous_as_read)?.isVisible = episodes.size == 1
         toolbar.findToolbarItem(R.id.action_play_externally)?.isVisible = !preferences.alwaysUseExternalPlayer()
         toolbar.findToolbarItem(R.id.action_play_internally)?.isVisible = preferences.alwaysUseExternalPlayer()
     }
@@ -1409,7 +1467,7 @@ class AnimeController :
     private fun showCustomDownloadDialog() {
         DownloadCustomEpisodesDialog(
             this,
-            presenter.allEpisodes.size
+            presenter.allEpisodes.size,
         ).showDialog(router)
     }
 

@@ -17,7 +17,7 @@ import eu.kanade.tachiyomi.widget.sheet.TabbedBottomSheetDialog
 class EpisodesSettingsSheet(
     private val router: Router,
     private val presenter: AnimePresenter,
-    private val onGroupClickListener: (ExtendedNavigationView.Group) -> Unit
+    private val onGroupClickListener: (ExtendedNavigationView.Group) -> Unit,
 ) : TabbedBottomSheetDialog(router.activity!!) {
 
     val filters = Filter(router.activity!!)
@@ -38,13 +38,13 @@ class EpisodesSettingsSheet(
     override fun getTabViews(): List<View> = listOf(
         filters,
         sort,
-        display
+        display,
     )
 
     override fun getTabTitles(): List<Int> = listOf(
         R.string.action_filter,
         R.string.action_sort,
-        R.string.action_display
+        R.string.action_display,
     )
 
     private fun showPopupMenu(view: View) {
@@ -56,7 +56,7 @@ class EpisodesSettingsSheet(
                         SetEpisodeSettingsDialog(presenter.anime).showDialog(router)
                     }
                 }
-            }
+            },
         )
     }
 

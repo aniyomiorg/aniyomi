@@ -27,7 +27,7 @@ import uy.kohesive.injekt.injectLazy
  */
 open class GlobalAnimeSearchController(
     protected val initialQuery: String? = null,
-    protected val extensionFilter: String? = null
+    protected val extensionFilter: String? = null,
 ) : SearchableNucleusController<GlobalSearchControllerBinding, GlobalAnimeSearchPresenter>(),
     GlobalAnimeSearchCardAdapter.OnAnimeClickListener,
     GlobalAnimeSearchAdapter.OnTitleClickListener {
@@ -102,7 +102,7 @@ open class GlobalAnimeSearchController(
             R.menu.global_search,
             R.id.action_search,
             null,
-            false // the onMenuItemActionExpand will handle this
+            false, // the onMenuItemActionExpand will handle this
         )
 
         optionsMenuSearchItem = menu.findItem(R.id.action_search)

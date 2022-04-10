@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.extension.model
 
+import android.graphics.drawable.Drawable
 import eu.kanade.tachiyomi.animesource.AnimeSource
 
 sealed class AnimeExtension {
@@ -10,6 +11,8 @@ sealed class AnimeExtension {
     abstract val versionCode: Long
     abstract val lang: String?
     abstract val isNsfw: Boolean
+    abstract val hasReadme: Boolean
+    abstract val hasChangelog: Boolean
 
     data class Installed(
         override val name: String,
@@ -18,11 +21,14 @@ sealed class AnimeExtension {
         override val versionCode: Long,
         override val lang: String,
         override val isNsfw: Boolean,
+        override val hasReadme: Boolean,
+        override val hasChangelog: Boolean,
         val pkgFactory: String?,
         val sources: List<AnimeSource>,
+        val icon: Drawable?,
         val hasUpdate: Boolean = false,
         val isObsolete: Boolean = false,
-        val isUnofficial: Boolean = false
+        val isUnofficial: Boolean = false,
     ) : AnimeExtension()
 
     data class Available(
@@ -32,8 +38,10 @@ sealed class AnimeExtension {
         override val versionCode: Long,
         override val lang: String,
         override val isNsfw: Boolean,
+        override val hasReadme: Boolean,
+        override val hasChangelog: Boolean,
         val apkName: String,
-        val iconUrl: String
+        val iconUrl: String,
     ) : AnimeExtension()
 
     data class Untrusted(
@@ -43,6 +51,8 @@ sealed class AnimeExtension {
         override val versionCode: Long,
         val signatureHash: String,
         override val lang: String? = null,
-        override val isNsfw: Boolean = false
+        override val isNsfw: Boolean = false,
+        override val hasReadme: Boolean = false,
+        override val hasChangelog: Boolean = false,
     ) : AnimeExtension()
 }

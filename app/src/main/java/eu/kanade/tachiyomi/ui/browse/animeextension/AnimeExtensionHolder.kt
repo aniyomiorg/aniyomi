@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.browse.animeextension
 
 import android.view.View
 import androidx.core.view.isVisible
-import coil.clear
+import coil.dispose
 import coil.load
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
@@ -39,11 +39,11 @@ class AnimeExtensionHolder(view: View, val adapter: AnimeExtensionAdapter) :
             else -> ""
         }.uppercase()
 
-        binding.icon.clear()
+        binding.icon.dispose()
         if (extension is AnimeExtension.Available) {
             binding.icon.load(extension.iconUrl)
-        } else {
-            extension.getApplicationIcon(itemView.context)?.let { binding.icon.setImageDrawable(it) }
+        } else if (extension is AnimeExtension.Installed) {
+            binding.icon.load(extension.icon)
         }
         bindButtons(item)
     }
@@ -73,7 +73,7 @@ class AnimeExtensionHolder(view: View, val adapter: AnimeExtensionAdapter) :
                         is AnimeExtension.Available -> R.string.ext_install
                     }
                 }
-            }
+            },
         )
 
         val isIdle = installStep == InstallStep.Idle || installStep == InstallStep.Error

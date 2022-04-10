@@ -87,7 +87,7 @@
     <string name="all">Όλα</string>
     <string name="pref_library_update_restriction">Περιορισμοί αυτόματων ενημερώσεων συσκευής</string>
     <string name="charging">Φορτίζει</string>
-    <string name="pref_update_only_non_completed">Σειρές σε εξέλιξη</string>
+    <string name="pref_update_only_non_completed">Ολοκληρωμένη σειρά</string>
     <string name="pref_auto_update_manga_sync">Ενημέρωση προόδου μετά την ανάγνωση</string>
     <string name="pref_start_screen">Οθόνη εκκίνησης</string>
     <string name="default_category">Προεπιλεγμένη κατηγορία</string>
@@ -121,7 +121,6 @@
     <string name="pref_reader_navigation">Πλοήγηση</string>
     <string name="pref_read_with_volume_keys">Πλήκτρα ήχου</string>
     <string name="pref_read_with_volume_keys_inverted">Αντιστροφή των πλήκτρων έντασης</string>
-    <string name="pref_read_with_tapping">Άγγιγμα</string>
     <string name="pref_reader_theme">Χρώμα φόντου</string>
     <string name="white_background">Άσπρο</string>
     <string name="black_background">Μαύρο</string>
@@ -344,20 +343,18 @@
     <string name="notification_chapters_multiple">Κεφάλαια %1$s</string>
     <string name="notification_chapters_single">Κεφάλαιο %1$s</string>
     <plurals name="notification_chapters_generic">
-        <item quantity="one">1 νέο κεφάλαιο</item>
+        <item quantity="one">%1$d νέο κεφάλαιο</item>
         <item quantity="other">%1$d νέα κεφάλαια</item>
     </plurals>
     <plurals name="notification_new_chapters_summary">
-        <item quantity="one">Για 1 τίτλο</item>
+        <item quantity="one">Για %d τίτλο</item>
         <item quantity="other">Για %d τίτλους</item>
     </plurals>
     <string name="notification_check_updates">Έλεγχος για νέα κεφάλαια</string>
     <string name="recent_manga_time">Κεφ. %1$s - %2$s</string>
     <string name="updating_library">Ενημέρωση βιβλιοθήκης</string>
     <string name="error_invalid_date_supplied">Η ημερομηνία που δόθηκε δεν είναι έγκυρη</string>
-    <string name="want_to_read">Θέλω να διαβάσω</string>
     <string name="paused">Σε παύση</string>
-    <string name="currently_reading">Διαβάζετε αυτή τη στιγμή</string>
     <string name="manga_info_collapse">Λιγότερα</string>
     <string name="manga_info_expand">Περισσότερα</string>
     <string name="in_library">Στη βιβλιοθήκη</string>
@@ -400,10 +397,10 @@
     <string name="pref_category_library_update">Καθολική ενημέρωση</string>
     <string name="pref_category_display">Προβολή</string>
     <string name="hide_notification_content">Απόκρυψη περιεχομένου ειδοποιήσεων</string>
-    <string name="secure_screen_summary">Απόκρυψη περιεχομένων εφαρμογής κατά την εναλλαγή εφαρμογών και τον αποκλεισμό στιγμιότυπων οθόνης</string>
+    <string name="secure_screen_summary">Η ασφαλής οθόνη αποκρύπτει τα περιεχόμενα εφαρμογών κατά την εναλλαγή εφαρμογών και εμποδίζει τα στιγμιότυπα οθόνης</string>
     <string name="secure_screen">Ασφάλισε την οθόνη</string>
     <plurals name="lock_after_mins">
-        <item quantity="one">Μετά από 1 λεπτό</item>
+        <item quantity="one">Μετά από %1$s λεπτό</item>
         <item quantity="other">Μετά από %1$s λεπτά</item>
     </plurals>
     <string name="lock_never">Ποτέ</string>
@@ -440,7 +437,7 @@
     <string name="downloaded_only_summary">Φιλτράρει όλα τα manga στη βιβλιοθήκη σας</string>
     <string name="pref_search_pinned_sources_only">Να περιέχονται μόνο καρφιτσωμένες πηγές</string>
     <plurals name="download_queue_summary">
-        <item quantity="one">1 που απομένει</item>
+        <item quantity="one">%1$s που απομένει</item>
         <item quantity="other">%1$s που απομένουν</item>
     </plurals>
     <string name="gray_background">Γκρι</string>
@@ -459,10 +456,6 @@
     <string name="action_display_unread_badge">Μη αναγνωσμένα κεφάλαια</string>
     <string name="tracking_info">Μονόδρομος συγχρονισμός για ενημέρωση των υπηρεσιών παρακολούθησης προόδου κεφαλαίων. Ρυθμίστε την παρακολούθηση για μεμονωμένες καταχωρήσεις manga από το κουμπί παρακολούθησης τους.</string>
     <string name="pref_refresh_library_covers">Ανανέωση εξώφυλλων manga της βιβλιοθήκης</string>
-    <plurals name="notification_update_error">
-        <item quantity="one">1 ενημέρωση απέτυχε</item>
-        <item quantity="other">%1$d ενημερώσεις απέτυχαν</item>
-    </plurals>
     <string name="unofficial_extension_message">Αυτή η επέκταση δεν προέρχεται από την επίσημη λίστα επεκτάσεων Tachiyomi.</string>
     <string name="ext_unofficial">Ανεπίσημη</string>
     <string name="sort_by_upload_date">Από ημερομηνία μεταφόρτωσης</string>
@@ -489,7 +482,7 @@
     <string name="loader_not_implemented_error">Δεν βρέθηκε πηγή</string>
     <string name="action_disable">Απενεργοποίηση</string>
     <plurals name="manga_num_chapters">
-        <item quantity="one">1 κεφάλαιο</item>
+        <item quantity="one">%1$s κεφάλαιο</item>
         <item quantity="other">%1$s κεφάλαια</item>
     </plurals>
     <string name="requires_app_restart">Απαιτείται επανεκκίνηση της εφαρμογής για να τεθεί σε ισχύ</string>
@@ -511,7 +504,7 @@
     <string name="pref_category_theme">Θέμα</string>
     <string name="action_sort_date_added">Ημερομηνία προσθήκης</string>
     <plurals name="num_trackers">
-        <item quantity="one">1 tracker</item>
+        <item quantity="one">%d tracker</item>
         <item quantity="other">%d trackers</item>
     </plurals>
     <string name="no_pinned_sources">Δεν έχετε καρφιτσωμένες πηγές</string>
@@ -526,7 +519,7 @@
     <string name="pref_remove_bookmarked_chapters">Να επιτρέπεται η διαγραφή κεφαλαίων με σελιδοδείκτη</string>
     <string name="parental_controls_info">Αυτό δεν εμποδίζει τις ανεπίσημες ή ενδεχομένως εσφαλμένα επισημασμένες επεκτάσεις να εμφανίζουν περιεχόμενο NSFW (18+) μέσα στην εφαρμογή.</string>
     <plurals name="missing_chapters_warning">
-        <item quantity="one">Παραλείπεται 1 κεφάλαιο, είτε λείπει από την πηγή είτε έχει φιλτραριστεί</item>
+        <item quantity="one">Παραλείπεται %d κεφάλαιο, είτε λείπει από την πηγή είτε έχει φιλτραριστεί</item>
         <item quantity="other">Παραλείπονται %d κεφάλαια, είτε λείπουν από την πηγή είτε έχουν φιλτραριστεί</item>
     </plurals>
     <string name="no_chapters_error">Δεν βρέθηκαν κεφάλαια</string>
@@ -581,7 +574,7 @@
     <string name="nav_zone_left">Αριστερά</string>
     <string name="nav_zone_next">Επόμενο</string>
     <string name="nav_zone_prev">Προηγούμενο</string>
-    <string name="pref_dns_over_https">DNS μέσω HTTPS</string>
+    <string name="pref_dns_over_https">DNS μέσω HTTPS (DoH)</string>
     <string name="exclude">Εξαίρεση: %s</string>
     <string name="include">Συμπερίληψη: %s</string>
     <string name="none">Κανένα</string>
@@ -589,7 +582,7 @@
     <string name="pref_download_new_categories_details">Τα Manga σε εξαιρούμενες κατηγορίες δεν θα ληφθούν ακόμα κι αν ανήκουν και σε κατηγορίες που περιλαμβάνονται.</string>
     <string name="pref_category_auto_download">Αυτόματη λήψη</string>
     <string name="pref_library_update_categories_details">Τα manga στις αποκλεισμένες κατηγορίες δεν θα ενημερώνονται ακόμη και αν βρίσκονται επίσης στις συμπεριλαμβανόμενες κατηγορίες.</string>
-    <string name="action_show_errors">Πατήστε για να δείτε τις λεπτομέρειες σφάλματος</string>
+    <string name="action_show_errors">Πατήστε για να δείτε λεπτομέρειες</string>
     <string name="update_check_eol">Αυτή η έκδοση Android δεν υποστηρίζεται πλέον</string>
     <string name="clipboard_copy_error">Απέτυχε η αντιγραφή στο πρόχειρο</string>
     <string name="rotation_landscape">Οριζόντια</string>
@@ -693,8 +686,33 @@
     <string name="database_clean">Καθαρισμός βάσης δεδομένων</string>
     <string name="extension_api_error">Απέτυχε η λήψη λίστας επεκτάσεων</string>
     <string name="privacy_policy">Πολιτική απορρήτου</string>
-    <string name="pref_library_update_manga_restriction">Περιορισμοί ενημέρωσης βιβλιοθήκης</string>
-    <string name="pref_update_only_completely_read">Πλήρως διαβασμένη σειρά</string>
-    <string name="only_update_restrictions">Μόνο ενημέρωση: %s</string>
+    <string name="pref_library_update_manga_restriction">Παράλειψη ενημέρωσης</string>
+    <string name="pref_update_only_completely_read">Έχει αδιάβαστα κεφάλαια</string>
     <string name="library_errors_help">Για βοήθεια σχετικά με τον τρόπο διόρθωσης σφαλμάτων ενημέρωσης βιβλιοθήκης, ανατρέξτε στο %1$s</string>
+    <string name="save_chapter_as_cbz">Αποθήκευση ως αρχείο CBZ</string>
+    <string name="cancelled">Ακυρώθηκε</string>
+    <string name="on_hiatus">Σε αναστολή</string>
+    <string name="publishing_finished">Η έκδοσή ολοκληρώθηκε</string>
+    <string name="action_faq_and_guides">Συχνές ερωτήσεις και οδηγοί</string>
+    <string name="backup_restore_invalid_uri">Σφάλμα: κενό URI</string>
+    <string name="webtoon_side_padding_5">5%</string>
+    <string name="action_show_manga">Εμφάνιση manga</string>
+    <string name="pref_landscape_zoom">Ζουμ οριζόντιας εικόνας</string>
+    <string name="confirm_manga_add_duplicate">Έχετε μια καταχώρηση στη βιβλιοθήκη σας με το ίδιο όνομα αλλά από διαφορετική πηγή (%1$s).
+\n
+\nΘέλετε ακόμα να συνεχίσετε;</string>
+    <string name="action_display_cover_only_grid">Πλέγμα μόνο με εξώφυλλα</string>
+    <string name="action_filter_started">Ξεκίνησε</string>
+    <string name="pref_update_only_started">Δεν έχει διαβασμένα κεφάλαια</string>
+    <string name="pref_navigate_pan">Πλοήγηση για οριζόντια μετακίνηση</string>
+    <string name="skipped_reason_completed">Παραλείφθηκε επειδή η σειρά ολοκληρώθηκε</string>
+    <string name="skipped_reason_not_caught_up">Παραβλέφθηκε επειδή υπάρχουν μη αναγνωσμένα κεφάλαια</string>
+    <string name="skipped_reason_not_started">Παραλείπεται επειδή δεν έχουν διαβαστεί κεφάλαια</string>
+    <string name="notification_update_error">%1$d ενημέρωση(ες) απέτυχε(-αν)</string>
+    <string name="learn_more">Μάθετε περισσότερα</string>
+    <string name="channel_skipped">Παραλήφθηκαν</string>
+    <string name="notification_update_skipped">%1$d ενημέρωση(εις) παραλείφθηκε(-αν)</string>
+    <string name="rotation_reverse_portrait">Αντίστροφο πορτρέτο</string>
+    <string name="action_move_to_top_all_for_series">Μετακίνηση σειράς στην κορυφή</string>
+    <string name="disabled_nav">Απενεργοποιημένο</string>
 </resources>

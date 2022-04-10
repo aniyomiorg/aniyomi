@@ -25,7 +25,7 @@ class ChangeAnimeCategoriesDialog<T>(bundle: Bundle? = null) :
         target: T,
         animes: List<Anime>,
         categories: List<Category>,
-        preselected: IntArray
+        preselected: IntArray,
     ) : this() {
         this.animes = animes
         this.categories = categories
@@ -43,7 +43,7 @@ class ChangeAnimeCategoriesDialog<T>(bundle: Bundle? = null) :
                     setQuadStateMultiChoiceItems(
                         items = categories.map { it.name },
                         isActionList = false,
-                        initialSelected = preselected
+                        initialSelected = preselected,
                     ) { selections ->
                         selected = selections
                     }
@@ -56,19 +56,22 @@ class ChangeAnimeCategoriesDialog<T>(bundle: Bundle? = null) :
                             .filterNotNull()
                         (targetController as? Listener)?.updateCategoriesForAnimes(animes, add, remove)
                     }
+                    setNeutralButton(R.string.action_edit) { _, _ -> openCategoryController() }
                 } else {
                     setMessage(R.string.information_empty_category_dialog)
-                    setPositiveButton(R.string.action_edit_anime_categories) { _, _ ->
-                        if (targetController is AnimelibController) {
-                            val libController = targetController as AnimelibController
-                            libController.clearSelection()
-                        }
-                        router.popCurrentController()
-                        router.pushController(CategoryController().withFadeTransaction())
-                    }
+                    setPositiveButton(R.string.action_edit_anime_categories) { _, _ -> openCategoryController() }
                 }
             }
             .create()
+    }
+
+    private fun openCategoryController() {
+        if (targetController is AnimelibController) {
+            val libController = targetController as AnimelibController
+            libController.clearSelection()
+        }
+        router.popCurrentController()
+        router.pushController(CategoryController().withFadeTransaction())
     }
 
     interface Listener {

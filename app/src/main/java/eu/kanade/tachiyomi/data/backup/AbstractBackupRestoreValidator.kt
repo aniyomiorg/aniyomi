@@ -16,3 +16,5 @@ abstract class AbstractBackupRestoreValidator {
 
     data class Results(val missingSources: List<String>, val missingTrackers: List<String>)
 }
+
+class ValidatorParseException(e: Exception) : RuntimeException(e)

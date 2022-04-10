@@ -27,6 +27,6 @@ class AnimeFavoritePutResolver : PutResolver<Anime>() {
 
     fun mapToContentValues(anime: Anime) =
         contentValuesOf(
-            AnimeTable.COL_FAVORITE to anime.favorite
+            AnimeTable.COL_FAVORITE to anime.favorite,
         )
 }

@@ -29,7 +29,7 @@ import eu.kanade.tachiyomi.data.database.tables.AnimeTrackTable.TABLE
 class AnimeTrackTypeMapping : SQLiteTypeMapping<AnimeTrack>(
     AnimeTrackPutResolver(),
     AnimeTrackGetResolver(),
-    AnimeTrackDeleteResolver()
+    AnimeTrackDeleteResolver(),
 )
 
 class AnimeTrackPutResolver : DefaultPutResolver<AnimeTrack>() {
@@ -58,7 +58,7 @@ class AnimeTrackPutResolver : DefaultPutResolver<AnimeTrack>() {
             COL_TRACKING_URL to obj.tracking_url,
             COL_SCORE to obj.score,
             COL_START_DATE to obj.started_watching_date,
-            COL_FINISH_DATE to obj.finished_watching_date
+            COL_FINISH_DATE to obj.finished_watching_date,
         )
 }
 

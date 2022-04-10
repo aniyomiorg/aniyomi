@@ -26,7 +26,7 @@ class DownloadCustomEpisodesDialog<T> : DialogController
      */
     constructor(target: T, maxEpisodes: Int) : super(
         // Add maximum number of episodes to download value to bundle.
-        bundleOf(KEY_ITEM_MAX to maxEpisodes)
+        bundleOf(KEY_ITEM_MAX to maxEpisodes),
     ) {
         targetController = target
         this.maxEpisodes = maxEpisodes

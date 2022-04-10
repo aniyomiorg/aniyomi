@@ -36,7 +36,7 @@ fun SEpisode.toEpisodeInfo(): EpisodeInfo {
         key = this.url,
         name = this.name,
         number = this.episode_number,
-        scanlator = this.scanlator ?: ""
+        scanlator = this.scanlator ?: "",
     )
 }
 

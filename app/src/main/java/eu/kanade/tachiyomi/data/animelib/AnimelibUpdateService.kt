@@ -23,8 +23,9 @@ import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.data.preference.MANGA_FULLY_READ
-import eu.kanade.tachiyomi.data.preference.MANGA_ONGOING
+import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
+import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
+import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -63,7 +64,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * This class will take care of updating the chapters of the anime from the library. It can be
+ * This class will take care of updating the episodes of the anime from the library. It can be
  * started calling the [start] method. If it's already running, it won't do anything.
  * While the library is updating, a [PowerManager.WakeLock] will be held until the update is
  * completed, preventing the device from going to sleep mode. A notification will display the
@@ -76,7 +77,7 @@ class AnimelibUpdateService(
     val preferences: PreferencesHelper = Injekt.get(),
     val downloadManager: AnimeDownloadManager = Injekt.get(),
     val trackManager: TrackManager = Injekt.get(),
-    val coverCache: AnimeCoverCache = Injekt.get()
+    val coverCache: AnimeCoverCache = Injekt.get(),
 ) : Service() {
 
     private lateinit var wakeLock: PowerManager.WakeLock
@@ -90,7 +91,7 @@ class AnimelibUpdateService(
      * Defines what should be updated within a service execution.
      */
     enum class Target {
-        CHAPTERS, // Anime chapters
+        EPISODES, // Anime episodes
 
         COVERS, // Anime covers
 
@@ -130,7 +131,7 @@ class AnimelibUpdateService(
          * @param target defines what should be updated.
          * @return true if service newly started, false otherwise
          */
-        fun start(context: Context, category: Category? = null, target: Target = Target.CHAPTERS): Boolean {
+        fun start(context: Context, category: Category? = null, target: Target = Target.EPISODES): Boolean {
             return if (!isRunning(context)) {
                 val intent = Intent(context, AnimelibUpdateService::class.java).apply {
                     putExtra(KEY_TARGET, target)
@@ -140,7 +141,7 @@ class AnimelibUpdateService(
 
                 true
             } else {
-                instance?.addAnimeToQueue(category?.id ?: -1, target)
+                instance?.addAnimeToQueue(category?.id ?: -1)
                 false
             }
         }
@@ -212,7 +213,7 @@ class AnimelibUpdateService(
 
         // Update favorite anime
         val categoryId = intent.getIntExtra(KEY_CATEGORY, -1)
-        addAnimeToQueue(categoryId, target)
+        addAnimeToQueue(categoryId)
 
         // Destroy service when completed or in case of an error.
         val handler = CoroutineExceptionHandler { _, exception ->
@@ -221,7 +222,7 @@ class AnimelibUpdateService(
         }
         updateJob = ioScope.launch(handler) {
             when (target) {
-                Target.CHAPTERS -> updateEpisodeList()
+                Target.EPISODES -> updateEpisodeList()
                 Target.COVERS -> updateCovers()
                 Target.TRACKING -> updateTrackings()
             }
@@ -237,10 +238,10 @@ class AnimelibUpdateService(
      * @param category the ID of the category to update, or -1 if no category specified.
      * @param target the target to update.
      */
-    fun addAnimeToQueue(categoryId: Int, target: Target) {
+    fun addAnimeToQueue(categoryId: Int) {
         val animelibAnime = db.getAnimelibAnimes().executeAsBlocking()
 
-        var listToUpdate = if (categoryId != -1) {
+        val listToUpdate = if (categoryId != -1) {
             animelibAnime.filter { it.category == categoryId }
         } else {
             val categoriesToUpdate = preferences.animelibUpdateCategories().get().map(String::toInt)
@@ -258,16 +259,6 @@ class AnimelibUpdateService(
             }
 
             listToInclude.minus(listToExclude)
-        }
-
-        if (target == Target.CHAPTERS) {
-            val restrictions = preferences.libraryUpdateMangaRestriction().get()
-            if (MANGA_ONGOING in restrictions) {
-                listToUpdate = listToUpdate.filterNot { it.status == SAnime.COMPLETED }
-            }
-            if (MANGA_FULLY_READ in restrictions) {
-                listToUpdate = listToUpdate.filter { it.unseen == 0 }
-            }
         }
 
         animeToUpdate = listToUpdate
@@ -298,10 +289,12 @@ class AnimelibUpdateService(
         val progressCount = AtomicInteger(0)
         val currentlyUpdatingAnime = CopyOnWriteArrayList<AnimelibAnime>()
         val newUpdates = CopyOnWriteArrayList<Pair<AnimelibAnime, Array<Episode>>>()
+        val skippedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val failedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val hasDownloads = AtomicBoolean(false)
         val loggedServices by lazy { trackManager.services.filter { it.isLogged } }
         val currentUnseenUpdatesCount = preferences.unseenUpdatesCount().get()
+        val restrictions = preferences.libraryUpdateMangaRestriction().get()
 
         withIOContext {
             animeToUpdate.groupBy { it.source }
@@ -320,19 +313,33 @@ class AnimelibUpdateService(
                                     anime,
                                 ) { anime ->
                                     try {
-                                        val (newEpisodes, _) = updateAnime(anime)
-
-                                        if (newEpisodes.isNotEmpty()) {
-                                            if (anime.shouldDownloadNewEpisodes(db, preferences)) {
-                                                downloadEpisodes(anime, newEpisodes)
-                                                hasDownloads.set(true)
+                                        when {
+                                            MANGA_NON_COMPLETED in restrictions && anime.status == SAnime.COMPLETED -> {
+                                                skippedUpdates.add(anime to getString(R.string.skipped_reason_completed))
                                             }
+                                            MANGA_HAS_UNREAD in restrictions && anime.unseenCount != 0 -> {
+                                                skippedUpdates.add(anime to getString(R.string.skipped_reason_not_caught_up))
+                                            }
+                                            MANGA_NON_READ in restrictions && anime.totalEpisodes > 0 && !anime.hasStarted -> {
+                                                skippedUpdates.add(anime to getString(R.string.skipped_reason_not_started))
+                                            }
+                                            else -> {
+                                                // Convert to the anime that contains new episodes
+                                                val (newEpisodes, _) = updateAnime(anime)
 
-                                            // Convert to the manga that contains new chapters
-                                            newUpdates.add(
-                                                anime to newEpisodes.sortedByDescending { ep -> ep.source_order }
-                                                    .toTypedArray()
-                                            )
+                                                if (newEpisodes.isNotEmpty()) {
+                                                    if (anime.shouldDownloadNewEpisodes(db, preferences)) {
+                                                        downloadEpisodes(anime, newEpisodes)
+                                                        hasDownloads.set(true)
+                                                    }
+
+                                                    // Convert to the anime that contains new episodes
+                                                    newUpdates.add(
+                                                        anime to newEpisodes.sortedByDescending { ep -> ep.source_order }
+                                                            .toTypedArray(),
+                                                    )
+                                                }
+                                            }
                                         }
                                     } catch (e: Throwable) {
                                         val errorMessage = when (e) {
@@ -375,9 +382,12 @@ class AnimelibUpdateService(
         if (failedUpdates.isNotEmpty()) {
             val errorFile = writeErrorFile(failedUpdates)
             notifier.showUpdateErrorNotification(
-                failedUpdates.map { it.first.title },
-                errorFile.getUriCompat(this)
+                failedUpdates.size,
+                errorFile.getUriCompat(this),
             )
+        }
+        if (skippedUpdates.isNotEmpty()) {
+            notifier.showUpdateSkippedNotification(skippedUpdates.size)
         }
     }
 
@@ -388,10 +398,10 @@ class AnimelibUpdateService(
     }
 
     /**
-     * Updates the chapters for the given anime and adds them to the database.
+     * Updates the episodes for the given anime and adds them to the database.
      *
      * @param anime the anime to update.
-     * @return a pair of the inserted and removed chapters.
+     * @return a pair of the inserted and removed episodes.
      */
     suspend fun updateAnime(anime: Anime): Pair<List<Episode>, List<Episode>> {
         val source = sourceManager.getOrStub(anime.source)
@@ -411,10 +421,10 @@ class AnimelibUpdateService(
             db.insertAnime(anime).executeAsBlocking()
         }
 
-        val chapters = source.getEpisodeList(anime.toAnimeInfo())
+        val episodes = source.getEpisodeList(anime.toAnimeInfo())
             .map { it.toSEpisode() }
 
-        return syncEpisodesWithSource(db, chapters, anime, source)
+        return syncEpisodesWithSource(db, episodes, anime, source)
     }
 
     private suspend fun updateCovers() {
@@ -526,7 +536,7 @@ class AnimelibUpdateService(
         notifier.showProgressNotification(
             updatingAnime,
             completed.get(),
-            animeToUpdate.size
+            animeToUpdate.size,
         )
 
         block(anime)
@@ -540,7 +550,7 @@ class AnimelibUpdateService(
         notifier.showProgressNotification(
             updatingAnime,
             completed.get(),
-            animeToUpdate.size
+            animeToUpdate.size,
         )
     }
 
@@ -558,7 +568,7 @@ class AnimelibUpdateService(
                     //   # Source
                     //     - Anime
                     errors.groupBy({ it.second }, { it.first }).forEach { (error, animes) ->
-                        out.write("! ${error}\n")
+                        out.write("\n! ${error}\n")
                         animes.groupBy { it.source }.forEach { (srcId, animes) ->
                             val source = sourceManager.getOrStub(srcId)
                             out.write("  # $source\n")

@@ -33,8 +33,7 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.preference.minusAssign
 import eu.kanade.tachiyomi.util.preference.plusAssign
 import eu.kanade.tachiyomi.util.view.onAnimationsFinished
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 
 /**
  * This controller shows and manages the different catalogues enabled by the user.
@@ -48,11 +47,8 @@ class AnimeSourceController :
     FlexibleAdapter.OnItemLongClickListener,
     AnimeSourceAdapter.OnSourceClickListener {
 
-    private val preferences: PreferencesHelper = Injekt.get()
+    private val preferences: PreferencesHelper by injectLazy()
 
-    /**
-     * Adapter containing sources.
-     */
     private var adapter: AnimeSourceAdapter? = null
 
     init {
@@ -92,6 +88,7 @@ class AnimeSourceController :
 
         // Update list on extension changes (e.g. new installation)
         (parentController as BrowseController).extensionListUpdateRelay
+            .skip(1) // Skip first update when ExtensionController created
             .subscribeUntilDestroy {
                 presenter.updateSources()
             }
@@ -127,18 +124,10 @@ class AnimeSourceController :
         val isPinned = item.header?.code?.equals(AnimeSourcePresenter.PINNED_KEY) ?: false
 
         val items = mutableListOf(
-            Pair(
-                activity.getString(if (isPinned) R.string.action_unpin else R.string.action_pin),
-                { toggleSourcePin(item.source) }
-            )
+            activity.getString(if (isPinned) R.string.action_unpin else R.string.action_pin) to { toggleSourcePin(item.source) },
         )
         if (item.source !is LocalAnimeSource) {
-            items.add(
-                Pair(
-                    activity.getString(R.string.action_disable),
-                    { disableSource(item.source) }
-                )
-            )
+            items.add(activity.getString(R.string.action_disable) to { disableSource(item.source) })
         }
 
         SourceOptionsDialog(item.source.toString(), items).showDialog(router)
@@ -206,7 +195,7 @@ class AnimeSourceController :
             R.id.action_settings -> {
                 parentController!!.router.pushController(
                     AnimeSourceFilterController()
-                        .withFadeTransaction()
+                        .withFadeTransaction(),
                 )
             }
         }
@@ -259,13 +248,13 @@ class AnimeSourceController :
             R.menu.browse_sources,
             R.id.action_search,
             R.string.action_global_search_hint,
-            false // GlobalSearch handles the searching here
+            false, // GlobalSearch handles the searching here
         )
     }
 
     override fun onSearchViewQueryTextSubmit(query: String?) {
         parentController!!.router.pushController(
-            GlobalAnimeSearchController(query).withFadeTransaction()
+            GlobalAnimeSearchController(query).withFadeTransaction(),
         )
     }
 }

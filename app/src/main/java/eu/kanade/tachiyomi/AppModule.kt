@@ -12,6 +12,7 @@ import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
 import eu.kanade.tachiyomi.extension.AnimeExtensionManager
@@ -63,6 +64,8 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { TrackManager(app) }
 
         addSingletonFactory { DelayedTrackingStore(app) }
+
+        addSingletonFactory { ImageSaver(app) }
 
         // Asynchronously init expensive components for a faster cold start
         ContextCompat.getMainExecutor(app).execute {

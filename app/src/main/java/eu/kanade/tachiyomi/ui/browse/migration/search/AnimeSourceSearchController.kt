@@ -8,7 +8,7 @@ import eu.kanade.tachiyomi.ui.browse.animesource.browse.AnimeSourceItem
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 
 class AnimeSourceSearchController(
-    bundle: Bundle
+    bundle: Bundle,
 ) : BrowseAnimeSourceController(bundle) {
 
     constructor(anime: Anime? = null, source: AnimeCatalogueSource, searchQuery: String? = null) : this(
@@ -18,7 +18,7 @@ class AnimeSourceSearchController(
             if (searchQuery != null) {
                 putString(SEARCH_QUERY_KEY, searchQuery)
             }
-        }
+        },
     )
     private var oldAnime: Anime? = args.getSerializable(ANIME_KEY) as Anime?
     private var newAnime: Anime? = null

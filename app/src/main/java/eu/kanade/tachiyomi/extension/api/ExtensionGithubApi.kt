@@ -39,10 +39,10 @@ internal class ExtensionGithubApi {
         }
     }
 
-    suspend fun checkForUpdates(context: Context): List<Extension.Installed> {
+    suspend fun checkForUpdates(context: Context): List<Extension.Installed>? {
         // Limit checks to once a day at most
         if (Date().time < preferences.lastExtCheck().get() + TimeUnit.DAYS.toMillis(1)) {
-            return emptyList()
+            return null
         }
 
         val extensions = findExtensions()
@@ -81,9 +81,11 @@ internal class ExtensionGithubApi {
                     versionCode = it.code,
                     lang = it.lang,
                     isNsfw = it.nsfw == 1,
+                    hasReadme = it.hasReadme == 1,
+                    hasChangelog = it.hasChangelog == 1,
                     sources = it.sources?.toExtensionSources() ?: emptyList(),
                     apkName = it.apk,
-                    iconUrl = "${REPO_URL_PREFIX}icon/${it.apk.replace(".apk", ".png")}"
+                    iconUrl = "${REPO_URL_PREFIX}icon/${it.apk.replace(".apk", ".png")}",
                 )
             }
     }
@@ -93,7 +95,7 @@ internal class ExtensionGithubApi {
             AvailableExtensionSources(
                 name = it.name,
                 id = it.id,
-                baseUrl = it.baseUrl
+                baseUrl = it.baseUrl,
             )
         }
     }
@@ -114,6 +116,8 @@ private data class ExtensionJsonObject(
     val code: Long,
     val version: String,
     val nsfw: Int,
+    val hasReadme: Int = 0,
+    val hasChangelog: Int = 0,
     val sources: List<ExtensionSourceJsonObject>?,
 )
 
@@ -121,6 +125,6 @@ private data class ExtensionJsonObject(
 private data class ExtensionSourceJsonObject(
     val name: String,
     val id: Long,
-    val baseUrl: String
+    val baseUrl: String,
 
 )

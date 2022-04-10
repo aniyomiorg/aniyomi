@@ -1,12 +1,8 @@
 package eu.kanade.tachiyomi.ui.manga
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import coil.imageLoader
-import coil.memory.MemoryCache
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
@@ -19,6 +15,8 @@ import eu.kanade.tachiyomi.data.database.models.toMangaInfo
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.saver.Image
+import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
@@ -39,10 +37,6 @@ import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.shouldDownloadNewChapters
-import eu.kanade.tachiyomi.util.storage.DiskUtil
-import eu.kanade.tachiyomi.util.storage.getPicturesDir
-import eu.kanade.tachiyomi.util.storage.getTempShareDir
-import eu.kanade.tachiyomi.util.system.ImageUtil
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.updateCoverLastModified
@@ -58,7 +52,7 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
+import uy.kohesive.injekt.injectLazy
 import java.util.Date
 
 class MangaPresenter(
@@ -68,7 +62,7 @@ class MangaPresenter(
     private val db: DatabaseHelper = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
     private val downloadManager: DownloadManager = Injekt.get(),
-    private val coverCache: CoverCache = Injekt.get()
+    private val coverCache: CoverCache = Injekt.get(),
 ) : BasePresenter<MangaController>() {
 
     /**
@@ -110,6 +104,8 @@ class MangaPresenter(
 
     private val loggedServices by lazy { trackManager.services.filter { it.isLogged } }
 
+    private val imageSaver: ImageSaver by injectLazy()
+
     private var trackSubscription: Subscription? = null
     private var searchTrackerJob: Job? = null
     private var refreshTrackersJob: Job? = null
@@ -141,7 +137,7 @@ class MangaPresenter(
                     filteredAndSortedChapters = chapters
                     view?.onNextChapters(chapters)
                 },
-                { _, error -> logcat(LogPriority.ERROR, error) }
+                { _, error -> logcat(LogPriority.ERROR, error) },
             )
 
         // Manga info - end
@@ -166,12 +162,16 @@ class MangaPresenter(
                     // Listen for download status changes
                     observeDownloads()
                 }
-                .subscribe { chaptersRelay.call(it) }
+                .subscribe { chaptersRelay.call(it) },
         )
 
         // Chapters list - end
 
         fetchTrackers()
+    }
+
+    fun getDuplicateLibraryManga(manga: Manga): Manga? {
+        return db.getDuplicateLibraryManga(manga).executeAsBlocking()
     }
 
     // Manga info - start
@@ -292,86 +292,13 @@ class MangaPresenter(
     }
 
     /**
-     * Get the manga cover as a Bitmap, either from the CoverCache (only works for library manga)
-     * or from the Coil ImageLoader cache.
+     * Save manga cover Bitmap to picture or temporary share directory.
      *
-     * @param context the context used to get the Coil ImageLoader
-     * @param memoryCacheKey Coil MemoryCache.Key that points to the cover Bitmap cache location
-     * @return manga cover as Bitmap
+     * @param image the image with specified location
+     * @return flow Flow which emits the Uri which specifies where the image is saved when
      */
-    fun getCoverBitmap(context: Context, memoryCacheKey: MemoryCache.Key?): Bitmap {
-        var resultBitmap = coverBitmapFromCoverCache()
-        if (resultBitmap == null && memoryCacheKey != null) {
-            resultBitmap = coverBitmapFromImageLoader(context, memoryCacheKey)
-        }
-
-        return resultBitmap ?: throw Exception("Cover not in cache")
-    }
-
-    /**
-     * Attempt manga cover retrieval from the CoverCache.
-     *
-     * @return cover as Bitmap or null if CoverCache does not contain cover for manga
-     */
-    private fun coverBitmapFromCoverCache(): Bitmap? {
-        val cover = coverCache.getCoverFile(manga)
-        return if (cover != null) {
-            BitmapFactory.decodeFile(cover.path)
-        } else {
-            null
-        }
-    }
-
-    /**
-     * Attempt manga cover retrieval from the Coil ImageLoader memoryCache.
-     *
-     * @param context the context used to get the Coil ImageLoader
-     * @param memoryCacheKey Coil MemoryCache.Key that points to the cover Bitmap cache location
-     * @return cover as Bitmap or null if there is no thumbnail cached with the memoryCacheKey
-     */
-    private fun coverBitmapFromImageLoader(context: Context, memoryCacheKey: MemoryCache.Key): Bitmap? {
-        return context.imageLoader.memoryCache[memoryCacheKey]
-    }
-
-    /**
-     * Save manga cover Bitmap to temporary share directory.
-     *
-     * @param context for the temporary share directory
-     * @param coverBitmap the cover to save (as Bitmap)
-     * @return cover File in temporary share directory
-     */
-    fun shareCover(context: Context, coverBitmap: Bitmap): File {
-        return saveCover(getTempShareDir(context), coverBitmap)
-    }
-
-    /**
-     * Save manga cover to pictures directory of the device.
-     *
-     * @param context for the pictures directory of the user
-     * @param coverBitmap the cover to save (as Bitmap)
-     * @return cover File in pictures directory
-     */
-    fun saveCover(context: Context, coverBitmap: Bitmap) {
-        saveCover(getPicturesDir(context), coverBitmap)
-    }
-
-    /**
-     * Save a manga cover Bitmap to a new File in a given directory.
-     * Overwrites file if it already exists.
-     *
-     * @param directory The directory in which the new file will be created
-     * @param coverBitmap The manga cover to save
-     * @return the newly created File
-     */
-    private fun saveCover(directory: File, coverBitmap: Bitmap): File {
-        directory.mkdirs()
-        val filename = DiskUtil.buildValidFilename("${manga.title}.${ImageUtil.ImageType.PNG}")
-
-        val destFile = File(directory, filename)
-        destFile.outputStream().use { desFileOutputStream ->
-            coverBitmap.compress(Bitmap.CompressFormat.PNG, 100, desFileOutputStream)
-        }
-        return destFile
+    fun saveImage(image: Image): Uri {
+        return imageSaver.save(image)
     }
 
     /**
@@ -401,7 +328,7 @@ class MangaPresenter(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeFirst(
                 { view, _ -> view.onSetCoverSuccess() },
-                { view, e -> view.onSetCoverError(e) }
+                { view, e -> view.onSetCoverError(e) },
             )
     }
 
@@ -416,7 +343,7 @@ class MangaPresenter(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeFirst(
                 { view, _ -> view.onSetCoverSuccess() },
-                { view, e -> view.onSetCoverError(e) }
+                { view, e -> view.onSetCoverError(e) },
             )
     }
 
@@ -438,7 +365,7 @@ class MangaPresenter(
                 },
                 { _, error ->
                     logcat(LogPriority.ERROR, error)
-                }
+                },
             )
 
         observeDownloadsPageSubscription?.let { remove(it) }

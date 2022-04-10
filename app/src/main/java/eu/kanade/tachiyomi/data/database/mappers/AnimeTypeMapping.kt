@@ -33,7 +33,7 @@ import eu.kanade.tachiyomi.data.database.tables.AnimeTable.TABLE
 class AnimeTypeMapping : SQLiteTypeMapping<Anime>(
     AnimePutResolver(),
     AnimeGetResolver(),
-    AnimeDeleteResolver()
+    AnimeDeleteResolver(),
 )
 
 class AnimePutResolver : DefaultPutResolver<Anime>() {
@@ -66,7 +66,7 @@ class AnimePutResolver : DefaultPutResolver<Anime>() {
             COL_VIEWER to obj.viewer_flags,
             COL_EPISODE_FLAGS to obj.episode_flags,
             COL_COVER_LAST_MODIFIED to obj.cover_last_modified,
-            COL_DATE_ADDED to obj.date_added
+            COL_DATE_ADDED to obj.date_added,
         )
 }
 

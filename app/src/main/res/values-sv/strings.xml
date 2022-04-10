@@ -77,17 +77,17 @@
     <string name="pref_library_columns">Artiklar per rad</string>
     <string name="portrait">Porträtt</string>
     <string name="landscape">Landskap</string>
-    <string name="pref_library_update_interval">Uppdateringsfrekvens</string>
-    <string name="update_never">Manuell</string>
+    <string name="pref_library_update_interval">Automatiska uppdateringar</string>
+    <string name="update_never">Av</string>
     <string name="update_6hour">Var 6:e timme</string>
     <string name="update_12hour">Var 12:e timme</string>
     <string name="update_24hour">Dagligen</string>
     <string name="update_48hour">Varannan dag</string>
     <string name="update_weekly">Varje vecka</string>
     <string name="all">Alla</string>
-    <string name="pref_library_update_restriction">Uppdateringsrestriktioner</string>
+    <string name="pref_library_update_restriction">Automatiska uppdateringar av enhetsbegränsningar</string>
     <string name="charging">Laddning</string>
-    <string name="pref_update_only_non_completed">Uppdatera endast pågående manga</string>
+    <string name="pref_update_only_non_completed">Är avslutad serie</string>
     <string name="pref_auto_update_manga_sync">Uppdatera förlopp efter läsning</string>
     <string name="pref_start_screen">Startskärm</string>
     <string name="default_category">Standardkategori</string>
@@ -121,7 +121,6 @@
     <string name="pref_reader_navigation">Navigering</string>
     <string name="pref_read_with_volume_keys">Volymknapparna</string>
     <string name="pref_read_with_volume_keys_inverted">Invertera volymknapparna</string>
-    <string name="pref_read_with_tapping">Skärmtryck</string>
     <string name="pref_reader_theme">Bakgrundsfärg</string>
     <string name="white_background">Vit</string>
     <string name="black_background">Svart</string>
@@ -155,15 +154,15 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">Nedladdningsplats</string>
-    <string name="pref_remove_after_marked_as_read">Efter markerad som läst</string>
-    <string name="pref_remove_after_read">Automatiskt efter läsning</string>
+    <string name="pref_remove_after_marked_as_read">Efter manuellt markerad som läst</string>
+    <string name="pref_remove_after_read">Ta bort automatiskt efter läsning</string>
     <string name="custom_dir">Anpassad plats</string>
     <string name="disabled">Inaktiverad</string>
     <string name="last_read_chapter">Senaste lästa kapitel</string>
-    <string name="second_to_last">Näst sista kapitel</string>
-    <string name="third_to_last">Tredje till sista kapitlet</string>
-    <string name="fourth_to_last">Fjärde till sista kapitlet</string>
-    <string name="fifth_to_last">Femte till sista kapitlet</string>
+    <string name="second_to_last">Näst sist lästa kapitel</string>
+    <string name="third_to_last">Tredje till sist lästa kapitlet</string>
+    <string name="fourth_to_last">Fjärde till sista lästa kapitlet</string>
+    <string name="fifth_to_last">Femte till sist lästa kapitlet</string>
     <string name="pref_download_new">Ladda ner nya kapitel</string>
     <string name="services">Tjänster</string>
     <string name="pref_create_backup">Skapa säkerhetskopia</string>
@@ -334,9 +333,7 @@
     <string name="logout_title">Logga ut från %1$s\?</string>
     <string name="logout">Logga ut</string>
     <string name="logout_success">Du är nu utloggad</string>
-    <string name="currently_reading">Läser</string>
     <string name="paused">Pausad</string>
-    <string name="want_to_read">Planerar att läsa</string>
     <string name="label_more">Mer</string>
     <string name="action_sort_latest_chapter">Senaste kapitel</string>
     <string name="action_view_chapters">Visa kapitel</string>
@@ -352,7 +349,7 @@
     <string name="lock_always">Alltid</string>
     <string name="lock_never">Aldrig</string>
     <plurals name="lock_after_mins">
-        <item quantity="one">Efter 1 minut</item>
+        <item quantity="one">Efter %1$s minut</item>
         <item quantity="other">Efter %1$s minuter</item>
     </plurals>
     <string name="secure_screen">Säker skärm</string>
@@ -362,10 +359,10 @@
     <string name="information_webview_outdated">Uppdatera WebView-appen för bättre kompatibilitet</string>
     <string name="channel_new_chapters">Kapiteluppdateringar</string>
     <string name="unlock_app">Lås upp Aniyomi</string>
-    <string name="secure_screen_summary">Dölj app-innehåll när du byter appar, och blockera skärmdumpar</string>
+    <string name="secure_screen_summary">Säker skärm döljer appinnehållet när du byter app och blockerar skärmdumpar</string>
     <string name="pref_category_display">Skärmvisning</string>
     <plurals name="notification_chapters_generic">
-        <item quantity="one">1 nytt kapitel</item>
+        <item quantity="one">%1$d nytt kapitel</item>
         <item quantity="other">%1$d nya kapitel</item>
     </plurals>
     <string name="notification_chapters_single">Kapitel %1$s</string>
@@ -383,7 +380,7 @@
     <string name="email">E-postadress</string>
     <string name="pref_always_show_chapter_transition">Visa alltid kapitelövergång</string>
     <plurals name="notification_new_chapters_summary">
-        <item quantity="one">För 1 titel</item>
+        <item quantity="one">För %d titel</item>
         <item quantity="other">För %d titlar</item>
     </plurals>
     <string name="action_menu">Meny</string>
@@ -439,7 +436,7 @@
     <string name="label_downloaded_only">Endast nedladdat</string>
     <string name="downloaded_only_summary">Filtrerar all manga i ditt bibliotek</string>
     <plurals name="download_queue_summary">
-        <item quantity="one">1 återstående</item>
+        <item quantity="one">%1$s återstående</item>
         <item quantity="other">%1$s återstående</item>
     </plurals>
     <string name="pref_search_pinned_sources_only">Inkludera endast fästa källor</string>
@@ -459,10 +456,6 @@
     <string name="action_display_unread_badge">Olästa kapitel</string>
     <string name="pref_refresh_library_covers">Uppdatera bibliotekets manga omslag</string>
     <string name="tracking_info">Envägssynkronisering för att uppdatera kapitelförloppet i spårningstjänster. Ställ in spårning för enskilda manga från spårningsknappen under manga info.</string>
-    <plurals name="notification_update_error">
-        <item quantity="one">1 uppdatering misslyckades</item>
-        <item quantity="other">%1$d uppdateringar misslyckades</item>
-    </plurals>
     <string name="sort_by_upload_date">Efter uppladdningsdatum</string>
     <string name="label_data">Data</string>
     <string name="backup_restore_missing_sources">Saknade källor:</string>
@@ -493,7 +486,7 @@
     <string name="pref_read_with_tapping_inverted">Invertera tryck</string>
     <string name="loader_not_implemented_error">Källan hittades inte</string>
     <plurals name="manga_num_chapters">
-        <item quantity="one">1 kapitel</item>
+        <item quantity="one">%1$s kapitel</item>
         <item quantity="other">%1$s kapitel</item>
     </plurals>
     <string name="unknown_status">Okänd status</string>
@@ -514,7 +507,7 @@
     <string name="channel_progress">Förlopp</string>
     <string name="download_notifier_download_finish">Nedladdningen slutförd</string>
     <plurals name="num_trackers">
-        <item quantity="one">1 spårare</item>
+        <item quantity="one">%d spårare</item>
         <item quantity="other">%d spårare</item>
     </plurals>
     <string name="no_pinned_sources">Du har inga fästa källor</string>
@@ -528,8 +521,8 @@
     <string name="chapter_settings_updated">Uppdaterade standardinställningar för kapitel</string>
     <string name="confirm_set_chapter_settings">Vill du spara de här inställningarna som standard\?</string>
     <plurals name="missing_chapters_warning">
-        <item quantity="one">Hoppar över ett kapitel, antingen saknar källan det eller så har det filtrerats bort</item>
-        <item quantity="other">Hoppar över %d kapitel, antingen saknar källan det eller så har det filtrerats bort</item>
+        <item quantity="one">Hoppar över %d kapitel, antingen saknar källan det eller så har det filtrerats bort</item>
+        <item quantity="other">Hoppar över %d kapitel, antingen saknar källan dem eller så har de filtrerats bort</item>
     </plurals>
     <string name="share_page_info">%1$s: %2$s, sida %3$d</string>
     <string name="no_chapters_error">Inga kapitel hittades</string>
@@ -581,7 +574,7 @@
     <string name="pref_dual_page_invert">Invertera dubbelsidig delad placering</string>
     <string name="pref_show_navigation_mode_summary">Visa tryckzoner kort när läsaren öppnas</string>
     <string name="pref_show_navigation_mode">Visa överlägg för navigeringslayout</string>
-    <string name="pref_dns_over_https">DNS över HTTPS</string>
+    <string name="pref_dns_over_https">DNS över HTTPS (DoH)</string>
     <string name="exclude">Exkludera: %s</string>
     <string name="include">Inkludera: %s</string>
     <string name="none">Ingen</string>
@@ -589,7 +582,7 @@
     <string name="pref_download_new_categories_details">Manga i uteslutna kategorier laddas inte ner även om de också ingår i inkluderade kategorier.</string>
     <string name="pref_category_auto_download">Ladda ned automatiskt</string>
     <string name="pref_library_update_categories_details">Manga i uteslutna kategorier uppdateras inte även om de också ingår i inkluderade kategorier.</string>
-    <string name="action_show_errors">Se fullstäning felinformation</string>
+    <string name="action_show_errors">Tryck för att se detaljer</string>
     <string name="update_check_eol">Denna Android-version stöds inte längre</string>
     <string name="clipboard_copy_error">Kunde inte kopiera till urklipp</string>
     <string name="rotation_landscape">Liggande</string>
@@ -691,4 +684,34 @@
     <string name="pref_auto_clear_chapter_cache">Rensa kapitelcache när appen stängs</string>
     <string name="clear_database_source_item_count">%1$d manga i databasen som inte är biblioteksmanga</string>
     <string name="database_clean">Rengör databasen</string>
+    <string name="backup_restore_invalid_uri">Fel: tom URI</string>
+    <string name="library_errors_help">För hjälp med att åtgärda fel i biblioteksuppdateringar, se %1$s</string>
+    <string name="pref_library_update_manga_restriction">Hoppa över uppdatering</string>
+    <string name="cancelled">Avbruten</string>
+    <string name="on_hiatus">På uppehåll</string>
+    <string name="publishing_finished">Publiceringen avslutad</string>
+    <string name="save_chapter_as_cbz">Spara som CBZ-arkiv</string>
+    <string name="privacy_policy">Integritetspolicy</string>
+    <string name="action_faq_and_guides">Vanliga frågor och guider</string>
+    <string name="pref_update_only_completely_read">Har olästa kapitel</string>
+    <string name="extension_api_error">Det gick inte att hämta tilläggslistan</string>
+    <string name="webtoon_side_padding_5">5%</string>
+    <string name="action_show_manga">Visa manga</string>
+    <string name="action_filter_started">Startad</string>
+    <string name="action_display_cover_only_grid">Endast omslags-rutnät</string>
+    <string name="pref_update_only_started">Inga lästa kapitel</string>
+    <string name="pref_navigate_pan">Navigera till pan</string>
+    <string name="confirm_manga_add_duplicate">Du har en post i ditt bibliotek med samma namn men från en annan källa (%1$s).
+\n
+\nVill du fortfarande fortsätta\?</string>
+    <string name="pref_landscape_zoom">Zooma in landskapsbilden</string>
+    <string name="skipped_reason_completed">Hoppade över eftersom serien är klar</string>
+    <string name="skipped_reason_not_caught_up">Hoppade över eftersom det finns olästa kapitel</string>
+    <string name="skipped_reason_not_started">Hoppade över eftersom inga kapitel läses</string>
+    <string name="learn_more">Läs mer</string>
+    <string name="notification_update_error">%1$d uppdatering(ar) misslyckades</string>
+    <string name="notification_update_skipped">%1$d uppdatering(ar) hoppades över</string>
+    <string name="channel_skipped">Hoppat över</string>
+    <string name="rotation_reverse_portrait">Omvänt porträtt</string>
+    <string name="action_move_to_top_all_for_series">Flytta serien till toppen</string>
 </resources>

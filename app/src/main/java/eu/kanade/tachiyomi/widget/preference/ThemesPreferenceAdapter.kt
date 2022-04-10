@@ -9,7 +9,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.PrefThemeItemBinding
-import eu.kanade.tachiyomi.ui.base.activity.BaseThemedActivity
+import eu.kanade.tachiyomi.ui.base.delegate.ThemingDelegate
 import eu.kanade.tachiyomi.util.system.getResourceColor
 import uy.kohesive.injekt.injectLazy
 
@@ -23,9 +23,9 @@ class ThemesPreferenceAdapter(private val clickListener: OnItemClickListener) :
     private lateinit var binding: PrefThemeItemBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThemeViewHolder {
-        val themeResIds = BaseThemedActivity.getThemeResIds(themes[viewType], preferences.themeDarkAmoled().get())
+        val themeResIds = ThemingDelegate.getThemeResIds(themes[viewType], preferences.themeDarkAmoled().get())
         val themedContext = themeResIds.fold(parent.context) {
-            context, themeResId ->
+                context, themeResId ->
             ContextThemeWrapper(context, themeResId)
         }
 
@@ -49,7 +49,7 @@ class ThemesPreferenceAdapter(private val clickListener: OnItemClickListener) :
     inner class ThemeViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
         private val selectedColor = view.context.getResourceColor(R.attr.colorAccent)
-        private val unselectedColor = view.context.getResourceColor(android.R.attr.textColorHint)
+        private val unselectedColor = view.context.getResourceColor(android.R.attr.divider)
 
         fun bind(appTheme: PreferenceValues.AppTheme) {
             binding.name.text = view.context.getString(appTheme.titleResId!!)

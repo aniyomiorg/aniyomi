@@ -2,37 +2,34 @@ package eu.kanade.tachiyomi.ui.base.activity
 
 import android.content.Context
 import android.os.Bundle
-import androidx.viewbinding.ViewBinding
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
+import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegateImpl
+import eu.kanade.tachiyomi.ui.base.delegate.ThemingDelegate
+import eu.kanade.tachiyomi.ui.base.delegate.ThemingDelegateImpl
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
-import eu.kanade.tachiyomi.ui.security.SecureActivityDelegate
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.prepareTabletUiContext
 import nucleus.view.NucleusAppCompatActivity
+import uy.kohesive.injekt.injectLazy
 
-abstract class BaseRxActivity<VB : ViewBinding, P : BasePresenter<*>> : NucleusAppCompatActivity<P>() {
+open class BaseRxActivity<P : BasePresenter<*>> :
+    NucleusAppCompatActivity<P>(),
+    SecureActivityDelegate by SecureActivityDelegateImpl(),
+    ThemingDelegate by ThemingDelegateImpl() {
 
-    @Suppress("LeakingThis")
-    private val secureActivityDelegate = SecureActivityDelegate(this)
-
-    lateinit var binding: VB
+    protected val preferences: PreferencesHelper by injectLazy()
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(
             LocaleHelper
                 .createLocaleWrapper(newBase)
-                .prepareTabletUiContext()
+                .prepareTabletUiContext(),
         )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        applyAppTheme(this)
         super.onCreate(savedInstanceState)
-
-        secureActivityDelegate.onCreate()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        secureActivityDelegate.onResume()
     }
 }

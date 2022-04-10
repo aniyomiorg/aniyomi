@@ -10,7 +10,7 @@ import uy.kohesive.injekt.api.get
 
 class MigrationAnimePresenter(
     private val sourceId: Long,
-    private val db: AnimeDatabaseHelper = Injekt.get()
+    private val db: AnimeDatabaseHelper = Injekt.get(),
 ) : BasePresenter<MigrationAnimeController>() {
 
     override fun onCreate(savedState: Bundle?) {

@@ -11,7 +11,7 @@ import kotlin.math.abs
 class Gestures(
     private val activity: PlayerActivity,
     private val width: Float,
-    private val height: Float
+    private val height: Float,
 ) : GestureDetector.SimpleOnGestureListener(), View.OnTouchListener {
     private var scrollState = STATE_UP
 
@@ -68,7 +68,7 @@ class Gestures(
         e1: MotionEvent,
         e2: MotionEvent,
         distanceX: Float,
-        distanceY: Float
+        distanceY: Float,
     ): Boolean {
         if (activity.isLocked) return false
         if (e1.y < height * 0.05F || e1.y > height * 0.95F) return false

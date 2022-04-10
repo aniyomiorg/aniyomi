@@ -7,6 +7,9 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -17,9 +20,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.BackupConst
-import eu.kanade.tachiyomi.data.backup.BackupCreateService
 import eu.kanade.tachiyomi.data.backup.BackupCreatorJob
 import eu.kanade.tachiyomi.data.backup.BackupRestoreService
+import eu.kanade.tachiyomi.data.backup.ValidatorParseException
 import eu.kanade.tachiyomi.data.backup.full.FullBackupRestoreValidator
 import eu.kanade.tachiyomi.data.backup.full.models.BackupFull
 import eu.kanade.tachiyomi.data.backup.legacy.LegacyBackupRestoreValidator
@@ -36,6 +39,7 @@ import eu.kanade.tachiyomi.util.preference.preferenceCategory
 import eu.kanade.tachiyomi.util.preference.summaryRes
 import eu.kanade.tachiyomi.util.preference.titleRes
 import eu.kanade.tachiyomi.util.system.DeviceUtil
+import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -65,7 +69,7 @@ class SettingsBackupController : SettingsController() {
                     context.toast(R.string.restore_miui_warning, Toast.LENGTH_LONG)
                 }
 
-                if (!BackupCreateService.isRunning(context)) {
+                if (!BackupCreatorJob.isManualJobRunning(context)) {
                     val ctrl = CreateBackupDialog()
                     ctrl.targetController = this@SettingsBackupController
                     ctrl.showDialog(router)
@@ -110,7 +114,7 @@ class SettingsBackupController : SettingsController() {
                     R.string.update_12hour,
                     R.string.update_24hour,
                     R.string.update_48hour,
-                    R.string.update_weekly
+                    R.string.update_weekly,
                 )
                 entryValues = arrayOf("0", "6", "12", "24", "48", "168")
                 summary = "%s"
@@ -157,10 +161,26 @@ class SettingsBackupController : SettingsController() {
         infoPreference(R.string.backup_info)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.settings_backup, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_backup_help -> activity?.openInBrowser(HELP_URL)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null && resultCode == Activity.RESULT_OK) {
             val activity = activity ?: return
             val uri = data.data
+
+            if (uri == null) {
+                activity.toast(R.string.backup_restore_invalid_uri)
+                return
+            }
 
             when (requestCode) {
                 CODE_BACKUP_DIR -> {
@@ -168,33 +188,18 @@ class SettingsBackupController : SettingsController() {
                     val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION
 
-                    if (uri != null) {
-                        activity.contentResolver.takePersistableUriPermission(uri, flags)
-                    }
-
-                    // Set backup Uri
+                    activity.contentResolver.takePersistableUriPermission(uri, flags)
                     preferences.backupsDirectory().set(uri.toString())
                 }
                 CODE_BACKUP_CREATE -> {
                     val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION
 
-                    if (uri != null) {
-                        activity.contentResolver.takePersistableUriPermission(uri, flags)
-                    }
-
-                    val file = UniFile.fromUri(activity, uri)
-
-                    activity.toast(R.string.creating_backup)
-
-                    BackupCreateService.start(
-                        activity,
-                        file.uri,
-                        backupFlags,
-                    )
+                    activity.contentResolver.takePersistableUriPermission(uri, flags)
+                    BackupCreatorJob.startNow(activity, uri, backupFlags)
                 }
                 CODE_BACKUP_RESTORE -> {
-                    uri?.let { RestoreBackupDialog(it).showDialog(router) }
+                    RestoreBackupDialog(uri).showDialog(router)
                 }
             }
         }
@@ -223,7 +228,7 @@ class SettingsBackupController : SettingsController() {
                 R.string.general_categories,
                 R.string.chapters_episodes,
                 R.string.track,
-                R.string.history
+                R.string.history,
             )
                 .map { activity.getString(it) }
             val selected = options.map { true }.toBooleanArray()
@@ -242,10 +247,10 @@ class SettingsBackupController : SettingsController() {
                     selected.forEachIndexed { i, checked ->
                         if (checked) {
                             when (i) {
-                                1 -> flags = flags or BackupCreateService.BACKUP_CATEGORY
-                                2 -> flags = flags or BackupCreateService.BACKUP_CHAPTER
-                                3 -> flags = flags or BackupCreateService.BACKUP_TRACK
-                                4 -> flags = flags or BackupCreateService.BACKUP_HISTORY
+                                1 -> flags = flags or BackupConst.BACKUP_CATEGORY
+                                2 -> flags = flags or BackupConst.BACKUP_CHAPTER
+                                3 -> flags = flags or BackupConst.BACKUP_TRACK
+                                4 -> flags = flags or BackupConst.BACKUP_HISTORY
                             }
                         }
                     }
@@ -259,7 +264,7 @@ class SettingsBackupController : SettingsController() {
 
     class RestoreBackupDialog(bundle: Bundle? = null) : DialogController(bundle) {
         constructor(uri: Uri) : this(
-            bundleOf(KEY_URI to uri)
+            bundleOf(KEY_URI to uri),
         )
 
         override fun onCreateDialog(savedViewState: Bundle?): Dialog {
@@ -268,12 +273,12 @@ class SettingsBackupController : SettingsController() {
 
             return try {
                 var type = BackupConst.BACKUP_TYPE_FULL
-                val results = runCatching {
+                val results = try {
                     FullBackupRestoreValidator().validate(activity, uri)
-                }.recoverCatching {
+                } catch (_: ValidatorParseException) {
                     type = BackupConst.BACKUP_TYPE_LEGACY
                     LegacyBackupRestoreValidator().validate(activity, uri)
-                }.getOrThrow()
+                }
 
                 var message = if (type == BackupConst.BACKUP_TYPE_FULL) {
                     activity.getString(R.string.backup_restore_content_full)
@@ -310,3 +315,5 @@ private const val KEY_URI = "RestoreBackupDialog.uri"
 private const val CODE_BACKUP_DIR = 503
 private const val CODE_BACKUP_CREATE = 504
 private const val CODE_BACKUP_RESTORE = 505
+
+private const val HELP_URL = "https://aniyomi.jmir.xyz/help/guides/backups/"

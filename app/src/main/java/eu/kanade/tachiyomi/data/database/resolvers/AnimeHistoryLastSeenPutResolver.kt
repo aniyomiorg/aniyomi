@@ -24,7 +24,7 @@ class AnimeHistoryLastSeenPutResolver : AnimeHistoryPutResolver() {
                 .table(updateQuery.table())
                 .where(updateQuery.where())
                 .whereArgs(updateQuery.whereArgs())
-                .build()
+                .build(),
         )
 
         cursor.use { putCursor ->
@@ -47,6 +47,6 @@ class AnimeHistoryLastSeenPutResolver : AnimeHistoryPutResolver() {
 
     private fun mapToUpdateContentValues(history: AnimeHistory) =
         contentValuesOf(
-            AnimeHistoryTable.COL_LAST_SEEN to history.last_seen
+            AnimeHistoryTable.COL_LAST_SEEN to history.last_seen,
         )
 }

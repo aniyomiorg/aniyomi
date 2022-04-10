@@ -33,7 +33,7 @@ class BrowseController :
     TabbedController {
 
     constructor(toExtensions: Boolean = false) : super(
-        bundleOf(TO_EXTENSIONS_EXTRA to toExtensions)
+        bundleOf(TO_EXTENSIONS_EXTRA to toExtensions),
     )
 
     @Suppress("unused")
@@ -82,11 +82,12 @@ class BrowseController :
         }
     }
 
-    override fun configureTabs(tabs: TabLayout) {
+    override fun configureTabs(tabs: TabLayout): Boolean {
         with(tabs) {
             tabGravity = TabLayout.GRAVITY_FILL
             tabMode = TabLayout.MODE_SCROLLABLE
         }
+        return true
     }
 
     override fun cleanupTabs(tabs: TabLayout) {
@@ -99,7 +100,7 @@ class BrowseController :
         /* It's possible to switch to the Library controller by the time setExtensionUpdateBadge
         is called, resulting in a badge being put on the category tabs (if enabled).
         This check prevents that from happening */
-        if (router.backstack.last().controller !is BrowseController) return
+        if (router.backstack.lastOrNull()?.controller !is BrowseController) return
 
         (activity as? MainActivity)?.binding?.tabs?.apply {
             val updates = preferences.extensionUpdatesCount().get()
@@ -116,7 +117,7 @@ class BrowseController :
         /* It's possible to switch to the Library controller by the time setExtensionUpdateBadge
         is called, resulting in a badge being put on the category tabs (if enabled).
         This check prevents that from happening */
-        if (router.backstack.last().controller !is BrowseController) return
+        if (router.backstack.lastOrNull()?.controller !is BrowseController) return
 
         (activity as? MainActivity)?.binding?.tabs?.apply {
             val updates = preferences.animeextensionUpdatesCount().get()
@@ -136,7 +137,7 @@ class BrowseController :
             R.string.label_mangasources,
             R.string.label_animeextensions,
             R.string.label_mangaextensions,
-            R.string.label_migration
+            R.string.label_migration,
         )
             .map { resources!!.getString(it) }
 

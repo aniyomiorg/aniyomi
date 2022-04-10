@@ -29,7 +29,7 @@ import eu.kanade.tachiyomi.data.database.tables.EpisodeTable.TABLE
 class EpisodeTypeMapping : SQLiteTypeMapping<Episode>(
     EpisodePutResolver(),
     EpisodeGetResolver(),
-    EpisodeDeleteResolver()
+    EpisodeDeleteResolver(),
 )
 
 class EpisodePutResolver : DefaultPutResolver<Episode>() {
@@ -58,7 +58,7 @@ class EpisodePutResolver : DefaultPutResolver<Episode>() {
             COL_LAST_SECOND_SEEN to obj.last_second_seen,
             COL_TOTAL_SECONDS to obj.total_seconds,
             COL_EPISODE_NUMBER to obj.episode_number,
-            COL_SOURCE_ORDER to obj.source_order
+            COL_SOURCE_ORDER to obj.source_order,
         )
 }
 

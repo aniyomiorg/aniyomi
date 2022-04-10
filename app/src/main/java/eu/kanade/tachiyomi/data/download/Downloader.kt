@@ -60,7 +60,7 @@ class Downloader(
     private val context: Context,
     private val provider: DownloadProvider,
     private val cache: DownloadCache,
-    private val sourceManager: SourceManager
+    private val sourceManager: SourceManager,
 ) {
 
     private val chapterCache: ChapterCache by injectLazy()
@@ -211,7 +211,7 @@ class Downloader(
                         downloadChapter(download).subscribeOn(Schedulers.io())
                     }
                 },
-                5
+                5,
             )
             .onBackpressureLatest()
             .observeOn(AndroidSchedulers.mainThread())
@@ -223,7 +223,7 @@ class Downloader(
                     DownloadService.stop(context)
                     logcat(LogPriority.ERROR, error)
                     notifier.onError(error.message)
-                }
+                },
             )
     }
 
@@ -478,7 +478,7 @@ class Downloader(
         download: Download,
         mangaDir: UniFile,
         tmpDir: UniFile,
-        dirname: String
+        dirname: String,
     ) {
         // Ensure that the chapter folder has all the images.
         val downloadedImages = tmpDir.listFiles().orEmpty().filterNot { it.name!!.endsWith(".tmp") }
@@ -563,5 +563,5 @@ class Downloader(
     }
 }
 
-// Arbitrary minimum required space to start a download: 50 MB
-private const val MIN_DISK_SPACE = 50 * 1024 * 1024
+// Arbitrary minimum required space to start a download: 200 MB
+private const val MIN_DISK_SPACE = 200L * 1024 * 1024

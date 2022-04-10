@@ -50,7 +50,6 @@
     <string name="pref_reader_navigation">Lapozás</string>
     <string name="pref_read_with_volume_keys">Hangerőszabályzó gombokkal</string>
     <string name="pref_read_with_volume_keys_inverted">Gombok felcserélése</string>
-    <string name="pref_read_with_tapping">Koppintással</string>
     <string name="pref_reader_theme">Háttérszín</string>
     <string name="pref_download_directory">Letöltések helye</string>
     <string name="version">Verzió</string>
@@ -265,10 +264,6 @@
     <plurals name="notification_chapters_generic">
         <item quantity="one">1 új fejezet</item>
         <item quantity="other">%1$d új fejezet</item>
-    </plurals>
-    <plurals name="notification_update_error">
-        <item quantity="one">%1$d frissítés sikertelen</item>
-        <item quantity="other">%1$d frissítés sikertelen</item>
     </plurals>
     <string name="cover_updated">Borító frissítve</string>
     <string name="set_as_cover">Beállítás borítóként</string>

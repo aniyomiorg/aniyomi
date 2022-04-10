@@ -21,6 +21,7 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.PREF_DOH_ADGUARD
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
 import eu.kanade.tachiyomi.network.PREF_DOH_GOOGLE
+import eu.kanade.tachiyomi.network.PREF_DOH_QUAD9
 import eu.kanade.tachiyomi.ui.base.controller.openInBrowser
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.setting.database.ClearDatabaseController
@@ -39,6 +40,7 @@ import eu.kanade.tachiyomi.util.preference.preferenceCategory
 import eu.kanade.tachiyomi.util.preference.summaryRes
 import eu.kanade.tachiyomi.util.preference.switchPreference
 import eu.kanade.tachiyomi.util.preference.titleRes
+import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.isPackageInstalled
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toast
@@ -172,12 +174,14 @@ class SettingsAdvancedController : SettingsController() {
                     "Cloudflare",
                     "Google",
                     "AdGuard",
+                    "Quad9",
                 )
                 entryValues = arrayOf(
                     "-1",
                     PREF_DOH_CLOUDFLARE.toString(),
                     PREF_DOH_GOOGLE.toString(),
                     PREF_DOH_ADGUARD.toString(),
+                    PREF_DOH_QUAD9.toString(),
                 )
                 defaultValue = "-1"
                 summary = "%s"
@@ -220,12 +224,17 @@ class SettingsAdvancedController : SettingsController() {
                 bindTo(preferences.extensionInstaller())
                 titleRes = R.string.ext_installer_pref
                 summary = "%s"
-                entriesRes = arrayOf(
-                    R.string.ext_installer_legacy,
-                    R.string.ext_installer_packageinstaller,
-                    R.string.ext_installer_shizuku,
-                )
-                entryValues = PreferenceValues.ExtensionInstaller.values().map { it.name }.toTypedArray()
+
+                // PackageInstaller doesn't work on MIUI properly for non-allowlisted apps
+                val values = if (DeviceUtil.isMiui) {
+                    PreferenceValues.ExtensionInstaller.values()
+                        .filter { it != PreferenceValues.ExtensionInstaller.PACKAGEINSTALLER }
+                } else {
+                    PreferenceValues.ExtensionInstaller.values().toList()
+                }
+
+                entriesRes = values.map { it.titleResId }.toTypedArray()
+                entryValues = values.map { it.name }.toTypedArray()
 
                 onChange {
                     if (it == PreferenceValues.ExtensionInstaller.SHIZUKU.name &&
@@ -254,7 +263,7 @@ class SettingsAdvancedController : SettingsController() {
                 bindTo(preferences.tabletUiMode())
                 titleRes = R.string.pref_tablet_ui_mode
                 summary = "%s"
-                entriesRes = arrayOf(R.string.automatic_background, R.string.lock_always, R.string.landscape, R.string.lock_never)
+                entriesRes = PreferenceValues.TabletUiMode.values().map { it.titleResId }.toTypedArray()
                 entryValues = PreferenceValues.TabletUiMode.values().map { it.name }.toTypedArray()
 
                 onChange {

@@ -74,15 +74,15 @@
     <string name="pref_library_columns">প্রতি সারিতে আইটেম</string>
     <string name="portrait">প্রতিকৃতি</string>
     <string name="landscape">ভূদৃশ্য</string>
-    <string name="pref_library_update_interval">হালনাগাদের হার</string>
-    <string name="update_never">স্বনির্ধারিত</string>
+    <string name="pref_library_update_interval">নিজেথেকে আপডেট</string>
+    <string name="update_never">বন্ধ</string>
     <string name="update_6hour">প্রতি ৬ ঘন্টায়</string>
     <string name="update_12hour">প্রতি ১২ ঘন্টায়</string>
     <string name="update_24hour">প্রতিদিন</string>
     <string name="update_48hour">প্রতি ২ দিন</string>
     <string name="update_weekly">সাপ্তাহিক</string>
     <string name="all">সব</string>
-    <string name="pref_library_update_restriction">হালনাগেদের সীমাবদ্ধতা</string>
+    <string name="pref_library_update_restriction">নিজেথেকে আপডেটের সীমাবদ্ধতা</string>
     <string name="charging">চার্জ হচ্ছে</string>
     <string name="pref_update_only_non_completed">কেবল চলমান মাংগা হালনাগাদ করুন</string>
     <string name="pref_auto_update_manga_sync">পড়ার পরে অগ্রগতি আপডেট করুন</string>
@@ -99,7 +99,6 @@
     <string name="pref_reader_navigation">ন্যাভিগেশন</string>
     <string name="pref_read_with_volume_keys">ভলিউম বোতামগুলো</string>
     <string name="pref_read_with_volume_keys_inverted">ভলিউম বোতামগুলো ওল্টান</string>
-    <string name="pref_read_with_tapping">টোকা</string>
     <string name="pref_reader_theme">ব্যাকগ্রাউন্ড রঙ</string>
     <string name="white_background">সাদা</string>
     <string name="black_background">কালো</string>
@@ -464,10 +463,6 @@
         <item quantity="one">এক্সটেনশন হালনাগাদ উপলব্ধ</item>
         <item quantity="other">%d এক্সটেনশন হালনাগাদ উপলব্ধ</item>
     </plurals>
-    <plurals name="notification_update_error">
-        <item quantity="one">১টি হালনাগাদ ব্যর্থ হয়েছে</item>
-        <item quantity="other">%1$dটি হালনাগাদ ব্যর্থ হয়েছে</item>
-    </plurals>
     <string name="notification_chapters_multiple">অধ্যায়গুলি %1$s</string>
     <string name="notification_chapters_single_and_more">অধ্যায় %1$s এবং %2$d আরও</string>
     <string name="notification_chapters_single">অধ্যায় %1$s</string>
@@ -493,9 +488,7 @@
     <string name="pref_category_for_this_series">এই সিরিজের জন্য</string>
     <string name="share_page_info">%1$s: %2$s, পৃষ্ঠা %3$d</string>
     <string name="error_invalid_date_supplied">অবৈধ তারিখ সরবরাহ করা হয়েছে</string>
-    <string name="want_to_read">পড়তে চাই</string>
     <string name="paused">বিরতি</string>
-    <string name="currently_reading">বর্তমানে পড়া হচ্ছে</string>
     <string name="add_tracking">ট্র্যাকিং যোগ করুন</string>
     <plurals name="num_trackers">
         <item quantity="one">1টি ট্র্যাকার</item>

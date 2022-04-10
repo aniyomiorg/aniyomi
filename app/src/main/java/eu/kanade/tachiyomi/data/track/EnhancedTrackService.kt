@@ -2,7 +2,9 @@ package eu.kanade.tachiyomi.data.track
 
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Manga
+import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.source.Source
@@ -37,4 +39,24 @@ interface EnhancedTrackService {
      * match is similar to TrackService.search, but only return zero or one match.
      */
     suspend fun match(anime: Anime): AnimeTrackSearch?
+
+    /**
+     * Checks whether the provided source/track/manga triplet is from this TrackService
+     */
+    fun isTrackFrom(track: Track, manga: Manga, source: Source?): Boolean
+
+    /**
+     * Checks whether the provided source/track/anime triplet is from this AnimeTrackService
+     */
+    fun isTrackFrom(track: AnimeTrack, anime: Anime, source: AnimeSource?): Boolean
+
+    /**
+     * Migrates the given track for the manga to the newSource, if possible
+     */
+    fun migrateTrack(track: Track, manga: Manga, newSource: Source): Track?
+
+    /**
+     * Migrates the given track for the anime to the newSource, if possible
+     */
+    fun migrateTrack(track: AnimeTrack, anime: Anime, newSource: AnimeSource): AnimeTrack?
 }

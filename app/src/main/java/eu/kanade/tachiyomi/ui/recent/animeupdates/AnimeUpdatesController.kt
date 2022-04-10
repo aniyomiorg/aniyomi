@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.view.ActionMode
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -88,9 +89,6 @@ class AnimeUpdatesController :
         val layoutManager = LinearLayoutManager(view.context)
         binding.recycler.layoutManager = layoutManager
         binding.recycler.setHasFixedSize(true)
-        adapter = AnimeUpdatesAdapter(this@AnimeUpdatesController, view.context)
-        binding.recycler.adapter = adapter
-        adapter?.fastScroller = binding.fastScroller
 
         binding.recycler.scrollStateChanges()
             .onEach {
@@ -100,6 +98,7 @@ class AnimeUpdatesController :
             }
             .launchIn(viewScope)
 
+        binding.swipeRefresh.isRefreshing = true
         binding.swipeRefresh.setDistanceToTriggerSync((2 * 64 * view.resources.displayMetrics.density).toInt())
         binding.swipeRefresh.refreshes()
             .onEach {
@@ -221,7 +220,15 @@ class AnimeUpdatesController :
      */
     fun onNextRecentEpisodes(episodes: List<IFlexible<*>>) {
         destroyActionModeIfNeeded()
-        adapter?.updateDataSet(episodes)
+        if (adapter == null) {
+            adapter = AnimeUpdatesAdapter(this@AnimeUpdatesController, binding.recycler.context, episodes)
+            binding.recycler.adapter = adapter
+            adapter!!.fastScroller = binding.fastScroller
+        } else {
+            adapter?.updateDataSet(episodes)
+        }
+        binding.swipeRefresh.isRefreshing = false
+        binding.fastScroller.isVisible = true
         binding.recycler.onAnimationsFinished {
             (activity as? MainActivity)?.ready = true
         }

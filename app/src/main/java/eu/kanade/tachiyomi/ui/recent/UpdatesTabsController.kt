@@ -52,18 +52,19 @@ class UpdatesTabsController() :
         }
     }
 
-    override fun configureTabs(tabs: TabLayout) {
+    override fun configureTabs(tabs: TabLayout): Boolean {
         with(tabs) {
             tabGravity = TabLayout.GRAVITY_FILL
             tabMode = TabLayout.MODE_FIXED
         }
+        return true
     }
 
     private inner class UpdatesTabsAdapter : RouterPagerAdapter(this@UpdatesTabsController) {
 
         private val tabTitles = listOf(
             R.string.label_animeupdates,
-            R.string.label_updates
+            R.string.label_updates,
         )
             .map { resources!!.getString(it) }
 

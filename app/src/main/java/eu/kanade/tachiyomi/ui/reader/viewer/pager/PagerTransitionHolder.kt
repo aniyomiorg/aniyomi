@@ -13,6 +13,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
+import eu.kanade.tachiyomi.ui.reader.viewer.ReaderButton
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderTransitionView
 import eu.kanade.tachiyomi.util.system.dpToPx
 import eu.kanade.tachiyomi.widget.ViewPagerAdapter
@@ -26,7 +27,7 @@ import rx.android.schedulers.AndroidSchedulers
 class PagerTransitionHolder(
     readerThemedContext: Context,
     val viewer: PagerViewer,
-    val transition: ChapterTransition
+    val transition: ChapterTransition,
 ) : LinearLayout(readerThemedContext), ViewPagerAdapter.PositionableView {
 
     /**
@@ -126,13 +127,14 @@ class PagerTransitionHolder(
             text = context.getString(R.string.transition_pages_error, error.message)
         }
 
-        val retryBtn = PagerButton(context, viewer).apply {
+        val retryBtn = ReaderButton(context).apply {
+            viewer = this@PagerTransitionHolder.viewer
             wrapContent()
             setText(R.string.action_retry)
             setOnClickListener {
                 val toChapter = transition.to
                 if (toChapter != null) {
-                    viewer.activity.requestPreloadChapter(toChapter)
+                    this@PagerTransitionHolder.viewer.activity.requestPreloadChapter(toChapter)
                 }
             }
         }

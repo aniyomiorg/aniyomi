@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.ui.browse.animesource
 
 import android.view.View
 import androidx.core.view.isVisible
+import coil.load
 import eu.davidea.viewholders.FlexibleViewHolder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
@@ -10,7 +11,7 @@ import eu.kanade.tachiyomi.databinding.SourceMainControllerItemBinding
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.view.setVectorCompat
 
-class AnimeSourceHolder(private val view: View, val adapter: AnimeSourceAdapter) :
+class AnimeSourceHolder(view: View, val adapter: AnimeSourceAdapter) :
     FlexibleViewHolder(view, adapter) {
 
     private val binding = SourceMainControllerItemBinding.bind(view)
@@ -33,12 +34,10 @@ class AnimeSourceHolder(private val view: View, val adapter: AnimeSourceAdapter)
         binding.subtitle.text = LocaleHelper.getDisplayName(source.lang)
 
         // Set source icon
-        itemView.post {
-            val icon = source.icon()
-            when {
-                icon != null -> binding.image.setImageDrawable(icon)
-                item.source.id == LocalAnimeSource.ID -> binding.image.setImageResource(R.mipmap.ic_local_source)
-            }
+        val icon = source.icon()
+        when {
+            icon != null -> binding.image.load(icon)
+            item.source.id == LocalAnimeSource.ID -> binding.image.load(R.mipmap.ic_local_source)
         }
 
         binding.sourceLatest.isVisible = source.supportsLatest

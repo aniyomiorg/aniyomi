@@ -55,7 +55,7 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
                 },
                 { _, error ->
                     logcat(LogPriority.ERROR, error)
-                }
+                },
             )
 
         downloadManager.queue.getProgressObservable()
@@ -92,7 +92,7 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
             .map { animeEpisodes ->
                 val map = TreeMap<Date, MutableList<AnimeEpisode>> { d1, d2 -> d2.compareTo(d1) }
                 val byDay = animeEpisodes
-                    .groupByTo(map, { it.episode.date_fetch.toDateKey() })
+                    .groupByTo(map) { it.episode.date_fetch.toDateKey() }
                 byDay.flatMap { entry ->
                     val dateItem = DateSectionItem(entry.key, relativeTime, dateFormat)
                     entry.value
@@ -188,7 +188,7 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
                 { view, _ ->
                     view.onEpisodesDeleted()
                 },
-                AnimeUpdatesController::onEpisodesDeletedError
+                AnimeUpdatesController::onEpisodesDeletedError,
             )
     }
 
@@ -227,7 +227,7 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
     /**
      * Delete selected episodes
      *
-     * @param items episodes selected
+     * @param episodeItems episodes selected
      */
     private fun deleteEpisodesInternal(episodeItems: List<AnimeUpdatesItem>) {
         val itemsByAnime = episodeItems.groupBy { it.anime.id }

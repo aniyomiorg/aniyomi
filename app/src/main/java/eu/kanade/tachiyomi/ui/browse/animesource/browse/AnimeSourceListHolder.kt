@@ -2,8 +2,8 @@ package eu.kanade.tachiyomi.ui.browse.animesource.browse
 
 import android.view.View
 import androidx.core.view.isVisible
-import coil.clear
-import coil.loadAny
+import coil.dispose
+import coil.load
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
@@ -50,9 +50,9 @@ class AnimeSourceListHolder(private val view: View, adapter: FlexibleAdapter<*>)
     }
 
     override fun setImage(anime: Anime) {
-        binding.thumbnail.clear()
+        binding.thumbnail.dispose()
         if (!anime.thumbnail_url.isNullOrEmpty()) {
-            binding.thumbnail.loadAny(anime) {
+            binding.thumbnail.load(anime) {
                 setParameter(AnimeCoverFetcher.USE_CUSTOM_COVER, false)
             }
         }

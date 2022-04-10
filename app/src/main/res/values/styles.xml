@@ -18,7 +18,6 @@
     <!--AlertDialog-->
     <!--===========-->
     <style name="ThemeOverlay.Tachiyomi.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="android:background">?attr/colorSurface</item>
         <item name="android:textColorPrimary">?attr/colorOnSurface</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
@@ -130,6 +129,16 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="Widget.Tachiyomi.Button.IconButton" parent="Widget.Material3.Button.TextButton.Icon">
+        <item name="iconTint">?attr/colorAccent</item>
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+
     <style name="Widget.Tachiyomi.Button.InlineButton" parent="Widget.Material3.Button.TextButton">
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>
@@ -144,6 +153,14 @@
     </style>
 
     <style name="Widget.Tachiyomi.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
+
+
+    <!--=======================-->
+    <!--Widgets.MaterialDivider-->
+    <!--=======================-->
+    <style name="Widget.Tachiyomi.MaterialDivider" parent="Widget.Material3.MaterialDivider">
+        <item name="dividerColor">@color/divider_default</item>
+    </style>
 
 
     <!--=================-->
@@ -182,10 +199,6 @@
     <!--Navigation Views-->
     <!--================-->
     <style name="Widget.Tachiyomi.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
-        <item name="itemPaddingBottom">10dp</item>
-        <item name="itemPaddingTop">10dp</item>
-        <item name="android:minHeight">68dp</item>
-
         <item name="itemRippleColor">@color/ripple_toolbar_fainter</item>
         <item name="labelVisibilityMode">labeled</item>
     </style>
@@ -226,7 +239,6 @@
 
     <style name="ThemeOverlay.Tachiyomi.Dialog.Fullscreen" parent="ThemeOverlay.Material3">
         <item name="android:windowIsFloating">false</item>
-        <item name="android:windowBackground">?android:attr/colorBackground</item>
         <item name="android:windowAnimationStyle">@style/Animation.Tachiyomi.Dialog</item>
     </style>
 

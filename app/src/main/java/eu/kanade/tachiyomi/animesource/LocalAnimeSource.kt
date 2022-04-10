@@ -178,7 +178,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource, Unm
                         episodeFile.nameWithoutExtension
                     }
                     date_upload = episodeFile.lastModified()
-                    name = getCleanEpisodeTitle(name, anime.title)
+                    name = getCleanEpisodeTitle(name)
                     EpisodeRecognition.parseEpisodeNumber(this, sAnime)
                 }
             }
@@ -193,12 +193,10 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource, Unm
     }
 
     /**
-     * Strips the anime title from a episode name and trim whitespace/delimiter characters.
+     * Trim whitespace/delimiter characters from episode names.
      */
-    private fun getCleanEpisodeTitle(episodeName: String, animeTitle: String): String {
-        return episodeName
-            .replace(animeTitle, "")
-            .trim(*WHITESPACE_CHARS.toCharArray(), '-', '_', ',', ':')
+    private fun getCleanEpisodeTitle(episodeName: String): String {
+        return episodeName.trim(*WHITESPACE_CHARS.toCharArray(), '-', '_', ',', ':')
     }
 
     private fun isSupportedFile(extension: String): Boolean {
@@ -252,7 +250,7 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource, Unm
     private class OrderBy(context: Context) : AnimeFilter.Sort(
         context.getString(R.string.local_filter_order_by),
         arrayOf(context.getString(R.string.title), context.getString(R.string.date)),
-        Selection(0, true)
+        Selection(0, true),
     )
 
     sealed class Format {

@@ -2,15 +2,15 @@ package eu.kanade.tachiyomi.ui.manga.track
 
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import coil.clear
-import coil.loadAny
+import coil.dispose
+import coil.load
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.databinding.TrackSearchItemBinding
 import java.util.Locale
 
 class TrackSearchHolder(
     private val binding: TrackSearchItemBinding,
-    private val adapter: TrackSearchAdapter
+    private val adapter: TrackSearchAdapter,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(track: TrackSearch, position: Int) {
         binding.root.isChecked = position == adapter.selectedItemPosition
@@ -20,9 +20,9 @@ class TrackSearchHolder(
         }
 
         binding.trackSearchTitle.text = track.title
-        binding.trackSearchCover.clear()
+        binding.trackSearchCover.dispose()
         if (track.cover_url.isNotEmpty()) {
-            binding.trackSearchCover.loadAny(track.cover_url)
+            binding.trackSearchCover.load(track.cover_url)
         }
 
         val hasStatus = track.publishing_status.isNotBlank()

@@ -25,7 +25,7 @@ class ChangeMangaCategoriesDialog<T>(bundle: Bundle? = null) :
         target: T,
         mangas: List<Manga>,
         categories: List<Category>,
-        preselected: IntArray
+        preselected: IntArray,
     ) : this() {
         this.mangas = mangas
         this.categories = categories
@@ -43,7 +43,7 @@ class ChangeMangaCategoriesDialog<T>(bundle: Bundle? = null) :
                     setQuadStateMultiChoiceItems(
                         items = categories.map { it.name },
                         isActionList = false,
-                        initialSelected = preselected
+                        initialSelected = preselected,
                     ) { selections ->
                         selected = selections
                     }
@@ -56,19 +56,22 @@ class ChangeMangaCategoriesDialog<T>(bundle: Bundle? = null) :
                             .filterNotNull()
                         (targetController as? Listener)?.updateCategoriesForMangas(mangas, add, remove)
                     }
+                    setNeutralButton(R.string.action_edit) { _, _ -> openCategoryController() }
                 } else {
                     setMessage(R.string.information_empty_category_dialog)
-                    setPositiveButton(R.string.action_edit_categories) { _, _ ->
-                        if (targetController is LibraryController) {
-                            val libController = targetController as LibraryController
-                            libController.clearSelection()
-                        }
-                        router.popCurrentController()
-                        router.pushController(CategoryController().withFadeTransaction())
-                    }
+                    setPositiveButton(R.string.action_edit_categories) { _, _ -> openCategoryController() }
                 }
             }
             .create()
+    }
+
+    private fun openCategoryController() {
+        if (targetController is LibraryController) {
+            val libController = targetController as LibraryController
+            libController.clearSelection()
+        }
+        router.popCurrentController()
+        router.pushController(CategoryController().withFadeTransaction())
     }
 
     interface Listener {

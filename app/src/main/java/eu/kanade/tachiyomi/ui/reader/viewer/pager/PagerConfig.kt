@@ -4,6 +4,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderPageImageView
 import eu.kanade.tachiyomi.ui.reader.viewer.ViewerConfig
 import eu.kanade.tachiyomi.ui.reader.viewer.ViewerNavigation
+import eu.kanade.tachiyomi.ui.reader.viewer.navigation.DisabledNavigation
 import eu.kanade.tachiyomi.ui.reader.viewer.navigation.EdgeNavigation
 import eu.kanade.tachiyomi.ui.reader.viewer.navigation.KindlishNavigation
 import eu.kanade.tachiyomi.ui.reader.viewer.navigation.LNavigation
@@ -21,7 +22,7 @@ import uy.kohesive.injekt.api.get
 class PagerConfig(
     private val viewer: PagerViewer,
     scope: CoroutineScope,
-    preferences: PreferencesHelper = Injekt.get()
+    preferences: PreferencesHelper = Injekt.get(),
 ) : ViewerConfig(preferences, scope) {
 
     var theme = preferences.readerTheme().get()
@@ -41,6 +42,12 @@ class PagerConfig(
     var imageCropBorders = false
         private set
 
+    var navigateToPan = false
+        private set
+
+    var landscapeZoom = false
+        private set
+
     init {
         preferences.readerTheme()
             .register(
@@ -48,7 +55,7 @@ class PagerConfig(
                     theme = it
                     automaticBackground = it == 3
                 },
-                { imagePropertyChangedListener?.invoke() }
+                { imagePropertyChangedListener?.invoke() },
             )
 
         preferences.imageScaleType()
@@ -59,6 +66,12 @@ class PagerConfig(
 
         preferences.cropBorders()
             .register({ imageCropBorders = it }, { imagePropertyChangedListener?.invoke() })
+
+        preferences.navigateToPan()
+            .register({ navigateToPan = it })
+
+        preferences.landscapeZoom()
+            .register({ landscapeZoom = it }, { imagePropertyChangedListener?.invoke() })
 
         preferences.navigationModePager()
             .register({ navigationMode = it }, { updateNavigation(navigationMode) })
@@ -76,7 +89,7 @@ class PagerConfig(
                 {
                     imagePropertyChangedListener?.invoke()
                     dualPageSplitChangedListener?.invoke(it)
-                }
+                },
             )
 
         preferences.dualPageInvertPaged()
@@ -119,6 +132,7 @@ class PagerConfig(
             2 -> KindlishNavigation()
             3 -> EdgeNavigation()
             4 -> RightAndLeftNavigation()
+            5 -> DisabledNavigation()
             else -> defaultNavigation()
         }
         navigationModeChangedListener?.invoke()

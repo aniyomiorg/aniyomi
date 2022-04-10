@@ -17,7 +17,7 @@ import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 data class AnimeSourceItem(
     val source: AnimeCatalogueSource,
     val header: LangItem? = null,
-    val isPinned: Boolean = false
+    val isPinned: Boolean = false,
 ) :
     AbstractSectionableItem<AnimeSourceHolder, LangItem>(header) {
 
@@ -33,7 +33,7 @@ data class AnimeSourceItem(
         adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
         holder: AnimeSourceHolder,
         position: Int,
-        payloads: MutableList<Any>
+        payloads: MutableList<Any>,
     ) {
         holder.bind(this)
     }

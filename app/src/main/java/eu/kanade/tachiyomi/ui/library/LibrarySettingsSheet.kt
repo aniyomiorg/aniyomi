@@ -23,7 +23,7 @@ import uy.kohesive.injekt.injectLazy
 class LibrarySettingsSheet(
     router: Router,
     private val trackManager: TrackManager = Injekt.get(),
-    onGroupClickListener: (ExtendedNavigationView.Group) -> Unit
+    onGroupClickListener: (ExtendedNavigationView.Group) -> Unit,
 ) : TabbedBottomSheetDialog(router.activity!!) {
 
     val filters: Filter
@@ -57,13 +57,13 @@ class LibrarySettingsSheet(
     override fun getTabViews(): List<View> = listOf(
         filters,
         sort,
-        display
+        display,
     )
 
     override fun getTabTitles(): List<Int> = listOf(
         R.string.action_filter,
         R.string.action_sort,
-        R.string.action_display
+        R.string.action_display,
     )
 
     /**
@@ -89,6 +89,7 @@ class LibrarySettingsSheet(
 
             private val downloaded = Item.TriStateGroup(R.string.action_filter_downloaded, this)
             private val unread = Item.TriStateGroup(R.string.action_filter_unread, this)
+            private val started = Item.TriStateGroup(R.string.action_filter_started, this)
             private val completed = Item.TriStateGroup(R.string.completed, this)
             private val trackFilters: Map<Int, Item.TriStateGroup>
 
@@ -103,7 +104,7 @@ class LibrarySettingsSheet(
                         trackFilters = services.associate { service ->
                             Pair(service.id, Item.TriStateGroup(getServiceResId(service, size), this))
                         }
-                        val list: MutableList<Item> = mutableListOf(downloaded, unread, completed)
+                        val list: MutableList<Item> = mutableListOf(downloaded, unread, started, completed)
                         if (size > 1) list.add(Item.Header(R.string.action_filter_tracked))
                         list.addAll(trackFilters.values)
                         items = list
@@ -122,6 +123,7 @@ class LibrarySettingsSheet(
                     downloaded.state = preferences.filterDownloaded().get()
                 }
                 unread.state = preferences.filterUnread().get()
+                started.state = preferences.filterStarted().get()
                 completed.state = preferences.filterCompleted().get()
 
                 trackFilters.forEach { trackFilter ->
@@ -141,6 +143,7 @@ class LibrarySettingsSheet(
                 when (item) {
                     downloaded -> preferences.filterDownloaded().set(newState)
                     unread -> preferences.filterUnread().set(newState)
+                    started -> preferences.filterStarted().set(newState)
                     completed -> preferences.filterCompleted().set(newState)
                     else -> {
                         trackFilters.forEach { trackFilter ->
@@ -315,10 +318,11 @@ class LibrarySettingsSheet(
 
             private val compactGrid = Item.Radio(R.string.action_display_grid, this)
             private val comfortableGrid = Item.Radio(R.string.action_display_comfortable_grid, this)
+            private val coverOnlyGrid = Item.Radio(R.string.action_display_cover_only_grid, this)
             private val list = Item.Radio(R.string.action_display_list, this)
 
             override val header = Item.Header(R.string.action_display_mode)
-            override val items = listOf(compactGrid, comfortableGrid, list)
+            override val items = listOf(compactGrid, comfortableGrid, coverOnlyGrid, list)
             override val footer = null
 
             override fun initModels() {
@@ -342,6 +346,7 @@ class LibrarySettingsSheet(
             fun setGroupSelections(mode: DisplayModeSetting) {
                 compactGrid.checked = mode == DisplayModeSetting.COMPACT_GRID
                 comfortableGrid.checked = mode == DisplayModeSetting.COMFORTABLE_GRID
+                coverOnlyGrid.checked = mode == DisplayModeSetting.COVER_ONLY_GRID
                 list.checked = mode == DisplayModeSetting.LIST
             }
 
@@ -349,6 +354,7 @@ class LibrarySettingsSheet(
                 val flag = when (item) {
                     compactGrid -> DisplayModeSetting.COMPACT_GRID
                     comfortableGrid -> DisplayModeSetting.COMFORTABLE_GRID
+                    coverOnlyGrid -> DisplayModeSetting.COVER_ONLY_GRID
                     list -> DisplayModeSetting.LIST
                     else -> throw NotImplementedError("Unknown display mode")
                 }

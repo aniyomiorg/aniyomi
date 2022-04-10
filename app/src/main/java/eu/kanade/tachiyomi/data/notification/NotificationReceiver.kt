@@ -77,14 +77,14 @@ class NotificationReceiver : BroadcastReceiver() {
                 shareImage(
                     context,
                     intent.getStringExtra(EXTRA_FILE_LOCATION)!!,
-                    intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
+                    intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1),
                 )
             // Delete image from path and dismiss notification
             ACTION_DELETE_IMAGE ->
                 deleteImage(
                     context,
                     intent.getStringExtra(EXTRA_FILE_LOCATION)!!,
-                    intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
+                    intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1),
                 )
             // Share backup file
             ACTION_SHARE_BACKUP ->
@@ -92,11 +92,11 @@ class NotificationReceiver : BroadcastReceiver() {
                     context,
                     intent.getParcelableExtra(EXTRA_URI)!!,
                     "application/x-protobuf+gzip",
-                    intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
+                    intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1),
                 )
             ACTION_CANCEL_RESTORE -> cancelRestore(
                 context,
-                intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
+                intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1),
             )
             // Cancel library update and dismiss notification
             ACTION_CANCEL_LIBRARY_UPDATE -> cancelLibraryUpdate(context, Notifications.ID_LIBRARY_PROGRESS)
@@ -106,7 +106,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 openChapter(
                     context,
                     intent.getLongExtra(EXTRA_MANGA_ID, -1),
-                    intent.getLongExtra(EXTRA_CHAPTER_ID, -1)
+                    intent.getLongExtra(EXTRA_CHAPTER_ID, -1),
                 )
             }
             // Open player activity
@@ -114,7 +114,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 openEpisode(
                     context,
                     intent.getLongExtra(EXTRA_MANGA_ID, -1),
-                    intent.getLongExtra(EXTRA_CHAPTER_ID, -1)
+                    intent.getLongExtra(EXTRA_CHAPTER_ID, -1),
                 )
             }
             // Mark updated manga chapters as read
@@ -171,7 +171,7 @@ class NotificationReceiver : BroadcastReceiver() {
                     context,
                     intent.getParcelableExtra(EXTRA_URI)!!,
                     "text/plain",
-                    intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
+                    intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1),
                 )
         }
     }
@@ -639,7 +639,7 @@ class NotificationReceiver : BroadcastReceiver() {
             context: Context,
             anime: Anime,
             episodes: Array<Episode>,
-            groupId: Int
+            groupId: Int,
         ): PendingIntent {
             val newIntent = Intent(context, NotificationReceiver::class.java).apply {
                 action = ACTION_MARK_AS_SEEN
@@ -689,7 +689,7 @@ class NotificationReceiver : BroadcastReceiver() {
             context: Context,
             manga: Manga,
             chapters: Array<Chapter>,
-            groupId: Int
+            groupId: Int,
         ): PendingIntent {
             val newIntent = Intent(context, NotificationReceiver::class.java).apply {
                 action = ACTION_MARK_AS_READ
@@ -711,7 +711,7 @@ class NotificationReceiver : BroadcastReceiver() {
             context: Context,
             manga: Manga,
             chapters: Array<Chapter>,
-            groupId: Int
+            groupId: Int,
         ): PendingIntent {
             val newIntent = Intent(context, NotificationReceiver::class.java).apply {
                 action = ACTION_DOWNLOAD_CHAPTER
@@ -733,7 +733,7 @@ class NotificationReceiver : BroadcastReceiver() {
             context: Context,
             anime: Anime,
             episodes: Array<Episode>,
-            groupId: Int
+            groupId: Int,
         ): PendingIntent {
             val newIntent = Intent(context, NotificationReceiver::class.java).apply {
                 action = ACTION_DOWNLOAD_EPISODE

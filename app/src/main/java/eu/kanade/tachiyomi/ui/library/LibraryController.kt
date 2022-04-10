@@ -8,13 +8,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.view.ActionMode
+import androidx.core.view.doOnAttach
 import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
+import com.fredporciuncula.flow.preferences.Preference
 import com.google.android.material.tabs.TabLayout
 import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
-import com.tfcporciuncula.flow.Preference
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Manga
@@ -50,7 +51,7 @@ import java.util.concurrent.TimeUnit
 
 class LibraryController(
     bundle: Bundle? = null,
-    private val preferences: PreferencesHelper = Injekt.get()
+    private val preferences: PreferencesHelper = Injekt.get(),
 ) : SearchableNucleusController<LibraryControllerBinding, LibraryPresenter>(bundle),
     RootController,
     TabbedController,
@@ -210,7 +211,7 @@ class LibraryController(
         binding.btnGlobalSearch.clicks()
             .onEach {
                 router.pushController(
-                    GlobalSearchController(presenter.query).withFadeTransaction()
+                    GlobalSearchController(presenter.query).withFadeTransaction(),
                 )
             }
             .launchIn(viewScope)
@@ -234,8 +235,9 @@ class LibraryController(
         super.onDestroyView(view)
     }
 
-    override fun configureTabs(tabs: TabLayout) {
+    override fun configureTabs(tabs: TabLayout): Boolean {
         with(tabs) {
+            isVisible = false
             tabGravity = TabLayout.GRAVITY_START
             tabMode = TabLayout.MODE_SCROLLABLE
         }
@@ -247,6 +249,8 @@ class LibraryController(
         mangaCountVisibilitySubscription = mangaCountVisibilityRelay.subscribe {
             adapter?.notifyDataSetChanged()
         }
+
+        return false
     }
 
     override fun cleanupTabs(tabs: TabLayout) {
@@ -277,7 +281,7 @@ class LibraryController(
                 listOf(
                     EmptyView.Action(R.string.getting_started_guide, R.drawable.ic_help_24dp) {
                         activity?.openInBrowser("https://aniyomi.jmir.xyz/help/guides/getting-started")
-                    }
+                    },
                 ),
             )
             (activity as? MainActivity)?.ready = true
@@ -291,22 +295,17 @@ class LibraryController(
         }
 
         // Set the categories
-        adapter.categories = categories
-        adapter.itemsPerCategory = adapter.categories
-            .map { (it.id ?: -1) to (mangaMap[it.id]?.size ?: 0) }
-            .toMap()
+        adapter.updateCategories(categories.map { it to (mangaMap[it.id]?.size ?: 0) })
 
         // Restore active category.
         binding.libraryPager.setCurrentItem(activeCat, false)
 
         // Trigger display of tabs
-        onTabsSettingsChanged()
+        onTabsSettingsChanged(firstLaunch = true)
 
         // Delay the scroll position to allow the view to be properly measured.
-        view.post {
-            if (isAttached) {
-                (activity as? MainActivity)?.binding?.tabs?.setScrollPosition(binding.libraryPager.currentItem, 0f, true)
-            }
+        view.doOnAttach {
+            (activity as? MainActivity)?.binding?.tabs?.setScrollPosition(binding.libraryPager.currentItem, 0f, true)
         }
 
         // Send the manga map to child fragments after the adapter is updated.
@@ -338,9 +337,11 @@ class LibraryController(
         presenter.requestBadgesUpdate()
     }
 
-    private fun onTabsSettingsChanged() {
+    private fun onTabsSettingsChanged(firstLaunch: Boolean = false) {
+        if (!firstLaunch) {
+            mangaCountVisibilityRelay.call(preferences.categoryNumberOfItems().get())
+        }
         tabsVisibilityRelay.call(preferences.categoryTabs().get() && adapter?.categories?.size ?: 0 > 1)
-        mangaCountVisibilityRelay.call(preferences.categoryNumberOfItems().get())
         updateTitle()
     }
 

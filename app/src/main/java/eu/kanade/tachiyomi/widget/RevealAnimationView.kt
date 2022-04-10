@@ -29,7 +29,7 @@ class RevealAnimationView @JvmOverloads constructor(context: Context, attrs: Att
             centerX,
             centerY,
             initialRadius.toFloat(),
-            0f
+            0f,
         )
 
         // Set duration of animation.
@@ -61,7 +61,7 @@ class RevealAnimationView @JvmOverloads constructor(context: Context, attrs: Att
             centerX,
             centerY,
             0f,
-            height.toFloat()
+            height.toFloat(),
         )
 
         // Set duration of animation

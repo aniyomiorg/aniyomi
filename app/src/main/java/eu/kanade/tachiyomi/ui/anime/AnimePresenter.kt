@@ -23,6 +23,8 @@ import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.saver.Image
+import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
@@ -39,10 +41,6 @@ import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
-import eu.kanade.tachiyomi.util.storage.DiskUtil
-import eu.kanade.tachiyomi.util.storage.getPicturesDir
-import eu.kanade.tachiyomi.util.storage.getTempShareDir
-import eu.kanade.tachiyomi.util.system.ImageUtil
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.updateCoverLastModified
@@ -58,7 +56,7 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
+import uy.kohesive.injekt.injectLazy
 import java.util.Date
 
 class AnimePresenter(
@@ -68,7 +66,7 @@ class AnimePresenter(
     private val db: AnimeDatabaseHelper = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
-    private val coverCache: AnimeCoverCache = Injekt.get()
+    private val coverCache: AnimeCoverCache = Injekt.get(),
 ) : BasePresenter<AnimeController>() {
 
     /**
@@ -118,6 +116,8 @@ class AnimePresenter(
 
     private val loggedServices by lazy { trackManager.services.filter { it.isLogged } }
 
+    private val imageSaver: ImageSaver by injectLazy()
+
     private var trackSubscription: Subscription? = null
     private var searchTrackerJob: Job? = null
     private var refreshTrackersJob: Job? = null
@@ -147,7 +147,7 @@ class AnimePresenter(
                     filteredAndSortedEpisodes = episodes
                     view?.onNextEpisodes(episodes)
                 },
-                { _, error -> logcat(LogPriority.ERROR, error) }
+                { _, error -> logcat(LogPriority.ERROR, error) },
             )
 
         // Anime info - end
@@ -172,12 +172,16 @@ class AnimePresenter(
                     // Listen for download status changes
                     observeDownloads()
                 }
-                .subscribe { episodesRelay.call(it) }
+                .subscribe { episodesRelay.call(it) },
         )
 
         // Episodes list - end
 
         fetchTrackers()
+    }
+
+    fun getDuplicateAnimelibAnime(anime: Anime): Anime? {
+        return db.getDuplicateAnimelibAnime(anime).executeAsBlocking()
     }
 
     // Anime info - start
@@ -336,48 +340,17 @@ class AnimePresenter(
      * @return cover as Bitmap or null if there is no thumbnail cached with the memoryCacheKey
      */
     private fun coverBitmapFromImageLoader(context: Context, memoryCacheKey: MemoryCache.Key): Bitmap? {
-        return context.imageLoader.memoryCache[memoryCacheKey]
+        return context.imageLoader.memoryCache?.get(memoryCacheKey)?.bitmap
     }
 
     /**
-     * Save manga cover Bitmap to temporary share directory.
+     * Save anime cover Bitmap to picture or temporary share directory.
      *
-     * @param context for the temporary share directory
-     * @param coverBitmap the cover to save (as Bitmap)
-     * @return cover File in temporary share directory
+     * @param image the image with specified location
+     * @return flow Flow which emits the Uri which specifies where the image is saved when
      */
-    fun shareCover(context: Context, coverBitmap: Bitmap): File {
-        return saveCover(getTempShareDir(context), coverBitmap)
-    }
-
-    /**
-     * Save manga cover to pictures directory of the device.
-     *
-     * @param context for the pictures directory of the user
-     * @param coverBitmap the cover to save (as Bitmap)
-     * @return cover File in pictures directory
-     */
-    fun saveCover(context: Context, coverBitmap: Bitmap) {
-        saveCover(getPicturesDir(context), coverBitmap)
-    }
-
-    /**
-     * Save a manga cover Bitmap to a new File in a given directory.
-     * Overwrites file if it already exists.
-     *
-     * @param directory The directory in which the new file will be created
-     * @param coverBitmap The manga cover to save
-     * @return the newly created File
-     */
-    private fun saveCover(directory: File, coverBitmap: Bitmap): File {
-        directory.mkdirs()
-        val filename = DiskUtil.buildValidFilename("${anime.title}.${ImageUtil.ImageType.PNG}")
-
-        val destFile = File(directory, filename)
-        destFile.outputStream().use { desFileOutputStream ->
-            coverBitmap.compress(Bitmap.CompressFormat.PNG, 100, desFileOutputStream)
-        }
-        return destFile
+    fun saveImage(image: Image): Uri {
+        return imageSaver.save(image)
     }
 
     /**
@@ -407,7 +380,7 @@ class AnimePresenter(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeFirst(
                 { view, _ -> view.onSetCoverSuccess() },
-                { view, e -> view.onSetCoverError(e) }
+                { view, e -> view.onSetCoverError(e) },
             )
     }
 
@@ -422,7 +395,7 @@ class AnimePresenter(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeFirst(
                 { view, _ -> view.onSetCoverSuccess() },
-                { view, e -> view.onSetCoverError(e) }
+                { view, e -> view.onSetCoverError(e) },
             )
     }
 
@@ -444,7 +417,7 @@ class AnimePresenter(
                 },
                 { _, error ->
                     logcat(LogPriority.ERROR, error)
-                }
+                },
             )
 
         observeDownloadsPageSubscription?.let { remove(it) }

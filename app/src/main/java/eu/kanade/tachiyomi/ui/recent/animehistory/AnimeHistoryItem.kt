@@ -24,7 +24,7 @@ class AnimeHistoryItem(val aeh: AnimeEpisodeHistory, header: DateSectionItem) :
         adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
         holder: AnimeHistoryHolder,
         position: Int,
-        payloads: List<Any?>?
+        payloads: List<Any?>?,
     ) {
         holder.bind(aeh)
     }

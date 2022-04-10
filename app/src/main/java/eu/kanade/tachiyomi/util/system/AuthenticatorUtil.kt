@@ -31,7 +31,7 @@ object AuthenticatorUtil {
         title: String,
         subtitle: String? = null,
         confirmationRequired: Boolean = true,
-        callback: AuthenticationCallback
+        callback: AuthenticationCallback,
     ) {
         isAuthenticating = true
         startClass2BiometricOrCredentialAuthentication(
@@ -39,7 +39,7 @@ object AuthenticatorUtil {
             subtitle = subtitle,
             confirmationRequired = confirmationRequired,
             executor = ContextCompat.getMainExecutor(this),
-            callback = callback
+            callback = callback,
         )
     }
 
@@ -72,7 +72,7 @@ object AuthenticatorUtil {
         override fun onAuthenticationError(
             activity: FragmentActivity?,
             @AuthenticationError errorCode: Int,
-            errString: CharSequence
+            errString: CharSequence,
         ) {
             isAuthenticating = false
         }
@@ -90,7 +90,7 @@ object AuthenticatorUtil {
         @CallSuper
         override fun onAuthenticationSucceeded(
             activity: FragmentActivity?,
-            result: BiometricPrompt.AuthenticationResult
+            result: BiometricPrompt.AuthenticationResult,
         ) {
             isAuthenticating = false
         }

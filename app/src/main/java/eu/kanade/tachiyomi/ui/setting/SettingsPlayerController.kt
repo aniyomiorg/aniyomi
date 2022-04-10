@@ -26,7 +26,7 @@ class SettingsPlayerController : SettingsController() {
                 R.string.pref_progress_85,
                 R.string.pref_progress_80,
                 R.string.pref_progress_75,
-                R.string.pref_progress_70
+                R.string.pref_progress_70,
             )
             entryValues = arrayOf(
                 "1.00F",
@@ -35,7 +35,7 @@ class SettingsPlayerController : SettingsController() {
                 "0.85F",
                 "0.80F",
                 "0.75F",
-                "0.70F"
+                "0.70F",
             )
             defaultValue = "0.85F"
 
@@ -50,13 +50,13 @@ class SettingsPlayerController : SettingsController() {
                 R.string.pref_skip_30,
                 R.string.pref_skip_20,
                 R.string.pref_skip_10,
-                R.string.pref_skip_5
+                R.string.pref_skip_5,
             )
             entryValues = arrayOf(
                 "30",
                 "20",
                 "10",
-                "5"
+                "5",
             )
             defaultValue = "10"
 

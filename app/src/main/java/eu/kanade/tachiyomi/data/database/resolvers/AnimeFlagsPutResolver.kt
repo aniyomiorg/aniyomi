@@ -28,6 +28,6 @@ class AnimeFlagsPutResolver(private val colName: String, private val fieldGetter
 
     fun mapToContentValues(anime: Anime) =
         contentValuesOf(
-            colName to fieldGetter.get(anime)
+            colName to fieldGetter.get(anime),
         )
 }

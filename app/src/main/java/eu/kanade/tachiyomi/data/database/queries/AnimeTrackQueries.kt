@@ -15,7 +15,7 @@ interface AnimeTrackQueries : DbProvider {
         .withQuery(
             Query.builder()
                 .table(AnimeTrackTable.TABLE)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -26,7 +26,7 @@ interface AnimeTrackQueries : DbProvider {
                 .table(AnimeTrackTable.TABLE)
                 .where("${AnimeTrackTable.COL_ANIME_ID} = ?")
                 .whereArgs(anime.id)
-                .build()
+                .build(),
         )
         .prepare()
 
@@ -40,7 +40,7 @@ interface AnimeTrackQueries : DbProvider {
                 .table(AnimeTrackTable.TABLE)
                 .where("${AnimeTrackTable.COL_ANIME_ID} = ? AND ${AnimeTrackTable.COL_SYNC_ID} = ?")
                 .whereArgs(anime.id, sync.id)
-                .build()
+                .build(),
         )
         .prepare()
 }
