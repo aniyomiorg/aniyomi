@@ -726,8 +726,7 @@ class PlayerActivity :
             }
             subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
-            val videoUrlString = resolveUri(Uri.parse(it.videoUrl))
-            MPVLib.command(arrayOf("loadfile", videoUrlString))
+            MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
         }
         launchUI { refreshUi() }
     }
@@ -962,24 +961,18 @@ class PlayerActivity :
             setViewMode()
             subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
-            val videoUrlString = resolveUri(Uri.parse(it.videoUrl))
-            MPVLib.command(arrayOf("loadfile", videoUrlString))
+            MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
         }
         launchUI { refreshUi() }
     }
 
-    private fun resolveUri(data: Uri): String {
-        val filepath = when (data.scheme) {
-            "file" -> data.path
-            "content" -> openContentFd(data)
-            "http", "https", "rtmp", "rtmps", "rtp", "rtsp", "mms", "mmst", "mmsh", "tcp", "udp",
-            -> data.toString()
-            else -> null
-        }
-        return filepath ?: return ""
+    private fun parseVideoUrl(videoUrl: String?): String? {
+        val uri = Uri.parse(videoUrl)
+        return openContentFd(uri) ?: videoUrl
     }
 
     private fun openContentFd(uri: Uri): String? {
+        if (uri.scheme != "content") return null
         val resolver = applicationContext.contentResolver
         logcat { "Resolving content URI: $uri" }
         val fd = try {
