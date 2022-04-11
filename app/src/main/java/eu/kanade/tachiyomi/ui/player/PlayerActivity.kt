@@ -16,10 +16,12 @@ import android.graphics.Color
 import android.graphics.drawable.Icon
 import android.media.AudioFocusRequest
 import android.media.AudioManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.ParcelFileDescriptor
 import android.util.DisplayMetrics
 import android.util.Rational
 import android.view.MotionEvent
@@ -57,6 +59,7 @@ import `is`.xyz.mpv.StateRestoreCallback
 import `is`.xyz.mpv.Utils
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
+import java.io.File
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -723,7 +726,8 @@ class PlayerActivity :
             }
             subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
-            MPVLib.command(arrayOf("loadfile", it.videoUrl))
+            val videoUrlString = resolveUri(Uri.parse(it.videoUrl))
+            MPVLib.command(arrayOf("loadfile", videoUrlString))
         }
         launchUI { refreshUi() }
     }
@@ -958,9 +962,44 @@ class PlayerActivity :
             setViewMode()
             subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
-            MPVLib.command(arrayOf("loadfile", it.videoUrl))
+            val videoUrlString = resolveUri(Uri.parse(it.videoUrl))
+            MPVLib.command(arrayOf("loadfile", videoUrlString))
         }
         launchUI { refreshUi() }
+    }
+
+    private fun resolveUri(data: Uri): String {
+        val filepath = when (data.scheme) {
+            "file" -> data.path
+            "content" -> openContentFd(data)
+            "http", "https", "rtmp", "rtmps", "rtp", "rtsp", "mms", "mmst", "mmsh", "tcp", "udp",
+            -> data.toString()
+            else -> null
+        }
+        return filepath ?: return ""
+    }
+
+    private fun openContentFd(uri: Uri): String? {
+        val resolver = applicationContext.contentResolver
+        logcat { "Resolving content URI: $uri" }
+        val fd = try {
+            val desc = resolver.openFileDescriptor(uri, "r")
+            desc!!.detachFd()
+        } catch (e: Exception) {
+            logcat { "Failed to open content fd: $e" }
+            return null
+        }
+        // Find out real file path and see if we can read it directly
+        try {
+            val path = File("/proc/self/fd/$fd").canonicalPath
+            if (!path.startsWith("/proc") && File(path).canRead()) {
+                logcat { "Found real file path: $path" }
+                ParcelFileDescriptor.adoptFd(fd).close() // we don't need that anymore
+                return path
+            }
+        } catch (e: Exception) { }
+        // Else, pass the fd to mpv
+        return "fdclose://$fd"
     }
 
     private fun setHttpOptions(video: Video) {
