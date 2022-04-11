@@ -128,7 +128,7 @@ class PreferencesHelper(val context: Context) {
         putFloat(Keys.playerSpeed, newSpeed)
     }
 
-    fun getPlayerViewMode() = prefs.getInt(Keys.playerViewMode, 0)
+    fun getPlayerViewMode() = prefs.getInt(Keys.playerViewMode, 1)
 
     fun playerFullscreen() = prefs.getBoolean("player_fullscreen", true)
 
