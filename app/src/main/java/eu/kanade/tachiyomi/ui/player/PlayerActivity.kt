@@ -294,7 +294,7 @@ class PlayerActivity :
             binding.pipBtn.isVisible = packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
         }
 
-        binding.backArrowBtn.setOnClickListener { onBackPressed() }
+        binding.backArrowBtn.setOnClickListener { finishAndRemoveTask() }
 
         binding.pipBtn.setOnClickListener { startPiP() }
 
