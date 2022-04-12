@@ -199,14 +199,22 @@ class PlayerActivity :
 
     private val animationHandler = Handler(Looper.getMainLooper())
 
-    // Fade out gesture text
-    private val gestureTextRunnable = Runnable { binding.gestureTextView.visibility = View.GONE }
+    // I spent like an hour trying to make the below 4 vals and functions, into one function. Failed miserably!
+    // All on you man, sorry
 
-    private fun showGestureText() {
-        animationHandler.removeCallbacks(gestureTextRunnable)
-        binding.gestureTextView.visibility = View.VISIBLE
+    // Fade out seek text
+    private val seekTextRunnable = Runnable {
+        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+            findViewById<LinearLayout>(R.id.seekView).startAnimation(fadeAnimation)
+            binding.seekView.visibility = View.GONE
+        }
+    }
 
-        animationHandler.postDelayed(gestureTextRunnable, 500L)
+    private fun showSeekText() {
+        animationHandler.removeCallbacks(seekTextRunnable)
+        binding.seekView.visibility = View.VISIBLE
+
+        animationHandler.postDelayed(seekTextRunnable, 500L)
     }
 
     // Fade out Volume Bar
@@ -224,6 +232,7 @@ class PlayerActivity :
         animationHandler.postDelayed(volumeViewRunnable, 500L)
     }
 
+    // Fade out Brightness Bar
     private val brightnessViewRunnable = Runnable {
         AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
             findViewById<LinearLayout>(R.id.brightnessView).startAnimation(fadeAnimation)
@@ -629,8 +638,8 @@ class PlayerActivity :
         MPVLib.command(arrayOf("seek", time.toString(), "relative"))
 
         val diffText = Utils.prettyTime(time, true)
-        binding.gestureTextView.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
-        showGestureText()
+        binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
+        showSeekText()
     }
 
     fun verticalScrollLeft(diff: Float) {
@@ -686,8 +695,8 @@ class PlayerActivity :
         updatePlaybackPos(newPos)
 
         val diffText = Utils.prettyTime(newDiff, true)
-        binding.gestureTextView.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
-        showGestureText()
+        binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
+        showSeekText()
     }
 
     @Suppress("UNUSED_PARAMETER")
