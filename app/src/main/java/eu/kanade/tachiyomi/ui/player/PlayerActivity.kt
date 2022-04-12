@@ -29,11 +29,13 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.WindowInsetsCompat
@@ -193,21 +195,33 @@ class PlayerActivity :
 
     private var userIsOperatingSeekbar = false
 
-    // private var lockedUI = false
     private lateinit var mDetector: GestureDetectorCompat
 
     private val animationHandler = Handler(Looper.getMainLooper())
 
     // Fade out gesture text
-    private val gestureTextRunnable = Runnable {
-        binding.gestureTextView.visibility = View.GONE
-    }
+    private val gestureTextRunnable = Runnable { binding.gestureTextView.visibility = View.GONE }
 
     private fun showGestureText() {
         animationHandler.removeCallbacks(gestureTextRunnable)
         binding.gestureTextView.visibility = View.VISIBLE
 
         animationHandler.postDelayed(gestureTextRunnable, 500L)
+    }
+
+    // Fade out Volume Bar
+    private val volumeViewRunnable = Runnable {
+        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+            findViewById<LinearLayout>(R.id.volumeView).startAnimation(fadeAnimation)
+            binding.volumeView.visibility = View.GONE
+        }
+    }
+
+    private fun showVolumeView() {
+        animationHandler.removeCallbacks(volumeViewRunnable)
+        binding.volumeView.visibility = View.VISIBLE
+
+        animationHandler.postDelayed(volumeViewRunnable, 500L)
     }
 
     private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
@@ -368,7 +382,7 @@ class PlayerActivity :
                 animation = R.anim.fade_out_medium
             }
             AnimationUtils.loadAnimation(this, animation).also { fadeAnimation ->
-                findViewById<RelativeLayout>(R.id.controls_top).startAnimation(fadeAnimation)
+                findViewById<ConstraintLayout>(R.id.controls_top).startAnimation(fadeAnimation)
                 findViewById<RelativeLayout>(R.id.controls_bottom).startAnimation(fadeAnimation)
                 findViewById<View>(R.id.background).startAnimation(fadeAnimation)
 
@@ -626,11 +640,14 @@ class PlayerActivity :
     fun verticalScrollRight(diff: Float) {
         fineVolume = (fineVolume + (diff * maxVolume)).coerceIn(0F, maxVolume.toFloat())
         val newVolume = fineVolume.toInt()
-        val newVolumePercent = 100 * newVolume / maxVolume
+        // val newVolumePercent = 100 * newVolume / maxVolume
         audioManager!!.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
 
-        binding.gestureTextView.text = getString(R.string.ui_volume, newVolumePercent)
-        showGestureText()
+        binding.volumeText.text = newVolume.toString()
+        binding.volumeBar.progress = newVolume
+        if (newVolume == 0) binding.volumeImg.setImageResource(R.drawable.ic_volume_none_24dp)
+        else binding.volumeImg.setImageResource(R.drawable.ic_volume_high_24dp)
+        showVolumeView()
     }
 
     fun initSeek() {

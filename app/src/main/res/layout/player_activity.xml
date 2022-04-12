@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/player_activity"
@@ -63,113 +64,150 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         app:tint="?attr/colorOnPrimarySurface" />
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/controls_top"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center">
+        android:layout_marginTop="10dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/title_txt_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/backArrowBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_arrow_back_24dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="?attr/colorOnPrimarySurface"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/fullTitleTxt"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-            <ImageButton
-                android:id="@+id/backArrowBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_arrow_back_24dp"
-                android:layout_marginHorizontal="10dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="?attr/colorOnPrimarySurface"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/fullTitleTxt"
-                app:layout_constraintTop_toTopOf="parent"/>
 
-            <LinearLayout
-                android:id="@+id/fullTitleTxt"
-                android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/fullTitleTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toRightOf="@id/backArrowBtn"
+            app:layout_constraintRight_toLeftOf="@id/cycleDecoderBtn"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/titleMainTxt"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintLeft_toRightOf="@id/backArrowBtn"
-                app:layout_constraintRight_toLeftOf="@id/cycleDecoderBtn"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/titleMainTxt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="?attr/colorOnPrimarySurface"
-                    android:text=""
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/titleSecondaryTxt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="?attr/colorOnPrimarySurface"
-                    android:alpha = "0.5"
-                    android:textSize="12sp"
-                    android:text="" />
-
-            </LinearLayout>
-
-
-            <ImageButton
-                android:id="@+id/settingsBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="openSettings"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/ic_settings_24dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:tint="?attr/colorOnPrimarySurface" />
-
-
-
-            <ImageButton
-                android:id="@+id/cycleSubsBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:onClick="cycleSub"
-                android:src="@drawable/ic_subtitles_black_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="?attr/colorOnPrimarySurface"
-                app:layout_constraintRight_toRightOf="@id/cycleAudioBtn"
-                app:layout_constraintRight_toLeftOf="@id/settingsBtn"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <ImageButton
-                android:id="@+id/cycleAudioBtn"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="cycleAudio"
-                android:src="@drawable/ic_audiotrack_black_24dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintRight_toRightOf="@id/cycleDecoderBtn"
-                app:layout_constraintRight_toLeftOf="@id/cycleSubsBtn"
-                app:tint="?attr/colorOnPrimarySurface" />
-
-            <Button
-                android:id="@+id/cycleDecoderBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_toLeftOf="@id/cycleAudioBtn"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="switchDecoder"
-                android:text=".."
                 android:textColor="?attr/colorOnPrimarySurface"
-                app:layout_constraintRight_toLeftOf="@id/cycleAudioBtn"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:text=""
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/titleSecondaryTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorOnPrimarySurface"
+                android:alpha = "0.5"
+                android:textSize="12sp"
+                android:text="" />
 
-    </RelativeLayout>
+        </LinearLayout>
+
+
+        <ImageButton
+            android:id="@+id/settingsBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="openSettings"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_settings_24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:tint="?attr/colorOnPrimarySurface" />
+
+
+        <ImageButton
+            android:id="@+id/cycleSubsBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:onClick="cycleSub"
+            android:src="@drawable/ic_subtitles_black_24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="?attr/colorOnPrimarySurface"
+            app:layout_constraintRight_toRightOf="@id/cycleAudioBtn"
+            app:layout_constraintRight_toLeftOf="@id/settingsBtn"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageButton
+            android:id="@+id/cycleAudioBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="cycleAudio"
+            android:src="@drawable/ic_audiotrack_black_24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="@id/cycleDecoderBtn"
+            app:layout_constraintRight_toLeftOf="@id/cycleSubsBtn"
+            app:tint="?attr/colorOnPrimarySurface" />
+
+        <Button
+            android:id="@+id/cycleDecoderBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_toLeftOf="@id/cycleAudioBtn"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="switchDecoder"
+            android:text=".."
+            android:textColor="?attr/colorOnPrimarySurface"
+            app:layout_constraintRight_toLeftOf="@id/cycleAudioBtn"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="90dp">
+
+        <LinearLayout
+            android:id="@+id/volumeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/volumeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10"
+                android:textColor="?attr/colorOnPrimarySurface"
+                android:textSize="20sp"
+                android:layout_marginBottom="5dp"/>
+
+            <ProgressBar
+                android:id="@+id/volumeBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="25dp"
+                android:layout_height="125dp"
+                android:max="15"
+                android:progress="10"
+                android:progressDrawable="@drawable/player_bar" />
+
+            <ImageView
+                android:id="@+id/volumeImg"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_volume_high_24dp"
+                app:tint="?attr/colorOnPrimarySurface"
+                android:layout_marginTop="5dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/controls_bottom"
@@ -210,6 +248,7 @@
                 android:visibility="visible">
 
                 <!-- These two are only used for audio -->
+
                 <TextView
                     android:id="@+id/titleTextView"
                     android:layout_width="match_parent"
@@ -366,7 +405,7 @@
         android:layout_height="100dp"
         android:layout_centerInParent="true"
         android:indeterminate="true"
-        app:indicatorColor="?attr/colorAccent"
+        app:indicatorColor="?attr/colorPrimary"
         app:indicatorSize="65dp" />
 
 
