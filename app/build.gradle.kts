@@ -166,7 +166,7 @@ dependencies {
     implementation(androidx.bundles.lifecycle)
 
     // Job scheduling
-    implementation(androidx.work.runtime)
+    implementation(androidx.bundles.workmanager)
 
     // RX
     implementation(libs.bundles.reactivex)
