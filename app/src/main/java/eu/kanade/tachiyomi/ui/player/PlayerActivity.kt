@@ -29,6 +29,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.annotation.RequiresApi
@@ -193,21 +194,71 @@ class PlayerActivity :
 
     private var userIsOperatingSeekbar = false
 
-    // private var lockedUI = false
     private lateinit var mDetector: GestureDetectorCompat
 
     private val animationHandler = Handler(Looper.getMainLooper())
 
-    // Fade out gesture text
-    private val gestureTextRunnable = Runnable {
-        binding.gestureTextView.visibility = View.GONE
+    // I spent like an hour trying to make the below 4 vals and functions, into one function. Failed miserably!
+    // All on you man, sorry
+
+    // Fade out seek text
+    private val seekTextRunnable = Runnable {
+        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+            findViewById<LinearLayout>(R.id.seekView).startAnimation(fadeAnimation)
+            binding.seekView.visibility = View.GONE
+        }
     }
 
-    private fun showGestureText() {
-        animationHandler.removeCallbacks(gestureTextRunnable)
-        binding.gestureTextView.visibility = View.VISIBLE
+    private fun showSeekText() {
+        animationHandler.removeCallbacks(seekTextRunnable)
+        binding.seekView.visibility = View.VISIBLE
 
-        animationHandler.postDelayed(gestureTextRunnable, 500L)
+        animationHandler.postDelayed(seekTextRunnable, 500L)
+    }
+
+    // Fade out Volume Bar
+    private val volumeViewRunnable = Runnable {
+        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+            findViewById<LinearLayout>(R.id.volumeView).startAnimation(fadeAnimation)
+            binding.volumeView.visibility = View.GONE
+        }
+    }
+
+    private fun showVolumeView() {
+        animationHandler.removeCallbacks(volumeViewRunnable)
+        binding.volumeView.visibility = View.VISIBLE
+
+        animationHandler.postDelayed(volumeViewRunnable, 500L)
+    }
+
+    // Fade out Brightness Bar
+    private val brightnessViewRunnable = Runnable {
+        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+            findViewById<LinearLayout>(R.id.brightnessView).startAnimation(fadeAnimation)
+            binding.brightnessView.visibility = View.GONE
+        }
+    }
+
+    private fun showBrightnessView() {
+        animationHandler.removeCallbacks(brightnessViewRunnable)
+        binding.brightnessView.visibility = View.VISIBLE
+
+        animationHandler.postDelayed(brightnessViewRunnable, 500L)
+    }
+
+    // Fade out Player controls
+    private val controlsViewRunnable = Runnable {
+        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+            findViewById<RelativeLayout>(R.id.player_controls).startAnimation(fadeAnimation)
+            binding.playerControls.visibility = View.GONE
+        }
+    }
+
+    private fun showControlsView() {
+        animationHandler.removeCallbacks(controlsViewRunnable)
+        binding.playerControls.visibility = View.VISIBLE
+
+        animationHandler.postDelayed(controlsViewRunnable, 1500L)
     }
 
     private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
@@ -357,42 +408,19 @@ class PlayerActivity :
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         if (isLocked) {
             // Hide controls
-            binding.controlsTop.isVisible = false
-            binding.controlsBottom.isVisible = false
-            binding.background.isVisible = false
+            binding.playerControls.isVisible = false
+
             // Toggle unlock button
             binding.unlockBtn.isVisible = !binding.unlockBtn.isVisible
         } else {
-            var animation = R.anim.fade_in_medium
-            if (binding.background.isVisible) {
-                animation = R.anim.fade_out_medium
-            }
-            AnimationUtils.loadAnimation(this, animation).also { fadeAnimation ->
-                findViewById<RelativeLayout>(R.id.controls_top).startAnimation(fadeAnimation)
-                findViewById<RelativeLayout>(R.id.controls_bottom).startAnimation(fadeAnimation)
-                findViewById<View>(R.id.background).startAnimation(fadeAnimation)
-
-                binding.controlsTop.isVisible = !binding.controlsTop.isVisible
-                binding.controlsBottom.isVisible = !binding.controlsBottom.isVisible
-                binding.background.isVisible = !binding.background.isVisible
-            }
-            // Toggle controls
-
-            // Hide unlock button
+            if(!binding.playerControls.isVisible) showControlsView()
+            else { animationHandler.removeCallbacks(controlsViewRunnable); binding.playerControls.isVisible = false }
             binding.unlockBtn.isVisible = false
         }
     }
 
     private fun hideControls(hide: Boolean) {
-        if (hide) {
-            binding.controlsTop.isVisible = false
-            binding.controlsBottom.isVisible = false
-            binding.background.isVisible = false
-        } else {
-            binding.controlsTop.isVisible = true
-            binding.controlsBottom.isVisible = true
-            binding.background.isVisible = true
-        }
+        binding.playerControls.isVisible = !hide
     }
 
     private fun showLoadingIndicator(visible: Boolean) {
@@ -601,8 +629,8 @@ class PlayerActivity :
         MPVLib.command(arrayOf("seek", time.toString(), "relative"))
 
         val diffText = Utils.prettyTime(time, true)
-        binding.gestureTextView.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
-        showGestureText()
+        binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
+        showSeekText()
     }
 
     fun verticalScrollLeft(diff: Float) {
@@ -611,6 +639,7 @@ class PlayerActivity :
             // value of 0 and 0.01 is broken somehow
             screenBrightness = brightness.coerceAtLeast(0.02F)
         }
+
         if (brightness < 0) {
             binding.brightnessOverlay.isVisible = true
             val alpha = (abs(brightness) * 256).toInt()
@@ -618,19 +647,26 @@ class PlayerActivity :
         } else {
             binding.brightnessOverlay.isVisible = false
         }
-
-        binding.gestureTextView.text = getString(R.string.ui_brightness, (brightness * 100).roundToInt())
-        showGestureText()
+        val finalBrightness = (brightness * 100).roundToInt()
+        binding.brightnessText.text = finalBrightness.toString()
+        binding.brightnessBar.progress = finalBrightness
+        binding.brightnessBar.secondaryProgress = abs(finalBrightness)
+        if (finalBrightness >= 0) binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_24dp)
+        else binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_24dp)
+        showBrightnessView()
     }
 
     fun verticalScrollRight(diff: Float) {
         fineVolume = (fineVolume + (diff * maxVolume)).coerceIn(0F, maxVolume.toFloat())
         val newVolume = fineVolume.toInt()
-        val newVolumePercent = 100 * newVolume / maxVolume
+        // val newVolumePercent = 100 * newVolume / maxVolume
         audioManager!!.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
 
-        binding.gestureTextView.text = getString(R.string.ui_volume, newVolumePercent)
-        showGestureText()
+        binding.volumeText.text = newVolume.toString()
+        binding.volumeBar.progress = newVolume
+        if (newVolume == 0) binding.volumeImg.setImageResource(R.drawable.ic_volume_none_24dp)
+        else binding.volumeImg.setImageResource(R.drawable.ic_volume_high_24dp)
+        showVolumeView()
     }
 
     fun initSeek() {
@@ -650,8 +686,8 @@ class PlayerActivity :
         updatePlaybackPos(newPos)
 
         val diffText = Utils.prettyTime(newDiff, true)
-        binding.gestureTextView.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
-        showGestureText()
+        binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
+        showSeekText()
     }
 
     @Suppress("UNUSED_PARAMETER")
