@@ -413,7 +413,8 @@ class PlayerActivity :
             // Toggle unlock button
             binding.unlockBtn.isVisible = !binding.unlockBtn.isVisible
         } else {
-            showControlsView()
+            if(!binding.playerControls.isVisible) showControlsView()
+            else { animationHandler.removeCallbacks(controlsViewRunnable); binding.playerControls.isVisible = false }
             binding.unlockBtn.isVisible = false
         }
     }
