@@ -224,6 +224,20 @@ class PlayerActivity :
         animationHandler.postDelayed(volumeViewRunnable, 500L)
     }
 
+    private val brightnessViewRunnable = Runnable {
+        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+            findViewById<LinearLayout>(R.id.brightnessView).startAnimation(fadeAnimation)
+            binding.brightnessView.visibility = View.GONE
+        }
+    }
+
+    private fun showBrightnessView() {
+        animationHandler.removeCallbacks(brightnessViewRunnable)
+        binding.brightnessView.visibility = View.VISIBLE
+
+        animationHandler.postDelayed(brightnessViewRunnable, 500L)
+    }
+
     private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
             if (!fromUser) {
@@ -625,6 +639,7 @@ class PlayerActivity :
             // value of 0 and 0.01 is broken somehow
             screenBrightness = brightness.coerceAtLeast(0.02F)
         }
+
         if (brightness < 0) {
             binding.brightnessOverlay.isVisible = true
             val alpha = (abs(brightness) * 256).toInt()
@@ -632,9 +647,13 @@ class PlayerActivity :
         } else {
             binding.brightnessOverlay.isVisible = false
         }
-
-        binding.gestureTextView.text = getString(R.string.ui_brightness, (brightness * 100).roundToInt())
-        showGestureText()
+        val finalBrightness = (brightness * 100).roundToInt()
+        binding.brightnessText.text = finalBrightness.toString()
+        binding.brightnessBar.progress = finalBrightness
+        binding.brightnessBar.secondaryProgress = abs(finalBrightness)
+        if (finalBrightness >= 0) binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_24dp)
+        else binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_24dp)
+        showBrightnessView()
     }
 
     fun verticalScrollRight(diff: Float) {
