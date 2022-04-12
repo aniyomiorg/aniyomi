@@ -35,7 +35,6 @@ import android.widget.SeekBar
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.WindowInsetsCompat
@@ -247,6 +246,21 @@ class PlayerActivity :
         animationHandler.postDelayed(brightnessViewRunnable, 500L)
     }
 
+    // Fade out Player controls
+    private val controlsViewRunnable = Runnable {
+        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+            findViewById<RelativeLayout>(R.id.player_controls).startAnimation(fadeAnimation)
+            binding.playerControls.visibility = View.GONE
+        }
+    }
+
+    private fun showControlsView() {
+        animationHandler.removeCallbacks(controlsViewRunnable)
+        binding.playerControls.visibility = View.VISIBLE
+
+        animationHandler.postDelayed(controlsViewRunnable, 1500L)
+    }
+
     private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
             if (!fromUser) {
@@ -394,42 +408,18 @@ class PlayerActivity :
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         if (isLocked) {
             // Hide controls
-            binding.controlsTop.isVisible = false
-            binding.controlsBottom.isVisible = false
-            binding.background.isVisible = false
+            binding.playerControls.isVisible = false
+
             // Toggle unlock button
             binding.unlockBtn.isVisible = !binding.unlockBtn.isVisible
         } else {
-            var animation = R.anim.fade_in_medium
-            if (binding.background.isVisible) {
-                animation = R.anim.fade_out_medium
-            }
-            AnimationUtils.loadAnimation(this, animation).also { fadeAnimation ->
-                findViewById<ConstraintLayout>(R.id.controls_top).startAnimation(fadeAnimation)
-                findViewById<RelativeLayout>(R.id.controls_bottom).startAnimation(fadeAnimation)
-                findViewById<View>(R.id.background).startAnimation(fadeAnimation)
-
-                binding.controlsTop.isVisible = !binding.controlsTop.isVisible
-                binding.controlsBottom.isVisible = !binding.controlsBottom.isVisible
-                binding.background.isVisible = !binding.background.isVisible
-            }
-            // Toggle controls
-
-            // Hide unlock button
+            showControlsView()
             binding.unlockBtn.isVisible = false
         }
     }
 
     private fun hideControls(hide: Boolean) {
-        if (hide) {
-            binding.controlsTop.isVisible = false
-            binding.controlsBottom.isVisible = false
-            binding.background.isVisible = false
-        } else {
-            binding.controlsTop.isVisible = true
-            binding.controlsBottom.isVisible = true
-            binding.background.isVisible = true
-        }
+        binding.playerControls.isVisible = !hide
     }
 
     private fun showLoadingIndicator(visible: Boolean) {
