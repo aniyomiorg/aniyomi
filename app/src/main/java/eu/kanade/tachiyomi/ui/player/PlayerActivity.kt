@@ -420,7 +420,8 @@ class PlayerActivity :
             // Hide controls
             binding.controlsView.isVisible = false
 
-            if (!binding.lockedView.isVisible) showGestureView("controls")
+            if (!binding.lockedView.isVisible && !player.paused!!) showGestureView("controls")
+            else if (!binding.lockedView.isVisible && player.paused!!) binding.lockedView.visibility = View.VISIBLE
 
             else {
                 animationHandler.removeCallbacks(controlsViewRunnable)
@@ -430,7 +431,8 @@ class PlayerActivity :
                 }
             }
         } else {
-            if (!binding.controlsView.isVisible) showGestureView("controls")
+            if (!binding.controlsView.isVisible && !player.paused!!) showGestureView("controls")
+            else if (!binding.controlsView.isVisible && player.paused!!) binding.controlsView.visibility = View.VISIBLE
 
             else {
                 animationHandler.removeCallbacks(controlsViewRunnable)
@@ -639,6 +641,10 @@ class PlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     fun playPause(view: View) {
         player.cyclePause()
+        when {
+            player.paused!! -> animationHandler.removeCallbacks(controlsViewRunnable)
+            binding.controlsView.isVisible -> showGestureView("controls")
+        }
     }
 
     val playPauseRunnable = Runnable {
