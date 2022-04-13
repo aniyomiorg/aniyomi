@@ -370,6 +370,7 @@
                             android:padding="@dimen/screen_edge_margin"
                             app:srcCompat="@drawable/ic_skip_next_24dp"
                             app:tint="?attr/colorOnPrimarySurface" />
+
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>

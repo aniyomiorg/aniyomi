@@ -709,8 +709,7 @@ class PlayerActivity :
         binding.brightnessText.text = finalBrightness.toString()
         binding.brightnessBar.progress = finalBrightness
         binding.brightnessBar.secondaryProgress = abs(finalBrightness)
-        if (finalBrightness >= 0) binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_24dp)
-        else binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_24dp)
+        if (finalBrightness >= 0) { binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_24dp); binding.brightnessBar.max = 100 } else { binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_24dp); binding.brightnessBar.max = 75 }
         showGestureView("brightness")
     }
 
