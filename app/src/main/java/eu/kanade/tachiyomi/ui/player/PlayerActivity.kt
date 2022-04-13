@@ -29,6 +29,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import androidx.annotation.RequiresApi
@@ -638,6 +639,33 @@ class PlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     fun playPause(view: View) {
         player.cyclePause()
+    }
+
+    val playPauseRunnable = Runnable {
+        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+            findViewById<ImageView>(R.id.playPauseView).startAnimation(fadeAnimation)
+            binding.playPauseView.visibility = View.GONE
+        }
+    }
+
+    fun doubleTapPlayPause() {
+        animationHandler.removeCallbacks(playPauseRunnable)
+        playPause(binding.playBtn)
+
+        if (!binding.controlsView.isVisible) {
+            when {
+                player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_80dp) }
+                !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_80dp) }
+            }
+
+            // if (binding.controlsView.isVisible) { binding.playPauseView.visibility = View.GONE; binding.playPauseView.setBackgroundColor(0x00000000) } else { binding.playPauseView.visibility = View.VISIBLE; binding.playPauseView.setBackgroundColor(0x70000000) }
+            AnimationUtils.loadAnimation(this, R.anim.fade_in_medium).also { fadeAnimation ->
+                findViewById<ImageView>(R.id.playPauseView).startAnimation(fadeAnimation)
+                binding.playPauseView.visibility = View.VISIBLE
+            }
+
+            animationHandler.postDelayed(playPauseRunnable, 500L)
+        } else binding.playPauseView.visibility = View.GONE
     }
 
     fun doubleTapSeek(time: Int, event: MotionEvent? = null) {

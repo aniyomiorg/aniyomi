@@ -135,7 +135,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="Settings"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:background="?attr/selectableItemBackground"
                     android:onClick="openSettings"
                     android:layout_marginRight="10dp"
                     android:src="@drawable/ic_settings_24dp"
@@ -151,7 +151,7 @@
                     android:contentDescription="Subtitles"
                     android:onClick="cycleSub"
                     android:src="@drawable/ic_subtitles_black_24dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:background="?attr/selectableItemBackground"
                     app:tint="?attr/colorOnPrimarySurface"
                     app:layout_constraintRight_toRightOf="@id/cycleAudioBtn"
                     app:layout_constraintRight_toLeftOf="@id/settingsBtn"
@@ -162,7 +162,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="Audio"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:background="?attr/selectableItemBackground"
                     android:onClick="cycleAudio"
                     android:src="@drawable/ic_audiotrack_black_24dp"
                     app:layout_constraintTop_toTopOf="parent"
@@ -175,7 +175,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_toLeftOf="@id/cycleAudioBtn"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:background="?attr/selectableItemBackground"
                     android:onClick="switchDecoder"
                     android:text=".."
                     android:textColor="?attr/colorOnPrimarySurface"
@@ -262,7 +262,7 @@
                                 android:layout_height="48dp"
                                 android:layout_marginLeft="10dp"
                                 android:contentDescription="Lock player"
-                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:background="?attr/selectableItemBackground"
                                 android:src="@drawable/ic_lock_24dp"
                                 app:tint="?attr/colorOnPrimarySurface" />
 
@@ -270,7 +270,7 @@
                                 android:id="@+id/cycleSpeedBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:background="?attr/selectableItemBackground"
                                 android:onClick="cycleSpeed"
                                 android:text=".."
                                 android:textColor="?attr/colorOnPrimarySurface" />
@@ -287,7 +287,7 @@
                                 android:id="@+id/controls_skip_intro_btn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:background="?attr/selectableItemBackground"
                                 android:onClick="skipIntro"
                                 android:text="@string/player_controls_skip_intro_text"
                                 android:textColor="?attr/colorOnPrimarySurface" />
@@ -296,7 +296,7 @@
                                 android:id="@+id/cycleViewModeBtn"
                                 android:layout_width="48dp"
                                 android:layout_height="match_parent"
-                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:background="?attr/selectableItemBackground"
                                 android:contentDescription="Cycle view modes"
                                 android:onClick="cycleViewMode"
                                 android:src="@drawable/ic_fullscreen_black_24dp"
@@ -479,6 +479,21 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/playPauseView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:state_enabled="true"
+        android:state_pressed="true"
+        android:state_focused="true"
+        android:layout_centerInParent="true"
+        android:contentDescription="Play/Pause"
+        android:textColor="@android:color/white"
+        android:background="#70000000"
+        android:visibility="gone"
+        app:tint="?attr/colorOnPrimarySurface"
+        tools:src="@drawable/ic_play_arrow_80dp" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/loading_indicator"
