@@ -29,8 +29,8 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
@@ -198,22 +198,12 @@ class PlayerActivity :
 
     private val animationHandler = Handler(Looper.getMainLooper())
 
-    // I spent like an hour trying to make the below 4 vals and functions, into one function. Failed miserably!
-    // All on you man, sorry
-
     // Fade out seek text
     private val seekTextRunnable = Runnable {
         AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
             findViewById<LinearLayout>(R.id.seekView).startAnimation(fadeAnimation)
             binding.seekView.visibility = View.GONE
         }
-    }
-
-    private fun showSeekText() {
-        animationHandler.removeCallbacks(seekTextRunnable)
-        binding.seekView.visibility = View.VISIBLE
-
-        animationHandler.postDelayed(seekTextRunnable, 500L)
     }
 
     // Fade out Volume Bar
@@ -224,13 +214,6 @@ class PlayerActivity :
         }
     }
 
-    private fun showVolumeView() {
-        animationHandler.removeCallbacks(volumeViewRunnable)
-        binding.volumeView.visibility = View.VISIBLE
-
-        animationHandler.postDelayed(volumeViewRunnable, 500L)
-    }
-
     // Fade out Brightness Bar
     private val brightnessViewRunnable = Runnable {
         AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
@@ -239,26 +222,50 @@ class PlayerActivity :
         }
     }
 
-    private fun showBrightnessView() {
-        animationHandler.removeCallbacks(brightnessViewRunnable)
-        binding.brightnessView.visibility = View.VISIBLE
-
-        animationHandler.postDelayed(brightnessViewRunnable, 500L)
-    }
-
     // Fade out Player controls
     private val controlsViewRunnable = Runnable {
         AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
-            findViewById<RelativeLayout>(R.id.player_controls).startAnimation(fadeAnimation)
-            binding.playerControls.visibility = View.GONE
+            if (!isLocked) {
+                findViewById<LinearLayout>(R.id.controlsView).startAnimation(fadeAnimation)
+                binding.controlsView.visibility = View.GONE
+            } else {
+                findViewById<LinearLayout>(R.id.lockedView).startAnimation(fadeAnimation)
+                binding.lockedView.visibility = View.GONE
+            }
         }
     }
 
-    private fun showControlsView() {
-        animationHandler.removeCallbacks(controlsViewRunnable)
-        binding.playerControls.visibility = View.VISIBLE
+    private fun showGestureView(type: String) {
+        val callback: Runnable
+        val itemView: LinearLayout
+        val delay: Long
+        when (type) {
+            "seek" -> {
+                callback = seekTextRunnable
+                itemView = binding.seekView
+                delay = 500L
+            }
+            "volume" -> {
+                callback = volumeViewRunnable
+                itemView = binding.volumeView
+                delay = 500L
+            }
+            "brightness" -> {
+                callback = brightnessViewRunnable
+                itemView = binding.brightnessView
+                delay = 500L
+            }
+            "controls" -> {
+                callback = controlsViewRunnable
+                itemView = if (!isLocked) binding.controlsView else binding.lockedView
+                delay = 3500L
+            }
+            else -> return
+        }
 
-        animationHandler.postDelayed(controlsViewRunnable, 1500L)
+        animationHandler.removeCallbacks(callback)
+        itemView.visibility = View.VISIBLE
+        animationHandler.postDelayed(callback, delay)
     }
 
     private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
@@ -311,7 +318,10 @@ class PlayerActivity :
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             window.navigationBarColor = 70000000
         }
+
         setVisibilities()
+        showGestureView("controls")
+
         player.initialize(applicationContext.filesDir.path)
         MPVLib.setOptionString("keep-open", "always")
         player.addObserver(this)
@@ -408,19 +418,36 @@ class PlayerActivity :
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         if (isLocked) {
             // Hide controls
-            binding.playerControls.isVisible = false
+            binding.controlsView.isVisible = false
 
-            // Toggle unlock button
-            binding.unlockBtn.isVisible = !binding.unlockBtn.isVisible
+            if (!binding.lockedView.isVisible && !player.paused!!) showGestureView("controls")
+            else if (!binding.lockedView.isVisible && player.paused!!) binding.lockedView.visibility = View.VISIBLE
+
+            else {
+                animationHandler.removeCallbacks(controlsViewRunnable)
+                AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+                    findViewById<LinearLayout>(R.id.lockedView).startAnimation(fadeAnimation)
+                    binding.lockedView.visibility = View.GONE
+                }
+            }
         } else {
-            if(!binding.playerControls.isVisible) showControlsView()
-            else { animationHandler.removeCallbacks(controlsViewRunnable); binding.playerControls.isVisible = false }
-            binding.unlockBtn.isVisible = false
+            if (!binding.controlsView.isVisible && !player.paused!!) showGestureView("controls")
+            else if (!binding.controlsView.isVisible && player.paused!!) binding.controlsView.visibility = View.VISIBLE
+
+            else {
+                animationHandler.removeCallbacks(controlsViewRunnable)
+                AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+                    findViewById<LinearLayout>(R.id.controlsView).startAnimation(fadeAnimation)
+                    binding.controlsView.visibility = View.GONE
+                }
+            }
+
+            binding.lockedView.isVisible = false
         }
     }
 
     private fun hideControls(hide: Boolean) {
-        binding.playerControls.isVisible = !hide
+        binding.controlsView.isVisible = !hide
     }
 
     private fun showLoadingIndicator(visible: Boolean) {
@@ -614,6 +641,37 @@ class PlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     fun playPause(view: View) {
         player.cyclePause()
+        when {
+            player.paused!! -> animationHandler.removeCallbacks(controlsViewRunnable)
+            binding.controlsView.isVisible -> showGestureView("controls")
+        }
+    }
+
+    val playPauseRunnable = Runnable {
+        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+            findViewById<ImageView>(R.id.playPauseView).startAnimation(fadeAnimation)
+            binding.playPauseView.visibility = View.GONE
+        }
+    }
+
+    fun doubleTapPlayPause() {
+        animationHandler.removeCallbacks(playPauseRunnable)
+        playPause(binding.playBtn)
+
+        if (!binding.controlsView.isVisible) {
+            when {
+                player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_80dp) }
+                !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_80dp) }
+            }
+
+            // if (binding.controlsView.isVisible) { binding.playPauseView.visibility = View.GONE; binding.playPauseView.setBackgroundColor(0x00000000) } else { binding.playPauseView.visibility = View.VISIBLE; binding.playPauseView.setBackgroundColor(0x70000000) }
+            AnimationUtils.loadAnimation(this, R.anim.fade_in_medium).also { fadeAnimation ->
+                findViewById<ImageView>(R.id.playPauseView).startAnimation(fadeAnimation)
+                binding.playPauseView.visibility = View.VISIBLE
+            }
+
+            animationHandler.postDelayed(playPauseRunnable, 500L)
+        } else binding.playPauseView.visibility = View.GONE
     }
 
     fun doubleTapSeek(time: Int, event: MotionEvent? = null) {
@@ -630,7 +688,7 @@ class PlayerActivity :
 
         val diffText = Utils.prettyTime(time, true)
         binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
-        showSeekText()
+        showGestureView("seek")
     }
 
     fun verticalScrollLeft(diff: Float) {
@@ -651,9 +709,8 @@ class PlayerActivity :
         binding.brightnessText.text = finalBrightness.toString()
         binding.brightnessBar.progress = finalBrightness
         binding.brightnessBar.secondaryProgress = abs(finalBrightness)
-        if (finalBrightness >= 0) binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_24dp)
-        else binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_24dp)
-        showBrightnessView()
+        if (finalBrightness >= 0) { binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_24dp); binding.brightnessBar.max = 100 } else { binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_24dp); binding.brightnessBar.max = 75 }
+        showGestureView("brightness")
     }
 
     fun verticalScrollRight(diff: Float) {
@@ -666,7 +723,7 @@ class PlayerActivity :
         binding.volumeBar.progress = newVolume
         if (newVolume == 0) binding.volumeImg.setImageResource(R.drawable.ic_volume_none_24dp)
         else binding.volumeImg.setImageResource(R.drawable.ic_volume_high_24dp)
-        showVolumeView()
+        showGestureView("volume")
     }
 
     fun initSeek() {
@@ -687,7 +744,7 @@ class PlayerActivity :
 
         val diffText = Utils.prettyTime(newDiff, true)
         binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
-        showSeekText()
+        showGestureView("seek")
     }
 
     @Suppress("UNUSED_PARAMETER")
