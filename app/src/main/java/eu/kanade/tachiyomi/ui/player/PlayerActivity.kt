@@ -99,7 +99,7 @@ class PlayerActivity :
 
     internal var isLocked = false
 
-    internal val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
+    private val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
 
     private var audioFocusRestore: () -> Unit = {}
 
@@ -896,6 +896,7 @@ class PlayerActivity :
     }
 
     private fun fileLoaded() {
+        MPVLib.setPropertyDouble("speed", preferences.getPlayerSpeed().toDouble())
         clearTracks()
         player.loadTracks()
         subTracks += player.tracks.getValue("sub")

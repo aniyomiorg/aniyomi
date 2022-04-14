@@ -16,12 +16,14 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.PickerDialog
 import `is`.xyz.mpv.SpeedPickerDialog
 import `is`.xyz.mpv.StateRestoreCallback
 import `is`.xyz.mpv.Utils
+import uy.kohesive.injekt.injectLazy
 
 class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
@@ -50,6 +52,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             userIsOperatingSeekbar = false
         }
     }
+
+    private val preferences: PreferencesHelper by injectLazy()
 
     private tailrec fun Context.getActivity(): PlayerActivity? = this as? PlayerActivity
         ?: (this as? ContextWrapper)?.baseContext?.getActivity()
@@ -148,6 +152,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun updateSpeedButton() {
         binding.cycleSpeedBtn.text = context.getString(R.string.ui_speed, activity.player.playbackSpeed)
+        activity.player.playbackSpeed?.let { preferences.setPlayerSpeed(it.toFloat()) }
     }
 
     internal fun showAndFadeControls() {
@@ -256,6 +261,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             setView(picker.buildView(LayoutInflater.from(context)))
             setPositiveButton(R.string.dialog_ok) { _, _ ->
                 picker.number?.let {
+                    preferences.setPlayerSpeed(it.toFloat())
                     if (picker.isInteger()) {
                         MPVLib.setPropertyInt("speed", it.toInt())
                     } else {
