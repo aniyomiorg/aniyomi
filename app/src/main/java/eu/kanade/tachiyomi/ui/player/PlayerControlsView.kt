@@ -198,6 +198,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     private fun pickAudio() {
+        if (activity.audioTracks.isEmpty()) return
         val restore = pauseForDialog()
 
         with(MaterialAlertDialogBuilder(context)) {
@@ -220,6 +221,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     private fun pickSub() {
+        if (activity.subTracks.isEmpty()) return
         val restore = pauseForDialog()
 
         with(MaterialAlertDialogBuilder(context)) {

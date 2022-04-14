@@ -514,12 +514,14 @@ class PlayerActivity :
 
     @Suppress("UNUSED_PARAMETER")
     fun cycleAudio(view: View) {
+        if (audioTracks.isEmpty()) return
         setAudio(if (selectedAudio < audioTracks.lastIndex) selectedAudio + 1 else 0)
         toast("Audio: ${audioTracks[selectedAudio].lang}")
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun cycleSub(view: View) {
+        if (subTracks.isEmpty()) return
         setSub(if (selectedSub < subTracks.lastIndex) selectedSub + 1 else 0)
         toast("Sub: ${subTracks[selectedSub].lang}")
     }
@@ -540,38 +542,37 @@ class PlayerActivity :
 
     @Suppress("UNUSED_PARAMETER")
     fun openSettings(view: View) {
-        if (currentVideoList?.isNotEmpty() == true) {
-            val qualityAlert = MaterialAlertDialogBuilder(this)
+        if (currentVideoList?.isNotEmpty() != true) return
+        val qualityAlert = MaterialAlertDialogBuilder(this)
 
-            qualityAlert.setTitle(R.string.playback_quality_dialog_title)
+        qualityAlert.setTitle(R.string.playback_quality_dialog_title)
 
-            var requestedQuality = 0
-            val qualities = currentVideoList!!.map { it.quality }.toTypedArray()
-            qualityAlert.setSingleChoiceItems(
-                qualities,
-                currentQuality,
-            ) { qualityDialog, selectedQuality ->
-                if (selectedQuality > qualities.lastIndex) {
-                    qualityDialog.cancel()
-                } else {
-                    requestedQuality = selectedQuality
-                }
-            }
-
-            qualityAlert.setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
-                if (requestedQuality != currentQuality) {
-                    currentQuality = requestedQuality
-                    changeQuality(requestedQuality)
-                }
-                qualityDialog.dismiss()
-            }
-
-            qualityAlert.setNegativeButton(android.R.string.cancel) { qualityDialog, _ ->
+        var requestedQuality = 0
+        val qualities = currentVideoList!!.map { it.quality }.toTypedArray()
+        qualityAlert.setSingleChoiceItems(
+            qualities,
+            currentQuality,
+        ) { qualityDialog, selectedQuality ->
+            if (selectedQuality > qualities.lastIndex) {
                 qualityDialog.cancel()
+            } else {
+                requestedQuality = selectedQuality
             }
-
-            qualityAlert.show()
         }
+
+        qualityAlert.setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
+            if (requestedQuality != currentQuality) {
+                currentQuality = requestedQuality
+                changeQuality(requestedQuality)
+            }
+            qualityDialog.dismiss()
+        }
+
+        qualityAlert.setNegativeButton(android.R.string.cancel) { qualityDialog, _ ->
+            qualityDialog.cancel()
+        }
+
+        qualityAlert.show()
     }
 
     private fun changeQuality(quality: Int) {
@@ -926,6 +927,7 @@ class PlayerActivity :
                 } ?: run {
                 val mpvSub = player.tracks.getValue("sub").first { player.sid == it.mpvId }
                 selectedSub = subTracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
+                    .coerceAtLeast(0)
             }
         }
         if (hadPreviousAudio) {
@@ -947,6 +949,7 @@ class PlayerActivity :
                 } ?: run {
                 val mpvAudio = player.tracks.getValue("audio").first { player.aid == it.mpvId }
                 selectedAudio = audioTracks.indexOfFirst { it.url == mpvAudio.mpvId.toString() }
+                    .coerceAtLeast(0)
             }
         }
         launchUI { showLoadingIndicator(false) }
