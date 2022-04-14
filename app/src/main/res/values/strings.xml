@@ -266,11 +266,11 @@
     <string name="restrictions">Restrictions: %s</string>
     <string name="only_update_restrictions">Only update: %s</string>
 
-    <string name="pref_library_update_manga_restriction">Skip updating</string>
-    <string name="pref_update_only_completely_read">Has unseen episodes/unread chapters</string>
-    <string name="pref_update_only_non_completed">Is completed series</string>
-    <string name="pref_update_only_started">No seen episodes/read chapters</string>
-    <string name="pref_library_update_show_tab_badge">Show unread/unseen count on Updates icon</string>
+    <string name="pref_library_update_manga_restriction">Skip updating titles</string>
+    <string name="pref_update_only_completely_read">With unseen episode(s)/unread chapter(s)</string>
+    <string name="pref_update_only_non_completed">With \"Completed\" status</string>
+    <string name="pref_update_only_started">That haven\'t been started</string>
+    <string name="pref_library_update_show_tab_badge">Show unseen/unread count on Updates icon</string>
     <string name="pref_library_update_refresh_metadata">Automatically refresh metadata</string>
     <string name="pref_library_update_refresh_metadata_summary">Check for new cover and details when updating library</string>
     <string name="pref_library_update_refresh_trackers">Automatically refresh trackers</string>
@@ -781,6 +781,7 @@
 
     <!-- Image notifier -->
     <string name="picture_saved">Picture saved</string>
+    <string name="error_saving_picture">Error saving picture</string>
 
     <!-- Reader activity -->
     <string name="custom_filter">Custom filter</string>
@@ -875,7 +876,7 @@
     </plurals>
     <string name="notification_update_error">%1$d update(s) failed</string>
     <string name="notification_update_skipped">%1$d update(s) skipped</string>
-    <string name="learn_more">Learn more</string>
+    <string name="learn_more">Tap to learn more</string>
     <string name="notification_cover_update_failed">Failed to update cover</string>
     <string name="notification_first_add_to_library">Please add the title to your library before doing this</string>
     <string name="library_errors_help">For help on how to fix library update errors, see %1$s</string>
@@ -900,6 +901,7 @@
     <string name="update_check_notification_download_complete">Download complete</string>
     <string name="update_check_notification_download_error">Download error</string>
     <string name="update_check_notification_update_available">New version available!</string>
+    <string name="update_check_fdroid_migration_info">A new version is available from the official releases. Tap to learn how to migrate from unofficial F-Droid releases.</string>
 
     <!--Extension Updates Notifications-->
     <plurals name="update_check_notification_ext_updates">
