@@ -24,14 +24,12 @@ class Gestures(
     }
 
     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-        if (e.y < height * 0.05F || e.y > height * 0.95F || e.x < width * 0.05F || e.x > width * 0.95F) return false
         activity.toggleControls()
         return true
     }
 
     override fun onDoubleTap(e: MotionEvent): Boolean {
         if (activity.isLocked) return false
-        if (e.y < height * 0.05F || e.y > height * 0.95F || e.x < width * 0.05F || e.x > width * 0.95F) return false
         val interval = preferences.skipLengthPreference()
         when {
             e.x < width * 0.4F -> activity.doubleTapSeek(-interval, e)
