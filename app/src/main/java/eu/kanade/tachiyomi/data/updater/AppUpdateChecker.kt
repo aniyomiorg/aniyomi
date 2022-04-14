@@ -65,7 +65,8 @@ class AppUpdateChecker {
 
 val GITHUB_REPO: String by lazy {
     if (BuildConfig.PREVIEW) {
-        "jmir1/aniyomi-preview"
+        // TODO: CHANGE THIS BACK
+        "jmir1/aniyomi-mpv-beta"
     } else {
         "jmir1/aniyomi"
     }
