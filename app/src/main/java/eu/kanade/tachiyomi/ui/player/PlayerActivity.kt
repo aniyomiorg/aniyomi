@@ -248,6 +248,11 @@ class PlayerActivity :
 
     private var hadPreviousAudio = false
 
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        binding.playerControls.resetControlsFade()
+        return super.dispatchTouchEvent(ev)
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {

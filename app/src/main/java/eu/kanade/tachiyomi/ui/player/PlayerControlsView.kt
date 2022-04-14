@@ -157,8 +157,15 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun showAndFadeControls() {
         val itemView = if (!activity.isLocked) binding.controlsView else binding.lockedView
-        animationHandler.removeCallbacks(controlsViewRunnable)
         itemView.visibility = View.VISIBLE
+        resetControlsFade()
+    }
+
+    internal fun resetControlsFade() {
+        val itemView = if (!activity.isLocked) binding.controlsView else binding.lockedView
+        if (!itemView.isVisible) return
+        animationHandler.removeCallbacks(controlsViewRunnable)
+        if (userIsOperatingSeekbar) return
         animationHandler.postDelayed(controlsViewRunnable, 3500L)
     }
 
