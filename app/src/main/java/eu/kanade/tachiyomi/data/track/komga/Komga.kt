@@ -136,7 +136,7 @@ class Komga(private val context: Context, id: Int) : TrackService(id), EnhancedT
             null
         }
 
-    override fun isTrackFrom(track: AnimeTrack, anime: Anime, source: AnimeSource?) = throw Exception("Not used")
+    override fun isTrackFrom(track: AnimeTrack, anime: Anime, source: AnimeSource?): Boolean = false
 
     override fun migrateTrack(track: AnimeTrack, anime: Anime, newSource: AnimeSource) = throw Exception("Not used")
 }
