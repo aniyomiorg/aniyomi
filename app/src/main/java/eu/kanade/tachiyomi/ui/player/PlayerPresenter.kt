@@ -40,10 +40,14 @@ class PlayerPresenter(
     private val delayedTrackingStore: DelayedTrackingStore = Injekt.get(),
 ) : BasePresenter<PlayerActivity>() {
     /**
+     * The ID of the anime loaded in the player.
+     */
+    var animeId: Long = -1L
+
+    /**
      * The anime loaded in the player. It can be null when instantiated for a short time.
      */
     var anime: Anime? = null
-        private set
 
     /**
      * The episode id of the currently loaded episode. Used to restore from process kill.
@@ -60,7 +64,9 @@ class PlayerPresenter(
      * Episode list for the active anime. It's retrieved lazily and should be accessed for the first
      * time in a background thread to avoid blocking the UI.
      */
-    val episodeList by lazy {
+    lateinit var episodeList: List<Episode>
+
+    private fun initEpisodeList(): List<Episode> {
         val anime = anime!!
         val dbEpisodes = db.getEpisodes(anime).executeAsBlocking()
 
@@ -93,7 +99,7 @@ class PlayerPresenter(
             else -> dbEpisodes
         }
 
-        episodesForPlayer
+        return episodesForPlayer
             .sortedWith(getEpisodeSort(anime, sortDescending = false))
     }
 
@@ -128,6 +134,10 @@ class PlayerPresenter(
         return anime == null
     }
 
+    private fun needsInit(newAnimeId: Long): Boolean {
+        return animeId != newAnimeId
+    }
+
     /**
      * Initializes this presenter with the given [animeId] and [initialEpisodeId]. This method will
      * fetch the anime from the database and initialize the initial episode.
@@ -155,12 +165,16 @@ class PlayerPresenter(
         if (!needsInit()) return
 
         this.anime = anime
-        if (episodeId == -1L) episodeId = initialEpisodeId
+        if (initialEpisodeId != -1L) episodeId = initialEpisodeId
 
         checkTrackers(anime)
 
         source = sourceManager.getOrStub(anime.source)
 
+        if (needsInit(anime.id ?: -1L)) {
+            this.animeId = anime.id!!
+            episodeList = initEpisodeList()
+        }
         currentEpisode = episodeList.first { initialEpisodeId == it.id }
         launchIO {
             try {
