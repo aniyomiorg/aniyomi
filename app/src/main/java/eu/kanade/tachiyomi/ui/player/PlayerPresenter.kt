@@ -164,17 +164,21 @@ class PlayerPresenter(
         currentEpisode = episodeList.first { initialEpisodeId == it.id }
         launchIO {
             try {
-                val currentEpisode = currentEpisode ?: throw Exception("bruh")
+                val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
                 EpisodeLoader.getLinks(currentEpisode, anime, source!!)
                     .subscribeFirst(
                         { activity, it ->
                             currentVideoList = it
-                            activity.setVideoList(it)
+                            if (it.isNotEmpty()) {
+                                activity.setVideoList(it)
+                            } else {
+                                activity.setInitialEpisodeError(Exception("Video list is empty."))
+                            }
                         },
                         PlayerActivity::setInitialEpisodeError,
                     )
             } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
+                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links." }
             }
         }
     }
@@ -186,7 +190,7 @@ class PlayerPresenter(
     }
 
     fun nextEpisode(callback: () -> Unit): String? {
-        val anime = anime ?: return "Invalid"
+        val anime = anime ?: return null
         val source = sourceManager.getOrStub(anime.source)
 
         val index = getCurrentEpisodeIndex()
@@ -194,25 +198,29 @@ class PlayerPresenter(
         currentEpisode = episodeList[index + 1]
         launchIO {
             try {
-                val currentEpisode = currentEpisode ?: throw Exception("bruh")
+                val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
                 EpisodeLoader.getLinks(currentEpisode, anime, source)
                     .subscribeFirst(
                         { activity, it ->
                             currentVideoList = it
-                            activity.setVideoList(it)
-                            callback()
+                            if (it.isNotEmpty()) {
+                                activity.setVideoList(it)
+                                callback()
+                            } else {
+                                activity.setInitialEpisodeError(Exception("Video list is empty."))
+                            }
                         },
                         PlayerActivity::setInitialEpisodeError,
                     )
             } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
+                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links." }
             }
         }
         return anime.title + " - " + episodeList[index + 1].name
     }
 
     fun previousEpisode(callback: () -> Unit): String? {
-        val anime = anime ?: return "Invalid"
+        val anime = anime ?: return null
         val source = sourceManager.getOrStub(anime.source)
 
         val index = getCurrentEpisodeIndex()
@@ -220,18 +228,22 @@ class PlayerPresenter(
         currentEpisode = episodeList[index - 1]
         launchIO {
             try {
-                val currentEpisode = currentEpisode ?: throw Exception("bruh")
+                val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
                 EpisodeLoader.getLinks(currentEpisode, anime, source)
                     .subscribeFirst(
                         { activity, it ->
                             currentVideoList = it
-                            activity.setVideoList(it)
-                            callback()
+                            if (it.isNotEmpty()) {
+                                activity.setVideoList(it)
+                                callback()
+                            } else {
+                                activity.setInitialEpisodeError(Exception("Video list is empty."))
+                            }
                         },
                         PlayerActivity::setInitialEpisodeError,
                     )
             } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { e.message ?: "error getting links" }
+                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links." }
             }
         }
         return anime.title + " - " + episodeList[index - 1].name

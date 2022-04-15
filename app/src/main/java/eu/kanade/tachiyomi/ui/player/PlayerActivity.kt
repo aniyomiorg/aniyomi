@@ -276,6 +276,7 @@ class PlayerActivity :
         player.addObserver(this)
 
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+            launchUI { toast(throwable.message) }
             logcat(LogPriority.ERROR, throwable)
             finish()
         }
@@ -633,10 +634,16 @@ class PlayerActivity :
         val plCount = presenter.episodeList.size
         val plPos = presenter.getCurrentEpisodeIndex()
 
-        val g = ContextCompat.getColor(this, R.color.tint_disabled)
-        val w = ContextCompat.getColor(this, R.color.tint_normal)
-        binding.playerControls.binding.prevBtn.imageTintList = ColorStateList.valueOf(if (plPos == 0) g else w)
-        binding.playerControls.binding.nextBtn.imageTintList = ColorStateList.valueOf(if (plPos == plCount - 1) g else w)
+        val grey = ContextCompat.getColor(this, R.color.tint_disabled)
+        val white = ContextCompat.getColor(this, R.color.tint_normal)
+        with(binding.playerControls.binding.prevBtn) {
+            this.imageTintList = ColorStateList.valueOf(if (plPos == 0) grey else white)
+            this.isClickable = plPos != 0
+        }
+        with(binding.playerControls.binding.nextBtn) {
+            this.imageTintList = ColorStateList.valueOf(if (plPos == plCount - 1) grey else white)
+            this.isClickable = plPos != plCount - 1
+        }
     }
 
     private fun updatePlaybackStatus(paused: Boolean) {
