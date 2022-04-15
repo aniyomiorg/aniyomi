@@ -184,15 +184,16 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      *
      * @param reason the text to show.
      */
-    fun onWarning(reason: String) {
+    fun onWarning(reason: String, timeout: Long? = null) {
         with(errorNotificationBuilder) {
             setContentTitle(context.getString(R.string.download_notifier_downloader_title))
-            setStyle(NotificationCompat.BigTextStyle().bigText(reason))
+            setContentText(reason)
             setSmallIcon(R.drawable.ic_warning_white_24dp)
             setAutoCancel(true)
             clearActions()
             setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
             setProgress(0, 0, false)
+            timeout?.let { setTimeoutAfter(it) }
 
             show(Notifications.ID_DOWNLOAD_CHAPTER_ERROR)
         }

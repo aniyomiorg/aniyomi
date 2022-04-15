@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.webkit.MimeTypeMap
-import android.widget.Toast
 import com.arthenica.ffmpegkit.ExecuteCallback
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFmpegSession
@@ -35,7 +34,6 @@ import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.system.ImageUtil
 import eu.kanade.tachiyomi.util.system.logcat
-import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -298,14 +296,21 @@ class AnimeDownloader(
 
             // Start downloader if needed
             if (autoStart && wasEmpty) {
+                val queuedDownloads = queue.filter { it.source !is UnmeteredSource }.count()
                 val maxDownloadsFromSource = queue
                     .groupBy { it.source }
                     .filterKeys { it !is UnmeteredSource }
                     .maxOf { it.value.size }
                 // TODO: show warnings in stable
-                if (maxDownloadsFromSource > EPISODES_PER_SOURCE_QUEUE_WARNING_THRESHOLD) {
+                if (
+                    queuedDownloads > DOWNLOADS_QUEUED_WARNING_THRESHOLD ||
+                    maxDownloadsFromSource > EPISODES_PER_SOURCE_QUEUE_WARNING_THRESHOLD
+                ) {
                     withUIContext {
-                        context.toast(R.string.download_queue_size_warning, Toast.LENGTH_LONG)
+                        notifier.onWarning(
+                            context.getString(R.string.download_queue_size_warning),
+                            WARNING_NOTIF_TIMEOUT_MS,
+                        )
                     }
                 }
                 AnimeDownloadService.start(context)
@@ -693,7 +698,9 @@ class AnimeDownloader(
 
     companion object {
         const val TMP_DIR_SUFFIX = "_tmp"
+        const val WARNING_NOTIF_TIMEOUT_MS = 30_000L
         const val EPISODES_PER_SOURCE_QUEUE_WARNING_THRESHOLD = 15
+        private const val DOWNLOADS_QUEUED_WARNING_THRESHOLD = 30
     }
 }
 
