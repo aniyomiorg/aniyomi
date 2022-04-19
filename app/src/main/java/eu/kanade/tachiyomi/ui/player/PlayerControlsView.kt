@@ -84,6 +84,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.nextBtn.setOnClickListener { activity.switchEpisode(false) }
         binding.prevBtn.setOnClickListener { activity.switchEpisode(true) }
+
+        binding.settingsBtn.setOnClickListener { showSettings() }
     }
 
     private val animationHandler = Handler(Looper.getMainLooper())
@@ -285,5 +287,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         picker.number = MPVLib.getPropertyDouble("speed")
         dialog.show()
+    }
+
+    private fun showSettings() {
+        binding.settingsLayout.isVisible = !binding.settingsLayout.isVisible
     }
 }

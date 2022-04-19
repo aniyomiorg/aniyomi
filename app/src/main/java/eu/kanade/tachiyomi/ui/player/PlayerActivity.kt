@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
@@ -17,11 +18,7 @@ import android.graphics.drawable.Icon
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.ParcelFileDescriptor
+import android.os.*
 import android.util.DisplayMetrics
 import android.util.Rational
 import android.view.MotionEvent
@@ -557,7 +554,7 @@ class PlayerActivity :
     private var currentQuality = 0
 
     @Suppress("UNUSED_PARAMETER")
-    fun openSettings(view: View) {
+    fun openQuality(view: View) {
         if (currentVideoList?.isNotEmpty() != true) return
         val qualityAlert = MaterialAlertDialogBuilder(this)
 
@@ -918,6 +915,7 @@ class PlayerActivity :
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     private fun fileLoaded() {
         MPVLib.setPropertyDouble("speed", preferences.getPlayerSpeed().toDouble())
         clearTracks()
@@ -976,6 +974,8 @@ class PlayerActivity :
         }
         launchUI { showLoadingIndicator(false) }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
+        if (player.videoW!! / player.videoH!! >= 1) this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        else this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
     }
 
     // mpv events
