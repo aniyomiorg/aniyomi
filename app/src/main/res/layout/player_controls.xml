@@ -238,6 +238,15 @@
                             android:src="@drawable/ic_lock_24dp"
                             app:tint="?attr/colorOnPrimarySurface" />
 
+                        <ImageButton
+                            android:id="@+id/rotateBtn"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:contentDescription="Rotate player"
+                            android:src="@drawable/ic_screen_rotation_24dp"
+                            app:tint="?attr/colorOnPrimarySurface" />
+
                         <Button
                             android:id="@+id/cycleSpeedBtn"
                             android:layout_width="wrap_content"
