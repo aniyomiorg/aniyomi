@@ -1,9 +1,7 @@
 package eu.kanade.tachiyomi.ui.player
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
@@ -86,10 +84,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.nextBtn.setOnClickListener { activity.switchEpisode(false) }
         binding.prevBtn.setOnClickListener { activity.switchEpisode(true) }
-
-        binding.settingsBtn.setOnClickListener { showSettings() }
-
-        binding.rotateBtn.setOnClickListener { rotatePlayer() }
     }
 
     private val animationHandler = Handler(Looper.getMainLooper())
@@ -291,15 +285,5 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         picker.number = MPVLib.getPropertyDouble("speed")
         dialog.show()
-    }
-
-    private fun showSettings() {
-        binding.settingsLayout.isVisible = !binding.settingsLayout.isVisible
-    }
-
-    @SuppressLint("SourceLockedOrientationActivity")
-    private fun rotatePlayer() {
-        if (activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
-        else activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
     }
 }

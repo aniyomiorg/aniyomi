@@ -102,11 +102,12 @@
                 android:id="@+id/settingsBtn"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_marginRight="10dp"
                 android:contentDescription="Settings"
+                android:onClick="showSettings"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_settings_24dp"
                 app:tint="?attr/colorOnPrimarySurface"
-                android:layout_marginRight="10dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -244,6 +245,7 @@
                             android:layout_height="48dp"
                             android:background="?attr/selectableItemBackground"
                             android:contentDescription="Rotate player"
+                            android:onClick="rotatePlayer"
                             android:src="@drawable/ic_screen_rotation_24dp"
                             app:tint="?attr/colorOnPrimarySurface" />
 
