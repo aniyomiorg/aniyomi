@@ -104,7 +104,6 @@
                 android:layout_height="48dp"
                 android:layout_marginRight="10dp"
                 android:contentDescription="Settings"
-                android:onClick="showSettings"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_settings_24dp"
                 app:tint="?attr/colorOnPrimarySurface"

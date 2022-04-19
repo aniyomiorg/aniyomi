@@ -421,9 +421,6 @@ class PlayerActivity :
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun showSettings(view: View) { binding.playerControls.binding.settingsLayout.isVisible = !binding.playerControls.binding.settingsLayout.isVisible }
-
-    @Suppress("UNUSED_PARAMETER")
     @SuppressLint("SourceLockedOrientationActivity")
     fun rotatePlayer(view: View) {
         if (this.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
