@@ -35,13 +35,13 @@
         android:background="#70000000">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/controls_top"
+            android:id="@+id/controlsTopPortrait"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp">
 
             <ImageButton
-                android:id="@+id/backArrowBtn"
+                android:id="@+id/backArrowBtnPortrait"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:contentDescription="Go back"
@@ -50,42 +50,41 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="?attr/colorOnPrimarySurface"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/fullTitleTxt"
+                app:layout_constraintRight_toLeftOf="@id/fullTitleTxtPortrait"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-             <LinearLayout
-                 android:id="@+id/fullTitleTxt"
+            <LinearLayout
+                 android:id="@+id/fullTitleTxtPortrait"
                  android:layout_width="0dp"
                  android:layout_height="wrap_content"
                  android:layout_marginRight="10dp"
                  android:orientation="vertical"
-                 app:layout_constraintLeft_toRightOf="@id/backArrowBtn"
-                 app:layout_constraintRight_toLeftOf="@id/qualityBtn"
+                 app:layout_constraintLeft_toRightOf="@id/backArrowBtnPortrait"
+                 app:layout_constraintRight_toLeftOf="@id/qualityBtnPortrait"
                  app:layout_constraintTop_toTopOf="parent">
+                <TextView
+                    android:id="@+id/titleMainTxtPortrait"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:textColor="?attr/colorOnPrimarySurface"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-                 <TextView
-                     android:id="@+id/titleMainTxt"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:maxLines="2"
-                     android:textColor="?attr/colorOnPrimarySurface"
-                     android:text=""
-                     android:textSize="16sp"
-                     android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/titleSecondaryTxtPortrait"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnPrimarySurface"
+                    android:alpha = "0.5"
+                    android:textSize="12sp"
+                    android:text="" />
 
-                 <TextView
-                     android:id="@+id/titleSecondaryTxt"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:textColor="?attr/colorOnPrimarySurface"
-                     android:alpha = "0.5"
-                     android:textSize="12sp"
-                     android:text="" />
-
-             </LinearLayout>
+            </LinearLayout>
 
             <ImageButton
-                android:id="@+id/qualityBtn"
+                android:id="@+id/qualityBtnPortrait"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:contentDescription="Quality"
@@ -93,13 +92,13 @@
                 android:onClick="openQuality"
                 android:src="@drawable/ic_video_quality_24dp"
                 app:tint="?attr/colorOnPrimarySurface"
-                app:layout_constraintRight_toLeftOf="@id/settingsBtn"
+                app:layout_constraintRight_toLeftOf="@id/settingsBtnPortrait"
                 app:layout_constraintTop_toTopOf="parent"/>
 
 
 
             <ImageButton
-                android:id="@+id/settingsBtn"
+                android:id="@+id/settingsBtnPortrait"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginRight="10dp"
@@ -112,7 +111,7 @@
 
 
             <LinearLayout
-                android:id="@+id/settingsLayout"
+                android:id="@+id/settingsLayoutPortrait"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
@@ -120,11 +119,11 @@
                 android:layoutDirection="rtl"
                 android:gravity="center"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/settingsBtn"
+                app:layout_constraintTop_toBottomOf="@id/settingsBtnPortrait"
                 android:visibility="gone">
 
                 <ImageButton
-                    android:id="@+id/cycleSubsBtn"
+                    android:id="@+id/cycleSubsBtnPortrait"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="Subtitles"
@@ -134,7 +133,7 @@
                     app:tint="?attr/colorOnPrimarySurface" />
 
                 <ImageButton
-                    android:id="@+id/cycleAudioBtn"
+                    android:id="@+id/cycleAudioBtnPortrait"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="Audio"
@@ -144,7 +143,7 @@
                     app:tint="?attr/colorOnPrimarySurface" />
 
                 <Button
-                    android:id="@+id/cycleDecoderBtn"
+                    android:id="@+id/cycleDecoderBtnPortrait"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:background="?attr/selectableItemBackground"
@@ -155,6 +154,109 @@
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/controlsTopLandscape"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/backArrowBtnLandscape"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="Go back"
+                android:src="@drawable/ic_arrow_back_24dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="?attr/colorOnPrimarySurface"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/fullTitleTxtLandscape"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <LinearLayout
+                android:id="@+id/fullTitleTxtLandscape"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toRightOf="@id/backArrowBtnLandscape"
+                app:layout_constraintRight_toLeftOf="@id/cycleDecoderBtnLandscape"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/titleMainTxtLandscape"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnPrimarySurface"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/titleSecondaryTxtLandscape"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnPrimarySurface"
+                    android:alpha = "0.5"
+                    android:textSize="12sp"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/qualityBtnLandscape"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="Settings"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="openQuality"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_video_quality_24dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:tint="?attr/colorOnPrimarySurface" />
+
+
+            <ImageButton
+                android:id="@+id/cycleSubsBtnLandscape"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="Subtitles"
+                android:onClick="cycleSub"
+                android:src="@drawable/ic_subtitles_black_24dp"
+                android:background="?attr/selectableItemBackground"
+                app:tint="?attr/colorOnPrimarySurface"
+                app:layout_constraintRight_toRightOf="@id/cycleAudioBtnLandscape"
+                app:layout_constraintRight_toLeftOf="@id/qualityBtnLandscape"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageButton
+                android:id="@+id/cycleAudioBtnLandscape"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="Audio"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="cycleAudio"
+                android:src="@drawable/ic_audiotrack_black_24dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="@id/cycleDecoderBtnLandscape"
+                app:layout_constraintRight_toLeftOf="@id/cycleSubsBtnLandscape"
+                app:tint="?attr/colorOnPrimarySurface" />
+
+            <Button
+                android:id="@+id/cycleDecoderBtnLandscape"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_toLeftOf="@id/cycleAudioBtnLandscape"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="switchDecoder"
+                android:text=".."
+                android:textColor="?attr/colorOnPrimarySurface"
+                app:layout_constraintRight_toLeftOf="@id/cycleAudioBtnLandscape"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <RelativeLayout
             android:id="@+id/controls_bottom"
