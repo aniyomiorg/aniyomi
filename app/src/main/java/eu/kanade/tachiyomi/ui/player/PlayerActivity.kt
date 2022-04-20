@@ -18,7 +18,11 @@ import android.graphics.drawable.Icon
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.ParcelFileDescriptor
 import android.util.DisplayMetrics
 import android.util.Rational
 import android.view.MotionEvent
