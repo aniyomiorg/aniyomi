@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
@@ -424,6 +425,20 @@ class PlayerActivity :
     }
 
     @Suppress("UNUSED_PARAMETER")
+    @SuppressLint("SourceLockedOrientationActivity")
+    fun rotatePlayer(view: View) {
+        if (this.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT) {
+            this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            binding.playerControls.binding.controlsTopLandscape.isVisible = true
+            binding.playerControls.binding.controlsTopPortrait.isVisible = false
+        } else {
+            this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+            binding.playerControls.binding.controlsTopLandscape.isVisible = false
+            binding.playerControls.binding.controlsTopPortrait.isVisible = true
+        }
+    }
+
+    @Suppress("UNUSED_PARAMETER")
     fun playPause(view: View) {
         player.cyclePause()
         binding.playerControls.playPause()
@@ -557,7 +572,7 @@ class PlayerActivity :
     private var currentQuality = 0
 
     @Suppress("UNUSED_PARAMETER")
-    fun openSettings(view: View) {
+    fun openQuality(view: View) {
         if (currentVideoList?.isNotEmpty() != true) return
         val qualityAlert = MaterialAlertDialogBuilder(this)
 
@@ -636,8 +651,10 @@ class PlayerActivity :
     }
 
     private fun updateEpisodeText() {
-        binding.playerControls.binding.titleMainTxt.text = presenter.anime?.title
-        binding.playerControls.binding.titleSecondaryTxt.text = presenter.currentEpisode?.name
+        binding.playerControls.binding.titleMainTxtLandscape.text = presenter.anime?.title
+        binding.playerControls.binding.titleSecondaryTxtLandscape.text = presenter.currentEpisode?.name
+        binding.playerControls.binding.titleMainTxtPortrait.text = presenter.anime?.title
+        binding.playerControls.binding.titleSecondaryTxtPortrait.text = presenter.currentEpisode?.name
     }
 
     private fun updatePlaylistButtons() {
@@ -918,6 +935,7 @@ class PlayerActivity :
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     private fun fileLoaded() {
         MPVLib.setPropertyDouble("speed", preferences.getPlayerSpeed().toDouble())
         clearTracks()
@@ -976,6 +994,19 @@ class PlayerActivity :
         }
         launchUI { showLoadingIndicator(false) }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
+        if (player.videoW!! / player.videoH!! >= 1) {
+            this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            launchUI {
+                binding.playerControls.binding.controlsTopLandscape.visibility = View.VISIBLE
+                binding.playerControls.binding.controlsTopPortrait.visibility = View.GONE
+            }
+        } else {
+            this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+            launchUI {
+                binding.playerControls.binding.controlsTopPortrait.visibility = View.VISIBLE
+                binding.playerControls.binding.controlsTopLandscape.visibility = View.GONE
+            }
+        }
     }
 
     // mpv events

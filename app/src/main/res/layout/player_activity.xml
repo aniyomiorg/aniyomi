@@ -19,7 +19,7 @@
 
 
     <!-- This LinearLayout only exists to prevent clipping -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
@@ -27,31 +27,43 @@
 
         <ImageView
             android:id="@+id/rew_bg"
-            android:layout_width="1000dp"
-            android:layout_height="1000dp"
-            android:layout_marginStart="-700dp"
-            android:layout_marginEnd="275dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
+            android:layout_marginTop="-100dp"
+            android:layout_marginBottom="-100dp"
             android:alpha="0"
             android:contentDescription="@string/fab_transformation_scrim_behavior"
             android:src="@drawable/ic_circle_right_200dp"
-            app:tint="?attr/colorAccent" />
-
+            app:tint="?attr/colorAccent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/mid_bg"/>
+        <View
+            android:id="@+id/mid_bg"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintLeft_toLeftOf="@id/rew_bg"
+            app:layout_constraintRight_toRightOf="@id/ffwd_bg" />
         <ImageView
             android:id="@+id/ffwd_bg"
-            android:layout_width="1000dp"
-            android:layout_height="1000dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
+            android:layout_marginTop="-100dp"
+            android:layout_marginBottom="-100dp"
             android:alpha="0"
             android:contentDescription="@string/fab_transformation_scrim_behavior"
             android:src="@drawable/ic_circle_200dp"
-            app:tint="?attr/colorAccent" />
-    </LinearLayout>
+            app:tint="?attr/colorAccent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/mid_bg" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <eu.kanade.tachiyomi.ui.player.PlayerControlsView
         android:id="@+id/player_controls"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/volumeView"
@@ -59,9 +71,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
+        android:layout_centerInParent="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="45dp"
-        android:layout_marginTop="90dp"
         android:visibility="gone">
 
         <TextView
@@ -70,7 +82,7 @@
             android:layout_height="wrap_content"
             android:text="10"
             android:gravity="left"
-            android:textColor="?attr/colorOnPrimarySurface"
+            android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:layout_marginBottom="5dp"/>
 
@@ -88,7 +100,7 @@
             android:layout_width="30dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_volume_high_24dp"
-            app:tint="?attr/colorOnPrimarySurface"
+            app:tint="#FFFFFF"
             android:layout_marginTop="5dp"
             tools:ignore="ContentDescription" />
 
@@ -101,8 +113,9 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
         android:layout_marginRight="45dp"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="105dp"
         android:visibility="gone">
 
         <TextView
@@ -111,7 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:text="100"
-            android:textColor="?attr/colorOnPrimarySurface"
+            android:textColor="#FFFFFF"
             android:textSize="15sp" />
 
         <ProgressBar
@@ -129,7 +142,7 @@
             android:layout_height="20dp"
             android:layout_marginTop="5dp"
             android:src="@drawable/ic_brightness_positive_24dp"
-            app:tint="?attr/colorOnPrimarySurface"
+            app:tint="#FFFFFF"
             tools:ignore="ContentDescription" />
 
     </LinearLayout>
