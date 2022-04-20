@@ -68,7 +68,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 PackageManager.FEATURE_PICTURE_IN_PICTURE,
             ) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
         }
-        binding.backArrowBtn.setOnClickListener { activity.finishAndRemoveTask() }
+        binding.backArrowBtnLandscape.setOnClickListener { activity.finishAndRemoveTask() }
+        binding.backArrowBtnPortrait.setOnClickListener { activity.finishAndRemoveTask() }
+
         binding.pipBtn.setOnClickListener { activity.startPiP() }
 
         // Lock and Unlock controls
@@ -76,16 +78,20 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.unlockBtn.setOnClickListener { activity.isLocked = false; toggleControls() }
 
         // Cycle, Long click controls
-        binding.cycleAudioBtn.setOnLongClickListener { pickAudio(); true }
+        binding.cycleAudioBtnLandscape.setOnLongClickListener { pickAudio(); true }
+        binding.cycleAudioBtnPortrait.setOnLongClickListener { pickAudio(); true }
+
         binding.cycleSpeedBtn.setOnLongClickListener { pickSpeed(); true }
-        binding.cycleSubsBtn.setOnLongClickListener { pickSub(); true }
+
+        binding.cycleSubsBtnLandscape.setOnLongClickListener { pickSub(); true }
+        binding.cycleSubsBtnPortrait.setOnLongClickListener { pickSub(); true }
 
         binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
 
         binding.nextBtn.setOnClickListener { activity.switchEpisode(false) }
         binding.prevBtn.setOnClickListener { activity.switchEpisode(true) }
 
-        binding.settingsBtn.setOnClickListener { showSettings() }
+        binding.settingsBtnPortrait.setOnClickListener { showSettings() }
     }
 
     private val animationHandler = Handler(Looper.getMainLooper())
@@ -146,10 +152,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     internal fun updateDecoderButton() {
-        if (binding.cycleDecoderBtn.visibility != View.VISIBLE) {
+        if (binding.cycleDecoderBtnLandscape.visibility != View.VISIBLE && binding.cycleDecoderBtnPortrait.visibility != View.VISIBLE) {
             return
         }
-        binding.cycleDecoderBtn.text = if (activity.player.hwdecActive) "HW" else "SW"
+        binding.cycleDecoderBtnLandscape.text = if (activity.player.hwdecActive) "HW" else "SW"
+        binding.cycleDecoderBtnPortrait.text = if (activity.player.hwdecActive) "HW" else "SW"
     }
 
     internal fun updateSpeedButton() {
@@ -290,10 +297,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     private fun showSettings() {
-        if (binding.settingsLayout.isVisible) {
-            fadeOutView(binding.settingsLayout)
-        } else {
-            fadeInView(binding.settingsLayout)
-        }
+        if (binding.settingsLayoutPortrait.isVisible) fadeOutView(binding.settingsLayoutPortrait)
+        else fadeInView(binding.settingsLayoutPortrait)
     }
 }
