@@ -25,6 +25,7 @@ import android.os.Looper
 import android.os.ParcelFileDescriptor
 import android.util.DisplayMetrics
 import android.util.Rational
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewAnimationUtils
@@ -220,17 +221,17 @@ class PlayerActivity :
             "seek" -> {
                 callback = seekTextRunnable
                 itemView = binding.seekView
-                delay = 500L
+                delay = 750L
             }
             "volume" -> {
                 callback = volumeViewRunnable
                 itemView = binding.volumeView
-                delay = 500L
+                delay = 750L
             }
             "brightness" -> {
                 callback = brightnessViewRunnable
                 itemView = binding.brightnessView
-                delay = 500L
+                delay = 750L
             }
             else -> return
         }
@@ -531,6 +532,46 @@ class PlayerActivity :
         if (newVolume == 0) binding.volumeImg.setImageResource(R.drawable.ic_volume_none_24dp)
         else binding.volumeImg.setImageResource(R.drawable.ic_volume_high_24dp)
         showGestureView("volume")
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_VOLUME_UP -> {
+                verticalScrollRight(1 / maxVolume.toFloat())
+                return true
+            }
+            KeyEvent.KEYCODE_VOLUME_DOWN -> {
+                verticalScrollRight(-1 / maxVolume.toFloat())
+                return true
+            }
+            KeyEvent.KEYCODE_MEDIA_NEXT -> {
+                switchEpisode(false)
+                return true
+            }
+            // Not entirely sure how to handle these KeyCodes yet, need to learn some more
+            /**
+             KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
+             switchEpisode(true)
+             return true
+             }
+             KeyEvent.KEYCODE_MEDIA_PLAY -> {
+             player.paused = true
+             doubleTapPlayPause()
+             return true
+             }
+             KeyEvent.KEYCODE_MEDIA_PAUSE -> {
+             player.paused = false
+             doubleTapPlayPause()
+             return true
+             }
+             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
+             doubleTapPlayPause()
+             return true
+             }
+             */
+            else -> {}
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     fun initSeek() {
