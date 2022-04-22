@@ -74,7 +74,8 @@
         android:layout_centerInParent="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="45dp"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/volumeText"
@@ -83,13 +84,13 @@
             android:text="10"
             android:gravity="left"
             android:textColor="#FFFFFF"
-            android:textSize="15sp"
+            android:textSize="14sp"
             android:layout_marginBottom="5dp"/>
 
         <ProgressBar
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:id="@+id/volumeBar"
-            android:layout_width="25dp"
+            android:layout_width="26dp"
             android:layout_height="125dp"
             android:max="15"
             android:progress="10"
@@ -116,7 +117,8 @@
         android:layout_centerInParent="true"
         android:layout_marginRight="45dp"
         android:layout_marginTop="105dp"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/brightnessText"
@@ -125,12 +127,12 @@
             android:layout_marginBottom="5dp"
             android:text="100"
             android:textColor="#FFFFFF"
-            android:textSize="15sp" />
+            android:textSize="14sp" />
 
         <ProgressBar
             android:id="@+id/brightnessBar"
             style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="25dp"
+            android:layout_width="26dp"
             android:layout_height="125dp"
             android:max="100"
             android:progress="10"
