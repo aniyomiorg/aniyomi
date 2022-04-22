@@ -728,14 +728,13 @@ class PlayerActivity :
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
         isInPipMode = isInPictureInPictureMode
-        binding.playerControls.hideControls(!isInPictureInPictureMode)
-        if (isInPictureInPictureMode) binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize / 2
-        else binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize * 2
+
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
 
         if (isInPictureInPictureMode) {
             // On Android TV it is required to hide controller in this PIP change callback
             binding.playerControls.hideControls(true)
+            binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize / 2
             mReceiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context?, intent: Intent?) {
                     if (intent == null || ACTION_MEDIA_CONTROL != intent.action) {
@@ -763,18 +762,18 @@ class PlayerActivity :
             }
             registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
         } else {
+            if (player.paused!!) binding.playerControls.hideControls(false)
+            binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize * 2
             if (mReceiver != null) {
                 unregisterReceiver(mReceiver)
                 mReceiver = null
             }
-            binding.playerControls.hideControls(false)
         }
     }
 
     @Suppress("DEPRECATION")
     internal fun startPiP() {
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            binding.playerControls.hideControls(true)
             player.paused?.let { updatePictureInPictureActions(!it) }
                 ?.let { this.enterPictureInPictureMode(it) }
         }

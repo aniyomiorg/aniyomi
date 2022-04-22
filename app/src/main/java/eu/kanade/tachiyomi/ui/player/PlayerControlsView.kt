@@ -131,7 +131,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     internal fun hideControls(hide: Boolean) {
-        binding.controlsView.isVisible = !hide
+        animationHandler.removeCallbacks(controlsViewRunnable)
+        if (hide) binding.controlsView.isVisible = false
+        else showAndFadeControls()
     }
 
     internal fun updatePlaybackPos(position: Int) {
@@ -166,6 +168,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun showAndFadeControls() {
         val itemView = if (!activity.isLocked) binding.controlsView else binding.lockedView
+        if (!itemView.isVisible) fadeInView(itemView)
         itemView.visibility = View.VISIBLE
         resetControlsFade()
     }
