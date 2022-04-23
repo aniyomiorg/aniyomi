@@ -6,8 +6,10 @@ import com.bluelinelabs.conductor.Controller
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Manga
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.util.isLocal
+import uy.kohesive.injekt.injectLazy
 
 class DeleteLibraryMangasDialog<T>(bundle: Bundle? = null) :
     DialogController(bundle) where T : Controller, T : DeleteLibraryMangasDialog.Listener {
@@ -18,9 +20,10 @@ class DeleteLibraryMangasDialog<T>(bundle: Bundle? = null) :
         this.mangas = mangas
         targetController = target
     }
+    private val preferences: PreferencesHelper by injectLazy()
 
     override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-        val canDeleteChapters = mangas.any { !it.isLocal() }
+        val canDeleteChapters = if (preferences.allowDeleteFromLocalSources()) true else mangas.any { !it.isLocal() }
         val items = when (canDeleteChapters) {
             true -> listOf(
                 R.string.manga_from_library,

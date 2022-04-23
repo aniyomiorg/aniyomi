@@ -256,8 +256,13 @@ class DownloadManager(
 
             val chapterDirs = provider.findChapterDirs(filteredChapters, manga, source)
             chapterDirs.forEach { it.delete() }
-            cache.removeChapters(filteredChapters, manga)
-            if (cache.getDownloadCount(manga) == 0) { // Delete manga directory if empty
+
+            if (source.id != 0L) {
+                cache.removeChapters(filteredChapters, manga)
+                if (cache.getDownloadCount(manga) == 0) { // Delete anime directory if empty
+                    chapterDirs.firstOrNull()?.parentFile?.delete()
+                }
+            } else if (provider.findMangaDir(manga, source)?.listFiles()?.filter { it.isDirectory }!!.isEmpty()) {
                 chapterDirs.firstOrNull()?.parentFile?.delete()
             }
         }

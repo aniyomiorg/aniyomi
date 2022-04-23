@@ -1084,7 +1084,7 @@ class MangaController :
         val chapters = getSelectedChapters()
         if (chapters.isEmpty()) return
         toolbar.findToolbarItem(R.id.action_download)?.isVisible = !isLocalSource && chapters.any { !it.isDownloaded }
-        toolbar.findToolbarItem(R.id.action_delete)?.isVisible = !isLocalSource && chapters.any { it.isDownloaded }
+        toolbar.findToolbarItem(R.id.action_delete)?.isVisible = if (preferences.allowDeleteFromLocalSources()) isLocalSource || chapters.any { it.isDownloaded } else !isLocalSource && chapters.any { !it.isDownloaded }
         toolbar.findToolbarItem(R.id.action_bookmark)?.isVisible = chapters.any { !it.chapter.bookmark }
         toolbar.findToolbarItem(R.id.action_remove_bookmark)?.isVisible = chapters.all { it.chapter.bookmark }
         toolbar.findToolbarItem(R.id.action_mark_as_read)?.isVisible = chapters.any { !it.chapter.read }
@@ -1228,6 +1228,7 @@ class MangaController :
         chapters.forEach {
             chaptersAdapter?.updateItem(it, it)
         }
+        if (source?.id == 0L) presenter.fetchChaptersFromSource(manualFetch = true)
     }
 
     fun onChaptersDeletedError(error: Throwable) {

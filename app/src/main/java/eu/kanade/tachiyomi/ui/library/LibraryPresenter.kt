@@ -13,7 +13,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.SManga
-import eu.kanade.tachiyomi.source.online.HttpSource
+// import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.ui.library.setting.SortDirectionSetting
 import eu.kanade.tachiyomi.ui.library.setting.SortModeSetting
@@ -533,7 +533,7 @@ class LibraryPresenter(
 
             if (deleteChapters) {
                 mangaToDelete.forEach { manga ->
-                    val source = sourceManager.get(manga.source) as? HttpSource
+                    val source = sourceManager.get(manga.source) // as? HttpSource
                     if (source != null) {
                         downloadManager.deleteManga(manga, source)
                     }
