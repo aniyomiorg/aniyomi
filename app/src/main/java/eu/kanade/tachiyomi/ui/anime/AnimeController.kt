@@ -1432,6 +1432,7 @@ class AnimeController :
         episodes.forEach {
             episodesAdapter?.updateItem(it, it)
         }
+        //TODO: Fix multi item delete visual bug
         if (source?.id == 0L) presenter.fetchEpisodesFromSource(manualFetch = true)
     }
 
