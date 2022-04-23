@@ -44,6 +44,15 @@ class PreferencesHelper(val context: Context) {
         "backup",
     ).toUri()
 
+    private val defaultAniyomiDir = File(
+        Environment.getExternalStorageDirectory().absolutePath + File.separator,
+        context.getString(R.string.app_name),
+    ).toUri()
+
+    fun aniyomiDirectory() = flowPrefs.getString("aniyomi_directory", defaultAniyomiDir.toString())
+
+    fun allowDeleteFromLocalSources() = prefs.getBoolean(Keys.removeLocalSourceItems, false)
+
     fun startScreen() = prefs.getInt(Keys.startScreen, 1)
 
     fun confirmExit() = prefs.getBoolean(Keys.confirmExit, false)

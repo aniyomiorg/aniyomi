@@ -143,6 +143,11 @@ class SettingsDownloadController : SettingsController() {
                         }
                     }.launchIn(viewScope)
             }
+            switchPreference {
+                key = Keys.removeLocalSourceItems
+                titleRes = R.string.pref_remove_local_source_items
+                defaultValue = false
+            }
         }
 
         preferenceCategory {

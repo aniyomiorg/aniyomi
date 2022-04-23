@@ -1253,7 +1253,7 @@ class AnimeController :
         val episodes = getSelectedEpisodes()
         if (episodes.isEmpty()) return
         toolbar.findToolbarItem(R.id.action_download)?.isVisible = !isLocalSource && episodes.any { !it.isDownloaded }
-        toolbar.findToolbarItem(R.id.action_delete)?.isVisible = !isLocalSource && episodes.any { it.isDownloaded }
+        toolbar.findToolbarItem(R.id.action_delete)?.isVisible = if (preferences.allowDeleteFromLocalSources()) isLocalSource || episodes.any { it.isDownloaded } else !isLocalSource && episodes.any { !it.isDownloaded }
         toolbar.findToolbarItem(R.id.action_bookmark)?.isVisible = episodes.any { !it.episode.bookmark }
         toolbar.findToolbarItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.episode.bookmark }
         toolbar.findToolbarItem(R.id.action_mark_as_read)?.isVisible = episodes.any { !it.episode.seen }
@@ -1432,6 +1432,7 @@ class AnimeController :
         episodes.forEach {
             episodesAdapter?.updateItem(it, it)
         }
+        if (source?.id == 0L) presenter.fetchEpisodesFromSource(manualFetch = true)
     }
 
     fun onEpisodesDeletedError(error: Throwable) {

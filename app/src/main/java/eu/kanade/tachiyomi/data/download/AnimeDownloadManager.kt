@@ -261,11 +261,15 @@ class AnimeDownloadManager(
         }
         launchIO {
             removeFromDownloadQueue(filteredEpisodes)
-
             val episodeDirs = provider.findEpisodeDirs(filteredEpisodes, anime, source)
             episodeDirs.forEach { it.delete() }
-            cache.removeEpisodes(filteredEpisodes, anime)
-            if (cache.getDownloadCount(anime) == 0) { // Delete anime directory if empty
+
+            if (source.id != 0L) {
+                cache.removeEpisodes(filteredEpisodes, anime)
+                if (cache.getDownloadCount(anime) == 0) { // Delete anime directory if empty
+                    episodeDirs.firstOrNull()?.parentFile?.delete()
+                }
+            } else if (provider.findAnimeDir(anime, source)?.listFiles()?.filter { it.name!!.endsWith(".mp4") || it.name!!.endsWith(".mkv") }!!.isEmpty()) {
                 episodeDirs.firstOrNull()?.parentFile?.delete()
             }
         }
@@ -300,7 +304,7 @@ class AnimeDownloadManager(
         launchIO {
             downloader.queue.remove(anime)
             provider.findAnimeDir(anime, source)?.delete()
-            cache.removeAnime(anime)
+            if (source.id != 0L) cache.removeAnime(anime)
         }
     }
 

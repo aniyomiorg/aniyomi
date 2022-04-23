@@ -47,6 +47,8 @@ object PreferenceKeys {
 
     const val removeBookmarkedChapters = "pref_remove_bookmarked"
 
+    const val removeLocalSourceItems = "pref_remove_local_source"
+
     const val filterDownloaded = "pref_filter_library_downloaded"
 
     const val filterUnread = "pref_filter_library_unread"

@@ -37,9 +37,20 @@ class AnimeDownloadProvider(private val context: Context) {
         dir
     }
 
+    /**
+     * The root directory for local anime.
+     */
+    private var aniyomiDir = preferences.aniyomiDirectory().get().let {
+        val dir = UniFile.fromUri(context, it.toUri())
+        dir
+    }
+
     init {
         preferences.downloadsDirectory().asFlow()
             .onEach { downloadsDir = UniFile.fromUri(context, it.toUri()) }
+            .launchIn(scope)
+        preferences.aniyomiDirectory().asFlow()
+            .onEach { aniyomiDir = UniFile.fromUri(context, it.toUri()) }
             .launchIn(scope)
     }
 
@@ -50,10 +61,16 @@ class AnimeDownloadProvider(private val context: Context) {
      * @param source the source of the anime.
      */
     internal fun getAnimeDir(anime: Anime, source: AnimeSource): UniFile {
-        try {
-            return downloadsDir
-                .createDirectory(getSourceDirName(source))
-                .createDirectory(getAnimeDirName(anime))
+        return try {
+            if (source.id == 0L) {
+                aniyomiDir
+                    .createDirectory(getSourceDirName(source))
+                    .createDirectory(getAnimeDirName(anime))
+            } else {
+                downloadsDir
+                    .createDirectory(getSourceDirName(source))
+                    .createDirectory(getAnimeDirName(anime))
+            }
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e) { "Invalid download directory" }
             throw Exception(context.getString(R.string.invalid_download_dir))
@@ -66,7 +83,8 @@ class AnimeDownloadProvider(private val context: Context) {
      * @param source the source to query.
      */
     fun findSourceDir(source: AnimeSource): UniFile? {
-        return downloadsDir.findFile(getSourceDirName(source), true)
+        return if (source.id == 0L) aniyomiDir.findFile(getSourceDirName(source), true)
+        else downloadsDir.findFile(getSourceDirName(source), true)
     }
 
     /**
@@ -104,9 +122,15 @@ class AnimeDownloadProvider(private val context: Context) {
     fun findEpisodeDirs(episodes: List<Episode>, anime: Anime, source: AnimeSource): List<UniFile> {
         val animeDir = findAnimeDir(anime, source) ?: return emptyList()
         return episodes.mapNotNull { episode ->
-            getValidEpisodeDirNames(episode).asSequence()
-                .mapNotNull { animeDir.findFile(it) }
-                .firstOrNull()
+            if (source.id == 0L) {
+                listOf(episode.name).asSequence()
+                    .mapNotNull { animeDir.findFile("$it.mp4") ?: animeDir.findFile("$it.mkv") }
+                    .firstOrNull()
+            } else {
+                getValidEpisodeDirNames(episode).asSequence()
+                    .mapNotNull { animeDir.findFile(it) }
+                    .firstOrNull()
+            }
         }
     }
 
@@ -116,7 +140,8 @@ class AnimeDownloadProvider(private val context: Context) {
      * @param source the source to query.
      */
     fun getSourceDirName(source: AnimeSource): String {
-        return DiskUtil.buildValidFilename(source.toString())
+        return if (source.id == 0L) DiskUtil.buildValidFilename("localanime")
+        else DiskUtil.buildValidFilename(source.toString())
     }
 
     /**
