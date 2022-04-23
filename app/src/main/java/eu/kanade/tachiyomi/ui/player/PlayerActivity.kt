@@ -13,6 +13,8 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Color
 import android.graphics.drawable.Icon
 import android.media.AudioFocusRequest
@@ -25,6 +27,7 @@ import android.os.Looper
 import android.os.ParcelFileDescriptor
 import android.util.DisplayMetrics
 import android.util.Rational
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewAnimationUtils
@@ -220,17 +223,17 @@ class PlayerActivity :
             "seek" -> {
                 callback = seekTextRunnable
                 itemView = binding.seekView
-                delay = 500L
+                delay = 750L
             }
             "volume" -> {
                 callback = volumeViewRunnable
                 itemView = binding.volumeView
-                delay = 500L
+                delay = 750L
             }
             "brightness" -> {
                 callback = brightnessViewRunnable
                 itemView = binding.brightnessView
-                delay = 500L
+                delay = 750L
             }
             else -> return
         }
@@ -299,18 +302,6 @@ class PlayerActivity :
 
         volumeControlStream = AudioManager.STREAM_MUSIC
 
-        val dm = DisplayMetrics()
-        windowManager.defaultDisplay.getRealMetrics(dm)
-        width = dm.widthPixels
-        height = dm.heightPixels
-
-        val gestures = Gestures(this, width.toFloat(), height.toFloat())
-        mDetector = GestureDetectorCompat(this, gestures)
-        player.setOnTouchListener { v, event ->
-            gestures.onTouch(v, event)
-            mDetector.onTouchEvent(event)
-        }
-
         if (presenter?.needsInit() == true) {
             val anime = intent.extras!!.getLong("anime", -1)
             val episode = intent.extras!!.getLong("episode", -1)
@@ -322,6 +313,31 @@ class PlayerActivity :
         }
 
         playerIsDestroyed = false
+    }
+
+    /**
+     * Sets up the gestures to be used
+     */
+
+    @Suppress("DEPRECATION")
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupGestures() {
+        val dm = DisplayMetrics()
+        windowManager.defaultDisplay.getRealMetrics(dm)
+        width = dm.widthPixels
+        height = dm.heightPixels
+
+        val gestures = Gestures(this, width.toFloat(), height.toFloat())
+        mDetector = GestureDetectorCompat(this, gestures)
+        player.setOnTouchListener { v, event ->
+            gestures.onTouch(v, event)
+            mDetector.onTouchEvent(event)
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (newConfig.orientation == ORIENTATION_PORTRAIT || newConfig.orientation == ORIENTATION_LANDSCAPE) launchUI { setupGestures(); setViewMode() }
     }
 
     /**
@@ -402,7 +418,7 @@ class PlayerActivity :
                 MPVLib.setOptionString("panscan", "0.0")
             }
             0 -> {
-                val newAspect = "${binding.root.width}/${binding.root.height}"
+                val newAspect = "$width/$height"
                 MPVLib.setOptionString("video-aspect-override", newAspect)
                 MPVLib.setOptionString("panscan", "0.0")
             }
@@ -520,6 +536,46 @@ class PlayerActivity :
         if (newVolume == 0) binding.volumeImg.setImageResource(R.drawable.ic_volume_none_24dp)
         else binding.volumeImg.setImageResource(R.drawable.ic_volume_high_24dp)
         showGestureView("volume")
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_VOLUME_UP -> {
+                verticalScrollRight(1 / maxVolume.toFloat())
+                return true
+            }
+            KeyEvent.KEYCODE_VOLUME_DOWN -> {
+                verticalScrollRight(-1 / maxVolume.toFloat())
+                return true
+            }
+            KeyEvent.KEYCODE_MEDIA_NEXT -> {
+                switchEpisode(false)
+                return true
+            }
+            // Not entirely sure how to handle these KeyCodes yet, need to learn some more
+            /**
+             KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
+             switchEpisode(true)
+             return true
+             }
+             KeyEvent.KEYCODE_MEDIA_PLAY -> {
+             player.paused = true
+             doubleTapPlayPause()
+             return true
+             }
+             KeyEvent.KEYCODE_MEDIA_PAUSE -> {
+             player.paused = false
+             doubleTapPlayPause()
+             return true
+             }
+             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
+             doubleTapPlayPause()
+             return true
+             }
+             */
+            else -> {}
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     fun initSeek() {
@@ -717,14 +773,13 @@ class PlayerActivity :
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
         isInPipMode = isInPictureInPictureMode
-        binding.playerControls.hideControls(!isInPictureInPictureMode)
-        if (isInPictureInPictureMode) binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize / 2
-        else binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize * 2
+
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
 
         if (isInPictureInPictureMode) {
             // On Android TV it is required to hide controller in this PIP change callback
             binding.playerControls.hideControls(true)
+            binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize / 2
             mReceiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context?, intent: Intent?) {
                     if (intent == null || ACTION_MEDIA_CONTROL != intent.action) {
@@ -752,18 +807,18 @@ class PlayerActivity :
             }
             registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
         } else {
+            if (player.paused!!) binding.playerControls.hideControls(false)
+            binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize * 2
             if (mReceiver != null) {
                 unregisterReceiver(mReceiver)
                 mReceiver = null
             }
-            binding.playerControls.hideControls(false)
         }
     }
 
     @Suppress("DEPRECATION")
     internal fun startPiP() {
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            binding.playerControls.hideControls(true)
             player.paused?.let { updatePictureInPictureActions(!it) }
                 ?.let { this.enterPictureInPictureMode(it) }
         }
@@ -856,7 +911,6 @@ class PlayerActivity :
                 val intPos = pos / 1000F
                 MPVLib.command(arrayOf("set", "start", "$intPos"))
             }
-            setViewMode()
             subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
             MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
@@ -1007,6 +1061,7 @@ class PlayerActivity :
                 binding.playerControls.binding.controlsTopLandscape.visibility = View.GONE
             }
         }
+        launchUI { setupGestures(); setViewMode() }
     }
 
     // mpv events

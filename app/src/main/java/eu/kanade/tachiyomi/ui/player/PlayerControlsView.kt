@@ -74,8 +74,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.pipBtn.setOnClickListener { activity.startPiP() }
 
         // Lock and Unlock controls
-        binding.lockBtn.setOnClickListener { activity.isLocked = true; toggleControls() }
-        binding.unlockBtn.setOnClickListener { activity.isLocked = false; toggleControls() }
+        binding.lockBtn.setOnClickListener { lockControls(true) }
+        binding.unlockBtn.setOnClickListener { lockControls(false) }
 
         // Cycle, Long click controls
         binding.cycleAudioBtnLandscape.setOnLongClickListener { pickAudio(); true }
@@ -105,9 +105,13 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
+    private fun lockControls(locked: Boolean) {
+        activity.isLocked = locked
+        toggleControls()
+    }
+
     internal fun toggleControls() {
         if (activity.isLocked) {
-            // Hide controls
             binding.controlsView.isVisible = false
 
             if (!binding.lockedView.isVisible && !activity.player.paused!!) {
@@ -131,7 +135,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     internal fun hideControls(hide: Boolean) {
-        binding.controlsView.isVisible = !hide
+        animationHandler.removeCallbacks(controlsViewRunnable)
+        if (hide) binding.controlsView.isVisible = false
+        else showAndFadeControls()
     }
 
     internal fun updatePlaybackPos(position: Int) {
@@ -166,6 +172,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun showAndFadeControls() {
         val itemView = if (!activity.isLocked) binding.controlsView else binding.lockedView
+        if (!itemView.isVisible) fadeInView(itemView)
         itemView.visibility = View.VISIBLE
         resetControlsFade()
     }
