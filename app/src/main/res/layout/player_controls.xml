@@ -392,6 +392,7 @@
                             android:layout_height="match_parent"
                             android:background="?android:attr/selectableItemBackground"
                             android:contentDescription="@string/action_player_pip"
+                            android:onClick="startPiP"
                             android:src="@drawable/ic_picture_in_picture_24dp"
                             android:visibility="visible" />
 

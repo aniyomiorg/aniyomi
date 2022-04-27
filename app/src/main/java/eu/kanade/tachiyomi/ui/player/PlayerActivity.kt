@@ -92,6 +92,7 @@ class PlayerActivity :
     }
 
     private var isInPipMode: Boolean = false
+    private var isPipStarted: Boolean = false
 
     private var mReceiver: BroadcastReceiver? = null
 
@@ -311,8 +312,44 @@ class PlayerActivity :
             }
             presenter.init(anime, episode)
         }
+        val dm = DisplayMetrics()
+        windowManager.defaultDisplay.getRealMetrics(dm)
+        width = dm.widthPixels
+        height = dm.heightPixels
+        if (width <= height) {
+            switchOrientation(false)
+        } else {
+            switchOrientation(true)
+        }
 
         playerIsDestroyed = false
+    }
+
+    /**
+     * Function to handle UI during orientation changes
+     */
+
+    private fun switchOrientation(isLandscape: Boolean) {
+        launchUI {
+            if (isLandscape) {
+                if (width <= height) {
+                    width = height.also { height = width }
+                }
+                binding.playerControls.binding.controlsTopLandscape.visibility = View.VISIBLE
+                binding.playerControls.binding.controlsTopPortrait.visibility = View.GONE
+                setupGestures()
+                setViewMode()
+            } else {
+                if (width >= height) {
+                    width = height.also { height = width }
+                }
+                binding.playerControls.binding.controlsTopPortrait.visibility = View.VISIBLE
+                binding.playerControls.binding.controlsTopLandscape.visibility = View.GONE
+                setupGestures()
+                setViewMode()
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
+        }
     }
 
     /**
@@ -322,11 +359,6 @@ class PlayerActivity :
     @Suppress("DEPRECATION")
     @SuppressLint("ClickableViewAccessibility")
     private fun setupGestures() {
-        val dm = DisplayMetrics()
-        windowManager.defaultDisplay.getRealMetrics(dm)
-        width = dm.widthPixels
-        height = dm.heightPixels
-
         val gestures = Gestures(this, width.toFloat(), height.toFloat())
         mDetector = GestureDetectorCompat(this, gestures)
         player.setOnTouchListener { v, event ->
@@ -337,7 +369,13 @@ class PlayerActivity :
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        if (newConfig.orientation == ORIENTATION_PORTRAIT || newConfig.orientation == ORIENTATION_LANDSCAPE) launchUI { setupGestures(); setViewMode() }
+        if (!isPipStarted) {
+            if (newConfig.orientation == ORIENTATION_LANDSCAPE) {
+                switchOrientation(true)
+            } else if (newConfig.orientation == ORIENTATION_PORTRAIT) {
+                switchOrientation(false)
+            }
+        }
     }
 
     /**
@@ -363,7 +401,7 @@ class PlayerActivity :
         when {
             epTxt == "Invalid" -> return
             epTxt == null -> { launchUI { toast(errorRes) }; showLoadingIndicator(false) }
-            isInPipMode -> launchUI { toast(epTxt) }
+            isInPipMode -> if (preferences.pipEpisodeToasts()) launchUI { toast(epTxt) }
         }
     }
 
@@ -445,12 +483,8 @@ class PlayerActivity :
     fun rotatePlayer(view: View) {
         if (this.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT) {
             this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-            binding.playerControls.binding.controlsTopLandscape.isVisible = true
-            binding.playerControls.binding.controlsTopPortrait.isVisible = false
         } else {
             this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
-            binding.playerControls.binding.controlsTopLandscape.isVisible = false
-            binding.playerControls.binding.controlsTopPortrait.isVisible = true
         }
     }
 
@@ -773,7 +807,7 @@ class PlayerActivity :
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
         isInPipMode = isInPictureInPictureMode
-
+        isPipStarted = isInPipMode
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
 
         if (isInPictureInPictureMode) {
@@ -796,11 +830,9 @@ class PlayerActivity :
                         }
                         CONTROL_TYPE_PREVIOUS -> {
                             switchEpisode(true)
-                            player.paused?.let { updatePictureInPictureActions(!it) }
                         }
                         CONTROL_TYPE_NEXT -> {
                             switchEpisode(false)
-                            player.paused?.let { updatePictureInPictureActions(!it) }
                         }
                     }
                 }
@@ -816,9 +848,10 @@ class PlayerActivity :
         }
     }
 
-    @Suppress("DEPRECATION")
-    internal fun startPiP() {
+    @Suppress("DEPRECATION", "UNUSED_PARAMETER")
+    fun startPiP(view: View) {
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            isPipStarted = true
             player.paused?.let { updatePictureInPictureActions(!it) }
                 ?.let { this.enterPictureInPictureMode(it) }
         }
@@ -886,7 +919,7 @@ class PlayerActivity :
 
                 ),
             )
-            .setAspectRatio(player.videoAspect?.times(10000)?.let { Rational(it.toInt(), 10000) })
+            .setAspectRatio(MPVLib.getPropertyInt("video-params/dw")?.let { width -> MPVLib.getPropertyInt("video-params/dh")?.let { height -> Rational(width, height) } })
             .build()
         setPictureInPictureParams(mPictureInPictureParams)
         return mPictureInPictureParams
@@ -1046,22 +1079,16 @@ class PlayerActivity :
                     .coerceAtLeast(0)
             }
         }
-        launchUI { showLoadingIndicator(false) }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
-        if (player.videoW!! / player.videoH!! >= 1) {
-            this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-            launchUI {
-                binding.playerControls.binding.controlsTopLandscape.visibility = View.VISIBLE
-                binding.playerControls.binding.controlsTopPortrait.visibility = View.GONE
-            }
-        } else {
-            this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
-            launchUI {
-                binding.playerControls.binding.controlsTopPortrait.visibility = View.VISIBLE
-                binding.playerControls.binding.controlsTopLandscape.visibility = View.GONE
+        launchUI {
+            showLoadingIndicator(false)
+            if (player.videoW!! / player.videoH!! >= 1) {
+                this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                switchOrientation(true)
+            } else {
+                this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+                switchOrientation(false)
             }
         }
-        launchUI { setupGestures(); setViewMode() }
     }
 
     // mpv events
