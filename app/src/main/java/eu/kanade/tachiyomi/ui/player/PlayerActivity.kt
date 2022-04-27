@@ -1089,7 +1089,6 @@ class PlayerActivity :
                 switchOrientation(false)
             }
         }
-        launchUI { setupGestures(); setViewMode() }
     }
 
     // mpv events
