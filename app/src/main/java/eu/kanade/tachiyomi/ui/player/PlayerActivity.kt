@@ -401,7 +401,7 @@ class PlayerActivity :
         when {
             epTxt == "Invalid" -> return
             epTxt == null -> { launchUI { toast(errorRes) }; showLoadingIndicator(false) }
-            isInPipMode -> launchUI { toast(epTxt) }
+            isInPipMode -> if (preferences.pipEpisodeToasts()) launchUI { toast(epTxt) }
         }
     }
 

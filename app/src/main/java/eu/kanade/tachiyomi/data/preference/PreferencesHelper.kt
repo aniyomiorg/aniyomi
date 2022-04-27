@@ -118,6 +118,8 @@ class PreferencesHelper(val context: Context) {
 
     fun defaultReadingMode() = prefs.getInt(Keys.defaultReadingMode, ReadingModeType.RIGHT_TO_LEFT.flagValue)
 
+    fun pipEpisodeToasts() = prefs.getBoolean(Keys.pipEpisodeToasts, true)
+
     fun defaultOrientationType() = prefs.getInt(Keys.defaultOrientationType, OrientationType.FREE.flagValue)
 
     fun defaultPlayerOrientationType() = prefs.getInt(Keys.defaultPlayerOrientationType, OrientationType.FREE.flagValue)

@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.setting
 
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.preference.PreferenceScreen
 import eu.kanade.tachiyomi.R
@@ -67,6 +68,14 @@ class SettingsPlayerController : SettingsController() {
             switchPreference {
                 key = "player_fullscreen"
                 titleRes = R.string.pref_player_fullscreen
+                defaultValue = true
+            }
+        }
+
+        if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            switchPreference {
+                key = Keys.pipEpisodeToasts
+                titleRes = R.string.pref_pip_episode_toasts
                 defaultValue = true
             }
         }

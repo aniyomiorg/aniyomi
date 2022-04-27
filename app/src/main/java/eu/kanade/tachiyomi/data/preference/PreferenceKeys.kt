@@ -11,6 +11,8 @@ object PreferenceKeys {
 
     const val defaultReadingMode = "pref_default_reading_mode_key"
 
+    const val pipEpisodeToasts = "pref_pip_episode_toasts"
+
     const val defaultOrientationType = "pref_default_orientation_type_key"
 
     const val defaultPlayerOrientationType = "pref_default_player_orientation_type_key"
