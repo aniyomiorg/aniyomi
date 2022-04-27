@@ -845,7 +845,6 @@ class PlayerActivity :
                 unregisterReceiver(mReceiver)
                 mReceiver = null
             }
-            // launchUI { setupGestures(); setViewMode() }
         }
     }
 
@@ -1090,6 +1089,7 @@ class PlayerActivity :
                 switchOrientation(false)
             }
         }
+        launchUI { setupGestures(); setViewMode() }
     }
 
     // mpv events
