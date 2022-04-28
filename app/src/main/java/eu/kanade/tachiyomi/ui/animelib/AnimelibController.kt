@@ -446,7 +446,7 @@ class AnimelibController(
     }
 
     override fun onCreateActionToolbar(menuInflater: MenuInflater, menu: Menu) {
-        menuInflater.inflate(R.menu.library_selection, menu)
+        menuInflater.inflate(R.menu.animelib_selection, menu)
     }
 
     override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
@@ -470,8 +470,8 @@ class AnimelibController(
         when (item.itemId) {
             R.id.action_move_to_category -> showChangeAnimeCategoriesDialog()
             R.id.action_download_unseen -> downloadUnseenEpisodes()
-            R.id.action_mark_as_read -> markReadStatus(true)
-            R.id.action_mark_as_unread -> markReadStatus(false)
+            R.id.action_mark_as_seen -> markReadStatus(true)
+            R.id.action_mark_as_unseen -> markReadStatus(false)
             R.id.action_delete -> showDeleteAnimeDialog()
             R.id.action_select_all -> selectAllCategoryAnime()
             R.id.action_select_inverse -> selectInverseCategoryAnime()
