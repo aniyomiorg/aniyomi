@@ -20,7 +20,7 @@
         tools:ignore="AlwaysShowAction" />
 
     <item
-        android:id="@+id/action_mark_as_read"
+        android:id="@+id/action_mark_as_seen"
         android:icon="@drawable/ic_done_24dp"
         android:title="@string/action_mark_as_seen"
         app:iconTint="?attr/colorOnSurface"
@@ -28,7 +28,7 @@
         tools:ignore="AlwaysShowAction" />
 
     <item
-        android:id="@+id/action_mark_as_unread"
+        android:id="@+id/action_mark_as_unseen"
         android:icon="@drawable/ic_done_outline_24dp"
         android:title="@string/action_mark_as_unseen"
         app:iconTint="?attr/colorOnSurface"
