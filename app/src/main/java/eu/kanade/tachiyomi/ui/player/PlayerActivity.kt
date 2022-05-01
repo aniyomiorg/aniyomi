@@ -607,12 +607,13 @@ class PlayerActivity :
                 verticalScrollRight(-1 / maxVolume.toFloat())
                 return true
             }
-            KeyEvent.KEYCODE_MEDIA_NEXT -> {
-                switchEpisode(false)
-                return true
-            }
             // Not entirely sure how to handle these KeyCodes yet, need to learn some more
             /**
+             KeyEvent.KEYCODE_MEDIA_NEXT -> {
+             switchEpisode(false)
+             return true
+             }
+
              KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
              switchEpisode(true)
              return true
@@ -789,6 +790,7 @@ class PlayerActivity :
     }
 
     private fun updatePlaybackStatus(paused: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) updatePictureInPictureActions(!paused)
         val r = if (paused) R.drawable.ic_play_arrow_80dp else R.drawable.ic_pause_80dp
         binding.playerControls.binding.playBtn.setImageResource(r)
 
@@ -847,11 +849,9 @@ class PlayerActivity :
                     when (intent.getIntExtra(EXTRA_CONTROL_TYPE, 0)) {
                         CONTROL_TYPE_PLAY -> {
                             player.paused = false
-                            updatePictureInPictureActions(true)
                         }
                         CONTROL_TYPE_PAUSE -> {
                             player.paused = true
-                            updatePictureInPictureActions(false)
                         }
                         CONTROL_TYPE_PREVIOUS -> {
                             switchEpisode(true)
