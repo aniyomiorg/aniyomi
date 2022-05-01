@@ -35,6 +35,7 @@ import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.WindowInsetsCompat
@@ -323,6 +324,30 @@ class PlayerActivity :
         }
 
         playerIsDestroyed = false
+    }
+
+    /**
+     * Class to override [MaterialAlertDialogBuilder] to hide the navigation and status bars
+     */
+
+    internal inner class HideBarsMaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(context) {
+        override fun create(): AlertDialog {
+            return super.create().apply {
+                val window = this.window ?: return@apply
+                val alertWindowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
+                alertWindowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+                alertWindowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+            }
+        }
+
+        override fun show(): AlertDialog {
+            return super.show().apply {
+                val window = this.window ?: return@apply
+                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+            }
+        }
     }
 
     /**
@@ -664,7 +689,7 @@ class PlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     fun openQuality(view: View) {
         if (currentVideoList?.isNotEmpty() != true) return
-        val qualityAlert = MaterialAlertDialogBuilder(this)
+        val qualityAlert = HideBarsMaterialAlertDialogBuilder(this)
 
         qualityAlert.setTitle(R.string.playback_quality_dialog_title)
 
