@@ -14,7 +14,6 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
@@ -222,7 +221,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         if (activity.audioTracks.isEmpty()) return
         val restore = pauseForDialog()
 
-        with(MaterialAlertDialogBuilder(context)) {
+        with(activity.HideBarsMaterialAlertDialogBuilder(context)) {
             setSingleChoiceItems(
                 activity.audioTracks.map { it.lang }.toTypedArray(),
                 activity.selectedAudio,
@@ -237,7 +236,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 dialog.dismiss()
             }
             setOnDismissListener { restore() }
-            create().show()
+            create()
+            show()
         }
     }
 
@@ -245,7 +245,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         if (activity.subTracks.isEmpty()) return
         val restore = pauseForDialog()
 
-        with(MaterialAlertDialogBuilder(context)) {
+        with(activity.HideBarsMaterialAlertDialogBuilder(context)) {
             setSingleChoiceItems(
                 activity.subTracks.map { it.lang }.toTypedArray(),
                 activity.selectedSub,
@@ -259,7 +259,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 dialog.dismiss()
             }
             setOnDismissListener { restore() }
-            create().show()
+            create()
+            show()
         }
     }
 
@@ -279,7 +280,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         @StringRes titleRes: Int,
         restoreState: StateRestoreCallback,
     ) {
-        val dialog = with(MaterialAlertDialogBuilder(context)) {
+        with(activity.HideBarsMaterialAlertDialogBuilder(context)) {
             setTitle(titleRes)
             setView(picker.buildView(LayoutInflater.from(context)))
             setPositiveButton(R.string.dialog_ok) { _, _ ->
@@ -295,10 +296,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             setNegativeButton(R.string.dialog_cancel) { dialog, _ -> dialog.cancel() }
             setOnDismissListener { restoreState() }
             create()
+            show()
         }
-
         picker.number = MPVLib.getPropertyDouble("speed")
-        dialog.show()
     }
 
     private fun showSettings() {
