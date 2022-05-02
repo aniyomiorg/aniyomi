@@ -67,8 +67,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 PackageManager.FEATURE_PICTURE_IN_PICTURE,
             ) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
         }
-        binding.backArrowBtnLandscape.setOnClickListener { activity.finishAndRemoveTask() }
-        binding.backArrowBtnPortrait.setOnClickListener { activity.finishAndRemoveTask() }
+        binding.backArrowBtnLandscape.setOnClickListener { activity.onBackPressed() }
+        binding.backArrowBtnPortrait.setOnClickListener { activity.onBackPressed() }
 
         // Lock and Unlock controls
         binding.lockBtn.setOnClickListener { lockControls(true) }
