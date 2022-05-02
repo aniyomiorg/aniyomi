@@ -809,9 +809,6 @@ class PlayerActivity :
             player.destroy()
         }
         abandonAudioFocus()
-        if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            finishAndRemoveTask()
-        }
         super.onDestroy()
     }
 
@@ -1129,8 +1126,10 @@ class PlayerActivity :
     private fun eventPropertyUi(property: String, value: Boolean) {
         when (property) {
             "pause" -> {
-                setAudioFocus(value)
-                updatePlaybackStatus(value)
+                if (!isFinishing) {
+                    setAudioFocus(value)
+                    updatePlaybackStatus(value)
+                }
             }
         }
     }
