@@ -2,9 +2,13 @@ package eu.kanade.tachiyomi.ui.setting
 
 import android.content.pm.PackageManager
 import android.os.Build
+import android.text.InputType.TYPE_CLASS_TEXT
+import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
+import android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
 import androidx.preference.PreferenceScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.preference.defaultValue
+import eu.kanade.tachiyomi.util.preference.editTextPreference
 import eu.kanade.tachiyomi.util.preference.entriesRes
 import eu.kanade.tachiyomi.util.preference.listPreference
 import eu.kanade.tachiyomi.util.preference.switchPreference
@@ -77,6 +81,14 @@ class SettingsPlayerController : SettingsController() {
                 key = Keys.pipEpisodeToasts
                 titleRes = R.string.pref_pip_episode_toasts
                 defaultValue = true
+            }
+        }
+
+        editTextPreference {
+            key = Keys.mpvConf
+            titleRes = R.string.pref_mpv_conf
+            setOnBindEditTextListener {
+                it.inputType = TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_MULTI_LINE or TYPE_TEXT_FLAG_NO_SUGGESTIONS
             }
         }
 

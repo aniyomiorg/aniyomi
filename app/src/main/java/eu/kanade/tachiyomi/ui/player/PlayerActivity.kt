@@ -286,6 +286,7 @@ class PlayerActivity :
         setVisibilities()
         binding.playerControls.showAndFadeControls()
 
+        setMpvConf()
         player.initialize(applicationContext.filesDir.path)
         MPVLib.setOptionString("keep-open", "always")
         player.addObserver(this)
@@ -326,10 +327,14 @@ class PlayerActivity :
         playerIsDestroyed = false
     }
 
+    private fun setMpvConf() {
+        val mpvConfFile = File("${applicationContext.filesDir.path}/mpv.conf")
+        preferences.mpvConf()?.let { mpvConfFile.writeText(it) }
+    }
+
     /**
      * Class to override [MaterialAlertDialogBuilder] to hide the navigation and status bars
      */
-
     internal inner class HideBarsMaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(context) {
         override fun create(): AlertDialog {
             return super.create().apply {

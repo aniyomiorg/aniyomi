@@ -13,6 +13,8 @@ object PreferenceKeys {
 
     const val pipEpisodeToasts = "pref_pip_episode_toasts"
 
+    const val mpvConf = "pref_mpv_conf"
+
     const val defaultOrientationType = "pref_default_orientation_type_key"
 
     const val defaultPlayerOrientationType = "pref_default_player_orientation_type_key"
