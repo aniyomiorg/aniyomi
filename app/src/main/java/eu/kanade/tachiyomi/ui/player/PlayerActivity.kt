@@ -812,6 +812,11 @@ class PlayerActivity :
         super.onDestroy()
     }
 
+    override fun onBackPressed() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) finishAndRemoveTask()
+        super.onBackPressed()
+    }
+
     override fun onStop() {
         presenter.saveEpisodeHistory()
         if (!playerIsDestroyed) {
