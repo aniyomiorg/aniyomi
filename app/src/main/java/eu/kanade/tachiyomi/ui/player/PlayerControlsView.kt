@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.ui.player
 
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -62,11 +61,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     override fun onViewAdded(child: View?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            binding.pipBtn.isVisible = context.packageManager.hasSystemFeature(
-                PackageManager.FEATURE_PICTURE_IN_PICTURE,
-            ) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-        }
+        binding.pipBtn.isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+      
         binding.backArrowBtnLandscape.setOnClickListener { activity.onBackPressed() }
         binding.backArrowBtnPortrait.setOnClickListener { activity.onBackPressed() }
 
