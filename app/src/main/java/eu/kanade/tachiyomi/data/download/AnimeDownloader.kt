@@ -497,7 +497,11 @@ class AnimeDownloader(
         // TODO: Support other file formats here as well (ffprobe or something, idk)
         val ffmpegOptions = FFmpegKitConfig.parseArguments(headerOptions + " -i '${video.videoUrl}' -c copy \"$escapedFilename\"")
         val executeCallback = ExecuteCallback {
-            if (it.state != SessionState.COMPLETED) tmpDir.findFile("$filename.mp4")?.delete()
+            if (it.state != SessionState.COMPLETED) {
+                tmpDir.findFile("$filename.mp4")?.delete()
+                it.failStackTrace?.let { trace -> logcat(LogPriority.ERROR) { trace } }
+                throw Exception(it.failStackTrace ?: "Error in ffmpeg download")
+            }
         }
         var duration = 0L
         var nextLineIsDuration = false
