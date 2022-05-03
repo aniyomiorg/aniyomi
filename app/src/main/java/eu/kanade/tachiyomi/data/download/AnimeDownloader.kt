@@ -252,7 +252,9 @@ class AnimeDownloader(
         runningRelay.call(false)
 
         isFFmpegRunning = false
-        FFmpegKitConfig.getSessions().forEach {
+        FFmpegKitConfig.getSessions().filter {
+            it.state == SessionState.CREATED || it.state == SessionState.RUNNING
+        }.forEach {
             it.executeCallback.apply(it)
             it.cancel()
         }
@@ -500,7 +502,6 @@ class AnimeDownloader(
             if (it.state != SessionState.COMPLETED) {
                 tmpDir.findFile("$filename.mp4")?.delete()
                 it.failStackTrace?.let { trace -> logcat(LogPriority.ERROR) { trace } }
-                throw Exception(it.failStackTrace ?: "Error in ffmpeg download")
             }
         }
         var duration = 0L

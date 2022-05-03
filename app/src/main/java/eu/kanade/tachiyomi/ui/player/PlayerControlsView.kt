@@ -62,7 +62,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     override fun onViewAdded(child: View?) {
         binding.pipBtn.isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-      
+
         binding.backArrowBtnLandscape.setOnClickListener { activity.onBackPressed() }
         binding.backArrowBtnPortrait.setOnClickListener { activity.onBackPressed() }
 
