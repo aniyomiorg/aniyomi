@@ -32,8 +32,8 @@ class Gestures(
         if (activity.isLocked) return false
         val interval = preferences.skipLengthPreference()
         when {
-            e.x < width * 0.4F -> activity.doubleTapSeek(-interval, e)
-            e.x > width * 0.6F -> activity.doubleTapSeek(interval, e)
+            e.x < width * 0.4F && interval != 0 -> activity.doubleTapSeek(-interval, e)
+            e.x > width * 0.6F && interval != 0 -> activity.doubleTapSeek(interval, e)
             else -> activity.doubleTapPlayPause()
         }
         return true

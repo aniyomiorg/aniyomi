@@ -56,12 +56,14 @@ class SettingsPlayerController : SettingsController() {
                 R.string.pref_skip_20,
                 R.string.pref_skip_10,
                 R.string.pref_skip_5,
+                R.string.pref_skip_disable,
             )
             entryValues = arrayOf(
                 "30",
                 "20",
                 "10",
                 "5",
+                "0",
             )
             defaultValue = "10"
 
