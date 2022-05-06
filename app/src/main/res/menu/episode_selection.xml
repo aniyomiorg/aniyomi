@@ -4,14 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/action_download"
-        android:icon="@drawable/ic_get_app_24dp"
-        android:title="@string/action_download"
-        app:iconTint="?attr/colorOnSurface"
-        app:showAsAction="always"
-        tools:ignore="AlwaysShowAction" />
-
-    <item
         android:id="@+id/action_bookmark"
         android:icon="@drawable/ic_bookmark_border_24dp"
         android:title="@string/action_bookmark_episode"
@@ -47,6 +39,14 @@
         android:id="@+id/action_mark_previous_as_read"
         android:icon="@drawable/ic_done_prev_24dp"
         android:title="@string/action_mark_previous_as_seen"
+        app:iconTint="?attr/colorOnSurface"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
+        android:id="@+id/action_download"
+        android:icon="@drawable/ic_get_app_24dp"
+        android:title="@string/action_download"
         app:iconTint="?attr/colorOnSurface"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />

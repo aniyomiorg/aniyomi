@@ -31,7 +31,7 @@ import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.openInBrowser
-import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
+import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.util.preference.DSL
 import eu.kanade.tachiyomi.util.preference.minusAssign
 import eu.kanade.tachiyomi.util.preference.onChange
@@ -165,9 +165,7 @@ class AnimeExtensionDetailsController(bundle: Bundle? = null) :
             switchSettingsPreference {
                 block()
                 onSettingsClick = View.OnClickListener {
-                    router.pushController(
-                        AnimeSourcePreferencesController(source.id).withFadeTransaction(),
-                    )
+                    router.pushController(AnimeSourcePreferencesController(source.id))
                 }
             }
         } else {

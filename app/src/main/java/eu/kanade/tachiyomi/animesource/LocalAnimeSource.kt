@@ -178,7 +178,6 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource, Unm
                         episodeFile.nameWithoutExtension
                     }
                     date_upload = episodeFile.lastModified()
-                    name = getCleanEpisodeTitle(name)
                     EpisodeRecognition.parseEpisodeNumber(this, sAnime)
                 }
             }
@@ -190,13 +189,6 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource, Unm
             .toList()
 
         return episodes
-    }
-
-    /**
-     * Trim whitespace/delimiter characters from episode names.
-     */
-    private fun getCleanEpisodeTitle(episodeName: String): String {
-        return episodeName.trim(*WHITESPACE_CHARS.toCharArray(), '-', '_', ',', ':')
     }
 
     private fun isSupportedFile(extension: String): Boolean {
@@ -260,32 +252,3 @@ class LocalAnimeSource(private val context: Context) : AnimeCatalogueSource, Unm
 }
 
 private val SUPPORTED_FILE_TYPES = listOf("mp4", "mkv")
-
-private val WHITESPACE_CHARS = arrayOf(
-    ' ',
-    '\u0009',
-    '\u000A',
-    '\u000B',
-    '\u000C',
-    '\u000D',
-    '\u0020',
-    '\u0085',
-    '\u00A0',
-    '\u1680',
-    '\u2000',
-    '\u2001',
-    '\u2002',
-    '\u2003',
-    '\u2004',
-    '\u2005',
-    '\u2006',
-    '\u2007',
-    '\u2008',
-    '\u2009',
-    '\u200A',
-    '\u2028',
-    '\u2029',
-    '\u202F',
-    '\u205F',
-    '\u3000',
-)

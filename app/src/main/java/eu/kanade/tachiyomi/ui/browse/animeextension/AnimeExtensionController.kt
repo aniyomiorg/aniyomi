@@ -17,7 +17,7 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.databinding.ExtensionControllerBinding
 import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
-import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
+import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.browse.BrowseController
 import eu.kanade.tachiyomi.ui.browse.animeextension.details.AnimeExtensionDetailsController
 import kotlinx.coroutines.flow.drop
@@ -92,9 +92,7 @@ open class AnimeExtensionController :
         when (item.itemId) {
             R.id.action_search -> expandActionViewFromInteraction = true
             R.id.action_settings -> {
-                parentController!!.router.pushController(
-                    AnimeExtensionFilterController().withFadeTransaction(),
-                )
+                parentController!!.router.pushController(AnimeExtensionFilterController())
             }
         }
         return super.onOptionsItemSelected(item)
@@ -172,7 +170,7 @@ open class AnimeExtensionController :
 
     private fun openDetails(extension: AnimeExtension.Installed) {
         val controller = AnimeExtensionDetailsController(extension.pkgName)
-        parentController!!.router.pushController(controller.withFadeTransaction())
+        parentController!!.router.pushController(controller)
     }
 
     private fun openTrustDialog(extension: AnimeExtension.Untrusted) {

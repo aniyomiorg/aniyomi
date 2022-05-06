@@ -31,8 +31,6 @@ object PreferenceKeys {
 
     const val externalPlayerPreference = "external_player_preference"
 
-    const val jumpToChapters = "jump_to_chapters"
-
     const val autoUpdateTrack = "pref_auto_update_manga_sync_key"
 
     const val useExternalDownloader = "use_external_downloader"

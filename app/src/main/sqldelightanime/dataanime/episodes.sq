@@ -1,0 +1,30 @@
+CREATE TABLE episodes(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    anime_id INTEGER NOT NULL,
+    url TEXT NOT NULL,
+    name TEXT NOT NULL,
+    scanlator TEXT,
+    seen INTEGER AS Boolean NOT NULL,
+    bookmark INTEGER AS Boolean NOT NULL,
+    last_second_seen INTEGER NOT NULL,
+    total_seconds INTEGER NOT NULL,
+    episode_number REAL AS Float NOT NULL,
+    source_order INTEGER NOT NULL,
+    date_fetch INTEGER AS Long NOT NULL,
+    date_upload INTEGER AS Long NOT NULL,
+    FOREIGN KEY(anime_id) REFERENCES animes (_id)
+    ON DELETE CASCADE
+);
+
+CREATE INDEX episodes_anime_id_index ON episodes(anime_id);
+CREATE INDEX episodes_unseen_by_anime_index ON episodes(anime_id, seen) WHERE seen = 0;
+
+getEpisodeById:
+SELECT *
+FROM episodes
+WHERE _id = :id;
+
+getEpisodeByAnimeId:
+SELECT *
+FROM episodes
+WHERE anime_id = :animeId;

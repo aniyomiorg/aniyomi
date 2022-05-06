@@ -182,8 +182,8 @@ class AnimelibSettingsSheet(
             private val alphabetically = Item.MultiSort(R.string.action_sort_alpha, this)
             private val total = Item.MultiSort(R.string.action_sort_total_episodes, this)
             private val lastSeen = Item.MultiSort(R.string.action_sort_last_seen, this)
-            private val lastChecked = Item.MultiSort(R.string.action_sort_last_checked, this)
-            private val unseen = Item.MultiSort(R.string.action_filter_unseen, this)
+            private val lastChecked = Item.MultiSort(R.string.action_sort_last_anime_update, this)
+            private val unseen = Item.MultiSort(R.string.action_sort_unseen_count, this)
             private val latestEpisode = Item.MultiSort(R.string.action_sort_latest_episode, this)
             private val episodeFetchDate = Item.MultiSort(R.string.action_sort_chapter_fetch_date, this)
             private val dateAdded = Item.MultiSort(R.string.action_sort_date_added, this)
@@ -206,15 +206,15 @@ class AnimelibSettingsSheet(
                 lastSeen.state =
                     if (sorting == SortModeSetting.LAST_READ) order else Item.MultiSort.SORT_NONE
                 lastChecked.state =
-                    if (sorting == SortModeSetting.LAST_CHECKED) order else Item.MultiSort.SORT_NONE
+                    if (sorting == SortModeSetting.LAST_MANGA_UPDATE) order else Item.MultiSort.SORT_NONE
                 unseen.state =
-                    if (sorting == SortModeSetting.UNREAD) order else Item.MultiSort.SORT_NONE
+                    if (sorting == SortModeSetting.UNREAD_COUNT) order else Item.MultiSort.SORT_NONE
                 total.state =
                     if (sorting == SortModeSetting.TOTAL_CHAPTERS) order else Item.MultiSort.SORT_NONE
                 latestEpisode.state =
                     if (sorting == SortModeSetting.LATEST_CHAPTER) order else Item.MultiSort.SORT_NONE
                 episodeFetchDate.state =
-                    if (sorting == SortModeSetting.DATE_FETCHED) order else Item.MultiSort.SORT_NONE
+                    if (sorting == SortModeSetting.CHAPTER_FETCH_DATE) order else Item.MultiSort.SORT_NONE
                 dateAdded.state =
                     if (sorting == SortModeSetting.DATE_ADDED) order else Item.MultiSort.SORT_NONE
             }
@@ -261,11 +261,11 @@ class AnimelibSettingsSheet(
                 val flag = when (item) {
                     alphabetically -> SortModeSetting.ALPHABETICAL
                     lastSeen -> SortModeSetting.LAST_READ
-                    lastChecked -> SortModeSetting.LAST_CHECKED
-                    unseen -> SortModeSetting.UNREAD
+                    lastChecked -> SortModeSetting.LAST_MANGA_UPDATE
+                    unseen -> SortModeSetting.UNREAD_COUNT
                     total -> SortModeSetting.TOTAL_CHAPTERS
                     latestEpisode -> SortModeSetting.LATEST_CHAPTER
-                    episodeFetchDate -> SortModeSetting.DATE_FETCHED
+                    episodeFetchDate -> SortModeSetting.CHAPTER_FETCH_DATE
                     dateAdded -> SortModeSetting.DATE_ADDED
                     else -> throw NotImplementedError("Unknown display mode")
                 }

@@ -55,15 +55,14 @@ fun Anime.updateCoverLastModified(db: AnimeDatabaseHelper) {
 fun Anime.shouldDownloadNewEpisodes(db: AnimeDatabaseHelper, prefs: PreferencesHelper): Boolean {
     if (!favorite) return false
 
-    // Boolean to determine if user wants to automatically download new episodes.
-    val downloadNew = prefs.downloadNew().get()
-    if (!downloadNew) return false
+    val downloadNewChapter = prefs.downloadNewChapter().get()
+    if (!downloadNewChapter) return false
 
-    val categoriesToDownload = prefs.downloadNewCategoriesAnime().get().map(String::toInt)
-    val categoriesToExclude = prefs.downloadNewCategoriesAnimeExclude().get().map(String::toInt)
+    val includedCategories = prefs.downloadNewEpisodeCategories().get().map(String::toInt)
+    val excludedCategories = prefs.downloadNewEpisodeCategoriesExclude().get().map(String::toInt)
 
-    // Default: download from all categories
-    if (categoriesToDownload.isEmpty() && categoriesToExclude.isEmpty()) return true
+    // Default: Download from all categories
+    if (includedCategories.isEmpty() && excludedCategories.isEmpty()) return true
 
     // Get all categories, else default category (0)
     val categoriesForAnime =
@@ -72,8 +71,11 @@ fun Anime.shouldDownloadNewEpisodes(db: AnimeDatabaseHelper, prefs: PreferencesH
             .takeUnless { it.isEmpty() } ?: listOf(0)
 
     // In excluded category
-    if (categoriesForAnime.intersect(categoriesToExclude).isNotEmpty()) return false
+    if (categoriesForAnime.any { it in excludedCategories }) return false
+
+    // Included category not selected
+    if (includedCategories.isEmpty()) return true
 
     // In included category
-    return categoriesForAnime.intersect(categoriesToDownload).isNotEmpty()
+    return categoriesForAnime.any { it in includedCategories }
 }

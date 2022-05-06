@@ -1,9 +1,11 @@
 package eu.kanade.tachiyomi.ui.setting.database
 
 import android.os.Bundle
+import eu.kanade.tachiyomi.Database
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
+import eu.kanade.tachiyomi.mi.AnimeDatabase
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import rx.Observable
@@ -16,6 +18,8 @@ class ClearDatabasePresenter : BasePresenter<ClearDatabaseController>() {
 
     private val db = Injekt.get<DatabaseHelper>()
     private val animedb = Injekt.get<AnimeDatabaseHelper>()
+    private val animedatabase = Injekt.get<AnimeDatabase>()
+    private val database = Injekt.get<Database>()
 
     private val sourceManager = Injekt.get<SourceManager>()
     private val animesourceManager = Injekt.get<AnimeSourceManager>()
@@ -34,12 +38,12 @@ class ClearDatabasePresenter : BasePresenter<ClearDatabaseController>() {
 
     fun clearDatabaseForSourceIds(sources: List<Long>) {
         db.deleteMangasNotInLibraryBySourceIds(sources).executeAsBlocking()
-        db.deleteHistoryNoLastRead().executeAsBlocking()
+        database.historyQueries.removeResettedHistory()
     }
 
     fun clearDatabaseForAnimeSourceIds(animeSources: List<Long>) {
         animedb.deleteAnimesNotInLibraryBySourceIds(animeSources).executeAsBlocking()
-        animedb.deleteHistoryNoLastSeen().executeAsBlocking()
+        animedatabase.animehistoryQueries.removeResettedHistory()
     }
 
     private fun getDatabaseSourcesObservable(): Observable<List<ClearDatabaseSourceItem>> {

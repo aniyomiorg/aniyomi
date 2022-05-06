@@ -68,12 +68,17 @@ class PlayerActivity :
     MPVLib.EventObserver {
 
     companion object {
-        fun newIntent(context: Context, anime: Anime, episode: Episode): Intent {
+
+        fun newIntent(context: Context, animeId: Long?, episodeId: Long?): Intent {
             return Intent(context, PlayerActivity::class.java).apply {
-                putExtra("anime", anime.id)
-                putExtra("episode", episode.id)
+                putExtra("anime", animeId)
+                putExtra("episode", episodeId)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
+        }
+
+        fun newIntent(context: Context, anime: Anime, episode: Episode): Intent {
+            return newIntent(context, anime.id, episode.id)
         }
     }
 
@@ -839,7 +844,7 @@ class PlayerActivity :
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
         isInPipMode = isInPictureInPictureMode
         isPipStarted = isInPipMode
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)

@@ -1,5 +1,5 @@
 package tachiyomi.animesource.model
 
-sealed class VideoInfo
+sealed class Video
 
-data class VideoUrl(val url: String) : VideoInfo()
+data class VideoUrl(val url: String) : Video()

@@ -14,7 +14,6 @@ import eu.kanade.tachiyomi.util.lang.awaitSingle
 import rx.Observable
 import tachiyomi.animesource.model.AnimeInfo
 import tachiyomi.animesource.model.EpisodeInfo
-import tachiyomi.animesource.model.VideoInfo
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -93,7 +92,7 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
      * [1.x API] Get a link for the episode of an anime.
      */
     @Suppress("DEPRECATION")
-    override suspend fun getVideoList(episode: EpisodeInfo): List<VideoInfo> {
+    override suspend fun getVideoList(episode: EpisodeInfo): List<tachiyomi.animesource.model.Video> {
         return fetchVideoList(episode.toSEpisode()).awaitSingle()
             .map { it.toVideoUrl() }
     }

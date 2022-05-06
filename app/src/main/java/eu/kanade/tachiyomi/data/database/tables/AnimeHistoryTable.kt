@@ -26,24 +26,4 @@ object AnimeHistoryTable {
      * Time seen column name
      */
     const val COL_TIME_SEEN = "${TABLE}_time_seen"
-
-    /**
-     * query to create animehistory table
-     */
-    val createTableQuery: String
-        get() =
-            """CREATE TABLE $TABLE(
-            $COL_ID INTEGER NOT NULL PRIMARY KEY,
-            $COL_EPISODE_ID INTEGER NOT NULL UNIQUE,
-            $COL_LAST_SEEN LONG,
-            $COL_TIME_SEEN LONG,
-            FOREIGN KEY($COL_EPISODE_ID) REFERENCES ${EpisodeTable.TABLE} (${EpisodeTable.COL_ID})
-            ON DELETE CASCADE
-            )"""
-
-    /**
-     * query to index animehistory episode id
-     */
-    val createEpisodeIdIndexQuery: String
-        get() = "CREATE INDEX ${TABLE}_${COL_EPISODE_ID}_index ON $TABLE($COL_EPISODE_ID)"
 }

@@ -8,19 +8,28 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
-import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
+import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchPresenter
 import eu.kanade.tachiyomi.ui.browse.migration.AnimeMigrationFlags
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 class AnimeSearchController(
     private var anime: Anime? = null,
 ) : GlobalAnimeSearchController(anime?.title) {
+
+    constructor(animeId: Long) : this(
+        Injekt.get<AnimeDatabaseHelper>()
+            .getAnime(animeId)
+            .executeAsBlocking()
+    )
 
     private var newAnime: Anime? = null
 
@@ -137,6 +146,6 @@ class AnimeSearchController(
     override fun onTitleClick(source: AnimeCatalogueSource) {
         presenter.preferences.lastUsedSource().set(source.id)
 
-        router.pushController(AnimeSourceSearchController(anime, source, presenter.query).withFadeTransaction())
+        router.pushController(AnimeSourceSearchController(anime, source, presenter.query))
     }
 }

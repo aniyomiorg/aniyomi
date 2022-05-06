@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.databinding.EpisodesItemBinding
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodeHolder
 import eu.kanade.tachiyomi.util.lang.toRelativeString
@@ -40,6 +41,8 @@ class EpisodeHolder(
                 itemView.context.getString(R.string.display_mode_episode, number)
             }
             else -> episode.name
+            // TODO: show cleaned name consistently around the app
+            // else -> cleanEpisodeName(episode, anime)
         }
 
         // Set correct text color
@@ -130,4 +133,47 @@ class EpisodeHolder(
         binding.animedownload.isVisible = item.anime.source != LocalAnimeSource.ID
         binding.animedownload.setState(item.status, item.progress)
     }
+
+    private fun cleanEpisodeName(episode: Episode, anime: Anime): String {
+        return episode.name
+            .trim()
+            .removePrefix(anime.title)
+            .trim(*EPISODE_TRIM_CHARS)
+    }
 }
+
+private val EPISODE_TRIM_CHARS = arrayOf(
+    // Whitespace
+    ' ',
+    '\u0009',
+    '\u000A',
+    '\u000B',
+    '\u000C',
+    '\u000D',
+    '\u0020',
+    '\u0085',
+    '\u00A0',
+    '\u1680',
+    '\u2000',
+    '\u2001',
+    '\u2002',
+    '\u2003',
+    '\u2004',
+    '\u2005',
+    '\u2006',
+    '\u2007',
+    '\u2008',
+    '\u2009',
+    '\u200A',
+    '\u2028',
+    '\u2029',
+    '\u202F',
+    '\u205F',
+    '\u3000',
+
+    // Separators
+    '-',
+    '_',
+    ',',
+    ':',
+).toCharArray()

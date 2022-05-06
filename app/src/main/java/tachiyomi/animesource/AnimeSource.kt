@@ -2,7 +2,7 @@ package tachiyomi.animesource
 
 import tachiyomi.animesource.model.AnimeInfo
 import tachiyomi.animesource.model.EpisodeInfo
-import tachiyomi.animesource.model.VideoInfo
+import tachiyomi.animesource.model.Video
 
 /**
  * A basic interface for creating a source. It could be an online source, a local source, etc...
@@ -41,7 +41,7 @@ interface AnimeSource {
      *
      * @param anime the anime to update.
      */
-    suspend fun getVideoList(episode: EpisodeInfo): List<VideoInfo>
+    suspend fun getVideoList(episode: EpisodeInfo): List<Video>
 
     /**
      * Returns a regex used to determine chapter information.

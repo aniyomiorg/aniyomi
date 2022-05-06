@@ -93,9 +93,10 @@ class LibraryUpdateNotifier(private val context: Context) {
     fun showQueueSizeWarningNotification() {
         val notificationBuilder = context.notificationBuilder(Notifications.CHANNEL_LIBRARY_PROGRESS) {
             setContentTitle(context.getString(R.string.label_warning))
-            setContentText(context.getString(R.string.notification_size_warning))
+            setStyle(NotificationCompat.BigTextStyle().bigText(context.getString(R.string.notification_size_warning)))
             setSmallIcon(R.drawable.ic_warning_white_24dp)
             setTimeoutAfter(Downloader.WARNING_NOTIF_TIMEOUT_MS)
+            setContentIntent(NotificationHandler.openUrl(context, HELP_WARNING_URL))
         }
 
         context.notificationManager.notify(
@@ -340,9 +341,13 @@ class LibraryUpdateNotifier(private val context: Context) {
         }
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
+
+    companion object {
+        const val HELP_WARNING_URL = "https://aniyomi.jmir.xyz/help/faq/#why-does-the-app-warn-about-large-bulk-updates-and-downloads"
+    }
 }
 
 private const val NOTIF_MAX_CHAPTERS = 5
 private const val NOTIF_TITLE_MAX_LEN = 45
 private const val NOTIF_ICON_SIZE = 192
-private const val HELP_SKIPPED_URL = "https://tachiyomi.org/help/faq/#why-does-global-update-skip-some-entries"
+private const val HELP_SKIPPED_URL = "https://aniyomi.jmir.xyz/help/faq/#why-does-global-update-skip-some-entries"

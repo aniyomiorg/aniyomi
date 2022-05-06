@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
+import eu.kanade.domain.animesource.model.AnimeSource
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
@@ -34,7 +35,7 @@ import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCategoriesDialog
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
-import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
+import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
 import eu.kanade.tachiyomi.ui.library.setting.DisplayModeSetting
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -69,15 +70,18 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
     FlexibleAdapter.EndlessScrollListener,
     ChangeAnimeCategoriesDialog.Listener {
 
-    constructor(source: AnimeCatalogueSource, searchQuery: String? = null) : this(
+    constructor(sourceId: Long, query: String? = null) : this(
         Bundle().apply {
-            putLong(SOURCE_ID_KEY, source.id)
-
-            if (searchQuery != null) {
-                putString(SEARCH_QUERY_KEY, searchQuery)
+            putLong(SOURCE_ID_KEY, sourceId)
+            query?.let { query ->
+                putString(SEARCH_QUERY_KEY, query)
             }
         },
     )
+
+    constructor(source: AnimeCatalogueSource, query: String? = null) : this(source.id, query)
+
+    constructor(source: AnimeSource, query: String? = null) : this(source.id, query)
 
     private val preferences: PreferencesHelper by injectLazy()
 
@@ -569,7 +573,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
      */
     override fun onItemClick(view: View, position: Int): Boolean {
         val item = adapter?.getItem(position) as? AnimeSourceItem ?: return false
-        router.pushController(AnimeController(item.anime, true).withFadeTransaction())
+        router.pushController(AnimeController(item.anime, true))
 
         return false
     }

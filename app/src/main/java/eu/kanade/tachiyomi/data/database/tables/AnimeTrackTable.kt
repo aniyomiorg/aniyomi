@@ -30,43 +30,6 @@ object AnimeTrackTable {
 
     const val COL_FINISH_DATE = "finish_date"
 
-    val createTableQuery: String
-        get() =
-            """CREATE TABLE $TABLE(
-            $COL_ID INTEGER NOT NULL PRIMARY KEY,
-            $COL_ANIME_ID INTEGER NOT NULL,
-            $COL_SYNC_ID INTEGER NOT NULL,
-            $COL_MEDIA_ID INTEGER NOT NULL,
-            $COL_LIBRARY_ID INTEGER,
-            $COL_TITLE TEXT NOT NULL,
-            $COL_LAST_EPISODE_SEEN REAL NOT NULL,
-            $COL_TOTAL_EPISODES INTEGER NOT NULL,
-            $COL_STATUS INTEGER NOT NULL,
-            $COL_SCORE FLOAT NOT NULL,
-            $COL_TRACKING_URL TEXT NOT NULL,
-            $COL_START_DATE LONG NOT NULL,
-            $COL_FINISH_DATE LONG NOT NULL,
-            UNIQUE ($COL_ANIME_ID, $COL_SYNC_ID) ON CONFLICT REPLACE,
-            FOREIGN KEY($COL_ANIME_ID) REFERENCES ${AnimeTable.TABLE} (${AnimeTable.COL_ID})
-            ON DELETE CASCADE
-            )"""
-
-    val addTrackingUrl: String
-        get() = "ALTER TABLE $TABLE ADD COLUMN $COL_TRACKING_URL TEXT DEFAULT ''"
-
-    val addLibraryId: String
-        get() = "ALTER TABLE $TABLE ADD COLUMN $COL_LIBRARY_ID INTEGER NULL"
-
-    val addStartDate: String
-        get() = "ALTER TABLE $TABLE ADD COLUMN $COL_START_DATE LONG NOT NULL DEFAULT 0"
-
-    val addFinishDate: String
-        get() = "ALTER TABLE $TABLE ADD COLUMN $COL_FINISH_DATE LONG NOT NULL DEFAULT 0"
-
-    val renameTableToTemp: String
-        get() =
-            "ALTER TABLE $TABLE RENAME TO ${TABLE}_tmp"
-
     val insertFromTempTable: String
         get() =
             """
@@ -74,7 +37,4 @@ object AnimeTrackTable {
             |SELECT $COL_ID,$COL_ANIME_ID,$COL_SYNC_ID,$COL_MEDIA_ID,$COL_LIBRARY_ID,$COL_TITLE,$COL_LAST_EPISODE_SEEN,$COL_TOTAL_EPISODES,$COL_STATUS,$COL_SCORE,$COL_TRACKING_URL,$COL_START_DATE,$COL_FINISH_DATE
             |FROM ${TABLE}_tmp
             """.trimMargin()
-
-    val dropTempTable: String
-        get() = "DROP TABLE ${TABLE}_tmp"
 }

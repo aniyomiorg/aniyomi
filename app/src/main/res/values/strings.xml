@@ -29,7 +29,8 @@
     <string name="label_mangasources">Manga Sources</string>
     <string name="label_animesources">Anime Sources</string>
     <string name="label_backup">Backup and restore</string>
-    <string name="label_migration">Migrate</string>
+    <string name="label_migration_manga">Migrate Manga</string>
+    <string name="label_migration_anime">Migrate Anime</string>
     <string name="label_extensions">Extensions</string>
     <string name="label_mangaextensions">Manga Extensions</string>
     <string name="label_animeextensions">Anime Extensions</string>
@@ -60,9 +61,14 @@
     <string name="action_sort_last_read">Last read</string>
     <string name="action_sort_last_seen">Last seen</string>
     <string name="action_sort_last_checked">Last checked</string>
-    <string name="action_sort_latest_chapter">Latest chapter</string>
     <string name="action_sort_latest_episode">Latest episode</string>
-    <string name="action_sort_chapter_fetch_date">Date fetched</string>
+    <string name="action_sort_last_manga_update">Last manga update</string>
+    <string name="action_sort_last_anime_update">Last anime update</string>
+    <string name="action_sort_unread_count">Unread count</string>
+    <string name="action_sort_unseen_count">Unseen count</string>
+    <string name="action_sort_latest_chapter">Latest chapter</string>
+    <string name="action_sort_chapter_fetch_date">Chapter fetch date</string>
+    <string name="action_sort_episode_fetch_date">Episode fetch date</string>
     <string name="action_sort_date_added">Date added</string>
     <string name="action_search">Search</string>
     <string name="action_search_settings">Search settings</string>
@@ -156,6 +162,7 @@
     <string name="action_save">Save</string>
     <string name="action_reset">Reset</string>
     <string name="action_undo">Undo</string>
+    <string name="action_close">Close</string>
     <string name="action_open_log">Open log</string>
     <string name="action_show_errors">Tap to see details</string>
     <string name="action_create">Create</string>
@@ -209,14 +216,13 @@
     <string name="alignment_top">Top</string>
     <string name="alignment_center">Center</string>
     <string name="alignment_bottom">Bottom</string>
-    <string name="pref_hide_bottom_bar_on_scroll">Hide bottom bar on scroll</string>
     <string name="pref_category_timestamps">Timestamps</string>
     <string name="pref_relative_format">Relative timestamps</string>
     <string name="pref_relative_time_short">Short (Today, Yesterday)</string>
     <string name="pref_relative_time_long">Long (Short+, n days ago)</string>
     <string name="pref_date_format">Date format</string>
-
     <string name="pref_start_screen">Start screen</string>
+
     <string name="pref_confirm_exit">Confirm exit</string>
     <string name="pref_manage_notifications">Manage notifications</string>
 
@@ -249,7 +255,6 @@
     <string name="pref_library_columns">Items per row</string>
     <string name="portrait">Portrait</string>
     <string name="landscape">Landscape</string>
-    <string name="pref_jump_to_chapters">Jump to chapters on open</string>
 
     <string name="pref_category_library_update">Global update</string>
     <string name="pref_library_update_interval">Automatic updates</string>
@@ -263,6 +268,7 @@
     <string name="pref_library_update_restriction">Automatic updates device restrictions</string>
     <string name="connected_to_wifi">Only on Wi-Fi</string>
     <string name="charging">Charging</string>
+    <string name="battery_not_low">Battery not low</string>
     <string name="restrictions">Restrictions: %s</string>
     <string name="only_update_restrictions">Only update: %s</string>
 
@@ -494,6 +500,8 @@
     <string name="action_track">Track</string>
 
       <!-- Browse section -->
+    <string name="pref_duplicate_pinned_sources">Show duplicated pinned sources</string>
+    <string name="pref_duplicate_pinned_sources_summary">Repeat pinned sources in their respective language groups</string>
     <string name="pref_enable_automatic_extension_updates">Check for extension updates</string>
     <string name="pref_search_pinned_sources_only">Only include pinned sources</string>
 
@@ -527,6 +535,7 @@
     <string name="backup_choice">What do you want to backup?</string>
     <string name="creating_backup">Creating backup</string>
     <string name="creating_backup_error">Backup failed</string>
+    <string name="empty_backup_error">No library entries to back up</string>
     <string name="restore_miui_warning">Backup/restore may not function properly if MIUI Optimization is disabled.</string>
     <string name="restore_in_progress">Restore is already in progress</string>
     <string name="restoring_backup">Restoring backup</string>
@@ -545,8 +554,8 @@
     <string name="used_cache">Used: %1$s</string>
     <string name="used_cache_both">Used by anime: %1$s, used by manga; %2$s</string>
     <string name="cache_deleted">Cache cleared. %1$d files have been deleted</string>
-    <string name="cache_delete_error">An error occurred while clearing cache</string>
-    <string name="pref_auto_clear_chapter_cache">Clear chapter/episode cache on app close</string>
+    <string name="cache_delete_error">Error occurred while clearing</string>
+    <string name="pref_auto_clear_chapter_cache">Clear episode/chapter cache on app close</string>
     <string name="pref_clear_database">Clear database</string>
     <string name="pref_clear_database_summary">Delete history for anime and manga that are not saved in your library</string>
     <plurals name="clear_database_source_item_count">
@@ -557,6 +566,8 @@
     <string name="clear_database_completed">Entries deleted</string>
     <string name="database_clean">Database clean</string>
     <string name="pref_refresh_library_covers">Refresh library covers</string>
+    <string name="pref_clear_webview_data">Clear WebView data</string>
+    <string name="webview_data_deleted">WebView data cleared</string>
     <string name="pref_refresh_library_tracking">Refresh tracking</string>
     <string name="pref_refresh_library_tracking_summary">Updates status, score and progress from the tracking services</string>
     <string name="pref_dump_crash_logs">Dump crash logs</string>
@@ -824,23 +835,30 @@
     <string name="clear_history_completed">History deleted</string>
     <string name="clear_history_confirmation">Are you sure? All history will be lost.</string>
 
+    <!-- Source Screen -->
+    <string name="source_empty_screen">No source found</string>
+
+    <!-- Source Filter Screen -->
+    <string name="source_filter_empty_screen">No installed source found</string>
+
     <!-- Source migration screen -->
     <string name="migration_help_guide">Source migration guide</string>
     <string name="migration_dialog_what_to_include">Select data to include</string>
     <string name="migration_selection_prompt">Select a source to migrate from</string>
     <string name="migrate">Migrate</string>
     <string name="copy">Copy</string>
+    <string name="migrate_empty_screen">Well, this is awkward</string>
 
     <!-- Downloads activity and service -->
     <string name="download_queue_error">Couldn\'t download chapters. You can try again in the downloads section</string>
     <string name="download_insufficient_space">Couldn\'t download due to low storage space</string>
-    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi</string>
+    <string name="download_queue_size_warning">Warning: large bulk downloads may lead to sources becoming slower and/or blocking Aniyomi. Tap to learn more.</string>
     <string name="video_list_empty_error">No video found</string>
 
     <!-- Library update service notifications -->
     <string name="notification_check_updates">Checking for new chapters</string>
     <string name="notification_updating">Updating library… (%1$d/%2$d)</string>
-    <string name="notification_size_warning">Large updates harm sources and may lead to slower updates and also increased battery usage</string>
+    <string name="notification_size_warning">Large updates harm sources and may lead to slower updates and also increased battery usage. Tap to learn more.</string>
     <string name="notification_new_chapters">New chapters found</string>
     <string name="notification_new_episodes">New episodes found</string>
     <plurals name="notification_new_chapters_summary">
@@ -894,7 +912,7 @@
 
     <!--UpdateCheck-->
     <string name="update_check_confirm">Download</string>
-    <string name="update_check_ignore">Ignore</string>
+    <string name="update_check_open">Open on GitHub</string>
     <string name="update_check_eol">This Android version is no longer supported</string>
     <string name="update_check_no_new_updates">No new updates available</string>
     <string name="update_check_look_for_updates">Searching for updates…</string>

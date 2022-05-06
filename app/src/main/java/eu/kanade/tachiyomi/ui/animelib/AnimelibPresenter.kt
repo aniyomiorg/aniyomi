@@ -31,7 +31,6 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.Collator
 import java.util.Collections
-import java.util.Comparator
 import java.util.Locale
 
 /**
@@ -254,15 +253,18 @@ class AnimelibPresenter(
     private fun applySort(categories: List<Category>, map: AnimelibMap): AnimelibMap {
         val lastReadAnime by lazy {
             var counter = 0
-            db.getLastSeenAnime().executeAsBlocking().associate { it.id!! to counter++ }
+            // Result comes as newest to oldest so it's reversed
+            db.getLastSeenAnime().executeAsBlocking().reversed().associate { it.id!! to counter++ }
         }
         val latestChapterAnime by lazy {
             var counter = 0
-            db.getLatestEpisodeAnime().executeAsBlocking().associate { it.id!! to counter++ }
+            // Result comes as newest to oldest so it's reversed
+            db.getLatestEpisodeAnime().executeAsBlocking().reversed().associate { it.id!! to counter++ }
         }
         val chapterFetchDateAnime by lazy {
             var counter = 0
-            db.getEpisodeFetchDateAnime().executeAsBlocking().associate { it.id!! to counter++ }
+            // Result comes as newest to oldest so it's reversed
+            db.getEpisodeFetchDateAnime().executeAsBlocking().reversed().associate { it.id!! to counter++ }
         }
 
         val sortingModes = categories.associate { category ->
@@ -285,13 +287,14 @@ class AnimelibPresenter(
                     collator.compare(i1.anime.title.lowercase(locale), i2.anime.title.lowercase(locale))
                 }
                 SortModeSetting.LAST_READ -> {
-                    // Get index of anime, set equal to list if size unknown.
-                    val anime1LastRead = lastReadAnime[i1.anime.id!!] ?: lastReadAnime.size
-                    val anime2LastRead = lastReadAnime[i2.anime.id!!] ?: lastReadAnime.size
+                    val anime1LastRead = lastReadAnime[i1.anime.id!!] ?: 0
+                    val anime2LastRead = lastReadAnime[i2.anime.id!!] ?: 0
                     anime1LastRead.compareTo(anime2LastRead)
                 }
-                SortModeSetting.LAST_CHECKED -> i2.anime.last_update.compareTo(i1.anime.last_update)
-                SortModeSetting.UNREAD -> when {
+                SortModeSetting.LAST_MANGA_UPDATE -> {
+                    i2.anime.last_update.compareTo(i1.anime.last_update)
+                }
+                SortModeSetting.UNREAD_COUNT -> when {
                     // Ensure unread content comes first
                     i1.anime.unseenCount == i2.anime.unseenCount -> 0
                     i1.anime.unseenCount == 0 -> if (sortAscending) 1 else -1
@@ -308,14 +311,14 @@ class AnimelibPresenter(
                         ?: latestChapterAnime.size
                     anime1latestEpisode.compareTo(anime2latestEpisode)
                 }
-                SortModeSetting.DATE_FETCHED -> {
-                    val anime1chapterFetchDate = chapterFetchDateAnime[i1.anime.id!!]
-                        ?: chapterFetchDateAnime.size
-                    val anime2chapterFetchDate = chapterFetchDateAnime[i2.anime.id!!]
-                        ?: chapterFetchDateAnime.size
+                SortModeSetting.CHAPTER_FETCH_DATE -> {
+                    val anime1chapterFetchDate = chapterFetchDateAnime[i1.anime.id!!] ?: 0
+                    val anime2chapterFetchDate = chapterFetchDateAnime[i2.anime.id!!] ?: 0
                     anime1chapterFetchDate.compareTo(anime2chapterFetchDate)
                 }
-                SortModeSetting.DATE_ADDED -> i2.anime.date_added.compareTo(i1.anime.date_added)
+                SortModeSetting.DATE_ADDED -> {
+                    i2.anime.date_added.compareTo(i1.anime.date_added)
+                }
             }
         }
 

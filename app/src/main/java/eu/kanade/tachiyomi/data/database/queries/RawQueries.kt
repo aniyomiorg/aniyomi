@@ -99,54 +99,6 @@ fun getRecentsQueryAnime() =
     ORDER BY ${Episode.COL_DATE_UPLOAD} DESC
 """
 
-/**
- * Query to get the recently read chapters of manga from the library up to a date.
- * The max_last_read table contains the most recent chapters grouped by manga
- * The select statement returns all information of chapters that have the same id as the chapter in max_last_read
- * and are read after the given time period
- */
-fun getRecentMangasQuery(search: String = "") =
-    """
-    SELECT ${Manga.TABLE}.${Manga.COL_URL} as mangaUrl, ${Manga.TABLE}.*, ${Chapter.TABLE}.*, ${History.TABLE}.*
-    FROM ${Manga.TABLE}
-    JOIN ${Chapter.TABLE}
-    ON ${Manga.TABLE}.${Manga.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
-    JOIN ${History.TABLE}
-    ON ${Chapter.TABLE}.${Chapter.COL_ID} = ${History.TABLE}.${History.COL_CHAPTER_ID}
-    JOIN (
-    SELECT ${Chapter.TABLE}.${Chapter.COL_MANGA_ID},${Chapter.TABLE}.${Chapter.COL_ID} as ${History.COL_CHAPTER_ID}, MAX(${History.TABLE}.${History.COL_LAST_READ}) as ${History.COL_LAST_READ}
-    FROM ${Chapter.TABLE} JOIN ${History.TABLE}
-    ON ${Chapter.TABLE}.${Chapter.COL_ID} = ${History.TABLE}.${History.COL_CHAPTER_ID}
-    GROUP BY ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}) AS max_last_read
-    ON ${Chapter.TABLE}.${Chapter.COL_MANGA_ID} = max_last_read.${Chapter.COL_MANGA_ID}
-    WHERE ${History.TABLE}.${History.COL_LAST_READ} > ?
-    AND max_last_read.${History.COL_CHAPTER_ID} = ${History.TABLE}.${History.COL_CHAPTER_ID}
-    AND lower(${Manga.TABLE}.${Manga.COL_TITLE}) LIKE '%$search%'
-    ORDER BY max_last_read.${History.COL_LAST_READ} DESC
-    LIMIT ? OFFSET ?
-"""
-
-fun getRecentAnimesQuery(search: String = "") =
-    """
-    SELECT ${Anime.TABLE}.${Anime.COL_URL} as animeUrl, ${Anime.TABLE}.*, ${Episode.TABLE}.*, ${AnimeHistory.TABLE}.*
-    FROM ${Anime.TABLE}
-    JOIN ${Episode.TABLE}
-    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
-    JOIN ${AnimeHistory.TABLE}
-    ON ${Episode.TABLE}.${Episode.COL_ID} = ${AnimeHistory.TABLE}.${AnimeHistory.COL_EPISODE_ID}
-    JOIN (
-    SELECT ${Episode.TABLE}.${Episode.COL_ANIME_ID},${Episode.TABLE}.${Episode.COL_ID} as ${AnimeHistory.COL_EPISODE_ID}, MAX(${AnimeHistory.TABLE}.${AnimeHistory.COL_LAST_SEEN}) as ${AnimeHistory.COL_LAST_SEEN}
-    FROM ${Episode.TABLE} JOIN ${AnimeHistory.TABLE}
-    ON ${Episode.TABLE}.${Episode.COL_ID} = ${AnimeHistory.TABLE}.${AnimeHistory.COL_EPISODE_ID}
-    GROUP BY ${Episode.TABLE}.${Episode.COL_ANIME_ID}) AS max_last_read
-    ON ${Episode.TABLE}.${Episode.COL_ANIME_ID} = max_last_read.${Episode.COL_ANIME_ID}
-    WHERE ${AnimeHistory.TABLE}.${AnimeHistory.COL_LAST_SEEN} > ?
-    AND max_last_read.${AnimeHistory.COL_EPISODE_ID} = ${AnimeHistory.TABLE}.${AnimeHistory.COL_EPISODE_ID}
-    AND lower(${Anime.TABLE}.${Anime.COL_TITLE}) LIKE '%$search%'
-    ORDER BY max_last_read.${AnimeHistory.COL_LAST_SEEN} DESC
-    LIMIT ? OFFSET ?
-"""
-
 fun getHistoryByMangaId() =
     """
     SELECT ${History.TABLE}.*
@@ -207,26 +159,6 @@ fun getLastSeenAnimeQuery() =
     WHERE ${Anime.TABLE}.${Anime.COL_FAVORITE} = 1
     GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
     ORDER BY max DESC
-"""
-
-fun getTotalChapterMangaQuery() =
-    """
-    SELECT ${Manga.TABLE}.*
-    FROM ${Manga.TABLE}
-    JOIN ${Chapter.TABLE}
-    ON ${Manga.TABLE}.${Manga.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
-    GROUP BY ${Manga.TABLE}.${Manga.COL_ID}
-    ORDER by COUNT(*)
-"""
-
-fun getTotalEpisodeAnimeQuery() =
-    """
-    SELECT ${Anime.TABLE}.*
-    FROM ${Anime.TABLE}
-    JOIN ${Episode.TABLE}
-    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
-    GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
-    ORDER by COUNT(*)
 """
 
 fun getLatestChapterMangaQuery() =

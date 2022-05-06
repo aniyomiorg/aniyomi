@@ -10,8 +10,6 @@ import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable
 
 interface AnimeCategoryQueries : DbProvider {
 
-    fun insertAnimeCategory(animeCategory: AnimeCategory) = db.put().`object`(animeCategory).prepare()
-
     fun insertAnimesCategories(animesCategories: List<AnimeCategory>) = db.put().objects(animesCategories).prepare()
 
     fun deleteOldAnimesCategories(animes: List<Anime>) = db.delete()

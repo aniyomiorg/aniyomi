@@ -16,6 +16,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.GlobalSearchControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
+import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 import uy.kohesive.injekt.injectLazy
@@ -76,7 +77,7 @@ open class GlobalAnimeSearchController(
      * @param anime clicked item containing anime information.
      */
     override fun onAnimeClick(anime: Anime) {
-        router.pushController(AnimeController(anime, true).withFadeTransaction())
+        router.pushController(AnimeController(anime, true))
     }
 
     /**

@@ -38,6 +38,7 @@ class SettingsGeneralController : SettingsController() {
             defaultValue = "1"
             summary = "%s"
         }
+
         switchPreference {
             bindTo(preferences.showUpdatesNavBadge())
             titleRes = R.string.pref_library_update_show_tab_badge

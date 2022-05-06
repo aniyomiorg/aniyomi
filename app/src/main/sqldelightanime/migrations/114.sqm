@@ -1,0 +1,150 @@
+DROP INDEX IF EXISTS episodes_anime_id_index;
+DROP INDEX IF EXISTS episodes_unseen_by_anime_index;
+DROP INDEX IF EXISTS animehistory_history_episode_id_index;
+DROP INDEX IF EXISTS library_favorite_index;
+DROP INDEX IF EXISTS animes_url_index;
+
+ALTER TABLE animes RENAME TO anime_temp;
+CREATE TABLE animes(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    source INTEGER NOT NULL,
+    url TEXT NOT NULL,
+    artist TEXT,
+    author TEXT,
+    description TEXT,
+    genre TEXT,
+    title TEXT NOT NULL,
+    status INTEGER NOT NULL,
+    thumbnail_url TEXT,
+    favorite INTEGER NOT NULL,
+    last_update INTEGER AS Long,
+    next_update INTEGER AS Long,
+    initialized INTEGER AS Boolean NOT NULL,
+    viewer INTEGER NOT NULL,
+    episode_flags INTEGER NOT NULL,
+    cover_last_modified INTEGER AS Long NOT NULL,
+    date_added INTEGER AS Long NOT NULL
+);
+INSERT INTO animes
+SELECT _id,source,url,artist,author,description,genre,title,status,thumbnail_url,favorite,last_update,next_update,initialized,viewer,episode_flags,cover_last_modified,date_added
+FROM anime_temp;
+
+ALTER TABLE categories RENAME TO categories_temp;
+CREATE TABLE categories(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    sort INTEGER NOT NULL,
+    flags INTEGER NOT NULL
+);
+INSERT INTO categories
+SELECT _id,name,sort,flags
+FROM categories_temp;
+
+ALTER TABLE episodes RENAME TO episodes_temp;
+CREATE TABLE episodes(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    anime_id INTEGER NOT NULL,
+    url TEXT NOT NULL,
+    name TEXT NOT NULL,
+    scanlator TEXT,
+    seen INTEGER AS Boolean NOT NULL,
+    bookmark INTEGER AS Boolean NOT NULL,
+    last_second_seen INTEGER NOT NULL,
+    total_seconds INTEGER NOT NULL,
+    episode_number REAL AS Float NOT NULL,
+    source_order INTEGER NOT NULL,
+    date_fetch INTEGER AS Long NOT NULL,
+    date_upload INTEGER AS Long NOT NULL,
+    FOREIGN KEY(anime_id) REFERENCES animes (_id)
+    ON DELETE CASCADE
+);
+INSERT INTO episodes
+SELECT _id,anime_id,url,name,scanlator,seen,bookmark,last_second_seen,total_seconds,episode_number,source_order,date_fetch,date_upload
+FROM episodes_temp;
+
+ALTER TABLE animehistory RENAME TO animehistory_temp;
+CREATE TABLE animehistory(
+    animehistory_id INTEGER NOT NULL PRIMARY KEY,
+    animehistory_episode_id INTEGER NOT NULL UNIQUE,
+    animehistory_last_seen INTEGER AS Long,
+    animehistory_time_seen INTEGER AS Long,
+    FOREIGN KEY(animehistory_episode_id) REFERENCES episodes (_id)
+    ON DELETE CASCADE
+);
+INSERT INTO animehistory
+SELECT animehistory_id, animehistory_episode_id, animehistory_last_seen, animehistory_time_seen
+FROM animehistory_temp;
+
+ALTER TABLE animes_categories RENAME TO animes_categories_temp;
+CREATE TABLE animes_categories(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    anime_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+    FOREIGN KEY(category_id) REFERENCES categories (_id)
+    ON DELETE CASCADE,
+    FOREIGN KEY(anime_id) REFERENCES animes (_id)
+    ON DELETE CASCADE
+);
+INSERT INTO animes_categories
+SELECT _id, anime_id, category_id
+FROM animes_categories_temp;
+
+ALTER TABLE anime_sync RENAME TO anime_sync_temp;
+CREATE TABLE anime_sync(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    anime_id INTEGER NOT NULL,
+    sync_id INTEGER NOT NULL,
+    remote_id INTEGER NOT NULL,
+    library_id INTEGER,
+    title TEXT NOT NULL,
+    last_episode_seen REAL NOT NULL,
+    total_episodes INTEGER NOT NULL,
+    status INTEGER NOT NULL,
+    score REAL AS Float NOT NULL,
+    remote_url TEXT NOT NULL,
+    start_date INTEGER AS Long NOT NULL,
+    finish_date INTEGER AS Long NOT NULL,
+    UNIQUE (anime_id, sync_id) ON CONFLICT REPLACE,
+    FOREIGN KEY(anime_id) REFERENCES animes (_id)
+    ON DELETE CASCADE
+);
+INSERT INTO anime_sync
+SELECT _id, anime_id, sync_id, remote_id, library_id, title, last_episode_seen, total_episodes, status, score, remote_url, start_date, finish_date
+FROM anime_sync_temp;
+
+CREATE INDEX episodes_anime_id_index ON episodes(anime_id);
+CREATE INDEX episodes_unseen_by_anime_index ON episodes(anime_id, seen) WHERE seen = 0;
+CREATE INDEX animehistory_history_episode_id_index ON animehistory(animehistory_episode_id);
+CREATE INDEX library_favorite_index ON animes(favorite) WHERE favorite = 1;
+CREATE INDEX animes_url_index ON animes(url);
+
+CREATE VIEW IF NOT EXISTS animehistoryView AS
+SELECT
+animehistory.animehistory_id AS id,
+animes._id AS animeId,
+episodes._id AS episodeId,
+animes.title,
+animes.thumbnail_url AS thumbnailUrl,
+episodes.episode_number AS episodeNumber,
+animehistory.animehistory_last_seen AS seenAt,
+max_last_seen.animehistory_last_seen AS maxSeenAt,
+max_last_seen.history_episode_id AS maxSeenAtEpisodeId
+FROM animes
+JOIN episodes
+ON animes._id = episodes.anime_id
+JOIN animehistory
+ON episodes._id = animehistory.animehistory_episode_id
+JOIN (
+SELECT episodes.anime_id,episodes._id AS history_episode_id, MAX(animehistory.animehistory_last_seen) AS animehistory_last_seen
+FROM episodes JOIN animehistory
+ON episodes._id = animehistory.animehistory_episode_id
+GROUP BY episodes.anime_id
+) AS max_last_seen
+ON episodes.anime_id = max_last_seen.anime_id;
+
+DROP TABLE IF EXISTS anime_sync_temp;
+DROP TABLE IF EXISTS animes_categories_temp;
+DROP TABLE IF EXISTS animehistory_temp;
+DROP TABLE IF EXISTS episodes_temp;
+DROP TABLE IF EXISTS categories_temp;
+DROP TABLE IF EXISTS anime_temp;

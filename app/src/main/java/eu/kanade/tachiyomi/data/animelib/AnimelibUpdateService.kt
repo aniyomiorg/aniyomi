@@ -283,7 +283,7 @@ class AnimelibUpdateService(
      * @param animeToUpdate the list to update
      * @return an observable delivering the progress of each update.
      */
-    suspend fun updateEpisodeList() {
+    private suspend fun updateEpisodeList() {
         val semaphore = Semaphore(5)
         val progressCount = AtomicInteger(0)
         val currentlyUpdatingAnime = CopyOnWriteArrayList<AnimelibAnime>()
@@ -402,7 +402,7 @@ class AnimelibUpdateService(
      * @param anime the anime to update.
      * @return a pair of the inserted and removed episodes.
      */
-    suspend fun updateAnime(anime: Anime): Pair<List<Episode>, List<Episode>> {
+    private suspend fun updateAnime(anime: Anime): Pair<List<Episode>, List<Episode>> {
         val source = sourceManager.getOrStub(anime.source)
 
         // Update anime details metadata

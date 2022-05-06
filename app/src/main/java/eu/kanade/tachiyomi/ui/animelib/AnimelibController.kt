@@ -27,7 +27,7 @@ import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
 import eu.kanade.tachiyomi.ui.base.controller.TabbedController
-import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
+import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.preference.asImmediateFlow
@@ -210,9 +210,7 @@ class AnimelibController(
 
         binding.btnGlobalSearch.clicks()
             .onEach {
-                router.pushController(
-                    GlobalAnimeSearchController(presenter.query).withFadeTransaction(),
-                )
+                router.pushController(GlobalAnimeSearchController(presenter.query))
             }
             .launchIn(viewScope)
     }
@@ -494,7 +492,7 @@ class AnimelibController(
         // Notify the presenter a anime is being opened.
         presenter.onOpenAnime()
 
-        router.pushController(AnimeController(anime).withFadeTransaction())
+        router.pushController(AnimeController(anime))
     }
 
     /**

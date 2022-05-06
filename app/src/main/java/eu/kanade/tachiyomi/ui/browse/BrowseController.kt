@@ -22,6 +22,7 @@ import eu.kanade.tachiyomi.ui.base.controller.TabbedController
 import eu.kanade.tachiyomi.ui.browse.animeextension.AnimeExtensionController
 import eu.kanade.tachiyomi.ui.browse.animesource.AnimeSourceController
 import eu.kanade.tachiyomi.ui.browse.extension.ExtensionController
+import eu.kanade.tachiyomi.ui.browse.migration.animesources.MigrationAnimeSourcesController
 import eu.kanade.tachiyomi.ui.browse.migration.sources.MigrationSourcesController
 import eu.kanade.tachiyomi.ui.browse.source.SourceController
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -137,7 +138,8 @@ class BrowseController :
             R.string.label_mangasources,
             R.string.label_animeextensions,
             R.string.label_mangaextensions,
-            R.string.label_migration,
+            R.string.label_migration_anime,
+            R.string.label_migration_manga,
         )
             .map { resources!!.getString(it) }
 
@@ -152,6 +154,7 @@ class BrowseController :
                     ANIMESOURCES_CONTROLLER -> AnimeSourceController()
                     EXTENSIONS_CONTROLLER -> ExtensionController()
                     ANIMEEXTENSIONS_CONTROLLER -> AnimeExtensionController()
+                    MIGRATION_CONTROLLER_ANIME -> MigrationAnimeSourcesController()
                     MIGRATION_CONTROLLER -> MigrationSourcesController()
                     else -> error("Wrong position $position")
                 }
@@ -171,6 +174,7 @@ class BrowseController :
         const val ANIMESOURCES_CONTROLLER = 0
         const val EXTENSIONS_CONTROLLER = 3
         const val ANIMEEXTENSIONS_CONTROLLER = 2
-        const val MIGRATION_CONTROLLER = 4
+        const val MIGRATION_CONTROLLER_ANIME = 4
+        const val MIGRATION_CONTROLLER = 5
     }
 }

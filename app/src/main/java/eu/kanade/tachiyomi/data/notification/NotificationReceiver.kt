@@ -218,7 +218,7 @@ class NotificationReceiver : BroadcastReceiver() {
      * @param chapterId id of chapter
      */
     private fun openChapter(context: Context, mangaId: Long, chapterId: Long) {
-        val db = DatabaseHelper(context)
+        val db = Injekt.get<DatabaseHelper>()
         val manga = db.getManga(mangaId).executeAsBlocking()
         val chapter = db.getChapter(chapterId).executeAsBlocking()
         if (manga != null && chapter != null) {
@@ -239,7 +239,7 @@ class NotificationReceiver : BroadcastReceiver() {
      * @param episodeId id of episode
      */
     private fun openEpisode(context: Context, animeId: Long, episodeId: Long) {
-        val db = AnimeDatabaseHelper(context)
+        val db = Injekt.get<AnimeDatabaseHelper>()
         val anime = db.getAnime(animeId).executeAsBlocking()
         val episode = db.getEpisode(episodeId).executeAsBlocking()
         if (anime != null && episode != null) {

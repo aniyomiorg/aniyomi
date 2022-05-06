@@ -21,21 +21,18 @@ import eu.kanade.tachiyomi.data.database.queries.AnimeQueries
 import eu.kanade.tachiyomi.data.database.queries.AnimeTrackQueries
 import eu.kanade.tachiyomi.data.database.queries.CategoryQueries
 import eu.kanade.tachiyomi.data.database.queries.EpisodeQueries
-import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory
 
 /**
  * This class provides operations to manage the database through its interfaces.
  */
-open class AnimeDatabaseHelper(context: Context) :
+open class AnimeDatabaseHelper(
+    context: Context,
+    openHelper: SupportSQLiteOpenHelper,
+) :
     AnimeQueries, EpisodeQueries, AnimeTrackQueries, CategoryQueries, AnimeCategoryQueries, AnimeHistoryQueries {
 
-    private val configuration = SupportSQLiteOpenHelper.Configuration.builder(context)
-        .name(AnimeDbOpenCallback.DATABASE_NAME)
-        .callback(AnimeDbOpenCallback())
-        .build()
-
     override val db = DefaultStorIOSQLite.builder()
-        .sqliteOpenHelper(RequerySQLiteOpenHelperFactory().create(configuration))
+        .sqliteOpenHelper(openHelper)
         .addTypeMapping(Anime::class.java, AnimeTypeMapping())
         .addTypeMapping(Episode::class.java, EpisodeTypeMapping())
         .addTypeMapping(AnimeTrack::class.java, AnimeTrackTypeMapping())

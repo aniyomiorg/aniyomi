@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.ui.browse.animesource.latest
 import android.os.Bundle
 import android.view.Menu
 import androidx.core.os.bundleOf
+import eu.kanade.domain.animesource.model.AnimeSource
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourcePresenter
 
@@ -13,7 +13,7 @@ import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourcePresent
  */
 class LatestUpdatesController(bundle: Bundle) : BrowseAnimeSourceController(bundle) {
 
-    constructor(source: AnimeCatalogueSource) : this(
+    constructor(source: AnimeSource) : this(
         bundleOf(SOURCE_ID_KEY to source.id),
     )
 

@@ -23,6 +23,16 @@ class SettingsBrowseController : SettingsController() {
         titleRes = R.string.browse
 
         preferenceCategory {
+            titleRes = R.string.label_sources
+
+            switchPreference {
+                bindTo(preferences.duplicatePinnedSources())
+                titleRes = R.string.pref_duplicate_pinned_sources
+                summaryRes = R.string.pref_duplicate_pinned_sources_summary
+            }
+        }
+
+        preferenceCategory {
             titleRes = R.string.label_extensions
 
             switchPreference {

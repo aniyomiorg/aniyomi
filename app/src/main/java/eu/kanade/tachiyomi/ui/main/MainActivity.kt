@@ -50,8 +50,8 @@ import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NoAppBarElevationController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.TabbedController
+import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.base.controller.setRoot
-import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.BrowseController
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
@@ -92,7 +92,6 @@ class MainActivity : BaseActivity() {
 
     private val startScreenId by lazy {
         when (preferences.startScreen()) {
-            1 -> R.id.nav_animelib
             2 -> R.id.nav_library
             3 -> R.id.nav_updates
             4 -> R.id.nav_browse
@@ -191,7 +190,7 @@ class MainActivity : BaseActivity() {
                     }
                     R.id.nav_updates -> {
                         if (router.backstackSize == 1) {
-                            router.pushController(DownloadTabsController().withFadeTransaction())
+                            router.pushController(DownloadTabsController())
                         }
                     }
                     R.id.nav_animelib -> {
@@ -200,7 +199,7 @@ class MainActivity : BaseActivity() {
                     }
                     R.id.nav_more -> {
                         if (router.backstackSize == 1) {
-                            router.pushController(SettingsMainController().withFadeTransaction())
+                            router.pushController(SettingsMainController())
                         }
                     }
                 }
@@ -435,7 +434,7 @@ class MainActivity : BaseActivity() {
                     router.popToRoot()
                 }
                 setSelectedNavItem(R.id.nav_browse)
-                router.pushController(BrowseController(toExtensions = true).withFadeTransaction())
+                router.pushController(BrowseController(toExtensions = true))
             }
             SHORTCUT_MANGA -> {
                 val extras = intent.extras ?: return false
@@ -460,14 +459,14 @@ class MainActivity : BaseActivity() {
                     router.popToRoot()
                 }
                 setSelectedNavItem(R.id.nav_more)
-                router.pushController(MangaDownloadController().withFadeTransaction())
+                router.pushController(MangaDownloadController())
             }
             SHORTCUT_ANIME_DOWNLOADS -> {
                 if (router.backstackSize > 1) {
                     router.popToRoot()
                 }
                 setSelectedNavItem(R.id.nav_more)
-                router.pushController(AnimeDownloadController().withFadeTransaction())
+                router.pushController(AnimeDownloadController())
             }
             Intent.ACTION_SEARCH, Intent.ACTION_SEND, "com.google.android.gms.actions.SEARCH_ACTION" -> {
                 // If the intent match the "standard" Android search intent
@@ -479,7 +478,7 @@ class MainActivity : BaseActivity() {
                     if (router.backstackSize > 1) {
                         router.popToRoot()
                     }
-                    router.pushController(GlobalSearchController(query).withFadeTransaction())
+                    router.pushController(GlobalSearchController(query))
                 }
             }
             INTENT_SEARCH -> {
@@ -489,7 +488,7 @@ class MainActivity : BaseActivity() {
                     if (router.backstackSize > 1) {
                         router.popToRoot()
                     }
-                    router.pushController(GlobalSearchController(query, filter).withFadeTransaction())
+                    router.pushController(GlobalSearchController(query, filter))
                 }
             }
             INTENT_ANIMESEARCH -> {
@@ -499,7 +498,7 @@ class MainActivity : BaseActivity() {
                     if (router.backstackSize > 1) {
                         router.popToRoot()
                     }
-                    router.pushController(GlobalAnimeSearchController(query, filter).withFadeTransaction())
+                    router.pushController(GlobalAnimeSearchController(query, filter))
                 }
             }
             else -> {

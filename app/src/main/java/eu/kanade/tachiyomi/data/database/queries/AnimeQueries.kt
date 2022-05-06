@@ -13,7 +13,6 @@ import eu.kanade.tachiyomi.data.database.resolvers.AnimeCoverLastModifiedPutReso
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeFavoritePutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeFlagsPutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeLastUpdatedPutResolver
-import eu.kanade.tachiyomi.data.database.resolvers.AnimeTitlePutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimelibAnimeGetResolver
 import eu.kanade.tachiyomi.data.database.resolvers.SourceIdAnimeCountGetResolver
 import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable
@@ -117,11 +116,6 @@ interface AnimeQueries : DbProvider {
         .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_VIEWER, Anime::viewer_flags))
         .prepare()
 
-    fun updateViewerFlags(anime: List<Anime>) = db.put()
-        .objects(anime)
-        .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_VIEWER, Anime::viewer_flags))
-        .prepare()
-
     fun updateLastUpdated(anime: Anime) = db.put()
         .`object`(anime)
         .withPutResolver(AnimeLastUpdatedPutResolver())
@@ -130,11 +124,6 @@ interface AnimeQueries : DbProvider {
     fun updateAnimeFavorite(anime: Anime) = db.put()
         .`object`(anime)
         .withPutResolver(AnimeFavoritePutResolver())
-        .prepare()
-
-    fun updateAnimeTitle(anime: Anime) = db.put()
-        .`object`(anime)
-        .withPutResolver(AnimeTitlePutResolver())
         .prepare()
 
     fun updateAnimeCoverLastModified(anime: Anime) = db.put()
@@ -169,16 +158,6 @@ interface AnimeQueries : DbProvider {
         .withQuery(
             RawQuery.builder()
                 .query(getLastSeenAnimeQuery())
-                .observesTables(AnimeTable.TABLE)
-                .build(),
-        )
-        .prepare()
-
-    fun getTotalEpisodeAnime() = db.get()
-        .listOfObjects(Anime::class.java)
-        .withQuery(
-            RawQuery.builder()
-                .query(getTotalEpisodeAnimeQuery())
                 .observesTables(AnimeTable.TABLE)
                 .build(),
         )

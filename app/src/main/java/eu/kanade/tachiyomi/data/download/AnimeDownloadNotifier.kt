@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.data.download
 
+import android.app.PendingIntent
 import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
@@ -184,16 +185,17 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      *
      * @param reason the text to show.
      */
-    fun onWarning(reason: String, timeout: Long? = null) {
+    fun onWarning(reason: String, timeout: Long? = null, contentIntent: PendingIntent? = null) {
         with(errorNotificationBuilder) {
             setContentTitle(context.getString(R.string.download_notifier_downloader_title))
-            setContentText(reason)
+            setStyle(NotificationCompat.BigTextStyle().bigText(reason))
             setSmallIcon(R.drawable.ic_warning_white_24dp)
             setAutoCancel(true)
             clearActions()
             setContentIntent(NotificationHandler.openAnimeDownloadManagerPendingActivity(context))
             setProgress(0, 0, false)
             timeout?.let { setTimeoutAfter(it) }
+            contentIntent?.let { setContentIntent(it) }
 
             show(Notifications.ID_DOWNLOAD_CHAPTER_ERROR)
         }

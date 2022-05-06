@@ -37,6 +37,7 @@ import com.google.android.material.snackbar.Snackbar
 import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.SelectableAdapter
+import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -79,7 +80,7 @@ import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.getMainAppBarHeight
-import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
+import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
 import eu.kanade.tachiyomi.ui.browse.animesource.latest.LatestUpdatesController
@@ -132,6 +133,8 @@ class AnimeController :
     ChangeAnimeCategoriesDialog.Listener,
     DownloadCustomEpisodesDialog.Listener,
     DeleteEpisodesDialog.Listener {
+
+    constructor(history: AnimeHistoryWithRelations) : this(history.animeId)
 
     constructor(anime: Anime?, fromSource: Boolean = false) : super(
         bundleOf(
@@ -283,18 +286,6 @@ class AnimeController :
                 .setStableIdMode(ConcatAdapter.Config.StableIdMode.SHARED_STABLE_IDS)
                 .build()
             it.adapter = ConcatAdapter(config, animeInfoAdapter, episodesHeaderAdapter, episodesAdapter)
-
-            // Skips directly to chapters list if navigated to from the library
-            it.post {
-                if (!fromSource && preferences.jumpToChapters()) {
-                    val mainActivityAppBar = (activity as? MainActivity)?.binding?.appbar
-                    (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
-                        1,
-                        mainActivityAppBar?.height ?: 0,
-                    )
-                    mainActivityAppBar?.isLifted = true
-                }
-            }
 
             it.scrollStateChanges()
                 .onEach { _ ->
@@ -599,7 +590,7 @@ class AnimeController :
                 }
                 setNegativeButton(activity?.getString(R.string.action_cancel)) { _, _ -> }
                 setNeutralButton(activity?.getString(R.string.action_show_anime)) { _, _ ->
-                    router.pushController(AnimeController(animelibAnime).withFadeTransaction())
+                    router.pushController(AnimeController(animelibAnime))
                 }
                 setCancelable(true)
             }.create().show()
@@ -732,7 +723,7 @@ class AnimeController :
      * @param query the search query to pass to the search controller
      */
     fun performGlobalSearch(query: String) {
-        router.pushController(GlobalAnimeSearchController(query).withFadeTransaction())
+        router.pushController(GlobalAnimeSearchController(query))
     }
 
     /**
@@ -954,7 +945,7 @@ class AnimeController :
     private fun saveEpisodeHistory(episode: EpisodeItem) {
         if (!incognitoMode) {
             val history = AnimeHistory.create(episode.episode).apply { last_seen = Date().time }
-            db.updateAnimeHistoryLastSeen(history).asRxCompletable()
+            db.upsertAnimeHistoryLastSeen(history).asRxCompletable()
                 .onErrorComplete()
                 .subscribeOn(Schedulers.io())
                 .subscribe()
@@ -1042,7 +1033,7 @@ class AnimeController :
     private fun migrateAnime() {
         val controller = AnimeSearchController(presenter.anime)
         controller.targetController = this
-        router.pushController(controller.withFadeTransaction())
+        router.pushController(controller)
     }
 
     // Anime info - end

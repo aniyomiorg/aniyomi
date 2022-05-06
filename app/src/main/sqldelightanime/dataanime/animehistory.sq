@@ -1,0 +1,37 @@
+import java.util.Date;
+
+CREATE TABLE animehistory(
+    animehistory_id INTEGER NOT NULL PRIMARY KEY,
+    animehistory_episode_id INTEGER NOT NULL UNIQUE,
+    animehistory_last_seen INTEGER AS Date,
+    animehistory_time_seen INTEGER AS Date,
+    FOREIGN KEY(animehistory_episode_id) REFERENCES episodes (_id)
+    ON DELETE CASCADE
+);
+
+CREATE INDEX animehistory_history_episode_id_index ON animehistory(animehistory_episode_id);
+
+resetAnimeHistoryById:
+UPDATE animehistory
+SET animehistory_last_seen = 0
+WHERE animehistory_id = :historyId;
+
+resetHistoryByAnimeId:
+UPDATE animehistory
+SET animehistory_last_seen = 0
+WHERE animehistory_id IN (
+    SELECT H.animehistory_id
+    FROM animes M
+    INNER JOIN episodes C
+    ON M._id = C.anime_id
+    INNER JOIN animehistory H
+    ON C._id = H.animehistory_episode_id
+    WHERE M._id = :animeId
+);
+
+removeAllHistory:
+DELETE FROM animehistory;
+
+removeResettedHistory:
+DELETE FROM animehistory
+WHERE animehistory_last_seen = 0;
