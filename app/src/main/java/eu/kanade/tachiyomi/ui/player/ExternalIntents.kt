@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
+import androidx.core.content.FileProvider
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -12,19 +14,29 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.util.lang.launchUI
+import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import uy.kohesive.injekt.injectLazy
+import java.io.File
 
 class ExternalIntents(val anime: Anime, val source: AnimeSource) {
     private val preferences: PreferencesHelper by injectLazy()
 
     fun getExternalIntent(episode: Episode, video: Video, context: Context): Intent? {
-        val videoUrl: Uri
-        if (video.videoUrl == null) {
+        val videoUrl = if (video.videoUrl == null) {
             makeErrorToast(context, Exception("video URL is null."))
             return null
         } else {
-            videoUrl = Uri.parse(video.videoUrl)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                logcat { File(Uri.parse(video.videoUrl).path!!).path }
+                FileProvider.getUriForFile(
+                    context,
+                    context.applicationContext.packageName + ".provider",
+                    File(Uri.parse(video.videoUrl).path!!),
+                )
+            } else {
+                Uri.parse(video.videoUrl)
+            }
         }
         val pkgName = preferences.externalPlayerPreference()
         val anime = anime
