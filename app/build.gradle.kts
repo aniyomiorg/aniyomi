@@ -26,7 +26,7 @@ android {
         applicationId = "xyz.jmir.tachiyomi.mi"
         minSdk = AndroidConfig.minSdk
         targetSdk = AndroidConfig.targetSdk
-        versionCode = 80
+        versionCode = 81
         versionName = "0.13.4.0"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")

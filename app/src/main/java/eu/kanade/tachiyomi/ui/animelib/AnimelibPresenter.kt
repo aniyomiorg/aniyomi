@@ -319,6 +319,7 @@ class AnimelibPresenter(
                 SortModeSetting.DATE_ADDED -> {
                     i2.anime.date_added.compareTo(i1.anime.date_added)
                 }
+                else -> throw IllegalStateException("Invalid SortModeSetting: $sortingMode")
             }
         }
 

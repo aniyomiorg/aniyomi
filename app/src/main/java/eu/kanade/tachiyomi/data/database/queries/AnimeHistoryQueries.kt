@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.database.queries
 
-import com.pushtorefresh.storio.sqlite.queries.DeleteQuery
 import com.pushtorefresh.storio.sqlite.queries.RawQuery
 import eu.kanade.tachiyomi.data.database.DbProvider
 import eu.kanade.tachiyomi.data.database.models.AnimeHistory
@@ -49,15 +48,5 @@ interface AnimeHistoryQueries : DbProvider {
     fun upsertAnimeHistoryLastSeen(historyList: List<AnimeHistory>) = db.put()
         .objects(historyList)
         .withPutResolver(AnimeHistoryUpsertResolver())
-        .prepare()
-
-    fun deleteAnimeHistoryNoLastSeen() = db.delete()
-        .byQuery(
-            DeleteQuery.builder()
-                .table(AnimeHistoryTable.TABLE)
-                .where("${AnimeHistoryTable.COL_LAST_SEEN} = ?")
-                .whereArgs(0)
-                .build(),
-        )
         .prepare()
 }

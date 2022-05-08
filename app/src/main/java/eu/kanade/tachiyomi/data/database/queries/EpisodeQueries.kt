@@ -72,11 +72,7 @@ interface EpisodeQueries : DbProvider {
         )
         .prepare()
 
-    fun insertEpisode(episode: Episode) = db.put().`object`(episode).prepare()
-
     fun insertEpisodes(episodes: List<Episode>) = db.put().objects(episodes).prepare()
-
-    fun deleteEpisode(episode: Episode) = db.delete().`object`(episode).prepare()
 
     fun deleteEpisodes(episodes: List<Episode>) = db.delete().objects(episodes).prepare()
 

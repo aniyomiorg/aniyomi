@@ -131,24 +131,12 @@ interface AnimeQueries : DbProvider {
         .withPutResolver(AnimeCoverLastModifiedPutResolver())
         .prepare()
 
-    fun deleteAnime(anime: Anime) = db.delete().`object`(anime).prepare()
-
-    fun deleteAnimes(animes: List<Anime>) = db.delete().objects(animes).prepare()
-
     fun deleteAnimesNotInLibraryBySourceIds(sourceIds: List<Long>) = db.delete()
         .byQuery(
             DeleteQuery.builder()
                 .table(AnimeTable.TABLE)
                 .where("${AnimeTable.COL_FAVORITE} = ? AND ${AnimeTable.COL_SOURCE} IN (${Queries.placeholders(sourceIds.size)})")
                 .whereArgs(0, *sourceIds.toTypedArray())
-                .build(),
-        )
-        .prepare()
-
-    fun deleteAnimes() = db.delete()
-        .byQuery(
-            DeleteQuery.builder()
-                .table(AnimeTable.TABLE)
                 .build(),
         )
         .prepare()
