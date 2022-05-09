@@ -53,7 +53,7 @@ class AnimeHistoryController : ComposeController<AnimeHistoryPresenter>(), RootC
             nestedScrollInterop = nestedScrollInterop,
             presenter = presenter,
             onClickCover = { history ->
-                router.pushController(AnimeController(history))
+                parentController!!.router.pushController(AnimeController(history))
             },
             onClickResume = { history ->
                 presenter.getNextEpisodeForAnime(history.animeId, history.episodeId)
