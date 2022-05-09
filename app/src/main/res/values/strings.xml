@@ -39,6 +39,9 @@
     <string name="label_default">Default</string>
     <string name="label_warning">Warning</string>
 
+    <string name="pref_bottom_nav_history">Replace Updates with History</string>
+    <string name="pref_bottom_nav_no_manga">Replace Manga with History</string>
+
     <string name="unlock_app">Unlock Aniyomi</string>
     <string name="confirm_lock_change">Authenticate to confirm change</string>
     <string name="confirm_exit">Press back again to exit</string>
@@ -221,6 +224,7 @@
     <string name="pref_relative_time_short">Short (Today, Yesterday)</string>
     <string name="pref_relative_time_long">Long (Short+, n days ago)</string>
     <string name="pref_date_format">Date format</string>
+    <string name="pref_bottom_nav_style">Bottom navigation style</string>
     <string name="pref_start_screen">Start screen</string>
 
     <string name="pref_confirm_exit">Confirm exit</string>

@@ -13,6 +13,7 @@ import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.util.system.applySystemAnimatorScale
 
 class TachiyomiBottomNavigationView @JvmOverloads constructor(
@@ -21,6 +22,14 @@ class TachiyomiBottomNavigationView @JvmOverloads constructor(
     defStyleAttr: Int = R.attr.bottomNavigationStyle,
     defStyleRes: Int = R.style.Widget_Design_BottomNavigationView,
 ) : BottomNavigationView(context, attrs, defStyleAttr, defStyleRes) {
+
+    override fun inflateMenu(resId: Int) {
+        when (PreferencesHelper(context).bottomNavStyle()) {
+            1 -> super.inflateMenu(R.menu.main_nav_history)
+            2 -> super.inflateMenu(R.menu.main_nav_no_manga)
+            else -> super.inflateMenu(resId)
+        }
+    }
 
     private var currentAnimator: ViewPropertyAnimator? = null
 

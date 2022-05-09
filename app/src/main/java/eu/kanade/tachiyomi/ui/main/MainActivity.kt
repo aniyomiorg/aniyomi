@@ -62,6 +62,7 @@ import eu.kanade.tachiyomi.ui.library.LibraryController
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.more.NewUpdateDialogController
+import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
 import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
 import eu.kanade.tachiyomi.ui.setting.SettingsMainController
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -91,12 +92,15 @@ class MainActivity : BaseActivity() {
     private lateinit var router: Router
 
     private val startScreenId by lazy {
-        when (preferences.startScreen()) {
-            2 -> R.id.nav_library
-            3 -> R.id.nav_updates
-            4 -> R.id.nav_browse
-            else -> R.id.nav_animelib
+        when (preferences.bottomNavStyle()) {
+            1 -> getStartScreen(startScreenArrayHistory)
+            2 -> getStartScreen(startScreenArrayNoManga)
+            else -> getStartScreen(startScreenArrayDefault)
         }
+    }
+
+    private fun getStartScreen(array: IntArray): Int {
+        return array.getOrNull(preferences.startScreen()) ?: R.id.nav_animelib
     }
 
     private var isConfirmingExit: Boolean = false
@@ -127,6 +131,8 @@ class MainActivity : BaseActivity() {
         val didMigration = if (savedInstanceState == null) Migrations.upgrade(preferences) else false
 
         binding = MainActivityBinding.inflate(layoutInflater)
+
+        binding.bottomNav!!.maxItemCount
 
         // Do not let the launcher create a new activity http://stackoverflow.com/questions/16283079
         if (!isTaskRoot) {
@@ -179,6 +185,7 @@ class MainActivity : BaseActivity() {
                     R.id.nav_library -> router.setRoot(LibraryController(), id)
                     R.id.nav_animelib -> router.setRoot(AnimelibController(), id)
                     R.id.nav_updates -> router.setRoot(UpdatesTabsController(), id)
+                    R.id.nav_history -> router.setRoot(HistoryTabsController(), id)
                     R.id.nav_browse -> router.setRoot(BrowseController(), id)
                     R.id.nav_more -> router.setRoot(MoreController(), id)
                 }
@@ -191,6 +198,11 @@ class MainActivity : BaseActivity() {
                     R.id.nav_updates -> {
                         if (router.backstackSize == 1) {
                             router.pushController(DownloadTabsController())
+                        }
+                    }
+                    R.id.nav_history -> {
+                        if (router.backstackSize == 1) {
+                            router.pushController(HistoryTabsController())
                         }
                     }
                     R.id.nav_animelib -> {
@@ -709,5 +721,29 @@ class MainActivity : BaseActivity() {
         const val INTENT_ANIMESEARCH = "eu.kanade.tachiyomi.ANIMESEARCH"
         const val INTENT_SEARCH_QUERY = "query"
         const val INTENT_SEARCH_FILTER = "filter"
+
+        private val startScreenArrayDefault = intArrayOf(
+            R.id.nav_animelib,
+            R.id.nav_animelib,
+            R.id.nav_library,
+            R.id.nav_updates,
+            R.id.nav_browse,
+        )
+
+        private val startScreenArrayHistory = intArrayOf(
+            R.id.nav_animelib,
+            R.id.nav_animelib,
+            R.id.nav_library,
+            R.id.nav_history,
+            R.id.nav_browse,
+        )
+
+        private val startScreenArrayNoManga = intArrayOf(
+            R.id.nav_animelib,
+            R.id.nav_animelib,
+            R.id.nav_updates,
+            R.id.nav_history,
+            R.id.nav_browse,
+        )
     }
 }

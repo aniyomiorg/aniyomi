@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.setting
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import androidx.core.app.ActivityCompat
 import androidx.preference.PreferenceScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.preference.bindTo
@@ -28,15 +29,31 @@ class SettingsGeneralController : SettingsController() {
         intListPreference {
             key = Keys.startScreen
             titleRes = R.string.pref_start_screen
-            entriesRes = arrayOf(
-                R.string.label_animelib,
-                R.string.label_manga,
-                R.string.label_recent_updates,
-                R.string.browse,
-            )
+            entriesRes = when (preferences.bottomNavStyle()) {
+                1 -> startScreenArrayHistory
+                2 -> startScreenArrayNoManga
+                else -> startScreenArrayDefault
+            }
             entryValues = arrayOf("1", "2", "3", "4")
             defaultValue = "1"
             summary = "%s"
+        }
+
+        intListPreference {
+            key = Keys.bottomNavStyle
+            titleRes = R.string.pref_bottom_nav_style
+            entriesRes = arrayOf(
+                R.string.label_default,
+                R.string.pref_bottom_nav_history,
+                R.string.pref_bottom_nav_no_manga,
+            )
+            entryValues = arrayOf("0", "1", "2")
+            defaultValue = "0"
+            summary = "%s"
+            onChange {
+                activity?.let { ActivityCompat.recreate(it) }
+                true
+            }
         }
 
         switchPreference {
@@ -144,7 +161,7 @@ class SettingsGeneralController : SettingsController() {
                 defaultValue = ""
                 summary = "%s"
 
-                onChange { newValue ->
+                onChange {
                     activity?.recreate()
                     true
                 }
@@ -170,3 +187,24 @@ class SettingsGeneralController : SettingsController() {
         }
     }
 }
+
+private val startScreenArrayDefault = arrayOf(
+    R.string.label_animelib,
+    R.string.label_manga,
+    R.string.label_recent_updates,
+    R.string.browse,
+)
+
+private val startScreenArrayHistory = arrayOf(
+    R.string.label_animelib,
+    R.string.label_manga,
+    R.string.label_recent_manga,
+    R.string.browse,
+)
+
+private val startScreenArrayNoManga = arrayOf(
+    R.string.label_animelib,
+    R.string.label_recent_updates,
+    R.string.label_recent_manga,
+    R.string.browse,
+)

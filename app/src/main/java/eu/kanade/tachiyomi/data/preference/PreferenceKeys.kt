@@ -65,6 +65,8 @@ object PreferenceKeys {
     const val migrationSortingMode = "pref_migration_sorting"
     const val migrationSortingDirection = "pref_migration_direction"
 
+    const val bottomNavStyle = "bottom_nav_style"
+
     const val startScreen = "start_screen"
 
     const val hideNotificationContent = "hide_notification_content"

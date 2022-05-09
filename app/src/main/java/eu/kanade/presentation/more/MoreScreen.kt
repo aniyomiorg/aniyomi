@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CloudOff
+import androidx.compose.material.icons.outlined.CollectionsBookmark
 import androidx.compose.material.icons.outlined.GetApp
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.History
@@ -28,9 +29,12 @@ import eu.kanade.presentation.components.PreferenceRow
 import eu.kanade.presentation.components.SwitchPreference
 import eu.kanade.presentation.util.quantityStringResource
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.more.DownloadQueueState
 import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.more.MorePresenter
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 @Composable
 fun MoreScreen(
@@ -46,6 +50,8 @@ fun MoreScreen(
 ) {
     val uriHandler = LocalUriHandler.current
     val downloadQueueState by presenter.downloadQueueState.collectAsState()
+
+    val preferences: PreferencesHelper = Injekt.get()
 
     LazyColumn(
         modifier = Modifier.nestedScroll(nestedScrollInterop),
@@ -75,9 +81,20 @@ fun MoreScreen(
         item { Divider() }
 
         item {
+            val bottomNavStyle = preferences.bottomNavStyle()
+            val titleRes = when (preferences.bottomNavStyle()) {
+                1 -> R.string.label_recent_updates
+                2 -> R.string.label_manga
+                else -> R.string.label_recent_manga
+            }
+            val painter = when (bottomNavStyle) {
+                1 -> painterResource(R.drawable.ic_updates_outline_24dp)
+                2 -> rememberVectorPainter(Icons.Outlined.CollectionsBookmark)
+                else -> rememberVectorPainter(Icons.Outlined.History)
+            }
             PreferenceRow(
-                title = stringResource(R.string.history),
-                painter = rememberVectorPainter(Icons.Outlined.History),
+                title = stringResource(titleRes),
+                painter = painter,
                 onClick = onClickHistory,
             )
         }

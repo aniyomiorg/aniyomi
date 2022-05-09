@@ -45,6 +45,8 @@ class PreferencesHelper(val context: Context) {
         "backup",
     ).toUri()
 
+    fun bottomNavStyle() = prefs.getInt(Keys.bottomNavStyle, 0)
+
     fun startScreen() = prefs.getInt(Keys.startScreen, 1)
 
     fun confirmExit() = prefs.getBoolean(Keys.confirmExit, false)
