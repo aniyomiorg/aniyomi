@@ -1,5 +1,8 @@
 package eu.kanade.tachiyomi.ui.recent.animeupdates
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,18 +16,27 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.SelectableAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
+import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.UpdatesControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
+import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodesAdapter
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.main.MainActivity
+import eu.kanade.tachiyomi.ui.player.EpisodeLoader
+import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.util.lang.awaitSingle
+import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.notificationManager
 import eu.kanade.tachiyomi.util.system.toast
@@ -35,6 +47,9 @@ import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
 import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 
 /**
  * Fragment that shows recent episodes.
@@ -60,6 +75,9 @@ class AnimeUpdatesController :
      */
     var adapter: AnimeUpdatesAdapter? = null
         private set
+
+    private val preferences: PreferencesHelper by injectLazy()
+    private val sourceManager: AnimeSourceManager by injectLazy()
 
     init {
         setHasOptionsMenu(true)
@@ -187,13 +205,84 @@ class AnimeUpdatesController :
     }
 
     /**
-     * Open episode in reader
+     * Open episode in player
      * @param item selected episode
      */
-    private fun openEpisode(item: AnimeUpdatesItem) {
+    private fun openEpisode(item: AnimeUpdatesItem, hasAnimation: Boolean = false, playerChangeRequested: Boolean = false) {
         val activity = activity ?: return
         val intent = PlayerActivity.newIntent(activity, item.anime, item.episode)
-        startActivity(intent)
+        val useInternal = preferences.alwaysUseExternalPlayer() == playerChangeRequested
+        if (hasAnimation) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        }
+
+        if (!useInternal) launchIO {
+            val video = try {
+                EpisodeLoader.getLink(item.episode, item.anime, source = sourceManager.getOrStub(item.anime.source)).awaitSingle()
+            } catch (e: Exception) {
+                return@launchIO makeErrorToast(activity, e)
+            }
+            val downloadManager: AnimeDownloadManager = Injekt.get()
+            val isDownloaded = downloadManager.isEpisodeDownloaded(item.episode, item.anime, true)
+            if (video != null) {
+                AnimeController.EXT_EPISODE = item.episode
+                AnimeController.EXT_ANIME = item.anime
+
+                val source = sourceManager.getOrStub(item.anime.source)
+                val extIntent = ExternalIntents(item.anime, source).getExternalIntent(item.episode, video, isDownloaded, activity)
+                if (extIntent != null) try {
+                    startActivityForResult(extIntent, AnimeController.REQUEST_EXTERNAL)
+                } catch (e: Exception) {
+                    makeErrorToast(activity, e)
+                }
+            } else {
+                makeErrorToast(activity, Exception("Couldn't find any video links."))
+            }
+        } else {
+            startActivity(intent)
+        }
+    }
+
+    private fun makeErrorToast(context: Context, e: Exception?) {
+        launchUI { context.toast(e?.message ?: "Cannot open episode") }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == AnimeController.REQUEST_EXTERNAL && resultCode == Activity.RESULT_OK) {
+            val anime = AnimeController.EXT_ANIME ?: return
+            val currentExtEpisode = AnimeController.EXT_EPISODE ?: return
+            val currentPosition: Long
+            val duration: Long
+            val cause = data!!.getStringExtra("end_by") ?: ""
+            if (cause.isNotEmpty()) {
+                val positionExtra = data.extras?.get("position")
+                currentPosition = if (positionExtra is Int) {
+                    positionExtra.toLong()
+                } else {
+                    positionExtra as? Long ?: 0L
+                }
+                val durationExtra = data.extras?.get("duration")
+                duration = if (durationExtra is Int) {
+                    durationExtra.toLong()
+                } else {
+                    durationExtra as? Long ?: 0L
+                }
+            } else {
+                if (data.extras?.get("extra_position") != null) {
+                    currentPosition = data.getLongExtra("extra_position", 0L)
+                    duration = data.getLongExtra("extra_duration", 0L)
+                } else {
+                    currentPosition = data.getIntExtra("position", 0).toLong()
+                    duration = data.getIntExtra("duration", 0).toLong()
+                }
+            }
+            if (cause == "playback_completion") {
+                AnimeController.setEpisodeProgress(currentExtEpisode, anime, currentExtEpisode.total_seconds, currentExtEpisode.total_seconds)
+            } else {
+                AnimeController.setEpisodeProgress(currentExtEpisode, anime, currentPosition, duration)
+            }
+            AnimeController.saveEpisodeHistory(EpisodeItem(currentExtEpisode, anime))
+        }
     }
 
     /**
@@ -381,6 +470,8 @@ class AnimeUpdatesController :
         toolbar.findToolbarItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.bookmark }
         toolbar.findToolbarItem(R.id.action_mark_as_seen)?.isVisible = episodes.any { !it.episode.seen }
         toolbar.findToolbarItem(R.id.action_mark_as_unseen)?.isVisible = episodes.all { it.episode.seen }
+        toolbar.findToolbarItem(R.id.action_play_externally)?.isVisible = !preferences.alwaysUseExternalPlayer()
+        toolbar.findToolbarItem(R.id.action_play_internally)?.isVisible = preferences.alwaysUseExternalPlayer()
     }
 
     /**
@@ -404,6 +495,8 @@ class AnimeUpdatesController :
             R.id.action_remove_bookmark -> bookmarkEpisodes(getSelectedEpisodes(), false)
             R.id.action_mark_as_seen -> markAsRead(getSelectedEpisodes())
             R.id.action_mark_as_unseen -> markAsUnread(getSelectedEpisodes())
+            R.id.action_play_internally -> openEpisode(getSelectedEpisodes().last(), playerChangeRequested = true)
+            R.id.action_play_externally -> openEpisode(getSelectedEpisodes().last(), playerChangeRequested = true)
             else -> return false
         }
         return true
