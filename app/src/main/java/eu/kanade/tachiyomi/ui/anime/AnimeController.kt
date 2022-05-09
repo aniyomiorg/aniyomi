@@ -1171,8 +1171,8 @@ class AnimeController :
         toolbar.findToolbarItem(R.id.action_mark_as_read)?.isVisible = episodes.any { !it.episode.seen }
         toolbar.findToolbarItem(R.id.action_mark_as_unread)?.isVisible = episodes.any { it.episode.seen }
         toolbar.findToolbarItem(R.id.action_mark_previous_as_read)?.isVisible = episodes.size == 1
-        toolbar.findToolbarItem(R.id.action_play_externally)?.isVisible = !preferences.alwaysUseExternalPlayer()
-        toolbar.findToolbarItem(R.id.action_play_internally)?.isVisible = preferences.alwaysUseExternalPlayer()
+        toolbar.findToolbarItem(R.id.action_play_externally)?.isVisible = !preferences.alwaysUseExternalPlayer() && episodes.size == 1
+        toolbar.findToolbarItem(R.id.action_play_internally)?.isVisible = preferences.alwaysUseExternalPlayer() && episodes.size == 1
     }
 
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
