@@ -158,15 +158,11 @@ class AnimeController :
     var anime: Anime? = null
         private set
 
-    var currentExtEpisode: Episode? = null
-        private set
-
     var source: AnimeSource? = null
         private set
 
     val fromSource = args.getBoolean(FROM_SOURCE_EXTRA, false)
 
-    private val preferences: PreferencesHelper by injectLazy()
     private val coverCache: AnimeCoverCache by injectLazy()
     private val sourceManager: AnimeSourceManager by injectLazy()
 
@@ -203,10 +199,6 @@ class AnimeController :
     private var trackSheet: TrackSheet? = null
 
     private var dialog: DialogController? = null
-
-    private val incognitoMode = preferences.incognitoMode().get()
-
-    private val db: AnimeDatabaseHelper = Injekt.get()
 
     /**
      * For [recyclerViewUpdatesToolbarTitleAlpha]
@@ -906,8 +898,8 @@ class AnimeController :
             presenter.editCover(anime!!, activity, dataUri)
         }
         if (requestCode == REQUEST_EXTERNAL && resultCode == Activity.RESULT_OK) {
-            val anime = anime ?: return
-            val currentExtEpisode = currentExtEpisode ?: return
+            val anime = EXT_ANIME ?: return
+            val currentExtEpisode = EXT_EPISODE ?: return
             val currentPosition: Long
             val duration: Long
             val cause = data!!.getStringExtra("end_by") ?: ""
@@ -934,85 +926,11 @@ class AnimeController :
                 }
             }
             if (cause == "playback_completion") {
-                setEpisodeProgress(currentExtEpisode, anime, 1L, 1L)
+                setEpisodeProgress(currentExtEpisode, anime, currentExtEpisode.total_seconds, currentExtEpisode.total_seconds)
             } else {
                 setEpisodeProgress(currentExtEpisode, anime, currentPosition, duration)
             }
             saveEpisodeHistory(EpisodeItem(currentExtEpisode, anime))
-        }
-    }
-
-    private fun saveEpisodeHistory(episode: EpisodeItem) {
-        if (!incognitoMode) {
-            val history = AnimeHistory.create(episode.episode).apply { last_seen = Date().time }
-            db.upsertAnimeHistoryLastSeen(history).asRxCompletable()
-                .onErrorComplete()
-                .subscribeOn(Schedulers.io())
-                .subscribe()
-        }
-    }
-
-    private fun setEpisodeProgress(episode: Episode, anime: Anime, seconds: Long, totalSeconds: Long) {
-        if (!incognitoMode) {
-            if (totalSeconds > 0L) {
-                episode.last_second_seen = seconds
-                episode.total_seconds = totalSeconds
-                val progress = preferences.progressPreference()
-                if (!episode.seen) episode.seen = episode.last_second_seen >= episode.total_seconds * progress
-                val episodes = listOf(EpisodeItem(episode, anime))
-                launchIO {
-                    db.updateEpisodesProgress(episodes).executeAsBlocking()
-                    if (preferences.autoUpdateTrack() && episode.seen) {
-                        updateTrackEpisodeSeen(episode, anime)
-                    }
-                    if (preferences.removeAfterMarkedAsRead()) {
-                        launchIO {
-                            try {
-                                val downloadManager: AnimeDownloadManager = Injekt.get()
-                                val source: AnimeSource = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
-                                downloadManager.deleteEpisodes(episodes, anime, source).forEach {
-                                    if (it is EpisodeItem) {
-                                        it.status = AnimeDownload.State.NOT_DOWNLOADED
-                                        it.download = null
-                                    }
-                                }
-                            } catch (e: Throwable) {
-                                throw e
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun updateTrackEpisodeSeen(episode: Episode, anime: Anime) {
-        val episodeSeen = episode.episode_number
-
-        val trackManager = Injekt.get<TrackManager>()
-
-        launchIO {
-            db.getTracks(anime).executeAsBlocking()
-                .mapNotNull { track ->
-                    val service = trackManager.getService(track.sync_id)
-                    if (service != null && service.isLogged && episodeSeen > track.last_episode_seen) {
-                        track.last_episode_seen = episodeSeen
-
-                        // We want these to execute even if the presenter is destroyed and leaks
-                        // for a while. The view can still be garbage collected.
-                        async {
-                            runCatching {
-                                service.update(track)
-                                db.insertTrack(track).executeAsBlocking()
-                            }
-                        }
-                    } else {
-                        null
-                    }
-                }
-                .awaitAll()
-                .mapNotNull { it.exceptionOrNull() }
-                .forEach { logcat(LogPriority.WARN, it) }
         }
     }
 
@@ -1111,7 +1029,8 @@ class AnimeController :
                 return@launchIO makeErrorToast(activity, e)
             }
             if (video != null) {
-                currentExtEpisode = episode
+                EXT_EPISODE = episode
+                EXT_ANIME = presenter.anime
 
                 val source = source ?: return@launchIO
                 val extIntent = ExternalIntents(presenter.anime, source).getExternalIntent(episode, video, activity)
@@ -1502,6 +1421,91 @@ class AnimeController :
     companion object {
         const val FROM_SOURCE_EXTRA = "from_source"
         const val ANIME_EXTRA = "anime"
+
+        /**
+         * Values and Functions used to handle External players
+         */
+        var EXT_EPISODE: Episode? = null
+        var EXT_ANIME: Anime? = null
+
+        private val preferences: PreferencesHelper by injectLazy()
+        private val incognitoMode = preferences.incognitoMode().get()
+        private val db: AnimeDatabaseHelper = Injekt.get()
+
+        internal fun saveEpisodeHistory(episode: EpisodeItem) {
+            if (!incognitoMode) {
+                val history = AnimeHistory.create(episode.episode).apply { last_seen = Date().time }
+                db.upsertAnimeHistoryLastSeen(history).asRxCompletable()
+                    .onErrorComplete()
+                    .subscribeOn(Schedulers.io())
+                    .subscribe()
+            }
+        }
+
+        internal fun setEpisodeProgress(episode: Episode, anime: Anime, seconds: Long, totalSeconds: Long) {
+            if (!incognitoMode) {
+                if (totalSeconds > 0L) {
+                    episode.last_second_seen = seconds
+                    episode.total_seconds = totalSeconds
+                    val progress = preferences.progressPreference()
+                    if (!episode.seen) episode.seen = episode.last_second_seen >= episode.total_seconds * progress
+                    val episodes = listOf(EpisodeItem(episode, anime))
+                    launchIO {
+                        db.updateEpisodesProgress(episodes).executeAsBlocking()
+                        if (preferences.autoUpdateTrack() && episode.seen) {
+                            updateTrackEpisodeSeen(episode, anime)
+                        }
+                        if (preferences.removeAfterMarkedAsRead()) {
+                            launchIO {
+                                try {
+                                    val downloadManager: AnimeDownloadManager = Injekt.get()
+                                    val source: AnimeSource = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
+                                    downloadManager.deleteEpisodes(episodes, anime, source).forEach {
+                                        if (it is EpisodeItem) {
+                                            it.status = AnimeDownload.State.NOT_DOWNLOADED
+                                            it.download = null
+                                        }
+                                    }
+                                } catch (e: Throwable) {
+                                    throw e
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private fun updateTrackEpisodeSeen(episode: Episode, anime: Anime) {
+            val episodeSeen = episode.episode_number
+
+            val trackManager = Injekt.get<TrackManager>()
+
+            launchIO {
+                db.getTracks(anime).executeAsBlocking()
+                    .mapNotNull { track ->
+                        val service = trackManager.getService(track.sync_id)
+                        if (service != null && service.isLogged && episodeSeen > track.last_episode_seen) {
+                            track.last_episode_seen = episodeSeen
+
+                            // We want these to execute even if the presenter is destroyed and leaks
+                            // for a while. The view can still be garbage collected.
+                            async {
+                                runCatching {
+                                    service.update(track)
+                                    db.insertTrack(track).executeAsBlocking()
+                                }
+                            }
+                        } else {
+                            null
+                        }
+                    }
+                    .awaitAll()
+                    .mapNotNull { it.exceptionOrNull() }
+                    .forEach { logcat(LogPriority.WARN, it) }
+            }
+        }
+
 
         /**
          * Key to change the cover of a anime in [onActivityResult].
