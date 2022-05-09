@@ -1028,12 +1028,14 @@ class AnimeController :
             } catch (e: Exception) {
                 return@launchIO makeErrorToast(activity, e)
             }
+            val downloadManager: AnimeDownloadManager = Injekt.get()
+            val isDownloaded = downloadManager.isEpisodeDownloaded(episode, presenter.anime, true)
             if (video != null) {
                 EXT_EPISODE = episode
                 EXT_ANIME = presenter.anime
 
                 val source = source ?: return@launchIO
-                val extIntent = ExternalIntents(presenter.anime, source).getExternalIntent(episode, video, activity)
+                val extIntent = ExternalIntents(presenter.anime, source).getExternalIntent(episode, video, isDownloaded, activity)
                 if (extIntent != null) try {
                     startActivityForResult(extIntent, REQUEST_EXTERNAL)
                 } catch (e: Exception) {
@@ -1505,7 +1507,6 @@ class AnimeController :
                     .forEach { logcat(LogPriority.WARN, it) }
             }
         }
-
 
         /**
          * Key to change the cover of a anime in [onActivityResult].
