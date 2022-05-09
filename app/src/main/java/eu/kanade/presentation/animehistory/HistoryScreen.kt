@@ -242,7 +242,7 @@ fun RemoveHistoryDialog(
         },
         text = {
             Column {
-                Text(text = stringResource(id = R.string.dialog_with_checkbox_remove_description))
+                Text(text = stringResource(id = R.string.dialog_with_checkbox_remove_description_anime))
                 Row(
                     modifier = Modifier
                         .padding(top = 16.dp)
@@ -260,7 +260,7 @@ fun RemoveHistoryDialog(
                     )
                     Text(
                         modifier = Modifier.padding(start = 4.dp),
-                        text = stringResource(id = R.string.dialog_with_checkbox_reset)
+                        text = stringResource(id = R.string.dialog_with_checkbox_reset_anime)
                     )
                 }
             }
