@@ -66,9 +66,9 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
 
             backup = Backup(
                 backupManga(databaseManga, flags),
-                backupCategories(),
+                backupCategories(flags),
                 backupAnime(databaseAnime, flags),
-                backupCategoriesAnime(),
+                backupCategoriesAnime(flags),
                 emptyList(),
                 backupExtensionInfo(databaseManga),
                 emptyList(),
@@ -160,25 +160,35 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
     }
 
     /**
-     * Backup the categories of library
+     * Backup the categories of manga library
      *
      * @return list of [BackupCategory] to be backed up
      */
-    private fun backupCategories(): List<BackupCategory> {
-        return databaseHelper.getCategories()
-            .executeAsBlocking()
-            .map { BackupCategory.copyFrom(it) }
+    private fun backupCategories(options: Int): List<BackupCategory> {
+        // Check if user wants category information in backup
+        return if (options and BACKUP_CATEGORY_MASK == BACKUP_CATEGORY) {
+            databaseHelper.getCategories()
+                .executeAsBlocking()
+                .map { BackupCategory.copyFrom(it) }
+        } else {
+            emptyList()
+        }
     }
 
     /**
-     * Backup the categories of library
+     * Backup the categories of anime library
      *
      * @return list of [BackupCategory] to be backed up
      */
-    private fun backupCategoriesAnime(): List<BackupCategory> {
-        return animedatabaseHelper.getCategories()
-            .executeAsBlocking()
-            .map { BackupCategory.copyFrom(it) }
+    private fun backupCategoriesAnime(options: Int): List<BackupCategory> {
+        // Check if user wants category information in backup
+        return if (options and BACKUP_CATEGORY_MASK == BACKUP_CATEGORY) {
+            animedatabaseHelper.getCategories()
+                .executeAsBlocking()
+                .map { BackupCategory.copyFrom(it) }
+        } else {
+            emptyList()
+        }
     }
 
     /**
