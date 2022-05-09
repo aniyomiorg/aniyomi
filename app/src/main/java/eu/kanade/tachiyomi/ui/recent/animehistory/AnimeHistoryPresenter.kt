@@ -13,6 +13,7 @@ import eu.kanade.domain.animehistory.interactor.RemoveAnimeHistoryById
 import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
 import eu.kanade.presentation.animehistory.HistoryUiModel
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 import java.util.Date
 
 /**
@@ -99,11 +101,13 @@ class AnimeHistoryPresenter(
         }
     }
 
-    fun getNextEpisodeForAnime(mangaId: Long, chapterId: Long) {
+    fun getNextEpisodeForAnime(animeId: Long, episodeId: Long) {
         presenterScope.launchIO {
-            val episode = getNextEpisodeForAnime.await(mangaId, chapterId)
+            val db: AnimeDatabaseHelper by injectLazy()
+            val episode = db.getEpisode(getNextEpisodeForAnime.await(animeId, episodeId)!!.id).executeAsBlocking()
+            val anime = db.getAnime(animeId).executeAsBlocking()
             launchUI {
-                view?.openEpisode(episode)
+                view?.openEpisode(episode, anime)
             }
         }
     }
