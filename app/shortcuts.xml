@@ -35,6 +35,17 @@
     </shortcut>
     <shortcut
         android:enabled="true"
+        android:icon="@drawable/sc_history_48dp"
+        android:shortcutDisabledMessage="@string/app_not_available"
+        android:shortcutId="show_recently_updated"
+        android:shortcutLongLabel="@string/label_recent_manga"
+        android:shortcutShortLabel="@string/label_recent_manga">
+        <intent
+            android:action="eu.kanade.tachiyomi.SHOW_RECENTLY_READ"
+            android:targetClass="eu.kanade.tachiyomi.ui.main.MainActivity" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
         android:icon="@drawable/sc_explore_48dp"
         android:shortcutDisabledMessage="@string/app_not_available"
         android:shortcutId="show_catalogues"

@@ -92,15 +92,15 @@ class MainActivity : BaseActivity() {
     private lateinit var router: Router
 
     private val startScreenId by lazy {
-        when (preferences.bottomNavStyle()) {
-            1 -> getStartScreen(startScreenArrayHistory)
-            2 -> getStartScreen(startScreenArrayNoManga)
-            else -> getStartScreen(startScreenArrayDefault)
-        }
+        getNavId(preferences.startScreen())
     }
 
-    private fun getStartScreen(array: IntArray): Int {
-        return array.getOrNull(preferences.startScreen()) ?: R.id.nav_animelib
+    private fun getNavId(index: Int): Int {
+        return when (preferences.bottomNavStyle()) {
+            1 -> startScreenArrayHistory.getOrNull(index)
+            2 -> startScreenArrayNoManga.getOrNull(index)
+            else -> startScreenArrayDefault.getOrNull(index)
+        } ?: R.id.nav_animelib
     }
 
     private var isConfirmingExit: Boolean = false
@@ -198,11 +198,6 @@ class MainActivity : BaseActivity() {
                     R.id.nav_updates -> {
                         if (router.backstackSize == 1) {
                             router.pushController(DownloadTabsController())
-                        }
-                    }
-                    R.id.nav_history -> {
-                        if (router.backstackSize == 1) {
-                            router.pushController(HistoryTabsController())
                         }
                     }
                     R.id.nav_animelib -> {
@@ -439,7 +434,7 @@ class MainActivity : BaseActivity() {
             SHORTCUT_LIBRARY -> setSelectedNavItem(R.id.nav_library)
             SHORTCUT_ANIMELIB -> setSelectedNavItem(R.id.nav_animelib)
             SHORTCUT_RECENTLY_UPDATED -> setSelectedNavItem(R.id.nav_updates)
-            // SHORTCUT_RECENTLY_READ -> setSelectedNavItem(R.id.nav_history)
+            SHORTCUT_RECENTLY_READ -> setSelectedNavItem(R.id.nav_history)
             SHORTCUT_CATALOGUES -> setSelectedNavItem(R.id.nav_browse)
             SHORTCUT_EXTENSIONS -> {
                 if (router.backstackSize > 1) {
@@ -593,8 +588,33 @@ class MainActivity : BaseActivity() {
     }
 
     fun setSelectedNavItem(itemId: Int) {
+        val newItemId = getNavIdForId(itemId)
         if (!isFinishing) {
-            nav.selectedItemId = itemId
+            if (newItemId != null) {
+                nav.selectedItemId = newItemId
+            } else {
+                nav.selectedItemId = R.id.nav_more
+                router.setRoot(getControllerForId(itemId), itemId)
+            }
+        }
+    }
+
+    private fun getNavIdForId(id: Int): Int? {
+        return when (preferences.bottomNavStyle()) {
+            1 -> startScreenArrayHistory.firstOrNull { it == id }
+            2 -> startScreenArrayNoManga.firstOrNull { it == id }
+            else -> startScreenArrayDefault.firstOrNull { it == id }
+        }
+    }
+
+    private fun getControllerForId(id: Int): Controller {
+        return when (id) {
+            R.id.nav_library -> LibraryController()
+            R.id.nav_updates -> UpdatesTabsController()
+            R.id.nav_history -> HistoryTabsController()
+            R.id.nav_browse -> BrowseController()
+            R.id.nav_more -> MoreController()
+            else -> AnimelibController()
         }
     }
 
