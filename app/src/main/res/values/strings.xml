@@ -491,10 +491,10 @@
     <string name="pref_category_anime_download">Anime downloads</string>
     <string name="pref_use_external_downloader">Always use external downloader for anime</string>
     <string name="pref_external_downloader_selection">Downloader app preference</string>
-    <string name="pref_download_new">Download new chapters</string>
+    <string name="pref_download_new">Download new chapters/episodes</string>
     <string name="pref_download_new_categories_details">Manga in excluded categories will not be downloaded even if they are also in included categories.</string>
     <string name="pref_download_new_anime_categories_details">Anime in excluded categories will not be downloaded even if they are also in included categories.</string>
-    <string name="save_chapter_as_cbz">Save as CBZ archive</string>
+    <string name="save_chapter_as_cbz">Save chapters as CBZ archive</string>
     <string name="split_tall_images">Auto split tall images</string>
     <string name="split_tall_images_summary">Improves reader performance by splitting tall downloaded images.</string>
 
