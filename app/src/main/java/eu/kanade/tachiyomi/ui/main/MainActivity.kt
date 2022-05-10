@@ -132,8 +132,6 @@ class MainActivity : BaseActivity() {
 
         binding = MainActivityBinding.inflate(layoutInflater)
 
-        binding.bottomNav!!.maxItemCount
-
         // Do not let the launcher create a new activity http://stackoverflow.com/questions/16283079
         if (!isTaskRoot) {
             finish()
