@@ -919,9 +919,9 @@ class PlayerActivity :
     fun updatePictureInPictureActions(
         playing: Boolean,
     ): PictureInPictureParams {
-        var aspect: Double? = null
+        var aspect: Int? = null
         if (player.videoAspect != null) {
-            aspect = if (player.videoAspect!!.times(10000) >= 23900) 23899.9 else if (player.videoAspect!!.times(10000) <= 4184) 4184.1 else player.videoAspect!!.times(10000)
+            aspect = if (player.videoAspect!!.times(10000) >= 23900) 23899 else if (player.videoAspect!!.times(10000) <= 4184) 4185 else player.videoAspect!!.times(10000).toInt()
         }
         val mPictureInPictureParams = PictureInPictureParams.Builder()
             // Set action items for the picture-in-picture mode. These are the only custom controls
@@ -960,7 +960,7 @@ class PlayerActivity :
 
                 ),
             )
-            .setAspectRatio(aspect?.let { Rational(it.toInt(), 10000) })
+            .setAspectRatio(aspect?.let { Rational(it, 10000) })
             .build()
         setPictureInPictureParams(mPictureInPictureParams)
         return mPictureInPictureParams
