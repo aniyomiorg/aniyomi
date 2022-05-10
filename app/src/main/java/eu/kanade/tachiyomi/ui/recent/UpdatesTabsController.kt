@@ -10,6 +10,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.viewpager.RouterPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.PagerControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.RxController
@@ -17,6 +18,7 @@ import eu.kanade.tachiyomi.ui.base.controller.TabbedController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesController
 import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
+import uy.kohesive.injekt.injectLazy
 
 class UpdatesTabsController() :
     RxController<PagerControllerBinding>(),
@@ -24,6 +26,8 @@ class UpdatesTabsController() :
     TabbedController {
 
     private var adapter: UpdatesTabsAdapter? = null
+
+    private val preferences: PreferencesHelper by injectLazy()
 
     override fun getTitle(): String {
         return resources!!.getString(R.string.label_recent_updates)
@@ -62,11 +66,9 @@ class UpdatesTabsController() :
 
     private inner class UpdatesTabsAdapter : RouterPagerAdapter(this@UpdatesTabsController) {
 
-        private val tabTitles = listOf(
-            R.string.label_animeupdates,
-            R.string.label_updates,
-        )
-            .map { resources!!.getString(it) }
+        private val tabTitles =
+            if (preferences.switchAnimeManga().get()) listOf(R.string.label_updates, R.string.label_animeupdates,).map { resources!!.getString(it) }
+            else listOf(R.string.label_animeupdates, R.string.label_updates,).map { resources!!.getString(it) }
 
         override fun getCount(): Int {
             return tabTitles.size
@@ -75,8 +77,8 @@ class UpdatesTabsController() :
         override fun configureRouter(router: Router, position: Int) {
             if (!router.hasRootController()) {
                 val controller: Controller = when (position) {
-                    UPDATES_CONTROLLER -> UpdatesController()
-                    ANIME_UPDATES_CONTROLLER -> AnimeUpdatesController()
+                    UPDATES_CONTROLLER_FIRST -> if (preferences.switchAnimeManga().get()) UpdatesController() else AnimeUpdatesController()
+                    UPDATES_CONTROLLER_SECOND -> if (preferences.switchAnimeManga().get()) AnimeUpdatesController() else UpdatesController()
                     else -> error("Wrong position $position")
                 }
                 router.setRoot(RouterTransaction.with(controller))
@@ -89,7 +91,7 @@ class UpdatesTabsController() :
     }
 
     companion object {
-        const val UPDATES_CONTROLLER = 1
-        const val ANIME_UPDATES_CONTROLLER = 0
+        const val UPDATES_CONTROLLER_FIRST = 0
+        const val UPDATES_CONTROLLER_SECOND = 1
     }
 }

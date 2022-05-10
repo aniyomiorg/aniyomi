@@ -48,7 +48,7 @@ class BrowseController :
 
     private var adapter: BrowseAdapter? = null
 
-    override fun getTitle(): String? {
+    override fun getTitle(): String {
         return resources!!.getString(R.string.browse)
     }
 
@@ -61,7 +61,7 @@ class BrowseController :
         binding.pager.adapter = adapter
 
         if (toExtensions) {
-            binding.pager.currentItem = ANIMEEXTENSIONS_CONTROLLER
+            binding.pager.currentItem = EXTENSIONS_CONTROLLER_FIRST
         }
     }
 
@@ -93,8 +93,8 @@ class BrowseController :
 
     override fun cleanupTabs(tabs: TabLayout) {
         // Remove extension update badge
-        tabs.getTabAt(EXTENSIONS_CONTROLLER)?.removeBadge()
-        tabs.getTabAt(ANIMEEXTENSIONS_CONTROLLER)?.removeBadge()
+        tabs.getTabAt(EXTENSIONS_CONTROLLER_FIRST)?.removeBadge()
+        tabs.getTabAt(EXTENSIONS_CONTROLLER_SECOND)?.removeBadge()
     }
 
     fun setExtensionUpdateBadge() {
@@ -105,11 +105,20 @@ class BrowseController :
 
         (activity as? MainActivity)?.binding?.tabs?.apply {
             val updates = preferences.extensionUpdatesCount().get()
-            if (updates > 0) {
-                val badge: BadgeDrawable? = getTabAt(EXTENSIONS_CONTROLLER)?.orCreateBadge
-                badge?.isVisible = true
+            if (preferences.switchAnimeManga().get()) {
+                if (updates > 0) {
+                    val badge: BadgeDrawable? = getTabAt(EXTENSIONS_CONTROLLER_FIRST)?.orCreateBadge
+                    badge?.isVisible = true
+                } else {
+                    getTabAt(EXTENSIONS_CONTROLLER_FIRST)?.removeBadge()
+                }
             } else {
-                getTabAt(EXTENSIONS_CONTROLLER)?.removeBadge()
+                if (updates > 0) {
+                    val badge: BadgeDrawable? = getTabAt(EXTENSIONS_CONTROLLER_SECOND)?.orCreateBadge
+                    badge?.isVisible = true
+                } else {
+                    getTabAt(EXTENSIONS_CONTROLLER_SECOND)?.removeBadge()
+                }
             }
         }
     }
@@ -122,26 +131,46 @@ class BrowseController :
 
         (activity as? MainActivity)?.binding?.tabs?.apply {
             val updates = preferences.animeextensionUpdatesCount().get()
-            if (updates > 0) {
-                val badge: BadgeDrawable? = getTabAt(ANIMEEXTENSIONS_CONTROLLER)?.orCreateBadge
-                badge?.isVisible = true
+            if (preferences.switchAnimeManga().get()) {
+                if (updates > 0) {
+                    val badge: BadgeDrawable? = getTabAt(EXTENSIONS_CONTROLLER_SECOND)?.orCreateBadge
+                    badge?.isVisible = true
+                } else {
+                    getTabAt(EXTENSIONS_CONTROLLER_SECOND)?.removeBadge()
+                }
             } else {
-                getTabAt(ANIMEEXTENSIONS_CONTROLLER)?.removeBadge()
+                if (updates > 0) {
+                    val badge: BadgeDrawable? = getTabAt(EXTENSIONS_CONTROLLER_FIRST)?.orCreateBadge
+                    badge?.isVisible = true
+                } else {
+                    getTabAt(EXTENSIONS_CONTROLLER_FIRST)?.removeBadge()
+                }
             }
         }
     }
 
     private inner class BrowseAdapter : RouterPagerAdapter(this@BrowseController) {
 
-        private val tabTitles = listOf(
-            R.string.label_animesources,
-            R.string.label_mangasources,
-            R.string.label_animeextensions,
-            R.string.label_mangaextensions,
-            R.string.label_migration_anime,
-            R.string.label_migration_manga,
-        )
-            .map { resources!!.getString(it) }
+        private val tabTitles =
+            if (preferences.switchAnimeManga().get()) {
+                listOf(
+                    R.string.label_mangasources,
+                    R.string.label_animesources,
+                    R.string.label_mangaextensions,
+                    R.string.label_animeextensions,
+                    R.string.label_migration_manga,
+                    R.string.label_migration_anime,
+                )
+                    .map { resources!!.getString(it) }
+            } else listOf(
+                R.string.label_animesources,
+                R.string.label_mangasources,
+                R.string.label_animeextensions,
+                R.string.label_mangaextensions,
+                R.string.label_migration_anime,
+                R.string.label_migration_manga,
+            )
+                .map { resources!!.getString(it) }
 
         override fun getCount(): Int {
             return tabTitles.size
@@ -150,12 +179,12 @@ class BrowseController :
         override fun configureRouter(router: Router, position: Int) {
             if (!router.hasRootController()) {
                 val controller: Controller = when (position) {
-                    SOURCES_CONTROLLER -> SourceController()
-                    ANIMESOURCES_CONTROLLER -> AnimeSourceController()
-                    EXTENSIONS_CONTROLLER -> ExtensionController()
-                    ANIMEEXTENSIONS_CONTROLLER -> AnimeExtensionController()
-                    MIGRATION_CONTROLLER_ANIME -> MigrationAnimeSourcesController()
-                    MIGRATION_CONTROLLER -> MigrationSourcesController()
+                    SOURCES_CONTROLLER_FIRST -> if (preferences.switchAnimeManga().get()) SourceController() else AnimeSourceController()
+                    SOURCES_CONTROLLER_SECOND -> if (preferences.switchAnimeManga().get()) AnimeSourceController() else SourceController()
+                    EXTENSIONS_CONTROLLER_FIRST -> if (preferences.switchAnimeManga().get()) ExtensionController() else AnimeExtensionController()
+                    EXTENSIONS_CONTROLLER_SECOND -> if (preferences.switchAnimeManga().get()) AnimeExtensionController() else ExtensionController()
+                    MIGRATION_CONTROLLER_FIRST -> if (preferences.switchAnimeManga().get()) MigrationSourcesController() else MigrationAnimeSourcesController()
+                    MIGRATION_CONTROLLER_SECOND -> if (preferences.switchAnimeManga().get()) MigrationAnimeSourcesController() else MigrationSourcesController()
                     else -> error("Wrong position $position")
                 }
                 router.setRoot(RouterTransaction.with(controller))
@@ -170,11 +199,11 @@ class BrowseController :
     companion object {
         const val TO_EXTENSIONS_EXTRA = "to_extensions"
 
-        const val SOURCES_CONTROLLER = 1
-        const val ANIMESOURCES_CONTROLLER = 0
-        const val EXTENSIONS_CONTROLLER = 3
-        const val ANIMEEXTENSIONS_CONTROLLER = 2
-        const val MIGRATION_CONTROLLER_ANIME = 4
-        const val MIGRATION_CONTROLLER = 5
+        const val SOURCES_CONTROLLER_FIRST = 0
+        const val SOURCES_CONTROLLER_SECOND = 1
+        const val EXTENSIONS_CONTROLLER_FIRST = 2
+        const val EXTENSIONS_CONTROLLER_SECOND = 3
+        const val MIGRATION_CONTROLLER_FIRST = 4
+        const val MIGRATION_CONTROLLER_SECOND = 5
     }
 }

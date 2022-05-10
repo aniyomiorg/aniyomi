@@ -10,6 +10,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.viewpager.RouterPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.PagerControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.RxController
@@ -17,6 +18,7 @@ import eu.kanade.tachiyomi.ui.base.controller.TabbedController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
 import eu.kanade.tachiyomi.ui.recent.history.HistoryController
+import uy.kohesive.injekt.injectLazy
 
 class HistoryTabsController() :
     RxController<PagerControllerBinding>(),
@@ -24,6 +26,8 @@ class HistoryTabsController() :
     TabbedController {
 
     private var adapter: HistoryTabsAdapter? = null
+
+    private val preferences: PreferencesHelper by injectLazy()
 
     override fun getTitle(): String {
         return resources!!.getString(R.string.history)
@@ -62,11 +66,9 @@ class HistoryTabsController() :
 
     private inner class HistoryTabsAdapter : RouterPagerAdapter(this@HistoryTabsController) {
 
-        private val tabTitles = listOf(
-            R.string.label_animehistory,
-            R.string.label_history,
-        )
-            .map { resources!!.getString(it) }
+        private val tabTitles =
+            if (preferences.switchAnimeManga().get()) listOf(R.string.label_history, R.string.label_animehistory,).map { resources!!.getString(it) }
+            else listOf(R.string.label_animehistory, R.string.label_history,).map { resources!!.getString(it) }
 
         override fun getCount(): Int {
             return tabTitles.size
@@ -75,8 +77,8 @@ class HistoryTabsController() :
         override fun configureRouter(router: Router, position: Int) {
             if (!router.hasRootController()) {
                 val controller: Controller = when (position) {
-                    HISTORY_CONTROLLER -> HistoryController()
-                    ANIME_HISTORY_CONTROLLER -> AnimeHistoryController()
+                    HISTORY_CONTROLLER_FIRST -> if (preferences.switchAnimeManga().get()) HistoryController() else AnimeHistoryController()
+                    HISTORY_CONTROLLER_SECOND -> if (preferences.switchAnimeManga().get()) AnimeHistoryController() else HistoryController()
                     else -> error("Wrong position $position")
                 }
                 router.setRoot(RouterTransaction.with(controller))
@@ -89,7 +91,7 @@ class HistoryTabsController() :
     }
 
     companion object {
-        const val ANIME_HISTORY_CONTROLLER = 0
-        const val HISTORY_CONTROLLER = 1
+        const val HISTORY_CONTROLLER_FIRST = 0
+        const val HISTORY_CONTROLLER_SECOND = 1
     }
 }

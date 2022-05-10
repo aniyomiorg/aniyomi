@@ -12,6 +12,7 @@ import com.bluelinelabs.conductor.viewpager.RouterPagerAdapter
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.PagerControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.FabController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
@@ -19,6 +20,7 @@ import eu.kanade.tachiyomi.ui.base.controller.RxController
 import eu.kanade.tachiyomi.ui.base.controller.TabbedController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.widget.listener.SimpleTabSelectedListener
+import uy.kohesive.injekt.injectLazy
 import eu.kanade.tachiyomi.ui.download.anime.DownloadController as AnimeDownloadController
 import eu.kanade.tachiyomi.ui.download.manga.DownloadController as MangaDownloadController
 
@@ -29,6 +31,8 @@ class DownloadTabsController :
     FabController {
 
     private var adapter: DownloadTabsAdapter? = null
+
+    private val preferences: PreferencesHelper by injectLazy()
 
     private val animeController = AnimeDownloadController()
 
@@ -41,15 +45,27 @@ class DownloadTabsController :
     private val onTabSelectedListener = object : SimpleTabSelectedListener() {
         override fun onTabSelected(tab: TabLayout.Tab?) {
             when (tab?.position) {
-                ANIMEDOWNLOAD_CONTROLLER -> {
-                    animeController.configureFab(thisFab)
-                    animeController.selectTab()
-                    if (!firstOpen) animeController.setInformationView()
+                DOWNLOAD_CONTROLLER_FIRST -> {
+                    if (preferences.switchAnimeManga().get()) {
+                        mangaController.configureFab(thisFab)
+                        mangaController.selectTab()
+                        if (!firstOpen) mangaController.setInformationView()
+                    } else {
+                        animeController.configureFab(thisFab)
+                        animeController.selectTab()
+                        if (!firstOpen) animeController.setInformationView()
+                    }
                 }
-                MANGADOWNLOAD_CONTROLLER -> {
-                    mangaController.configureFab(thisFab)
-                    mangaController.selectTab()
-                    if (!firstOpen) mangaController.setInformationView()
+                DOWNLOAD_CONTROLLER_SECOND -> {
+                    if (preferences.switchAnimeManga().get()) {
+                        animeController.configureFab(thisFab)
+                        animeController.selectTab()
+                        if (!firstOpen) animeController.setInformationView()
+                    } else {
+                        mangaController.configureFab(thisFab)
+                        mangaController.selectTab()
+                        if (!firstOpen) mangaController.setInformationView()
+                    }
                 }
             }
             firstOpen = false
@@ -58,13 +74,23 @@ class DownloadTabsController :
         override fun onTabUnselected(tab: TabLayout.Tab?) {
             thisFab.isVisible = false
             when (tab?.position) {
-                ANIMEDOWNLOAD_CONTROLLER -> {
-                    animeController.unselectTab()
-                    animeController.cleanupFab(thisFab)
+                DOWNLOAD_CONTROLLER_FIRST -> {
+                    if (preferences.switchAnimeManga().get()) {
+                        mangaController.unselectTab()
+                        mangaController.cleanupFab(thisFab)
+                    } else {
+                        animeController.unselectTab()
+                        animeController.cleanupFab(thisFab)
+                    }
                 }
-                MANGADOWNLOAD_CONTROLLER -> {
-                    mangaController.unselectTab()
-                    mangaController.cleanupFab(thisFab)
+                DOWNLOAD_CONTROLLER_SECOND -> {
+                    if (preferences.switchAnimeManga().get()) {
+                        animeController.unselectTab()
+                        animeController.cleanupFab(thisFab)
+                    } else {
+                        mangaController.unselectTab()
+                        mangaController.cleanupFab(thisFab)
+                    }
                 }
             }
         }
@@ -82,6 +108,14 @@ class DownloadTabsController :
 
         adapter = DownloadTabsAdapter()
         binding.pager.adapter = adapter
+
+        if (preferences.switchAnimeManga().get()) {
+            mangaController.selectTab()
+            animeController.unselectTab()
+        } else {
+            animeController.selectTab()
+            mangaController.unselectTab()
+        }
     }
 
     override fun onDestroyView(view: View) {
@@ -114,11 +148,9 @@ class DownloadTabsController :
 
     private inner class DownloadTabsAdapter : RouterPagerAdapter(this@DownloadTabsController) {
 
-        private val tabTitles = listOf(
-            R.string.label_animehistory,
-            R.string.label_history,
-        )
-            .map { resources!!.getString(it) }
+        private val tabTitles =
+            if (preferences.switchAnimeManga().get()) listOf(R.string.label_manga, R.string.label_animelib,).map { resources!!.getString(it) }
+            else listOf(R.string.label_animelib, R.string.label_manga,).map { resources!!.getString(it) }
 
         override fun getCount(): Int {
             return tabTitles.size
@@ -127,8 +159,8 @@ class DownloadTabsController :
         override fun configureRouter(router: Router, position: Int) {
             if (!router.hasRootController()) {
                 val controller: Controller = when (position) {
-                    ANIMEDOWNLOAD_CONTROLLER -> animeController
-                    MANGADOWNLOAD_CONTROLLER -> mangaController
+                    DOWNLOAD_CONTROLLER_FIRST -> if (preferences.switchAnimeManga().get()) mangaController else animeController
+                    DOWNLOAD_CONTROLLER_SECOND -> if (preferences.switchAnimeManga().get()) animeController else mangaController
                     else -> error("Wrong position $position")
                 }
                 router.setRoot(RouterTransaction.with(controller))
@@ -152,7 +184,7 @@ class DownloadTabsController :
     }
 
     companion object {
-        const val ANIMEDOWNLOAD_CONTROLLER = 0
-        const val MANGADOWNLOAD_CONTROLLER = 1
+        const val DOWNLOAD_CONTROLLER_FIRST = 0
+        const val DOWNLOAD_CONTROLLER_SECOND = 1
     }
 }
