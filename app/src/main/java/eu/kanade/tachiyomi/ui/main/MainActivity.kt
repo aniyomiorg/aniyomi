@@ -333,6 +333,10 @@ class MainActivity : BaseActivity() {
                 }
             }
             .launchIn(lifecycleScope)
+
+        preferences.showNavBarLabels()
+            .asImmediateFlow { setNavLabelVisibility() }
+            .launchIn(lifecycleScope)
     }
 
     /**
@@ -747,6 +751,14 @@ class MainActivity : BaseActivity() {
 
     private val nav: NavigationBarView
         get() = binding.bottomNav ?: binding.sideNav!!
+
+    private fun setNavLabelVisibility() {
+        if (preferences.showNavBarLabels().get()) {
+            nav.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_LABELED
+        } else {
+            nav.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_SELECTED
+        }
+    }
 
     init {
         registerSecureActivity(this)
