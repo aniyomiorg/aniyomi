@@ -800,7 +800,7 @@ class PlayerActivity :
     }
 
     private fun updatePlaybackStatus(paused: Boolean) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) updatePictureInPictureActions(!paused)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) updatePictureInPictureActions(!paused)
         val r = if (paused) R.drawable.ic_play_arrow_80dp else R.drawable.ic_pause_80dp
         binding.playerControls.binding.playBtn.setImageResource(r)
 
@@ -919,6 +919,10 @@ class PlayerActivity :
     fun updatePictureInPictureActions(
         playing: Boolean,
     ): PictureInPictureParams {
+        var aspect: Double? = null
+        if (player.videoAspect != null) {
+            aspect = if (player.videoAspect!!.times(10000) >= 23900) 23899.9 else if (player.videoAspect!!.times(10000) <= 4184) 4184.1 else player.videoAspect!!.times(10000)
+        }
         val mPictureInPictureParams = PictureInPictureParams.Builder()
             // Set action items for the picture-in-picture mode. These are the only custom controls
             // available during the picture-in-picture mode.
@@ -956,7 +960,7 @@ class PlayerActivity :
 
                 ),
             )
-            .setAspectRatio(MPVLib.getPropertyInt("video-params/dw")?.let { width -> MPVLib.getPropertyInt("video-params/dh")?.let { height -> Rational(width, height) } })
+            .setAspectRatio(aspect?.let { Rational(it.toInt(), 10000) })
             .build()
         setPictureInPictureParams(mPictureInPictureParams)
         return mPictureInPictureParams
