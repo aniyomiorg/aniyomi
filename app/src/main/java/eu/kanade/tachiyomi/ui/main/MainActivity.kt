@@ -237,6 +237,11 @@ class MainActivity : BaseActivity() {
                             router.pushController(DownloadTabsController())
                         }
                     }
+                    R.id.nav_history -> {
+                        if (router.backstackSize == 1) {
+                            router.pushController(DownloadTabsController())
+                        }
+                    }
                     R.id.nav_more -> {
                         if (router.backstackSize == 1) {
                             router.pushController(SettingsMainController())
