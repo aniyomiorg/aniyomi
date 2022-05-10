@@ -33,6 +33,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.more.DownloadQueueState
 import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.more.MorePresenter
+import eu.kanade.tachiyomi.util.preference.asImmediateFlow
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -120,19 +121,41 @@ fun MoreScreen(
                 onClick = onClickDownloadQueue,
             )
         }
-        item {
-            PreferenceRow(
-                title = stringResource(R.string.anime_categories),
-                painter = rememberVectorPainter(Icons.Outlined.Label),
-                onClick = onClickAnimeCategories,
-            )
-        }
-        item {
-            PreferenceRow(
-                title = stringResource(R.string.categories),
-                painter = rememberVectorPainter(Icons.Outlined.Label),
-                onClick = onClickCategories,
-            )
+        preferences.switchAnimeManga().asImmediateFlow {
+            when (it) {
+                true -> {
+                    item {
+                        PreferenceRow(
+                            title = stringResource(R.string.categories),
+                            painter = rememberVectorPainter(Icons.Outlined.Label),
+                            onClick = onClickCategories,
+                        )
+                    }
+                    item {
+                        PreferenceRow(
+                            title = stringResource(R.string.anime_categories),
+                            painter = rememberVectorPainter(Icons.Outlined.Label),
+                            onClick = onClickAnimeCategories,
+                        )
+                    }
+                }
+                false -> {
+                    item {
+                        PreferenceRow(
+                            title = stringResource(R.string.anime_categories),
+                            painter = rememberVectorPainter(Icons.Outlined.Label),
+                            onClick = onClickAnimeCategories,
+                        )
+                    }
+                    item {
+                        PreferenceRow(
+                            title = stringResource(R.string.categories),
+                            painter = rememberVectorPainter(Icons.Outlined.Label),
+                            onClick = onClickCategories,
+                        )
+                    }
+                }
+            }
         }
         item {
             PreferenceRow(

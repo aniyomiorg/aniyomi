@@ -186,25 +186,38 @@ class SettingsGeneralController : SettingsController() {
             }
         }
     }
+    private val startScreenArrayDefault =
+        if (preferences.switchAnimeManga().get()) arrayOf(
+            R.string.label_manga,
+            R.string.label_animelib,
+            R.string.label_recent_updates,
+            R.string.browse,
+        )
+        else arrayOf(
+            R.string.label_animelib,
+            R.string.label_manga,
+            R.string.label_recent_updates,
+            R.string.browse,
+        )
+
+    private val startScreenArrayHistory =
+        if (preferences.switchAnimeManga().get()) arrayOf(
+            R.string.label_manga,
+            R.string.label_animelib,
+            R.string.label_recent_manga,
+            R.string.browse,
+        )
+        else arrayOf(
+            R.string.label_animelib,
+            R.string.label_manga,
+            R.string.label_recent_manga,
+            R.string.browse,
+        )
+
+    private val startScreenArrayNoManga = arrayOf(
+        R.string.label_animelib,
+        R.string.label_recent_updates,
+        R.string.label_recent_manga,
+        R.string.browse,
+    )
 }
-
-private val startScreenArrayDefault = arrayOf(
-    R.string.label_animelib,
-    R.string.label_manga,
-    R.string.label_recent_updates,
-    R.string.browse,
-)
-
-private val startScreenArrayHistory = arrayOf(
-    R.string.label_animelib,
-    R.string.label_manga,
-    R.string.label_recent_manga,
-    R.string.browse,
-)
-
-private val startScreenArrayNoManga = arrayOf(
-    R.string.label_animelib,
-    R.string.label_recent_updates,
-    R.string.label_recent_manga,
-    R.string.browse,
-)

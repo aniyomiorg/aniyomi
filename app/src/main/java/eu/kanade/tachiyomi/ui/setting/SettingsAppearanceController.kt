@@ -93,10 +93,10 @@ class SettingsAppearanceController : SettingsController() {
             }
         }
 
-        if (context.isTablet()) {
-            preferenceCategory {
-                titleRes = R.string.pref_category_navigation
+        preferenceCategory {
+            titleRes = R.string.pref_category_navigation
 
+            if (context.isTablet()) {
                 intListPreference {
                     bindTo(preferences.sideNavIconAlignment())
                     titleRes = R.string.pref_side_nav_icon_alignment
@@ -108,6 +108,23 @@ class SettingsAppearanceController : SettingsController() {
                     entryValues = arrayOf("0", "1", "2")
                     summary = "%s"
                 }
+            }
+            if (preferences.bottomNavStyle() != 2) {
+                switchPreference {
+                    key = Keys.switchAnimeManga
+                    titleRes = R.string.pref_switch_anime_manga
+                    defaultValue = false
+                }
+            }
+            switchPreference {
+                key = Keys.showNavBarLabels
+                titleRes = R.string.pref_show_nav_labels
+                defaultValue = true
+            }
+            switchPreference {
+                key = Keys.hideNavBarScroll
+                titleRes = R.string.pref_hide_nav_scroll
+                defaultValue = false
             }
         }
 

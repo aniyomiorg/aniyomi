@@ -94,67 +94,155 @@ class SettingsLibraryController : SettingsController() {
         preferenceCategory {
             titleRes = R.string.general_categories
 
-            preference {
-                key = "pref_action_edit_anime_categories"
-                titleRes = R.string.action_edit_anime_categories
+            if (preferences.switchAnimeManga().get()) {
+                preference {
+                    key = "pref_action_edit_categories"
+                    titleRes = R.string.action_edit_categories
 
-                val catCount = dbCategoriesAnime.size
-                summary = context.resources.getQuantityString(R.plurals.num_categories, catCount, catCount)
+                    val catCount = dbCategories.size
+                    summary = context.resources.getQuantityString(
+                        R.plurals.num_categories,
+                        catCount,
+                        catCount,
+                    )
 
-                onClick {
-                    router.pushController(AnimeCategoryController())
+                    onClick {
+                        router.pushController(CategoryController())
+                    }
                 }
-            }
 
-            intListPreference {
-                key = Keys.defaultAnimeCategory
-                titleRes = R.string.default_anime_category
+                intListPreference {
+                    key = Keys.defaultCategory
+                    titleRes = R.string.default_category
 
-                entries = arrayOf(context.getString(R.string.default_category_summary)) +
-                    categoriesAnime.map { it.name }.toTypedArray()
-                entryValues = arrayOf("-1") + categoriesAnime.map { it.id.toString() }.toTypedArray()
-                defaultValue = "-1"
+                    entries = arrayOf(context.getString(R.string.default_category_summary)) +
+                        categories.map { it.name }.toTypedArray()
+                    entryValues = arrayOf("-1") + categories.map { it.id.toString() }.toTypedArray()
+                    defaultValue = "-1"
 
-                val selectedCategory = categoriesAnime.find { it.id == preferences.defaultAnimeCategory() }
-                summary = selectedCategory?.name
-                    ?: context.getString(R.string.default_category_summary)
-                onChange { newValue ->
-                    summary = categoriesAnime.find {
-                        it.id == (newValue as String).toInt()
-                    }?.name ?: context.getString(R.string.default_category_summary)
-                    true
+                    val selectedCategory =
+                        categories.find { it.id == preferences.defaultCategory() }
+                    summary = selectedCategory?.name
+                        ?: context.getString(R.string.default_category_summary)
+                    onChange { newValue ->
+                        summary = categories.find {
+                            it.id == (newValue as String).toInt()
+                        }?.name ?: context.getString(R.string.default_category_summary)
+                        true
+                    }
                 }
-            }
 
-            preference {
-                key = "pref_action_edit_categories"
-                titleRes = R.string.action_edit_categories
+                preference {
+                    key = "pref_action_edit_anime_categories"
+                    titleRes = R.string.action_edit_anime_categories
 
-                val catCount = dbCategories.size
-                summary = context.resources.getQuantityString(R.plurals.num_categories, catCount, catCount)
+                    val catCount = dbCategoriesAnime.size
+                    summary = context.resources.getQuantityString(
+                        R.plurals.num_categories,
+                        catCount,
+                        catCount,
+                    )
 
-                onClick {
-                    router.pushController(CategoryController())
+                    onClick {
+                        router.pushController(AnimeCategoryController())
+                    }
                 }
-            }
 
-            intListPreference {
-                key = Keys.defaultCategory
-                titleRes = R.string.default_category
+                intListPreference {
+                    key = Keys.defaultAnimeCategory
+                    titleRes = R.string.default_anime_category
 
-                entries = arrayOf(context.getString(R.string.default_category_summary)) +
-                    categories.map { it.name }.toTypedArray()
-                entryValues = arrayOf("-1") + categories.map { it.id.toString() }.toTypedArray()
-                defaultValue = "-1"
+                    entries = arrayOf(context.getString(R.string.default_category_summary)) +
+                        categoriesAnime.map { it.name }.toTypedArray()
+                    entryValues =
+                        arrayOf("-1") + categoriesAnime.map { it.id.toString() }.toTypedArray()
+                    defaultValue = "-1"
 
-                val selectedCategory = categories.find { it.id == preferences.defaultCategory() }
-                summary = selectedCategory?.name
-                    ?: context.getString(R.string.default_category_summary)
-                onChange { newValue ->
-                    summary = categories.find {
-                        it.id == (newValue as String).toInt()
-                    }?.name ?: context.getString(R.string.default_category_summary)
-                    true
+                    val selectedCategory =
+                        categoriesAnime.find { it.id == preferences.defaultAnimeCategory() }
+                    summary = selectedCategory?.name
+                        ?: context.getString(R.string.default_category_summary)
+                    onChange { newValue ->
+                        summary = categoriesAnime.find {
+                            it.id == (newValue as String).toInt()
+                        }?.name ?: context.getString(R.string.default_category_summary)
+                        true
+                    }
+                }
+            } else {
+                preference {
+                    key = "pref_action_edit_anime_categories"
+                    titleRes = R.string.action_edit_anime_categories
+
+                    val catCount = dbCategoriesAnime.size
+                    summary = context.resources.getQuantityString(
+                        R.plurals.num_categories,
+                        catCount,
+                        catCount,
+                    )
+
+                    onClick {
+                        router.pushController(AnimeCategoryController())
+                    }
+                }
+
+                intListPreference {
+                    key = Keys.defaultAnimeCategory
+                    titleRes = R.string.default_anime_category
+
+                    entries = arrayOf(context.getString(R.string.default_category_summary)) +
+                        categoriesAnime.map { it.name }.toTypedArray()
+                    entryValues =
+                        arrayOf("-1") + categoriesAnime.map { it.id.toString() }.toTypedArray()
+                    defaultValue = "-1"
+
+                    val selectedCategory =
+                        categoriesAnime.find { it.id == preferences.defaultAnimeCategory() }
+                    summary = selectedCategory?.name
+                        ?: context.getString(R.string.default_category_summary)
+                    onChange { newValue ->
+                        summary = categoriesAnime.find {
+                            it.id == (newValue as String).toInt()
+                        }?.name ?: context.getString(R.string.default_category_summary)
+                        true
+                    }
+                }
+
+                preference {
+                    key = "pref_action_edit_categories"
+                    titleRes = R.string.action_edit_categories
+
+                    val catCount = dbCategories.size
+                    summary = context.resources.getQuantityString(
+                        R.plurals.num_categories,
+                        catCount,
+                        catCount,
+                    )
+
+                    onClick {
+                        router.pushController(CategoryController())
+                    }
+                }
+
+                intListPreference {
+                    key = Keys.defaultCategory
+                    titleRes = R.string.default_category
+
+                    entries = arrayOf(context.getString(R.string.default_category_summary)) +
+                        categories.map { it.name }.toTypedArray()
+                    entryValues = arrayOf("-1") + categories.map { it.id.toString() }.toTypedArray()
+                    defaultValue = "-1"
+
+                    val selectedCategory =
+                        categories.find { it.id == preferences.defaultCategory() }
+                    summary = selectedCategory?.name
+                        ?: context.getString(R.string.default_category_summary)
+                    onChange { newValue ->
+                        summary = categories.find {
+                            it.id == (newValue as String).toInt()
+                        }?.name ?: context.getString(R.string.default_category_summary)
+                        true
+                    }
                 }
             }
 
@@ -256,97 +344,195 @@ class SettingsLibraryController : SettingsController() {
                     .onEach { updateSummary() }
                     .launchIn(viewScope)
             }
-            preference {
-                bindTo(preferences.animelibUpdateCategories())
-                titleRes = R.string.anime_categories
 
-                onClick {
-                    AnimelibGlobalUpdateCategoriesDialog().showDialog(router)
+            if (preferences.switchAnimeManga().get()) {
+                preference {
+                    bindTo(preferences.libraryUpdateCategories())
+                    titleRes = R.string.categories
+
+                    onClick {
+                        LibraryGlobalUpdateCategoriesDialog().showDialog(router)
+                    }
+
+                    fun updateSummary() {
+                        val includedCategories = preferences.libraryUpdateCategories().get()
+                            .mapNotNull { id -> categories.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+                        val excludedCategories = preferences.libraryUpdateCategoriesExclude().get()
+                            .mapNotNull { id -> categories.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+
+                        val allExcluded = excludedCategories.size == categories.size
+
+                        val includedItemsText = when {
+                            // Some selected, but not all
+                            includedCategories.isNotEmpty() && includedCategories.size != categories.size -> includedCategories.joinToString { it.name }
+                            // All explicitly selected
+                            includedCategories.size == categories.size -> context.getString(R.string.all)
+                            allExcluded -> context.getString(R.string.none)
+                            else -> context.getString(R.string.all)
+                        }
+                        val excludedItemsText = when {
+                            excludedCategories.isEmpty() -> context.getString(R.string.none)
+                            allExcluded -> context.getString(R.string.all)
+                            else -> excludedCategories.joinToString { it.name }
+                        }
+
+                        summary = buildSpannedString {
+                            append(context.getString(R.string.include, includedItemsText))
+                            appendLine()
+                            append(context.getString(R.string.exclude, excludedItemsText))
+                        }
+                    }
+
+                    preferences.libraryUpdateCategories().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
+                    preferences.libraryUpdateCategoriesExclude().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
                 }
 
-                fun updateSummary() {
-                    val includedCategories = preferences.animelibUpdateCategories().get()
-                        .mapNotNull { id -> categoriesAnime.find { it.id == id.toInt() } }
-                        .sortedBy { it.order }
-                    val excludedCategories = preferences.animelibUpdateCategoriesExclude().get()
-                        .mapNotNull { id -> categoriesAnime.find { it.id == id.toInt() } }
-                        .sortedBy { it.order }
+                preference {
+                    bindTo(preferences.animelibUpdateCategories())
+                    titleRes = R.string.anime_categories
 
-                    val allExcluded = excludedCategories.size == categories.size
-
-                    val includedItemsText = when {
-                        // Some selected, but not all
-                        includedCategories.isNotEmpty() && includedCategories.size != categories.size -> includedCategories.joinToString { it.name }
-                        // All explicitly selected
-                        includedCategories.size == categories.size -> context.getString(R.string.all)
-                        allExcluded -> context.getString(R.string.none)
-                        else -> context.getString(R.string.all)
-                    }
-                    val excludedItemsText = when {
-                        excludedCategories.isEmpty() -> context.getString(R.string.none)
-                        allExcluded -> context.getString(R.string.all)
-                        else -> excludedCategories.joinToString { it.name }
+                    onClick {
+                        AnimelibGlobalUpdateCategoriesDialog().showDialog(router)
                     }
 
-                    summary = buildSpannedString {
-                        append(context.getString(R.string.include, includedItemsText))
-                        appendLine()
-                        append(context.getString(R.string.exclude, excludedItemsText))
+                    fun updateSummary() {
+                        val includedCategories = preferences.animelibUpdateCategories().get()
+                            .mapNotNull { id -> categoriesAnime.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+                        val excludedCategories = preferences.animelibUpdateCategoriesExclude().get()
+                            .mapNotNull { id -> categoriesAnime.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+
+                        val allExcluded = excludedCategories.size == categories.size
+
+                        val includedItemsText = when {
+                            // Some selected, but not all
+                            includedCategories.isNotEmpty() && includedCategories.size != categories.size -> includedCategories.joinToString { it.name }
+                            // All explicitly selected
+                            includedCategories.size == categories.size -> context.getString(R.string.all)
+                            allExcluded -> context.getString(R.string.none)
+                            else -> context.getString(R.string.all)
+                        }
+                        val excludedItemsText = when {
+                            excludedCategories.isEmpty() -> context.getString(R.string.none)
+                            allExcluded -> context.getString(R.string.all)
+                            else -> excludedCategories.joinToString { it.name }
+                        }
+
+                        summary = buildSpannedString {
+                            append(context.getString(R.string.include, includedItemsText))
+                            appendLine()
+                            append(context.getString(R.string.exclude, excludedItemsText))
+                        }
                     }
+
+                    preferences.animelibUpdateCategories().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
+                    preferences.animelibUpdateCategoriesExclude().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
+                }
+            } else {
+                preference {
+                    bindTo(preferences.animelibUpdateCategories())
+                    titleRes = R.string.anime_categories
+
+                    onClick {
+                        AnimelibGlobalUpdateCategoriesDialog().showDialog(router)
+                    }
+
+                    fun updateSummary() {
+                        val includedCategories = preferences.animelibUpdateCategories().get()
+                            .mapNotNull { id -> categoriesAnime.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+                        val excludedCategories = preferences.animelibUpdateCategoriesExclude().get()
+                            .mapNotNull { id -> categoriesAnime.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+
+                        val allExcluded = excludedCategories.size == categories.size
+
+                        val includedItemsText = when {
+                            // Some selected, but not all
+                            includedCategories.isNotEmpty() && includedCategories.size != categories.size -> includedCategories.joinToString { it.name }
+                            // All explicitly selected
+                            includedCategories.size == categories.size -> context.getString(R.string.all)
+                            allExcluded -> context.getString(R.string.none)
+                            else -> context.getString(R.string.all)
+                        }
+                        val excludedItemsText = when {
+                            excludedCategories.isEmpty() -> context.getString(R.string.none)
+                            allExcluded -> context.getString(R.string.all)
+                            else -> excludedCategories.joinToString { it.name }
+                        }
+
+                        summary = buildSpannedString {
+                            append(context.getString(R.string.include, includedItemsText))
+                            appendLine()
+                            append(context.getString(R.string.exclude, excludedItemsText))
+                        }
+                    }
+
+                    preferences.animelibUpdateCategories().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
+                    preferences.animelibUpdateCategoriesExclude().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
                 }
 
-                preferences.animelibUpdateCategories().asFlow()
-                    .onEach { updateSummary() }
-                    .launchIn(viewScope)
-                preferences.animelibUpdateCategoriesExclude().asFlow()
-                    .onEach { updateSummary() }
-                    .launchIn(viewScope)
-            }
-            preference {
-                bindTo(preferences.libraryUpdateCategories())
-                titleRes = R.string.categories
+                preference {
+                    bindTo(preferences.libraryUpdateCategories())
+                    titleRes = R.string.categories
 
-                onClick {
-                    LibraryGlobalUpdateCategoriesDialog().showDialog(router)
+                    onClick {
+                        LibraryGlobalUpdateCategoriesDialog().showDialog(router)
+                    }
+
+                    fun updateSummary() {
+                        val includedCategories = preferences.libraryUpdateCategories().get()
+                            .mapNotNull { id -> categories.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+                        val excludedCategories = preferences.libraryUpdateCategoriesExclude().get()
+                            .mapNotNull { id -> categories.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+
+                        val allExcluded = excludedCategories.size == categories.size
+
+                        val includedItemsText = when {
+                            // Some selected, but not all
+                            includedCategories.isNotEmpty() && includedCategories.size != categories.size -> includedCategories.joinToString { it.name }
+                            // All explicitly selected
+                            includedCategories.size == categories.size -> context.getString(R.string.all)
+                            allExcluded -> context.getString(R.string.none)
+                            else -> context.getString(R.string.all)
+                        }
+                        val excludedItemsText = when {
+                            excludedCategories.isEmpty() -> context.getString(R.string.none)
+                            allExcluded -> context.getString(R.string.all)
+                            else -> excludedCategories.joinToString { it.name }
+                        }
+
+                        summary = buildSpannedString {
+                            append(context.getString(R.string.include, includedItemsText))
+                            appendLine()
+                            append(context.getString(R.string.exclude, excludedItemsText))
+                        }
+                    }
+
+                    preferences.libraryUpdateCategories().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
+                    preferences.libraryUpdateCategoriesExclude().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
                 }
-
-                fun updateSummary() {
-                    val includedCategories = preferences.libraryUpdateCategories().get()
-                        .mapNotNull { id -> categories.find { it.id == id.toInt() } }
-                        .sortedBy { it.order }
-                    val excludedCategories = preferences.libraryUpdateCategoriesExclude().get()
-                        .mapNotNull { id -> categories.find { it.id == id.toInt() } }
-                        .sortedBy { it.order }
-
-                    val allExcluded = excludedCategories.size == categories.size
-
-                    val includedItemsText = when {
-                        // Some selected, but not all
-                        includedCategories.isNotEmpty() && includedCategories.size != categories.size -> includedCategories.joinToString { it.name }
-                        // All explicitly selected
-                        includedCategories.size == categories.size -> context.getString(R.string.all)
-                        allExcluded -> context.getString(R.string.none)
-                        else -> context.getString(R.string.all)
-                    }
-                    val excludedItemsText = when {
-                        excludedCategories.isEmpty() -> context.getString(R.string.none)
-                        allExcluded -> context.getString(R.string.all)
-                        else -> excludedCategories.joinToString { it.name }
-                    }
-
-                    summary = buildSpannedString {
-                        append(context.getString(R.string.include, includedItemsText))
-                        appendLine()
-                        append(context.getString(R.string.exclude, excludedItemsText))
-                    }
-                }
-
-                preferences.libraryUpdateCategories().asFlow()
-                    .onEach { updateSummary() }
-                    .launchIn(viewScope)
-                preferences.libraryUpdateCategoriesExclude().asFlow()
-                    .onEach { updateSummary() }
-                    .launchIn(viewScope)
             }
             switchPreference {
                 key = Keys.autoUpdateMetadata

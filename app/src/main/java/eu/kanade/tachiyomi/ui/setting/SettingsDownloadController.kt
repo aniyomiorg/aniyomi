@@ -112,43 +112,87 @@ class SettingsDownloadController : SettingsController() {
                 titleRes = R.string.pref_remove_bookmarked_chapters
                 defaultValue = false
             }
-            multiSelectListPreference {
-                bindTo(preferences.removeExcludeAnimeCategories())
-                titleRes = R.string.pref_remove_exclude_categories_anime
-                entries = animeCategories.map { it.name }.toTypedArray()
-                entryValues = animeCategories.map { it.id.toString() }.toTypedArray()
 
-                preferences.removeExcludeAnimeCategories().asFlow()
-                    .onEach { mutable ->
-                        val selected = mutable
-                            .mapNotNull { id -> animeCategories.find { it.id == id.toInt() } }
-                            .sortedBy { it.order }
+            if (preferences.switchAnimeManga().get()) {
+                multiSelectListPreference {
+                    bindTo(preferences.removeExcludeCategories())
+                    titleRes = R.string.pref_remove_exclude_categories_manga
+                    entries = mangaCategories.map { it.name }.toTypedArray()
+                    entryValues = mangaCategories.map { it.id.toString() }.toTypedArray()
 
-                        summary = if (selected.isEmpty()) {
-                            resources?.getString(R.string.none)
-                        } else {
-                            selected.joinToString { it.name }
-                        }
-                    }.launchIn(viewScope)
-            }
-            multiSelectListPreference {
-                bindTo(preferences.removeExcludeCategories())
-                titleRes = R.string.pref_remove_exclude_categories_manga
-                entries = mangaCategories.map { it.name }.toTypedArray()
-                entryValues = mangaCategories.map { it.id.toString() }.toTypedArray()
+                    preferences.removeExcludeCategories().asFlow()
+                        .onEach { mutable ->
+                            val selected = mutable
+                                .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
+                                .sortedBy { it.order }
 
-                preferences.removeExcludeCategories().asFlow()
-                    .onEach { mutable ->
-                        val selected = mutable
-                            .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
-                            .sortedBy { it.order }
+                            summary = if (selected.isEmpty()) {
+                                resources?.getString(R.string.none)
+                            } else {
+                                selected.joinToString { it.name }
+                            }
+                        }.launchIn(viewScope)
+                }
 
-                        summary = if (selected.isEmpty()) {
-                            resources?.getString(R.string.none)
-                        } else {
-                            selected.joinToString { it.name }
-                        }
-                    }.launchIn(viewScope)
+                multiSelectListPreference {
+                    bindTo(preferences.removeExcludeAnimeCategories())
+                    titleRes = R.string.pref_remove_exclude_categories_anime
+                    entries = animeCategories.map { it.name }.toTypedArray()
+                    entryValues = animeCategories.map { it.id.toString() }.toTypedArray()
+
+                    preferences.removeExcludeAnimeCategories().asFlow()
+                        .onEach { mutable ->
+                            val selected = mutable
+                                .mapNotNull { id -> animeCategories.find { it.id == id.toInt() } }
+                                .sortedBy { it.order }
+
+                            summary = if (selected.isEmpty()) {
+                                resources?.getString(R.string.none)
+                            } else {
+                                selected.joinToString { it.name }
+                            }
+                        }.launchIn(viewScope)
+                }
+            } else {
+                multiSelectListPreference {
+                    bindTo(preferences.removeExcludeAnimeCategories())
+                    titleRes = R.string.pref_remove_exclude_categories_anime
+                    entries = animeCategories.map { it.name }.toTypedArray()
+                    entryValues = animeCategories.map { it.id.toString() }.toTypedArray()
+
+                    preferences.removeExcludeAnimeCategories().asFlow()
+                        .onEach { mutable ->
+                            val selected = mutable
+                                .mapNotNull { id -> animeCategories.find { it.id == id.toInt() } }
+                                .sortedBy { it.order }
+
+                            summary = if (selected.isEmpty()) {
+                                resources?.getString(R.string.none)
+                            } else {
+                                selected.joinToString { it.name }
+                            }
+                        }.launchIn(viewScope)
+                }
+
+                multiSelectListPreference {
+                    bindTo(preferences.removeExcludeCategories())
+                    titleRes = R.string.pref_remove_exclude_categories_manga
+                    entries = mangaCategories.map { it.name }.toTypedArray()
+                    entryValues = mangaCategories.map { it.id.toString() }.toTypedArray()
+
+                    preferences.removeExcludeCategories().asFlow()
+                        .onEach { mutable ->
+                            val selected = mutable
+                                .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
+                                .sortedBy { it.order }
+
+                            summary = if (selected.isEmpty()) {
+                                resources?.getString(R.string.none)
+                            } else {
+                                selected.joinToString { it.name }
+                            }
+                        }.launchIn(viewScope)
+                }
             }
         }
 
@@ -159,90 +203,183 @@ class SettingsDownloadController : SettingsController() {
                 bindTo(preferences.downloadNewChapter())
                 titleRes = R.string.pref_download_new
             }
-            preference {
-                bindTo(preferences.downloadNewEpisodeCategories())
-                titleRes = R.string.anime_categories
-                onClick {
-                    DownloadAnimeCategoriesDialog().showDialog(router)
+
+            if (preferences.switchAnimeManga().get()) {
+                preference {
+                    bindTo(preferences.downloadNewChapterCategories())
+                    titleRes = R.string.categories
+                    onClick {
+                        DownloadCategoriesDialog().showDialog(router)
+                    }
+
+                    visibleIf(preferences.downloadNewChapter()) { it }
+
+                    fun updateSummary() {
+                        val selectedCategories = preferences.downloadNewChapterCategories().get()
+                            .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+                        val includedItemsText = if (selectedCategories.isEmpty()) {
+                            context.getString(R.string.all)
+                        } else {
+                            selectedCategories.joinToString { it.name }
+                        }
+
+                        val excludedCategories =
+                            preferences.downloadNewChapterCategoriesExclude().get()
+                                .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
+                                .sortedBy { it.order }
+                        val excludedItemsText = if (excludedCategories.isEmpty()) {
+                            context.getString(R.string.none)
+                        } else {
+                            excludedCategories.joinToString { it.name }
+                        }
+
+                        summary = buildSpannedString {
+                            append(context.getString(R.string.include, includedItemsText))
+                            appendLine()
+                            append(context.getString(R.string.exclude, excludedItemsText))
+                        }
+                    }
+
+                    preferences.downloadNewChapterCategories().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
+                    preferences.downloadNewChapterCategoriesExclude().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
                 }
 
-                visibleIf(preferences.downloadNewChapter()) { it }
-
-                fun updateSummary() {
-                    val selectedCategories = preferences.downloadNewEpisodeCategories().get()
-                        .mapNotNull { id -> animeCategories.find { it.id == id.toInt() } }
-                        .sortedBy { it.order }
-                    val includedItemsText = if (selectedCategories.isEmpty()) {
-                        context.getString(R.string.all)
-                    } else {
-                        selectedCategories.joinToString { it.name }
+                preference {
+                    bindTo(preferences.downloadNewEpisodeCategories())
+                    titleRes = R.string.anime_categories
+                    onClick {
+                        DownloadAnimeCategoriesDialog().showDialog(router)
                     }
 
-                    val excludedCategories = preferences.downloadNewEpisodeCategoriesExclude().get()
-                        .mapNotNull { id -> animeCategories.find { it.id == id.toInt() } }
-                        .sortedBy { it.order }
-                    val excludedItemsText = if (excludedCategories.isEmpty()) {
-                        context.getString(R.string.none)
-                    } else {
-                        excludedCategories.joinToString { it.name }
+                    visibleIf(preferences.downloadNewChapter()) { it }
+
+                    fun updateSummary() {
+                        val selectedCategories = preferences.downloadNewEpisodeCategories().get()
+                            .mapNotNull { id -> animeCategories.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+                        val includedItemsText = if (selectedCategories.isEmpty()) {
+                            context.getString(R.string.all)
+                        } else {
+                            selectedCategories.joinToString { it.name }
+                        }
+
+                        val excludedCategories =
+                            preferences.downloadNewEpisodeCategoriesExclude().get()
+                                .mapNotNull { id -> animeCategories.find { it.id == id.toInt() } }
+                                .sortedBy { it.order }
+                        val excludedItemsText = if (excludedCategories.isEmpty()) {
+                            context.getString(R.string.none)
+                        } else {
+                            excludedCategories.joinToString { it.name }
+                        }
+
+                        summary = buildSpannedString {
+                            append(context.getString(R.string.include, includedItemsText))
+                            appendLine()
+                            append(context.getString(R.string.exclude, excludedItemsText))
+                        }
                     }
 
-                    summary = buildSpannedString {
-                        append(context.getString(R.string.include, includedItemsText))
-                        appendLine()
-                        append(context.getString(R.string.exclude, excludedItemsText))
+                    preferences.downloadNewEpisodeCategories().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
+                    preferences.downloadNewEpisodeCategoriesExclude().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
+                }
+            } else {
+                preference {
+                    bindTo(preferences.downloadNewEpisodeCategories())
+                    titleRes = R.string.anime_categories
+                    onClick {
+                        DownloadAnimeCategoriesDialog().showDialog(router)
                     }
+
+                    visibleIf(preferences.downloadNewChapter()) { it }
+
+                    fun updateSummary() {
+                        val selectedCategories = preferences.downloadNewEpisodeCategories().get()
+                            .mapNotNull { id -> animeCategories.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+                        val includedItemsText = if (selectedCategories.isEmpty()) {
+                            context.getString(R.string.all)
+                        } else {
+                            selectedCategories.joinToString { it.name }
+                        }
+
+                        val excludedCategories =
+                            preferences.downloadNewEpisodeCategoriesExclude().get()
+                                .mapNotNull { id -> animeCategories.find { it.id == id.toInt() } }
+                                .sortedBy { it.order }
+                        val excludedItemsText = if (excludedCategories.isEmpty()) {
+                            context.getString(R.string.none)
+                        } else {
+                            excludedCategories.joinToString { it.name }
+                        }
+
+                        summary = buildSpannedString {
+                            append(context.getString(R.string.include, includedItemsText))
+                            appendLine()
+                            append(context.getString(R.string.exclude, excludedItemsText))
+                        }
+                    }
+
+                    preferences.downloadNewEpisodeCategories().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
+                    preferences.downloadNewEpisodeCategoriesExclude().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
                 }
 
-                preferences.downloadNewEpisodeCategories().asFlow()
-                    .onEach { updateSummary() }
-                    .launchIn(viewScope)
-                preferences.downloadNewEpisodeCategoriesExclude().asFlow()
-                    .onEach { updateSummary() }
-                    .launchIn(viewScope)
-            }
+                preference {
+                    bindTo(preferences.downloadNewChapterCategories())
+                    titleRes = R.string.categories
+                    onClick {
+                        DownloadCategoriesDialog().showDialog(router)
+                    }
 
-            preference {
-                bindTo(preferences.downloadNewChapterCategories())
-                titleRes = R.string.categories
-                onClick {
-                    DownloadCategoriesDialog().showDialog(router)
+                    visibleIf(preferences.downloadNewChapter()) { it }
+
+                    fun updateSummary() {
+                        val selectedCategories = preferences.downloadNewChapterCategories().get()
+                            .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
+                            .sortedBy { it.order }
+                        val includedItemsText = if (selectedCategories.isEmpty()) {
+                            context.getString(R.string.all)
+                        } else {
+                            selectedCategories.joinToString { it.name }
+                        }
+
+                        val excludedCategories =
+                            preferences.downloadNewChapterCategoriesExclude().get()
+                                .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
+                                .sortedBy { it.order }
+                        val excludedItemsText = if (excludedCategories.isEmpty()) {
+                            context.getString(R.string.none)
+                        } else {
+                            excludedCategories.joinToString { it.name }
+                        }
+
+                        summary = buildSpannedString {
+                            append(context.getString(R.string.include, includedItemsText))
+                            appendLine()
+                            append(context.getString(R.string.exclude, excludedItemsText))
+                        }
+                    }
+
+                    preferences.downloadNewChapterCategories().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
+                    preferences.downloadNewChapterCategoriesExclude().asFlow()
+                        .onEach { updateSummary() }
+                        .launchIn(viewScope)
                 }
-
-                visibleIf(preferences.downloadNewChapter()) { it }
-
-                fun updateSummary() {
-                    val selectedCategories = preferences.downloadNewChapterCategories().get()
-                        .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
-                        .sortedBy { it.order }
-                    val includedItemsText = if (selectedCategories.isEmpty()) {
-                        context.getString(R.string.all)
-                    } else {
-                        selectedCategories.joinToString { it.name }
-                    }
-
-                    val excludedCategories = preferences.downloadNewChapterCategoriesExclude().get()
-                        .mapNotNull { id -> mangaCategories.find { it.id == id.toInt() } }
-                        .sortedBy { it.order }
-                    val excludedItemsText = if (excludedCategories.isEmpty()) {
-                        context.getString(R.string.none)
-                    } else {
-                        excludedCategories.joinToString { it.name }
-                    }
-
-                    summary = buildSpannedString {
-                        append(context.getString(R.string.include, includedItemsText))
-                        appendLine()
-                        append(context.getString(R.string.exclude, excludedItemsText))
-                    }
-                }
-
-                preferences.downloadNewChapterCategories().asFlow()
-                    .onEach { updateSummary() }
-                    .launchIn(viewScope)
-                preferences.downloadNewChapterCategoriesExclude().asFlow()
-                    .onEach { updateSummary() }
-                    .launchIn(viewScope)
             }
         }
         preferenceCategory {
