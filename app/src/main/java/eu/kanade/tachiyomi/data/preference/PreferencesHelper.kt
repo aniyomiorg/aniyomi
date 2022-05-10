@@ -53,6 +53,12 @@ class PreferencesHelper(val context: Context) {
 
     fun sideNavIconAlignment() = flowPrefs.getInt("pref_side_nav_icon_alignment", 0)
 
+    fun switchAnimeManga() = flowPrefs.getBoolean(Keys.switchAnimeManga, false)
+
+    fun showNavBarLabels() = flowPrefs.getBoolean(Keys.showNavBarLabels, true)
+
+    fun hideNavBarScroll() = flowPrefs.getBoolean(Keys.hideNavBarScroll, false)
+
     fun useAuthenticator() = flowPrefs.getBoolean("use_biometric_lock", false)
 
     fun lockAppAfter() = flowPrefs.getInt("lock_app_after", 0)
