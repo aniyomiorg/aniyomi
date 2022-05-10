@@ -701,9 +701,15 @@ class MangaController :
             is HistoryController, -> {
                 // Manually navigate to LibraryController
                 router.handleBack()
-                (router.activity as MainActivity).setSelectedNavItem(R.id.nav_library)
-                val controller = router.getControllerWithTag(R.id.nav_library.toString()) as LibraryController
-                controller.search(query)
+                if (preferences.switchAnimeManga().get()) {
+                    (router.activity as MainActivity).setSelectedNavItem(R.id.nav_library_first)
+                    val controller = router.getControllerWithTag(R.id.nav_library_first.toString()) as LibraryController
+                    controller.search(query)
+                } else {
+                    (router.activity as MainActivity).setSelectedNavItem(R.id.nav_library_second)
+                    val controller = router.getControllerWithTag(R.id.nav_library_second.toString()) as LibraryController
+                    controller.search(query)
+                }
             }
             is LatestUpdatesController -> {
                 // Search doesn't currently work in source Latest view

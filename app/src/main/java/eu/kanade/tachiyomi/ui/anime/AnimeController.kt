@@ -739,9 +739,15 @@ class AnimeController :
             is AnimeHistoryController, -> {
                 // Manually navigate to AnimelibController
                 router.handleBack()
-                (router.activity as MainActivity).setSelectedNavItem(R.id.nav_animelib)
-                val controller = router.getControllerWithTag(R.id.nav_animelib.toString()) as AnimelibController
-                controller.search(query)
+                if (preferences.switchAnimeManga().get()) {
+                    (router.activity as MainActivity).setSelectedNavItem(R.id.nav_library_second)
+                    val controller = router.getControllerWithTag(R.id.nav_library_second.toString()) as AnimelibController
+                    controller.search(query)
+                } else {
+                    (router.activity as MainActivity).setSelectedNavItem(R.id.nav_library_first)
+                    val controller = router.getControllerWithTag(R.id.nav_library_first.toString()) as AnimelibController
+                    controller.search(query)
+                }
             }
             is LatestUpdatesController -> {
                 // Search doesn't currently work in source Latest view

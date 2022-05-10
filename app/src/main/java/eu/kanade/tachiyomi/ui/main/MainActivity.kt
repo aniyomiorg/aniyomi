@@ -100,7 +100,7 @@ class MainActivity : BaseActivity() {
             1 -> startScreenArrayHistory.getOrNull(index)
             2 -> startScreenArrayNoManga.getOrNull(index)
             else -> startScreenArrayDefault.getOrNull(index)
-        } ?: R.id.nav_animelib
+        } ?: R.id.nav_library_first
     }
 
     private var isConfirmingExit: Boolean = false
@@ -174,14 +174,39 @@ class MainActivity : BaseActivity() {
                 .launchIn(lifecycleScope)
         }
 
+        if (preferences.bottomNavStyle() == 2) preferences.switchAnimeManga().set(false)
+
+        preferences.switchAnimeManga()
+            .asImmediateFlow {
+                when (it) {
+                    true -> {
+                        nav.menu.findItem(R.id.nav_library_first).setTitle(R.string.label_manga)
+                        nav.menu.findItem(R.id.nav_library_first).setIcon(R.drawable.ic_library_selector_24dp)
+
+                        nav.menu.findItem(R.id.nav_library_second).setTitle(R.string.label_animelib)
+                        nav.menu.findItem(R.id.nav_library_second).setIcon(R.drawable.ic_animelibrary_selector_24dp)
+                    }
+                    false -> {
+                        nav.menu.findItem(R.id.nav_library_first).setTitle(R.string.label_animelib)
+                        nav.menu.findItem(R.id.nav_library_first).setIcon(R.drawable.ic_animelibrary_selector_24dp)
+
+                        if (preferences.bottomNavStyle() != 2) {
+                            nav.menu.findItem(R.id.nav_library_second).setTitle(R.string.label_manga)
+                            nav.menu.findItem(R.id.nav_library_second).setIcon(R.drawable.ic_library_selector_24dp)
+                        }
+                    }
+                }
+            }
+            .launchIn(lifecycleScope)
+
         nav.setOnItemSelectedListener { item ->
             val id = item.itemId
 
             val currentRoot = router.backstack.firstOrNull()
             if (currentRoot?.tag()?.toIntOrNull() != id) {
                 when (id) {
-                    R.id.nav_library -> router.setRoot(LibraryController(), id)
-                    R.id.nav_animelib -> router.setRoot(AnimelibController(), id)
+                    R.id.nav_library_first -> if (preferences.switchAnimeManga().get()) router.setRoot(LibraryController(), id) else router.setRoot(AnimelibController(), id)
+                    R.id.nav_library_second -> if (preferences.switchAnimeManga().get()) router.setRoot(AnimelibController(), id) else router.setRoot(LibraryController(), id)
                     R.id.nav_updates -> router.setRoot(UpdatesTabsController(), id)
                     R.id.nav_history -> router.setRoot(HistoryTabsController(), id)
                     R.id.nav_browse -> router.setRoot(BrowseController(), id)
@@ -189,18 +214,28 @@ class MainActivity : BaseActivity() {
                 }
             } else if (!isHandlingShortcut) {
                 when (id) {
-                    R.id.nav_library -> {
-                        val controller = router.getControllerWithTag(id.toString()) as? LibraryController
-                        controller?.showSettingsSheet()
+                    R.id.nav_library_first -> {
+                        if (preferences.switchAnimeManga().get()) {
+                            val controller = router.getControllerWithTag(id.toString()) as? LibraryController
+                            controller?.showSettingsSheet()
+                        } else {
+                            val controller = router.getControllerWithTag(id.toString()) as? AnimelibController
+                            controller?.showSettingsSheet()
+                        }
+                    }
+                    R.id.nav_library_second -> {
+                        if (preferences.switchAnimeManga().get()) {
+                            val controller = router.getControllerWithTag(id.toString()) as? AnimelibController
+                            controller?.showSettingsSheet()
+                        } else {
+                            val controller = router.getControllerWithTag(id.toString()) as? LibraryController
+                            controller?.showSettingsSheet()
+                        }
                     }
                     R.id.nav_updates -> {
                         if (router.backstackSize == 1) {
                             router.pushController(DownloadTabsController())
                         }
-                    }
-                    R.id.nav_animelib -> {
-                        val controller = router.getControllerWithTag(id.toString()) as? AnimelibController
-                        controller?.showSettingsSheet()
                     }
                     R.id.nav_more -> {
                         if (router.backstackSize == 1) {
@@ -429,8 +464,8 @@ class MainActivity : BaseActivity() {
         isHandlingShortcut = true
 
         when (intent.action) {
-            SHORTCUT_LIBRARY -> setSelectedNavItem(R.id.nav_library)
-            SHORTCUT_ANIMELIB -> setSelectedNavItem(R.id.nav_animelib)
+            SHORTCUT_ANIMELIB -> if (preferences.switchAnimeManga().get()) setSelectedNavItem(R.id.nav_library_second) else setSelectedNavItem(R.id.nav_library_first)
+            SHORTCUT_LIBRARY -> if (preferences.switchAnimeManga().get()) setSelectedNavItem(R.id.nav_library_first) else setSelectedNavItem(R.id.nav_library_second)
             SHORTCUT_RECENTLY_UPDATED -> setSelectedNavItem(R.id.nav_updates)
             SHORTCUT_RECENTLY_READ -> setSelectedNavItem(R.id.nav_history)
             SHORTCUT_CATALOGUES -> setSelectedNavItem(R.id.nav_browse)
@@ -446,7 +481,7 @@ class MainActivity : BaseActivity() {
                 val fgController = router.backstack.lastOrNull()?.controller as? MangaController
                 if (fgController?.manga?.id != extras.getLong(MangaController.MANGA_EXTRA)) {
                     router.popToRoot()
-                    setSelectedNavItem(R.id.nav_library)
+                    if (preferences.switchAnimeManga().get()) setSelectedNavItem(R.id.nav_library_first) else setSelectedNavItem(R.id.nav_library_second)
                     router.pushController(RouterTransaction.with(MangaController(extras)))
                 }
             }
@@ -455,7 +490,7 @@ class MainActivity : BaseActivity() {
                 val fgController = router.backstack.lastOrNull()?.controller as? AnimeController
                 if (fgController?.anime?.id != extras.getLong(AnimeController.ANIME_EXTRA)) {
                     router.popToRoot()
-                    setSelectedNavItem(R.id.nav_animelib)
+                    if (preferences.switchAnimeManga().get()) setSelectedNavItem(R.id.nav_library_second) else setSelectedNavItem(R.id.nav_library_first)
                     router.pushController(RouterTransaction.with(AnimeController(extras)))
                 }
             }
@@ -607,7 +642,7 @@ class MainActivity : BaseActivity() {
 
     private fun getControllerForId(id: Int): Controller {
         return when (id) {
-            R.id.nav_library -> LibraryController()
+            R.id.nav_library_second -> LibraryController()
             R.id.nav_updates -> UpdatesTabsController()
             R.id.nav_history -> HistoryTabsController()
             R.id.nav_browse -> BrowseController()
@@ -741,24 +776,24 @@ class MainActivity : BaseActivity() {
         const val INTENT_SEARCH_FILTER = "filter"
 
         private val startScreenArrayDefault = intArrayOf(
-            R.id.nav_animelib,
-            R.id.nav_animelib,
-            R.id.nav_library,
+            R.id.nav_library_first,
+            R.id.nav_library_first,
+            R.id.nav_library_second,
             R.id.nav_updates,
             R.id.nav_browse,
         )
 
         private val startScreenArrayHistory = intArrayOf(
-            R.id.nav_animelib,
-            R.id.nav_animelib,
-            R.id.nav_library,
+            R.id.nav_library_first,
+            R.id.nav_library_first,
+            R.id.nav_library_second,
             R.id.nav_history,
             R.id.nav_browse,
         )
 
         private val startScreenArrayNoManga = intArrayOf(
-            R.id.nav_animelib,
-            R.id.nav_animelib,
+            R.id.nav_library_first,
+            R.id.nav_library_first,
             R.id.nav_updates,
             R.id.nav_history,
             R.id.nav_browse,
