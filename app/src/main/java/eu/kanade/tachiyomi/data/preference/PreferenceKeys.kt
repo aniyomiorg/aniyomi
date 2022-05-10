@@ -15,8 +15,6 @@ object PreferenceKeys {
 
     const val showNavBarLabels = "pref_show_nav_labels"
 
-    const val hideNavBarScroll = "pref_hide_nav_scroll"
-
     const val pipEpisodeToasts = "pref_pip_episode_toasts"
 
     const val mpvConf = "pref_mpv_conf"

@@ -221,7 +221,6 @@
     <string name="alignment_bottom">Bottom</string>
     <string name="pref_switch_anime_manga">Switch Anime and Manga</string>
     <string name="pref_show_nav_labels">Always show navigation labels</string>
-    <string name="pref_hide_nav_scroll">Hide navigation bar on scroll</string>
     <string name="pref_category_timestamps">Timestamps</string>
     <string name="pref_relative_format">Relative timestamps</string>
     <string name="pref_relative_time_short">Short (Today, Yesterday)</string>

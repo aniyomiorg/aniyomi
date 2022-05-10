@@ -121,11 +121,6 @@ class SettingsAppearanceController : SettingsController() {
                 titleRes = R.string.pref_show_nav_labels
                 defaultValue = true
             }
-            switchPreference {
-                key = Keys.hideNavBarScroll
-                titleRes = R.string.pref_hide_nav_scroll
-                defaultValue = false
-            }
         }
 
         preferenceCategory {
