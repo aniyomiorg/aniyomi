@@ -229,6 +229,7 @@ class SettingsBackupController : SettingsController() {
                 R.string.chapters_episodes,
                 R.string.track,
                 R.string.history,
+                R.string.label_settings,
             )
                 .map { activity.getString(it) }
             val selected = options.map { true }.toBooleanArray()
@@ -251,6 +252,7 @@ class SettingsBackupController : SettingsController() {
                                 2 -> flags = flags or BackupConst.BACKUP_CHAPTER
                                 3 -> flags = flags or BackupConst.BACKUP_TRACK
                                 4 -> flags = flags or BackupConst.BACKUP_HISTORY
+                                5 -> flags = flags or BackupConst.BACKUP_PREFS
                             }
                         }
                     }

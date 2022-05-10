@@ -14,4 +14,5 @@ data class Backup(
     @ProtoNumber(101) var backupSources: List<BackupSource> = emptyList(),
     @ProtoNumber(102) var backupBrokenAnimeSources: List<BrokenBackupAnimeSource> = emptyList(),
     @ProtoNumber(103) var backupAnimeSources: List<BackupAnimeSource> = emptyList(),
+    @ProtoNumber(104) var backupPreferences: List<BackupPreference> = emptyList()
 )

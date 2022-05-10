@@ -2,6 +2,8 @@ package eu.kanade.tachiyomi.data.backup.full
 
 import android.content.Context
 import android.net.Uri
+import androidx.preference.PreferenceManager
+import com.fredporciuncula.flow.preferences.FlowSharedPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.AbstractBackupRestore
 import eu.kanade.tachiyomi.data.backup.BackupNotifier
@@ -13,6 +15,12 @@ import eu.kanade.tachiyomi.data.backup.full.models.BackupHistory
 import eu.kanade.tachiyomi.data.backup.full.models.BackupManga
 import eu.kanade.tachiyomi.data.backup.full.models.BackupSerializer
 import eu.kanade.tachiyomi.data.backup.full.models.BackupSource
+import eu.kanade.tachiyomi.data.backup.full.models.BooleanPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.FloatPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.IntPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.LongPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.StringPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.StringSetPreferenceValue
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Chapter
@@ -66,6 +74,32 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
             }
 
             restoreAnime(it, backup.backupCategoriesAnime)
+        }
+
+        // Restore preferences
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val flowPrefs = FlowSharedPreferences(prefs)
+        backup.backupPreferences.forEach { pref ->
+            when (pref.value) {
+                is IntPreferenceValue -> {
+                    prefs.edit().putInt(pref.key, pref.value.value).apply()
+                }
+                is LongPreferenceValue -> {
+                    prefs.edit().putLong(pref.key, pref.value.value).apply()
+                }
+                is FloatPreferenceValue -> {
+                    prefs.edit().putFloat(pref.key, pref.value.value).apply()
+                }
+                is StringPreferenceValue -> {
+                    prefs.edit().putString(pref.key, pref.value.value).apply()
+                }
+                is BooleanPreferenceValue -> {
+                    prefs.edit().putBoolean(pref.key, pref.value.value).apply()
+                }
+                is StringSetPreferenceValue -> {
+                    prefs.edit().putStringSet(pref.key, pref.value.value).apply()
+                }
+            }
         }
 
         // TODO: optionally trigger online library + tracker update

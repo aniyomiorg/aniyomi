@@ -1,7 +1,9 @@
 package eu.kanade.tachiyomi.data.backup.full
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
+import androidx.preference.PreferenceManager
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.AbstractBackupManager
@@ -11,6 +13,8 @@ import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CHAPTER
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CHAPTER_MASK
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_HISTORY
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_HISTORY_MASK
+import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_PREFS
+import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_PREFS_MASK
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_TRACK
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_TRACK_MASK
 import eu.kanade.tachiyomi.data.backup.full.models.Backup
@@ -24,9 +28,16 @@ import eu.kanade.tachiyomi.data.backup.full.models.BackupEpisode
 import eu.kanade.tachiyomi.data.backup.full.models.BackupFull
 import eu.kanade.tachiyomi.data.backup.full.models.BackupHistory
 import eu.kanade.tachiyomi.data.backup.full.models.BackupManga
+import eu.kanade.tachiyomi.data.backup.full.models.BackupPreference
 import eu.kanade.tachiyomi.data.backup.full.models.BackupSerializer
 import eu.kanade.tachiyomi.data.backup.full.models.BackupSource
 import eu.kanade.tachiyomi.data.backup.full.models.BackupTracking
+import eu.kanade.tachiyomi.data.backup.full.models.BooleanPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.FloatPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.IntPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.LongPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.StringPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.StringSetPreferenceValue
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeCategory
 import eu.kanade.tachiyomi.data.database.models.AnimeHistory
@@ -60,20 +71,25 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
         // Create root object
         var backup: Backup? = null
 
-        databaseHelper.inTransaction {
-            val databaseManga = getFavoriteManga()
-            val databaseAnime = getFavoriteAnime()
+        animedatabaseHelper.inTransaction {
+            databaseHelper.inTransaction {
+                val databaseManga = getFavoriteManga()
+                val databaseAnime = getFavoriteAnime()
 
-            backup = Backup(
-                backupManga(databaseManga, flags),
-                backupCategories(flags),
-                backupAnime(databaseAnime, flags),
-                backupCategoriesAnime(flags),
-                emptyList(),
-                backupExtensionInfo(databaseManga),
-                emptyList(),
-                backupAnimeExtensionInfo(databaseAnime),
-            )
+                val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+                backup = Backup(
+                    backupManga(databaseManga, flags),
+                    backupCategories(flags),
+                    backupAnime(databaseAnime, flags),
+                    backupCategoriesAnime(flags),
+                    emptyList(),
+                    backupExtensionInfo(databaseManga),
+                    emptyList(),
+                    backupAnimeExtensionInfo(databaseAnime),
+                    backupPreferences(prefs, flags)
+                )
+            }
         }
 
         var file: UniFile? = null
@@ -297,6 +313,40 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
         }
 
         return animeObject
+    }
+
+    private fun backupPreferences(prefs: SharedPreferences, options: Int): List<BackupPreference> {
+        if (options and BACKUP_PREFS_MASK != BACKUP_PREFS) return emptyList()
+        val backupPreferences = mutableListOf<BackupPreference>()
+        for (pref in prefs.all) {
+            val toAdd = when (pref.value) {
+                is Int -> {
+                    BackupPreference(pref.key, IntPreferenceValue(pref.value as Int))
+                }
+                is Long -> {
+                    BackupPreference(pref.key, LongPreferenceValue(pref.value as Long))
+                }
+                is Float -> {
+                    BackupPreference(pref.key, FloatPreferenceValue(pref.value as Float))
+                }
+                is String -> {
+                    BackupPreference(pref.key, StringPreferenceValue(pref.value as String))
+                }
+                is Boolean -> {
+                    BackupPreference(pref.key, BooleanPreferenceValue(pref.value as Boolean))
+                }
+                is Set<*> -> {
+                    (pref.value as? Set<String>)?.let {
+                        BackupPreference(pref.key, StringSetPreferenceValue(it))
+                    } ?: continue
+                }
+                else -> {
+                    continue
+                }
+            }
+            backupPreferences.add(toAdd)
+        }
+        return backupPreferences
     }
 
     fun restoreMangaNoFetch(manga: Manga, dbManga: Manga) {
