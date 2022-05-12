@@ -87,7 +87,7 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
                     backupExtensionInfo(databaseManga),
                     emptyList(),
                     backupAnimeExtensionInfo(databaseAnime),
-                    backupPreferences(prefs, flags)
+                    backupPreferences(prefs, flags),
                 )
             }
         }

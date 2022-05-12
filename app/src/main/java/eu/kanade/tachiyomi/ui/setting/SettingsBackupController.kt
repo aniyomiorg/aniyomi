@@ -26,12 +26,18 @@ import eu.kanade.tachiyomi.data.backup.ValidatorParseException
 import eu.kanade.tachiyomi.data.backup.full.FullBackupRestoreValidator
 import eu.kanade.tachiyomi.data.backup.full.models.BackupFull
 import eu.kanade.tachiyomi.data.backup.legacy.LegacyBackupRestoreValidator
+import eu.kanade.tachiyomi.data.preference.FLAG_CATEGORIES
+import eu.kanade.tachiyomi.data.preference.FLAG_CHAPTERS
+import eu.kanade.tachiyomi.data.preference.FLAG_HISTORY
+import eu.kanade.tachiyomi.data.preference.FLAG_SETTINGS
+import eu.kanade.tachiyomi.data.preference.FLAG_TRACK
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.requestPermissionsSafe
 import eu.kanade.tachiyomi.util.preference.bindTo
 import eu.kanade.tachiyomi.util.preference.entriesRes
 import eu.kanade.tachiyomi.util.preference.infoPreference
 import eu.kanade.tachiyomi.util.preference.intListPreference
+import eu.kanade.tachiyomi.util.preference.multiSelectListPreference
 import eu.kanade.tachiyomi.util.preference.onChange
 import eu.kanade.tachiyomi.util.preference.onClick
 import eu.kanade.tachiyomi.util.preference.preference
@@ -122,6 +128,34 @@ class SettingsBackupController : SettingsController() {
                 onChange { newValue ->
                     val interval = (newValue as String).toInt()
                     BackupCreatorJob.setupTask(context, interval)
+                    true
+                }
+            }
+            multiSelectListPreference {
+                bindTo(preferences.backupFlags())
+                titleRes = R.string.pref_backup_flags
+                summaryRes = R.string.pref_backup_flags_summ
+                entriesRes = arrayOf(
+                    R.string.general_categories,
+                    R.string.chapters_episodes,
+                    R.string.track,
+                    R.string.history,
+                    R.string.settings,
+                )
+                entryValues = arrayOf(
+                    FLAG_CATEGORIES,
+                    FLAG_CHAPTERS,
+                    FLAG_TRACK,
+                    FLAG_HISTORY,
+                    FLAG_SETTINGS,
+                )
+
+                onChange {
+                    val flags = (it as Set<String>).sumOf { s ->
+                        s.toInt(16)
+                    }
+                    if (flags and BackupConst.BACKUP_PREFS_MASK == BackupConst.BACKUP_PREFS) context.toast(R.string.backup_settings_warning)
+                    BackupCreatorJob.setupTask(context, prefFlags = flags)
                     true
                 }
             }
@@ -229,10 +263,10 @@ class SettingsBackupController : SettingsController() {
                 R.string.chapters_episodes,
                 R.string.track,
                 R.string.history,
-                R.string.label_settings,
+                R.string.settings,
             )
                 .map { activity.getString(it) }
-            val selected = options.map { true }.toBooleanArray()
+            val selected = options.mapIndexed { i, _ -> i <= 4 }.toBooleanArray() // Settings are disabled by default
 
             return MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.backup_choice)
@@ -252,7 +286,10 @@ class SettingsBackupController : SettingsController() {
                                 2 -> flags = flags or BackupConst.BACKUP_CHAPTER
                                 3 -> flags = flags or BackupConst.BACKUP_TRACK
                                 4 -> flags = flags or BackupConst.BACKUP_HISTORY
-                                5 -> flags = flags or BackupConst.BACKUP_PREFS
+                                5 -> {
+                                    activity.toast(R.string.backup_settings_warning)
+                                    flags = flags or BackupConst.BACKUP_PREFS
+                                }
                             }
                         }
                     }

@@ -54,9 +54,12 @@ class BackupCreatorJob(private val context: Context, workerParams: WorkerParamet
             return list.find { it.state == WorkInfo.State.RUNNING } != null
         }
 
-        fun setupTask(context: Context, prefInterval: Int? = null) {
+        fun setupTask(context: Context, prefInterval: Int? = null, prefFlags: Int? = null) {
             val preferences = Injekt.get<PreferencesHelper>()
             val interval = prefInterval ?: preferences.backupInterval().get()
+            val flags = prefFlags ?: preferences.backupFlags().get().sumOf { s ->
+                s.toInt(16)
+            }
             val workManager = WorkManager.getInstance(context)
             if (interval > 0) {
                 val request = PeriodicWorkRequestBuilder<BackupCreatorJob>(
@@ -66,7 +69,12 @@ class BackupCreatorJob(private val context: Context, workerParams: WorkerParamet
                     TimeUnit.MINUTES,
                 )
                     .addTag(TAG_AUTO)
-                    .setInputData(workDataOf(IS_AUTO_BACKUP_KEY to true))
+                    .setInputData(
+                        workDataOf(
+                            IS_AUTO_BACKUP_KEY to true,
+                            BACKUP_FLAGS_KEY to flags,
+                        )
+                    )
                     .build()
 
                 workManager.enqueueUniquePeriodicWork(TAG_AUTO, ExistingPeriodicWorkPolicy.REPLACE, request)
