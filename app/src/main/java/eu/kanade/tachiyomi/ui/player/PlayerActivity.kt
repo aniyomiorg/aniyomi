@@ -108,6 +108,8 @@ class PlayerActivity :
 
     internal val player get() = binding.player
 
+    private val playerControls get() = binding.playerControls
+
     private var audioManager: AudioManager? = null
     private var fineVolume = 0F
     private var maxVolume = 0
@@ -209,16 +211,16 @@ class PlayerActivity :
     // Fade out Volume Bar
     private val volumeViewRunnable = Runnable {
         AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
-            binding.volumeView.startAnimation(fadeAnimation)
-            binding.volumeView.visibility = View.GONE
+            playerControls.binding.volumeView.startAnimation(fadeAnimation)
+            playerControls.binding.volumeView.visibility = View.GONE
         }
     }
 
     // Fade out Brightness Bar
     private val brightnessViewRunnable = Runnable {
         AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
-            binding.brightnessView.startAnimation(fadeAnimation)
-            binding.brightnessView.visibility = View.GONE
+            playerControls.binding.brightnessView.startAnimation(fadeAnimation)
+            playerControls.binding.brightnessView.visibility = View.GONE
         }
     }
 
@@ -234,12 +236,12 @@ class PlayerActivity :
             }
             "volume" -> {
                 callback = volumeViewRunnable
-                itemView = binding.volumeView
+                itemView = playerControls.binding.volumeView
                 delay = 750L
             }
             "brightness" -> {
                 callback = brightnessViewRunnable
-                itemView = binding.brightnessView
+                itemView = playerControls.binding.brightnessView
                 delay = 750L
             }
             else -> return
@@ -269,7 +271,7 @@ class PlayerActivity :
     private var hadPreviousAudio = false
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        binding.playerControls.resetControlsFade()
+        playerControls.resetControlsFade()
         return super.dispatchTouchEvent(ev)
     }
 
@@ -289,7 +291,7 @@ class PlayerActivity :
         }
 
         setVisibilities()
-        binding.playerControls.showAndFadeControls()
+        playerControls.showAndFadeControls()
 
         setMpvConf()
         player.initialize(applicationContext.filesDir.path)
@@ -370,19 +372,14 @@ class PlayerActivity :
                 if (width <= height) {
                     width = height.also { height = width }
                 }
-                binding.playerControls.binding.controlsTopLandscape.visibility = View.VISIBLE
-                binding.playerControls.binding.controlsTopPortrait.visibility = View.GONE
-                setupGestures()
-                setViewMode()
             } else {
                 if (width >= height) {
                     width = height.also { height = width }
                 }
-                binding.playerControls.binding.controlsTopPortrait.visibility = View.VISIBLE
-                binding.playerControls.binding.controlsTopLandscape.visibility = View.GONE
-                setupGestures()
-                setViewMode()
             }
+            player.duration?.let { playerControls.updatePlaybackPos(it) }
+            setupGestures()
+            setViewMode()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
         }
     }
@@ -440,11 +437,11 @@ class PlayerActivity :
         }
     }
 
-    fun toggleControls() = binding.playerControls.toggleControls()
+    fun toggleControls() = playerControls.toggleControls()
 
     private fun showLoadingIndicator(visible: Boolean) {
         if (binding.loadingIndicator.isVisible == visible) return
-        binding.playerControls.binding.playBtn.isVisible = !visible
+        playerControls.binding.playBtn.isVisible = !visible
         binding.loadingIndicator.isVisible = visible
     }
 
@@ -526,7 +523,7 @@ class PlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     fun playPause(view: View) {
         player.cyclePause()
-        binding.playerControls.playPause()
+        playerControls.playPause()
     }
 
     private val doubleTapPlayPauseRunnable = Runnable {
@@ -538,9 +535,9 @@ class PlayerActivity :
 
     fun doubleTapPlayPause() {
         animationHandler.removeCallbacks(doubleTapPlayPauseRunnable)
-        playPause(binding.playerControls.binding.playBtn)
+        playPause(playerControls.binding.playBtn)
 
-        if (!binding.playerControls.binding.controlsView.isVisible) {
+        if (!playerControls.binding.controlsView.isVisible) {
             when {
                 player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_80dp) }
                 !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_80dp) }
@@ -559,7 +556,7 @@ class PlayerActivity :
         val v = if (time < 0) binding.rewBg else binding.ffwdBg
         val w = if (time < 0) width * 0.2F else width * 0.8F
         val x = (event?.x?.toInt() ?: w.toInt()) - v.x.toInt()
-        val y = (event?.y?.toInt() ?: height / 2) - v.y.toInt()
+        val y = (event?.y?.toInt() ?: (height / 2)) - v.y.toInt()
         ViewAnimationUtils.createCircularReveal(v, x, y, 0f, kotlin.math.max(v.height, v.width).toFloat()).setDuration(500).start()
 
         ObjectAnimator.ofFloat(v, "alpha", 0f, 0.2f).setDuration(500).start()
@@ -587,10 +584,16 @@ class PlayerActivity :
             binding.brightnessOverlay.isVisible = false
         }
         val finalBrightness = (brightness * 100).roundToInt()
-        binding.brightnessText.text = finalBrightness.toString()
-        binding.brightnessBar.progress = finalBrightness
-        binding.brightnessBar.secondaryProgress = abs(finalBrightness)
-        if (finalBrightness >= 0) { binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_24dp); binding.brightnessBar.max = 100 } else { binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_24dp); binding.brightnessBar.max = 75 }
+        playerControls.binding.brightnessText.text = finalBrightness.toString()
+        playerControls.binding.brightnessBar.progress = finalBrightness
+        playerControls.binding.brightnessBar.secondaryProgress = abs(finalBrightness)
+        if (finalBrightness >= 0) {
+            playerControls.binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_24dp)
+            playerControls.binding.brightnessBar.max = 100
+        } else {
+            playerControls.binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_24dp)
+            playerControls.binding.brightnessBar.max = 75
+        }
         showGestureView("brightness")
     }
 
@@ -600,10 +603,10 @@ class PlayerActivity :
         // val newVolumePercent = 100 * newVolume / maxVolume
         audioManager!!.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
 
-        binding.volumeText.text = newVolume.toString()
-        binding.volumeBar.progress = newVolume
-        if (newVolume == 0) binding.volumeImg.setImageResource(R.drawable.ic_volume_none_24dp)
-        else binding.volumeImg.setImageResource(R.drawable.ic_volume_high_24dp)
+        playerControls.binding.volumeText.text = newVolume.toString()
+        playerControls.binding.volumeBar.progress = newVolume
+        if (newVolume == 0) playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_none_24dp)
+        else playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_high_24dp)
         showGestureView("volume")
     }
 
@@ -662,7 +665,7 @@ class PlayerActivity :
         val newDiff = newPos - initialSeek
         // seek faster than assigning to timePos but less precise
         MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
-        binding.playerControls.updatePlaybackPos(newPos)
+        playerControls.updatePlaybackPos(newPos)
 
         val diffText = Utils.prettyTime(newDiff, true)
         binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
@@ -751,13 +754,13 @@ class PlayerActivity :
     fun switchDecoder(view: View) {
         player.cycleHwdec()
         preferences.getPlayerViewMode()
-        binding.playerControls.updateDecoderButton()
+        playerControls.updateDecoderButton()
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun cycleSpeed(view: View) {
         player.cycleSpeed()
-        binding.playerControls.updateSpeedButton()
+        playerControls.updateSpeedButton()
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -769,18 +772,16 @@ class PlayerActivity :
         // forces update of entire UI, used when resuming the activity
         val paused = player.paused ?: return
         updatePlaybackStatus(paused)
-        player.timePos?.let { binding.playerControls.updatePlaybackPos(it) }
-        player.duration?.let { binding.playerControls.updatePlaybackDuration(it) }
+        player.timePos?.let { playerControls.updatePlaybackPos(it) }
+        player.duration?.let { playerControls.updatePlaybackDuration(it) }
         updatePlaylistButtons()
         updateEpisodeText()
         player.loadTracks()
     }
 
     private fun updateEpisodeText() {
-        binding.playerControls.binding.titleMainTxtLandscape.text = presenter.anime?.title
-        binding.playerControls.binding.titleSecondaryTxtLandscape.text = presenter.currentEpisode?.name
-        binding.playerControls.binding.titleMainTxtPortrait.text = presenter.anime?.title
-        binding.playerControls.binding.titleSecondaryTxtPortrait.text = presenter.currentEpisode?.name
+        playerControls.binding.titleMainTxt.text = presenter.anime?.title
+        playerControls.binding.titleSecondaryTxt.text = presenter.currentEpisode?.name
     }
 
     private fun updatePlaylistButtons() {
@@ -789,11 +790,11 @@ class PlayerActivity :
 
         val grey = ContextCompat.getColor(this, R.color.tint_disabled)
         val white = ContextCompat.getColor(this, R.color.tint_normal)
-        with(binding.playerControls.binding.prevBtn) {
+        with(playerControls.binding.prevBtn) {
             this.imageTintList = ColorStateList.valueOf(if (plPos == 0) grey else white)
             this.isClickable = plPos != 0
         }
-        with(binding.playerControls.binding.nextBtn) {
+        with(playerControls.binding.nextBtn) {
             this.imageTintList = ColorStateList.valueOf(if (plPos == plCount - 1) grey else white)
             this.isClickable = plPos != plCount - 1
         }
@@ -802,7 +803,7 @@ class PlayerActivity :
     private fun updatePlaybackStatus(paused: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) updatePictureInPictureActions(!paused)
         val r = if (paused) R.drawable.ic_play_arrow_80dp else R.drawable.ic_pause_80dp
-        binding.playerControls.binding.playBtn.setImageResource(r)
+        playerControls.binding.playBtn.setImageResource(r)
 
         if (paused) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -851,7 +852,7 @@ class PlayerActivity :
 
         if (isInPictureInPictureMode) {
             // On Android TV it is required to hide controller in this PIP change callback
-            binding.playerControls.hideControls(true)
+            playerControls.hideControls(true)
             binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize / 2
             mReceiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context?, intent: Intent?) {
@@ -876,7 +877,7 @@ class PlayerActivity :
             }
             registerReceiver(mReceiver, IntentFilter(ACTION_MEDIA_CONTROL))
         } else {
-            if (player.paused!!) binding.playerControls.hideControls(false)
+            if (player.paused!!) playerControls.hideControls(false)
             binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize * 2
             if (mReceiver != null) {
                 unregisterReceiver(mReceiver)
@@ -1136,8 +1137,8 @@ class PlayerActivity :
 
     private fun eventPropertyUi(property: String, value: Long) {
         when (property) {
-            "time-pos" -> binding.playerControls.updatePlaybackPos(value.toInt())
-            "duration" -> binding.playerControls.updatePlaybackDuration(value.toInt())
+            "time-pos" -> playerControls.updatePlaybackPos(value.toInt())
+            "duration" -> playerControls.updatePlaybackDuration(value.toInt())
         }
     }
 
