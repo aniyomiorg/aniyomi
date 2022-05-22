@@ -377,7 +377,6 @@ class PlayerActivity :
                     width = height.also { height = width }
                 }
             }
-            player.duration?.let { playerControls.updatePlaybackPos(it) }
             setupGestures()
             setViewMode()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
