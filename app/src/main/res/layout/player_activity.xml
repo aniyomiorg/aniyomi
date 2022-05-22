@@ -66,90 +66,6 @@
         android:layout_height="match_parent" />
 
     <LinearLayout
-        android:id="@+id/volumeView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="45dp"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-        <TextView
-            android:id="@+id/volumeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="10"
-            android:gravity="left"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:layout_marginBottom="5dp"/>
-
-        <ProgressBar
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:id="@+id/volumeBar"
-            android:layout_width="26dp"
-            android:layout_height="125dp"
-            android:max="15"
-            android:progress="10"
-            android:progressDrawable="@drawable/player_bar" />
-
-        <ImageView
-            android:id="@+id/volumeImg"
-            android:layout_width="30dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_volume_high_24dp"
-            app:tint="#FFFFFF"
-            android:layout_marginTop="5dp"
-            tools:ignore="ContentDescription" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/brightnessView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_alignParentRight="true"
-        android:layout_centerInParent="true"
-        android:layout_marginRight="45dp"
-        android:layout_marginTop="105dp"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-        <TextView
-            android:id="@+id/brightnessText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="100"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-        <ProgressBar
-            android:id="@+id/brightnessBar"
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="26dp"
-            android:layout_height="125dp"
-            android:max="100"
-            android:progress="10"
-            android:progressDrawable="@drawable/player_bar" />
-
-        <ImageView
-            android:id="@+id/brightnessImg"
-            android:layout_width="30dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/ic_brightness_positive_24dp"
-            app:tint="#FFFFFF"
-            tools:ignore="ContentDescription" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/seekView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -181,7 +97,8 @@
         android:background="#70000000"
         android:visibility="gone"
         app:tint="?attr/colorOnPrimarySurface"
-        tools:src="@drawable/ic_play_arrow_80dp" />
+        tools:src="@drawable/ic_play_arrow_80dp"
+        tools:visibility="visible" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/loading_indicator"
