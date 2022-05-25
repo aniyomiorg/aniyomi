@@ -80,6 +80,10 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.nextBtn.setOnClickListener { activity.switchEpisode(false) }
         binding.prevBtn.setOnClickListener { activity.switchEpisode(true) }
+
+        binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked ->
+            activity.toggleAutoplay(isChecked)
+        }
     }
 
     private val animationHandler = Handler(Looper.getMainLooper())
