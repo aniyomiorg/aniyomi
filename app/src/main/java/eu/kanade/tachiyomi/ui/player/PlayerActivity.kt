@@ -36,11 +36,13 @@ import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
@@ -291,7 +293,9 @@ class PlayerActivity :
         }
 
         setVisibilities()
+
         playerControls.showAndFadeControls()
+        toggleAutoplay(preferences.autoplayEnabled().get())
 
         setMpvConf()
         player.initialize(applicationContext.filesDir.path)
@@ -372,9 +376,43 @@ class PlayerActivity :
                 if (width <= height) {
                     width = height.also { height = width }
                 }
+
+                playerControls.binding.titleMainTxt.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    rightToLeft = playerControls.binding.toggleAutoplay.id
+                    rightToRight = ConstraintLayout.LayoutParams.UNSET
+                }
+                playerControls.binding.titleSecondaryTxt.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    rightToLeft = playerControls.binding.toggleAutoplay.id
+                    rightToRight = ConstraintLayout.LayoutParams.UNSET
+                }
+                playerControls.binding.qualityBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    topToBottom = ConstraintLayout.LayoutParams.UNSET
+                }
+                playerControls.binding.toggleAutoplay.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    leftToLeft = ConstraintLayout.LayoutParams.UNSET
+                    leftToRight = playerControls.binding.titleMainTxt.id
+                }
             } else {
                 if (width >= height) {
                     width = height.also { height = width }
+                }
+
+                playerControls.binding.titleMainTxt.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    rightToLeft = ConstraintLayout.LayoutParams.UNSET
+                    rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+                }
+                playerControls.binding.titleSecondaryTxt.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    rightToLeft = ConstraintLayout.LayoutParams.UNSET
+                    rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+                }
+                playerControls.binding.qualityBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    topToTop = ConstraintLayout.LayoutParams.UNSET
+                    topToBottom = playerControls.binding.backArrowBtn.id
+                }
+                playerControls.binding.toggleAutoplay.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
+                    leftToRight = ConstraintLayout.LayoutParams.UNSET
                 }
             }
             setupGestures()
@@ -424,7 +462,7 @@ class PlayerActivity :
         showLoadingIndicator(true)
 
         val epTxt = switchMethod {
-            if (wasPlayerPaused == false) {
+            if (wasPlayerPaused == false || preferences.autoplayEnabled().get()) {
                 player.paused = false
             }
         }
@@ -436,10 +474,37 @@ class PlayerActivity :
         }
     }
 
+    // Fade out Player information text
+    private val playerInformationRunnable = Runnable {
+        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+            playerControls.binding.playerInformation.startAnimation(fadeAnimation)
+            playerControls.binding.playerInformation.visibility = View.GONE
+        }
+    }
+
+    internal fun toggleAutoplay(isAutoplay: Boolean) {
+        playerControls.binding.toggleAutoplay.isChecked = isAutoplay
+        playerControls.binding.toggleAutoplay.thumbDrawable = if (isAutoplay) {
+            ContextCompat.getDrawable(playerControls.context, R.drawable.ic_play_circle_filled_24)
+        } else ContextCompat.getDrawable(playerControls.context, R.drawable.ic_pause_circle_filled_24)
+
+        if (isAutoplay) {
+            playerControls.binding.playerInformation.text = getString(R.string.enable_auto_play)
+        } else {
+            playerControls.binding.playerInformation.text = getString(R.string.disable_auto_play)
+        }
+
+        if (!preferences.autoplayEnabled().get() == isAutoplay) {
+            animationHandler.removeCallbacks(playerInformationRunnable)
+            playerControls.binding.playerInformation.visibility = View.VISIBLE
+            animationHandler.postDelayed(playerInformationRunnable, 1000L)
+        }
+        preferences.autoplayEnabled().set(isAutoplay)
+    }
+
     fun toggleControls() = playerControls.toggleControls()
 
     private fun showLoadingIndicator(visible: Boolean) {
-        if (binding.loadingIndicator.isVisible == visible) return
         playerControls.binding.playBtn.isVisible = !visible
         binding.loadingIndicator.isVisible = visible
     }
@@ -771,8 +836,8 @@ class PlayerActivity :
         // forces update of entire UI, used when resuming the activity
         val paused = player.paused ?: return
         updatePlaybackStatus(paused)
-        player.timePos?.let { playerControls.updatePlaybackPos(it) }
         player.duration?.let { playerControls.updatePlaybackDuration(it) }
+        player.timePos?.let { playerControls.updatePlaybackPos(it) }
         updatePlaylistButtons()
         updateEpisodeText()
         player.loadTracks()
@@ -1147,6 +1212,14 @@ class PlayerActivity :
             "pause" -> {
                 if (!isFinishing) {
                     setAudioFocus(value)
+
+                    if (player.timePos != null && player.duration != null) {
+                        val isVideoEof = MPVLib.getPropertyBoolean("eof-reached") == true
+                        val isVideoCompleted = isVideoEof || (player.timePos!! >= player.duration!!)
+                        if (isVideoCompleted && preferences.autoplayEnabled().get()) {
+                            animationHandler.postDelayed({ switchEpisode(false) }, 1000L)
+                        }
+                    }
                     updatePlaybackStatus(value)
                 }
             }

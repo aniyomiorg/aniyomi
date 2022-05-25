@@ -121,6 +121,8 @@ class PreferencesHelper(val context: Context) {
 
     fun pipEpisodeToasts() = prefs.getBoolean(Keys.pipEpisodeToasts, true)
 
+    fun autoplayEnabled() = flowPrefs.getBoolean(Keys.autoplayEnabled, false)
+
     fun mpvConf() = prefs.getString(Keys.mpvConf, "")
 
     fun defaultOrientationType() = prefs.getInt(Keys.defaultOrientationType, OrientationType.FREE.flagValue)
