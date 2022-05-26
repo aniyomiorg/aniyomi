@@ -208,6 +208,7 @@ class PlayerActivity :
         AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
             binding.seekView.startAnimation(fadeAnimation)
             binding.seekView.visibility = View.GONE
+            diffSeekMain = 0
         }
     }
 
@@ -235,7 +236,7 @@ class PlayerActivity :
             "seek" -> {
                 callback = seekTextRunnable
                 itemView = binding.seekView
-                delay = 750L
+                delay = 1000L
             }
             "volume" -> {
                 callback = volumeViewRunnable
@@ -642,9 +643,7 @@ class PlayerActivity :
         val newPos = (player.timePos ?: 0) + time // only for display
         MPVLib.command(arrayOf("seek", time.toString(), "relative"))
 
-        val diffText = Utils.prettyTime(time, true)
-        binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
-        showGestureView("seek")
+        editSeekText(newPos, time)
     }
 
     fun verticalScrollLeft(diff: Float) {
@@ -745,7 +744,20 @@ class PlayerActivity :
         MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
         playerControls.updatePlaybackPos(newPos)
 
-        val diffText = Utils.prettyTime(newDiff, true)
+        editSeekText(newPos, newDiff, true)
+    }
+
+    private var diffSeekMain = 0
+    private var diffSeekHorizontal = 0
+    private fun editSeekText(newPos: Int, diff: Int, isHorizontalSeek: Boolean = false) {
+        if (isHorizontalSeek) {
+            diffSeekMain += diff - diffSeekHorizontal
+            diffSeekHorizontal = diff
+        } else {
+            diffSeekMain += diff
+            diffSeekHorizontal = 0
+        }
+        val diffText = Utils.prettyTime(diffSeekMain, true)
         binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
         showGestureView("seek")
     }
