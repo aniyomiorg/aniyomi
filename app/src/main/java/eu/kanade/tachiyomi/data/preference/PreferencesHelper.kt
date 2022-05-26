@@ -121,7 +121,9 @@ class PreferencesHelper(val context: Context) {
 
     fun pipEpisodeToasts() = prefs.getBoolean(Keys.pipEpisodeToasts, true)
 
-    fun autoplayEnabled() = flowPrefs.getBoolean(Keys.autoplayEnabled, false)
+    fun autoplayEnabled() = flowPrefs.getBoolean("pref_auto_play_enabled", false)
+
+    fun invertedPlaybackTxt() = flowPrefs.getBoolean("pref_invert_playback_txt", false)
 
     fun mpvConf() = prefs.getString(Keys.mpvConf, "")
 

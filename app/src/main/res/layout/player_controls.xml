@@ -256,6 +256,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
 
+        <Button
+            android:id="@+id/playbackPositionBtn"
+            android:layout_width="96dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="?attr/selectableItemBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
         <SeekBar
             android:id="@+id/playbackSeekbar"
             android:layout_width="0dp"
