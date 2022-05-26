@@ -1218,6 +1218,8 @@ class PlayerActivity :
         }
     }
 
+    private val nextEpisodeRunnable = Runnable { switchEpisode(false) }
+
     @Suppress("DEPRECATION")
     private fun eventPropertyUi(property: String, value: Boolean) {
         when (property) {
@@ -1226,10 +1228,11 @@ class PlayerActivity :
                     setAudioFocus(value)
 
                     if (player.timePos != null && player.duration != null) {
+                        animationHandler.removeCallbacks(nextEpisodeRunnable)
                         val isVideoEof = MPVLib.getPropertyBoolean("eof-reached") == true
                         val isVideoCompleted = isVideoEof || (player.timePos!! >= player.duration!!)
                         if (isVideoCompleted && preferences.autoplayEnabled().get()) {
-                            animationHandler.postDelayed({ switchEpisode(false) }, 1000L)
+                            animationHandler.postDelayed(nextEpisodeRunnable, 1000L)
                         }
                     }
                     updatePlaybackStatus(value)
