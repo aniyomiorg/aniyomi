@@ -548,20 +548,20 @@ class PlayerActivity :
                 MPVLib.setOptionString("video-aspect-override", "-1")
                 MPVLib.setOptionString("panscan", "1.0")
 
-                playerControls.binding.playerInformation.text = getString(R.string.video_fit_height)
+                playerControls.binding.playerInformation.text = getString(R.string.video_crop_screen)
             }
             1 -> {
                 MPVLib.setOptionString("video-aspect-override", "-1")
                 MPVLib.setOptionString("panscan", "0.0")
 
-                playerControls.binding.playerInformation.text = getString(R.string.video_fit_width)
+                playerControls.binding.playerInformation.text = getString(R.string.video_fit_screen)
             }
             0 -> {
                 val newAspect = "$width/$height"
                 MPVLib.setOptionString("video-aspect-override", newAspect)
                 MPVLib.setOptionString("panscan", "0.0")
 
-                playerControls.binding.playerInformation.text = getString(R.string.video_fill_width_and_height)
+                playerControls.binding.playerInformation.text = getString(R.string.video_stretch_screen)
             }
         }
         if (playerViewMode != preferences.getPlayerViewMode()) {
