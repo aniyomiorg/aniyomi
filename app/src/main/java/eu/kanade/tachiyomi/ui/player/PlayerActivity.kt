@@ -470,7 +470,7 @@ class PlayerActivity :
 
         when {
             epTxt == "Invalid" -> return
-            epTxt == null -> { launchUI { toast(errorRes) }; showLoadingIndicator(false) }
+            epTxt == null -> { if (presenter.anime != null) launchUI { toast(errorRes) }; showLoadingIndicator(false) }
             isInPipMode -> if (preferences.pipEpisodeToasts()) launchUI { toast(epTxt) }
         }
     }
