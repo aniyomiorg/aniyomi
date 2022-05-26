@@ -55,6 +55,7 @@ import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.logcat
+import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
@@ -910,7 +911,11 @@ class PlayerActivity :
             presenter.saveEpisodeProgress(player.timePos, player.duration)
             player.paused = true
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) finishAndRemoveTask()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+            isInPipMode &&
+            powerManager.isInteractive
+        ) finishAndRemoveTask()
+
         super.onStop()
     }
 
