@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.player
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
 import android.os.Build
@@ -81,6 +82,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.nextBtn.setOnClickListener { activity.switchEpisode(false) }
         binding.prevBtn.setOnClickListener { activity.switchEpisode(true) }
 
+        binding.playbackPositionBtn.setOnClickListener {
+            preferences.invertedPlaybackTxt().set(!preferences.invertedPlaybackTxt().get())
+            if (activity.player.timePos != null) updatePlaybackPos(activity.player.timePos!!)
+        }
+
         binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked ->
             activity.toggleAutoplay(isChecked)
         }
@@ -97,7 +103,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    private fun lockControls(locked: Boolean) {
+    internal fun lockControls(locked: Boolean) {
         activity.isLocked = locked
         toggleControls()
     }
@@ -128,12 +134,18 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun hideControls(hide: Boolean) {
         animationHandler.removeCallbacks(controlsViewRunnable)
-        if (hide) binding.controlsView.isVisible = false
-        else showAndFadeControls()
+        if (hide) {
+            binding.controlsView.isVisible = false
+            binding.lockedView.isVisible = false
+        } else showAndFadeControls()
     }
 
+    @SuppressLint("SetTextI18n")
     internal fun updatePlaybackPos(position: Int) {
-        binding.playbackPositionTxt.text = Utils.prettyTime(position)
+        if (preferences.invertedPlaybackTxt().get() && activity.player.duration != null) {
+            binding.playbackPositionTxt.text = "-${ Utils.prettyTime(activity.player.duration!! - position) }"
+        } else binding.playbackPositionTxt.text = Utils.prettyTime(position)
+
         if (!userIsOperatingSeekbar) {
             binding.playbackSeekbar.progress = position
         }

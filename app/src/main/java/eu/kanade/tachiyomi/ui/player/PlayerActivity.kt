@@ -55,6 +55,7 @@ import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.logcat
+import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
@@ -469,7 +470,7 @@ class PlayerActivity :
 
         when {
             epTxt == "Invalid" -> return
-            epTxt == null -> { launchUI { toast(errorRes) }; showLoadingIndicator(false) }
+            epTxt == null -> { if (presenter.anime != null) launchUI { toast(errorRes) }; showLoadingIndicator(false) }
             isInPipMode -> if (preferences.pipEpisodeToasts()) launchUI { toast(epTxt) }
         }
     }
@@ -546,17 +547,30 @@ class PlayerActivity :
             2 -> {
                 MPVLib.setOptionString("video-aspect-override", "-1")
                 MPVLib.setOptionString("panscan", "1.0")
+
+                playerControls.binding.playerInformation.text = getString(R.string.video_crop_screen)
             }
             1 -> {
                 MPVLib.setOptionString("video-aspect-override", "-1")
                 MPVLib.setOptionString("panscan", "0.0")
+
+                playerControls.binding.playerInformation.text = getString(R.string.video_fit_screen)
             }
             0 -> {
                 val newAspect = "$width/$height"
                 MPVLib.setOptionString("video-aspect-override", newAspect)
                 MPVLib.setOptionString("panscan", "0.0")
+
+                playerControls.binding.playerInformation.text = getString(R.string.video_stretch_screen)
             }
         }
+        if (playerViewMode != preferences.getPlayerViewMode()) {
+            animationHandler.removeCallbacks(playerInformationRunnable)
+            playerControls.binding.playerInformation.visibility = View.VISIBLE
+            animationHandler.postDelayed(playerInformationRunnable, 1000L)
+        }
+
+        preferences.setPlayerViewMode(playerViewMode)
     }
 
     @Suppress("DEPRECATION")
@@ -758,7 +772,6 @@ class PlayerActivity :
             2 -> 0
             else -> 0
         }
-        preferences.setPlayerViewMode(playerViewMode)
         setViewMode()
     }
 
@@ -898,7 +911,11 @@ class PlayerActivity :
             presenter.saveEpisodeProgress(player.timePos, player.duration)
             player.paused = true
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) finishAndRemoveTask()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+            isInPipMode &&
+            powerManager.isInteractive
+        ) finishAndRemoveTask()
+
         super.onStop()
     }
 
@@ -912,6 +929,7 @@ class PlayerActivity :
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
         isInPipMode = isInPictureInPictureMode
         isPipStarted = isInPipMode
+        playerControls.lockControls(isInPipMode)
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
 
         if (isInPictureInPictureMode) {
@@ -954,6 +972,7 @@ class PlayerActivity :
     fun startPiP(view: View) {
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             isPipStarted = true
+            playerControls.hideControls(true)
             player.paused?.let { updatePictureInPictureActions(!it) }
                 ?.let { this.enterPictureInPictureMode(it) }
         }
@@ -1206,6 +1225,8 @@ class PlayerActivity :
         }
     }
 
+    private val nextEpisodeRunnable = Runnable { switchEpisode(false) }
+
     @Suppress("DEPRECATION")
     private fun eventPropertyUi(property: String, value: Boolean) {
         when (property) {
@@ -1214,10 +1235,11 @@ class PlayerActivity :
                     setAudioFocus(value)
 
                     if (player.timePos != null && player.duration != null) {
+                        animationHandler.removeCallbacks(nextEpisodeRunnable)
                         val isVideoEof = MPVLib.getPropertyBoolean("eof-reached") == true
                         val isVideoCompleted = isVideoEof || (player.timePos!! >= player.duration!!)
                         if (isVideoCompleted && preferences.autoplayEnabled().get()) {
-                            animationHandler.postDelayed({ switchEpisode(false) }, 1000L)
+                            animationHandler.postDelayed(nextEpisodeRunnable, 1000L)
                         }
                     }
                     updatePlaybackStatus(value)
