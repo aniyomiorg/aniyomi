@@ -546,17 +546,30 @@ class PlayerActivity :
             2 -> {
                 MPVLib.setOptionString("video-aspect-override", "-1")
                 MPVLib.setOptionString("panscan", "1.0")
+
+                playerControls.binding.playerInformation.text = getString(R.string.video_fit_height)
             }
             1 -> {
                 MPVLib.setOptionString("video-aspect-override", "-1")
                 MPVLib.setOptionString("panscan", "0.0")
+
+                playerControls.binding.playerInformation.text = getString(R.string.video_fit_width)
             }
             0 -> {
                 val newAspect = "$width/$height"
                 MPVLib.setOptionString("video-aspect-override", newAspect)
                 MPVLib.setOptionString("panscan", "0.0")
+
+                playerControls.binding.playerInformation.text = getString(R.string.video_fill_width_and_height)
             }
         }
+        if (playerViewMode != preferences.getPlayerViewMode()) {
+            animationHandler.removeCallbacks(playerInformationRunnable)
+            playerControls.binding.playerInformation.visibility = View.VISIBLE
+            animationHandler.postDelayed(playerInformationRunnable, 1000L)
+        }
+
+        preferences.setPlayerViewMode(playerViewMode)
     }
 
     @Suppress("DEPRECATION")
@@ -758,7 +771,6 @@ class PlayerActivity :
             2 -> 0
             else -> 0
         }
-        preferences.setPlayerViewMode(playerViewMode)
         setViewMode()
     }
 
