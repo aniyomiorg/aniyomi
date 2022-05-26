@@ -929,6 +929,7 @@ class PlayerActivity :
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
         isInPipMode = isInPictureInPictureMode
         isPipStarted = isInPipMode
+        playerControls.lockControls(isInPipMode)
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
 
         if (isInPictureInPictureMode) {
@@ -971,6 +972,7 @@ class PlayerActivity :
     fun startPiP(view: View) {
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             isPipStarted = true
+            playerControls.hideControls(true)
             player.paused?.let { updatePictureInPictureActions(!it) }
                 ?.let { this.enterPictureInPictureMode(it) }
         }

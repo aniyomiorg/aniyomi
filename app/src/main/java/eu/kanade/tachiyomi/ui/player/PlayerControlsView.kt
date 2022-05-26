@@ -103,7 +103,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    private fun lockControls(locked: Boolean) {
+    internal fun lockControls(locked: Boolean) {
         activity.isLocked = locked
         toggleControls()
     }
@@ -134,8 +134,10 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun hideControls(hide: Boolean) {
         animationHandler.removeCallbacks(controlsViewRunnable)
-        if (hide) binding.controlsView.isVisible = false
-        else showAndFadeControls()
+        if (hide) {
+            binding.controlsView.isVisible = false
+            binding.lockedView.isVisible = false
+        } else showAndFadeControls()
     }
 
     @SuppressLint("SetTextI18n")
