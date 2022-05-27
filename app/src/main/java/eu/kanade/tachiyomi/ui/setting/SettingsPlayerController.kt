@@ -11,6 +11,7 @@ import eu.kanade.tachiyomi.util.preference.defaultValue
 import eu.kanade.tachiyomi.util.preference.editTextPreference
 import eu.kanade.tachiyomi.util.preference.entriesRes
 import eu.kanade.tachiyomi.util.preference.listPreference
+import eu.kanade.tachiyomi.util.preference.summaryRes
 import eu.kanade.tachiyomi.util.preference.switchPreference
 import eu.kanade.tachiyomi.util.preference.titleRes
 import eu.kanade.tachiyomi.data.preference.PreferenceKeys as Keys
@@ -68,6 +69,13 @@ class SettingsPlayerController : SettingsController() {
             defaultValue = "10"
 
             summary = "%s"
+        }
+
+        switchPreference {
+            key = Keys.playerFastSeek
+            titleRes = R.string.pref_player_fast_seek
+            defaultValue = false
+            summaryRes = R.string.pref_player_fast_seek_summary
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

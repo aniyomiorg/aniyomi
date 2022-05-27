@@ -21,6 +21,8 @@ object PreferenceKeys {
 
     const val playerSpeed = "pref_player_speed"
 
+    const val playerFastSeek = "pref_player_fast_seek"
+
     const val playerViewMode = "pref_player_view_mode"
 
     const val progressPreference = "pref_progress_preference"

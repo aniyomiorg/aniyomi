@@ -641,7 +641,7 @@ class PlayerActivity :
         ObjectAnimator.ofFloat(v, "alpha", 0f, 0.2f).setDuration(500).start()
         ObjectAnimator.ofFloat(v, "alpha", 0.2f, 0.2f, 0f).setDuration(1000).start()
         val newPos = (player.timePos ?: 0) + time // only for display
-        MPVLib.command(arrayOf("seek", time.toString(), "relative"))
+        MPVLib.command(arrayOf("seek", time.toString(), "relative+exact"))
 
         editSeekText(newPos, time)
     }
@@ -740,8 +740,10 @@ class PlayerActivity :
         }
         val newPos = (initialSeek + diff.toInt()).coerceIn(0, duration)
         val newDiff = newPos - initialSeek
-        // seek faster than assigning to timePos but less precise
-        MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
+
+        val seekFlags = if (preferences.getPlayerFastSeek()) "absolute+keyframes" else "absolute"
+
+        MPVLib.command(arrayOf("seek", newPos.toString(), seekFlags))
         playerControls.updatePlaybackPos(newPos)
 
         editSeekText(newPos, newDiff, true)
