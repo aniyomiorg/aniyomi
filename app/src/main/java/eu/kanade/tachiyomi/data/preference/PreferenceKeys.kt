@@ -19,6 +19,12 @@ object PreferenceKeys {
 
     const val defaultPlayerOrientationType = "pref_default_player_orientation_type_key"
 
+    const val adjustOrientationVideoDimensions = "pref_adjust_orientation_video_dimensions"
+
+    const val defaultPlayerOrientationLandscape = "pref_default_player_orientation_landscape_key"
+
+    const val defaultPlayerOrientationPortrait = "pref_default_player_orientation_portrait_key"
+
     const val playerSpeed = "pref_player_speed"
 
     const val playerFastSeek = "pref_player_fast_seek"

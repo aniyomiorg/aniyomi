@@ -9,12 +9,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
-import android.content.res.Configuration.ORIENTATION_LANDSCAPE
-import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Color
 import android.graphics.drawable.Icon
 import android.media.AudioFocusRequest
@@ -289,6 +286,8 @@ class PlayerActivity :
         binding = PlayerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationType()
+
         window.statusBarColor = 70000000
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             window.navigationBarColor = 70000000
@@ -441,9 +440,9 @@ class PlayerActivity :
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         if (!isPipStarted) {
-            if (newConfig.orientation == ORIENTATION_LANDSCAPE) {
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 switchOrientation(true)
-            } else if (newConfig.orientation == ORIENTATION_PORTRAIT) {
+            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 switchOrientation(false)
             }
         }
@@ -592,10 +591,10 @@ class PlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     @SuppressLint("SourceLockedOrientationActivity")
     fun rotatePlayer(view: View) {
-        if (this.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT) {
-            this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            this.requestedOrientation = preferences.defaultPlayerOrientationLandscape()
         } else {
-            this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+            this.requestedOrientation = preferences.defaultPlayerOrientationPortrait()
         }
     }
 
@@ -1220,12 +1219,14 @@ class PlayerActivity :
         }
         launchUI {
             showLoadingIndicator(false)
-            if (player.videoW!! / player.videoH!! >= 1) {
-                this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-                switchOrientation(true)
-            } else {
-                this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
-                switchOrientation(false)
+            if (preferences.adjustOrientationVideoDimensions()) {
+                if (player.videoW!! / player.videoH!! >= 1) {
+                    this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationLandscape()
+                    switchOrientation(true)
+                } else {
+                    this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationPortrait()
+                    switchOrientation(false)
+                }
             }
         }
     }

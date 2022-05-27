@@ -424,6 +424,9 @@
     <string name="rotation_portrait">Portrait</string>
     <string name="rotation_reverse_portrait">Reverse portrait</string>
     <string name="rotation_landscape">Landscape</string>
+    <string name="rotation_reverse_landscape">Reverse Landscape</string>
+    <string name="rotation_sensor_portrait">Sensor Portrait</string>
+    <string name="rotation_sensor_landscape">Sensor Landscape</string>
     <string name="rotation_force_portrait">Locked portrait</string>
     <string name="rotation_force_landscape">Locked landscape</string>
     <string name="color_filter_r_value">R</string>
@@ -450,6 +453,12 @@
     <string name="pref_category_player">Player</string>
     <string name="pref_category_progress">Progress</string>
     <string name="pref_progress_mark_as_seen">At what point to mark the episode as seen</string>
+    <string name="pref_category_player_orientation">Orientation</string>
+    <string name="pref_default_player_orientation">Default orientation</string>
+    <string name="pref_adjust_orientation_video_dimensions">Adjust the orientation based on a video\'s dimensions</string>
+    <string name="pref_default_portrait_orientation">Default portrait</string>
+    <string name="pref_default_landscape_orientation">Default landscape</string>
+    <string name="pref_category_internal_player">Internal player</string>
     <string name="pref_skip_length">Double tap to skip length</string>
     <string name="pref_skip_30">30s</string>
     <string name="pref_skip_20">20s</string>
@@ -458,10 +467,11 @@
     <string name="pref_skip_disable">Disable</string>
     <string name="pref_player_fast_seek">Enable faster horizontal seeking</string>
     <string name="pref_player_fast_seek_summary">Horizontal scroll will focus on keyframes, leading to faster but less precise seeking</string>
-    <string name="pref_always_use_external_player">Always use external player</string>
     <string name="pref_player_fullscreen">Show content in display cutout</string>
     <string name="pref_pip_episode_toasts">Show episode toasts when switching episodes in PiP mode</string>
     <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
+    <string name="pref_category_external_player">External player</string>
+    <string name="pref_always_use_external_player">Always use external player</string>
     <string name="pref_external_player_preference">External player preference</string>
     <string name="pref_progress_70">70%</string>
     <string name="pref_progress_75">75%</string>

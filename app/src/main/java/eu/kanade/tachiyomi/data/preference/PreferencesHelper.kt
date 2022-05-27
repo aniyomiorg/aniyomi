@@ -129,7 +129,13 @@ class PreferencesHelper(val context: Context) {
 
     fun defaultOrientationType() = prefs.getInt(Keys.defaultOrientationType, OrientationType.FREE.flagValue)
 
-    fun defaultPlayerOrientationType() = prefs.getInt(Keys.defaultPlayerOrientationType, OrientationType.FREE.flagValue)
+    fun defaultPlayerOrientationType() = prefs.getString(Keys.defaultPlayerOrientationType, "10")!!.toInt()
+
+    fun adjustOrientationVideoDimensions() = prefs.getBoolean(Keys.adjustOrientationVideoDimensions, true)
+
+    fun defaultPlayerOrientationLandscape() = prefs.getString(Keys.defaultPlayerOrientationLandscape, "6")!!.toInt()
+
+    fun defaultPlayerOrientationPortrait() = prefs.getString(Keys.defaultPlayerOrientationPortrait, "7")!!.toInt()
 
     fun getPlayerSpeed() = prefs.getFloat(Keys.playerSpeed, 1F)
 
