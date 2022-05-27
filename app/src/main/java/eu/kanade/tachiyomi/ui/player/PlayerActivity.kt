@@ -9,12 +9,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
-import android.content.res.Configuration.ORIENTATION_LANDSCAPE
-import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Color
 import android.graphics.drawable.Icon
 import android.media.AudioFocusRequest
@@ -208,6 +205,7 @@ class PlayerActivity :
         AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
             binding.seekView.startAnimation(fadeAnimation)
             binding.seekView.visibility = View.GONE
+            diffSeekMain = 0
         }
     }
 
@@ -235,7 +233,7 @@ class PlayerActivity :
             "seek" -> {
                 callback = seekTextRunnable
                 itemView = binding.seekView
-                delay = 750L
+                delay = 1000L
             }
             "volume" -> {
                 callback = volumeViewRunnable
@@ -287,6 +285,8 @@ class PlayerActivity :
 
         binding = PlayerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationType()
 
         window.statusBarColor = 70000000
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
@@ -440,9 +440,9 @@ class PlayerActivity :
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         if (!isPipStarted) {
-            if (newConfig.orientation == ORIENTATION_LANDSCAPE) {
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 switchOrientation(true)
-            } else if (newConfig.orientation == ORIENTATION_PORTRAIT) {
+            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 switchOrientation(false)
             }
         }
@@ -591,10 +591,10 @@ class PlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     @SuppressLint("SourceLockedOrientationActivity")
     fun rotatePlayer(view: View) {
-        if (this.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT) {
-            this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            this.requestedOrientation = preferences.defaultPlayerOrientationLandscape()
         } else {
-            this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+            this.requestedOrientation = preferences.defaultPlayerOrientationPortrait()
         }
     }
 
@@ -640,11 +640,9 @@ class PlayerActivity :
         ObjectAnimator.ofFloat(v, "alpha", 0f, 0.2f).setDuration(500).start()
         ObjectAnimator.ofFloat(v, "alpha", 0.2f, 0.2f, 0f).setDuration(1000).start()
         val newPos = (player.timePos ?: 0) + time // only for display
-        MPVLib.command(arrayOf("seek", time.toString(), "relative"))
+        MPVLib.command(arrayOf("seek", time.toString(), "relative+exact"))
 
-        val diffText = Utils.prettyTime(time, true)
-        binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
-        showGestureView("seek")
+        editSeekText(newPos, time)
     }
 
     fun verticalScrollLeft(diff: Float) {
@@ -741,11 +739,26 @@ class PlayerActivity :
         }
         val newPos = (initialSeek + diff.toInt()).coerceIn(0, duration)
         val newDiff = newPos - initialSeek
-        // seek faster than assigning to timePos but less precise
-        MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
+
+        val seekFlags = if (preferences.getPlayerFastSeek()) "absolute+keyframes" else "absolute"
+
+        MPVLib.command(arrayOf("seek", newPos.toString(), seekFlags))
         playerControls.updatePlaybackPos(newPos)
 
-        val diffText = Utils.prettyTime(newDiff, true)
+        editSeekText(newPos, newDiff, true)
+    }
+
+    private var diffSeekMain = 0
+    private var diffSeekHorizontal = 0
+    private fun editSeekText(newPos: Int, diff: Int, isHorizontalSeek: Boolean = false) {
+        if (isHorizontalSeek) {
+            diffSeekMain += diff - diffSeekHorizontal
+            diffSeekHorizontal = diff
+        } else {
+            diffSeekMain += diff
+            diffSeekHorizontal = 0
+        }
+        val diffText = Utils.prettyTime(diffSeekMain, true)
         binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
         showGestureView("seek")
     }
@@ -1206,12 +1219,14 @@ class PlayerActivity :
         }
         launchUI {
             showLoadingIndicator(false)
-            if (player.videoW!! / player.videoH!! >= 1) {
-                this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-                switchOrientation(true)
-            } else {
-                this@PlayerActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
-                switchOrientation(false)
+            if (preferences.adjustOrientationVideoDimensions()) {
+                if (player.videoW!! / player.videoH!! >= 1) {
+                    this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationLandscape()
+                    switchOrientation(true)
+                } else {
+                    this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationPortrait()
+                    switchOrientation(false)
+                }
             }
         }
     }
