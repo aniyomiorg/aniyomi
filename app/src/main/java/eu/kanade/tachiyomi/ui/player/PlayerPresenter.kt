@@ -264,6 +264,7 @@ class PlayerPresenter(
     }
 
     fun saveEpisodeHistory() {
+        if (incognitoMode) return
         val episode = currentEpisode ?: return
         val history = AnimeHistory.create(episode).apply { last_seen = Date().time }
         db.upsertAnimeHistoryLastSeen(history).asRxCompletable()
