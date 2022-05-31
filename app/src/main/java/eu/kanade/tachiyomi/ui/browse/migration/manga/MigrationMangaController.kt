@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.core.os.bundleOf
-import eu.kanade.presentation.source.MigrateMangaScreen
+import eu.kanade.presentation.browse.MigrateMangaScreen
 import eu.kanade.tachiyomi.ui.base.controller.ComposeController
 import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.browse.migration.search.SearchController
@@ -42,7 +42,7 @@ class MigrationMangaController : ComposeController<MigrationMangaPresenter> {
             },
             onClickCover = {
                 router.pushController(MangaController(it.id))
-            }
+            },
         )
     }
 

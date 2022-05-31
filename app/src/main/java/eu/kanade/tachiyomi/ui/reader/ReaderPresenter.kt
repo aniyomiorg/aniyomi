@@ -4,10 +4,12 @@ import android.app.Application
 import android.net.Uri
 import android.os.Bundle
 import com.jakewharton.rxrelay.BehaviorRelay
-import eu.kanade.tachiyomi.R
+import eu.kanade.domain.chapter.interactor.UpdateChapter
+import eu.kanade.domain.chapter.model.ChapterUpdate
+import eu.kanade.domain.history.interactor.UpsertHistory
+import eu.kanade.domain.history.model.HistoryUpdate
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
-import eu.kanade.tachiyomi.data.database.models.History
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -22,6 +24,7 @@ import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.ui.reader.loader.ChapterLoader
+import eu.kanade.tachiyomi.ui.reader.loader.HttpPageLoader
 import eu.kanade.tachiyomi.ui.reader.model.InsertPage
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
@@ -62,6 +65,8 @@ class ReaderPresenter(
     private val coverCache: CoverCache = Injekt.get(),
     private val preferences: PreferencesHelper = Injekt.get(),
     private val delayedTrackingStore: DelayedTrackingStore = Injekt.get(),
+    private val upsertHistory: UpsertHistory = Injekt.get(),
+    private val updateChapter: UpdateChapter = Injekt.get(),
 ) : BasePresenter<ReaderActivity>() {
 
     /**
@@ -79,6 +84,11 @@ class ReaderPresenter(
      * The chapter loader for the loaded manga. It'll be null until [manga] is set.
      */
     private var loader: ChapterLoader? = null
+
+    /**
+     * The time the chapter was started reading
+     */
+    private var chapterReadStartTime: Long? = null
 
     /**
      * Subscription to prevent setting chapters as active from multiple threads.
@@ -168,8 +178,7 @@ class ReaderPresenter(
         val currentChapters = viewerChaptersRelay.value
         if (currentChapters != null) {
             currentChapters.unref()
-            saveChapterProgress(currentChapters.currChapter)
-            saveChapterHistory(currentChapters.currChapter)
+            saveReadingProgress(currentChapters.currChapter)
         }
     }
 
@@ -200,7 +209,9 @@ class ReaderPresenter(
      */
     fun onSaveInstanceStateNonConfigurationChange() {
         val currentChapter = getCurrentChapter() ?: return
-        saveChapterProgress(currentChapter)
+        launchIO {
+            saveChapterProgress(currentChapter)
+        }
     }
 
     /**
@@ -345,6 +356,14 @@ class ReaderPresenter(
      * that the user doesn't have to wait too long to continue reading.
      */
     private fun preload(chapter: ReaderChapter) {
+        if (chapter.pageLoader is HttpPageLoader) {
+            val manga = manga ?: return
+            val isDownloaded = downloadManager.isChapterDownloaded(chapter.chapter, manga)
+            if (isDownloaded) {
+                chapter.state = ReaderChapter.State.Wait
+            }
+        }
+
         if (chapter.state != ReaderChapter.State.Wait && chapter.state !is ReaderChapter.State.Error) {
             return
         }
@@ -389,7 +408,7 @@ class ReaderPresenter(
 
         if (selectedChapter != currentChapters.currChapter) {
             logcat { "Setting ${selectedChapter.chapter.url} as active" }
-            onChapterChanged(currentChapters.currChapter)
+            saveReadingProgress(currentChapters.currChapter)
             loadNewChapter(selectedChapter)
         }
     }
@@ -421,39 +440,57 @@ class ReaderPresenter(
         }
     }
 
-    /**
-     * Called when a chapter changed from [fromChapter] to [toChapter]. It updates [fromChapter]
-     * on the database.
-     */
-    private fun onChapterChanged(fromChapter: ReaderChapter) {
-        saveChapterProgress(fromChapter)
-        saveChapterHistory(fromChapter)
+    fun saveCurrentChapterReadingProgress() {
+        getCurrentChapter()?.let { saveReadingProgress(it) }
     }
 
     /**
-     * Saves this [chapter] progress (last read page and whether it's read).
+     * Called when reader chapter is changed in reader or when activity is paused.
+     */
+    private fun saveReadingProgress(readerChapter: ReaderChapter) {
+        launchIO {
+            saveChapterProgress(readerChapter)
+            saveChapterHistory(readerChapter)
+        }
+    }
+
+    /**
+     * Saves this [readerChapter] progress (last read page and whether it's read).
      * If incognito mode isn't on or has at least 1 tracker
      */
-    private fun saveChapterProgress(chapter: ReaderChapter) {
+    private suspend fun saveChapterProgress(readerChapter: ReaderChapter) {
         if (!incognitoMode || hasTrackers) {
-            db.updateChapterProgress(chapter.chapter).asRxCompletable()
-                .onErrorComplete()
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+            val chapter = readerChapter.chapter
+            updateChapter.await(
+                ChapterUpdate(
+                    id = chapter.id!!,
+                    read = chapter.read,
+                    bookmark = chapter.bookmark,
+                    lastPageRead = chapter.last_page_read.toLong(),
+                ),
+            )
         }
     }
 
     /**
-     * Saves this [chapter] last read history if incognito mode isn't on.
+     * Saves this [readerChapter] last read history if incognito mode isn't on.
      */
-    private fun saveChapterHistory(chapter: ReaderChapter) {
+    private suspend fun saveChapterHistory(readerChapter: ReaderChapter) {
         if (!incognitoMode) {
-            val history = History.create(chapter.chapter).apply { last_read = Date().time }
-            db.upsertHistoryLastRead(history).asRxCompletable()
-                .onErrorComplete()
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+            val chapterId = readerChapter.chapter.id!!
+            val readAt = Date()
+            val sessionReadDuration = chapterReadStartTime?.let { readAt.time - it } ?: 0
+
+            upsertHistory.await(
+                HistoryUpdate(chapterId, readAt, sessionReadDuration),
+            ).also {
+                chapterReadStartTime = null
+            }
         }
+    }
+
+    fun setReadStartTime() {
+        chapterReadStartTime = Date().time
     }
 
     /**
@@ -621,7 +658,7 @@ class ReaderPresenter(
      * Shares the image of this [page] and notifies the UI with the path of the file to share.
      * The image must be first copied to the internal partition because there are many possible
      * formats it can come from, like a zipped chapter, in which case it's not possible to directly
-     * get a path to the file and it has to be decompresssed somewhere first. Only the last shared
+     * get a path to the file and it has to be decompressed somewhere first. Only the last shared
      * image will be kept so it won't be taking lots of internal disk space.
      */
     fun shareImage(page: ReaderPage) {
@@ -662,20 +699,22 @@ class ReaderPresenter(
 
         Observable
             .fromCallable {
-                if (manga.isLocal()) {
-                    val context = Injekt.get<Application>()
-                    LocalSource.updateCover(context, manga, stream())
-                    manga.updateCoverLastModified(db)
-                    R.string.cover_updated
-                    SetAsCoverResult.Success
-                } else {
-                    if (manga.favorite) {
-                        coverCache.setCustomCoverToCache(manga, stream())
+                stream().use {
+                    if (manga.isLocal()) {
+                        val context = Injekt.get<Application>()
+                        LocalSource.updateCover(context, manga, it)
                         manga.updateCoverLastModified(db)
                         coverCache.clearMemoryCache()
                         SetAsCoverResult.Success
                     } else {
-                        SetAsCoverResult.AddToLibraryFirst
+                        if (manga.favorite) {
+                            coverCache.setCustomCoverToCache(manga, it)
+                            manga.updateCoverLastModified(db)
+                            coverCache.clearMemoryCache()
+                            SetAsCoverResult.Success
+                        } else {
+                            SetAsCoverResult.AddToLibraryFirst
+                        }
                     }
                 }
             }

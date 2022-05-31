@@ -14,7 +14,6 @@ import eu.kanade.tachiyomi.data.database.models.AnimeHistoryImpl
 import eu.kanade.tachiyomi.data.database.tables.AnimeHistoryTable.COL_EPISODE_ID
 import eu.kanade.tachiyomi.data.database.tables.AnimeHistoryTable.COL_ID
 import eu.kanade.tachiyomi.data.database.tables.AnimeHistoryTable.COL_LAST_SEEN
-import eu.kanade.tachiyomi.data.database.tables.AnimeHistoryTable.COL_TIME_SEEN
 import eu.kanade.tachiyomi.data.database.tables.AnimeHistoryTable.TABLE
 
 class AnimeHistoryTypeMapping : SQLiteTypeMapping<AnimeHistory>(
@@ -40,7 +39,6 @@ open class AnimeHistoryPutResolver : DefaultPutResolver<AnimeHistory>() {
             COL_ID to obj.id,
             COL_EPISODE_ID to obj.episode_id,
             COL_LAST_SEEN to obj.last_seen,
-            COL_TIME_SEEN to obj.time_seen,
         )
 }
 
@@ -50,7 +48,6 @@ class AnimeHistoryGetResolver : DefaultGetResolver<AnimeHistory>() {
         id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_ID))
         episode_id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_EPISODE_ID))
         last_seen = cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_SEEN))
-        time_seen = cursor.getLong(cursor.getColumnIndexOrThrow(COL_TIME_SEEN))
     }
 }
 

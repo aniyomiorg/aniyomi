@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.database
 
-import android.content.Context
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite
 import eu.kanade.tachiyomi.data.database.mappers.AnimeCategoryTypeMapping
@@ -25,8 +24,7 @@ import eu.kanade.tachiyomi.data.database.queries.EpisodeQueries
 /**
  * This class provides operations to manage the database through its interfaces.
  */
-open class AnimeDatabaseHelper(
-    context: Context,
+class AnimeDatabaseHelper(
     openHelper: SupportSQLiteOpenHelper,
 ) :
     AnimeQueries, EpisodeQueries, AnimeTrackQueries, CategoryQueries, AnimeCategoryQueries, AnimeHistoryQueries {

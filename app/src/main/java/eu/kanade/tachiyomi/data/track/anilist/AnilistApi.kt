@@ -463,7 +463,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
 
     private fun jsonToALManga(struct: JsonObject): ALManga {
         return ALManga(
-            struct["id"]!!.jsonPrimitive.int,
+            struct["id"]!!.jsonPrimitive.long,
             struct["title"]!!.jsonObject["userPreferred"]!!.jsonPrimitive.content,
             struct["coverImage"]!!.jsonObject["large"]!!.jsonPrimitive.content,
             struct["description"]!!.jsonPrimitive.contentOrNull,
@@ -476,7 +476,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
 
     private fun jsonToALAnime(struct: JsonObject): ALAnime {
         return ALAnime(
-            struct["id"]!!.jsonPrimitive.int,
+            struct["id"]!!.jsonPrimitive.long,
             struct["title"]!!.jsonObject["userPreferred"]!!.jsonPrimitive.content,
             struct["coverImage"]!!.jsonObject["large"]!!.jsonPrimitive.content,
             struct["description"]!!.jsonPrimitive.contentOrNull,
@@ -550,11 +550,11 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         private const val baseMangaUrl = "https://anilist.co/manga/"
         private const val baseAnimeUrl = "https://anilist.co/anime/"
 
-        fun mangaUrl(mediaId: Int): String {
+        fun mangaUrl(mediaId: Long): String {
             return baseMangaUrl + mediaId
         }
 
-        fun animeUrl(mediaId: Int): String {
+        fun animeUrl(mediaId: Long): String {
             return baseAnimeUrl + mediaId
         }
 

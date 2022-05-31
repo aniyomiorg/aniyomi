@@ -28,7 +28,7 @@ class SearchController(
     constructor(mangaId: Long) : this(
         Injekt.get<DatabaseHelper>()
             .getManga(mangaId)
-            .executeAsBlocking()
+            .executeAsBlocking(),
     )
 
     private var newManga: Manga? = null
@@ -138,7 +138,10 @@ class SearchController(
                     }
                     (targetController as? SearchController)?.copyManga(manga, newManga)
                 }
-                .setNeutralButton(android.R.string.cancel, null)
+                .setNeutralButton(activity?.getString(R.string.action_show_manga)) { _, _ ->
+                    dismissDialog()
+                    router.pushController(MangaController(newManga))
+                }
                 .create()
         }
     }

@@ -19,12 +19,12 @@ import eu.kanade.tachiyomi.databinding.PagerControllerBinding
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.RxController
 import eu.kanade.tachiyomi.ui.base.controller.TabbedController
-import eu.kanade.tachiyomi.ui.browse.animeextension.AnimeExtensionController
-import eu.kanade.tachiyomi.ui.browse.animesource.AnimeSourceController
-import eu.kanade.tachiyomi.ui.browse.extension.ExtensionController
+import eu.kanade.tachiyomi.ui.browse.animeextension.AnimeExtensionsController
+import eu.kanade.tachiyomi.ui.browse.animesource.AnimeSourcesController
+import eu.kanade.tachiyomi.ui.browse.extension.ExtensionsController
 import eu.kanade.tachiyomi.ui.browse.migration.animesources.MigrationAnimeSourcesController
 import eu.kanade.tachiyomi.ui.browse.migration.sources.MigrationSourcesController
-import eu.kanade.tachiyomi.ui.browse.source.SourceController
+import eu.kanade.tachiyomi.ui.browse.source.SourcesController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import uy.kohesive.injekt.injectLazy
 
@@ -150,10 +150,10 @@ class BrowseController :
         override fun configureRouter(router: Router, position: Int) {
             if (!router.hasRootController()) {
                 val controller: Controller = when (position) {
-                    SOURCES_CONTROLLER -> SourceController()
-                    ANIMESOURCES_CONTROLLER -> AnimeSourceController()
-                    EXTENSIONS_CONTROLLER -> ExtensionController()
-                    ANIMEEXTENSIONS_CONTROLLER -> AnimeExtensionController()
+                    SOURCES_CONTROLLER -> SourcesController()
+                    ANIMESOURCES_CONTROLLER -> AnimeSourcesController()
+                    EXTENSIONS_CONTROLLER -> ExtensionsController()
+                    ANIMEEXTENSIONS_CONTROLLER -> AnimeExtensionsController()
                     MIGRATION_CONTROLLER_ANIME -> MigrationAnimeSourcesController()
                     MIGRATION_CONTROLLER -> MigrationSourcesController()
                     else -> error("Wrong position $position")

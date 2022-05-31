@@ -5,13 +5,15 @@ import eu.kanade.data.AnimeDatabaseHandler
 import eu.kanade.data.anime.animeMapper
 import eu.kanade.data.episode.episodeMapper
 import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
 import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
 import eu.kanade.domain.animehistory.repository.AnimeHistoryRepository
 import eu.kanade.domain.episode.model.Episode
 import eu.kanade.tachiyomi.util.system.logcat
+import logcat.LogPriority
 
 class AnimeHistoryRepositoryImpl(
-    private val handler: AnimeDatabaseHandler
+    private val handler: AnimeDatabaseHandler,
 ) : AnimeHistoryRepository {
 
     override fun getHistory(query: String): PagingSource<Long, AnimeHistoryWithRelations> {
@@ -20,7 +22,7 @@ class AnimeHistoryRepositoryImpl(
             transacter = { animehistoryViewQueries },
             queryProvider = { limit, offset ->
                 animehistoryViewQueries.animehistory(query, limit, offset, animehistoryWithRelationsMapper)
-            }
+            },
         )
     }
 
@@ -67,7 +69,7 @@ class AnimeHistoryRepositoryImpl(
         try {
             handler.await { animehistoryQueries.resetAnimeHistoryById(historyId) }
         } catch (e: Exception) {
-            logcat(throwable = e)
+            logcat(LogPriority.ERROR, throwable = e)
         }
     }
 
@@ -75,7 +77,7 @@ class AnimeHistoryRepositoryImpl(
         try {
             handler.await { animehistoryQueries.resetHistoryByAnimeId(animeId) }
         } catch (e: Exception) {
-            logcat(throwable = e)
+            logcat(LogPriority.ERROR, throwable = e)
         }
     }
 
@@ -84,8 +86,21 @@ class AnimeHistoryRepositoryImpl(
             handler.await { animehistoryQueries.removeAllHistory() }
             true
         } catch (e: Exception) {
-            logcat(throwable = e)
+            logcat(LogPriority.ERROR, throwable = e)
             false
+        }
+    }
+
+    override suspend fun upsertHistory(historyUpdate: AnimeHistoryUpdate) {
+        try {
+            handler.await {
+                animehistoryQueries.upsert(
+                    historyUpdate.episodeId,
+                    historyUpdate.seenAt,
+                )
+            }
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, throwable = e)
         }
     }
 }

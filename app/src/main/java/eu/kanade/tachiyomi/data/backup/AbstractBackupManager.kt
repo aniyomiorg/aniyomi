@@ -20,16 +20,17 @@ import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.toSChapter
 import eu.kanade.tachiyomi.util.chapter.syncChaptersWithSource
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
-import uy.kohesive.injekt.injectLazy
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 abstract class AbstractBackupManager(protected val context: Context) {
 
-    internal val databaseHelper: DatabaseHelper by injectLazy()
-    internal val animedatabaseHelper: AnimeDatabaseHelper by injectLazy()
-    internal val sourceManager: SourceManager by injectLazy()
-    internal val animesourceManager: AnimeSourceManager by injectLazy()
-    internal val trackManager: TrackManager by injectLazy()
-    protected val preferences: PreferencesHelper by injectLazy()
+    internal val db: DatabaseHelper = Injekt.get()
+    internal val animedb: AnimeDatabaseHelper = Injekt.get()
+    internal val sourceManager: SourceManager = Injekt.get()
+    internal val animesourceManager: AnimeSourceManager = Injekt.get()
+    internal val trackManager: TrackManager = Injekt.get()
+    protected val preferences: PreferencesHelper = Injekt.get()
 
     abstract fun createBackup(uri: Uri, flags: Int, isAutoBackup: Boolean): String
 
@@ -39,7 +40,7 @@ abstract class AbstractBackupManager(protected val context: Context) {
      * @return [Manga], null if not found
      */
     internal fun getMangaFromDatabase(manga: Manga): Manga? =
-        databaseHelper.getManga(manga.url, manga.source).executeAsBlocking()
+        db.getManga(manga.url, manga.source).executeAsBlocking()
 
     /**
      * Returns manga
@@ -47,7 +48,7 @@ abstract class AbstractBackupManager(protected val context: Context) {
      * @return [Manga], null if not found
      */
     internal fun getAnimeFromDatabase(anime: Anime): Anime? =
-        animedatabaseHelper.getAnime(anime.url, anime.source).executeAsBlocking()
+        animedb.getAnime(anime.url, anime.source).executeAsBlocking()
 
     /**
      * Fetches chapter information.
@@ -60,7 +61,7 @@ abstract class AbstractBackupManager(protected val context: Context) {
     internal suspend fun restoreChapters(source: Source, manga: Manga, chapters: List<Chapter>): Pair<List<Chapter>, List<Chapter>> {
         val fetchedChapters = source.getChapterList(manga.toMangaInfo())
             .map { it.toSChapter() }
-        val syncedChapters = syncChaptersWithSource(databaseHelper, fetchedChapters, manga, source)
+        val syncedChapters = syncChaptersWithSource(db, fetchedChapters, manga, source)
         if (syncedChapters.first.isNotEmpty()) {
             chapters.forEach { it.manga_id = manga.id }
             updateChapters(chapters)
@@ -79,7 +80,7 @@ abstract class AbstractBackupManager(protected val context: Context) {
     internal suspend fun restoreEpisodes(source: AnimeSource, anime: Anime, episodes: List<Episode>): Pair<List<Episode>, List<Episode>> {
         val fetchedEpisodes = source.getEpisodeList(anime.toAnimeInfo())
             .map { it.toSEpisode() }
-        val syncedEpisodes = syncEpisodesWithSource(animedatabaseHelper, fetchedEpisodes, anime, source)
+        val syncedEpisodes = syncEpisodesWithSource(animedb, fetchedEpisodes, anime, source)
         if (syncedEpisodes.first.isNotEmpty()) {
             episodes.forEach { it.anime_id = anime.id }
             updateEpisodes(episodes)
@@ -93,7 +94,7 @@ abstract class AbstractBackupManager(protected val context: Context) {
      * @return [Manga] from library
      */
     protected fun getFavoriteManga(): List<Manga> =
-        databaseHelper.getFavoriteMangas().executeAsBlocking()
+        db.getFavoriteMangas().executeAsBlocking()
 
     /**
      * Returns list containing anime from library
@@ -101,7 +102,7 @@ abstract class AbstractBackupManager(protected val context: Context) {
      * @return [Anime] from library
      */
     protected fun getFavoriteAnime(): List<Anime> =
-        animedatabaseHelper.getFavoriteAnimes().executeAsBlocking()
+        animedb.getFavoriteAnimes().executeAsBlocking()
 
     /**
      * Inserts manga and returns id
@@ -109,27 +110,27 @@ abstract class AbstractBackupManager(protected val context: Context) {
      * @return id of [Manga], null if not found
      */
     internal fun insertManga(manga: Manga): Long? =
-        databaseHelper.insertManga(manga).executeAsBlocking().insertedId()
+        db.insertManga(manga).executeAsBlocking().insertedId()
 
     /**
      * Inserts list of chapters
      */
     protected fun insertChapters(chapters: List<Chapter>) {
-        databaseHelper.insertChapters(chapters).executeAsBlocking()
+        db.insertChapters(chapters).executeAsBlocking()
     }
 
     /**
      * Updates a list of chapters
      */
     protected fun updateChapters(chapters: List<Chapter>) {
-        databaseHelper.updateChaptersBackup(chapters).executeAsBlocking()
+        db.updateChaptersBackup(chapters).executeAsBlocking()
     }
 
     /**
      * Updates a list of chapters with known database ids
      */
     protected fun updateKnownChapters(chapters: List<Chapter>) {
-        databaseHelper.updateKnownChaptersBackup(chapters).executeAsBlocking()
+        db.updateKnownChaptersBackup(chapters).executeAsBlocking()
     }
 
     /**
@@ -138,27 +139,27 @@ abstract class AbstractBackupManager(protected val context: Context) {
      * @return id of [Anime], null if not found
      */
     internal fun insertAnime(anime: Anime): Long? =
-        animedatabaseHelper.insertAnime(anime).executeAsBlocking().insertedId()
+        animedb.insertAnime(anime).executeAsBlocking().insertedId()
 
     /**
      * Inserts list of chapters
      */
     protected fun insertEpisodes(episodes: List<Episode>) {
-        animedatabaseHelper.insertEpisodes(episodes).executeAsBlocking()
+        animedb.insertEpisodes(episodes).executeAsBlocking()
     }
 
     /**
      * Updates a list of chapters
      */
     protected fun updateEpisodes(episodes: List<Episode>) {
-        animedatabaseHelper.updateEpisodesBackup(episodes).executeAsBlocking()
+        animedb.updateEpisodesBackup(episodes).executeAsBlocking()
     }
 
     /**
      * Updates a list of chapters with known database ids
      */
     protected fun updateKnownEpisodes(episodes: List<Episode>) {
-        animedatabaseHelper.updateKnownEpisodesBackup(episodes).executeAsBlocking()
+        animedb.updateKnownEpisodesBackup(episodes).executeAsBlocking()
     }
 
     /**

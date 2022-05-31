@@ -13,5 +13,5 @@ data class Episode(
     val name: String,
     val dateUpload: Long,
     val episodeNumber: Float,
-    val scanlator: String?
+    val scanlator: String?,
 )

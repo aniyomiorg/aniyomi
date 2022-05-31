@@ -53,9 +53,6 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
 
-/**
- * Presenter of [BrowseAnimeSourceController].
- */
 open class BrowseAnimeSourcePresenter(
     private val sourceId: Long,
     searchQuery: String? = null,
@@ -349,6 +346,10 @@ open class BrowseAnimeSourcePresenter(
      */
     fun getCategories(): List<Category> {
         return db.getCategories().executeAsBlocking()
+    }
+
+    fun getDuplicateAnimelibAnime(anime: Anime): Anime? {
+        return db.getDuplicateAnimelibAnime(anime).executeAsBlocking()
     }
 
     /**

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.core.os.bundleOf
-import eu.kanade.presentation.animesource.MigrateAnimeScreen
+import eu.kanade.presentation.browse.MigrateAnimeScreen
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.ComposeController
 import eu.kanade.tachiyomi.ui.base.controller.pushController
@@ -42,7 +42,7 @@ class MigrationAnimeController : ComposeController<MigrationAnimePresenter> {
             },
             onClickCover = {
                 router.pushController(AnimeController(it.id))
-            }
+            },
         )
     }
 

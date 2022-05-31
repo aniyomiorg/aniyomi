@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 
 class AnimeSourceRepositoryImpl(
     private val sourceManager: AnimeSourceManager,
-    private val handler: AnimeDatabaseHandler
+    private val handler: AnimeDatabaseHandler,
 ) : AnimeSourceRepository {
 
     override fun getSources(): Flow<List<AnimeSource>> {

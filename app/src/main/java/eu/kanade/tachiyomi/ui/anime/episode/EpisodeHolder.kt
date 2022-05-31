@@ -29,6 +29,7 @@ class EpisodeHolder(
         }
         binding.animedownload.setOnLongClickListener {
             onAnimeDownloadLongClick(it, bindingAdapterPosition)
+            true
         }
     }
 

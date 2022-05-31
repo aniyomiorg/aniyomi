@@ -29,6 +29,10 @@ class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdat
         binding.download.setOnClickListener {
             onAnimeDownloadClick(it, bindingAdapterPosition)
         }
+        binding.download.setOnLongClickListener {
+            onAnimeDownloadLongClick(it, bindingAdapterPosition)
+            true
+        }
     }
 
     fun bind(item: AnimeUpdatesItem) {

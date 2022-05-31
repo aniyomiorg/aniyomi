@@ -5,13 +5,15 @@ import eu.kanade.data.DatabaseHandler
 import eu.kanade.data.chapter.chapterMapper
 import eu.kanade.data.manga.mangaMapper
 import eu.kanade.domain.chapter.model.Chapter
+import eu.kanade.domain.history.model.HistoryUpdate
 import eu.kanade.domain.history.model.HistoryWithRelations
 import eu.kanade.domain.history.repository.HistoryRepository
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.tachiyomi.util.system.logcat
+import logcat.LogPriority
 
 class HistoryRepositoryImpl(
-    private val handler: DatabaseHandler
+    private val handler: DatabaseHandler,
 ) : HistoryRepository {
 
     override fun getHistory(query: String): PagingSource<Long, HistoryWithRelations> {
@@ -20,7 +22,7 @@ class HistoryRepositoryImpl(
             transacter = { historyViewQueries },
             queryProvider = { limit, offset ->
                 historyViewQueries.history(query, limit, offset, historyWithRelationsMapper)
-            }
+            },
         )
     }
 
@@ -67,7 +69,7 @@ class HistoryRepositoryImpl(
         try {
             handler.await { historyQueries.resetHistoryById(historyId) }
         } catch (e: Exception) {
-            logcat(throwable = e)
+            logcat(LogPriority.ERROR, throwable = e)
         }
     }
 
@@ -75,7 +77,7 @@ class HistoryRepositoryImpl(
         try {
             handler.await { historyQueries.resetHistoryByMangaId(mangaId) }
         } catch (e: Exception) {
-            logcat(throwable = e)
+            logcat(LogPriority.ERROR, throwable = e)
         }
     }
 
@@ -84,8 +86,22 @@ class HistoryRepositoryImpl(
             handler.await { historyQueries.removeAllHistory() }
             true
         } catch (e: Exception) {
-            logcat(throwable = e)
+            logcat(LogPriority.ERROR, throwable = e)
             false
+        }
+    }
+
+    override suspend fun upsertHistory(historyUpdate: HistoryUpdate) {
+        try {
+            handler.await {
+                historyQueries.upsert(
+                    historyUpdate.chapterId,
+                    historyUpdate.readAt,
+                    historyUpdate.sessionReadDuration,
+                )
+            }
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, throwable = e)
         }
     }
 }

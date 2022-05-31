@@ -12,14 +12,14 @@ import java.util.Locale
 
 class GetAnimeSourcesWithFavoriteCount(
     private val repository: AnimeSourceRepository,
-    private val preferences: PreferencesHelper
+    private val preferences: PreferencesHelper,
 ) {
 
     fun subscribe(): Flow<List<Pair<AnimeSource, Long>>> {
         return combine(
             preferences.migrationSortingDirection().asFlow(),
             preferences.migrationSortingMode().asFlow(),
-            repository.getSourcesWithFavoriteCount()
+            repository.getSourcesWithFavoriteCount(),
         ) { direction, mode, list ->
             list.sortedWith(sortFn(direction, mode))
         }
@@ -27,7 +27,7 @@ class GetAnimeSourcesWithFavoriteCount(
 
     private fun sortFn(
         direction: SetMigrateSorting.Direction,
-        sorting: SetMigrateSorting.Mode
+        sorting: SetMigrateSorting.Mode,
     ): java.util.Comparator<Pair<AnimeSource, Long>> {
         val locale = Locale.getDefault()
         val collator = Collator.getInstance(locale).apply {

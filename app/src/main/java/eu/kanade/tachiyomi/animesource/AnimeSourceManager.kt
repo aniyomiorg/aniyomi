@@ -14,7 +14,7 @@ import rx.Observable
 import tachiyomi.animesource.model.AnimeInfo
 import tachiyomi.animesource.model.EpisodeInfo
 
-open class AnimeSourceManager(private val context: Context) {
+class AnimeSourceManager(private val context: Context) {
 
     private val sourcesMap = mutableMapOf<Long, AnimeSource>()
     private val stubSourcesMap = mutableMapOf<Long, StubSource>()
@@ -28,7 +28,7 @@ open class AnimeSourceManager(private val context: Context) {
         createInternalSources().forEach { registerSource(it) }
     }
 
-    open fun get(sourceKey: Long): AnimeSource? {
+    fun get(sourceKey: Long): AnimeSource? {
         return sourcesMap[sourceKey]
     }
 

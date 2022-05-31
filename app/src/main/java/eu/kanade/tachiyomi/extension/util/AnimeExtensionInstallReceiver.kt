@@ -52,6 +52,7 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
                     when (val result = getExtensionFromIntent(context, intent)) {
                         is AnimeLoadResult.Success -> listener.onExtensionInstalled(result.extension)
                         is AnimeLoadResult.Untrusted -> listener.onExtensionUntrusted(result.extension)
+                        else -> {}
                     }
                 }
             }
@@ -60,8 +61,8 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
                     when (val result = getExtensionFromIntent(context, intent)) {
                         is AnimeLoadResult.Success -> listener.onExtensionUpdated(result.extension)
                         // Not needed as a package can't be upgraded if the signature is different
-                        is AnimeLoadResult.Untrusted -> {
-                        }
+                        // is LoadResult.Untrusted -> {}
+                        else -> {}
                     }
                 }
             }

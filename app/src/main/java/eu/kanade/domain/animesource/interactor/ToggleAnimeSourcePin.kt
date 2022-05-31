@@ -6,11 +6,11 @@ import eu.kanade.tachiyomi.util.preference.minusAssign
 import eu.kanade.tachiyomi.util.preference.plusAssign
 
 class ToggleAnimeSourcePin(
-    private val preferences: PreferencesHelper
+    private val preferences: PreferencesHelper,
 ) {
 
     fun await(source: AnimeSource) {
-        val isPinned = source.id.toString() in preferences.pinnedSources().get()
+        val isPinned = source.id.toString() in preferences.pinnedAnimeSources().get()
         if (isPinned) {
             preferences.pinnedAnimeSources() -= source.id.toString()
         } else {

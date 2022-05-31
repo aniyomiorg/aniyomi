@@ -19,7 +19,7 @@ class AndroidAnimeDatabaseHandler(
     val db: AnimeDatabase,
     private val driver: AndroidSqliteDriver,
     val queryDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    val transactionDispatcher: CoroutineDispatcher = queryDispatcher
+    val transactionDispatcher: CoroutineDispatcher = queryDispatcher,
 ) : AnimeDatabaseHandler {
 
     val suspendingTransactionId = ThreadLocal<Int>()
@@ -30,21 +30,21 @@ class AndroidAnimeDatabaseHandler(
 
     override suspend fun <T : Any> awaitList(
         inTransaction: Boolean,
-        block: suspend AnimeDatabase.() -> Query<T>
+        block: suspend AnimeDatabase.() -> Query<T>,
     ): List<T> {
         return dispatch(inTransaction) { block(db).executeAsList() }
     }
 
     override suspend fun <T : Any> awaitOne(
         inTransaction: Boolean,
-        block: suspend AnimeDatabase.() -> Query<T>
+        block: suspend AnimeDatabase.() -> Query<T>,
     ): T {
         return dispatch(inTransaction) { block(db).executeAsOne() }
     }
 
     override suspend fun <T : Any> awaitOneOrNull(
         inTransaction: Boolean,
-        block: suspend AnimeDatabase.() -> Query<T>
+        block: suspend AnimeDatabase.() -> Query<T>,
     ): T? {
         return dispatch(inTransaction) { block(db).executeAsOneOrNull() }
     }
@@ -64,7 +64,7 @@ class AndroidAnimeDatabaseHandler(
     override fun <T : Any> subscribeToPagingSource(
         countQuery: AnimeDatabase.() -> Query<Long>,
         transacter: AnimeDatabase.() -> Transacter,
-        queryProvider: AnimeDatabase.(Long, Long) -> Query<T>
+        queryProvider: AnimeDatabase.(Long, Long) -> Query<T>,
     ): PagingSource<Long, T> {
         return QueryPagingSource(
             countQuery = countQuery(db),
@@ -72,7 +72,7 @@ class AndroidAnimeDatabaseHandler(
             dispatcher = queryDispatcher,
             queryProvider = { limit, offset ->
                 queryProvider.invoke(db, limit, offset)
-            }
+            },
         )
     }
 

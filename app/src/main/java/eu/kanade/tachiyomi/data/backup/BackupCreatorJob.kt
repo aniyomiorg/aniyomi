@@ -73,7 +73,7 @@ class BackupCreatorJob(private val context: Context, workerParams: WorkerParamet
                         workDataOf(
                             IS_AUTO_BACKUP_KEY to true,
                             BACKUP_FLAGS_KEY to flags,
-                        )
+                        ),
                     )
                     .build()
 

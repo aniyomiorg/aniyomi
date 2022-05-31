@@ -9,15 +9,16 @@ import android.webkit.WebView
 import androidx.core.net.toUri
 import androidx.preference.PreferenceScreen
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import eu.kanade.domain.anime.repository.AnimeRepository
+import eu.kanade.domain.manga.repository.MangaRepository
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService.Target
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
+import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.PREF_DOH_ADGUARD
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
@@ -50,17 +51,21 @@ import eu.kanade.tachiyomi.util.system.setDefaultSettings
 import eu.kanade.tachiyomi.util.system.toast
 import logcat.LogPriority
 import rikka.sui.Sui
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import eu.kanade.tachiyomi.data.preference.PreferenceKeys as Keys
 
-class SettingsAdvancedController : SettingsController() {
+class SettingsAdvancedController(
+    private val animeRepository: AnimeRepository = Injekt.get(),
+    private val mangaRepository: MangaRepository = Injekt.get(),
+) : SettingsController() {
 
     private val network: NetworkHelper by injectLazy()
     private val chapterCache: ChapterCache by injectLazy()
     private val episodeCache: EpisodeCache by injectLazy()
-    private val db: DatabaseHelper by injectLazy()
-    private val animedb: AnimeDatabaseHelper by injectLazy()
+    private val trackManager: TrackManager by injectLazy()
 
     @SuppressLint("BatteryLife")
     override fun setupPreferenceScreen(screen: PreferenceScreen) = screen.apply {
@@ -217,16 +222,27 @@ class SettingsAdvancedController : SettingsController() {
                     AnimelibUpdateService.start(context, target = AnimelibUpdateService.Target.COVERS)
                 }
             }
-            preference {
-                key = "pref_refresh_library_tracking"
-                titleRes = R.string.pref_refresh_library_tracking
-                summaryRes = R.string.pref_refresh_library_tracking_summary
 
-                onClick {
-                    LibraryUpdateService.start(context, target = Target.TRACKING)
-                    AnimelibUpdateService.start(context, target = AnimelibUpdateService.Target.TRACKING)
+            if (trackManager.hasLoggedServices()) {
+                preference {
+                    key = "pref_refresh_library_tracking"
+                    titleRes = R.string.pref_refresh_library_tracking
+                    summaryRes = R.string.pref_refresh_library_tracking_summary
+
+                    onClick {
+                        LibraryUpdateService.start(context, target = Target.TRACKING)
+                        AnimelibUpdateService.start(context, target = AnimelibUpdateService.Target.TRACKING)
+                    }
                 }
             }
+        }
+
+        preference {
+            key = "pref_reset_viewer_flags"
+            titleRes = R.string.pref_reset_viewer_flags
+            summaryRes = R.string.pref_reset_viewer_flags_summary
+
+            onClick { resetViewerFlags() }
         }
 
         preferenceCategory {
@@ -287,37 +303,52 @@ class SettingsAdvancedController : SettingsController() {
     }
 
     private fun clearChapterAndEpisodeCache() {
-        if (activity == null) return
+        val activity = activity ?: return
         launchIO {
             try {
                 val deletedFiles = chapterCache.clear() + episodeCache.clear()
                 withUIContext {
-                    activity?.toast(resources?.getString(R.string.cache_deleted, deletedFiles))
+                    activity.toast(resources?.getString(R.string.cache_deleted, deletedFiles))
                     findPreference(CLEAR_CACHE_KEY)?.summary =
                         resources?.getString(R.string.used_cache_both, episodeCache.readableSize, chapterCache.readableSize)
                 }
             } catch (e: Throwable) {
                 logcat(LogPriority.ERROR, e)
-                withUIContext { activity?.toast(R.string.cache_delete_error) }
+                withUIContext { activity.toast(R.string.cache_delete_error) }
             }
         }
     }
 
     private fun clearWebViewData() {
-        if (activity == null) return
+        val activity = activity ?: return
         try {
-            val webview = WebView(activity!!)
+            val webview = WebView(activity)
             webview.setDefaultSettings()
             webview.clearCache(true)
             webview.clearFormData()
             webview.clearHistory()
             webview.clearSslPreferences()
             WebStorage.getInstance().deleteAllData()
-            activity?.applicationInfo?.dataDir?.let { File("$it/app_webview/").deleteRecursively() }
-            activity?.toast(R.string.webview_data_deleted)
+            activity.applicationInfo?.dataDir?.let { File("$it/app_webview/").deleteRecursively() }
+            activity.toast(R.string.webview_data_deleted)
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e)
-            activity?.toast(R.string.cache_delete_error)
+            activity.toast(R.string.cache_delete_error)
+        }
+    }
+
+    private fun resetViewerFlags() {
+        val activity = activity ?: return
+        launchIO {
+            val success = mangaRepository.resetViewerFlags() && animeRepository.resetViewerFlags()
+            withUIContext {
+                val message = if (success) {
+                    R.string.pref_reset_viewer_flags_success
+                } else {
+                    R.string.pref_reset_viewer_flags_error
+                }
+                activity.toast(message)
+            }
         }
     }
 }

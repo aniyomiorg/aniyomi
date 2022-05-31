@@ -394,6 +394,7 @@ class AnimelibSettingsSheet(
                     unseenBadge -> preferences.unreadBadge().set(item.checked)
                     localBadge -> preferences.localBadge().set(item.checked)
                     languageBadge -> preferences.languageBadge().set(item.checked)
+                    else -> {}
                 }
                 adapter.notifyItemChanged(item)
             }
@@ -418,6 +419,7 @@ class AnimelibSettingsSheet(
                 when (item) {
                     showTabs -> preferences.animeCategoryTabs().set(item.checked)
                     showNumberOfItems -> preferences.animeCategoryNumberOfItems().set(item.checked)
+                    else -> {}
                 }
                 adapter.notifyItemChanged(item)
             }

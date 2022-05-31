@@ -4,7 +4,7 @@ import eu.kanade.domain.animehistory.model.AnimeHistory
 import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
 import java.util.Date
 
-val animehistoryMapper: (Long, Long, Date?, Date?) -> AnimeHistory = { id, episodeId, seenAt, _ ->
+val animehistoryMapper: (Long, Long, Date?) -> AnimeHistory = { id, episodeId, seenAt ->
     AnimeHistory(
         id = id,
         episodeId = episodeId,
@@ -13,7 +13,7 @@ val animehistoryMapper: (Long, Long, Date?, Date?) -> AnimeHistory = { id, episo
 }
 
 val animehistoryWithRelationsMapper: (Long, Long, Long, String, String?, Float, Date?) -> AnimeHistoryWithRelations = {
-    historyId, animeId, episodeId, title, thumbnailUrl, episodeNumber, seenAt ->
+        historyId, animeId, episodeId, title, thumbnailUrl, episodeNumber, seenAt ->
     AnimeHistoryWithRelations(
         id = historyId,
         episodeId = episodeId,
@@ -21,6 +21,6 @@ val animehistoryWithRelationsMapper: (Long, Long, Long, String, String?, Float, 
         title = title,
         thumbnailUrl = thumbnailUrl ?: "",
         episodeNumber = episodeNumber,
-        seenAt = seenAt
+        seenAt = seenAt,
     )
 }

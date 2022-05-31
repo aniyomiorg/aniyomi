@@ -12,17 +12,17 @@ interface AnimeDatabaseHandler {
 
     suspend fun <T : Any> awaitList(
         inTransaction: Boolean = false,
-        block: suspend AnimeDatabase.() -> Query<T>
+        block: suspend AnimeDatabase.() -> Query<T>,
     ): List<T>
 
     suspend fun <T : Any> awaitOne(
         inTransaction: Boolean = false,
-        block: suspend AnimeDatabase.() -> Query<T>
+        block: suspend AnimeDatabase.() -> Query<T>,
     ): T
 
     suspend fun <T : Any> awaitOneOrNull(
         inTransaction: Boolean = false,
-        block: suspend AnimeDatabase.() -> Query<T>
+        block: suspend AnimeDatabase.() -> Query<T>,
     ): T?
 
     fun <T : Any> subscribeToList(block: AnimeDatabase.() -> Query<T>): Flow<List<T>>
@@ -34,6 +34,6 @@ interface AnimeDatabaseHandler {
     fun <T : Any> subscribeToPagingSource(
         countQuery: AnimeDatabase.() -> Query<Long>,
         transacter: AnimeDatabase.() -> Transacter,
-        queryProvider: AnimeDatabase.(Long, Long) -> Query<T>
+        queryProvider: AnimeDatabase.(Long, Long) -> Query<T>,
     ): PagingSource<Long, T>
 }

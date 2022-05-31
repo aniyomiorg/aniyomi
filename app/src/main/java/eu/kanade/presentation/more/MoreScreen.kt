@@ -3,7 +3,6 @@ package eu.kanade.presentation.more
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.CollectionsBookmark
@@ -26,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.PreferenceRow
+import eu.kanade.presentation.components.ScrollbarLazyColumn
 import eu.kanade.presentation.components.SwitchPreference
 import eu.kanade.presentation.util.quantityStringResource
 import eu.kanade.tachiyomi.R
@@ -53,7 +53,7 @@ fun MoreScreen(
 
     val preferences: PreferencesHelper = Injekt.get()
 
-    LazyColumn(
+    ScrollbarLazyColumn(
         modifier = Modifier.nestedScroll(nestedScrollInterop),
         contentPadding = WindowInsets.navigationBars.asPaddingValues(),
     ) {

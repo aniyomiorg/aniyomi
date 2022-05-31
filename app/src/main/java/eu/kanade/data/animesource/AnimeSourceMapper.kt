@@ -8,7 +8,7 @@ val animesourceMapper: (eu.kanade.tachiyomi.animesource.AnimeSource) -> AnimeSou
         source.id,
         source.lang,
         source.name,
-        false
+        false,
     )
 }
 

@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 data class ALManga(
-    val media_id: Int,
+    val media_id: Long,
     val title_user_pref: String,
     val image_url_lge: String,
     val description: String?,
@@ -42,7 +42,7 @@ data class ALManga(
 }
 
 data class ALAnime(
-    val media_id: Int,
+    val media_id: Long,
     val title_user_pref: String,
     val image_url_lge: String,
     val description: String?,

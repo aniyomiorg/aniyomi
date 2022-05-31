@@ -28,3 +28,18 @@ getEpisodeByAnimeId:
 SELECT *
 FROM episodes
 WHERE anime_id = :animeId;
+
+update:
+UPDATE episodes
+SET anime_id = coalesce(:animeId, anime_id),
+    url = coalesce(:url, url),
+    name = coalesce(:name, name),
+    scanlator = coalesce(:scanlator, scanlator),
+    seen = coalesce(:seen, seen),
+    bookmark = coalesce(:bookmark, bookmark),
+    last_second_seen = coalesce(:lastSecondSeen, last_second_seen),
+    episode_number = coalesce(:episodeNumber, episode_number),
+    source_order = coalesce(:sourceOrder, source_order),
+    date_fetch = coalesce(:dateFetch, date_fetch),
+    date_upload = coalesce(:dateUpload, date_upload)
+WHERE _id = :episodeId;

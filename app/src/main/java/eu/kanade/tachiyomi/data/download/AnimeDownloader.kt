@@ -670,17 +670,14 @@ class AnimeDownloader(
         val downloadedImages = tmpDir.listFiles().orEmpty().filterNot { it.name!!.endsWith(".tmp") }
 
         download.status = if (downloadedImages.size == 1) {
-            AnimeDownload.State.DOWNLOADED
-        } else {
-            AnimeDownload.State.ERROR
-        }
-
-        // Only rename the directory if it's downloaded.
-        if (download.status == AnimeDownload.State.DOWNLOADED) {
+            // Only rename the directory if it's downloaded.
             tmpDir.renameTo(dirname)
             cache.addEpisode(dirname, animeDir, download.anime)
 
             DiskUtil.createNoMediaFile(tmpDir, context)
+            AnimeDownload.State.DOWNLOADED
+        } else {
+            AnimeDownload.State.ERROR
         }
     }
 

@@ -56,3 +56,9 @@ sealed class AnimeExtension {
         override val hasChangelog: Boolean = false,
     ) : AnimeExtension()
 }
+
+data class AvailableAnimeExtensionSources(
+    val name: String,
+    val id: Long,
+    val baseUrl: String,
+)

@@ -231,12 +231,18 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
         super.onSaveInstanceState(outState)
     }
 
+    override fun onPause() {
+        presenter.saveCurrentChapterReadingProgress()
+        super.onPause()
+    }
+
     /**
      * Set menu visibility again on activity resume to apply immersive mode again if needed.
      * Helps with rotations.
      */
     override fun onResume() {
         super.onResume()
+        presenter.setReadStartTime()
         setMenuVisibility(menuVisible, animate = false)
     }
 

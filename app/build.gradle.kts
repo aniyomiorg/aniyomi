@@ -139,17 +139,6 @@ android {
         kotlinCompilerExtensionVersion = compose.versions.compose.get()
     }
 
-    sqldelight {
-        database("Database") {
-            packageName = "eu.kanade.tachiyomi"
-            sourceFolders = listOf("sqldelight")
-        }
-        database("AnimeDatabase") {
-            packageName = "eu.kanade.tachiyomi.mi"
-            sourceFolders = listOf("sqldelightanime")
-        }
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -157,6 +146,19 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    sqldelight {
+        database("Database") {
+            packageName = "eu.kanade.tachiyomi"
+            dialect = "sqlite:3.24"
+            sourceFolders = listOf("sqldelight")
+        }
+        database("AnimeDatabase") {
+            packageName = "eu.kanade.tachiyomi.mi"
+            dialect = "sqlite:3.24"
+            sourceFolders = listOf("sqldelightanime")
+        }
     }
 }
 
@@ -169,12 +171,14 @@ dependencies {
     implementation(compose.material.icons)
     implementation(compose.animation)
     implementation(compose.ui.tooling)
+    implementation(compose.ui.util)
     implementation(compose.accompanist.webview)
+    implementation(compose.accompanist.swiperefresh)
 
     implementation(androidx.paging.runtime)
     implementation(androidx.paging.compose)
 
-    implementation(libs.sqldelight.sqlite)
+    implementation(androidx.sqlite)
     implementation(libs.sqldelight.android.driver)
     implementation(libs.sqldelight.coroutines)
     implementation(libs.sqldelight.android.paging)

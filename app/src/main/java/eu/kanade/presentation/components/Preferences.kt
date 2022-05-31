@@ -21,13 +21,15 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.core.prefs.PreferenceMutableState
 import eu.kanade.presentation.util.horizontalPadding
 
+const val DIVIDER_ALPHA = 0.2f
+
 @Composable
 fun Divider(
     modifier: Modifier = Modifier,
 ) {
     androidx.compose.material3.Divider(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = DIVIDER_ALPHA),
     )
 }
 
@@ -56,13 +58,13 @@ fun PreferenceRow(
                 onLongClick = onLongClick,
                 onClick = onClick,
             ),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         if (painter != null) {
             Icon(
                 painter = painter,
                 modifier = Modifier
-                    .padding(horizontal = horizontalPadding)
+                    .padding(start = horizontalPadding, end = 16.dp)
                     .size(24.dp),
                 tint = MaterialTheme.colorScheme.primary,
                 contentDescription = null,
@@ -70,8 +72,8 @@ fun PreferenceRow(
         }
         Column(
             Modifier
-                .padding(horizontal = horizontalPadding)
-                .weight(1f)
+                .padding(horizontal = 16.dp)
+                .weight(1f),
         ) {
             Text(
                 text = title,
@@ -86,7 +88,11 @@ fun PreferenceRow(
             }
         }
         if (action != null) {
-            Box(Modifier.widthIn(min = 56.dp)) {
+            Box(
+                Modifier
+                    .widthIn(min = 56.dp)
+                    .padding(end = horizontalPadding),
+            ) {
                 action()
             }
         }
@@ -106,11 +112,7 @@ fun SwitchPreference(
         title = title,
         subtitle = subtitle,
         painter = painter,
-        action = {
-            Switch(checked = preference.value, onCheckedChange = null)
-            // TODO: remove this once switch checked state is fixed: https://issuetracker.google.com/issues/228336571
-            Text(preference.value.toString())
-        },
+        action = { Switch(checked = preference.value, onCheckedChange = null) },
         onClick = { preference.value = !preference.value },
     )
 }

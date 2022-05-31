@@ -20,7 +20,7 @@ class AnimeSourceFilterPresenter(
     private val getLanguagesWithSources: GetLanguagesWithAnimeSources = Injekt.get(),
     private val toggleSource: ToggleAnimeSource = Injekt.get(),
     private val toggleLanguage: ToggleLanguage = Injekt.get(),
-    private val preferences: PreferencesHelper = Injekt.get()
+    private val preferences: PreferencesHelper = Injekt.get(),
 ) : BasePresenter<AnimeSourceFilterController>() {
 
     private val _state: MutableStateFlow<AnimeSourceFilterState> = MutableStateFlow(AnimeSourceFilterState.Loading)
@@ -49,7 +49,7 @@ class AnimeSourceFilterPresenter(
             header + it.value.map { source ->
                 AnimeFilterUiModel.Item(
                     source,
-                    source.id.toString() !in preferences.disabledSources().get()
+                    source.id.toString() !in preferences.disabledSources().get(),
                 )
             }
         }

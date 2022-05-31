@@ -1,8 +1,6 @@
 package eu.kanade.tachiyomi.data.download
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.webkit.MimeTypeMap
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
@@ -29,8 +27,6 @@ import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.system.ImageUtil
-import eu.kanade.tachiyomi.util.system.ImageUtil.isAnimatedAndSupported
-import eu.kanade.tachiyomi.util.system.ImageUtil.isTallImage
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.async
 import logcat.LogPriority
@@ -42,12 +38,9 @@ import rx.subscriptions.CompositeSubscription
 import uy.kohesive.injekt.injectLazy
 import java.io.BufferedOutputStream
 import java.io.File
-import java.io.FileOutputStream
 import java.util.zip.CRC32
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
-import kotlin.math.ceil
-import kotlin.math.min
 
 /**
  * This class is the one in charge of downloading chapters.
@@ -281,7 +274,7 @@ class Downloader(
 
             // Start downloader if needed
             if (autoStart && wasEmpty) {
-                val queuedDownloads = queue.filter { it.source !is UnmeteredSource }.count()
+                val queuedDownloads = queue.count { it.source !is UnmeteredSource }
                 val maxDownloadsFromSource = queue
                     .groupBy { it.source }
                     .filterKeys { it !is UnmeteredSource }
@@ -352,18 +345,14 @@ class Downloader(
             .flatMap({ page -> getOrDownloadImage(page, download, tmpDir) }, 5)
             .onBackpressureLatest()
             // Do when page is downloaded.
-            .doOnNext { page ->
-                if (preferences.splitTallImages().get()) {
-                    splitTallImage(page, tmpDir)
-                }
-                notifier.onProgressChange(download)
-            }
+            .doOnNext { notifier.onProgressChange(download) }
             .toList()
             .map { download }
             // Do after download completes
             .doOnNext { ensureSuccessfulDownload(download, mangaDir, tmpDir, chapterDirname) }
             // If the page list threw, it will resume here
             .onErrorReturn { error ->
+                logcat(LogPriority.ERROR, error)
                 download.status = Download.State.ERROR
                 notifier.onError(error.message, download.chapter.name, download.manga.title)
                 download
@@ -401,8 +390,12 @@ class Downloader(
         }
 
         return pageObservable
-            // When the image is ready, set image path, progress (just in case) and status
+            // When the page is ready, set page path, progress (just in case) and status
             .doOnNext { file ->
+                val success = splitTallImageIfNeeded(page, tmpDir)
+                if (success.not()) {
+                    notifier.onError(context.getString(R.string.download_notifier_split_failed), download.chapter.name, download.manga.title)
+                }
                 page.uri = file.uri
                 page.progress = 100
                 download.downloadedImages++
@@ -487,6 +480,21 @@ class Downloader(
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(mime) ?: "jpg"
     }
 
+    private fun splitTallImageIfNeeded(page: Page, tmpDir: UniFile): Boolean {
+        if (!preferences.splitTallImages().get()) return true
+
+        val filename = String.format("%03d", page.number)
+        val imageFile = tmpDir.listFiles()?.find { it.name!!.startsWith(filename) }
+            ?: throw Error(context.getString(R.string.download_notifier_split_page_not_found, page.number))
+        val imageFilePath = imageFile.filePath
+            ?: throw Error(context.getString(R.string.download_notifier_split_page_path_not_found, page.number))
+
+        // check if the original page was previously splitted before then skip.
+        if (imageFile.name!!.contains("__")) return true
+
+        return ImageUtil.splitTallImage(imageFile, imageFilePath)
+    }
+
     /**
      * Checks if the download was successful.
      *
@@ -505,13 +513,7 @@ class Downloader(
         val downloadedImages = tmpDir.listFiles().orEmpty().filterNot { it.name!!.endsWith(".tmp") || (it.name!!.contains("__") && !it.name!!.contains("__001.jpg")) }
 
         download.status = if (downloadedImages.size == download.pages!!.size) {
-            Download.State.DOWNLOADED
-        } else {
-            Download.State.ERROR
-        }
-
-        // Only rename the directory if it's downloaded.
-        if (download.status == Download.State.DOWNLOADED) {
+            // Only rename the directory if it's downloaded.
             if (preferences.saveChaptersAsCBZ().get()) {
                 archiveChapter(mangaDir, dirname, tmpDir)
             } else {
@@ -520,6 +522,10 @@ class Downloader(
             cache.addChapter(dirname, mangaDir, download.manga)
 
             DiskUtil.createNoMediaFile(tmpDir, context)
+
+            Download.State.DOWNLOADED
+        } else {
+            Download.State.ERROR
         }
     }
 
@@ -555,48 +561,6 @@ class Downloader(
         }
         zip.renameTo("$dirname.cbz")
         tmpDir.delete()
-    }
-
-    /**
-     * Splits tall images to improve performance of reader
-     */
-    private fun splitTallImage(page: Page, tmpDir: UniFile) {
-        val filename = String.format("%03d", page.number)
-        val imageFile = tmpDir.listFiles()?.find { it.name!!.startsWith("$filename.") }
-            ?: throw Error(context.getString(R.string.download_notifier_split_page_not_found, page.number))
-
-        if (isAnimatedAndSupported(imageFile.openInputStream()) || !isTallImage(imageFile.openInputStream())) {
-            return
-        }
-
-        val bitmap = BitmapFactory.decodeFile(imageFile.filePath)
-        val splitsCount = bitmap.height / context.resources.displayMetrics.heightPixels + 1
-        val heightPerSplit = ceil(bitmap.height / splitsCount.toDouble()).toInt()
-        logcat { "Splitting height ${bitmap.height} by $splitsCount * $heightPerSplit" }
-
-        try {
-            (0 until splitsCount).forEach { split ->
-                logcat { "Split #$split at y=${split * heightPerSplit}" }
-                val splitPath = imageFile.filePath!!.substringBeforeLast(".") + "__${"%03d".format(split + 1)}.jpg"
-                val splitHeight = split * heightPerSplit
-                FileOutputStream(splitPath).use { stream ->
-                    Bitmap.createBitmap(
-                        bitmap,
-                        0,
-                        splitHeight,
-                        bitmap.width,
-                        min(heightPerSplit, bitmap.height - splitHeight),
-                    ).compress(Bitmap.CompressFormat.JPEG, 100, stream)
-                }
-            }
-            imageFile.delete()
-        } catch (e: Exception) {
-            // Image splits were not successfully saved so delete them and keep the original image
-            (0 until splitsCount)
-                .map { imageFile.filePath!!.substringBeforeLast(".") + "__${"%03d".format(it + 1)}.jpg" }
-                .forEach { File(it).delete() }
-            throw e
-        }
     }
 
     /**

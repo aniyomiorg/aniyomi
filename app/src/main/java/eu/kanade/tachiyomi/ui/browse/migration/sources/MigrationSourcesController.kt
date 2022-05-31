@@ -5,7 +5,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import eu.kanade.presentation.source.MigrateSourceScreen
+import eu.kanade.presentation.browse.MigrateSourceScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.base.controller.ComposeController
 import eu.kanade.tachiyomi.ui.base.controller.pushController
@@ -30,8 +30,8 @@ class MigrationSourcesController : ComposeController<MigrationSourcesPresenter>(
                 parentController!!.router.pushController(
                     MigrationMangaController(
                         source.id,
-                        source.name
-                    )
+                        source.name,
+                    ),
                 )
             },
             onLongClickItem = { source ->
@@ -51,12 +51,14 @@ class MigrationSourcesController : ComposeController<MigrationSourcesPresenter>(
                 true
             }
             R.id.asc_alphabetical,
-            R.id.desc_alphabetical -> {
+            R.id.desc_alphabetical,
+            -> {
                 presenter.setAlphabeticalSorting(itemId == R.id.asc_alphabetical)
                 true
             }
             R.id.asc_count,
-            R.id.desc_count -> {
+            R.id.desc_count,
+            -> {
                 presenter.setTotalSorting(itemId == R.id.asc_count)
                 true
             }

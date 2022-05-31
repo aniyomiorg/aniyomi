@@ -55,8 +55,8 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         // Store source mapping for error messages
         val backupMaps = backup.backupBrokenSources.map { BackupSource(it.name, it.sourceId) } + backup.backupSources
         val backupMapsAnime = backup.backupBrokenAnimeSources.map { BackupAnimeSource(it.name, it.sourceId) } + backup.backupAnimeSources
-        sourceMapping = backupMaps.map { it.sourceId to it.name }.toMap() +
-            backupMapsAnime.map { it.sourceId to it.name }.toMap()
+        sourceMapping = backupMaps.associate { it.sourceId to it.name } +
+            backupMapsAnime.associate { it.sourceId to it.name }
 
         // Restore individual manga
         backup.backupManga.forEach {

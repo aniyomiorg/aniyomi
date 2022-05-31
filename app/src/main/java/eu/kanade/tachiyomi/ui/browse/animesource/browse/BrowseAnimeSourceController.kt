@@ -31,6 +31,7 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.SourceControllerBinding
+import eu.kanade.tachiyomi.ui.anime.AddDuplicateAnimeDialog
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCategoriesDialog
 import eu.kanade.tachiyomi.ui.base.controller.FabController
@@ -59,9 +60,6 @@ import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
 import uy.kohesive.injekt.injectLazy
 
-/**
- * Controller to manage the catalogues available in the app.
- */
 open class BrowseAnimeSourceController(bundle: Bundle) :
     SearchableNucleusController<SourceControllerBinding, BrowseAnimeSourcePresenter>(bundle),
     FabController,
@@ -358,6 +356,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
                         when (filter) {
                             is AnimeFilter.TriState -> filter.state = 1
                             is AnimeFilter.CheckBox -> filter.state = true
+                            else -> {}
                         }
                         filterList = presenter.sourceFilters
                         break@filter
@@ -590,6 +589,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
     override fun onItemLongClick(position: Int) {
         val activity = activity ?: return
         val anime = (adapter?.getItem(position) as? AnimeSourceItem?)?.anime ?: return
+        val duplicateAnime = presenter.getDuplicateAnimelibAnime(anime)
 
         if (anime.favorite) {
             MaterialAlertDialogBuilder(activity)
@@ -605,43 +605,52 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
                 }
                 .show()
         } else {
-            val categories = presenter.getCategories()
-            val defaultCategoryId = preferences.defaultAnimeCategory()
-            val defaultCategory = categories.find { it.id == defaultCategoryId }
+            if (duplicateAnime != null) {
+                AddDuplicateAnimeDialog(this, duplicateAnime) { addToLibrary(anime, position) }
+                    .showDialog(router)
+            } else {
+                addToLibrary(anime, position)
+            }
+        }
+    }
 
-            when {
-                // Default category set
-                defaultCategory != null -> {
-                    presenter.moveAnimeToCategory(anime, defaultCategory)
+    private fun addToLibrary(newAnime: Anime, position: Int) {
+        val activity = activity ?: return
+        val categories = presenter.getCategories()
+        val defaultCategoryId = preferences.defaultAnimeCategory()
+        val defaultCategory = categories.find { it.id == defaultCategoryId }
 
-                    presenter.changeAnimeFavorite(anime)
-                    adapter?.notifyItemChanged(position)
-                    activity.toast(activity.getString(R.string.manga_added_library))
-                }
+        when {
+            // Default category set
+            defaultCategory != null -> {
+                presenter.moveAnimeToCategory(newAnime, defaultCategory)
 
-                // Automatic 'Default' or no categories
-                defaultCategoryId == 0 || categories.isEmpty() -> {
-                    presenter.moveAnimeToCategory(anime, null)
+                presenter.changeAnimeFavorite(newAnime)
+                adapter?.notifyItemChanged(position)
+                activity.toast(activity.getString(R.string.manga_added_library))
+            }
 
-                    presenter.changeAnimeFavorite(anime)
-                    adapter?.notifyItemChanged(position)
-                    activity.toast(activity.getString(R.string.manga_added_library))
-                }
+            // Automatic 'Default' or no categories
+            defaultCategoryId == 0 || categories.isEmpty() -> {
+                presenter.moveAnimeToCategory(newAnime, null)
+                presenter.changeAnimeFavorite(newAnime)
+                adapter?.notifyItemChanged(position)
+                activity.toast(activity.getString(R.string.manga_added_library))
+            }
 
-                // Choose a category
-                else -> {
-                    val ids = presenter.getAnimeCategoryIds(anime)
-                    val preselected = categories.map {
-                        if (it.id in ids) {
-                            QuadStateTextView.State.CHECKED.ordinal
-                        } else {
-                            QuadStateTextView.State.UNCHECKED.ordinal
-                        }
-                    }.toIntArray()
+            // Choose a category
+            else -> {
+                val ids = presenter.getAnimeCategoryIds(newAnime)
+                val preselected = categories.map {
+                    if (it.id in ids) {
+                        QuadStateTextView.State.CHECKED.ordinal
+                    } else {
+                        QuadStateTextView.State.UNCHECKED.ordinal
+                    }
+                }.toIntArray()
 
-                    ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected)
-                        .showDialog(router)
-                }
+                ChangeAnimeCategoriesDialog(this, listOf(newAnime), categories, preselected)
+                    .showDialog(router)
             }
         }
     }

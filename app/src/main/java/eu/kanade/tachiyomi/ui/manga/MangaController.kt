@@ -29,7 +29,6 @@ import coil.request.ImageRequest
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dev.chrisbanes.insetter.applyInsetter
@@ -47,6 +46,7 @@ import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.Location
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
@@ -523,30 +523,11 @@ class MangaController :
         } else {
             val duplicateManga = presenter.getDuplicateLibraryManga(manga)
             if (duplicateManga != null) {
-                showAddDuplicateDialog(
-                    manga,
-                    duplicateManga,
-                )
+                AddDuplicateMangaDialog(this, duplicateManga) { addToLibrary(manga) }
+                    .showDialog(router)
             } else {
                 addToLibrary(manga)
             }
-        }
-    }
-
-    private fun showAddDuplicateDialog(newManga: Manga, libraryManga: Manga) {
-        activity?.let {
-            val source = sourceManager.getOrStub(libraryManga.source)
-            MaterialAlertDialogBuilder(it).apply {
-                setMessage(activity?.getString(R.string.confirm_manga_add_duplicate, source.name))
-                setPositiveButton(activity?.getString(R.string.action_add)) { _, _ ->
-                    addToLibrary(newManga)
-                }
-                setNegativeButton(activity?.getString(R.string.action_cancel)) { _, _ -> }
-                setNeutralButton(activity?.getString(R.string.action_show_manga)) { _, _ ->
-                    router.pushController(MangaController(libraryManga))
-                }
-                setCancelable(true)
-            }.create().show()
         }
     }
 
@@ -554,7 +535,7 @@ class MangaController :
         trackSheet?.show()
     }
 
-    private fun addToLibrary(manga: Manga) {
+    private fun addToLibrary(newManga: Manga) {
         val categories = presenter.getCategories()
         val defaultCategoryId = preferences.defaultCategory()
         val defaultCategory = categories.find { it.id == defaultCategoryId }
@@ -563,7 +544,7 @@ class MangaController :
             // Default category set
             defaultCategory != null -> {
                 toggleFavorite()
-                presenter.moveMangaToCategory(manga, defaultCategory)
+                presenter.moveMangaToCategory(newManga, defaultCategory)
                 activity?.toast(activity?.getString(R.string.manga_added_library))
                 activity?.invalidateOptionsMenu()
             }
@@ -571,14 +552,14 @@ class MangaController :
             // Automatic 'Default' or no categories
             defaultCategoryId == 0 || categories.isEmpty() -> {
                 toggleFavorite()
-                presenter.moveMangaToCategory(manga, null)
+                presenter.moveMangaToCategory(newManga, null)
                 activity?.toast(activity?.getString(R.string.manga_added_library))
                 activity?.invalidateOptionsMenu()
             }
 
             // Choose a category
             else -> {
-                val ids = presenter.getMangaCategoryIds(manga)
+                val ids = presenter.getMangaCategoryIds(newManga)
                 val preselected = categories.map {
                     if (it.id!! in ids) {
                         QuadStateTextView.State.CHECKED.ordinal
@@ -587,24 +568,25 @@ class MangaController :
                     }
                 }.toIntArray()
 
-                showChangeCategoryDialog(manga, categories, preselected)
+                showChangeCategoryDialog(newManga, categories, preselected)
             }
         }
 
         if (source != null) {
             presenter.trackList
                 .map { it.service }
+                .filterNot { it is AnimeTrackService }
                 .filterIsInstance<EnhancedTrackService>()
                 .filter { it.accept(source!!) }
                 .forEach { service ->
                     launchIO {
                         try {
-                            service.match(manga)?.let { track ->
+                            service.match(newManga)?.let { track ->
                                 presenter.registerTracking(track, service as TrackService)
                             }
                         } catch (e: Exception) {
                             logcat(LogPriority.WARN, e) {
-                                "Could not match manga: ${manga.title} with service $service"
+                                "Could not match manga: ${newManga.title} with service $service"
                             }
                         }
                     }

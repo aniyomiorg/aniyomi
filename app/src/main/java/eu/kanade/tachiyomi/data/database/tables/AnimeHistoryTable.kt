@@ -10,20 +10,15 @@ object AnimeHistoryTable {
     /**
      * Id column name
      */
-    const val COL_ID = "${TABLE}_id"
+    const val COL_ID = "_id"
 
     /**
      * Episode id column name
      */
-    const val COL_EPISODE_ID = "${TABLE}_episode_id"
+    const val COL_EPISODE_ID = "episode_id"
 
     /**
      * Last seen column name
      */
-    const val COL_LAST_SEEN = "${TABLE}_last_seen"
-
-    /**
-     * Time seen column name
-     */
-    const val COL_TIME_SEEN = "${TABLE}_time_seen"
+    const val COL_LAST_SEEN = "last_seen"
 }

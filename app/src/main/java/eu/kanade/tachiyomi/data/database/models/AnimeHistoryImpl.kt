@@ -19,9 +19,4 @@ class AnimeHistoryImpl : AnimeHistory {
      * Last time chapter was read in time long format
      */
     override var last_seen: Long = 0
-
-    /**
-     * Total time chapter was read - todo not yet implemented
-     */
-    override var time_seen: Long = 0
 }

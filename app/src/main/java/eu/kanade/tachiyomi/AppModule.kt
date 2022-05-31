@@ -53,7 +53,7 @@ class AppModule(val app: Application) : InjektModule {
                 .callback(DbOpenCallback())
                 .name(DbOpenCallback.DATABASE_NAME)
                 .noBackupDirectory(false)
-                .build()
+                .build(),
         )
 
         val openHelperAnime = FrameworkSQLiteOpenHelperFactory().create(
@@ -61,7 +61,7 @@ class AppModule(val app: Application) : InjektModule {
                 .callback(AnimeDbOpenCallback())
                 .name(AnimeDbOpenCallback.DATABASE_NAME)
                 .noBackupDirectory(false)
-                .build()
+                .build(),
         )
 
         val sqlDriverManga = AndroidSqliteDriver(openHelper = openHelperManga)
@@ -72,12 +72,11 @@ class AppModule(val app: Application) : InjektModule {
             Database(
                 driver = sqlDriverManga,
                 historyAdapter = History.Adapter(
-                    history_last_readAdapter = dateAdapter,
-                    history_time_readAdapter = dateAdapter
+                    last_readAdapter = dateAdapter,
                 ),
                 mangasAdapter = Mangas.Adapter(
-                    genreAdapter = listOfStringsAdapter
-                )
+                    genreAdapter = listOfStringsAdapter,
+                ),
             )
         }
 
@@ -85,12 +84,11 @@ class AppModule(val app: Application) : InjektModule {
             AnimeDatabase(
                 driver = sqlDriverAnime,
                 animehistoryAdapter = Animehistory.Adapter(
-                    animehistory_last_seenAdapter = dateAdapter,
-                    animehistory_time_seenAdapter = dateAdapter
+                    last_seenAdapter = dateAdapter,
                 ),
                 animesAdapter = Animes.Adapter(
-                    genreAdapter = listOfStringsAdapter
-                )
+                    genreAdapter = listOfStringsAdapter,
+                ),
             )
         }
 
@@ -102,9 +100,9 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory { PreferencesHelper(app) }
 
-        addSingletonFactory { DatabaseHelper(app, openHelperManga) }
+        addSingletonFactory { DatabaseHelper(openHelperManga) }
 
-        addSingletonFactory { AnimeDatabaseHelper(app, openHelperAnime) }
+        addSingletonFactory { AnimeDatabaseHelper(openHelperAnime) }
 
         addSingletonFactory { ChapterCache(app) }
 

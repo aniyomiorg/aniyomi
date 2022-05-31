@@ -45,8 +45,8 @@ open class BaseEpisodeHolder(
         }
     }
 
-    fun onAnimeDownloadLongClick(view: View, position: Int): Boolean {
-        val item = adapter.getItem(position) as? BaseEpisodeItem<*, *> ?: return false
+    fun onAnimeDownloadLongClick(view: View, position: Int) {
+        val item = adapter.getItem(position) as? BaseEpisodeItem<*, *> ?: return
         when (item.status) {
             AnimeDownload.State.NOT_DOWNLOADED, AnimeDownload.State.ERROR -> {
                 view.popupMenu(
@@ -75,10 +75,13 @@ open class BaseEpisodeHolder(
                         }
                     },
                 )
-                return true
             }
+            AnimeDownload.State.DOWNLOADED, AnimeDownload.State.DOWNLOADING -> {
+                adapter.clickListener.deleteEpisode(position)
+            }
+            // AnimeDownload.State.QUEUE
             else -> {
-                return false
+                adapter.clickListener.startDownloadNow(position)
             }
         }
     }

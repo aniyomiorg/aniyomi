@@ -22,11 +22,6 @@ interface AnimeHistory : Serializable {
      */
     var last_seen: Long
 
-    /**
-     * Total time chapter was read - todo not yet implemented
-     */
-    var time_seen: Long
-
     companion object {
 
         /**

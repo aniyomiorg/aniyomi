@@ -138,7 +138,7 @@ private suspend fun AndroidAnimeDatabaseHandler.createTransactionContext(): Coro
  * thread by cancelling the job.
  */
 private suspend fun CoroutineDispatcher.acquireTransactionThread(
-    controlJob: Job
+    controlJob: Job,
 ): ContinuationInterceptor {
     return suspendCancellableCoroutine { continuation ->
         continuation.invokeOnCancellation {
@@ -159,8 +159,8 @@ private suspend fun CoroutineDispatcher.acquireTransactionThread(
             // Couldn't acquire a thread, cancel coroutine.
             continuation.cancel(
                 IllegalStateException(
-                    "Unable to acquire a thread to perform the database transaction.", ex
-                )
+                    "Unable to acquire a thread to perform the database transaction.", ex,
+                ),
             )
         }
     }
@@ -171,7 +171,7 @@ private suspend fun CoroutineDispatcher.acquireTransactionThread(
  */
 private class TransactionElement(
     private val transactionThreadControlJob: Job,
-    val transactionDispatcher: ContinuationInterceptor
+    val transactionDispatcher: ContinuationInterceptor,
 ) : CoroutineContext.Element {
 
     companion object Key : CoroutineContext.Key<TransactionElement>

@@ -274,8 +274,9 @@
     <string name="update_weekly">Weekly</string>
     <string name="pref_library_update_restriction">Automatic updates device restrictions</string>
     <string name="connected_to_wifi">Only on Wi-Fi</string>
-    <string name="charging">Charging</string>
-    <string name="battery_not_low">Battery not low</string>
+    <string name="network_not_metered">Only on unmetered network</string>
+    <string name="charging">When charging</string>
+    <string name="battery_not_low">When battery not low</string>
     <string name="restrictions">Restrictions: %s</string>
     <string name="only_update_restrictions">Only update: %s</string>
 
@@ -326,10 +327,11 @@
     <string name="unofficial_extension_message_tachiyomi">This extension is not from the official Tachiyomi extensions list.</string>
     <string name="unofficial_extension_message_aniyomi">This extension is not from the official Aniyomi extensions list.</string>
     <string name="extension_api_error">Failed to get extensions list</string>
-    <string name="ext_version_info">Version: %1$s</string>
-    <string name="ext_language_info">Language: %1$s</string>
+    <string name="ext_info_version">Version</string>
+    <string name="ext_info_language">Language</string>
+    <string name="ext_info_age_rating">Age rating</string>
     <string name="ext_nsfw_short">18+</string>
-    <string name="ext_nsfw_warning">May contain NSFW (18+) content</string>
+    <string name="ext_nsfw_warning">Sources from this extension may contain NSFW (18+) content</string>
     <string name="ext_install_service_notif">Installing extension…</string>
     <string name="ext_installer_pref">Installer</string>
     <string name="ext_installer_legacy">Legacy</string>
@@ -537,16 +539,13 @@
     <string name="pref_backup_interval">Backup frequency</string>
     <string name="pref_backup_flags">Backup options</string>
     <string name="pref_backup_slots">Maximum backups</string>
-    <string name="source_not_found_name">Source not found: %1$s</string>
     <string name="tracker_not_logged_in">Not logged in: %1$s</string>
     <string name="backup_restore_invalid_uri">Error: empty URI</string>
     <string name="backup_created">Backup created</string>
     <string name="invalid_backup_file">Invalid backup file</string>
-    <string name="invalid_backup_file_missing_data">File is missing data.</string>
-    <string name="invalid_backup_file_missing_manga">Backup does not contain any manga.</string>
+    <string name="invalid_backup_file_missing_manga">Backup does not contain any anime or manga.</string>
     <string name="backup_restore_missing_sources">Missing sources:</string>
     <string name="backup_restore_missing_trackers">Trackers not logged into:</string>
-    <string name="backup_restore_content">Restore uses sources to fetch data, carrier costs may apply.\n\nMake sure you have installed all necessary extensions and are logged in to sources and tracking services before restoring.</string>
     <string name="backup_restore_content_full">Data from the backup file will be restored.\n\nYou will need to install any missing extensions and log in to tracking services afterwards to use them.</string>
     <string name="restore_completed">Restore completed</string>
     <string name="restore_duration">%02d min, %02d sec</string>
@@ -588,11 +587,15 @@
     <string name="clear_database_confirmation">Are you sure? Completed episodes and chapters and progress of non-library entries will be lost</string>
     <string name="clear_database_completed">Entries deleted</string>
     <string name="database_clean">Database clean</string>
-    <string name="pref_refresh_library_covers">Refresh library covers</string>
     <string name="pref_clear_webview_data">Clear WebView data</string>
     <string name="webview_data_deleted">WebView data cleared</string>
-    <string name="pref_refresh_library_tracking">Refresh tracking</string>
     <string name="pref_refresh_library_tracking_summary">Updates status, score and progress from the tracking services</string>
+    <string name="pref_refresh_library_covers">Refresh library covers</string>
+    <string name="pref_refresh_library_tracking">Refresh tracking</string>
+    <string name="pref_reset_viewer_flags">Reset per-series reader settings</string>
+    <string name="pref_reset_viewer_flags_summary">Resets reading mode and orientation of all series</string>
+    <string name="pref_reset_viewer_flags_success">All reader settings reset</string>
+    <string name="pref_reset_viewer_flags_error">Couldn\'t reset reader settings</string>
     <string name="pref_dump_crash_logs">Dump crash logs</string>
     <string name="pref_dump_crash_logs_summary">Saves error logs to a file for sharing with the developers</string>
     <string name="crash_log_saved">Crash logs saved</string>
@@ -771,6 +774,7 @@
     <string name="tracker_komga_warning">This tracker is only compatible with the Komga source.</string>
     <string name="tracker_bangumi" translatable="false">Bangumi</string>
     <string name="tracker_shikimori" translatable="false">Shikimori</string>
+    <string name="tracker_manga_updates" translatable="false">MangaUpdates</string>
     <string name="manga_tracking_tab">Tracking</string>
     <plurals name="num_trackers">
         <item quantity="one">%d tracker</item>
@@ -792,6 +796,11 @@
     <string name="want_to_watch">Want to watch</string>
     <string name="repeating">Rereading</string>
     <string name="repeating_anime">Rewatching</string>
+    <string name="reading_list">Reading List</string>
+    <string name="wish_list">Wish List</string>
+    <string name="complete_list">Complete List</string>
+    <string name="on_hold_list">On Hold List</string>
+    <string name="unfinished_list">Unfinished List</string>
     <string name="score">Score</string>
     <string name="title">Title</string>
     <string name="status">Status</string>
@@ -870,7 +879,7 @@
     <string name="migration_selection_prompt">Select a source to migrate from</string>
     <string name="migrate">Migrate</string>
     <string name="copy">Copy</string>
-    <string name="migrate_empty_screen">Well, this is awkward</string>
+    <string name="empty_screen">Well, this is awkward</string>
 
     <!-- Downloads activity and service -->
     <string name="download_queue_error">Couldn\'t download chapters. You can try again in the downloads section</string>
@@ -982,6 +991,8 @@
     <string name="download_notifier_download_paused">Download paused</string>
     <string name="download_notifier_download_finish">Download completed</string>
     <string name="download_notifier_split_page_not_found">Page %d not found while splitting</string>
+    <string name="download_notifier_split_page_path_not_found">Couldn\'t find file path of page %d</string>
+    <string name="download_notifier_split_failed">Couldn\'t split downloaded image</string>
 
     <!-- Notification channels -->
     <string name="channel_common">Common</string>

@@ -10,7 +10,7 @@ class AnimeTrackSearch : AnimeTrack {
 
     override var sync_id: Int = 0
 
-    override var media_id: Int = 0
+    override var media_id: Long = 0
 
     override var library_id: Long? = null
 
@@ -42,19 +42,21 @@ class AnimeTrackSearch : AnimeTrack {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other == null || javaClass != other.javaClass) return false
+        if (javaClass != other?.javaClass) return false
 
-        other as AnimeTrack
+        other as AnimeTrackSearch
 
         if (anime_id != other.anime_id) return false
         if (sync_id != other.sync_id) return false
-        return media_id == other.media_id
+        if (media_id != other.media_id) return false
+
+        return true
     }
 
     override fun hashCode(): Int {
-        var result = (anime_id xor anime_id.ushr(32)).toInt()
+        var result = anime_id.hashCode()
         result = 31 * result + sync_id
-        result = 31 * result + media_id
+        result = 31 * result + media_id.hashCode()
         return result
     }
 

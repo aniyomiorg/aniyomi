@@ -31,7 +31,6 @@ import coil.request.ImageRequest
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dev.chrisbanes.insetter.applyInsetter
@@ -56,6 +55,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.Location
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
+import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
@@ -562,30 +562,11 @@ class AnimeController :
         } else {
             val duplicateAnime = presenter.getDuplicateAnimelibAnime(anime)
             if (duplicateAnime != null) {
-                showAddDuplicateDialog(
-                    anime,
-                    duplicateAnime,
-                )
+                AddDuplicateAnimeDialog(this, duplicateAnime) { addToAnimelib(anime) }
+                    .showDialog(router)
             } else {
                 addToAnimelib(anime)
             }
-        }
-    }
-
-    private fun showAddDuplicateDialog(newAnime: Anime, animelibAnime: Anime) {
-        activity?.let {
-            val source = sourceManager.getOrStub(animelibAnime.source)
-            MaterialAlertDialogBuilder(it).apply {
-                setMessage(activity?.getString(R.string.confirm_manga_add_duplicate, source.name))
-                setPositiveButton(activity?.getString(R.string.action_add)) { _, _ ->
-                    addToAnimelib(newAnime)
-                }
-                setNegativeButton(activity?.getString(R.string.action_cancel)) { _, _ -> }
-                setNeutralButton(activity?.getString(R.string.action_show_anime)) { _, _ ->
-                    router.pushController(AnimeController(animelibAnime))
-                }
-                setCancelable(true)
-            }.create().show()
         }
     }
 
@@ -593,7 +574,7 @@ class AnimeController :
         trackSheet?.show()
     }
 
-    private fun addToAnimelib(anime: Anime) {
+    private fun addToAnimelib(newAnime: Anime) {
         val categories = presenter.getCategories()
         val defaultCategoryId = preferences.defaultAnimeCategory()
         val defaultCategory = categories.find { it.id == defaultCategoryId }
@@ -602,7 +583,7 @@ class AnimeController :
             // Default category set
             defaultCategory != null -> {
                 toggleFavorite()
-                presenter.moveAnimeToCategory(anime, defaultCategory)
+                presenter.moveAnimeToCategory(newAnime, defaultCategory)
                 activity?.toast(activity?.getString(R.string.manga_added_library))
                 activity?.invalidateOptionsMenu()
             }
@@ -610,14 +591,14 @@ class AnimeController :
             // Automatic 'Default' or no categories
             defaultCategoryId == 0 || categories.isEmpty() -> {
                 toggleFavorite()
-                presenter.moveAnimeToCategory(anime, null)
+                presenter.moveAnimeToCategory(newAnime, null)
                 activity?.toast(activity?.getString(R.string.manga_added_library))
                 activity?.invalidateOptionsMenu()
             }
 
             // Choose a category
             else -> {
-                val ids = presenter.getAnimeCategoryIds(anime)
+                val ids = presenter.getAnimeCategoryIds(newAnime)
                 val preselected = categories.map {
                     if (it.id!! in ids) {
                         QuadStateTextView.State.CHECKED.ordinal
@@ -626,23 +607,24 @@ class AnimeController :
                     }
                 }.toIntArray()
 
-                showChangeCategoryDialog(anime, categories, preselected)
+                showChangeCategoryDialog(newAnime, categories, preselected)
             }
         }
 
         if (source != null) {
             presenter.trackList
                 .map { it.service }
+                .filterNot { it is MangaTrackService }
                 .filterIsInstance<EnhancedTrackService>()
                 .filter { it.accept(source!!) }
                 .forEach { service ->
                     launchIO {
                         try {
-                            service.match(anime)?.let { track ->
+                            service.match(newAnime)?.let { track ->
                                 presenter.registerTracking(track, service as TrackService)
                             }
                         } catch (e: Exception) {
-                            logcat(LogPriority.WARN, e) { "Could not match anime: ${anime.title} with service $service" }
+                            logcat(LogPriority.WARN, e) { "Could not match anime: ${newAnime.title} with service $service" }
                         }
                     }
                 }

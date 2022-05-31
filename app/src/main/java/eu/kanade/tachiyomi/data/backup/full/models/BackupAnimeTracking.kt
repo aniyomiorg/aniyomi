@@ -12,7 +12,8 @@ data class BackupAnimeTracking(
     @ProtoNumber(1) var syncId: Int,
     // LibraryId is not null in 1.x
     @ProtoNumber(2) var libraryId: Long,
-    @ProtoNumber(3) var mediaId: Int = 0,
+    @Deprecated("Use mediaId instead", level = DeprecationLevel.WARNING) @ProtoNumber(3)
+    var mediaIdInt: Int = 0,
     // trackingUrl is called mediaUrl in 1.x
     @ProtoNumber(4) var trackingUrl: String = "",
     @ProtoNumber(5) var title: String = "",
@@ -25,11 +26,16 @@ data class BackupAnimeTracking(
     @ProtoNumber(10) var startedWatchingDate: Long = 0,
     // finishedReadingDate is called endReadTime in 1.x
     @ProtoNumber(11) var finishedWatchingDate: Long = 0,
+    @ProtoNumber(100) var mediaId: Long = 0,
 ) {
     fun getTrackingImpl(): AnimeTrackImpl {
         return AnimeTrackImpl().apply {
             sync_id = this@BackupAnimeTracking.syncId
-            media_id = this@BackupAnimeTracking.mediaId
+            media_id = if (this@BackupAnimeTracking.mediaIdInt != 0) {
+                this@BackupAnimeTracking.mediaIdInt.toLong()
+            } else {
+                this@BackupAnimeTracking.mediaId
+            }
             library_id = this@BackupAnimeTracking.libraryId
             title = this@BackupAnimeTracking.title
             last_episode_seen = this@BackupAnimeTracking.lastChapterRead

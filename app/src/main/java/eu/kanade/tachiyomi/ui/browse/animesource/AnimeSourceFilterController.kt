@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.ui.browse.animesource
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import eu.kanade.domain.animesource.model.AnimeSource
-import eu.kanade.presentation.animesource.AnimeSourceFilterScreen
+import eu.kanade.presentation.browse.AnimeSourceFilterScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.base.controller.ComposeController
 

@@ -26,7 +26,7 @@ class AnimeDbOpenCallback : SupportSQLiteOpenHelper.Callback(AnimeDatabase.Schem
             AnimeDatabase.Schema.migrate(
                 driver = AndroidSqliteDriver(database = db, cacheSize = 1),
                 oldVersion = oldVersion,
-                newVersion = newVersion
+                newVersion = newVersion,
             )
         }
     }

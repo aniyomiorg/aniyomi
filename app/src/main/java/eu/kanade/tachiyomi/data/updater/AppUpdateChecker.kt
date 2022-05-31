@@ -47,6 +47,7 @@ class AppUpdateChecker {
             when (result) {
                 is AppUpdateResult.NewUpdate -> AppUpdateNotifier(context).promptUpdate(result.release)
                 is AppUpdateResult.NewUpdateFdroidInstallation -> AppUpdateNotifier(context).promptFdroidUpdate()
+                else -> {}
             }
 
             result
@@ -64,7 +65,18 @@ class AppUpdateChecker {
         } else {
             // Release builds: based on releases in "jmir1/aniyomi" repo
             // tagged as something like "v0.1.2"
-            newVersion != BuildConfig.VERSION_NAME
+            val oldVersion = BuildConfig.VERSION_NAME.replace("[^\\d.]".toRegex(), "")
+
+            val newSemVer = newVersion.split(".").map { it.toInt() }
+            val oldSemVer = oldVersion.split(".").map { it.toInt() }
+
+            oldSemVer.mapIndexed { index, i ->
+                if (newSemVer[index] > i) {
+                    return true
+                }
+            }
+
+            false
         }
     }
 }

@@ -28,7 +28,7 @@ class AnimeSearchController(
     constructor(animeId: Long) : this(
         Injekt.get<AnimeDatabaseHelper>()
             .getAnime(animeId)
-            .executeAsBlocking()
+            .executeAsBlocking(),
     )
 
     private var newAnime: Anime? = null

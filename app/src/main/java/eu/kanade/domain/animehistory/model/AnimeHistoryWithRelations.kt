@@ -9,5 +9,5 @@ data class AnimeHistoryWithRelations(
     val title: String,
     val thumbnailUrl: String,
     val episodeNumber: Float,
-    val seenAt: Date?
+    val seenAt: Date?,
 )

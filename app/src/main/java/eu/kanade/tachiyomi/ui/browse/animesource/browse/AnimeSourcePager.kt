@@ -4,7 +4,7 @@ import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 
-open class AnimeSourcePager(val source: AnimeCatalogueSource, val query: String, val filters: AnimeFilterList) : AnimePager() {
+class AnimeSourcePager(val source: AnimeCatalogueSource, val query: String, val filters: AnimeFilterList) : AnimePager() {
 
     override suspend fun requestNextPage() {
         val page = currentPage

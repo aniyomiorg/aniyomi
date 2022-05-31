@@ -68,7 +68,7 @@ class AnimeTrackGetResolver : DefaultGetResolver<AnimeTrack>() {
         id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_ID))
         anime_id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_ANIME_ID))
         sync_id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_SYNC_ID))
-        media_id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_MEDIA_ID))
+        media_id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_MEDIA_ID))
         library_id = cursor.getLong(cursor.getColumnIndexOrThrow(COL_LIBRARY_ID))
         title = cursor.getString(cursor.getColumnIndexOrThrow(COL_TITLE))
         last_episode_seen = cursor.getFloat(cursor.getColumnIndexOrThrow(COL_LAST_EPISODE_SEEN))

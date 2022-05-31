@@ -10,6 +10,7 @@ import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
+import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.NoLoginTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
@@ -18,7 +19,7 @@ import eu.kanade.tachiyomi.source.Source
 import okhttp3.Dns
 import okhttp3.OkHttpClient
 
-class Komga(private val context: Context, id: Int) : TrackService(id), EnhancedTrackService, NoLoginTrackService {
+class Komga(private val context: Context, id: Int) : TrackService(id), EnhancedTrackService, NoLoginTrackService, MangaTrackService {
 
     companion object {
         const val UNREAD = 1
@@ -101,9 +102,7 @@ class Komga(private val context: Context, id: Int) : TrackService(id), EnhancedT
         return track
     }
 
-    override suspend fun refresh(track: AnimeTrack): AnimeTrack {
-        TODO("Not yet implemented")
-    }
+    override suspend fun refresh(track: AnimeTrack): AnimeTrack = throw Exception("Not used")
 
     override suspend fun login(username: String, password: String) {
         saveCredentials("user", "pass")
