@@ -67,7 +67,7 @@ class AnimeSourcesController : SearchableComposeController<AnimeSourcesPresenter
      */
     private fun openSource(source: AnimeSource, controller: BrowseAnimeSourceController) {
         if (!preferences.incognitoMode().get()) {
-            preferences.lastUsedSource().set(source.id)
+            preferences.lastUsedAnimeSource().set(source.id)
         }
         parentController!!.router.pushController(controller)
     }

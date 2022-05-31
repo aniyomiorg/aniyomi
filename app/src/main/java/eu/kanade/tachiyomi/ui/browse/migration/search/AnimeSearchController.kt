@@ -144,7 +144,7 @@ class AnimeSearchController(
     }
 
     override fun onTitleClick(source: AnimeCatalogueSource) {
-        presenter.preferences.lastUsedSource().set(source.id)
+        presenter.preferences.lastUsedAnimeSource().set(source.id)
 
         router.pushController(AnimeSourceSearchController(anime, source, presenter.query))
     }
