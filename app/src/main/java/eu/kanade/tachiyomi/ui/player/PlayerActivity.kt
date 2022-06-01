@@ -1278,6 +1278,7 @@ class PlayerActivity :
     override fun event(eventId: Int) {
         when (eventId) {
             MPVLib.mpvEventId.MPV_EVENT_FILE_LOADED -> fileLoaded()
+            MPVLib.mpvEventId.MPV_EVENT_START_FILE -> launchUI { refreshUi() }
         }
     }
 }
