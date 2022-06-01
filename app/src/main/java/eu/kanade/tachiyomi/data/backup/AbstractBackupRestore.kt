@@ -15,6 +15,7 @@ import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.util.chapter.NoChaptersException
+import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import kotlinx.coroutines.Job
 import uy.kohesive.injekt.injectLazy
@@ -97,8 +98,8 @@ abstract class AbstractBackupRestore<T : AbstractBackupManager>(protected val co
             backupManager.restoreEpisodes(source, anime, episodes)
         } catch (e: Exception) {
             // If there's any error, return empty update and continue.
-            val errorMessage = if (e is NoChaptersException) {
-                context.getString(R.string.no_chapters_error)
+            val errorMessage = if (e is NoEpisodesException) {
+                context.getString(R.string.no_episodes_error)
             } else {
                 e.message
             }

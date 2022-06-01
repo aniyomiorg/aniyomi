@@ -141,7 +141,7 @@
     <!-- Manga chapters fragment -->
     <string name="display_mode_chapter">Capítulo %1$s</string>
     <string name="chapter_downloading_progress">Descargando (%1$d/%2$d)</string>
-    <string name="chapter_error">Error</string>
+    <string name="download_error">Error</string>
     <string name="show_title">Título de la fuente</string>
     <string name="show_chapter_number">Número de capítulo</string>
     <string name="sorting_mode">Modo al ordenar</string>
@@ -215,7 +215,7 @@
     <string name="action_remove_bookmark">Quitar como favorito</string>
     <string name="action_add">Añadir</string>
     <string name="download_notifier_no_network">No hay conexión de red disponible</string>
-    <string name="download_notifier_download_paused">Descarga pausada</string>
+    <string name="download_notifier_download_paused_chapters">Descarga pausada</string>
     <string name="confirm_set_image_as_cover">¿Usar esta imagen como portada\?</string>
     <string name="action_display">Apariencia</string>
     <string name="action_display_grid">Rejilla compacta</string>
@@ -268,7 +268,7 @@
     <string name="local_source">Fuente local</string>
     <string name="manga_not_in_db">Este manga se ha eliminado de la base de datos.</string>
     <string name="delete_downloads_for_manga">¿Eliminar los capítulos descargados\?</string>
-    <string name="chapter_paused">Pausado</string>
+    <string name="download_paused">Pausado</string>
     <string name="manga_tracking_tab">Seguimiento</string>
     <string name="error_category_exists">¡Ya existe una categoría con este nombre!</string>
     <string name="snack_categories_deleted">Categorías eliminadas</string>
@@ -387,7 +387,7 @@
     <string name="pref_cutout_short">Mostrar contenido en el área recortada</string>
     <string name="information_cloudflare_bypass_failure">Fallo al evitar Cloudflare</string>
     <string name="information_webview_outdated">Actualiza la aplicación WebView para mejorar la compatibilidad</string>
-    <string name="channel_new_chapters">Capítulos actualizados</string>
+    <string name="channel_new_chapters_episodes">Capítulos actualizados</string>
     <string name="unlock_app">Desbloquear Aniyomi</string>
     <string name="secure_screen_summary">Pantalla segura oculta el contenido al cambiar de aplicación y bloquea las capturas de pantalla</string>
     <string name="pref_category_display">Visualización</string>

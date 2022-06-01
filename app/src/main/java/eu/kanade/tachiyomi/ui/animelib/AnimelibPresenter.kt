@@ -460,7 +460,7 @@ class AnimelibPresenter(
     }
 
     /**
-     * Returns the mix (non-common) categories for the given list of manga.
+     * Returns the mix (non-common) categories for the given list of anime.
      *
      * @param animes the list of anime.
      */

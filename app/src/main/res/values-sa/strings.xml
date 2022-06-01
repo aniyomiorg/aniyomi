@@ -413,8 +413,8 @@
     <string name="cancelled">अलोप्यत</string>
     <string name="manga_info_expand">अधिकम्</string>
     <string name="manga_info_collapse">न्यूनम्</string>
-    <string name="chapter_error">दोषः</string>
-    <string name="chapter_paused">विरमितम्</string>
+    <string name="download_error">दोषः</string>
+    <string name="download_paused">विरमितम्</string>
     <string name="download_custom">स्वकृतम्</string>
     <string name="download_unread">अपठितम्</string>
     <string name="manga_cover">मुखचित्रम्</string>
@@ -492,7 +492,7 @@
     <string name="transition_pages_loading">पुटान् आरोपयतु…</string>
     <string name="updating_library">ग्रन्थालयं नवीकरोति</string>
     <string name="pref_clear_history">चरित्रं मार्जयतु</string>
-    <string name="download_notifier_download_paused">अवारोपणं विरमितम्</string>
+    <string name="download_notifier_download_paused_chapters">अवारोपणं विरमितम्</string>
     <string name="download_notifier_download_finish">अवारोपणं समापितम्</string>
     <string name="channel_errors">दोषाः</string>
     <string name="label_downloaded_only">अवारोपितानि एव</string>
@@ -545,7 +545,7 @@
     <string name="notification_chapters_multiple">अध्यायाः %1$s</string>
     <string name="update_check_notification_download_error">अवारोपणदोषः</string>
     <string name="channel_complete">पूर्णम्</string>
-    <string name="channel_new_chapters">अध्यायनवीकरणानि</string>
+    <string name="channel_new_chapters_episodes">अध्यायनवीकरणानि</string>
     <string name="channel_app_updates">अनुप्रयोगनवीकरणानि</string>
     <string name="channel_ext_updates">विस्तारनवीकरणानि</string>
     <string name="channel_crash_logs">ध्वंसेतिवृत्तानि</string>

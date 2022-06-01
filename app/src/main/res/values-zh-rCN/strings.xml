@@ -225,8 +225,8 @@
     <string name="source_not_installed">未安装图源：%1$s</string>
     <string name="display_mode_chapter">第 %1$s 章</string>
     <string name="chapter_downloading_progress">正在下载（%1$d/%2$d）</string>
-    <string name="chapter_error">错误</string>
-    <string name="chapter_paused">搁置中</string>
+    <string name="download_error">错误</string>
+    <string name="download_paused">搁置中</string>
     <string name="show_title">图源标题</string>
     <string name="show_chapter_number">章节编号</string>
     <string name="sorting_mode">排序模式</string>
@@ -304,7 +304,7 @@
     <string name="download_notifier_unknown_error">下载时发生不可预期的错误</string>
     <string name="download_notifier_text_only_wifi">无可用 Wi-Fi 连接</string>
     <string name="download_notifier_no_network">无网络连接</string>
-    <string name="download_notifier_download_paused">下载已暂停</string>
+    <string name="download_notifier_download_paused_chapters">下载已暂停</string>
     <string name="channel_common">一般</string>
     <string name="pref_read_with_long_tap">长按显示</string>
     <string name="action_open_in_web_view">在 WebView 中打开</string>
@@ -355,7 +355,7 @@
     <string name="unlock_app">解锁 Aniyomi</string>
     <string name="secure_screen_summary">切换应用程序时，安全屏幕隐藏应用程序内容，并阻止截屏</string>
     <string name="pref_category_display">显示</string>
-    <string name="channel_new_chapters">章节更新</string>
+    <string name="channel_new_chapters_episodes">章节更新</string>
     <string name="hide_notification_content">隐藏通知内容</string>
     <string name="lock_with_biometrics">需要解锁</string>
     <string name="pref_cutout_short">在刘海屏区域显示内容</string>

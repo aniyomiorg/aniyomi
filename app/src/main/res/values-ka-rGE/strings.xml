@@ -293,8 +293,8 @@
     <string name="snack_add_to_library">დავამატო მანგა ბიბლიოთეკაში?</string>
     <string name="display_mode_chapter">თავი %1$s</string>
     <string name="chapter_downloading_progress">მიმდინარეობს გადმოწერა (%1$d/%2$d)</string>
-    <string name="chapter_error">შეცდომა</string>
-    <string name="chapter_paused">დაპაუზებულია</string>
+    <string name="download_error">შეცდომა</string>
+    <string name="download_paused">დაპაუზებულია</string>
     <string name="show_title">წყაროს სათაური</string>
     <string name="show_chapter_number">თავის ნომერი</string>
     <string name="sorting_mode">დალაგების რეჟიმი</string>
@@ -376,9 +376,9 @@
     <string name="information_empty_library">შენი ბიბლიოთეკა ცარიელია, დაამატე სერიები შენს ბიბლიოთეკაში \"დაათვალიერე\"-დან.</string>
     <string name="download_notifier_text_only_wifi">Wi-Fi კავშირი არ არის ხელმისაწვდომი</string>
     <string name="download_notifier_no_network">ინტერნეტთან კავშირი არ არის ხელმისაწვდომი</string>
-    <string name="download_notifier_download_paused">გადმოწერა დაპაუზებულია</string>
+    <string name="download_notifier_download_paused_chapters">გადმოწერა დაპაუზებულია</string>
     <string name="channel_common">საერთო</string>
-    <string name="channel_new_chapters">თავების განახლებები</string>
+    <string name="channel_new_chapters_episodes">თავების განახლებები</string>
     <string name="channel_ext_updates">გავრცობის განახლებები</string>
     <string name="chapters">თავები</string>
     <string name="track">თვალყურის დევნება</string>

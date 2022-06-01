@@ -160,9 +160,9 @@
     <string name="information_no_recent">Nincs új frissítés</string>
     <string name="information_no_downloads">Nincs letöltés folyamatban</string>
     <string name="channel_ext_updates">Bővítményfrissítések</string>
-    <string name="channel_new_chapters">Fejezetfrissítések</string>
+    <string name="channel_new_chapters_episodes">Fejezetfrissítések</string>
     <string name="channel_common">Gyakori</string>
-    <string name="download_notifier_download_paused">Letöltés szüneteltetve</string>
+    <string name="download_notifier_download_paused_chapters">Letöltés szüneteltetve</string>
     <string name="download_notifier_text_only_wifi">Nincs Wi-Fi kapcsolat</string>
     <string name="download_notifier_unknown_error">Egy váratlan hiba miatt nem sikerült letölteni a fejezetet</string>
     <string name="download_notifier_title_error">Hiba</string>
@@ -248,7 +248,7 @@
         <item quantity="other">%1$s fejezet</item>
     </plurals>
     <string name="spen_previous_page">Előző oldal</string>
-    <string name="chapter_error">Hiba</string>
+    <string name="download_error">Hiba</string>
     <string name="website">Weboldal</string>
     <string name="check_for_updates">Frissítések keresése</string>
     <string name="licenses">Nyílt forráskódú licenc</string>
@@ -300,7 +300,7 @@
     <string name="download_10">Következő 10 fejezet</string>
     <string name="download_5">Következő 5 fejezet</string>
     <string name="download_1">Következő fejezet</string>
-    <string name="chapter_paused">Szünetel</string>
+    <string name="download_paused">Szünetel</string>
     <string name="snack_add_to_library">Manga könyvtárhoz adása\?</string>
     <string name="source_not_installed">Forrás nincs telepítve: %1$s</string>
     <string name="ongoing">Folyamatban van</string>

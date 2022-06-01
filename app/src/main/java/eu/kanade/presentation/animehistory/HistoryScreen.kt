@@ -97,7 +97,7 @@ fun HistoryContent(
         LoadingScreen()
         return
     } else if (history.loadState.refresh is LoadState.NotLoading && history.itemCount == 0) {
-        EmptyScreen(textResource = R.string.information_no_recent_manga)
+        EmptyScreen(textResource = R.string.information_no_recent_anime)
         return
     }
 

@@ -39,7 +39,7 @@ import eu.kanade.presentation.browse.components.BaseAnimeSourceItem
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.LocalSource
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.ui.browse.animesource.AnimeSourceState
 import eu.kanade.tachiyomi.ui.browse.animesource.AnimeSourcesPresenter
 
@@ -233,7 +233,7 @@ fun AnimeSourceOptionsDialog(
                         .fillMaxWidth()
                         .padding(vertical = 16.dp),
                 )
-                if (source.id != LocalSource.ID) {
+                if (source.id != LocalAnimeSource.ID) {
                     Text(
                         text = stringResource(id = R.string.action_disable),
                         modifier = Modifier

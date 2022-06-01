@@ -113,8 +113,8 @@
     <string name="source_not_installed">Zdroj není nainstalován: %1$s</string>
     <string name="display_mode_chapter">Kapitola %1$s</string>
     <string name="chapter_downloading_progress">Stahování (%1$d/%2$d)</string>
-    <string name="chapter_error">Chyba</string>
-    <string name="chapter_paused">Pozastaveno</string>
+    <string name="download_error">Chyba</string>
+    <string name="download_paused">Pozastaveno</string>
     <string name="sort_by_source">Podle zdroje</string>
     <string name="manga_download">Stáhnout</string>
     <string name="download_1">Stáhnout další kapitolu</string>
@@ -164,7 +164,7 @@
     <string name="download_notifier_unknown_error">Při stahování kapitoly došlo k neznámé chybě</string>
     <string name="download_notifier_text_only_wifi">WiFi připojení není dostupné</string>
     <string name="download_notifier_no_network">Síťové připojení není dostupné</string>
-    <string name="download_notifier_download_paused">Stahování pozastaveno</string>
+    <string name="download_notifier_download_paused_chapters">Stahování pozastaveno</string>
     <string name="label_download_queue">Stahovací fronta</string>
     <string name="name">Název</string>
     <string name="track">Sledování</string>
@@ -480,7 +480,7 @@
     <string name="action_start">Začít</string>
     <string name="channel_crash_logs">Záznamy o pádech</string>
     <string name="channel_ext_updates">Aktualizace rozšíření</string>
-    <string name="channel_new_chapters">Aktualizace kapitol</string>
+    <string name="channel_new_chapters_episodes">Aktualizace kapitol</string>
     <string name="channel_errors">Chyby</string>
     <string name="channel_complete">Dokončeno</string>
     <string name="channel_progress">Postup</string>

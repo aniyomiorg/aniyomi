@@ -186,8 +186,8 @@
     <string name="delete_downloads_for_manga">Excluir os capítulos disponíveis offline\?</string>
     <string name="display_mode_chapter">Capítulo %1$s</string>
     <string name="chapter_downloading_progress">Fazendo download (%1$d/%2$d)</string>
-    <string name="chapter_error">Erro</string>
-    <string name="chapter_paused">Pausado</string>
+    <string name="download_error">Erro</string>
+    <string name="download_paused">Pausado</string>
     <string name="show_title">Título da fonte</string>
     <string name="show_chapter_number">Número do capítulo</string>
     <string name="sorting_mode">Modo de ordenação</string>
@@ -246,7 +246,7 @@
     <string name="download_notifier_unknown_error">Não foi possível realizar o download do capítulo devido a um erro inesperado</string>
     <string name="download_notifier_text_only_wifi">Conexão Wi-Fi indisponível</string>
     <string name="download_notifier_no_network">Conexão à rede indisponível</string>
-    <string name="download_notifier_download_paused">Download pausado</string>
+    <string name="download_notifier_download_paused_chapters">Download pausado</string>
     <string name="action_global_search">Pesquisa global</string>
     <string name="other_source">Outras</string>
     <string name="action_global_search_hint">Pesquisa global…</string>
@@ -355,7 +355,7 @@
     <string name="pref_cutout_short">Mostrar conteúdo na área de recorte da tela</string>
     <string name="information_cloudflare_bypass_failure">Falha ao contornar o Cloudflare</string>
     <string name="information_webview_outdated">Por favor, atualize o aplicativo de WebView para uma melhor compatibilidade</string>
-    <string name="channel_new_chapters">Atualizações de capítulos</string>
+    <string name="channel_new_chapters_episodes">Atualizações de capítulos</string>
     <string name="unlock_app">Desbloquear o Aniyomi</string>
     <string name="secure_screen_summary">A tela segura oculta os conteúdos do aplicativo durante a troca de aplicativos e impede capturas de tela</string>
     <string name="pref_category_display">Visualização</string>

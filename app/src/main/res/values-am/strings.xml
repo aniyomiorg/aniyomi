@@ -261,13 +261,13 @@
     <string name="tapping_inverted_none">የለም</string>
     <string name="pref_read_with_tapping_inverted">ተገልብጦ መታ ማድረግ</string>
     <string name="channel_ext_updates">የቅጥያ ዝመናዎች</string>
-    <string name="channel_new_chapters">የምዕራፍ ዝመናዎች</string>
+    <string name="channel_new_chapters_episodes">የምዕራፍ ዝመናዎች</string>
     <string name="channel_errors">ስህተቶች</string>
     <string name="channel_complete">ተጠናቀቀ</string>
     <string name="channel_progress">እድገት</string>
     <string name="channel_common">የተለመደ</string>
     <string name="download_notifier_download_finish">ማውረድ ተጠናቅቋል</string>
-    <string name="download_notifier_download_paused">ማውረድ ለአፍታ ቆሟል</string>
+    <string name="download_notifier_download_paused_chapters">ማውረድ ለአፍታ ቆሟል</string>
     <string name="color_filter_r_value">ቀ</string>
     <string name="color_filter_b_value">ቢ</string>
     <string name="color_filter_g_value">ኣ</string>

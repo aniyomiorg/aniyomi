@@ -184,8 +184,8 @@
     <string name="delete_downloads_for_manga">Hapus bab terunduh\?</string>
     <string name="display_mode_chapter">Bab %1$s</string>
     <string name="chapter_downloading_progress">Mengunduh (%1$d/%2$d)</string>
-    <string name="chapter_error">Kesalahan</string>
-    <string name="chapter_paused">Jeda</string>
+    <string name="download_error">Kesalahan</string>
+    <string name="download_paused">Jeda</string>
     <string name="show_title">Judul</string>
     <string name="show_chapter_number">Nomor bab</string>
     <string name="sorting_mode">Urutkan menurut</string>
@@ -244,7 +244,7 @@
     <string name="download_notifier_unknown_error">Terjadi kesalahan saat mengunduh bab</string>
     <string name="download_notifier_text_only_wifi">Tidak terhubung dengan Wi-Fi</string>
     <string name="download_notifier_no_network">Tidak ada koneksi jaringan yang tersedia</string>
-    <string name="download_notifier_download_paused">Pengunduhan dijeda</string>
+    <string name="download_notifier_download_paused_chapters">Pengunduhan dijeda</string>
     <string name="action_global_search">Pencarian Global</string>
     <string name="action_display_download_badge">Diunduh</string>
     <string name="local_source_badge">Lokal</string>
@@ -360,7 +360,7 @@
     <string name="paused">Dijeda</string>
     <string name="information_cloudflare_bypass_failure">Gagal untuk menembus Cloudflare</string>
     <string name="information_webview_outdated">Harap perbarui aplikasi WebView untuk kompatibilitas yang lebih baik</string>
-    <string name="channel_new_chapters">Pembaruan bab</string>
+    <string name="channel_new_chapters_episodes">Pembaruan bab</string>
     <string name="notification_check_updates">Memeriksa bab baru</string>
     <string name="pref_disable_battery_optimization">Nonaktifkan optimisasi baterai</string>
     <string name="battery_optimization_disabled">Optimalisasi baterai sudah dimatikan</string>

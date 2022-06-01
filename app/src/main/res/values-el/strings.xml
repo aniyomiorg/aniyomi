@@ -225,8 +225,8 @@
     <string name="source_not_installed">Η πηγή δεν είναι εγκατεστημένη: %1$s</string>
     <string name="display_mode_chapter">Κεφάλαιο %1$s</string>
     <string name="chapter_downloading_progress">Λήψη (%1$d/%2$d)</string>
-    <string name="chapter_error">Σφάλμα</string>
-    <string name="chapter_paused">Παύση</string>
+    <string name="download_error">Σφάλμα</string>
+    <string name="download_paused">Παύση</string>
     <string name="show_title">Τίτλος πηγής</string>
     <string name="show_chapter_number">Αριθμός κεφαλαίου</string>
     <string name="sorting_mode">Λειτουργία ταξινόμησης</string>
@@ -304,7 +304,7 @@
     <string name="download_notifier_unknown_error">Το κεφάλαιο δεν μπορούσε να ληφθεί λόγο μη αναμενόμενου σφάλματος</string>
     <string name="download_notifier_text_only_wifi">Δεν υπάρχει διαθέσιμη σύνδεση Wi-Fi</string>
     <string name="download_notifier_no_network">Δεν υπάρχει διαθέσιμη σύνδεση δικτύου</string>
-    <string name="download_notifier_download_paused">Λήψη σε παύση</string>
+    <string name="download_notifier_download_paused_chapters">Λήψη σε παύση</string>
     <string name="channel_common">Κοινό</string>
     <string name="pref_read_with_long_tap">Εμφάνιση με παρατεταμένο πάτημα</string>
     <string name="action_open_in_web_view">Άνοιγμα στο WebView</string>
@@ -334,7 +334,7 @@
     <string name="restore_duration">%02d λεπτά, %02d δευτερόλεπτα</string>
     <string name="action_select_inverse">Επιλογή αντίστροφου</string>
     <string name="channel_ext_updates">Ενημερώσεις επεκτάσεων</string>
-    <string name="channel_new_chapters">Ενημερώσεις κεφαλαίων</string>
+    <string name="channel_new_chapters_episodes">Ενημερώσεις κεφαλαίων</string>
     <string name="information_webview_outdated">Παρακαλώ ενημερώστε την εφαρμογή WebView για καλύτερη συμβατότητα</string>
     <string name="information_webview_required">Το WebView απαιτείται για το Tachiyomi</string>
     <string name="notification_chapters_single_and_more">Κεφάλαιο %1$s και %2$d ακόμη</string>

@@ -222,9 +222,9 @@
     <string name="tapping_inverted_none">Ninguno</string>
     <string name="pref_read_with_tapping_inverted">Tapping invertido</string>
     <string name="channel_ext_updates">Actualizaciones de extensión</string>
-    <string name="channel_new_chapters">Actualizaciones de capítulos</string>
+    <string name="channel_new_chapters_episodes">Actualizaciones de capítulos</string>
     <string name="channel_common">Común</string>
-    <string name="download_notifier_download_paused">Descarga pausada</string>
+    <string name="download_notifier_download_paused_chapters">Descarga pausada</string>
     <string name="download_notifier_no_network">No hay ninguna conexión de red disponible</string>
     <string name="download_notifier_text_only_wifi">No hay ninguna conexión Wi-Fi disponible</string>
     <string name="download_notifier_unknown_error">No se pudo descargar el capítulo debido a un error inesperado</string>
@@ -403,8 +403,8 @@
     <string name="sorting_mode">Modo de ordenado</string>
     <string name="show_chapter_number">Número de capítulo</string>
     <string name="show_title">Título de la fuente</string>
-    <string name="chapter_paused">Pausado</string>
-    <string name="chapter_error">Error</string>
+    <string name="download_paused">Pausado</string>
+    <string name="download_error">Error</string>
     <string name="chapter_downloading_progress">Descargando (%1$d/%2$d)</string>
     <string name="display_mode_chapter">Capítulo %1$s</string>
     <string name="snack_add_to_library">¿Añadir manga a la biblioteca\?</string>

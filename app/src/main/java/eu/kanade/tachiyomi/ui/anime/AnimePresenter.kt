@@ -302,12 +302,12 @@ class AnimePresenter(
     }
 
     /**
-     * Get the manga cover as a Bitmap, either from the CoverCache (only works for library manga)
+     * Get the anime cover as a Bitmap, either from the CoverCache (only works for library anime)
      * or from the Coil ImageLoader cache.
      *
      * @param context the context used to get the Coil ImageLoader
      * @param memoryCacheKey Coil MemoryCache.Key that points to the cover Bitmap cache location
-     * @return manga cover as Bitmap
+     * @return anime cover as Bitmap
      */
     fun getCoverBitmap(context: Context, memoryCacheKey: MemoryCache.Key?): Bitmap {
         var resultBitmap = coverBitmapFromCoverCache()
@@ -319,9 +319,9 @@ class AnimePresenter(
     }
 
     /**
-     * Attempt manga cover retrieval from the CoverCache.
+     * Attempt anime cover retrieval from the CoverCache.
      *
-     * @return cover as Bitmap or null if CoverCache does not contain cover for manga
+     * @return cover as Bitmap or null if CoverCache does not contain cover for anime
      */
     private fun coverBitmapFromCoverCache(): Bitmap? {
         val cover = coverCache.getCoverFile(anime)
@@ -333,7 +333,7 @@ class AnimePresenter(
     }
 
     /**
-     * Attempt manga cover retrieval from the Coil ImageLoader memoryCache.
+     * Attempt anime cover retrieval from the Coil ImageLoader memoryCache.
      *
      * @param context the context used to get the Coil ImageLoader
      * @param memoryCacheKey Coil MemoryCache.Key that points to the cover Bitmap cache location
@@ -777,7 +777,7 @@ class AnimePresenter(
     }
 
     /**
-     * Whether the display only downloaded filter is enabled.
+     * Whether the display only bookmarked filter is enabled.
      */
     fun onlyBookmarked(): State {
         return when (anime.bookmarkedFilter) {

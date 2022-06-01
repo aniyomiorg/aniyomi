@@ -43,9 +43,9 @@ abstract class AbstractBackupManager(protected val context: Context) {
         db.getManga(manga.url, manga.source).executeAsBlocking()
 
     /**
-     * Returns manga
+     * Returns anime
      *
-     * @return [Manga], null if not found
+     * @return [Anime], null if not found
      */
     internal fun getAnimeFromDatabase(anime: Anime): Anime? =
         animedb.getAnime(anime.url, anime.source).executeAsBlocking()
@@ -70,12 +70,12 @@ abstract class AbstractBackupManager(protected val context: Context) {
     }
 
     /**
-     * Fetches chapter information.
+     * Fetches episode information.
      *
-     * @param source source of manga
+     * @param source source of anime
      * @param anime anime that needs updating
      * @param episodes list of episodes in the backup
-     * @return Updated manga chapters.
+     * @return Updated anime episodes.
      */
     internal suspend fun restoreEpisodes(source: AnimeSource, anime: Anime, episodes: List<Episode>): Pair<List<Episode>, List<Episode>> {
         val fetchedEpisodes = source.getEpisodeList(anime.toAnimeInfo())
@@ -142,21 +142,21 @@ abstract class AbstractBackupManager(protected val context: Context) {
         animedb.insertAnime(anime).executeAsBlocking().insertedId()
 
     /**
-     * Inserts list of chapters
+     * Inserts list of episodes
      */
     protected fun insertEpisodes(episodes: List<Episode>) {
         animedb.insertEpisodes(episodes).executeAsBlocking()
     }
 
     /**
-     * Updates a list of chapters
+     * Updates a list of episodes
      */
     protected fun updateEpisodes(episodes: List<Episode>) {
         animedb.updateEpisodesBackup(episodes).executeAsBlocking()
     }
 
     /**
-     * Updates a list of chapters with known database ids
+     * Updates a list of episodes with known database ids
      */
     protected fun updateKnownEpisodes(episodes: List<Episode>) {
         animedb.updateKnownEpisodesBackup(episodes).executeAsBlocking()

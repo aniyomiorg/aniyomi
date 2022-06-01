@@ -153,8 +153,8 @@ abstract class InstallerAnime(private val service: Service) {
     }
 
     companion object {
-        private const val ACTION_CANCEL_QUEUE = "Installer.action.CANCEL_QUEUE"
-        private const val EXTRA_DOWNLOAD_ID = "Installer.extra.DOWNLOAD_ID"
+        private const val ACTION_CANCEL_QUEUE = "InstallerAnime.action.CANCEL_QUEUE"
+        private const val EXTRA_DOWNLOAD_ID = "InstallerAnime.extra.DOWNLOAD_ID"
 
         /**
          * Attempts to cancel the installation entry for the provided download ID.

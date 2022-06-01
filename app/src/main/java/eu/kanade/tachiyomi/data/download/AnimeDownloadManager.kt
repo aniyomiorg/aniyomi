@@ -189,7 +189,7 @@ class AnimeDownloadManager(
                 .filter { "video" in it.type.orEmpty() }
 
             if (files.isEmpty()) {
-                throw Exception(context.getString(R.string.page_list_empty_error))
+                throw Exception(context.getString(R.string.video_list_empty_error))
             }
 
             val file = files[0]

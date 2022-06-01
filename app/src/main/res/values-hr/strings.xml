@@ -344,8 +344,8 @@
     <string name="sorting_mode">Modus razvrstavanja</string>
     <string name="show_chapter_number">Broj poglavlja</string>
     <string name="show_title">Naslov izvora</string>
-    <string name="chapter_paused">Zaustavljeno</string>
-    <string name="chapter_error">Greška</string>
+    <string name="download_paused">Zaustavljeno</string>
+    <string name="download_error">Greška</string>
     <string name="chapter_downloading_progress">Preuzimanje (%1$d/%2$d)</string>
     <string name="display_mode_chapter">Poglavlje %1$s</string>
     <string name="snack_add_to_library">Dodati manga u biblioteku\?</string>
@@ -444,9 +444,9 @@
         <item quantity="other">%1$d novih poglavlja</item>
     </plurals>
     <string name="channel_ext_updates">Ažuriranja proširenja</string>
-    <string name="channel_new_chapters">Ažuriranja poglavlja</string>
+    <string name="channel_new_chapters_episodes">Ažuriranja poglavlja</string>
     <string name="channel_common">Opće</string>
-    <string name="download_notifier_download_paused">Preuzimanje zaustavljeno</string>
+    <string name="download_notifier_download_paused_chapters">Preuzimanje zaustavljeno</string>
     <string name="download_notifier_no_network">Nema mrežne veze</string>
     <string name="download_notifier_text_only_wifi">Nema dostupne Wi-Fi veze</string>
     <string name="download_notifier_unknown_error">Poglavlje nije moguće preuzeti zbog neočekivane pogreške</string>

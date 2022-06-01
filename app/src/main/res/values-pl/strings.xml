@@ -66,8 +66,8 @@
     <string name="pref_library_columns">Ilość okładek w rzędzie</string>
     <string name="remove_from_library">Usuń z biblioteki</string>
     <string name="display_mode_chapter">Rozdział %1$s</string>
-    <string name="chapter_error">Błąd</string>
-    <string name="chapter_paused">Wstrzymane</string>
+    <string name="download_error">Błąd</string>
+    <string name="download_paused">Wstrzymane</string>
     <string name="manga_download">Pobierz</string>
     <string name="download_1">Następny rozdział</string>
     <string name="download_5">5 następnych rozdziałów</string>
@@ -101,7 +101,7 @@
     <string name="information_empty_library">Twoja biblioteka jest pusta</string>
     <string name="download_notifier_title_error">Błąd</string>
     <string name="download_notifier_unknown_error">Podczas pobierania rozdziału wystąpił nieoczekiwany błąd</string>
-    <string name="download_notifier_download_paused">Pobieranie wstrzymane</string>
+    <string name="download_notifier_download_paused_chapters">Pobieranie wstrzymane</string>
     <string name="action_sort_alpha">Alfabetycznie</string>
     <string name="track">Śledzenie</string>
     <string name="action_reset">Reset</string>
@@ -344,7 +344,7 @@
     <string name="pref_category_display">Wyświetlanie</string>
     <string name="hide_notification_content">Ukryj zawartość powiadomienia</string>
     <string name="lock_when_idle">Zablokuj podczas bezczynności</string>
-    <string name="channel_new_chapters">Aktualizacje rozdziałów</string>
+    <string name="channel_new_chapters_episodes">Aktualizacje rozdziałów</string>
     <string name="information_webview_outdated">Zaktualizuj aplikację WebView dla lepszej kompatybilności</string>
     <string name="information_cloudflare_bypass_failure">Nie udało się obejść Cloudflare</string>
     <string name="label_more">Więcej</string>

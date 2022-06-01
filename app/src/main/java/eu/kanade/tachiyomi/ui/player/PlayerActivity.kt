@@ -681,8 +681,8 @@ class PlayerActivity :
 
         playerControls.binding.volumeText.text = newVolume.toString()
         playerControls.binding.volumeBar.progress = newVolume
-        if (newVolume == 0) playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_none_24dp)
-        else playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_high_24dp)
+        if (newVolume == 0) playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_off_24dp)
+        else playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_on_24dp)
         showGestureView("volume")
     }
 

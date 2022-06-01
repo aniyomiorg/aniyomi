@@ -144,8 +144,8 @@
     <string name="remove_from_library">Verwijderen uit bibliotheek</string>
     <string name="display_mode_chapter">Hoofdstuk %1$s</string>
     <string name="chapter_downloading_progress">Aan het downloaden (%1$d/%2$d)</string>
-    <string name="chapter_error">Fout</string>
-    <string name="chapter_paused">Gepauzeerd</string>
+    <string name="download_error">Fout</string>
+    <string name="download_paused">Gepauzeerd</string>
     <string name="show_title">Brontitel</string>
     <string name="show_chapter_number">Hoofdstuknummer</string>
     <string name="sorting_mode">Sorteermodus</string>
@@ -192,7 +192,7 @@
     <string name="download_notifier_title_error">Fout</string>
     <string name="download_notifier_text_only_wifi">Geen Wi-Fi-verbinding beschikbaar</string>
     <string name="download_notifier_no_network">Geen netwerkverbinding beschikbaar</string>
-    <string name="download_notifier_download_paused">Download gepauzeerd</string>
+    <string name="download_notifier_download_paused_chapters">Download gepauzeerd</string>
     <string name="label_recent_updates">Updates</string>
     <string name="action_sort_total">Aantal hoofdstukken</string>
     <string name="app_not_available">App niet beschikbaar</string>
@@ -354,7 +354,7 @@
     <string name="ext_updates_pending">Updates in de wachtrij</string>
     <string name="information_cloudflare_bypass_failure">Kon Cloudflare niet omzeilen</string>
     <string name="information_webview_outdated">Gelieve de WebView-app bij te werken voor betere compatibiliteit</string>
-    <string name="channel_new_chapters">Hoofdstukupdates</string>
+    <string name="channel_new_chapters_episodes">Hoofdstukupdates</string>
     <string name="unlock_app">Ontgrendel Aniyomi</string>
     <string name="secure_screen_summary">Veilig scherm modus verbergt de inhoud van de app bij het wisselen en blokkeert schermafbeeldingen</string>
     <string name="pref_category_display">Weergave</string>

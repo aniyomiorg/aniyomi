@@ -217,8 +217,8 @@
     <string name="source_not_installed">Kilde ikke installert: %1$s</string>
     <string name="display_mode_chapter">Kapittel %1$s</string>
     <string name="chapter_downloading_progress">Laster ned (%1$d/%2$d)</string>
-    <string name="chapter_error">Feil</string>
-    <string name="chapter_paused">Pauset</string>
+    <string name="download_error">Feil</string>
+    <string name="download_paused">Pauset</string>
     <string name="show_title">Kildetittel</string>
     <string name="show_chapter_number">Kapittelnummer</string>
     <string name="sorting_mode">Sorteringsmodus</string>
@@ -311,7 +311,7 @@
     <string name="download_notifier_unknown_error">Kunne ikke laste ned kapittel grunnet uventet feil</string>
     <string name="download_notifier_text_only_wifi">Ingen trådløstilkobling tilgjengelig</string>
     <string name="download_notifier_no_network">Ingen nettverkstilkobling tilgjengelig</string>
-    <string name="download_notifier_download_paused">Nedlasting pauset</string>
+    <string name="download_notifier_download_paused_chapters">Nedlasting pauset</string>
     <string name="pref_color_filter_mode">Blandingsmodus for fargefilter</string>
     <string name="filter_mode_overlay">Overlegg</string>
     <string name="filter_mode_multiply">Multiplisere</string>
@@ -350,7 +350,7 @@
         <item quantity="other">Etter %1$s minutter</item>
     </plurals>
     <string name="secure_screen">Sikker skjerm</string>
-    <string name="channel_new_chapters">Kapitteloppdateringer</string>
+    <string name="channel_new_chapters_episodes">Kapitteloppdateringer</string>
     <string name="unlock_app">Lås opp Aniyomi</string>
     <string name="notification_chapters_single">Kapittel %1$s</string>
     <string name="email">E-postadresse</string>
