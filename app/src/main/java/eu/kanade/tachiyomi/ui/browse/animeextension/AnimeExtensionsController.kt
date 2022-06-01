@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.base.controller.ComposeController
 import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.browse.BrowseController
-import eu.kanade.tachiyomi.ui.browse.extension.details.ExtensionDetailsController
+import eu.kanade.tachiyomi.ui.browse.animeextension.details.AnimeExtensionDetailsController
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -51,14 +51,14 @@ class AnimeExtensionsController : ComposeController<AnimeExtensionsPresenter>() 
             },
             onLaunched = {
                 val ctrl = parentController as BrowseController
-                ctrl.setExtensionUpdateBadge()
+                ctrl.setAnimeExtensionUpdateBadge()
                 ctrl.extensionListUpdateRelay.call(true)
             },
             onInstallExtension = {
                 presenter.installExtension(it)
             },
             onOpenExtension = {
-                val controller = ExtensionDetailsController(it.pkgName)
+                val controller = AnimeExtensionDetailsController(it.pkgName)
                 parentController!!.router.pushController(controller)
             },
             onTrustExtension = {

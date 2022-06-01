@@ -225,8 +225,8 @@
     <string name="source_not_installed">Sursa nu este instalată:%1$s</string>
     <string name="display_mode_chapter">Capitolul %1$s</string>
     <string name="chapter_downloading_progress">Se descarcă (%1$d/%2$d)</string>
-    <string name="chapter_error">Eroare</string>
-    <string name="chapter_paused">Întrerupt</string>
+    <string name="download_error">Eroare</string>
+    <string name="download_paused">Întrerupt</string>
     <string name="show_title">Titlul sursei</string>
     <string name="show_chapter_number">Numărul capitolului</string>
     <string name="sorting_mode">Mod de sortare</string>
@@ -304,7 +304,7 @@
     <string name="download_notifier_unknown_error">Nu s-a putut descărca capitolul din cauza unei erori neașteptate</string>
     <string name="download_notifier_text_only_wifi">Nu este disponibilă nicio conexiune Wi-Fi</string>
     <string name="download_notifier_no_network">Nici o conexiune la internet valabilă</string>
-    <string name="download_notifier_download_paused">Descărcare întreruptă</string>
+    <string name="download_notifier_download_paused_chapters">Descărcare întreruptă</string>
     <string name="channel_common">General</string>
     <string name="action_open_in_web_view">Deschide în WebView</string>
     <string name="pref_true_color">Culoare 32-bit</string>
@@ -357,7 +357,7 @@
     <string name="pref_cutout_short">Afișare conținut în zona decupată</string>
     <string name="information_cloudflare_bypass_failure">A eșuat evitarea Cloudflare</string>
     <string name="information_webview_outdated">Actualizați aplicația WebView pentru o compatibilitate mai bună</string>
-    <string name="channel_new_chapters">Actualizări de capitole</string>
+    <string name="channel_new_chapters_episodes">Actualizări de capitole</string>
     <string name="secure_screen_summary">Ascundeți conținutul aplicației atunci când comutați aplicații și blocați capturile de ecran</string>
     <string name="pref_category_display">Afișare</string>
     <plurals name="notification_chapters_generic">

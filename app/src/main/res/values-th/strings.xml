@@ -223,8 +223,8 @@
     <string name="source_not_installed">ไม่ได้ติดตั้งแหลงที่มา: %1$s</string>
     <string name="display_mode_chapter">ตอนที่ %1$s</string>
     <string name="chapter_downloading_progress">กำลังดาวน์โหลด (%1$d/%2$d)</string>
-    <string name="chapter_error">เกิดข้อผิดพลาด</string>
-    <string name="chapter_paused">หยุดชั่วคราว</string>
+    <string name="download_error">เกิดข้อผิดพลาด</string>
+    <string name="download_paused">หยุดชั่วคราว</string>
     <string name="show_title">ชื่อตามแหล่งที่มา</string>
     <string name="show_chapter_number">หมายเลขตอน</string>
     <string name="sorting_mode">โหมดการจัดเรียง</string>
@@ -314,7 +314,7 @@
     <string name="download_notifier_unknown_error">ไม่สามารถดาวน์โหลดตอนได้เนื่องจากข้อผิดพลาดที่ไม่คาดคิด</string>
     <string name="download_notifier_text_only_wifi">ไม่มีการเชื่อมต่อ Wi-Fi</string>
     <string name="download_notifier_no_network">ไม่มีการเชื่อมต่อเครือข่าย</string>
-    <string name="download_notifier_download_paused">การดาวน์โหลดหยุดชั่วคราว</string>
+    <string name="download_notifier_download_paused_chapters">การดาวน์โหลดหยุดชั่วคราว</string>
     <string name="channel_common">ทั่วไป</string>
     <string name="filter_mode_multiply">หลากหลาย</string>
     <string name="filter_mode_darken">เบิร์น / มืดขึ้น</string>
@@ -566,7 +566,7 @@
     <string name="spen_previous_page">หน้าก่อน</string>
     <string name="channel_crash_logs">บันทึกข้อขัดข้อง</string>
     <string name="channel_ext_updates">ส่วนขยายอัปเดต</string>
-    <string name="channel_new_chapters">อัปเดตตอน</string>
+    <string name="channel_new_chapters_episodes">อัปเดตตอน</string>
     <string name="channel_errors">ข้อผิดพลาด</string>
     <string name="channel_complete">เสร็จสมบูรณ์</string>
     <string name="channel_progress">ความคืบหน้า</string>

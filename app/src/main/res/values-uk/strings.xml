@@ -225,8 +225,8 @@
     <string name="source_not_installed">Джерело не встановлено: %1$s</string>
     <string name="display_mode_chapter">Глава %1$s</string>
     <string name="chapter_downloading_progress">Завантажується (%1$d/%2$d)</string>
-    <string name="chapter_error">Помилка</string>
-    <string name="chapter_paused">Пауза</string>
+    <string name="download_error">Помилка</string>
+    <string name="download_paused">Пауза</string>
     <string name="show_title">Назва джерела</string>
     <string name="show_chapter_number">Номер глави</string>
     <string name="sorting_mode">Метод сортування</string>
@@ -304,7 +304,7 @@
     <string name="download_notifier_unknown_error">Невідома помилка при завантаженні глави</string>
     <string name="download_notifier_text_only_wifi">Немає Wi-Fi підключення</string>
     <string name="download_notifier_no_network">Немає мережевого з`єднання</string>
-    <string name="download_notifier_download_paused">Завантаження призупинено</string>
+    <string name="download_notifier_download_paused_chapters">Завантаження призупинено</string>
     <string name="channel_common">Звичайний</string>
     <string name="pref_read_with_long_tap">Показувати при довгому натисканні</string>
     <string name="action_open_in_web_view">Відкрити у WebView</string>
@@ -357,7 +357,7 @@
     <string name="pref_cutout_short">Відображати вміст обітнутої області</string>
     <string name="information_cloudflare_bypass_failure">Не вдалось обійти Cloudflare</string>
     <string name="information_webview_outdated">Будь ласка, оновіть WebView для кращої сумісності</string>
-    <string name="channel_new_chapters">Оновлення глав</string>
+    <string name="channel_new_chapters_episodes">Оновлення глав</string>
     <string name="unlock_app">Відчинити Aniyomi</string>
     <string name="secure_screen_summary">Ховати вміст застосунку при перемиканні програм та блокувати скріншоти</string>
     <string name="pref_category_display">Відображення</string>

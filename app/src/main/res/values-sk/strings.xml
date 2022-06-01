@@ -242,8 +242,8 @@
     <string name="source_not_installed">Zdroj nie je nainštalovaný: %1$s</string>
     <string name="display_mode_chapter">Kapitola %1$s</string>
     <string name="chapter_downloading_progress">Sťahovanie (%1$d/%2$d)</string>
-    <string name="chapter_error">Chyba</string>
-    <string name="chapter_paused">Pozastavené</string>
+    <string name="download_error">Chyba</string>
+    <string name="download_paused">Pozastavené</string>
     <string name="show_title">Zobraziť názov</string>
     <string name="show_chapter_number">Číslo kapitoly</string>
     <string name="sorting_mode">Režim triedenia</string>
@@ -321,7 +321,7 @@
     <string name="download_notifier_unknown_error">Kapitolu sa nepodarilo stiahnuť z dôvodu neočakávanej chyby</string>
     <string name="download_notifier_text_only_wifi">WiFi pripojenie nie je dostupné</string>
     <string name="download_notifier_no_network">Sieťové pripojenie nie je dostupné</string>
-    <string name="download_notifier_download_paused">Sťahovanie bolo pozastavené</string>
+    <string name="download_notifier_download_paused_chapters">Sťahovanie bolo pozastavené</string>
     <string name="channel_common">Bežný</string>
     <string name="no_results_found">Neboli nájdené žiadne výsledky</string>
     <string name="migration_selection_prompt">Vyberte zdroj zo ktorého chcete migrovat</string>

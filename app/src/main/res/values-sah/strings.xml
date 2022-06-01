@@ -393,8 +393,8 @@
     <string name="sorting_mode">Суортуур эрэһиимэ</string>
     <string name="show_chapter_number">Түһүмэх нүөмэрэ</string>
     <string name="show_title">Төрүт аата</string>
-    <string name="chapter_paused">Тохтотулунна</string>
-    <string name="chapter_error">Сыыһааһын</string>
+    <string name="download_paused">Тохтотулунна</string>
+    <string name="download_error">Сыыһааһын</string>
     <string name="chapter_downloading_progress">Хачайдааһын (%1$d/%2$d)</string>
     <string name="display_mode_chapter">Түһүмэх %1$s</string>
     <string name="snack_add_to_library">Маанганы Бэбэлэтиэкэҕэ киллэрэбит дуу\?</string>

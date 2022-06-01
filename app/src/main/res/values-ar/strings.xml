@@ -191,8 +191,8 @@
     <string name="delete_downloads_for_manga">حذف الفصول المنزلة؟</string>
     <string name="display_mode_chapter">الفصل %1$s</string>
     <string name="chapter_downloading_progress">جاري التنزيل (%1$d/%2$d)</string>
-    <string name="chapter_error">خطأ</string>
-    <string name="chapter_paused">متوقّف</string>
+    <string name="download_error">خطأ</string>
+    <string name="download_paused">متوقّف</string>
     <string name="show_title">عنوان المصدر</string>
     <string name="show_chapter_number">رقم الفصل</string>
     <string name="sorting_mode">وضع الفرز</string>
@@ -251,7 +251,7 @@
     <string name="download_notifier_unknown_error">فشل تنزيل الفصل بسبب حدوث خطأ غير متوقع</string>
     <string name="download_notifier_text_only_wifi">لا يتوفر اتصال واي فاي</string>
     <string name="download_notifier_no_network">لا يتوفر اتصال بالشبكة</string>
-    <string name="download_notifier_download_paused">تم إيقاف التنزيل مؤقتاً</string>
+    <string name="download_notifier_download_paused_chapters">تم إيقاف التنزيل مؤقتاً</string>
     <string name="channel_common">عامٌّ</string>
     <string name="label_migration">نقل</string>
     <string name="label_extensions">الإضافات</string>
@@ -384,7 +384,7 @@
     <string name="action_select_inverse">عكس التحديد</string>
     <string name="confirm_exit">اضغط رجوع مرة أخرى للخروج</string>
     <string name="channel_ext_updates">تحديثات اﻹضافات</string>
-    <string name="channel_new_chapters">تحديثات الفصول</string>
+    <string name="channel_new_chapters_episodes">تحديثات الفصول</string>
     <string name="information_webview_outdated">يرجى تحديث تطبيق WebView لتوافق أفضل</string>
     <string name="information_webview_required">يتطلب Tachiyomi وجود WebView</string>
     <string name="information_cloudflare_bypass_failure">فشل في تجاوز Cloudflare</string>

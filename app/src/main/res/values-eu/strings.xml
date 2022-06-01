@@ -168,7 +168,7 @@
     <string name="delete_downloads_for_manga">Deskargatutako kapituluak ezabatu nahi dituzu\?</string>
     <string name="copied_to_clipboard">Arbelean kopiatu da:
 \n%1$s</string>
-    <string name="chapter_paused">Gelditurik</string>
+    <string name="download_paused">Gelditurik</string>
     <string name="show_chapter_number">Kapituluaren zenbakia</string>
     <string name="sorting_mode">Ordenatzeko modua</string>
     <string name="custom_download">Deskargatu kopuru pertsonalizatua</string>
@@ -241,7 +241,7 @@
     <string name="download_notifier_downloader_title">Deskargatzailea</string>
     <string name="download_notifier_unknown_error">Ezin izan da kapitulua deskargatu ustekabeko errore baten ondorioz</string>
     <string name="download_notifier_no_network">Ez dago sare-konexiorik erabilgarri</string>
-    <string name="channel_new_chapters">Kapituluaren eguneraketak</string>
+    <string name="channel_new_chapters_episodes">Kapituluaren eguneraketak</string>
     <string name="channel_app_updates">Aplikazioen eguneraketak</string>
     <string name="spen_next_page">Hurrengo orrialdea</string>
     <string name="channel_ext_updates">Luzapenen eguneraketak</string>
@@ -335,7 +335,7 @@
     <string name="download_insufficient_space">Ezin izan dira kapituluak deskargatu memorian leku gutxi dagoelako</string>
     <string name="notification_updating">Liburutegia eguneratzen… (%1$d/%2$d)</string>
     <string name="notification_size_warning">Eguneratze handiek bateriaren erabilera areagotzea eta iturriak motelagoak izatea eragin dezakete</string>
-    <string name="download_notifier_download_paused">Deskarga pausatu da</string>
+    <string name="download_notifier_download_paused_chapters">Deskarga pausatu da</string>
     <string name="pref_low">Baxua</string>
     <string name="pref_lowest">Baxuena</string>
     <string name="pref_download_new">Deskargatu kapitulu berriak</string>
@@ -405,7 +405,7 @@
 \n
 \nFalta diren luzapenak instalatu eta jarraipen-zerbitzuetan saioa hasi beharko duzu ondoren horiek erabiltzeko.</string>
     <string name="chapter_downloading_progress">Deskargatzen (%1$d/%2$d)</string>
-    <string name="chapter_error">Errorea</string>
+    <string name="download_error">Errorea</string>
     <string name="also_set_chapter_settings_for_library">Nire liburutegiko manga guztietan ere aplikatu</string>
     <string name="manga_removed_library">Liburutegitik kendua</string>
     <string name="manga_info_collapse">Gutxiago</string>

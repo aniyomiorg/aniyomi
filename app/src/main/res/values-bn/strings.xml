@@ -193,8 +193,8 @@
     <string name="delete_downloads_for_manga">ডাউনলোডকৃত অধ্যায়গুলো মুছে ফেলতে চান?</string>
     <string name="display_mode_chapter">অধ্যায় %1$s</string>
     <string name="chapter_downloading_progress">ডাউনলোড হচ্ছে (%1$d/%2$d)</string>
-    <string name="chapter_error">ত্রুটি</string>
-    <string name="chapter_paused">থেমে আছে</string>
+    <string name="download_error">ত্রুটি</string>
+    <string name="download_paused">থেমে আছে</string>
     <string name="show_title">উৎস শিরোনাম</string>
     <string name="show_chapter_number">অধ্যায় নাম্বার</string>
     <string name="sorting_mode">সাজানোর রূপ</string>
@@ -254,7 +254,7 @@
     <string name="download_notifier_unknown_error">অপ্রত্যাশিত ত্রুটির কারণে অধ্যায় ডাউনলোড করা যায়নি</string>
     <string name="download_notifier_text_only_wifi">কোন ওয়াই-ফাই সংযোগ খুঁজে পাওয়া যায়নি</string>
     <string name="download_notifier_no_network">কোন নেটওয়ার্ক সংযোগ খুঁজে পাওয়া যায়নি</string>
-    <string name="download_notifier_download_paused">ডাউনলোড বিরতি</string>
+    <string name="download_notifier_download_paused_chapters">ডাউনলোড বিরতি</string>
     <string name="channel_common">সাধারণ</string>
     <string name="label_migration">স্থানান্তর করুন</string>
     <string name="label_extensions">এক্সটেনশন গুলো</string>
@@ -446,7 +446,7 @@
     <string name="tapping_inverted_none">কিছুই না</string>
     <string name="pref_read_with_tapping_inverted">উল্টানো ট্যাপিং</string>
     <string name="channel_ext_updates">এক্সটেনশনের হালনাগাদগুলো</string>
-    <string name="channel_new_chapters">অধ্যায়ের হালনাগাদগুলো</string>
+    <string name="channel_new_chapters_episodes">অধ্যায়ের হালনাগাদগুলো</string>
     <string name="channel_errors">ত্রুটিসমূহ</string>
     <string name="channel_complete">সম্পূর্ণ</string>
     <string name="channel_progress">অগ্রগতি</string>

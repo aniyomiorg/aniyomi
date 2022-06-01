@@ -169,8 +169,8 @@
     <!-- Manga chapters fragment -->
     <string name="display_mode_chapter">Chương %1$s</string>
     <string name="chapter_downloading_progress">Đang tải xuống (%1$d/%2$d)</string>
-    <string name="chapter_error">Lỗi</string>
-    <string name="chapter_paused">Đã tạm dừng</string>
+    <string name="download_error">Lỗi</string>
+    <string name="download_paused">Đã tạm dừng</string>
     <string name="show_title">Tiêu đề nguồn</string>
     <string name="show_chapter_number">Số chương</string>
     <string name="sorting_mode">Sắp xếp</string>
@@ -246,7 +246,7 @@
     <string name="download_notifier_unknown_error">Đã xảy ra lỗi khi tải xuống chương này</string>
     <string name="download_notifier_text_only_wifi">Không có kết nối Wi-fi</string>
     <string name="download_notifier_no_network">Không có kết nối mạng</string>
-    <string name="download_notifier_download_paused">Tải xuống đã tạm dừng</string>
+    <string name="download_notifier_download_paused_chapters">Tải xuống đã tạm dừng</string>
     <string name="categories">Hạng mục</string>
     <string name="manga">Manga</string>
     <string name="track">Theo dõi</string>
@@ -492,7 +492,7 @@
     <string name="channel_crash_logs">Logs lỗi</string>
     <string name="spen_next_page">Trang tiếp theo</string>
     <string name="badges_header">Huy hiệu</string>
-    <string name="channel_new_chapters">Cập nhật chương</string>
+    <string name="channel_new_chapters_episodes">Cập nhật chương</string>
     <string name="chapter_settings_updated">Đã cập nhật tuỳ chỉnh mặc định cho chương</string>
     <string name="channel_errors">Lỗi</string>
     <string name="channel_complete">Hoàn thành</string>

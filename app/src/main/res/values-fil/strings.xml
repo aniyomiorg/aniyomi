@@ -283,9 +283,9 @@
     <string name="tapping_inverted_horizontal">Pahiga</string>
     <string name="channel_ext_updates">Mga update sa dugtong</string>
     <string name="tapping_inverted_none">Wala</string>
-    <string name="channel_new_chapters">Mga update sa kabanata</string>
+    <string name="channel_new_chapters_episodes">Mga update sa kabanata</string>
     <string name="channel_common">Komon</string>
-    <string name="download_notifier_download_paused">Nakahinto ang pag-download</string>
+    <string name="download_notifier_download_paused_chapters">Nakahinto ang pag-download</string>
     <string name="download_notifier_no_network">Walang koneksyon sa Internet</string>
     <string name="download_notifier_text_only_wifi">Walang koneksyon sa Wifi</string>
     <string name="download_notifier_unknown_error">Di ma-download ang kabanata dahil sa isang di-inaasahang error</string>
@@ -393,8 +393,8 @@
     <string name="sorting_mode">Pag-ayos</string>
     <string name="show_title">Pangalan ng source</string>
     <string name="show_chapter_number">Kabanata</string>
-    <string name="chapter_paused">Nakahinto</string>
-    <string name="chapter_error">Nagka-error</string>
+    <string name="download_paused">Nakahinto</string>
+    <string name="download_error">Nagka-error</string>
     <string name="chapter_downloading_progress">Dina-download (%1$d/%2$d)</string>
     <string name="display_mode_chapter">Kabanata %1$s</string>
     <string name="snack_add_to_library">Idagdag ang manga sa Aklatan\?</string>

@@ -188,8 +188,8 @@
     <string name="source_not_installed">소스 미설치: %1$s</string>
     <string name="display_mode_chapter">%1$s화</string>
     <string name="chapter_downloading_progress">다운로드 중 (%1$d/%2$d)</string>
-    <string name="chapter_error">오류</string>
-    <string name="chapter_paused">일시중지됨</string>
+    <string name="download_error">오류</string>
+    <string name="download_paused">일시중지됨</string>
     <string name="show_chapter_number">회차 번호</string>
     <string name="sorting_mode">정렬 모드</string>
     <string name="sort_by_source">소스 기준</string>
@@ -246,7 +246,7 @@
     <string name="download_notifier_downloader_title">다운로더</string>
     <string name="download_notifier_title_error">오류</string>
     <string name="download_notifier_unknown_error">다운로드 중에 예기치 않은 오류가 발생하였습니다</string>
-    <string name="download_notifier_download_paused">다운로드 일시중지됨</string>
+    <string name="download_notifier_download_paused_chapters">다운로드 일시중지됨</string>
     <string name="action_display_download_badge">다운로드된 회차</string>
     <string name="pref_update_only_non_completed">연재가 끝남</string>
     <string name="pref_auto_update_manga_sync">읽은 기록 동기화</string>
@@ -501,7 +501,7 @@
     <string name="learn_more">터치하여 자세히 알아보기</string>
     <string name="chapter_settings_updated">기본 회차 설정을 업데이트 했습니다</string>
     <string name="channel_skipped">건너뜀</string>
-    <string name="channel_new_chapters">회차 업데이트</string>
+    <string name="channel_new_chapters_episodes">회차 업데이트</string>
     <string name="include">포함: %s</string>
     <string name="label_background_activity">백그라운드 활동</string>
     <string name="pref_update_only_completely_read">안 읽은 회차가 있음</string>

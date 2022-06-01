@@ -261,9 +261,9 @@
     <string name="pref_library_update_interval">ನವೀಕರಣ ಆವರ್ತನ</string>
     <string name="pref_category_library_update">ನವೀಕರಣಗಳು</string>
     <string name="channel_ext_updates">ವಿಸ್ತರಣೆ ನವೀಕರಣಗಳು</string>
-    <string name="channel_new_chapters">ಅಧ್ಯಾಯ ನವೀಕರಣಗಳು</string>
+    <string name="channel_new_chapters_episodes">ಅಧ್ಯಾಯ ನವೀಕರಣಗಳು</string>
     <string name="channel_common">ಸಾಮಾನ್ಯ</string>
-    <string name="download_notifier_download_paused">ಡೌನ್‌ಲೋಡ್ ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
+    <string name="download_notifier_download_paused_chapters">ಡೌನ್‌ಲೋಡ್ ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
     <string name="download_notifier_no_network">ಯಾವುದೇ ನೆಟ್‌ವರ್ಕ್ ಸಂಪರ್ಕ ಲಭ್ಯವಿಲ್ಲ</string>
     <string name="download_notifier_text_only_wifi">ಯಾವುದೇ ವೈ-ಫೈ ಸಂಪರ್ಕ ಲಭ್ಯವಿಲ್ಲ</string>
     <string name="download_notifier_unknown_error">ಅನಿರೀಕ್ಷಿತ ದೋಷದಿಂದಾಗಿ ಅಧ್ಯಾಯವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ</string>
@@ -367,8 +367,8 @@
     <string name="sorting_mode">ವಿಂಗಡಿಸುವ ರೀತಿ</string>
     <string name="show_chapter_number">ಅಧ್ಯಾಯ ಸಂಖ್ಯೆ</string>
     <string name="show_title">ಮೂಲ ಶೀರ್ಷಿಕೆ</string>
-    <string name="chapter_paused">ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
-    <string name="chapter_error">ದೋಷ</string>
+    <string name="download_paused">ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
+    <string name="download_error">ದೋಷ</string>
     <string name="chapter_downloading_progress">ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ (%1$d/%2$d)</string>
     <string name="display_mode_chapter">ಅಧ್ಯಾಯ %1$s</string>
     <string name="snack_add_to_library">ಮಾಂಗಾವನ್ನು ಗ್ರಂಥಾಲಯಕ್ಕೆ ಸೇರಿಸುವುದೇ\?</string>

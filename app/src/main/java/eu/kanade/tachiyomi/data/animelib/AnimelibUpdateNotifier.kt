@@ -165,7 +165,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
             // Parent group notification
             notify(
                 Notifications.ID_NEW_CHAPTERS,
-                context.notification(Notifications.CHANNEL_NEW_CHAPTERS) {
+                context.notification(Notifications.CHANNEL_NEW_CHAPTERS_EPISODES) {
                     setContentTitle(context.getString(R.string.notification_new_episodes))
                     if (updates.size == 1 && !preferences.hideNotificationContent()) {
                         setContentText(updates.first().first.title.chop(NOTIF_TITLE_MAX_LEN))
@@ -209,7 +209,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
 
     private suspend fun createNewEpisodesNotification(anime: Anime, episodes: Array<Episode>): Notification {
         val icon = getAnimeIcon(anime)
-        return context.notification(Notifications.CHANNEL_NEW_CHAPTERS) {
+        return context.notification(Notifications.CHANNEL_NEW_CHAPTERS_EPISODES) {
             setContentTitle(anime.title)
 
             val description = getNewEpisodesDescription(episodes)
@@ -233,7 +233,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
             // Mark episodes as read action
             addAction(
                 R.drawable.ic_glasses_24dp,
-                context.getString(R.string.action_mark_as_read),
+                context.getString(R.string.action_mark_as_seen),
                 NotificationReceiver.markAsReadPendingBroadcast(
                     context,
                     anime,

@@ -126,8 +126,8 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      */
     fun onPaused() {
         with(progressNotificationBuilder) {
-            setContentTitle(context.getString(R.string.chapter_paused))
-            setContentText(context.getString(R.string.download_notifier_download_paused))
+            setContentTitle(context.getString(R.string.download_paused))
+            setContentText(context.getString(R.string.download_notifier_download_paused_episodes))
             setSmallIcon(R.drawable.ic_pause_24dp)
             setProgress(0, 0, false)
             setOngoing(false)

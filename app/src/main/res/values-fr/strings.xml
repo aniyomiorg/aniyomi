@@ -160,7 +160,7 @@
     <!-- Manga chapters fragment -->
     <string name="display_mode_chapter">Chapitre %1$s</string>
     <string name="chapter_downloading_progress">En téléchargement (%1$d/%2$d)</string>
-    <string name="chapter_error">Erreur</string>
+    <string name="download_error">Erreur</string>
     <string name="show_title">Titre de la source</string>
     <string name="show_chapter_number">Numéro de chapitre</string>
     <string name="sorting_mode">Mode de tri</string>
@@ -252,9 +252,9 @@
     <string name="app_not_available">Application indisponible</string>
     <string name="update_weekly">Chaque semaine</string>
     <string name="default_category">Catégorie par défaut</string>
-    <string name="download_notifier_download_paused">Téléchargement en pause</string>
+    <string name="download_notifier_download_paused_chapters">Téléchargement en pause</string>
     <string name="local_source">Source locale</string>
-    <string name="chapter_paused">En pause</string>
+    <string name="download_paused">En pause</string>
     <string name="action_open_log">Ouvrir le fichier</string>
     <string name="action_restore">Restaurer</string>
     <string name="pref_backup_directory">Dossier de sauvegarde</string>
@@ -389,7 +389,7 @@
     <string name="pref_cutout_short">Utiliser la zone de l\'encoche</string>
     <string name="information_cloudflare_bypass_failure">Impossible de contourner Cloudflare</string>
     <string name="information_webview_outdated">Veuillez mettre à jour l\'application WebView pour une meilleure compatibilité</string>
-    <string name="channel_new_chapters">Mises à jour des chapitres</string>
+    <string name="channel_new_chapters_episodes">Mises à jour des chapitres</string>
     <string name="unlock_app">Débloquer Aniyomi</string>
     <string name="secure_screen_summary">L\'écran sécurisé cache le contenu lors du changement d\'application et bloque les captures d\'écran</string>
     <string name="pref_category_display">Affichage</string>

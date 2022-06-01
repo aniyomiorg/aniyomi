@@ -135,7 +135,7 @@ internal class AnimeExtensionInstaller(private val context: Context) {
     fun installApk(downloadId: Long, uri: Uri) {
         when (val installer = installerPref.get()) {
             PreferenceValues.ExtensionInstaller.LEGACY -> {
-                val intent = Intent(context, ExtensionInstallActivity::class.java)
+                val intent = Intent(context, AnimeExtensionInstallActivity::class.java)
                     .setDataAndType(uri, APK_MIME)
                     .putExtra(EXTRA_DOWNLOAD_ID, downloadId)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -260,7 +260,7 @@ internal class AnimeExtensionInstaller(private val context: Context) {
 
     companion object {
         const val APK_MIME = "application/vnd.android.package-archive"
-        const val EXTRA_DOWNLOAD_ID = "ExtensionInstaller.extra.DOWNLOAD_ID"
+        const val EXTRA_DOWNLOAD_ID = "AnimeExtensionInstaller.extra.DOWNLOAD_ID"
         const val FILE_SCHEME = "file://"
     }
 }

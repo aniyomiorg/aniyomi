@@ -153,7 +153,7 @@ class NotificationReceiver : BroadcastReceiver() {
                     downloadChapters(urls, mangaId)
                 }
             }
-            // Download manga chapters
+            // Download anime episodes
             ACTION_DOWNLOAD_EPISODE -> {
                 val notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
                 if (notificationId > -1) {
@@ -227,7 +227,7 @@ class NotificationReceiver : BroadcastReceiver() {
             }
             context.startActivity(intent)
         } else {
-            context.toast(context.getString(R.string.chapter_error))
+            context.toast(context.getString(R.string.download_error))
         }
     }
 
@@ -248,7 +248,7 @@ class NotificationReceiver : BroadcastReceiver() {
             }
             context.startActivity(intent)
         } else {
-            context.toast(context.getString(R.string.chapter_error))
+            context.toast(context.getString(R.string.download_error))
         }
     }
 

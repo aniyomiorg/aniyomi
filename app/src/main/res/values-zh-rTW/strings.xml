@@ -144,8 +144,8 @@
     <string name="copied_to_clipboard">已複製至剪貼簿：
 \n「%1$s」</string>
     <string name="source_not_installed">來源未安裝：%1$s</string>
-    <string name="chapter_error">錯誤</string>
-    <string name="chapter_paused">已暫停</string>
+    <string name="download_error">錯誤</string>
+    <string name="download_paused">已暫停</string>
     <string name="manga_download">下載</string>
     <string name="snack_categories_deleted">已刪除分類</string>
     <string name="picture_saved">圖片已儲存</string>
@@ -163,7 +163,7 @@
     <string name="download_notifier_title_error">錯誤</string>
     <string name="download_notifier_text_only_wifi">沒有可用的 Wi-Fi 連線</string>
     <string name="download_notifier_no_network">尚未連接至網路</string>
-    <string name="download_notifier_download_paused">下載已暫停</string>
+    <string name="download_notifier_download_paused_chapters">下載已暫停</string>
     <string name="pref_library_columns">書櫃欄位數目</string>
     <string name="pref_page_transitions">翻頁轉場動畫</string>
     <string name="pref_crop_borders">邊緣裁剪</string>
@@ -409,7 +409,7 @@
     <string name="label_sources">來源</string>
     <string name="pref_webtoon_side_padding">頁緣留白</string>
     <string name="add_tracking">新增閱讀歷程</string>
-    <string name="channel_new_chapters">新刊發行</string>
+    <string name="channel_new_chapters_episodes">新刊發行</string>
     <string name="in_library">在書櫃中</string>
     <string name="viewer">閱讀模式</string>
     <string name="action_disable">停用</string>

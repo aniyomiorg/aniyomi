@@ -420,7 +420,7 @@
         <item quantity="other">%d एक्सटेनशन अपडेटहरु उपलब्ध छन्</item>
     </plurals>
     <string name="download_notifier_text_only_wifi">कुनै Wi-Fi जडान उपलब्ध छैन</string>
-    <string name="download_notifier_download_paused">डाउनलोड रोकियो</string>
+    <string name="download_notifier_download_paused_chapters">डाउनलोड रोकियो</string>
     <string name="download_notifier_no_network">कुनै नेटवर्क जडान उपलब्ध छैन</string>
     <string name="tracking_info">ट्र्याकिङ सेवाहरूमा अध्याय प्रगति अपडेट गर्न एकतर्फी सिङ्क। तिनीहरूको ट्र्याकिङ बटनबाट व्यक्तिगत माङ्गा प्रविष्टिहरूको लागि ट्र्याकिङ सेट अप गर्नुहोस्।</string>
     <string name="backup_restore_missing_trackers">ट्र्याकरहरूमा लगइन छैनन्:</string>
@@ -575,7 +575,7 @@
     <string name="clear_history_confirmation">तपाइँ पक्का हुनुहुन्छ\? सबै इतिहासहरू मेटिनेछन्।</string>
     <string name="transition_pages_error">पृष्टहरू लोड हुन असफल: %1$s</string>
     <string name="source_not_installed">स्रोत स्थापना नागरिएको: %1$s</string>
-    <string name="chapter_paused">रोकिएको</string>
+    <string name="download_paused">रोकिएको</string>
     <string name="chapter_downloading_progress">डाउनलोड गर्दै (%1$d/%2$d)</string>
     <string name="sort_by_number">अध्याय संख्या द्वारा</string>
     <string name="sort_by_upload_date">अपलोड मिति द्वारा</string>
@@ -630,7 +630,7 @@
     <string name="manga_cover">कभर</string>
     <string name="confirm_manga_add_duplicate">तपाईँको पुस्तकालयमा सोही नाम गरिएको श्रृंखला अर्कै (%1$s) स्रोतमा रहेको छ!
 \nके तपाईँ जारी राख्न चाहनुहुन्छ\?</string>
-    <string name="chapter_error">त्रुटि</string>
+    <string name="download_error">त्रुटि</string>
     <string name="show_title">स्रोत शीर्षक</string>
     <string name="sort_by_source">स्रोत द्वारा</string>
     <plurals name="num_trackers">
@@ -677,7 +677,7 @@
     <string name="description_cover">माङ्गा को कभर</string>
     <string name="file_picker_error">कुनै फाइल पिकर एप फेला परेन</string>
     <string name="update_check_confirm">डाउनलोड गर्नुहोस्</string>
-    <string name="channel_new_chapters">अध्याय अपडेटहरू</string>
+    <string name="channel_new_chapters_episodes">अध्याय अपडेटहरू</string>
     <string name="skipped_reason_completed">श्रृङ्खला पूरा भएकोले छोडियो</string>
     <string name="learn_more">अधिक जानकारी</string>
     <string name="update_check_no_new_updates">कुनै नयाँ अपडेटहरू उपलब्ध छैनन्</string>

@@ -165,7 +165,7 @@ class LibraryUpdateNotifier(private val context: Context) {
             // Parent group notification
             notify(
                 Notifications.ID_NEW_CHAPTERS,
-                context.notification(Notifications.CHANNEL_NEW_CHAPTERS) {
+                context.notification(Notifications.CHANNEL_NEW_CHAPTERS_EPISODES) {
                     setContentTitle(context.getString(R.string.notification_new_chapters))
                     if (updates.size == 1 && !preferences.hideNotificationContent()) {
                         setContentText(updates.first().first.title.chop(NOTIF_TITLE_MAX_LEN))
@@ -209,7 +209,7 @@ class LibraryUpdateNotifier(private val context: Context) {
 
     private suspend fun createNewChaptersNotification(manga: Manga, chapters: Array<Chapter>): Notification {
         val icon = getMangaIcon(manga)
-        return context.notification(Notifications.CHANNEL_NEW_CHAPTERS) {
+        return context.notification(Notifications.CHANNEL_NEW_CHAPTERS_EPISODES) {
             setContentTitle(manga.title)
 
             val description = getNewChaptersDescription(chapters)

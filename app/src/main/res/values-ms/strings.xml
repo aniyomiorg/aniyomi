@@ -192,8 +192,8 @@
     <string name="delete_downloads_for_manga">Padam bab-bab yang dimuat turun?</string>
     <string name="display_mode_chapter">Bab %1$s</string>
     <string name="chapter_downloading_progress">Memuat turun (%1$d/%2$d)</string>
-    <string name="chapter_error">Ralat</string>
-    <string name="chapter_paused">Ditangguh</string>
+    <string name="download_error">Ralat</string>
+    <string name="download_paused">Ditangguh</string>
     <string name="show_title">Tajuk sumber</string>
     <string name="show_chapter_number">Nombor bab</string>
     <string name="sorting_mode">Mod susunan</string>
@@ -253,7 +253,7 @@
     <string name="download_notifier_unknown_error">Ralat tidak diketahui ketika memuat turun bab</string>
     <string name="download_notifier_text_only_wifi">Tiada sambungan Wi-Fi yang tersedia</string>
     <string name="download_notifier_no_network">Tiada sambungan rangkaian tersedia</string>
-    <string name="download_notifier_download_paused">Muat turun dihentikan sebentar</string>
+    <string name="download_notifier_download_paused_chapters">Muat turun dihentikan sebentar</string>
     <string name="channel_common">Biasa</string>
     <string name="label_migration">Pindah sumber</string>
     <string name="label_extensions">Sambungan</string>
@@ -354,7 +354,7 @@
     <string name="pref_cutout_short">Tunjuk kandungan dalam kawasan bertakuk</string>
     <string name="information_cloudflare_bypass_failure">Gagal untuk memintas Cloudflare</string>
     <string name="information_webview_outdated">Sila kemas kini aplikasi WebView untuk keserasian yang lebih baik</string>
-    <string name="channel_new_chapters">Pengemaskinian bab</string>
+    <string name="channel_new_chapters_episodes">Pengemaskinian bab</string>
     <string name="unlock_app">Buka kunci Aniyomi</string>
     <string name="secure_screen_summary">Skrin selamat menyembunyikan kandungan aplikasi apabila menukar aplikasi dan sekat tangkapan skrin</string>
     <string name="pref_category_display">Paparan</string>

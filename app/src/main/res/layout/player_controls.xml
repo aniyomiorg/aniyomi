@@ -394,7 +394,7 @@
             android:layout_width="30dp"
             android:layout_height="20dp"
             android:layout_marginTop="5dp"
-            android:src="@drawable/ic_volume_high_24dp"
+            android:src="@drawable/ic_volume_on_24dp"
             app:tint="#FFFFFF"
             tools:ignore="ContentDescription" />
 

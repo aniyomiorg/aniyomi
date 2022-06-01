@@ -164,7 +164,7 @@
     <!-- Manga chapters fragment -->
     <string name="display_mode_chapter">Capitolo %1$s</string>
     <string name="chapter_downloading_progress">Scaricando (%1$d/%2$d)</string>
-    <string name="chapter_error">Errore</string>
+    <string name="download_error">Errore</string>
     <string name="show_title">Titolo della fonte</string>
     <string name="show_chapter_number">Numero del capitolo</string>
     <string name="sorting_mode">Modalità di ordinamento</string>
@@ -274,10 +274,10 @@
     <string name="no_more_results">Nessun altro risultato</string>
     <string name="local_source">Fonte locale</string>
     <string name="delete_downloads_for_manga">Eliminare i capitoli scaricati?</string>
-    <string name="chapter_paused">In pausa</string>
+    <string name="download_paused">In pausa</string>
     <string name="manga_tracking_tab">Tracking</string>
     <string name="snack_add_to_library">Aggiungere manga alla libreria\?</string>
-    <string name="download_notifier_download_paused">Download in pausa</string>
+    <string name="download_notifier_download_paused_chapters">Download in pausa</string>
     <string name="label_migration">Migra</string>
     <string name="label_extensions">Estensioni</string>
     <string name="label_extension_info">Informazioni estensione</string>
@@ -388,7 +388,7 @@
     <string name="pref_cutout_short">Mostra il contenuto dell\'area ritagliata</string>
     <string name="information_cloudflare_bypass_failure">Impossibile bypassare Cloudflare</string>
     <string name="information_webview_outdated">Per favore aggiorna l\'app WebView per una migliore compatibilità</string>
-    <string name="channel_new_chapters">Aggiornamenti capitoli</string>
+    <string name="channel_new_chapters_episodes">Aggiornamenti capitoli</string>
     <string name="unlock_app">Sblocca Aniyomi</string>
     <string name="secure_screen_summary">Schermo sicuro nasconde i contenuti dell\'app quando cambi applicazione e blocca gli screenshot</string>
     <string name="pref_category_display">Visualizzazione</string>

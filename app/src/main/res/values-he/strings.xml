@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="channel_ext_updates">עדכונים לתוסף</string>
-    <string name="channel_new_chapters">עדכונים לפרק</string>
+    <string name="channel_new_chapters_episodes">עדכונים לפרק</string>
     <string name="channel_common">נפוץ</string>
-    <string name="download_notifier_download_paused">ההורדה מושהית</string>
+    <string name="download_notifier_download_paused_chapters">ההורדה מושהית</string>
     <string name="download_notifier_no_network">אין חיבור רשת זמין</string>
     <string name="download_notifier_text_only_wifi">אין חיבור Wi-Fi זמין</string>
     <string name="download_notifier_unknown_error">לא ניתן היה להוריד את הפרק בגלל שגיאה בלתי צפויה</string>
@@ -108,8 +108,8 @@
     <string name="sorting_mode">מצב מיון</string>
     <string name="show_chapter_number">מספר פרק</string>
     <string name="show_title">כותרת</string>
-    <string name="chapter_paused">מושהה</string>
-    <string name="chapter_error">שגיאה</string>
+    <string name="download_paused">מושהה</string>
+    <string name="download_error">שגיאה</string>
     <string name="chapter_downloading_progress">מוריד (%1$d/%2$d)</string>
     <string name="display_mode_chapter">פרקים %1$s</string>
     <string name="snack_add_to_library">להוסיף מאנגה לספרייה\?</string>

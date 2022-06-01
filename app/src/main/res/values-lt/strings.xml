@@ -462,13 +462,13 @@
     <string name="logout_success">Dabar esate atsijungęs</string>
     <string name="invalid_login">Nepavyko prisijungti</string>
     <string name="set_as_cover">Nustatyti kaip viršelį</string>
-    <string name="chapter_paused">Pristabdyta</string>
+    <string name="download_paused">Pristabdyta</string>
     <string name="source_not_installed">Šaltinis neįdiegtas: %1$s</string>
     <string name="snack_add_to_library">Pridėti manga į biblioteką\?</string>
     <string name="track_type">Тipas</string>
     <string name="track_started_reading_date">Pradžios data</string>
     <string name="display_mode_chapter">Skyrius %1$s</string>
-    <string name="chapter_error">Klaida</string>
+    <string name="download_error">Klaida</string>
     <string name="sorting_mode">Rūšiavimo režimas</string>
     <string name="login_success">Prisijungęs</string>
     <string name="unknown_error">Nežinoma klaida</string>
