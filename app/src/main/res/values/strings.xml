@@ -503,7 +503,7 @@
     <string name="fourth_to_last">Fourth to last read chapter</string>
     <string name="fifth_to_last">Fifth to last read chapter</string>
     <string name="pref_category_auto_download">Auto-download</string>
-    <string name="pref_category_anime_download">Anime downloads</string>
+    <string name="pref_category_external_downloader">External downloader</string>
     <string name="pref_use_external_downloader">Always use external downloader for anime</string>
     <string name="pref_external_downloader_selection">Downloader app preference</string>
     <string name="pref_download_new">Download new chapters/episodes</string>

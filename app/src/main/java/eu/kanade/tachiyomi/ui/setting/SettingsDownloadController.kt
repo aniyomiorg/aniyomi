@@ -246,7 +246,7 @@ class SettingsDownloadController : SettingsController() {
             }
         }
         preferenceCategory {
-            titleRes = R.string.pref_category_anime_download
+            titleRes = R.string.pref_category_external_downloader
             switchPreference {
                 key = Keys.useExternalDownloader
                 titleRes = R.string.pref_use_external_downloader
