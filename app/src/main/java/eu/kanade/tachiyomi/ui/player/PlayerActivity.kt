@@ -1080,7 +1080,7 @@ class PlayerActivity :
             setHttpOptions(it)
             presenter.currentEpisode?.let { episode ->
                 if (episode.seen && !preferences.preserveWatchingPosition()) episode.last_second_seen = 1L
-                MPVLib.command(arrayOf("set", "start", "${(episode.last_second_seen / 1000F)}"))
+                MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
             }
             subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
