@@ -4,6 +4,7 @@ import android.content.Context
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.download.DownloadManager
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.online.HttpSource
@@ -13,6 +14,7 @@ import rx.Completable
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import uy.kohesive.injekt.injectLazy
 
 /**
  * Loader used to retrieve the [PageLoader] for a given chapter.
@@ -23,6 +25,8 @@ class ChapterLoader(
     private val manga: Manga,
     private val source: Source,
 ) {
+
+    private val preferences: PreferencesHelper by injectLazy()
 
     /**
      * Returns a completable that assigns the page loader and loads the its pages. It just
@@ -57,7 +61,7 @@ class ChapterLoader(
 
                 // If the chapter is partially read, set the starting page to the last the user read
                 // otherwise use the requested page.
-                if (!chapter.chapter.read) {
+                if (!chapter.chapter.read || preferences.preserveReadingPosition()) {
                     chapter.requestedPage = chapter.chapter.last_page_read
                 }
             }

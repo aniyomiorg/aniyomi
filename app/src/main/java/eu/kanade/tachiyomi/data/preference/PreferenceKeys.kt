@@ -11,6 +11,10 @@ object PreferenceKeys {
 
     const val defaultReadingMode = "pref_default_reading_mode_key"
 
+    const val preserveReadingPosition = "pref_preserve_reading_position"
+
+    const val preserveWatchingPosition = "pref_preserve_watching_position"
+
     const val pipEpisodeToasts = "pref_pip_episode_toasts"
 
     const val mpvConf = "pref_mpv_conf"

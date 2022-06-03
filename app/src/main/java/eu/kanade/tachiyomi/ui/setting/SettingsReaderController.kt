@@ -39,6 +39,7 @@ class SettingsReaderController : SettingsController() {
             defaultValue = "${ReadingModeType.RIGHT_TO_LEFT.flagValue}"
             summary = "%s"
         }
+
         intListPreference {
             bindTo(preferences.doubleTapAnimSpeed())
             titleRes = R.string.pref_double_tap_anim_speed
@@ -135,6 +136,11 @@ class SettingsReaderController : SettingsController() {
             switchPreference {
                 bindTo(preferences.alwaysShowChapterTransition())
                 titleRes = R.string.pref_always_show_chapter_transition
+            }
+            switchPreference {
+                key = Keys.preserveReadingPosition
+                titleRes = R.string.pref_preserve_reading_position
+                defaultValue = false
             }
         }
 

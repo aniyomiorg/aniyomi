@@ -79,6 +79,10 @@ class PreferencesHelper(val context: Context) {
 
     fun themeDarkAmoled() = flowPrefs.getBoolean("pref_theme_dark_amoled_key", false)
 
+    fun preserveReadingPosition() = prefs.getBoolean(Keys.preserveReadingPosition, false)
+
+    fun preserveWatchingPosition() = prefs.getBoolean(Keys.preserveWatchingPosition, false)
+
     fun pageTransitions() = flowPrefs.getBoolean("pref_enable_transitions_key", true)
 
     fun doubleTapAnimSpeed() = flowPrefs.getInt("pref_double_tap_anim_speed", 500)

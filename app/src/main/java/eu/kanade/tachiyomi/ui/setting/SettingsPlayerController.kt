@@ -50,6 +50,12 @@ class SettingsPlayerController : SettingsController() {
             summary = "%s"
         }
 
+        switchPreference {
+            key = Keys.preserveWatchingPosition
+            titleRes = R.string.pref_preserve_watching_position
+            defaultValue = false
+        }
+
         preferenceCategory {
             titleRes = R.string.pref_category_player_orientation
 

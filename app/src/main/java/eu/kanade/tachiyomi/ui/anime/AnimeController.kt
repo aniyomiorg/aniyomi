@@ -1433,7 +1433,6 @@ class AnimeController :
                     episode.total_seconds = totalSeconds
                     val progress = preferences.progressPreference()
                     if (!episode.seen) episode.seen = episode.last_second_seen >= episode.total_seconds * progress
-                    if (episode.seen) episode.last_second_seen = 0L
                     val episodes = listOf(EpisodeItem(episode, anime))
                     launchIO {
                         db.updateEpisodesProgress(episodes).executeAsBlocking()
