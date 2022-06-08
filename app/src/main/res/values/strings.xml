@@ -371,6 +371,7 @@
     <string name="pref_keep_screen_on">Keep screen on</string>
     <string name="pref_skip_read_chapters">Skip chapters marked read</string>
     <string name="pref_skip_filtered_chapters">Skip filtered chapters</string>
+    <string name="pref_preserve_reading_position">Preserve reading position on read chapters</string>
     <string name="pref_reader_navigation">Navigation</string>
     <string name="pref_read_with_volume_keys">Volume keys</string>
     <string name="pref_read_with_volume_keys_inverted">Invert volume keys</string>
@@ -455,6 +456,14 @@
     <string name="pref_category_player">Player</string>
     <string name="pref_category_progress">Progress</string>
     <string name="pref_progress_mark_as_seen">At what point to mark the episode as seen</string>
+    <string name="pref_progress_70">70%</string>
+    <string name="pref_progress_75">75%</string>
+    <string name="pref_progress_80">80%</string>
+    <string name="pref_progress_85">85%</string>
+    <string name="pref_progress_90">90%</string>
+    <string name="pref_progress_95">95%</string>
+    <string name="pref_progress_100">100%</string>
+    <string name="pref_preserve_watching_position">Preserve watch position on seen episodes</string>
     <string name="pref_category_player_orientation">Orientation</string>
     <string name="pref_default_player_orientation">Default orientation</string>
     <string name="pref_adjust_orientation_video_dimensions">Adjust the orientation based on a video\'s dimensions</string>
@@ -475,13 +484,6 @@
     <string name="pref_category_external_player">External player</string>
     <string name="pref_always_use_external_player">Always use external player</string>
     <string name="pref_external_player_preference">External player preference</string>
-    <string name="pref_progress_70">70%</string>
-    <string name="pref_progress_75">75%</string>
-    <string name="pref_progress_80">80%</string>
-    <string name="pref_progress_85">85%</string>
-    <string name="pref_progress_90">90%</string>
-    <string name="pref_progress_95">95%</string>
-    <string name="pref_progress_100">100%</string>
     <string name="playertitle">%1$s - %2$s</string>
 
       <!-- Downloads section -->
@@ -503,7 +505,7 @@
     <string name="fourth_to_last">Fourth to last read chapter</string>
     <string name="fifth_to_last">Fifth to last read chapter</string>
     <string name="pref_category_auto_download">Auto-download</string>
-    <string name="pref_category_anime_download">Anime downloads</string>
+    <string name="pref_category_external_downloader">External downloader</string>
     <string name="pref_use_external_downloader">Always use external downloader for anime</string>
     <string name="pref_external_downloader_selection">Downloader app preference</string>
     <string name="pref_download_new">Download new chapters/episodes</string>

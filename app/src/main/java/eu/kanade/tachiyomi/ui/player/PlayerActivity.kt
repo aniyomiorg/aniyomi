@@ -1078,9 +1078,9 @@ class PlayerActivity :
         currentVideoList = videos
         currentVideoList?.firstOrNull()?.let {
             setHttpOptions(it)
-            presenter.currentEpisode?.last_second_seen?.let { pos ->
-                val intPos = pos / 1000F
-                MPVLib.command(arrayOf("set", "start", "$intPos"))
+            presenter.currentEpisode?.let { episode ->
+                if (episode.seen && !preferences.preserveWatchingPosition()) episode.last_second_seen = 1L
+                MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
             }
             subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
@@ -1278,6 +1278,7 @@ class PlayerActivity :
     override fun event(eventId: Int) {
         when (eventId) {
             MPVLib.mpvEventId.MPV_EVENT_FILE_LOADED -> fileLoaded()
+            MPVLib.mpvEventId.MPV_EVENT_START_FILE -> launchUI { refreshUi() }
         }
     }
 }
