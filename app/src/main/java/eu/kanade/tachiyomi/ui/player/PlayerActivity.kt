@@ -299,7 +299,8 @@ class PlayerActivity :
         toggleAutoplay(preferences.autoplayEnabled().get())
 
         setMpvConf()
-        player.initialize(applicationContext.filesDir.path)
+        val logLevel = if (preferences.verboseLogging()) "v" else "warn"
+        player.initialize(applicationContext.filesDir.path, logLevel)
         MPVLib.setOptionString("keep-open", "always")
         player.addObserver(this)
 
@@ -508,6 +509,13 @@ class PlayerActivity :
     private fun showLoadingIndicator(visible: Boolean) {
         playerControls.binding.playBtn.isVisible = !visible
         binding.loadingIndicator.isVisible = visible
+    }
+
+    private fun isSeeking(seeking: Boolean) {
+        val position = player.timePos ?: return
+        val cachePosition = MPVLib.getPropertyInt("demuxer-cache-time") ?: -1
+        logcat { "pos: $position, cache: $cachePosition" }
+        showLoadingIndicator(position >= cachePosition && seeking)
     }
 
     internal fun setSub(index: Int) {
@@ -1235,6 +1243,7 @@ class PlayerActivity :
 
     private fun eventPropertyUi(property: String, value: Long) {
         when (property) {
+            "demuxer-cache-time" -> playerControls.updateBufferPosition(value.toInt())
             "time-pos" -> playerControls.updatePlaybackPos(value.toInt())
             "duration" -> playerControls.updatePlaybackDuration(value.toInt())
         }
@@ -1245,6 +1254,8 @@ class PlayerActivity :
     @Suppress("DEPRECATION")
     private fun eventPropertyUi(property: String, value: Boolean) {
         when (property) {
+            "seeking" -> isSeeking(value)
+            "paused-for-cache" -> showLoadingIndicator(value)
             "pause" -> {
                 if (!isFinishing) {
                     setAudioFocus(value)
@@ -1279,6 +1290,14 @@ class PlayerActivity :
         when (eventId) {
             MPVLib.mpvEventId.MPV_EVENT_FILE_LOADED -> fileLoaded()
             MPVLib.mpvEventId.MPV_EVENT_START_FILE -> launchUI { refreshUi() }
+        }
+    }
+
+    override fun efEvent(err: String?) {
+        logcat(LogPriority.ERROR) { err ?: "Error: File ended" }
+        runOnUiThread {
+            showLoadingIndicator(false)
+            toast(err ?: "Error: File ended")
         }
     }
 }

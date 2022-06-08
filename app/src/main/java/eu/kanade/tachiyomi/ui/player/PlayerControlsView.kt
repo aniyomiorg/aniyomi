@@ -161,6 +161,10 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
+    internal fun updateBufferPosition(duration: Int) {
+        binding.playbackSeekbar.secondaryProgress = duration
+    }
+
     internal fun updateDecoderButton() {
         if (binding.cycleDecoderBtn.visibility != View.VISIBLE && binding.cycleDecoderBtn.visibility != View.VISIBLE) {
             return
