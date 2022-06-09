@@ -1173,11 +1173,11 @@ class PlayerActivity :
         MPVLib.setPropertyDouble("speed", preferences.getPlayerSpeed().toDouble())
         clearTracks()
         player.loadTracks()
-        subTracks += player.tracks.getValue("sub")
+        subTracks += player.tracks.getOrElse("sub") { emptyList() }
             .drop(1).map { track ->
                 Track(track.mpvId.toString(), track.name)
             }.toTypedArray()
-        audioTracks += player.tracks.getValue("audio")
+        audioTracks += player.tracks.getOrElse("audio") { emptyList() }
             .drop(1).map { track ->
                 Track(track.mpvId.toString(), track.name)
             }.toTypedArray()
@@ -1198,7 +1198,8 @@ class PlayerActivity :
                         MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.url))
                     }
                 } ?: run {
-                val mpvSub = player.tracks.getValue("sub").first { player.sid == it.mpvId }
+                val mpvSub = player.tracks.getOrElse("sub") { emptyList() }
+                    .first { player.sid == it.mpvId }
                 selectedSub = subTracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
                     .coerceAtLeast(0)
             }
@@ -1220,7 +1221,8 @@ class PlayerActivity :
                         MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
                     }
                 } ?: run {
-                val mpvAudio = player.tracks.getValue("audio").first { player.aid == it.mpvId }
+                val mpvAudio = player.tracks.getOrElse("audio") { emptyList() }
+                    .first { player.aid == it.mpvId }
                 selectedAudio = audioTracks.indexOfFirst { it.url == mpvAudio.mpvId.toString() }
                     .coerceAtLeast(0)
             }
