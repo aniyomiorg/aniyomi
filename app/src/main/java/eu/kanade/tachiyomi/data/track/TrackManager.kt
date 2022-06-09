@@ -40,4 +40,8 @@ class TrackManager(context: Context) {
     fun getService(id: Int) = services.find { it.id == id }
 
     fun hasLoggedServices() = services.any { it.isLogged }
+
+    fun hasLoggedMangaServices() = services.any { it.isLogged && it !is AnimeTrackService }
+
+    fun hasLoggedAnimeServices() = services.any { it.isLogged && it !is MangaTrackService }
 }

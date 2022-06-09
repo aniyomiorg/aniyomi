@@ -107,7 +107,7 @@ class AnimeInfoHeaderAdapter(
             }
 
             with(binding.btnTracking) {
-                if (trackManager.hasLoggedServices()) {
+                if (trackManager.hasLoggedAnimeServices()) {
                     isVisible = true
 
                     if (trackCount > 0) {

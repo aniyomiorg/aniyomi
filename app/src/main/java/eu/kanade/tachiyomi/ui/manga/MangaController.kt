@@ -46,7 +46,6 @@ import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.Location
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
@@ -575,7 +574,6 @@ class MangaController :
         if (source != null) {
             presenter.trackList
                 .map { it.service }
-                .filterNot { it is AnimeTrackService }
                 .filterIsInstance<EnhancedTrackService>()
                 .filter { it.accept(source!!) }
                 .forEach { service ->

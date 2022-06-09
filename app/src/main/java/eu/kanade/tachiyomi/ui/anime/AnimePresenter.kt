@@ -26,6 +26,7 @@ import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
+import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
@@ -114,7 +115,7 @@ class AnimePresenter(
     private var _trackList: List<TrackItem> = emptyList()
     val trackList get() = _trackList
 
-    private val loggedServices by lazy { trackManager.services.filter { it.isLogged } }
+    private val loggedServices by lazy { trackManager.services.filter { it.isLogged && it !is MangaTrackService } }
 
     private val imageSaver: ImageSaver by injectLazy()
 
@@ -191,7 +192,7 @@ class AnimePresenter(
     }
 
     private fun getTrackingObservable(): Observable<Int> {
-        if (!trackManager.hasLoggedServices()) {
+        if (!trackManager.hasLoggedAnimeServices()) {
             return Observable.just(0)
         }
 

@@ -107,7 +107,7 @@ class MangaInfoHeaderAdapter(
             }
 
             with(binding.btnTracking) {
-                if (trackManager.hasLoggedServices()) {
+                if (trackManager.hasLoggedMangaServices()) {
                     isVisible = true
 
                     if (trackCount > 0) {
