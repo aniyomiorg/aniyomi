@@ -776,6 +776,7 @@
     <string name="tracker_komga_warning">This tracker is only compatible with the Komga source.</string>
     <string name="tracker_bangumi" translatable="false">Bangumi</string>
     <string name="tracker_shikimori" translatable="false">Shikimori</string>
+    <string name="tracker_simkl" translatable="false">Simkl</string>
     <string name="tracker_manga_updates" translatable="false">MangaUpdates</string>
     <string name="manga_tracking_tab">Tracking</string>
     <plurals name="num_trackers">
@@ -790,6 +791,7 @@
     <string name="currently_watching">Currently watching</string>
     <string name="completed">Completed</string>
     <string name="dropped">Dropped</string>
+    <string name="not_interesting">Not interesting</string>
     <string name="on_hold">On hold</string>
     <string name="paused">Paused</string>
     <string name="plan_to_read">Plan to read</string>

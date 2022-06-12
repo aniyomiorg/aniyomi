@@ -188,6 +188,21 @@
                     android:scheme="tachiyomi" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.setting.track.SimklLoginActivity"
+            android:label="Simkl"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="simkl-auth"
+                    android:scheme="aniyomi" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".data.notification.NotificationReceiver"
