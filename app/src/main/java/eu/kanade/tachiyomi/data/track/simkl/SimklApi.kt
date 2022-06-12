@@ -11,7 +11,6 @@ import eu.kanade.tachiyomi.network.await
 import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.network.parseAs
 import eu.kanade.tachiyomi.util.lang.withIOContext
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
@@ -234,7 +233,6 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                         ?.jsonObject?.get("simkl")
                         ?.jsonPrimitive?.long == track.media_id
                 }?.jsonObject ?: return@withIOContext null
-            logcat { listAnime.toString() }
 
             jsonToAnimeTrack(listAnime, typeName, type, status)
         }

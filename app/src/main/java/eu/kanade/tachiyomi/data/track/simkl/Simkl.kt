@@ -10,7 +10,6 @@ import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -85,7 +84,6 @@ class Simkl(private val context: Context, id: Int) : TrackService(id), AnimeTrac
     }
 
     override suspend fun searchAnime(query: String): List<AnimeTrackSearch> {
-        logcat { getPassword() }
         return api.searchAnime(query, "anime") +
             api.searchAnime(query, "tv") +
             api.searchAnime(query, "movie")
