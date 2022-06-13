@@ -64,6 +64,8 @@ import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.more.NewUpdateDialogController
 import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
 import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
+import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
+import eu.kanade.tachiyomi.ui.recent.history.HistoryController
 import eu.kanade.tachiyomi.ui.setting.SettingsMainController
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
@@ -201,6 +203,22 @@ class MainActivity : BaseActivity() {
                     R.id.nav_animelib -> {
                         val controller = router.getControllerWithTag(id.toString()) as? AnimelibController
                         controller?.showSettingsSheet()
+                    }
+                    R.id.nav_history -> {
+                        if (router.backstackSize == 1) {
+                            try {
+                                when (router.backstack[0].controller) {
+                                    is HistoryController -> {
+                                        (router.backstack[0].controller as HistoryController).resumeLastChapterRead()
+                                    }
+                                    is AnimeHistoryController -> {
+                                        (router.backstack[0].controller as AnimeHistoryController).resumeLastEpisodeSeen()
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                toast(R.string.cant_open_last_read_chapter)
+                            }
+                        }
                     }
                     R.id.nav_more -> {
                         if (router.backstackSize == 1) {

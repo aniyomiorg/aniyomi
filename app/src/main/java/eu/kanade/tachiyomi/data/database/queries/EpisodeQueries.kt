@@ -10,7 +10,6 @@ import eu.kanade.tachiyomi.data.database.resolvers.AnimeEpisodeGetResolver
 import eu.kanade.tachiyomi.data.database.resolvers.EpisodeBackupPutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.EpisodeKnownBackupPutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.EpisodeProgressPutResolver
-import eu.kanade.tachiyomi.data.database.resolvers.EpisodeSourceOrderPutResolver
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable
 import java.util.Date
 
@@ -94,10 +93,5 @@ interface EpisodeQueries : DbProvider {
     fun updateEpisodesProgress(episodes: List<Episode>) = db.put()
         .objects(episodes)
         .withPutResolver(EpisodeProgressPutResolver())
-        .prepare()
-
-    fun fixEpisodesSourceOrder(episodes: List<Episode>) = db.put()
-        .objects(episodes)
-        .withPutResolver(EpisodeSourceOrderPutResolver())
         .prepare()
 }

@@ -281,7 +281,9 @@ class AnimeUpdatesController :
             } else {
                 AnimeController.setEpisodeProgress(currentExtEpisode, anime, currentPosition, duration)
             }
-            AnimeController.saveEpisodeHistory(EpisodeItem(currentExtEpisode, anime))
+            launchIO {
+                AnimeController.saveEpisodeHistory(EpisodeItem(currentExtEpisode, anime))
+            }
         }
     }
 

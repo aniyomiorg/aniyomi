@@ -7,6 +7,7 @@ import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.toSEpisode
+import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeCategory
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
@@ -17,12 +18,14 @@ import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchI
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchPresenter
 import eu.kanade.tachiyomi.ui.browse.migration.AnimeMigrationFlags
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
+import eu.kanade.tachiyomi.util.hasCustomCover
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.toast
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 import java.util.Date
 
 class AnimeSearchPresenter(
@@ -32,6 +35,7 @@ class AnimeSearchPresenter(
 
     private val replacingAnimeRelay = BehaviorRelay.create<Pair<Boolean, Anime?>>()
 
+    private val coverCache: AnimeCoverCache by injectLazy()
     private val enhancedServices by lazy { Injekt.get<TrackManager>().services.filterIsInstance<EnhancedTrackService>() }
 
     override fun onCreate(savedState: Bundle?) {
@@ -103,12 +107,16 @@ class AnimeSearchPresenter(
             AnimeMigrationFlags.hasTracks(
                 flags,
             )
+        val migrateCustomCover =
+            AnimeMigrationFlags.hasCustomCover(
+                flags,
+            )
 
         db.inTransaction {
             // Update episodes read
             if (migrateEpisodes) {
                 try {
-                    syncEpisodesWithSource(db, sourceEpisodes, anime, source)
+                    syncEpisodesWithSource(sourceEpisodes, anime, source)
                 } catch (e: Exception) {
                     // Worst case, episodes won't be synced
                 }
@@ -143,7 +151,7 @@ class AnimeSearchPresenter(
 
             // Update track
             if (migrateTracks) {
-                val tracksToUpdate = db.getTracks(prevAnime).executeAsBlocking().mapNotNull { track ->
+                val tracksToUpdate = db.getTracks(prevAnime.id).executeAsBlocking().mapNotNull { track ->
                     track.id = null
                     track.anime_id = anime.id!!
 
@@ -172,6 +180,11 @@ class AnimeSearchPresenter(
                 prevAnime.date_added = 0
             } else {
                 anime.date_added = Date().time
+            }
+
+            // Update custom cover
+            if (migrateCustomCover) {
+                coverCache.setCustomCoverToCache(anime, coverCache.getCustomCoverFile(prevAnime.id).inputStream())
             }
 
             // SearchPresenter#networkToLocalManga may have updated the manga title,

@@ -2,6 +2,10 @@ package eu.kanade.tachiyomi.ui.player
 
 import android.app.Application
 import android.os.Bundle
+import eu.kanade.domain.animehistory.interactor.UpsertAnimeHistory
+import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
+import eu.kanade.domain.episode.interactor.UpdateEpisode
+import eu.kanade.domain.episode.model.EpisodeUpdate
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -9,14 +13,12 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.AnimeHistory
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingUpdateJob
-import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.episode.getEpisodeSort
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -26,7 +28,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import logcat.LogPriority
 import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
@@ -38,6 +39,8 @@ class PlayerPresenter(
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val preferences: PreferencesHelper = Injekt.get(),
     private val delayedTrackingStore: DelayedTrackingStore = Injekt.get(),
+    private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
+    private val updateEpisode: UpdateEpisode = Injekt.get(),
 ) : BasePresenter<PlayerActivity>() {
     /**
      * The ID of the anime loaded in the player.
@@ -109,7 +112,7 @@ class PlayerPresenter(
 
     private var hasTrackers: Boolean = false
     private val checkTrackers: (Anime) -> Unit = { anime ->
-        val tracks = db.getTracks(anime).executeAsBlocking()
+        val tracks = db.getTracks(anime.id).executeAsBlocking()
 
         hasTrackers = tracks.size > 0
     }
@@ -263,20 +266,16 @@ class PlayerPresenter(
         return anime.title + " - " + episodeList[index - 1].name
     }
 
-    fun saveEpisodeHistory() {
+    suspend fun saveEpisodeHistory() {
         if (incognitoMode) return
-        val episode = currentEpisode ?: return
-        val history = AnimeHistory.create(episode).apply { last_seen = Date().time }
-        db.upsertAnimeHistoryLastSeen(history).asRxCompletable()
-            .onErrorComplete()
-            .subscribeOn(Schedulers.io())
-            .subscribe()
+        upsertHistory.await(
+            AnimeHistoryUpdate(episodeId, Date()),
+        )
     }
 
-    fun saveEpisodeProgress(pos: Int?, duration: Int?) {
+    suspend fun saveEpisodeProgress(pos: Int?, duration: Int?) {
         if (incognitoMode) return
         val episode = currentEpisode ?: return
-        val anime = anime ?: return
         val seconds = (pos ?: return) * 1000L
         val totalSeconds = (duration ?: return) * 1000L
         if (totalSeconds > 0L) {
@@ -284,16 +283,21 @@ class PlayerPresenter(
             episode.total_seconds = totalSeconds
             val progress = preferences.progressPreference()
             if (!episode.seen) episode.seen = episode.last_second_seen >= episode.total_seconds * progress
-            val episodes = listOf(EpisodeItem(episode, anime))
-            launchIO {
-                db.updateEpisodesProgress(episodes).executeAsBlocking()
-                if (preferences.autoUpdateTrack() && episode.seen) {
-                    updateTrackEpisodeSeen(episode)
-                }
-                if (episode.seen) {
-                    deleteEpisodeIfNeeded(episode)
-                    deleteEpisodeFromDownloadQueue(episode)
-                }
+            updateEpisode.await(
+                EpisodeUpdate(
+                    id = episode.id!!,
+                    seen = episode.seen,
+                    bookmark = episode.bookmark,
+                    lastSecondSeen = episode.last_second_seen,
+                    totalSeconds = episode.total_seconds,
+                ),
+            )
+            if (preferences.autoUpdateTrack() && episode.seen) {
+                updateTrackEpisodeSeen(episode)
+            }
+            if (episode.seen) {
+                deleteEpisodeIfNeeded(episode)
+                deleteEpisodeFromDownloadQueue(episode)
             }
         }
     }
@@ -346,7 +350,7 @@ class PlayerPresenter(
         val context = Injekt.get<Application>()
 
         launchIO {
-            db.getTracks(anime).executeAsBlocking()
+            db.getTracks(anime.id).executeAsBlocking()
                 .mapNotNull { track ->
                     val service = trackManager.getService(track.sync_id)
                     if (service != null && service.isLogged && episodeSeen > track.last_episode_seen) {

@@ -85,9 +85,9 @@ class EpisodesSettingsSheet(
             private val unread = Item.TriStateGroup(R.string.action_filter_unseen, this)
             private val bookmarked = Item.TriStateGroup(R.string.action_filter_bookmarked, this)
 
-            override val header = null
+            override val header: Item? = null
             override val items = listOf(downloaded, unread, bookmarked)
-            override val footer = null
+            override val footer: Item? = null
 
             override fun initModels() {
                 if (presenter.forceDownloaded()) {
@@ -138,9 +138,9 @@ class EpisodesSettingsSheet(
             private val episodeNum = Item.MultiSort(R.string.sort_by_episode_number, this)
             private val uploadDate = Item.MultiSort(R.string.sort_by_upload_date, this)
 
-            override val header = null
+            override val header: Item? = null
             override val items = listOf(source, uploadDate, episodeNum)
-            override val footer = null
+            override val footer: Item? = null
 
             override fun initModels() {
                 val sorting = presenter.anime.sorting
@@ -200,9 +200,9 @@ class EpisodesSettingsSheet(
             private val displayTitle = Item.Radio(R.string.show_title, this)
             private val displayEpisodeNum = Item.Radio(R.string.show_episode_number, this)
 
-            override val header = null
+            override val header: Item? = null
             override val items = listOf(displayTitle, displayEpisodeNum)
-            override val footer = null
+            override val footer: Item? = null
 
             override fun initModels() {
                 val mode = presenter.anime.displayMode

@@ -151,7 +151,7 @@ class ReaderPresenter(
 
     private var hasTrackers: Boolean = false
     private val checkTrackers: (Manga) -> Unit = { manga ->
-        val tracks = db.getTracks(manga).executeAsBlocking()
+        val tracks = db.getTracks(manga.id).executeAsBlocking()
 
         hasTrackers = tracks.size > 0
     }
@@ -704,13 +704,11 @@ class ReaderPresenter(
                         val context = Injekt.get<Application>()
                         LocalSource.updateCover(context, manga, it)
                         manga.updateCoverLastModified(db)
-                        coverCache.clearMemoryCache()
                         SetAsCoverResult.Success
                     } else {
                         if (manga.favorite) {
                             coverCache.setCustomCoverToCache(manga, it)
                             manga.updateCoverLastModified(db)
-                            coverCache.clearMemoryCache()
                             SetAsCoverResult.Success
                         } else {
                             SetAsCoverResult.AddToLibraryFirst
@@ -755,7 +753,7 @@ class ReaderPresenter(
         val context = Injekt.get<Application>()
 
         launchIO {
-            db.getTracks(manga).executeAsBlocking()
+            db.getTracks(manga.id).executeAsBlocking()
                 .mapNotNull { track ->
                     val service = trackManager.getService(track.sync_id)
                     if (service != null && service.isLogged && chapterRead > track.last_chapter_read) {

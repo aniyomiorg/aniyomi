@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.data.database.models
 
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import tachiyomi.animesource.model.AnimeInfo
+import eu.kanade.domain.anime.model.Anime as DomainAnime
 
 interface Anime : SAnime {
 
@@ -116,5 +117,28 @@ fun Anime.toAnimeInfo(): AnimeInfo {
         key = this.url,
         status = this.status,
         title = this.title,
+    )
+}
+
+fun Anime.toDomainAnime(): DomainAnime? {
+    val mangaId = id ?: return null
+    return DomainAnime(
+        id = mangaId,
+        source = source,
+        favorite = favorite,
+        lastUpdate = last_update,
+        dateAdded = date_added,
+        viewerFlags = viewer_flags.toLong(),
+        episodeFlags = episode_flags.toLong(),
+        coverLastModified = cover_last_modified,
+        url = url,
+        title = title,
+        artist = artist,
+        author = author,
+        description = description,
+        genre = getGenres(),
+        status = status.toLong(),
+        thumbnailUrl = thumbnail_url,
+        initialized = initialized,
     )
 }

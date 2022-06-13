@@ -102,8 +102,9 @@ class AnimeDownloadManager(
         downloader.clearQueue(isNotification)
     }
 
-    fun startDownloadNow(episode: Episode) {
-        val download = downloader.queue.find { it.episode.id == episode.id } ?: return
+    fun startDownloadNow(episodeId: Long?) {
+        if (episodeId == null) return
+        val download = downloader.queue.find { it.episode.id == episodeId } ?: return
         val queue = downloader.queue.toMutableList()
         queue.remove(download)
         queue.add(0, download)

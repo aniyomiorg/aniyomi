@@ -6,6 +6,12 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
+import eu.kanade.data.episode.NoEpisodesException
+import eu.kanade.domain.anime.interactor.GetAnimeById
+import eu.kanade.domain.anime.interactor.UpdateAnime
+import eu.kanade.domain.anime.model.toAnimeInfo
+import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
+import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -19,7 +25,7 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Episode
-import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
+import eu.kanade.tachiyomi.data.database.models.toDomainAnime
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -31,8 +37,6 @@ import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.UnmeteredSource
-import eu.kanade.tachiyomi.util.episode.NoEpisodesException
-import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
 import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.prepUpdateCover
@@ -55,12 +59,15 @@ import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
+import tachiyomi.animesource.model.AnimeInfo
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
+import eu.kanade.domain.anime.model.Anime as DomainAnime
+import eu.kanade.domain.episode.model.Episode as DomainEpisode
 
 /**
  * This class will take care of updating the episodes of the anime from the library. It can be
@@ -77,6 +84,9 @@ class AnimelibUpdateService(
     val downloadManager: AnimeDownloadManager = Injekt.get(),
     val trackManager: TrackManager = Injekt.get(),
     val coverCache: AnimeCoverCache = Injekt.get(),
+    private val getAnimeById: GetAnimeById = Injekt.get(),
+    private val updateAnime: UpdateAnime = Injekt.get(),
+    private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get(),
 ) : Service() {
 
     private lateinit var wakeLock: PowerManager.WakeLock
@@ -303,7 +313,7 @@ class AnimelibUpdateService(
                                 }
 
                                 // Don't continue to update if anime not in library
-                                db.getAnime(anime.id!!).executeAsBlocking() ?: return@forEach
+                                anime.id?.let { getAnimeById.await(it) } ?: return@forEach
 
                                 withUpdateNotification(
                                     currentlyUpdatingAnime,
@@ -323,19 +333,22 @@ class AnimelibUpdateService(
                                             }
                                             else -> {
                                                 // Convert to the anime that contains new episodes
-                                                val (newEpisodes, _) = updateAnime(animeWithNotif)
+                                                animeWithNotif.toDomainAnime()?.let { domainAnime ->
+                                                    val (newEpisodes, _) = updateAnime(domainAnime)
+                                                    val newDbEpisodes = newEpisodes.map { it.toDbEpisode() }
 
-                                                if (newEpisodes.isNotEmpty()) {
-                                                    if (animeWithNotif.shouldDownloadNewEpisodes(db, preferences)) {
-                                                        downloadEpisodes(animeWithNotif, newEpisodes)
-                                                        hasDownloads.set(true)
+                                                    if (newEpisodes.isNotEmpty()) {
+                                                        if (animeWithNotif.shouldDownloadNewEpisodes(db, preferences)) {
+                                                            downloadEpisodes(animeWithNotif, newDbEpisodes)
+                                                            hasDownloads.set(true)
+                                                        }
+
+                                                        // Convert to the manga that contains new chapters
+                                                        newUpdates.add(
+                                                            animeWithNotif to newDbEpisodes.sortedByDescending { ep -> ep.source_order }
+                                                                .toTypedArray(),
+                                                        )
                                                     }
-
-                                                    // Convert to the anime that contains new episodes
-                                                    newUpdates.add(
-                                                        animeWithNotif to newEpisodes.sortedByDescending { ep -> ep.source_order }
-                                                            .toTypedArray(),
-                                                    )
                                                 }
                                             }
                                         }
@@ -395,39 +408,27 @@ class AnimelibUpdateService(
      * @param anime the anime to update.
      * @return a pair of the inserted and removed episodes.
      */
-    private suspend fun updateAnime(anime: Anime): Pair<List<Episode>, List<Episode>> {
+    private suspend fun updateAnime(anime: DomainAnime): Pair<List<DomainEpisode>, List<DomainEpisode>> {
         val source = sourceManager.getOrStub(anime.source)
 
-        var updatedAnime: SAnime = anime
+        val animeInfo: AnimeInfo = anime.toAnimeInfo()
 
-        // Update anime details metadata
+        // Update anime metadata if needed
         if (preferences.autoUpdateMetadata()) {
-            val updatedAnimeDetails = source.getAnimeDetails(anime.toAnimeInfo())
-            val sAnime = updatedAnimeDetails.toSAnime()
-            // Avoid "losing" existing cover
-            if (!sAnime.thumbnail_url.isNullOrEmpty()) {
-                anime.prepUpdateCover(coverCache, sAnime, false)
-            } else {
-                sAnime.thumbnail_url = anime.thumbnail_url
-            }
-
-            updatedAnime = sAnime
+            val updatedAnimeInfo = source.getAnimeDetails(anime.toAnimeInfo())
+            updateAnime.awaitUpdateFromSource(anime, updatedAnimeInfo, manualFetch = false, coverCache)
         }
 
-        val episodes = source.getEpisodeList(updatedAnime.toAnimeInfo())
+        val episodes = source.getEpisodeList(animeInfo)
             .map { it.toSEpisode() }
 
         // Get anime from database to account for if it was removed during the update
-        val dbAnime = db.getAnime(anime.id!!).executeAsBlocking()
+        val dbAnime = getAnimeById.await(anime.id)
             ?: return Pair(emptyList(), emptyList())
-
-        // Copy into [dbAnime] to retain favourite value
-        dbAnime.copyFrom(updatedAnime)
-        db.insertAnime(dbAnime).executeAsBlocking()
 
         // [dbAnime] was used so that anime data doesn't get overwritten
         // in case anime gets new chapter
-        return syncEpisodesWithSource(db, episodes, dbAnime, source)
+        return syncEpisodesWithSource.await(episodes, dbAnime, source)
     }
 
     private suspend fun updateCovers() {
@@ -474,7 +475,6 @@ class AnimelibUpdateService(
                 .awaitAll()
         }
 
-        coverCache.clearMemoryCache()
         notifier.cancelProgressNotification()
     }
 
@@ -501,7 +501,7 @@ class AnimelibUpdateService(
     }
 
     private suspend fun updateTrackings(anime: AnimelibAnime, loggedServices: List<TrackService>) {
-        db.getTracks(anime).executeAsBlocking()
+        db.getTracks(anime.id).executeAsBlocking()
             .map { track ->
                 supervisorScope {
                     async {

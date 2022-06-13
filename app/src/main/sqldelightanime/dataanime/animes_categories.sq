@@ -7,3 +7,11 @@ CREATE TABLE animes_categories(
     FOREIGN KEY(anime_id) REFERENCES animes (_id)
     ON DELETE CASCADE
 );
+
+insert:
+INSERT INTO animes_categories(anime_id, category_id)
+VALUES (:animeId, :categoryId);
+
+deleteAnimeCategoryByAnimeId:
+DELETE FROM animes_categories
+WHERE anime_id = :animeId;

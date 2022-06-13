@@ -10,6 +10,26 @@ CREATE TABLE animehistory(
 
 CREATE INDEX animehistory_history_episode_id_index ON animehistory(episode_id);
 
+getHistoryByAnimeId:
+SELECT
+H._id,
+H.episode_id,
+H.last_seen
+FROM animehistory H
+JOIN episodes EP
+ON H.episode_id = EP._id
+WHERE EP.anime_id = :animeId AND EP._id = H.episode_id;
+
+getHistoryByEpisodeUrl:
+SELECT
+H._id,
+H.episode_id,
+H.last_seen
+FROM animehistory H
+JOIN episodes EP
+ON H.episode_id = EP._id
+WHERE EP.url = :episodeUrl AND EP._id = H.episode_id;
+
 resetAnimeHistoryById:
 UPDATE animehistory
 SET last_seen = 0
@@ -21,10 +41,10 @@ SET last_seen = 0
 WHERE _id IN (
     SELECT H._id
     FROM animes M
-    INNER JOIN episodes C
-    ON M._id = C.anime_id
+    INNER JOIN episodes EP
+    ON M._id = EP.anime_id
     INNER JOIN animehistory H
-    ON C._id = H.episode_id
+    ON EP._id = H.episode_id
     WHERE M._id = :animeId
 );
 

@@ -752,6 +752,7 @@
     <string name="download_all">All</string>
     <string name="download_unread">Unread</string>
     <string name="download_unseen">Unseen</string>
+    <string name="custom_cover">Custom cover</string>
     <string name="manga_cover">Cover</string>
     <string name="cover_saved">Cover saved</string>
     <string name="error_saving_cover">Error saving cover</string>
@@ -1038,4 +1039,5 @@
 
     <string name="pref_navigate_pan">Navigate to pan</string>
     <string name="pref_landscape_zoom">Zoom landscape image</string>
+    <string name="cant_open_last_read_chapter">Unable to open last read chapter</string>
 </resources>

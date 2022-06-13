@@ -1,8 +1,5 @@
 package eu.kanade.tachiyomi.util.episode
 
-import eu.kanade.tachiyomi.animesource.model.SAnime
-import eu.kanade.tachiyomi.animesource.model.SEpisode
-
 /**
  * -R> = regex conversion.
  */
@@ -37,17 +34,17 @@ object EpisodeRecognition {
      */
     private val unwantedWhiteSpace = Regex("""(\s)(extra|special|omake)""")
 
-    fun parseEpisodeNumber(episode: SEpisode, anime: SAnime) {
+    fun parseEpisodeNumber(animeTitle: String, episodeName: String, episodeNumber: Float? = null): Float {
         // If episode number is known return.
-        if (episode.episode_number == -2F || episode.episode_number > -1F) {
-            return
+        if (episodeNumber != null && (episodeNumber == -2f || episodeNumber > -1f)) {
+            return episodeNumber
         }
 
-        // Get episode title with lower case
-        var name = episode.name.lowercase()
+        // Get chapter title with lower case
+        var name = episodeName.lowercase()
 
-        // Remove comma's from episode.
-        name = name.replace(',', '.')
+        // Remove comma's or hyphens.
+        name = name.replace(',', '.').replace('-', '.')
 
         // Remove unwanted white spaces.
         unwantedWhiteSpace.findAll(name).let {
@@ -59,10 +56,8 @@ object EpisodeRecognition {
             it.forEach { occurrence -> name = name.replace(occurrence.value, "") }
         }
 
-        // Check base case ep.xx
-        if (updateEpisode(basic.find(name), episode)) {
-            return
-        }
+        // Check base case ch.xx
+        getEpisodeNumberFromMatch(basic.find(name))?.let { return it }
 
         // Check one number occurrence.
         val occurrences: MutableList<MatchResult> = arrayListOf()
@@ -71,41 +66,34 @@ object EpisodeRecognition {
         }
 
         if (occurrences.size == 1) {
-            if (updateEpisode(occurrences[0], episode)) {
-                return
-            }
+            getEpisodeNumberFromMatch(occurrences[0])?.let { return it }
         }
 
-        // Remove anime title from episode title.
-        val nameWithoutAnime = name.replace(anime.title.lowercase(), "").trim()
+        // Remove manga title from chapter title.
+        val nameWithoutAnime = name.replace(animeTitle.lowercase(), "").trim()
 
         // Check if first value is number after title remove.
-        if (updateEpisode(withoutAnime.find(nameWithoutAnime), episode)) {
-            return
-        }
+        getEpisodeNumberFromMatch(withoutAnime.find(nameWithoutAnime))?.let { return it }
 
         // Take the first number encountered.
-        if (updateEpisode(occurrence.find(nameWithoutAnime), episode)) {
-            return
-        }
+        getEpisodeNumberFromMatch(occurrence.find(nameWithoutAnime))?.let { return it }
+
+        return episodeNumber ?: -1f
     }
 
     /**
-     * Check if volume is found and update episode
+     * Check if episode number is found and return it
      * @param match result of regex
-     * @param episode episode object
-     * @return true if volume is found
+     * @return chapter number if found else null
      */
-    private fun updateEpisode(match: MatchResult?, episode: SEpisode): Boolean {
-        match?.let {
+    private fun getEpisodeNumberFromMatch(match: MatchResult?): Float? {
+        return match?.let {
             val initial = it.groups[1]?.value?.toFloat()!!
-            val subEpisodeDecimal = it.groups[2]?.value
-            val subEpisodeAlpha = it.groups[3]?.value
-            val addition = checkForDecimal(subEpisodeDecimal, subEpisodeAlpha)
-            episode.episode_number = initial.plus(addition)
-            return true
+            val subChapterDecimal = it.groups[2]?.value
+            val subChapterAlpha = it.groups[3]?.value
+            val addition = checkForDecimal(subChapterDecimal, subChapterAlpha)
+            initial.plus(addition)
         }
-        return false
     }
 
     /**

@@ -6,6 +6,8 @@ import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.util.Date
 
 fun Anime.isLocal() = source == LocalAnimeSource.ID
@@ -36,8 +38,8 @@ fun Anime.prepUpdateCover(coverCache: AnimeCoverCache, remoteAnime: SAnime, refr
     }
 }
 
-fun Anime.hasCustomCover(coverCache: AnimeCoverCache): Boolean {
-    return coverCache.getCustomCoverFile(this).exists()
+fun Anime.hasCustomCover(coverCache: AnimeCoverCache = Injekt.get()): Boolean {
+    return coverCache.getCustomCoverFile(id).exists()
 }
 
 fun Anime.removeCovers(coverCache: AnimeCoverCache) {

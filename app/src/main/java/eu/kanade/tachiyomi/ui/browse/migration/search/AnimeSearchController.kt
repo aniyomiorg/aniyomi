@@ -104,7 +104,7 @@ class AnimeSearchController(
         override fun onCreateDialog(savedViewState: Bundle?): Dialog {
             val prefValue = preferences.migrateFlags().get()
             val enabledFlagsPositions = AnimeMigrationFlags.getEnabledFlagsPositions(prefValue)
-            val items = AnimeMigrationFlags.titles
+            val items = AnimeMigrationFlags.titles(anime)
                 .map { resources?.getString(it) }
                 .toTypedArray()
             val selected = items

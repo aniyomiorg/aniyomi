@@ -8,6 +8,8 @@ import android.os.Bundle
 import coil.imageLoader
 import coil.memory.MemoryCache
 import com.jakewharton.rxrelay.PublishRelay
+import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.toSAnime
@@ -49,6 +51,7 @@ import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.Stat
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import rx.Observable
@@ -68,6 +71,7 @@ class AnimePresenter(
     private val trackManager: TrackManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
+    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
 ) : BasePresenter<AnimeController>() {
 
     /**
@@ -85,9 +89,7 @@ class AnimePresenter(
     /**
      * Subject of list of episodes to allow updating the view without going to DB.
      */
-    private val episodesRelay: PublishRelay<List<EpisodeItem>> by lazy {
-        PublishRelay.create<List<EpisodeItem>>()
-    }
+    private val episodesRelay by lazy { PublishRelay.create<List<EpisodeItem>>() }
 
     /**
      * Whether the episode list has been requested to the source.
@@ -155,26 +157,19 @@ class AnimePresenter(
 
         // Episodes list - start
 
-        // Add the subscription that retrieves the episodes from the database, keeps subscribed to
-        // changes, and sends the list of episodes to the relay.
-        add(
-            db.getEpisodes(anime).asRxObservable()
-                .map { episodes ->
-                    // Convert every episode to a model.
-                    episodes.map { it.toModel() }
-                }
-                .doOnNext { episodes ->
-                    // Find downloaded episodes
-                    setDownloadedEpisodes(episodes)
-
-                    // Store the last emission
-                    this.allEpisodes = episodes
-
-                    // Listen for download status changes
-                    observeDownloads()
-                }
-                .subscribe { episodesRelay.call(it) },
-        )
+        // Keeps subscribed to changes and sends the list of chapters to the relay.
+        presenterScope.launchIO {
+            anime.id?.let { animeId ->
+                getEpisodeByAnimeId.subscribe(animeId)
+                    .collectLatest { domainEpisodes ->
+                        val episodeItems = domainEpisodes.map { it.toDbEpisode().toModel() }
+                        setDownloadedEpisodes(episodeItems)
+                        this@AnimePresenter.allEpisodes = episodeItems
+                        observeDownloads()
+                        episodesRelay.call(episodeItems)
+                    }
+            }
+        }
 
         // Episodes list - end
 
@@ -196,7 +191,7 @@ class AnimePresenter(
             return Observable.just(0)
         }
 
-        return db.getTracks(anime).asRxObservable()
+        return db.getTracks(anime.id).asRxObservable()
             .map { tracks ->
                 val loggedServices = trackManager.services.filter { it.isLogged }.map { it.id }
                 tracks.filter { it.sync_id in loggedServices }
@@ -325,7 +320,7 @@ class AnimePresenter(
      * @return cover as Bitmap or null if CoverCache does not contain cover for anime
      */
     private fun coverBitmapFromCoverCache(): Bitmap? {
-        val cover = coverCache.getCoverFile(anime)
+        val cover = coverCache.getCoverFile(anime.thumbnail_url)
         return if (cover != null) {
             BitmapFactory.decodeFile(cover.path)
         } else {
@@ -369,12 +364,11 @@ class AnimePresenter(
                         LocalAnimeSource.updateCover(context, anime, it)
                         anime.updateCoverLastModified(db)
                         db.insertAnime(anime).executeAsBlocking()
-                        coverCache.clearMemoryCache()
                     } else if (anime.favorite) {
                         coverCache.setCustomCoverToCache(anime, it)
                         anime.updateCoverLastModified(db)
-                        coverCache.clearMemoryCache()
                     }
+                    true
                 }
             }
             .subscribeOn(Schedulers.io())
@@ -388,9 +382,8 @@ class AnimePresenter(
     fun deleteCustomCover(anime: Anime) {
         Observable
             .fromCallable {
-                coverCache.deleteCustomCover(anime)
+                coverCache.deleteCustomCover(anime.id)
                 anime.updateCoverLastModified(db)
-                coverCache.clearMemoryCache()
             }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -482,7 +475,7 @@ class AnimePresenter(
                 val episodes = source.getEpisodeList(anime.toAnimeInfo())
                     .map { it.toSEpisode() }
 
-                val (newEpisodes, _) = syncEpisodesWithSource(db, episodes, anime, source)
+                val (newEpisodes, _) = syncEpisodesWithSource(episodes, anime, source)
                 if (manualFetch) {
                     downloadNewEpisodes(newEpisodes)
                 }
@@ -577,7 +570,7 @@ class AnimePresenter(
     }
 
     fun startDownloadingNow(episode: Episode) {
-        downloadManager.startDownloadNow(episode)
+        downloadManager.startDownloadNow(episode.id)
     }
 
     /**
@@ -812,7 +805,7 @@ class AnimePresenter(
 
     private fun fetchTrackers() {
         trackSubscription?.let { remove(it) }
-        trackSubscription = db.getTracks(anime)
+        trackSubscription = db.getTracks(anime.id)
             .asRxObservable()
             .map { tracks ->
                 loggedServices.map { service ->

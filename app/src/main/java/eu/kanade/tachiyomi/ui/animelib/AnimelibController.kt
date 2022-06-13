@@ -386,7 +386,7 @@ class AnimelibController(
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         createOptionsMenu(menu, inflater, R.menu.library, R.id.action_search)
         // Mutate the filter icon because it needs to be tinted and the resource is shared.
-        menu.findItem(R.id.action_filter).icon.mutate()
+        menu.findItem(R.id.action_filter).icon?.mutate()
     }
 
     fun search(query: String) {
@@ -412,7 +412,7 @@ class AnimelibController(
         // Tint icon if there's a filter active
         if (settingsSheet.filters.hasActiveFilters()) {
             val filterColor = activity!!.getResourceColor(R.attr.colorFilterActive)
-            filterItem.icon.setTint(filterColor)
+            filterItem.icon?.setTint(filterColor)
         }
     }
 
@@ -467,7 +467,7 @@ class AnimelibController(
 
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_move_to_category -> showChangeAnimeCategoriesDialog()
+            R.id.action_move_to_category -> showAnimeCategoriesDialog()
             R.id.action_download_unseen -> downloadUnseenEpisodes()
             R.id.action_mark_as_seen -> markReadStatus(true)
             R.id.action_mark_as_unseen -> markReadStatus(false)
@@ -540,7 +540,7 @@ class AnimelibController(
     /**
      * Move the selected anime to a list of categories.
      */
-    private fun showChangeAnimeCategoriesDialog() {
+    private fun showAnimeCategoriesDialog() {
         // Create a copy of selected anime
         val animes = selectedAnimes.toList()
 

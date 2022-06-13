@@ -19,13 +19,13 @@ interface AnimeTrackQueries : DbProvider {
         )
         .prepare()
 
-    fun getTracks(anime: Anime) = db.get()
+    fun getTracks(animeId: Long?) = db.get()
         .listOfObjects(AnimeTrack::class.java)
         .withQuery(
             Query.builder()
                 .table(AnimeTrackTable.TABLE)
                 .where("${AnimeTrackTable.COL_ANIME_ID} = ?")
-                .whereArgs(anime.id)
+                .whereArgs(animeId)
                 .build(),
         )
         .prepare()

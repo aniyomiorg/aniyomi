@@ -7,13 +7,12 @@ import androidx.paging.insertSeparators
 import androidx.paging.map
 import eu.kanade.domain.animehistory.interactor.DeleteAnimeHistoryTable
 import eu.kanade.domain.animehistory.interactor.GetAnimeHistory
-import eu.kanade.domain.animehistory.interactor.GetNextEpisodeForAnime
+import eu.kanade.domain.animehistory.interactor.GetNextEpisode
 import eu.kanade.domain.animehistory.interactor.RemoveAnimeHistoryByAnimeId
 import eu.kanade.domain.animehistory.interactor.RemoveAnimeHistoryById
 import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
 import eu.kanade.presentation.animehistory.HistoryUiModel
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
@@ -28,7 +27,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import uy.kohesive.injekt.injectLazy
 import java.util.Date
 
 /**
@@ -38,7 +36,7 @@ import java.util.Date
  */
 class AnimeHistoryPresenter(
     private val getAnimeHistory: GetAnimeHistory = Injekt.get(),
-    private val getNextEpisodeForAnime: GetNextEpisodeForAnime = Injekt.get(),
+    private val getNextEpisode: GetNextEpisode = Injekt.get(),
     private val deleteAnimeHistoryTable: DeleteAnimeHistoryTable = Injekt.get(),
     private val removeAnimeHistoryById: RemoveAnimeHistoryById = Injekt.get(),
     private val removeAnimeHistoryByAnimeId: RemoveAnimeHistoryByAnimeId = Injekt.get(),
@@ -103,11 +101,9 @@ class AnimeHistoryPresenter(
 
     fun getNextEpisodeForAnime(animeId: Long, episodeId: Long) {
         presenterScope.launchIO {
-            val db: AnimeDatabaseHelper by injectLazy()
-            val episode = db.getEpisode(getNextEpisodeForAnime.await(animeId, episodeId)!!.id).executeAsBlocking()
-            val anime = db.getAnime(animeId).executeAsBlocking()
+            val episode = getNextEpisode.await(animeId, episodeId)!!
             launchUI {
-                view?.openEpisode(episode, anime)
+                view?.openEpisode(episode)
             }
         }
     }
@@ -118,6 +114,15 @@ class AnimeHistoryPresenter(
             if (!result) return@launchIO
             launchUI {
                 view?.activity?.toast(R.string.clear_history_completed)
+            }
+        }
+    }
+
+    fun resumeLastEpisodeSeen() {
+        presenterScope.launchIO {
+            val episode = getNextEpisode.await()
+            launchUI {
+                view?.openEpisode(episode)
             }
         }
     }

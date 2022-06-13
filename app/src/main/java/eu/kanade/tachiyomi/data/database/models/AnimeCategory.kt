@@ -1,5 +1,7 @@
 package eu.kanade.tachiyomi.data.database.models
 
+import dataanime.GetCategories
+
 class AnimeCategory {
 
     var id: Long? = null
@@ -11,10 +13,17 @@ class AnimeCategory {
     companion object {
 
         fun create(anime: Anime, category: Category): AnimeCategory {
-            val mc = AnimeCategory()
-            mc.anime_id = anime.id!!
-            mc.category_id = category.id!!
-            return mc
+            val ac = AnimeCategory()
+            ac.anime_id = anime.id!!
+            ac.category_id = category.id!!
+            return ac
+        }
+
+        fun create(anime: Anime, category: GetCategories): AnimeCategory {
+            val ac = AnimeCategory()
+            ac.anime_id = anime.id!!
+            ac.category_id = category.id.toInt()
+            return ac
         }
     }
 }

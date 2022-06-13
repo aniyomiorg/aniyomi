@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.animesource.model
 
+import dataanime.Episodes
 import tachiyomi.animesource.model.EpisodeInfo
 import java.io.Serializable
 
@@ -16,6 +17,14 @@ interface SEpisode : Serializable {
     var scanlator: String?
 
     fun copyFrom(other: SEpisode) {
+        name = other.name
+        url = other.url
+        date_upload = other.date_upload
+        episode_number = other.episode_number
+        scanlator = other.scanlator
+    }
+
+    fun copyFrom(other: Episodes) {
         name = other.name
         url = other.url
         date_upload = other.date_upload

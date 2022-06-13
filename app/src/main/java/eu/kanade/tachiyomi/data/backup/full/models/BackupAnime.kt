@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.backup.full.models
 
-import eu.kanade.tachiyomi.data.database.models.Anime
+import dataanime.Animes
 import eu.kanade.tachiyomi.data.database.models.AnimeImpl
 import eu.kanade.tachiyomi.data.database.models.AnimeTrackImpl
 import eu.kanade.tachiyomi.data.database.models.EpisodeImpl
@@ -27,7 +27,7 @@ data class BackupAnime(
     @ProtoNumber(13) var dateAdded: Long = 0,
     // @ProtoNumber(15) val flags: Int = 0, 1.x value, not used in 0.x
     @ProtoNumber(16) var episodes: List<BackupEpisode> = emptyList(),
-    @ProtoNumber(17) var categories: List<Int> = emptyList(),
+    @ProtoNumber(17) var categories: List<Long> = emptyList(),
     @ProtoNumber(18) var tracking: List<BackupAnimeTracking> = emptyList(),
     // Bump by 100 for values that are not saved/implemented in 1.x but are used in 0.x
     @ProtoNumber(100) var favorite: Boolean = true,
@@ -67,21 +67,21 @@ data class BackupAnime(
     }
 
     companion object {
-        fun copyFrom(anime: Anime): BackupAnime {
+        fun copyFrom(anime: Animes): BackupAnime {
             return BackupAnime(
                 url = anime.url,
                 title = anime.title,
                 artist = anime.artist,
                 author = anime.author,
                 description = anime.description,
-                genre = anime.getGenres() ?: emptyList(),
-                status = anime.status,
+                genre = anime.genre ?: emptyList(),
+                status = anime.status.toInt(),
                 thumbnailUrl = anime.thumbnail_url,
                 favorite = anime.favorite,
                 source = anime.source,
                 dateAdded = anime.date_added,
-                viewer_flags = anime.viewer_flags,
-                episodeFlags = anime.episode_flags,
+                viewer_flags = anime.viewer.toInt(),
+                episodeFlags = anime.episode_flags.toInt(),
             )
         }
     }

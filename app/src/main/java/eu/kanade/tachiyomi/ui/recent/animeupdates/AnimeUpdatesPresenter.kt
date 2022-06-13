@@ -151,7 +151,7 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
     }
 
     fun startDownloadingNow(episode: Episode) {
-        downloadManager.startDownloadNow(episode)
+        downloadManager.startDownloadNow(episode.id)
     }
 
     /**

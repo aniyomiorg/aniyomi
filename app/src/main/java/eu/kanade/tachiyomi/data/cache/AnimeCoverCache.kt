@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.data.cache
 
 import android.content.Context
-import coil.imageLoader
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import java.io.File
@@ -34,11 +33,11 @@ class AnimeCoverCache(private val context: Context) {
     /**
      * Returns the cover from cache.
      *
-     * @param anime the anime.
+     * @param animeThumbnailUrl the anime.
      * @return cover image.
      */
-    fun getCoverFile(anime: Anime): File? {
-        return anime.thumbnail_url?.let {
+    fun getCoverFile(animeThumbnailUrl: String?): File? {
+        return animeThumbnailUrl?.let {
             File(cacheDir, DiskUtil.hashKeyForDisk(it))
         }
     }
@@ -46,11 +45,11 @@ class AnimeCoverCache(private val context: Context) {
     /**
      * Returns the custom cover from cache.
      *
-     * @param anime the anime.
+     * @param animeId the anime id.
      * @return cover image.
      */
-    fun getCustomCoverFile(anime: Anime): File {
-        return File(customCoverCacheDir, DiskUtil.hashKeyForDisk(anime.id.toString()))
+    fun getCustomCoverFile(animeId: Long?): File {
+        return File(customCoverCacheDir, DiskUtil.hashKeyForDisk(animeId.toString()))
     }
 
     /**
@@ -62,7 +61,7 @@ class AnimeCoverCache(private val context: Context) {
      */
     @Throws(IOException::class)
     fun setCustomCoverToCache(anime: Anime, inputStream: InputStream) {
-        getCustomCoverFile(anime).outputStream().use {
+        getCustomCoverFile(anime.id).outputStream().use {
             inputStream.copyTo(it)
         }
     }
@@ -77,12 +76,12 @@ class AnimeCoverCache(private val context: Context) {
     fun deleteFromCache(anime: Anime, deleteCustomCover: Boolean = false): Int {
         var deleted = 0
 
-        getCoverFile(anime)?.let {
+        getCoverFile(anime.thumbnail_url)?.let {
             if (it.exists() && it.delete()) ++deleted
         }
 
         if (deleteCustomCover) {
-            if (deleteCustomCover(anime)) ++deleted
+            if (deleteCustomCover(anime.id)) ++deleted
         }
 
         return deleted
@@ -91,20 +90,13 @@ class AnimeCoverCache(private val context: Context) {
     /**
      * Delete custom cover of the anime from the cache
      *
-     * @param anime the anime.
+     * @param animeId the anime id.
      * @return whether the cover was deleted.
      */
-    fun deleteCustomCover(anime: Anime): Boolean {
-        return getCustomCoverFile(anime).let {
+    fun deleteCustomCover(animeId: Long?): Boolean {
+        return getCustomCoverFile(animeId).let {
             it.exists() && it.delete()
         }
-    }
-
-    /**
-     * Clear coil's memory cache.
-     */
-    fun clearMemoryCache() {
-        context.imageLoader.memoryCache?.clear()
     }
 
     private fun getCacheDir(dir: String): File {

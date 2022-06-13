@@ -36,6 +36,9 @@ import com.google.android.material.snackbar.Snackbar
 import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.SelectableAdapter
+import eu.kanade.data.episode.NoEpisodesException
+import eu.kanade.domain.animehistory.interactor.UpsertAnimeHistory
+import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
 import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
@@ -45,7 +48,6 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.AnimeHistory
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
@@ -93,7 +95,6 @@ import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
 import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
 import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
-import eu.kanade.tachiyomi.util.episode.NoEpisodesException
 import eu.kanade.tachiyomi.util.hasCustomCover
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -113,7 +114,6 @@ import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
 import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
-import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -163,7 +163,6 @@ class AnimeController :
     val fromSource = args.getBoolean(FROM_SOURCE_EXTRA, false)
 
     private val coverCache: AnimeCoverCache by injectLazy()
-    private val sourceManager: AnimeSourceManager by injectLazy()
 
     private var animeInfoAdapter: AnimeInfoHeaderAdapter? = null
     private var episodesHeaderAdapter: AnimeEpisodesHeaderAdapter? = null
@@ -910,7 +909,9 @@ class AnimeController :
             } else {
                 setEpisodeProgress(currentExtEpisode, anime, currentPosition, duration)
             }
-            saveEpisodeHistory(EpisodeItem(currentExtEpisode, anime))
+            launchIO {
+                saveEpisodeHistory(EpisodeItem(currentExtEpisode, anime))
+            }
         }
     }
 
@@ -1414,13 +1415,12 @@ class AnimeController :
         private val incognitoMode = preferences.incognitoMode().get()
         private val db: AnimeDatabaseHelper = Injekt.get()
 
-        internal fun saveEpisodeHistory(episode: EpisodeItem) {
+        internal suspend fun saveEpisodeHistory(episode: EpisodeItem) {
             if (!incognitoMode) {
-                val history = AnimeHistory.create(episode.episode).apply { last_seen = Date().time }
-                db.upsertAnimeHistoryLastSeen(history).asRxCompletable()
-                    .onErrorComplete()
-                    .subscribeOn(Schedulers.io())
-                    .subscribe()
+                val upsertHistory: UpsertAnimeHistory = Injekt.get()
+                upsertHistory.await(
+                    AnimeHistoryUpdate(episode.id!!, Date()),
+                )
             }
         }
 
@@ -1464,7 +1464,7 @@ class AnimeController :
             val trackManager = Injekt.get<TrackManager>()
 
             launchIO {
-                db.getTracks(anime).executeAsBlocking()
+                db.getTracks(anime.id).executeAsBlocking()
                     .mapNotNull { track ->
                         val service = trackManager.getService(track.sync_id)
                         if (service != null && service.isLogged && episodeSeen > track.last_episode_seen) {

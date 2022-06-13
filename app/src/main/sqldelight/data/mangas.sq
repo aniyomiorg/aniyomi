@@ -25,10 +25,24 @@ CREATE TABLE mangas(
 CREATE INDEX library_favorite_index ON mangas(favorite) WHERE favorite = 1;
 CREATE INDEX mangas_url_index ON mangas(url);
 
+insert:
+INSERT INTO mangas(source,url,artist,author,description,genre,title,status,thumbnail_url,favorite,last_update,next_update,initialized,viewer,chapter_flags,cover_last_modified,date_added)
+VALUES (:source,:url,:artist,:author,:description,:genre,:title,:status,:thumbnail_url,:favorite,:last_update,:next_update,:initialized,:viewer,:chapter_flags,:cover_last_modified,:date_added);
+
 getMangaById:
 SELECT *
 FROM mangas
 WHERE _id = :id;
+
+getMangaByUrlAndSource:
+SELECT *
+FROM mangas
+WHERE url = :url AND source = :source;
+
+getFavorites:
+SELECT *
+FROM mangas
+WHERE favorite = 1;
 
 getSourceIdWithFavoriteCount:
 SELECT
@@ -47,3 +61,36 @@ AND source = :sourceId;
 resetViewerFlags:
 UPDATE mangas
 SET viewer = 0;
+
+getSourceIdsWithNonLibraryManga:
+SELECT source, COUNT(*) AS manga_count
+FROM mangas
+WHERE favorite = 0
+GROUP BY source;
+
+deleteMangasNotInLibraryBySourceIds:
+DELETE FROM mangas
+WHERE favorite = 0 AND source IN :sourceIds;
+
+update:
+UPDATE mangas SET
+    source = coalesce(:source, source),
+    url = coalesce(:url, url),
+    artist = coalesce(:artist, artist),
+    author = coalesce(:author, author),
+    description = coalesce(:description, description),
+    genre = coalesce(:genre, genre),
+    title = coalesce(:title, title),
+    status = coalesce(:status, status),
+    thumbnail_url = coalesce(:thumbnailUrl, thumbnail_url),
+    favorite = coalesce(:favorite, favorite),
+    last_update = coalesce(:lastUpdate, last_update),
+    initialized = coalesce(:initialized, initialized),
+    viewer = coalesce(:viewer, viewer),
+    chapter_flags = coalesce(:chapterFlags, chapter_flags),
+    cover_last_modified = coalesce(:coverLastModified, cover_last_modified),
+    date_added = coalesce(:dateAdded, date_added)
+WHERE _id = :mangaId;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

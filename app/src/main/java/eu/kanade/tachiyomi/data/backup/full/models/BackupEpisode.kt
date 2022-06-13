@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.backup.full.models
 
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.EpisodeImpl
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
@@ -21,7 +20,7 @@ data class BackupEpisode(
     @ProtoNumber(8) var dateUpload: Long = 0,
     // episodeNumber is called number is 1.x
     @ProtoNumber(9) var episodeNumber: Float = 0F,
-    @ProtoNumber(10) var sourceOrder: Int = 0,
+    @ProtoNumber(10) var sourceOrder: Long = 0,
 ) {
     fun toEpisodeImpl(): EpisodeImpl {
         return EpisodeImpl().apply {
@@ -35,25 +34,36 @@ data class BackupEpisode(
             total_seconds = this@BackupEpisode.totalSeconds
             date_fetch = this@BackupEpisode.dateFetch
             date_upload = this@BackupEpisode.dateUpload
-            source_order = this@BackupEpisode.sourceOrder
+            source_order = this@BackupEpisode.sourceOrder.toInt()
         }
     }
+}
 
-    companion object {
-        fun copyFrom(episode: Episode): BackupEpisode {
-            return BackupEpisode(
-                url = episode.url,
-                name = episode.name,
-                episodeNumber = episode.episode_number,
-                scanlator = episode.scanlator,
-                seen = episode.seen,
-                bookmark = episode.bookmark,
-                lastSecondSeen = episode.last_second_seen,
-                totalSeconds = episode.total_seconds,
-                dateFetch = episode.date_fetch,
-                dateUpload = episode.date_upload,
-                sourceOrder = episode.source_order,
-            )
-        }
-    }
+val backupEpisodeMapper = {
+        _: Long,
+        _: Long,
+        url: String,
+        name: String,
+        scanlator: String?,
+        seen: Boolean,
+        bookmark: Boolean,
+        lastSecondSeen: Long,
+        totalSeconds: Long,
+        episodeNumber: Float,
+        source_order: Long,
+        dateFetch: Long,
+        dateUpload: Long, ->
+    BackupEpisode(
+        url = url,
+        name = name,
+        episodeNumber = episodeNumber,
+        scanlator = scanlator,
+        seen = seen,
+        bookmark = bookmark,
+        lastSecondSeen = lastSecondSeen,
+        totalSeconds = totalSeconds,
+        dateFetch = dateFetch,
+        dateUpload = dateUpload,
+        sourceOrder = source_order,
+    )
 }

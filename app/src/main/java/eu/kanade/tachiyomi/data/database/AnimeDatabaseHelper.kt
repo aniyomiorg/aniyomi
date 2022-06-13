@@ -15,7 +15,6 @@ import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.queries.AnimeCategoryQueries
-import eu.kanade.tachiyomi.data.database.queries.AnimeHistoryQueries
 import eu.kanade.tachiyomi.data.database.queries.AnimeQueries
 import eu.kanade.tachiyomi.data.database.queries.AnimeTrackQueries
 import eu.kanade.tachiyomi.data.database.queries.CategoryQueries
@@ -27,7 +26,7 @@ import eu.kanade.tachiyomi.data.database.queries.EpisodeQueries
 class AnimeDatabaseHelper(
     openHelper: SupportSQLiteOpenHelper,
 ) :
-    AnimeQueries, EpisodeQueries, AnimeTrackQueries, CategoryQueries, AnimeCategoryQueries, AnimeHistoryQueries {
+    AnimeQueries, EpisodeQueries, AnimeTrackQueries, CategoryQueries, AnimeCategoryQueries {
 
     override val db = DefaultStorIOSQLite.builder()
         .sqliteOpenHelper(openHelper)

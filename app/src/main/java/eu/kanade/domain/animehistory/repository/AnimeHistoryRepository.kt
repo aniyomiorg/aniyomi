@@ -9,7 +9,9 @@ interface AnimeHistoryRepository {
 
     fun getHistory(query: String): PagingSource<Long, AnimeHistoryWithRelations>
 
-    suspend fun getNextEpisodeForAnime(animeId: Long, episodeId: Long): Episode?
+    suspend fun getLastHistory(): AnimeHistoryWithRelations?
+
+    suspend fun getNextEpisode(animeId: Long, episodeId: Long): Episode?
 
     suspend fun resetHistory(historyId: Long)
 

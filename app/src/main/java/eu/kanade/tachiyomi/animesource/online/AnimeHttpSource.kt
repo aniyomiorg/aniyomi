@@ -373,8 +373,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param episode the episode to be added.
      * @param anime the anime of the episode.
      */
-    open fun prepareNewEpisode(episode: SEpisode, anime: SAnime) {
-    }
+    open fun prepareNewEpisode(episode: SEpisode, anime: SAnime) {}
 
     /**
      * Returns the list of filters for the source.

@@ -184,7 +184,7 @@ class LocalAnimeSource(
                     }
                     date_upload = episodeFile.lastModified()
 
-                    EpisodeRecognition.parseEpisodeNumber(this, sAnime)
+                    episode_number = EpisodeRecognition.parseEpisodeNumber(sAnime.title, this.name, this.episode_number)
                 }
             }
             .map { it.toEpisodeInfo() }
@@ -225,7 +225,6 @@ class LocalAnimeSource(
         val second = duration.toInt() / 2
         FFmpegKit.execute("-ss $second -i '${episode.url}' -frames 1 -q:v 2 '$coverPath'")
         anime.thumbnail_url = coverPath
-        coverCache.clearMemoryCache()
     }
 
     companion object {

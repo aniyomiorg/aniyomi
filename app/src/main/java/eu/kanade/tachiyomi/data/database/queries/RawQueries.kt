@@ -1,7 +1,5 @@
 package eu.kanade.tachiyomi.data.database.queries
 
-import eu.kanade.tachiyomi.data.database.resolvers.SourceIdAnimeCountGetResolver
-import eu.kanade.tachiyomi.data.database.resolvers.SourceIdMangaCountGetResolver
 import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable as AnimeCategory
 import eu.kanade.tachiyomi.data.database.tables.AnimeHistoryTable as AnimeHistory
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable as Anime
@@ -222,25 +220,3 @@ fun getCategoriesForAnimeQuery() =
     ${AnimeCategory.TABLE}.${AnimeCategory.COL_CATEGORY_ID}
     WHERE ${AnimeCategory.COL_ANIME_ID} = ?
 """
-
-/** Query to get the list of sources in the database that have
- * non-library manga, and how many
- */
-fun getSourceIdsWithNonLibraryMangaQuery() =
-    """
-    SELECT ${Manga.COL_SOURCE}, COUNT(*) as ${SourceIdMangaCountGetResolver.COL_COUNT}
-    FROM ${Manga.TABLE}
-    WHERE ${Manga.COL_FAVORITE} = 0
-    GROUP BY ${Manga.COL_SOURCE}
-    """
-
-/** Query to get the list of sources in the database that have
- * non-library manga, and how many
- */
-fun getSourceIdsWithNonLibraryAnimeQuery() =
-    """
-    SELECT ${Anime.COL_SOURCE}, COUNT(*) as ${SourceIdAnimeCountGetResolver.COL_COUNT}
-    FROM ${Anime.TABLE}
-    WHERE ${Anime.COL_FAVORITE} = 0
-    GROUP BY ${Anime.COL_SOURCE}
-    """

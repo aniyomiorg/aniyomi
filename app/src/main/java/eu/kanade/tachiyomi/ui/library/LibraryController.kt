@@ -386,7 +386,7 @@ class LibraryController(
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         createOptionsMenu(menu, inflater, R.menu.library, R.id.action_search)
         // Mutate the filter icon because it needs to be tinted and the resource is shared.
-        menu.findItem(R.id.action_filter).icon.mutate()
+        menu.findItem(R.id.action_filter).icon?.mutate()
     }
 
     fun search(query: String) {
@@ -412,7 +412,7 @@ class LibraryController(
         // Tint icon if there's a filter active
         if (settingsSheet.filters.hasActiveFilters()) {
             val filterColor = activity!!.getResourceColor(R.attr.colorFilterActive)
-            filterItem.icon.setTint(filterColor)
+            filterItem.icon?.setTint(filterColor)
         }
     }
 
@@ -467,7 +467,7 @@ class LibraryController(
 
     override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_move_to_category -> showChangeMangaCategoriesDialog()
+            R.id.action_move_to_category -> showMangaCategoriesDialog()
             R.id.action_download_unread -> downloadUnreadChapters()
             R.id.action_mark_as_read -> markReadStatus(true)
             R.id.action_mark_as_unread -> markReadStatus(false)
@@ -540,7 +540,7 @@ class LibraryController(
     /**
      * Move the selected manga to a list of categories.
      */
-    private fun showChangeMangaCategoriesDialog() {
+    private fun showMangaCategoriesDialog() {
         // Create a copy of selected manga
         val mangas = selectedMangas.toList()
 

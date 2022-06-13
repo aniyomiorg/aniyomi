@@ -107,28 +107,24 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         return true
     }
 
-    private fun restoreCategories(backupCategories: List<BackupCategory>) {
-        db.inTransaction {
-            backupManager.restoreCategories(backupCategories)
-        }
+    private suspend fun restoreCategories(backupCategories: List<BackupCategory>) {
+        backupManager.restoreCategories(backupCategories)
 
         restoreProgress += 1
         showRestoreProgress(restoreProgress, restoreAmount, context.getString(R.string.categories))
     }
 
-    private fun restoreCategoriesAnime(backupCategories: List<BackupCategory>) {
-        animedb.inTransaction {
-            backupManager.restoreCategoriesAnime(backupCategories)
-        }
+    private suspend fun restoreCategoriesAnime(backupCategories: List<BackupCategory>) {
+        backupManager.restoreCategoriesAnime(backupCategories)
 
         restoreProgress += 1
-        showRestoreProgress(restoreProgress, restoreAmount, context.getString(R.string.categories))
+        showRestoreProgress(restoreProgress, restoreAmount, context.getString(R.string.anime_categories))
     }
 
-    private fun restoreManga(backupManga: BackupManga, backupCategories: List<BackupCategory>) {
+    private suspend fun restoreManga(backupManga: BackupManga, backupCategories: List<BackupCategory>) {
         val manga = backupManga.getMangaImpl()
         val chapters = backupManga.getChaptersImpl()
-        val categories = backupManga.categories
+        val categories = backupManga.categories.map { it.toInt() }
         val history = backupManga.brokenHistory.map { BackupHistory(it.url, it.lastRead) } + backupManga.history
         val tracks = backupManga.getTrackingImpl()
 
@@ -143,10 +139,10 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         showRestoreProgress(restoreProgress, restoreAmount, manga.title)
     }
 
-    private fun restoreAnime(backupAnime: BackupAnime, backupCategories: List<BackupCategory>) {
+    private suspend fun restoreAnime(backupAnime: BackupAnime, backupCategories: List<BackupCategory>) {
         val anime = backupAnime.getAnimeImpl()
         val episodes = backupAnime.getEpisodesImpl()
-        val categories = backupAnime.categories
+        val categories = backupAnime.categories.map { it.toInt() }
         val history = backupAnime.brokenHistory.map { BackupAnimeHistory(it.url, it.lastSeen) } + backupAnime.history
         val tracks = backupAnime.getTrackingImpl()
 
@@ -170,7 +166,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
      * @param history history data from json
      * @param tracks tracking data from json
      */
-    private fun restoreMangaData(
+    private suspend fun restoreMangaData(
         manga: Manga,
         chapters: List<Chapter>,
         categories: List<Int>,
@@ -178,18 +174,16 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         tracks: List<Track>,
         backupCategories: List<BackupCategory>,
     ) {
-        db.inTransaction {
-            val dbManga = backupManager.getMangaFromDatabase(manga)
-            if (dbManga == null) {
-                // Manga not in database
-                restoreMangaFetch(manga, chapters, categories, history, tracks, backupCategories)
-            } else {
-                // Manga in database
-                // Copy information from manga already in database
-                backupManager.restoreMangaNoFetch(manga, dbManga)
-                // Fetch rest of manga information
-                restoreMangaNoFetch(manga, chapters, categories, history, tracks, backupCategories)
-            }
+        val dbManga = backupManager.getMangaFromDatabase(manga.url, manga.source)
+        if (dbManga == null) {
+            // Manga not in database
+            restoreMangaFetch(manga, chapters, categories, history, tracks, backupCategories)
+        } else {
+            // Manga in database
+            // Copy information from manga already in database
+            backupManager.restoreMangaNoFetch(manga, dbManga)
+            // Fetch rest of manga information
+            restoreMangaNoFetch(manga, chapters, categories, history, tracks, backupCategories)
         }
     }
 
@@ -202,7 +196,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
      * @param history history data from json
      * @param tracks tracking data from json
      */
-    private fun restoreAnimeData(
+    private suspend fun restoreAnimeData(
         anime: Anime,
         episodes: List<Episode>,
         categories: List<Int>,
@@ -210,18 +204,16 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         tracks: List<AnimeTrack>,
         backupCategories: List<BackupCategory>,
     ) {
-        animedb.inTransaction {
-            val dbAnime = backupManager.getAnimeFromDatabase(anime)
-            if (dbAnime == null) {
-                // Manga not in database
-                restoreAnimeFetch(anime, episodes, categories, history, tracks, backupCategories)
-            } else {
-                // Manga in database
-                // Copy information from manga already in database
-                backupManager.restoreAnimeNoFetch(anime, dbAnime)
-                // Fetch rest of manga information
-                restoreAnimeNoFetch(anime, episodes, categories, history, tracks, backupCategories)
-            }
+        val dbAnime = backupManager.getAnimeFromDatabase(anime.url, anime.source)
+        if (dbAnime == null) {
+            // Anime not in database
+            restoreAnimeFetch(anime, episodes, categories, history, tracks, backupCategories)
+        } else {
+            // Anime in database
+            // Copy information from anime already in database
+            backupManager.restoreAnimeNoFetch(anime, dbAnime)
+            // Fetch rest of anime information
+            restoreAnimeNoFetch(anime, episodes, categories, history, tracks, backupCategories)
         }
     }
 
@@ -232,7 +224,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
      * @param chapters chapters of manga that needs updating
      * @param categories categories that need updating
      */
-    private fun restoreMangaFetch(
+    private suspend fun restoreMangaFetch(
         manga: Manga,
         chapters: List<Chapter>,
         categories: List<Int>,
@@ -259,7 +251,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
      * @param episodes episodes of anime that needs updating
      * @param categories categories that need updating
      */
-    private fun restoreAnimeFetch(
+    private suspend fun restoreAnimeFetch(
         anime: Anime,
         episodes: List<Episode>,
         categories: List<Int>,
@@ -279,7 +271,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         }
     }
 
-    private fun restoreMangaNoFetch(
+    private suspend fun restoreMangaNoFetch(
         backupManga: Manga,
         chapters: List<Chapter>,
         categories: List<Int>,
@@ -292,7 +284,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         restoreExtraForManga(backupManga, categories, history, tracks, backupCategories)
     }
 
-    private fun restoreAnimeNoFetch(
+    private suspend fun restoreAnimeNoFetch(
         backupAnime: Anime,
         episodes: List<Episode>,
         categories: List<Int>,
@@ -305,7 +297,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         restoreExtraForAnime(backupAnime, categories, history, tracks, backupCategories)
     }
 
-    private fun restoreExtraForManga(manga: Manga, categories: List<Int>, history: List<BackupHistory>, tracks: List<Track>, backupCategories: List<BackupCategory>) {
+    private suspend fun restoreExtraForManga(manga: Manga, categories: List<Int>, history: List<BackupHistory>, tracks: List<Track>, backupCategories: List<BackupCategory>) {
         // Restore categories
         backupManager.restoreCategoriesForManga(manga, categories, backupCategories)
 
@@ -316,7 +308,7 @@ class FullBackupRestore(context: Context, notifier: BackupNotifier) : AbstractBa
         backupManager.restoreTrackForManga(manga, tracks)
     }
 
-    private fun restoreExtraForAnime(anime: Anime, categories: List<Int>, history: List<BackupAnimeHistory>, tracks: List<AnimeTrack>, backupCategories: List<BackupCategory>) {
+    private suspend fun restoreExtraForAnime(anime: Anime, categories: List<Int>, history: List<BackupAnimeHistory>, tracks: List<AnimeTrack>, backupCategories: List<BackupCategory>) {
         // Restore categories
         backupManager.restoreCategoriesForAnime(anime, categories, backupCategories)
 

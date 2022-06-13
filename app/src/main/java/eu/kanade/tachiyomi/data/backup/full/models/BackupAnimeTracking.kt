@@ -17,9 +17,9 @@ data class BackupAnimeTracking(
     // trackingUrl is called mediaUrl in 1.x
     @ProtoNumber(4) var trackingUrl: String = "",
     @ProtoNumber(5) var title: String = "",
-    // lastChapterRead is called last read, and it has been changed to a float in 1.x
-    @ProtoNumber(6) var lastChapterRead: Float = 0F,
-    @ProtoNumber(7) var totalChapters: Int = 0,
+    // lastEpisodeSeen is called last seen, and it has been changed to a float in 1.x
+    @ProtoNumber(6) var lastEpisodeSeen: Float = 0F,
+    @ProtoNumber(7) var totalEpisodes: Int = 0,
     @ProtoNumber(8) var score: Float = 0F,
     @ProtoNumber(9) var status: Int = 0,
     // startedReadingDate is called startReadTime in 1.x
@@ -38,8 +38,8 @@ data class BackupAnimeTracking(
             }
             library_id = this@BackupAnimeTracking.libraryId
             title = this@BackupAnimeTracking.title
-            last_episode_seen = this@BackupAnimeTracking.lastChapterRead
-            total_episodes = this@BackupAnimeTracking.totalChapters
+            last_episode_seen = this@BackupAnimeTracking.lastEpisodeSeen
+            total_episodes = this@BackupAnimeTracking.totalEpisodes
             score = this@BackupAnimeTracking.score
             status = this@BackupAnimeTracking.status
             started_watching_date = this@BackupAnimeTracking.startedWatchingDate
@@ -57,8 +57,8 @@ data class BackupAnimeTracking(
                 libraryId = track.library_id!!,
                 title = track.title,
                 // convert to float for 1.x
-                lastChapterRead = track.last_episode_seen,
-                totalChapters = track.total_episodes,
+                lastEpisodeSeen = track.last_episode_seen,
+                totalEpisodes = track.total_episodes,
                 score = track.score,
                 status = track.status,
                 startedWatchingDate = track.started_watching_date,
@@ -67,4 +67,34 @@ data class BackupAnimeTracking(
             )
         }
     }
+}
+
+val backupAnimeTrackMapper = {
+        _id: Long,
+        anime_id: Long,
+        syncId: Long,
+        mediaId: Long,
+        libraryId: Long?,
+        title: String,
+        lastEpisodeSeen: Double,
+        totalEpisodes: Long,
+        status: Long,
+        score: Float,
+        remoteUrl: String,
+        startDate: Long,
+        finishDate: Long, ->
+    BackupAnimeTracking(
+        syncId = syncId.toInt(),
+        mediaId = mediaId,
+        // forced not null so its compatible with 1.x backup system
+        libraryId = libraryId ?: 0,
+        title = title,
+        lastEpisodeSeen = lastEpisodeSeen.toFloat(),
+        totalEpisodes = totalEpisodes.toInt(),
+        score = score,
+        status = status.toInt(),
+        startedWatchingDate = startDate,
+        finishedWatchingDate = finishDate,
+        trackingUrl = remoteUrl,
+    )
 }

@@ -6,9 +6,13 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import rx.subjects.PublishSubject
 
-class AnimeDownload(val source: AnimeHttpSource, val anime: Anime, val episode: Episode, val changeDownloader: Boolean = false) {
-
-    var video: Video? = null
+data class AnimeDownload(
+    val source: AnimeHttpSource,
+    val anime: Anime,
+    val episode: Episode,
+    val changeDownloader: Boolean = false,
+    var video: Video? = null,
+) {
 
     @Volatile
     @Transient

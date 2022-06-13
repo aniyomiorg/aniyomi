@@ -24,10 +24,23 @@ SELECT *
 FROM episodes
 WHERE _id = :id;
 
-getEpisodeByAnimeId:
+getEpisodesByAnimeId:
 SELECT *
 FROM episodes
 WHERE anime_id = :animeId;
+
+getEpisodeByUrl:
+SELECT *
+FROM episodes
+WHERE url = :episodeUrl;
+
+removeEpisodesWithIds:
+DELETE FROM episodes
+WHERE _id IN :episodeIds;
+
+insert:
+INSERT INTO episodes(anime_id,url,name,scanlator,seen,bookmark,last_second_seen,total_seconds,episode_number,source_order,date_fetch,date_upload)
+VALUES (:animeId,:url,:name,:scanlator,:seen,:bookmark,:lastSecondSeen,:totalSeconds,:episodeNumber,:sourceOrder,:dateFetch,:dateUpload);
 
 update:
 UPDATE episodes
@@ -38,8 +51,12 @@ SET anime_id = coalesce(:animeId, anime_id),
     seen = coalesce(:seen, seen),
     bookmark = coalesce(:bookmark, bookmark),
     last_second_seen = coalesce(:lastSecondSeen, last_second_seen),
+    total_seconds = coalesce(:totalSeconds, total_seconds),
     episode_number = coalesce(:episodeNumber, episode_number),
     source_order = coalesce(:sourceOrder, source_order),
     date_fetch = coalesce(:dateFetch, date_fetch),
     date_upload = coalesce(:dateUpload, date_upload)
 WHERE _id = :episodeId;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

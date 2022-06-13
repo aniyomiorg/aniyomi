@@ -9,11 +9,12 @@ import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.presentation.animehistory.AnimeHistoryScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.anime.AnimeController
@@ -101,25 +102,28 @@ class AnimeHistoryController : ComposeController<AnimeHistoryPresenter>(), RootC
         }
     }
 
-    fun openEpisode(episode: Episode?, anime: Anime?) {
+    fun openEpisode(episode: Episode?) {
         val activity = activity ?: return
-        if (episode != null && anime != null) {
-            val intent = PlayerActivity.newIntent(activity, anime, episode)
+        if (episode != null) {
+            val intent = PlayerActivity.newIntent(activity, episode.animeId, episode.id)
 
             if (preferences.alwaysUseExternalPlayer()) launchIO {
+                val db: AnimeDatabaseHelper by injectLazy()
+                val anime = episode.animeId?.let { db.getAnime(it).executeAsBlocking() } ?: return@launchIO
+                val dbEpisode = episode.toDbEpisode()
                 val video = try {
-                    EpisodeLoader.getLink(episode, anime, source = sourceManager.getOrStub(anime.source)).awaitSingle()
+                    EpisodeLoader.getLink(dbEpisode, anime, source = sourceManager.getOrStub(anime.source)).awaitSingle()
                 } catch (e: Exception) {
                     return@launchIO makeErrorToast(activity, e)
                 }
                 val downloadManager: AnimeDownloadManager = Injekt.get()
-                val isDownloaded = downloadManager.isEpisodeDownloaded(episode, anime, true)
+                val isDownloaded = downloadManager.isEpisodeDownloaded(dbEpisode, anime, true)
                 if (video != null) {
-                    AnimeController.EXT_EPISODE = episode
+                    AnimeController.EXT_EPISODE = dbEpisode
                     AnimeController.EXT_ANIME = anime
 
                     val source = sourceManager.getOrStub(anime.source)
-                    val extIntent = ExternalIntents(anime, source).getExternalIntent(episode, video, isDownloaded, activity)
+                    val extIntent = ExternalIntents(anime, source).getExternalIntent(dbEpisode, video, isDownloaded, activity)
                     if (extIntent != null) try {
                         startActivityForResult(extIntent, AnimeController.REQUEST_EXTERNAL)
                     } catch (e: Exception) {
@@ -174,7 +178,13 @@ class AnimeHistoryController : ComposeController<AnimeHistoryPresenter>(), RootC
             } else {
                 AnimeController.setEpisodeProgress(currentExtEpisode, anime, currentPosition, duration)
             }
-            AnimeController.saveEpisodeHistory(EpisodeItem(currentExtEpisode, anime))
+            launchIO {
+                AnimeController.saveEpisodeHistory(EpisodeItem(currentExtEpisode, anime))
+            }
         }
+    }
+
+    fun resumeLastEpisodeSeen() {
+        presenter.resumeLastEpisodeSeen()
     }
 }

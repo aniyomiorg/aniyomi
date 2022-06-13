@@ -49,6 +49,7 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
+import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.logcat
@@ -89,8 +90,10 @@ class PlayerActivity :
             finish()
             return
         }
-        presenter.saveEpisodeProgress(player.timePos, player.duration)
-        presenter.saveEpisodeHistory()
+        launchIO {
+            presenter.saveEpisodeProgress(player.timePos, player.duration)
+            presenter.saveEpisodeHistory()
+        }
 
         presenter.anime = null
         presenter.init(anime, episode)
@@ -457,8 +460,10 @@ class PlayerActivity :
         val switchMethod = if (previous) presenter::previousEpisode else presenter::nextEpisode
         val errorRes = if (previous) R.string.no_previous_episode else R.string.no_next_episode
 
-        presenter.saveEpisodeProgress(player.timePos, player.duration)
-        presenter.saveEpisodeHistory()
+        launchIO {
+            presenter.saveEpisodeProgress(player.timePos, player.duration)
+            presenter.saveEpisodeHistory()
+        }
         val wasPlayerPaused = player.paused
         player.paused = true
         showLoadingIndicator(true)
@@ -927,9 +932,13 @@ class PlayerActivity :
     }
 
     override fun onStop() {
-        presenter.saveEpisodeHistory()
+        launchIO {
+            presenter.saveEpisodeHistory()
+        }
         if (!playerIsDestroyed) {
-            presenter.saveEpisodeProgress(player.timePos, player.duration)
+            launchIO {
+                presenter.saveEpisodeProgress(player.timePos, player.duration)
+            }
             player.paused = true
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&

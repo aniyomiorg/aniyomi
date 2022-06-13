@@ -25,10 +25,24 @@ CREATE TABLE animes(
 CREATE INDEX animelib_favorite_index ON animes(favorite) WHERE favorite = 1;
 CREATE INDEX animes_url_index ON animes(url);
 
+insert:
+INSERT INTO animes(source,url,artist,author,description,genre,title,status,thumbnail_url,favorite,last_update,next_update,initialized,viewer,episode_flags,cover_last_modified,date_added)
+VALUES (:source,:url,:artist,:author,:description,:genre,:title,:status,:thumbnail_url,:favorite,:last_update,:next_update,:initialized,:viewer,:episode_flags,:cover_last_modified,:date_added);
+
 getAnimeById:
 SELECT *
 FROM animes
 WHERE _id = :id;
+
+getAnimeByUrlAndSource:
+SELECT *
+FROM animes
+WHERE url = :url AND source = :source;
+
+getFavorites:
+SELECT *
+FROM animes
+WHERE favorite = 1;
 
 getAnimeSourceIdWithFavoriteCount:
 SELECT
@@ -47,3 +61,36 @@ AND source = :sourceId;
 resetViewerFlags:
 UPDATE animes
 SET viewer = 0;
+
+getSourceIdsWithNonLibraryAnime:
+SELECT source, COUNT(*) AS anime_count
+FROM animes
+WHERE favorite = 0
+GROUP BY source;
+
+deleteAnimesNotInLibraryBySourceIds:
+DELETE FROM animes
+WHERE favorite = 0 AND source IN :sourceIds;
+
+update:
+UPDATE animes SET
+    source = coalesce(:source, source),
+    url = coalesce(:url, url),
+    artist = coalesce(:artist, artist),
+    author = coalesce(:author, author),
+    description = coalesce(:description, description),
+    genre = coalesce(:genre, genre),
+    title = coalesce(:title, title),
+    status = coalesce(:status, status),
+    thumbnail_url = coalesce(:thumbnailUrl, thumbnail_url),
+    favorite = coalesce(:favorite, favorite),
+    last_update = coalesce(:lastUpdate, last_update),
+    initialized = coalesce(:initialized, initialized),
+    viewer = coalesce(:viewer, viewer),
+    episode_flags = coalesce(:episodeFlags, episode_flags),
+    cover_last_modified = coalesce(:coverLastModified, cover_last_modified),
+    date_added = coalesce(:dateAdded, date_added)
+WHERE _id = :animeId;
+
+selectLastInsertedRowId:
+SELECT last_insert_rowid();

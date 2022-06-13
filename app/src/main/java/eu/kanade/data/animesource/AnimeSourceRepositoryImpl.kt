@@ -7,6 +7,7 @@ import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import eu.kanade.tachiyomi.animesource.AnimeSource as LoadedAnimeSource
 
 class AnimeSourceRepositoryImpl(
     private val sourceManager: AnimeSourceManager,
@@ -29,13 +30,23 @@ class AnimeSourceRepositoryImpl(
         val sourceIdWithFavoriteCount = handler.subscribeToList { animesQueries.getAnimeSourceIdWithFavoriteCount() }
         return sourceIdWithFavoriteCount.map { sourceIdsWithCount ->
             sourceIdsWithCount
+                .filterNot { it.source == LocalAnimeSource.ID }
                 .map { (sourceId, count) ->
                     val source = sourceManager.getOrStub(sourceId).run {
                         animesourceMapper(this)
                     }
                     source to count
                 }
-                .filterNot { it.first.id == LocalAnimeSource.ID }
+        }
+    }
+
+    override fun getSourcesWithNonLibraryAnime(): Flow<List<Pair<LoadedAnimeSource, Long>>> {
+        val sourceIdWithNonLibraryAnime = handler.subscribeToList { animesQueries.getSourceIdsWithNonLibraryAnime() }
+        return sourceIdWithNonLibraryAnime.map { sourceId ->
+            sourceId.map { (sourceId, count) ->
+                val source = sourceManager.getOrStub(sourceId)
+                source to count
+            }
         }
     }
 }
