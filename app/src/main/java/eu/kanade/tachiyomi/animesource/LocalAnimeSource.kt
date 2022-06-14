@@ -19,7 +19,9 @@ import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.DiskUtil
+import eu.kanade.tachiyomi.util.storage.toFFmpegString
 import eu.kanade.tachiyomi.util.system.ImageUtil
+import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -28,6 +30,7 @@ import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonPrimitive
+import logcat.LogPriority
 import rx.Observable
 import tachiyomi.animesource.model.AnimeInfo
 import tachiyomi.animesource.model.EpisodeInfo
@@ -126,7 +129,11 @@ class LocalAnimeSource(
                     val episode = episodes.last().toSEpisode()
                     // Copy the cover from the first episode found if not available
                     if (anime.thumbnail_url == null) {
-                        updateCoverFromVideo(episode, anime)
+                        try {
+                            updateCoverFromVideo(episode, anime)
+                        } catch (e: Exception) {
+                            logcat(LogPriority.ERROR) { "Couldn't extract thumbnail from video." }
+                        }
                     }
                 }
             }
@@ -220,11 +227,19 @@ class LocalAnimeSource(
         val animeDir = getAnimeDir(anime.url, baseDirsFiles) ?: return
         val coverPath = "${animeDir.absolutePath}/$DEFAULT_COVER_NAME"
 
-        val ffProbe = FFprobeKit.execute("-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 '${episode.url}'")
+        val episodeFilename = { episode.url.toFFmpegString(context) }
+        val ffProbe = FFprobeKit.execute(
+            "-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"${episodeFilename()}\"",
+        )
         val duration = ffProbe.allLogsAsString.trim().toFloat()
         val second = duration.toInt() / 2
-        FFmpegKit.execute("-ss $second -i '${episode.url}' -frames 1 -q:v 2 '$coverPath'")
-        anime.thumbnail_url = coverPath
+
+        val coverFilename = coverPath.toFFmpegString(context)
+        FFmpegKit.execute("-ss $second -i \"${episodeFilename()}\" -frames 1 -q:v 2 \"$coverFilename\"")
+
+        if (File(coverPath).exists()) {
+            anime.thumbnail_url = coverPath
+        }
     }
 
     companion object {

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.webkit.MimeTypeMap
-import com.arthenica.ffmpegkit.ExecuteCallback
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFmpegSession
 import com.arthenica.ffmpegkit.LogCallback
@@ -34,6 +33,7 @@ import eu.kanade.tachiyomi.util.lang.plusAssign
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
+import eu.kanade.tachiyomi.util.storage.toFFmpegString
 import eu.kanade.tachiyomi.util.system.ImageUtil
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.async
@@ -257,7 +257,6 @@ class AnimeDownloader(
         FFmpegKitConfig.getSessions().filter {
             it.state == SessionState.CREATED || it.state == SessionState.RUNNING
         }.forEach {
-            it.executeCallback.apply(it)
             it.cancel()
         }
 
@@ -497,17 +496,11 @@ class AnimeDownloader(
 
     private fun hlsObservable(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
         isFFmpegRunning = true
-        val escapedFilename = "${tmpDir.filePath}/$filename.mp4".replace("\"", "\\\"")
         val headers = video.headers ?: source.headers
         val headerOptions = headers.joinToString("", "-headers '", "'") { "${it.first}: ${it.second}\r\n" }
-        // TODO: Support other file formats here as well (ffprobe or something, idk)
-        val ffmpegOptions = FFmpegKitConfig.parseArguments(headerOptions + " -i '${video.videoUrl}' -c copy \"$escapedFilename\"")
-        val executeCallback = ExecuteCallback {
-            if (it.state != SessionState.COMPLETED) {
-                tmpDir.findFile("$filename.mp4")?.delete()
-                it.failStackTrace?.let { trace -> logcat(LogPriority.ERROR) { trace } }
-            }
-        }
+        val ffmpegFilename = "${tmpDir.filePath}/$filename.mp4".toFFmpegString(context)
+        val ffmpegOptions = FFmpegKitConfig.parseArguments(headerOptions + " -i '${video.videoUrl}' -c copy \"$ffmpegFilename\"")
+
         var duration = 0L
         var nextLineIsDuration = false
         val logCallback = LogCallback { log ->
@@ -522,9 +515,17 @@ class AnimeDownloader(
                 video.progress = (100 * it.time.toLong() / duration).toInt()
             }
         }
-        val session = FFmpegSession(ffmpegOptions, executeCallback, logCallback, statisticsCallback)
+        val session = FFmpegSession(ffmpegOptions, {}, logCallback, statisticsCallback)
 
         FFmpegKitConfig.ffmpegExecute(session)
+        // need to find a more optimal solution for this
+        if (video.progress < 100) {
+            tmpDir.findFile("$filename.mp4")?.delete()
+        }
+        session.failStackTrace?.let { trace ->
+            logcat(LogPriority.ERROR) { trace }
+            throw Exception("Error in ffmpeg!")
+        }
         return Observable.just(session)
             .map {
                 tmpDir.findFile("$filename.mp4") ?: throw Exception("Downloaded file not found")
