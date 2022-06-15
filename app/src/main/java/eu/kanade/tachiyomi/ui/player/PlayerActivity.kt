@@ -1270,18 +1270,17 @@ class PlayerActivity :
             "pause" -> {
                 if (!isFinishing) {
                     setAudioFocus(value)
-
-                    if (player.timePos != null && player.duration != null) {
-                        animationHandler.removeCallbacks(nextEpisodeRunnable)
-                        val isVideoEof = MPVLib.getPropertyBoolean("eof-reached") == true
-                        val isVideoCompleted = isVideoEof || (player.timePos!! >= player.duration!!)
-                        if (isVideoCompleted && preferences.autoplayEnabled().get()) {
-                            animationHandler.postDelayed(nextEpisodeRunnable, 1000L)
-                        }
-                    }
                     updatePlaybackStatus(value)
                 }
             }
+            "eof-reached" -> endFile(value)
+        }
+    }
+
+    private fun endFile(eofReached: Boolean) {
+        animationHandler.removeCallbacks(nextEpisodeRunnable)
+        if (eofReached && preferences.autoplayEnabled().get()) {
+            animationHandler.postDelayed(nextEpisodeRunnable, 1000L)
         }
     }
 
