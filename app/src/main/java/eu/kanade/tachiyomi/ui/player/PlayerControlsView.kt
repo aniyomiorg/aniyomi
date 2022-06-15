@@ -49,6 +49,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         override fun onStopTrackingTouch(seekBar: SeekBar) {
             userIsOperatingSeekbar = false
+            animationHandler.postDelayed(controlsViewRunnable, 3500L)
         }
     }
 
