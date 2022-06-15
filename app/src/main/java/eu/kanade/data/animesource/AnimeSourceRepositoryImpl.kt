@@ -2,6 +2,7 @@ package eu.kanade.data.animesource
 
 import eu.kanade.data.AnimeDatabaseHandler
 import eu.kanade.domain.animesource.model.AnimeSource
+import eu.kanade.domain.animesource.model.AnimeSourceData
 import eu.kanade.domain.animesource.repository.AnimeSourceRepository
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
@@ -48,5 +49,13 @@ class AnimeSourceRepositoryImpl(
                 source to count
             }
         }
+    }
+
+    override suspend fun getAnimeSourceData(id: Long): AnimeSourceData? {
+        return handler.awaitOneOrNull { animesourcesQueries.getAnimeSourceData(id, animesourceDataMapper) }
+    }
+
+    override suspend fun upsertAnimeSourceData(id: Long, lang: String, name: String) {
+        handler.await { animesourcesQueries.upsert(id, lang, name) }
     }
 }

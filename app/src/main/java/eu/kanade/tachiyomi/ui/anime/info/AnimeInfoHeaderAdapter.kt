@@ -228,11 +228,7 @@ class AnimeInfoHeaderAdapter(
          */
         private fun setAnimeInfo() {
             // Update full title TextView.
-            binding.mangaFullTitle.text = if (anime.title.isBlank()) {
-                view.context.getString(R.string.unknown)
-            } else {
-                anime.title
-            }
+            binding.mangaFullTitle.text = anime.title.ifBlank { view.context.getString(R.string.unknown) }
 
             // Update author TextView.
             binding.mangaAuthor.text = if (anime.author.isNullOrBlank()) {
@@ -249,6 +245,8 @@ class AnimeInfoHeaderAdapter(
             }
 
             // If anime source is known update source TextView.
+            binding.mangaMissingSourceIcon.isVisible = source is AnimeSourceManager.StubSource
+
             val animeSource = source.toString()
             with(binding.mangaSource) {
                 val enabledLanguages = preferences.enabledLanguages().get()

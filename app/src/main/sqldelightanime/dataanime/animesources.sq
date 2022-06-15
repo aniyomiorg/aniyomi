@@ -1,0 +1,20 @@
+CREATE TABLE animesources(
+    _id INTEGER NOT NULL PRIMARY KEY,
+    lang TEXT NOT NULL,
+    name TEXT NOT NULL
+);
+
+getAnimeSourceData:
+SELECT *
+FROM animesources
+WHERE _id = :id;
+
+upsert:
+INSERT INTO animesources(_id, lang, name)
+VALUES (:id, :lang, :name)
+ON CONFLICT(_id)
+DO UPDATE
+SET
+    lang = :lang,
+    name = :name
+WHERE _id = :id;

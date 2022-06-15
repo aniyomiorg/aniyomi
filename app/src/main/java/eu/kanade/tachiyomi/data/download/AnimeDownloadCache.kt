@@ -71,7 +71,7 @@ class AnimeDownloadCache(
      */
     fun isEpisodeDownloaded(episode: Episode, anime: Anime, skipCache: Boolean): Boolean {
         if (skipCache) {
-            val source = sourceManager.get(anime.source) ?: return false
+            val source = sourceManager.getOrStub(anime.source)
             return provider.findEpisodeDir(episode, anime, source) != null
         }
 
@@ -124,11 +124,15 @@ class AnimeDownloadCache(
     private fun renew() {
         val onlineSources = sourceManager.getOnlineSources()
 
+        val stubSources = sourceManager.getStubSources()
+
+        val allSource = onlineSources + stubSources
+
         val sourceDirs = rootDir.dir.listFiles()
             .orEmpty()
             .associate { it.name to SourceDirectory(it) }
             .mapNotNullKeys { entry ->
-                onlineSources.find { provider.getSourceDirName(it).equals(entry.key, ignoreCase = true) }?.id
+                allSource.find { provider.getSourceDirName(it).equals(entry.key, ignoreCase = true) }?.id
             }
 
         rootDir.files = sourceDirs

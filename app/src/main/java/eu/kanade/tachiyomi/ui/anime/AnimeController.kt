@@ -1250,7 +1250,9 @@ class AnimeController :
 
     private fun downloadEpisodes(episodes: List<EpisodeItem>) {
         if (source is AnimeSourceManager.StubSource) {
-            activity?.toast(R.string.loader_not_implemented_error)
+            activity?.let {
+                it.toast(it.getString(R.string.source_not_installed, source?.toString().orEmpty()))
+            }
             return
         }
 

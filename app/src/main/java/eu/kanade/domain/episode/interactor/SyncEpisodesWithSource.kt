@@ -85,28 +85,29 @@ class SyncEpisodesWithSource(
             val dbEpisode = dbEpisodes.find { it.url == episode.url }
 
             if (dbEpisode == null) {
-                if (episode.dateUpload == 0L) {
+                val toAddEpisode = if (episode.dateUpload == 0L) {
                     val altDateUpload = if (maxSeenUploadDate == 0L) rightNow else maxSeenUploadDate
-                    episode = episode.copy(dateUpload = altDateUpload)
+                    episode.copy(dateUpload = altDateUpload)
                 } else {
                     maxSeenUploadDate = max(maxSeenUploadDate, sourceEpisode.dateUpload)
+                    episode
                 }
-                toAdd.add(episode)
+                toAdd.add(toAddEpisode)
             } else {
                 if (shouldUpdateDbEpisode.await(dbEpisode, episode)) {
                     if (dbEpisode.name != episode.name && downloadManager.isEpisodeDownloaded(dbEpisode.toDbEpisode(), anime.toDbAnime())) {
                         downloadManager.renameEpisode(source, anime.toDbAnime(), dbEpisode.toDbEpisode(), episode.toDbEpisode())
                     }
-                    episode = dbEpisode.copy(
-                        name = sourceEpisode.name,
-                        episodeNumber = sourceEpisode.episodeNumber,
-                        scanlator = sourceEpisode.scanlator,
-                        sourceOrder = sourceEpisode.sourceOrder,
+                    var toChangeEpisode = dbEpisode.copy(
+                        name = episode.name,
+                        episodeNumber = episode.episodeNumber,
+                        scanlator = episode.scanlator,
+                        sourceOrder = episode.sourceOrder,
                     )
-                    if (sourceEpisode.dateUpload != 0L) {
-                        episode = episode.copy(dateUpload = sourceEpisode.dateUpload)
+                    if (episode.dateUpload != 0L) {
+                        toChangeEpisode = toChangeEpisode.copy(dateUpload = sourceEpisode.dateUpload)
                     }
-                    toChange.add(episode)
+                    toChange.add(toChangeEpisode)
                 }
             }
         }
@@ -133,11 +134,10 @@ class SyncEpisodesWithSource(
 
         // Date fetch is set in such a way that the upper ones will have bigger value than the lower ones
         // Sources MUST return the episodes from most to less recent, which is common.
-        val now = Date().time
 
         var itemCount = toAdd.size
         var updatedToAdd = toAdd.map { toAddItem ->
-            var episode = toAddItem.copy(dateFetch = now + itemCount--)
+            var episode = toAddItem.copy(dateFetch = rightNow + itemCount--)
 
             if (episode.isRecognizedNumber.not() && episode.episodeNumber !in deletedEpisodeNumbers) return@map episode
 

@@ -410,7 +410,10 @@ class MainActivity : BaseActivity() {
                 AnimeExtensionGithubApi().checkForUpdates(this@MainActivity)?.let { pendingUpdates ->
                     preferences.animeextensionUpdatesCount().set(pendingUpdates.size)
                 }
-                ExtensionGithubApi().checkForUpdates(this@MainActivity)?.let { pendingUpdates ->
+                ExtensionGithubApi().checkForUpdates(
+                    this@MainActivity,
+                    fromAvailableExtensionList = true,
+                )?.let { pendingUpdates ->
                     preferences.extensionUpdatesCount().set(pendingUpdates.size)
                 }
             } catch (e: Exception) {

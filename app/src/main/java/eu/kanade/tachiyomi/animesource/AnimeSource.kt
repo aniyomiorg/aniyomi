@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.animesource
 
 import android.graphics.drawable.Drawable
+import eu.kanade.domain.animesource.model.AnimeSourceData
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -101,3 +102,5 @@ interface AnimeSource : tachiyomi.animesource.AnimeSource {
 fun AnimeSource.icon(): Drawable? = Injekt.get<AnimeExtensionManager>().getAppIconForSource(this)
 
 fun AnimeSource.getPreferenceKey(): String = "source_$id"
+
+fun AnimeSource.toAnimeSourceData(): AnimeSourceData = AnimeSourceData(id = id, lang = lang, name = name)

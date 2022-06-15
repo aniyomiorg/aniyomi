@@ -59,9 +59,7 @@ internal class AnimeExtensionGithubApi {
             return null
         }
 
-        val extensions = findExtensions()
-
-        preferences.lastAnimeExtCheck().set(Date().time)
+        val extensions = findExtensions().also { preferences.lastAnimeExtCheck().set(Date().time) }
 
         val installedExtensions = AnimeExtensionLoader.loadExtensions(context)
             .filterIsInstance<AnimeLoadResult.Success>()

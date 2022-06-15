@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.extension.model
 
 import android.graphics.drawable.Drawable
+import eu.kanade.domain.animesource.model.AnimeSourceData
 import eu.kanade.tachiyomi.animesource.AnimeSource
 
 sealed class AnimeExtension {
@@ -57,8 +58,17 @@ sealed class AnimeExtension {
     ) : AnimeExtension()
 }
 
-data class AvailableAnimeExtensionSources(
-    val name: String,
+data class AvailableAnimeSources(
     val id: Long,
+    val lang: String,
+    val name: String,
     val baseUrl: String,
-)
+) {
+    fun toAnimeSourceData(): AnimeSourceData {
+        return AnimeSourceData(
+            id = this.id,
+            lang = this.lang,
+            name = this.name,
+        )
+    }
+}

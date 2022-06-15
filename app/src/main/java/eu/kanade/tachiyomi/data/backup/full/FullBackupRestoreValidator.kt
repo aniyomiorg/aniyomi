@@ -46,11 +46,21 @@ class FullBackupRestoreValidator : AbstractBackupRestoreValidator() {
         val animesources = backup.backupAnimeSources.associate { it.sourceId to it.name }
         val missingSources = sources
             .filter { sourceManager.get(it.key) == null }
-            .values
+            .values.map {
+                val id = it.toLongOrNull()
+                if (id == null) it
+                else sourceManager.getOrStub(id).toString()
+            }
+            .distinct()
             .sorted() +
             animesources
                 .filter { animesourceManager.get(it.key) == null }
-                .values
+                .values.map {
+                    val id = it.toLongOrNull()
+                    if (id == null) it
+                    else animesourceManager.getOrStub(id).toString()
+                }
+                .distinct()
                 .sorted()
 
         val trackers = backup.backupManga
