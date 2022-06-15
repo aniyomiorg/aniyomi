@@ -17,9 +17,10 @@ import eu.kanade.tachiyomi.source.icon
 class ClearDatabaseItemHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter) {
     private val binding = ClearDatabaseSourceItemBinding.bind(view)
 
-    fun bind(source: Source, count: Int) {
+    fun bind(source: Source, count: Long) {
         binding.title.text = source.toString()
-        binding.description.text = itemView.context.resources.getQuantityString(R.plurals.clear_database_source_item_count, count, count)
+        binding.description.text = itemView.context.resources
+            .getQuantityString(R.plurals.clear_database_source_item_count, count.toInt(), count.toInt())
 
         itemView.post {
             when {
@@ -28,13 +29,13 @@ class ClearDatabaseItemHolder(view: View, adapter: FlexibleAdapter<*>) : Flexibl
                 source.icon() != null -> binding.thumbnail.setImageDrawable(source.icon())
             }
         }
-
         binding.checkbox.isChecked = (bindingAdapter as FlexibleAdapter<*>).isSelected(bindingAdapterPosition)
     }
 
-    fun bind(source: AnimeSource, count: Int) {
+    fun bind(source: AnimeSource, count: Long) {
         binding.title.text = source.toString()
-        binding.description.text = itemView.context.resources.getQuantityString(R.plurals.clear_database_source_item_count, count, count)
+        binding.description.text = itemView.context.resources
+            .getQuantityString(R.plurals.clear_database_source_item_count, count.toInt(), count.toInt())
 
         itemView.post {
             when {
@@ -43,7 +44,6 @@ class ClearDatabaseItemHolder(view: View, adapter: FlexibleAdapter<*>) : Flexibl
                 source.icon() != null -> binding.thumbnail.setImageDrawable(source.icon())
             }
         }
-
         binding.checkbox.isChecked = (bindingAdapter as FlexibleAdapter<*>).isSelected(bindingAdapterPosition)
     }
 }

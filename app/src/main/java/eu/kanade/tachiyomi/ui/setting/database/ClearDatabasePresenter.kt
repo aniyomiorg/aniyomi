@@ -23,18 +23,20 @@ class ClearDatabasePresenter(
         super.onCreate(savedState)
 
         presenterScope.launchIO {
-            getSourcesWithNonLibraryManga.subscribe()
-                .collectLatest { list ->
-                    val items = list
-                        .map { (source, count) -> ClearDatabaseSourceItem(source, count) }
-                        .sortedBy { it.source.name }
-
-                    withUIContext { view?.setItems(items) }
-                }
             getAnimeSourcesWithNonLibraryAnime.subscribe()
                 .collectLatest { list ->
                     val items = list
                         .map { (source, count) -> ClearDatabaseAnimeSourceItem(source, count) }
+                        .sortedBy { it.source.name }
+
+                    withUIContext { view?.setItemsAnime(items) }
+                }
+        }
+        presenterScope.launchIO {
+            getSourcesWithNonLibraryManga.subscribe()
+                .collectLatest { list ->
+                    val items = list
+                        .map { (source, count) -> ClearDatabaseSourceItem(source, count) }
                         .sortedBy { it.source.name }
 
                     withUIContext { view?.setItems(items) }
