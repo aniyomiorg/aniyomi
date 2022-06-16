@@ -112,15 +112,15 @@ class AnimeSearchPresenter(
                 flags,
             )
 
+        try {
+            syncEpisodesWithSource(sourceEpisodes, anime, source)
+        } catch (e: Exception) {
+            // Worst case, episodes won't be synced
+        }
+
         db.inTransaction {
             // Update episodes read
             if (migrateEpisodes) {
-                try {
-                    syncEpisodesWithSource(sourceEpisodes, anime, source)
-                } catch (e: Exception) {
-                    // Worst case, episodes won't be synced
-                }
-
                 val prevAnimeEpisodes = db.getEpisodes(prevAnime).executeAsBlocking()
                 val maxEpisodeRead = prevAnimeEpisodes
                     .filter { it.seen }

@@ -111,15 +111,15 @@ class SearchPresenter(
                 flags,
             )
 
+        try {
+            syncChaptersWithSource(sourceChapters, manga, source)
+        } catch (e: Exception) {
+            // Worst case, chapters won't be synced
+        }
+
         db.inTransaction {
             // Update chapters read
             if (migrateChapters) {
-                try {
-                    syncChaptersWithSource(sourceChapters, manga, source)
-                } catch (e: Exception) {
-                    // Worst case, chapters won't be synced
-                }
-
                 val prevMangaChapters = db.getChapters(prevManga).executeAsBlocking()
                 val maxChapterRead = prevMangaChapters
                     .filter { it.read }
