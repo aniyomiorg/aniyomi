@@ -20,7 +20,7 @@ class GetChapterByMangaId(
         }
     }
 
-    suspend fun subscribe(mangaId: Long): Flow<List<Chapter>> {
+    fun subscribe(mangaId: Long): Flow<List<Chapter>> {
         return try {
             chapterRepository.getChapterByMangaIdAsFlow(mangaId)
         } catch (e: Exception) {

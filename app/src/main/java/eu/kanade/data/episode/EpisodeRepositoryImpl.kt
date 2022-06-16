@@ -103,7 +103,7 @@ class EpisodeRepositoryImpl(
         return handler.awaitList { episodesQueries.getEpisodesByAnimeId(animeId, episodeMapper) }
     }
 
-    override suspend fun getEpisodeByAnimeIdAsFlow(animeId: Long): Flow<List<Episode>> {
+    override fun getEpisodeByAnimeIdAsFlow(animeId: Long): Flow<List<Episode>> {
         return handler.subscribeToList { episodesQueries.getEpisodesByAnimeId(animeId, episodeMapper) }
     }
 }

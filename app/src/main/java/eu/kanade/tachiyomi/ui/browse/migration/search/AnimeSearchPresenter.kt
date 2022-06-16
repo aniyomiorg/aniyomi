@@ -86,7 +86,7 @@ class AnimeSearchPresenter(
         }
     }
 
-    private fun migrateAnimeInternal(
+    private suspend fun migrateAnimeInternal(
         prevSource: AnimeSource?,
         source: AnimeSource,
         sourceEpisodes: List<SEpisode>,

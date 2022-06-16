@@ -5,7 +5,6 @@ import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.data.database.models.toDomainAnime
-import kotlinx.coroutines.runBlocking
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import eu.kanade.tachiyomi.data.database.models.Anime as DbAnime
@@ -19,16 +18,14 @@ import eu.kanade.tachiyomi.data.database.models.Episode as DbEpisode
  * @param source the source of the episodes.
  * @return a pair of new insertions and deletions.
  */
-fun syncEpisodesWithSource(
+suspend fun syncEpisodesWithSource(
     rawSourceEpisodes: List<SEpisode>,
     anime: DbAnime,
     source: AnimeSource,
     syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get(),
 ): Pair<List<DbEpisode>, List<DbEpisode>> {
     val domainAnime = anime.toDomainAnime() ?: return Pair(emptyList(), emptyList())
-    val (added, deleted) = runBlocking {
-        syncEpisodesWithSource.await(rawSourceEpisodes, domainAnime, source)
-    }
+    val (added, deleted) = syncEpisodesWithSource.await(rawSourceEpisodes, domainAnime, source)
 
     val addedDbEpisodes = added.map { it.toDbEpisode() }
     val deletedDbEpisodes = deleted.map { it.toDbEpisode() }

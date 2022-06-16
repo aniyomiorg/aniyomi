@@ -20,7 +20,7 @@ class GetEpisodeByAnimeId(
         }
     }
 
-    suspend fun subscribe(animeId: Long): Flow<List<Episode>> {
+    fun subscribe(animeId: Long): Flow<List<Episode>> {
         return try {
             episodeRepository.getEpisodeByAnimeIdAsFlow(animeId)
         } catch (e: Exception) {

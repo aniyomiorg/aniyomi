@@ -8,8 +8,6 @@ import android.os.Bundle
 import coil.imageLoader
 import coil.memory.MemoryCache
 import com.jakewharton.rxrelay.PublishRelay
-import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.toSAnime
@@ -51,7 +49,6 @@ import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.Stat
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import rx.Observable
@@ -71,7 +68,7 @@ class AnimePresenter(
     private val trackManager: TrackManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    // private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
 ) : BasePresenter<AnimeController>() {
 
     /**
@@ -158,18 +155,24 @@ class AnimePresenter(
         // Episodes list - start
 
         // Keeps subscribed to changes and sends the list of chapters to the relay.
-        presenterScope.launchIO {
-            anime.id?.let { animeId ->
-                getEpisodeByAnimeId.subscribe(animeId)
-                    .collectLatest { domainEpisodes ->
-                        val episodeItems = domainEpisodes.map { it.toDbEpisode().toModel() }
-                        setDownloadedEpisodes(episodeItems)
-                        this@AnimePresenter.allEpisodes = episodeItems
-                        observeDownloads()
-                        episodesRelay.call(episodeItems)
-                    }
-            }
-        }
+        add(
+            db.getEpisodes(anime).asRxObservable()
+                .map { episodes ->
+                    // Convert every episode to a model.
+                    episodes.map { it.toModel() }
+                }
+                .doOnNext { episodes ->
+                    // Find downloaded episodes
+                    setDownloadedEpisodes(episodes)
+
+                    // Store the last emission
+                    this.allEpisodes = episodes
+
+                    // Listen for download status changes
+                    observeDownloads()
+                }
+                .subscribe { episodesRelay.call(it) },
+        )
 
         // Episodes list - end
 
