@@ -8,6 +8,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.ui.library.setting.DisplayModeSetting
@@ -98,17 +99,18 @@ class LibrarySettingsSheet(
             override val footer = null
 
             init {
-                trackManager.services.filter { service -> service.isLogged }
-                    .also { services ->
-                        val size = services.size
-                        trackFilters = services.associate { service ->
-                            Pair(service.id, Item.TriStateGroup(getServiceResId(service, size), this))
-                        }
-                        val list: MutableList<Item> = mutableListOf(downloaded, unread, started, completed)
-                        if (size > 1) list.add(Item.Header(R.string.action_filter_tracked))
-                        list.addAll(trackFilters.values)
-                        items = list
+                trackManager.services.filter { service ->
+                    service.isLogged && service !is AnimeTrackService
+                }.also { services ->
+                    val size = services.size
+                    trackFilters = services.associate { service ->
+                        Pair(service.id, Item.TriStateGroup(getServiceResId(service, size), this))
                     }
+                    val list: MutableList<Item> = mutableListOf(downloaded, unread, started, completed)
+                    if (size > 1) list.add(Item.Header(R.string.action_filter_tracked))
+                    list.addAll(trackFilters.values)
+                    items = list
+                }
             }
 
             private fun getServiceResId(service: TrackService, size: Int): Int {
