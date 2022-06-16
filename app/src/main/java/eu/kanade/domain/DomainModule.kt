@@ -3,6 +3,8 @@ package eu.kanade.domain
 import eu.kanade.data.anime.AnimeRepositoryImpl
 import eu.kanade.data.animehistory.AnimeHistoryRepositoryImpl
 import eu.kanade.data.animesource.AnimeSourceRepositoryImpl
+import eu.kanade.data.category.CategoryRepositoryImpl
+import eu.kanade.data.category.CategoryRepositoryImplAnime
 import eu.kanade.data.chapter.ChapterRepositoryImpl
 import eu.kanade.data.episode.EpisodeRepositoryImpl
 import eu.kanade.data.history.HistoryRepositoryImpl
@@ -31,6 +33,16 @@ import eu.kanade.domain.animesource.interactor.ToggleAnimeSource
 import eu.kanade.domain.animesource.interactor.ToggleAnimeSourcePin
 import eu.kanade.domain.animesource.interactor.UpsertAnimeSourceData
 import eu.kanade.domain.animesource.repository.AnimeSourceRepository
+import eu.kanade.domain.category.interactor.DeleteCategory
+import eu.kanade.domain.category.interactor.DeleteCategoryAnime
+import eu.kanade.domain.category.interactor.GetCategories
+import eu.kanade.domain.category.interactor.GetCategoriesAnime
+import eu.kanade.domain.category.interactor.InsertCategory
+import eu.kanade.domain.category.interactor.InsertCategoryAnime
+import eu.kanade.domain.category.interactor.UpdateCategory
+import eu.kanade.domain.category.interactor.UpdateCategoryAnime
+import eu.kanade.domain.category.repository.CategoryRepository
+import eu.kanade.domain.category.repository.CategoryRepositoryAnime
 import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
 import eu.kanade.domain.chapter.interactor.ShouldUpdateDbChapter
 import eu.kanade.domain.chapter.interactor.SyncChaptersWithSource
@@ -91,6 +103,18 @@ class DomainModule : InjektModule {
         addFactory { UpdateEpisode(get()) }
         addFactory { ShouldUpdateDbEpisode() }
         addFactory { SyncEpisodesWithSource(get(), get(), get(), get()) }
+
+        addSingletonFactory<CategoryRepositoryAnime> { CategoryRepositoryImplAnime(get()) }
+        addFactory { GetCategoriesAnime(get()) }
+        addFactory { InsertCategoryAnime(get()) }
+        addFactory { UpdateCategoryAnime(get()) }
+        addFactory { DeleteCategoryAnime(get()) }
+
+        addSingletonFactory<CategoryRepository> { CategoryRepositoryImpl(get()) }
+        addFactory { GetCategories(get()) }
+        addFactory { InsertCategory(get()) }
+        addFactory { UpdateCategory(get()) }
+        addFactory { DeleteCategory(get()) }
 
         addSingletonFactory<MangaRepository> { MangaRepositoryImpl(get()) }
         addFactory { GetFavoritesBySourceId(get()) }

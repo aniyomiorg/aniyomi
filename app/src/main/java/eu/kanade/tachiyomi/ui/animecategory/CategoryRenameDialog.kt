@@ -4,8 +4,8 @@ import android.app.Dialog
 import android.os.Bundle
 import com.bluelinelabs.conductor.Controller
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import eu.kanade.domain.category.model.Category
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.widget.materialdialogs.setTextInput
 
@@ -78,8 +78,6 @@ class CategoryRenameDialog<T>(bundle: Bundle? = null) : DialogController(bundle)
     interface Listener {
         fun renameCategory(category: Category, name: String)
     }
-
-    private companion object {
-        const val CATEGORY_KEY = "CategoryRenameDialog.category"
-    }
 }
+
+private const val CATEGORY_KEY = "CategoryRenameDialog.category"
