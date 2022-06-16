@@ -7,6 +7,8 @@ import android.net.Uri
 import android.webkit.MimeTypeMap
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFmpegSession
+import com.arthenica.ffmpegkit.FFprobeSession
+import com.arthenica.ffmpegkit.Level
 import com.arthenica.ffmpegkit.LogCallback
 import com.arthenica.ffmpegkit.SessionState
 import com.arthenica.ffmpegkit.StatisticsCallback
@@ -255,7 +257,7 @@ class AnimeDownloader(
 
         isFFmpegRunning = false
         FFmpegKitConfig.getSessions().filter {
-            it.state == SessionState.CREATED || it.state == SessionState.RUNNING
+            it.isFFmpeg && (it.state == SessionState.CREATED || it.state == SessionState.RUNNING)
         }.forEach {
             it.cancel()
         }
@@ -498,8 +500,11 @@ class AnimeDownloader(
         isFFmpegRunning = true
         val headers = video.headers ?: source.headers
         val headerOptions = headers.joinToString("", "-headers '", "'") { "${it.first}: ${it.second}\r\n" }
-        val ffmpegFilename = "${tmpDir.filePath}/$filename.mp4".toFFmpegString(context)
-        val ffmpegOptions = FFmpegKitConfig.parseArguments(headerOptions + " -i '${video.videoUrl}' -c copy \"$ffmpegFilename\"")
+        val ffmpegFilename = { "${tmpDir.filePath}/$filename.mp4".toFFmpegString(context) }
+        val ffmpegOptions = FFmpegKitConfig.parseArguments(headerOptions + " -i '${video.videoUrl}' -c copy \"${ffmpegFilename()}\"")
+        val ffprobeCommand = { file: String, ffprobeHeaders: String? ->
+            FFmpegKitConfig.parseArguments("${ffprobeHeaders?.plus(" ") ?: ""}-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"$file\"")
+        }
 
         var duration = 0L
         var nextLineIsDuration = false
@@ -509,6 +514,7 @@ class AnimeDownloader(
                 nextLineIsDuration = false
             }
             if (log.message == "  Duration: ") nextLineIsDuration = true
+            if (log.level <= Level.AV_LOG_WARNING) log.message?.let { logcat { it } }
         }
         val statisticsCallback = StatisticsCallback {
             if (duration > 0L) {
@@ -517,9 +523,11 @@ class AnimeDownloader(
         }
         val session = FFmpegSession(ffmpegOptions, {}, logCallback, statisticsCallback)
 
+        val inputDuration = getDuration(ffprobeCommand(video.videoUrl!!, headerOptions)) ?: 0F
         FFmpegKitConfig.ffmpegExecute(session)
-        // need to find a more optimal solution for this
-        if (video.progress < 100) {
+        val outputDuration = getDuration(ffprobeCommand(ffmpegFilename(), null)) ?: 0F
+        // allow for slight errors
+        if (inputDuration > outputDuration * 1.01F) {
             tmpDir.findFile("$filename.mp4")?.delete()
         }
         session.failStackTrace?.let { trace ->
@@ -530,6 +538,12 @@ class AnimeDownloader(
             .map {
                 tmpDir.findFile("$filename.mp4") ?: throw Exception("Downloaded file not found")
             }
+    }
+
+    private fun getDuration(ffprobeCommand: Array<String>): Float? {
+        val session = FFprobeSession(ffprobeCommand)
+        FFmpegKitConfig.ffprobeExecute(session)
+        return session.allLogsAsString.trim().toFloatOrNull()
     }
 
     /**
