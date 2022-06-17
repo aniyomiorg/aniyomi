@@ -496,11 +496,13 @@ class AnimeDownloader(
         return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
     }
 
-    private fun hlsObservable(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
+    private fun hlsObservable(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
         isFFmpegRunning = true
-        val headers = video.headers ?: source.headers
+        val headers = video.headers ?: download.source.headers
         val headerOptions = headers.joinToString("", "-headers '", "'") { "${it.first}: ${it.second}\r\n" }
-        val ffmpegFilename = { "${tmpDir.filePath}/$filename.mp4".toFFmpegString(context) }
+        val videoFile = tmpDir.findFile("$filename.mp4")
+            ?: tmpDir.createFile("$filename.mp4")!!
+        val ffmpegFilename = { videoFile.uri.toFFmpegString(context) }
         val ffmpegOptions = FFmpegKitConfig.parseArguments(headerOptions + " -i '${video.videoUrl}' -c copy \"${ffmpegFilename()}\"")
         val ffprobeCommand = { file: String, ffprobeHeaders: String? ->
             FFmpegKitConfig.parseArguments("${ffprobeHeaders?.plus(" ") ?: ""}-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"$file\"")
@@ -564,7 +566,7 @@ class AnimeDownloader(
     }
 
     private fun newObservable(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
-        return if (isHls(video)) hlsObservable(video, download.source, tmpDir, filename)
+        return if (isHls(video)) hlsObservable(video, download, tmpDir, filename)
         else download.source.fetchVideo(video)
             .map { response ->
                 val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
