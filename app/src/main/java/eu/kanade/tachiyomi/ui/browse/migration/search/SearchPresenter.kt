@@ -85,7 +85,7 @@ class SearchPresenter(
         }
     }
 
-    private fun migrateMangaInternal(
+    private suspend fun migrateMangaInternal(
         prevSource: Source?,
         source: Source,
         sourceChapters: List<SChapter>,
