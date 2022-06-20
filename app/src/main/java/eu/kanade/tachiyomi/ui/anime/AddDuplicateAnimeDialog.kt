@@ -40,7 +40,7 @@ class AddDuplicateAnimeDialog(bundle: Bundle? = null) : DialogController(bundle)
             .setNegativeButton(android.R.string.cancel, null)
             .setNeutralButton(activity?.getString(R.string.action_show_anime)) { _, _ ->
                 dismissDialog()
-                router.pushController(AnimeController(libraryAnime))
+                router.pushController(AnimeController(libraryAnime.id!!))
             }
             .setCancelable(true)
             .create()

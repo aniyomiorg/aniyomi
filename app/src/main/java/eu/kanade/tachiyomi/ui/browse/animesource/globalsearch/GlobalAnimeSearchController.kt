@@ -77,7 +77,7 @@ open class GlobalAnimeSearchController(
      * @param anime clicked item containing anime information.
      */
     override fun onAnimeClick(anime: Anime) {
-        router.pushController(AnimeController(anime, true))
+        router.pushController(AnimeController(anime.id!!, true))
     }
 
     /**

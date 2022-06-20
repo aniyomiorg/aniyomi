@@ -2,7 +2,9 @@ package eu.kanade.domain.anime.model
 
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.LocalSource
+import eu.kanade.tachiyomi.widget.ExtendedNavigationView
 import tachiyomi.animesource.model.AnimeInfo
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -45,15 +47,99 @@ data class Anime(
         }
     }
 
-    companion object {
+    val displayMode: Long
+        get() = episodeFlags and EPISODE_DISPLAY_MASK
 
+    val unseenFilterRaw: Long
+        get() = episodeFlags and EPISODE_UNSEEN_MASK
+
+    val downloadedFilterRaw: Long
+        get() = episodeFlags and EPISODE_DOWNLOADED_MASK
+
+    val bookmarkedFilterRaw: Long
+        get() = episodeFlags and EPISODE_BOOKMARKED_MASK
+
+    val unseenFilter: TriStateFilter
+        get() = when (unseenFilterRaw) {
+            EPISODE_SHOW_UNSEEN -> TriStateFilter.ENABLED_IS
+            EPISODE_SHOW_SEEN -> TriStateFilter.ENABLED_NOT
+            else -> TriStateFilter.DISABLED
+        }
+
+    val downloadedFilter: TriStateFilter
+        get() {
+            if (forceDownloaded()) return TriStateFilter.ENABLED_IS
+            return when (downloadedFilterRaw) {
+                EPISODE_SHOW_DOWNLOADED -> TriStateFilter.ENABLED_IS
+                EPISODE_SHOW_NOT_DOWNLOADED -> TriStateFilter.ENABLED_NOT
+                else -> TriStateFilter.DISABLED
+            }
+        }
+
+    val bookmarkedFilter: TriStateFilter
+        get() = when (bookmarkedFilterRaw) {
+            EPISODE_SHOW_BOOKMARKED -> TriStateFilter.ENABLED_IS
+            EPISODE_SHOW_NOT_BOOKMARKED -> TriStateFilter.ENABLED_NOT
+            else -> TriStateFilter.DISABLED
+        }
+
+    fun episodesFiltered(): Boolean {
+        return unseenFilter != TriStateFilter.DISABLED ||
+            downloadedFilter != TriStateFilter.DISABLED ||
+            bookmarkedFilter != TriStateFilter.DISABLED
+    }
+
+    fun forceDownloaded(): Boolean {
+        return favorite && Injekt.get<PreferencesHelper>().downloadedOnly().get()
+    }
+
+    fun sortDescending(): Boolean {
+        return episodeFlags and EPISODE_SORT_DIR_MASK == EPISODE_SORTING_DESC
+    }
+
+    companion object {
         // Generic filter that does not filter anything
         const val SHOW_ALL = 0x00000000L
+
+        const val EPISODE_SORT_DESC = 0x00000000L
+        const val EPISODE_SORT_ASC = 0x00000001L
+        const val EPISODE_SORT_DIR_MASK = 0x00000001L
+
+        const val EPISODE_SHOW_UNSEEN = 0x00000002L
+        const val EPISODE_SHOW_SEEN = 0x00000004L
+        const val EPISODE_UNSEEN_MASK = 0x00000006L
+
+        const val EPISODE_SHOW_DOWNLOADED = 0x00000008L
+        const val EPISODE_SHOW_NOT_DOWNLOADED = 0x00000010L
+        const val EPISODE_DOWNLOADED_MASK = 0x00000018L
+
+        const val EPISODE_SHOW_BOOKMARKED = 0x00000020L
+        const val EPISODE_SHOW_NOT_BOOKMARKED = 0x00000040L
+        const val EPISODE_BOOKMARKED_MASK = 0x00000060L
 
         const val EPISODE_SORTING_SOURCE = 0x00000000L
         const val EPISODE_SORTING_NUMBER = 0x00000100L
         const val EPISODE_SORTING_UPLOAD_DATE = 0x00000200L
         const val EPISODE_SORTING_MASK = 0x00000300L
+        const val EPISODE_SORTING_DESC = 0x00000000L
+
+        const val EPISODE_DISPLAY_NAME = 0x00000000L
+        const val EPISODE_DISPLAY_NUMBER = 0x00100000L
+        const val EPISODE_DISPLAY_MASK = 0x00100000L
+    }
+}
+
+enum class TriStateFilter {
+    DISABLED, // Disable filter
+    ENABLED_IS, // Enabled with "is" filter
+    ENABLED_NOT, // Enabled with "not" filter
+}
+
+fun TriStateFilter.toTriStateGroupState(): ExtendedNavigationView.Item.TriStateGroup.State {
+    return when (this) {
+        TriStateFilter.DISABLED -> ExtendedNavigationView.Item.TriStateGroup.State.IGNORE
+        TriStateFilter.ENABLED_IS -> ExtendedNavigationView.Item.TriStateGroup.State.INCLUDE
+        TriStateFilter.ENABLED_NOT -> ExtendedNavigationView.Item.TriStateGroup.State.EXCLUDE
     }
 }
 

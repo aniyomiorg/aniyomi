@@ -84,7 +84,7 @@ class AnimeSearchController(
         if (!isReplacingAnime) {
             router.popController(this)
             if (newAnime != null) {
-                val newAnimeController = RouterTransaction.with(AnimeController(newAnime))
+                val newAnimeController = RouterTransaction.with(AnimeController(newAnime.id!!))
                 if (router.backstack.lastOrNull()?.controller is AnimeController) {
                     // Replace old AnimeController
                     router.replaceTopController(newAnimeController)

@@ -10,6 +10,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.getNameForAnimeInfo
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
@@ -100,7 +101,7 @@ class AnimeInfoHeaderAdapter(
                 .onEach { controller.onFavoriteClick() }
                 .launchIn(controller.viewScope)
 
-            if (controller.presenter.anime.favorite && controller.presenter.getCategories().isNotEmpty()) {
+            if (controller.presenter.anime.favorite) {
                 binding.btnFavorite.longClicks()
                     .onEach { controller.onCategoriesClick() }
                     .launchIn(controller.viewScope)
@@ -247,20 +248,8 @@ class AnimeInfoHeaderAdapter(
             // If anime source is known update source TextView.
             binding.mangaMissingSourceIcon.isVisible = source is AnimeSourceManager.StubSource
 
-            val animeSource = source.toString()
             with(binding.mangaSource) {
-                val enabledLanguages = preferences.enabledLanguages().get()
-                    .filterNot { it in listOf("all", "other") }
-
-                val hasOneActiveLanguages = enabledLanguages.size == 1
-                val isInEnabledLanguages = source.lang in enabledLanguages
-                text = when {
-                    // For edge cases where user disables a source they got anime of in their library.
-                    hasOneActiveLanguages && !isInEnabledLanguages -> animeSource
-                    // Hide the language tag when only one language is used.
-                    hasOneActiveLanguages && isInEnabledLanguages -> source.name
-                    else -> animeSource
-                }
+                text = source.getNameForAnimeInfo()
                 setOnClickListener {
                     controller.performSearch(sourceManager.getOrStub(source.id).name)
                 }

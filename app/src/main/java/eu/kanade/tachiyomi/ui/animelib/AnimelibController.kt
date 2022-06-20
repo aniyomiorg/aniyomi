@@ -493,7 +493,7 @@ class AnimelibController(
         // Notify the presenter a anime is being opened.
         presenter.onOpenAnime()
 
-        router.pushController(AnimeController(anime))
+        router.pushController(AnimeController(anime.id!!))
     }
 
     /**

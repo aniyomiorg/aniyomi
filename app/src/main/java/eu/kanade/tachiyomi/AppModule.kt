@@ -52,7 +52,7 @@ class AppModule(val app: Application) : InjektModule {
         // This is used to allow incremental migration from Storio
         val openHelperMangaConfig = SupportSQLiteOpenHelper.Configuration.builder(app)
             .callback(DbOpenCallback())
-            .name(DbOpenCallback.DATABASE_NAME)
+            .name(DbOpenCallback.DATABASE_FILENAME)
             .noBackupDirectory(false)
             .build()
 
@@ -65,7 +65,7 @@ class AppModule(val app: Application) : InjektModule {
 
         val openHelperAnimeConfig = SupportSQLiteOpenHelper.Configuration.builder(app)
             .callback(AnimeDbOpenCallback())
-            .name(AnimeDbOpenCallback.DATABASE_NAME)
+            .name(AnimeDbOpenCallback.DATABASE_FILENAME)
             .noBackupDirectory(false)
             .build()
 

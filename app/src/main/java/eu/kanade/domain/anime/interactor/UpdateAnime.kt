@@ -58,4 +58,8 @@ class UpdateAnime(
     suspend fun awaitUpdateLastUpdate(animeId: Long): Boolean {
         return animeRepository.update(AnimeUpdate(id = animeId, lastUpdate = Date().time))
     }
+
+    suspend fun awaitUpdateCoverLastModified(mangaId: Long): Boolean {
+        return animeRepository.update(AnimeUpdate(id = mangaId, coverLastModified = Date().time))
+    }
 }

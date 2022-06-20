@@ -27,8 +27,12 @@ import coil.util.DebugLogger
 import eu.kanade.domain.DomainModule
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
 import eu.kanade.tachiyomi.data.coil.AnimeCoverKeyer
+import eu.kanade.tachiyomi.data.coil.AnimeKeyer
+import eu.kanade.tachiyomi.data.coil.DomainAnimeKeyer
+import eu.kanade.tachiyomi.data.coil.DomainMangaKeyer
 import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher
 import eu.kanade.tachiyomi.data.coil.MangaCoverKeyer
+import eu.kanade.tachiyomi.data.coil.MangaKeyer
 import eu.kanade.tachiyomi.data.coil.TachiyomiImageDecoder
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
@@ -138,6 +142,14 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
                 add(TachiyomiImageDecoder.Factory())
                 add(MangaCoverFetcher.Factory(lazy(callFactoryInit), lazy(diskCacheInit)))
                 add(AnimeCoverFetcher.Factory(lazy(callFactoryInit), lazy(diskCacheInit)))
+                add(AnimeCoverFetcher.DomainAnimeFactory(lazy(callFactoryInit), lazy(diskCacheInit)))
+                add(AnimeCoverFetcher.AnimeCoverFactory(lazy(callFactoryInit), lazy(diskCacheInit)))
+                add(AnimeKeyer())
+                add(DomainAnimeKeyer())
+                add(MangaCoverFetcher.DomainMangaFactory(lazy(callFactoryInit), lazy(diskCacheInit)))
+                add(MangaCoverFetcher.MangaCoverFactory(lazy(callFactoryInit), lazy(diskCacheInit)))
+                add(MangaKeyer())
+                add(DomainMangaKeyer())
                 add(MangaCoverKeyer())
                 add(AnimeCoverKeyer())
             }

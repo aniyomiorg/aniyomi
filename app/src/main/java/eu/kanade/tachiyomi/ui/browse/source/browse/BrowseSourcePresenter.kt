@@ -2,6 +2,9 @@ package eu.kanade.tachiyomi.ui.browse.source.browse
 
 import android.os.Bundle
 import eu.davidea.flexibleadapter.items.IFlexible
+import eu.kanade.domain.category.interactor.GetCategories
+import eu.kanade.domain.manga.interactor.GetDuplicateLibraryManga
+import eu.kanade.domain.manga.model.toDbManga
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Category
@@ -43,6 +46,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
@@ -52,6 +56,7 @@ import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
+import eu.kanade.domain.category.model.Category as DomainCategory
 
 open class BrowseSourcePresenter(
     private val sourceId: Long,
@@ -60,6 +65,8 @@ open class BrowseSourcePresenter(
     private val db: DatabaseHelper = Injekt.get(),
     private val prefs: PreferencesHelper = Injekt.get(),
     private val coverCache: CoverCache = Injekt.get(),
+    private val getDuplicateLibraryManga: GetDuplicateLibraryManga = Injekt.get(),
+    private val getCategories: GetCategories = Injekt.get(),
 ) : BasePresenter<BrowseSourceController>() {
 
     /**
@@ -344,12 +351,12 @@ open class BrowseSourcePresenter(
      *
      * @return List of categories, not including the default category
      */
-    fun getCategories(): List<Category> {
-        return db.getCategories().executeAsBlocking()
+    suspend fun getCategories(): List<DomainCategory> {
+        return getCategories.subscribe().firstOrNull() ?: emptyList()
     }
 
-    fun getDuplicateLibraryManga(manga: Manga): Manga? {
-        return db.getDuplicateLibraryManga(manga).executeAsBlocking()
+    suspend fun getDuplicateLibraryManga(manga: Manga): Manga? {
+        return getDuplicateLibraryManga.await(manga.title, manga.source)?.toDbManga()
     }
 
     /**
@@ -358,9 +365,9 @@ open class BrowseSourcePresenter(
      * @param manga the manga to get categories from.
      * @return Array of category ids the manga is in, if none returns default id
      */
-    fun getMangaCategoryIds(manga: Manga): Array<Int?> {
+    fun getMangaCategoryIds(manga: Manga): Array<Long?> {
         val categories = db.getCategoriesForManga(manga).executeAsBlocking()
-        return categories.mapNotNull { it.id }.toTypedArray()
+        return categories.mapNotNull { it?.id?.toLong() }.toTypedArray()
     }
 
     /**

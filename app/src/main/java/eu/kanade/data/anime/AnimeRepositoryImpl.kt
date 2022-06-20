@@ -22,6 +22,12 @@ class AnimeRepositoryImpl(
         return handler.subscribeToList { animesQueries.getFavoriteBySourceId(sourceId, animeMapper) }
     }
 
+    override suspend fun getDuplicateLibraryAnime(title: String, sourceId: Long): Anime? {
+        return handler.awaitOneOrNull {
+            animesQueries.getDuplicateLibraryAnime(title, sourceId, animeMapper)
+        }
+    }
+
     override suspend fun resetViewerFlags(): Boolean {
         return try {
             handler.await { animesQueries.resetViewerFlags() }

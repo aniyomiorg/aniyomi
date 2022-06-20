@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import coil.imageLoader
 import coil.request.ImageRequest
-import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -35,6 +34,7 @@ import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.SelectableAdapter
 import eu.kanade.data.chapter.NoChaptersException
+import eu.kanade.domain.category.model.toDbCategory
 import eu.kanade.domain.history.model.HistoryWithRelations
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.CoverCache
@@ -90,6 +90,7 @@ import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.hasCustomCover
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
+import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
@@ -99,6 +100,7 @@ import eu.kanade.tachiyomi.widget.ActionModeWithToolbar
 import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
@@ -122,21 +124,17 @@ class MangaController :
 
     constructor(history: HistoryWithRelations) : this(history.mangaId)
 
-    constructor(manga: Manga?, fromSource: Boolean = false) : super(
+    constructor(mangaId: Long, fromSource: Boolean = false) : super(
         bundleOf(
-            MANGA_EXTRA to (manga?.id ?: 0),
+            MANGA_EXTRA to mangaId,
             FROM_SOURCE_EXTRA to fromSource,
         ),
     ) {
-        this.manga = manga
-        if (manga != null) {
-            source = Injekt.get<SourceManager>().getOrStub(manga.source)
+        this.manga = Injekt.get<DatabaseHelper>().getManga(mangaId).executeAsBlocking()
+        if (this.manga != null) {
+            source = Injekt.get<SourceManager>().getOrStub(this.manga!!.source)
         }
     }
-
-    constructor(mangaId: Long) : this(
-        Injekt.get<DatabaseHelper>().getManga(mangaId).executeAsBlocking(),
-    )
 
     @Suppress("unused")
     constructor(bundle: Bundle) : this(bundle.getLong(MANGA_EXTRA))
@@ -184,8 +182,6 @@ class MangaController :
 
     private var trackSheet: TrackSheet? = null
 
-    private var dialog: DialogController? = null
-
     /**
      * For [recyclerViewUpdatesToolbarTitleAlpha]
      */
@@ -208,8 +204,10 @@ class MangaController :
         super.onChangeStarted(handler, type)
         // Hide toolbar title on enter
         // No need to update alpha for cover dialog
-        if (dialog == null) {
-            updateToolbarTitleAlpha(if (type.isEnter) 0F else 1F)
+        if (!type.isEnter) {
+            if (!type.isPush || router.backstack.lastOrNull()?.controller !is DialogController) {
+                updateToolbarTitleAlpha(1f)
+            }
         }
         recyclerViewUpdatesToolbarTitleAlpha(type.isEnter)
     }
@@ -307,13 +305,9 @@ class MangaController :
             }
             .launchIn(viewScope)
 
-        settingsSheet = ChaptersSettingsSheet(router, presenter) { group ->
-            if (group is ChaptersSettingsSheet.Filter.FilterGroup) {
-                updateFilterIconState()
-            }
-        }
+        settingsSheet = ChaptersSettingsSheet(router, presenter)
 
-        trackSheet = TrackSheet(this, manga!!, (activity as MainActivity).supportFragmentManager)
+        trackSheet = TrackSheet(this, (activity as MainActivity).supportFragmentManager)
 
         updateFilterIconState()
         recyclerViewUpdatesToolbarTitleAlpha(true)
@@ -403,13 +397,16 @@ class MangaController :
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        // Hide options for local manga
-        menu.findItem(R.id.action_share).isVisible = !isLocalSource
-        menu.findItem(R.id.download_group).isVisible = !isLocalSource
+        runBlocking {
+            // Hide options for local manga
+            menu.findItem(R.id.action_share).isVisible = !isLocalSource
+            menu.findItem(R.id.download_group).isVisible = !isLocalSource
 
-        // Hide options for non-library manga
-        menu.findItem(R.id.action_edit_categories).isVisible = presenter.manga.favorite && presenter.getCategories().isNotEmpty()
-        menu.findItem(R.id.action_migrate).isVisible = presenter.manga.favorite
+            // Hide options for non-library manga
+            menu.findItem(R.id.action_edit_categories).isVisible =
+                presenter.manga.favorite && presenter.getCategories().isNotEmpty()
+            menu.findItem(R.id.action_migrate).isVisible = presenter.manga.favorite
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -519,12 +516,17 @@ class MangaController :
             activity?.toast(activity?.getString(R.string.manga_removed_library))
             activity?.invalidateOptionsMenu()
         } else {
-            val duplicateManga = presenter.getDuplicateLibraryManga(manga)
-            if (duplicateManga != null) {
-                AddDuplicateMangaDialog(this, duplicateManga) { addToLibrary(manga) }
-                    .showDialog(router)
-            } else {
-                addToLibrary(manga)
+            launchIO {
+                val duplicateManga = presenter.getDuplicateLibraryManga(manga)
+
+                withUIContext {
+                    if (duplicateManga != null) {
+                        AddDuplicateMangaDialog(this@MangaController, duplicateManga) { addToLibrary(manga) }
+                            .showDialog(router)
+                    } else {
+                        addToLibrary(manga)
+                    }
+                }
             }
         }
     }
@@ -534,39 +536,47 @@ class MangaController :
     }
 
     private fun addToLibrary(newManga: Manga) {
-        val categories = presenter.getCategories()
-        val defaultCategoryId = preferences.defaultCategory()
-        val defaultCategory = categories.find { it.id == defaultCategoryId }
+        launchIO {
+            val categories = presenter.getCategories()
+            val defaultCategoryId = preferences.defaultCategory()
+            val defaultCategory = categories.find { it.id == defaultCategoryId.toLong() }
 
-        when {
-            // Default category set
-            defaultCategory != null -> {
-                toggleFavorite()
-                presenter.moveMangaToCategory(newManga, defaultCategory)
-                activity?.toast(activity?.getString(R.string.manga_added_library))
-                activity?.invalidateOptionsMenu()
-            }
-
-            // Automatic 'Default' or no categories
-            defaultCategoryId == 0 || categories.isEmpty() -> {
-                toggleFavorite()
-                presenter.moveMangaToCategory(newManga, null)
-                activity?.toast(activity?.getString(R.string.manga_added_library))
-                activity?.invalidateOptionsMenu()
-            }
-
-            // Choose a category
-            else -> {
-                val ids = presenter.getMangaCategoryIds(newManga)
-                val preselected = categories.map {
-                    if (it.id!! in ids) {
-                        QuadStateTextView.State.CHECKED.ordinal
-                    } else {
-                        QuadStateTextView.State.UNCHECKED.ordinal
+            withUIContext {
+                when {
+                    // Default category set
+                    defaultCategory != null -> {
+                        toggleFavorite()
+                        presenter.moveMangaToCategory(newManga, defaultCategory.toDbCategory())
+                        activity?.toast(activity?.getString(R.string.manga_added_library))
+                        activity?.invalidateOptionsMenu()
                     }
-                }.toIntArray()
 
-                showChangeCategoryDialog(newManga, categories, preselected)
+                    // Automatic 'Default' or no categories
+                    defaultCategoryId == 0 || categories.isEmpty() -> {
+                        toggleFavorite()
+                        presenter.moveMangaToCategory(newManga, null)
+                        activity?.toast(activity?.getString(R.string.manga_added_library))
+                        activity?.invalidateOptionsMenu()
+                    }
+
+                    // Choose a category
+                    else -> {
+                        val ids = presenter.getMangaCategoryIds(newManga)
+                        val preselected = categories.map {
+                            if (it.id in ids) {
+                                QuadStateTextView.State.CHECKED.ordinal
+                            } else {
+                                QuadStateTextView.State.UNCHECKED.ordinal
+                            }
+                        }.toTypedArray()
+
+                        showChangeCategoryDialog(
+                            newManga,
+                            categories.map { it.toDbCategory() },
+                            preselected,
+                        )
+                    }
+                }
             }
         }
 
@@ -610,32 +620,32 @@ class MangaController :
     }
 
     fun onCategoriesClick() {
-        val manga = presenter.manga
-        val categories = presenter.getCategories()
+        launchIO {
+            val manga = presenter.manga
+            val categories = presenter.getCategories()
 
-        val ids = presenter.getMangaCategoryIds(manga)
-        val preselected = categories.map {
-            if (it.id!! in ids) {
-                QuadStateTextView.State.CHECKED.ordinal
-            } else {
-                QuadStateTextView.State.UNCHECKED.ordinal
+            if (categories.isEmpty()) {
+                return@launchIO
             }
-        }.toIntArray()
-        showChangeCategoryDialog(manga, categories, preselected)
+
+            val ids = presenter.getMangaCategoryIds(manga)
+            val preselected = categories.map {
+                if (it.id in ids) {
+                    QuadStateTextView.State.CHECKED.ordinal
+                } else {
+                    QuadStateTextView.State.UNCHECKED.ordinal
+                }
+            }.toTypedArray()
+
+            withUIContext {
+                showChangeCategoryDialog(manga, categories.map { it.toDbCategory() }, preselected)
+            }
+        }
     }
 
-    private fun showChangeCategoryDialog(manga: Manga, categories: List<Category>, preselected: IntArray) {
-        if (dialog != null) return
-        dialog = ChangeMangaCategoriesDialog(this, listOf(manga), categories, preselected)
-        dialog?.addLifecycleListener(
-            object : LifecycleListener() {
-                override fun postDestroy(controller: Controller) {
-                    super.postDestroy(controller)
-                    dialog = null
-                }
-            },
-        )
-        dialog?.showDialog(router)
+    private fun showChangeCategoryDialog(manga: Manga, categories: List<Category>, preselected: Array<Int>) {
+        ChangeMangaCategoriesDialog(this, listOf(manga), categories, preselected.toIntArray())
+            .showDialog(router)
     }
 
     override fun updateCategoriesForMangas(mangas: List<Manga>, addCategories: List<Category>, removeCategories: List<Category>) {
@@ -735,18 +745,9 @@ class MangaController :
     }
 
     fun showFullCoverDialog() {
-        if (dialog != null) return
         val manga = manga ?: return
-        dialog = MangaFullCoverDialog(this, manga)
-        dialog?.addLifecycleListener(
-            object : LifecycleListener() {
-                override fun postDestroy(controller: Controller) {
-                    super.postDestroy(controller)
-                    dialog = null
-                }
-            },
-        )
-        dialog?.showDialog(router)
+        MangaFullCoverDialog(this, manga)
+            .showDialog(router)
     }
 
     fun shareCover() {
@@ -836,13 +837,13 @@ class MangaController :
             val dataUri = data?.data
             if (dataUri == null || resultCode != Activity.RESULT_OK) return
             val activity = activity ?: return
-            presenter.editCover(manga!!, activity, dataUri)
+            presenter.editCover(activity, dataUri)
         }
     }
 
     fun onSetCoverSuccess() {
         mangaInfoAdapter?.notifyItemChanged(0, this)
-        (dialog as? MangaFullCoverDialog)?.setImage(manga)
+        (router.backstack.lastOrNull()?.controller as? MangaFullCoverDialog)?.setImage(manga)
         activity?.toast(R.string.cover_updated)
     }
 
@@ -890,6 +891,7 @@ class MangaController :
         }
 
         updateFabVisibility()
+        updateFilterIconState()
     }
 
     private fun fetchChaptersFromSource(manualFetch: Boolean = false) {

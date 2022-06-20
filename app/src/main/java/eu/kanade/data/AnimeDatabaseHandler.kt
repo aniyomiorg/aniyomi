@@ -2,7 +2,6 @@ package eu.kanade.data
 
 import androidx.paging.PagingSource
 import com.squareup.sqldelight.Query
-import com.squareup.sqldelight.Transacter
 import eu.kanade.tachiyomi.mi.AnimeDatabase
 import kotlinx.coroutines.flow.Flow
 
@@ -33,7 +32,6 @@ interface AnimeDatabaseHandler {
 
     fun <T : Any> subscribeToPagingSource(
         countQuery: AnimeDatabase.() -> Query<Long>,
-        transacter: AnimeDatabase.() -> Transacter,
         queryProvider: AnimeDatabase.(Long, Long) -> Query<T>,
     ): PagingSource<Long, T>
 }

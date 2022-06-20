@@ -58,6 +58,13 @@ FROM animes
 WHERE favorite = 1
 AND source = :sourceId;
 
+getDuplicateLibraryAnime:
+SELECT *
+FROM animes
+WHERE favorite = 1
+AND LOWER(title) = :title
+AND source != :source;
+
 resetViewerFlags:
 UPDATE animes
 SET viewer = 0;

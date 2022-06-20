@@ -19,7 +19,6 @@ class AnimeHistoryRepositoryImpl(
     override fun getHistory(query: String): PagingSource<Long, AnimeHistoryWithRelations> {
         return handler.subscribeToPagingSource(
             countQuery = { animehistoryViewQueries.countHistory(query) },
-            transacter = { animehistoryViewQueries },
             queryProvider = { limit, offset ->
                 animehistoryViewQueries.animehistory(query, limit, offset, animehistoryWithRelationsMapper)
             },

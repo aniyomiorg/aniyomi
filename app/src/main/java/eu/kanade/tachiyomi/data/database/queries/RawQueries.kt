@@ -97,42 +97,6 @@ fun getRecentsQueryAnime() =
     ORDER BY ${Episode.COL_DATE_UPLOAD} DESC
 """
 
-fun getHistoryByMangaId() =
-    """
-    SELECT ${History.TABLE}.*
-    FROM ${History.TABLE}
-    JOIN ${Chapter.TABLE}
-    ON ${History.TABLE}.${History.COL_CHAPTER_ID} = ${Chapter.TABLE}.${Chapter.COL_ID}
-    WHERE ${Chapter.TABLE}.${Chapter.COL_MANGA_ID} = ? AND ${History.TABLE}.${History.COL_CHAPTER_ID} = ${Chapter.TABLE}.${Chapter.COL_ID}
-"""
-
-fun getHistoryByAnimeId() =
-    """
-    SELECT ${AnimeHistory.TABLE}.*
-    FROM ${AnimeHistory.TABLE}
-    JOIN ${Episode.TABLE}
-    ON ${AnimeHistory.TABLE}.${AnimeHistory.COL_EPISODE_ID} = ${Episode.TABLE}.${Episode.COL_ID}
-    WHERE ${Episode.TABLE}.${Episode.COL_ANIME_ID} = ? AND ${AnimeHistory.TABLE}.${AnimeHistory.COL_EPISODE_ID} = ${Episode.TABLE}.${Episode.COL_ID}
-"""
-
-fun getHistoryByChapterUrl() =
-    """
-    SELECT ${History.TABLE}.*
-    FROM ${History.TABLE}
-    JOIN ${Chapter.TABLE}
-    ON ${History.TABLE}.${History.COL_CHAPTER_ID} = ${Chapter.TABLE}.${Chapter.COL_ID}
-    WHERE ${Chapter.TABLE}.${Chapter.COL_URL} = ? AND ${History.TABLE}.${History.COL_CHAPTER_ID} = ${Chapter.TABLE}.${Chapter.COL_ID}
-"""
-
-fun getHistoryByEpisodeUrl() =
-    """
-    SELECT ${AnimeHistory.TABLE}.*
-    FROM ${AnimeHistory.TABLE}
-    JOIN ${Episode.TABLE}
-    ON ${AnimeHistory.TABLE}.${AnimeHistory.COL_EPISODE_ID} = ${Episode.TABLE}.${Episode.COL_ID}
-    WHERE ${Episode.TABLE}.${Episode.COL_URL} = ? AND ${AnimeHistory.TABLE}.${AnimeHistory.COL_EPISODE_ID} = ${Episode.TABLE}.${Episode.COL_ID}
-"""
-
 fun getLastReadMangaQuery() =
     """
     SELECT ${Manga.TABLE}.*, MAX(${History.TABLE}.${History.COL_LAST_READ}) AS max

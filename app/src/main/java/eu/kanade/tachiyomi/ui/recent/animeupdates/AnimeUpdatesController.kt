@@ -29,7 +29,7 @@ import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodesAdapter
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
-import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
+import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
@@ -383,7 +383,7 @@ class AnimeUpdatesController :
     }
 
     private fun openAnime(episode: AnimeUpdatesItem) {
-        parentController!!.router.pushController(AnimeController(episode.anime).withFadeTransaction())
+        parentController!!.router.pushController(AnimeController(episode.anime.id!!))
     }
 
     /**

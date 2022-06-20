@@ -41,13 +41,13 @@ fun BaseAnimeListItem(
     }
 }
 
-private val defaultCover: @Composable RowScope.(Anime, () -> Unit) -> Unit = { manga, onClick ->
+private val defaultCover: @Composable RowScope.(Anime, () -> Unit) -> Unit = { anime, onClick ->
     MangaCover.Square(
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .clickable(onClick = onClick)
             .fillMaxHeight(),
-        data = manga.thumbnailUrl,
+        data = anime,
+        onClick = onClick,
     )
 }
 

@@ -12,7 +12,7 @@ class AnimeDbOpenCallback : SupportSQLiteOpenHelper.Callback(AnimeDatabase.Schem
         /**
          * Name of the database file.
          */
-        const val DATABASE_NAME = "tachiyomi.animedb"
+        const val DATABASE_FILENAME = "tachiyomi.animedb"
     }
 
     override fun onCreate(db: SupportSQLiteDatabase) {

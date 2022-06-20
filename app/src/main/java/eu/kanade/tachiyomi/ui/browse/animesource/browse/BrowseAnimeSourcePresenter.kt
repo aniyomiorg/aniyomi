@@ -2,6 +2,9 @@ package eu.kanade.tachiyomi.ui.browse.animesource.browse
 
 import android.os.Bundle
 import eu.davidea.flexibleadapter.items.IFlexible
+import eu.kanade.domain.anime.interactor.GetDuplicateLibraryAnime
+import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.category.interactor.GetCategoriesAnime
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
@@ -43,6 +46,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
@@ -52,6 +56,7 @@ import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
+import eu.kanade.domain.category.model.Category as DomainCategory
 
 open class BrowseAnimeSourcePresenter(
     private val sourceId: Long,
@@ -60,6 +65,8 @@ open class BrowseAnimeSourcePresenter(
     private val db: AnimeDatabaseHelper = Injekt.get(),
     private val prefs: PreferencesHelper = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
+    private val getDuplicateLibraryAnime: GetDuplicateLibraryAnime = Injekt.get(),
+    private val getCategories: GetCategoriesAnime = Injekt.get(),
 ) : BasePresenter<BrowseAnimeSourceController>() {
 
     /**
@@ -344,12 +351,12 @@ open class BrowseAnimeSourcePresenter(
      *
      * @return List of categories, not including the default category
      */
-    fun getCategories(): List<Category> {
-        return db.getCategories().executeAsBlocking()
+    suspend fun getCategories(): List<DomainCategory> {
+        return getCategories.subscribe().firstOrNull() ?: emptyList()
     }
 
-    fun getDuplicateAnimelibAnime(anime: Anime): Anime? {
-        return db.getDuplicateAnimelibAnime(anime).executeAsBlocking()
+    suspend fun getDuplicateLibraryAnime(anime: Anime): Anime? {
+        return getDuplicateLibraryAnime.await(anime.title, anime.source)?.toDbAnime()
     }
 
     /**
@@ -358,9 +365,9 @@ open class BrowseAnimeSourcePresenter(
      * @param anime the anime to get categories from.
      * @return Array of category ids the anime is in, if none returns default id
      */
-    fun getAnimeCategoryIds(anime: Anime): Array<Int?> {
+    fun getAnimeCategoryIds(anime: Anime): Array<Long?> {
         val categories = db.getCategoriesForAnime(anime).executeAsBlocking()
-        return categories.mapNotNull { it.id }.toTypedArray()
+        return categories.mapNotNull { it?.id?.toLong() }.toTypedArray()
     }
 
     /**

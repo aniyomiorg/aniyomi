@@ -4,6 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import com.jakewharton.rxrelay.PublishRelay
+import eu.kanade.domain.category.interactor.GetCategories
+import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
+import eu.kanade.domain.chapter.model.toDbChapter
+import eu.kanade.domain.manga.interactor.GetDuplicateLibraryManga
+import eu.kanade.domain.manga.model.toDbManga
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Category
@@ -11,6 +16,7 @@ import eu.kanade.tachiyomi.data.database.models.Chapter
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.database.models.MangaCategory
 import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.toDomainManga
 import eu.kanade.tachiyomi.data.database.models.toMangaInfo
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.model.Download
@@ -21,7 +27,6 @@ import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.model.toSChapter
 import eu.kanade.tachiyomi.source.model.toSManga
@@ -32,8 +37,10 @@ import eu.kanade.tachiyomi.util.chapter.ChapterSettingsHelper
 import eu.kanade.tachiyomi.util.chapter.getChapterSort
 import eu.kanade.tachiyomi.util.chapter.syncChaptersWithSource
 import eu.kanade.tachiyomi.util.chapter.syncChaptersWithTrackServiceTwoWay
+import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.isLocal
 import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.removeCovers
@@ -45,6 +52,8 @@ import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.Stat
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import rx.Observable
@@ -55,6 +64,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.Date
+import eu.kanade.domain.category.model.Category as DomainCategory
 
 class MangaPresenter(
     val manga: Manga,
@@ -64,7 +74,9 @@ class MangaPresenter(
     private val trackManager: TrackManager = Injekt.get(),
     private val downloadManager: DownloadManager = Injekt.get(),
     private val coverCache: CoverCache = Injekt.get(),
-    // private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
+    private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
+    private val getDuplicateLibraryManga: GetDuplicateLibraryManga = Injekt.get(),
+    private val getCategories: GetCategories = Injekt.get(),
 ) : BasePresenter<MangaController>() {
 
     /**
@@ -145,32 +157,26 @@ class MangaPresenter(
         // Chapters list - start
 
         // Keeps subscribed to changes and sends the list of chapters to the relay.
-        add(
-            db.getChapters(manga).asRxObservable()
-                .map { chapters ->
-                    // Convert every chapter to a model.
-                    chapters.map { it.toModel() }
-                }
-                .doOnNext { episodes ->
-                    // Find downloaded chapters
-                    setDownloadedChapters(episodes)
-
-                    // Store the last emission
-                    this.allChapters = episodes
-
-                    // Listen for download status changes
-                    observeDownloads()
-                }
-                .subscribe { chaptersRelay.call(it) },
-        )
+        presenterScope.launchIO {
+            manga.id?.let { mangaId ->
+                getChapterByMangaId.subscribe(mangaId)
+                    .collectLatest { domainChapters ->
+                        val chapterItems = domainChapters.map { it.toDbChapter().toModel() }
+                        setDownloadedChapters(chapterItems)
+                        this@MangaPresenter.allChapters = chapterItems
+                        observeDownloads()
+                        chaptersRelay.call(chapterItems)
+                    }
+            }
+        }
 
         // Chapters list - end
 
         fetchTrackers()
     }
 
-    fun getDuplicateLibraryManga(manga: Manga): Manga? {
-        return db.getDuplicateLibraryManga(manga).executeAsBlocking()
+    suspend fun getDuplicateLibraryManga(manga: Manga): Manga? {
+        return getDuplicateLibraryManga.await(manga.title, manga.source)?.toDbManga()
     }
 
     // Manga info - start
@@ -254,8 +260,8 @@ class MangaPresenter(
      *
      * @return List of categories, not including the default category
      */
-    fun getCategories(): List<Category> {
-        return db.getCategories().executeAsBlocking()
+    suspend fun getCategories(): List<DomainCategory> {
+        return getCategories.subscribe().firstOrNull() ?: emptyList()
     }
 
     /**
@@ -264,9 +270,9 @@ class MangaPresenter(
      * @param manga the manga to get categories from.
      * @return Array of category ids the manga is in, if none returns default id
      */
-    fun getMangaCategoryIds(manga: Manga): IntArray {
+    fun getMangaCategoryIds(manga: Manga): Array<Long> {
         val categories = db.getCategoriesForManga(manga).executeAsBlocking()
-        return categories.mapNotNull { it.id }.toIntArray()
+        return categories.mapNotNull { it?.id?.toLong() }.toTypedArray()
     }
 
     /**
@@ -303,31 +309,20 @@ class MangaPresenter(
     /**
      * Update cover with local file.
      *
-     * @param manga the manga edited.
      * @param context Context.
      * @param data uri of the cover resource.
      */
-    fun editCover(manga: Manga, context: Context, data: Uri) {
-        Observable
-            .fromCallable {
-                context.contentResolver.openInputStream(data)?.use {
-                    if (manga.isLocal()) {
-                        LocalSource.updateCover(context, manga, it)
-                        manga.updateCoverLastModified(db)
-                        db.insertManga(manga).executeAsBlocking()
-                    } else if (manga.favorite) {
-                        coverCache.setCustomCoverToCache(manga, it)
-                        manga.updateCoverLastModified(db)
-                    }
-                    true
+    fun editCover(context: Context, data: Uri) {
+        presenterScope.launchIO {
+            context.contentResolver.openInputStream(data)?.use {
+                try {
+                    val result = manga.toDomainManga()!!.editCover(context, it)
+                    launchUI { if (result) view?.onSetCoverSuccess() }
+                } catch (e: Exception) {
+                    launchUI { view?.onSetCoverError(e) }
                 }
             }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeFirst(
-                { view, _ -> view.onSetCoverSuccess() },
-                { view, e -> view.onSetCoverError(e) },
-            )
+        }
     }
 
     fun deleteCustomCover(manga: Manga) {
@@ -664,14 +659,14 @@ class MangaPresenter(
     /**
      * Whether downloaded only mode is enabled.
      */
-    fun forceDownloaded(): Boolean {
+    private fun forceDownloaded(): Boolean {
         return manga.favorite && preferences.downloadedOnly().get()
     }
 
     /**
      * Whether the display only downloaded filter is enabled.
      */
-    fun onlyDownloaded(): State {
+    private fun onlyDownloaded(): State {
         if (forceDownloaded()) {
             return State.INCLUDE
         }
@@ -685,7 +680,7 @@ class MangaPresenter(
     /**
      * Whether the display only downloaded filter is enabled.
      */
-    fun onlyBookmarked(): State {
+    private fun onlyBookmarked(): State {
         return when (manga.bookmarkedFilter) {
             Manga.CHAPTER_SHOW_BOOKMARKED -> State.INCLUDE
             Manga.CHAPTER_SHOW_NOT_BOOKMARKED -> State.EXCLUDE
@@ -696,7 +691,7 @@ class MangaPresenter(
     /**
      * Whether the display only unread filter is enabled.
      */
-    fun onlyUnread(): State {
+    private fun onlyUnread(): State {
         return when (manga.readFilter) {
             Manga.CHAPTER_SHOW_UNREAD -> State.INCLUDE
             Manga.CHAPTER_SHOW_READ -> State.EXCLUDE

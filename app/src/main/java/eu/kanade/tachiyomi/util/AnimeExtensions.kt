@@ -1,5 +1,9 @@
 package eu.kanade.tachiyomi.util
 
+import android.content.Context
+import eu.kanade.domain.anime.interactor.UpdateAnime
+import eu.kanade.domain.anime.model.isLocal
+import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
@@ -8,7 +12,9 @@ import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.InputStream
 import java.util.Date
+import eu.kanade.domain.anime.model.Anime as DomainAnime
 
 fun Anime.isLocal() = source == LocalAnimeSource.ID
 
@@ -80,4 +86,22 @@ fun Anime.shouldDownloadNewEpisodes(db: AnimeDatabaseHelper, prefs: PreferencesH
 
     // In included category
     return categoriesForAnime.any { it in includedCategories }
+}
+
+suspend fun DomainAnime.editCover(
+    context: Context,
+    stream: InputStream,
+    updateAnime: UpdateAnime = Injekt.get(),
+    coverCache: AnimeCoverCache = Injekt.get(),
+): Boolean {
+    return if (isLocal()) {
+        LocalAnimeSource.updateCover(context, toDbAnime(), stream)
+        updateAnime.awaitUpdateCoverLastModified(id)
+    } else if (favorite) {
+        coverCache.setCustomCoverToCache(toDbAnime(), stream)
+        updateAnime.awaitUpdateCoverLastModified(id)
+    } else {
+        // We should never reach this block
+        false
+    }
 }

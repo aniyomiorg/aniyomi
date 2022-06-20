@@ -11,6 +11,7 @@ import eu.kanade.data.history.HistoryRepositoryImpl
 import eu.kanade.data.manga.MangaRepositoryImpl
 import eu.kanade.data.source.SourceRepositoryImpl
 import eu.kanade.domain.anime.interactor.GetAnimeById
+import eu.kanade.domain.anime.interactor.GetDuplicateLibraryAnime
 import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.repository.AnimeRepository
 import eu.kanade.domain.animeextension.interactor.GetAnimeExtensionLanguages
@@ -64,6 +65,7 @@ import eu.kanade.domain.history.interactor.RemoveHistoryById
 import eu.kanade.domain.history.interactor.RemoveHistoryByMangaId
 import eu.kanade.domain.history.interactor.UpsertHistory
 import eu.kanade.domain.history.repository.HistoryRepository
+import eu.kanade.domain.manga.interactor.GetDuplicateLibraryManga
 import eu.kanade.domain.manga.interactor.GetFavoritesBySourceId
 import eu.kanade.domain.manga.interactor.GetMangaById
 import eu.kanade.domain.manga.interactor.ResetViewerFlags
@@ -92,6 +94,7 @@ class DomainModule : InjektModule {
 
     override fun InjektRegistrar.registerInjectables() {
         addSingletonFactory<AnimeRepository> { AnimeRepositoryImpl(get()) }
+        addFactory { GetDuplicateLibraryAnime(get()) }
         addFactory { GetFavoritesBySourceIdAnime(get()) }
         addFactory { GetAnimeById(get()) }
         addFactory { GetNextEpisode(get()) }
@@ -117,6 +120,7 @@ class DomainModule : InjektModule {
         addFactory { DeleteCategory(get()) }
 
         addSingletonFactory<MangaRepository> { MangaRepositoryImpl(get()) }
+        addFactory { GetDuplicateLibraryManga(get()) }
         addFactory { GetFavoritesBySourceId(get()) }
         addFactory { GetMangaById(get()) }
         addFactory { GetNextChapter(get()) }

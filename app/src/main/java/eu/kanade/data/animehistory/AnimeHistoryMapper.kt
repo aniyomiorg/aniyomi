@@ -2,6 +2,7 @@ package eu.kanade.data.animehistory
 
 import eu.kanade.domain.animehistory.model.AnimeHistory
 import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
+import eu.kanade.domain.manga.model.MangaCover
 import java.util.Date
 
 val animehistoryMapper: (Long, Long, Date?) -> AnimeHistory = { id, episodeId, seenAt ->
@@ -12,15 +13,21 @@ val animehistoryMapper: (Long, Long, Date?) -> AnimeHistory = { id, episodeId, s
     )
 }
 
-val animehistoryWithRelationsMapper: (Long, Long, Long, String, String?, Float, Date?) -> AnimeHistoryWithRelations = {
-        historyId, animeId, episodeId, title, thumbnailUrl, episodeNumber, seenAt ->
+val animehistoryWithRelationsMapper: (Long, Long, Long, String, String?, Long, Boolean, Long, Float, Date?) -> AnimeHistoryWithRelations = {
+        historyId, animeId, episodeId, title, thumbnailUrl, sourceId, isFavorite, coverLastModified, episodeNumber, seenAt ->
     AnimeHistoryWithRelations(
         id = historyId,
         episodeId = episodeId,
         animeId = animeId,
         title = title,
-        thumbnailUrl = thumbnailUrl ?: "",
         episodeNumber = episodeNumber,
         seenAt = seenAt,
+        coverData = MangaCover(
+            mangaId = animeId,
+            sourceId = sourceId,
+            isMangaFavorite = isFavorite,
+            url = thumbnailUrl,
+            lastModified = coverLastModified,
+        ),
     )
 }

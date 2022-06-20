@@ -37,7 +37,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import eu.kanade.presentation.browse.components.BaseBrowseItem
 import eu.kanade.presentation.browse.components.ExtensionIcon
-import eu.kanade.presentation.components.ScrollbarLazyColumn
+import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.SwipeRefreshIndicator
 import eu.kanade.presentation.util.horizontalPadding
 import eu.kanade.presentation.util.plus
@@ -109,7 +109,7 @@ fun ExtensionContent(
 ) {
     var trustState by remember { mutableStateOf<AnimeExtension.Untrusted?>(null) }
 
-    ScrollbarLazyColumn(
+    FastScrollLazyColumn(
         contentPadding = WindowInsets.navigationBars.asPaddingValues() + topPaddingValues,
     ) {
         items(

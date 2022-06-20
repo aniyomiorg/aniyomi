@@ -10,11 +10,15 @@ import coil.fetch.SourceResult
 import coil.network.HttpException
 import coil.request.Options
 import coil.request.Parameters
+import eu.kanade.domain.manga.model.MangaCover
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
+import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher.Companion.USE_CUSTOM_COVER
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.network.await
+import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
@@ -30,6 +34,7 @@ import okio.sink
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.net.HttpURLConnection
+import eu.kanade.domain.anime.model.Anime as DomainAnime
 
 /**
  * A [Fetcher] that fetches cover image for [Anime] object.
@@ -48,7 +53,7 @@ class AnimeCoverFetcher(
     private val coverFileLazy: Lazy<File?>,
     private val customCoverFileLazy: Lazy<File>,
     private val diskCacheKeyLazy: Lazy<String>,
-    private val sourceLazy: Lazy<HttpSource?>,
+    private val sourceLazy: Lazy<AnimeHttpSource?>,
     private val callFactoryLazy: Lazy<Call.Factory>,
     private val diskCacheLazy: Lazy<DiskCache>,
 ) : Fetcher {
@@ -290,8 +295,54 @@ class AnimeCoverFetcher(
                 options = options,
                 coverFileLazy = lazy { coverCache.getCoverFile(data.thumbnail_url) },
                 customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.id) },
+                diskCacheKeyLazy = lazy { AnimeKeyer().key(data, options) },
+                sourceLazy = lazy { sourceManager.get(data.source) as? AnimeHttpSource },
+                callFactoryLazy = callFactoryLazy,
+                diskCacheLazy = diskCacheLazy,
+            )
+        }
+    }
+
+    class DomainAnimeFactory(
+        private val callFactoryLazy: Lazy<Call.Factory>,
+        private val diskCacheLazy: Lazy<DiskCache>,
+    ) : Fetcher.Factory<DomainAnime> {
+
+        private val coverCache: CoverCache by injectLazy()
+        private val sourceManager: SourceManager by injectLazy()
+
+        override fun create(data: DomainAnime, options: Options, imageLoader: ImageLoader): Fetcher {
+            return AnimeCoverFetcher(
+                url = data.thumbnailUrl,
+                isLibraryAnime = data.favorite,
+                options = options,
+                coverFileLazy = lazy { coverCache.getCoverFile(data.thumbnailUrl) },
+                customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.id) },
+                diskCacheKeyLazy = lazy { DomainAnimeKeyer().key(data, options) },
+                sourceLazy = lazy { sourceManager.get(data.source) as? AnimeHttpSource },
+                callFactoryLazy = callFactoryLazy,
+                diskCacheLazy = diskCacheLazy,
+            )
+        }
+    }
+
+    class AnimeCoverFactory(
+        private val callFactoryLazy: Lazy<Call.Factory>,
+        private val diskCacheLazy: Lazy<DiskCache>,
+    ) : Fetcher.Factory<MangaCover> {
+
+        private val coverCache: AnimeCoverCache by injectLazy()
+        private val sourceManager: AnimeSourceManager by injectLazy()
+
+        override fun create(data: MangaCover, options: Options, imageLoader: ImageLoader): Fetcher {
+            return MangaCoverFetcher(
+                url = data.url,
+                isLibraryManga = data.isMangaFavorite,
+                options = options,
+                coverFileLazy = lazy { coverCache.getCoverFile(data.url) },
+                customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.mangaId) },
                 diskCacheKeyLazy = lazy { AnimeCoverKeyer().key(data, options) },
-                sourceLazy = lazy { sourceManager.get(data.source) as? HttpSource },
+                sourceLazy = lazy { sourceManager.get(data.sourceId) as? HttpSource },
                 callFactoryLazy = callFactoryLazy,
                 diskCacheLazy = diskCacheLazy,
             )

@@ -639,15 +639,28 @@ class MainActivity : BaseActivity() {
     }
 
     private fun syncActivityViewWithController(
-        to: Controller? = router.backstack.lastOrNull()?.controller,
+        to: Controller? = null,
         from: Controller? = null,
         isPush: Boolean = true,
     ) {
-        if (from is DialogController || to is DialogController) {
-            return
-        }
-        if (from is PreferenceDialogController || to is PreferenceDialogController) {
-            return
+        var internalTo = to
+
+        if (internalTo == null) {
+            // Should go here when the activity is recreated and dialog controller is on top of the backstack
+            // Then we'll assume the top controller is the parent controller of this dialog
+            val backstack = router.backstack
+            internalTo = backstack.lastOrNull()?.controller
+            if (internalTo is DialogController || internalTo is PreferenceDialogController) {
+                internalTo = backstack.getOrNull(backstack.size - 2)?.controller ?: return
+            }
+        } else {
+            // Ignore changes for normal transactions
+            if (from is DialogController || internalTo is DialogController) {
+                return
+            }
+            if (from is PreferenceDialogController || internalTo is PreferenceDialogController) {
+                return
+            }
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(router.backstackSize != 1)
@@ -655,10 +668,10 @@ class MainActivity : BaseActivity() {
         // Always show appbar again when changing controllers
         binding.appbar.setExpanded(true)
 
-        if ((from == null || from is RootController) && to !is RootController) {
+        if ((from == null || from is RootController) && internalTo !is RootController) {
             showNav(false)
         }
-        if (to is RootController) {
+        if (internalTo is RootController) {
             // Always show bottom nav again when returning to a RootController
             showNav(true)
         }
@@ -666,8 +679,8 @@ class MainActivity : BaseActivity() {
         if (from is TabbedController) {
             from.cleanupTabs(binding.tabs)
         }
-        if (to is TabbedController) {
-            if (to.configureTabs(binding.tabs)) {
+        if (internalTo is TabbedController) {
+            if (internalTo.configureTabs(binding.tabs)) {
                 binding.tabs.isVisible = true
             }
         } else {
@@ -677,41 +690,41 @@ class MainActivity : BaseActivity() {
         if (from is FabController) {
             from.cleanupFab(binding.fabLayout.rootFab)
         }
-        if (to is FabController) {
+        if (internalTo is FabController) {
             binding.fabLayout.rootFab.show()
-            to.configureFab(binding.fabLayout.rootFab)
+            internalTo.configureFab(binding.fabLayout.rootFab)
         } else {
             binding.fabLayout.rootFab.hide()
         }
 
-        if (!isTablet()) noTabletActivityView(isPush, from, to)
-    }
-
-    private fun noTabletActivityView(isPush: Boolean, from: Controller?, to: Controller?) {
-        // Save lift state
-        if (isPush) {
-            if (router.backstackSize > 1) {
-                // Save lift state
-                from?.let {
-                    backstackLiftState[it.instanceId] = binding.appbar.isLifted
+        if (!isTablet()) {
+            // Save lift state
+            if (isPush) {
+                if (router.backstackSize > 1) {
+                    // Save lift state
+                    from?.let {
+                        backstackLiftState[it.instanceId] = binding.appbar.isLifted
+                    }
+                } else {
+                    backstackLiftState.clear()
                 }
+                binding.appbar.isLifted = false
             } else {
-                backstackLiftState.clear()
+                internalTo?.let {
+                    binding.appbar.isLifted = backstackLiftState.getOrElse(it.instanceId) { false }
+                }
+                from?.let {
+                    backstackLiftState.remove(it.instanceId)
+                }
             }
-            binding.appbar.isLifted = false
-        } else {
-            to?.let {
-                binding.appbar.isLifted = backstackLiftState.getOrElse(it.instanceId) { false }
-            }
-            from?.let {
-                backstackLiftState.remove(it.instanceId)
-            }
+
+            binding.root.isLiftAppBarOnScroll = internalTo !is NoAppBarElevationController
+
+            binding.appbar.isTransparentWhenNotLifted = internalTo is MangaController ||
+                internalTo is AnimeController
+            binding.controllerContainer.overlapHeader = internalTo is MangaController ||
+                internalTo is AnimeController
         }
-
-        binding.root.isLiftAppBarOnScroll = to !is NoAppBarElevationController
-
-        binding.appbar.isTransparentWhenNotLifted = to is MangaController || to is AnimeController
-        binding.controllerContainer.overlapHeader = to is MangaController || to is AnimeController
     }
 
     private fun showNav(visible: Boolean) {

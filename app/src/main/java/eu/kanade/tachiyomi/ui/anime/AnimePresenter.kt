@@ -8,8 +8,12 @@ import android.os.Bundle
 import coil.imageLoader
 import coil.memory.MemoryCache
 import com.jakewharton.rxrelay.PublishRelay
+import eu.kanade.domain.anime.interactor.GetDuplicateLibraryAnime
+import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.category.interactor.GetCategoriesAnime
+import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.toSAnime
 import eu.kanade.tachiyomi.animesource.model.toSEpisode
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
@@ -20,6 +24,7 @@ import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
+import eu.kanade.tachiyomi.data.database.models.toDomainAnime
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -32,12 +37,14 @@ import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.anime.track.TrackItem
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
+import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.episode.EpisodeSettingsHelper
 import eu.kanade.tachiyomi.util.episode.getEpisodeSort
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
 import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
 import eu.kanade.tachiyomi.util.isLocal
 import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.removeCovers
@@ -49,6 +56,8 @@ import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.Stat
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import rx.Observable
@@ -59,6 +68,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.Date
+import eu.kanade.domain.category.model.Category as DomainCategory
 
 class AnimePresenter(
     val anime: Anime,
@@ -68,7 +78,9 @@ class AnimePresenter(
     private val trackManager: TrackManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
-    // private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val getDuplicateLibraryAnime: GetDuplicateLibraryAnime = Injekt.get(),
+    private val getCategories: GetCategoriesAnime = Injekt.get(),
 ) : BasePresenter<AnimeController>() {
 
     /**
@@ -155,32 +167,26 @@ class AnimePresenter(
         // Episodes list - start
 
         // Keeps subscribed to changes and sends the list of chapters to the relay.
-        add(
-            db.getEpisodes(anime).asRxObservable()
-                .map { episodes ->
-                    // Convert every episode to a model.
-                    episodes.map { it.toModel() }
-                }
-                .doOnNext { episodes ->
-                    // Find downloaded episodes
-                    setDownloadedEpisodes(episodes)
-
-                    // Store the last emission
-                    this.allEpisodes = episodes
-
-                    // Listen for download status changes
-                    observeDownloads()
-                }
-                .subscribe { episodesRelay.call(it) },
-        )
+        presenterScope.launchIO {
+            anime.id?.let { animeId ->
+                getEpisodeByAnimeId.subscribe(animeId)
+                    .collectLatest { domainEpisodes ->
+                        val episodeItems = domainEpisodes.map { it.toDbEpisode().toModel() }
+                        setDownloadedEpisodes(episodeItems)
+                        this@AnimePresenter.allEpisodes = episodeItems
+                        observeDownloads()
+                        episodesRelay.call(episodeItems)
+                    }
+            }
+        }
 
         // Episodes list - end
 
         fetchTrackers()
     }
 
-    fun getDuplicateAnimelibAnime(anime: Anime): Anime? {
-        return db.getDuplicateAnimelibAnime(anime).executeAsBlocking()
+    suspend fun getDuplicateLibraryAnime(anime: Anime): Anime? {
+        return getDuplicateLibraryAnime.await(anime.title, anime.source)?.toDbAnime()
     }
 
     // Anime info - start
@@ -264,8 +270,8 @@ class AnimePresenter(
      *
      * @return List of categories, not including the default category
      */
-    fun getCategories(): List<Category> {
-        return db.getCategories().executeAsBlocking()
+    suspend fun getCategories(): List<DomainCategory> {
+        return getCategories.subscribe().firstOrNull() ?: emptyList()
     }
 
     /**
@@ -274,9 +280,9 @@ class AnimePresenter(
      * @param anime the anime to get categories from.
      * @return Array of category ids the anime is in, if none returns default id
      */
-    fun getAnimeCategoryIds(anime: Anime): IntArray {
+    fun getAnimeCategoryIds(anime: Anime): Array<Long> {
         val categories = db.getCategoriesForAnime(anime).executeAsBlocking()
-        return categories.mapNotNull { it.id }.toIntArray()
+        return categories.mapNotNull { it?.id?.toLong() }.toTypedArray()
     }
 
     /**
@@ -355,31 +361,20 @@ class AnimePresenter(
     /**
      * Update cover with local file.
      *
-     * @param anime the anime edited.
      * @param context Context.
      * @param data uri of the cover resource.
      */
-    fun editCover(anime: Anime, context: Context, data: Uri) {
-        Observable
-            .fromCallable {
-                context.contentResolver.openInputStream(data)?.use {
-                    if (anime.isLocal()) {
-                        LocalAnimeSource.updateCover(context, anime, it)
-                        anime.updateCoverLastModified(db)
-                        db.insertAnime(anime).executeAsBlocking()
-                    } else if (anime.favorite) {
-                        coverCache.setCustomCoverToCache(anime, it)
-                        anime.updateCoverLastModified(db)
-                    }
-                    true
+    fun editCover(context: Context, data: Uri) {
+        presenterScope.launchIO {
+            context.contentResolver.openInputStream(data)?.use {
+                try {
+                    val result = anime.toDomainAnime()!!.editCover(context, it)
+                    launchUI { if (result) view?.onSetCoverSuccess() }
+                } catch (e: Exception) {
+                    launchUI { view?.onSetCoverError(e) }
                 }
             }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeFirst(
-                { view, _ -> view.onSetCoverSuccess() },
-                { view, e -> view.onSetCoverError(e) },
-            )
+        }
     }
 
     fun deleteCustomCover(anime: Anime) {
@@ -505,10 +500,10 @@ class AnimePresenter(
     private fun applyEpisodeFilters(episodes: List<EpisodeItem>): Observable<List<EpisodeItem>> {
         var observable = Observable.from(episodes).subscribeOn(Schedulers.io())
 
-        val unreadFilter = onlyUnread()
-        if (unreadFilter == State.INCLUDE) {
+        val unseenFilter = onlyUnseen()
+        if (unseenFilter == State.INCLUDE) {
             observable = observable.filter { !it.seen }
-        } else if (unreadFilter == State.EXCLUDE) {
+        } else if (unseenFilter == State.EXCLUDE) {
             observable = observable.filter { it.seen }
         }
 
@@ -600,27 +595,6 @@ class AnimePresenter(
     }
 
     /**
-     * Mark the selected episode list as read/unread.
-     * @param selectedEpisodes the list of selected episodes.
-     * @param read whether to mark episodes as read or unread.
-     */
-    fun setEpisodesProgress(selectedEpisodes: List<EpisodeItem>) {
-        val episodes = selectedEpisodes.map { episode ->
-            val progress = preferences.progressPreference()
-            if (!episode.seen) episode.seen = episode.last_second_seen >= episode.total_seconds * progress
-            episode
-        }
-
-        launchIO {
-            db.updateEpisodesProgress(episodes).executeAsBlocking()
-
-            if (preferences.removeAfterMarkedAsRead()) {
-                deleteEpisodes(episodes.filter { it.seen })
-            }
-        }
-    }
-
-    /**
      * Downloads the given list of episodes with the manager.
      * @param episodes the list of episodes to download.
      */
@@ -691,10 +665,10 @@ class AnimePresenter(
     }
 
     /**
-     * Sets the read filter and requests an UI update.
-     * @param state whether to display only unread episodes or all episodes.
+     * Sets the seen filter and requests an UI update.
+     * @param state whether to display only unseen episodes or all episodes.
      */
-    fun setUnreadFilter(state: State) {
+    fun setUnseenFilter(state: State) {
         anime.seenFilter = when (state) {
             State.IGNORE -> Anime.SHOW_ALL
             State.INCLUDE -> Anime.EPISODE_SHOW_UNSEEN
@@ -755,14 +729,14 @@ class AnimePresenter(
     /**
      * Whether downloaded only mode is enabled.
      */
-    fun forceDownloaded(): Boolean {
+    private fun forceDownloaded(): Boolean {
         return anime.favorite && preferences.downloadedOnly().get()
     }
 
     /**
      * Whether the display only downloaded filter is enabled.
      */
-    fun onlyDownloaded(): State {
+    private fun onlyDownloaded(): State {
         if (forceDownloaded()) {
             return State.INCLUDE
         }
@@ -776,7 +750,7 @@ class AnimePresenter(
     /**
      * Whether the display only bookmarked filter is enabled.
      */
-    fun onlyBookmarked(): State {
+    private fun onlyBookmarked(): State {
         return when (anime.bookmarkedFilter) {
             Anime.EPISODE_SHOW_BOOKMARKED -> State.INCLUDE
             Anime.EPISODE_SHOW_NOT_BOOKMARKED -> State.EXCLUDE
@@ -787,7 +761,7 @@ class AnimePresenter(
     /**
      * Whether the display only unread filter is enabled.
      */
-    fun onlyUnread(): State {
+    private fun onlyUnseen(): State {
         return when (anime.seenFilter) {
             Anime.EPISODE_SHOW_UNSEEN -> State.INCLUDE
             Anime.EPISODE_SHOW_SEEN -> State.EXCLUDE

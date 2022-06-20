@@ -2,9 +2,7 @@ package eu.kanade.data
 
 import androidx.paging.PagingSource
 import com.squareup.sqldelight.Query
-import com.squareup.sqldelight.Transacter
-import com.squareup.sqldelight.android.AndroidSqliteDriver
-import com.squareup.sqldelight.android.paging3.QueryPagingSource
+import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOne
@@ -17,7 +15,7 @@ import kotlinx.coroutines.withContext
 
 class AndroidAnimeDatabaseHandler(
     val db: AnimeDatabase,
-    private val driver: AndroidSqliteDriver,
+    private val driver: SqlDriver,
     val queryDispatcher: CoroutineDispatcher = Dispatchers.IO,
     val transactionDispatcher: CoroutineDispatcher = queryDispatcher,
 ) : AnimeDatabaseHandler {
@@ -63,13 +61,11 @@ class AndroidAnimeDatabaseHandler(
 
     override fun <T : Any> subscribeToPagingSource(
         countQuery: AnimeDatabase.() -> Query<Long>,
-        transacter: AnimeDatabase.() -> Transacter,
         queryProvider: AnimeDatabase.(Long, Long) -> Query<T>,
     ): PagingSource<Long, T> {
-        return QueryPagingSource(
-            countQuery = countQuery(db),
-            transacter = transacter(db),
-            dispatcher = queryDispatcher,
+        return AnimeQueryPagingSource(
+            handler = this,
+            countQuery = countQuery,
             queryProvider = { limit, offset ->
                 queryProvider.invoke(db, limit, offset)
             },

@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import coil.imageLoader
 import coil.request.ImageRequest
-import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -40,6 +39,7 @@ import eu.kanade.data.episode.NoEpisodesException
 import eu.kanade.domain.animehistory.interactor.UpsertAnimeHistory
 import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
 import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
+import eu.kanade.domain.category.model.toDbCategory
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -99,6 +99,7 @@ import eu.kanade.tachiyomi.util.hasCustomCover
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
+import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
@@ -111,6 +112,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
@@ -135,21 +137,17 @@ class AnimeController :
 
     constructor(history: AnimeHistoryWithRelations) : this(history.animeId)
 
-    constructor(anime: Anime?, fromSource: Boolean = false) : super(
+    constructor(animeId: Long, fromSource: Boolean = false) : super(
         bundleOf(
-            ANIME_EXTRA to (anime?.id ?: 0),
+            ANIME_EXTRA to animeId,
             FROM_SOURCE_EXTRA to fromSource,
         ),
     ) {
-        this.anime = anime
-        if (anime != null) {
-            source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source)
+        this.anime = Injekt.get<AnimeDatabaseHelper>().getAnime(animeId).executeAsBlocking()
+        if (this.anime != null) {
+            source = Injekt.get<AnimeSourceManager>().getOrStub(this.anime!!.source)
         }
     }
-
-    constructor(animeId: Long) : this(
-        Injekt.get<AnimeDatabaseHelper>().getAnime(animeId).executeAsBlocking(),
-    )
 
     @Suppress("unused")
     constructor(bundle: Bundle) : this(bundle.getLong(ANIME_EXTRA))
@@ -196,8 +194,6 @@ class AnimeController :
 
     private var trackSheet: TrackSheet? = null
 
-    private var dialog: DialogController? = null
-
     /**
      * For [recyclerViewUpdatesToolbarTitleAlpha]
      */
@@ -220,8 +216,10 @@ class AnimeController :
         super.onChangeStarted(handler, type)
         // Hide toolbar title on enter
         // No need to update alpha for cover dialog
-        if (dialog == null) {
-            updateToolbarTitleAlpha(if (type.isEnter) 0F else 1F)
+        if (!type.isEnter) {
+            if (!type.isPush || router.backstack.lastOrNull()?.controller !is DialogController) {
+                updateToolbarTitleAlpha(1f)
+            }
         }
         recyclerViewUpdatesToolbarTitleAlpha(type.isEnter)
     }
@@ -319,13 +317,9 @@ class AnimeController :
             }
             .launchIn(viewScope)
 
-        settingsSheet = EpisodesSettingsSheet(router, presenter) { group ->
-            if (group is EpisodesSettingsSheet.Filter.FilterGroup) {
-                updateFilterIconState()
-            }
-        }
+        settingsSheet = EpisodesSettingsSheet(router, presenter)
 
-        trackSheet = TrackSheet(this, anime!!, (activity as MainActivity).supportFragmentManager)
+        trackSheet = TrackSheet(this, (activity as MainActivity).supportFragmentManager)
 
         updateFilterIconState()
         recyclerViewUpdatesToolbarTitleAlpha(true)
@@ -442,13 +436,16 @@ class AnimeController :
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        // Hide options for local anime
-        menu.findItem(R.id.action_share).isVisible = !isLocalSource
-        menu.findItem(R.id.download_group).isVisible = !isLocalSource
+        runBlocking {
+            // Hide options for local anime
+            menu.findItem(R.id.action_share).isVisible = !isLocalSource
+            menu.findItem(R.id.download_group).isVisible = !isLocalSource
 
-        // Hide options for non-animelib anime
-        menu.findItem(R.id.action_edit_categories).isVisible = presenter.anime.favorite && presenter.getCategories().isNotEmpty()
-        menu.findItem(R.id.action_migrate).isVisible = presenter.anime.favorite
+            // Hide options for non-animelib anime
+            menu.findItem(R.id.action_edit_categories).isVisible =
+                presenter.anime.favorite && presenter.getCategories().isNotEmpty()
+            menu.findItem(R.id.action_migrate).isVisible = presenter.anime.favorite
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -558,12 +555,17 @@ class AnimeController :
             activity?.toast(activity?.getString(R.string.manga_removed_library))
             activity?.invalidateOptionsMenu()
         } else {
-            val duplicateAnime = presenter.getDuplicateAnimelibAnime(anime)
-            if (duplicateAnime != null) {
-                AddDuplicateAnimeDialog(this, duplicateAnime) { addToAnimelib(anime) }
-                    .showDialog(router)
-            } else {
-                addToAnimelib(anime)
+            launchIO {
+                val duplicateAnime = presenter.getDuplicateLibraryAnime(anime)
+
+                withUIContext {
+                    if (duplicateAnime != null) {
+                        AddDuplicateAnimeDialog(this@AnimeController, duplicateAnime) { addToLibrary(anime) }
+                            .showDialog(router)
+                    } else {
+                        addToLibrary(anime)
+                    }
+                }
             }
         }
     }
@@ -572,40 +574,48 @@ class AnimeController :
         trackSheet?.show()
     }
 
-    private fun addToAnimelib(newAnime: Anime) {
-        val categories = presenter.getCategories()
-        val defaultCategoryId = preferences.defaultAnimeCategory()
-        val defaultCategory = categories.find { it.id == defaultCategoryId }
+    private fun addToLibrary(newAnime: Anime) {
+        launchIO {
+            val categories = presenter.getCategories()
+            val defaultCategoryId = preferences.defaultAnimeCategory()
+            val defaultCategory = categories.find { it.id == defaultCategoryId.toLong() }
 
-        when {
-            // Default category set
-            defaultCategory != null -> {
-                toggleFavorite()
-                presenter.moveAnimeToCategory(newAnime, defaultCategory)
-                activity?.toast(activity?.getString(R.string.manga_added_library))
-                activity?.invalidateOptionsMenu()
-            }
-
-            // Automatic 'Default' or no categories
-            defaultCategoryId == 0 || categories.isEmpty() -> {
-                toggleFavorite()
-                presenter.moveAnimeToCategory(newAnime, null)
-                activity?.toast(activity?.getString(R.string.manga_added_library))
-                activity?.invalidateOptionsMenu()
-            }
-
-            // Choose a category
-            else -> {
-                val ids = presenter.getAnimeCategoryIds(newAnime)
-                val preselected = categories.map {
-                    if (it.id!! in ids) {
-                        QuadStateTextView.State.CHECKED.ordinal
-                    } else {
-                        QuadStateTextView.State.UNCHECKED.ordinal
+            withUIContext {
+                when {
+                    // Default category set
+                    defaultCategory != null -> {
+                        toggleFavorite()
+                        presenter.moveAnimeToCategory(newAnime, defaultCategory.toDbCategory())
+                        activity?.toast(activity?.getString(R.string.manga_added_library))
+                        activity?.invalidateOptionsMenu()
                     }
-                }.toIntArray()
 
-                showChangeCategoryDialog(newAnime, categories, preselected)
+                    // Automatic 'Default' or no categories
+                    defaultCategoryId == 0 || categories.isEmpty() -> {
+                        toggleFavorite()
+                        presenter.moveAnimeToCategory(newAnime, null)
+                        activity?.toast(activity?.getString(R.string.manga_added_library))
+                        activity?.invalidateOptionsMenu()
+                    }
+
+                    // Choose a category
+                    else -> {
+                        val ids = presenter.getAnimeCategoryIds(newAnime)
+                        val preselected = categories.map {
+                            if (it.id in ids) {
+                                QuadStateTextView.State.CHECKED.ordinal
+                            } else {
+                                QuadStateTextView.State.UNCHECKED.ordinal
+                            }
+                        }.toTypedArray()
+
+                        showChangeCategoryDialog(
+                            newAnime,
+                            categories.map { it.toDbCategory() },
+                            preselected,
+                        )
+                    }
+                }
             }
         }
 
@@ -647,33 +657,32 @@ class AnimeController :
     }
 
     fun onCategoriesClick() {
-        val anime = presenter.anime
-        val categories = presenter.getCategories()
+        launchIO {
+            val anime = presenter.anime
+            val categories = presenter.getCategories()
 
-        val ids = presenter.getAnimeCategoryIds(anime)
-        val preselected = categories.map {
-            if (it.id!! in ids) {
-                QuadStateTextView.State.CHECKED.ordinal
-            } else {
-                QuadStateTextView.State.UNCHECKED.ordinal
+            if (categories.isEmpty()) {
+                return@launchIO
             }
-        }.toIntArray()
 
-        showChangeCategoryDialog(anime, categories, preselected)
+            val ids = presenter.getAnimeCategoryIds(anime)
+            val preselected = categories.map {
+                if (it.id in ids) {
+                    QuadStateTextView.State.CHECKED.ordinal
+                } else {
+                    QuadStateTextView.State.UNCHECKED.ordinal
+                }
+            }.toTypedArray()
+
+            withUIContext {
+                showChangeCategoryDialog(anime, categories.map { it.toDbCategory() }, preselected)
+            }
+        }
     }
 
-    private fun showChangeCategoryDialog(anime: Anime, categories: List<Category>, preselected: IntArray) {
-        if (dialog != null) return
-        dialog = ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected)
-        dialog?.addLifecycleListener(
-            object : LifecycleListener() {
-                override fun postDestroy(controller: Controller) {
-                    super.postDestroy(controller)
-                    dialog = null
-                }
-            },
-        )
-        dialog?.showDialog(router)
+    private fun showChangeCategoryDialog(anime: Anime, categories: List<Category>, preselected: Array<Int>) {
+        ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected.toIntArray())
+            .showDialog(router)
     }
 
     override fun updateCategoriesForAnimes(animes: List<Anime>, addCategories: List<Category>, removeCategories: List<Category>) {
@@ -773,18 +782,9 @@ class AnimeController :
     }
 
     fun showFullCoverDialog() {
-        if (dialog != null) return
         val anime = anime ?: return
-        dialog = AnimeFullCoverDialog(this, anime)
-        dialog?.addLifecycleListener(
-            object : LifecycleListener() {
-                override fun postDestroy(controller: Controller) {
-                    super.postDestroy(controller)
-                    dialog = null
-                }
-            },
-        )
-        dialog?.showDialog(router)
+        AnimeFullCoverDialog(this, anime)
+            .showDialog(router)
     }
 
     fun shareCover() {
@@ -874,7 +874,7 @@ class AnimeController :
             val dataUri = data?.data
             if (dataUri == null || resultCode != Activity.RESULT_OK) return
             val activity = activity ?: return
-            presenter.editCover(anime!!, activity, dataUri)
+            presenter.editCover(activity, dataUri)
         }
         if (requestCode == REQUEST_EXTERNAL && resultCode == Activity.RESULT_OK) {
             val anime = EXT_ANIME ?: return
@@ -917,7 +917,7 @@ class AnimeController :
 
     fun onSetCoverSuccess() {
         animeInfoAdapter?.notifyItemChanged(0, this)
-        (dialog as? AnimeFullCoverDialog)?.setImage(anime)
+        (router.backstack.lastOrNull()?.controller as? AnimeFullCoverDialog)?.setImage(anime)
         activity?.toast(R.string.cover_updated)
     }
 
@@ -965,6 +965,7 @@ class AnimeController :
         }
 
         updateFabVisibility()
+        updateFilterIconState()
     }
 
     private fun fetchEpisodesFromSource(manualFetch: Boolean = false) {
@@ -1263,7 +1264,7 @@ class AnimeController :
             addSnackbar = (activity as? MainActivity)?.binding?.rootCoordinator?.snack(view.context.getString(R.string.snack_add_to_animelib)) {
                 setAction(R.string.action_add) {
                     if (!anime.favorite) {
-                        addToAnimelib(anime)
+                        addToLibrary(anime)
                     }
                 }
             }
@@ -1284,7 +1285,7 @@ class AnimeController :
             addSnackbar = (activity as? MainActivity)?.binding?.rootCoordinator?.snack(view.context.getString(R.string.snack_add_to_animelib)) {
                 setAction(R.string.action_add) {
                     if (!anime.favorite) {
-                        addToAnimelib(anime)
+                        addToLibrary(anime)
                     }
                 }
             }
