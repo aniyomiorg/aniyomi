@@ -69,7 +69,6 @@ class AppUpdateService : Service() {
             downloadApk(title, url)
         }
 
-        runningJob?.invokeOnCompletion { stopSelf(startId) }
         return START_NOT_STICKY
     }
 
