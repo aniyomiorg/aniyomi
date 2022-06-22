@@ -503,7 +503,7 @@ class AnimeDownloader(
         val videoFile = tmpDir.findFile("$filename.mp4")
             ?: tmpDir.createFile("$filename.mp4")!!
         val ffmpegFilename = { videoFile.uri.toFFmpegString(context) }
-        val ffmpegOptions = FFmpegKitConfig.parseArguments(headerOptions + " -i '${video.videoUrl}' -c copy \"${ffmpegFilename()}\"")
+        val ffmpegOptions = FFmpegKitConfig.parseArguments(headerOptions + " -i '${video.videoUrl}' -c copy \"${ffmpegFilename()}\" -y")
         val ffprobeCommand = { file: String, ffprobeHeaders: String? ->
             FFmpegKitConfig.parseArguments("${ffprobeHeaders?.plus(" ") ?: ""}-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"$file\"")
         }

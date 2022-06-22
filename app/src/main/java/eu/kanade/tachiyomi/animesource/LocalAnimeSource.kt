@@ -235,7 +235,7 @@ class LocalAnimeSource(
         val second = duration.toInt() / 2
 
         val coverFilename = coverPath.toFFmpegString(context)
-        FFmpegKit.execute("-ss $second -i \"${episodeFilename()}\" -frames 1 -q:v 2 \"$coverFilename\"")
+        FFmpegKit.execute("-ss $second -i \"${episodeFilename()}\" -frames 1 -q:v 2 \"$coverFilename\" -y")
 
         if (File(coverPath).exists()) {
             anime.thumbnail_url = coverPath

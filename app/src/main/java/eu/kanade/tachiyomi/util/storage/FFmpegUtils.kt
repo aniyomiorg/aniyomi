@@ -11,7 +11,7 @@ fun String.toFFmpegString(context: Context): String {
 }
 
 fun Uri.toFFmpegString(context: Context): String {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && this.scheme == "content") {
         FFmpegKitConfig.getSafParameter(context, this, "rw")
     } else {
         this.path!!
