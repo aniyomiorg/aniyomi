@@ -324,6 +324,7 @@ class PlayerActivity :
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         fineVolume = audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
         maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+        playerControls.binding.volumeBar.max = maxVolume
 
         brightness = Utils.getScreenBrightness(this) ?: 0.5F
 
