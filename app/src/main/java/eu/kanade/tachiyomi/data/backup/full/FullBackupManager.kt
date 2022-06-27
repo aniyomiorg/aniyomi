@@ -593,9 +593,11 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
                 animehandler
                     .awaitOneOrNull { episodesQueries.getEpisodeByUrl(url) }
                     ?.let {
-                        AnimeHistoryUpdate(
-                            episodeId = it._id,
-                            seenAt = Date(lastSeen),
+                        toUpdate.add(
+                            AnimeHistoryUpdate(
+                                episodeId = it._id,
+                                seenAt = Date(lastSeen),
+                            ),
                         )
                     }
             }
