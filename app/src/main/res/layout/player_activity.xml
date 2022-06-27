@@ -92,7 +92,7 @@
 
         </LinearLayout>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/playPauseView"
             android:layout_width="80dp"
             android:layout_height="80dp"
