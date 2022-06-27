@@ -298,7 +298,6 @@ class PlayerActivity :
 
         setVisibilities()
 
-        playerControls.showAndFadeControls()
         playerControls.hideControls(true)
         toggleAutoplay(preferences.autoplayEnabled().get())
 
