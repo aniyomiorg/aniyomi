@@ -211,7 +211,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    private fun pauseForDialog(): StateRestoreCallback {
+    internal fun pauseForDialog(): StateRestoreCallback {
         val wasPlayerPaused = activity.player.paused ?: true // default to not changing state
         activity.player.paused = true
         return {

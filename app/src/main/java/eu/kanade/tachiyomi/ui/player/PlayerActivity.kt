@@ -824,38 +824,45 @@ class PlayerActivity :
     private var currentQuality = 0
 
     @Suppress("UNUSED_PARAMETER")
-    fun openQuality(view: View) {
+    fun pickQuality(view: View) {
         if (currentVideoList?.isNotEmpty() != true) return
-        val qualityAlert = HideBarsMaterialAlertDialogBuilder(this)
-
-        qualityAlert.setTitle(R.string.playback_quality_dialog_title)
+        val restore = playerControls.pauseForDialog()
 
         var requestedQuality = 0
         val qualities = currentVideoList!!.map { it.quality }.toTypedArray()
-        qualityAlert.setSingleChoiceItems(
-            qualities,
-            currentQuality,
-        ) { qualityDialog, selectedQuality ->
-            if (selectedQuality > qualities.lastIndex) {
+
+        with(HideBarsMaterialAlertDialogBuilder(this)) {
+            setTitle(R.string.playback_quality_dialog_title)
+
+            setSingleChoiceItems(
+                qualities,
+                currentQuality,
+            ) { qualityDialog, selectedQuality ->
+                if (selectedQuality > qualities.lastIndex) {
+                    qualityDialog.cancel()
+                } else {
+                    requestedQuality = selectedQuality
+                }
+            }
+
+            setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
+                if (requestedQuality != currentQuality) {
+                    currentQuality = requestedQuality
+                    changeQuality(requestedQuality)
+                }
+                qualityDialog.dismiss()
+                restore()
+            }
+
+            setNegativeButton(android.R.string.cancel) { qualityDialog, _ ->
                 qualityDialog.cancel()
-            } else {
-                requestedQuality = selectedQuality
+                restore()
             }
-        }
 
-        qualityAlert.setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
-            if (requestedQuality != currentQuality) {
-                currentQuality = requestedQuality
-                changeQuality(requestedQuality)
-            }
-            qualityDialog.dismiss()
+            setOnDismissListener { restore() }
+            create()
+            show()
         }
-
-        qualityAlert.setNegativeButton(android.R.string.cancel) { qualityDialog, _ ->
-            qualityDialog.cancel()
-        }
-
-        qualityAlert.show()
     }
 
     private fun changeQuality(quality: Int) {

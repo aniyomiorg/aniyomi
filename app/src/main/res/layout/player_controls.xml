@@ -88,7 +88,7 @@
             android:layout_marginRight="10dp"
             android:background="?attr/selectableItemBackground"
             android:contentDescription="Settings"
-            android:onClick="openQuality"
+            android:onClick="pickQuality"
             android:src="@drawable/ic_video_quality_24dp"
             app:layout_constraintLeft_toRightOf="@id/cycleSubsBtn"
             app:layout_constraintRight_toRightOf="parent"
