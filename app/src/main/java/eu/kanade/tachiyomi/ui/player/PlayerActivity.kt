@@ -31,6 +31,7 @@ import android.view.ViewAnimationUtils
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -66,7 +67,8 @@ import kotlin.math.roundToInt
 @RequiresPresenter(PlayerPresenter::class)
 class PlayerActivity :
     BaseRxActivity<PlayerPresenter>(),
-    MPVLib.EventObserver {
+    MPVLib.EventObserver,
+    MPVLib.LogObserver {
 
     companion object {
 
@@ -302,9 +304,11 @@ class PlayerActivity :
         toggleAutoplay(preferences.autoplayEnabled().get())
 
         setMpvConf()
-        val logLevel = if (preferences.verboseLogging()) "v" else "warn"
+        val logLevel = if (preferences.verboseLogging()) "info" else "warn"
         player.initialize(applicationContext.filesDir.path, logLevel)
         MPVLib.setOptionString("keep-open", "always")
+        MPVLib.setOptionString("ytdl", "no")
+        MPVLib.addLogObserver(this)
         player.addObserver(this)
 
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
@@ -456,8 +460,12 @@ class PlayerActivity :
      * Switches to the previous episode if [previous] is true,
      * to the next episode if [previous] is false
      */
-    internal fun switchEpisode(previous: Boolean) {
-        val switchMethod = if (previous) presenter::previousEpisode else presenter::nextEpisode
+    internal fun switchEpisode(previous: Boolean, autoPlay: Boolean = false) {
+        val switchMethod = if (previous && !autoPlay) {
+            presenter::previousEpisode
+        } else {
+            presenter::nextEpisode
+        }
         val errorRes = if (previous) R.string.no_previous_episode else R.string.no_next_episode
 
         launchIO {
@@ -476,8 +484,17 @@ class PlayerActivity :
 
         when {
             epTxt == "Invalid" -> return
-            epTxt == null -> { if (presenter.anime != null) launchUI { toast(errorRes) }; showLoadingIndicator(false) }
-            isInPipMode -> if (preferences.pipEpisodeToasts()) launchUI { toast(epTxt) }
+            epTxt == null -> {
+                if (presenter.anime != null && !autoPlay) {
+                    launchUI { toast(errorRes) }
+                }
+                showLoadingIndicator(false)
+            }
+            isInPipMode -> {
+                if (preferences.pipEpisodeToasts()) {
+                    launchUI { toast(epTxt) }
+                }
+            }
         }
     }
 
@@ -519,7 +536,6 @@ class PlayerActivity :
     private fun isSeeking(seeking: Boolean) {
         val position = player.timePos ?: return
         val cachePosition = MPVLib.getPropertyInt("demuxer-cache-time") ?: -1
-        logcat { "pos: $position, cache: $cachePosition" }
         showLoadingIndicator(position >= cachePosition && seeking)
     }
 
@@ -917,6 +933,7 @@ class PlayerActivity :
 
     override fun onDestroy() {
         presenter.deletePendingEpisodes()
+        MPVLib.removeLogObserver(this)
         if (!playerIsDestroyed) {
             playerIsDestroyed = true
             player.removeObserver(this)
@@ -1260,7 +1277,7 @@ class PlayerActivity :
         }
     }
 
-    private val nextEpisodeRunnable = Runnable { switchEpisode(false) }
+    private val nextEpisodeRunnable = Runnable { switchEpisode(previous = false, autoPlay = true) }
 
     @Suppress("DEPRECATION")
     private fun eventPropertyUi(property: String, value: Boolean) {
@@ -1304,10 +1321,30 @@ class PlayerActivity :
     }
 
     override fun efEvent(err: String?) {
-        logcat(LogPriority.ERROR) { err ?: "Error: File ended" }
+        var errorMessage = err ?: "Error: File ended"
+        if (!httpError.isNullOrEmpty()) {
+            errorMessage += ": $httpError"
+            httpError = null
+        }
+        logcat(LogPriority.ERROR) { errorMessage }
         runOnUiThread {
             showLoadingIndicator(false)
-            toast(err ?: "Error: File ended")
+            toast(errorMessage, Toast.LENGTH_LONG)
+        }
+    }
+
+    private var httpError: String? = null
+
+    override fun logMessage(prefix: String, level: Int, text: String) {
+        val logPriority = when (level) {
+            MPVLib.mpvLogLevel.MPV_LOG_LEVEL_FATAL, MPVLib.mpvLogLevel.MPV_LOG_LEVEL_ERROR -> LogPriority.ERROR
+            MPVLib.mpvLogLevel.MPV_LOG_LEVEL_WARN -> LogPriority.WARN
+            MPVLib.mpvLogLevel.MPV_LOG_LEVEL_INFO -> LogPriority.INFO
+            else -> null
+        }
+        if (logPriority != null) {
+            if (text.contains("HTTP error")) httpError = text
+            logcat.logcat("mpv/$prefix", logPriority) { text }
         }
     }
 }

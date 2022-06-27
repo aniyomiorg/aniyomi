@@ -103,7 +103,7 @@ sqldelight-gradle = { module="com.squareup.sqldelight:gradle-plugin", version.re
 junit = "org.junit.jupiter:junit-jupiter:5.8.2"
 
 ffmpeg-kit = "com.arthenica:ffmpeg-kit-https:4.5.1-1.LTS"
-aniyomi-mpv = "com.github.jmir1:aniyomi-mpv-lib:1.2"
+aniyomi-mpv = "com.github.jmir1:aniyomi-mpv-lib:1.3"
 
 [bundles]
 reactivex = ["rxandroid", "rxjava", "rxrelay"]
