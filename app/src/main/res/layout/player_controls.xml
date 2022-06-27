@@ -237,7 +237,6 @@
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackground"
             android:onClick="skipIntro"
-            android:text="@string/player_controls_skip_intro_text"
             android:textColor="?attr/colorOnPrimarySurface"
             app:layout_constraintBottom_toTopOf="@id/playbackSeekbar"
             app:layout_constraintRight_toLeftOf="@id/cycleViewModeBtn" />

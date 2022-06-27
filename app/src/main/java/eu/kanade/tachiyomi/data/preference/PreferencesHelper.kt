@@ -165,6 +165,8 @@ class PreferencesHelper(val context: Context) {
 
     fun progressPreference() = prefs.getString(Keys.progressPreference, "0.85F")!!.toFloat()
 
+    fun introLengthPreference() = prefs.getString(Keys.introLengthPreference, "85")!!.toInt()
+
     fun skipLengthPreference() = prefs.getString(Keys.skipLengthPreference, "10")!!.toInt()
 
     fun imageScaleType() = flowPrefs.getInt("pref_image_scale_type_key", 1)

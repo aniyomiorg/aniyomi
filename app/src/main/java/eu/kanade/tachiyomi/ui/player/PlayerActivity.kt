@@ -888,7 +888,7 @@ class PlayerActivity :
 
     @Suppress("UNUSED_PARAMETER")
     fun skipIntro(view: View) {
-        doubleTapSeek(85)
+        doubleTapSeek(preferences.introLengthPreference())
     }
 
     private fun refreshUi() {

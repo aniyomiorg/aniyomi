@@ -63,6 +63,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     override fun onViewAdded(child: View?) {
+        binding.controlsSkipIntroBtn.text = context.getString(R.string.player_controls_skip_intro_text, preferences.introLengthPreference())
+
         binding.pipBtn.isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
         binding.backArrowBtn.setOnClickListener { activity.onBackPressed() }

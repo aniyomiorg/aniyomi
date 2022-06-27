@@ -135,6 +135,25 @@ class SettingsPlayerController : SettingsController() {
             titleRes = R.string.pref_category_internal_player
 
             listPreference {
+                key = Keys.introLengthPreference
+                titleRes = R.string.pref_intro_length
+
+                entriesRes = arrayOf(
+                    R.string.pref_skip_85,
+                    R.string.pref_skip_55,
+                    R.string.pref_skip_25,
+                )
+                entryValues = arrayOf(
+                    "85",
+                    "55",
+                    "25",
+                )
+                defaultValue = "85"
+
+                summary = "%s"
+            }
+
+            listPreference {
                 key = Keys.skipLengthPreference
                 titleRes = R.string.pref_skip_length
 
