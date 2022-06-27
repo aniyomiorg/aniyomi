@@ -300,7 +300,11 @@ class PlayerActivity :
 
         setVisibilities()
 
-        playerControls.hideControls(true)
+        if (preferences.hideControls()) {
+            playerControls.hideControls(true)
+        } else {
+            playerControls.showAndFadeControls()
+        }
         toggleAutoplay(preferences.autoplayEnabled().get())
 
         setMpvConf()

@@ -172,6 +172,12 @@ class SettingsPlayerController : SettingsController() {
                 }
             }
 
+            switchPreference {
+                key = "player_hide_controls"
+                titleRes = R.string.pref_player_hide_controls
+                defaultValue = false
+            }
+
             if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 switchPreference {
                     key = Keys.pipEpisodeToasts

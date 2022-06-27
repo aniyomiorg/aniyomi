@@ -157,6 +157,8 @@ class PreferencesHelper(val context: Context) {
         putInt(Keys.playerViewMode, newMode)
     }
 
+    fun hideControls() = prefs.getBoolean("player_hide_controls", false)
+
     fun alwaysUseExternalPlayer() = prefs.getBoolean(Keys.alwaysUseExternalPlayer, false)
 
     fun externalPlayerPreference() = prefs.getString(Keys.externalPlayerPreference, "")
