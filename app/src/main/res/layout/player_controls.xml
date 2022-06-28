@@ -387,7 +387,6 @@
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="26dp"
             android:layout_height="125dp"
-            android:max="15"
             android:progress="10"
             android:progressDrawable="@drawable/player_bar" />
 
