@@ -30,6 +30,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -104,6 +105,8 @@ class PlayerActivity :
 
     private var isInPipMode: Boolean = false
     private var isPipStarted: Boolean = false
+
+    internal var isDoubleTapSeeking: Boolean = false
 
     private var mReceiver: BroadcastReceiver? = null
 
@@ -199,38 +202,34 @@ class PlayerActivity :
         }
     }
 
-    private var initialSeek = -1
+    internal var initialSeek = -1
 
     private lateinit var mDetector: GestureDetectorCompat
 
     private val animationHandler = Handler(Looper.getMainLooper())
 
     // Fade out seek text
-    private val seekTextRunnable = Runnable {
-        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
-            binding.seekView.startAnimation(fadeAnimation)
-            binding.seekView.visibility = View.GONE
-            diffSeekMain = 0
-        }
+    internal val seekTextRunnable = Runnable {
+        binding.seekView.visibility = View.GONE
     }
 
     // Fade out Volume Bar
-    private val volumeViewRunnable = Runnable {
+    internal val volumeViewRunnable = Runnable {
         AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
-            playerControls.binding.volumeView.startAnimation(fadeAnimation)
+            if (!playerControls.shouldHideUiForSeek) playerControls.binding.volumeView.startAnimation(fadeAnimation)
             playerControls.binding.volumeView.visibility = View.GONE
         }
     }
 
     // Fade out Brightness Bar
-    private val brightnessViewRunnable = Runnable {
+    internal val brightnessViewRunnable = Runnable {
         AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
-            playerControls.binding.brightnessView.startAnimation(fadeAnimation)
+            if (!playerControls.shouldHideUiForSeek) playerControls.binding.brightnessView.startAnimation(fadeAnimation)
             playerControls.binding.brightnessView.visibility = View.GONE
         }
     }
 
-    private fun showGestureView(type: String) {
+    internal fun showGestureView(type: String) {
         val callback: Runnable
         val itemView: LinearLayout
         val delay: Long
@@ -238,7 +237,7 @@ class PlayerActivity :
             "seek" -> {
                 callback = seekTextRunnable
                 itemView = binding.seekView
-                delay = 1000L
+                delay = 0L
             }
             "volume" -> {
                 callback = volumeViewRunnable
@@ -663,19 +662,67 @@ class PlayerActivity :
         } else binding.playPauseView.visibility = View.GONE
     }
 
+    private lateinit var doubleTapBg: ImageView
+
+    private val doubleTapSeekRunnable = Runnable {
+        isDoubleTapSeeking = false
+        binding.secondsView.isVisible = false
+        doubleTapBg.isVisible = false
+        binding.secondsView.seconds = 0
+        binding.secondsView.stop()
+    }
+
     fun doubleTapSeek(time: Int, event: MotionEvent? = null) {
-        val v = if (time < 0) binding.rewBg else binding.ffwdBg
+        if (!isDoubleTapSeeking) doubleTapBg = if (time < 0) binding.rewBg else binding.ffwdBg
+        val v = if (time < 0) binding.rewTap else binding.ffwdTap
         val w = if (time < 0) width * 0.2F else width * 0.8F
         val x = (event?.x?.toInt() ?: w.toInt()) - v.x.toInt()
         val y = (event?.y?.toInt() ?: (height / 2)) - v.y.toInt()
+
+        isDoubleTapSeeking = true
+        binding.secondsView.isVisible = true
+        animationHandler.removeCallbacks(doubleTapSeekRunnable)
+        animationHandler.postDelayed(doubleTapSeekRunnable, 750L)
+
+        if (time < 0) {
+            binding.secondsView.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                rightToRight = ConstraintLayout.LayoutParams.UNSET
+                leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
+            }
+            binding.secondsView.isForward = false
+
+            if (doubleTapBg != binding.rewBg) {
+                doubleTapBg.isVisible = false
+                binding.secondsView.seconds = 0
+                doubleTapBg = binding.rewBg
+            }
+            doubleTapBg.isVisible = true
+
+            binding.secondsView.seconds -= time
+        } else {
+            binding.secondsView.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+                leftToLeft = ConstraintLayout.LayoutParams.UNSET
+            }
+            binding.secondsView.isForward = true
+
+            if (doubleTapBg != binding.ffwdBg) {
+                doubleTapBg.isVisible = false
+                binding.secondsView.seconds = 0
+                doubleTapBg = binding.ffwdBg
+            }
+            doubleTapBg.isVisible = true
+
+            binding.secondsView.seconds += time
+        }
+        playerControls.hideUiForSeek()
+        binding.secondsView.start()
         ViewAnimationUtils.createCircularReveal(v, x, y, 0f, kotlin.math.max(v.height, v.width).toFloat()).setDuration(500).start()
 
-        ObjectAnimator.ofFloat(v, "alpha", 0f, 0.2f).setDuration(500).start()
-        ObjectAnimator.ofFloat(v, "alpha", 0.2f, 0.2f, 0f).setDuration(1000).start()
-        val newPos = (player.timePos ?: 0) + time // only for display
-        MPVLib.command(arrayOf("seek", time.toString(), "relative+exact"))
+        ObjectAnimator.ofFloat(v, "alpha", 0f, 0.15f).setDuration(500).start()
+        ObjectAnimator.ofFloat(v, "alpha", 0.15f, 0.15f, 0f).setDuration(1000).start()
 
-        editSeekText(newPos, time)
+        MPVLib.command(arrayOf("seek", time.toString(), "relative+exact"))
     }
 
     fun verticalScrollLeft(diff: Float) {
@@ -763,7 +810,6 @@ class PlayerActivity :
     fun initSeek() {
         initialSeek = player.timePos ?: -1
     }
-
     fun horizontalScroll(diff: Float) {
         // disable seeking when timePos is not available
         val duration = player.duration ?: 0
@@ -775,23 +821,11 @@ class PlayerActivity :
 
         val seekFlags = if (preferences.getPlayerFastSeek()) "absolute+keyframes" else "absolute"
 
+        playerControls.hideUiForSeek()
         MPVLib.command(arrayOf("seek", newPos.toString(), seekFlags))
         playerControls.updatePlaybackPos(newPos)
 
-        editSeekText(newPos, newDiff, true)
-    }
-
-    private var diffSeekMain = 0
-    private var diffSeekHorizontal = 0
-    private fun editSeekText(newPos: Int, diff: Int, isHorizontalSeek: Boolean = false) {
-        if (isHorizontalSeek) {
-            diffSeekMain += diff - diffSeekHorizontal
-            diffSeekHorizontal = diff
-        } else {
-            diffSeekMain += diff
-            diffSeekHorizontal = 0
-        }
-        val diffText = Utils.prettyTime(diffSeekMain, true)
+        val diffText = Utils.prettyTime(newDiff, true)
         binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
         showGestureView("seek")
     }
