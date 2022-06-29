@@ -364,7 +364,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="80"
                 android:progressBackgroundTint="@color/tint_seekbar_bg"
-                android:secondaryProgressTint="?attr/colorOnSecondary"
+                android:secondaryProgressTint="?attr/colorSecondaryVariant"
                 tools:progress="25"
                 tools:secondaryProgress="50"
                 app:layout_constraintBottom_toBottomOf="parent"
