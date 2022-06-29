@@ -17,6 +17,8 @@ object PreferenceKeys {
 
     const val pipEpisodeToasts = "pref_pip_episode_toasts"
 
+    const val pipOnExit = "pref_pip_on_exit"
+
     const val mpvConf = "pref_mpv_conf"
 
     const val defaultOrientationType = "pref_default_orientation_type_key"

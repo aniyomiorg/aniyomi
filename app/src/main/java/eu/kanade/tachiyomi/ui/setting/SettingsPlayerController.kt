@@ -203,6 +203,12 @@ class SettingsPlayerController : SettingsController() {
                     titleRes = R.string.pref_pip_episode_toasts
                     defaultValue = true
                 }
+
+                switchPreference {
+                    key = Keys.pipOnExit
+                    titleRes = R.string.pref_pip_on_exit
+                    defaultValue = true
+                }
             }
 
             editTextPreference {

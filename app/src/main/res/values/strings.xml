@@ -486,6 +486,7 @@
     <string name="pref_player_fullscreen">Show content in display cutout</string>
     <string name="pref_player_hide_controls">Hide player controls when opening the player</string>
     <string name="pref_pip_episode_toasts">Show episode toasts when switching episodes in PiP mode</string>
+    <string name="pref_pip_on_exit">Automatically switch to PiP mode on exiting the player</string>
     <string name="pref_mpv_conf">Edit MPV configuration file for further player settings</string>
     <string name="pref_category_external_player">External player</string>
     <string name="pref_always_use_external_player">Always use external player</string>

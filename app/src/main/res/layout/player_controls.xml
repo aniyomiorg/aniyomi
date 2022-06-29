@@ -300,7 +300,6 @@
                 android:layout_marginRight="10dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/action_player_pip"
-                android:onClick="startPiP"
                 android:src="@drawable/ic_picture_in_picture_24dp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -993,8 +993,18 @@ class PlayerActivity :
     }
 
     override fun onBackPressed() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) finishAndRemoveTask()
-        super.onBackPressed()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (preferences.pipOnExit()) startPiP()
+            else {
+                finishAndRemoveTask()
+                super.onBackPressed()
+            }
+        }
+    }
+
+    override fun onUserLeaveHint() {
+        if (player.paused == false && preferences.pipOnExit()) startPiP()
+        super.onUserLeaveHint()
     }
 
     override fun onStop() {
@@ -1064,8 +1074,9 @@ class PlayerActivity :
         }
     }
 
-    @Suppress("DEPRECATION", "UNUSED_PARAMETER")
-    fun startPiP(view: View) {
+    @Suppress("DEPRECATION")
+    fun startPiP() {
+        if (isInPipMode) return
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             isPipStarted = true
             playerControls.hideControls(true)

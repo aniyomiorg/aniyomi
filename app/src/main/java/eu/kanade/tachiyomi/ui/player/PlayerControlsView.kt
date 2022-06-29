@@ -155,6 +155,10 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.nextBtn.setOnClickListener { activity.switchEpisode(false) }
         binding.prevBtn.setOnClickListener { activity.switchEpisode(true) }
 
+        binding.pipBtn.setOnClickListener { activity.startPiP() }
+
+        binding.pipBtn.isVisible = !preferences.pipOnExit()
+
         binding.playbackPositionBtn.setOnClickListener {
             preferences.invertedPlaybackTxt().set(!preferences.invertedPlaybackTxt().get())
             if (activity.player.timePos != null) updatePlaybackPos(activity.player.timePos!!)
