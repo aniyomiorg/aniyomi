@@ -42,9 +42,13 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
         val anime = anime
         if (episode.seen) {
             if ((!preferences.preserveWatchingPosition()) ||
-                (preferences.preserveWatchingPosition()
-                    && episode.last_second_seen == episode.total_seconds))
+                (
+                    preferences.preserveWatchingPosition() &&
+                        episode.last_second_seen == episode.total_seconds
+                    )
+            ) {
                 episode.last_second_seen = 1L
+            }
         }
         return if (pkgName.isNullOrEmpty()) {
             Intent(Intent.ACTION_VIEW).apply {
