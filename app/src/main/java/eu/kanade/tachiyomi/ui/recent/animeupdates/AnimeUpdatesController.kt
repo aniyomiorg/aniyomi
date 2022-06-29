@@ -18,7 +18,6 @@ import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.database.models.toDomainAnime
 import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
-import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -46,7 +45,6 @@ import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
 import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
-import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
@@ -235,8 +233,6 @@ class AnimeUpdatesController :
                 launchUI { context.toast(e.message) }
                 return@launchIO
             }
-            val downloadManager: AnimeDownloadManager = Injekt.get()
-            val isDownloaded = downloadManager.isEpisodeDownloaded(episode, anime, true)
             if (video != null) {
                 AnimeController.EXT_EPISODE = domainEpisode
                 AnimeController.EXT_ANIME = domainAnime
@@ -244,7 +240,6 @@ class AnimeUpdatesController :
                 val extIntent = ExternalIntents(domainAnime, source).getExternalIntent(
                     domainEpisode,
                     video,
-                    isDownloaded,
                     context,
                 )
                 if (extIntent != null) try {

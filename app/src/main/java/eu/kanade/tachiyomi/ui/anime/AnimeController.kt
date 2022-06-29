@@ -35,7 +35,6 @@ import eu.kanade.tachiyomi.animesource.isLocalOrStub
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Category
-import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -136,7 +135,6 @@ class AnimeController :
                 windowWidthSizeClass = calculateWindowWidthSizeClass(),
                 onBackClicked = router::popCurrentController,
                 onEpisodeClicked = this::openEpisode,
-                onEpisodeClickedExternal = this::openEpisodeExternal,
                 onDownloadEpisode = this::onDownloadEpisodes.takeIf { !successState.source.isLocalOrStub() },
                 onAddToLibraryClicked = this::onFavoriteClick,
                 onWebViewClicked = this::openAnimeInWebView.takeIf { isHttpSource },
@@ -378,8 +376,8 @@ class AnimeController :
         if (episode != null) openEpisode(episode)
     }
 
-    private fun openEpisode(episode: DomainEpisode) {
-        if (preferences.alwaysUseExternalPlayer()) {
+    private fun openEpisode(episode: DomainEpisode, altPlayer: Boolean = false) {
+        if (preferences.alwaysUseExternalPlayer() != altPlayer) {
             openEpisodeExternal(episode)
         } else {
             openEpisodeInternal(episode)
@@ -403,8 +401,6 @@ class AnimeController :
                 launchUI { context.toast(e.message) }
                 return@launchIO
             }
-            val downloadManager: AnimeDownloadManager = Injekt.get()
-            val isDownloaded = downloadManager.isEpisodeDownloaded(episode.toDbEpisode(), anime.toDbAnime(), true)
             if (video != null) {
                 EXT_EPISODE = episode
                 EXT_ANIME = presenter.anime
@@ -412,7 +408,6 @@ class AnimeController :
                 val extIntent = ExternalIntents(anime, source).getExternalIntent(
                     episode,
                     video,
-                    isDownloaded,
                     context,
                 )
                 if (extIntent != null) try {

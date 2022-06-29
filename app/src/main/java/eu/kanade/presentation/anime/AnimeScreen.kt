@@ -100,8 +100,7 @@ fun AnimeScreen(
     snackbarHostState: SnackbarHostState,
     windowWidthSizeClass: WindowWidthSizeClass,
     onBackClicked: () -> Unit,
-    onEpisodeClicked: (Episode) -> Unit,
-    onEpisodeClickedExternal: (Episode) -> Unit,
+    onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
@@ -133,7 +132,6 @@ fun AnimeScreen(
             snackbarHostState = snackbarHostState,
             onBackClicked = onBackClicked,
             onEpisodeClicked = onEpisodeClicked,
-            onEpisodeClickedExternal = onEpisodeClickedExternal,
             onDownloadEpisode = onDownloadEpisode,
             onAddToLibraryClicked = onAddToLibraryClicked,
             onWebViewClicked = onWebViewClicked,
@@ -160,7 +158,6 @@ fun AnimeScreen(
             snackbarHostState = snackbarHostState,
             onBackClicked = onBackClicked,
             onEpisodeClicked = onEpisodeClicked,
-            onEpisodeClickedExternal = onEpisodeClickedExternal,
             onDownloadEpisode = onDownloadEpisode,
             onAddToLibraryClicked = onAddToLibraryClicked,
             onWebViewClicked = onWebViewClicked,
@@ -188,8 +185,7 @@ private fun AnimeScreenSmallImpl(
     state: AnimeScreenState.Success,
     snackbarHostState: SnackbarHostState,
     onBackClicked: () -> Unit,
-    onEpisodeClicked: (Episode) -> Unit,
-    onEpisodeClickedExternal: (Episode) -> Unit,
+    onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
@@ -361,11 +357,11 @@ private fun AnimeScreenSmallImpl(
                         onDownloadEpisode != null && selected.any { it.downloadState == AnimeDownload.State.DOWNLOADED }
                     },
                     onExternalClicked = {
-                        onEpisodeClickedExternal(selected.map { it.episode }.first())
+                        onEpisodeClicked(selected.map { it.episode }.first(), true)
                         selected.clear()
                     }.takeIf { !preferences.alwaysUseExternalPlayer() && selected.size == 1 },
                     onInternalClicked = {
-                        onEpisodeClicked(selected.map { it.episode }.first())
+                        onEpisodeClicked(selected.map { it.episode }.first(), true)
                         selected.clear()
                     }.takeIf { preferences.alwaysUseExternalPlayer() && selected.size == 1 },
                 )
@@ -488,8 +484,7 @@ fun AnimeScreenLargeImpl(
     windowWidthSizeClass: WindowWidthSizeClass,
     snackbarHostState: SnackbarHostState,
     onBackClicked: () -> Unit,
-    onEpisodeClicked: (Episode) -> Unit,
-    onEpisodeClickedExternal: (Episode) -> Unit,
+    onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
@@ -621,11 +616,11 @@ fun AnimeScreenLargeImpl(
                             onDownloadEpisode != null && selected.any { it.downloadState == AnimeDownload.State.DOWNLOADED }
                         },
                         onExternalClicked = {
-                            onEpisodeClickedExternal(selected.map { it.episode }.first())
+                            onEpisodeClicked(selected.map { it.episode }.first(), true)
                             selected.clear()
                         }.takeIf { !preferences.alwaysUseExternalPlayer() && selected.size == 1 },
                         onInternalClicked = {
-                            onEpisodeClicked(selected.map { it.episode }.first())
+                            onEpisodeClicked(selected.map { it.episode }.first(), true)
                             selected.clear()
                         }.takeIf { preferences.alwaysUseExternalPlayer() && selected.size == 1 },
                     )
@@ -833,7 +828,7 @@ fun onEpisodeItemClick(
     selected: MutableList<EpisodeItem>,
     episodes: List<EpisodeItem>,
     selectedPositions: Array<Int>,
-    onEpisodeClicked: (Episode) -> Unit,
+    onEpisodeClicked: (Episode, Boolean) -> Unit,
 ) {
     val selectedIndex = episodes.indexOf(episodeItem)
     when {
@@ -855,7 +850,7 @@ fun onEpisodeItemClick(
             }
             selected.add(episodeItem)
         }
-        else -> onEpisodeClicked(episodeItem.episode)
+        else -> onEpisodeClicked(episodeItem.episode, false)
     }
 }
 

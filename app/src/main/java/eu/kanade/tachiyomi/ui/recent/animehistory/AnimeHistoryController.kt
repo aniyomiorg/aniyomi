@@ -15,7 +15,6 @@ import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.presentation.animehistory.AnimeHistoryScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
-import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.ComposeController
@@ -126,13 +125,11 @@ class AnimeHistoryController : ComposeController<AnimeHistoryPresenter>(), RootC
                 launchUI { context.toast(e.message) }
                 return@launchIO
             }
-            val downloadManager: AnimeDownloadManager = Injekt.get()
-            val isDownloaded = downloadManager.isEpisodeDownloaded(dbEpisode, dbAnime, true)
             if (video != null) {
                 AnimeController.EXT_EPISODE = episode
                 AnimeController.EXT_ANIME = anime
 
-                val extIntent = ExternalIntents(anime, source).getExternalIntent(episode, video, isDownloaded, context)
+                val extIntent = ExternalIntents(anime, source).getExternalIntent(episode, video, context)
                 if (extIntent != null) try {
                     startActivityForResult(extIntent, AnimeController.REQUEST_EXTERNAL)
                 } catch (e: Exception) {

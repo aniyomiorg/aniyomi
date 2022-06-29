@@ -11,7 +11,7 @@ plugins {
 
 if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
     apply<com.google.gms.googleservices.GoogleServicesPlugin>()
-    apply(plugin = "com.google.firebase.crashlytics")
+    apply<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsPlugin>()
 }
 
 shortcutHelper.setFilePath("./shortcuts.xml")

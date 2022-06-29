@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.toDbAnime
@@ -43,18 +45,28 @@ import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
+import java.io.File
 import java.util.Date
 import eu.kanade.tachiyomi.data.database.models.Episode as DbEpisode
 
 class ExternalIntents(val anime: Anime, val source: AnimeSource) {
     private val preferences: PreferencesHelper by injectLazy()
 
-    fun getExternalIntent(episode: Episode, video: Video, isDownloaded: Boolean, context: Context): Intent? {
+    fun getExternalIntent(episode: Episode, video: Video, context: Context): Intent? {
         val videoUrl = if (video.videoUrl == null) {
             makeErrorToast(context, Exception("video URL is null."))
             return null
         } else {
-            video.videoUrl!!.toUri()
+            val uri = video.videoUrl!!.toUri()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && uri.scheme != "content") {
+                FileProvider.getUriForFile(
+                    context,
+                    context.applicationContext.packageName + ".provider",
+                    File(uri.path!!),
+                )
+            } else {
+                uri
+            }
         }
         val pkgName = preferences.externalPlayerPreference()
         val anime = anime
