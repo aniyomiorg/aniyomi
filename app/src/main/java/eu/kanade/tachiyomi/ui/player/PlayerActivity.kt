@@ -321,10 +321,13 @@ class PlayerActivity :
         }
 
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        fineVolume = audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
+        fineVolume = if (preferences.playerVolumeValue().get() == -1.0F) audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()else preferences.playerVolumeValue().get()
+        verticalScrollRight(0F)
         maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+        playerControls.binding.volumeBar.max = maxVolume
 
-        brightness = Utils.getScreenBrightness(this) ?: 0.5F
+        brightness = if (preferences.playerBrightnessValue().get() == -1.0F) Utils.getScreenBrightness(this) ?: 0.5F else preferences.playerBrightnessValue().get()
+        verticalScrollLeft(0F)
 
         volumeControlStream = AudioManager.STREAM_MUSIC
 
@@ -726,7 +729,7 @@ class PlayerActivity :
     }
 
     fun verticalScrollLeft(diff: Float) {
-        brightness = (brightness + diff).coerceIn(-0.75F, 1F)
+        if (diff != 0F) brightness = (brightness + diff).coerceIn(-0.75F, 1F)
         window.attributes = window.attributes.apply {
             // value of 0 and 0.01 is broken somehow
             screenBrightness = brightness.coerceAtLeast(0.02F)
@@ -750,11 +753,11 @@ class PlayerActivity :
             playerControls.binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_24dp)
             playerControls.binding.brightnessBar.max = 75
         }
-        showGestureView("brightness")
+        if (diff != 0F) showGestureView("brightness")
     }
 
     fun verticalScrollRight(diff: Float) {
-        fineVolume = (fineVolume + (diff * maxVolume)).coerceIn(0F, maxVolume.toFloat())
+        if (diff != 0F) fineVolume = (fineVolume + (diff * maxVolume)).coerceIn(0F, maxVolume.toFloat())
         val newVolume = fineVolume.toInt()
         // val newVolumePercent = 100 * newVolume / maxVolume
         audioManager!!.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
@@ -763,7 +766,7 @@ class PlayerActivity :
         playerControls.binding.volumeBar.progress = newVolume
         if (newVolume == 0) playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_off_24dp)
         else playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_on_24dp)
-        showGestureView("volume")
+        if (diff != 0F) showGestureView("volume")
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -819,10 +822,8 @@ class PlayerActivity :
         val newPos = (initialSeek + diff.toInt()).coerceIn(0, duration)
         val newDiff = newPos - initialSeek
 
-        val seekFlags = if (preferences.getPlayerFastSeek()) "absolute+keyframes" else "absolute"
-
         playerControls.hideUiForSeek()
-        MPVLib.command(arrayOf("seek", newPos.toString(), seekFlags))
+        if (preferences.getPlayerFastSeek()) MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes")) else player.timePos = newPos
         playerControls.updatePlaybackPos(newPos)
 
         val diffText = Utils.prettyTime(newDiff, true)
@@ -977,6 +978,8 @@ class PlayerActivity :
     }
 
     override fun onDestroy() {
+        preferences.playerVolumeValue().set(fineVolume)
+        preferences.playerBrightnessValue().set(brightness)
         presenter.deletePendingEpisodes()
         MPVLib.removeLogObserver(this)
         if (!playerIsDestroyed) {
