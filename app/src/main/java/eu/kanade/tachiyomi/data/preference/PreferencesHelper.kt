@@ -151,7 +151,7 @@ class PreferencesHelper(val context: Context) {
         putFloat(Keys.playerSpeed, newSpeed)
     }
 
-    fun getPlayerFastSeek() = prefs.getBoolean(Keys.playerFastSeek, false)
+    fun getPlayerSmoothSeek() = prefs.getBoolean(Keys.playerSmoothSeek, false)
 
     fun getPlayerViewMode() = prefs.getInt(Keys.playerViewMode, 1)
 

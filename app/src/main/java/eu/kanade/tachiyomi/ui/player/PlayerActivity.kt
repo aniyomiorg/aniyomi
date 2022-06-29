@@ -823,7 +823,7 @@ class PlayerActivity :
         val newDiff = newPos - initialSeek
 
         playerControls.hideUiForSeek()
-        if (preferences.getPlayerFastSeek()) MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes")) else player.timePos = newPos
+        if (preferences.getPlayerSmoothSeek()) player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
         playerControls.updatePlaybackPos(newPos)
 
         val diffText = Utils.prettyTime(newDiff, true)

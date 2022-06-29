@@ -177,10 +177,10 @@ class SettingsPlayerController : SettingsController() {
             }
 
             switchPreference {
-                key = Keys.playerFastSeek
-                titleRes = R.string.pref_player_fast_seek
+                key = Keys.playerSmoothSeek
+                titleRes = R.string.pref_player_smooth_seek
                 defaultValue = false
-                summaryRes = R.string.pref_player_fast_seek_summary
+                summaryRes = R.string.pref_player_smooth_seek_summary
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
