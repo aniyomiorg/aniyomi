@@ -156,13 +156,14 @@ class AnimeDownloadManager(
     }
 
     /**
-     * Tells the downloader to enqueue the given list of episodes.
+     * Tells the downloader to enqueue the given list of episodes
+     * using the alternative method of downloading.
      *
      * @param anime the anime of the episodes.
      * @param episodes the list of episodes to enqueue.
      * @param autoStart whether to start the downloader after enqueing the episodes.
      */
-    fun downloadEpisodesExternally(anime: Anime, episodes: List<Episode>, autoStart: Boolean = true) {
+    fun downloadEpisodesAlt(anime: Anime, episodes: List<Episode>, autoStart: Boolean = true) {
         downloader.queueEpisodes(anime, episodes, autoStart, true)
     }
 

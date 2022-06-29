@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.util.episode
 
+import eu.kanade.domain.anime.interactor.SetAnimeEpisodeFlags
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -34,12 +35,24 @@ object EpisodeSettingsHelper {
         db.updateEpisodeFlags(anime).executeAsBlocking()
     }
 
+    suspend fun applySettingDefaults(animeId: Long, setAnimeEpisodeFlags: SetAnimeEpisodeFlags) {
+        setAnimeEpisodeFlags.awaitSetAllFlags(
+            animeId = animeId,
+            unseenFilter = prefs.filterEpisodeBySeen().toLong(),
+            downloadedFilter = prefs.filterEpisodeByDownloaded().toLong(),
+            bookmarkedFilter = prefs.filterEpisodeByBookmarked().toLong(),
+            sortingMode = prefs.sortEpisodeBySourceOrNumber().toLong(),
+            sortingDirection = prefs.sortEpisodeByAscendingOrDescending().toLong(),
+            displayMode = prefs.displayEpisodeByNameOrNumber().toLong(),
+        )
+    }
+
     /**
      * Updates all animes in library with global Episode Settings.
      */
     fun updateAllAnimesWithGlobalDefaults() {
         launchIO {
-            val updatedAnimes = db.getFavoriteAnimes(sortByTitle = false)
+            val updatedAnimes = db.getFavoriteAnimes()
                 .executeAsBlocking()
                 .map { anime ->
                     with(anime) {

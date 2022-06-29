@@ -42,8 +42,28 @@ class EpisodeRepositoryImpl(
     }
 
     override suspend fun update(episodeUpdate: EpisodeUpdate) {
-        try {
-            handler.await {
+        handler.await {
+            episodesQueries.update(
+                episodeUpdate.animeId,
+                episodeUpdate.url,
+                episodeUpdate.name,
+                episodeUpdate.scanlator,
+                episodeUpdate.seen?.toLong(),
+                episodeUpdate.bookmark?.toLong(),
+                episodeUpdate.lastSecondSeen,
+                episodeUpdate.totalSeconds,
+                episodeUpdate.episodeNumber?.toDouble(),
+                episodeUpdate.sourceOrder,
+                episodeUpdate.dateFetch,
+                episodeUpdate.dateUpload,
+                episodeId = episodeUpdate.id,
+            )
+        }
+    }
+
+    override suspend fun updateAll(episodeUpdates: List<EpisodeUpdate>) {
+        handler.await(inTransaction = true) {
+            episodeUpdates.forEach { episodeUpdate ->
                 episodesQueries.update(
                     episodeUpdate.animeId,
                     episodeUpdate.url,
@@ -60,34 +80,6 @@ class EpisodeRepositoryImpl(
                     episodeId = episodeUpdate.id,
                 )
             }
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e)
-        }
-    }
-
-    override suspend fun updateAll(episodeUpdates: List<EpisodeUpdate>) {
-        try {
-            handler.await(inTransaction = true) {
-                episodeUpdates.forEach { episodeUpdate ->
-                    episodesQueries.update(
-                        episodeUpdate.animeId,
-                        episodeUpdate.url,
-                        episodeUpdate.name,
-                        episodeUpdate.scanlator,
-                        episodeUpdate.seen?.toLong(),
-                        episodeUpdate.bookmark?.toLong(),
-                        episodeUpdate.lastSecondSeen,
-                        episodeUpdate.totalSeconds,
-                        episodeUpdate.episodeNumber?.toDouble(),
-                        episodeUpdate.sourceOrder,
-                        episodeUpdate.dateFetch,
-                        episodeUpdate.dateUpload,
-                        episodeId = episodeUpdate.id,
-                    )
-                }
-            }
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e)
         }
     }
 

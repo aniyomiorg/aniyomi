@@ -92,7 +92,7 @@ class AnimelibSettingsSheet(
             private val unseen = Item.TriStateGroup(R.string.action_filter_unseen, this)
             private val started = Item.TriStateGroup(R.string.action_filter_started, this)
             private val completed = Item.TriStateGroup(R.string.completed, this)
-            private val trackFilters: Map<Int, Item.TriStateGroup>
+            private val trackFilters: Map<Long, Item.TriStateGroup>
 
             override val header = null
             override val items: List<Item>
@@ -129,7 +129,7 @@ class AnimelibSettingsSheet(
                 completed.state = preferences.filterCompleted().get()
 
                 trackFilters.forEach { trackFilter ->
-                    trackFilter.value.state = preferences.filterTracking(trackFilter.key).get()
+                    trackFilter.value.state = preferences.filterTracking(trackFilter.key.toInt()).get()
                 }
             }
 
@@ -150,7 +150,7 @@ class AnimelibSettingsSheet(
                     else -> {
                         trackFilters.forEach { trackFilter ->
                             if (trackFilter.value == item) {
-                                preferences.filterTracking(trackFilter.key).set(newState)
+                                preferences.filterTracking(trackFilter.key.toInt()).set(newState)
                             }
                         }
                     }

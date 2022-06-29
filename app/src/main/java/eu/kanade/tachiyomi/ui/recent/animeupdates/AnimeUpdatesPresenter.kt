@@ -221,7 +221,7 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
      * @param items list of recent episodes seleted.
      */
     fun downloadEpisodesExternally(items: List<AnimeUpdatesItem>) {
-        items.forEach { downloadManager.downloadEpisodesExternally(it.anime, listOf(it.episode)) }
+        items.forEach { downloadManager.downloadEpisodesAlt(it.anime, listOf(it.episode)) }
     }
 
     /**

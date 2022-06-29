@@ -61,8 +61,8 @@ class AnimeTrackSearch : AnimeTrack {
     }
 
     companion object {
-        fun create(serviceId: Int): AnimeTrackSearch = AnimeTrackSearch().apply {
-            sync_id = serviceId
+        fun create(serviceId: Long): AnimeTrackSearch = AnimeTrackSearch().apply {
+            sync_id = serviceId.toInt()
         }
     }
 }

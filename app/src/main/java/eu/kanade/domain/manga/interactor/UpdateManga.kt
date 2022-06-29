@@ -8,17 +8,23 @@ import eu.kanade.domain.manga.model.toDbManga
 import eu.kanade.domain.manga.repository.MangaRepository
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import tachiyomi.source.model.MangaInfo
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.util.Date
 
 class UpdateManga(
     private val mangaRepository: MangaRepository,
 ) {
 
+    suspend fun await(mangaUpdate: MangaUpdate): Boolean {
+        return mangaRepository.update(mangaUpdate)
+    }
+
     suspend fun awaitUpdateFromSource(
         localManga: Manga,
         remoteManga: MangaInfo,
         manualFetch: Boolean,
-        coverCache: CoverCache,
+        coverCache: CoverCache = Injekt.get(),
     ): Boolean {
         // if the manga isn't a favorite, set its title from source and update in db
         val title = if (!localManga.favorite) remoteManga.title else null
@@ -61,5 +67,15 @@ class UpdateManga(
 
     suspend fun awaitUpdateCoverLastModified(mangaId: Long): Boolean {
         return mangaRepository.update(MangaUpdate(id = mangaId, coverLastModified = Date().time))
+    }
+
+    suspend fun awaitUpdateFavorite(mangaId: Long, favorite: Boolean): Boolean {
+        val dateAdded = when (favorite) {
+            true -> Date().time
+            false -> 0
+        }
+        return mangaRepository.update(
+            MangaUpdate(id = mangaId, favorite = favorite, dateAdded = dateAdded),
+        )
     }
 }

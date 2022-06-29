@@ -122,7 +122,9 @@ class AnimeHistoryPresenter(
         presenterScope.launchIO {
             val episode = getNextEpisode.await()
             launchUI {
-                view?.openEpisode(episode)
+                if (episode != null) {
+                    view?.openEpisode(episode)
+                }
             }
         }
     }

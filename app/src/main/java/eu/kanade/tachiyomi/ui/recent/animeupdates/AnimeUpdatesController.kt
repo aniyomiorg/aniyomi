@@ -1,7 +1,5 @@
 package eu.kanade.tachiyomi.ui.recent.animeupdates
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.Menu
@@ -18,6 +16,8 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
+import eu.kanade.tachiyomi.data.database.models.toDomainAnime
+import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
@@ -25,7 +25,6 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.UpdatesControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
-import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.anime.episode.base.BaseEpisodesAdapter
 import eu.kanade.tachiyomi.ui.base.controller.NucleusController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
@@ -210,81 +209,60 @@ class AnimeUpdatesController :
      */
     private fun openEpisode(item: AnimeUpdatesItem, hasAnimation: Boolean = false, playerChangeRequested: Boolean = false) {
         val activity = activity ?: return
-        val intent = PlayerActivity.newIntent(activity, item.anime, item.episode)
-        val useInternal = preferences.alwaysUseExternalPlayer() == playerChangeRequested
-        if (hasAnimation) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-        }
-
-        if (!useInternal) launchIO {
-            val video = try {
-                EpisodeLoader.getLink(item.episode, item.anime, source = sourceManager.getOrStub(item.anime.source)).awaitSingle()
-            } catch (e: Exception) {
-                return@launchIO makeErrorToast(activity, e)
-            }
-            val downloadManager: AnimeDownloadManager = Injekt.get()
-            val isDownloaded = downloadManager.isEpisodeDownloaded(item.episode, item.anime, true)
-            if (video != null) {
-                AnimeController.EXT_EPISODE = item.episode
-                AnimeController.EXT_ANIME = item.anime
-
-                val source = sourceManager.getOrStub(item.anime.source)
-                val extIntent = ExternalIntents(item.anime, source).getExternalIntent(item.episode, video, isDownloaded, activity)
-                if (extIntent != null) try {
-                    startActivityForResult(extIntent, AnimeController.REQUEST_EXTERNAL)
-                } catch (e: Exception) {
-                    makeErrorToast(activity, e)
-                }
-            } else {
-                makeErrorToast(activity, Exception("Couldn't find any video links."))
-            }
+        val useExternal = preferences.alwaysUseExternalPlayer() != playerChangeRequested
+        if (useExternal) {
+            openEpisodeExternal(item)
         } else {
+            val intent = PlayerActivity.newIntent(activity, item.anime, item.episode)
+            if (hasAnimation) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            }
             startActivity(intent)
         }
     }
 
-    private fun makeErrorToast(context: Context, e: Exception?) {
-        launchUI { context.toast(e?.message ?: "Cannot open episode") }
+    private fun openEpisodeExternal(item: AnimeUpdatesItem) {
+        val context = activity ?: return
+        val anime = item.anime
+        val domainAnime = item.anime.toDomainAnime() ?: return
+        val episode = item.episode
+        val domainEpisode = item.episode.toDomainEpisode() ?: return
+        val source = sourceManager.get(item.anime.source) ?: return
+        launchIO {
+            val video = try {
+                EpisodeLoader.getLink(episode, anime, source).awaitSingle()
+            } catch (e: Exception) {
+                launchUI { context.toast(e.message) }
+                return@launchIO
+            }
+            val downloadManager: AnimeDownloadManager = Injekt.get()
+            val isDownloaded = downloadManager.isEpisodeDownloaded(episode, anime, true)
+            if (video != null) {
+                AnimeController.EXT_EPISODE = domainEpisode
+                AnimeController.EXT_ANIME = domainAnime
+
+                val extIntent = ExternalIntents(domainAnime, source).getExternalIntent(
+                    domainEpisode,
+                    video,
+                    isDownloaded,
+                    context,
+                )
+                if (extIntent != null) try {
+                    startActivityForResult(extIntent, AnimeController.REQUEST_EXTERNAL)
+                } catch (e: Exception) {
+                    launchUI { context.toast(e.message) }
+                    return@launchIO
+                }
+            } else {
+                launchUI { context.toast("Couldn't find any video links.") }
+                return@launchIO
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == AnimeController.REQUEST_EXTERNAL && resultCode == Activity.RESULT_OK) {
-            val anime = AnimeController.EXT_ANIME ?: return
-            val currentExtEpisode = AnimeController.EXT_EPISODE ?: return
-            val currentPosition: Long
-            val duration: Long
-            val cause = data!!.getStringExtra("end_by") ?: ""
-            if (cause.isNotEmpty()) {
-                val positionExtra = data.extras?.get("position")
-                currentPosition = if (positionExtra is Int) {
-                    positionExtra.toLong()
-                } else {
-                    positionExtra as? Long ?: 0L
-                }
-                val durationExtra = data.extras?.get("duration")
-                duration = if (durationExtra is Int) {
-                    durationExtra.toLong()
-                } else {
-                    durationExtra as? Long ?: 0L
-                }
-            } else {
-                if (data.extras?.get("extra_position") != null) {
-                    currentPosition = data.getLongExtra("extra_position", 0L)
-                    duration = data.getLongExtra("extra_duration", 0L)
-                } else {
-                    currentPosition = data.getIntExtra("position", 0).toLong()
-                    duration = data.getIntExtra("duration", 0).toLong()
-                }
-            }
-            if (cause == "playback_completion") {
-                AnimeController.setEpisodeProgress(currentExtEpisode, anime, currentExtEpisode.total_seconds, currentExtEpisode.total_seconds)
-            } else {
-                AnimeController.setEpisodeProgress(currentExtEpisode, anime, currentPosition, duration)
-            }
-            launchIO {
-                AnimeController.saveEpisodeHistory(EpisodeItem(currentExtEpisode, anime))
-            }
-        }
+        ExternalIntents.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     /**

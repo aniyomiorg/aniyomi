@@ -4,7 +4,11 @@ import android.os.Bundle
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.domain.anime.interactor.GetDuplicateLibraryAnime
 import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
+import eu.kanade.domain.animetrack.model.toDomainTrack
 import eu.kanade.domain.category.interactor.GetCategoriesAnime
+import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
@@ -36,7 +40,6 @@ import eu.kanade.tachiyomi.ui.browse.animesource.filter.TextSectionItem
 import eu.kanade.tachiyomi.ui.browse.animesource.filter.TriStateItem
 import eu.kanade.tachiyomi.ui.browse.animesource.filter.TriStateSectionItem
 import eu.kanade.tachiyomi.util.episode.EpisodeSettingsHelper
-import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.removeCovers
@@ -67,6 +70,9 @@ open class BrowseAnimeSourcePresenter(
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val getDuplicateLibraryAnime: GetDuplicateLibraryAnime = Injekt.get(),
     private val getCategories: GetCategoriesAnime = Injekt.get(),
+    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val insertTrack: InsertAnimeTrack = Injekt.get(),
+    private val syncEpisodesWithTrackServiceTwoWay: SyncEpisodesWithTrackServiceTwoWay = Injekt.get(),
 ) : BasePresenter<BrowseAnimeSourceController>() {
 
     /**
@@ -277,24 +283,25 @@ open class BrowseAnimeSourcePresenter(
     }
 
     private fun autoAddTrack(anime: Anime) {
-        loggedServices
-            .filterIsInstance<EnhancedTrackService>()
-            .filter { it.accept(source) }
-            .forEach { service ->
-                launchIO {
+        launchIO {
+            loggedServices
+                .filterIsInstance<EnhancedTrackService>()
+                .filter { it.accept(source) }
+                .forEach { service ->
                     try {
                         service.match(anime)?.let { track ->
                             track.anime_id = anime.id!!
                             (service as TrackService).bind(track)
-                            db.insertTrack(track).executeAsBlocking()
+                            insertTrack.await(track.toDomainTrack()!!)
 
-                            syncEpisodesWithTrackServiceTwoWay(db, db.getEpisodes(anime).executeAsBlocking(), track, service as TrackService)
+                            val episodes = getEpisodeByAnimeId.await(anime.id!!)
+                            syncEpisodesWithTrackServiceTwoWay.await(episodes, track.toDomainTrack()!!, service)
                         }
                     } catch (e: Exception) {
                         logcat(LogPriority.WARN, e) { "Could not match anime: ${anime.title} with service $service" }
                     }
                 }
-            }
+        }
     }
 
     /**

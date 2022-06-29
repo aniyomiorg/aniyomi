@@ -9,6 +9,7 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.toDomainAnime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -48,19 +49,18 @@ fun Anime.hasCustomCover(coverCache: AnimeCoverCache = Injekt.get()): Boolean {
     return coverCache.getCustomCoverFile(id).exists()
 }
 
-fun Anime.removeCovers(coverCache: AnimeCoverCache) {
-    if (isLocal()) return
+fun Anime.removeCovers(coverCache: AnimeCoverCache = Injekt.get()): Int {
+    if (isLocal()) return 0
 
     cover_last_modified = Date().time
-    coverCache.deleteFromCache(this, true)
-}
-
-fun Anime.updateCoverLastModified(db: AnimeDatabaseHelper) {
-    cover_last_modified = Date().time
-    db.updateAnimeCoverLastModified(this).executeAsBlocking()
+    return coverCache.deleteFromCache(this, true)
 }
 
 fun Anime.shouldDownloadNewEpisodes(db: AnimeDatabaseHelper, prefs: PreferencesHelper): Boolean {
+    return toDomainAnime()?.shouldDownloadNewEpisodes(db, prefs) ?: false
+}
+
+fun DomainAnime.shouldDownloadNewEpisodes(db: AnimeDatabaseHelper, prefs: PreferencesHelper): Boolean {
     if (!favorite) return false
 
     val downloadNewChapter = prefs.downloadNewChapter().get()
@@ -74,7 +74,7 @@ fun Anime.shouldDownloadNewEpisodes(db: AnimeDatabaseHelper, prefs: PreferencesH
 
     // Get all categories, else default category (0)
     val categoriesForAnime =
-        db.getCategoriesForAnime(this).executeAsBlocking()
+        db.getCategoriesForAnime(toDbAnime()).executeAsBlocking()
             .mapNotNull { it.id }
             .takeUnless { it.isEmpty() } ?: listOf(0)
 

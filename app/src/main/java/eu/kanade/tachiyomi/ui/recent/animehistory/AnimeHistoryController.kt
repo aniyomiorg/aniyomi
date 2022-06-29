@@ -1,7 +1,5 @@
 package eu.kanade.tachiyomi.ui.recent.animehistory
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuInflater
@@ -9,16 +7,17 @@ import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import eu.kanade.domain.anime.interactor.GetAnimeById
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.episode.model.Episode
 import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.presentation.animehistory.AnimeHistoryScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.anime.AnimeController
-import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.base.controller.ComposeController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.pushController
@@ -42,6 +41,7 @@ class AnimeHistoryController : ComposeController<AnimeHistoryPresenter>(), RootC
     private var query = ""
 
     private val preferences: PreferencesHelper = Injekt.get()
+    private val getAnimeById: GetAnimeById = Injekt.get()
     private val sourceManager: AnimeSourceManager by injectLazy()
 
     override fun getTitle() = resources?.getString(R.string.label_recent_manga)
@@ -54,7 +54,7 @@ class AnimeHistoryController : ComposeController<AnimeHistoryPresenter>(), RootC
             nestedScrollInterop = nestedScrollInterop,
             presenter = presenter,
             onClickCover = { history ->
-                parentController!!.router.pushController(AnimeController(history))
+                parentController!!.router.pushController(AnimeController(history.animeId))
             },
             onClickResume = { history ->
                 presenter.getNextEpisodeForAnime(history.animeId, history.episodeId)
@@ -102,86 +102,53 @@ class AnimeHistoryController : ComposeController<AnimeHistoryPresenter>(), RootC
         }
     }
 
-    fun openEpisode(episode: Episode?) {
+    suspend fun openEpisode(episode: Episode) {
         val activity = activity ?: return
-        if (episode != null) {
-            val intent = PlayerActivity.newIntent(activity, episode.animeId, episode.id)
-
-            if (preferences.alwaysUseExternalPlayer()) launchIO {
-                val db: AnimeDatabaseHelper by injectLazy()
-                val anime = episode.animeId?.let { db.getAnime(it).executeAsBlocking() } ?: return@launchIO
-                val dbEpisode = episode.toDbEpisode()
-                val video = try {
-                    EpisodeLoader.getLink(dbEpisode, anime, source = sourceManager.getOrStub(anime.source)).awaitSingle()
-                } catch (e: Exception) {
-                    return@launchIO makeErrorToast(activity, e)
-                }
-                val downloadManager: AnimeDownloadManager = Injekt.get()
-                val isDownloaded = downloadManager.isEpisodeDownloaded(dbEpisode, anime, true)
-                if (video != null) {
-                    AnimeController.EXT_EPISODE = dbEpisode
-                    AnimeController.EXT_ANIME = anime
-
-                    val source = sourceManager.getOrStub(anime.source)
-                    val extIntent = ExternalIntents(anime, source).getExternalIntent(dbEpisode, video, isDownloaded, activity)
-                    if (extIntent != null) try {
-                        startActivityForResult(extIntent, AnimeController.REQUEST_EXTERNAL)
-                    } catch (e: Exception) {
-                        makeErrorToast(activity, e)
-                    }
-                } else {
-                    makeErrorToast(activity, Exception("Couldn't find any video links."))
-                }
-            } else {
-                startActivity(intent)
-            }
+        val anime = getAnimeById.await(episode.animeId) ?: return
+        val useExternal = preferences.alwaysUseExternalPlayer()
+        if (useExternal) {
+            openEpisodeExternal(episode, anime)
         } else {
-            activity.toast(R.string.no_next_episode)
+            val intent = PlayerActivity.newIntent(activity, anime.id, episode.id)
+            startActivity(intent)
         }
     }
 
-    private fun makeErrorToast(context: Context, e: Exception?) {
-        launchUI { context.toast(e?.message ?: "Cannot open episode") }
+    private fun openEpisodeExternal(episode: Episode, anime: Anime) {
+        val context = activity ?: return
+        val source = sourceManager.get(anime.source) ?: return
+        val dbEpisode = episode.toDbEpisode()
+        val dbAnime = anime.toDbAnime()
+        launchIO {
+            val video = try {
+                EpisodeLoader.getLink(dbEpisode, dbAnime, source).awaitSingle()
+            } catch (e: Exception) {
+                launchUI { context.toast(e.message) }
+                return@launchIO
+            }
+            val downloadManager: AnimeDownloadManager = Injekt.get()
+            val isDownloaded = downloadManager.isEpisodeDownloaded(dbEpisode, dbAnime, true)
+            if (video != null) {
+                AnimeController.EXT_EPISODE = episode
+                AnimeController.EXT_ANIME = anime
+
+                val extIntent = ExternalIntents(anime, source).getExternalIntent(episode, video, isDownloaded, context)
+                if (extIntent != null) try {
+                    startActivityForResult(extIntent, AnimeController.REQUEST_EXTERNAL)
+                } catch (e: Exception) {
+                    launchUI { context.toast(e.message) }
+                    return@launchIO
+                }
+            } else {
+                launchUI { context.toast("Couldn't find any video links.") }
+                return@launchIO
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == AnimeController.REQUEST_EXTERNAL && resultCode == Activity.RESULT_OK) {
-            val anime = AnimeController.EXT_ANIME ?: return
-            val currentExtEpisode = AnimeController.EXT_EPISODE ?: return
-            val currentPosition: Long
-            val duration: Long
-            val cause = data!!.getStringExtra("end_by") ?: ""
-            if (cause.isNotEmpty()) {
-                val positionExtra = data.extras?.get("position")
-                currentPosition = if (positionExtra is Int) {
-                    positionExtra.toLong()
-                } else {
-                    positionExtra as? Long ?: 0L
-                }
-                val durationExtra = data.extras?.get("duration")
-                duration = if (durationExtra is Int) {
-                    durationExtra.toLong()
-                } else {
-                    durationExtra as? Long ?: 0L
-                }
-            } else {
-                if (data.extras?.get("extra_position") != null) {
-                    currentPosition = data.getLongExtra("extra_position", 0L)
-                    duration = data.getLongExtra("extra_duration", 0L)
-                } else {
-                    currentPosition = data.getIntExtra("position", 0).toLong()
-                    duration = data.getIntExtra("duration", 0).toLong()
-                }
-            }
-            if (cause == "playback_completion") {
-                AnimeController.setEpisodeProgress(currentExtEpisode, anime, currentExtEpisode.total_seconds, currentExtEpisode.total_seconds)
-            } else {
-                AnimeController.setEpisodeProgress(currentExtEpisode, anime, currentPosition, duration)
-            }
-            launchIO {
-                AnimeController.saveEpisodeHistory(EpisodeItem(currentExtEpisode, anime))
-            }
-        }
+        ExternalIntents.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     fun resumeLastEpisodeSeen() {

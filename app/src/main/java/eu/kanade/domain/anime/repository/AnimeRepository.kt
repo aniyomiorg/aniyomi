@@ -8,11 +8,17 @@ interface AnimeRepository {
 
     suspend fun getAnimeById(id: Long): Anime
 
+    suspend fun subscribeAnimeById(id: Long): Flow<Anime>
+
+    suspend fun getAnimeByIdAsFlow(id: Long): Flow<Anime>
+
     fun getFavoritesBySourceId(sourceId: Long): Flow<List<Anime>>
 
     suspend fun getDuplicateLibraryAnime(title: String, sourceId: Long): Anime?
 
     suspend fun resetViewerFlags(): Boolean
+
+    suspend fun moveAnimeToCategories(animeId: Long, categoryIds: List<Long>)
 
     suspend fun update(update: AnimeUpdate): Boolean
 }

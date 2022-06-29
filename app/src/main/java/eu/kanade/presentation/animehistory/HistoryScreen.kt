@@ -27,7 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -99,28 +99,6 @@ fun HistoryContent(
 
     val scrollState = rememberLazyListState()
 
-    val transition = rememberInfiniteTransition()
-
-    val translateAnimation = transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1000f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = 1000,
-                easing = LinearEasing,
-            ),
-        ),
-    )
-
-    val brush = Brush.linearGradient(
-        colors = shimmerGradient,
-        start = Offset(0f, 0f),
-        end = Offset(
-            x = translateAnimation.value,
-            y = 00f,
-        ),
-    )
-
     ScrollbarLazyColumn(
         modifier = Modifier
             .nestedScroll(nestedScroll),
@@ -149,6 +127,28 @@ fun HistoryContent(
                     )
                 }
                 null -> {
+                    val transition = rememberInfiniteTransition()
+                    val translateAnimation = transition.animateFloat(
+                        initialValue = 0f,
+                        targetValue = 1000f,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(
+                                durationMillis = 1000,
+                                easing = LinearEasing,
+                            ),
+                        ),
+                    )
+
+                    val brush = remember {
+                        linearGradient(
+                            colors = shimmerGradient,
+                            start = Offset(0f, 0f),
+                            end = Offset(
+                                x = translateAnimation.value,
+                                y = 00f,
+                            ),
+                        )
+                    }
                     HistoryItemShimmer(brush = brush)
                 }
             }

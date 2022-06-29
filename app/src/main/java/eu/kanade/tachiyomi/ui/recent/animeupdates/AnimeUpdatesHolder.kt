@@ -26,13 +26,7 @@ class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdat
             adapter.coverClickListener.onCoverClick(bindingAdapterPosition)
         }
 
-        binding.download.setOnClickListener {
-            onAnimeDownloadClick(it, bindingAdapterPosition)
-        }
-        binding.download.setOnLongClickListener {
-            onAnimeDownloadLongClick(it, bindingAdapterPosition)
-            true
-        }
+        binding.download.listener = downloadActionListener
     }
 
     fun bind(item: AnimeUpdatesItem) {

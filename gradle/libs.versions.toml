@@ -1,5 +1,5 @@
 [versions]
-aboutlib_version = "10.3.0"
+aboutlib_version = "10.3.1"
 okhttp_version = "4.10.0"
 nucleus_version = "3.0.0"
 coil_version = "2.1.0"
@@ -11,7 +11,7 @@ leakcanary = "2.9.1"
 
 [libraries]
 android-shortcut-gradle = "com.github.zellius:android-shortcut-gradle-plugin:0.1.2"
-google-services-gradle = "com.google.gms:google-services:4.3.10"
+google-services-gradle = "com.google.gms:google-services:4.3.12"
 google-firebase-crashlytics = "com.google.firebase:firebase-crashlytics-gradle:2.8.0"
 
 tachiyomi-api = "org.tachiyomi:source-api:1.1"
@@ -60,7 +60,7 @@ natural-comparator = "com.github.gpanther:java-nat-sort:natural-comparator-1.1"
 
 markwon = "io.noties.markwon:core:4.6.2"
 
-material = "com.google.android.material:material:1.7.0-alpha01"
+material = "com.google.android.material:material:1.7.0-alpha02"
 androidprocessbutton = "com.github.dmytrodanylyk.android-process-button:library:1.0.4"
 flexible-adapter-core = "com.github.arkon.FlexibleAdapter:flexible-adapter:c8013533"
 flexible-adapter-ui = "com.github.arkon.FlexibleAdapter:flexible-adapter-ui:c8013533"
