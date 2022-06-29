@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.presentation.manga.DownloadAction
-import eu.kanade.presentation.manga.components.ChapterHeader
 import kotlin.math.roundToInt
 
 @Composable
@@ -86,9 +85,9 @@ fun AnimeTopAppBar(
                     onCoverClick = onCoverClick,
                     doSearch = doGlobalSearch,
                 )
-                ChapterHeader(
-                    chapterCount = episodeCount,
-                    isChapterFiltered = episodeFiltered,
+                EpisodeHeader(
+                    episodeCount = episodeCount,
+                    isEpisodeFiltered = episodeFiltered,
                     onFilterButtonClicked = onFilterButtonClicked,
                 )
             }

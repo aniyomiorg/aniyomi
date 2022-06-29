@@ -304,7 +304,7 @@ private fun AnimeAndSourceTitlesLarge(
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
-            text = author?.takeIf { it.isNotBlank() } ?: stringResource(R.string.unknown_author),
+            text = author?.takeIf { it.isNotBlank() } ?: stringResource(R.string.unknown_studio),
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier
                 .secondaryItemAlpha()
@@ -434,7 +434,7 @@ private fun AnimeAndSourceTitlesSmall(
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = author?.takeIf { it.isNotBlank() }
-                    ?: stringResource(R.string.unknown_author),
+                    ?: stringResource(R.string.unknown_studio),
                 style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier
                     .secondaryItemAlpha()
