@@ -289,7 +289,6 @@ class PlayerActivity :
 
         binding = PlayerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationType()
 
         window.statusBarColor = 70000000
@@ -325,6 +324,7 @@ class PlayerActivity :
         verticalScrollRight(0F)
         maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
         playerControls.binding.volumeBar.max = maxVolume
+        playerControls.binding.volumeBar.secondaryProgress = maxVolume
 
         brightness = if (preferences.playerBrightnessValue().get() == -1.0F) Utils.getScreenBrightness(this) ?: 0.5F else preferences.playerBrightnessValue().get()
         verticalScrollLeft(0F)
@@ -652,8 +652,8 @@ class PlayerActivity :
 
         if (!playerControls.binding.controlsView.isVisible) {
             when {
-                player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_80dp) }
-                !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_80dp) }
+                player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_72dp) }
+                !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_72dp) }
             }
 
             AnimationUtils.loadAnimation(this, R.anim.fade_in_medium).also { fadeAnimation ->
@@ -744,14 +744,15 @@ class PlayerActivity :
         }
         val finalBrightness = (brightness * 100).roundToInt()
         playerControls.binding.brightnessText.text = finalBrightness.toString()
-        playerControls.binding.brightnessBar.progress = finalBrightness
-        playerControls.binding.brightnessBar.secondaryProgress = abs(finalBrightness)
+        playerControls.binding.brightnessBar.progress = abs(finalBrightness)
         if (finalBrightness >= 0) {
             playerControls.binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_24dp)
             playerControls.binding.brightnessBar.max = 100
+            playerControls.binding.brightnessBar.secondaryProgress = 100
         } else {
             playerControls.binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_24dp)
             playerControls.binding.brightnessBar.max = 75
+            playerControls.binding.brightnessBar.secondaryProgress = 75
         }
         if (diff != 0F) showGestureView("brightness")
     }
@@ -967,7 +968,7 @@ class PlayerActivity :
 
     private fun updatePlaybackStatus(paused: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) updatePictureInPictureActions(!paused)
-        val r = if (paused) R.drawable.ic_play_arrow_80dp else R.drawable.ic_pause_80dp
+        val r = if (paused) R.drawable.ic_play_arrow_72dp else R.drawable.ic_pause_72dp
         playerControls.binding.playBtn.setImageResource(r)
 
         if (paused) {

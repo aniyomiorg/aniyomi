@@ -185,9 +185,9 @@
 
             <ImageButton
                 android:id="@+id/prevBtn"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:layout_marginRight="240dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="255dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/action_previous_episode"
                 android:padding="@dimen/screen_edge_margin"
@@ -195,13 +195,13 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_skip_previous_56dp"
+                app:srcCompat="@drawable/ic_skip_previous_50dp"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <ImageButton
                 android:id="@+id/play_btn"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Play/Pause"
                 android:onClick="playPause"
@@ -212,14 +212,14 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="?attr/colorOnPrimarySurface"
-                tools:src="@drawable/ic_play_arrow_80dp"
+                tools:src="@drawable/ic_play_arrow_72dp"
                 tools:visibility="visible" />
 
             <ImageButton
                 android:id="@+id/nextBtn"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:layout_marginLeft="240dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="255dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/action_next_episode"
                 android:padding="@dimen/screen_edge_margin"
@@ -227,7 +227,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_skip_next_56dp"
+                app:srcCompat="@drawable/ic_skip_next_50dp"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <TextView
@@ -335,8 +335,8 @@
             android:id="@+id/seekBarGroup"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="10dp"
             android:visibility="visible">
 
             <TextView
@@ -365,11 +365,11 @@
                 android:layout_weight="80"
                 android:progressBackgroundTint="@color/tint_seekbar_bg"
                 android:secondaryProgressTint="?attr/colorSecondaryVariant"
-                tools:progress="25"
-                tools:secondaryProgress="50"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/playbackPositionTxt"
-                app:layout_constraintRight_toLeftOf="@id/playbackDurationTxt" />
+                app:layout_constraintRight_toLeftOf="@id/playbackDurationTxt"
+                tools:progress="25"
+                tools:secondaryProgress="50" />
 
             <TextView
                 android:id="@+id/playbackDurationTxt"
@@ -415,7 +415,8 @@
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="26dp"
             android:layout_height="125dp"
-            android:progress="10"
+            android:progress="20"
+            android:secondaryProgress="100"
             android:progressDrawable="@drawable/player_bar" />
 
         <ImageView
@@ -455,8 +456,8 @@
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="26dp"
             android:layout_height="125dp"
-            android:max="100"
-            android:progress="10"
+            android:progress="20"
+            android:secondaryProgress="100"
             android:progressDrawable="@drawable/player_bar" />
 
         <ImageView
