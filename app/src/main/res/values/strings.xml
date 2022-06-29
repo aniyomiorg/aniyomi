@@ -731,6 +731,7 @@
     <string name="source_not_installed">Source not installed: %1$s</string>
     <string name="snack_add_to_library">Add manga to library?</string>
     <string name="snack_add_to_animelib">Add anime to library?</string>
+    <string name="description_placeholder">No description</string>
 
     <!-- Manga chapters / Anime episodes fragment -->
     <string name="display_mode_chapter">Chapter %1$s</string>
