@@ -35,12 +35,11 @@ import eu.kanade.tachiyomi.animesource.isLocalOrStub
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Category
-import eu.kanade.tachiyomi.data.download.DownloadService
+import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.network.HttpException
-import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.anime.episode.DownloadCustomEpisodesDialog
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodesSettingsSheet
 import eu.kanade.tachiyomi.ui.anime.info.AnimeFullCoverDialog
@@ -52,16 +51,16 @@ import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCategoriesDialog
 import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
 import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
+import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
+import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
+import eu.kanade.tachiyomi.ui.browse.animesource.latest.LatestUpdatesController
 import eu.kanade.tachiyomi.ui.browse.migration.search.AnimeSearchController
-import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
-import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
-import eu.kanade.tachiyomi.ui.browse.source.latest.LatestUpdatesController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.recent.history.HistoryController
-import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
+import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
+import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -128,7 +127,7 @@ class AnimeController :
         val state by presenter.state.collectAsState()
         if (state is AnimeScreenState.Success) {
             val successState = state as AnimeScreenState.Success
-            val isHttpSource = remember { successState.source is HttpSource }
+            val isHttpSource = remember { successState.source is AnimeHttpSource }
             AnimeScreen(
                 state = successState,
                 snackbarHostState = snackbarHostState,
@@ -297,7 +296,7 @@ class AnimeController :
      */
     private fun performSearch(query: String, global: Boolean) {
         if (global) {
-            router.pushController(GlobalSearchController(query))
+            router.pushController(GlobalAnimeSearchController(query))
             return
         }
 
@@ -310,19 +309,19 @@ class AnimeController :
                 router.handleBack()
                 previousController.search(query)
             }
-            is UpdatesController,
-            is HistoryController, -> {
-                // Manually navigate to LibraryController
+            is AnimeUpdatesController,
+            is AnimeHistoryController, -> {
+                // Manually navigate to AnimelibController
                 router.handleBack()
-                (router.activity as MainActivity).setSelectedNavItem(R.id.nav_library)
-                val controller = router.getControllerWithTag(R.id.nav_library.toString()) as AnimelibController
+                (router.activity as MainActivity).setSelectedNavItem(R.id.nav_animelib)
+                val controller = router.getControllerWithTag(R.id.nav_animelib.toString()) as AnimelibController
                 controller.search(query)
             }
             is LatestUpdatesController -> {
                 // Search doesn't currently work in source Latest view
                 return
             }
-            is BrowseSourceController -> {
+            is BrowseAnimeSourceController -> {
                 router.handleBack()
                 previousController.searchWithQuery(query)
             }
@@ -342,8 +341,8 @@ class AnimeController :
         val previousController = router.backstack[router.backstackSize - 2].controller
         val presenterSource = presenter.source
 
-        if (previousController is BrowseSourceController &&
-            presenterSource is HttpSource
+        if (previousController is BrowseAnimeSourceController &&
+            presenterSource is AnimeHttpSource
         ) {
             router.handleBack()
             previousController.searchWithGenre(genreName)
@@ -442,7 +441,7 @@ class AnimeController :
                 EpisodeDownloadAction.START -> {
                     downloadEpisodes(items.map { it.episode })
                     if (items.any { it.downloadState == AnimeDownload.State.ERROR }) {
-                        DownloadService.start(activity!!)
+                        AnimeDownloadService.start(activity!!)
                     }
                 }
                 EpisodeDownloadAction.START_NOW -> {
@@ -459,7 +458,7 @@ class AnimeController :
                 EpisodeDownloadAction.START_ALT -> {
                     downloadEpisodes(items.map { it.episode }, alt = true)
                     if (items.any { it.downloadState == AnimeDownload.State.ERROR }) {
-                        DownloadService.start(activity!!)
+                        AnimeDownloadService.start(activity!!)
                     }
                 }
             }

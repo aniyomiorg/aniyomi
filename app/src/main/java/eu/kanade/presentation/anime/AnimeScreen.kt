@@ -73,6 +73,7 @@ import eu.kanade.presentation.util.isScrolledToEnd
 import eu.kanade.presentation.util.isScrollingUp
 import eu.kanade.presentation.util.plus
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.getNameForAnimeInfo
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -667,7 +668,7 @@ fun AnimeScreenLargeImpl(
                     description = state.anime.description,
                     tagsProvider = { state.anime.genre },
                     sourceName = remember { state.source.getNameForAnimeInfo() },
-                    isStubSource = remember { state.source is SourceManager.StubSource },
+                    isStubSource = remember { state.source is AnimeSourceManager.StubSource },
                     coverDataProvider = { state.anime },
                     favorite = state.anime.favorite,
                     status = state.anime.status,

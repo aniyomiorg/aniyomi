@@ -168,7 +168,7 @@ class AnimePresenter(
                                 dateRelativeTime = preferences.relativeTime().get(),
                                 dateFormat = preferences.dateFormat(),
                                 isFromSource = isFromSource,
-                                trackingAvailable = trackManager.hasLoggedServices(),
+                                trackingAvailable = trackManager.hasLoggedAnimeServices(),
                                 episodes = episodeItems,
                             )
 

@@ -168,7 +168,7 @@ class MangaPresenter(
                                 dateRelativeTime = preferences.relativeTime().get(),
                                 dateFormat = preferences.dateFormat(),
                                 isFromSource = isFromSource,
-                                trackingAvailable = trackManager.hasLoggedServices(),
+                                trackingAvailable = trackManager.hasLoggedMangaServices(),
                                 chapters = chapterItems,
                             )
 
