@@ -23,6 +23,7 @@ import eu.kanade.domain.episode.model.Episode
 import eu.kanade.domain.episode.model.EpisodeUpdate
 import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
@@ -58,7 +59,16 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
             return null
         } else {
             val uri = video.videoUrl!!.toUri()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && uri.scheme != "content") {
+            val isOnDevice = if (anime.source == LocalAnimeSource.ID) {
+                true
+            } else {
+                downloadManager.isEpisodeDownloaded(
+                    episode.toDbEpisode(),
+                    anime.toDbAnime(),
+                    skipCache = true,
+                )
+            }
+            if (isOnDevice && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && uri.scheme != "content") {
                 FileProvider.getUriForFile(
                     context,
                     context.applicationContext.packageName + ".provider",
