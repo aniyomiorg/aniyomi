@@ -847,6 +847,7 @@
     <string name="set_as_cover">Set as cover</string>
     <string name="cover_updated">Cover updated</string>
     <string name="share_page_info">%1$s: %2$s, page %3$d</string>
+    <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="chapter_progress">Page: %1$d</string>
     <string name="episode_progress">Progress: %1$s/%2$s</string>
     <string name="episode_progress_no_total">Progress: %1$s</string>
@@ -870,6 +871,14 @@
         <item quantity="one">Skipping %d chapter, either the source is missing it or it has been filtered out</item>
         <item quantity="other">Skipping %d chapters, either the source is missing them or they have been filtered out</item>
     </plurals>
+
+    <string name="screenshot_header">Take screenshot</string>
+    <string name="stats_header">Show statistics</string>
+    <string name="toggle_stats">Toggle stats</string>
+    <string name="stats_page">Stats page</string>
+    <string name="stats_page_1">Page 1</string>
+    <string name="stats_page_2">Page 2</string>
+    <string name="stats_page_3">Page 3</string>
 
     <!-- Updates fragment -->
     <string name="updating_library">Updating library</string>

@@ -55,12 +55,14 @@ import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.powerManager
+import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
 import java.io.File
+import java.io.InputStream
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -399,7 +401,7 @@ class PlayerActivity :
                     rightToLeft = playerControls.binding.toggleAutoplay.id
                     rightToRight = ConstraintLayout.LayoutParams.UNSET
                 }
-                playerControls.binding.qualityBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                playerControls.binding.playerOverflow.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     topToTop = ConstraintLayout.LayoutParams.PARENT_ID
                     topToBottom = ConstraintLayout.LayoutParams.UNSET
                 }
@@ -420,7 +422,7 @@ class PlayerActivity :
                     rightToLeft = ConstraintLayout.LayoutParams.UNSET
                     rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
                 }
-                playerControls.binding.qualityBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                playerControls.binding.playerOverflow.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     topToTop = ConstraintLayout.LayoutParams.UNSET
                     topToBottom = playerControls.binding.backArrowBtn.id
                 }
@@ -857,6 +859,104 @@ class PlayerActivity :
         }
 
         qualityAlert.show()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun openOptions(view: View) {
+        playerControls.hideControls(true)
+        PlayerOptionsSheet(this).show()
+    }
+
+    var stats: Boolean = false
+    var statsPage: Int = 0
+        set(value) {
+            val newValue = when (value) {
+                0 -> 1
+                1 -> 2
+                2 -> 3
+                else -> 1
+            }
+            MPVLib.command(arrayOf("script-binding", "stats/display-page-$newValue"))
+            field = newValue - 1
+        }
+
+    fun toggleStats() {
+        MPVLib.command(arrayOf("script-binding", "stats/display-stats-toggle"))
+        stats = !stats
+    }
+
+    fun takeScreenshot(): InputStream? {
+        val filename = cacheDir.path + "/${System.currentTimeMillis()}_mpv_screenshot.png"
+        MPVLib.command(arrayOf("screenshot-to-file", filename))
+        return File(filename).takeIf { it.exists() }?.inputStream()
+    }
+
+    /**
+     * Called from the options sheet. It delegates the call to the presenter to do some IO, which
+     * will call [onShareImageResult] with the path the image was saved on when it's ready.
+     */
+    fun shareImage() {
+        presenter.shareImage()
+    }
+
+    /**
+     * Called from the presenter when a screenshot is ready to be shared. It shows Android's
+     * default sharing tool.
+     */
+    fun onShareImageResult(uri: Uri, seconds: String) {
+        val anime = presenter.anime ?: return
+        val episode = presenter.currentEpisode ?: return
+
+        val intent = uri.toShareIntent(
+            context = applicationContext,
+            message = getString(R.string.share_screenshot_info, anime.title, episode.name, seconds),
+        )
+        startActivity(Intent.createChooser(intent, getString(R.string.action_share)))
+    }
+
+    /**
+     * Called from the options sheet. It delegates saving the screenshot on
+     * external storage to the presenter.
+     */
+    fun saveImage() {
+        presenter.saveImage()
+    }
+
+    /**
+     * Called from the presenter when a screenshot is saved or fails. It shows a message
+     * or logs the event depending on the [result].
+     */
+    fun onSaveImageResult(result: PlayerPresenter.SaveImageResult) {
+        when (result) {
+            is PlayerPresenter.SaveImageResult.Success -> {
+                toast(R.string.picture_saved)
+            }
+            is PlayerPresenter.SaveImageResult.Error -> {
+                logcat(LogPriority.ERROR, result.error)
+            }
+        }
+    }
+
+    /**
+     * Called from the options sheet. It delegates setting the screenshot
+     * as the cover to the presenter.
+     */
+    fun setAsCover() {
+        presenter.setAsCover(this)
+    }
+
+    /**
+     * Called from the presenter when a screenshot is set as cover or fails.
+     * It shows a different message depending on the [result].
+     */
+    fun onSetAsCoverResult(result: PlayerPresenter.SetAsCoverResult) {
+        toast(
+            when (result) {
+                PlayerPresenter.SetAsCoverResult.Success -> R.string.cover_updated
+                PlayerPresenter.SetAsCoverResult.AddToLibraryFirst -> R.string.notification_first_add_to_library
+                PlayerPresenter.SetAsCoverResult.Error -> R.string.notification_cover_update_failed
+            },
+        )
     }
 
     private fun changeQuality(quality: Int) {

@@ -81,18 +81,31 @@
         <!-- Top Controls (Left)-->
 
         <ImageButton
-            android:id="@+id/qualityBtn"
+            android:id="@+id/player_overflow"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:background="?attr/selectableItemBackground"
             android:contentDescription="Settings"
+            android:onClick="openOptions"
+            android:src="@drawable/ic_overflow_24dp"
+            app:layout_constraintLeft_toRightOf="@id/qualityBtn"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/backArrowBtn"
+            app:tint="?attr/colorOnPrimarySurface" />
+
+        <ImageButton
+            android:id="@+id/qualityBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="Settings"
             android:onClick="openQuality"
             android:src="@drawable/ic_video_quality_24dp"
             app:layout_constraintLeft_toRightOf="@id/cycleSubsBtn"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/backArrowBtn"
+            app:layout_constraintRight_toLeftOf="@id/player_overflow"
+            app:layout_constraintTop_toTopOf="@id/player_overflow"
             app:tint="?attr/colorOnPrimarySurface" />
 
         <ImageButton
