@@ -208,6 +208,7 @@
     <string name="pref_app_theme">App theme</string>
     <string name="theme_monet">Dynamic</string>
     <string name="theme_greenapple">Green Apple</string>
+    <string name="theme_lavender">Lavender</string>
     <string name="theme_midnightdusk">Midnight Dusk</string>
     <string name="theme_strawberrydaiquiri">Strawberry Daiquiri</string>
     <string name="theme_tako">Tako</string>
@@ -731,6 +732,7 @@
     <string name="source_not_installed">Source not installed: %1$s</string>
     <string name="snack_add_to_library">Add manga to library?</string>
     <string name="snack_add_to_animelib">Add anime to library?</string>
+    <string name="description_placeholder">No description</string>
 
     <!-- Manga chapters / Anime episodes fragment -->
     <string name="display_mode_chapter">Chapter %1$s</string>
@@ -848,6 +850,7 @@
     <string name="share_page_info">%1$s: %2$s, page %3$d</string>
     <string name="chapter_progress">Page: %1$d</string>
     <string name="episode_progress">Progress: %1$s/%2$s</string>
+    <string name="episode_progress_no_total">Progress: %1$s</string>
     <string name="no_next_chapter">Next chapter not found</string>
     <string name="no_previous_chapter">Previous chapter not found</string>
     <string name="decode_image_error">The image couldn\'t be loaded</string>

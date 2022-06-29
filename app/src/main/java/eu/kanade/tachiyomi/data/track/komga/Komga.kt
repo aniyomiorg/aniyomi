@@ -18,8 +18,12 @@ import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.source.Source
 import okhttp3.Dns
 import okhttp3.OkHttpClient
+import eu.kanade.domain.anime.model.Anime as DomainAnime
+import eu.kanade.domain.animetrack.model.AnimeTrack as DomainAnimeTrack
+import eu.kanade.domain.manga.model.Manga as DomainManga
+import eu.kanade.domain.track.model.Track as DomainTrack
 
-class Komga(private val context: Context, id: Int) : TrackService(id), EnhancedTrackService, NoLoginTrackService, MangaTrackService {
+class Komga(private val context: Context, id: Long) : TrackService(id), EnhancedTrackService, NoLoginTrackService, MangaTrackService {
 
     companion object {
         const val UNREAD = 1
@@ -125,17 +129,17 @@ class Komga(private val context: Context, id: Int) : TrackService(id), EnhancedT
 
     override suspend fun match(anime: Anime) = throw Exception("Not used")
 
-    override fun isTrackFrom(track: Track, manga: Manga, source: Source?): Boolean =
-        track.tracking_url == manga.url && source?.let { accept(it) } == true
+    override fun isTrackFrom(track: DomainTrack, manga: DomainManga, source: Source?): Boolean =
+        track.remoteUrl == manga.url && source?.let { accept(it) } == true
 
-    override fun migrateTrack(track: Track, manga: Manga, newSource: Source): Track? =
+    override fun migrateTrack(track: DomainTrack, manga: DomainManga, newSource: Source): DomainTrack? =
         if (accept(newSource)) {
-            track.also { track.tracking_url = manga.url }
+            track.copy(remoteUrl = manga.url)
         } else {
             null
         }
 
-    override fun isTrackFrom(track: AnimeTrack, anime: Anime, source: AnimeSource?): Boolean = false
+    override fun isTrackFrom(track: DomainAnimeTrack, anime: DomainAnime, source: AnimeSource?): Boolean = false
 
-    override fun migrateTrack(track: AnimeTrack, anime: Anime, newSource: AnimeSource) = throw Exception("Not used")
+    override fun migrateTrack(track: DomainAnimeTrack, anime: DomainAnime, newSource: AnimeSource) = throw Exception("Not used")
 }

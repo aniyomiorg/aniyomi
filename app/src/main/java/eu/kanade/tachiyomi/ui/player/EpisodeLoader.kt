@@ -9,6 +9,7 @@ import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
+import eu.kanade.tachiyomi.util.system.logcat
 import rx.Observable
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -77,6 +78,7 @@ class EpisodeLoader {
             episode: Episode,
         ): Observable<List<Video>> {
             return try {
+                logcat { episode.url }
                 val video = Video(episode.url, "Local source: ${episode.url}", episode.url, Uri.parse(episode.url))
                 Observable.just(listOf(video))
             } catch (e: Exception) {

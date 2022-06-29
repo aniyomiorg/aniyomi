@@ -39,8 +39,8 @@ interface AnimeTrack : Serializable {
     }
 
     companion object {
-        fun create(serviceId: Int): AnimeTrack = AnimeTrackImpl().apply {
-            sync_id = serviceId
+        fun create(serviceId: Long): AnimeTrack = AnimeTrackImpl().apply {
+            sync_id = serviceId.toInt()
         }
     }
 }

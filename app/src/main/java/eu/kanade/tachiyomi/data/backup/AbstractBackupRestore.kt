@@ -116,7 +116,7 @@ abstract class AbstractBackupRestore<T : AbstractBackupManager>(protected val co
      */
     internal suspend fun updateTracking(manga: Manga, tracks: List<Track>) {
         tracks.forEach { track ->
-            val service = trackManager.getService(track.sync_id)
+            val service = trackManager.getService(track.sync_id.toLong())
             if (service != null && service.isLogged) {
                 try {
                     val updatedTrack = service.refresh(track)
@@ -154,7 +154,7 @@ abstract class AbstractBackupRestore<T : AbstractBackupManager>(protected val co
      */
     internal suspend fun updateAnimeTracking(anime: Anime, tracks: List<AnimeTrack>) {
         tracks.forEach { track ->
-            val service = trackManager.getService(track.sync_id)
+            val service = trackManager.getService(track.sync_id.toLong())
             if (service != null && service.isLogged) {
                 try {
                     val updatedTrack = service.refresh(track)

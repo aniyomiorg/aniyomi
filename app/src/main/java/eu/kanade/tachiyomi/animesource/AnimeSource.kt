@@ -120,3 +120,5 @@ fun AnimeSource.getNameForAnimeInfo(): String {
         else -> toString()
     }
 }
+
+fun AnimeSource.isLocalOrStub(): Boolean = id == LocalAnimeSource.ID || this is AnimeSourceManager.StubSource

@@ -1,10 +1,11 @@
 package eu.kanade.tachiyomi.ui.browse.migration
 
+import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.util.hasCustomCover
+import kotlinx.coroutines.runBlocking
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -17,7 +18,7 @@ object AnimeMigrationFlags {
     private const val CUSTOM_COVER = 0b1000
 
     private val coverCache: AnimeCoverCache by injectLazy()
-    private val db: AnimeDatabaseHelper = Injekt.get()
+    private val getTracks: GetAnimeTracks = Injekt.get()
 
     val flags get() = arrayOf(EPISODES, CATEGORIES, TRACK, CUSTOM_COVER)
 
@@ -48,14 +49,12 @@ object AnimeMigrationFlags {
     fun titles(anime: Anime?): Array<Int> {
         val titles = arrayOf(R.string.episodes, R.string.anime_categories).toMutableList()
         if (anime != null) {
-            db.inTransaction {
-                if (db.getTracks(anime.id).executeAsBlocking().isNotEmpty()) {
-                    titles.add(R.string.track)
-                }
+            if (runBlocking { getTracks.await(anime.id!!) }.isNotEmpty()) {
+                titles.add(R.string.track)
+            }
 
-                if (anime.hasCustomCover(coverCache)) {
-                    titles.add(R.string.custom_cover)
-                }
+            if (anime.hasCustomCover(coverCache)) {
+                titles.add(R.string.custom_cover)
             }
         }
         return titles.toTypedArray()

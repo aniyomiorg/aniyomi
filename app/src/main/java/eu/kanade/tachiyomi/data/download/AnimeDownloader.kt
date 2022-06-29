@@ -305,7 +305,8 @@ class AnimeDownloader(
                 val maxDownloadsFromSource = queue
                     .groupBy { it.source }
                     .filterKeys { it !is UnmeteredSource }
-                    .maxOf { it.value.size }
+                    .maxOfOrNull { it.value.size }
+                    ?: 0
                 // TODO: show warnings in stable
                 if (
                     queuedDownloads > DOWNLOADS_QUEUED_WARNING_THRESHOLD ||

@@ -42,10 +42,10 @@ open class TriStateItem(val filter: AnimeFilter.TriState) : AbstractFlexibleItem
                 else -> throw Exception("Unknown state")
             },
         )?.apply {
-            val color = if (filter.state == AnimeFilter.TriState.STATE_INCLUDE) {
+            val color = if (filter.state == AnimeFilter.TriState.STATE_IGNORE) {
                 view.context.getResourceColor(R.attr.colorAccent)
             } else {
-                view.context.getResourceColor(R.attr.colorOnBackground, 0.38f)
+                view.context.getResourceColor(R.attr.colorPrimary)
             }
 
             setTint(color)

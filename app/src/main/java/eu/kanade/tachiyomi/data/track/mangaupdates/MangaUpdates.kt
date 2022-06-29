@@ -13,7 +13,7 @@ import eu.kanade.tachiyomi.data.track.mangaupdates.dto.toTrackSearch
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 
-class MangaUpdates(private val context: Context, id: Int) : TrackService(id), MangaTrackService {
+class MangaUpdates(private val context: Context, id: Long) : TrackService(id), MangaTrackService {
 
     companion object {
         const val READING_LIST = 0

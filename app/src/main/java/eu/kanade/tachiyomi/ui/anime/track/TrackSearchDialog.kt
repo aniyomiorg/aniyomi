@@ -54,7 +54,7 @@ class TrackSearchDialog : DialogController {
 
     @Suppress("unused")
     constructor(bundle: Bundle) : super(bundle) {
-        service = Injekt.get<TrackManager>().getService(bundle.getInt(KEY_SERVICE))!!
+        service = Injekt.get<TrackManager>().getService(bundle.getLong(KEY_SERVICE))!!
         currentTrackUrl = bundle.getString(KEY_CURRENT_URL)
     }
 
@@ -82,7 +82,7 @@ class TrackSearchDialog : DialogController {
 
         // Do an initial search based on the manga's title
         if (savedViewState == null) {
-            currentlySearched = trackController.presenter.anime.title
+            currentlySearched = trackController.presenter.anime!!.title
             binding!!.titleInput.editText?.append(currentlySearched)
         }
         search(currentlySearched)

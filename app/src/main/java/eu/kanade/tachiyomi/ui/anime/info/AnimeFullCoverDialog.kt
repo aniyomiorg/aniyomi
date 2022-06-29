@@ -1,118 +1,258 @@
 package eu.kanade.tachiyomi.ui.anime.info
 
-import android.app.Dialog
-import android.graphics.drawable.ColorDrawable
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.View
-import androidx.core.graphics.ColorUtils
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.core.os.bundleOf
-import androidx.core.view.WindowCompat
 import coil.imageLoader
-import coil.request.Disposable
 import coil.request.ImageRequest
-import dev.chrisbanes.insetter.applyInsetter
+import coil.size.Size
+import eu.kanade.domain.anime.interactor.GetAnimeById
+import eu.kanade.domain.anime.interactor.UpdateAnime
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.anime.model.hasCustomCover
+import eu.kanade.presentation.anime.components.AnimeCoverDialog
+import eu.kanade.presentation.manga.EditCoverAction
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.databinding.MangaFullCoverDialogBinding
-import eu.kanade.tachiyomi.ui.anime.AnimeController
-import eu.kanade.tachiyomi.ui.base.controller.DialogController
-import eu.kanade.tachiyomi.ui.reader.viewer.ReaderPageImageView
-import eu.kanade.tachiyomi.util.view.setNavigationBarTransparentCompat
-import eu.kanade.tachiyomi.widget.TachiyomiFullscreenDialog
+import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
+import eu.kanade.tachiyomi.data.saver.Image
+import eu.kanade.tachiyomi.data.saver.ImageSaver
+import eu.kanade.tachiyomi.data.saver.Location
+import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
+import eu.kanade.tachiyomi.util.editCover
+import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.lang.launchUI
+import eu.kanade.tachiyomi.util.lang.withUIContext
+import eu.kanade.tachiyomi.util.system.logcat
+import eu.kanade.tachiyomi.util.system.toShareIntent
+import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import logcat.LogPriority
+import nucleus.presenter.Presenter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 
-class AnimeFullCoverDialog : DialogController {
+class AnimeFullCoverDialog : FullComposeController<AnimeFullCoverDialog.AnimeFullCoverPresenter> {
 
-    private var anime: Anime? = null
-
-    private var binding: MangaFullCoverDialogBinding? = null
-
-    private var disposable: Disposable? = null
-
-    private val animeController
-        get() = targetController as AnimeController?
-
-    constructor(targetController: AnimeController, anime: Anime) : super(bundleOf("animeId" to anime.id)) {
-        this.targetController = targetController
-        this.anime = anime
-    }
+    private val animeId: Long
 
     @Suppress("unused")
-    constructor(bundle: Bundle) : super(bundle) {
-        val db = Injekt.get<AnimeDatabaseHelper>()
-        anime = db.getAnime(bundle.getLong("animeId")).executeAsBlocking()
+    constructor(bundle: Bundle) : this(bundle.getLong(MANGA_EXTRA))
+
+    constructor(
+        animeId: Long,
+    ) : super(bundleOf(MANGA_EXTRA to animeId)) {
+        this.animeId = animeId
     }
 
-    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-        binding = MangaFullCoverDialogBinding.inflate(activity!!.layoutInflater)
+    override fun createPresenter() = AnimeFullCoverPresenter(animeId)
 
-        binding?.toolbar?.apply {
-            setNavigationOnClickListener { dialog?.dismiss() }
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.action_share_cover -> animeController?.shareCover()
-                    R.id.action_save_cover -> animeController?.saveCover()
-                    R.id.action_edit_cover -> animeController?.changeCover()
+    @Composable
+    override fun ComposeContent() {
+        val anime = presenter.anime.collectAsState().value
+        if (anime != null) {
+            AnimeCoverDialog(
+                coverDataProvider = { anime },
+                isCustomCover = remember(anime) { anime.hasCustomCover() },
+                onShareClick = this::shareCover,
+                onSaveClick = this::saveCover,
+                onEditClick = this::changeCover,
+                onDismissRequest = router::popCurrentController,
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+    }
+
+    private fun shareCover() {
+        val activity = activity ?: return
+        viewScope.launchIO {
+            try {
+                val uri = presenter.saveCover(activity, temp = true) ?: return@launchIO
+                launchUI {
+                    startActivity(uri.toShareIntent(activity))
                 }
-                true
+            } catch (e: Throwable) {
+                launchUI {
+                    logcat(LogPriority.ERROR, e)
+                    activity.toast(R.string.error_saving_cover)
+                }
             }
-            menu?.findItem(R.id.action_edit_cover)?.isVisible = anime?.favorite ?: false
-        }
-
-        setImage(anime)
-
-        binding?.appbar?.applyInsetter {
-            type(navigationBars = true, statusBars = true) {
-                padding(left = true, top = true, right = true)
-            }
-        }
-
-        binding?.container?.onViewClicked = { dialog?.dismiss() }
-        binding?.container?.applyInsetter {
-            type(navigationBars = true) {
-                padding(bottom = true)
-            }
-        }
-
-        return TachiyomiFullscreenDialog(activity!!, binding!!.root).apply {
-            val typedValue = TypedValue()
-            val theme = context.theme
-            theme.resolveAttribute(android.R.attr.colorBackground, typedValue, true)
-            window?.setBackgroundDrawable(ColorDrawable(ColorUtils.setAlphaComponent(typedValue.data, 230)))
         }
     }
 
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        dialog?.window?.let { window ->
-            window.setNavigationBarTransparentCompat(window.context)
-            WindowCompat.setDecorFitsSystemWindows(window, false)
+    private fun saveCover() {
+        val activity = activity ?: return
+        viewScope.launchIO {
+            try {
+                presenter.saveCover(activity, temp = false)
+                launchUI {
+                    activity.toast(R.string.cover_saved)
+                }
+            } catch (e: Throwable) {
+                launchUI {
+                    logcat(LogPriority.ERROR, e)
+                    activity.toast(R.string.error_saving_cover)
+                }
+            }
         }
     }
 
-    override fun onDetach(view: View) {
-        super.onDetach(view)
-        disposable?.dispose()
-        disposable = null
-    }
-
-    fun setImage(anime: Anime?) {
-        if (anime == null) return
-        val request = ImageRequest.Builder(applicationContext!!)
-            .data(anime)
-            .target {
-                binding?.container?.setImage(
-                    it,
-                    ReaderPageImageView.Config(
-                        zoomDuration = 500,
+    private fun changeCover(action: EditCoverAction) {
+        when (action) {
+            EditCoverAction.EDIT -> {
+                val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                    type = "image/*"
+                }
+                startActivityForResult(
+                    Intent.createChooser(
+                        intent,
+                        resources?.getString(R.string.file_select_cover),
                     ),
+                    REQUEST_IMAGE_OPEN,
                 )
             }
-            .build()
+            EditCoverAction.DELETE -> presenter.deleteCustomCover()
+        }
+    }
 
-        disposable = applicationContext?.imageLoader?.enqueue(request)
+    private fun onSetCoverSuccess() {
+        activity?.toast(R.string.cover_updated)
+    }
+
+    private fun onSetCoverError(error: Throwable) {
+        activity?.toast(R.string.notification_cover_update_failed)
+        logcat(LogPriority.ERROR, error)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_IMAGE_OPEN) {
+            val dataUri = data?.data
+            if (dataUri == null || resultCode != Activity.RESULT_OK) return
+            val activity = activity ?: return
+            presenter.editCover(activity, dataUri)
+        }
+    }
+
+    inner class AnimeFullCoverPresenter(
+        private val animeId: Long,
+        private val getAnimeById: GetAnimeById = Injekt.get(),
+    ) : Presenter<AnimeFullCoverDialog>() {
+
+        private var presenterScope: CoroutineScope = MainScope()
+
+        private val _animeFlow = MutableStateFlow<Anime?>(null)
+        val anime = _animeFlow.asStateFlow()
+
+        private val imageSaver by injectLazy<ImageSaver>()
+        private val coverCache by injectLazy<AnimeCoverCache>()
+        private val updateAnime by injectLazy<UpdateAnime>()
+
+        override fun onCreate(savedState: Bundle?) {
+            super.onCreate(savedState)
+            presenterScope.launchIO {
+                getAnimeById.subscribe(animeId)
+                    .collect { _animeFlow.value = it }
+            }
+        }
+
+        override fun onDestroy() {
+            super.onDestroy()
+            presenterScope.cancel()
+        }
+
+        /**
+         * Save anime cover Bitmap to picture or temporary share directory.
+         *
+         * @param context The context for building and executing the ImageRequest
+         * @return the uri to saved file
+         */
+        suspend fun saveCover(context: Context, temp: Boolean): Uri? {
+            val anime = anime.value ?: return null
+            val req = ImageRequest.Builder(context)
+                .data(anime)
+                .size(Size.ORIGINAL)
+                .build()
+            val result = context.imageLoader.execute(req).drawable
+
+            // TODO: Handle animated cover
+            val bitmap = (result as? BitmapDrawable)?.bitmap ?: return null
+            return imageSaver.save(
+                Image.Cover(
+                    bitmap = bitmap,
+                    name = anime.title,
+                    location = if (temp) Location.Cache else Location.Pictures.create(),
+                ),
+            )
+        }
+
+        /**
+         * Update cover with local file.
+         *
+         * @param context Context.
+         * @param data uri of the cover resource.
+         */
+        fun editCover(context: Context, data: Uri) {
+            val anime = anime.value ?: return
+            presenterScope.launchIO {
+                @Suppress("BlockingMethodInNonBlockingContext")
+                context.contentResolver.openInputStream(data)?.use {
+                    val result = try {
+                        anime.editCover(context, it, updateAnime, coverCache)
+                    } catch (e: Exception) {
+                        view?.onSetCoverError(e)
+                        false
+                    }
+                    withUIContext { if (result) view?.onSetCoverSuccess() }
+                }
+            }
+        }
+
+        fun deleteCustomCover() {
+            val animeId = anime.value?.id ?: return
+            presenterScope.launchIO {
+                try {
+                    coverCache.deleteCustomCover(animeId)
+                    updateAnime.awaitUpdateCoverLastModified(animeId)
+                    withUIContext { view?.onSetCoverSuccess() }
+                } catch (e: Exception) {
+                    withUIContext { view?.onSetCoverError(e) }
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val MANGA_EXTRA = "animeId"
+
+        /**
+         * Key to change the cover of a anime in [onActivityResult].
+         */
+        private const val REQUEST_IMAGE_OPEN = 101
     }
 }

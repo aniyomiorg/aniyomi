@@ -2,6 +2,18 @@ package eu.kanade.tachiyomi.ui.browse.migration.search
 
 import android.os.Bundle
 import com.jakewharton.rxrelay.BehaviorRelay
+import eu.kanade.domain.anime.interactor.UpdateAnime
+import eu.kanade.domain.anime.model.AnimeUpdate
+import eu.kanade.domain.anime.model.hasCustomCover
+import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
+import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
+import eu.kanade.domain.category.interactor.GetCategoriesAnime
+import eu.kanade.domain.category.interactor.MoveAnimeToCategories
+import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
+import eu.kanade.domain.episode.interactor.UpdateEpisode
+import eu.kanade.domain.episode.model.toEpisodeUpdate
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -9,16 +21,14 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.toSEpisode
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.AnimeCategory
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
+import eu.kanade.tachiyomi.data.database.models.toDomainAnime
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchCardItem
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchItem
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchPresenter
 import eu.kanade.tachiyomi.ui.browse.migration.AnimeMigrationFlags
-import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
-import eu.kanade.tachiyomi.util.hasCustomCover
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.lang.withUIContext
@@ -31,10 +41,17 @@ import java.util.Date
 class AnimeSearchPresenter(
     initialQuery: String? = "",
     private val anime: Anime,
+    private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get(),
+    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val updateEpisode: UpdateEpisode = Injekt.get(),
+    private val updateAnime: UpdateAnime = Injekt.get(),
+    private val getCategories: GetCategoriesAnime = Injekt.get(),
+    private val getTracks: GetAnimeTracks = Injekt.get(),
+    private val insertTrack: InsertAnimeTrack = Injekt.get(),
+    private val moveAnimeToCategories: MoveAnimeToCategories = Injekt.get(),
 ) : GlobalAnimeSearchPresenter(initialQuery) {
 
     private val replacingAnimeRelay = BehaviorRelay.create<Pair<Boolean, Anime?>>()
-
     private val coverCache: AnimeCoverCache by injectLazy()
     private val enhancedServices by lazy { Injekt.get<TrackManager>().services.filterIsInstance<EnhancedTrackService>() }
 
@@ -95,101 +112,93 @@ class AnimeSearchPresenter(
         replace: Boolean,
     ) {
         val flags = preferences.migrateFlags().get()
-        val migrateEpisodes =
-            AnimeMigrationFlags.hasEpisodes(
-                flags,
-            )
-        val migrateCategories =
-            AnimeMigrationFlags.hasCategories(
-                flags,
-            )
-        val migrateTracks =
-            AnimeMigrationFlags.hasTracks(
-                flags,
-            )
-        val migrateCustomCover =
-            AnimeMigrationFlags.hasCustomCover(
-                flags,
-            )
+
+        val migrateEpisodes = AnimeMigrationFlags.hasEpisodes(flags)
+        val migrateCategories = AnimeMigrationFlags.hasCategories(flags)
+        val migrateTracks = AnimeMigrationFlags.hasTracks(flags)
+        val migrateCustomCover = AnimeMigrationFlags.hasCustomCover(flags)
+
+        val prevDomainAnime = prevAnime.toDomainAnime() ?: return
+        val domainAnime = anime.toDomainAnime() ?: return
 
         try {
-            syncEpisodesWithSource(sourceEpisodes, anime, source)
+            syncEpisodesWithSource.await(sourceEpisodes, domainAnime, source)
         } catch (e: Exception) {
             // Worst case, episodes won't be synced
         }
 
-        db.inTransaction {
-            // Update episodes read
-            if (migrateEpisodes) {
-                val prevAnimeEpisodes = db.getEpisodes(prevAnime).executeAsBlocking()
-                val maxEpisodeRead = prevAnimeEpisodes
-                    .filter { it.seen }
-                    .maxOfOrNull { it.episode_number } ?: 0f
-                val dbEpisodes = db.getEpisodes(anime).executeAsBlocking()
-                for (episode in dbEpisodes) {
-                    if (episode.isRecognizedNumber) {
-                        val prevEpisode = prevAnimeEpisodes
-                            .find { it.isRecognizedNumber && it.episode_number == episode.episode_number }
-                        if (prevEpisode != null) {
-                            episode.date_fetch = prevEpisode.date_fetch
-                            episode.bookmark = prevEpisode.bookmark
-                        }
-                        if (episode.episode_number <= maxEpisodeRead) {
-                            episode.seen = true
-                        }
+        // Update episodes seen, bookmark and dateFetch
+        if (migrateEpisodes) {
+            val prevAnimeEpisodes = getEpisodeByAnimeId.await(prevDomainAnime.id)
+            val animeEpisodes = getEpisodeByAnimeId.await(domainAnime.id)
+
+            val maxEpisodeSeen = prevAnimeEpisodes
+                .filter { it.seen }
+                .maxOfOrNull { it.episodeNumber }
+
+            val updatedAnimeEpisodes = animeEpisodes.map { animeEpisode ->
+                var updatedEpisode = animeEpisode
+                if (updatedEpisode.isRecognizedNumber) {
+                    val prevEpisode = prevAnimeEpisodes
+                        .find { it.isRecognizedNumber && it.episodeNumber == updatedEpisode.episodeNumber }
+
+                    if (prevEpisode != null) {
+                        updatedEpisode = updatedEpisode.copy(
+                            dateFetch = prevEpisode.dateFetch,
+                            bookmark = prevEpisode.bookmark,
+                        )
                     }
-                    db.insertEpisodes(dbEpisodes).executeAsBlocking()
+
+                    if (maxEpisodeSeen != null && updatedEpisode.episodeNumber <= maxEpisodeSeen) {
+                        updatedEpisode = updatedEpisode.copy(seen = true)
+                    }
                 }
+
+                updatedEpisode
             }
 
-            // Update categories
-            if (migrateCategories) {
-                val categories = db.getCategoriesForAnime(prevAnime).executeAsBlocking()
-                val animeCategories = categories.map { AnimeCategory.create(anime, it) }
-                db.setAnimeCategories(animeCategories, listOf(anime))
-            }
-
-            // Update track
-            if (migrateTracks) {
-                val tracksToUpdate = db.getTracks(prevAnime.id).executeAsBlocking().mapNotNull { track ->
-                    track.id = null
-                    track.anime_id = anime.id!!
-
-                    val service = enhancedServices
-                        .firstOrNull { it.isTrackFrom(track, prevAnime, prevSource) }
-                    if (service != null) service.migrateTrack(track, anime, source)
-                    else track
-                }
-                db.insertTracks(tracksToUpdate).executeAsBlocking()
-            }
-
-            // Update favorite status
-            if (replace) {
-                prevAnime.favorite = false
-                db.updateAnimeFavorite(prevAnime).executeAsBlocking()
-            }
-            anime.favorite = true
-
-            // Update reading preferences
-            anime.episode_flags = prevAnime.episode_flags
-            anime.viewer_flags = prevAnime.viewer_flags
-
-            // Update date added
-            if (replace) {
-                anime.date_added = prevAnime.date_added
-                prevAnime.date_added = 0
-            } else {
-                anime.date_added = Date().time
-            }
-
-            // Update custom cover
-            if (migrateCustomCover) {
-                coverCache.setCustomCoverToCache(anime, coverCache.getCustomCoverFile(prevAnime.id).inputStream())
-            }
-
-            // SearchPresenter#networkToLocalManga may have updated the manga title,
-            // so ensure db gets updated title too
-            db.insertAnime(anime).executeAsBlocking()
+            val episodeUpdates = updatedAnimeEpisodes.map { it.toEpisodeUpdate() }
+            updateEpisode.awaitAll(episodeUpdates)
         }
+
+        // Update categories
+        if (migrateCategories) {
+            val categoryIds = getCategories.await(prevDomainAnime.id).map { it.id }
+            moveAnimeToCategories.await(domainAnime.id, categoryIds)
+        }
+
+        // Update track
+        if (migrateTracks) {
+            val tracks = getTracks.await(prevDomainAnime.id).mapNotNull { track ->
+                val updatedTrack = track.copy(animeId = domainAnime.id)
+
+                val service = enhancedServices
+                    .firstOrNull { it.isTrackFrom(updatedTrack, prevDomainAnime, prevSource) }
+
+                if (service != null) service.migrateTrack(updatedTrack, domainAnime, source)
+                else updatedTrack
+            }
+            insertTrack.awaitAll(tracks)
+        }
+
+        if (replace) {
+            updateAnime.await(AnimeUpdate(prevDomainAnime.id, favorite = false, dateAdded = 0))
+        }
+
+        // Update custom cover (recheck if custom cover exists)
+        if (migrateCustomCover && prevDomainAnime.hasCustomCover()) {
+            @Suppress("BlockingMethodInNonBlockingContext")
+            coverCache.setCustomCoverToCache(domainAnime.toDbAnime(), coverCache.getCustomCoverFile(prevDomainAnime.id).inputStream())
+        }
+
+        updateAnime.await(
+            AnimeUpdate(
+                id = domainAnime.id,
+                favorite = true,
+                episodeFlags = prevDomainAnime.episodeFlags,
+                viewerFlags = prevDomainAnime.viewerFlags,
+                dateAdded = if (replace) prevDomainAnime.dateAdded else Date().time,
+            ),
+        )
     }
 }

@@ -1,13 +1,10 @@
 package eu.kanade.tachiyomi.data.database.queries
 
-import com.pushtorefresh.storio.sqlite.operations.get.PreparedGetListOfObjects
 import com.pushtorefresh.storio.sqlite.queries.Query
 import com.pushtorefresh.storio.sqlite.queries.RawQuery
 import eu.kanade.tachiyomi.data.database.DbProvider
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
-import eu.kanade.tachiyomi.data.database.resolvers.AnimeCoverLastModifiedPutResolver
-import eu.kanade.tachiyomi.data.database.resolvers.AnimeFavoritePutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimeFlagsPutResolver
 import eu.kanade.tachiyomi.data.database.resolvers.AnimelibAnimeGetResolver
 import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable
@@ -28,36 +25,16 @@ interface AnimeQueries : DbProvider {
         .withGetResolver(AnimelibAnimeGetResolver.INSTANCE)
         .prepare()
 
-    fun getDuplicateAnimelibAnime(anime: Anime) = db.get()
-        .`object`(Anime::class.java)
+    fun getFavoriteAnimes() = db.get()
+        .listOfObjects(Anime::class.java)
         .withQuery(
             Query.builder()
                 .table(AnimeTable.TABLE)
-                .where("${AnimeTable.COL_FAVORITE} = 1 AND LOWER(${AnimeTable.COL_TITLE}) = ? AND ${AnimeTable.COL_SOURCE} != ?")
-                .whereArgs(
-                    anime.title.lowercase(),
-                    anime.source,
-                )
-                .limit(1)
+                .where("${AnimeTable.COL_FAVORITE} = ?")
+                .whereArgs(1)
                 .build(),
         )
         .prepare()
-
-    fun getFavoriteAnimes(sortByTitle: Boolean = true): PreparedGetListOfObjects<Anime> {
-        var queryBuilder = Query.builder()
-            .table(AnimeTable.TABLE)
-            .where("${AnimeTable.COL_FAVORITE} = ?")
-            .whereArgs(1)
-
-        if (sortByTitle) {
-            queryBuilder = queryBuilder.orderBy(AnimeTable.COL_TITLE)
-        }
-
-        return db.get()
-            .listOfObjects(Anime::class.java)
-            .withQuery(queryBuilder.build())
-            .prepare()
-    }
 
     fun getAnime(url: String, sourceId: Long) = db.get()
         .`object`(Anime::class.java)
@@ -98,16 +75,6 @@ interface AnimeQueries : DbProvider {
     fun updateViewerFlags(anime: Anime) = db.put()
         .`object`(anime)
         .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_VIEWER, Anime::viewer_flags))
-        .prepare()
-
-    fun updateAnimeFavorite(anime: Anime) = db.put()
-        .`object`(anime)
-        .withPutResolver(AnimeFavoritePutResolver())
-        .prepare()
-
-    fun updateAnimeCoverLastModified(anime: Anime) = db.put()
-        .`object`(anime)
-        .withPutResolver(AnimeCoverLastModifiedPutResolver())
         .prepare()
 
     fun getLastSeenAnime() = db.get()

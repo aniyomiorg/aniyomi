@@ -15,7 +15,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class Simkl(private val context: Context, id: Int) : TrackService(id), AnimeTrackService {
+class Simkl(private val context: Context, id: Long) : TrackService(id), AnimeTrackService {
 
     companion object {
         const val WATCHING = 1

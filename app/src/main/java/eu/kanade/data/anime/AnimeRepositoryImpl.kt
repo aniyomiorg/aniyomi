@@ -18,6 +18,14 @@ class AnimeRepositoryImpl(
         return handler.awaitOne { animesQueries.getAnimeById(id, animeMapper) }
     }
 
+    override suspend fun subscribeAnimeById(id: Long): Flow<Anime> {
+        return handler.subscribeToOne { animesQueries.getAnimeById(id, animeMapper) }
+    }
+
+    override suspend fun getAnimeByIdAsFlow(id: Long): Flow<Anime> {
+        return handler.subscribeToOne { animesQueries.getAnimeById(id, animeMapper) }
+    }
+
     override fun getFavoritesBySourceId(sourceId: Long): Flow<List<Anime>> {
         return handler.subscribeToList { animesQueries.getFavoriteBySourceId(sourceId, animeMapper) }
     }
@@ -35,6 +43,15 @@ class AnimeRepositoryImpl(
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
             false
+        }
+    }
+
+    override suspend fun moveAnimeToCategories(animeId: Long, categoryIds: List<Long>) {
+        handler.await(inTransaction = true) {
+            animes_categoriesQueries.deleteAnimeCategoryByAnimeId(animeId)
+            categoryIds.map { categoryId ->
+                animes_categoriesQueries.insert(animeId, categoryId)
+            }
         }
     }
 

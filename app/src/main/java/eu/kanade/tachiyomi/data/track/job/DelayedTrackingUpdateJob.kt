@@ -9,8 +9,14 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
+import eu.kanade.domain.anime.interactor.GetAnimeById
+import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
+import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
+import eu.kanade.domain.animetrack.model.toDbTrack
+import eu.kanade.domain.manga.interactor.GetMangaById
+import eu.kanade.domain.track.interactor.GetTracks
+import eu.kanade.domain.track.interactor.InsertTrack
+import eu.kanade.domain.track.model.toDbTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.Dispatchers
@@ -24,27 +30,30 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
     CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        val db = Injekt.get<DatabaseHelper>()
-        val animedb = Injekt.get<AnimeDatabaseHelper>()
+        val getAnimeById = Injekt.get<GetAnimeById>()
+        val getMangaById = Injekt.get<GetMangaById>()
+        val getAnimeTracks = Injekt.get<GetAnimeTracks>()
+        val getTracks = Injekt.get<GetTracks>()
+        val insertAnimeTrack = Injekt.get<InsertAnimeTrack>()
+        val insertTrack = Injekt.get<InsertTrack>()
+
         val trackManager = Injekt.get<TrackManager>()
         val delayedTrackingStore = Injekt.get<DelayedTrackingStore>()
 
         withContext(Dispatchers.IO) {
             val tracks = delayedTrackingStore.getItems().mapNotNull {
-                val manga = db.getManga(it.mangaId).executeAsBlocking() ?: return@withContext
-                db.getTracks(manga.id).executeAsBlocking()
+                val manga = getMangaById.await(it.mangaId) ?: return@withContext
+                getTracks.await(manga.id)
                     .find { track -> track.id == it.trackId }
-                    ?.also { track ->
-                        track.last_chapter_read = it.lastChapterRead
-                    }
+                    ?.copy(lastChapterRead = it.lastChapterRead.toDouble())
             }
 
             tracks.forEach { track ->
                 try {
-                    val service = trackManager.getService(track.sync_id)
+                    val service = trackManager.getService(track.syncId)
                     if (service != null && service.isLogged) {
-                        service.update(track, true)
-                        db.insertTrack(track).executeAsBlocking()
+                        service.update(track.toDbTrack(), true)
+                        insertTrack.await(track)
                     }
                 } catch (e: Exception) {
                     logcat(LogPriority.ERROR, e)
@@ -52,20 +61,18 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
             }
 
             val animeTracks = delayedTrackingStore.getAnimeItems().mapNotNull {
-                val anime = animedb.getAnime(it.animeId).executeAsBlocking() ?: return@withContext
-                animedb.getTracks(anime.id).executeAsBlocking()
+                val anime = getAnimeById.await(it.animeId) ?: return@withContext
+                getAnimeTracks.await(anime.id)
                     .find { track -> track.id == it.trackId }
-                    ?.also { track ->
-                        track.last_episode_seen = it.lastEpisodeSeen
-                    }
+                    ?.copy(lastEpisodeSeen = it.lastEpisodeSeen.toDouble())
             }
 
             animeTracks.forEach { track ->
                 try {
-                    val service = trackManager.getService(track.sync_id)
+                    val service = trackManager.getService(track.syncId)
                     if (service != null && service.isLogged) {
-                        service.update(track, true)
-                        animedb.insertTrack(track).executeAsBlocking()
+                        service.update(track.toDbTrack(), true)
+                        insertAnimeTrack.await(track)
                     }
                 } catch (e: Exception) {
                     logcat(LogPriority.ERROR, e)

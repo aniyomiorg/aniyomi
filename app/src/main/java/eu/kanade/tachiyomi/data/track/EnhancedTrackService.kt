@@ -1,13 +1,15 @@
 package eu.kanade.tachiyomi.data.track
 
+import eu.kanade.domain.animetrack.model.AnimeTrack
+import eu.kanade.domain.track.model.Track
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Manga
-import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.source.Source
+import eu.kanade.domain.anime.model.Anime as DomainAnime
+import eu.kanade.domain.manga.model.Manga as DomainManga
 
 /**
  * An Enhanced Track Service will never prompt the user to match a manga with the remote.
@@ -43,20 +45,20 @@ interface EnhancedTrackService {
     /**
      * Checks whether the provided source/track/manga triplet is from this TrackService
      */
-    fun isTrackFrom(track: Track, manga: Manga, source: Source?): Boolean
+    fun isTrackFrom(track: Track, manga: DomainManga, source: Source?): Boolean
 
     /**
      * Checks whether the provided source/track/anime triplet is from this AnimeTrackService
      */
-    fun isTrackFrom(track: AnimeTrack, anime: Anime, source: AnimeSource?): Boolean
+    fun isTrackFrom(track: AnimeTrack, anime: DomainAnime, source: AnimeSource?): Boolean
 
     /**
      * Migrates the given track for the manga to the newSource, if possible
      */
-    fun migrateTrack(track: Track, manga: Manga, newSource: Source): Track?
+    fun migrateTrack(track: Track, manga: DomainManga, newSource: Source): Track?
 
     /**
      * Migrates the given track for the anime to the newSource, if possible
      */
-    fun migrateTrack(track: AnimeTrack, anime: Anime, newSource: AnimeSource): AnimeTrack?
+    fun migrateTrack(track: AnimeTrack, anime: DomainAnime, newSource: AnimeSource): AnimeTrack?
 }

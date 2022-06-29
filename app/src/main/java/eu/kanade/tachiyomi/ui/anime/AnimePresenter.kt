@@ -1,87 +1,107 @@
 package eu.kanade.tachiyomi.ui.anime
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
-import coil.imageLoader
-import coil.memory.MemoryCache
-import com.jakewharton.rxrelay.PublishRelay
+import androidx.compose.runtime.Immutable
+import eu.kanade.domain.anime.interactor.GetAnimeWithEpisodes
 import eu.kanade.domain.anime.interactor.GetDuplicateLibraryAnime
+import eu.kanade.domain.anime.interactor.SetAnimeEpisodeFlags
+import eu.kanade.domain.anime.interactor.UpdateAnime
+import eu.kanade.domain.anime.model.TriStateFilter
+import eu.kanade.domain.anime.model.isLocal
+import eu.kanade.domain.anime.model.toAnimeInfo
 import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.animetrack.interactor.DeleteAnimeTrack
+import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
+import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
+import eu.kanade.domain.animetrack.model.toDbTrack
+import eu.kanade.domain.animetrack.model.toDomainTrack
 import eu.kanade.domain.category.interactor.GetCategoriesAnime
-import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.category.interactor.MoveAnimeToCategories
+import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
+import eu.kanade.domain.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.episode.interactor.UpdateEpisode
+import eu.kanade.domain.episode.model.EpisodeUpdate
 import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.animesource.model.toSAnime
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.toSEpisode
-import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.AnimeCategory
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.database.models.Episode
-import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
-import eu.kanade.tachiyomi.data.database.models.toDomainAnime
+import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.data.saver.Image
-import eu.kanade.tachiyomi.data.saver.ImageSaver
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
-import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.ui.anime.episode.EpisodeItem
 import eu.kanade.tachiyomi.ui.anime.track.TrackItem
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
-import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.episode.EpisodeSettingsHelper
 import eu.kanade.tachiyomi.util.episode.getEpisodeSort
-import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
-import eu.kanade.tachiyomi.util.episode.syncEpisodesWithTrackServiceTwoWay
-import eu.kanade.tachiyomi.util.isLocal
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.lang.withUIContext
-import eu.kanade.tachiyomi.util.prepUpdateCover
+import eu.kanade.tachiyomi.util.preference.asImmediateFlow
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
-import eu.kanade.tachiyomi.util.updateCoverLastModified
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.State
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.withContext
 import logcat.LogPriority
-import rx.Observable
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import uy.kohesive.injekt.injectLazy
-import java.util.Date
-import eu.kanade.domain.category.model.Category as DomainCategory
+import java.text.DateFormat
+import eu.kanade.domain.anime.model.Anime as DomainAnime
+import eu.kanade.domain.episode.model.Episode as DomainEpisode
 
 class AnimePresenter(
-    val anime: Anime,
-    val source: AnimeSource,
-    val preferences: PreferencesHelper = Injekt.get(),
+    val animeId: Long,
+    val isFromSource: Boolean,
+    private val preferences: PreferencesHelper = Injekt.get(),
     private val db: AnimeDatabaseHelper = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
-    private val coverCache: AnimeCoverCache = Injekt.get(),
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val getAnimeAndEpisodes: GetAnimeWithEpisodes = Injekt.get(),
     private val getDuplicateLibraryAnime: GetDuplicateLibraryAnime = Injekt.get(),
+    private val setAnimeEpisodeFlags: SetAnimeEpisodeFlags = Injekt.get(),
+    private val updateEpisode: UpdateEpisode = Injekt.get(),
+    private val updateAnime: UpdateAnime = Injekt.get(),
+    private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get(),
     private val getCategories: GetCategoriesAnime = Injekt.get(),
+    private val deleteTrack: DeleteAnimeTrack = Injekt.get(),
+    private val getTracks: GetAnimeTracks = Injekt.get(),
+    private val moveAnimeToCategories: MoveAnimeToCategories = Injekt.get(),
+    private val insertTrack: InsertAnimeTrack = Injekt.get(),
+    private val syncEpisodesWithTrackServiceTwoWay: SyncEpisodesWithTrackServiceTwoWay = Injekt.get(),
 ) : BasePresenter<AnimeController>() {
+
+    private val _state: MutableStateFlow<AnimeScreenState> = MutableStateFlow(AnimeScreenState.Loading)
+
+    val state = _state.asStateFlow()
+
+    private val successState: AnimeScreenState.Success?
+        get() = state.value as? AnimeScreenState.Success
 
     /**
      * Subscription to update the anime from the source.
@@ -89,180 +109,217 @@ class AnimePresenter(
     private var fetchAnimeJob: Job? = null
 
     /**
-     * List of episodes of the anime. It's always unfiltered and unsorted.
-     */
-    var allEpisodes: List<EpisodeItem> = emptyList()
-        private set
-    var filteredAndSortedEpisodes: List<EpisodeItem> = emptyList()
-
-    /**
-     * Subject of list of episodes to allow updating the view without going to DB.
-     */
-    private val episodesRelay by lazy { PublishRelay.create<List<EpisodeItem>>() }
-
-    /**
-     * Whether the episode list has been requested to the source.
-     */
-    var hasRequested = false
-        private set
-
-    /**
      * Subscription to retrieve the new list of episodes from the source.
      */
     private var fetchEpisodesJob: Job? = null
 
     /**
-     * Subscription to retrieve the new link of episodes from the source.
-     */
-    private var fetchEpisodeLinksJob: Job? = null
-
-    /**
      * Subscription to observe download status changes.
      */
     private var observeDownloadsStatusSubscription: Subscription? = null
-    private var observeDownloadsPageSubscription: Subscription? = null
     private var observeDownloadsProgressSubscription: Subscription? = null
 
     private var _trackList: List<TrackItem> = emptyList()
     val trackList get() = _trackList
 
-    private val loggedServices by lazy { trackManager.services.filter { it.isLogged && it !is MangaTrackService } }
+    private val loggedServices by lazy { trackManager.services.filter { it.isLogged && it !is AnimeTrackService } }
 
-    private val imageSaver: ImageSaver by injectLazy()
-
-    private var trackSubscription: Subscription? = null
     private var searchTrackerJob: Job? = null
     private var refreshTrackersJob: Job? = null
+
+    val anime: DomainAnime?
+        get() = successState?.anime
+
+    val source: AnimeSource?
+        get() = successState?.source
+
+    val isFavoritedAnime: Boolean
+        get() = anime?.favorite ?: false
+
+    val processedEpisodes: Sequence<EpisodeItem>?
+        get() = successState?.processedEpisodes
+
+    /**
+     * Helper function to update the UI state only if it's currently in success state
+     */
+    private fun updateSuccessState(func: (AnimeScreenState.Success) -> AnimeScreenState.Success) {
+        _state.update { if (it is AnimeScreenState.Success) func(it) else it }
+    }
 
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
 
-        if (!anime.favorite) {
-            EpisodeSettingsHelper.applySettingDefaults(anime)
-        }
-
         // Anime info - start
 
-        getAnimeObservable()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeLatestCache({ view, anime -> view.onNextAnimeInfo(anime, source) })
-
-        getTrackingObservable()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeLatestCache(AnimeController::onTrackingCount) { _, error -> logcat(LogPriority.ERROR, error) }
-
-        // Prepare the relay.
-        episodesRelay.flatMap { applyEpisodeFilters(it) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeLatestCache(
-                { _, episodes ->
-                    filteredAndSortedEpisodes = episodes
-                    view?.onNextEpisodes(episodes)
-                },
-                { _, error -> logcat(LogPriority.ERROR, error) },
-            )
-
-        // Anime info - end
-
-        // Episodes list - start
-
-        // Keeps subscribed to changes and sends the list of chapters to the relay.
         presenterScope.launchIO {
-            anime.id?.let { animeId ->
-                getEpisodeByAnimeId.subscribe(animeId)
-                    .collectLatest { domainEpisodes ->
-                        val episodeItems = domainEpisodes.map { it.toDbEpisode().toModel() }
-                        setDownloadedEpisodes(episodeItems)
-                        this@AnimePresenter.allEpisodes = episodeItems
-                        observeDownloads()
-                        episodesRelay.call(episodeItems)
-                    }
+            if (!getAnimeAndEpisodes.awaitAnime(animeId).favorite) {
+                EpisodeSettingsHelper.applySettingDefaults(animeId, setAnimeEpisodeFlags)
             }
+
+            getAnimeAndEpisodes.subscribe(animeId)
+                .collectLatest { (anime, episodes) ->
+                    val episodeItems = episodes.toEpisodeItems(anime)
+                    _state.update { currentState ->
+                        when (currentState) {
+                            // Initialize success state
+                            AnimeScreenState.Loading -> AnimeScreenState.Success(
+                                anime = anime,
+                                source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source),
+                                dateRelativeTime = preferences.relativeTime().get(),
+                                dateFormat = preferences.dateFormat(),
+                                isFromSource = isFromSource,
+                                trackingAvailable = trackManager.hasLoggedServices(),
+                                episodes = episodeItems,
+                            )
+
+                            // Update state
+                            is AnimeScreenState.Success -> currentState.copy(anime = anime, episodes = episodeItems)
+                        }
+                    }
+
+                    observeTrackers()
+                    observeTrackingCount()
+                    observeDownloads()
+
+                    if (!anime.initialized) {
+                        fetchAllFromSource(manualFetch = false)
+                    }
+                }
         }
 
-        // Episodes list - end
+        preferences.incognitoMode()
+            .asImmediateFlow { incognito ->
+                updateSuccessState { it.copy(isIncognitoMode = incognito) }
+            }
+            .launchIn(presenterScope)
 
-        fetchTrackers()
+        preferences.downloadedOnly()
+            .asImmediateFlow { downloadedOnly ->
+                updateSuccessState { it.copy(isDownloadedOnlyMode = downloadedOnly) }
+            }
+            .launchIn(presenterScope)
     }
 
-    suspend fun getDuplicateLibraryAnime(anime: Anime): Anime? {
-        return getDuplicateLibraryAnime.await(anime.title, anime.source)?.toDbAnime()
+    fun fetchAllFromSource(manualFetch: Boolean = true) {
+        fetchAnimeFromSource(manualFetch)
+        fetchEpisodesFromSource(manualFetch)
     }
 
     // Anime info - start
-
-    private fun getAnimeObservable(): Observable<Anime> {
-        return db.getAnime(anime.url, anime.source).asRxObservable()
-    }
-
-    private fun getTrackingObservable(): Observable<Int> {
-        if (!trackManager.hasLoggedAnimeServices()) {
-            return Observable.just(0)
-        }
-
-        return db.getTracks(anime.id).asRxObservable()
-            .map { tracks ->
-                val loggedServices = trackManager.services.filter { it.isLogged }.map { it.id }
-                tracks.filter { it.sync_id in loggedServices }
-            }
-            .map { it.size }
-    }
-
     /**
      * Fetch anime information from source.
      */
-    fun fetchAnimeFromSource(manualFetch: Boolean = false) {
+    private fun fetchAnimeFromSource(manualFetch: Boolean = false) {
         if (fetchAnimeJob?.isActive == true) return
         fetchAnimeJob = presenterScope.launchIO {
+            updateSuccessState { it.copy(isRefreshingInfo = true) }
             try {
-                val networkAnime = source.getAnimeDetails(anime.toAnimeInfo())
-                val sAnime = networkAnime.toSAnime()
-                anime.prepUpdateCover(coverCache, sAnime, manualFetch)
-                anime.copyFrom(sAnime)
-                if (!anime.favorite) {
-                    // if the anime isn't a favorite, set its title from source and update in db
-                    anime.title = sAnime.title
+                successState?.let {
+                    val networkAnime = it.source.getAnimeDetails(it.anime.toAnimeInfo())
+                    updateAnime.awaitUpdateFromSource(it.anime, networkAnime, manualFetch)
                 }
-                anime.initialized = true
-                db.insertAnime(anime).executeAsBlocking()
-
-                withUIContext { view?.onFetchAnimeInfoDone() }
             } catch (e: Throwable) {
                 withUIContext { view?.onFetchAnimeInfoError(e) }
             }
+            updateSuccessState { it.copy(isRefreshingInfo = false) }
         }
     }
 
     /**
      * Update favorite status of anime, (removes / adds) anime (to / from) library.
-     *
-     * @return the new status of the anime.
      */
-    fun toggleFavorite(): Boolean {
-        anime.favorite = !anime.favorite
-        anime.date_added = when (anime.favorite) {
-            true -> Date().time
-            false -> 0
+    fun toggleFavorite(
+        onRemoved: () -> Unit,
+        onAdded: () -> Unit,
+        onRequireCategory: (anime: DomainAnime, availableCats: List<Category>) -> Unit,
+        onDuplicateExists: ((DomainAnime) -> Unit)?,
+    ) {
+        val state = successState ?: return
+        presenterScope.launchIO {
+            val anime = state.anime
+
+            if (isFavoritedAnime) {
+                // Remove from library
+                if (updateAnime.awaitUpdateFavorite(anime.id, false)) {
+                    // Remove covers and update last modified in db
+                    if (anime.toDbAnime().removeCovers() > 0) {
+                        updateAnime.awaitUpdateCoverLastModified(anime.id)
+                    }
+                    launchUI { onRemoved() }
+                }
+            } else {
+                // Add to library
+                // First, check if duplicate exists if callback is provided
+                if (onDuplicateExists != null) {
+                    val duplicate = getDuplicateLibraryAnime.await(anime.title, anime.source)
+                    if (duplicate != null) {
+                        launchUI { onDuplicateExists(duplicate) }
+                        return@launchIO
+                    }
+                }
+
+                // Now check if user previously set categories, when available
+                val categories = getCategories()
+                val defaultCategoryId = preferences.defaultCategory()
+                val defaultCategory = categories.find { it.id == defaultCategoryId }
+                when {
+                    // Default category set
+                    defaultCategory != null -> {
+                        val result = updateAnime.awaitUpdateFavorite(anime.id, true)
+                        if (!result) return@launchIO
+                        moveAnimeToCategory(anime.toDbAnime(), defaultCategory)
+                        launchUI { onAdded() }
+                    }
+
+                    // Automatic 'Default' or no categories
+                    defaultCategoryId == 0 || categories.isEmpty() -> {
+                        val result = updateAnime.awaitUpdateFavorite(anime.id, true)
+                        if (!result) return@launchIO
+                        moveAnimeToCategory(anime.toDbAnime(), null)
+                        launchUI { onAdded() }
+                    }
+
+                    // Choose a category
+                    else -> launchUI { onRequireCategory(anime, categories) }
+                }
+
+                // Finally match with enhanced tracking when available
+                val source = state.source
+                trackList
+                    .map { it.service }
+                    .filterIsInstance<EnhancedTrackService>()
+                    .filter { it.accept(source) }
+                    .forEach { service ->
+                        launchIO {
+                            try {
+                                service.match(anime.toDbAnime())?.let { track ->
+                                    registerTracking(track, service as TrackService)
+                                }
+                            } catch (e: Exception) {
+                                logcat(LogPriority.WARN, e) {
+                                    "Could not match anime: ${anime.title} with service $service"
+                                }
+                            }
+                        }
+                    }
+            }
         }
-        if (!anime.favorite) {
-            anime.removeCovers(coverCache)
-        }
-        db.insertAnime(anime).executeAsBlocking()
-        return anime.favorite
     }
 
     /**
      * Returns true if the anime has any downloads.
      */
     fun hasDownloads(): Boolean {
-        return downloadManager.getDownloadCount(anime) > 0
+        val anime = successState?.anime ?: return false
+        return downloadManager.getDownloadCount(anime.toDbAnime()) > 0
     }
 
     /**
      * Deletes all the downloads for the anime.
      */
     fun deleteDownloads() {
-        downloadManager.deleteAnime(anime, source)
+        val state = successState ?: return
+        downloadManager.deleteAnime(state.anime.toDbAnime(), state.source)
     }
 
     /**
@@ -270,8 +327,8 @@ class AnimePresenter(
      *
      * @return List of categories, not including the default category
      */
-    suspend fun getCategories(): List<DomainCategory> {
-        return getCategories.subscribe().firstOrNull() ?: emptyList()
+    fun getCategories(): List<Category> {
+        return db.getCategories().executeAsBlocking()
     }
 
     /**
@@ -280,9 +337,16 @@ class AnimePresenter(
      * @param anime the anime to get categories from.
      * @return Array of category ids the anime is in, if none returns default id
      */
-    fun getAnimeCategoryIds(anime: Anime): Array<Long> {
-        val categories = db.getCategoriesForAnime(anime).executeAsBlocking()
-        return categories.mapNotNull { it?.id?.toLong() }.toTypedArray()
+    fun getAnimeCategoryIds(anime: DomainAnime): Array<Int> {
+        val categories = runBlocking { getCategories.await(anime.id) }
+        return categories.map { it.id.toInt() }.toTypedArray()
+    }
+
+    fun moveAnimeToCategoriesAndAddToLibrary(anime: Anime, categories: List<Category>) {
+        moveAnimeToCategories(anime, categories)
+        presenterScope.launchIO {
+            updateAnime.awaitUpdateFavorite(anime.id!!, true)
+        }
     }
 
     /**
@@ -291,9 +355,12 @@ class AnimePresenter(
      * @param anime the anime to move.
      * @param categories the selected categories.
      */
-    fun moveAnimeToCategories(anime: Anime, categories: List<Category>) {
-        val ac = categories.filter { it.id != 0 }.map { AnimeCategory.create(anime, it) }
-        db.setAnimeCategories(ac, listOf(anime))
+    private fun moveAnimeToCategories(anime: Anime, categories: List<Category>) {
+        val animeId = anime.id ?: return
+        val categoryIds = categories.mapNotNull { it.id?.toLong() }
+        presenterScope.launchIO {
+            moveAnimeToCategories.await(animeId, categoryIds)
+        }
     }
 
     /**
@@ -302,93 +369,24 @@ class AnimePresenter(
      * @param anime the anime to move.
      * @param category the selected category, or null for default category.
      */
-    fun moveAnimeToCategory(anime: Anime, category: Category?) {
+    private fun moveAnimeToCategory(anime: Anime, category: Category?) {
         moveAnimeToCategories(anime, listOfNotNull(category))
     }
 
-    /**
-     * Get the anime cover as a Bitmap, either from the CoverCache (only works for library anime)
-     * or from the Coil ImageLoader cache.
-     *
-     * @param context the context used to get the Coil ImageLoader
-     * @param memoryCacheKey Coil MemoryCache.Key that points to the cover Bitmap cache location
-     * @return anime cover as Bitmap
-     */
-    fun getCoverBitmap(context: Context, memoryCacheKey: MemoryCache.Key?): Bitmap {
-        var resultBitmap = coverBitmapFromCoverCache()
-        if (resultBitmap == null && memoryCacheKey != null) {
-            resultBitmap = coverBitmapFromImageLoader(context, memoryCacheKey)
-        }
+    private fun observeTrackingCount() {
+        val anime = successState?.anime ?: return
 
-        return resultBitmap ?: throw Exception("Cover not in cache")
-    }
-
-    /**
-     * Attempt anime cover retrieval from the CoverCache.
-     *
-     * @return cover as Bitmap or null if CoverCache does not contain cover for anime
-     */
-    private fun coverBitmapFromCoverCache(): Bitmap? {
-        val cover = coverCache.getCoverFile(anime.thumbnail_url)
-        return if (cover != null) {
-            BitmapFactory.decodeFile(cover.path)
-        } else {
-            null
-        }
-    }
-
-    /**
-     * Attempt anime cover retrieval from the Coil ImageLoader memoryCache.
-     *
-     * @param context the context used to get the Coil ImageLoader
-     * @param memoryCacheKey Coil MemoryCache.Key that points to the cover Bitmap cache location
-     * @return cover as Bitmap or null if there is no thumbnail cached with the memoryCacheKey
-     */
-    private fun coverBitmapFromImageLoader(context: Context, memoryCacheKey: MemoryCache.Key): Bitmap? {
-        return context.imageLoader.memoryCache?.get(memoryCacheKey)?.bitmap
-    }
-
-    /**
-     * Save anime cover Bitmap to picture or temporary share directory.
-     *
-     * @param image the image with specified location
-     * @return flow Flow which emits the Uri which specifies where the image is saved when
-     */
-    fun saveImage(image: Image): Uri {
-        return imageSaver.save(image)
-    }
-
-    /**
-     * Update cover with local file.
-     *
-     * @param context Context.
-     * @param data uri of the cover resource.
-     */
-    fun editCover(context: Context, data: Uri) {
         presenterScope.launchIO {
-            context.contentResolver.openInputStream(data)?.use {
-                try {
-                    val result = anime.toDomainAnime()!!.editCover(context, it)
-                    launchUI { if (result) view?.onSetCoverSuccess() }
-                } catch (e: Exception) {
-                    launchUI { view?.onSetCoverError(e) }
+            getTracks.subscribe(anime.id)
+                .catch { logcat(LogPriority.ERROR, it) }
+                .map { tracks ->
+                    val loggedServicesId = loggedServices.map { it.id.toLong() }
+                    tracks.filter { it.syncId in loggedServicesId }.size
                 }
-            }
+                .collectLatest { trackingCount ->
+                    updateSuccessState { it.copy(trackingCount = trackingCount) }
+                }
         }
-    }
-
-    fun deleteCustomCover(anime: Anime) {
-        Observable
-            .fromCallable {
-                coverCache.deleteCustomCover(anime.id)
-                anime.updateCoverLastModified(db)
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeFirst(
-                { view, _ -> view.onSetCoverSuccess() },
-                { view, e -> view.onSetCoverError(e) },
-            )
     }
 
     // Anime info - end
@@ -400,196 +398,147 @@ class AnimePresenter(
         observeDownloadsStatusSubscription = downloadManager.queue.getStatusObservable()
             .observeOn(Schedulers.io())
             .onBackpressureBuffer()
-            .filter { download -> download.anime.id == anime.id }
+            .filter { download -> download.anime.id == successState?.anime?.id }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeLatestCache(
-                { view, it ->
-                    onDownloadStatusChange(it)
-                    view.onEpisodeDownloadUpdate(it)
-                },
+                { _, it -> updateDownloadState(it) },
                 { _, error ->
                     logcat(LogPriority.ERROR, error)
                 },
             )
 
-        observeDownloadsPageSubscription?.let { remove(it) }
-        observeDownloadsPageSubscription = downloadManager.queue.getProgressObservable()
-            .observeOn(Schedulers.io())
-            .onBackpressureBuffer()
-            .filter { download -> download.anime.id == anime.id }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeLatestAnimeCache(AnimeController::onEpisodeDownloadUpdate) { _, error ->
-                logcat(LogPriority.ERROR, error)
-            }
-
         observeDownloadsProgressSubscription?.let { remove(it) }
         observeDownloadsProgressSubscription = downloadManager.queue.getPreciseProgressObservable()
             .observeOn(Schedulers.io())
             .onBackpressureLatest()
-            .filter { download -> download.anime.id == anime.id }
+            .filter { download -> download.anime.id == successState?.anime?.id }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeLatestAnimeCache(AnimeController::onEpisodeDownloadUpdate) { _, error ->
-                logcat(LogPriority.ERROR, error)
+            .subscribeLatestCache(
+                { _, download -> updateDownloadState(download) },
+                { _, error -> logcat(LogPriority.ERROR, error) },
+            )
+    }
+
+    private fun updateDownloadState(download: AnimeDownload) {
+        updateSuccessState { successState ->
+            val modifiedIndex = successState.episodes.indexOfFirst { it.episode.id == download.episode.id }
+            if (modifiedIndex < 0) return@updateSuccessState successState
+
+            val newEpisodes = successState.episodes.toMutableList().apply {
+                val item = removeAt(modifiedIndex)
+                    .copy(downloadState = download.status, downloadProgress = download.progress)
+                add(modifiedIndex, item)
             }
-    }
-
-    /**
-     * Converts a episode from the database to an extended model, allowing to store new fields.
-     */
-    private fun Episode.toModel(): EpisodeItem {
-        // Create the model object.
-        val model = EpisodeItem(this, anime)
-
-        // Find an active download for this episode.
-        val download = downloadManager.queue.find { it.episode.id == id }
-
-        if (download != null) {
-            // If there's an active download, assign it.
-            model.download = download
+            successState.copy(episodes = newEpisodes)
         }
-        return model
     }
 
-    /**
-     * Finds and assigns the list of downloaded episodes.
-     *
-     * @param episodes the list of episode from the database.
-     */
-    private fun setDownloadedEpisodes(episodes: List<EpisodeItem>) {
-        episodes
-            .filter { downloadManager.isEpisodeDownloaded(it, anime) }
-            .forEach { it.status = AnimeDownload.State.DOWNLOADED }
+    private fun List<DomainEpisode>.toEpisodeItems(anime: DomainAnime): List<EpisodeItem> {
+        return map { episode ->
+            val activeDownload = downloadManager.queue.find { episode.id == it.episode.id }
+            val downloaded = downloadManager.isEpisodeDownloaded(episode.toDbEpisode(), anime.toDbAnime())
+            val downloadState = when {
+                activeDownload != null -> activeDownload.status
+                downloaded -> AnimeDownload.State.DOWNLOADED
+                else -> AnimeDownload.State.NOT_DOWNLOADED
+            }
+            EpisodeItem(
+                episode = episode,
+                downloadState = downloadState,
+                downloadProgress = activeDownload?.progress ?: 0,
+            )
+        }
     }
 
     /**
      * Requests an updated list of episodes from the source.
      */
-    fun fetchEpisodesFromSource(manualFetch: Boolean = false) {
-        hasRequested = true
-
+    private fun fetchEpisodesFromSource(manualFetch: Boolean = false) {
         if (fetchEpisodesJob?.isActive == true) return
         fetchEpisodesJob = presenterScope.launchIO {
+            updateSuccessState { it.copy(isRefreshingEpisode = true) }
             try {
-                val episodes = source.getEpisodeList(anime.toAnimeInfo())
-                    .map { it.toSEpisode() }
+                successState?.let { successState ->
+                    val episodes = successState.source.getEpisodeList(successState.anime.toAnimeInfo())
+                        .map { it.toSEpisode() }
 
-                val (newEpisodes, _) = syncEpisodesWithSource(episodes, anime, source)
-                if (manualFetch) {
-                    downloadNewEpisodes(newEpisodes)
+                    val (newEpisodes, _) = syncEpisodesWithSource.await(
+                        episodes,
+                        successState.anime,
+                        successState.source,
+                    )
+
+                    if (manualFetch) {
+                        val dbEpisodes = newEpisodes.map { it.toDbEpisode() }
+                        downloadNewEpisodes(dbEpisodes)
+                    }
                 }
-
-                withUIContext { view?.onFetchEpisodesDone() }
             } catch (e: Throwable) {
                 withUIContext { view?.onFetchEpisodesError(e) }
             }
+            updateSuccessState { it.copy(isRefreshingEpisode = false) }
         }
     }
 
     /**
-     * Updates the UI after applying the filters.
+     * Returns the next unseen episode or null if everything is seen.
      */
-    private fun refreshEpisodes() {
-        episodesRelay.call(allEpisodes)
-    }
-
-    /**
-     * Applies the view filters to the list of episodes obtained from the database.
-     * @param episodes the list of episodes from the database
-     * @return an observable of the list of episodes filtered and sorted.
-     */
-    private fun applyEpisodeFilters(episodes: List<EpisodeItem>): Observable<List<EpisodeItem>> {
-        var observable = Observable.from(episodes).subscribeOn(Schedulers.io())
-
-        val unseenFilter = onlyUnseen()
-        if (unseenFilter == State.INCLUDE) {
-            observable = observable.filter { !it.seen }
-        } else if (unseenFilter == State.EXCLUDE) {
-            observable = observable.filter { it.seen }
-        }
-
-        val downloadedFilter = onlyDownloaded()
-        if (downloadedFilter == State.INCLUDE) {
-            observable = observable.filter { it.isDownloaded || it.anime.isLocal() }
-        } else if (downloadedFilter == State.EXCLUDE) {
-            observable = observable.filter { !it.isDownloaded && !it.anime.isLocal() }
-        }
-
-        val bookmarkedFilter = onlyBookmarked()
-        if (bookmarkedFilter == State.INCLUDE) {
-            observable = observable.filter { it.bookmark }
-        } else if (bookmarkedFilter == State.EXCLUDE) {
-            observable = observable.filter { !it.bookmark }
-        }
-
-        return observable.toSortedList(getEpisodeSort(anime))
-    }
-
-    /**
-     * Called when a download for the active anime changes status.
-     * @param download the download whose status changed.
-     */
-    private fun onDownloadStatusChange(download: AnimeDownload) {
-        // Assign the download to the model object.
-        if (download.status == AnimeDownload.State.QUEUE) {
-            allEpisodes.find { it.id == download.episode.id }?.let {
-                if (it.download == null) {
-                    it.download = download
-                }
+    fun getNextUnseenEpisode(): DomainEpisode? {
+        val successState = successState ?: return null
+        return successState.processedEpisodes.map { it.episode }.let { episodes ->
+            if (successState.anime.sortDescending()) {
+                episodes.findLast { !it.seen }
+            } else {
+                episodes.find { !it.seen }
             }
         }
+    }
 
-        // Force UI update if downloaded filter active and download finished.
-        if (onlyDownloaded() != State.IGNORE && download.status == AnimeDownload.State.DOWNLOADED) {
-            refreshEpisodes()
-        }
+    fun getUnseenEpisodes(): List<DomainEpisode> {
+        return successState?.processedEpisodes
+            ?.filter { (episode, dlStatus) -> !episode.seen && dlStatus == AnimeDownload.State.NOT_DOWNLOADED }
+            ?.map { it.episode }
+            ?.toList()
+            ?: emptyList()
+    }
+
+    fun getUnseenEpisodesSorted(): List<DomainEpisode> {
+        val anime = successState?.anime ?: return emptyList()
+        val episodes = getUnseenEpisodes().sortedWith(getEpisodeSort(anime))
+        return if (anime.sortDescending()) episodes.reversed() else episodes
+    }
+
+    fun startDownloadingNow(episodeId: Long) {
+        downloadManager.startDownloadNow(episodeId)
+    }
+
+    fun cancelDownload(episodeId: Long) {
+        val activeDownload = downloadManager.queue.find { episodeId == it.episode.id } ?: return
+        downloadManager.deletePendingDownload(activeDownload)
+        updateDownloadState(activeDownload.apply { status = AnimeDownload.State.NOT_DOWNLOADED })
+    }
+
+    fun markPreviousEpisodeSeen(pointer: DomainEpisode) {
+        val successState = successState ?: return
+        val episodes = processedEpisodes.orEmpty().map { it.episode }.toList()
+        val prevEpisodes = if (successState.anime.sortDescending()) episodes.asReversed() else episodes
+        val pointerPos = prevEpisodes.indexOf(pointer)
+        if (pointerPos != -1) markEpisodesSeen(prevEpisodes.take(pointerPos), true)
     }
 
     /**
-     * Returns the next unread episode or null if everything is read.
+     * Mark the selected episode list as seen/unseen.
+     * @param episodes the list of selected episodes.
+     * @param seen whether to mark episodes as seen or unseen.
      */
-    fun getNextUnseenEpisode(): EpisodeItem? {
-        return if (sortDescending()) {
-            return filteredAndSortedEpisodes.findLast { !it.seen }
-        } else {
-            filteredAndSortedEpisodes.find { !it.seen }
-        }
-    }
-
-    fun getUnseenEpisodesSorted(): List<EpisodeItem> {
-        val episodes = allEpisodes
-            .sortedWith(getEpisodeSort(anime))
-            .filter { !it.seen && it.status == AnimeDownload.State.NOT_DOWNLOADED }
-            .distinctBy { it.name }
-        return if (sortDescending()) {
-            episodes.reversed()
-        } else {
-            episodes
-        }
-    }
-
-    fun startDownloadingNow(episode: Episode) {
-        downloadManager.startDownloadNow(episode.id)
-    }
-
-    /**
-     * Mark the selected episode list as read/unread.
-     * @param selectedEpisodes the list of selected episodes.
-     * @param read whether to mark episodes as read or unread.
-     */
-    fun markEpisodesRead(selectedEpisodes: List<EpisodeItem>, read: Boolean) {
-        val episodes = selectedEpisodes.map { episode ->
-            episode.seen = read
-            if (!read) {
-                episode.last_second_seen = 0
-            }
-            episode
-        }
-
-        launchIO {
-            db.updateEpisodesProgress(episodes).executeAsBlocking()
-
-            if (preferences.removeAfterMarkedAsRead()) {
-                deleteEpisodes(episodes.filter { it.seen })
+    fun markEpisodesSeen(episodes: List<DomainEpisode>, seen: Boolean) {
+        presenterScope.launchIO {
+            val modified = episodes.filterNot { it.seen == seen }
+            modified
+                .map { EpisodeUpdate(id = it.id, seen = seen) }
+                .let { updateEpisode.awaitAll(it) }
+            if (seen && preferences.removeAfterMarkedAsRead()) {
+                deleteEpisodes(modified)
             }
         }
     }
@@ -598,29 +547,25 @@ class AnimePresenter(
      * Downloads the given list of episodes with the manager.
      * @param episodes the list of episodes to download.
      */
-    fun downloadEpisodes(episodes: List<Episode>) {
-        downloadManager.downloadEpisodes(anime, episodes)
-    }
-
-    /**
-     * Downloads the given list of episodes with the manager.
-     * @param episodes the list of episodes to download.
-     */
-    fun downloadEpisodesExternally(episodes: List<Episode>) {
-        downloadManager.downloadEpisodesExternally(anime, episodes)
+    fun downloadEpisodes(episodes: List<DomainEpisode>, alt: Boolean = false) {
+        val anime = successState?.anime ?: return
+        if (alt) {
+            downloadManager.downloadEpisodesAlt(anime.toDbAnime(), episodes.map { it.toDbEpisode() })
+        } else {
+            downloadManager.downloadEpisodes(anime.toDbAnime(), episodes.map { it.toDbEpisode() })
+        }
     }
 
     /**
      * Bookmarks the given list of episodes.
-     * @param selectedEpisodes the list of episodes to bookmark.
+     * @param episodes the list of episodes to bookmark.
      */
-    fun bookmarkEpisodes(selectedEpisodes: List<EpisodeItem>, bookmarked: Boolean) {
-        launchIO {
-            selectedEpisodes
-                .forEach {
-                    it.bookmark = bookmarked
-                    db.updateEpisodeProgress(it).executeAsBlocking()
-                }
+    fun bookmarkEpisodes(episodes: List<DomainEpisode>, bookmarked: Boolean) {
+        presenterScope.launchIO {
+            episodes
+                .filterNot { it.bookmark == bookmarked }
+                .map { EpisodeUpdate(id = it.id, bookmark = bookmarked) }
+                .let { updateEpisode.awaitAll(it) }
         }
     }
 
@@ -628,40 +573,41 @@ class AnimePresenter(
      * Deletes the given list of episode.
      * @param episodes the list of episodes to delete.
      */
-    fun deleteEpisodes(episodes: List<EpisodeItem>) {
+    fun deleteEpisodes(episodes: List<DomainEpisode>) {
         launchIO {
+            val episodes2 = episodes.map { it.toDbEpisode() }
             try {
-                downloadManager.deleteEpisodes(episodes, anime, source).forEach {
-                    if (it is EpisodeItem) {
-                        it.status = AnimeDownload.State.NOT_DOWNLOADED
-                        it.download = null
+                updateSuccessState { successState ->
+                    val deletedIds = downloadManager
+                        .deleteEpisodes(episodes2, successState.anime.toDbAnime(), successState.source)
+                        .map { it.id }
+                    val deletedEpisodes = successState.episodes.filter { deletedIds.contains(it.episode.id) }
+                    if (deletedEpisodes.isEmpty()) return@updateSuccessState successState
+
+                    // TODO: Don't do this fake status update
+                    val newEpisodes = successState.episodes.toMutableList().apply {
+                        deletedEpisodes.forEach {
+                            val index = indexOf(it)
+                            val toAdd = removeAt(index)
+                                .copy(downloadState = AnimeDownload.State.NOT_DOWNLOADED, downloadProgress = 0)
+                            add(index, toAdd)
+                        }
                     }
+                    successState.copy(episodes = newEpisodes)
                 }
-
-                if (onlyDownloaded() != State.IGNORE) {
-                    refreshEpisodes()
-                }
-
-                view?.onEpisodesDeleted(episodes)
             } catch (e: Throwable) {
-                view?.onEpisodesDeletedError(e)
+                logcat(LogPriority.ERROR, e)
             }
         }
     }
 
     private fun downloadNewEpisodes(episodes: List<Episode>) {
+        val anime = successState?.anime ?: return
         if (episodes.isEmpty() || !anime.shouldDownloadNewEpisodes(db, preferences)) return
-
-        downloadEpisodes(episodes)
-    }
-
-    /**
-     * Reverses the sorting and requests an UI update.
-     */
-    fun reverseSortOrder() {
-        anime.setEpisodeOrder(if (sortDescending()) Anime.EPISODE_SORT_ASC else Anime.EPISODE_SORT_DESC)
-        db.updateEpisodeFlags(anime).executeAsBlocking()
-        refreshEpisodes()
+        downloadEpisodes(
+            episodes.map { it.toDomainEpisode()!! },
+            preferences.useExternalDownloader(),
+        )
     }
 
     /**
@@ -669,13 +615,16 @@ class AnimePresenter(
      * @param state whether to display only unseen episodes or all episodes.
      */
     fun setUnseenFilter(state: State) {
-        anime.seenFilter = when (state) {
-            State.IGNORE -> Anime.SHOW_ALL
-            State.INCLUDE -> Anime.EPISODE_SHOW_UNSEEN
-            State.EXCLUDE -> Anime.EPISODE_SHOW_SEEN
+        val anime = successState?.anime ?: return
+
+        val flag = when (state) {
+            State.IGNORE -> DomainAnime.SHOW_ALL
+            State.INCLUDE -> DomainAnime.EPISODE_SHOW_UNSEEN
+            State.EXCLUDE -> DomainAnime.EPISODE_SHOW_SEEN
         }
-        db.updateEpisodeFlags(anime).executeAsBlocking()
-        refreshEpisodes()
+        presenterScope.launchIO {
+            setAnimeEpisodeFlags.awaitSetUnseenFilter(anime, flag)
+        }
     }
 
     /**
@@ -683,13 +632,17 @@ class AnimePresenter(
      * @param state whether to display only downloaded episodes or all episodes.
      */
     fun setDownloadedFilter(state: State) {
-        anime.downloadedFilter = when (state) {
-            State.IGNORE -> Anime.SHOW_ALL
-            State.INCLUDE -> Anime.EPISODE_SHOW_DOWNLOADED
-            State.EXCLUDE -> Anime.EPISODE_SHOW_NOT_DOWNLOADED
+        val anime = successState?.anime ?: return
+
+        val flag = when (state) {
+            State.IGNORE -> DomainAnime.SHOW_ALL
+            State.INCLUDE -> DomainAnime.EPISODE_SHOW_DOWNLOADED
+            State.EXCLUDE -> DomainAnime.EPISODE_SHOW_NOT_DOWNLOADED
         }
-        db.updateEpisodeFlags(anime).executeAsBlocking()
-        refreshEpisodes()
+
+        presenterScope.launchIO {
+            setAnimeEpisodeFlags.awaitSetDownloadedFilter(anime, flag)
+        }
     }
 
     /**
@@ -697,101 +650,66 @@ class AnimePresenter(
      * @param state whether to display only bookmarked episodes or all episodes.
      */
     fun setBookmarkedFilter(state: State) {
-        anime.bookmarkedFilter = when (state) {
-            State.IGNORE -> Anime.SHOW_ALL
-            State.INCLUDE -> Anime.EPISODE_SHOW_BOOKMARKED
-            State.EXCLUDE -> Anime.EPISODE_SHOW_NOT_BOOKMARKED
+        val anime = successState?.anime ?: return
+
+        val flag = when (state) {
+            State.IGNORE -> DomainAnime.SHOW_ALL
+            State.INCLUDE -> DomainAnime.EPISODE_SHOW_BOOKMARKED
+            State.EXCLUDE -> DomainAnime.EPISODE_SHOW_NOT_BOOKMARKED
         }
-        db.updateEpisodeFlags(anime).executeAsBlocking()
-        refreshEpisodes()
+
+        presenterScope.launchIO {
+            setAnimeEpisodeFlags.awaitSetBookmarkFilter(anime, flag)
+        }
     }
 
     /**
      * Sets the active display mode.
      * @param mode the mode to set.
      */
-    fun setDisplayMode(mode: Int) {
-        anime.displayMode = mode
-        db.updateEpisodeFlags(anime).executeAsBlocking()
-        refreshEpisodes()
+    fun setDisplayMode(mode: Long) {
+        val anime = successState?.anime ?: return
+
+        presenterScope.launchIO {
+            setAnimeEpisodeFlags.awaitSetDisplayMode(anime, mode)
+        }
     }
 
     /**
      * Sets the sorting method and requests an UI update.
      * @param sort the sorting mode.
      */
-    fun setSorting(sort: Int) {
-        anime.sorting = sort
-        db.updateEpisodeFlags(anime).executeAsBlocking()
-        refreshEpisodes()
-    }
+    fun setSorting(sort: Long) {
+        val anime = successState?.anime ?: return
 
-    /**
-     * Whether downloaded only mode is enabled.
-     */
-    private fun forceDownloaded(): Boolean {
-        return anime.favorite && preferences.downloadedOnly().get()
-    }
-
-    /**
-     * Whether the display only downloaded filter is enabled.
-     */
-    private fun onlyDownloaded(): State {
-        if (forceDownloaded()) {
-            return State.INCLUDE
+        presenterScope.launchIO {
+            setAnimeEpisodeFlags.awaitSetSortingModeOrFlipOrder(anime, sort)
         }
-        return when (anime.downloadedFilter) {
-            Anime.EPISODE_SHOW_DOWNLOADED -> State.INCLUDE
-            Anime.EPISODE_SHOW_NOT_DOWNLOADED -> State.EXCLUDE
-            else -> State.IGNORE
-        }
-    }
-
-    /**
-     * Whether the display only bookmarked filter is enabled.
-     */
-    private fun onlyBookmarked(): State {
-        return when (anime.bookmarkedFilter) {
-            Anime.EPISODE_SHOW_BOOKMARKED -> State.INCLUDE
-            Anime.EPISODE_SHOW_NOT_BOOKMARKED -> State.EXCLUDE
-            else -> State.IGNORE
-        }
-    }
-
-    /**
-     * Whether the display only unread filter is enabled.
-     */
-    private fun onlyUnseen(): State {
-        return when (anime.seenFilter) {
-            Anime.EPISODE_SHOW_UNSEEN -> State.INCLUDE
-            Anime.EPISODE_SHOW_SEEN -> State.EXCLUDE
-            else -> State.IGNORE
-        }
-    }
-
-    /**
-     * Whether the sorting method is descending or ascending.
-     */
-    fun sortDescending(): Boolean {
-        return anime.sortDescending()
     }
 
     // Episodes list - end
 
     // Track sheet - start
 
-    private fun fetchTrackers() {
-        trackSubscription?.let { remove(it) }
-        trackSubscription = db.getTracks(anime.id)
-            .asRxObservable()
-            .map { tracks ->
-                loggedServices.map { service ->
-                    TrackItem(tracks.find { it.sync_id == service.id }, service)
+    private fun observeTrackers() {
+        val anime = successState?.anime ?: return
+
+        presenterScope.launchIO {
+            getTracks.subscribe(anime.id)
+                .catch { logcat(LogPriority.ERROR, it) }
+                .map { tracks ->
+                    val dbTracks = tracks.map { it.toDbTrack() }
+                    loggedServices.map { service ->
+                        TrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service)
+                    }
                 }
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext { _trackList = it }
-            .subscribeLatestCache(AnimeController::onNextTrackers)
+                .collectLatest { trackItems ->
+                    _trackList = trackItems
+                    withContext(Dispatchers.Main) {
+                        view?.onNextTrackers(trackItems)
+                    }
+                }
+        }
     }
 
     fun refreshTrackers() {
@@ -800,18 +718,27 @@ class AnimePresenter(
             supervisorScope {
                 try {
                     trackList
-                        .filter { it.track != null }
                         .map {
                             async {
-                                val track = it.service.refresh(it.track!!)
-                                db.insertTrack(track).executeAsBlocking()
+                                val track = it.track ?: return@async null
 
-                                if (it.service is EnhancedTrackService) {
-                                    syncEpisodesWithTrackServiceTwoWay(db, allEpisodes, track, it.service)
+                                val updatedTrack = it.service.refresh(track)
+
+                                val domainTrack = updatedTrack.toDomainTrack() ?: return@async null
+                                insertTrack.await(domainTrack)
+
+                                (it.service as? EnhancedTrackService)?.let { _ ->
+                                    val allEpisodes = successState?.episodes
+                                        ?.map { it.episode } ?: emptyList()
+
+                                    syncEpisodesWithTrackServiceTwoWay
+                                        .await(allEpisodes, domainTrack, it.service)
                                 }
                             }
                         }
                         .awaitAll()
+
+                    withUIContext { view?.onTrackingRefreshDone() }
                 } catch (e: Throwable) {
                     withUIContext { view?.onTrackingRefreshError(e) }
                 }
@@ -832,16 +759,26 @@ class AnimePresenter(
     }
 
     fun registerTracking(item: AnimeTrack?, service: TrackService) {
+        val successState = successState ?: return
         if (item != null) {
-            item.anime_id = anime.id!!
+            item.anime_id = successState.anime.id
             launchIO {
                 try {
-                    val hasReadChapters = allEpisodes.any { it.seen }
-                    service.bind(item, hasReadChapters)
-                    db.insertTrack(item).executeAsBlocking()
+                    val allEpisodes = successState.episodes
+                        .map { it.episode.toDbEpisode() }
+                    val hasSeenEpisodes = allEpisodes.any { it.seen }
+                    service.bind(item, hasSeenEpisodes)
 
-                    if (service is EnhancedTrackService) {
-                        syncEpisodesWithTrackServiceTwoWay(db, allEpisodes, item, service)
+                    item.toDomainTrack(idRequired = false)?.let { track ->
+                        insertTrack.await(track)
+
+                        (service as? EnhancedTrackService)?.let { _ ->
+                            val episodes = successState.episodes
+                                .map { it.episode }
+
+                            syncEpisodesWithTrackServiceTwoWay
+                                .await(episodes, track, service)
+                        }
                     }
                 } catch (e: Throwable) {
                     withUIContext { view?.applicationContext?.toast(e.message) }
@@ -853,26 +790,35 @@ class AnimePresenter(
     }
 
     fun unregisterTracking(service: TrackService) {
-        db.deleteTrackForAnime(anime, service).executeAsBlocking()
+        val anime = successState?.anime ?: return
+
+        presenterScope.launchIO {
+            deleteTrack.await(anime.id, service.id.toLong())
+        }
     }
 
     private fun updateRemote(track: AnimeTrack, service: TrackService) {
         launchIO {
             try {
                 service.update(track)
-                db.insertTrack(track).executeAsBlocking()
+
+                track.toDomainTrack(idRequired = false)?.let {
+                    insertTrack.await(it)
+                }
+
+                withUIContext { view?.onTrackingRefreshDone() }
             } catch (e: Throwable) {
                 withUIContext { view?.onTrackingRefreshError(e) }
 
                 // Restart on error to set old values
-                fetchTrackers()
+                observeTrackers()
             }
         }
     }
 
     fun setTrackerStatus(item: TrackItem, index: Int) {
         val track = item.track!!
-        track.status = item.service.getStatusListAnime()[index]
+        track.status = item.service.getStatusList()[index]
         if (track.status == item.service.getCompletionStatus() && track.total_episodes != 0) {
             track.last_episode_seen = track.total_episodes.toFloat()
         }
@@ -910,4 +856,72 @@ class AnimePresenter(
     }
 
     // Track sheet - end
+}
+
+sealed class AnimeScreenState {
+    @Immutable
+    object Loading : AnimeScreenState()
+
+    @Immutable
+    data class Success(
+        val anime: DomainAnime,
+        val source: AnimeSource,
+        val dateRelativeTime: Int,
+        val dateFormat: DateFormat,
+        val isFromSource: Boolean,
+        val episodes: List<EpisodeItem>,
+        val trackingAvailable: Boolean = false,
+        val trackingCount: Int = 0,
+        val isRefreshingInfo: Boolean = false,
+        val isRefreshingEpisode: Boolean = false,
+        val isIncognitoMode: Boolean = false,
+        val isDownloadedOnlyMode: Boolean = false,
+    ) : AnimeScreenState() {
+
+        val processedEpisodes: Sequence<EpisodeItem>
+            get() = episodes.applyFilters(anime)
+
+        /**
+         * Applies the view filters to the list of episodes obtained from the database.
+         * @return an observable of the list of episodes filtered and sorted.
+         */
+        private fun List<EpisodeItem>.applyFilters(anime: DomainAnime): Sequence<EpisodeItem> {
+            val isLocalAnime = anime.isLocal()
+            val unseenFilter = anime.unseenFilter
+            val downloadedFilter = anime.downloadedFilter
+            val bookmarkedFilter = anime.bookmarkedFilter
+            return asSequence()
+                .filter { (episode) ->
+                    when (unseenFilter) {
+                        TriStateFilter.DISABLED -> true
+                        TriStateFilter.ENABLED_IS -> !episode.seen
+                        TriStateFilter.ENABLED_NOT -> episode.seen
+                    }
+                }
+                .filter { (episode) ->
+                    when (bookmarkedFilter) {
+                        TriStateFilter.DISABLED -> true
+                        TriStateFilter.ENABLED_IS -> episode.bookmark
+                        TriStateFilter.ENABLED_NOT -> !episode.bookmark
+                    }
+                }
+                .filter {
+                    when (downloadedFilter) {
+                        TriStateFilter.DISABLED -> true
+                        TriStateFilter.ENABLED_IS -> it.isDownloaded || isLocalAnime
+                        TriStateFilter.ENABLED_NOT -> !it.isDownloaded && !isLocalAnime
+                    }
+                }
+                .sortedWith { (episode1), (episode2) -> getEpisodeSort(anime).invoke(episode1, episode2) }
+        }
+    }
+}
+
+@Immutable
+data class EpisodeItem(
+    val episode: DomainEpisode,
+    val downloadState: AnimeDownload.State,
+    val downloadProgress: Int,
+) {
+    val isDownloaded = downloadState == AnimeDownload.State.DOWNLOADED
 }

@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.util.chapter
 
+import eu.kanade.domain.manga.interactor.SetMangaChapterFlags
 import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -34,12 +35,24 @@ object ChapterSettingsHelper {
         db.updateChapterFlags(manga).executeAsBlocking()
     }
 
+    suspend fun applySettingDefaults(mangaId: Long, setMangaChapterFlags: SetMangaChapterFlags) {
+        setMangaChapterFlags.awaitSetAllFlags(
+            mangaId = mangaId,
+            unreadFilter = prefs.filterChapterByRead().toLong(),
+            downloadedFilter = prefs.filterChapterByDownloaded().toLong(),
+            bookmarkedFilter = prefs.filterChapterByBookmarked().toLong(),
+            sortingMode = prefs.sortChapterBySourceOrNumber().toLong(),
+            sortingDirection = prefs.sortChapterByAscendingOrDescending().toLong(),
+            displayMode = prefs.displayChapterByNameOrNumber().toLong(),
+        )
+    }
+
     /**
      * Updates all mangas in library with global Chapter Settings.
      */
     fun updateAllMangasWithGlobalDefaults() {
         launchIO {
-            val updatedMangas = db.getFavoriteMangas(sortByTitle = false)
+            val updatedMangas = db.getFavoriteMangas()
                 .executeAsBlocking()
                 .map { manga ->
                     with(manga) {

@@ -47,6 +47,7 @@ import eu.kanade.tachiyomi.ui.animelib.AnimelibController
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.FabController
+import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
 import eu.kanade.tachiyomi.ui.base.controller.NoAppBarElevationController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.TabbedController
@@ -466,7 +467,7 @@ class MainActivity : BaseActivity() {
             SHORTCUT_MANGA -> {
                 val extras = intent.extras ?: return false
                 val fgController = router.backstack.lastOrNull()?.controller as? MangaController
-                if (fgController?.manga?.id != extras.getLong(MangaController.MANGA_EXTRA)) {
+                if (fgController?.mangaId != extras.getLong(MangaController.MANGA_EXTRA)) {
                     router.popToRoot()
                     setSelectedNavItem(R.id.nav_library)
                     router.pushController(RouterTransaction.with(MangaController(extras)))
@@ -475,7 +476,7 @@ class MainActivity : BaseActivity() {
             SHORTCUT_ANIME -> {
                 val extras = intent.extras ?: return false
                 val fgController = router.backstack.lastOrNull()?.controller as? AnimeController
-                if (fgController?.anime?.id != extras.getLong(AnimeController.ANIME_EXTRA)) {
+                if (fgController?.animeId != extras.getLong(AnimeController.ANIME_EXTRA)) {
                     router.popToRoot()
                     setSelectedNavItem(R.id.nav_animelib)
                     router.pushController(RouterTransaction.with(AnimeController(extras)))
@@ -697,6 +698,10 @@ class MainActivity : BaseActivity() {
             binding.fabLayout.rootFab.hide()
         }
 
+        val isFullComposeController = internalTo is FullComposeController<*>
+        binding.appbar.isVisible = !isFullComposeController
+        binding.controllerContainer.enableScrollingBehavior(!isFullComposeController)
+
         if (!isTablet()) {
             // Save lift state
             if (isPush) {
@@ -719,11 +724,6 @@ class MainActivity : BaseActivity() {
             }
 
             binding.root.isLiftAppBarOnScroll = internalTo !is NoAppBarElevationController
-
-            binding.appbar.isTransparentWhenNotLifted = internalTo is MangaController ||
-                internalTo is AnimeController
-            binding.controllerContainer.overlapHeader = internalTo is MangaController ||
-                internalTo is AnimeController
         }
     }
 

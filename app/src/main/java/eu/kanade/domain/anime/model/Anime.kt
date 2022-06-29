@@ -1,5 +1,6 @@
 package eu.kanade.domain.anime.model
 
+import eu.kanade.data.listOfStringsAdapter
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -94,7 +95,7 @@ data class Anime(
     }
 
     fun sortDescending(): Boolean {
-        return episodeFlags and EPISODE_SORT_DIR_MASK == EPISODE_SORTING_DESC
+        return episodeFlags and EPISODE_SORT_DIR_MASK == EPISODE_SORT_DESC
     }
 
     companion object {
@@ -121,7 +122,6 @@ data class Anime(
         const val EPISODE_SORTING_NUMBER = 0x00000100L
         const val EPISODE_SORTING_UPLOAD_DATE = 0x00000200L
         const val EPISODE_SORTING_MASK = 0x00000300L
-        const val EPISODE_SORTING_DESC = 0x00000000L
 
         const val EPISODE_DISPLAY_NAME = 0x00000000L
         const val EPISODE_DISPLAY_NUMBER = 0x00100000L
@@ -144,7 +144,7 @@ fun TriStateFilter.toTriStateGroupState(): ExtendedNavigationView.Item.TriStateG
 }
 
 // TODO: Remove when all deps are migrated
-fun Anime.toDbAnime(): DbAnime = DbAnime.create(url, title, source).also {
+fun Anime.toDbAnime(): DbAnime = DbAnime.create(source).also {
     it.id = id
     it.favorite = favorite
     it.last_update = lastUpdate
@@ -152,6 +152,15 @@ fun Anime.toDbAnime(): DbAnime = DbAnime.create(url, title, source).also {
     it.viewer_flags = viewerFlags.toInt()
     it.episode_flags = episodeFlags.toInt()
     it.cover_last_modified = coverLastModified
+    it.url = url
+    it.title = title
+    it.artist = artist
+    it.author = author
+    it.description = description
+    it.genre = genre?.let(listOfStringsAdapter::encode)
+    it.status = status.toInt()
+    it.thumbnail_url = thumbnailUrl
+    it.initialized = initialized
 }
 
 fun Anime.toAnimeInfo(): AnimeInfo = AnimeInfo(

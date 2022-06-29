@@ -7,10 +7,11 @@ import android.view.View
 import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.Router
 import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.anime.model.toTriStateGroupState
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.toDomainAnime
 import eu.kanade.tachiyomi.ui.anime.AnimePresenter
+import eu.kanade.tachiyomi.ui.anime.AnimeScreenState
 import eu.kanade.tachiyomi.util.view.popupMenu
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.State
@@ -18,6 +19,9 @@ import eu.kanade.tachiyomi.widget.sheet.TabbedBottomSheetDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.launch
 
 class EpisodesSettingsSheet(
     private val router: Router,
@@ -42,8 +46,14 @@ class EpisodesSettingsSheet(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         scope = MainScope()
-        // TODO: Listen to changes
-        updateAnime()
+        scope.launch {
+            presenter.state
+                .filterIsInstance<AnimeScreenState.Success>()
+                .collectLatest {
+                    anime = it.anime
+                    getTabViews().forEach { settings -> (settings as Settings).updateView() }
+                }
+        }
     }
 
     override fun onDetachedFromWindow() {
@@ -63,17 +73,13 @@ class EpisodesSettingsSheet(
         R.string.action_display,
     )
 
-    private fun updateAnime() {
-        anime = presenter.anime.toDomainAnime()
-    }
-
     private fun showPopupMenu(view: View) {
         view.popupMenu(
             menuRes = R.menu.default_chapter_filter,
             onMenuItemClick = {
                 when (itemId) {
                     R.id.set_as_default -> {
-                        SetEpisodeSettingsDialog(presenter.anime).showDialog(router)
+                        SetEpisodeSettingsDialog(presenter.anime!!.toDbAnime()).showDialog(router)
                     }
                 }
             },
@@ -144,10 +150,6 @@ class EpisodesSettingsSheet(
                     bookmarked -> presenter.setBookmarkedFilter(newState)
                     else -> {}
                 }
-
-                // TODO: Remove
-                updateAnime()
-                updateView()
             }
         }
     }
@@ -202,16 +204,11 @@ class EpisodesSettingsSheet(
 
             override fun onItemClicked(item: Item) {
                 when (item) {
-                    source -> presenter.setSorting(Anime.EPISODE_SORTING_SOURCE.toInt())
-                    episodeNum -> presenter.setSorting(Anime.EPISODE_SORTING_NUMBER.toInt())
-                    uploadDate -> presenter.setSorting(Anime.EPISODE_SORTING_UPLOAD_DATE.toInt())
+                    source -> presenter.setSorting(Anime.EPISODE_SORTING_SOURCE)
+                    episodeNum -> presenter.setSorting(Anime.EPISODE_SORTING_NUMBER)
+                    uploadDate -> presenter.setSorting(Anime.EPISODE_SORTING_UPLOAD_DATE)
                     else -> throw Exception("Unknown sorting")
                 }
-
-                // TODO: Remove
-                presenter.reverseSortOrder()
-                updateAnime()
-                updateView()
             }
         }
     }
@@ -257,14 +254,10 @@ class EpisodesSettingsSheet(
                 if (item.checked) return
 
                 when (item) {
-                    displayTitle -> presenter.setDisplayMode(Anime.EPISODE_DISPLAY_NAME.toInt())
-                    displayEpisodeNum -> presenter.setDisplayMode(Anime.EPISODE_DISPLAY_NUMBER.toInt())
+                    displayTitle -> presenter.setDisplayMode(Anime.EPISODE_DISPLAY_NAME)
+                    displayEpisodeNum -> presenter.setDisplayMode(Anime.EPISODE_DISPLAY_NUMBER)
                     else -> throw NotImplementedError("Unknown display mode")
                 }
-
-                // TODO: Remove
-                updateAnime()
-                updateView()
             }
         }
     }

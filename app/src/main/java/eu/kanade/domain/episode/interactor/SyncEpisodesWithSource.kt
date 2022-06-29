@@ -25,6 +25,7 @@ class SyncEpisodesWithSource(
     private val episodeRepository: EpisodeRepository = Injekt.get(),
     private val shouldUpdateDbEpisode: ShouldUpdateDbEpisode = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
+    private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
 ) {
 
@@ -167,7 +168,7 @@ class SyncEpisodesWithSource(
 
         if (toChange.isNotEmpty()) {
             val episodeUpdates = toChange.map { it.toEpisodeUpdate() }
-            episodeRepository.updateAll(episodeUpdates)
+            updateEpisode.awaitAll(episodeUpdates)
         }
 
         // Set this anime as updated since episodes were changed
