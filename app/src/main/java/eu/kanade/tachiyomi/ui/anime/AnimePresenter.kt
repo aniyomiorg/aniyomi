@@ -818,7 +818,7 @@ class AnimePresenter(
 
     fun setTrackerStatus(item: TrackItem, index: Int) {
         val track = item.track!!
-        track.status = item.service.getStatusList()[index]
+        track.status = item.service.getStatusListAnime()[index]
         if (track.status == item.service.getCompletionStatus() && track.total_episodes != 0) {
             track.last_episode_seen = track.total_episodes.toFloat()
         }
