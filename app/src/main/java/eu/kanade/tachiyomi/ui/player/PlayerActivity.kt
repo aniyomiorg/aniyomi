@@ -1095,7 +1095,7 @@ class PlayerActivity :
 
     override fun onBackPressed() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (preferences.pipOnExit()) startPiP()
+            if (player.paused == false && preferences.pipOnExit()) startPiP()
             else {
                 finishAndRemoveTask()
                 super.onBackPressed()
