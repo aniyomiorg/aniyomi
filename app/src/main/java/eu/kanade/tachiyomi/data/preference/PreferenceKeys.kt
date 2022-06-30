@@ -17,6 +17,8 @@ object PreferenceKeys {
 
     const val pipEpisodeToasts = "pref_pip_episode_toasts"
 
+    const val pipOnExit = "pref_pip_on_exit"
+
     const val mpvConf = "pref_mpv_conf"
 
     const val defaultOrientationType = "pref_default_orientation_type_key"
@@ -31,7 +33,7 @@ object PreferenceKeys {
 
     const val playerSpeed = "pref_player_speed"
 
-    const val playerFastSeek = "pref_player_fast_seek"
+    const val playerSmoothSeek = "pref_player_smooth_seek"
 
     const val playerViewMode = "pref_player_view_mode"
 

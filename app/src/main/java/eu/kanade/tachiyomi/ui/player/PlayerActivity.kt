@@ -30,6 +30,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -106,6 +107,8 @@ class PlayerActivity :
 
     private var isInPipMode: Boolean = false
     private var isPipStarted: Boolean = false
+
+    internal var isDoubleTapSeeking: Boolean = false
 
     private var mReceiver: BroadcastReceiver? = null
 
@@ -201,38 +204,34 @@ class PlayerActivity :
         }
     }
 
-    private var initialSeek = -1
+    internal var initialSeek = -1
 
     private lateinit var mDetector: GestureDetectorCompat
 
     private val animationHandler = Handler(Looper.getMainLooper())
 
     // Fade out seek text
-    private val seekTextRunnable = Runnable {
-        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
-            binding.seekView.startAnimation(fadeAnimation)
-            binding.seekView.visibility = View.GONE
-            diffSeekMain = 0
-        }
+    internal val seekTextRunnable = Runnable {
+        binding.seekView.visibility = View.GONE
     }
 
     // Fade out Volume Bar
-    private val volumeViewRunnable = Runnable {
+    internal val volumeViewRunnable = Runnable {
         AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
-            playerControls.binding.volumeView.startAnimation(fadeAnimation)
+            if (!playerControls.shouldHideUiForSeek) playerControls.binding.volumeView.startAnimation(fadeAnimation)
             playerControls.binding.volumeView.visibility = View.GONE
         }
     }
 
     // Fade out Brightness Bar
-    private val brightnessViewRunnable = Runnable {
+    internal val brightnessViewRunnable = Runnable {
         AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
-            playerControls.binding.brightnessView.startAnimation(fadeAnimation)
+            if (!playerControls.shouldHideUiForSeek) playerControls.binding.brightnessView.startAnimation(fadeAnimation)
             playerControls.binding.brightnessView.visibility = View.GONE
         }
     }
 
-    private fun showGestureView(type: String) {
+    internal fun showGestureView(type: String) {
         val callback: Runnable
         val itemView: LinearLayout
         val delay: Long
@@ -240,7 +239,7 @@ class PlayerActivity :
             "seek" -> {
                 callback = seekTextRunnable
                 itemView = binding.seekView
-                delay = 1000L
+                delay = 0L
             }
             "volume" -> {
                 callback = volumeViewRunnable
@@ -292,7 +291,6 @@ class PlayerActivity :
 
         binding = PlayerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationType()
 
         window.statusBarColor = 70000000
@@ -324,11 +322,14 @@ class PlayerActivity :
         }
 
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        fineVolume = audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
+        fineVolume = if (preferences.playerVolumeValue().get() == -1.0F) audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()else preferences.playerVolumeValue().get()
+        verticalScrollRight(0F)
         maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
         playerControls.binding.volumeBar.max = maxVolume
+        playerControls.binding.volumeBar.secondaryProgress = maxVolume
 
-        brightness = Utils.getScreenBrightness(this) ?: 0.5F
+        brightness = if (preferences.playerBrightnessValue().get() == -1.0F) Utils.getScreenBrightness(this) ?: 0.5F else preferences.playerBrightnessValue().get()
+        verticalScrollLeft(0F)
 
         volumeControlStream = AudioManager.STREAM_MUSIC
 
@@ -653,8 +654,8 @@ class PlayerActivity :
 
         if (!playerControls.binding.controlsView.isVisible) {
             when {
-                player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_80dp) }
-                !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_80dp) }
+                player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_72dp) }
+                !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_72dp) }
             }
 
             AnimationUtils.loadAnimation(this, R.anim.fade_in_medium).also { fadeAnimation ->
@@ -666,23 +667,71 @@ class PlayerActivity :
         } else binding.playPauseView.visibility = View.GONE
     }
 
+    private lateinit var doubleTapBg: ImageView
+
+    private val doubleTapSeekRunnable = Runnable {
+        isDoubleTapSeeking = false
+        binding.secondsView.isVisible = false
+        doubleTapBg.isVisible = false
+        binding.secondsView.seconds = 0
+        binding.secondsView.stop()
+    }
+
     fun doubleTapSeek(time: Int, event: MotionEvent? = null) {
-        val v = if (time < 0) binding.rewBg else binding.ffwdBg
+        if (!isDoubleTapSeeking) doubleTapBg = if (time < 0) binding.rewBg else binding.ffwdBg
+        val v = if (time < 0) binding.rewTap else binding.ffwdTap
         val w = if (time < 0) width * 0.2F else width * 0.8F
         val x = (event?.x?.toInt() ?: w.toInt()) - v.x.toInt()
         val y = (event?.y?.toInt() ?: (height / 2)) - v.y.toInt()
+
+        isDoubleTapSeeking = true
+        binding.secondsView.isVisible = true
+        animationHandler.removeCallbacks(doubleTapSeekRunnable)
+        animationHandler.postDelayed(doubleTapSeekRunnable, 750L)
+
+        if (time < 0) {
+            binding.secondsView.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                rightToRight = ConstraintLayout.LayoutParams.UNSET
+                leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
+            }
+            binding.secondsView.isForward = false
+
+            if (doubleTapBg != binding.rewBg) {
+                doubleTapBg.isVisible = false
+                binding.secondsView.seconds = 0
+                doubleTapBg = binding.rewBg
+            }
+            doubleTapBg.isVisible = true
+
+            binding.secondsView.seconds -= time
+        } else {
+            binding.secondsView.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+                leftToLeft = ConstraintLayout.LayoutParams.UNSET
+            }
+            binding.secondsView.isForward = true
+
+            if (doubleTapBg != binding.ffwdBg) {
+                doubleTapBg.isVisible = false
+                binding.secondsView.seconds = 0
+                doubleTapBg = binding.ffwdBg
+            }
+            doubleTapBg.isVisible = true
+
+            binding.secondsView.seconds += time
+        }
+        playerControls.hideUiForSeek()
+        binding.secondsView.start()
         ViewAnimationUtils.createCircularReveal(v, x, y, 0f, kotlin.math.max(v.height, v.width).toFloat()).setDuration(500).start()
 
-        ObjectAnimator.ofFloat(v, "alpha", 0f, 0.2f).setDuration(500).start()
-        ObjectAnimator.ofFloat(v, "alpha", 0.2f, 0.2f, 0f).setDuration(1000).start()
-        val newPos = (player.timePos ?: 0) + time // only for display
-        MPVLib.command(arrayOf("seek", time.toString(), "relative+exact"))
+        ObjectAnimator.ofFloat(v, "alpha", 0f, 0.15f).setDuration(500).start()
+        ObjectAnimator.ofFloat(v, "alpha", 0.15f, 0.15f, 0f).setDuration(1000).start()
 
-        editSeekText(newPos, time)
+        MPVLib.command(arrayOf("seek", time.toString(), "relative+exact"))
     }
 
     fun verticalScrollLeft(diff: Float) {
-        brightness = (brightness + diff).coerceIn(-0.75F, 1F)
+        if (diff != 0F) brightness = (brightness + diff).coerceIn(-0.75F, 1F)
         window.attributes = window.attributes.apply {
             // value of 0 and 0.01 is broken somehow
             screenBrightness = brightness.coerceAtLeast(0.02F)
@@ -697,20 +746,21 @@ class PlayerActivity :
         }
         val finalBrightness = (brightness * 100).roundToInt()
         playerControls.binding.brightnessText.text = finalBrightness.toString()
-        playerControls.binding.brightnessBar.progress = finalBrightness
-        playerControls.binding.brightnessBar.secondaryProgress = abs(finalBrightness)
+        playerControls.binding.brightnessBar.progress = abs(finalBrightness)
         if (finalBrightness >= 0) {
             playerControls.binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_24dp)
             playerControls.binding.brightnessBar.max = 100
+            playerControls.binding.brightnessBar.secondaryProgress = 100
         } else {
             playerControls.binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_24dp)
             playerControls.binding.brightnessBar.max = 75
+            playerControls.binding.brightnessBar.secondaryProgress = 75
         }
-        showGestureView("brightness")
+        if (diff != 0F) showGestureView("brightness")
     }
 
     fun verticalScrollRight(diff: Float) {
-        fineVolume = (fineVolume + (diff * maxVolume)).coerceIn(0F, maxVolume.toFloat())
+        if (diff != 0F) fineVolume = (fineVolume + (diff * maxVolume)).coerceIn(0F, maxVolume.toFloat())
         val newVolume = fineVolume.toInt()
         // val newVolumePercent = 100 * newVolume / maxVolume
         audioManager!!.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
@@ -719,7 +769,7 @@ class PlayerActivity :
         playerControls.binding.volumeBar.progress = newVolume
         if (newVolume == 0) playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_off_24dp)
         else playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_on_24dp)
-        showGestureView("volume")
+        if (diff != 0F) showGestureView("volume")
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -766,7 +816,6 @@ class PlayerActivity :
     fun initSeek() {
         initialSeek = player.timePos ?: -1
     }
-
     fun horizontalScroll(diff: Float) {
         // disable seeking when timePos is not available
         val duration = player.duration ?: 0
@@ -776,25 +825,11 @@ class PlayerActivity :
         val newPos = (initialSeek + diff.toInt()).coerceIn(0, duration)
         val newDiff = newPos - initialSeek
 
-        val seekFlags = if (preferences.getPlayerFastSeek()) "absolute+keyframes" else "absolute"
-
-        MPVLib.command(arrayOf("seek", newPos.toString(), seekFlags))
+        playerControls.hideUiForSeek()
+        if (preferences.getPlayerSmoothSeek()) player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
         playerControls.updatePlaybackPos(newPos)
 
-        editSeekText(newPos, newDiff, true)
-    }
-
-    private var diffSeekMain = 0
-    private var diffSeekHorizontal = 0
-    private fun editSeekText(newPos: Int, diff: Int, isHorizontalSeek: Boolean = false) {
-        if (isHorizontalSeek) {
-            diffSeekMain += diff - diffSeekHorizontal
-            diffSeekHorizontal = diff
-        } else {
-            diffSeekMain += diff
-            diffSeekHorizontal = 0
-        }
-        val diffText = Utils.prettyTime(diffSeekMain, true)
+        val diffText = Utils.prettyTime(newDiff, true)
         binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
         showGestureView("seek")
     }
@@ -827,38 +862,45 @@ class PlayerActivity :
     private var currentQuality = 0
 
     @Suppress("UNUSED_PARAMETER")
-    fun openQuality(view: View) {
+    fun pickQuality(view: View) {
         if (currentVideoList?.isNotEmpty() != true) return
-        val qualityAlert = HideBarsMaterialAlertDialogBuilder(this)
-
-        qualityAlert.setTitle(R.string.playback_quality_dialog_title)
+        val restore = playerControls.pauseForDialog()
 
         var requestedQuality = 0
         val qualities = currentVideoList!!.map { it.quality }.toTypedArray()
-        qualityAlert.setSingleChoiceItems(
-            qualities,
-            currentQuality,
-        ) { qualityDialog, selectedQuality ->
-            if (selectedQuality > qualities.lastIndex) {
+
+        with(HideBarsMaterialAlertDialogBuilder(this)) {
+            setTitle(R.string.playback_quality_dialog_title)
+
+            setSingleChoiceItems(
+                qualities,
+                currentQuality,
+            ) { qualityDialog, selectedQuality ->
+                if (selectedQuality > qualities.lastIndex) {
+                    qualityDialog.cancel()
+                } else {
+                    requestedQuality = selectedQuality
+                }
+            }
+
+            setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
+                if (requestedQuality != currentQuality) {
+                    currentQuality = requestedQuality
+                    changeQuality(requestedQuality)
+                }
+                qualityDialog.dismiss()
+                restore()
+            }
+
+            setNegativeButton(android.R.string.cancel) { qualityDialog, _ ->
                 qualityDialog.cancel()
-            } else {
-                requestedQuality = selectedQuality
+                restore()
             }
-        }
 
-        qualityAlert.setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
-            if (requestedQuality != currentQuality) {
-                currentQuality = requestedQuality
-                changeQuality(requestedQuality)
-            }
-            qualityDialog.dismiss()
+            setOnDismissListener { restore() }
+            create()
+            show()
         }
-
-        qualityAlert.setNegativeButton(android.R.string.cancel) { qualityDialog, _ ->
-            qualityDialog.cancel()
-        }
-
-        qualityAlert.show()
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -1026,7 +1068,7 @@ class PlayerActivity :
 
     private fun updatePlaybackStatus(paused: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) updatePictureInPictureActions(!paused)
-        val r = if (paused) R.drawable.ic_play_arrow_80dp else R.drawable.ic_pause_80dp
+        val r = if (paused) R.drawable.ic_play_arrow_72dp else R.drawable.ic_pause_72dp
         playerControls.binding.playBtn.setImageResource(r)
 
         if (paused) {
@@ -1037,6 +1079,8 @@ class PlayerActivity :
     }
 
     override fun onDestroy() {
+        preferences.playerVolumeValue().set(fineVolume)
+        preferences.playerBrightnessValue().set(brightness)
         presenter.deletePendingEpisodes()
         MPVLib.removeLogObserver(this)
         if (!playerIsDestroyed) {
@@ -1049,8 +1093,18 @@ class PlayerActivity :
     }
 
     override fun onBackPressed() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) finishAndRemoveTask()
-        super.onBackPressed()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (preferences.pipOnExit()) startPiP()
+            else {
+                finishAndRemoveTask()
+                super.onBackPressed()
+            }
+        }
+    }
+
+    override fun onUserLeaveHint() {
+        if (player.paused == false && preferences.pipOnExit()) startPiP()
+        super.onUserLeaveHint()
     }
 
     override fun onStop() {
@@ -1120,8 +1174,9 @@ class PlayerActivity :
         }
     }
 
-    @Suppress("DEPRECATION", "UNUSED_PARAMETER")
-    fun startPiP(view: View) {
+    @Suppress("DEPRECATION")
+    fun startPiP() {
+        if (isInPipMode) return
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             isPipStarted = true
             playerControls.hideControls(true)

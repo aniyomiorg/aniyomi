@@ -23,26 +23,53 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/rew_bg"
+            android:id="@+id/rew_tap"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="-100dp"
             android:layout_marginBottom="-100dp"
             android:alpha="0"
-            android:contentDescription="@string/fab_transformation_scrim_behavior"
             android:src="@drawable/ic_circle_right_200dp"
             app:tint="?attr/colorAccent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/mid_bg"/>
+
+        <ImageView
+            android:id="@+id/rew_bg"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="-100dp"
+            android:layout_marginBottom="-100dp"
+            android:alpha=".15"
+            android:src="@drawable/ic_circle_right_200dp"
+            android:visibility="gone"
+            app:tint="?attr/colorAccent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/mid_bg"/>
+
 
         <View
             android:id="@+id/mid_bg"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            app:layout_constraintLeft_toLeftOf="@id/rew_bg"
-            app:layout_constraintRight_toRightOf="@id/ffwd_bg" />
+            app:layout_constraintLeft_toLeftOf="@id/rew_tap"
+            app:layout_constraintRight_toRightOf="@id/ffwd_tap" />
+
+        <ImageView
+            android:id="@+id/ffwd_tap"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="-100dp"
+            android:layout_marginBottom="-100dp"
+            android:alpha="0"
+            android:src="@drawable/ic_circle_200dp"
+            app:tint="?attr/colorAccent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/mid_bg" />
 
         <ImageView
             android:id="@+id/ffwd_bg"
@@ -51,9 +78,9 @@
             android:layout_gravity="center_vertical"
             android:layout_marginTop="-100dp"
             android:layout_marginBottom="-100dp"
-            android:alpha="0"
-            android:contentDescription="@string/fab_transformation_scrim_behavior"
+            android:alpha=".15"
             android:src="@drawable/ic_circle_200dp"
+            android:visibility="gone"
             app:tint="?attr/colorAccent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toRightOf="@id/mid_bg" />
@@ -92,16 +119,16 @@
 
         </LinearLayout>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/playPauseView"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:layout_centerInParent="true"
             android:contentDescription="Play/Pause"
-            android:background="#70000000"
+            android:background="@drawable/ic_play_pause_bg"
             android:visibility="gone"
             app:tint="?attr/colorOnPrimarySurface"
-            tools:src="@drawable/ic_play_arrow_80dp"
+            tools:src="@drawable/ic_play_arrow_72dp"
             tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -130,6 +157,19 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
+
+        <eu.kanade.tachiyomi.ui.player.DoubleTapSecondsView
+            android:id="@+id/seconds_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -34,7 +34,7 @@ class HistoryController : ComposeController<HistoryPresenter>(), RootController 
             nestedScrollInterop = nestedScrollInterop,
             presenter = presenter,
             onClickCover = { history ->
-                router.pushController(MangaController(history.mangaId))
+                parentController!!.router.pushController(MangaController(history.mangaId))
             },
             onClickResume = { history ->
                 presenter.getNextChapterForManga(history.mangaId, history.chapterId)

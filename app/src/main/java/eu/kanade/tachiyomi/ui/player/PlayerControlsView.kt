@@ -33,24 +33,94 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     val activity: PlayerActivity = context.getActivity()!!
 
     private var userIsOperatingSeekbar = false
-
+    internal var shouldHideUiForSeek = false
     private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
             if (!fromUser) {
                 return
             }
+            hideUiForSeek()
             activity.player.timePos = progress
             updatePlaybackPos(progress)
+
+            val duration = activity.player.duration ?: 0
+            if (duration == 0 || activity.initialSeek < 0) {
+                return
+            }
+            val newDiff = activity.player.timePos!! - activity.initialSeek
+
+            val diffText = Utils.prettyTime(newDiff, true)
+            activity.binding.seekText.text = activity.getString(R.string.ui_seek_distance, Utils.prettyTime(activity.player.timePos!!), diffText)
+            activity.showGestureView("seek")
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar) {
             userIsOperatingSeekbar = true
+            activity.initSeek()
         }
 
         override fun onStopTrackingTouch(seekBar: SeekBar) {
             userIsOperatingSeekbar = false
+            animationHandler.removeCallbacks(hideUiForSeekRunnable)
+            animationHandler.postDelayed(hideUiForSeekRunnable, 500L)
             animationHandler.postDelayed(controlsViewRunnable, 3500L)
         }
+    }
+
+    private var showControls = false
+
+    private val nonSeekViewRunnable = Runnable {
+        binding.topControlsGroup.isVisible = true
+        binding.middleControlsGroup.isVisible = true
+        binding.bottomControlsGroup.isVisible = true
+    }
+
+    private val hideUiForSeekRunnable = Runnable {
+        shouldHideUiForSeek = false
+        activity.player.paused = false
+        if (showControls) {
+            AnimationUtils.loadAnimation(activity, R.anim.fade_in_medium).also { fadeAnimation ->
+                binding.topControlsGroup.startAnimation(fadeAnimation)
+                binding.topControlsGroup.isVisible = true
+
+                binding.middleControlsGroup.startAnimation(fadeAnimation)
+                binding.middleControlsGroup.isVisible = true
+
+                binding.bottomControlsGroup.startAnimation(fadeAnimation)
+                binding.bottomControlsGroup.isVisible = true
+            }
+        } else {
+            animationHandler.removeCallbacks(controlsViewRunnable)
+            animationHandler.postDelayed(controlsViewRunnable, 500L)
+            animationHandler.removeCallbacks(nonSeekViewRunnable)
+            animationHandler.postDelayed(nonSeekViewRunnable, 700L)
+        }
+    }
+
+    internal fun hideUiForSeek() {
+        animationHandler.removeCallbacks(controlsViewRunnable)
+        animationHandler.removeCallbacks(hideUiForSeekRunnable)
+
+        if (!(binding.topControlsGroup.visibility == INVISIBLE && binding.middleControlsGroup.visibility == INVISIBLE && binding.bottomControlsGroup.visibility == INVISIBLE)) {
+            showControls = binding.controlsView.isVisible
+            binding.topControlsGroup.visibility = INVISIBLE
+            binding.middleControlsGroup.visibility = INVISIBLE
+            binding.bottomControlsGroup.visibility = INVISIBLE
+            activity.player.paused = true
+            animationHandler.removeCallbacks(activity.volumeViewRunnable)
+            animationHandler.removeCallbacks(activity.brightnessViewRunnable)
+            animationHandler.removeCallbacks(activity.seekTextRunnable)
+            binding.volumeView.isVisible = false
+            binding.brightnessView.isVisible = false
+            activity.binding.seekView.isVisible = false
+            binding.seekBarGroup.isVisible = true
+            binding.controlsView.isVisible = true
+            shouldHideUiForSeek = true
+        }
+
+        val delay = if (activity.isDoubleTapSeeking) 1000L else 500L
+
+        animationHandler.postDelayed(hideUiForSeekRunnable, delay)
     }
 
     private val preferences: PreferencesHelper by injectLazy()
@@ -84,6 +154,10 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.nextBtn.setOnClickListener { activity.switchEpisode(false) }
         binding.prevBtn.setOnClickListener { activity.switchEpisode(true) }
+
+        binding.pipBtn.setOnClickListener { activity.startPiP() }
+
+        binding.pipBtn.isVisible = !preferences.pipOnExit()
 
         binding.playbackPositionBtn.setOnClickListener {
             preferences.invertedPlaybackTxt().set(!preferences.invertedPlaybackTxt().get())
@@ -149,10 +223,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             binding.playbackPositionTxt.text = "-${ Utils.prettyTime(activity.player.duration!! - position) }"
         } else binding.playbackPositionTxt.text = Utils.prettyTime(position)
 
-        if (!userIsOperatingSeekbar) {
-            binding.playbackSeekbar.progress = position
-        }
-
+        binding.playbackSeekbar.progress = position
         updateDecoderButton()
         updateSpeedButton()
     }
@@ -211,7 +282,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    private fun pauseForDialog(): StateRestoreCallback {
+    internal fun pauseForDialog(): StateRestoreCallback {
         val wasPlayerPaused = activity.player.paused ?: true // default to not changing state
         activity.player.paused = true
         return {
