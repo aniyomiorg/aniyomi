@@ -108,7 +108,7 @@
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="Settings"
-                android:onClick="openQuality"
+                android:onClick="pickQuality"
                 android:src="@drawable/ic_video_quality_24dp"
                 app:layout_constraintLeft_toRightOf="@id/cycleSubsBtn"
                 app:layout_constraintRight_toLeftOf="@id/player_overflow"
