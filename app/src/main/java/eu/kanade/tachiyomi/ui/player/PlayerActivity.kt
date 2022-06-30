@@ -470,9 +470,9 @@ class PlayerActivity :
      */
     internal fun switchEpisode(previous: Boolean, autoPlay: Boolean = false) {
         val switchMethod = if (previous && !autoPlay) {
-            presenter::previousEpisode
+            { callback: () -> Unit -> presenter.previousEpisode(callback) }
         } else {
-            presenter::nextEpisode
+            { callback: () -> Unit -> presenter.nextEpisode(callback, autoPlay) }
         }
         val errorRes = if (previous) R.string.no_previous_episode else R.string.no_next_episode
 
@@ -485,7 +485,7 @@ class PlayerActivity :
         showLoadingIndicator(true)
 
         val epTxt = switchMethod {
-            if (wasPlayerPaused == false || preferences.autoplayEnabled().get()) {
+            if (wasPlayerPaused == false || autoPlay) {
                 player.paused = false
             }
         }
@@ -1268,14 +1268,14 @@ class PlayerActivity :
         finish()
     }
 
-    fun setVideoList(videos: List<Video>) {
+    fun setVideoList(videos: List<Video>, fromStart: Boolean = false) {
         if (playerIsDestroyed) return
         currentVideoList = videos
         currentVideoList?.firstOrNull()?.let {
             setHttpOptions(it)
             presenter.currentEpisode?.let { episode ->
                 if (episode.seen && !preferences.preserveWatchingPosition()) episode.last_second_seen = 1L
-                MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
+                if (!fromStart) MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
             }
             subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()

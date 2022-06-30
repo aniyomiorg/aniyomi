@@ -227,7 +227,7 @@ class PlayerPresenter(
         return source is AnimeHttpSource && !EpisodeLoader.isDownloaded(currentEpisode, anime)
     }
 
-    fun nextEpisode(callback: () -> Unit): String? {
+    fun nextEpisode(callback: () -> Unit, fromStart: Boolean = false): String? {
         val anime = anime ?: return null
         val source = sourceManager.getOrStub(anime.source)
 
@@ -242,7 +242,7 @@ class PlayerPresenter(
                         { activity, it ->
                             currentVideoList = it
                             if (it.isNotEmpty()) {
-                                activity.setVideoList(it)
+                                activity.setVideoList(it, fromStart)
                                 callback()
                             } else {
                                 activity.setInitialEpisodeError(Exception("Video list is empty."))
