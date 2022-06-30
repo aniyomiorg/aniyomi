@@ -96,7 +96,7 @@ class SyncEpisodesWithSource(
                 toAdd.add(toAddEpisode)
             } else {
                 if (shouldUpdateDbEpisode.await(dbEpisode, episode)) {
-                    if (dbEpisode.name != episode.name && downloadManager.isEpisodeDownloaded(dbEpisode.toDbEpisode(), anime.toDbAnime())) {
+                    if (dbEpisode.name != episode.name && downloadManager.isEpisodeDownloaded(dbEpisode.name, dbEpisode.scanlator, anime.title, anime.source)) {
                         downloadManager.renameEpisode(source, anime.toDbAnime(), dbEpisode.toDbEpisode(), episode.toDbEpisode())
                     }
                     var toChangeEpisode = dbEpisode.copy(

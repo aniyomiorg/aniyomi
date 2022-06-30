@@ -56,8 +56,8 @@ fun AnimeBottomActionMenu(
     onBookmarkClicked: (() -> Unit)?,
     onRemoveBookmarkClicked: (() -> Unit)?,
     onMarkAsSeenClicked: (() -> Unit)?,
-    onMarkAsUnreadClicked: (() -> Unit)?,
-    onMarkPreviousAsReadClicked: (() -> Unit)?,
+    onMarkAsUnseenClicked: (() -> Unit)?,
+    onMarkPreviousAsSeenClicked: (() -> Unit)?,
     onDownloadClicked: (() -> Unit)?,
     onDeleteClicked: (() -> Unit)?,
     onExternalClicked: (() -> Unit)?,
@@ -118,22 +118,22 @@ fun AnimeBottomActionMenu(
                         onClick = onMarkAsSeenClicked,
                     )
                 }
-                if (onMarkAsUnreadClicked != null) {
+                if (onMarkAsUnseenClicked != null) {
                     Button(
                         title = stringResource(R.string.action_mark_as_unseen),
                         icon = Icons.Default.RemoveDone,
                         toConfirm = confirm[3],
                         onLongClick = { onLongClickItem(3) },
-                        onClick = onMarkAsUnreadClicked,
+                        onClick = onMarkAsUnseenClicked,
                     )
                 }
-                if (onMarkPreviousAsReadClicked != null) {
+                if (onMarkPreviousAsSeenClicked != null) {
                     Button(
                         title = stringResource(R.string.action_mark_previous_as_seen),
                         icon = ImageVector.vectorResource(id = R.drawable.ic_done_prev_24dp),
                         toConfirm = confirm[4],
                         onLongClick = { onLongClickItem(4) },
-                        onClick = onMarkPreviousAsReadClicked,
+                        onClick = onMarkPreviousAsSeenClicked,
                     )
                 }
                 if (onDownloadClicked != null) {

@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
@@ -41,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -148,8 +150,8 @@ fun AnimeScreen(
             onEditCategoryClicked = onEditCategoryClicked,
             onMigrateClicked = onMigrateClicked,
             onMultiBookmarkClicked = onMultiBookmarkClicked,
-            onMultiMarkAsReadClicked = onMultiMarkAsSeenClicked,
-            onMarkPreviousAsReadClicked = onMarkPreviousAsSeenClicked,
+            onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
+            onMarkPreviousAsSeenClicked = onMarkPreviousAsSeenClicked,
             onMultiDeleteClicked = onMultiDeleteClicked,
         )
     } else {
@@ -175,7 +177,7 @@ fun AnimeScreen(
             onMigrateClicked = onMigrateClicked,
             onMultiBookmarkClicked = onMultiBookmarkClicked,
             onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
-            onMarkPreviousAsReadClicked = onMarkPreviousAsSeenClicked,
+            onMarkPreviousAsSeenClicked = onMarkPreviousAsSeenClicked,
             onMultiDeleteClicked = onMultiDeleteClicked,
         )
     }
@@ -208,13 +210,11 @@ private fun AnimeScreenSmallImpl(
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Episode>, bookmarked: Boolean) -> Unit,
-    onMultiMarkAsReadClicked: (List<Episode>, markAsRead: Boolean) -> Unit,
-    onMarkPreviousAsReadClicked: (Episode) -> Unit,
+    onMultiMarkAsSeenClicked: (List<Episode>, markAsRead: Boolean) -> Unit,
+    onMarkPreviousAsSeenClicked: (Episode) -> Unit,
     onMultiDeleteClicked: (List<Episode>) -> Unit,
 ) {
-    val context = LocalContext.current
     val layoutDirection = LocalLayoutDirection.current
-    val haptic = LocalHapticFeedback.current
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
     val scrollBehavior = ExitUntilCollapsedScrollBehavior(rememberTopAppBarScrollState(), decayAnimationSpec)
     val episodeListState = rememberLazyListState()
@@ -243,7 +243,6 @@ private fun AnimeScreenSmallImpl(
             )
         },
     ) {
-        val preferences: PreferencesHelper = Injekt.get()
         val episodes = remember(state) { state.processedEpisodes.toList() }
         val selected = remember(episodes) { emptyList<EpisodeItem>().toMutableStateList() }
         val selectedPositions = remember(episodes) { arrayOf(-1, -1) } // first and last selected index in list
@@ -322,49 +321,15 @@ private fun AnimeScreenSmallImpl(
                 )
             },
             bottomBar = {
-                AnimeBottomActionMenu(
-                    visible = selected.isNotEmpty(),
-                    modifier = Modifier.fillMaxWidth(),
-                    onBookmarkClicked = {
-                        onMultiBookmarkClicked.invoke(selected.map { it.episode }, true)
-                        selected.clear()
-                    }.takeIf { selected.any { !it.episode.bookmark } },
-                    onRemoveBookmarkClicked = {
-                        onMultiBookmarkClicked.invoke(selected.map { it.episode }, false)
-                        selected.clear()
-                    }.takeIf { selected.all { it.episode.bookmark } },
-                    onMarkAsSeenClicked = {
-                        onMultiMarkAsReadClicked(selected.map { it.episode }, true)
-                        selected.clear()
-                    }.takeIf { selected.any { !it.episode.seen } },
-                    onMarkAsUnreadClicked = {
-                        onMultiMarkAsReadClicked(selected.map { it.episode }, false)
-                        selected.clear()
-                    }.takeIf { selected.any { it.episode.seen } },
-                    onMarkPreviousAsReadClicked = {
-                        onMarkPreviousAsReadClicked(selected[0].episode)
-                        selected.clear()
-                    }.takeIf { selected.size == 1 },
-                    onDownloadClicked = {
-                        onDownloadEpisode!!(selected.toList(), EpisodeDownloadAction.START)
-                        selected.clear()
-                    }.takeIf {
-                        onDownloadEpisode != null && selected.any { it.downloadState != AnimeDownload.State.DOWNLOADED }
-                    },
-                    onDeleteClicked = {
-                        onMultiDeleteClicked(selected.map { it.episode })
-                        selected.clear()
-                    }.takeIf {
-                        onDownloadEpisode != null && selected.any { it.downloadState == AnimeDownload.State.DOWNLOADED }
-                    },
-                    onExternalClicked = {
-                        onEpisodeClicked(selected.map { it.episode }.first(), true)
-                        selected.clear()
-                    }.takeIf { !preferences.alwaysUseExternalPlayer() && selected.size == 1 },
-                    onInternalClicked = {
-                        onEpisodeClicked(selected.map { it.episode }.first(), true)
-                        selected.clear()
-                    }.takeIf { preferences.alwaysUseExternalPlayer() && selected.size == 1 },
+                SharedAnimeBottomActionMenu(
+                    selected = selected,
+                    onEpisodeClicked = onEpisodeClicked,
+                    onMultiBookmarkClicked = onMultiBookmarkClicked,
+                    onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
+                    onMarkPreviousAsSeenClicked = onMarkPreviousAsSeenClicked,
+                    onDownloadEpisode = onDownloadEpisode,
+                    onMultiDeleteClicked = onMultiDeleteClicked,
+                    fillFraction = 1f,
                 )
             },
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -404,75 +369,14 @@ private fun AnimeScreenSmallImpl(
                     state = episodeListState,
                     contentPadding = withNavBarContentPadding,
                 ) {
-                    items(items = episodes) { episodeItem ->
-                        val (episode, downloadState, downloadProgress) = episodeItem
-                        val episodeTitle = if (state.anime.displayMode == EPISODE_DISPLAY_NUMBER) {
-                            stringResource(
-                                id = R.string.display_mode_episode,
-                                episodeDecimalFormat.format(episode.episodeNumber.toDouble()),
-                            )
-                        } else {
-                            episode.name
-                        }
-                        val date = remember(episode.dateUpload) {
-                            episode.dateUpload
-                                .takeIf { it > 0 }
-                                ?.let { Date(it).toRelativeString(context, state.dateRelativeTime, state.dateFormat) }
-                        }
-                        val lastSecondSeen = remember(episode.lastSecondSeen) {
-                            episode.lastSecondSeen.takeIf { !episode.seen && it > 0 }
-                        }
-                        val totalSeconds = remember(episode.totalSeconds) {
-                            episode.totalSeconds.takeIf { !episode.seen && it > 0 }
-                        }
-                        val scanlator = remember(episode.scanlator) { episode.scanlator.takeIf { !it.isNullOrBlank() } }
-
-                        AnimeEpisodeListItem(
-                            title = episodeTitle,
-                            date = date,
-                            watchProgress = lastSecondSeen?.let {
-                                if (totalSeconds != null) {
-                                    stringResource(
-                                        R.string.episode_progress,
-                                        formatProgress(lastSecondSeen),
-                                        formatProgress(totalSeconds),
-                                    )
-                                } else {
-                                    stringResource(
-                                        R.string.episode_progress_no_total,
-                                        formatProgress(lastSecondSeen),
-                                    )
-                                }
-                            },
-                            scanlator = scanlator,
-                            seen = episode.seen,
-                            bookmark = episode.bookmark,
-                            selected = selected.contains(episodeItem),
-                            downloadState = downloadState,
-                            downloadProgress = downloadProgress,
-                            onLongClick = {
-                                val dispatched = onEpisodeItemLongClick(
-                                    episodeItem = episodeItem,
-                                    selected = selected,
-                                    episodes = episodes,
-                                    selectedPositions = selectedPositions,
-                                )
-                                if (dispatched) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            },
-                            onClick = {
-                                onEpisodeItemClick(
-                                    episodeItem = episodeItem,
-                                    selected = selected,
-                                    episodes = episodes,
-                                    selectedPositions = selectedPositions,
-                                    onEpisodeClicked = onEpisodeClicked,
-                                )
-                            },
-                            onDownloadClick = if (onDownloadEpisode != null) {
-                                { onDownloadEpisode(listOf(episodeItem), it) }
-                            } else null,
-                        )
-                    }
+                    sharedEpisodeItems(
+                        episodes = episodes,
+                        state = state,
+                        selected = selected,
+                        selectedPositions = selectedPositions,
+                        onEpisodeClicked = onEpisodeClicked,
+                        onDownloadEpisode = onDownloadEpisode,
+                    )
                 }
             }
         }
@@ -508,13 +412,11 @@ fun AnimeScreenLargeImpl(
     // For bottom action menu
     onMultiBookmarkClicked: (List<Episode>, bookmarked: Boolean) -> Unit,
     onMultiMarkAsSeenClicked: (List<Episode>, markAsRead: Boolean) -> Unit,
-    onMarkPreviousAsReadClicked: (Episode) -> Unit,
+    onMarkPreviousAsSeenClicked: (Episode) -> Unit,
     onMultiDeleteClicked: (List<Episode>) -> Unit,
 ) {
-    val context = LocalContext.current
     val layoutDirection = LocalLayoutDirection.current
     val density = LocalDensity.current
-    val haptic = LocalHapticFeedback.current
 
     val insetPadding = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()
     val (topBarHeight, onTopBarHeightChanged) = remember { mutableStateOf(0) }
@@ -534,7 +436,6 @@ fun AnimeScreenLargeImpl(
             )
         },
     ) {
-        val preferences: PreferencesHelper = Injekt.get()
         val episodeListState = rememberLazyListState()
         val episodes = remember(state) { state.processedEpisodes.toList() }
         val selected = remember(episodes) { emptyList<EpisodeItem>().toMutableStateList() }
@@ -581,49 +482,15 @@ fun AnimeScreenLargeImpl(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.BottomEnd,
                 ) {
-                    AnimeBottomActionMenu(
-                        visible = selected.isNotEmpty(),
-                        modifier = Modifier.fillMaxWidth(0.5f),
-                        onBookmarkClicked = {
-                            onMultiBookmarkClicked.invoke(selected.map { it.episode }, true)
-                            selected.clear()
-                        }.takeIf { selected.any { !it.episode.bookmark } },
-                        onRemoveBookmarkClicked = {
-                            onMultiBookmarkClicked.invoke(selected.map { it.episode }, false)
-                            selected.clear()
-                        }.takeIf { selected.all { it.episode.bookmark } },
-                        onMarkAsSeenClicked = {
-                            onMultiMarkAsSeenClicked(selected.map { it.episode }, true)
-                            selected.clear()
-                        }.takeIf { selected.any { !it.episode.seen } },
-                        onMarkAsUnreadClicked = {
-                            onMultiMarkAsSeenClicked(selected.map { it.episode }, false)
-                            selected.clear()
-                        }.takeIf { selected.any { it.episode.seen } },
-                        onMarkPreviousAsReadClicked = {
-                            onMarkPreviousAsReadClicked(selected[0].episode)
-                            selected.clear()
-                        }.takeIf { selected.size == 1 },
-                        onDownloadClicked = {
-                            onDownloadEpisode!!(selected, EpisodeDownloadAction.START)
-                            selected.clear()
-                        }.takeIf {
-                            onDownloadEpisode != null && selected.any { it.downloadState != AnimeDownload.State.DOWNLOADED }
-                        },
-                        onDeleteClicked = {
-                            onMultiDeleteClicked(selected.map { it.episode })
-                            selected.clear()
-                        }.takeIf {
-                            onDownloadEpisode != null && selected.any { it.downloadState == AnimeDownload.State.DOWNLOADED }
-                        },
-                        onExternalClicked = {
-                            onEpisodeClicked(selected.map { it.episode }.first(), true)
-                            selected.clear()
-                        }.takeIf { !preferences.alwaysUseExternalPlayer() && selected.size == 1 },
-                        onInternalClicked = {
-                            onEpisodeClicked(selected.map { it.episode }.first(), true)
-                            selected.clear()
-                        }.takeIf { preferences.alwaysUseExternalPlayer() && selected.size == 1 },
+                    SharedAnimeBottomActionMenu(
+                        selected = selected,
+                        onEpisodeClicked = onEpisodeClicked,
+                        onMultiBookmarkClicked = onMultiBookmarkClicked,
+                        onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
+                        onMarkPreviousAsSeenClicked = onMarkPreviousAsSeenClicked,
+                        onDownloadEpisode = onDownloadEpisode,
+                        onMultiDeleteClicked = onMultiDeleteClicked,
+                        fillFraction = 0.5f,
                     )
                 }
             },
@@ -703,85 +570,164 @@ fun AnimeScreenLargeImpl(
                             )
                         }
 
-                        items(items = episodes) { episodeItem ->
-                            val (episode, downloadState, downloadProgress) = episodeItem
-                            val episodeTitle = remember(state.anime.displayMode, episode.episodeNumber, episode.name) {
-                                if (state.anime.displayMode == EPISODE_DISPLAY_NUMBER) {
-                                    episodeDecimalFormat.format(episode.episodeNumber.toDouble())
-                                } else {
-                                    episode.name
-                                }
-                            }
-                            val date = remember(episode.dateUpload) {
-                                episode.dateUpload
-                                    .takeIf { it > 0 }
-                                    ?.let {
-                                        Date(it).toRelativeString(
-                                            context,
-                                            state.dateRelativeTime,
-                                            state.dateFormat,
-                                        )
-                                    }
-                            }
-                            val lastSecondSeen = remember(episode.lastSecondSeen) {
-                                episode.lastSecondSeen.takeIf { !episode.seen && it > 0 }
-                            }
-                            val totalSeconds = remember(episode.totalSeconds) {
-                                episode.totalSeconds.takeIf { !episode.seen && it > 0 }
-                            }
-                            val scanlator =
-                                remember(episode.scanlator) { episode.scanlator.takeIf { !it.isNullOrBlank() } }
-
-                            AnimeEpisodeListItem(
-                                title = episodeTitle,
-                                date = date,
-                                watchProgress = lastSecondSeen?.let {
-                                    if (totalSeconds != null) {
-                                        stringResource(
-                                            R.string.episode_progress,
-                                            formatProgress(lastSecondSeen),
-                                            formatProgress(totalSeconds),
-                                        )
-                                    } else {
-                                        stringResource(
-                                            R.string.episode_progress_no_total,
-                                            formatProgress(lastSecondSeen),
-                                        )
-                                    }
-                                },
-                                scanlator = scanlator,
-                                seen = episode.seen,
-                                bookmark = episode.bookmark,
-                                selected = selected.contains(episodeItem),
-                                downloadState = downloadState,
-                                downloadProgress = downloadProgress,
-                                onLongClick = {
-                                    val dispatched = onEpisodeItemLongClick(
-                                        episodeItem = episodeItem,
-                                        selected = selected,
-                                        episodes = episodes,
-                                        selectedPositions = selectedPositions,
-                                    )
-                                    if (dispatched) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                },
-                                onClick = {
-                                    onEpisodeItemClick(
-                                        episodeItem = episodeItem,
-                                        selected = selected,
-                                        episodes = episodes,
-                                        selectedPositions = selectedPositions,
-                                        onEpisodeClicked = onEpisodeClicked,
-                                    )
-                                },
-                                onDownloadClick = if (onDownloadEpisode != null) {
-                                    { onDownloadEpisode(listOf(episodeItem), it) }
-                                } else null,
-                            )
-                        }
+                        sharedEpisodeItems(
+                            episodes = episodes,
+                            state = state,
+                            selected = selected,
+                            selectedPositions = selectedPositions,
+                            onEpisodeClicked = onEpisodeClicked,
+                            onDownloadEpisode = onDownloadEpisode,
+                        )
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SharedAnimeBottomActionMenu(
+    selected: SnapshotStateList<EpisodeItem>,
+    onEpisodeClicked: (Episode, Boolean) -> Unit,
+    onMultiBookmarkClicked: (List<Episode>, bookmarked: Boolean) -> Unit,
+    onMultiMarkAsSeenClicked: (List<Episode>, markAsSeen: Boolean) -> Unit,
+    onMarkPreviousAsSeenClicked: (Episode) -> Unit,
+    onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
+    onMultiDeleteClicked: (List<Episode>) -> Unit,
+    fillFraction: Float,
+) {
+    val preferences: PreferencesHelper = Injekt.get()
+    AnimeBottomActionMenu(
+        visible = selected.isNotEmpty(),
+        modifier = Modifier.fillMaxWidth(fillFraction),
+        onBookmarkClicked = {
+            onMultiBookmarkClicked.invoke(selected.map { it.episode }, true)
+            selected.clear()
+        }.takeIf { selected.any { !it.episode.bookmark } },
+        onRemoveBookmarkClicked = {
+            onMultiBookmarkClicked.invoke(selected.map { it.episode }, false)
+            selected.clear()
+        }.takeIf { selected.all { it.episode.bookmark } },
+        onMarkAsSeenClicked = {
+            onMultiMarkAsSeenClicked(selected.map { it.episode }, true)
+            selected.clear()
+        }.takeIf { selected.any { !it.episode.seen } },
+        onMarkAsUnseenClicked = {
+            onMultiMarkAsSeenClicked(selected.map { it.episode }, false)
+            selected.clear()
+        }.takeIf { selected.any { it.episode.seen } },
+        onMarkPreviousAsSeenClicked = {
+            onMarkPreviousAsSeenClicked(selected[0].episode)
+            selected.clear()
+        }.takeIf { selected.size == 1 },
+        onDownloadClicked = {
+            onDownloadEpisode!!(selected.toList(), EpisodeDownloadAction.START)
+            selected.clear()
+        }.takeIf {
+            onDownloadEpisode != null && selected.any { it.downloadState != AnimeDownload.State.DOWNLOADED }
+        },
+        onDeleteClicked = {
+            onMultiDeleteClicked(selected.map { it.episode })
+            selected.clear()
+        }.takeIf {
+            onDownloadEpisode != null && selected.any { it.downloadState == AnimeDownload.State.DOWNLOADED }
+        },
+        onExternalClicked = {
+            onEpisodeClicked(selected.map { it.episode }.first(), true)
+            selected.clear()
+        }.takeIf { !preferences.alwaysUseExternalPlayer() && selected.size == 1 },
+        onInternalClicked = {
+            onEpisodeClicked(selected.map { it.episode }.first(), true)
+            selected.clear()
+        }.takeIf { preferences.alwaysUseExternalPlayer() && selected.size == 1 },
+    )
+}
+
+private fun LazyListScope.sharedEpisodeItems(
+    episodes: List<EpisodeItem>,
+    state: AnimeScreenState.Success,
+    selected: SnapshotStateList<EpisodeItem>,
+    selectedPositions: Array<Int>,
+    onEpisodeClicked: (Episode, Boolean) -> Unit,
+    onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
+) {
+    items(items = episodes) { episodeItem ->
+        val context = LocalContext.current
+        val haptic = LocalHapticFeedback.current
+
+        val (episode, downloadState, downloadProgress) = episodeItem
+        val episodeTitle = if (state.anime.displayMode == EPISODE_DISPLAY_NUMBER) {
+            stringResource(
+                id = R.string.display_mode_episode,
+                episodeDecimalFormat.format(episode.episodeNumber.toDouble()),
+            )
+        } else {
+            episode.name
+        }
+        val date = remember(episode.dateUpload) {
+            episode.dateUpload
+                .takeIf { it > 0 }
+                ?.let {
+                    Date(it).toRelativeString(
+                        context,
+                        state.dateRelativeTime,
+                        state.dateFormat,
+                    )
+                }
+        }
+        val lastSecondSeen = remember(episode.lastSecondSeen) {
+            episode.lastSecondSeen.takeIf { !episode.seen && it > 0 }
+        }
+        val totalSeconds = remember(episode.totalSeconds) {
+            episode.totalSeconds.takeIf { !episode.seen && it > 0 }
+        }
+        val scanlator = remember(episode.scanlator) { episode.scanlator.takeIf { !it.isNullOrBlank() } }
+
+        AnimeEpisodeListItem(
+            title = episodeTitle,
+            date = date,
+            watchProgress = lastSecondSeen?.let {
+                if (totalSeconds != null) {
+                    stringResource(
+                        id = R.string.episode_progress,
+                        formatProgress(lastSecondSeen),
+                        formatProgress(totalSeconds),
+                    )
+                } else {
+                    stringResource(
+                        id = R.string.episode_progress_no_total,
+                        formatProgress(lastSecondSeen),
+                    )
+                }
+            },
+            scanlator = scanlator,
+            seen = episode.seen,
+            bookmark = episode.bookmark,
+            selected = selected.contains(episodeItem),
+            downloadState = downloadState,
+            downloadProgress = downloadProgress,
+            onLongClick = {
+                val dispatched = onEpisodeItemLongClick(
+                    episodeItem = episodeItem,
+                    selected = selected,
+                    episodes = episodes,
+                    selectedPositions = selectedPositions,
+                )
+                if (dispatched) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            },
+            onClick = {
+                onEpisodeItemClick(
+                    episodeItem = episodeItem,
+                    selected = selected,
+                    episodes = episodes,
+                    selectedPositions = selectedPositions,
+                    onEpisodeClicked = onEpisodeClicked,
+                )
+            },
+            onDownloadClick = if (onDownloadEpisode != null) {
+                { onDownloadEpisode(listOf(episodeItem), it) }
+            } else null,
+        )
     }
 }
 
@@ -824,7 +770,7 @@ private fun onEpisodeItemLongClick(
     return false
 }
 
-fun onEpisodeItemClick(
+private fun onEpisodeItemClick(
     episodeItem: EpisodeItem,
     selected: MutableList<EpisodeItem>,
     episodes: List<EpisodeItem>,

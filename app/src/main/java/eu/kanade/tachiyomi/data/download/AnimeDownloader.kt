@@ -201,8 +201,8 @@ class AnimeDownloader(
             queue
                 .filter { it.status == AnimeDownload.State.QUEUE }
                 .forEach {
-                    val animeDir = provider.getAnimeDir(it.anime, it.source)
-                    val episodeDirname = provider.getEpisodeDirName(it.episode)
+                    val animeDir = provider.getAnimeDir(it.anime.title, it.source)
+                    val episodeDirname = provider.getEpisodeDirName(it.episode.name, it.episode.scanlator)
                     val tmpDir = animeDir.findFile(episodeDirname + TMP_DIR_SUFFIX)
                     tmpDir?.delete()
                     it.status = AnimeDownload.State.NOT_DOWNLOADED
@@ -279,7 +279,7 @@ class AnimeDownloader(
         val episodesWithoutDir = async {
             episodes
                 // Filter out those already downloaded.
-                .filter { provider.findEpisodeDir(it, anime, source) == null }
+                .filter { provider.findEpisodeDir(it.name, it.scanlator, anime.title, source) == null }
                 // Add episodes to queue from the start.
                 .sortedByDescending { it.source_order }
         }
@@ -331,7 +331,7 @@ class AnimeDownloader(
      * @param download the episode to be downloaded.
      */
     private fun downloadEpisode(download: AnimeDownload): Observable<AnimeDownload> = Observable.defer {
-        val animeDir = provider.getAnimeDir(download.anime, download.source)
+        val animeDir = provider.getAnimeDir(download.anime.title, download.source)
 
         val availSpace = DiskUtil.getAvailableStorageSpace(animeDir)
         if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
@@ -340,7 +340,7 @@ class AnimeDownloader(
             return@defer Observable.just(download)
         }
 
-        val episodeDirname = provider.getEpisodeDirName(download.episode)
+        val episodeDirname = provider.getEpisodeDirName(download.episode.name, download.episode.scanlator)
         val tmpDir = animeDir.createDirectory(episodeDirname + TMP_DIR_SUFFIX)
         notifier.onProgressChange(download)
 

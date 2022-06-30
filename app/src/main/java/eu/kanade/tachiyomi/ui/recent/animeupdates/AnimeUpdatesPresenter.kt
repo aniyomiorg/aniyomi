@@ -129,7 +129,7 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
             val anime = item.anime
             val episode = item.episode
 
-            if (downloadManager.isEpisodeDownloaded(episode, anime)) {
+            if (downloadManager.isEpisodeDownloaded(episode.name, episode.scanlator, anime.title, anime.source)) {
                 item.status = AnimeDownload.State.DOWNLOADED
             }
         }

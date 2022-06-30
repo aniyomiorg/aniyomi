@@ -63,9 +63,10 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
                 true
             } else {
                 downloadManager.isEpisodeDownloaded(
-                    episode.toDbEpisode(),
-                    anime.toDbAnime(),
-                    skipCache = true,
+                    episode.name,
+                    episode.scanlator,
+                    anime.title,
+                    anime.source,
                 )
             }
             if (isOnDevice && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && uri.scheme != "content") {

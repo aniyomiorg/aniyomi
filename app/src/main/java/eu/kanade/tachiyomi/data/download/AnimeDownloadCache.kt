@@ -65,26 +65,20 @@ class AnimeDownloadCache(
     /**
      * Returns true if the episode is downloaded.
      *
-     * @param episode the episode to check.
-     * @param anime the anime of the episode.
+     * @param episodeName the name of the episode to query.
+     * @param chapterScanlator scanlator of the chapter to query
+     * @param animeTitle the title of the anime to query.
+     * @param sourceId the id of the source of the episode.
      * @param skipCache whether to skip the directory cache and check in the filesystem.
      */
-    fun isEpisodeDownloaded(episode: Episode, anime: Anime, skipCache: Boolean): Boolean {
-        if (skipCache) {
-            val source = sourceManager.getOrStub(anime.source)
-            return provider.findEpisodeDir(episode, anime, source) != null
-        }
-
-        checkRenew()
-
-        val sourceDir = rootDir.files[anime.source]
-        if (sourceDir != null) {
-            val animeDir = sourceDir.files[provider.getAnimeDirName(anime)]
-            if (animeDir != null) {
-                return provider.getValidEpisodeDirNames(episode).any { it in animeDir.files }
-            }
-        }
-        return false
+    fun isEpisodeDownloaded(
+        episodeName: String,
+        chapterScanlator: String?,
+        animeTitle: String,
+        sourceId: Long,
+    ): Boolean {
+        val source = sourceManager.getOrStub(sourceId)
+        return provider.findEpisodeDir(episodeName, chapterScanlator, animeTitle, source) != null
     }
 
     /**
@@ -97,7 +91,7 @@ class AnimeDownloadCache(
 
         val sourceDir = rootDir.files[anime.source]
         if (sourceDir != null) {
-            val animeDir = sourceDir.files[provider.getAnimeDirName(anime)]
+            val animeDir = sourceDir.files[provider.getAnimeDirName(anime.title)]
             if (animeDir != null) {
                 return animeDir.files
                     .filter { !it.endsWith(AnimeDownloader.TMP_DIR_SUFFIX) }
@@ -174,7 +168,7 @@ class AnimeDownloadCache(
         }
 
         // Retrieve the cached anime directory or cache a new one
-        val animeDirName = provider.getAnimeDirName(anime)
+        val animeDirName = provider.getAnimeDirName(anime.title)
         var animeDir = sourceDir.files[animeDirName]
         if (animeDir == null) {
             animeDir = AnimeDirectory(animeUniFile)
@@ -194,8 +188,8 @@ class AnimeDownloadCache(
     @Synchronized
     fun removeEpisode(episode: Episode, anime: Anime) {
         val sourceDir = rootDir.files[anime.source] ?: return
-        val animeDir = sourceDir.files[provider.getAnimeDirName(anime)] ?: return
-        provider.getValidEpisodeDirNames(episode).forEach {
+        val animeDir = sourceDir.files[provider.getAnimeDirName(anime.title)] ?: return
+        provider.getValidEpisodeDirNames(episode.name, episode.scanlator).forEach {
             if (it in animeDir.files) {
                 animeDir.files -= it
             }
@@ -211,9 +205,9 @@ class AnimeDownloadCache(
     @Synchronized
     fun removeEpisodes(episodes: List<Episode>, anime: Anime) {
         val sourceDir = rootDir.files[anime.source] ?: return
-        val animeDir = sourceDir.files[provider.getAnimeDirName(anime)] ?: return
+        val animeDir = sourceDir.files[provider.getAnimeDirName(anime.title)] ?: return
         episodes.forEach { episode ->
-            provider.getValidEpisodeDirNames(episode).forEach {
+            provider.getValidEpisodeDirNames(episode.name, episode.scanlator).forEach {
                 if (it in animeDir.files) {
                     animeDir.files -= it
                 }
@@ -229,7 +223,7 @@ class AnimeDownloadCache(
     @Synchronized
     fun removeAnime(anime: Anime) {
         val sourceDir = rootDir.files[anime.source] ?: return
-        val animeDirName = provider.getAnimeDirName(anime)
+        val animeDirName = provider.getAnimeDirName(anime.title)
         if (animeDirName in sourceDir.files) {
             sourceDir.files -= animeDirName
         }

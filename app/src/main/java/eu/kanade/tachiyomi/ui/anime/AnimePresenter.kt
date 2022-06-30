@@ -436,7 +436,7 @@ class AnimePresenter(
     private fun List<DomainEpisode>.toEpisodeItems(anime: DomainAnime): List<EpisodeItem> {
         return map { episode ->
             val activeDownload = downloadManager.queue.find { episode.id == it.episode.id }
-            val downloaded = downloadManager.isEpisodeDownloaded(episode.toDbEpisode(), anime.toDbAnime())
+            val downloaded = downloadManager.isEpisodeDownloaded(episode.name, episode.scanlator, anime.title, anime.source)
             val downloadState = when {
                 activeDownload != null -> activeDownload.status
                 downloaded -> AnimeDownload.State.DOWNLOADED

@@ -176,7 +176,7 @@ class AnimeDownloadManager(
      * @return an observable containing the list of pages from the episode.
      */
     fun buildVideo(source: AnimeSource, anime: Anime, episode: Episode): Observable<Video> {
-        return buildVideo(provider.findEpisodeDir(episode, anime, source))
+        return buildVideo(provider.findEpisodeDir(episode.name, episode.scanlator, anime.title, source))
     }
 
     /**
@@ -202,12 +202,19 @@ class AnimeDownloadManager(
     /**
      * Returns true if the episode is downloaded.
      *
-     * @param episode the episode to check.
-     * @param anime the anime of the episode.
+     * @param episodeName the name of the episode to query.
+     * @param chapterScanlator scanlator of the chapter to query
+     * @param animeTitle the title of the anime to query.
+     * @param sourceId the id of the source of the episode.
      * @param skipCache whether to skip the directory cache and check in the filesystem.
      */
-    fun isEpisodeDownloaded(episode: Episode, anime: Anime, skipCache: Boolean = false): Boolean {
-        return cache.isEpisodeDownloaded(episode, anime, skipCache)
+    fun isEpisodeDownloaded(
+        episodeName: String,
+        chapterScanlator: String?,
+        animeTitle: String,
+        sourceId: Long,
+    ): Boolean {
+        return cache.isEpisodeDownloaded(episodeName, chapterScanlator, animeTitle, sourceId)
     }
 
     /**
@@ -301,7 +308,7 @@ class AnimeDownloadManager(
     fun deleteAnime(anime: Anime, source: AnimeSource) {
         launchIO {
             downloader.queue.remove(anime)
-            provider.findAnimeDir(anime, source)?.delete()
+            provider.findAnimeDir(anime.title, source)?.delete()
             cache.removeAnime(anime)
         }
     }
@@ -336,15 +343,15 @@ class AnimeDownloadManager(
      * @param newEpisode the target episode with the new name.
      */
     fun renameEpisode(source: AnimeSource, anime: Anime, oldEpisode: Episode, newEpisode: Episode) {
-        val oldNames = provider.getValidEpisodeDirNames(oldEpisode)
-        val newName = provider.getEpisodeDirName(newEpisode)
-        val animeDir = provider.getAnimeDir(anime, source)
+        val oldNames = provider.getValidEpisodeDirNames(oldEpisode.name, oldEpisode.scanlator)
+        val animeDir = provider.getAnimeDir(anime.title, source)
 
         // Assume there's only 1 version of the episode name formats present
         val oldFolder = oldNames.asSequence()
             .mapNotNull { animeDir.findFile(it) }
             .firstOrNull()
 
+        val newName = provider.getEpisodeDirName(newEpisode.name, newEpisode.scanlator)
         if (oldFolder?.renameTo(newName) == true) {
             cache.removeEpisode(oldEpisode, anime)
             cache.addEpisode(newName, animeDir, anime)
