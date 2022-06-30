@@ -32,7 +32,9 @@ class DoubleTapSecondsView(context: Context, attrs: AttributeSet?) : LinearLayou
     var seconds: Int = 0
         set(value) {
             binding.doubleTapSeconds.text = context.resources.getQuantityString(
-                R.plurals.seconds, value, value,
+                R.plurals.seconds,
+                value,
+                value,
             )
             field = value
         }
@@ -166,19 +168,20 @@ class DoubleTapSecondsView(context: Context, attrs: AttributeSet?) : LinearLayou
             setFloatValues(0f, 1f)
 
             addUpdateListener { update(it.animatedValue as Float) }
-            addListener(object : AnimatorListener {
-                override fun onAnimationStart(animation: Animator?) {
-                    start()
-                }
+            addListener(
+                object : AnimatorListener {
+                    override fun onAnimationStart(animation: Animator?) {
+                        start()
+                    }
 
-                override fun onAnimationEnd(animation: Animator?) {
-                    end()
-                }
+                    override fun onAnimationEnd(animation: Animator?) {
+                        end()
+                    }
 
-                override fun onAnimationCancel(animation: Animator?) = Unit
+                    override fun onAnimationCancel(animation: Animator?) = Unit
 
-                override fun onAnimationRepeat(animation: Animator?) = Unit
-            },
+                    override fun onAnimationRepeat(animation: Animator?) = Unit
+                },
             )
         }
     }

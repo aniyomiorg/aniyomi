@@ -82,7 +82,7 @@ val backupAnimeTrackMapper = {
         score: Float,
         remoteUrl: String,
         startDate: Long,
-        finishDate: Long, ->
+        finishDate: Long,  ->
     BackupAnimeTracking(
         syncId = syncId.toInt(),
         mediaId = mediaId,

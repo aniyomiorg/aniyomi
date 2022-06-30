@@ -52,7 +52,7 @@ val backupEpisodeMapper = {
         episodeNumber: Float,
         source_order: Long,
         dateFetch: Long,
-        dateUpload: Long, ->
+        dateUpload: Long,  ->
     BackupEpisode(
         url = url,
         name = name,
