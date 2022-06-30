@@ -918,6 +918,7 @@ class PlayerActivity :
                 2 -> 3
                 else -> 1
             }
+            if (!stats) toggleStats()
             MPVLib.command(arrayOf("script-binding", "stats/display-page-$newValue"))
             field = newValue - 1
         }
