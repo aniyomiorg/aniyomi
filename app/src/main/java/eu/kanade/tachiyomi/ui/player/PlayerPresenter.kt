@@ -1,7 +1,10 @@
 package eu.kanade.tachiyomi.ui.player
 
 import android.app.Application
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
+import eu.kanade.domain.anime.model.isLocal
 import eu.kanade.domain.animehistory.interactor.UpsertAnimeHistory
 import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
 import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
@@ -16,16 +19,28 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.data.database.models.toDomainAnime
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.saver.Image
+import eu.kanade.tachiyomi.data.saver.ImageSaver
+import eu.kanade.tachiyomi.data.saver.Location
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingUpdateJob
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
+import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
+import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.episode.getEpisodeSort
+import eu.kanade.tachiyomi.util.lang.byteSize
 import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.lang.launchUI
+import eu.kanade.tachiyomi.util.lang.takeBytes
+import eu.kanade.tachiyomi.util.storage.DiskUtil
+import eu.kanade.tachiyomi.util.storage.cacheImageDir
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.logcat
+import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -33,6 +48,7 @@ import logcat.LogPriority
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 import java.util.Date
 
 class PlayerPresenter(
@@ -66,6 +82,8 @@ class PlayerPresenter(
     var currentEpisode: Episode? = null
 
     private var currentVideoList: List<Video>? = null
+
+    private val imageSaver: ImageSaver by injectLazy()
 
     /**
      * Episode list for the active anime. It's retrieved lazily and should be accessed for the first
@@ -391,4 +409,136 @@ class PlayerPresenter(
             downloadManager.deletePendingEpisodes()
         }
     }
+
+    /**
+     * Saves the screenshot on the pictures directory and notifies the UI of the result.
+     * There's also a notification to allow sharing the image somewhere else or deleting it.
+     */
+    fun saveImage() {
+        val anime = anime ?: return
+
+        val context = Injekt.get<Application>()
+        val notifier = SaveImageNotifier(context)
+        notifier.onClear()
+
+        val seconds = view?.player?.timePos?.let { Utils.prettyTime(it) } ?: return
+        val filename = generateFilename(anime, seconds) ?: return
+        val imageStream = { view!!.takeScreenshot()!! }
+
+        // Pictures directory.
+        val relativePath = if (preferences.folderPerManga()) DiskUtil.buildValidFilename(anime.title) else ""
+
+        // Copy file in background.
+        try {
+            presenterScope.launchIO {
+                val uri = imageSaver.save(
+                    image = Image.Page(
+                        inputStream = imageStream,
+                        name = filename,
+                        location = Location.Pictures.create(relativePath),
+                    ),
+                )
+                launchUI {
+                    notifier.onComplete(uri)
+                    view!!.onSaveImageResult(SaveImageResult.Success(uri))
+                }
+            }
+        } catch (e: Throwable) {
+            notifier.onError(e.message)
+            view!!.onSaveImageResult(SaveImageResult.Error(e))
+        }
+    }
+
+    /**
+     * Shares the screenshot and notifies the UI with the path of the file to share.
+     * The image must be first copied to the internal partition because there are many possible
+     * formats it can come from, like a zipped chapter, in which case it's not possible to directly
+     * get a path to the file and it has to be decompressed somewhere first. Only the last shared
+     * image will be kept so it won't be taking lots of internal disk space.
+     */
+    fun shareImage() {
+        val anime = anime ?: return
+
+        val context = Injekt.get<Application>()
+        val destDir = context.cacheImageDir
+
+        val seconds = view?.player?.timePos?.let { Utils.prettyTime(it) } ?: return
+        val filename = generateFilename(anime, seconds) ?: return
+        val imageStream = { view!!.takeScreenshot()!! }
+
+        try {
+            presenterScope.launchIO {
+                destDir.deleteRecursively()
+                val uri = imageSaver.save(
+                    image = Image.Page(
+                        inputStream = imageStream,
+                        name = filename,
+                        location = Location.Cache,
+                    ),
+                )
+                launchUI {
+                    view!!.onShareImageResult(uri, seconds)
+                }
+            }
+        } catch (e: Throwable) {
+            logcat(LogPriority.ERROR, e)
+        }
+    }
+
+    /**
+     * Sets the screenshot as cover and notifies the UI of the result.
+     */
+    fun setAsCover(context: Context) {
+        val anime = anime?.toDomainAnime() ?: return
+        val imageStream = view?.takeScreenshot() ?: return
+
+        presenterScope.launchIO {
+            val result = try {
+                anime.editCover(context, imageStream)
+            } catch (e: Exception) {
+                false
+            }
+            launchUI {
+                val resultResult = if (!result) {
+                    SetAsCoverResult.Error
+                } else if (anime.isLocal() || anime.favorite) {
+                    SetAsCoverResult.Success
+                } else {
+                    SetAsCoverResult.AddToLibraryFirst
+                }
+                view?.onSetAsCoverResult(resultResult)
+            }
+        }
+    }
+
+    /**
+     * Results of the set as cover feature.
+     */
+    enum class SetAsCoverResult {
+        Success, AddToLibraryFirst, Error
+    }
+
+    /**
+     * Results of the save image feature.
+     */
+    sealed class SaveImageResult {
+        class Success(val uri: Uri) : SaveImageResult()
+        class Error(val error: Throwable) : SaveImageResult()
+    }
+
+    /**
+     * Generate a filename for the given [anime] and [timePos]
+     */
+    private fun generateFilename(
+        anime: Anime,
+        timePos: String,
+    ): String? {
+        val episode = currentEpisode ?: return null
+        val filenameSuffix = " - $timePos"
+        return DiskUtil.buildValidFilename(
+            "${anime.title} - ${episode.name}".takeBytes(MAX_FILE_NAME_BYTES - filenameSuffix.byteSize()),
+        ) + filenameSuffix
+    }
 }
+
+private const val MAX_FILE_NAME_BYTES = 250

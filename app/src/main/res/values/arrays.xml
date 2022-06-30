@@ -101,4 +101,10 @@
         <item>@string/playback_options_speed</item>
         <item>@string/playback_options_quality</item>
     </string-array>
+
+    <string-array name="stats_pages">
+        <item>@string/stats_page_1</item>
+        <item>@string/stats_page_2</item>
+        <item>@string/stats_page_3</item>
+    </string-array>
 </resources>
