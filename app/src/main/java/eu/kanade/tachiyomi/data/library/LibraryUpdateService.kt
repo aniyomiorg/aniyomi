@@ -35,6 +35,7 @@ import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
@@ -305,7 +306,7 @@ class LibraryUpdateService(
         val skippedUpdates = CopyOnWriteArrayList<Pair<Manga, String?>>()
         val failedUpdates = CopyOnWriteArrayList<Pair<Manga, String?>>()
         val hasDownloads = AtomicBoolean(false)
-        val loggedServices by lazy { trackManager.services.filter { it.isLogged } }
+        val loggedServices by lazy { trackManager.services.filter { it.isLogged && it !is AnimeTrackService } }
         val currentUnreadUpdatesCount = preferences.unreadUpdatesCount().get()
         val restrictions = preferences.libraryUpdateMangaRestriction().get()
 
@@ -492,7 +493,7 @@ class LibraryUpdateService(
      */
     private suspend fun updateTrackings() {
         var progressCount = 0
-        val loggedServices = trackManager.services.filter { it.isLogged }
+        val loggedServices = trackManager.services.filter { it.isLogged && it !is AnimeTrackService }
 
         mangaToUpdate.forEach { manga ->
             if (updateJob?.isActive != true) {

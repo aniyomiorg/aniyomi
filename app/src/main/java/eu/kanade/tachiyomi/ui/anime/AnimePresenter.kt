@@ -34,8 +34,8 @@ import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
+import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.ui.anime.track.TrackItem
@@ -122,7 +122,7 @@ class AnimePresenter(
     private var _trackList: List<TrackItem> = emptyList()
     val trackList get() = _trackList
 
-    private val loggedServices by lazy { trackManager.services.filter { it.isLogged && it !is AnimeTrackService } }
+    private val loggedServices by lazy { trackManager.services.filter { it.isLogged && it !is MangaTrackService } }
 
     private var searchTrackerJob: Job? = null
     private var refreshTrackersJob: Job? = null

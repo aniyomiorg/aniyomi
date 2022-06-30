@@ -82,10 +82,13 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
         val anime = anime
         val lastSecondSeen = if (episode.seen) {
             if ((!preferences.preserveWatchingPosition()) ||
-                (preferences.preserveWatchingPosition() &&
-                 episode.lastSecondSeen == episode.totalSeconds)) 0L else episode.lastSecondSeen
+                (
+                    preferences.preserveWatchingPosition() &&
+                        episode.lastSecondSeen == episode.totalSeconds
+                    )
+            ) 0L else episode.lastSecondSeen
         } else episode.lastSecondSeen
-        
+
         return if (pkgName.isNullOrEmpty()) {
             Intent(Intent.ACTION_VIEW).apply {
                 setDataAndTypeAndNormalize(videoUrl, getMime(videoUrl))
