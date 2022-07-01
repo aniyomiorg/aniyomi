@@ -7,14 +7,14 @@ import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerOptionsSheetBinding
-import eu.kanade.tachiyomi.widget.sheet.BaseBottomSheetDialog
+import eu.kanade.tachiyomi.widget.sheet.PlayerBottomSheetDialog
 
 /**
  * Sheet to show when overflow button in player is clicked.
  */
 class PlayerOptionsSheet(
     private val activity: PlayerActivity,
-) : BaseBottomSheetDialog(activity) {
+) : PlayerBottomSheetDialog(activity) {
 
     private lateinit var binding: PlayerOptionsSheetBinding
     private var wasPaused: Boolean? = null
@@ -75,6 +75,7 @@ class PlayerOptionsSheet(
     }
 
     override fun dismiss() {
+        activity.playerControls.showAndFadeControls()
         wasPaused?.let { activity.player.paused = it }
         super.dismiss()
     }

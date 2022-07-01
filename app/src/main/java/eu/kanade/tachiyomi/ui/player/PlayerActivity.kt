@@ -118,7 +118,7 @@ class PlayerActivity :
 
     internal val player get() = binding.player
 
-    private val playerControls get() = binding.playerControls
+    val playerControls get() = binding.playerControls
 
     private var audioManager: AudioManager? = null
     private var fineVolume = 0F
