@@ -928,10 +928,25 @@ class PlayerActivity :
         stats = !stats
     }
 
+    var screenshotSubs: Boolean = preferences.screenshotSubtitles().get()
+        set(value) {
+            preferences.screenshotSubtitles().set(value)
+            field = value
+        }
+
     fun takeScreenshot(): InputStream? {
-        val filename = cacheDir.path + "/${System.currentTimeMillis()}_mpv_screenshot.png"
-        MPVLib.command(arrayOf("screenshot-to-file", filename))
-        return File(filename).takeIf { it.exists() }?.inputStream()
+        val filename = cacheDir.path + "/${System.currentTimeMillis()}_mpv_screenshot_tmp.png"
+        val subtitleFlag = if (screenshotSubs) {
+            "subtitles"
+        } else {
+            "video"
+        }
+        MPVLib.command(arrayOf("screenshot-to-file", filename, subtitleFlag))
+        val tempFile = File(filename).takeIf { it.exists() } ?: return null
+        val newFile = File(cacheDir.path + "/mpv_screenshot.png")
+        newFile.delete()
+        tempFile.renameTo(newFile)
+        return newFile.takeIf { it.exists() }?.inputStream()
     }
 
     /**

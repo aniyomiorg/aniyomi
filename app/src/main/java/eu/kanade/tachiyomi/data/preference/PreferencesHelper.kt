@@ -165,6 +165,8 @@ class PreferencesHelper(val context: Context) {
 
     fun hideControls() = prefs.getBoolean("player_hide_controls", false)
 
+    fun screenshotSubtitles() = flowPrefs.getBoolean("pref_screenshot_subtitles", false)
+
     fun alwaysUseExternalPlayer() = prefs.getBoolean(Keys.alwaysUseExternalPlayer, false)
 
     fun externalPlayerPreference() = prefs.getString(Keys.externalPlayerPreference, "")

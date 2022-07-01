@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.player
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.CompoundButton
+import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerOptionsSheetBinding
@@ -26,7 +27,10 @@ class PlayerOptionsSheet(
         binding.setAsCover.setOnClickListener { setAsCover() }
         binding.share.setOnClickListener { share() }
         binding.save.setOnClickListener { save() }
+        binding.toggleSubs.isChecked = activity.screenshotSubs
+        binding.toggleSubs.setOnCheckedChangeListener { _, newValue -> activity.screenshotSubs = newValue }
         binding.toggleStats.isChecked = activity.stats
+        binding.statsPage.isVisible = activity.stats
         binding.toggleStats.setOnCheckedChangeListener(toggleStats)
         binding.statsPage.setSelection(activity.statsPage)
         binding.statsPage.onItemSelectedListener = setStatsPage
@@ -52,7 +56,6 @@ class PlayerOptionsSheet(
      */
     private fun share() {
         activity.shareImage()
-        dismiss()
     }
 
     /**
@@ -60,17 +63,15 @@ class PlayerOptionsSheet(
      */
     private fun save() {
         activity.saveImage()
-        dismiss()
     }
 
-    private val toggleStats = { _: CompoundButton, _: Boolean ->
+    private val toggleStats = { _: CompoundButton, newValue: Boolean ->
+        binding.statsPage.isVisible = newValue
         activity.toggleStats()
-        dismiss()
     }
 
     private val setStatsPage = { page: Int ->
         activity.statsPage = page
-        dismiss()
     }
 
     override fun dismiss() {
