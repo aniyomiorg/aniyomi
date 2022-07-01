@@ -835,20 +835,6 @@ class PlayerActivity :
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun cycleAudio(view: View) {
-        if (audioTracks.isEmpty()) return
-        setAudio(if (selectedAudio < audioTracks.lastIndex) selectedAudio + 1 else 0)
-        toast("Audio: ${audioTracks[selectedAudio].lang}")
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun cycleSub(view: View) {
-        if (subTracks.isEmpty()) return
-        setSub(if (selectedSub < subTracks.lastIndex) selectedSub + 1 else 0)
-        toast("Sub: ${subTracks[selectedSub].lang}")
-    }
-
-    @Suppress("UNUSED_PARAMETER")
     fun cycleViewMode(view: View) {
         playerViewMode = when (playerViewMode) {
             0 -> 1
@@ -859,48 +845,50 @@ class PlayerActivity :
         setViewMode()
     }
 
+    @Suppress("UNUSED_PARAMETER")
+    fun pickAudio(view: View) {
+        val audioTracks = audioTracks.takeUnless { it.isEmpty() } ?: return
+
+        playerControls.hideControls(true)
+        PlayerTracksSheet(
+            this,
+            R.string.audio_dialog_header,
+            ::setAudio,
+            audioTracks,
+            selectedAudio,
+        ).show()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun pickSub(view: View) {
+        val subTracks = subTracks.takeUnless { it.isEmpty() } ?: return
+
+        playerControls.hideControls(true)
+        PlayerTracksSheet(
+            this,
+            R.string.subtitle_dialog_header,
+            ::setSub,
+            subTracks,
+            selectedSub,
+        ).show()
+    }
+
     private var currentQuality = 0
 
     @Suppress("UNUSED_PARAMETER")
     fun pickQuality(view: View) {
-        if (currentVideoList?.isNotEmpty() != true) return
-        val restore = playerControls.pauseForDialog()
+        val videoTracks = currentVideoList?.map {
+            Track("", it.quality)
+        }?.toTypedArray()?.takeUnless { it.isEmpty() } ?: return
 
-        var requestedQuality = 0
-        val qualities = currentVideoList!!.map { it.quality }.toTypedArray()
-
-        with(HideBarsMaterialAlertDialogBuilder(this)) {
-            setTitle(R.string.playback_quality_dialog_title)
-
-            setSingleChoiceItems(
-                qualities,
-                currentQuality,
-            ) { qualityDialog, selectedQuality ->
-                if (selectedQuality > qualities.lastIndex) {
-                    qualityDialog.cancel()
-                } else {
-                    requestedQuality = selectedQuality
-                }
-            }
-
-            setPositiveButton(android.R.string.ok) { qualityDialog, _ ->
-                if (requestedQuality != currentQuality) {
-                    currentQuality = requestedQuality
-                    changeQuality(requestedQuality)
-                }
-                qualityDialog.dismiss()
-                restore()
-            }
-
-            setNegativeButton(android.R.string.cancel) { qualityDialog, _ ->
-                qualityDialog.cancel()
-                restore()
-            }
-
-            setOnDismissListener { restore() }
-            create()
-            show()
-        }
+        playerControls.hideControls(true)
+        PlayerTracksSheet(
+            this,
+            R.string.quality_dialog_header,
+            ::changeQuality,
+            videoTracks,
+            currentQuality,
+        ).show()
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -1019,8 +1007,10 @@ class PlayerActivity :
 
     private fun changeQuality(quality: Int) {
         if (playerIsDestroyed) return
+        if (currentQuality == quality) return
         logcat(LogPriority.INFO) { "changing quality" }
         currentVideoList?.getOrNull(quality)?.let {
+            currentQuality = quality
             setHttpOptions(it)
             player.timePos?.let {
                 MPVLib.command(arrayOf("set", "start", "${player.timePos}"))

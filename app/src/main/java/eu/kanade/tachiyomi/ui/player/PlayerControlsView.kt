@@ -141,12 +141,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.lockBtn.setOnClickListener { lockControls(true) }
         binding.unlockBtn.setOnClickListener { lockControls(false) }
 
-        // Cycle, Long click controls
-        binding.cycleAudioBtn.setOnLongClickListener { pickAudio(); true }
-
+        // Long click controls
         binding.cycleSpeedBtn.setOnLongClickListener { pickSpeed(); true }
-
-        binding.cycleSubsBtn.setOnLongClickListener { pickSub(); true }
 
         binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
 
@@ -297,53 +293,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             binding.controlsView.isVisible -> {
                 showAndFadeControls()
             }
-        }
-    }
-
-    private fun pickAudio() {
-        if (activity.audioTracks.isEmpty()) return
-        val restore = pauseForDialog()
-
-        with(activity.HideBarsMaterialAlertDialogBuilder(context)) {
-            setSingleChoiceItems(
-                activity.audioTracks.map { it.lang }.toTypedArray(),
-                activity.selectedAudio,
-            ) { dialog, item ->
-                if (item == activity.selectedAudio) return@setSingleChoiceItems
-                if (item == 0) {
-                    activity.selectedAudio = 0
-                    activity.player.aid = -1
-                    return@setSingleChoiceItems
-                }
-                activity.setAudio(item)
-                dialog.dismiss()
-            }
-            setOnDismissListener { restore() }
-            create()
-            show()
-        }
-    }
-
-    private fun pickSub() {
-        if (activity.subTracks.isEmpty()) return
-        val restore = pauseForDialog()
-
-        with(activity.HideBarsMaterialAlertDialogBuilder(context)) {
-            setSingleChoiceItems(
-                activity.subTracks.map { it.lang }.toTypedArray(),
-                activity.selectedSub,
-            ) { dialog, item ->
-                if (item == 0) {
-                    activity.selectedSub = 0
-                    activity.player.sid = -1
-                    return@setSingleChoiceItems
-                }
-                activity.setSub(item)
-                dialog.dismiss()
-            }
-            setOnDismissListener { restore() }
-            create()
-            show()
         }
     }
 

@@ -1059,7 +1059,9 @@
     <!-- Aniyomi stuff -->
     <string name="playback_speed_dialog_title">Change playback speed:</string>
     <string name="playback_speed_dialog_reset">Reset</string>
-    <string name="playback_quality_dialog_title">Change video quality:</string>
+    <string name="quality_dialog_header">Change video quality:</string>
+    <string name="subtitle_dialog_header">Change subtitle track:</string>
+    <string name="audio_dialog_header">Change audio track:</string>
     <string name="playback_options_speed">Playback speed</string>
     <string name="playback_options_quality">Video quality</string>
     <string name="playback_options_title">Playback options</string>

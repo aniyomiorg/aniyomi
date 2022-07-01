@@ -70,7 +70,7 @@
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/toggleSubs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/screenshot_show_subs"
@@ -92,7 +92,7 @@
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/toggleStats"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/toggle_stats"
@@ -101,8 +101,14 @@
         <eu.kanade.tachiyomi.widget.MaterialSpinnerView
             android:id="@+id/statsPage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:entries="@array/stats_pages"
             app:title="@string/stats_page" />
+
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
+
 </androidx.core.widget.NestedScrollView>
