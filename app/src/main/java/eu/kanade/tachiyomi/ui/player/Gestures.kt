@@ -19,13 +19,14 @@ class Gestures(
 
     private val preferences: PreferencesHelper by injectLazy()
 
+    val interval = preferences.skipLengthPreference()
+
     override fun onDown(event: MotionEvent): Boolean {
         return true
     }
 
     override fun onSingleTapUp(e: MotionEvent): Boolean {
         if (activity.isLocked || !activity.isDoubleTapSeeking || activity.player.timePos == null || activity.player.duration == null) return false
-        val interval = preferences.skipLengthPreference()
         when {
             e.x < width * 0.4F && interval != 0 -> if (activity.player.timePos!! > 0) activity.doubleTapSeek(-interval, e) else return false
             e.x > width * 0.6F && interval != 0 -> if (activity.player.timePos!! < activity.player.duration!!) activity.doubleTapSeek(interval, e) else return false
@@ -41,8 +42,7 @@ class Gestures(
 
     override fun onDoubleTap(e: MotionEvent): Boolean {
         if (activity.isLocked) { activity.toggleControls(); return false }
-        if (activity.isDoubleTapSeeking || activity.player.timePos == null || activity.player.duration == null) return false
-        val interval = preferences.skipLengthPreference()
+        if (activity.player.timePos == null || activity.player.duration == null) return false
         when {
             e.x < width * 0.4F && interval != 0 -> if (activity.player.timePos!! > 0) activity.doubleTapSeek(-interval, e) else return false
             e.x > width * 0.6F && interval != 0 -> if (activity.player.timePos!! < activity.player.duration!!) activity.doubleTapSeek(interval, e) else return false

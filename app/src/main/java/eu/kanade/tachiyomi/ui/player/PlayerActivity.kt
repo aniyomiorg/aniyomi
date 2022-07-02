@@ -671,14 +671,14 @@ class PlayerActivity :
         binding.secondsView.stop()
     }
 
-    fun doubleTapSeek(time: Int, event: MotionEvent? = null) {
+    fun doubleTapSeek(time: Int, event: MotionEvent? = null, isDoubleTap: Boolean = true) {
         if (!isDoubleTapSeeking) doubleTapBg = if (time < 0) binding.rewBg else binding.ffwdBg
         val v = if (time < 0) binding.rewTap else binding.ffwdTap
         val w = if (time < 0) width * 0.2F else width * 0.8F
         val x = (event?.x?.toInt() ?: w.toInt()) - v.x.toInt()
         val y = (event?.y?.toInt() ?: (height / 2)) - v.y.toInt()
 
-        isDoubleTapSeeking = true
+        isDoubleTapSeeking = isDoubleTap
         binding.secondsView.isVisible = true
         animationHandler.removeCallbacks(doubleTapSeekRunnable)
         animationHandler.postDelayed(doubleTapSeekRunnable, 750L)
@@ -1031,7 +1031,7 @@ class PlayerActivity :
 
     @Suppress("UNUSED_PARAMETER")
     fun skipIntro(view: View) {
-        doubleTapSeek(preferences.introLengthPreference())
+        doubleTapSeek(preferences.introLengthPreference(), isDoubleTap = false)
     }
 
     private fun refreshUi() {
