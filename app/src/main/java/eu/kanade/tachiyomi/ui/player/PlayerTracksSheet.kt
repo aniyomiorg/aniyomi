@@ -11,7 +11,7 @@ import eu.kanade.tachiyomi.databinding.PlayerTracksSheetBinding
 import eu.kanade.tachiyomi.widget.sheet.PlayerBottomSheetDialog
 
 /**
- * Sheet to show when overflow button in player is clicked.
+ * Sheet to show when track selection buttons in player are clicked.
  */
 class PlayerTracksSheet(
     private val activity: PlayerActivity,
