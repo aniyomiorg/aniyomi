@@ -76,6 +76,16 @@ FROM animes
 WHERE favorite = 0
 GROUP BY source;
 
+getRecentlyUpdated:
+SELECT *
+FROM animes A
+JOIN episodes EP
+ON A._id = EP.anime_id
+WHERE A.favorite = 1
+AND EP.date_upload > :after
+AND EP.date_fetch > A.date_added
+ORDER BY EP.date_upload DESC;
+
 deleteAnimesNotInLibraryBySourceIds:
 DELETE FROM animes
 WHERE favorite = 0 AND source IN :sourceIds;

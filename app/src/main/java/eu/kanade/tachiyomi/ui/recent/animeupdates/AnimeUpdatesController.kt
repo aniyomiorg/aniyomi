@@ -12,12 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.SelectableAdapter
-import eu.davidea.flexibleadapter.items.IFlexible
+import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
-import eu.kanade.tachiyomi.data.database.models.toDomainAnime
-import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -40,12 +39,13 @@ import eu.kanade.tachiyomi.util.system.notificationManager
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.onAnimationsFinished
 import eu.kanade.tachiyomi.widget.ActionModeWithToolbar
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import logcat.LogPriority
 import reactivecircus.flowbinding.recyclerview.scrollStateChanges
 import reactivecircus.flowbinding.swiperefreshlayout.refreshes
-import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 /**
@@ -123,6 +123,24 @@ class AnimeUpdatesController :
                 binding.swipeRefresh.isRefreshing = false
             }
             .launchIn(viewScope)
+
+        viewScope.launch {
+            presenter.updates.collectLatest { updatesItems ->
+                destroyActionModeIfNeeded()
+                if (adapter == null) {
+                    adapter = AnimeUpdatesAdapter(this@AnimeUpdatesController, binding.recycler.context, updatesItems)
+                    binding.recycler.adapter = adapter
+                    adapter!!.fastScroller = binding.fastScroller
+                } else {
+                    adapter?.updateDataSet(updatesItems)
+                }
+                binding.swipeRefresh.isRefreshing = false
+                binding.fastScroller.isVisible = true
+                binding.recycler.onAnimationsFinished {
+                    (activity as? MainActivity)?.ready = true
+                }
+            }
+        }
     }
 
     override fun onDestroyView(view: View) {
@@ -211,7 +229,7 @@ class AnimeUpdatesController :
         if (useExternal) {
             openEpisodeExternal(item)
         } else {
-            val intent = PlayerActivity.newIntent(activity, item.anime, item.episode)
+            val intent = PlayerActivity.newIntent(activity, item.anime.id, item.episode.id)
             if (hasAnimation) {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             }
@@ -222,23 +240,22 @@ class AnimeUpdatesController :
     private fun openEpisodeExternal(item: AnimeUpdatesItem) {
         val context = activity ?: return
         val anime = item.anime
-        val domainAnime = item.anime.toDomainAnime() ?: return
+        val domainAnime = item.anime
         val episode = item.episode
-        val domainEpisode = item.episode.toDomainEpisode() ?: return
         val source = sourceManager.get(item.anime.source) ?: return
         launchIO {
             val video = try {
-                EpisodeLoader.getLink(episode, anime, source).awaitSingle()
+                EpisodeLoader.getLink(episode.toDbEpisode(), anime.toDbAnime(), source).awaitSingle()
             } catch (e: Exception) {
                 launchUI { context.toast(e.message) }
                 return@launchIO
             }
             if (video != null) {
-                AnimeController.EXT_EPISODE = domainEpisode
+                AnimeController.EXT_EPISODE = episode
                 AnimeController.EXT_ANIME = domainAnime
 
                 val extIntent = ExternalIntents(domainAnime, source).getExternalIntent(
-                    domainEpisode,
+                    episode,
                     video,
                     context,
                 )
@@ -276,26 +293,6 @@ class AnimeUpdatesController :
     private fun downloadEpisodesExternally(episodes: List<AnimeUpdatesItem>) {
         presenter.downloadEpisodesExternally(episodes)
         destroyActionModeIfNeeded()
-    }
-
-    /**
-     * Populate adapter with episodes
-     * @param episodes list of [Any]
-     */
-    fun onNextRecentEpisodes(episodes: List<IFlexible<*>>) {
-        destroyActionModeIfNeeded()
-        if (adapter == null) {
-            adapter = AnimeUpdatesAdapter(this@AnimeUpdatesController, binding.recycler.context, episodes)
-            binding.recycler.adapter = adapter
-            adapter!!.fastScroller = binding.fastScroller
-        } else {
-            adapter?.updateDataSet(episodes)
-        }
-        binding.swipeRefresh.isRefreshing = false
-        binding.fastScroller.isVisible = true
-        binding.recycler.onAnimationsFinished {
-            (activity as? MainActivity)?.ready = true
-        }
     }
 
     override fun onUpdateEmptyView(size: Int) {
@@ -356,7 +353,7 @@ class AnimeUpdatesController :
     }
 
     private fun openAnime(episode: AnimeUpdatesItem) {
-        parentController!!.router.pushController(AnimeController(episode.anime.id!!))
+        parentController!!.router.pushController(AnimeController(episode.anime.id))
     }
 
     /**
@@ -395,8 +392,8 @@ class AnimeUpdatesController :
     }
 
     override fun startDownloadNow(position: Int) {
-        val episode = adapter?.getItem(position) as? AnimeUpdatesItem ?: return
-        presenter.startDownloadingNow(episode)
+        val item = adapter?.getItem(position) as? AnimeUpdatesItem ?: return
+        presenter.startDownloadingNow(item.episode)
     }
 
     private fun bookmarkEpisodes(episodes: List<AnimeUpdatesItem>, bookmarked: Boolean) {
@@ -441,8 +438,8 @@ class AnimeUpdatesController :
         if (episodes.isEmpty()) return
         toolbar.findToolbarItem(R.id.action_download)?.isVisible = episodes.any { !it.isDownloaded }
         toolbar.findToolbarItem(R.id.action_delete)?.isVisible = episodes.any { it.isDownloaded }
-        toolbar.findToolbarItem(R.id.action_bookmark)?.isVisible = episodes.any { !it.bookmark }
-        toolbar.findToolbarItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.bookmark }
+        toolbar.findToolbarItem(R.id.action_bookmark)?.isVisible = episodes.any { !it.episode.bookmark }
+        toolbar.findToolbarItem(R.id.action_remove_bookmark)?.isVisible = episodes.all { it.episode.bookmark }
         toolbar.findToolbarItem(R.id.action_mark_as_seen)?.isVisible = episodes.any { !it.episode.seen }
         toolbar.findToolbarItem(R.id.action_mark_as_unseen)?.isVisible = episodes.all { it.episode.seen }
         toolbar.findToolbarItem(R.id.action_play_externally)?.isVisible = !preferences.alwaysUseExternalPlayer() && episodes.size == 1

@@ -2,15 +2,13 @@ package eu.kanade.tachiyomi.ui.anime.episode.base
 
 import eu.davidea.flexibleadapter.items.AbstractHeaderItem
 import eu.davidea.flexibleadapter.items.AbstractSectionableItem
-import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 
 abstract class BaseEpisodeItem<T : BaseEpisodeHolder, H : AbstractHeaderItem<*>>(
     val episode: Episode,
     header: H? = null,
-) :
-    AbstractSectionableItem<T, H?>(header),
-    Episode by episode {
+) : AbstractSectionableItem<T, H?>(header) {
 
     private var _status: AnimeDownload.State = AnimeDownload.State.NOT_DOWNLOADED
 
@@ -35,12 +33,14 @@ abstract class BaseEpisodeItem<T : BaseEpisodeHolder, H : AbstractHeaderItem<*>>
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other is BaseEpisodeItem<*, *>) {
-            return episode.id!! == other.episode.id!!
+            return episode.id == other.episode.id && episode.seen == other.episode.seen
         }
         return false
     }
 
     override fun hashCode(): Int {
-        return episode.id!!.hashCode()
+        var result = episode.id.hashCode()
+        result = 31 * result + episode.seen.hashCode()
+        return result
     }
 }

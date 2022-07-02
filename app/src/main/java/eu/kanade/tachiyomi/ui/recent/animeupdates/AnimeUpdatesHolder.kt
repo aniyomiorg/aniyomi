@@ -43,12 +43,12 @@ class AnimeUpdatesHolder(private val view: View, private val adapter: AnimeUpdat
         } else {
             binding.mangaTitle.setTextColor(adapter.unseenColor)
             binding.chapterTitle.setTextColor(
-                if (item.bookmark) adapter.bookmarkedColor else adapter.unseenColorSecondary,
+                if (item.episode.bookmark) adapter.bookmarkedColor else adapter.unseenColorSecondary,
             )
         }
 
         // Set bookmark status
-        binding.bookmarkIcon.isVisible = item.bookmark
+        binding.bookmarkIcon.isVisible = item.episode.bookmark
 
         // Set episode status
         binding.download.isVisible = item.anime.source != LocalAnimeSource.ID

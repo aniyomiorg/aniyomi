@@ -71,32 +71,6 @@ val animelibQuery =
         ON MC.${AnimeCategory.COL_ANIME_ID} = M.${Anime.COL_ID}
 """
 
-/**
- * Query to get the recent chapters of manga from the library up to a date.
- */
-fun getRecentsQuery() =
-    """
-    SELECT ${Manga.TABLE}.${Manga.COL_URL} as mangaUrl, * FROM ${Manga.TABLE} JOIN ${Chapter.TABLE}
-    ON ${Manga.TABLE}.${Manga.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
-    WHERE ${Manga.COL_FAVORITE} = 1 
-    AND ${Chapter.COL_DATE_UPLOAD} > ?
-    AND ${Chapter.COL_DATE_FETCH} > ${Manga.COL_DATE_ADDED}
-    ORDER BY ${Chapter.COL_DATE_UPLOAD} DESC
-"""
-
-/**
- * Query to get the recent chapters of manga from the library up to a date.
- */
-fun getRecentsQueryAnime() =
-    """
-    SELECT ${Anime.TABLE}.${Anime.COL_URL} as animeUrl, * FROM ${Anime.TABLE} JOIN ${Episode.TABLE}
-    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
-    WHERE ${Anime.COL_FAVORITE} = 1 
-    AND ${Episode.COL_DATE_UPLOAD} > ?
-    AND ${Episode.COL_DATE_FETCH} > ${Anime.COL_DATE_ADDED}
-    ORDER BY ${Episode.COL_DATE_UPLOAD} DESC
-"""
-
 fun getLastReadMangaQuery() =
     """
     SELECT ${Manga.TABLE}.*, MAX(${History.TABLE}.${History.COL_LAST_READ}) AS max
