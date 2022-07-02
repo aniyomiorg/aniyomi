@@ -675,7 +675,7 @@ private fun LazyListScope.sharedEpisodeItems(
                     )
                 }
         }
-        val lastSecondSeen = remember(episode.lastSecondSeen) {
+        val lastSecondSeen = remember(episode.lastSecondSeen, episode.seen) {
             episode.lastSecondSeen.takeIf { !episode.seen && it > 0 }
         }
         val totalSeconds = remember(episode.totalSeconds) {

@@ -656,7 +656,7 @@ private fun LazyListScope.sharedChapterItems(
                     )
                 }
         }
-        val lastPageRead = remember(chapter.lastPageRead) {
+        val lastPageRead = remember(chapter.lastPageRead, chapter.read) {
             chapter.lastPageRead.takeIf { !chapter.read && it > 0 }
         }
         val scanlator = remember(chapter.scanlator) { chapter.scanlator.takeIf { !it.isNullOrBlank() } }

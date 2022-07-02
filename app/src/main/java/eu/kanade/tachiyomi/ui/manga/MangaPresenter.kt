@@ -533,9 +533,10 @@ class MangaPresenter(
      */
     fun markChaptersRead(chapters: List<DomainChapter>, read: Boolean) {
         presenterScope.launchIO {
+            val lastPageRead = if (read || preferences.preserveReadingPosition()) null else 0L
             val modified = chapters.filterNot { it.read == read }
             modified
-                .map { ChapterUpdate(id = it.id, read = read) }
+                .map { ChapterUpdate(id = it.id, read = read, lastPageRead = lastPageRead) }
                 .let { updateChapter.awaitAll(it) }
             if (read && preferences.removeAfterMarkedAsRead()) {
                 deleteChapters(modified)

@@ -308,7 +308,6 @@ class PlayerPresenter(
                 EpisodeUpdate(
                     id = episode.id!!,
                     seen = episode.seen,
-                    bookmark = episode.bookmark,
                     lastSecondSeen = episode.last_second_seen,
                     totalSeconds = episode.total_seconds,
                 ),

@@ -533,9 +533,10 @@ class AnimePresenter(
      */
     fun markEpisodesSeen(episodes: List<DomainEpisode>, seen: Boolean) {
         presenterScope.launchIO {
+            val lastSecondSeen = if (seen || preferences.preserveWatchingPosition()) null else 0L
             val modified = episodes.filterNot { it.seen == seen }
             modified
-                .map { EpisodeUpdate(id = it.id, seen = seen) }
+                .map { EpisodeUpdate(id = it.id, seen = seen, lastSecondSeen = lastSecondSeen) }
                 .let { updateEpisode.awaitAll(it) }
             if (seen && preferences.removeAfterMarkedAsRead()) {
                 deleteEpisodes(modified)
