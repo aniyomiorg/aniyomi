@@ -86,6 +86,62 @@ AND EP.date_upload > :after
 AND EP.date_fetch > A.date_added
 ORDER BY EP.date_upload DESC;
 
+getAnimelib:
+SELECT M.*, COALESCE(MC.category_id, 0) AS category
+FROM (
+    SELECT animes.*, COALESCE(C.unseenCount, 0) AS unseen_count, COALESCE(R.seenCount, 0) AS seen_count
+    FROM animes
+    LEFT JOIN (
+        SELECT episodes.anime_id, COUNT(*) AS unseenCount
+        FROM episodes
+        WHERE episodes.seen = 0
+        GROUP BY episodes.anime_id
+    ) AS C
+    ON animes._id = C.anime_id
+    LEFT JOIN (
+        SELECT episodes.anime_id, COUNT(*) AS seenCount
+        FROM episodes
+        WHERE episodes.seen = 1
+        GROUP BY episodes.anime_id
+    ) AS R
+    WHERE animes.favorite = 1
+    GROUP BY animes._id
+    ORDER BY animes.title
+) AS M
+LEFT JOIN (
+    SELECT *
+    FROM animes_categories
+) AS MC
+ON M._id = MC.anime_id;
+
+getLastSeen:
+SELECT M.*, MAX(H.last_seen) AS max
+FROM animes M
+JOIN episodes C
+ON M._id = C.anime_id
+JOIN animehistory H
+ON C._id = H.episode_id
+WHERE M.favorite = 1
+GROUP BY M._id
+ORDER BY max ASC;
+
+getLatestByEpisodeUploadDate:
+SELECT M.*, MAX(C.date_upload) AS max
+FROM animes M
+JOIN episodes C
+ON M._id = C.anime_id
+GROUP BY M._id
+ORDER BY max ASC;
+
+getLatestByEpisodeFetchDate:
+SELECT M.*, MAX(C.date_fetch) AS max
+FROM animes M
+JOIN episodes C
+ON M._id = C.anime_id
+GROUP BY M._id
+ORDER BY max ASC;
+
+
 deleteAnimesNotInLibraryBySourceIds:
 DELETE FROM animes
 WHERE favorite = 0 AND source IN :sourceIds;

@@ -1,12 +1,10 @@
 package eu.kanade.tachiyomi.data.database.queries
 
 import eu.kanade.tachiyomi.data.database.tables.AnimeCategoryTable as AnimeCategory
-import eu.kanade.tachiyomi.data.database.tables.AnimeHistoryTable as AnimeHistory
 import eu.kanade.tachiyomi.data.database.tables.AnimeTable as Anime
 import eu.kanade.tachiyomi.data.database.tables.CategoryTable as Category
 import eu.kanade.tachiyomi.data.database.tables.ChapterTable as Chapter
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable as Episode
-import eu.kanade.tachiyomi.data.database.tables.HistoryTable as History
 import eu.kanade.tachiyomi.data.database.tables.MangaCategoryTable as MangaCategory
 import eu.kanade.tachiyomi.data.database.tables.MangaTable as Manga
 
@@ -69,72 +67,6 @@ val animelibQuery =
     LEFT JOIN (
         SELECT * FROM ${AnimeCategory.TABLE}) AS MC
         ON MC.${AnimeCategory.COL_ANIME_ID} = M.${Anime.COL_ID}
-"""
-
-fun getLastReadMangaQuery() =
-    """
-    SELECT ${Manga.TABLE}.*, MAX(${History.TABLE}.${History.COL_LAST_READ}) AS max
-    FROM ${Manga.TABLE}
-    JOIN ${Chapter.TABLE}
-    ON ${Manga.TABLE}.${Manga.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
-    JOIN ${History.TABLE}
-    ON ${Chapter.TABLE}.${Chapter.COL_ID} = ${History.TABLE}.${History.COL_CHAPTER_ID}
-    WHERE ${Manga.TABLE}.${Manga.COL_FAVORITE} = 1
-    GROUP BY ${Manga.TABLE}.${Manga.COL_ID}
-    ORDER BY max DESC
-"""
-
-fun getLastSeenAnimeQuery() =
-    """
-    SELECT ${Anime.TABLE}.*, MAX(${AnimeHistory.TABLE}.${AnimeHistory.COL_LAST_SEEN}) AS max
-    FROM ${Anime.TABLE}
-    JOIN ${Episode.TABLE}
-    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
-    JOIN ${AnimeHistory.TABLE}
-    ON ${Episode.TABLE}.${Episode.COL_ID} = ${AnimeHistory.TABLE}.${AnimeHistory.COL_EPISODE_ID}
-    WHERE ${Anime.TABLE}.${Anime.COL_FAVORITE} = 1
-    GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
-    ORDER BY max DESC
-"""
-
-fun getLatestChapterMangaQuery() =
-    """
-    SELECT ${Manga.TABLE}.*, MAX(${Chapter.TABLE}.${Chapter.COL_DATE_UPLOAD}) AS max
-    FROM ${Manga.TABLE}
-    JOIN ${Chapter.TABLE}
-    ON ${Manga.TABLE}.${Manga.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
-    GROUP BY ${Manga.TABLE}.${Manga.COL_ID}
-    ORDER by max DESC
-"""
-
-fun getLatestEpisodeAnimeQuery() =
-    """
-    SELECT ${Anime.TABLE}.*, MAX(${Episode.TABLE}.${Episode.COL_DATE_UPLOAD}) AS max
-    FROM ${Anime.TABLE}
-    JOIN ${Episode.TABLE}
-    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
-    GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
-    ORDER by max DESC
-"""
-
-fun getChapterFetchDateMangaQuery() =
-    """
-    SELECT ${Manga.TABLE}.*, MAX(${Chapter.TABLE}.${Chapter.COL_DATE_FETCH}) AS max
-    FROM ${Manga.TABLE}
-    JOIN ${Chapter.TABLE}
-    ON ${Manga.TABLE}.${Manga.COL_ID} = ${Chapter.TABLE}.${Chapter.COL_MANGA_ID}
-    GROUP BY ${Manga.TABLE}.${Manga.COL_ID}
-    ORDER by max DESC
-"""
-
-fun getEpisodeFetchDateAnimeQuery() =
-    """
-    SELECT ${Anime.TABLE}.*, MAX(${Episode.TABLE}.${Episode.COL_DATE_FETCH}) AS max
-    FROM ${Anime.TABLE}
-    JOIN ${Episode.TABLE}
-    ON ${Anime.TABLE}.${Anime.COL_ID} = ${Episode.TABLE}.${Episode.COL_ANIME_ID}
-    GROUP BY ${Anime.TABLE}.${Anime.COL_ID}
-    ORDER by max DESC
 """
 
 /**

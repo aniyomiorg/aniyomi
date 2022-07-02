@@ -1,10 +1,17 @@
 package eu.kanade.tachiyomi.data.download.model
 
+import eu.kanade.domain.anime.interactor.GetAnimeById
+import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.episode.interactor.GetEpisode
+import eu.kanade.domain.episode.model.toDbEpisode
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import rx.subjects.PublishSubject
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 data class AnimeDownload(
     val source: AnimeHttpSource,
@@ -76,5 +83,20 @@ data class AnimeDownload(
         DOWNLOADING(2),
         DOWNLOADED(3),
         ERROR(4),
+    }
+
+    companion object {
+        suspend fun fromEpisodeId(
+            chapterId: Long,
+            getEpisode: GetEpisode = Injekt.get(),
+            getAnimeById: GetAnimeById = Injekt.get(),
+            sourceManager: AnimeSourceManager = Injekt.get(),
+        ): AnimeDownload? {
+            val episode = getEpisode.await(chapterId) ?: return null
+            val anime = getAnimeById.await(episode.animeId) ?: return null
+            val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: return null
+
+            return AnimeDownload(source, anime.toDbAnime(), episode.toDbEpisode())
+        }
     }
 }

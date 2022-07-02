@@ -74,7 +74,7 @@ fun DomainAnime.shouldDownloadNewEpisodes(db: AnimeDatabaseHelper, prefs: Prefer
 
     // Get all categories, else default category (0)
     val categoriesForAnime =
-        db.getCategoriesForAnime(toDbAnime()).executeAsBlocking()
+        db.getCategoriesForAnime(id).executeAsBlocking()
             .mapNotNull { it.id }
             .takeUnless { it.isEmpty() } ?: listOf(0)
 

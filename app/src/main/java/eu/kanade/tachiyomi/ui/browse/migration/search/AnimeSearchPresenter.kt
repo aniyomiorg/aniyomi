@@ -9,7 +9,7 @@ import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
 import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
 import eu.kanade.domain.category.interactor.GetCategoriesAnime
-import eu.kanade.domain.category.interactor.MoveAnimeToCategories
+import eu.kanade.domain.category.interactor.SetAnimeCategories
 import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.episode.interactor.UpdateEpisode
@@ -48,7 +48,7 @@ class AnimeSearchPresenter(
     private val getCategories: GetCategoriesAnime = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val insertTrack: InsertAnimeTrack = Injekt.get(),
-    private val moveAnimeToCategories: MoveAnimeToCategories = Injekt.get(),
+    private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
 ) : GlobalAnimeSearchPresenter(initialQuery) {
 
     private val replacingAnimeRelay = BehaviorRelay.create<Pair<Boolean, Anime?>>()
@@ -164,7 +164,7 @@ class AnimeSearchPresenter(
         // Update categories
         if (migrateCategories) {
             val categoryIds = getCategories.await(prevDomainAnime.id).map { it.id }
-            moveAnimeToCategories.await(domainAnime.id, categoryIds)
+            setAnimeCategories.await(domainAnime.id, categoryIds)
         }
 
         // Update track

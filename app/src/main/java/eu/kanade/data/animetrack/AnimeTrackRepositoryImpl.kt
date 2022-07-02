@@ -15,7 +15,13 @@ class AnimeTrackRepositoryImpl(
         }
     }
 
-    override suspend fun subscribeAnimeTracksByAnimeId(animeId: Long): Flow<List<AnimeTrack>> {
+    override fun getAnimeTracksAsFlow(): Flow<List<AnimeTrack>> {
+        return handler.subscribeToList {
+            anime_syncQueries.getAnimeTracks(animetrackMapper)
+        }
+    }
+
+    override fun getAnimeTracksByAnimeIdAsFlow(animeId: Long): Flow<List<AnimeTrack>> {
         return handler.subscribeToList {
             anime_syncQueries.getTracksByAnimeId(animeId, animetrackMapper)
         }

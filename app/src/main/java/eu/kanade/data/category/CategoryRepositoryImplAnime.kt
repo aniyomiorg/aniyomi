@@ -15,6 +15,18 @@ class CategoryRepositoryImplAnime(
         return handler.subscribeToList { categoriesQueries.getCategories(categoryMapper) }
     }
 
+    override suspend fun getCategoriesByAnimeId(animeId: Long): List<Category> {
+        return handler.awaitList {
+            categoriesQueries.getCategoriesByAnimeId(animeId, categoryMapper)
+        }
+    }
+
+    override fun getCategoriesByAnimeIdAsFlow(animeId: Long): Flow<List<Category>> {
+        return handler.subscribeToList {
+            categoriesQueries.getCategoriesByAnimeId(animeId, categoryMapper)
+        }
+    }
+
     @Throws(DuplicateNameException::class)
     override suspend fun insert(name: String, order: Long) {
         if (checkDuplicateName(name)) throw DuplicateNameException(name)
@@ -45,12 +57,6 @@ class CategoryRepositoryImplAnime(
             categoriesQueries.delete(
                 categoryId = categoryId,
             )
-        }
-    }
-
-    override suspend fun getCategoriesForAnime(animeId: Long): List<Category> {
-        return handler.awaitList {
-            categoriesQueries.getCategoriesByAnimeId(animeId, categoryMapper)
         }
     }
 

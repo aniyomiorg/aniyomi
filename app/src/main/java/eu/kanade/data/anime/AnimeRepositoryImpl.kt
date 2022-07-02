@@ -46,7 +46,7 @@ class AnimeRepositoryImpl(
         }
     }
 
-    override suspend fun moveAnimeToCategories(animeId: Long, categoryIds: List<Long>) {
+    override suspend fun setAnimeCategories(animeId: Long, categoryIds: List<Long>) {
         handler.await(inTransaction = true) {
             animes_categoriesQueries.deleteAnimeCategoryByAnimeId(animeId)
             categoryIds.map { categoryId ->
@@ -57,31 +57,47 @@ class AnimeRepositoryImpl(
 
     override suspend fun update(update: AnimeUpdate): Boolean {
         return try {
-            handler.await {
-                animesQueries.update(
-                    source = update.source,
-                    url = update.url,
-                    artist = update.artist,
-                    author = update.author,
-                    description = update.description,
-                    genre = update.genre?.let(listOfStringsAdapter::encode),
-                    title = update.title,
-                    status = update.status,
-                    thumbnailUrl = update.thumbnailUrl,
-                    favorite = update.favorite?.toLong(),
-                    lastUpdate = update.lastUpdate,
-                    initialized = update.initialized?.toLong(),
-                    viewer = update.viewerFlags,
-                    episodeFlags = update.episodeFlags,
-                    coverLastModified = update.coverLastModified,
-                    dateAdded = update.dateAdded,
-                    animeId = update.id,
-                )
-            }
+            partialUpdate(update)
             true
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
             false
+        }
+    }
+
+    override suspend fun updateAll(values: List<AnimeUpdate>): Boolean {
+        return try {
+            partialUpdate(*values.toTypedArray())
+            true
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e)
+            false
+        }
+    }
+
+    private suspend fun partialUpdate(vararg values: AnimeUpdate) {
+        handler.await(inTransaction = true) {
+            values.forEach { value ->
+                animesQueries.update(
+                    source = value.source,
+                    url = value.url,
+                    artist = value.artist,
+                    author = value.author,
+                    description = value.description,
+                    genre = value.genre?.let(listOfStringsAdapter::encode),
+                    title = value.title,
+                    status = value.status,
+                    thumbnailUrl = value.thumbnailUrl,
+                    favorite = value.favorite?.toLong(),
+                    lastUpdate = value.lastUpdate,
+                    initialized = value.initialized?.toLong(),
+                    viewer = value.viewerFlags,
+                    episodeFlags = value.episodeFlags,
+                    coverLastModified = value.coverLastModified,
+                    dateAdded = value.dateAdded,
+                    animeId = value.id,
+                )
+            }
         }
     }
 }

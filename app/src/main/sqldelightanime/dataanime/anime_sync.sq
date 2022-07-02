@@ -21,6 +21,9 @@ delete:
 DELETE FROM anime_sync
 WHERE anime_id = :animeId AND sync_id = :syncId;
 
+getAnimeTracks:
+SELECT *
+FROM anime_sync;
 
 getTracksByAnimeId:
 SELECT *

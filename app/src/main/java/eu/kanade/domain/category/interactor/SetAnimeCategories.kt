@@ -4,13 +4,13 @@ import eu.kanade.domain.anime.repository.AnimeRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
 
-class MoveAnimeToCategories(
-    private val mangaRepository: AnimeRepository,
+class SetAnimeCategories(
+    private val animeRepository: AnimeRepository,
 ) {
 
-    suspend fun await(mangaId: Long, categoryIds: List<Long>) {
+    suspend fun await(animeId: Long, categoryIds: List<Long>) {
         try {
-            mangaRepository.moveAnimeToCategories(mangaId, categoryIds)
+            animeRepository.setAnimeCategories(animeId, categoryIds)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
         }

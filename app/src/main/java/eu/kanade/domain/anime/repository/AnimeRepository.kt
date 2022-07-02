@@ -18,7 +18,9 @@ interface AnimeRepository {
 
     suspend fun resetViewerFlags(): Boolean
 
-    suspend fun moveAnimeToCategories(animeId: Long, categoryIds: List<Long>)
+    suspend fun setAnimeCategories(animeId: Long, categoryIds: List<Long>)
 
     suspend fun update(update: AnimeUpdate): Boolean
+
+    suspend fun updateAll(values: List<AnimeUpdate>): Boolean
 }

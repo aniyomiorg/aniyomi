@@ -93,7 +93,7 @@ class PlayerPresenter(
 
     private fun initEpisodeList(): List<Episode> {
         val anime = anime!!
-        val dbEpisodes = db.getEpisodes(anime).executeAsBlocking()
+        val dbEpisodes = db.getEpisodes(anime.id!!).executeAsBlocking()
 
         val selectedEpisode = dbEpisodes.find { it.id == episodeId }
             ?: error("Requested episode of id $episodeId not found in episode list")
@@ -338,7 +338,7 @@ class PlayerPresenter(
             else -> throw NotImplementedError("Unknown sorting method")
         }
 
-        val episodes = db.getEpisodes(anime).executeAsBlocking()
+        val episodes = db.getEpisodes(anime.id!!).executeAsBlocking()
             .sortedWith { e1, e2 -> sortFunction(e1, e2) }
 
         val currentEpisodePosition = episodes.indexOf(episode)

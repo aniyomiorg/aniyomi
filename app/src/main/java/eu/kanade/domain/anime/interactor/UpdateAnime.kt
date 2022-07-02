@@ -20,6 +20,10 @@ class UpdateAnime(
         return animeRepository.update(animeUpdate)
     }
 
+    suspend fun awaitAll(values: List<AnimeUpdate>): Boolean {
+        return animeRepository.updateAll(values)
+    }
+
     suspend fun awaitUpdateFromSource(
         localAnime: Anime,
         remoteAnime: AnimeInfo,

@@ -15,6 +15,7 @@ import eu.kanade.tachiyomi.data.download.model.AnimeDownloadQueue
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.logcat
+import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import rx.Observable
 import uy.kohesive.injekt.Injekt
@@ -104,10 +105,12 @@ class AnimeDownloadManager(
 
     fun startDownloadNow(episodeId: Long?) {
         if (episodeId == null) return
-        val download = downloader.queue.find { it.episode.id == episodeId } ?: return
+        val download = downloader.queue.find { it.episode.id == episodeId }
+        // If not in queue try to start a new download
+        val toAdd = download ?: runBlocking { AnimeDownload.fromEpisodeId(episodeId) } ?: return
         val queue = downloader.queue.toMutableList()
-        queue.remove(download)
-        queue.add(0, download)
+        download?.let { queue.remove(it) }
+        queue.add(0, toAdd)
         reorderQueue(queue)
         if (isPaused()) {
             if (AnimeDownloadService.isRunning(context)) {
@@ -363,7 +366,7 @@ class AnimeDownloadManager(
     private fun getEpisodesToDelete(episodes: List<Episode>, anime: Anime): List<Episode> {
         // Retrieve the categories that are set to exclude from being deleted on read
         val categoriesToExclude = preferences.removeExcludeAnimeCategories().get().map(String::toInt)
-        val categoriesForAnime = db.getCategoriesForAnime(anime).executeAsBlocking()
+        val categoriesForAnime = db.getCategoriesForAnime(anime.id!!).executeAsBlocking()
             .mapNotNull { it.id }
             .takeUnless { it.isEmpty() }
             ?: listOf(0)

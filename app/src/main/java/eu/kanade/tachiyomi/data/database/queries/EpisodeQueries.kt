@@ -2,20 +2,19 @@ package eu.kanade.tachiyomi.data.database.queries
 
 import com.pushtorefresh.storio.sqlite.queries.Query
 import eu.kanade.tachiyomi.data.database.DbProvider
-import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.resolvers.EpisodeProgressPutResolver
 import eu.kanade.tachiyomi.data.database.tables.EpisodeTable
 
 interface EpisodeQueries : DbProvider {
 
-    fun getEpisodes(anime: Anime) = db.get()
+    fun getEpisodes(animeId: Long) = db.get()
         .listOfObjects(Episode::class.java)
         .withQuery(
             Query.builder()
                 .table(EpisodeTable.TABLE)
                 .where("${EpisodeTable.COL_ANIME_ID} = ?")
-                .whereArgs(anime.id)
+                .whereArgs(animeId)
                 .build(),
         )
         .prepare()
@@ -55,11 +54,6 @@ interface EpisodeQueries : DbProvider {
 
     fun updateEpisodeProgress(episode: Episode) = db.put()
         .`object`(episode)
-        .withPutResolver(EpisodeProgressPutResolver())
-        .prepare()
-
-    fun updateEpisodesProgress(episodes: List<Episode>) = db.put()
-        .objects(episodes)
         .withPutResolver(EpisodeProgressPutResolver())
         .prepare()
 }

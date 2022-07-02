@@ -373,7 +373,7 @@ open class BrowseAnimeSourcePresenter(
      * @return Array of category ids the anime is in, if none returns default id
      */
     fun getAnimeCategoryIds(anime: Anime): Array<Long?> {
-        val categories = db.getCategoriesForAnime(anime).executeAsBlocking()
+        val categories = db.getCategoriesForAnime(anime.id!!).executeAsBlocking()
         return categories.mapNotNull { it?.id?.toLong() }.toTypedArray()
     }
 

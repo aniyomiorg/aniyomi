@@ -16,7 +16,7 @@ import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
 import eu.kanade.domain.animetrack.model.toDbTrack
 import eu.kanade.domain.animetrack.model.toDomainTrack
 import eu.kanade.domain.category.interactor.GetCategoriesAnime
-import eu.kanade.domain.category.interactor.MoveAnimeToCategories
+import eu.kanade.domain.category.interactor.SetAnimeCategories
 import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
 import eu.kanade.domain.episode.interactor.UpdateEpisode
@@ -91,7 +91,7 @@ class AnimePresenter(
     private val getCategories: GetCategoriesAnime = Injekt.get(),
     private val deleteTrack: DeleteAnimeTrack = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
-    private val moveAnimeToCategories: MoveAnimeToCategories = Injekt.get(),
+    private val moveAnimeToCategories: SetAnimeCategories = Injekt.get(),
     private val insertTrack: InsertAnimeTrack = Injekt.get(),
     private val syncEpisodesWithTrackServiceTwoWay: SyncEpisodesWithTrackServiceTwoWay = Injekt.get(),
 ) : BasePresenter<AnimeController>() {

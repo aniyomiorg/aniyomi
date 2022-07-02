@@ -60,8 +60,6 @@ interface AnimeQueries : DbProvider {
 
     fun insertAnime(anime: Anime) = db.put().`object`(anime).prepare()
 
-    fun insertAnimes(animes: List<Anime>) = db.put().objects(animes).prepare()
-
     fun updateEpisodeFlags(anime: Anime) = db.put()
         .`object`(anime)
         .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_EPISODE_FLAGS, Anime::episode_flags))
@@ -75,35 +73,5 @@ interface AnimeQueries : DbProvider {
     fun updateViewerFlags(anime: Anime) = db.put()
         .`object`(anime)
         .withPutResolver(AnimeFlagsPutResolver(AnimeTable.COL_VIEWER, Anime::viewer_flags))
-        .prepare()
-
-    fun getLastSeenAnime() = db.get()
-        .listOfObjects(Anime::class.java)
-        .withQuery(
-            RawQuery.builder()
-                .query(getLastSeenAnimeQuery())
-                .observesTables(AnimeTable.TABLE)
-                .build(),
-        )
-        .prepare()
-
-    fun getLatestEpisodeAnime() = db.get()
-        .listOfObjects(Anime::class.java)
-        .withQuery(
-            RawQuery.builder()
-                .query(getLatestEpisodeAnimeQuery())
-                .observesTables(AnimeTable.TABLE)
-                .build(),
-        )
-        .prepare()
-
-    fun getEpisodeFetchDateAnime() = db.get()
-        .listOfObjects(Anime::class.java)
-        .withQuery(
-            RawQuery.builder()
-                .query(getEpisodeFetchDateAnimeQuery())
-                .observesTables(AnimeTable.TABLE)
-                .build(),
-        )
         .prepare()
 }

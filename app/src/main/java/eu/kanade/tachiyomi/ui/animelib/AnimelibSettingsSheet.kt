@@ -4,8 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import com.bluelinelabs.conductor.Router
+import eu.kanade.domain.category.interactor.UpdateCategoryAnime
+import eu.kanade.domain.category.model.CategoryUpdate
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.MangaTrackService
@@ -14,9 +15,13 @@ import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.ui.library.setting.DisplayModeSetting
 import eu.kanade.tachiyomi.ui.library.setting.SortDirectionSetting
 import eu.kanade.tachiyomi.ui.library.setting.SortModeSetting
+import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.State
 import eu.kanade.tachiyomi.widget.sheet.TabbedBottomSheetDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -24,13 +29,15 @@ import uy.kohesive.injekt.injectLazy
 class AnimelibSettingsSheet(
     router: Router,
     private val trackManager: TrackManager = Injekt.get(),
+    private val updateCategory: UpdateCategoryAnime = Injekt.get(),
     onGroupClickListener: (ExtendedNavigationView.Group) -> Unit,
 ) : TabbedBottomSheetDialog(router.activity!!) {
 
     val filters: Filter
     private val sort: Sort
     private val display: Display
-    private val db: AnimeDatabaseHelper by injectLazy()
+
+    val sheetScope = CoroutineScope(Job() + Dispatchers.IO)
 
     init {
         filters = Filter(router.activity!!)
@@ -253,7 +260,14 @@ class AnimelibSettingsSheet(
                 if (preferences.categorizedDisplaySettings().get() && currentCategory != null && currentCategory?.id != 0) {
                     currentCategory?.sortDirection = flag.flag
 
-                    db.insertCategory(currentCategory!!).executeAsBlocking()
+                    sheetScope.launchIO {
+                        updateCategory.await(
+                            CategoryUpdate(
+                                id = currentCategory!!.id?.toLong()!!,
+                                flags = currentCategory!!.flags.toLong(),
+                            ),
+                        )
+                    }
                 } else {
                     preferences.librarySortingAscending().set(flag)
                 }
@@ -275,7 +289,14 @@ class AnimelibSettingsSheet(
                 if (preferences.categorizedDisplaySettings().get() && currentCategory != null && currentCategory?.id != 0) {
                     currentCategory?.sortMode = flag.flag
 
-                    db.insertCategory(currentCategory!!).executeAsBlocking()
+                    sheetScope.launchIO {
+                        updateCategory.await(
+                            CategoryUpdate(
+                                id = currentCategory!!.id?.toLong()!!,
+                                flags = currentCategory!!.flags.toLong(),
+                            ),
+                        )
+                    }
                 } else {
                     preferences.librarySortingMode().set(flag)
                 }
@@ -364,7 +385,14 @@ class AnimelibSettingsSheet(
                 if (preferences.categorizedDisplaySettings().get() && currentCategory != null && currentCategory?.id != 0) {
                     currentCategory?.displayMode = flag.flag
 
-                    db.insertCategory(currentCategory!!).executeAsBlocking()
+                    sheetScope.launchIO {
+                        updateCategory.await(
+                            CategoryUpdate(
+                                id = currentCategory!!.id?.toLong()!!,
+                                flags = currentCategory!!.flags.toLong(),
+                            ),
+                        )
+                    }
                 } else {
                     preferences.libraryDisplayMode().set(flag)
                 }
