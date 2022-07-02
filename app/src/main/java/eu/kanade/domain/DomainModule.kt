@@ -80,7 +80,7 @@ import eu.kanade.domain.history.interactor.RemoveHistoryByMangaId
 import eu.kanade.domain.history.interactor.UpsertHistory
 import eu.kanade.domain.history.repository.HistoryRepository
 import eu.kanade.domain.manga.interactor.GetDuplicateLibraryManga
-import eu.kanade.domain.manga.interactor.GetFavoritesBySourceId
+import eu.kanade.domain.manga.interactor.GetFavorites
 import eu.kanade.domain.manga.interactor.GetMangaById
 import eu.kanade.domain.manga.interactor.GetMangaWithChapters
 import eu.kanade.domain.manga.interactor.ResetViewerFlags
@@ -107,7 +107,7 @@ import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addFactory
 import uy.kohesive.injekt.api.addSingletonFactory
 import uy.kohesive.injekt.api.get
-import eu.kanade.domain.anime.interactor.GetFavoritesBySourceId as GetFavoritesBySourceIdAnime
+import eu.kanade.domain.anime.interactor.GetFavorites as GetFavoritesAnime
 import eu.kanade.domain.anime.interactor.ResetViewerFlags as ResetViewerFlagsAnime
 
 class DomainModule : InjektModule {
@@ -115,7 +115,7 @@ class DomainModule : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingletonFactory<AnimeRepository> { AnimeRepositoryImpl(get()) }
         addFactory { GetDuplicateLibraryAnime(get()) }
-        addFactory { GetFavoritesBySourceIdAnime(get()) }
+        addFactory { GetFavoritesAnime(get()) }
         addFactory { GetAnimeWithEpisodes(get(), get()) }
         addFactory { GetAnimeById(get()) }
         addFactory { GetNextEpisode(get()) }
@@ -146,7 +146,7 @@ class DomainModule : InjektModule {
 
         addSingletonFactory<MangaRepository> { MangaRepositoryImpl(get()) }
         addFactory { GetDuplicateLibraryManga(get()) }
-        addFactory { GetFavoritesBySourceId(get()) }
+        addFactory { GetFavorites(get()) }
         addFactory { GetMangaWithChapters(get(), get()) }
         addFactory { GetMangaById(get()) }
         addFactory { GetNextChapter(get()) }

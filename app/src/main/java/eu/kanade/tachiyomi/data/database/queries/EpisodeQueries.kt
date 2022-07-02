@@ -8,17 +8,6 @@ import eu.kanade.tachiyomi.data.database.tables.EpisodeTable
 
 interface EpisodeQueries : DbProvider {
 
-    fun getEpisodes(animeId: Long) = db.get()
-        .listOfObjects(Episode::class.java)
-        .withQuery(
-            Query.builder()
-                .table(EpisodeTable.TABLE)
-                .where("${EpisodeTable.COL_ANIME_ID} = ?")
-                .whereArgs(animeId)
-                .build(),
-        )
-        .prepare()
-
     fun getEpisode(id: Long) = db.get()
         .`object`(Episode::class.java)
         .withQuery(

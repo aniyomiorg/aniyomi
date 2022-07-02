@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.browse.migration.anime
 
 import android.os.Bundle
-import eu.kanade.domain.anime.interactor.GetFavoritesBySourceId
+import eu.kanade.domain.anime.interactor.GetFavorites
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -16,7 +16,7 @@ import uy.kohesive.injekt.api.get
 
 class MigrationAnimePresenter(
     private val sourceId: Long,
-    private val getFavoritesBySourceId: GetFavoritesBySourceId = Injekt.get(),
+    private val getFavorites: GetFavorites = Injekt.get(),
 ) : BasePresenter<MigrationAnimeController>() {
 
     private val _state: MutableStateFlow<MigrateAnimeState> = MutableStateFlow(MigrateAnimeState.Loading)
@@ -25,7 +25,7 @@ class MigrationAnimePresenter(
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
         presenterScope.launchIO {
-            getFavoritesBySourceId
+            getFavorites
                 .subscribe(sourceId)
                 .catch { exception ->
                     _state.value = MigrateAnimeState.Error(exception)

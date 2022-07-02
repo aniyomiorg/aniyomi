@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.backup.full.models
 
-import dataanime.Animes
+import eu.kanade.domain.anime.model.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeImpl
 import eu.kanade.tachiyomi.data.database.models.AnimeTrackImpl
 import eu.kanade.tachiyomi.data.database.models.EpisodeImpl
@@ -67,7 +67,7 @@ data class BackupAnime(
     }
 
     companion object {
-        fun copyFrom(anime: Animes): BackupAnime {
+        fun copyFrom(anime: Anime): BackupAnime {
             return BackupAnime(
                 url = anime.url,
                 title = anime.title,
@@ -76,12 +76,12 @@ data class BackupAnime(
                 description = anime.description,
                 genre = anime.genre ?: emptyList(),
                 status = anime.status.toInt(),
-                thumbnailUrl = anime.thumbnail_url,
+                thumbnailUrl = anime.thumbnailUrl,
                 favorite = anime.favorite,
                 source = anime.source,
-                dateAdded = anime.date_added,
-                viewer_flags = anime.viewer.toInt(),
-                episodeFlags = anime.episode_flags.toInt(),
+                dateAdded = anime.dateAdded,
+                viewer_flags = anime.viewerFlags.toInt(),
+                episodeFlags = anime.episodeFlags.toInt(),
             )
         }
     }

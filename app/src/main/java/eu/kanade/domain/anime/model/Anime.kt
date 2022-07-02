@@ -31,9 +31,6 @@ data class Anime(
     val initialized: Boolean,
 ) {
 
-    val sorting: Long
-        get() = episodeFlags and EPISODE_SORTING_MASK
-
     fun toSAnime(): SAnime {
         return SAnime.create().also {
             it.url = url
@@ -47,6 +44,9 @@ data class Anime(
             it.initialized = initialized
         }
     }
+
+    val sorting: Long
+        get() = episodeFlags and EPISODE_SORTING_MASK
 
     val displayMode: Long
         get() = episodeFlags and EPISODE_DISPLAY_MASK

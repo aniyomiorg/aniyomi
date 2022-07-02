@@ -12,6 +12,8 @@ interface AnimeRepository {
 
     suspend fun getAnimeByIdAsFlow(id: Long): Flow<Anime>
 
+    suspend fun getFavorites(): List<Anime>
+
     fun getFavoritesBySourceId(sourceId: Long): Flow<List<Anime>>
 
     suspend fun getDuplicateLibraryAnime(title: String, sourceId: Long): Anime?

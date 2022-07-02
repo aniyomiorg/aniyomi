@@ -5,6 +5,7 @@ import android.net.Uri
 import eu.kanade.data.AnimeDatabaseHandler
 import eu.kanade.data.DatabaseHandler
 import eu.kanade.data.toLong
+import eu.kanade.domain.manga.interactor.GetFavorites
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.toSEpisode
@@ -25,6 +26,9 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import data.Mangas as DbManga
 import dataanime.Animes as DbAnime
+import eu.kanade.domain.anime.interactor.GetFavorites as GetFavoritesAnime
+import eu.kanade.domain.anime.model.Anime as DomainAnime
+import eu.kanade.domain.manga.model.Manga as DomainManga
 
 abstract class AbstractBackupManager(protected val context: Context) {
 
@@ -35,6 +39,8 @@ abstract class AbstractBackupManager(protected val context: Context) {
     internal val animesourceManager: AnimeSourceManager = Injekt.get()
     internal val trackManager: TrackManager = Injekt.get()
     protected val preferences: PreferencesHelper = Injekt.get()
+    private val getFavorites: GetFavorites = Injekt.get()
+    private val getFavoritesAnime: GetFavoritesAnime = Injekt.get()
 
     abstract suspend fun createBackup(uri: Uri, flags: Int, isAutoBackup: Boolean): String
 
@@ -99,8 +105,8 @@ abstract class AbstractBackupManager(protected val context: Context) {
      *
      * @return [Manga] from library
      */
-    protected suspend fun getFavoriteManga(): List<DbManga> {
-        return handler.awaitList { mangasQueries.getFavorites() }
+    protected suspend fun getFavoriteManga(): List<DomainManga> {
+        return getFavorites.await()
     }
 
     /**
@@ -108,8 +114,8 @@ abstract class AbstractBackupManager(protected val context: Context) {
      *
      * @return [Anime] from library
      */
-    protected suspend fun getFavoriteAnime(): List<DbAnime> {
-        return animehandler.awaitList { animesQueries.getFavorites() }
+    protected suspend fun getFavoriteAnime(): List<DomainAnime> {
+        return getFavoritesAnime.await()
     }
 
     /**

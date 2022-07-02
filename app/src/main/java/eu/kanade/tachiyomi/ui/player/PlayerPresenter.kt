@@ -4,19 +4,22 @@ import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import eu.kanade.domain.anime.interactor.GetAnimeById
 import eu.kanade.domain.anime.model.isLocal
+import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.animehistory.interactor.UpsertAnimeHistory
 import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
 import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
 import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
 import eu.kanade.domain.animetrack.model.toDbTrack
+import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.episode.interactor.UpdateEpisode
 import eu.kanade.domain.episode.model.EpisodeUpdate
+import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.toDomainAnime
@@ -36,6 +39,7 @@ import eu.kanade.tachiyomi.util.lang.byteSize
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.lang.takeBytes
+import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
 import eu.kanade.tachiyomi.util.system.isOnline
@@ -45,18 +49,18 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.Date
 
 class PlayerPresenter(
-    private val db: AnimeDatabaseHelper = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val preferences: PreferencesHelper = Injekt.get(),
     private val delayedTrackingStore: DelayedTrackingStore = Injekt.get(),
+    private val getAnimeById: GetAnimeById = Injekt.get(),
+    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val insertTrack: InsertAnimeTrack = Injekt.get(),
     private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
@@ -93,14 +97,14 @@ class PlayerPresenter(
 
     private fun initEpisodeList(): List<Episode> {
         val anime = anime!!
-        val dbEpisodes = db.getEpisodes(anime.id!!).executeAsBlocking()
+        val episodes = runBlocking { getEpisodeByAnimeId.await(anime.id!!) }
 
-        val selectedEpisode = dbEpisodes.find { it.id == episodeId }
+        val selectedEpisode = episodes.find { it.id == episodeId }
             ?: error("Requested episode of id $episodeId not found in episode list")
 
         val episodesForPlayer = when {
             preferences.skipRead() || preferences.skipFiltered() -> {
-                val filteredEpisodes = dbEpisodes.filterNot {
+                val filteredEpisodes = episodes.filterNot {
                     when {
                         preferences.skipRead() && it.seen -> true
                         preferences.skipFiltered() -> {
@@ -121,10 +125,11 @@ class PlayerPresenter(
                     filteredEpisodes + listOf(selectedEpisode)
                 }
             }
-            else -> dbEpisodes
+            else -> episodes
         }
 
         return episodesForPlayer
+            .map { it.toDbEpisode() }
             .sortedWith(getEpisodeSort(anime, sortDescending = false))
     }
 
@@ -169,16 +174,16 @@ class PlayerPresenter(
     fun init(animeId: Long, initialEpisodeId: Long) {
         if (!needsInit()) return
 
-        db.getAnime(animeId).asRxObservable()
-            .first()
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext { init(it, initialEpisodeId) }
-            .subscribeFirst(
-                { _, _ ->
-                    // Ignore onNext event
-                },
-                PlayerActivity::setInitialEpisodeError,
-            )
+        launchIO {
+            try {
+                val anime = getAnimeById.await(animeId)
+                withUIContext {
+                    anime?.let { init(it.toDbAnime(), initialEpisodeId) }
+                }
+            } catch (e: Throwable) {
+                view?.setInitialEpisodeError(e)
+            }
+        }
     }
 
     /**
@@ -338,7 +343,8 @@ class PlayerPresenter(
             else -> throw NotImplementedError("Unknown sorting method")
         }
 
-        val episodes = db.getEpisodes(anime.id!!).executeAsBlocking()
+        val episodes = runBlocking { getEpisodeByAnimeId.await(anime.id!!) }
+            .map { it.toDbEpisode() }
             .sortedWith { e1, e2 -> sortFunction(e1, e2) }
 
         val currentEpisodePosition = episodes.indexOf(episode)

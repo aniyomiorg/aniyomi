@@ -26,6 +26,10 @@ class AnimeRepositoryImpl(
         return handler.subscribeToOne { animesQueries.getAnimeById(id, animeMapper) }
     }
 
+    override suspend fun getFavorites(): List<Anime> {
+        return handler.awaitList { animesQueries.getFavorites(animeMapper) }
+    }
+
     override fun getFavoritesBySourceId(sourceId: Long): Flow<List<Anime>> {
         return handler.subscribeToList { animesQueries.getFavoriteBySourceId(sourceId, animeMapper) }
     }

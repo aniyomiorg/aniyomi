@@ -47,8 +47,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -81,10 +79,6 @@ class PlayerActivity :
                 putExtra("episode", episodeId)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
-        }
-
-        fun newIntent(context: Context, anime: Anime, episode: Episode): Intent {
-            return newIntent(context, anime.id, episode.id)
         }
     }
 

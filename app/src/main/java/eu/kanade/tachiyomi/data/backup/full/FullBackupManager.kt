@@ -60,6 +60,8 @@ import okio.sink
 import java.io.FileOutputStream
 import java.util.Date
 import kotlin.math.max
+import eu.kanade.domain.anime.model.Anime as DomainAnime
+import eu.kanade.domain.manga.model.Manga as DomainManga
 
 class FullBackupManager(context: Context) : AbstractBackupManager(context) {
 
@@ -143,19 +145,19 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
         }
     }
 
-    private suspend fun backupManga(mangas: List<Mangas>, flags: Int): List<BackupManga> {
+    private suspend fun backupManga(mangas: List<DomainManga>, flags: Int): List<BackupManga> {
         return mangas.map {
             backupMangaObject(it, flags)
         }
     }
 
-    private suspend fun backupAnime(animes: List<Animes>, flags: Int): List<BackupAnime> {
+    private suspend fun backupAnime(animes: List<DomainAnime>, flags: Int): List<BackupAnime> {
         return animes.map {
             backupAnimeObject(it, flags)
         }
     }
 
-    private fun backupExtensionInfo(mangas: List<Mangas>): List<BackupSource> {
+    private fun backupExtensionInfo(mangas: List<DomainManga>): List<BackupSource> {
         return mangas
             .asSequence()
             .map { it.source }
@@ -165,7 +167,7 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
             .toList()
     }
 
-    private fun backupAnimeExtensionInfo(animes: List<Animes>): List<BackupAnimeSource> {
+    private fun backupAnimeExtensionInfo(animes: List<DomainAnime>): List<BackupAnimeSource> {
         return animes
             .asSequence()
             .map { it.source }
@@ -210,14 +212,14 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
      * @param options options for the backup
      * @return [BackupManga] containing manga in a serializable form
      */
-    private suspend fun backupMangaObject(manga: Mangas, options: Int): BackupManga {
+    private suspend fun backupMangaObject(manga: DomainManga, options: Int): BackupManga {
         // Entry for this manga
         val mangaObject = BackupManga.copyFrom(manga)
 
         // Check if user wants chapter information in backup
         if (options and BACKUP_CHAPTER_MASK == BACKUP_CHAPTER) {
             // Backup all the chapters
-            val chapters = handler.awaitList { chaptersQueries.getChaptersByMangaId(manga._id, backupChapterMapper) }
+            val chapters = handler.awaitList { chaptersQueries.getChaptersByMangaId(manga.id, backupChapterMapper) }
             if (chapters.isNotEmpty()) {
                 mangaObject.chapters = chapters
             }
@@ -226,7 +228,7 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
         // Check if user wants category information in backup
         if (options and BACKUP_CATEGORY_MASK == BACKUP_CATEGORY) {
             // Backup categories for this manga
-            val categoriesForManga = handler.awaitList { categoriesQueries.getCategoriesByMangaId(manga._id) }
+            val categoriesForManga = handler.awaitList { categoriesQueries.getCategoriesByMangaId(manga.id) }
             if (categoriesForManga.isNotEmpty()) {
                 mangaObject.categories = categoriesForManga.map { it.order }
             }
@@ -234,7 +236,7 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
 
         // Check if user wants track information in backup
         if (options and BACKUP_TRACK_MASK == BACKUP_TRACK) {
-            val tracks = handler.awaitList { manga_syncQueries.getTracksByMangaId(manga._id, backupTrackMapper) }
+            val tracks = handler.awaitList { manga_syncQueries.getTracksByMangaId(manga.id, backupTrackMapper) }
             if (tracks.isNotEmpty()) {
                 mangaObject.tracking = tracks
             }
@@ -242,7 +244,7 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
 
         // Check if user wants history information in backup
         if (options and BACKUP_HISTORY_MASK == BACKUP_HISTORY) {
-            val historyByMangaId = handler.awaitList(true) { historyQueries.getHistoryByMangaId(manga._id) }
+            val historyByMangaId = handler.awaitList(true) { historyQueries.getHistoryByMangaId(manga.id) }
             if (historyByMangaId.isNotEmpty()) {
                 val history = historyByMangaId.map { history ->
                     val chapter = handler.awaitOne { chaptersQueries.getChapterById(history.chapter_id) }
@@ -264,14 +266,14 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
      * @param options options for the backup
      * @return [BackupAnime] containing anime in a serializable form
      */
-    private suspend fun backupAnimeObject(anime: Animes, options: Int): BackupAnime {
+    private suspend fun backupAnimeObject(anime: DomainAnime, options: Int): BackupAnime {
         // Entry for this anime
         val animeObject = BackupAnime.copyFrom(anime)
 
         // Check if user wants chapter information in backup
         if (options and BACKUP_CHAPTER_MASK == BACKUP_CHAPTER) {
             // Backup all the chapters
-            val episodes = animehandler.awaitList { episodesQueries.getEpisodesByAnimeId(anime._id, backupEpisodeMapper) }
+            val episodes = animehandler.awaitList { episodesQueries.getEpisodesByAnimeId(anime.id, backupEpisodeMapper) }
             if (episodes.isNotEmpty()) {
                 animeObject.episodes = episodes
             }
@@ -280,7 +282,7 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
         // Check if user wants category information in backup
         if (options and BACKUP_CATEGORY_MASK == BACKUP_CATEGORY) {
             // Backup categories for this manga
-            val categoriesForAnime = animehandler.awaitList { categoriesQueries.getCategoriesByAnimeId(anime._id) }
+            val categoriesForAnime = animehandler.awaitList { categoriesQueries.getCategoriesByAnimeId(anime.id) }
             if (categoriesForAnime.isNotEmpty()) {
                 animeObject.categories = categoriesForAnime.map { it.order }
             }
@@ -288,7 +290,7 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
 
         // Check if user wants track information in backup
         if (options and BACKUP_TRACK_MASK == BACKUP_TRACK) {
-            val tracks = animehandler.awaitList { anime_syncQueries.getTracksByAnimeId(anime._id, backupAnimeTrackMapper) }
+            val tracks = animehandler.awaitList { anime_syncQueries.getTracksByAnimeId(anime.id, backupAnimeTrackMapper) }
             if (tracks.isNotEmpty()) {
                 animeObject.tracking = tracks
             }
@@ -296,7 +298,7 @@ class FullBackupManager(context: Context) : AbstractBackupManager(context) {
 
         // Check if user wants history information in backup
         if (options and BACKUP_HISTORY_MASK == BACKUP_HISTORY) {
-            val historyByAnimeId = animehandler.awaitList(true) { animehistoryQueries.getHistoryByAnimeId(anime._id) }
+            val historyByAnimeId = animehandler.awaitList(true) { animehistoryQueries.getHistoryByAnimeId(anime.id) }
             if (historyByAnimeId.isNotEmpty()) {
                 val history = historyByAnimeId.map { history ->
                     val episode = animehandler.awaitOne { episodesQueries.getEpisodeById(history.episode_id) }
