@@ -87,7 +87,7 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
                     preferences.preserveWatchingPosition() &&
                         episode.lastSecondSeen == episode.totalSeconds
                     )
-            ) 0L else episode.lastSecondSeen
+            ) 1L else episode.lastSecondSeen
         } else episode.lastSecondSeen
 
         return if (pkgName.isNullOrEmpty()) {
