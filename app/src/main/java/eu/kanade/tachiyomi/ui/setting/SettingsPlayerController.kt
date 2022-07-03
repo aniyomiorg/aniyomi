@@ -207,7 +207,7 @@ class SettingsPlayerController : SettingsController() {
                 switchPreference {
                     key = Keys.pipOnExit
                     titleRes = R.string.pref_pip_on_exit
-                    defaultValue = true
+                    defaultValue = false
                 }
             }
 
