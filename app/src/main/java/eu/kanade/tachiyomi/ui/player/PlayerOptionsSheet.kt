@@ -78,5 +78,6 @@ class PlayerOptionsSheet(
         activity.playerControls.showAndFadeControls()
         wasPaused?.let { activity.player.paused = it }
         super.dismiss()
+        activity.setVisibilities()
     }
 }

@@ -605,7 +605,7 @@ class PlayerActivity :
     }
 
     @Suppress("DEPRECATION")
-    private fun setVisibilities() {
+    fun setVisibilities() {
         binding.root.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -1099,6 +1099,9 @@ class PlayerActivity :
                 finishAndRemoveTask()
                 super.onBackPressed()
             }
+        } else {
+            finishAndRemoveTask()
+            super.onBackPressed()
         }
     }
 

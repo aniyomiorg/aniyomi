@@ -125,7 +125,7 @@ class PreferencesHelper(val context: Context) {
 
     fun pipEpisodeToasts() = prefs.getBoolean(Keys.pipEpisodeToasts, true)
 
-    fun pipOnExit() = prefs.getBoolean(Keys.pipOnExit, true)
+    fun pipOnExit() = prefs.getBoolean(Keys.pipOnExit, false)
 
     fun playerBrightnessValue() = flowPrefs.getFloat("player_brightness_value", -1.0F)
 
