@@ -427,7 +427,7 @@
     <string name="rotation_type">Rotation type</string>
     <string name="rotation_free">Free</string>
     <string name="rotation_portrait">Portrait</string>
-    <string name="rotation_reverse_portrait">Reverse portrait</string>
+    <string name="rotation_reverse_portrait">Reverse Portrait</string>
     <string name="rotation_landscape">Landscape</string>
     <string name="rotation_reverse_landscape">Reverse Landscape</string>
     <string name="rotation_sensor_portrait">Sensor Portrait</string>
@@ -482,8 +482,8 @@
     <string name="pref_skip_10">10s</string>
     <string name="pref_skip_5">5s</string>
     <string name="pref_skip_disable">Disable</string>
-    <string name="pref_player_smooth_seek">Enable smoother seeking</string>
-    <string name="pref_player_smooth_seek_summary">When disabled, seeking will focus on keyframes, leading to faster but less precise seeking</string>
+    <string name="pref_player_smooth_seek">Enable precise seeking</string>
+    <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
     <string name="pref_player_fullscreen">Show content in display cutout</string>
     <string name="pref_player_hide_controls">Hide player controls when opening the player</string>
     <string name="pref_pip_episode_toasts">Show episode toasts when switching episodes in PiP mode</string>
