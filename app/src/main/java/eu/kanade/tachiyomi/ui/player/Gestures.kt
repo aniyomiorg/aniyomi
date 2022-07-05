@@ -98,6 +98,7 @@ class Gestures(
             if (scrollState == STATE_HORIZONTAL) {
                 scrollDiff?.let { activity.horizontalScroll(it, final = true) }
                 scrollDiff = null
+                activity.playerControls.resetControlsFade()
             }
             if (scrollState != STATE_UP) {
                 scrollState = STATE_UP

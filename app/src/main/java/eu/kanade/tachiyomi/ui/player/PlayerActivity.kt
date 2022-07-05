@@ -259,15 +259,15 @@ class PlayerActivity :
 
     private var playerIsDestroyed = true
 
-    internal var subTracks: Array<Track> = emptyArray()
+    private var subTracks: Array<Track> = emptyArray()
 
-    internal var selectedSub = 0
+    private var selectedSub = 0
 
     private var hadPreviousSubs = false
 
-    internal var audioTracks: Array<Track> = emptyArray()
+    private var audioTracks: Array<Track> = emptyArray()
 
-    internal var selectedAudio = 0
+    private var selectedAudio = 0
 
     private var hadPreviousAudio = false
 
@@ -541,7 +541,7 @@ class PlayerActivity :
         showLoadingIndicator(position >= cachePosition && seeking)
     }
 
-    internal fun setSub(index: Int) {
+    private fun setSub(index: Int) {
         if (selectedSub == index || selectedSub > subTracks.lastIndex) return
         selectedSub = index
         if (index == 0) {
@@ -557,7 +557,7 @@ class PlayerActivity :
             ?: MPVLib.command(arrayOf("sub-add", subTracks[index].url, "select", subTracks[index].url))
     }
 
-    internal fun setAudio(index: Int) {
+    private fun setAudio(index: Int) {
         if (selectedAudio == index || selectedAudio > audioTracks.lastIndex) return
         selectedAudio = index
         if (index == 0) {
@@ -810,6 +810,7 @@ class PlayerActivity :
     fun initSeek() {
         initialSeek = player.timePos ?: -1
     }
+
     fun horizontalScroll(diff: Float, final: Boolean = false) {
         // disable seeking when timePos is not available
         val duration = player.duration ?: 0
