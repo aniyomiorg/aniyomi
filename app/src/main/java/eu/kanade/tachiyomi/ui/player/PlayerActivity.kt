@@ -810,7 +810,7 @@ class PlayerActivity :
     fun initSeek() {
         initialSeek = player.timePos ?: -1
     }
-    fun horizontalScroll(diff: Float) {
+    fun horizontalScroll(diff: Float, final: Boolean = false) {
         // disable seeking when timePos is not available
         val duration = player.duration ?: 0
         if (duration == 0 || initialSeek < 0) {
@@ -820,7 +820,7 @@ class PlayerActivity :
         val newDiff = newPos - initialSeek
 
         playerControls.hideUiForSeek()
-        if (preferences.getPlayerSmoothSeek()) player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
+        if (preferences.getPlayerSmoothSeek() && final) player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
         playerControls.updatePlaybackPos(newPos)
 
         val diffText = Utils.prettyTime(newDiff, true)

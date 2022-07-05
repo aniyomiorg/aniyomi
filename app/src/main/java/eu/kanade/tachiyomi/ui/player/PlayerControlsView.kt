@@ -40,7 +40,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 return
             }
             hideUiForSeek()
-            activity.player.timePos = progress
+            MPVLib.command(arrayOf("seek", progress.toString(), "absolute+keyframes"))
             updatePlaybackPos(progress)
 
             val duration = activity.player.duration ?: 0
@@ -60,6 +60,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
 
         override fun onStopTrackingTouch(seekBar: SeekBar) {
+            val newPos = seekBar.progress
+            if (preferences.getPlayerSmoothSeek()) activity.player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
             userIsOperatingSeekbar = false
             animationHandler.removeCallbacks(hideUiForSeekRunnable)
             animationHandler.postDelayed(hideUiForSeekRunnable, 500L)

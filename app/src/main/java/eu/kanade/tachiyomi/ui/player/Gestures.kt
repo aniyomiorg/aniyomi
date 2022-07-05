@@ -51,6 +51,8 @@ class Gestures(
         return true
     }
 
+    private var scrollDiff: Float? = null
+
     override fun onScroll(
         e1: MotionEvent,
         e2: MotionEvent,
@@ -82,7 +84,9 @@ class Gestures(
                 activity.verticalScrollRight(1.5F * distanceY / height)
             }
             STATE_HORIZONTAL -> {
-                activity.horizontalScroll(150F * -dx / width)
+                val diff = 150F * -dx / width
+                scrollDiff = diff
+                activity.horizontalScroll(diff)
             }
         }
         return true
@@ -91,6 +95,10 @@ class Gestures(
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_UP) {
+            if (scrollState == STATE_HORIZONTAL) {
+                scrollDiff?.let { activity.horizontalScroll(it, final = true) }
+                scrollDiff = null
+            }
             if (scrollState != STATE_UP) {
                 scrollState = STATE_UP
             }
