@@ -243,7 +243,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         if (preferences.invertedDurationTxt().get() && activity.player.duration != null) {
             binding.playbackDurationTxt.text = "-${ Utils.prettyTime(activity.player.duration!! - duration) }"
         } else binding.playbackDurationTxt.text = Utils.prettyTime(duration)
-        
+
         if (!userIsOperatingSeekbar) {
             binding.playbackSeekbar.max = activity.player.duration!!
         }
