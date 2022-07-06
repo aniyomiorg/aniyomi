@@ -158,7 +158,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.playbackPositionBtn.setOnClickListener {
             preferences.invertedDurationTxt().set(false)
-            if (activity.player.timePos != null) updatePlaybackPos(activity.player.timePos!!)
+            preferences.invertedPlaybackTxt().set(!preferences.invertedPlaybackTxt().get())
             if (activity.player.timePos != null) {
                 updatePlaybackPos(activity.player.timePos!!)
                 updatePlaybackDuration(activity.player.duration!!)
