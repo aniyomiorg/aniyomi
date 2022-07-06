@@ -157,8 +157,21 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
         binding.playbackPositionBtn.setOnClickListener {
-            preferences.invertedPlaybackTxt().set(!preferences.invertedPlaybackTxt().get())
+            preferences.invertedDurationTxt().set(false)
             if (activity.player.timePos != null) updatePlaybackPos(activity.player.timePos!!)
+            if (activity.player.timePos != null) {
+                updatePlaybackPos(activity.player.timePos!!)
+                updatePlaybackDuration(activity.player.duration!!)
+            }
+        }
+
+        binding.playbackDurationBtn.setOnClickListener {
+            preferences.invertedPlaybackTxt().set(false)
+            preferences.invertedDurationTxt().set(!preferences.invertedDurationTxt().get())
+            if (preferences.invertedDurationTxt().get() && activity.player.timePos != null) {
+                updatePlaybackPos(activity.player.timePos!!)
+                updatePlaybackDuration(activity.player.timePos!!)
+            } else updatePlaybackDuration(activity.player.duration!!)
         }
 
         binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked ->
@@ -225,10 +238,14 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         updateSpeedButton()
     }
 
+    @SuppressLint("SetTextI18n")
     internal fun updatePlaybackDuration(duration: Int) {
-        binding.playbackDurationTxt.text = Utils.prettyTime(duration)
+        if (preferences.invertedDurationTxt().get() && activity.player.duration != null) {
+            binding.playbackDurationTxt.text = "-${ Utils.prettyTime(activity.player.duration!! - duration) }"
+        } else binding.playbackDurationTxt.text = Utils.prettyTime(duration)
+        
         if (!userIsOperatingSeekbar) {
-            binding.playbackSeekbar.max = duration
+            binding.playbackSeekbar.max = activity.player.duration!!
         }
     }
 
