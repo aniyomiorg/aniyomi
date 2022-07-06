@@ -134,7 +134,7 @@ class PreferencesHelper(val context: Context) {
     fun autoplayEnabled() = flowPrefs.getBoolean("pref_auto_play_enabled", false)
 
     fun invertedPlaybackTxt() = flowPrefs.getBoolean("pref_invert_playback_txt", false)
-    
+
     fun invertedDurationTxt() = flowPrefs.getBoolean("pref_invert_duration_txt", false)
 
     fun mpvConf() = prefs.getString(Keys.mpvConf, "")
