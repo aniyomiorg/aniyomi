@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.player
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
@@ -153,9 +152,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.pipBtn.setOnClickListener { activity.startPiP() }
 
-        binding.pipBtn.isVisible = !preferences.pipOnExit() &&
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-
+        binding.pipBtn.isVisible = !preferences.pipOnExit() && activity.deviceSupportsPip
         binding.playbackPositionBtn.setOnClickListener {
             preferences.invertedPlaybackTxt().set(!preferences.invertedPlaybackTxt().get())
             if (activity.player.timePos != null) updatePlaybackPos(activity.player.timePos!!)

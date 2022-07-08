@@ -101,6 +101,7 @@ class PlayerActivity :
 
     private var isInPipMode: Boolean = false
     private var isPipStarted: Boolean = false
+    internal var deviceSupportsPip: Boolean = false
 
     internal var isDoubleTapSeeking: Boolean = false
 
@@ -283,6 +284,8 @@ class PlayerActivity :
         Utils.copyAssets(this)
         super.onCreate(savedInstanceState)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) deviceSupportsPip = packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
+
         binding = PlayerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationType()
@@ -428,7 +431,7 @@ class PlayerActivity :
             }
             setupGestures()
             setViewMode()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
+            if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
         }
     }
 
@@ -1068,7 +1071,7 @@ class PlayerActivity :
     }
 
     private fun updatePlaybackStatus(paused: Boolean) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) updatePictureInPictureActions(!paused)
+        if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) updatePictureInPictureActions(!paused)
         val r = if (paused) R.drawable.ic_play_arrow_72dp else R.drawable.ic_pause_72dp
         playerControls.binding.playBtn.setImageResource(r)
 
@@ -1094,7 +1097,7 @@ class PlayerActivity :
     }
 
     override fun onBackPressed() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (deviceSupportsPip) {
             if (player.paused == false && preferences.pipOnExit()) startPiP()
             else {
                 finishAndRemoveTask()
@@ -1121,8 +1124,7 @@ class PlayerActivity :
             }
             player.paused = true
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-            isInPipMode &&
+        if (deviceSupportsPip && isInPipMode &&
             powerManager.isInteractive
         ) finishAndRemoveTask()
 
@@ -1132,7 +1134,7 @@ class PlayerActivity :
     override fun onResume() {
         super.onResume()
         setVisibilities()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
+        if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -1181,7 +1183,7 @@ class PlayerActivity :
     @Suppress("DEPRECATION")
     fun startPiP() {
         if (isInPipMode) return
-        if (packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             isPipStarted = true
             playerControls.hideControls(true)
             player.paused?.let { updatePictureInPictureActions(!it) }
