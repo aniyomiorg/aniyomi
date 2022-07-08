@@ -284,7 +284,7 @@ class PlayerActivity :
         Utils.copyAssets(this)
         super.onCreate(savedInstanceState)
 
-        deviceSupportsPip = packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) deviceSupportsPip = packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
 
         binding = PlayerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -1097,7 +1097,7 @@ class PlayerActivity :
     }
 
     override fun onBackPressed() {
-        if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (deviceSupportsPip) {
             if (player.paused == false && preferences.pipOnExit()) startPiP()
             else {
                 finishAndRemoveTask()
@@ -1124,8 +1124,7 @@ class PlayerActivity :
             }
             player.paused = true
         }
-        if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-            isInPipMode &&
+        if (deviceSupportsPip && isInPipMode &&
             powerManager.isInteractive
         ) finishAndRemoveTask()
 
