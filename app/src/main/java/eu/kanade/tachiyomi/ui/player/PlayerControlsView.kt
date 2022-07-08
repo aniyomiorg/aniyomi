@@ -154,6 +154,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.pipBtn.setOnClickListener { activity.startPiP() }
 
         binding.pipBtn.isVisible = !preferences.pipOnExit() &&
+            activity.deviceSupportsPip &&
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
         binding.playbackPositionBtn.setOnClickListener {
