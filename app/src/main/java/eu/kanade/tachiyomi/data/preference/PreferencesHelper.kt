@@ -135,6 +135,8 @@ class PreferencesHelper(val context: Context) {
 
     fun invertedPlaybackTxt() = flowPrefs.getBoolean("pref_invert_playback_txt", false)
 
+    fun invertedDurationTxt() = flowPrefs.getBoolean("pref_invert_duration_txt", false)
+
     fun mpvConf() = prefs.getString(Keys.mpvConf, "")
 
     fun defaultOrientationType() = prefs.getInt(Keys.defaultOrientationType, OrientationType.FREE.flagValue)
