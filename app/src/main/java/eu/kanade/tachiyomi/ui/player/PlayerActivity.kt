@@ -1279,8 +1279,8 @@ class PlayerActivity :
         currentVideoList?.firstOrNull()?.let {
             setHttpOptions(it)
             presenter.currentEpisode?.let { episode ->
-                if (episode.seen && !preferences.preserveWatchingPosition()) episode.last_second_seen = 1L
-                if (!fromStart) MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
+                if ((episode.seen && !preferences.preserveWatchingPosition()) || fromStart) episode.last_second_seen = 1L
+                MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
             }
             subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
