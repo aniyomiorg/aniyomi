@@ -210,18 +210,18 @@ class PlayerActivity :
         binding.seekView.visibility = View.GONE
     }
 
-    // Fade out Volume Bar
+    // Slide out Volume Bar
     internal val volumeViewRunnable = Runnable {
-        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
-            if (!playerControls.shouldHideUiForSeek) playerControls.binding.volumeView.startAnimation(fadeAnimation)
+        AnimationUtils.loadAnimation(this, R.anim.player_exit_left).also { slideAnimation ->
+            if (!playerControls.shouldHideUiForSeek) playerControls.binding.volumeView.startAnimation(slideAnimation)
             playerControls.binding.volumeView.visibility = View.GONE
         }
     }
 
-    // Fade out Brightness Bar
+    // Slide out Brightness Bar
     internal val brightnessViewRunnable = Runnable {
-        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
-            if (!playerControls.shouldHideUiForSeek) playerControls.binding.brightnessView.startAnimation(fadeAnimation)
+        AnimationUtils.loadAnimation(this, R.anim.player_exit_right).also { slideAnimation ->
+            if (!playerControls.shouldHideUiForSeek) playerControls.binding.brightnessView.startAnimation(slideAnimation)
             playerControls.binding.brightnessView.visibility = View.GONE
         }
     }
@@ -240,11 +240,13 @@ class PlayerActivity :
                 callback = volumeViewRunnable
                 itemView = playerControls.binding.volumeView
                 delay = 750L
+                if (!itemView.isVisible) itemView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.player_enter_left))
             }
             "brightness" -> {
                 callback = brightnessViewRunnable
                 itemView = playerControls.binding.brightnessView
                 delay = 750L
+                if (!itemView.isVisible) itemView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.player_enter_right))
             }
             else -> return
         }
@@ -505,7 +507,7 @@ class PlayerActivity :
 
     // Fade out Player information text
     private val playerInformationRunnable = Runnable {
-        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+        AnimationUtils.loadAnimation(this, R.anim.fade_out_short).also { fadeAnimation ->
             playerControls.binding.playerInformation.startAnimation(fadeAnimation)
             playerControls.binding.playerInformation.visibility = View.GONE
         }
