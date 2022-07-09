@@ -392,6 +392,14 @@
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
+            
+            <Button
+                android:id="@+id/playbackDurationBtn"
+                android:layout_width="96dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackground"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
