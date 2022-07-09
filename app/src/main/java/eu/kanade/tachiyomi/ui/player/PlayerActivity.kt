@@ -641,7 +641,7 @@ class PlayerActivity :
     }
 
     private val doubleTapPlayPauseRunnable = Runnable {
-        AnimationUtils.loadAnimation(this, R.anim.fade_out_medium).also { fadeAnimation ->
+        AnimationUtils.loadAnimation(this, R.anim.player_fade_out).also { fadeAnimation ->
             binding.playPauseView.startAnimation(fadeAnimation)
             binding.playPauseView.visibility = View.GONE
         }
@@ -657,7 +657,7 @@ class PlayerActivity :
                 !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_72dp) }
             }
 
-            AnimationUtils.loadAnimation(this, R.anim.fade_in_medium).also { fadeAnimation ->
+            AnimationUtils.loadAnimation(this, R.anim.player_fade_in).also { fadeAnimation ->
                 binding.playPauseView.startAnimation(fadeAnimation)
                 binding.playPauseView.visibility = View.VISIBLE
             }

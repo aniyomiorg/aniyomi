@@ -80,7 +80,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         shouldHideUiForSeek = false
         activity.player.paused = false
         if (showControls) {
-            AnimationUtils.loadAnimation(activity, R.anim.fade_in_medium).also { fadeAnimation ->
+            AnimationUtils.loadAnimation(activity, R.anim.player_fade_in).also { fadeAnimation ->
                 binding.topControlsGroup.startAnimation(fadeAnimation)
                 binding.topControlsGroup.isVisible = true
 
@@ -96,7 +96,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             animationHandler.removeCallbacks(controlsViewRunnable)
             animationHandler.postDelayed(controlsViewRunnable, 500L)
             animationHandler.removeCallbacks(nonSeekViewRunnable)
-            animationHandler.postDelayed(nonSeekViewRunnable, 850L)
+            animationHandler.postDelayed(nonSeekViewRunnable, 600L + R.integer.player_animation_duration.toLong())
         }
     }
 
@@ -265,7 +265,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     private fun fadeOutView(view: View) {
         animationHandler.removeCallbacks(controlsViewRunnable)
 
-        AnimationUtils.loadAnimation(context, R.anim.fade_out_medium).also { fadeAnimation ->
+        AnimationUtils.loadAnimation(context, R.anim.player_fade_out).also { fadeAnimation ->
             view.startAnimation(fadeAnimation)
             view.visibility = View.GONE
         }
@@ -275,14 +275,14 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             binding.topControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_exit_top))
             binding.bottomRightControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_exit_right))
             binding.bottomLeftControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_exit_left))
-            binding.middleControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_out_medium))
+            binding.middleControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_fade_out))
         }
     }
 
     private fun fadeInView(view: View) {
         animationHandler.removeCallbacks(controlsViewRunnable)
 
-        AnimationUtils.loadAnimation(context, R.anim.fade_in_medium).also { fadeAnimation ->
+        AnimationUtils.loadAnimation(context, R.anim.player_fade_in).also { fadeAnimation ->
             view.startAnimation(fadeAnimation)
             view.visibility = View.VISIBLE
         }
@@ -291,7 +291,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.topControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_enter_top))
         binding.bottomRightControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_enter_right))
         binding.bottomLeftControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_enter_left))
-        binding.middleControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_in_medium))
+        binding.middleControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_fade_in))
     }
 
     private fun pauseForDialog(): StateRestoreCallback {
