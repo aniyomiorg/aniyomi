@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="@integer/player_animation_duration"
+    android:interpolator="@android:interpolator/fast_out_slow_in">
+
+   <translate
+       android:fromXDelta="100%p"
+       android:toXDelta="0" />
+</set>

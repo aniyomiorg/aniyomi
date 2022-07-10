@@ -81,7 +81,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         shouldHideUiForSeek = false
         activity.player.paused = wasPausedBeforeSeeking
         if (showControls) {
-            AnimationUtils.loadAnimation(activity, R.anim.fade_in_medium).also { fadeAnimation ->
+            AnimationUtils.loadAnimation(activity, R.anim.player_fade_in).also { fadeAnimation ->
                 binding.topControlsGroup.startAnimation(fadeAnimation)
                 binding.topControlsGroup.isVisible = true
 
@@ -91,11 +91,14 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 binding.bottomControlsGroup.startAnimation(fadeAnimation)
                 binding.bottomControlsGroup.isVisible = true
             }
+            showControls = false
         } else {
+            showControls = true
+
             animationHandler.removeCallbacks(controlsViewRunnable)
             animationHandler.postDelayed(controlsViewRunnable, 500L)
             animationHandler.removeCallbacks(nonSeekViewRunnable)
-            animationHandler.postDelayed(nonSeekViewRunnable, 700L)
+            animationHandler.postDelayed(nonSeekViewRunnable, 600L + resources.getInteger(R.integer.player_animation_duration).toLong())
         }
     }
 
@@ -281,21 +284,38 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     private fun fadeOutView(view: View) {
         animationHandler.removeCallbacks(controlsViewRunnable)
-        AnimationUtils.loadAnimation(context, R.anim.fade_out_medium).also { fadeAnimation ->
+
+        AnimationUtils.loadAnimation(context, R.anim.player_fade_out).also { fadeAnimation ->
             view.startAnimation(fadeAnimation)
             view.visibility = View.GONE
+        }
+
+        binding.seekBarGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_exit_bottom))
+        if (!showControls) {
+            binding.topControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_exit_top))
+            binding.bottomRightControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_exit_right))
+            binding.bottomLeftControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_exit_left))
+            binding.middleControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_fade_out))
+            showControls = false
         }
     }
 
     private fun fadeInView(view: View) {
         animationHandler.removeCallbacks(controlsViewRunnable)
-        AnimationUtils.loadAnimation(context, R.anim.fade_in_short).also { fadeAnimation ->
+
+        AnimationUtils.loadAnimation(context, R.anim.player_fade_in).also { fadeAnimation ->
             view.startAnimation(fadeAnimation)
             view.visibility = View.VISIBLE
         }
+
+        binding.seekBarGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_enter_bottom))
+        binding.topControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_enter_top))
+        binding.bottomRightControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_enter_right))
+        binding.bottomLeftControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_enter_left))
+        binding.middleControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_fade_in))
     }
 
-    internal fun pauseForDialog(): StateRestoreCallback {
+    private fun pauseForDialog(): StateRestoreCallback {
         val wasPlayerPaused = activity.player.paused ?: true // default to not changing state
         activity.player.paused = true
         return {
