@@ -224,7 +224,7 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
                     }
                 }
                 launchIO {
-                    if (cause == "playback_completion") {
+                    if (cause == "playback_completion" || (currentPosition == duration && duration == 0L)) {
                         saveEpisodeProgress(currentExtEpisode, anime, currentExtEpisode.totalSeconds, currentExtEpisode.totalSeconds)
                     } else {
                         saveEpisodeProgress(currentExtEpisode, anime, currentPosition, duration)

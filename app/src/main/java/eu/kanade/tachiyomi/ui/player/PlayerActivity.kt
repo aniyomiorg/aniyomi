@@ -615,6 +615,7 @@ class PlayerActivity :
             View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
             View.SYSTEM_UI_FLAG_LOW_PROFILE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && preferences.playerFullscreen()) {
             window.attributes.layoutInDisplayCutoutMode =
@@ -1036,6 +1037,7 @@ class PlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     fun skipIntro(view: View) {
         doubleTapSeek(preferences.introLengthPreference(), isDoubleTap = false)
+        playerControls.resetControlsFade()
     }
 
     private fun refreshUi() {

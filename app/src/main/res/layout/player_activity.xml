@@ -121,8 +121,8 @@
 
         <ImageView
             android:id="@+id/playPauseView"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_centerInParent="true"
             android:contentDescription="Play/Pause"
             android:background="@drawable/ic_play_pause_bg"
