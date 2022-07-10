@@ -3,12 +3,14 @@ package eu.kanade.domain.anime.model
 import eu.kanade.data.listOfStringsAdapter
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
+import eu.kanade.tachiyomi.data.database.models.AnimeImpl
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView
 import tachiyomi.animesource.model.AnimeInfo
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.Serializable
 import eu.kanade.tachiyomi.data.database.models.Anime as DbAnime
 
 data class Anime(
@@ -29,21 +31,7 @@ data class Anime(
     val status: Long,
     val thumbnailUrl: String?,
     val initialized: Boolean,
-) {
-
-    fun toSAnime(): SAnime {
-        return SAnime.create().also {
-            it.url = url
-            it.title = title
-            it.artist = artist
-            it.author = author
-            it.description = description
-            it.genre = genre.orEmpty().joinToString()
-            it.status = status.toInt()
-            it.thumbnail_url = thumbnailUrl
-            it.initialized = initialized
-        }
-    }
+) : Serializable {
 
     val sorting: Long
         get() = episodeFlags and EPISODE_SORTING_MASK
@@ -98,6 +86,18 @@ data class Anime(
         return episodeFlags and EPISODE_SORT_DIR_MASK == EPISODE_SORT_DESC
     }
 
+    fun toSAnime(): SAnime = SAnime.create().also {
+        it.url = url
+        it.title = title
+        it.artist = artist
+        it.author = author
+        it.description = description
+        it.genre = genre.orEmpty().joinToString()
+        it.status = status.toInt()
+        it.thumbnail_url = thumbnailUrl
+        it.initialized = initialized
+    }
+
     companion object {
         // Generic filter that does not filter anything
         const val SHOW_ALL = 0x00000000L
@@ -126,6 +126,26 @@ data class Anime(
         const val EPISODE_DISPLAY_NAME = 0x00000000L
         const val EPISODE_DISPLAY_NUMBER = 0x00100000L
         const val EPISODE_DISPLAY_MASK = 0x00100000L
+
+        fun create() = Anime(
+            id = -1L,
+            url = "",
+            title = "",
+            source = -1L,
+            favorite = false,
+            lastUpdate = -1L,
+            dateAdded = -1L,
+            viewerFlags = -1L,
+            episodeFlags = -1L,
+            coverLastModified = -1L,
+            artist = null,
+            author = null,
+            description = null,
+            genre = null,
+            status = 0L,
+            thumbnailUrl = null,
+            initialized = false,
+        )
     }
 }
 
@@ -144,8 +164,9 @@ fun TriStateFilter.toTriStateGroupState(): ExtendedNavigationView.Item.TriStateG
 }
 
 // TODO: Remove when all deps are migrated
-fun Anime.toDbAnime(): DbAnime = DbAnime.create(source).also {
+fun Anime.toDbAnime(): DbAnime = AnimeImpl().also {
     it.id = id
+    it.source = source
     it.favorite = favorite
     it.last_update = lastUpdate
     it.date_added = dateAdded
@@ -173,6 +194,28 @@ fun Anime.toAnimeInfo(): AnimeInfo = AnimeInfo(
     status = status.toInt(),
     title = title,
 )
+
+fun Anime.toAnimeUpdate(): AnimeUpdate {
+    return AnimeUpdate(
+        id = id,
+        source = source,
+        favorite = favorite,
+        lastUpdate = lastUpdate,
+        dateAdded = dateAdded,
+        viewerFlags = viewerFlags,
+        episodeFlags = episodeFlags,
+        coverLastModified = coverLastModified,
+        url = url,
+        title = title,
+        artist = artist,
+        author = author,
+        description = description,
+        genre = genre,
+        status = status,
+        thumbnailUrl = thumbnailUrl,
+        initialized = initialized,
+    )
+}
 
 fun Anime.isLocal(): Boolean = source == LocalSource.ID
 

@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dev.chrisbanes.insetter.applyInsetter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.SelectableAdapter
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.category.model.Category
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.Category
+import eu.kanade.tachiyomi.data.database.models.toDomainAnime
 import eu.kanade.tachiyomi.databinding.AnimelibCategoryBinding
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.lang.plusAssign
@@ -143,7 +144,7 @@ class AnimelibCategoryView @JvmOverloads constructor(context: Context, attrs: At
             .filter { it == category.id }
             .subscribe {
                 adapter.currentItems.forEach { item ->
-                    controller.setSelection(item.anime, true)
+                    controller.setSelection(item.anime.toDomainAnime()!!, true)
                 }
                 controller.invalidateActionMode()
             }
@@ -152,7 +153,7 @@ class AnimelibCategoryView @JvmOverloads constructor(context: Context, attrs: At
             .filter { it == category.id }
             .subscribe {
                 adapter.currentItems.forEach { item ->
-                    controller.toggleSelection(item.anime)
+                    controller.toggleSelection(item.anime.toDomainAnime()!!)
                 }
                 controller.invalidateActionMode()
             }
@@ -191,7 +192,7 @@ class AnimelibCategoryView @JvmOverloads constructor(context: Context, attrs: At
                 val position = adapter.indexOf(anime)
                 if (position != -1 && !adapter.isSelected(position)) {
                     adapter.toggleSelection(position)
-                    (recycler.findViewHolderForItemId(anime.id!!) as? AnimelibHolder<*>)?.toggleActivation()
+                    (recycler.findViewHolderForItemId(anime.id) as? AnimelibHolder<*>)?.toggleActivation()
                 }
             }
         }
@@ -241,7 +242,7 @@ class AnimelibCategoryView @JvmOverloads constructor(context: Context, attrs: At
         val position = adapter.indexOf(anime)
         if (position != -1) {
             adapter.toggleSelection(position)
-            (recycler.findViewHolderForItemId(anime.id!!) as? AnimelibHolder<*>)?.toggleActivation()
+            (recycler.findViewHolderForItemId(anime.id) as? AnimelibHolder<*>)?.toggleActivation()
         }
     }
 
@@ -263,7 +264,7 @@ class AnimelibCategoryView @JvmOverloads constructor(context: Context, attrs: At
             toggleSelection(position)
             true
         } else {
-            openAnime(item.anime)
+            openAnime(item.anime.toDomainAnime()!!)
             false
         }
     }
@@ -309,7 +310,7 @@ class AnimelibCategoryView @JvmOverloads constructor(context: Context, attrs: At
     private fun toggleSelection(position: Int) {
         val item = adapter.getItem(position) ?: return
 
-        controller.setSelection(item.anime, !adapter.isSelected(position))
+        controller.setSelection(item.anime.toDomainAnime()!!, !adapter.isSelected(position))
         controller.invalidateActionMode()
     }
 
@@ -321,7 +322,7 @@ class AnimelibCategoryView @JvmOverloads constructor(context: Context, attrs: At
     private fun setSelection(position: Int) {
         val item = adapter.getItem(position) ?: return
 
-        controller.setSelection(item.anime, true)
+        controller.setSelection(item.anime.toDomainAnime()!!, true)
         controller.invalidateActionMode()
     }
 }

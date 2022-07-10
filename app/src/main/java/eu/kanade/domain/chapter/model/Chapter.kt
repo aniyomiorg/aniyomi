@@ -1,5 +1,6 @@
 package eu.kanade.domain.chapter.model
 
+import eu.kanade.tachiyomi.data.database.models.ChapterImpl
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.data.database.models.Chapter as DbChapter
 
@@ -41,27 +42,25 @@ data class Chapter(
     }
 
     companion object {
-        fun create(): Chapter {
-            return Chapter(
-                id = -1,
-                mangaId = -1,
-                read = false,
-                bookmark = false,
-                lastPageRead = 0,
-                dateFetch = 0,
-                sourceOrder = 0,
-                url = "",
-                name = "",
-                dateUpload = -1,
-                chapterNumber = -1f,
-                scanlator = null,
-            )
-        }
+        fun create() = Chapter(
+            id = -1,
+            mangaId = -1,
+            read = false,
+            bookmark = false,
+            lastPageRead = 0,
+            dateFetch = 0,
+            sourceOrder = 0,
+            url = "",
+            name = "",
+            dateUpload = -1,
+            chapterNumber = -1f,
+            scanlator = null,
+        )
     }
 }
 
 // TODO: Remove when all deps are migrated
-fun Chapter.toDbChapter(): DbChapter = DbChapter.create().also {
+fun Chapter.toDbChapter(): DbChapter = ChapterImpl().also {
     it.id = id
     it.manga_id = mangaId
     it.url = url

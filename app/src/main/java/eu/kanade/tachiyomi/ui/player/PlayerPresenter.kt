@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import eu.kanade.domain.anime.interactor.GetAnimeById
+import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.model.isLocal
 import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.animehistory.interactor.UpsertAnimeHistory
@@ -23,6 +23,7 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.toDomainAnime
+import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.saver.Image
@@ -53,13 +54,14 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.Date
+import eu.kanade.domain.anime.model.Anime as DomainAnime
 
 class PlayerPresenter(
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val preferences: PreferencesHelper = Injekt.get(),
     private val delayedTrackingStore: DelayedTrackingStore = Injekt.get(),
-    private val getAnimeById: GetAnimeById = Injekt.get(),
+    private val getAnime: GetAnime = Injekt.get(),
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val insertTrack: InsertAnimeTrack = Injekt.get(),
@@ -108,12 +110,12 @@ class PlayerPresenter(
                     when {
                         preferences.skipRead() && it.seen -> true
                         preferences.skipFiltered() -> {
-                            anime.seenFilter == Anime.EPISODE_SHOW_SEEN && !it.seen ||
-                                anime.seenFilter == Anime.EPISODE_SHOW_UNSEEN && it.seen ||
-                                anime.downloadedFilter == Anime.EPISODE_SHOW_DOWNLOADED && !downloadManager.isEpisodeDownloaded(it.name, it.scanlator, anime.title, anime.source) ||
-                                anime.downloadedFilter == Anime.EPISODE_SHOW_NOT_DOWNLOADED && downloadManager.isEpisodeDownloaded(it.name, it.scanlator, anime.title, anime.source) ||
-                                anime.bookmarkedFilter == Anime.EPISODE_SHOW_BOOKMARKED && !it.bookmark ||
-                                anime.bookmarkedFilter == Anime.EPISODE_SHOW_NOT_BOOKMARKED && it.bookmark
+                            anime.seenFilter == DomainAnime.EPISODE_SHOW_SEEN.toInt() && !it.seen ||
+                                anime.seenFilter == DomainAnime.EPISODE_SHOW_UNSEEN.toInt() && it.seen ||
+                                anime.downloadedFilter == DomainAnime.EPISODE_SHOW_DOWNLOADED.toInt() && !downloadManager.isEpisodeDownloaded(it.name, it.scanlator, anime.title, anime.source) ||
+                                anime.downloadedFilter == DomainAnime.EPISODE_SHOW_NOT_DOWNLOADED.toInt() && downloadManager.isEpisodeDownloaded(it.name, it.scanlator, anime.title, anime.source) ||
+                                anime.bookmarkedFilter == DomainAnime.EPISODE_SHOW_BOOKMARKED.toInt() && !it.bookmark ||
+                                anime.bookmarkedFilter == DomainAnime.EPISODE_SHOW_NOT_BOOKMARKED.toInt() && it.bookmark
                         }
                         else -> false
                     }
@@ -129,8 +131,8 @@ class PlayerPresenter(
         }
 
         return episodesForPlayer
+            .sortedWith(getEpisodeSort(anime.toDomainAnime()!!, sortDescending = false))
             .map { it.toDbEpisode() }
-            .sortedWith(getEpisodeSort(anime, sortDescending = false))
     }
 
     fun getCurrentEpisodeIndex(): Int {
@@ -138,8 +140,8 @@ class PlayerPresenter(
     }
 
     private var hasTrackers: Boolean = false
-    private val checkTrackers: (Anime) -> Unit = { anime ->
-        val tracks = runBlocking { getTracks.await(anime.id!!) }
+    private val checkTrackers: (DomainAnime) -> Unit = { anime ->
+        val tracks = runBlocking { getTracks.await(anime.id) }
         hasTrackers = tracks.isNotEmpty()
     }
 
@@ -176,7 +178,7 @@ class PlayerPresenter(
 
         launchIO {
             try {
-                val anime = getAnimeById.await(animeId)
+                val anime = getAnime.await(animeId)
                 withUIContext {
                     anime?.let { init(it.toDbAnime(), initialEpisodeId) }
                 }
@@ -196,7 +198,7 @@ class PlayerPresenter(
         this.anime = anime
         if (initialEpisodeId != -1L) episodeId = initialEpisodeId
 
-        checkTrackers(anime)
+        checkTrackers(anime.toDomainAnime()!!)
 
         source = sourceManager.getOrStub(anime.source)
 
@@ -328,31 +330,19 @@ class PlayerPresenter(
     }
 
     private fun deleteEpisodeFromDownloadQueue(episode: Episode) {
-        downloadManager.getEpisodeDownloadOrNull(episode)?.let { download ->
+        downloadManager.getEpisodeDownloadOrNull(episode.toDomainEpisode()!!)?.let { download ->
             downloadManager.deletePendingDownload(download)
         }
     }
 
-    private fun deleteEpisodeIfNeeded(episode: Episode) {
-        val anime = anime ?: return
-        // Determine which chapter should be deleted and enqueue
-        val sortFunction: (Episode, Episode) -> Int = when (anime.sorting) {
-            Anime.EPISODE_SORTING_SOURCE -> { c1, c2 -> c2.source_order.compareTo(c1.source_order) }
-            Anime.EPISODE_SORTING_NUMBER -> { c1, c2 -> c1.episode_number.compareTo(c2.episode_number) }
-            Anime.EPISODE_SORTING_UPLOAD_DATE -> { c1, c2 -> c1.date_upload.compareTo(c2.date_upload) }
-            else -> throw NotImplementedError("Unknown sorting method")
-        }
+    private fun deleteEpisodeIfNeeded(currentEpisode: Episode) {
+        // Determine which episode should be deleted and enqueue
+        val currentEpisodePosition = episodeList.indexOf(currentEpisode)
+        val removeAfterSeenSlots = preferences.removeAfterReadSlots()
+        val episodeToDelete = episodeList.getOrNull(currentEpisodePosition - removeAfterSeenSlots)
 
-        val episodes = runBlocking { getEpisodeByAnimeId.await(anime.id!!) }
-            .map { it.toDbEpisode() }
-            .sortedWith { e1, e2 -> sortFunction(e1, e2) }
-
-        val currentEpisodePosition = episodes.indexOf(episode)
-        val removeAfterReadSlots = preferences.removeAfterReadSlots()
-        val episodeToDelete = episodes.getOrNull(currentEpisodePosition - removeAfterReadSlots)
-
-        // Check if deleting option is enabled and chapter exists
-        if (removeAfterReadSlots != -1 && episodeToDelete != null) {
+        // Check if deleting option is enabled and episode exists
+        if (removeAfterSeenSlots != -1 && episodeToDelete != null) {
             enqueueDeleteSeenEpisodes(episodeToDelete)
         }
     }
@@ -362,7 +352,7 @@ class PlayerPresenter(
         if (!episode.seen) return
 
         launchIO {
-            downloadManager.enqueueDeleteEpisodes(listOf(episode), anime)
+            downloadManager.enqueueDeleteEpisodes(listOf(episode.toDomainEpisode()!!), anime.toDomainAnime()!!)
         }
     }
 

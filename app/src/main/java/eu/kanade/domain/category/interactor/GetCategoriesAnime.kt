@@ -9,11 +9,15 @@ class GetCategoriesAnime(
 ) {
 
     fun subscribe(): Flow<List<Category>> {
-        return categoryRepository.getAll()
+        return categoryRepository.getAllAsFlow()
     }
 
     fun subscribe(animeId: Long): Flow<List<Category>> {
         return categoryRepository.getCategoriesByAnimeIdAsFlow(animeId)
+    }
+
+    suspend fun await(): List<Category> {
+        return categoryRepository.getAll()
     }
 
     suspend fun await(animeId: Long): List<Category> {

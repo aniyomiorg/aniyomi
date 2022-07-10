@@ -8,6 +8,7 @@ import eu.kanade.domain.category.interactor.UpdateCategoryAnime
 import eu.kanade.domain.category.model.CategoryUpdate
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Category
+import eu.kanade.tachiyomi.data.database.models.toDomainCategory
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -203,8 +204,8 @@ class AnimelibSettingsSheet(
             override val footer = null
 
             override fun initModels() {
-                val sorting = SortModeSetting.get(preferences, currentCategory)
-                val order = if (SortDirectionSetting.get(preferences, currentCategory) == SortDirectionSetting.ASCENDING) {
+                val sorting = SortModeSetting.get(preferences, currentCategory?.toDomainCategory())
+                val order = if (SortDirectionSetting.get(preferences, currentCategory?.toDomainCategory()) == SortDirectionSetting.ASCENDING) {
                     Item.MultiSort.SORT_ASC
                 } else {
                     Item.MultiSort.SORT_DESC
@@ -258,7 +259,7 @@ class AnimelibSettingsSheet(
                 }
 
                 if (preferences.categorizedDisplaySettings().get() && currentCategory != null && currentCategory?.id != 0) {
-                    currentCategory?.sortDirection = flag.flag
+                    currentCategory?.sortDirection = flag.flag.toInt()
 
                     sheetScope.launchIO {
                         updateCategory.await(
@@ -287,7 +288,7 @@ class AnimelibSettingsSheet(
                 }
 
                 if (preferences.categorizedDisplaySettings().get() && currentCategory != null && currentCategory?.id != 0) {
-                    currentCategory?.sortMode = flag.flag
+                    currentCategory?.sortMode = flag.flag.toInt()
 
                     sheetScope.launchIO {
                         updateCategory.await(
@@ -331,7 +332,7 @@ class AnimelibSettingsSheet(
         // Gets user preference of currently selected display mode at current category
         private fun getDisplayModePreference(): DisplayModeSetting {
             return if (preferences.categorizedDisplaySettings().get() && currentCategory != null && currentCategory?.id != 0) {
-                DisplayModeSetting.fromFlag(currentCategory?.displayMode)
+                DisplayModeSetting.fromFlag(currentCategory?.displayMode?.toLong())
             } else {
                 preferences.libraryDisplayMode().get()
             }
@@ -383,7 +384,7 @@ class AnimelibSettingsSheet(
                 }
 
                 if (preferences.categorizedDisplaySettings().get() && currentCategory != null && currentCategory?.id != 0) {
-                    currentCategory?.displayMode = flag.flag
+                    currentCategory?.displayMode = flag.flag.toInt()
 
                     sheetScope.launchIO {
                         updateCategory.await(

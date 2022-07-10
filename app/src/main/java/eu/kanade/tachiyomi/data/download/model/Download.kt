@@ -2,10 +2,9 @@ package eu.kanade.tachiyomi.data.download.model
 
 import eu.kanade.domain.chapter.interactor.GetChapter
 import eu.kanade.domain.chapter.model.toDbChapter
-import eu.kanade.domain.manga.interactor.GetMangaById
-import eu.kanade.domain.manga.model.toDbManga
+import eu.kanade.domain.manga.interactor.GetManga
+import eu.kanade.domain.manga.model.Manga
 import eu.kanade.tachiyomi.data.database.models.Chapter
-import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
@@ -69,14 +68,14 @@ data class Download(
         suspend fun fromChapterId(
             chapterId: Long,
             getChapter: GetChapter = Injekt.get(),
-            getMangaById: GetMangaById = Injekt.get(),
+            getManga: GetManga = Injekt.get(),
             sourceManager: SourceManager = Injekt.get(),
         ): Download? {
             val chapter = getChapter.await(chapterId) ?: return null
-            val manga = getMangaById.await(chapter.mangaId) ?: return null
+            val manga = getManga.await(chapter.mangaId) ?: return null
             val source = sourceManager.get(manga.source) as? HttpSource ?: return null
 
-            return Download(source, manga.toDbManga(), chapter.toDbChapter())
+            return Download(source, manga, chapter.toDbChapter())
         }
     }
 }

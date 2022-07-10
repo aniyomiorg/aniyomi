@@ -23,12 +23,8 @@ interface Anime : SAnime {
 
     var cover_last_modified: Long
 
-    fun setEpisodeOrder(order: Int) {
-        setEpisodeFlags(order, EPISODE_SORT_MASK)
-    }
-
     fun sortDescending(): Boolean {
-        return episode_flags and EPISODE_SORT_MASK == EPISODE_SORT_DESC
+        return episode_flags and DomainAnime.EPISODE_SORT_DIR_MASK.toInt() == DomainAnime.EPISODE_SORT_DESC.toInt()
     }
 
     fun getGenres(): List<String>? {
@@ -46,59 +42,26 @@ interface Anime : SAnime {
 
     // Used to display the episode's title one way or another
     var displayMode: Int
-        get() = episode_flags and EPISODE_DISPLAY_MASK
-        set(mode) = setEpisodeFlags(mode, EPISODE_DISPLAY_MASK)
+        get() = episode_flags and DomainAnime.EPISODE_DISPLAY_MASK.toInt()
+        set(mode) = setEpisodeFlags(mode, DomainAnime.EPISODE_DISPLAY_MASK.toInt())
 
     var seenFilter: Int
-        get() = episode_flags and EPISODE_SEEN_MASK
-        set(filter) = setEpisodeFlags(filter, EPISODE_SEEN_MASK)
+        get() = episode_flags and DomainAnime.EPISODE_UNSEEN_MASK.toInt()
+        set(filter) = setEpisodeFlags(filter, DomainAnime.EPISODE_UNSEEN_MASK.toInt())
 
     var downloadedFilter: Int
-        get() = episode_flags and EPISODE_DOWNLOADED_MASK
-        set(filter) = setEpisodeFlags(filter, EPISODE_DOWNLOADED_MASK)
+        get() = episode_flags and DomainAnime.EPISODE_DOWNLOADED_MASK.toInt()
+        set(filter) = setEpisodeFlags(filter, DomainAnime.EPISODE_DOWNLOADED_MASK.toInt())
 
     var bookmarkedFilter: Int
-        get() = episode_flags and EPISODE_BOOKMARKED_MASK
-        set(filter) = setEpisodeFlags(filter, EPISODE_BOOKMARKED_MASK)
+        get() = episode_flags and DomainAnime.EPISODE_BOOKMARKED_MASK.toInt()
+        set(filter) = setEpisodeFlags(filter, DomainAnime.EPISODE_BOOKMARKED_MASK.toInt())
 
     var sorting: Int
-        get() = episode_flags and EPISODE_SORTING_MASK
-        set(sort) = setEpisodeFlags(sort, EPISODE_SORTING_MASK)
+        get() = episode_flags and DomainAnime.EPISODE_SORTING_MASK.toInt()
+        set(sort) = setEpisodeFlags(sort, DomainAnime.EPISODE_SORTING_MASK.toInt())
 
     companion object {
-
-        const val EPISODE_SORT_DESC = 0x00000000
-        const val EPISODE_SORT_ASC = 0x00000001
-        const val EPISODE_SORT_MASK = 0x00000001
-
-        // Generic filter that does not filter anything
-        const val SHOW_ALL = 0x00000000
-
-        const val EPISODE_SHOW_UNSEEN = 0x00000002
-        const val EPISODE_SHOW_SEEN = 0x00000004
-        const val EPISODE_SEEN_MASK = 0x00000006
-
-        const val EPISODE_SHOW_DOWNLOADED = 0x00000008
-        const val EPISODE_SHOW_NOT_DOWNLOADED = 0x00000010
-        const val EPISODE_DOWNLOADED_MASK = 0x00000018
-
-        const val EPISODE_SHOW_BOOKMARKED = 0x00000020
-        const val EPISODE_SHOW_NOT_BOOKMARKED = 0x00000040
-        const val EPISODE_BOOKMARKED_MASK = 0x00000060
-
-        const val EPISODE_SORTING_SOURCE = 0x00000000
-        const val EPISODE_SORTING_NUMBER = 0x00000100
-        const val EPISODE_SORTING_UPLOAD_DATE = 0x00000200
-        const val EPISODE_SORTING_MASK = 0x00000300
-
-        const val EPISODE_DISPLAY_NAME = 0x00000000
-        const val EPISODE_DISPLAY_NUMBER = 0x00100000
-        const val EPISODE_DISPLAY_MASK = 0x00100000
-
-        fun create(source: Long): Anime = AnimeImpl().apply {
-            this.source = source
-        }
-
         fun create(pathUrl: String, title: String, source: Long = 0): Anime = AnimeImpl().apply {
             url = pathUrl
             this.title = title

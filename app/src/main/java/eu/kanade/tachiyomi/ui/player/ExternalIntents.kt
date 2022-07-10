@@ -11,7 +11,6 @@ import android.os.Build
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.animehistory.interactor.UpsertAnimeHistory
 import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
 import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
@@ -273,12 +272,12 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
                 }
                 if (episode.seen) {
                     deleteEpisodeIfNeeded(episode.toDomainEpisode()!!, anime)
-                    deleteEpisodeFromDownloadQueue(episode)
+                    deleteEpisodeFromDownloadQueue(episode.toDomainEpisode()!!)
                 }
             }
         }
 
-        private fun deleteEpisodeFromDownloadQueue(episode: DbEpisode) {
+        private fun deleteEpisodeFromDownloadQueue(episode: Episode) {
             downloadManager.getEpisodeDownloadOrNull(episode)?.let { download ->
                 downloadManager.deletePendingDownload(download)
             }
@@ -348,7 +347,7 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
             if (!episode.seen) return
 
             launchIO {
-                downloadManager.enqueueDeleteEpisodes(listOf(episode.toDbEpisode()), anime.toDbAnime())
+                downloadManager.enqueueDeleteEpisodes(listOf(episode), anime)
             }
         }
     }

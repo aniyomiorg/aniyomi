@@ -25,10 +25,6 @@ CREATE TABLE animes(
 CREATE INDEX animelib_favorite_index ON animes(favorite) WHERE favorite = 1;
 CREATE INDEX animes_url_index ON animes(url);
 
-insert:
-INSERT INTO animes(source,url,artist,author,description,genre,title,status,thumbnail_url,favorite,last_update,next_update,initialized,viewer,episode_flags,cover_last_modified,date_added)
-VALUES (:source,:url,:artist,:author,:description,:genre,:title,:status,:thumbnail_url,:favorite,:last_update,:next_update,:initialized,:viewer,:episode_flags,:cover_last_modified,:date_added);
-
 getAnimeById:
 SELECT *
 FROM animes
@@ -145,6 +141,10 @@ ORDER BY max ASC;
 deleteAnimesNotInLibraryBySourceIds:
 DELETE FROM animes
 WHERE favorite = 0 AND source IN :sourceIds;
+
+insert:
+INSERT INTO animes(source,url,artist,author,description,genre,title,status,thumbnail_url,favorite,last_update,next_update,initialized,viewer,episode_flags,cover_last_modified,date_added)
+VALUES (:source,:url,:artist,:author,:description,:genre,:title,:status,:thumbnailUrl,:favorite,:lastUpdate,:nextUpdate,:initialized,:viewerFlags,:episodeFlags,:coverLastModified,:dateAdded);
 
 update:
 UPDATE animes SET

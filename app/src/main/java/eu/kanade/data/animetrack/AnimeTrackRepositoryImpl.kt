@@ -37,27 +37,16 @@ class AnimeTrackRepositoryImpl(
     }
 
     override suspend fun insert(track: AnimeTrack) {
-        handler.await {
-            anime_syncQueries.insert(
-                animeId = track.animeId,
-                syncId = track.syncId,
-                remoteId = track.remoteId,
-                libraryId = track.libraryId,
-                title = track.title,
-                lastEpisodeSeen = track.lastEpisodeSeen,
-                totalEpisodes = track.totalEpisodes,
-                status = track.status,
-                score = track.score,
-                remoteUrl = track.remoteUrl,
-                startDate = track.startDate,
-                finishDate = track.finishDate,
-            )
-        }
+        insertValues(track)
     }
 
     override suspend fun insertAll(tracks: List<AnimeTrack>) {
+        insertValues(*tracks.toTypedArray())
+    }
+
+    private suspend fun insertValues(vararg values: AnimeTrack) {
         handler.await(inTransaction = true) {
-            tracks.forEach { animeTrack ->
+            values.forEach { animeTrack ->
                 anime_syncQueries.insert(
                     animeId = animeTrack.animeId,
                     syncId = animeTrack.syncId,

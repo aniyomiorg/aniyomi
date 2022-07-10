@@ -4,16 +4,16 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.davidea.viewholders.FlexibleViewHolder
+import eu.kanade.domain.anime.model.Anime
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
-import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.databinding.GlobalSearchControllerCardBinding
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 /**
- * Holder that binds the [GlobalSearchItem] containing catalogue cards.
+ * Holder that binds the [GlobalAnimeSearchItem] containing catalogue cards.
  *
- * @param view view of [GlobalSearchItem]
- * @param adapter instance of [GlobalSearchAdapter]
+ * @param view view of [GlobalAnimeSearchItem]
+ * @param adapter instance of [GlobalAnimeSearchAdapter]
  */
 class GlobalAnimeSearchHolder(view: View, val adapter: GlobalAnimeSearchAdapter) :
     FlexibleViewHolder(view, adapter) {
@@ -92,7 +92,7 @@ class GlobalAnimeSearchHolder(view: View, val adapter: GlobalAnimeSearchAdapter)
     private fun getHolder(anime: Anime): GlobalAnimeSearchCardHolder? {
         animeAdapter.allBoundViewHolders.forEach { holder ->
             val item = animeAdapter.getItem(holder.bindingAdapterPosition)
-            if (item != null && item.anime.id!! == anime.id!!) {
+            if (item != null && item.anime.id == anime.id) {
                 return holder as GlobalAnimeSearchCardHolder
             }
         }

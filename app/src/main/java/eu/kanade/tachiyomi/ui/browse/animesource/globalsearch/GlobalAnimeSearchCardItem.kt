@@ -5,8 +5,8 @@ import androidx.recyclerview.widget.RecyclerView
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
+import eu.kanade.domain.anime.model.Anime
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Anime
 
 class GlobalAnimeSearchCardItem(val anime: Anime) : AbstractFlexibleItem<GlobalAnimeSearchCardHolder>() {
 

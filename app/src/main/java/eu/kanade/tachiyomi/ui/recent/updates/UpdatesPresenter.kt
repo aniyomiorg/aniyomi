@@ -3,12 +3,12 @@ package eu.kanade.tachiyomi.ui.recent.updates
 import android.os.Bundle
 import eu.kanade.data.DatabaseHandler
 import eu.kanade.data.manga.mangaChapterMapper
+import eu.kanade.domain.chapter.interactor.SetReadStatus
 import eu.kanade.domain.chapter.interactor.UpdateChapter
 import eu.kanade.domain.chapter.model.Chapter
 import eu.kanade.domain.chapter.model.ChapterUpdate
 import eu.kanade.domain.chapter.model.toDbChapter
 import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.toDbManga
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -41,6 +41,7 @@ class UpdatesPresenter : BasePresenter<UpdatesController>() {
 
     private val handler: DatabaseHandler by injectLazy()
     private val updateChapter: UpdateChapter by injectLazy()
+    private val setReadStatus: SetReadStatus by injectLazy()
 
     private val relativeTime: Int = preferences.relativeTime().get()
     private val dateFormat: DateFormat = preferences.dateFormat()
@@ -168,14 +169,12 @@ class UpdatesPresenter : BasePresenter<UpdatesController>() {
      */
     fun markChapterRead(items: List<UpdatesItem>, read: Boolean) {
         presenterScope.launchIO {
-            val toUpdate = items.map {
-                ChapterUpdate(
-                    read = read,
-                    lastPageRead = if (!read) 0 else null,
-                    id = it.chapter.id,
-                )
-            }
-            updateChapter.awaitAll(toUpdate)
+            setReadStatus.await(
+                read = read,
+                values = items
+                    .map { it.chapter }
+                    .toTypedArray(),
+            )
         }
     }
 
@@ -219,7 +218,7 @@ class UpdatesPresenter : BasePresenter<UpdatesController>() {
      * @param items list of recent chapters seleted.
      */
     fun downloadChapters(items: List<UpdatesItem>) {
-        items.forEach { downloadManager.downloadChapters(it.manga.toDbManga(), listOf(it.chapter.toDbChapter())) }
+        items.forEach { downloadManager.downloadChapters(it.manga, listOf(it.chapter.toDbChapter())) }
     }
 
     /**
@@ -230,7 +229,7 @@ class UpdatesPresenter : BasePresenter<UpdatesController>() {
     private fun deleteChaptersInternal(chapterItems: List<UpdatesItem>) {
         val itemsByManga = chapterItems.groupBy { it.manga.id }
         for ((_, items) in itemsByManga) {
-            val manga = items.first().manga.toDbManga()
+            val manga = items.first().manga
             val source = sourceManager.get(manga.source) ?: continue
             val chapters = items.map { it.chapter.toDbChapter() }
 

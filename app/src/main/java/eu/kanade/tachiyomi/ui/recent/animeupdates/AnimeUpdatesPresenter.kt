@@ -4,11 +4,10 @@ import android.os.Bundle
 import eu.kanade.data.AnimeDatabaseHandler
 import eu.kanade.data.anime.animeEpisodeMapper
 import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.episode.interactor.SetSeenStatus
 import eu.kanade.domain.episode.interactor.UpdateEpisode
 import eu.kanade.domain.episode.model.Episode
 import eu.kanade.domain.episode.model.EpisodeUpdate
-import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
@@ -41,6 +40,7 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
 
     private val handler: AnimeDatabaseHandler by injectLazy()
     private val updateEpisode: UpdateEpisode by injectLazy()
+    private val setSeenStatus: SetSeenStatus by injectLazy()
 
     private val relativeTime: Int = preferences.relativeTime().get()
     private val dateFormat: DateFormat = preferences.dateFormat()
@@ -178,14 +178,12 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
      */
     fun markEpisodeRead(items: List<AnimeUpdatesItem>, seen: Boolean) {
         presenterScope.launchIO {
-            val toUpdate = items.map {
-                EpisodeUpdate(
-                    seen = seen,
-                    lastSecondSeen = if (!seen) 0 else null,
-                    id = it.episode.id,
-                )
-            }
-            updateEpisode.awaitAll(toUpdate)
+            setSeenStatus.await(
+                seen = seen,
+                values = items
+                    .map { it.episode }
+                    .toTypedArray(),
+            )
         }
     }
 
@@ -229,7 +227,7 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
      * @param items list of recent episodes seleted.
      */
     fun downloadEpisodes(items: List<AnimeUpdatesItem>) {
-        items.forEach { downloadManager.downloadEpisodes(it.anime.toDbAnime(), listOf(it.episode.toDbEpisode())) }
+        items.forEach { downloadManager.downloadEpisodes(it.anime, listOf(it.episode)) }
     }
 
     /**
@@ -237,7 +235,7 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
      * @param items list of recent episodes seleted.
      */
     fun downloadEpisodesExternally(items: List<AnimeUpdatesItem>) {
-        items.forEach { downloadManager.downloadEpisodesAlt(it.anime.toDbAnime(), listOf(it.episode.toDbEpisode())) }
+        items.forEach { downloadManager.downloadEpisodesAlt(it.anime, listOf(it.episode)) }
     }
 
     /**
@@ -248,9 +246,9 @@ class AnimeUpdatesPresenter : BasePresenter<AnimeUpdatesController>() {
     private fun deleteEpisodesInternal(episodeItems: List<AnimeUpdatesItem>) {
         val itemsByAnime = episodeItems.groupBy { it.anime.id }
         for ((_, items) in itemsByAnime) {
-            val anime = items.first().anime.toDbAnime()
+            val anime = items.first().anime
             val source = sourceManager.get(anime.source) ?: continue
-            val episodes = items.map { it.episode.toDbEpisode() }
+            val episodes = items.map { it.episode }
 
             downloadManager.deleteEpisodes(episodes, anime, source)
             items.forEach {

@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.animelib
 
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.domain.anime.model.Anime
 
 /**
  * Adapter storing a list of anime in a certain category.

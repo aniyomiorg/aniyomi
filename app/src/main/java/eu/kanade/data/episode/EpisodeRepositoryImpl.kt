@@ -42,41 +42,29 @@ class EpisodeRepositoryImpl(
     }
 
     override suspend fun update(episodeUpdate: EpisodeUpdate) {
-        handler.await {
-            episodesQueries.update(
-                episodeUpdate.animeId,
-                episodeUpdate.url,
-                episodeUpdate.name,
-                episodeUpdate.scanlator,
-                episodeUpdate.seen?.toLong(),
-                episodeUpdate.bookmark?.toLong(),
-                episodeUpdate.lastSecondSeen,
-                episodeUpdate.totalSeconds,
-                episodeUpdate.episodeNumber?.toDouble(),
-                episodeUpdate.sourceOrder,
-                episodeUpdate.dateFetch,
-                episodeUpdate.dateUpload,
-                episodeId = episodeUpdate.id,
-            )
-        }
+        partialUpdate(episodeUpdate)
     }
 
     override suspend fun updateAll(episodeUpdates: List<EpisodeUpdate>) {
+        partialUpdate(*episodeUpdates.toTypedArray())
+    }
+
+    private suspend fun partialUpdate(vararg episodeUpdates: EpisodeUpdate) {
         handler.await(inTransaction = true) {
             episodeUpdates.forEach { episodeUpdate ->
                 episodesQueries.update(
-                    episodeUpdate.animeId,
-                    episodeUpdate.url,
-                    episodeUpdate.name,
-                    episodeUpdate.scanlator,
-                    episodeUpdate.seen?.toLong(),
-                    episodeUpdate.bookmark?.toLong(),
-                    episodeUpdate.lastSecondSeen,
-                    episodeUpdate.totalSeconds,
-                    episodeUpdate.episodeNumber?.toDouble(),
-                    episodeUpdate.sourceOrder,
-                    episodeUpdate.dateFetch,
-                    episodeUpdate.dateUpload,
+                    animeId = episodeUpdate.animeId,
+                    url = episodeUpdate.url,
+                    name = episodeUpdate.name,
+                    scanlator = episodeUpdate.scanlator,
+                    seen = episodeUpdate.seen?.toLong(),
+                    bookmark = episodeUpdate.bookmark?.toLong(),
+                    lastSecondSeen = episodeUpdate.lastSecondSeen,
+                    totalSeconds = episodeUpdate.totalSeconds,
+                    episodeNumber = episodeUpdate.episodeNumber?.toDouble(),
+                    sourceOrder = episodeUpdate.sourceOrder,
+                    dateFetch = episodeUpdate.dateFetch,
+                    dateUpload = episodeUpdate.dateUpload,
                     episodeId = episodeUpdate.id,
                 )
             }
@@ -101,5 +89,9 @@ class EpisodeRepositoryImpl(
 
     override fun getEpisodeByAnimeIdAsFlow(animeId: Long): Flow<List<Episode>> {
         return handler.subscribeToList { episodesQueries.getEpisodesByAnimeId(animeId, episodeMapper) }
+    }
+
+    override suspend fun getEpisodeByUrlAndAnimeId(url: String, animeId: Long): Episode? {
+        return handler.awaitOneOrNull { episodesQueries.getEpisodeByUrlAndAnimeId(url, animeId, episodeMapper) }
     }
 }

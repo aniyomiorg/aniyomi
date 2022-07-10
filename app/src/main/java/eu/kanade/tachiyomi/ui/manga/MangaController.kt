@@ -24,14 +24,14 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.data.chapter.NoChaptersException
+import eu.kanade.domain.category.model.Category
+import eu.kanade.domain.manga.model.Manga
 import eu.kanade.domain.manga.model.toDbManga
 import eu.kanade.presentation.manga.ChapterDownloadAction
 import eu.kanade.presentation.manga.DownloadAction
 import eu.kanade.presentation.manga.MangaScreen
 import eu.kanade.presentation.util.calculateWindowWidthSizeClass
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Category
-import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
@@ -58,6 +58,8 @@ import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.ui.recent.history.HistoryController
 import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
+import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
@@ -209,7 +211,7 @@ class MangaController :
                 {
                     AddDuplicateMangaDialog(
                         target = this,
-                        libraryManga = it.toDbManga(),
+                        libraryManga = it,
                         onAddToLibrary = { onFavoriteClick(checkDuplicate = false) },
                     ).showDialog(router)
                 }
@@ -223,7 +225,7 @@ class MangaController :
                         QuadStateTextView.State.UNCHECKED.ordinal
                     }
                 }.toTypedArray()
-                showChangeCategoryDialog(manga.toDbManga(), categories, preselected)
+                showChangeCategoryDialog(manga, categories, preselected)
             },
         )
     }
@@ -244,23 +246,24 @@ class MangaController :
         }
     }
 
-    fun onTrackingClick() {
-        trackSheet.show()
-    }
-
     private fun onCategoriesClick() {
-        val manga = presenter.manga ?: return
-        val categories = presenter.getCategories()
+        viewScope.launchIO {
+            val manga = presenter.manga ?: return@launchIO
+            val categories = presenter.getCategories()
 
-        val ids = presenter.getMangaCategoryIds(manga)
-        val preselected = categories.map {
-            if (it.id in ids) {
-                QuadStateTextView.State.CHECKED.ordinal
-            } else {
-                QuadStateTextView.State.UNCHECKED.ordinal
+            val ids = presenter.getMangaCategoryIds(manga)
+            val preselected = categories.map {
+                if (it.id in ids) {
+                    QuadStateTextView.State.CHECKED.ordinal
+                } else {
+                    QuadStateTextView.State.UNCHECKED.ordinal
+                }
+            }.toTypedArray()
+
+            withUIContext {
+                showChangeCategoryDialog(manga, categories, preselected)
             }
-        }.toTypedArray()
-        showChangeCategoryDialog(manga.toDbManga(), categories, preselected)
+        }
     }
 
     private fun showChangeCategoryDialog(manga: Manga, categories: List<Category>, preselected: Array<Int>) {
@@ -349,7 +352,7 @@ class MangaController :
      */
     private fun migrateManga() {
         val manga = presenter.manga ?: return
-        val controller = SearchController(manga.toDbManga())
+        val controller = SearchController(manga)
         controller.targetController = this
         router.pushController(controller)
     }

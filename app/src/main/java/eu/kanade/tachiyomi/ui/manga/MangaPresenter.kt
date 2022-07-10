@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.compose.runtime.Immutable
 import eu.kanade.domain.category.interactor.GetCategories
 import eu.kanade.domain.category.interactor.SetMangaCategories
+import eu.kanade.domain.category.model.Category
+import eu.kanade.domain.chapter.interactor.SetReadStatus
 import eu.kanade.domain.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.domain.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
 import eu.kanade.domain.chapter.interactor.UpdateChapter
@@ -22,12 +24,7 @@ import eu.kanade.domain.track.interactor.GetTracks
 import eu.kanade.domain.track.interactor.InsertTrack
 import eu.kanade.domain.track.model.toDbTrack
 import eu.kanade.domain.track.model.toDomainTrack
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
-import eu.kanade.tachiyomi.data.database.models.Category
-import eu.kanade.tachiyomi.data.database.models.Chapter
-import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.database.models.Track
-import eu.kanade.tachiyomi.data.database.models.toDomainChapter
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -79,12 +76,12 @@ class MangaPresenter(
     val mangaId: Long,
     val isFromSource: Boolean,
     private val preferences: PreferencesHelper = Injekt.get(),
-    private val db: DatabaseHelper = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
     private val downloadManager: DownloadManager = Injekt.get(),
     private val getMangaAndChapters: GetMangaWithChapters = Injekt.get(),
     private val getDuplicateLibraryManga: GetDuplicateLibraryManga = Injekt.get(),
     private val setMangaChapterFlags: SetMangaChapterFlags = Injekt.get(),
+    private val setReadStatus: SetReadStatus = Injekt.get(),
     private val updateChapter: UpdateChapter = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
     private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get(),
@@ -153,7 +150,7 @@ class MangaPresenter(
 
         presenterScope.launchIO {
             if (!getMangaAndChapters.awaitManga(mangaId).favorite) {
-                ChapterSettingsHelper.applySettingDefaults(mangaId, setMangaChapterFlags)
+                ChapterSettingsHelper.applySettingDefaults(mangaId)
             }
 
             getMangaAndChapters.subscribe(mangaId)
@@ -260,22 +257,22 @@ class MangaPresenter(
 
                 // Now check if user previously set categories, when available
                 val categories = getCategories()
-                val defaultCategoryId = preferences.defaultCategory()
+                val defaultCategoryId = preferences.defaultCategory().toLong()
                 val defaultCategory = categories.find { it.id == defaultCategoryId }
                 when {
                     // Default category set
                     defaultCategory != null -> {
                         val result = updateManga.awaitUpdateFavorite(manga.id, true)
                         if (!result) return@launchIO
-                        moveMangaToCategory(manga.toDbManga(), defaultCategory)
+                        moveMangaToCategory(defaultCategory)
                         launchUI { onAdded() }
                     }
 
                     // Automatic 'Default' or no categories
-                    defaultCategoryId == 0 || categories.isEmpty() -> {
+                    defaultCategoryId == 0L || categories.isEmpty() -> {
                         val result = updateManga.awaitUpdateFavorite(manga.id, true)
                         if (!result) return@launchIO
-                        moveMangaToCategory(manga.toDbManga(), null)
+                        moveMangaToCategory(null)
                         launchUI { onAdded() }
                     }
 
@@ -311,7 +308,7 @@ class MangaPresenter(
      */
     fun hasDownloads(): Boolean {
         val manga = successState?.manga ?: return false
-        return downloadManager.getDownloadCount(manga.toDbManga()) > 0
+        return downloadManager.getDownloadCount(manga) > 0
     }
 
     /**
@@ -319,7 +316,7 @@ class MangaPresenter(
      */
     fun deleteDownloads() {
         val state = successState ?: return
-        downloadManager.deleteManga(state.manga.toDbManga(), state.source)
+        downloadManager.deleteManga(state.manga, state.source)
     }
 
     /**
@@ -327,8 +324,8 @@ class MangaPresenter(
      *
      * @return List of categories, not including the default category
      */
-    fun getCategories(): List<Category> {
-        return db.getCategories().executeAsBlocking()
+    suspend fun getCategories(): List<Category> {
+        return getCategories.await()
     }
 
     /**
@@ -337,15 +334,15 @@ class MangaPresenter(
      * @param manga the manga to get categories from.
      * @return Array of category ids the manga is in, if none returns default id
      */
-    fun getMangaCategoryIds(manga: DomainManga): Array<Int> {
+    fun getMangaCategoryIds(manga: DomainManga): Array<Long> {
         val categories = runBlocking { getCategories.await(manga.id) }
-        return categories.map { it.id.toInt() }.toTypedArray()
+        return categories.map { it.id }.toTypedArray()
     }
 
-    fun moveMangaToCategoriesAndAddToLibrary(manga: Manga, categories: List<Category>) {
-        moveMangaToCategories(manga, categories)
+    fun moveMangaToCategoriesAndAddToLibrary(manga: DomainManga, categories: List<Category>) {
+        moveMangaToCategories(categories)
         presenterScope.launchIO {
-            updateManga.awaitUpdateFavorite(manga.id!!, true)
+            updateManga.awaitUpdateFavorite(manga.id, true)
         }
     }
 
@@ -355,9 +352,8 @@ class MangaPresenter(
      * @param manga the manga to move.
      * @param categories the selected categories.
      */
-    private fun moveMangaToCategories(manga: Manga, categories: List<Category>) {
-        val mangaId = manga.id ?: return
-        val categoryIds = categories.mapNotNull { it.id?.toLong() }
+    private fun moveMangaToCategories(categories: List<Category>) {
+        val categoryIds = categories.map { it.id }
         presenterScope.launchIO {
             setMangaCategories.await(mangaId, categoryIds)
         }
@@ -369,8 +365,8 @@ class MangaPresenter(
      * @param manga the manga to move.
      * @param category the selected category, or null for default category.
      */
-    private fun moveMangaToCategory(manga: Manga, category: Category?) {
-        moveMangaToCategories(manga, listOfNotNull(category))
+    private fun moveMangaToCategory(category: Category?) {
+        moveMangaToCategories(listOfNotNull(category))
     }
 
     private fun observeTrackingCount() {
@@ -380,7 +376,7 @@ class MangaPresenter(
             getTracks.subscribe(manga.id)
                 .catch { logcat(LogPriority.ERROR, it) }
                 .map { tracks ->
-                    val loggedServicesId = loggedServices.map { it.id.toLong() }
+                    val loggedServicesId = loggedServices.map { it.id }
                     tracks.filter { it.syncId in loggedServicesId }.size
                 }
                 .collectLatest { trackingCount ->
@@ -469,8 +465,7 @@ class MangaPresenter(
                     )
 
                     if (manualFetch) {
-                        val dbChapters = newChapters.map { it.toDbChapter() }
-                        downloadNewChapters(dbChapters)
+                        downloadNewChapters(newChapters)
                     }
                 }
             } catch (e: Throwable) {
@@ -533,14 +528,10 @@ class MangaPresenter(
      */
     fun markChaptersRead(chapters: List<DomainChapter>, read: Boolean) {
         presenterScope.launchIO {
-            val lastPageRead = if (read || preferences.preserveReadingPosition()) null else 0L
-            val modified = chapters.filterNot { it.read == read }
-            modified
-                .map { ChapterUpdate(id = it.id, read = read, lastPageRead = lastPageRead) }
-                .let { updateChapter.awaitAll(it) }
-            if (read && preferences.removeAfterMarkedAsRead()) {
-                deleteChapters(modified)
-            }
+            setReadStatus.await(
+                read = read,
+                values = chapters.toTypedArray(),
+            )
         }
     }
 
@@ -550,7 +541,7 @@ class MangaPresenter(
      */
     fun downloadChapters(chapters: List<DomainChapter>) {
         val manga = successState?.manga ?: return
-        downloadManager.downloadChapters(manga.toDbManga(), chapters.map { it.toDbChapter() })
+        downloadManager.downloadChapters(manga, chapters.map { it.toDbChapter() })
     }
 
     /**
@@ -576,7 +567,7 @@ class MangaPresenter(
             try {
                 updateSuccessState { successState ->
                     val deletedIds = downloadManager
-                        .deleteChapters(chapters2, successState.manga.toDbManga(), successState.source)
+                        .deleteChapters(chapters2, successState.manga, successState.source)
                         .map { it.id }
                     val deletedChapters = successState.chapters.filter { deletedIds.contains(it.chapter.id) }
                     if (deletedChapters.isEmpty()) return@updateSuccessState successState
@@ -598,10 +589,13 @@ class MangaPresenter(
         }
     }
 
-    private fun downloadNewChapters(chapters: List<Chapter>) {
-        val manga = successState?.manga ?: return
-        if (chapters.isEmpty() || !manga.shouldDownloadNewChapters(db, preferences)) return
-        downloadChapters(chapters.map { it.toDomainChapter()!! })
+    private fun downloadNewChapters(chapters: List<DomainChapter>) {
+        presenterScope.launchIO {
+            val manga = successState?.manga ?: return@launchIO
+            val categories = getCategories.await(manga.id).map { it.id }
+            if (chapters.isEmpty() || !manga.shouldDownloadNewChapters(categories, preferences)) return@launchIO
+            downloadChapters(chapters)
+        }
     }
 
     /**
@@ -787,7 +781,7 @@ class MangaPresenter(
         val manga = successState?.manga ?: return
 
         presenterScope.launchIO {
-            deleteTrack.await(manga.id, service.id.toLong())
+            deleteTrack.await(manga.id, service.id)
         }
     }
 

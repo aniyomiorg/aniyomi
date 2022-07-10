@@ -5,9 +5,9 @@ import androidx.core.view.isVisible
 import coil.dispose
 import coil.load
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.kanade.domain.anime.model.Anime
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
-import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.databinding.SourceListItemBinding
 import eu.kanade.tachiyomi.util.system.getResourceColor
 
@@ -51,7 +51,7 @@ class AnimeSourceListHolder(private val view: View, adapter: FlexibleAdapter<*>)
 
     override fun setImage(anime: Anime) {
         binding.thumbnail.dispose()
-        if (!anime.thumbnail_url.isNullOrEmpty()) {
+        if (!anime.thumbnailUrl.isNullOrEmpty()) {
             binding.thumbnail.load(anime) {
                 setParameter(AnimeCoverFetcher.USE_CUSTOM_COVER, false)
             }

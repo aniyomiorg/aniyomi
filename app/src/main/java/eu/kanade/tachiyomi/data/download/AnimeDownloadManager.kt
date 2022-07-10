@@ -3,13 +3,13 @@ package eu.kanade.tachiyomi.data.download
 import android.content.Context
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.category.interactor.GetCategoriesAnime
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.model.AnimeDownloadQueue
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -31,7 +31,7 @@ import uy.kohesive.injekt.injectLazy
  */
 class AnimeDownloadManager(
     private val context: Context,
-    private val db: AnimeDatabaseHelper = Injekt.get(),
+    private val getCategories: GetCategoriesAnime = Injekt.get(),
 ) {
 
     private val sourceManager: AnimeSourceManager by injectLazy()
@@ -209,7 +209,6 @@ class AnimeDownloadManager(
      * @param chapterScanlator scanlator of the chapter to query
      * @param animeTitle the title of the anime to query.
      * @param sourceId the id of the source of the episode.
-     * @param skipCache whether to skip the directory cache and check in the filesystem.
      */
     fun isEpisodeDownloaded(
         episodeName: String,
@@ -228,7 +227,7 @@ class AnimeDownloadManager(
      */
     fun getEpisodeDownloadOrNull(episode: Episode): AnimeDownload? {
         return downloader.queue
-            .firstOrNull { it.episode.id == episode.id && it.episode.anime_id == episode.anime_id }
+            .firstOrNull { it.episode.id == episode.id && it.episode.animeId == episode.animeId }
     }
 
     /**
@@ -365,9 +364,10 @@ class AnimeDownloadManager(
 
     private fun getEpisodesToDelete(episodes: List<Episode>, anime: Anime): List<Episode> {
         // Retrieve the categories that are set to exclude from being deleted on read
-        val categoriesToExclude = preferences.removeExcludeAnimeCategories().get().map(String::toInt)
-        val categoriesForAnime = db.getCategoriesForAnime(anime.id!!).executeAsBlocking()
-            .mapNotNull { it.id }
+        val categoriesToExclude = preferences.removeExcludeCategories().get().map(String::toInt)
+
+        val categoriesForAnime = runBlocking { getCategories.await(anime.id) }
+            .map { it.id }
             .takeUnless { it.isEmpty() }
             ?: listOf(0)
 

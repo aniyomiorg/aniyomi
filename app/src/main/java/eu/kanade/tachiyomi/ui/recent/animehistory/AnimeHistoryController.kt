@@ -7,7 +7,7 @@ import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import eu.kanade.domain.anime.interactor.GetAnimeById
+import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.episode.model.Episode
@@ -40,7 +40,7 @@ class AnimeHistoryController : ComposeController<AnimeHistoryPresenter>(), RootC
     private var query = ""
 
     private val preferences: PreferencesHelper = Injekt.get()
-    private val getAnimeById: GetAnimeById = Injekt.get()
+    private val getAnimeById: GetAnime = Injekt.get()
     private val sourceManager: AnimeSourceManager by injectLazy()
 
     override fun getTitle() = resources?.getString(R.string.label_recent_manga)

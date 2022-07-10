@@ -13,9 +13,9 @@ import androidx.core.app.NotificationManagerCompat
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloader
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
@@ -294,8 +294,8 @@ class AnimelibUpdateNotifier(private val context: Context) {
 
         val displayableEpisodeNumbers = episodes
             .filter { it.isRecognizedNumber }
-            .sortedBy { it.episode_number }
-            .map { formatter.format(it.episode_number) }
+            .sortedBy { it.episodeNumber }
+            .map { formatter.format(it.episodeNumber) }
             .toSet()
 
         return when (displayableEpisodeNumbers.size) {

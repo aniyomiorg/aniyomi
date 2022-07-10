@@ -22,11 +22,7 @@ interface Episode : SEpisode, Serializable {
 
     var source_order: Int
 
-    val isRecognizedNumber: Boolean
-        get() = episode_number >= 0f
-
     companion object {
-
         fun create(): Episode = EpisodeImpl().apply {
             episode_number = -1f
         }

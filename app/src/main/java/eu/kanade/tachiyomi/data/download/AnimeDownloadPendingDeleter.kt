@@ -2,8 +2,9 @@ package eu.kanade.tachiyomi.data.download
 
 import android.content.Context
 import androidx.core.content.edit
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.episode.model.Episode
+import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -49,7 +50,7 @@ class AnimeDownloadPendingDeleter(context: Context) {
             // Last entry matches the anime, reuse it to avoid decoding json from preferences
             lastEntry.copy(episodes = newEpisodes)
         } else {
-            val existingEntry = preferences.getString(anime.id!!.toString(), null)
+            val existingEntry = preferences.getString(anime.id.toString(), null)
             if (existingEntry != null) {
                 // Existing entry found on preferences, decode json and add the new episode
                 val savedEntry = json.decodeFromString<Entry>(existingEntry)
@@ -155,34 +156,37 @@ class AnimeDownloadPendingDeleter(context: Context) {
      * Returns a anime entry from a anime model.
      */
     private fun Anime.toEntry(): AnimeEntry {
-        return AnimeEntry(id!!, url, title, source)
+        return AnimeEntry(id, url, title, source)
     }
 
     /**
      * Returns a episode entry from a episode model.
      */
     private fun Episode.toEntry(): EpisodeEntry {
-        return EpisodeEntry(id!!, url, name, scanlator)
+        return EpisodeEntry(id, url, name, scanlator)
     }
 
     /**
      * Returns a anime model from a anime entry.
      */
     private fun AnimeEntry.toModel(): Anime {
-        return Anime.create(url, title, source).also {
-            it.id = id
-        }
+        return Anime.create().copy(
+            url = url,
+            title = title,
+            source = source,
+            id = id,
+        )
     }
 
     /**
      * Returns a episode model from a episode entry.
      */
     private fun EpisodeEntry.toModel(): Episode {
-        return Episode.create().also {
+        return eu.kanade.tachiyomi.data.database.models.Episode.create().also {
             it.id = id
             it.url = url
             it.name = name
             it.scanlator = scanlator
-        }
+        }.toDomainEpisode()!!
     }
 }

@@ -24,7 +24,9 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.data.episode.NoEpisodesException
+import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.presentation.anime.AnimeScreen
 import eu.kanade.presentation.manga.DownloadAction
@@ -33,8 +35,6 @@ import eu.kanade.presentation.util.calculateWindowWidthSizeClass
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.isLocalOrStub
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.Category
 import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -65,6 +65,7 @@ import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
+import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
@@ -221,7 +222,7 @@ class AnimeController :
                 {
                     AddDuplicateAnimeDialog(
                         target = this,
-                        libraryAnime = it.toDbAnime(),
+                        libraryAnime = it,
                         onAddToLibrary = { onFavoriteClick(checkDuplicate = false) },
                     ).showDialog(router)
                 }
@@ -235,7 +236,7 @@ class AnimeController :
                         QuadStateTextView.State.UNCHECKED.ordinal
                     }
                 }.toTypedArray()
-                showChangeCategoryDialog(anime.toDbAnime(), categories, preselected)
+                showChangeCategoryDialog(anime, categories, preselected)
             },
         )
     }
@@ -256,23 +257,24 @@ class AnimeController :
         }
     }
 
-    fun onTrackingClick() {
-        trackSheet.show()
-    }
-
     private fun onCategoriesClick() {
-        val anime = presenter.anime ?: return
-        val categories = presenter.getCategories()
+        viewScope.launchIO {
+            val anime = presenter.anime ?: return@launchIO
+            val categories = presenter.getCategories()
 
-        val ids = presenter.getAnimeCategoryIds(anime)
-        val preselected = categories.map {
-            if (it.id in ids) {
-                QuadStateTextView.State.CHECKED.ordinal
-            } else {
-                QuadStateTextView.State.UNCHECKED.ordinal
+            val ids = presenter.getAnimeCategoryIds(anime)
+            val preselected = categories.map {
+                if (it.id in ids) {
+                    QuadStateTextView.State.CHECKED.ordinal
+                } else {
+                    QuadStateTextView.State.UNCHECKED.ordinal
+                }
+            }.toTypedArray()
+
+            withUIContext {
+                showChangeCategoryDialog(anime, categories, preselected)
             }
-        }.toTypedArray()
-        showChangeCategoryDialog(anime.toDbAnime(), categories, preselected)
+        }
     }
 
     private fun showChangeCategoryDialog(anime: Anime, categories: List<Category>, preselected: Array<Int>) {
@@ -361,7 +363,7 @@ class AnimeController :
      */
     private fun migrateAnime() {
         val anime = presenter.anime ?: return
-        val controller = AnimeSearchController(anime.toDbAnime())
+        val controller = AnimeSearchController(anime)
         controller.targetController = this
         router.pushController(controller)
     }

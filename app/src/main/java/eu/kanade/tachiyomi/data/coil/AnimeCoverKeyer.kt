@@ -6,14 +6,14 @@ import eu.kanade.domain.anime.model.hasCustomCover
 import eu.kanade.domain.manga.model.MangaCover
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.util.hasCustomCover
+import eu.kanade.tachiyomi.data.database.models.toDomainAnime
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import eu.kanade.domain.anime.model.Anime as DomainAnime
 
 class AnimeKeyer : Keyer<Anime> {
     override fun key(data: Anime, options: Options): String {
-        return if (data.hasCustomCover()) {
+        return if (data.toDomainAnime()!!.hasCustomCover()) {
             "${data.id};${data.cover_last_modified}"
         } else {
             "${data.thumbnail_url};${data.cover_last_modified}"

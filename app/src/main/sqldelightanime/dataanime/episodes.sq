@@ -34,6 +34,12 @@ SELECT *
 FROM episodes
 WHERE url = :episodeUrl;
 
+getEpisodeByUrlAndAnimeId:
+SELECT *
+FROM episodes
+WHERE url = :chapterUrl
+AND anime_id = :animeId;
+
 removeEpisodesWithIds:
 DELETE FROM episodes
 WHERE _id IN :episodeIds;

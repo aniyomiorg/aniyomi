@@ -9,9 +9,9 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import eu.kanade.domain.anime.model.Anime
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.GlobalSearchControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
@@ -23,7 +23,7 @@ import uy.kohesive.injekt.injectLazy
 
 /**
  * This controller shows and manages the different search result in global search.
- * This controller should only handle UI actions, IO actions should be done by [GlobalSearchPresenter]
+ * This controller should only handle UI actions, IO actions should be done by [GlobalAnimeSearchPresenter]
  * [GlobalAnimeSearchCardAdapter.OnAnimeClickListener] called when anime is clicked in global search
  */
 open class GlobalAnimeSearchController(
@@ -53,7 +53,6 @@ open class GlobalAnimeSearchController(
      * Initiate the view with [R.layout.global_search_controller].
      *
      * @param inflater used to load the layout xml.
-     * @param container containing parent views.
      * @return inflated view
      */
     override fun createBinding(inflater: LayoutInflater) = GlobalSearchControllerBinding.inflate(inflater)
@@ -63,9 +62,9 @@ open class GlobalAnimeSearchController(
     }
 
     /**
-     * Create the [GlobalSearchPresenter] used in controller.
+     * Create the [GlobalAnimeSearchPresenter] used in controller.
      *
-     * @return instance of [GlobalSearchPresenter]
+     * @return instance of [GlobalAnimeSearchPresenter]
      */
     override fun createPresenter(): GlobalAnimeSearchPresenter {
         return GlobalAnimeSearchPresenter(initialQuery, extensionFilter)
@@ -77,7 +76,7 @@ open class GlobalAnimeSearchController(
      * @param anime clicked item containing anime information.
      */
     override fun onAnimeClick(anime: Anime) {
-        router.pushController(AnimeController(anime.id!!, true))
+        router.pushController(AnimeController(anime.id, true))
     }
 
     /**

@@ -15,6 +15,9 @@ import com.arthenica.ffmpegkit.StatisticsCallback
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -22,8 +25,6 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateNotifier
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.model.AnimeDownloadQueue
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
@@ -281,7 +282,7 @@ class AnimeDownloader(
                 // Filter out those already downloaded.
                 .filter { provider.findEpisodeDir(it.name, it.scanlator, anime.title, source) == null }
                 // Add episodes to queue from the start.
-                .sortedByDescending { it.source_order }
+                .sortedByDescending { it.sourceOrder }
         }
 
         // Runs in main thread (synchronization needed).
@@ -346,7 +347,7 @@ class AnimeDownloader(
 
         val videoObservable = if (download.video == null) {
             // Pull video from network and add them to download object
-            download.source.fetchVideoList(download.episode).map { it.first() }
+            download.source.fetchVideoList(download.episode.toDbEpisode()).map { it.first() }
                 .doOnNext { video ->
                     if (video == null) {
                         throw Exception(context.getString(R.string.video_list_empty_error))

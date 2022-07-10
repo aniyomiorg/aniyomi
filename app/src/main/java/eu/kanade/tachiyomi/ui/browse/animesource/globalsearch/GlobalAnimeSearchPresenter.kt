@@ -1,21 +1,27 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.globalsearch
 
 import android.os.Bundle
+import eu.kanade.domain.anime.interactor.GetAnime
+import eu.kanade.domain.anime.interactor.InsertAnime
+import eu.kanade.domain.anime.interactor.UpdateAnime
+import eu.kanade.domain.anime.model.toAnimeUpdate
+import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.toSAnime
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
+import eu.kanade.tachiyomi.data.database.models.toDomainAnime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.extension.AnimeExtensionManager
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourcePresenter
 import eu.kanade.tachiyomi.util.lang.runAsObservable
 import eu.kanade.tachiyomi.util.system.logcat
+import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import rx.Observable
 import rx.Subscription
@@ -31,15 +37,16 @@ import uy.kohesive.injekt.injectLazy
  * Function calls should be done from here. UI calls should be done from the controller.
  *
  * @param sourceManager manages the different sources.
- * @param db manages the database calls.
  * @param preferences manages the preference calls.
  */
 open class GlobalAnimeSearchPresenter(
     val initialQuery: String? = "",
     val initialExtensionFilter: String? = null,
     val sourceManager: AnimeSourceManager = Injekt.get(),
-    val db: AnimeDatabaseHelper = Injekt.get(),
     val preferences: PreferencesHelper = Injekt.get(),
+    private val getAnime: GetAnime = Injekt.get(),
+    private val insertAnime: InsertAnime = Injekt.get(),
+    private val updateAnime: UpdateAnime = Injekt.get(),
 ) : BasePresenter<GlobalAnimeSearchController>() {
 
     /**
@@ -170,7 +177,7 @@ open class GlobalAnimeSearchPresenter(
                         .map { it.animes }
                         .map { list -> list.map { networkToLocalAnime(it, source.id) } } // Convert to local anime
                         .doOnNext { fetchImage(it, source) } // Load anime covers
-                        .map { list -> createCatalogueSearchItem(source, list.map { GlobalAnimeSearchCardItem(it) }) }
+                        .map { list -> createCatalogueSearchItem(source, list.map { GlobalAnimeSearchCardItem(it.toDomainAnime()!!) }) }
                 },
                 5,
             )
@@ -230,7 +237,7 @@ open class GlobalAnimeSearchPresenter(
             .subscribe(
                 { (source, anime) ->
                     @Suppress("DEPRECATION")
-                    view?.onAnimeInitialized(source, anime)
+                    view?.onAnimeInitialized(source, anime.toDomainAnime()!!)
                 },
                 { error ->
                     logcat(LogPriority.ERROR, error)
@@ -248,7 +255,7 @@ open class GlobalAnimeSearchPresenter(
         val networkAnime = source.getAnimeDetails(anime.toAnimeInfo())
         anime.copyFrom(networkAnime.toSAnime())
         anime.initialized = true
-        db.insertAnime(anime).executeAsBlocking()
+        runBlocking { updateAnime.await(anime.toDomainAnime()!!.toAnimeUpdate()) }
         return anime
     }
 
@@ -260,18 +267,21 @@ open class GlobalAnimeSearchPresenter(
      * @return a anime from the database.
      */
     protected open fun networkToLocalAnime(sAnime: SAnime, sourceId: Long): Anime {
-        var localAnime = db.getAnime(sAnime.url, sourceId).executeAsBlocking()
+        var localAnime = runBlocking { getAnime.await(sAnime.url, sourceId) }
         if (localAnime == null) {
             val newAnime = Anime.create(sAnime.url, sAnime.title, sourceId)
             newAnime.copyFrom(sAnime)
-            val result = db.insertAnime(newAnime).executeAsBlocking()
-            newAnime.id = result.insertedId()
-            localAnime = newAnime
+            newAnime.id = -1
+            val result = runBlocking {
+                val id = insertAnime.await(newAnime.toDomainAnime()!!)
+                getAnime.await(id!!)
+            }
+            localAnime = result
         } else if (!localAnime.favorite) {
             // if the anime isn't a favorite, set its display title from source
             // if it later becomes a favorite, updated title will go to db
-            localAnime.title = sAnime.title
+            localAnime = localAnime.copy(title = sAnime.title)
         }
-        return localAnime
+        return localAnime!!.toDbAnime()
     }
 }

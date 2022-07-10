@@ -1,8 +1,9 @@
 package eu.kanade.tachiyomi.util.episode
 
+import eu.kanade.domain.anime.interactor.GetFavorites
 import eu.kanade.domain.anime.interactor.SetAnimeEpisodeFlags
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.util.lang.launchIO
 import uy.kohesive.injekt.injectLazy
@@ -10,32 +11,34 @@ import uy.kohesive.injekt.injectLazy
 object EpisodeSettingsHelper {
 
     private val prefs: PreferencesHelper by injectLazy()
-    private val db: AnimeDatabaseHelper by injectLazy()
+    private val getFavorites: GetFavorites by injectLazy()
+    private val setAnimeEpisodeFlags: SetAnimeEpisodeFlags by injectLazy()
 
     /**
      * Updates the global Episode Settings in Preferences.
      */
     fun setGlobalSettings(anime: Anime) {
-        prefs.setEpisodeSettingsDefault(anime)
+        prefs.setEpisodeSettingsDefault(anime.toDbAnime())
     }
 
     /**
      * Updates a single anime's Episode Settings to match what's set in Preferences.
      */
     fun applySettingDefaults(anime: Anime) {
-        with(anime) {
-            seenFilter = prefs.filterEpisodeBySeen()
-            downloadedFilter = prefs.filterEpisodeByDownloaded()
-            bookmarkedFilter = prefs.filterEpisodeByBookmarked()
-            sorting = prefs.sortEpisodeBySourceOrNumber()
-            displayMode = prefs.displayEpisodeByNameOrNumber()
-            setEpisodeOrder(prefs.sortEpisodeByAscendingOrDescending())
+        launchIO {
+            setAnimeEpisodeFlags.awaitSetAllFlags(
+                animeId = anime.id,
+                unseenFilter = prefs.filterEpisodeBySeen().toLong(),
+                downloadedFilter = prefs.filterEpisodeByDownloaded().toLong(),
+                bookmarkedFilter = prefs.filterEpisodeByBookmarked().toLong(),
+                sortingMode = prefs.sortEpisodeBySourceOrNumber().toLong(),
+                sortingDirection = prefs.sortEpisodeByAscendingOrDescending().toLong(),
+                displayMode = prefs.displayEpisodeByNameOrNumber().toLong(),
+            )
         }
-
-        db.updateEpisodeFlags(anime).executeAsBlocking()
     }
 
-    suspend fun applySettingDefaults(animeId: Long, setAnimeEpisodeFlags: SetAnimeEpisodeFlags) {
+    suspend fun applySettingDefaults(animeId: Long) {
         setAnimeEpisodeFlags.awaitSetAllFlags(
             animeId = animeId,
             unseenFilter = prefs.filterEpisodeBySeen().toLong(),
@@ -52,21 +55,18 @@ object EpisodeSettingsHelper {
      */
     fun updateAllAnimesWithGlobalDefaults() {
         launchIO {
-            val updatedAnimes = db.getFavoriteAnimes()
-                .executeAsBlocking()
+            getFavorites.await()
                 .map { anime ->
-                    with(anime) {
-                        seenFilter = prefs.filterEpisodeBySeen()
-                        downloadedFilter = prefs.filterEpisodeByDownloaded()
-                        bookmarkedFilter = prefs.filterEpisodeByBookmarked()
-                        sorting = prefs.sortEpisodeBySourceOrNumber()
-                        displayMode = prefs.displayEpisodeByNameOrNumber()
-                        setEpisodeOrder(prefs.sortEpisodeByAscendingOrDescending())
-                    }
-                    anime
+                    setAnimeEpisodeFlags.awaitSetAllFlags(
+                        animeId = anime.id,
+                        unseenFilter = prefs.filterEpisodeBySeen().toLong(),
+                        downloadedFilter = prefs.filterEpisodeByDownloaded().toLong(),
+                        bookmarkedFilter = prefs.filterEpisodeByBookmarked().toLong(),
+                        sortingMode = prefs.sortEpisodeBySourceOrNumber().toLong(),
+                        sortingDirection = prefs.sortEpisodeByAscendingOrDescending().toLong(),
+                        displayMode = prefs.displayEpisodeByNameOrNumber().toLong(),
+                    )
                 }
-
-            db.updateEpisodeFlags(updatedAnimes).executeAsBlocking()
         }
     }
 }

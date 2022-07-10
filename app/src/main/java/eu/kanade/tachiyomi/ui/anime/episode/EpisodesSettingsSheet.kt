@@ -7,7 +7,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.Router
 import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.anime.model.toTriStateGroupState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.anime.AnimePresenter
@@ -79,7 +78,7 @@ class EpisodesSettingsSheet(
             onMenuItemClick = {
                 when (itemId) {
                     R.id.set_as_default -> {
-                        SetEpisodeSettingsDialog(presenter.anime!!.toDbAnime()).showDialog(router)
+                        SetEpisodeSettingsDialog(presenter.anime!!).showDialog(router)
                     }
                 }
             },

@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.ui.browse.animesource.browse
 import androidx.core.view.isVisible
 import coil.dispose
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.kanade.domain.anime.model.Anime
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
-import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.databinding.SourceCompactGridItemBinding
 import eu.kanade.tachiyomi.util.view.loadAutoPause
 

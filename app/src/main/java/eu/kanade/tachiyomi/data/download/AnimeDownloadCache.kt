@@ -3,9 +3,9 @@ package eu.kanade.tachiyomi.data.download
 import android.content.Context
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import kotlinx.coroutines.flow.onEach
 import uy.kohesive.injekt.Injekt

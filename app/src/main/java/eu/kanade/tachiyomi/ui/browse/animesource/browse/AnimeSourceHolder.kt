@@ -4,7 +4,7 @@ import android.view.View
 import androidx.viewbinding.ViewBinding
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.viewholders.FlexibleViewHolder
-import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.domain.anime.model.Anime
 
 /**
  * Generic class used to hold the displayed data of a anime in the catalogue.

@@ -4,10 +4,10 @@ import android.app.Dialog
 import android.os.Bundle
 import com.bluelinelabs.conductor.Controller
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.anime.model.isLocal
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
-import eu.kanade.tachiyomi.util.isLocal
 
 class DeleteAnimelibAnimesDialog<T>(bundle: Bundle? = null) :
     DialogController(bundle) where T : Controller, T : DeleteAnimelibAnimesDialog.Listener {

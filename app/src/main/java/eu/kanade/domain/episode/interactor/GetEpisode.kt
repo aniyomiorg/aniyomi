@@ -17,4 +17,13 @@ class GetEpisode(
             null
         }
     }
+
+    suspend fun await(url: String, animeId: Long): Episode? {
+        return try {
+            episodeRepository.getEpisodeByUrlAndAnimeId(url, animeId)
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e)
+            null
+        }
+    }
 }

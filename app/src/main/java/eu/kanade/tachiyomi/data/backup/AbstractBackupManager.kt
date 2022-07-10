@@ -5,6 +5,10 @@ import android.net.Uri
 import eu.kanade.data.AnimeDatabaseHandler
 import eu.kanade.data.DatabaseHandler
 import eu.kanade.data.toLong
+import eu.kanade.domain.chapter.interactor.SyncChaptersWithSource
+import eu.kanade.domain.chapter.model.toDbChapter
+import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
+import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.domain.manga.interactor.GetFavorites
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -14,14 +18,14 @@ import eu.kanade.tachiyomi.data.database.models.Chapter
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
+import eu.kanade.tachiyomi.data.database.models.toDomainAnime
+import eu.kanade.tachiyomi.data.database.models.toDomainManga
 import eu.kanade.tachiyomi.data.database.models.toMangaInfo
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.toSChapter
-import eu.kanade.tachiyomi.util.chapter.syncChaptersWithSource
-import eu.kanade.tachiyomi.util.episode.syncEpisodesWithSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import data.Mangas as DbManga
@@ -41,6 +45,8 @@ abstract class AbstractBackupManager(protected val context: Context) {
     protected val preferences: PreferencesHelper = Injekt.get()
     private val getFavorites: GetFavorites = Injekt.get()
     private val getFavoritesAnime: GetFavoritesAnime = Injekt.get()
+    private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get()
+    private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get()
 
     abstract suspend fun createBackup(uri: Uri, flags: Int, isAutoBackup: Boolean): String
 
@@ -73,12 +79,12 @@ abstract class AbstractBackupManager(protected val context: Context) {
     internal suspend fun restoreChapters(source: Source, manga: Manga, chapters: List<Chapter>): Pair<List<Chapter>, List<Chapter>> {
         val fetchedChapters = source.getChapterList(manga.toMangaInfo())
             .map { it.toSChapter() }
-        val syncedChapters = syncChaptersWithSource(fetchedChapters, manga, source)
+        val syncedChapters = syncChaptersWithSource.await(fetchedChapters, manga.toDomainManga()!!, source)
         if (syncedChapters.first.isNotEmpty()) {
             chapters.forEach { it.manga_id = manga.id }
             updateChapters(chapters)
         }
-        return syncedChapters
+        return syncedChapters.first.map { it.toDbChapter() } to syncedChapters.second.map { it.toDbChapter() }
     }
 
     /**
@@ -92,12 +98,12 @@ abstract class AbstractBackupManager(protected val context: Context) {
     internal suspend fun restoreEpisodes(source: AnimeSource, anime: Anime, episodes: List<Episode>): Pair<List<Episode>, List<Episode>> {
         val fetchedEpisodes = source.getEpisodeList(anime.toAnimeInfo())
             .map { it.toSEpisode() }
-        val syncedEpisodes = syncEpisodesWithSource(fetchedEpisodes, anime, source)
+        val syncedEpisodes = syncEpisodesWithSource.await(fetchedEpisodes, anime.toDomainAnime()!!, source)
         if (syncedEpisodes.first.isNotEmpty()) {
             episodes.forEach { it.anime_id = anime.id }
             updateEpisodes(episodes)
         }
-        return syncedEpisodes
+        return syncedEpisodes.first.map { it.toDbEpisode() } to syncedEpisodes.second.map { it.toDbEpisode() }
     }
 
     /**
@@ -134,15 +140,15 @@ abstract class AbstractBackupManager(protected val context: Context) {
                 genre = manga.getGenres(),
                 title = manga.title,
                 status = manga.status.toLong(),
-                thumbnail_url = manga.thumbnail_url,
+                thumbnailUrl = manga.thumbnail_url,
                 favorite = manga.favorite,
-                last_update = manga.last_update,
-                next_update = 0L,
+                lastUpdate = manga.last_update,
+                nextUpdate = 0L,
                 initialized = manga.initialized,
-                viewer = manga.viewer_flags.toLong(),
-                chapter_flags = manga.chapter_flags.toLong(),
-                cover_last_modified = manga.cover_last_modified,
-                date_added = manga.date_added,
+                viewerFlags = manga.viewer_flags.toLong(),
+                chapterFlags = manga.chapter_flags.toLong(),
+                coverLastModified = manga.cover_last_modified,
+                dateAdded = manga.date_added,
             )
             mangasQueries.selectLastInsertedRowId()
         }
@@ -260,15 +266,15 @@ abstract class AbstractBackupManager(protected val context: Context) {
                 genre = anime.getGenres(),
                 title = anime.title,
                 status = anime.status.toLong(),
-                thumbnail_url = anime.thumbnail_url,
+                thumbnailUrl = anime.thumbnail_url,
                 favorite = anime.favorite,
-                last_update = anime.last_update,
-                next_update = 0L,
+                lastUpdate = anime.last_update,
+                nextUpdate = 0L,
                 initialized = anime.initialized,
-                viewer = anime.viewer_flags.toLong(),
-                episode_flags = anime.episode_flags.toLong(),
-                cover_last_modified = anime.cover_last_modified,
-                date_added = anime.date_added,
+                viewerFlags = anime.viewer_flags.toLong(),
+                episodeFlags = anime.episode_flags.toLong(),
+                coverLastModified = anime.cover_last_modified,
+                dateAdded = anime.date_added,
             )
             animesQueries.selectLastInsertedRowId()
         }

@@ -6,7 +6,7 @@ import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 
-class GetAnimeById(
+class GetAnime(
     private val animeRepository: AnimeRepository,
 ) {
 
@@ -20,6 +20,10 @@ class GetAnimeById(
     }
 
     suspend fun subscribe(id: Long): Flow<Anime> {
-        return animeRepository.subscribeAnimeById(id)
+        return animeRepository.getAnimeByIdAsFlow(id)
+    }
+
+    suspend fun await(url: String, sourceId: Long): Anime? {
+        return animeRepository.getAnimeByUrlAndSourceId(url, sourceId)
     }
 }

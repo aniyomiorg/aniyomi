@@ -148,10 +148,10 @@ class DownloadController :
                 presenter.clearQueue()
             }
             R.id.newest, R.id.oldest -> {
-                reorderQueue({ it.download.episode.date_upload }, item.itemId == R.id.newest)
+                reorderQueue({ it.download.episode.dateUpload }, item.itemId == R.id.newest)
             }
             R.id.asc, R.id.desc -> {
-                reorderQueue({ it.download.episode.episode_number }, item.itemId == R.id.desc)
+                reorderQueue({ it.download.episode.episodeNumber }, item.itemId == R.id.desc)
             }
         }
         return super.onOptionsItemSelected(item)

@@ -2,11 +2,14 @@ package eu.kanade.tachiyomi.data.download
 
 import android.content.Context
 import androidx.core.content.edit
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
-import eu.kanade.tachiyomi.data.database.models.Manga
+import eu.kanade.domain.chapter.interactor.GetChapter
+import eu.kanade.domain.chapter.model.toDbChapter
+import eu.kanade.domain.manga.interactor.GetManga
+import eu.kanade.domain.manga.model.Manga
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -29,7 +32,9 @@ class DownloadStore(
     private val preferences = context.getSharedPreferences("active_downloads", Context.MODE_PRIVATE)
 
     private val json: Json by injectLazy()
-    private val db: DatabaseHelper by injectLazy()
+
+    private val getManga: GetManga by injectLazy()
+    private val getChapter: GetChapter by injectLazy()
 
     /**
      * Counter used to keep the queue order.
@@ -90,10 +95,10 @@ class DownloadStore(
             val cachedManga = mutableMapOf<Long, Manga?>()
             for ((mangaId, chapterId) in objs) {
                 val manga = cachedManga.getOrPut(mangaId) {
-                    db.getManga(mangaId).executeAsBlocking()
+                    runBlocking { getManga.await(mangaId) }
                 } ?: continue
                 val source = sourceManager.get(manga.source) as? HttpSource ?: continue
-                val chapter = db.getChapter(chapterId).executeAsBlocking() ?: continue
+                val chapter = runBlocking { getChapter.await(chapterId) }?.toDbChapter() ?: continue
                 downloads.add(Download(source, manga, chapter))
             }
         }

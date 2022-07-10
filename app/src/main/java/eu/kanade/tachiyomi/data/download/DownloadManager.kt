@@ -3,10 +3,10 @@ package eu.kanade.tachiyomi.data.download
 import android.content.Context
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
+import eu.kanade.domain.category.interactor.GetCategories
+import eu.kanade.domain.manga.model.Manga
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Chapter
-import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.download.model.DownloadQueue
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -31,7 +31,7 @@ import uy.kohesive.injekt.injectLazy
  */
 class DownloadManager(
     private val context: Context,
-    private val db: DatabaseHelper = Injekt.get(),
+    private val getCategories: GetCategories = Injekt.get(),
 ) {
 
     private val sourceManager: SourceManager by injectLazy()
@@ -362,8 +362,9 @@ class DownloadManager(
     private fun getChaptersToDelete(chapters: List<Chapter>, manga: Manga): List<Chapter> {
         // Retrieve the categories that are set to exclude from being deleted on read
         val categoriesToExclude = preferences.removeExcludeCategories().get().map(String::toInt)
-        val categoriesForManga = db.getCategoriesForManga(manga.id!!).executeAsBlocking()
-            .mapNotNull { it.id }
+
+        val categoriesForManga = runBlocking { getCategories.await(manga.id!!) }
+            .map { it.id }
             .takeUnless { it.isEmpty() }
             ?: listOf(0)
 

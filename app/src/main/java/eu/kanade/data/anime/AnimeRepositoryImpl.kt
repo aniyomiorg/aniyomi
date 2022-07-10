@@ -6,6 +6,7 @@ import eu.kanade.data.toLong
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.AnimeUpdate
 import eu.kanade.domain.anime.repository.AnimeRepository
+import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
@@ -18,16 +19,24 @@ class AnimeRepositoryImpl(
         return handler.awaitOne { animesQueries.getAnimeById(id, animeMapper) }
     }
 
-    override suspend fun subscribeAnimeById(id: Long): Flow<Anime> {
-        return handler.subscribeToOne { animesQueries.getAnimeById(id, animeMapper) }
-    }
-
     override suspend fun getAnimeByIdAsFlow(id: Long): Flow<Anime> {
         return handler.subscribeToOne { animesQueries.getAnimeById(id, animeMapper) }
     }
 
+    override suspend fun getAnimeByUrlAndSourceId(url: String, sourceId: Long): Anime? {
+        return handler.awaitOneOrNull { animesQueries.getAnimeByUrlAndSource(url, sourceId, animeMapper) }
+    }
+
     override suspend fun getFavorites(): List<Anime> {
         return handler.awaitList { animesQueries.getFavorites(animeMapper) }
+    }
+
+    override suspend fun getAnimelibAnime(): List<AnimelibAnime> {
+        return handler.awaitList { animesQueries.getAnimelib(animelibAnime) }
+    }
+
+    override fun getAnimelibAnimeAsFlow(): Flow<List<AnimelibAnime>> {
+        return handler.subscribeToList { animesQueries.getAnimelib(animelibAnime) }
     }
 
     override fun getFavoritesBySourceId(sourceId: Long): Flow<List<Anime>> {
@@ -56,6 +65,31 @@ class AnimeRepositoryImpl(
             categoryIds.map { categoryId ->
                 animes_categoriesQueries.insert(animeId, categoryId)
             }
+        }
+    }
+
+    override suspend fun insert(anime: Anime): Long? {
+        return handler.awaitOneOrNull {
+            animesQueries.insert(
+                source = anime.source,
+                url = anime.url,
+                artist = anime.artist,
+                author = anime.author,
+                description = anime.description,
+                genre = anime.genre,
+                title = anime.title,
+                status = anime.status,
+                thumbnailUrl = anime.thumbnailUrl,
+                favorite = anime.favorite,
+                lastUpdate = anime.lastUpdate,
+                nextUpdate = null,
+                initialized = anime.initialized,
+                viewerFlags = anime.viewerFlags,
+                episodeFlags = anime.episodeFlags,
+                coverLastModified = anime.coverLastModified,
+                dateAdded = anime.dateAdded,
+            )
+            animesQueries.selectLastInsertedRowId()
         }
     }
 

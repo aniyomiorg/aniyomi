@@ -20,7 +20,7 @@ import androidx.core.os.bundleOf
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.size.Size
-import eu.kanade.domain.anime.interactor.GetAnimeById
+import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.hasCustomCover
@@ -161,7 +161,7 @@ class AnimeFullCoverDialog : FullComposeController<AnimeFullCoverDialog.AnimeFul
 
     inner class AnimeFullCoverPresenter(
         private val animeId: Long,
-        private val getAnimeById: GetAnimeById = Injekt.get(),
+        private val getAnime: GetAnime = Injekt.get(),
     ) : Presenter<AnimeFullCoverDialog>() {
 
         private var presenterScope: CoroutineScope = MainScope()
@@ -176,7 +176,7 @@ class AnimeFullCoverDialog : FullComposeController<AnimeFullCoverDialog.AnimeFul
         override fun onCreate(savedState: Bundle?) {
             super.onCreate(savedState)
             presenterScope.launchIO {
-                getAnimeById.subscribe(animeId)
+                getAnime.subscribe(animeId)
                     .collect { _animeFlow.value = it }
             }
         }

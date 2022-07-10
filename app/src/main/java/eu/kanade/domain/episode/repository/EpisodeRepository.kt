@@ -19,4 +19,6 @@ interface EpisodeRepository {
     suspend fun getEpisodeById(id: Long): Episode?
 
     fun getEpisodeByAnimeIdAsFlow(animeId: Long): Flow<List<Episode>>
+
+    suspend fun getEpisodeByUrlAndAnimeId(url: String, animeId: Long): Episode?
 }

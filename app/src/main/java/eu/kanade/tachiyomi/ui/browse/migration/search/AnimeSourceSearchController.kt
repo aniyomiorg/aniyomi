@@ -2,8 +2,8 @@ package eu.kanade.tachiyomi.ui.browse.migration.search
 
 import android.os.Bundle
 import android.view.View
+import eu.kanade.domain.anime.model.Anime
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.AnimeSourceItem
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 

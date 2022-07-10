@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi
 import android.app.Application
 import android.os.Build
 import androidx.core.content.ContextCompat
-import androidx.sqlite.db.SupportSQLiteOpenHelper
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import data.History
@@ -21,10 +20,6 @@ import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.AnimeDbOpenCallback
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
-import eu.kanade.tachiyomi.data.database.DbOpenCallback
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -49,36 +44,29 @@ class AppModule(val app: Application) : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingleton(app)
 
-        // This is used to allow incremental migration from Storio
-        val openHelperMangaConfig = SupportSQLiteOpenHelper.Configuration.builder(app)
-            .callback(DbOpenCallback())
-            .name(DbOpenCallback.DATABASE_FILENAME)
-            .noBackupDirectory(false)
-            .build()
+        val sqlDriverManga = AndroidSqliteDriver(
+            schema = Database.Schema,
+            context = app,
+            name = "tachiyomi.db",
+            factory = if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Support database inspector in Android Studio
+                FrameworkSQLiteOpenHelperFactory()
+            } else {
+                RequerySQLiteOpenHelperFactory()
+            },
+        )
 
-        val openHelperManga = if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Support database inspector in Android Studio
-            FrameworkSQLiteOpenHelperFactory().create(openHelperMangaConfig)
-        } else {
-            RequerySQLiteOpenHelperFactory().create(openHelperMangaConfig)
-        }
-
-        val openHelperAnimeConfig = SupportSQLiteOpenHelper.Configuration.builder(app)
-            .callback(AnimeDbOpenCallback())
-            .name(AnimeDbOpenCallback.DATABASE_FILENAME)
-            .noBackupDirectory(false)
-            .build()
-
-        val openHelperAnime = if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Support database inspector in Android Studio
-            FrameworkSQLiteOpenHelperFactory().create(openHelperAnimeConfig)
-        } else {
-            RequerySQLiteOpenHelperFactory().create(openHelperAnimeConfig)
-        }
-
-        val sqlDriverManga = AndroidSqliteDriver(openHelper = openHelperManga)
-
-        val sqlDriverAnime = AndroidSqliteDriver(openHelper = openHelperAnime)
+        val sqlDriverAnime = AndroidSqliteDriver(
+            schema = AnimeDatabase.Schema,
+            context = app,
+            name = "tachiyomi.animedb",
+            factory = if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Support database inspector in Android Studio
+                FrameworkSQLiteOpenHelperFactory()
+            } else {
+                RequerySQLiteOpenHelperFactory()
+            },
+        )
 
         addSingletonFactory {
             Database(
@@ -111,10 +99,6 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { Json { ignoreUnknownKeys = true } }
 
         addSingletonFactory { PreferencesHelper(app) }
-
-        addSingletonFactory { DatabaseHelper(openHelperManga) }
-
-        addSingletonFactory { AnimeDatabaseHelper(openHelperAnime) }
 
         addSingletonFactory { ChapterCache(app) }
 
@@ -155,9 +139,6 @@ class AppModule(val app: Application) : InjektModule {
 
             get<Database>()
             get<AnimeDatabase>()
-
-            get<DatabaseHelper>()
-            get<AnimeDatabaseHelper>()
 
             get<DownloadManager>()
             get<AnimeDownloadManager>()

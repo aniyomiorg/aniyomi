@@ -1,10 +1,10 @@
 package eu.kanade.tachiyomi.ui.animelib
 
-import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.domain.anime.model.Anime
 
 sealed class AnimelibSelectionEvent {
 
     class Selected(val anime: Anime) : AnimelibSelectionEvent()
     class Unselected(val anime: Anime) : AnimelibSelectionEvent()
-    class Cleared : AnimelibSelectionEvent()
+    object Cleared : AnimelibSelectionEvent()
 }

@@ -1,9 +1,9 @@
 package eu.kanade.tachiyomi.data.download.model
 
 import com.jakewharton.rxrelay.PublishRelay
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.tachiyomi.animesource.model.Video
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadStore
 import rx.Observable
 import rx.subjects.PublishSubject

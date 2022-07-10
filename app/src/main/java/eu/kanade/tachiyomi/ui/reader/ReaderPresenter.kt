@@ -11,13 +11,13 @@ import eu.kanade.domain.chapter.model.ChapterUpdate
 import eu.kanade.domain.chapter.model.toDbChapter
 import eu.kanade.domain.history.interactor.UpsertHistory
 import eu.kanade.domain.history.model.HistoryUpdate
-import eu.kanade.domain.manga.interactor.GetMangaById
+import eu.kanade.domain.manga.interactor.GetManga
+import eu.kanade.domain.manga.interactor.SetMangaViewerFlags
 import eu.kanade.domain.manga.model.isLocal
 import eu.kanade.domain.manga.model.toDbManga
 import eu.kanade.domain.track.interactor.GetTracks
 import eu.kanade.domain.track.interactor.InsertTrack
 import eu.kanade.domain.track.model.toDbTrack
-import eu.kanade.tachiyomi.data.database.DatabaseHelper
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.database.models.toDomainManga
 import eu.kanade.tachiyomi.data.download.DownloadManager
@@ -63,22 +63,23 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.Date
 import java.util.concurrent.TimeUnit
+import eu.kanade.domain.manga.model.Manga as DomainManga
 
 /**
  * Presenter used by the activity to perform background operations.
  */
 class ReaderPresenter(
-    private val db: DatabaseHelper = Injekt.get(),
     private val sourceManager: SourceManager = Injekt.get(),
     private val downloadManager: DownloadManager = Injekt.get(),
     private val preferences: PreferencesHelper = Injekt.get(),
     private val delayedTrackingStore: DelayedTrackingStore = Injekt.get(),
-    private val getMangaById: GetMangaById = Injekt.get(),
+    private val getManga: GetManga = Injekt.get(),
     private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
     private val getTracks: GetTracks = Injekt.get(),
     private val insertTrack: InsertTrack = Injekt.get(),
     private val upsertHistory: UpsertHistory = Injekt.get(),
     private val updateChapter: UpdateChapter = Injekt.get(),
+    private val setMangaViewerFlags: SetMangaViewerFlags = Injekt.get(),
 ) : BasePresenter<ReaderActivity>() {
 
     /**
@@ -136,12 +137,12 @@ class ReaderPresenter(
                     when {
                         preferences.skipRead() && it.read -> true
                         preferences.skipFiltered() -> {
-                            (manga.readFilter == Manga.CHAPTER_SHOW_READ && !it.read) ||
-                                (manga.readFilter == Manga.CHAPTER_SHOW_UNREAD && it.read) ||
-                                (manga.downloadedFilter == Manga.CHAPTER_SHOW_DOWNLOADED && !downloadManager.isChapterDownloaded(it.name, it.scanlator, manga.title, manga.source)) ||
-                                (manga.downloadedFilter == Manga.CHAPTER_SHOW_NOT_DOWNLOADED && downloadManager.isChapterDownloaded(it.name, it.scanlator, manga.title, manga.source)) ||
-                                (manga.bookmarkedFilter == Manga.CHAPTER_SHOW_BOOKMARKED && !it.bookmark) ||
-                                (manga.bookmarkedFilter == Manga.CHAPTER_SHOW_NOT_BOOKMARKED && it.bookmark)
+                            (manga.readFilter == DomainManga.CHAPTER_SHOW_READ.toInt() && !it.read) ||
+                                (manga.readFilter == DomainManga.CHAPTER_SHOW_UNREAD.toInt() && it.read) ||
+                                (manga.downloadedFilter == DomainManga.CHAPTER_SHOW_DOWNLOADED.toInt() && !downloadManager.isChapterDownloaded(it.name, it.scanlator, manga.title, manga.source)) ||
+                                (manga.downloadedFilter == DomainManga.CHAPTER_SHOW_NOT_DOWNLOADED.toInt() && downloadManager.isChapterDownloaded(it.name, it.scanlator, manga.title, manga.source)) ||
+                                (manga.bookmarkedFilter == DomainManga.CHAPTER_SHOW_BOOKMARKED.toInt() && !it.bookmark) ||
+                                (manga.bookmarkedFilter == DomainManga.CHAPTER_SHOW_NOT_BOOKMARKED.toInt() && it.bookmark)
                         }
                         else -> false
                     }
@@ -157,14 +158,14 @@ class ReaderPresenter(
         }
 
         chaptersForReader
+            .sortedWith(getChapterSort(manga.toDomainManga()!!, sortDescending = false))
             .map { it.toDbChapter() }
-            .sortedWith(getChapterSort(manga, sortDescending = false))
             .map(::ReaderChapter)
     }
 
     private var hasTrackers: Boolean = false
-    private val checkTrackers: (Manga) -> Unit = { manga ->
-        val tracks = runBlocking { getTracks.await(manga.id!!) }
+    private val checkTrackers: (DomainManga) -> Unit = { manga ->
+        val tracks = runBlocking { getTracks.await(manga.id) }
         hasTrackers = tracks.isNotEmpty()
     }
 
@@ -242,7 +243,7 @@ class ReaderPresenter(
 
         launchIO {
             try {
-                val manga = getMangaById.await(mangaId)
+                val manga = getManga.await(mangaId)
                 withUIContext {
                     manga?.let { init(it.toDbManga(), initialChapterId) }
                 }
@@ -262,11 +263,11 @@ class ReaderPresenter(
         this.manga = manga
         if (chapterId == -1L) chapterId = initialChapterId
 
-        checkTrackers(manga)
+        checkTrackers(manga.toDomainManga()!!)
 
         val context = Injekt.get<Application>()
         val source = sourceManager.getOrStub(manga.source)
-        loader = ChapterLoader(context, downloadManager, manga, source)
+        loader = ChapterLoader(context, downloadManager, manga.toDomainManga()!!, source)
 
         Observable.just(manga).subscribeLatestCache(ReaderActivity::setManga)
         viewerChaptersRelay.subscribeLatestCache(ReaderActivity::setChapters)
@@ -540,13 +541,16 @@ class ReaderPresenter(
      * Bookmarks the currently active chapter.
      */
     fun bookmarkCurrentChapter(bookmarked: Boolean) {
-        if (getCurrentChapter()?.chapter == null) {
-            return
+        val chapter = getCurrentChapter()?.chapter ?: return
+        chapter.bookmark = bookmarked // Otherwise the bookmark icon doesn't update
+        launchIO {
+            updateChapter.await(
+                ChapterUpdate(
+                    id = chapter.id!!.toLong(),
+                    bookmark = bookmarked,
+                ),
+            )
         }
-
-        val chapter = getCurrentChapter()?.chapter!!
-        chapter.bookmark = bookmarked
-        db.updateChapterProgress(chapter).executeAsBlocking()
     }
 
     /**
@@ -567,7 +571,9 @@ class ReaderPresenter(
     fun setMangaReadingMode(readingModeType: Int) {
         val manga = manga ?: return
         manga.readingModeType = readingModeType
-        db.updateViewerFlags(manga).executeAsBlocking()
+        runBlocking {
+            setMangaViewerFlags.awaitSetMangaReadingMode(manga.id!!.toLong(), readingModeType.toLong())
+        }
 
         Observable.timer(250, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .subscribeFirst({ view, _ ->
@@ -602,7 +608,9 @@ class ReaderPresenter(
     fun setMangaOrientationType(rotationType: Int) {
         val manga = manga ?: return
         manga.orientationType = rotationType
-        db.updateViewerFlags(manga).executeAsBlocking()
+        runBlocking {
+            setMangaViewerFlags.awaitSetOrientationType(manga.id!!.toLong(), rotationType.toLong())
+        }
 
         logcat(LogPriority.INFO) { "Manga orientation is ${manga.orientationType}" }
 
@@ -796,7 +804,7 @@ class ReaderPresenter(
         val manga = manga ?: return
 
         launchIO {
-            downloadManager.enqueueDeleteChapters(listOf(chapter.chapter), manga)
+            downloadManager.enqueueDeleteChapters(listOf(chapter.chapter), manga.toDomainManga()!!)
         }
     }
 

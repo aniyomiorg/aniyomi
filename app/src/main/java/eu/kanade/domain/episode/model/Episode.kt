@@ -1,6 +1,7 @@
 package eu.kanade.domain.episode.model
 
 import eu.kanade.tachiyomi.animesource.model.SEpisode
+import eu.kanade.tachiyomi.data.database.models.EpisodeImpl
 import eu.kanade.tachiyomi.data.database.models.Episode as DbEpisode
 
 data class Episode(
@@ -42,28 +43,26 @@ data class Episode(
     }
 
     companion object {
-        fun create(): Episode {
-            return Episode(
-                id = -1,
-                animeId = -1,
-                seen = false,
-                bookmark = false,
-                lastSecondSeen = 0,
-                totalSeconds = 0,
-                dateFetch = 0,
-                sourceOrder = 0,
-                url = "",
-                name = "",
-                dateUpload = -1,
-                episodeNumber = -1f,
-                scanlator = null,
-            )
-        }
+        fun create() = Episode(
+            id = -1,
+            animeId = -1,
+            seen = false,
+            bookmark = false,
+            lastSecondSeen = 0,
+            totalSeconds = 0,
+            dateFetch = 0,
+            sourceOrder = 0,
+            url = "",
+            name = "",
+            dateUpload = -1,
+            episodeNumber = -1f,
+            scanlator = null,
+        )
     }
 }
 
 // TODO: Remove when all deps are migrated
-fun Episode.toDbEpisode(): DbEpisode = DbEpisode.create().also {
+fun Episode.toDbEpisode(): DbEpisode = EpisodeImpl().also {
     it.id = id
     it.anime_id = animeId
     it.url = url

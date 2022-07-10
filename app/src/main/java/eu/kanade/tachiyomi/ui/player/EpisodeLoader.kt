@@ -8,6 +8,8 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.data.database.models.toDomainAnime
+import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.util.system.logcat
 import rx.Observable
@@ -66,7 +68,7 @@ class EpisodeLoader {
             source: AnimeSource,
             downloadManager: AnimeDownloadManager,
         ): Observable<List<Video>> {
-            return downloadManager.buildVideo(source, anime, episode)
+            return downloadManager.buildVideo(source, anime.toDomainAnime()!!, episode.toDomainEpisode()!!)
                 .onErrorReturn { null }
                 .map {
                     if (it == null) emptyList()

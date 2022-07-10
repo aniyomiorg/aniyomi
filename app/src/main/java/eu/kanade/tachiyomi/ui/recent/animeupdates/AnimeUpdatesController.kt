@@ -321,9 +321,6 @@ class AnimeUpdatesController :
      */
     private fun markAsRead(episodes: List<AnimeUpdatesItem>) {
         presenter.markEpisodeRead(episodes, true)
-        if (presenter.preferences.removeAfterMarkedAsRead()) {
-            deleteEpisodes(episodes)
-        }
         destroyActionModeIfNeeded()
     }
 

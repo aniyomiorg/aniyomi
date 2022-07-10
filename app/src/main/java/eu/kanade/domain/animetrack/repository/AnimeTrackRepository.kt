@@ -9,7 +9,7 @@ interface AnimeTrackRepository {
 
     fun getAnimeTracksAsFlow(): Flow<List<AnimeTrack>>
 
-    fun getAnimeTracksByAnimeIdAsFlow(mangaId: Long): Flow<List<AnimeTrack>>
+    fun getAnimeTracksByAnimeIdAsFlow(animeId: Long): Flow<List<AnimeTrack>>
 
     suspend fun delete(animeId: Long, syncId: Long)
 

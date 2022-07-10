@@ -17,6 +17,8 @@ import eu.kanade.domain.animetrack.model.toDbTrack
 import eu.kanade.domain.animetrack.model.toDomainTrack
 import eu.kanade.domain.category.interactor.GetCategoriesAnime
 import eu.kanade.domain.category.interactor.SetAnimeCategories
+import eu.kanade.domain.category.model.Category
+import eu.kanade.domain.episode.interactor.SetSeenStatus
 import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
 import eu.kanade.domain.episode.interactor.UpdateEpisode
@@ -25,12 +27,7 @@ import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.toSEpisode
-import eu.kanade.tachiyomi.data.database.AnimeDatabaseHelper
-import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Category
-import eu.kanade.tachiyomi.data.database.models.Episode
-import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
 import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
@@ -79,12 +76,12 @@ class AnimePresenter(
     val animeId: Long,
     val isFromSource: Boolean,
     private val preferences: PreferencesHelper = Injekt.get(),
-    private val db: AnimeDatabaseHelper = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val getAnimeAndEpisodes: GetAnimeWithEpisodes = Injekt.get(),
     private val getDuplicateLibraryAnime: GetDuplicateLibraryAnime = Injekt.get(),
     private val setAnimeEpisodeFlags: SetAnimeEpisodeFlags = Injekt.get(),
+    private val setSeenStatus: SetSeenStatus = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
     private val syncEpisodesWithSource: SyncEpisodesWithSource = Injekt.get(),
@@ -153,7 +150,7 @@ class AnimePresenter(
 
         presenterScope.launchIO {
             if (!getAnimeAndEpisodes.awaitAnime(animeId).favorite) {
-                EpisodeSettingsHelper.applySettingDefaults(animeId, setAnimeEpisodeFlags)
+                EpisodeSettingsHelper.applySettingDefaults(animeId)
             }
 
             getAnimeAndEpisodes.subscribe(animeId)
@@ -260,22 +257,22 @@ class AnimePresenter(
 
                 // Now check if user previously set categories, when available
                 val categories = getCategories()
-                val defaultCategoryId = preferences.defaultCategory()
+                val defaultCategoryId = preferences.defaultCategory().toLong()
                 val defaultCategory = categories.find { it.id == defaultCategoryId }
                 when {
                     // Default category set
                     defaultCategory != null -> {
                         val result = updateAnime.awaitUpdateFavorite(anime.id, true)
                         if (!result) return@launchIO
-                        moveAnimeToCategory(anime.toDbAnime(), defaultCategory)
+                        moveAnimeToCategory(defaultCategory)
                         launchUI { onAdded() }
                     }
 
                     // Automatic 'Default' or no categories
-                    defaultCategoryId == 0 || categories.isEmpty() -> {
+                    defaultCategoryId == 0L || categories.isEmpty() -> {
                         val result = updateAnime.awaitUpdateFavorite(anime.id, true)
                         if (!result) return@launchIO
-                        moveAnimeToCategory(anime.toDbAnime(), null)
+                        moveAnimeToCategory(null)
                         launchUI { onAdded() }
                     }
 
@@ -311,7 +308,7 @@ class AnimePresenter(
      */
     fun hasDownloads(): Boolean {
         val anime = successState?.anime ?: return false
-        return downloadManager.getDownloadCount(anime.toDbAnime()) > 0
+        return downloadManager.getDownloadCount(anime) > 0
     }
 
     /**
@@ -319,7 +316,7 @@ class AnimePresenter(
      */
     fun deleteDownloads() {
         val state = successState ?: return
-        downloadManager.deleteAnime(state.anime.toDbAnime(), state.source)
+        downloadManager.deleteAnime(state.anime, state.source)
     }
 
     /**
@@ -327,8 +324,8 @@ class AnimePresenter(
      *
      * @return List of categories, not including the default category
      */
-    fun getCategories(): List<Category> {
-        return db.getCategories().executeAsBlocking()
+    suspend fun getCategories(): List<Category> {
+        return getCategories.await()
     }
 
     /**
@@ -337,27 +334,25 @@ class AnimePresenter(
      * @param anime the anime to get categories from.
      * @return Array of category ids the anime is in, if none returns default id
      */
-    fun getAnimeCategoryIds(anime: DomainAnime): Array<Int> {
+    fun getAnimeCategoryIds(anime: DomainAnime): Array<Long> {
         val categories = runBlocking { getCategories.await(anime.id) }
-        return categories.map { it.id.toInt() }.toTypedArray()
+        return categories.map { it.id }.toTypedArray()
     }
 
-    fun moveAnimeToCategoriesAndAddToLibrary(anime: Anime, categories: List<Category>) {
-        moveAnimeToCategories(anime, categories)
+    fun moveAnimeToCategoriesAndAddToLibrary(anime: DomainAnime, categories: List<Category>) {
+        moveAnimeToCategories(categories)
         presenterScope.launchIO {
-            updateAnime.awaitUpdateFavorite(anime.id!!, true)
+            updateAnime.awaitUpdateFavorite(anime.id, true)
         }
     }
 
     /**
      * Move the given anime to categories.
      *
-     * @param anime the anime to move.
      * @param categories the selected categories.
      */
-    private fun moveAnimeToCategories(anime: Anime, categories: List<Category>) {
-        val animeId = anime.id ?: return
-        val categoryIds = categories.mapNotNull { it.id?.toLong() }
+    private fun moveAnimeToCategories(categories: List<Category>) {
+        val categoryIds = categories.map { it.id }
         presenterScope.launchIO {
             moveAnimeToCategories.await(animeId, categoryIds)
         }
@@ -366,11 +361,10 @@ class AnimePresenter(
     /**
      * Move the given anime to the category.
      *
-     * @param anime the anime to move.
      * @param category the selected category, or null for default category.
      */
-    private fun moveAnimeToCategory(anime: Anime, category: Category?) {
-        moveAnimeToCategories(anime, listOfNotNull(category))
+    private fun moveAnimeToCategory(category: Category?) {
+        moveAnimeToCategories(listOfNotNull(category))
     }
 
     private fun observeTrackingCount() {
@@ -380,7 +374,7 @@ class AnimePresenter(
             getTracks.subscribe(anime.id)
                 .catch { logcat(LogPriority.ERROR, it) }
                 .map { tracks ->
-                    val loggedServicesId = loggedServices.map { it.id.toLong() }
+                    val loggedServicesId = loggedServices.map { it.id }
                     tracks.filter { it.syncId in loggedServicesId }.size
                 }
                 .collectLatest { trackingCount ->
@@ -469,8 +463,7 @@ class AnimePresenter(
                     )
 
                     if (manualFetch) {
-                        val dbEpisodes = newEpisodes.map { it.toDbEpisode() }
-                        downloadNewEpisodes(dbEpisodes)
+                        downloadNewEpisodes(newEpisodes)
                     }
                 }
             } catch (e: Throwable) {
@@ -533,14 +526,10 @@ class AnimePresenter(
      */
     fun markEpisodesSeen(episodes: List<DomainEpisode>, seen: Boolean) {
         presenterScope.launchIO {
-            val lastSecondSeen = if (seen || preferences.preserveWatchingPosition()) null else 0L
-            val modified = episodes.filterNot { it.seen == seen }
-            modified
-                .map { EpisodeUpdate(id = it.id, seen = seen, lastSecondSeen = lastSecondSeen) }
-                .let { updateEpisode.awaitAll(it) }
-            if (seen && preferences.removeAfterMarkedAsRead()) {
-                deleteEpisodes(modified)
-            }
+            setSeenStatus.await(
+                seen = seen,
+                values = episodes.toTypedArray(),
+            )
         }
     }
 
@@ -551,9 +540,9 @@ class AnimePresenter(
     fun downloadEpisodes(episodes: List<DomainEpisode>, alt: Boolean = false) {
         val anime = successState?.anime ?: return
         if (alt) {
-            downloadManager.downloadEpisodesAlt(anime.toDbAnime(), episodes.map { it.toDbEpisode() })
+            downloadManager.downloadEpisodesAlt(anime, episodes)
         } else {
-            downloadManager.downloadEpisodes(anime.toDbAnime(), episodes.map { it.toDbEpisode() })
+            downloadManager.downloadEpisodes(anime, episodes)
         }
     }
 
@@ -576,11 +565,10 @@ class AnimePresenter(
      */
     fun deleteEpisodes(episodes: List<DomainEpisode>) {
         launchIO {
-            val episodes2 = episodes.map { it.toDbEpisode() }
             try {
                 updateSuccessState { successState ->
                     val deletedIds = downloadManager
-                        .deleteEpisodes(episodes2, successState.anime.toDbAnime(), successState.source)
+                        .deleteEpisodes(episodes, successState.anime, successState.source)
                         .map { it.id }
                     val deletedEpisodes = successState.episodes.filter { deletedIds.contains(it.episode.id) }
                     if (deletedEpisodes.isEmpty()) return@updateSuccessState successState
@@ -602,13 +590,13 @@ class AnimePresenter(
         }
     }
 
-    private fun downloadNewEpisodes(episodes: List<Episode>) {
-        val anime = successState?.anime ?: return
-        if (episodes.isEmpty() || !anime.shouldDownloadNewEpisodes(db, preferences)) return
-        downloadEpisodes(
-            episodes.map { it.toDomainEpisode()!! },
-            preferences.useExternalDownloader(),
-        )
+    private fun downloadNewEpisodes(episodes: List<DomainEpisode>) {
+        presenterScope.launchIO {
+            val anime = successState?.anime ?: return@launchIO
+            val categories = getCategories.await(anime.id).map { it.id }
+            if (episodes.isEmpty() || !anime.shouldDownloadNewEpisodes(categories, preferences)) return@launchIO
+            downloadEpisodes(episodes)
+        }
     }
 
     /**
@@ -794,7 +782,7 @@ class AnimePresenter(
         val anime = successState?.anime ?: return
 
         presenterScope.launchIO {
-            deleteTrack.await(anime.id, service.id.toLong())
+            deleteTrack.await(anime.id, service.id)
         }
     }
 

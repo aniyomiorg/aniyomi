@@ -14,7 +14,7 @@ class GetAnimeWithEpisodes(
 
     suspend fun subscribe(id: Long): Flow<Pair<Anime, List<Episode>>> {
         return combine(
-            animeRepository.subscribeAnimeById(id),
+            animeRepository.getAnimeByIdAsFlow(id),
             episodeRepository.getEpisodeByAnimeIdAsFlow(id),
         ) { anime, episodes ->
             Pair(anime, episodes)

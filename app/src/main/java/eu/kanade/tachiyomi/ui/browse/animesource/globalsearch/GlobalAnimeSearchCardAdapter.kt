@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.globalsearch
 
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.domain.anime.model.Anime
 
 /**
  * Adapter that holds the anime items from search results.
