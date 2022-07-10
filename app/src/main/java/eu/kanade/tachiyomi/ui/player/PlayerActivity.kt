@@ -1036,6 +1036,7 @@ class PlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     fun skipIntro(view: View) {
         doubleTapSeek(preferences.introLengthPreference(), isDoubleTap = false)
+        playerControls.resetControlsFade()
     }
 
     private fun refreshUi() {
