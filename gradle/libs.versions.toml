@@ -11,8 +11,8 @@ leakcanary = "2.9.1"
 
 [libraries]
 android-shortcut-gradle = "com.github.zellius:android-shortcut-gradle-plugin:0.1.2"
-google-services-gradle = "com.google.gms:google-services:4.3.13"
-google-firebase-crashlytics = "com.google.firebase:firebase-crashlytics-gradle:2.9.1"
+google-services-gradle = "com.google.gms:google-services:4.3.10"
+google-firebase-crashlytics = "com.google.firebase:firebase-crashlytics-gradle:2.8.0"
 
 tachiyomi-api = "org.tachiyomi:source-api:1.1"
 
