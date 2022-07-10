@@ -69,6 +69,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     private var showControls = false
+    private var wasPausedBeforeSeeking = false
 
     private val nonSeekViewRunnable = Runnable {
         binding.topControlsGroup.isVisible = true
@@ -78,7 +79,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     private val hideUiForSeekRunnable = Runnable {
         shouldHideUiForSeek = false
-        activity.player.paused = false
+        activity.player.paused = wasPausedBeforeSeeking
         if (showControls) {
             AnimationUtils.loadAnimation(activity, R.anim.fade_in_medium).also { fadeAnimation ->
                 binding.topControlsGroup.startAnimation(fadeAnimation)
@@ -103,6 +104,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         animationHandler.removeCallbacks(hideUiForSeekRunnable)
 
         if (!(binding.topControlsGroup.visibility == INVISIBLE && binding.middleControlsGroup.visibility == INVISIBLE && binding.bottomControlsGroup.visibility == INVISIBLE)) {
+            wasPausedBeforeSeeking = activity.player.paused!!
             showControls = binding.controlsView.isVisible
             binding.topControlsGroup.visibility = INVISIBLE
             binding.middleControlsGroup.visibility = INVISIBLE
