@@ -388,6 +388,7 @@ class PlayerActivity :
 
     private fun switchOrientation(isLandscape: Boolean) {
         launchUI {
+            setVisibilities()
             if (isLandscape) {
                 if (width <= height) {
                     width = height.also { height = width }
