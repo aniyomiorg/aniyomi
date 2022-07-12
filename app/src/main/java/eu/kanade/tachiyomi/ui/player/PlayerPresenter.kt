@@ -234,9 +234,16 @@ class PlayerPresenter(
         return source is AnimeHttpSource && !EpisodeLoader.isDownloaded(currentEpisode, anime)
     }
 
-    fun nextEpisode(callback: () -> Unit, fromStart: Boolean = false): String? {
+    fun nextEpisode(pos: Int?, duration: Int?, callback: () -> Unit, fromStart: Boolean = false): String? {
         val anime = anime ?: return null
         val source = sourceManager.getOrStub(anime.source)
+
+        val progressEpisode = currentEpisode
+
+        launchIO {
+            saveEpisodeProgress(pos, duration, progressEpisode)
+            saveEpisodeHistory()
+        }
 
         val index = getCurrentEpisodeIndex()
         if (index == episodeList.lastIndex) return null
@@ -264,9 +271,16 @@ class PlayerPresenter(
         return anime.title + " - " + episodeList[index + 1].name
     }
 
-    fun previousEpisode(callback: () -> Unit): String? {
+    fun previousEpisode(pos: Int?, duration: Int?, callback: () -> Unit): String? {
         val anime = anime ?: return null
         val source = sourceManager.getOrStub(anime.source)
+
+        val progressEpisode = currentEpisode
+
+        launchIO {
+            saveEpisodeProgress(pos, duration, progressEpisode)
+            saveEpisodeHistory()
+        }
 
         val index = getCurrentEpisodeIndex()
         if (index == 0) return null
@@ -301,9 +315,9 @@ class PlayerPresenter(
         )
     }
 
-    suspend fun saveEpisodeProgress(pos: Int?, duration: Int?) {
+    suspend fun saveEpisodeProgress(pos: Int?, duration: Int?, episode: Episode? = currentEpisode) {
         if (incognitoMode) return
-        val episode = currentEpisode ?: return
+        if (episode == null) return
         val seconds = (pos ?: return) * 1000L
         val totalSeconds = (duration ?: return) * 1000L
         if (totalSeconds > 0L) {
