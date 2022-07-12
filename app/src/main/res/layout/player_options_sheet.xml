@@ -76,6 +76,24 @@
             android:text="@string/screenshot_show_subs"
             android:textColor="?android:attr/textColorSecondary" />
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/toggleVolumeBrightnessGestures"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/toggle_volume_brightness_gestures"
+            android:textColor="?android:attr/textColorSecondary" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/toggleHorizontalSeekGesture"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/toggle_horizontal_seek_gesture"
+            android:textColor="?android:attr/textColorSecondary" />
+
         <!-- Stats preferences -->
 
         <TextView

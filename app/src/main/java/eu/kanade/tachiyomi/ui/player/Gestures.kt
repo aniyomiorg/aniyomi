@@ -78,15 +78,15 @@ class Gestures(
                 }
             }
             STATE_VERTICAL_L -> {
-                activity.verticalScrollLeft(1.5F * distanceY / height)
+                if (preferences.gestureVolumeBrightness().get()) activity.verticalScrollLeft(1.5F * distanceY / height)
             }
             STATE_VERTICAL_R -> {
-                activity.verticalScrollRight(1.5F * distanceY / height)
+                if (preferences.gestureVolumeBrightness().get()) activity.verticalScrollRight(1.5F * distanceY / height)
             }
             STATE_HORIZONTAL -> {
                 val diff = 150F * -dx / width
                 scrollDiff = diff
-                activity.horizontalScroll(diff)
+                if (preferences.gestureHorizontalSeek().get()) activity.horizontalScroll(diff)
             }
         }
         return true
@@ -96,7 +96,7 @@ class Gestures(
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_UP) {
             if (scrollState == STATE_HORIZONTAL) {
-                scrollDiff?.let { activity.horizontalScroll(it, final = true) }
+                scrollDiff?.let { if (preferences.gestureHorizontalSeek().get()) activity.horizontalScroll(it, final = true) }
                 scrollDiff = null
                 activity.playerControls.resetControlsFade()
             }

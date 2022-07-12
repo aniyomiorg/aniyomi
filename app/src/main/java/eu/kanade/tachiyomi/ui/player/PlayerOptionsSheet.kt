@@ -29,6 +29,10 @@ class PlayerOptionsSheet(
         binding.save.setOnClickListener { save() }
         binding.toggleSubs.isChecked = activity.screenshotSubs
         binding.toggleSubs.setOnCheckedChangeListener { _, newValue -> activity.screenshotSubs = newValue }
+        binding.toggleVolumeBrightnessGestures.isChecked = activity.gestureVolumeBrightness
+        binding.toggleVolumeBrightnessGestures.setOnCheckedChangeListener { _, newValue -> activity.gestureVolumeBrightness = newValue }
+        binding.toggleHorizontalSeekGesture.isChecked = activity.gestureHorizontalSeek
+        binding.toggleHorizontalSeekGesture.setOnCheckedChangeListener { _, newValue -> activity.gestureHorizontalSeek = newValue }
         binding.toggleStats.isChecked = activity.stats
         binding.statsPage.isVisible = activity.stats
         binding.toggleStats.setOnCheckedChangeListener(toggleStats)

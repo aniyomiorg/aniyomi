@@ -171,6 +171,10 @@ class PreferencesHelper(val context: Context) {
 
     fun screenshotSubtitles() = flowPrefs.getBoolean("pref_screenshot_subtitles", false)
 
+    fun gestureVolumeBrightness() = flowPrefs.getBoolean("pref_gesture_volume_brightness", true)
+
+    fun gestureHorizontalSeek() = flowPrefs.getBoolean("pref_gesture_horizontal_seek", true)
+
     fun alwaysUseExternalPlayer() = prefs.getBoolean(Keys.alwaysUseExternalPlayer, false)
 
     fun externalPlayerPreference() = prefs.getString(Keys.externalPlayerPreference, "")

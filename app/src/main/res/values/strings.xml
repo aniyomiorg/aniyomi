@@ -875,6 +875,8 @@
 
     <string name="screenshot_header">Take screenshot</string>
     <string name="screenshot_show_subs">Show subtitles in screenshot</string>
+    <string name="toggle_volume_brightness_gestures">Toggle Volume and Brightness Gestures</string>
+    <string name="toggle_horizontal_seek_gesture">Toggle Horizontal Seek Gesture</string>
     <string name="stats_header">Show statistics</string>
     <string name="toggle_stats">Toggle stats</string>
     <string name="stats_page">Stats page</string>
