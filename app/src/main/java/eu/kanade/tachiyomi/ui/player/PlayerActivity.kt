@@ -918,6 +918,12 @@ class PlayerActivity :
         stats = !stats
     }
 
+    var gestureVolumeBrightness: Boolean = preferences.gestureVolumeBrightness().get()
+        set(value) {
+            preferences.gestureVolumeBrightness().set(value)
+            field = value
+        }
+
     var screenshotSubs: Boolean = preferences.screenshotSubtitles().get()
         set(value) {
             preferences.screenshotSubtitles().set(value)

@@ -29,6 +29,8 @@ class PlayerOptionsSheet(
         binding.save.setOnClickListener { save() }
         binding.toggleSubs.isChecked = activity.screenshotSubs
         binding.toggleSubs.setOnCheckedChangeListener { _, newValue -> activity.screenshotSubs = newValue }
+        binding.toggleGestures.isChecked = activity.gestureVolumeBrightness
+        binding.toggleGestures.setOnCheckedChangeListener { _, newValue -> activity.gestureVolumeBrightness = newValue }
         binding.toggleStats.isChecked = activity.stats
         binding.statsPage.isVisible = activity.stats
         binding.toggleStats.setOnCheckedChangeListener(toggleStats)

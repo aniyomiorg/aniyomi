@@ -78,10 +78,10 @@ class Gestures(
                 }
             }
             STATE_VERTICAL_L -> {
-                activity.verticalScrollLeft(1.5F * distanceY / height)
+                if (preferences.gestureVolumeBrightness().get()) activity.verticalScrollLeft(1.5F * distanceY / height)
             }
             STATE_VERTICAL_R -> {
-                activity.verticalScrollRight(1.5F * distanceY / height)
+                if (preferences.gestureVolumeBrightness().get()) activity.verticalScrollRight(1.5F * distanceY / height)
             }
             STATE_HORIZONTAL -> {
                 val diff = 150F * -dx / width

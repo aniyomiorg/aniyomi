@@ -76,6 +76,15 @@
             android:text="@string/screenshot_show_subs"
             android:textColor="?android:attr/textColorSecondary" />
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/toggleGestures"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/toggle_volume_brightness_gestures"
+            android:textColor="?android:attr/textColorSecondary" />
+
         <!-- Stats preferences -->
 
         <TextView
