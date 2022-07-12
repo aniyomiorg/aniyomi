@@ -470,16 +470,12 @@ class PlayerActivity :
      */
     internal fun switchEpisode(previous: Boolean, autoPlay: Boolean = false) {
         val switchMethod = if (previous && !autoPlay) {
-            { callback: () -> Unit -> presenter.previousEpisode(callback) }
+            { callback: () -> Unit -> presenter.previousEpisode(player.timePos, player.duration, callback) }
         } else {
-            { callback: () -> Unit -> presenter.nextEpisode(callback, autoPlay) }
+            { callback: () -> Unit -> presenter.nextEpisode(player.timePos, player.duration, callback, autoPlay) }
         }
         val errorRes = if (previous) R.string.no_previous_episode else R.string.no_next_episode
 
-        launchIO {
-            presenter.saveEpisodeProgress(player.timePos, player.duration)
-            presenter.saveEpisodeHistory()
-        }
         val wasPlayerPaused = player.paused
         player.paused = true
         showLoadingIndicator(true)
