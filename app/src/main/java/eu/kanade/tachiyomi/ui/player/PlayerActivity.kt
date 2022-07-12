@@ -924,6 +924,12 @@ class PlayerActivity :
             field = value
         }
 
+    var gestureHorizontalSeek: Boolean = preferences.gestureHorizontalSeek().get()
+        set(value) {
+            preferences.gestureHorizontalSeek().set(value)
+            field = value
+        }
+
     var screenshotSubs: Boolean = preferences.screenshotSubtitles().get()
         set(value) {
             preferences.screenshotSubtitles().set(value)
