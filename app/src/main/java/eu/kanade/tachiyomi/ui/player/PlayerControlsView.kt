@@ -296,8 +296,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             binding.bottomRightControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_exit_right))
             binding.bottomLeftControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_exit_left))
             binding.middleControlsGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_fade_out))
-            showControls = false
         }
+        showControls = false
     }
 
     private fun fadeInView(view: View) {
