@@ -18,6 +18,7 @@ import eu.kanade.domain.anime.interactor.GetAnimelibAnime
 import eu.kanade.domain.anime.interactor.GetDuplicateLibraryAnime
 import eu.kanade.domain.anime.interactor.InsertAnime
 import eu.kanade.domain.anime.interactor.SetAnimeEpisodeFlags
+import eu.kanade.domain.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.repository.AnimeRepository
 import eu.kanade.domain.animedownload.interactor.DeleteAnimeDownload
@@ -131,6 +132,7 @@ class DomainModule : InjektModule {
         addFactory { GetNextEpisode(get()) }
         addFactory { ResetViewerFlagsAnime(get()) }
         addFactory { SetAnimeEpisodeFlags(get()) }
+        addFactory { SetAnimeViewerFlags(get()) }
         addFactory { InsertAnime(get()) }
         addFactory { UpdateAnime(get()) }
         addFactory { SetAnimeCategories(get()) }

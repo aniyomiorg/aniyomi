@@ -61,6 +61,10 @@ interface Anime : SAnime {
         get() = episode_flags and DomainAnime.EPISODE_SORTING_MASK.toInt()
         set(sort) = setEpisodeFlags(sort, DomainAnime.EPISODE_SORTING_MASK.toInt())
 
+    var skipIntroLength: Int
+        get() = viewer_flags and 0x000000FF
+        set(skipIntro) = setViewerFlags(skipIntro, 0x000000FF)
+
     companion object {
         fun create(pathUrl: String, title: String, source: Long = 0): Anime = AnimeImpl().apply {
             url = pathUrl
