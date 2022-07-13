@@ -157,6 +157,7 @@
                 android:id="@+id/toggleAutoplay"
                 android:layout_width="64dp"
                 android:layout_height="48dp"
+                tools:checked="true"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/cycleDecoderBtn"
                 app:layout_constraintTop_toTopOf="@id/cycleDecoderBtn" />
@@ -317,9 +318,11 @@
                     android:id="@+id/controls_skip_intro_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackground"
+                    android:backgroundTint="?attr/colorPrimary"
                     android:onClick="skipIntro"
-                    android:textColor="?attr/colorOnPrimarySurface" />
+                    android:text=""
+                    tools:text="+85s"
+                    android:textColor="?attr/colorOnPrimary" />
 
                 <ImageButton
                     android:id="@+id/cycleViewModeBtn"
@@ -348,7 +351,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/seekBarGroup"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="10dp"
             android:layout_marginBottom="10dp"
@@ -395,7 +398,7 @@
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
-            
+
             <Button
                 android:id="@+id/playbackDurationBtn"
                 android:layout_width="96dp"
