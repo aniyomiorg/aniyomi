@@ -39,7 +39,7 @@ object PreferenceKeys {
 
     const val progressPreference = "pref_progress_preference"
 
-    const val introLengthPreference = "pref_intro_length_preference"
+    const val defaultIntroLength = "pref_default_intro_length"
 
     const val skipLengthPreference = "pref_skip_length_preference"
 

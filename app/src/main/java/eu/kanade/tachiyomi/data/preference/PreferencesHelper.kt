@@ -181,7 +181,7 @@ class PreferencesHelper(val context: Context) {
 
     fun progressPreference() = prefs.getString(Keys.progressPreference, "0.85F")!!.toFloat()
 
-    fun introLengthPreference() = prefs.getString(Keys.introLengthPreference, "85")!!.toInt()
+    fun defaultIntroLength() = flowPrefs.getInt(Keys.defaultIntroLength, 85)
 
     fun skipLengthPreference() = prefs.getString(Keys.skipLengthPreference, "10")!!.toInt()
 

@@ -472,11 +472,9 @@
     <string name="pref_default_portrait_orientation">Default portrait</string>
     <string name="pref_default_landscape_orientation">Default landscape</string>
     <string name="pref_category_internal_player">Internal player</string>
+    <string name="pref_default_intro_length">Default skip intro length</string>
     <string name="pref_intro_length">Skip intro length</string>
     <string name="pref_skip_length">Double tap to skip length</string>
-    <string name="pref_skip_85">85s</string>
-    <string name="pref_skip_55">55s</string>
-    <string name="pref_skip_25">25s</string>
     <string name="pref_skip_30">30s</string>
     <string name="pref_skip_20">20s</string>
     <string name="pref_skip_10">10s</string>

@@ -1,21 +1,34 @@
 package eu.kanade.tachiyomi.ui.setting
 
+import android.app.Dialog
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
 import android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+import android.view.LayoutInflater
 import androidx.preference.PreferenceScreen
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.databinding.PrefSkipIntroLengthBinding
+import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.util.preference.defaultValue
 import eu.kanade.tachiyomi.util.preference.editTextPreference
 import eu.kanade.tachiyomi.util.preference.entriesRes
 import eu.kanade.tachiyomi.util.preference.listPreference
+import eu.kanade.tachiyomi.util.preference.onClick
+import eu.kanade.tachiyomi.util.preference.preference
 import eu.kanade.tachiyomi.util.preference.preferenceCategory
 import eu.kanade.tachiyomi.util.preference.summaryRes
 import eu.kanade.tachiyomi.util.preference.switchPreference
 import eu.kanade.tachiyomi.util.preference.titleRes
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import eu.kanade.tachiyomi.data.preference.PreferenceKeys as Keys
 
 class SettingsPlayerController : SettingsController() {
@@ -134,23 +147,16 @@ class SettingsPlayerController : SettingsController() {
         preferenceCategory {
             titleRes = R.string.pref_category_internal_player
 
-            listPreference {
-                key = Keys.introLengthPreference
-                titleRes = R.string.pref_intro_length
+            preference {
+                key = Keys.defaultIntroLength
+                titleRes = R.string.pref_default_intro_length
+                onClick {
+                    SkipIntroLengthDialog().showDialog(router)
+                }
 
-                entriesRes = arrayOf(
-                    R.string.pref_skip_85,
-                    R.string.pref_skip_55,
-                    R.string.pref_skip_25,
-                )
-                entryValues = arrayOf(
-                    "85",
-                    "55",
-                    "25",
-                )
-                defaultValue = "85"
-
-                summary = "%s"
+                preferences.defaultIntroLength().asFlow()
+                    .onEach { summary = it.toString() }
+                    .launchIn(viewScope)
             }
 
             listPreference {
@@ -256,6 +262,36 @@ class SettingsPlayerController : SettingsController() {
                 defaultValue = ""
 
                 summary = "%s"
+            }
+        }
+    }
+}
+
+class SkipIntroLengthDialog : DialogController() {
+
+    private val preferences: PreferencesHelper = Injekt.get()
+
+    private var defaultIntroLength = preferences.defaultIntroLength().get()
+
+    override fun onCreateDialog(savedViewState: Bundle?): Dialog {
+        val binding = PrefSkipIntroLengthBinding.inflate(LayoutInflater.from(activity!!))
+        onViewCreated(binding)
+        return MaterialAlertDialogBuilder(activity!!)
+            .setTitle(R.string.pref_intro_length)
+            .setView(binding.root)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                preferences.defaultIntroLength().set(defaultIntroLength)
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
+    }
+
+    fun onViewCreated(binding: PrefSkipIntroLengthBinding) {
+        with(binding.skipIntroColumn) {
+            value = defaultIntroLength
+
+            setOnValueChangedListener { _, _, newValue ->
+                defaultIntroLength = newValue
             }
         }
     }
