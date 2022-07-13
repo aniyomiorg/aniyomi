@@ -158,7 +158,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.pipBtn.setOnClickListener { activity.startPiP() }
 
         binding.pipBtn.isVisible = !preferences.pipOnExit() && activity.deviceSupportsPip
-        
+
         binding.playbackPositionBtn.setOnClickListener {
             if (activity.player.timePos != null && activity.player.duration != null) {
                 preferences.invertedDurationTxt().set(false)
