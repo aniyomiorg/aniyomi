@@ -309,7 +309,7 @@
 
             <LinearLayout
                 android:id="@+id/bottomRightControlsGroup"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="48dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent">
