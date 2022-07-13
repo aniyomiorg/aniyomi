@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import eu.kanade.domain.anime.interactor.GetAnime
+import eu.kanade.domain.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.anime.model.isLocal
 import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.animehistory.interactor.UpsertAnimeHistory
@@ -16,6 +17,7 @@ import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.episode.interactor.UpdateEpisode
 import eu.kanade.domain.episode.model.EpisodeUpdate
 import eu.kanade.domain.episode.model.toDbEpisode
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -50,10 +52,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
+import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.Date
+import java.util.concurrent.TimeUnit
 import eu.kanade.domain.anime.model.Anime as DomainAnime
 
 class PlayerPresenter(
@@ -67,6 +72,7 @@ class PlayerPresenter(
     private val insertTrack: InsertAnimeTrack = Injekt.get(),
     private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
+    private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
 ) : BasePresenter<PlayerActivity>() {
     /**
      * The ID of the anime loaded in the player.
@@ -533,6 +539,37 @@ class PlayerPresenter(
     sealed class SaveImageResult {
         class Success(val uri: Uri) : SaveImageResult()
         class Error(val error: Throwable) : SaveImageResult()
+    }
+
+    /**
+     * Returns the skipIntroLength used by this anime or the default one.
+     */
+    fun getAnimeSkipIntroLength(resolveDefault: Boolean = true): Int {
+        val default = preferences.defaultIntroLength().get()
+        val anime = anime ?: return default
+        val skipIntroLength = anime.skipIntroLength
+        return when {
+            resolveDefault && skipIntroLength <= 0 -> default
+            else -> anime.skipIntroLength
+        }
+    }
+
+    /**
+     * Updates the skipIntroLength for the open anime.
+     */
+    fun setAnimeSkipIntroLength(skipIntroLength: Int) {
+        val anime = anime ?: return
+        anime.skipIntroLength = skipIntroLength
+        runBlocking {
+            setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id!!.toLong(), skipIntroLength.toLong())
+        }
+
+        logcat(LogPriority.INFO) { "Skip Intro Length is ${anime.skipIntroLength}" }
+
+        Observable.timer(250, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .subscribeFirst({ view, _ ->
+                view.playerControls.binding.controlsSkipIntroBtn.text = view.getString(R.string.player_controls_skip_intro_text, skipIntroLength)
+            },)
     }
 
     /**
