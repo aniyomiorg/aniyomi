@@ -158,22 +158,25 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.pipBtn.setOnClickListener { activity.startPiP() }
 
         binding.pipBtn.isVisible = !preferences.pipOnExit() && activity.deviceSupportsPip
+        
         binding.playbackPositionBtn.setOnClickListener {
-            preferences.invertedDurationTxt().set(false)
-            preferences.invertedPlaybackTxt().set(!preferences.invertedPlaybackTxt().get())
-            if (activity.player.timePos != null) {
+            if (activity.player.timePos != null && activity.player.duration != null) {
+                preferences.invertedDurationTxt().set(false)
+                preferences.invertedPlaybackTxt().set(!preferences.invertedPlaybackTxt().get())
                 updatePlaybackPos(activity.player.timePos!!)
                 updatePlaybackDuration(activity.player.duration!!)
             }
         }
 
         binding.playbackDurationBtn.setOnClickListener {
-            preferences.invertedPlaybackTxt().set(false)
-            preferences.invertedDurationTxt().set(!preferences.invertedDurationTxt().get())
-            if (preferences.invertedDurationTxt().get() && activity.player.timePos != null) {
-                updatePlaybackPos(activity.player.timePos!!)
-                updatePlaybackDuration(activity.player.timePos!!)
-            } else updatePlaybackDuration(activity.player.duration!!)
+            if (activity.player.timePos != null && activity.player.duration != null) {
+                preferences.invertedPlaybackTxt().set(false)
+                preferences.invertedDurationTxt().set(!preferences.invertedDurationTxt().get())
+                if (preferences.invertedDurationTxt().get()) {
+                    updatePlaybackPos(activity.player.timePos!!)
+                    updatePlaybackDuration(activity.player.timePos!!)
+                } else updatePlaybackDuration(activity.player.duration!!)
+            }
         }
 
         binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked ->
