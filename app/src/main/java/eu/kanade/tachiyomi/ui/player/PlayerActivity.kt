@@ -1455,7 +1455,7 @@ class PlayerActivity :
                 playerControls.updatePlaybackPos(value.toInt())
                 if (preferences.invertedDurationTxt().get()) playerControls.updatePlaybackDuration(value.toInt())
             }
-            "duration" -> playerControls.updatePlaybackDuration(value.toInt())
+            "duration" -> if (!preferences.invertedDurationTxt().get()) playerControls.updatePlaybackDuration(value.toInt())
         }
     }
 
