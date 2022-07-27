@@ -1452,11 +1452,8 @@ class PlayerActivity :
     private fun eventPropertyUi(property: String, value: Long) {
         when (property) {
             "demuxer-cache-time" -> playerControls.updateBufferPosition(value.toInt())
-            "time-pos" -> {
-                playerControls.updatePlaybackPos(value.toInt())
-                if (preferences.invertedDurationTxt().get()) playerControls.updatePlaybackDuration(value.toInt())
-            }
-            "duration" -> if (!preferences.invertedDurationTxt().get()) playerControls.updatePlaybackDuration(value.toInt())
+            "time-pos" -> playerControls.updatePlaybackPos(value.toInt())
+            "duration" -> playerControls.updatePlaybackDuration(value.toInt())
         }
     }
 
