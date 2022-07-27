@@ -173,10 +173,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             if (activity.player.timePos != null && activity.player.duration != null) {
                 preferences.invertedPlaybackTxt().set(false)
                 preferences.invertedDurationTxt().set(!preferences.invertedDurationTxt().get())
-                if (preferences.invertedDurationTxt().get()) {
-                    updatePlaybackPos(activity.player.timePos!!)
-                    updatePlaybackDuration(activity.player.timePos!!)
-                } else updatePlaybackDuration(activity.player.duration!!)
+                updatePlaybackPos(activity.player.timePos!!)
+                updatePlaybackDuration(activity.player.duration!!)
             }
         }
 
@@ -235,9 +233,16 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     @SuppressLint("SetTextI18n")
     internal fun updatePlaybackPos(position: Int) {
-        if (preferences.invertedPlaybackTxt().get() && activity.player.duration != null) {
-            binding.playbackPositionTxt.text = "-${ Utils.prettyTime(activity.player.duration!! - position) }"
-        } else binding.playbackPositionTxt.text = Utils.prettyTime(position)
+        if (activity.player.duration != null) {
+            if (preferences.invertedPlaybackTxt().get()) {
+                binding.playbackPositionTxt.text =
+                    "-${Utils.prettyTime(activity.player.duration!! - position)}"
+            } else if (preferences.invertedDurationTxt().get()) {
+                binding.playbackPositionTxt.text = Utils.prettyTime(position)
+                binding.playbackDurationTxt.text =
+                    "-${Utils.prettyTime(activity.player.duration!! - position)}"
+            } else binding.playbackPositionTxt.text = Utils.prettyTime(position)
+        }
 
         binding.playbackSeekbar.progress = position
         updateDecoderButton()
@@ -246,12 +251,12 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     @SuppressLint("SetTextI18n")
     internal fun updatePlaybackDuration(duration: Int) {
-        if (preferences.invertedDurationTxt().get() && activity.player.duration != null) {
-            binding.playbackDurationTxt.text = "-${ Utils.prettyTime(activity.player.duration!! - duration) }"
-        } else binding.playbackDurationTxt.text = Utils.prettyTime(duration)
+        if (!preferences.invertedDurationTxt().get() && activity.player.duration != null) {
+            binding.playbackDurationTxt.text = Utils.prettyTime(duration)
+        }
 
         if (!userIsOperatingSeekbar) {
-            binding.playbackSeekbar.max = activity.player.duration!!
+            binding.playbackSeekbar.max = duration
         }
     }
 
