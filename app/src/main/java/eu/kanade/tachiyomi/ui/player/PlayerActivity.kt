@@ -1295,6 +1295,7 @@ class PlayerActivity :
             presenter.currentEpisode?.let { episode ->
                 if ((episode.seen && !preferences.preserveWatchingPosition()) || fromStart) episode.last_second_seen = 1L
                 MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
+                playerControls.updatePlaybackDuration(episode.total_seconds.toInt() / 1000)
             }
             subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
