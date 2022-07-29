@@ -1047,8 +1047,10 @@ class PlayerActivity :
 
     @Suppress("UNUSED_PARAMETER")
     fun skipIntro(view: View) {
-        doubleTapSeek(presenter.getAnimeSkipIntroLength(), isDoubleTap = false)
-        playerControls.resetControlsFade()
+        if (playerControls.binding.controlsSkipIntroBtn.text != "") {
+            doubleTapSeek(presenter.getAnimeSkipIntroLength(), isDoubleTap = false)
+            playerControls.resetControlsFade()
+        }
     }
 
     private fun refreshUi() {
