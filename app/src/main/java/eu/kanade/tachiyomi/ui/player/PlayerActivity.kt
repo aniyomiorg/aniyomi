@@ -1352,6 +1352,7 @@ class PlayerActivity :
 
         MPVLib.setOptionString("http-header-fields", httpHeaderString)
         headers["user-agent"]?.let { MPVLib.setOptionString("user-agent", it) }
+        headers["referer"]?.let { MPVLib.setOptionString("referrer", it) }
 
         // need to fix the cache
         // MPVLib.setOptionString("cache-on-disk", "yes")
@@ -1439,7 +1440,7 @@ class PlayerActivity :
         launchUI {
             showLoadingIndicator(false)
             if (preferences.adjustOrientationVideoDimensions()) {
-                if (player.videoW!! / player.videoH!! >= 1) {
+                if ((player.videoW ?: 1) / (player.videoH ?: 1) >= 1) {
                     this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationLandscape()
                     switchOrientation(true)
                 } else {

@@ -494,11 +494,15 @@ class AnimeDownloader(
             }
     }
 
+    private fun isMpd(video: Video): Boolean {
+        return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".mpd") ?: false
+    }
+
     private fun isHls(video: Video): Boolean {
         return video.videoUrl?.toHttpUrl()?.encodedPath?.endsWith(".m3u8") ?: false
     }
 
-    private fun hlsObservable(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
+    private fun ffmpegObservable(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
         isFFmpegRunning = true
         val headers = video.headers ?: download.source.headers
         val headerOptions = headers.joinToString("", "-headers '", "'") { "${it.first}: ${it.second}\r\n" }
@@ -568,7 +572,7 @@ class AnimeDownloader(
     }
 
     private fun newObservable(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
-        return if (isHls(video)) hlsObservable(video, download, tmpDir, filename)
+        return if (isHls(video) || isMpd(video)) ffmpegObservable(video, download, tmpDir, filename)
         else download.source.fetchVideo(video)
             .map { response ->
                 val file = tmpDir.findFile("$filename.tmp") ?: tmpDir.createFile("$filename.tmp")
