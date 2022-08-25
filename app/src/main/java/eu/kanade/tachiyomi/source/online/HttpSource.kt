@@ -74,7 +74,7 @@ abstract class HttpSource : CatalogueSource {
      * Headers builder for requests. Implementations can override this method for custom headers.
      */
     protected open fun headersBuilder() = Headers.Builder().apply {
-        add("User-Agent", DEFAULT_USER_AGENT)
+        add("User-Agent", network.defaultUserAgent)
     }
 
     /**
@@ -369,8 +369,4 @@ abstract class HttpSource : CatalogueSource {
      * Returns the list of filters for the source.
      */
     override fun getFilterList() = FilterList()
-
-    companion object {
-        const val DEFAULT_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.124 Safari/537.36 Edg/102.0.1245.44"
-    }
 }

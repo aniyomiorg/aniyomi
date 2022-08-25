@@ -55,4 +55,8 @@ class NetworkHelper(context: Context) {
             .addInterceptor(CloudflareInterceptor(context))
             .build()
     }
+
+    val defaultUserAgent by lazy {
+        preferences.defaultUserAgent().get()
+    }
 }

@@ -556,6 +556,9 @@
     <string name="pref_tablet_ui_mode">Tablet UI</string>
     <string name="pref_verbose_logging">Verbose logging</string>
     <string name="pref_verbose_logging_summary">Print verbose logs to system log (reduces app performance)</string>
+    <string name="pref_user_agent_string">Default user agent string</string>
+    <string name="pref_reset_user_agent_string">Reset default user agent string</string>
+    <string name="error_user_agent_string_blank">User agent string can not be blank</string>
 
       <!-- About section -->
     <string name="website">Website</string>

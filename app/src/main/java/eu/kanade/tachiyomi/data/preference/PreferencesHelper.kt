@@ -254,6 +254,8 @@ class PreferencesHelper(val context: Context) {
 
     fun libraryUpdateInterval() = flowPrefs.getInt("pref_library_update_interval_key", 24)
 
+    fun defaultUserAgent() = flowPrefs.getString(Keys.defaultUserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0) Gecko/20100101 Firefox/103.0")
+
     fun libraryUpdateDeviceRestriction() = flowPrefs.getStringSet("library_update_restriction", setOf(DEVICE_ONLY_ON_WIFI))
     fun libraryUpdateMangaRestriction() = flowPrefs.getStringSet("library_update_manga_restriction", setOf(MANGA_FULLY_READ, MANGA_ONGOING))
 

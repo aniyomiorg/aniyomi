@@ -47,6 +47,8 @@ object PreferenceKeys {
 
     const val removeAfterMarkedAsRead = "pref_remove_after_marked_as_read_key"
 
+    const val defaultUserAgent = "default_user_agent"
+
     const val removeBookmarkedChapters = "pref_remove_bookmarked"
 
     const val filterDownloaded = "pref_filter_library_downloaded"
