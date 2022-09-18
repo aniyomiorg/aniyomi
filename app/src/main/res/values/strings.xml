@@ -1068,6 +1068,7 @@
     <string name="playback_options_speed">Playback speed</string>
     <string name="playback_options_quality">Video quality</string>
     <string name="playback_options_title">Playback options</string>
+    <string name="action_action_change_intro_length">Change intro length</string>
 
     <string name="pref_navigate_pan">Navigate to pan</string>
     <string name="pref_landscape_zoom">Zoom landscape image</string>
