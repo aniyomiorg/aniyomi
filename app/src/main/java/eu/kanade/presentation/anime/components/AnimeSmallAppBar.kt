@@ -53,6 +53,7 @@ fun AnimeSmallAppBar(
     onShareClicked: (() -> Unit)?,
     onDownloadClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
+    changeAnimeSkipIntro: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
     // For action mode
     actionModeCounter: Int,
@@ -194,6 +195,13 @@ fun AnimeSmallAppBar(
                                     text = { Text(text = stringResource(R.string.action_migrate)) },
                                     onClick = {
                                         onMigrateClicked()
+                                        onDismissRequest()
+                                    },
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(text = stringResource(R.string.action_change_intro_length)) },
+                                    onClick = {
+                                        changeAnimeSkipIntro?.invoke()
                                         onDismissRequest()
                                     },
                                 )

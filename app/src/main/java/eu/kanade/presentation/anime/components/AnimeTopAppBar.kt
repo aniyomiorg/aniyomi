@@ -46,6 +46,7 @@ fun AnimeTopAppBar(
     onDownloadClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    changeAnimeSkipIntro: (() -> Unit)?,
     doGlobalSearch: (query: String, global: Boolean) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior?,
     // For action mode
@@ -53,6 +54,7 @@ fun AnimeTopAppBar(
     onSelectAll: () -> Unit,
     onInvertSelection: () -> Unit,
     onSmallAppBarHeightChanged: (Int) -> Unit,
+
 ) {
     val scrollPercentageProvider = { scrollBehavior?.scrollFraction?.coerceIn(0f, 1f) ?: 0f }
     val inverseScrollPercentageProvider = { 1f - scrollPercentageProvider() }
@@ -108,9 +110,11 @@ fun AnimeTopAppBar(
                 onDownloadClicked = onDownloadClicked,
                 onEditCategoryClicked = onEditCategoryClicked,
                 onMigrateClicked = onMigrateClicked,
+                changeAnimeSkipIntro = changeAnimeSkipIntro,
                 actionModeCounter = actionModeCounter,
                 onSelectAll = onSelectAll,
                 onInvertSelection = onInvertSelection,
+
             )
         },
     ) { measurables, constraints ->

@@ -122,12 +122,14 @@ fun AnimeScreen(
     onDownloadActionClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    changeAnimeSkipIntro: (() -> Unit)?,
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Episode>, bookmarked: Boolean) -> Unit,
     onMultiMarkAsSeenClicked: (List<Episode>, markAsSeen: Boolean) -> Unit,
     onMarkPreviousAsSeenClicked: (Episode) -> Unit,
     onMultiDeleteClicked: (List<Episode>) -> Unit,
+
 ) {
     if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
         AnimeScreenSmallImpl(
@@ -149,6 +151,7 @@ fun AnimeScreen(
             onDownloadActionClicked = onDownloadActionClicked,
             onEditCategoryClicked = onEditCategoryClicked,
             onMigrateClicked = onMigrateClicked,
+            changeAnimeSkipIntro = changeAnimeSkipIntro,
             onMultiBookmarkClicked = onMultiBookmarkClicked,
             onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
             onMarkPreviousAsSeenClicked = onMarkPreviousAsSeenClicked,
@@ -174,6 +177,7 @@ fun AnimeScreen(
             onShareClicked = onShareClicked,
             onDownloadActionClicked = onDownloadActionClicked,
             onEditCategoryClicked = onEditCategoryClicked,
+            changeAnimeSkipIntro = changeAnimeSkipIntro,
             onMigrateClicked = onMigrateClicked,
             onMultiBookmarkClicked = onMultiBookmarkClicked,
             onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
@@ -207,12 +211,14 @@ private fun AnimeScreenSmallImpl(
     onDownloadActionClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    changeAnimeSkipIntro: (() -> Unit)?,
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Episode>, bookmarked: Boolean) -> Unit,
     onMultiMarkAsSeenClicked: (List<Episode>, markAsRead: Boolean) -> Unit,
     onMarkPreviousAsSeenClicked: (Episode) -> Unit,
     onMultiDeleteClicked: (List<Episode>) -> Unit,
+
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
@@ -305,6 +311,7 @@ private fun AnimeScreenSmallImpl(
                     onDownloadClicked = onDownloadActionClicked,
                     onEditCategoryClicked = onEditCategoryClicked,
                     onMigrateClicked = onMigrateClicked,
+                    changeAnimeSkipIntro = changeAnimeSkipIntro,
                     doGlobalSearch = onSearch,
                     scrollBehavior = scrollBehavior,
                     actionModeCounter = selected.size,
@@ -409,12 +416,14 @@ fun AnimeScreenLargeImpl(
     onDownloadActionClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
     onMigrateClicked: (() -> Unit)?,
+    changeAnimeSkipIntro: (() -> Unit)?,
 
     // For bottom action menu
     onMultiBookmarkClicked: (List<Episode>, bookmarked: Boolean) -> Unit,
     onMultiMarkAsSeenClicked: (List<Episode>, markAsRead: Boolean) -> Unit,
     onMarkPreviousAsSeenClicked: (Episode) -> Unit,
     onMultiDeleteClicked: (List<Episode>) -> Unit,
+
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val density = LocalDensity.current
@@ -466,6 +475,7 @@ fun AnimeScreenLargeImpl(
                     onDownloadClicked = onDownloadActionClicked,
                     onEditCategoryClicked = onEditCategoryClicked,
                     onMigrateClicked = onMigrateClicked,
+                    changeAnimeSkipIntro = changeAnimeSkipIntro,
                     actionModeCounter = selected.size,
                     onSelectAll = {
                         selected.clear()

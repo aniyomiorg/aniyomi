@@ -39,6 +39,7 @@ import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
 import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
+import eu.kanade.tachiyomi.databinding.PrefSkipIntroLengthBinding
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.ui.anime.episode.DownloadCustomEpisodesDialog
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodesSettingsSheet
@@ -153,6 +154,7 @@ class AnimeController :
                 onMultiMarkAsSeenClicked = presenter::markEpisodesSeen,
                 onMarkPreviousAsSeenClicked = presenter::markPreviousEpisodeSeen,
                 onMultiDeleteClicked = this::deleteEpisodesWithConfirmation,
+                changeAnimeSkipIntro = this::changeAnimeSkipIntro.takeIf { successState.anime.favorite },
             )
         } else {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -196,6 +198,31 @@ class AnimeController :
         val activity = activity ?: return
         val intent = WebViewActivity.newIntent(activity, url, source.id, anime.title)
         startActivity(intent)
+    }
+
+    private fun changeAnimeSkipIntro() {
+        val anime = presenter.anime ?: return
+        val playerActivity = PlayerActivity()
+        var newSkipIntroLength = playerActivity.presenter.getAnimeSkipIntroLength()
+        val binding = PrefSkipIntroLengthBinding.inflate(LayoutInflater.from(activity))
+
+        playerActivity.presenter.anime = anime.toDbAnime()
+        with(binding.skipIntroColumn) {
+            value = playerActivity.presenter.getAnimeSkipIntroLength()
+            setOnValueChangedListener { _, _, newValue ->
+                newSkipIntroLength = newValue
+            }
+        }
+        activity?.let {
+            MaterialAlertDialogBuilder(it)
+                .setTitle(R.string.action_change_intro_length)
+                .setView(binding.root)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    playerActivity.presenter.setAnimeSkipIntroLength(newSkipIntroLength)
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
+        }
     }
 
     fun shareAnime() {
