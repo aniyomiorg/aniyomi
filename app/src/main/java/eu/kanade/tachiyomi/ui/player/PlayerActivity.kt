@@ -49,6 +49,8 @@ import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
+import eu.kanade.tachiyomi.util.SkipType
+import eu.kanade.tachiyomi.util.Stamp
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.LocaleHelper
@@ -58,6 +60,7 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
+import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
 import java.io.File
@@ -1053,6 +1056,22 @@ class PlayerActivity :
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
+    fun skipOpening(view: View) {
+        // this stop the counter
+        if (waitingAniSkip > 0) {
+            waitingAniSkip = -1
+            return
+        }
+        launchIO {
+            if (!aniSkipInterval.isNullOrEmpty()) {
+                val endOp = aniSkipInterval!!.find { it.skipType == SkipType.op } ?: return@launchIO
+                MPVLib.command(arrayOf("seek", "${endOp.interval.endTime}", "absolute", "exact"))
+                playerControls.resetControlsFade()
+            }
+        }
+    }
+
     private fun refreshUi() {
         // forces update of entire UI, used when resuming the activity
         val paused = player.paused ?: return
@@ -1437,6 +1456,12 @@ class PlayerActivity :
                     .coerceAtLeast(0)
             }
         }
+
+        waitingAniSkip = preferences.waitingTimeAniSkip()!!.toInt()
+        runBlocking {
+            if (aniSkipInterval == null) aniSkipInterval = presenter.aniSkipResponse()
+        }
+
         launchUI {
             showLoadingIndicator(false)
             if (preferences.adjustOrientationVideoDimensions()) {
@@ -1450,13 +1475,61 @@ class PlayerActivity :
             }
         }
     }
+    private var aniSkipInterval: List<Stamp>? = null
+    private val aniSkipEnable = preferences.aniSkipEnabled()
+    private val autoSkipAniSkip = preferences.autoSkipAniSkip()
+    private val netflixStyle = preferences.enableNetflixStyleAniSkip()
+    private var waitingAniSkip = preferences.waitingTimeAniSkip()!!.toInt()
+
+    @SuppressLint("SetTextI18n")
+    private fun aniSkipStuff(value: Long) {
+        if (aniSkipEnable) {
+            aniSkipInterval?.firstOrNull { it.skipType == SkipType.op }?.interval?.let {
+                if (value >= it.startTime && value <= it.endTime) {
+                    if (autoSkipAniSkip && !netflixStyle) {
+                        MPVLib.command(arrayOf("seek", it.endTime.toString(), "absolute"))
+                    }
+                    if (netflixStyle && waitingAniSkip > -1) {
+                        if (waitingAniSkip > 0) {
+                            launchUI {
+                                playerControls.binding.controlsSkipIntroBtn.visibility = View.GONE
+                                playerControls.binding.controlsAniskipOp.text = getString(R.string.player_aniskip_dontskip) + " " + waitingAniSkip
+                                playerControls.binding.controlsAniskipOp.visibility = View.VISIBLE
+                            }
+                            waitingAniSkip--
+                        } else {
+                            MPVLib.command(arrayOf("seek", it.endTime.toString(), "absolute"))
+                            launchUI {
+                                playerControls.binding.controlsAniskipOp.visibility = View.GONE
+                                playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
+                            }
+                        }
+                    } else {
+                        // showing without netflix style
+                        launchUI {
+                            playerControls.binding.controlsAniskipOp.text = getString(R.string.player_aniskip_op)
+                            playerControls.binding.controlsAniskipOp.visibility = View.VISIBLE
+                        }
+                    }
+                } else {
+                    launchUI {
+                        playerControls.binding.controlsAniskipOp.visibility = View.GONE
+                        playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
+    }
 
     // mpv events
 
     private fun eventPropertyUi(property: String, value: Long) {
         when (property) {
             "demuxer-cache-time" -> playerControls.updateBufferPosition(value.toInt())
-            "time-pos" -> playerControls.updatePlaybackPos(value.toInt())
+            "time-pos" -> {
+                playerControls.updatePlaybackPos(value.toInt())
+                aniSkipStuff(value)
+            }
             "duration" -> playerControls.updatePlaybackDuration(value.toInt())
         }
     }

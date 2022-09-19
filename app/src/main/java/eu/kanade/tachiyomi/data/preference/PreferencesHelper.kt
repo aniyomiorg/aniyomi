@@ -461,4 +461,9 @@ class PreferencesHelper(val context: Context) {
             )
         }
     }
+
+    fun aniSkipEnabled() = prefs.getBoolean(Keys.enableAniSkip, false)
+    fun autoSkipAniSkip() = prefs.getBoolean(Keys.enableAutoSkip_AniSkip, false)
+    fun waitingTimeAniSkip() = prefs.getString(Keys.waitingTimeAniSkip, "5")
+    fun enableNetflixStyleAniSkip() = prefs.getBoolean(Keys.enableNetflixStyleAniSkip, false)
 }
