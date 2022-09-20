@@ -87,7 +87,7 @@ class AniSkipApi {
                 SkipType.ed -> aniSkipResponse.first { it.skipType == SkipType.ed }.interval
                 SkipType.op -> aniSkipResponse.first { it.skipType == SkipType.op }.interval
                 SkipType.recap -> aniSkipResponse.first { it.skipType == SkipType.recap }.interval
-                SkipType.mixed_op -> aniSkipResponse.first { it.skipType.getString() == SkipType.mixed_op.getString() }.interval
+                SkipType.mixed_op -> aniSkipResponse.first { it.skipType == SkipType.mixedOp }.interval
             }
             if (waitingTime > -1) {
                 if (waitingTime > 0) {
@@ -135,14 +135,14 @@ data class Stamp(
 @Serializable
 enum class SkipType {
     op, ed, recap, @SerialName("mixed-op")
-    mixed_op;
+    mixedOp;
 
     fun getString(): String {
         return when (this) {
             op -> "Opening"
             ed -> "Ending"
             recap -> "Recap"
-            mixed_op -> "Mixed-op"
+            mixedOp -> "Mixed-op"
         }
     }
 }

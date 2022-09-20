@@ -1070,7 +1070,7 @@ class PlayerActivity :
                 SkipType.op -> MPVLib.command(arrayOf("seek", "${aniSkipIOP.endTime}", "absolute", "exact"))
                 SkipType.ed -> MPVLib.command(arrayOf("seek", "${aniSkipIED.endTime}", "absolute", "exact"))
                 SkipType.recap -> MPVLib.command(arrayOf("seek", "${aniSkipIRecap.endTime}", "absolute", "exact"))
-                SkipType.mixed_op -> MPVLib.command(arrayOf("seek", "${aniSkipIMOP.endTime}", "absolute", "exact"))
+                SkipType.mixedOp -> MPVLib.command(arrayOf("seek", "${aniSkipIMOP.endTime}", "absolute", "exact"))
                 else -> return
             }
         }
@@ -1467,7 +1467,7 @@ class PlayerActivity :
         }
         aniSkipIOP = aniSkipInterval?.firstOrNull { it.skipType == SkipType.op }?.interval
             ?: AniSkipInterval(-1.0, -1.0)
-        aniSkipIMOP = aniSkipInterval?.firstOrNull { it.skipType == SkipType.mixed_op }?.interval
+        aniSkipIMOP = aniSkipInterval?.firstOrNull { it.skipType == SkipType.mixedOp }?.interval
             ?: AniSkipInterval(-1.0, -1.0)
         aniSkipIED = aniSkipInterval?.firstOrNull { it.skipType == SkipType.ed }?.interval
             ?: AniSkipInterval(-1.0, -1.0)
@@ -1505,7 +1505,7 @@ class PlayerActivity :
         if (aniSkipEnable) {
             skipType = when {
                 value >= aniSkipIOP.startTime && value <= aniSkipIOP.endTime -> SkipType.op
-                value >= aniSkipIMOP.startTime && value <= aniSkipIMOP.endTime -> SkipType.mixed_op
+                value >= aniSkipIMOP.startTime && value <= aniSkipIMOP.endTime -> SkipType.mixedOp
                 value >= aniSkipIED.startTime && value <= aniSkipIED.endTime -> SkipType.ed
                 value >= aniSkipIRecap.startTime && value <= aniSkipIRecap.endTime -> SkipType.recap
                 else -> null
@@ -1521,7 +1521,7 @@ class PlayerActivity :
                         SkipType.op -> MPVLib.command(arrayOf("seek", "${aniSkipIOP.endTime}", "absolute"))
                         SkipType.ed -> MPVLib.command(arrayOf("seek", "${aniSkipIED.endTime}", "absolute"))
                         SkipType.recap -> MPVLib.command(arrayOf("seek", "${aniSkipIRecap.endTime}", "absolute"))
-                        SkipType.mixed_op -> MPVLib.command(arrayOf("seek", "${aniSkipIMOP.endTime}", "absolute"))
+                        SkipType.mixedOp -> MPVLib.command(arrayOf("seek", "${aniSkipIMOP.endTime}", "absolute"))
                     }
                 } else {
                     aniSkipPlayerUtils.showSkipButton(skipType)
