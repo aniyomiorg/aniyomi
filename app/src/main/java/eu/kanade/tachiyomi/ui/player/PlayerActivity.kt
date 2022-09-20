@@ -1505,8 +1505,8 @@ class PlayerActivity :
         if (aniSkipEnable) {
             skipType = when {
                 value >= aniSkipIOP.startTime && value <= aniSkipIOP.endTime -> SkipType.op
-                value >= aniSkipIMOP.startTime && value <= aniSkipIMOP.endTime -> SkipType.mixedOp
                 value >= aniSkipIED.startTime && value <= aniSkipIED.endTime -> SkipType.ed
+                value >= aniSkipIMOP.startTime && value <= aniSkipIMOP.endTime -> SkipType.mixedOp
                 value >= aniSkipIRecap.startTime && value <= aniSkipIRecap.endTime -> SkipType.recap
                 else -> null
             }

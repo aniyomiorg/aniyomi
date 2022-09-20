@@ -1071,6 +1071,7 @@
     <string name="action_change_intro_length">Change intro length</string>
     <string name="player_aniskip_op">Skip Opening</string>
     <string name="player_aniskip_ed">Skip Ending</string>
+    <string name="player_aniskip_mixedOp">Skip MixedOp</string>
     <string name="player_aniskip_recap">Skip Recap</string>
     <string name="player_aniskip_dontskip">Don\'t skip</string>
     <string name="pref_category_player_aniskip">AniSkip Settings</string>

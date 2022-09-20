@@ -72,7 +72,7 @@ class AniSkipApi {
                 SkipType.ed -> R.string.player_aniskip_ed
                 SkipType.op -> R.string.player_aniskip_op
                 SkipType.recap -> R.string.player_aniskip_recap
-                SkipType.mixedOp -> R.string.player_aniskip_op
+                SkipType.mixedOp -> R.string.player_aniskip_mixedOp
             }
             launchUI {
                 playerControls.binding.controlsAniskipOp.text = activity.getString(skipButtonString)
