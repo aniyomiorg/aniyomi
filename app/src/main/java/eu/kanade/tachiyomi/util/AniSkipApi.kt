@@ -72,7 +72,7 @@ class AniSkipApi {
                 SkipType.ed -> R.string.player_aniskip_ed
                 SkipType.op -> R.string.player_aniskip_op
                 SkipType.recap -> R.string.player_aniskip_recap
-                SkipType.mixed_op -> R.string.player_aniskip_op
+                SkipType.mixedOp -> R.string.player_aniskip_op
             }
             launchUI {
                 playerControls.binding.controlsAniskipOp.text = activity.getString(skipButtonString)
@@ -87,7 +87,7 @@ class AniSkipApi {
                 SkipType.ed -> aniSkipResponse.first { it.skipType == SkipType.ed }.interval
                 SkipType.op -> aniSkipResponse.first { it.skipType == SkipType.op }.interval
                 SkipType.recap -> aniSkipResponse.first { it.skipType == SkipType.recap }.interval
-                SkipType.mixed_op -> aniSkipResponse.first { it.skipType == SkipType.mixedOp }.interval
+                SkipType.mixedOp -> aniSkipResponse.first { it.skipType == SkipType.mixedOp }.interval
             }
             if (waitingTime > -1) {
                 if (waitingTime > 0) {
