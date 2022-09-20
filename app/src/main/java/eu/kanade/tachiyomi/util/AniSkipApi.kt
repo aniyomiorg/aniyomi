@@ -1,9 +1,17 @@
 package eu.kanade.tachiyomi.util
 
+import android.annotation.SuppressLint
 import android.util.Log
+import android.view.View
+import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.jsonMime
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.util.lang.launchUI
+import `is`.xyz.mpv.MPVLib
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -51,6 +59,60 @@ class AniSkipApi {
         val malId = response.body!!.string().substringAfter("idMal\":").substringBefore("}")
         return malId.toLong()
     }
+
+    class PlayerUtils(
+        private val binding: PlayerActivityBinding,
+        private val aniSkipResponse: List<Stamp>,
+    ) {
+        private val playerControls get() = binding.playerControls
+        private val activity: PlayerActivity get() = binding.root.context as PlayerActivity
+
+        fun showSkipButton(skipType: SkipType) {
+            val skipButtonString = when (skipType) {
+                SkipType.ed -> R.string.player_aniskip_ed
+                SkipType.op -> R.string.player_aniskip_op
+                SkipType.recap -> R.string.player_aniskip_recap
+                SkipType.mixed_op -> R.string.player_aniskip_op
+            }
+            launchUI {
+                playerControls.binding.controlsAniskipOp.text = activity.getString(skipButtonString)
+                playerControls.binding.controlsAniskipOp.visibility = View.VISIBLE
+            }
+        }
+
+        // this is used when netflixStyle is enabled
+        @SuppressLint("SetTextI18n")
+        fun showSkipButton(skipType: SkipType, waitingTime: Int) {
+            val skipTime = when (skipType) {
+                SkipType.ed -> aniSkipResponse.first { it.skipType == SkipType.ed }.interval
+                SkipType.op -> aniSkipResponse.first { it.skipType == SkipType.op }.interval
+                SkipType.recap -> aniSkipResponse.first { it.skipType == SkipType.recap }.interval
+                SkipType.mixed_op -> aniSkipResponse.first { it.skipType.getString() == SkipType.mixed_op.getString() }.interval
+            }
+            if (waitingTime > -1) {
+                if (waitingTime > 0) {
+                    launchUI {
+                        playerControls.binding.controlsSkipIntroBtn.visibility = View.GONE
+                        playerControls.binding.controlsAniskipOp.text = activity.getString(R.string.player_aniskip_dontskip) + " " + waitingTime
+                        playerControls.binding.controlsAniskipOp.visibility = View.VISIBLE
+                    }
+                } else {
+                    seekTo(skipTime.endTime)
+                    launchUI {
+                        playerControls.binding.controlsAniskipOp.visibility = View.GONE
+                        playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
+                    }
+                }
+            } else {
+                // when waitingTime is -1, it means that the user cancelled the skip
+                showSkipButton(skipType)
+            }
+        }
+
+        private fun seekTo(time: Double) {
+            MPVLib.command(arrayOf("seek", time.toString(), "absolute"))
+        }
+    }
 }
 
 @Serializable
@@ -70,14 +132,17 @@ data class Stamp(
 )
 
 @Suppress("EnumEntryName")
+@Serializable
 enum class SkipType {
-    op, ed, recap;
+    op, ed, recap, @SerialName("mixed-op")
+    mixed_op;
 
     fun getString(): String {
         return when (this) {
             op -> "Opening"
             ed -> "Ending"
             recap -> "Recap"
+            mixed_op -> "Mixed-op"
         }
     }
 }
