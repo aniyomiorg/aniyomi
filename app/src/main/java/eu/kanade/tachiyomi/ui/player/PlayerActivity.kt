@@ -1461,19 +1461,6 @@ class PlayerActivity :
             }
         }
 
-        waitingAniSkip = preferences.waitingTimeAniSkip()!!.toInt()
-        runBlocking {
-            if (aniSkipInterval == null) aniSkipInterval = presenter.aniSkipResponse()
-        }
-        aniSkipIOP = aniSkipInterval?.firstOrNull { it.skipType == SkipType.op }?.interval
-            ?: AniSkipInterval(-1.0, -1.0)
-        aniSkipIMOP = aniSkipInterval?.firstOrNull { it.skipType == SkipType.mixedOp }?.interval
-            ?: AniSkipInterval(-1.0, -1.0)
-        aniSkipIED = aniSkipInterval?.firstOrNull { it.skipType == SkipType.ed }?.interval
-            ?: AniSkipInterval(-1.0, -1.0)
-        aniSkipIRecap = aniSkipInterval?.firstOrNull { it.skipType == SkipType.recap }?.interval
-            ?: AniSkipInterval(-1.0, -1.0)
-
         launchUI {
             showLoadingIndicator(false)
             if (preferences.adjustOrientationVideoDimensions()) {
@@ -1486,6 +1473,19 @@ class PlayerActivity :
                 }
             }
         }
+        // aniSkip stuff
+        waitingAniSkip = preferences.waitingTimeAniSkip()!!.toInt()
+        runBlocking {
+            aniSkipInterval = presenter.aniSkipResponse()
+        }
+        aniSkipIOP = aniSkipInterval?.firstOrNull { it.skipType == SkipType.op }?.interval
+            ?: AniSkipInterval(-1.0, -1.0)
+        aniSkipIMOP = aniSkipInterval?.firstOrNull { it.skipType == SkipType.mixedOp }?.interval
+            ?: AniSkipInterval(-1.0, -1.0)
+        aniSkipIED = aniSkipInterval?.firstOrNull { it.skipType == SkipType.ed }?.interval
+            ?: AniSkipInterval(-1.0, -1.0)
+        aniSkipIRecap = aniSkipInterval?.firstOrNull { it.skipType == SkipType.recap }?.interval
+            ?: AniSkipInterval(-1.0, -1.0)
     }
 
     private val aniSkipEnable = preferences.aniSkipEnabled()
@@ -1525,6 +1525,11 @@ class PlayerActivity :
                     }
                 } else {
                     aniSkipPlayerUtils.showSkipButton(skipType)
+                }
+            } ?: run {
+                launchUI {
+                    playerControls.binding.controlsAniskipOp.visibility = View.GONE
+                    playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
                 }
             }
         }
