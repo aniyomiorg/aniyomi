@@ -50,7 +50,6 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
 import eu.kanade.tachiyomi.util.AniSkipApi
-import eu.kanade.tachiyomi.util.AniSkipInterval
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -1052,27 +1051,16 @@ class PlayerActivity :
 
     @Suppress("UNUSED_PARAMETER")
     fun skipIntro(view: View) {
-        if (playerControls.binding.controlsSkipIntroBtn.text != "") {
+        if (skipType != null) {
+            // this stop the counter
+            if (waitingAniSkip > 0) {
+                waitingAniSkip = -1
+                return
+            }
+            skipType.let { MPVLib.command(arrayOf("seek", "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}", "absolute")) }
+        } else if (playerControls.binding.controlsSkipIntroBtn.text != "") {
             doubleTapSeek(presenter.getAnimeSkipIntroLength(), isDoubleTap = false)
             playerControls.resetControlsFade()
-        }
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun skipOpening(view: View) {
-        // this stop the counter
-        if (waitingAniSkip > 0) {
-            waitingAniSkip = -1
-            return
-        }
-        if (skipType != null) {
-            when (skipType) {
-                SkipType.op -> MPVLib.command(arrayOf("seek", "${aniSkipIOP.endTime}", "absolute", "exact"))
-                SkipType.ed -> MPVLib.command(arrayOf("seek", "${aniSkipIED.endTime}", "absolute", "exact"))
-                SkipType.recap -> MPVLib.command(arrayOf("seek", "${aniSkipIRecap.endTime}", "absolute", "exact"))
-                SkipType.mixedOp -> MPVLib.command(arrayOf("seek", "${aniSkipIMOP.endTime}", "absolute", "exact"))
-                else -> return
-            }
         }
     }
 
@@ -1478,14 +1466,6 @@ class PlayerActivity :
         runBlocking {
             aniSkipInterval = presenter.aniSkipResponse()
         }
-        aniSkipIOP = aniSkipInterval?.firstOrNull { it.skipType == SkipType.op }?.interval
-            ?: AniSkipInterval(-1.0, -1.0)
-        aniSkipIMOP = aniSkipInterval?.firstOrNull { it.skipType == SkipType.mixedOp }?.interval
-            ?: AniSkipInterval(-1.0, -1.0)
-        aniSkipIED = aniSkipInterval?.firstOrNull { it.skipType == SkipType.ed }?.interval
-            ?: AniSkipInterval(-1.0, -1.0)
-        aniSkipIRecap = aniSkipInterval?.firstOrNull { it.skipType == SkipType.recap }?.interval
-            ?: AniSkipInterval(-1.0, -1.0)
     }
 
     private val aniSkipEnable = preferences.aniSkipEnabled()
@@ -1494,42 +1474,27 @@ class PlayerActivity :
 
     private var aniSkipInterval: List<Stamp>? = null
     private var waitingAniSkip = preferences.waitingTimeAniSkip()!!.toInt()
-    private var aniSkipIOP: AniSkipInterval = AniSkipInterval(-1.0, -1.0)
-    private var aniSkipIMOP: AniSkipInterval = AniSkipInterval(-1.0, -1.0)
-    private var aniSkipIED: AniSkipInterval = AniSkipInterval(-1.0, -1.0)
-    private var aniSkipIRecap: AniSkipInterval = AniSkipInterval(-1.0, -1.0)
+
     var skipType: SkipType? = null
 
     @SuppressLint("SetTextI18n")
     private fun aniSkipStuff(value: Long) {
         if (aniSkipEnable) {
-            skipType = when {
-                value >= aniSkipIOP.startTime && value <= aniSkipIOP.endTime -> SkipType.op
-                value >= aniSkipIED.startTime && value <= aniSkipIED.endTime -> SkipType.ed
-                value >= aniSkipIMOP.startTime && value <= aniSkipIMOP.endTime -> SkipType.mixedOp
-                value >= aniSkipIRecap.startTime && value <= aniSkipIRecap.endTime -> SkipType.recap
-                else -> null
-            }
-            if (skipType == null) launchUI { playerControls.binding.controlsAniskipOp.visibility = View.GONE }
+            skipType = aniSkipInterval?.firstOrNull { it.interval.startTime <= value && it.interval.endTime >= value }?.skipType
+
             skipType?.let { skipType ->
                 val aniSkipPlayerUtils = AniSkipApi.PlayerUtils(binding, aniSkipInterval!!)
                 if (netflixStyle) {
                     aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)
                     waitingAniSkip--
                 } else if (autoSkipAniSkip) {
-                    when (skipType) {
-                        SkipType.op -> MPVLib.command(arrayOf("seek", "${aniSkipIOP.endTime}", "absolute"))
-                        SkipType.ed -> MPVLib.command(arrayOf("seek", "${aniSkipIED.endTime}", "absolute"))
-                        SkipType.recap -> MPVLib.command(arrayOf("seek", "${aniSkipIRecap.endTime}", "absolute"))
-                        SkipType.mixedOp -> MPVLib.command(arrayOf("seek", "${aniSkipIMOP.endTime}", "absolute"))
-                    }
+                    skipType.let { MPVLib.command(arrayOf("seek", "${aniSkipInterval!!.first{it.skipType == skipType}}", "absolute")) }
                 } else {
                     aniSkipPlayerUtils.showSkipButton(skipType)
                 }
             } ?: run {
                 launchUI {
-                    playerControls.binding.controlsAniskipOp.visibility = View.GONE
-                    playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
+                    playerControls.binding.controlsSkipIntroBtn.text = getString(R.string.player_controls_skip_intro_text, presenter.getAnimeSkipIntroLength())
                 }
             }
         }

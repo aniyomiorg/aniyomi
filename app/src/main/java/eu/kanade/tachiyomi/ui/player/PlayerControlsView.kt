@@ -181,7 +181,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked ->
             activity.toggleAutoplay(isChecked)
         }
-        binding.controlsAniskipOp.isVisible = false
     }
 
     private val animationHandler = Handler(Looper.getMainLooper())

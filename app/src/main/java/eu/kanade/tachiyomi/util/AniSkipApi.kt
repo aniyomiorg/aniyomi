@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.util
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.view.View
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.network.GET
@@ -75,8 +74,7 @@ class AniSkipApi {
                 SkipType.mixedOp -> R.string.player_aniskip_mixedOp
             }
             launchUI {
-                playerControls.binding.controlsAniskipOp.text = activity.getString(skipButtonString)
-                playerControls.binding.controlsAniskipOp.visibility = View.VISIBLE
+                playerControls.binding.controlsSkipIntroBtn.text = activity.getString(skipButtonString)
             }
         }
 
@@ -92,15 +90,12 @@ class AniSkipApi {
             if (waitingTime > -1) {
                 if (waitingTime > 0) {
                     launchUI {
-                        playerControls.binding.controlsSkipIntroBtn.visibility = View.GONE
-                        playerControls.binding.controlsAniskipOp.text = activity.getString(R.string.player_aniskip_dontskip) + " " + waitingTime
-                        playerControls.binding.controlsAniskipOp.visibility = View.VISIBLE
+                        playerControls.binding.controlsSkipIntroBtn.text = activity.getString(R.string.player_aniskip_dontskip) + " " + waitingTime
                     }
                 } else {
                     seekTo(skipTime.endTime)
                     launchUI {
-                        playerControls.binding.controlsAniskipOp.visibility = View.GONE
-                        playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
+                        playerControls.binding.controlsSkipIntroBtn.text = ""
                     }
                 }
             } else {
