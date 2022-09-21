@@ -612,9 +612,8 @@ class PlayerPresenter(
                 else -> null
             }
             val duration = view?.player?.duration ?: return null
-            return when (malId) {
-                null -> null
-                else -> AniSkipApi().getResult(malId!!.toInt(), episodeNumber, duration.toLong())
+            return malId?.let {
+                AniSkipApi().getResult(it.toInt(), episodeNumber, duration.toLong())
             }
         }
         return null
