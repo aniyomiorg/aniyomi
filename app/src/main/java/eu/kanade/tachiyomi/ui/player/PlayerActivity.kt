@@ -1488,7 +1488,7 @@ class PlayerActivity :
                     aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)
                     waitingAniSkip--
                 } else if (autoSkipAniSkip) {
-                    skipType.let { MPVLib.command(arrayOf("seek", "${aniSkipInterval!!.first{it.skipType == skipType}}", "absolute")) }
+                    skipType.let { MPVLib.command(arrayOf("seek", "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}", "absolute")) }
                 } else {
                     aniSkipPlayerUtils.showSkipButton(skipType)
                 }
