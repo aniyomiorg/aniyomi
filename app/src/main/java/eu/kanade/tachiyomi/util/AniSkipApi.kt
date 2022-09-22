@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.util
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
@@ -47,7 +48,8 @@ class AniSkipApi {
                 body = buildJsonObject { put("query", query) }.toString().toRequestBody(jsonMime),
             ),
         ).execute()
-        return json.decodeFromString<JsonObject>("${response.body!!}")["data"]!!.jsonObject["Media"]!!.jsonObject["idMal"]!!.jsonPrimitive.long
+        return response.body!!.string().substringAfter("idMal\":").substringBefore("}")
+            .toLongOrNull() ?: 0
     }
 
     class PlayerUtils(
