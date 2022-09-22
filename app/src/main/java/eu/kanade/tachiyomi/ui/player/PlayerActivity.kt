@@ -1480,11 +1480,19 @@ class PlayerActivity :
     @SuppressLint("SetTextI18n")
     private fun aniSkipStuff(value: Long) {
         if (aniSkipEnable) {
-            skipType = aniSkipInterval?.firstOrNull { it.interval.startTime <= value && it.interval.endTime >= value }?.skipType
+            skipType = aniSkipInterval?.firstOrNull { it.interval.startTime <= value && it.interval.endTime > value }?.skipType
 
             skipType?.let { skipType ->
                 val aniSkipPlayerUtils = AniSkipApi.PlayerUtils(binding, aniSkipInterval!!)
                 if (netflixStyle) {
+                    // show a toast with the seconds before the skip
+                    if (waitingAniSkip == preferences.waitingTimeAniSkip()!!.toInt()) {
+                        Toast.makeText(
+                            this,
+                            "AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
                     aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)
                     waitingAniSkip--
                 } else if (autoSkipAniSkip) {

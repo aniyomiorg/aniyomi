@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.util
 
 import android.annotation.SuppressLint
-import android.util.Log
+import android.widget.Toast
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.network.GET
@@ -13,9 +13,7 @@ import `is`.xyz.mpv.MPVLib
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
+import kotlinx.serialization.json.*
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import uy.kohesive.injekt.injectLazy
@@ -26,12 +24,10 @@ class AniSkipApi {
 
     // credits: https://github.com/saikou-app/saikou/blob/main/app/src/main/java/ani/saikou/others/AniSkip.kt
     fun getResult(malId: Int, episodeNumber: Int, episodeLength: Long): List<Stamp>? {
-        Log.i("bruh", "mal : $malId, num : $episodeNumber, len : $episodeLength")
         val url =
             "https://api.aniskip.com/v2/skip-times/$malId/$episodeNumber?types[]=ed&types[]=mixed-ed&types[]=mixed-op&types[]=op&types[]=recap&episodeLength=$episodeLength"
         return try {
             val a = client.newCall(GET(url)).execute().body!!.string()
-            Log.i("bruh", "res: $a")
             val res = json.decodeFromString<AniSkipResponse>(a)
             if (res.found) res.results else null
         } catch (e: Exception) {
@@ -45,18 +41,13 @@ class AniSkipApi {
                 Media(id:$id){idMal}
                 }
         """.trimMargin()
-        val payload = buildJsonObject {
-            put("query", query)
-        }
         val response = client.newCall(
             POST(
                 "https://graphql.anilist.co",
-                body = payload.toString().toRequestBody(jsonMime),
+                body = buildJsonObject { put("query", query) }.toString().toRequestBody(jsonMime),
             ),
         ).execute()
-        // i need to change this
-        val malId = response.body!!.string().substringAfter("idMal\":").substringBefore("}")
-        return malId.toLong()
+        return json.decodeFromString<JsonObject>("${response.body!!}")["data"]!!.jsonObject["Media"]!!.jsonObject["idMal"]!!.jsonPrimitive.long
     }
 
     class PlayerUtils(
@@ -90,12 +81,17 @@ class AniSkipApi {
             if (waitingTime > -1) {
                 if (waitingTime > 0) {
                     launchUI {
-                        playerControls.binding.controlsSkipIntroBtn.text = activity.getString(R.string.player_aniskip_dontskip) + " " + waitingTime
+                        playerControls.binding.controlsSkipIntroBtn.text = activity.getString(R.string.player_aniskip_dontskip)
                     }
                 } else {
                     seekTo(skipTime.endTime)
+                    // show a toast
                     launchUI {
-                        playerControls.binding.controlsSkipIntroBtn.text = ""
+                        Toast.makeText(
+                            activity,
+                            activity.getString(R.string.player_aniskip_skip, skipType.getString()),
+                            Toast.LENGTH_SHORT,
+                        ).show()
                     }
                 }
             } else {

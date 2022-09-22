@@ -1073,7 +1073,6 @@
     <string name="player_aniskip_ed">Skip Ending</string>
     <string name="player_aniskip_mixedOp">Skip MixedOp</string>
     <string name="player_aniskip_recap">Skip Recap</string>
-    <string name="player_aniskip_dontskip">Don\'t skip</string>
     <string name="pref_category_player_aniskip">AniSkip Settings</string>
     <string name="pref_enable_aniskip">Enable AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Enable auto skip</string>
@@ -1085,6 +1084,9 @@
     <string name="pref_waiting_time_aniskip_9">9 seconds</string>
     <string name="pref_waiting_time_aniskip_10">10 seconds</string>
     <string name="pref_enable_netflixStyle_aniskip">Enable Netflix style</string>
+    <string name="player_aniskip_dontskip">Don\'t skip</string>
+    <string name="player_aniskip_dontskip_toast">Skip in: %d seconds</string>
+    <string name="player_aniskip_skip">%s Skipped</string>
 
     <string name="pref_navigate_pan">Navigate to pan</string>
     <string name="pref_landscape_zoom">Zoom landscape image</string>
