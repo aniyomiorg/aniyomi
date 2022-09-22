@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.util
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
