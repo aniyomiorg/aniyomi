@@ -1085,7 +1085,7 @@
     <string name="pref_waiting_time_aniskip_10">10 seconds</string>
     <string name="pref_enable_netflixStyle_aniskip">Enable Netflix style</string>
     <string name="player_aniskip_dontskip">Don\'t skip</string>
-    <string name="player_aniskip_dontskip_toast">Skip in: %d seconds</string>
+    <string name="player_aniskip_dontskip_toast">Skip in %d seconds</string>
     <string name="player_aniskip_skip">%s Skipped</string>
 
     <string name="pref_navigate_pan">Navigate to pan</string>

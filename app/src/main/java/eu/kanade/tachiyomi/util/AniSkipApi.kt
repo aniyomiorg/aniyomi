@@ -1,7 +1,10 @@
 package eu.kanade.tachiyomi.util
 
 import android.annotation.SuppressLint
-import android.widget.Toast
+import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.network.GET
@@ -17,6 +20,7 @@ import kotlinx.serialization.json.*
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import uy.kohesive.injekt.injectLazy
+import java.util.*
 
 class AniSkipApi {
     private val client = OkHttpClient()
@@ -66,6 +70,7 @@ class AniSkipApi {
                 SkipType.mixedOp -> R.string.player_aniskip_mixedOp
             }
             launchUI {
+                playerControls.binding.controlsSkipIntroBtn.isVisible = true
                 playerControls.binding.controlsSkipIntroBtn.text = activity.getString(skipButtonString)
             }
         }
@@ -82,23 +87,41 @@ class AniSkipApi {
             if (waitingTime > -1) {
                 if (waitingTime > 0) {
                     launchUI {
+                        playerControls.binding.controlsSkipIntroBtn.isVisible = true
                         playerControls.binding.controlsSkipIntroBtn.text = activity.getString(R.string.player_aniskip_dontskip)
                     }
                 } else {
                     seekTo(skipTime.endTime)
-                    // show a toast
-                    launchUI {
-                        Toast.makeText(
-                            activity,
-                            activity.getString(R.string.player_aniskip_skip, skipType.getString()),
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                    }
+                    skipAnimation(skipType)
                 }
             } else {
                 // when waitingTime is -1, it means that the user cancelled the skip
                 showSkipButton(skipType)
             }
+        }
+
+        fun skipAnimation(skipType: SkipType) {
+            binding.secondsView.binding.doubleTapSeconds.text = activity.getString(R.string.player_aniskip_skip, skipType.getString())
+
+            binding.secondsView.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+                leftToLeft = ConstraintLayout.LayoutParams.UNSET
+            }
+            binding.secondsView.isVisible = true
+            binding.secondsView.isForward = true
+
+            binding.ffwdBg.visibility = View.VISIBLE
+            binding.ffwdBg.animate().alpha(0.15f).setDuration(100).withEndAction {
+                binding.secondsView.animate().alpha(1f).setDuration(500).withEndAction {
+                    binding.secondsView.animate().alpha(0f).setDuration(500).withEndAction {
+                        binding.ffwdBg.animate().alpha(0f).setDuration(100).withEndAction {
+                            binding.ffwdBg.visibility = View.GONE
+                            binding.secondsView.isVisible = false
+                            binding.secondsView.alpha = 1f
+                        }
+                    }
+                }
+            }.start()
         }
 
         private fun seekTo(time: Double) {

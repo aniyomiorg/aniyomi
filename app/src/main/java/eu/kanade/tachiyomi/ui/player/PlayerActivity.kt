@@ -1058,6 +1058,7 @@ class PlayerActivity :
                 return
             }
             skipType.let { MPVLib.command(arrayOf("seek", "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}", "absolute")) }
+            AniSkipApi.PlayerUtils(binding, aniSkipInterval!!).skipAnimation(skipType!!)
         } else if (playerControls.binding.controlsSkipIntroBtn.text != "") {
             doubleTapSeek(presenter.getAnimeSkipIntroLength(), isDoubleTap = false)
             playerControls.resetControlsFade()
@@ -1480,8 +1481,11 @@ class PlayerActivity :
     @SuppressLint("SetTextI18n")
     private fun aniSkipStuff(value: Long) {
         if (aniSkipEnable) {
-            skipType = aniSkipInterval?.firstOrNull { it.interval.startTime <= value && it.interval.endTime > value }?.skipType
+            // if it doesn't find the opening it will show the +85 button
+            val showNormalSkipButton = aniSkipInterval?.firstOrNull { it.skipType == SkipType.op || it.skipType == SkipType.mixedOp } == null
+            if (showNormalSkipButton) return
 
+            skipType = aniSkipInterval?.firstOrNull { it.interval.startTime <= value && it.interval.endTime > value }?.skipType
             skipType?.let { skipType ->
                 val aniSkipPlayerUtils = AniSkipApi.PlayerUtils(binding, aniSkipInterval!!)
                 if (netflixStyle) {
@@ -1502,7 +1506,7 @@ class PlayerActivity :
                 }
             } ?: run {
                 launchUI {
-                    playerControls.binding.controlsSkipIntroBtn.text = getString(R.string.player_controls_skip_intro_text, presenter.getAnimeSkipIntroLength())
+                    playerControls.binding.controlsSkipIntroBtn.isVisible = false
                 }
             }
         }
