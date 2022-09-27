@@ -98,7 +98,7 @@ jobs:
             | universal | ${{ env.APK_UNIVERSAL_SHA }} |
             | x86 | ${{ env.APK_X86_SHA }} |
             | x86_64 | ${{ env.APK_X86_64_SHA }} |
-            
+          
             To find out the best version for you:-
 
             https://play.google.com/store/apps/details?id=ru.andr7e.deviceinfohw
