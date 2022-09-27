@@ -25,7 +25,7 @@ data class GithubRelease(
             "armeabi-v7a" -> "-armeabi-v7a"
             "x86" -> "-x86"
             "x86_64" -> "-x86_64"
-            else -> ""
+            else -> "-universal"
         }
 
         return assets.find { it.downloadLink.contains("aniyomi$apkVariant-") }?.downloadLink
