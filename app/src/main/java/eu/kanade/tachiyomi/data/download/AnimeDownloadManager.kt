@@ -169,7 +169,6 @@ class AnimeDownloadManager(
     fun downloadEpisodesAlt(anime: Anime, episodes: List<Episode>, autoStart: Boolean = true) {
         downloader.queueEpisodes(anime, episodes, autoStart, true)
     }
-
     /**
      * Builds the page list of a downloaded episode.
      *
