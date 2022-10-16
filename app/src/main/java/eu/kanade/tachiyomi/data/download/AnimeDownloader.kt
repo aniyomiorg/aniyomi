@@ -631,7 +631,7 @@ class AnimeDownloader(
                             }
                             it.delete()
                             tmpDir.delete()
-                            queue.forEach { Anime ->
+                            queue.find { Anime -> Anime.video == video }?.let { Anime ->
                                 Anime.status = AnimeDownload.State.DOWNLOADED
                                 completeAnimeDownload(Anime)
                             }
