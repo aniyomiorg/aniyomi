@@ -629,7 +629,12 @@ class AnimeDownloader(
                                 putExtra("com.dv.get.ACTION_LIST_ADD", "${Uri.parse(video.videoUrl)}<info>$filename.mp4")
                                 putExtra("com.dv.get.ACTION_LIST_PATH", tmpDir.filePath!!.substringBeforeLast("_"))
                             }
-                            video.progress = 1
+                            it.delete()
+                            tmpDir.delete()
+                            queue.forEach { Anime ->
+                                Anime.status = AnimeDownload.State.DOWNLOADED
+                                completeAnimeDownload(Anime)
+                            }
                         }
                     }
                 } else {
