@@ -623,13 +623,13 @@ class AnimeDownloader(
                             }
                         }
                         pkgName.startsWith("com.dv.adm") -> {
-                            it.delete()
                             intent.apply {
                                 component = ComponentName(pkgName, "$pkgName.AEditor")
                                 action = Intent.ACTION_VIEW
                                 putExtra("com.dv.get.ACTION_LIST_ADD", "${Uri.parse(video.videoUrl)}<info>$filename.mp4")
                                 putExtra("com.dv.get.ACTION_LIST_PATH", tmpDir.filePath!!.substringBeforeLast("_"))
                             }
+                            video.progress = 1
                         }
                     }
                 } else {
