@@ -54,7 +54,7 @@ fun EpisodeDownloadIndicator(
                     val episodeDownloadAction = when {
                         isDownloaded -> EpisodeDownloadAction.DELETE
                         isDownloading -> EpisodeDownloadAction.CANCEL
-                        else -> EpisodeDownloadAction.START_NOW
+                        else -> EpisodeDownloadAction.START_ALT
                     }
                     onClick(episodeDownloadAction)
                 },
