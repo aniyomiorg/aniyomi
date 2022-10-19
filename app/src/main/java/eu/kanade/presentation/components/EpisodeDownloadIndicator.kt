@@ -29,6 +29,8 @@ import eu.kanade.presentation.manga.EpisodeDownloadAction
 import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.model.AnimeDownload
+import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import uy.kohesive.injekt.injectLazy
 
 @Composable
 fun EpisodeDownloadIndicator(
@@ -128,20 +130,35 @@ fun EpisodeDownloadIndicator(
                         tint = arrowColor,
                     )
                     DropdownMenu(expanded = isMenuExpanded, onDismissRequest = { isMenuExpanded = false }) {
-                        DropdownMenuItem(
-                            text = { Text(text = stringResource(R.string.action_start_downloading_now)) },
-                            onClick = {
-                                onClick(EpisodeDownloadAction.START_NOW)
-                                isMenuExpanded = false
-                            },
-                        )
-                        DropdownMenuItem(
-                            text = { Text(text = stringResource(R.string.action_cancel)) },
-                            onClick = {
-                                onClick(EpisodeDownloadAction.CANCEL)
-                                isMenuExpanded = false
-                            },
-                        )
+                        if (isDownloading) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_start_downloading_now)) },
+                                onClick = {
+                                    onClick(EpisodeDownloadAction.START_NOW)
+                                    isMenuExpanded = false
+                                },
+                            )
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_cancel)) },
+                                onClick = {
+                                    onClick(EpisodeDownloadAction.CANCEL)
+                                    isMenuExpanded = false
+                                },
+                            )
+                        } else {
+                            val downloadText = if (preferences.useExternalDownloader()) {
+                                stringResource(R.string.action_start_download_internally)
+                            } else {
+                                stringResource(R.string.action_start_download_externally)
+                            }
+                            DropdownMenuItem(
+                                text = { Text(text = downloadText) },
+                                onClick = {
+                                    onClick(EpisodeDownloadAction.START_ALT)
+                                    isMenuExpanded = false
+                                },
+                            )
+                        }
                     }
                 }
             }
@@ -154,3 +171,5 @@ private val IndicatorPadding = 2.dp
 
 // To match composable parameter name when used later
 private val IndicatorStrokeWidth = IndicatorPadding
+
+private val preferences: PreferencesHelper by injectLazy()
