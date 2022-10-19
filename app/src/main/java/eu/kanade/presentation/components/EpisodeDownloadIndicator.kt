@@ -53,12 +53,15 @@ fun EpisodeDownloadIndicator(
                     }
                 },
                 onLongClick = {
-                    val episodeDownloadAction = when {
-                        isDownloaded -> EpisodeDownloadAction.DELETE
-                        isDownloading -> EpisodeDownloadAction.CANCEL
-                        else -> EpisodeDownloadAction.START_ALT
+                    if (isDownloaded || isDownloading) {
+                        val episodeDownloadAction = when {
+                            isDownloaded -> EpisodeDownloadAction.DELETE
+                            else -> EpisodeDownloadAction.CANCEL
+                        }
+                        onClick(episodeDownloadAction)
+                    } else {
+                        isMenuExpanded = true
                     }
-                    onClick(episodeDownloadAction)
                 },
             ) {
                 val indicatorModifier = Modifier
