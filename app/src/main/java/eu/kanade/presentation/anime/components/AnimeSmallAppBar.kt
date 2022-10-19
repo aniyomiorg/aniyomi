@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.FlipToBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -50,6 +51,7 @@ fun AnimeSmallAppBar(
     incognitoMode: Boolean,
     downloadedOnlyMode: Boolean,
     onBackClicked: () -> Unit,
+    onRefreshClicked: (() -> Unit),
     onShareClicked: (() -> Unit)?,
     onDownloadClicked: ((DownloadAction) -> Unit)?,
     onEditCategoryClicked: (() -> Unit)?,
@@ -100,6 +102,12 @@ fun AnimeSmallAppBar(
                         )
                     }
                 } else {
+                    IconButton(onClick = onRefreshClicked) {
+                        Icon(
+                            imageVector = Icons.Outlined.Refresh,
+                            contentDescription = stringResource(R.string.action_webview_refresh),
+                        )
+                    }
                     if (onShareClicked != null) {
                         IconButton(onClick = onShareClicked) {
                             Icon(
