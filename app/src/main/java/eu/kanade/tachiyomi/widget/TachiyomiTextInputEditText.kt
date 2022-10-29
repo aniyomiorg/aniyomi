@@ -5,9 +5,9 @@ import android.util.AttributeSet
 import android.widget.EditText
 import androidx.core.view.inputmethod.EditorInfoCompat
 import com.google.android.material.textfield.TextInputEditText
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.util.preference.asImmediateFlow
+import eu.kanade.tachiyomi.util.preference.asHotFlow
 import eu.kanade.tachiyomi.widget.TachiyomiTextInputEditText.Companion.setIncognito
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,7 @@ import uy.kohesive.injekt.api.get
 
 /**
  * A custom [TextInputEditText] that sets [EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING] to imeOptions
- * if [PreferencesHelper.incognitoMode] is true. Some IMEs may not respect this flag.
+ * if [BasePreferences.incognitoMode] is true. Some IMEs may not respect this flag.
  *
  * @see setIncognito
  */
@@ -46,16 +46,18 @@ class TachiyomiTextInputEditText @JvmOverloads constructor(
     companion object {
         /**
          * Sets Flow to this [EditText] that sets [EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING] to imeOptions
-         * if [PreferencesHelper.incognitoMode] is true. Some IMEs may not respect this flag.
+         * if [BasePreferences.incognitoMode] is true. Some IMEs may not respect this flag.
          */
         fun EditText.setIncognito(viewScope: CoroutineScope) {
-            Injekt.get<PreferencesHelper>().incognitoMode().asImmediateFlow {
-                imeOptions = if (it) {
-                    imeOptions or EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING
-                } else {
-                    imeOptions and EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING.inv()
+            Injekt.get<BasePreferences>().incognitoMode()
+                .asHotFlow {
+                    imeOptions = if (it) {
+                        imeOptions or EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING
+                    } else {
+                        imeOptions and EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING.inv()
+                    }
                 }
-            }.launchIn(viewScope)
+                .launchIn(viewScope)
         }
     }
 }

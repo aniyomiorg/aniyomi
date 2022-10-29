@@ -5,9 +5,9 @@ import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.inputmethod.EditorInfoCompat
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.util.preference.asImmediateFlow
+import eu.kanade.tachiyomi.util.preference.asHotFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -18,7 +18,7 @@ import uy.kohesive.injekt.api.get
 
 /**
  * A custom [SearchView] that sets [EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING] to imeOptions
- * if [PreferencesHelper.incognitoMode] is true. Some IMEs may not respect this flag.
+ * if [BasePreferences.incognitoMode] is true. Some IMEs may not respect this flag.
  */
 class TachiyomiSearchView @JvmOverloads constructor(
     context: Context,
@@ -31,13 +31,15 @@ class TachiyomiSearchView @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-        Injekt.get<PreferencesHelper>().incognitoMode().asImmediateFlow {
-            imeOptions = if (it) {
-                imeOptions or EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING
-            } else {
-                imeOptions and EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING.inv()
+        Injekt.get<BasePreferences>().incognitoMode()
+            .asHotFlow {
+                imeOptions = if (it) {
+                    imeOptions or EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING
+                } else {
+                    imeOptions and EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING.inv()
+                }
             }
-        }.launchIn(scope!!)
+            .launchIn(scope!!)
     }
 
     override fun setOnQueryTextListener(listener: OnQueryTextListener?) {
@@ -48,7 +50,9 @@ class TachiyomiSearchView @JvmOverloads constructor(
                 clearFocus()
                 listener?.onQueryTextSubmit(query.toString())
                 true
-            } else false
+            } else {
+                false
+            }
         }
     }
 

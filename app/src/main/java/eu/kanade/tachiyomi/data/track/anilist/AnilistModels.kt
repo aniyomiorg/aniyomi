@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.data.track.anilist
 
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
+import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.tachiyomi.data.database.models.Track
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
@@ -158,7 +158,7 @@ fun AnimeTrack.toAnilistStatus() = when (status) {
     else -> throw NotImplementedError("Unknown status: $status")
 }
 
-private val preferences: PreferencesHelper by injectLazy()
+private val preferences: TrackPreferences by injectLazy()
 
 fun Track.toAnilistScore(): String = when (preferences.anilistScoreType().get()) {
 // 10 point

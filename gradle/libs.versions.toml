@@ -1,20 +1,18 @@
 [versions]
-aboutlib_version = "10.3.1"
-okhttp_version = "4.10.0"
+aboutlib_version = "10.5.1"
+okhttp_version = "5.0.0-alpha.10"
 nucleus_version = "3.0.0"
-coil_version = "2.1.0"
-conductor_version = "3.1.5"
+coil_version = "2.2.2"
+conductor_version = "3.1.7"
 flowbinding_version = "1.2.0"
-shizuku_version = "12.1.0"
-sqldelight = "1.5.3"
+shizuku_version = "12.2.0"
+sqldelight = "1.5.4"
 leakcanary = "2.9.1"
+voyager = "1.0.0-rc05"
 
 [libraries]
 android-shortcut-gradle = "com.github.zellius:android-shortcut-gradle-plugin:0.1.2"
-google-services-gradle = "com.google.gms:google-services:4.3.10"
-google-firebase-crashlytics = "com.google.firebase:firebase-crashlytics-gradle:2.8.0"
-
-tachiyomi-api = "org.tachiyomi:source-api:1.1"
+google-services-gradle = "com.google.gms:google-services:4.3.14"
 
 rxandroid = "io.reactivex:rxandroid:1.2.1"
 rxjava = "io.reactivex:rxjava:1.3.8"
@@ -29,20 +27,17 @@ okio = "com.squareup.okio:okio:3.2.0"
 conscrypt-android = "org.conscrypt:conscrypt-android:2.5.2"
 
 quickjs-android = "app.cash.quickjs:quickjs-android:0.9.2"
-# TODO: remove Duktape once all extensions are using QuickJS
-duktape-android = "com.squareup.duktape:duktape-android:1.4.0"
 
-jsoup = "org.jsoup:jsoup:1.14.3"
+jsoup = "org.jsoup:jsoup:1.15.3"
 
 disklrucache = "com.jakewharton:disklrucache:2.0.2"
 unifile = "com.github.tachiyomiorg:unifile:17bec43"
-junrar = "com.github.junrar:junrar:7.5.2"
+junrar = "com.github.junrar:junrar:7.5.3"
 
-sqlitektx = "androidx.sqlite:sqlite-ktx:2.3.0-alpha03"
+sqlitektx = "androidx.sqlite:sqlite-ktx:2.3.0-beta01"
 sqlite-android = "com.github.requery:sqlite-android:3.36.0"
 
 preferencektx = "androidx.preference:preference-ktx:1.2.0"
-flowpreferences = "com.fredporciuncula:flow-preferences:1.7.0"
 
 nucleus-core = { module = "info.android15.nucleus:nucleus", version.ref = "nucleus_version" }
 nucleus-supportv7 = { module = "info.android15.nucleus:nucleus-support-v7", version.ref = "nucleus_version" }
@@ -60,47 +55,46 @@ natural-comparator = "com.github.gpanther:java-nat-sort:natural-comparator-1.1"
 
 markwon = "io.noties.markwon:core:4.6.2"
 
-material = "com.google.android.material:material:1.7.0-alpha02"
-androidprocessbutton = "com.github.dmytrodanylyk.android-process-button:library:1.0.4"
+material = "com.google.android.material:material:1.7.0"
 flexible-adapter-core = "com.github.arkon.FlexibleAdapter:flexible-adapter:c8013533"
 flexible-adapter-ui = "com.github.arkon.FlexibleAdapter:flexible-adapter-ui:c8013533"
-viewstatepageradapter = "com.nightlynexus.viewstatepageradapter:viewstatepageradapter:1.1.0"
 photoview = "com.github.chrisbanes:PhotoView:2.3.0"
 directionalviewpager = "com.github.tachiyomiorg:DirectionalViewPager:1.0.0"
 insetter = "dev.chrisbanes.insetter:insetter:0.6.1"
+cascade = "me.saket.cascade:cascade-compose:2.0.0-beta1"
 
 conductor-core = { module = "com.bluelinelabs:conductor", version.ref = "conductor_version" }
-conductor-viewpager = { module = "com.bluelinelabs:conductor-viewpager", version.ref = "conductor_version" }
 conductor-support-preference = { module = "com.github.tachiyomiorg:conductor-support-preference", version.ref = "conductor_version" }
 
 flowbinding-android = { module = "io.github.reactivecircus.flowbinding:flowbinding-android", version.ref = "flowbinding_version" }
 flowbinding-appcompat = { module = "io.github.reactivecircus.flowbinding:flowbinding-appcompat", version.ref = "flowbinding_version" }
-flowbinding-recyclerview = { module = "io.github.reactivecircus.flowbinding:flowbinding-recyclerview", version.ref = "flowbinding_version" }
-flowbinding-swiperefreshlayout = { module = "io.github.reactivecircus.flowbinding:flowbinding-swiperefreshlayout", version.ref = "flowbinding_version" }
-flowbinding-viewpager = { module = "io.github.reactivecircus.flowbinding:flowbinding-viewpager", version.ref = "flowbinding_version" }
 
 logcat = "com.squareup.logcat:logcat:0.1"
 
-acra-http = "ch.acra:acra-http:5.9.5"
-firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.0.0"
-firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.2.11"
+acra-http = "ch.acra:acra-http:5.9.6"
+firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.0"
 
 aboutLibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlib_version" }
 aboutLibraries-gradle = { module = "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin", version.ref = "aboutlib_version" }
-aboutLibraries-compose = { module = "com.mikepenz:aboutlibraries-compose", version.ref ="aboutlib_version" }
+aboutLibraries-compose = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "aboutlib_version" }
 
 shizuku-api = { module = "dev.rikka.shizuku:api", version.ref = "shizuku_version" }
 shizuku-provider = { module = "dev.rikka.shizuku:provider", version.ref = "shizuku_version" }
 
-leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref ="leakcanary" }
-leakcanary-plumber = { module = "com.squareup.leakcanary:plumber-android", version.ref ="leakcanary" }
+leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
+leakcanary-plumber = { module = "com.squareup.leakcanary:plumber-android", version.ref = "leakcanary" }
 
-sqldelight-android-driver = { module = "com.squareup.sqldelight:android-driver", version.ref ="sqldelight" }
-sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions-jvm", version.ref ="sqldelight" }
-sqldelight-android-paging = { module = "com.squareup.sqldelight:android-paging3-extensions", version.ref ="sqldelight" }
-sqldelight-gradle = { module="com.squareup.sqldelight:gradle-plugin", version.ref ="sqldelight" }
+sqldelight-android-driver = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-coroutines = { module = "com.squareup.sqldelight:coroutines-extensions-jvm", version.ref = "sqldelight" }
+sqldelight-android-paging = { module = "com.squareup.sqldelight:android-paging3-extensions", version.ref = "sqldelight" }
+sqldelight-gradle = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqldelight" }
 
-junit = "org.junit.jupiter:junit-jupiter:5.8.2"
+junit = "org.junit.jupiter:junit-jupiter:5.9.1"
+
+voyager-navigator = { module = "ca.gosyer:voyager-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "ca.gosyer:voyager-transitions", version.ref = "voyager" }
+
+numberpicker= "com.chargemap.compose:numberpicker:1.0.3"
 
 ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:4.5.1-1.3.LTS"
 arthenica-smartexceptions = "com.arthenica:smart-exception-java:0.1.1"
@@ -109,14 +103,14 @@ aniyomi-mpv = "com.github.jmir1:aniyomi-mpv-lib:1.4"
 [bundles]
 reactivex = ["rxandroid", "rxjava", "rxrelay"]
 okhttp = ["okhttp-core", "okhttp-logging", "okhttp-dnsoverhttps"]
-js-engine = ["quickjs-android", "duktape-android"]
+js-engine = ["quickjs-android"]
 sqlite = ["sqlitektx", "sqlite-android"]
 nucleus = ["nucleus-core", "nucleus-supportv7"]
 coil = ["coil-core", "coil-gif", "coil-compose"]
-flowbinding = ["flowbinding-android", "flowbinding-appcompat", "flowbinding-recyclerview", "flowbinding-swiperefreshlayout", "flowbinding-viewpager"]
-conductor = ["conductor-core", "conductor-viewpager", "conductor-support-preference"]
+flowbinding = ["flowbinding-android", "flowbinding-appcompat"]
+conductor = ["conductor-core", "conductor-support-preference"]
 shizuku = ["shizuku-api", "shizuku-provider"]
+voyager = ["voyager-navigator", "voyager-transitions"]
 
 [plugins]
-kotlinter = { id = "org.jmailen.kotlinter", version = "3.11.1" }
-versionsx = { id = "com.github.ben-manes.versions", version = "0.42.0" }
+kotlinter = { id = "org.jmailen.kotlinter", version = "3.12.0" }

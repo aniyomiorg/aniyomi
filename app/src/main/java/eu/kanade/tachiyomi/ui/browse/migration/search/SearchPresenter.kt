@@ -13,9 +13,10 @@ import eu.kanade.domain.manga.model.Manga
 import eu.kanade.domain.manga.model.MangaUpdate
 import eu.kanade.domain.manga.model.hasCustomCover
 import eu.kanade.domain.manga.model.toDbManga
-import eu.kanade.domain.manga.model.toMangaInfo
 import eu.kanade.domain.track.interactor.GetTracks
 import eu.kanade.domain.track.interactor.InsertTrack
+import eu.kanade.tachiyomi.core.preference.Preference
+import eu.kanade.tachiyomi.core.preference.PreferenceStore
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -23,13 +24,11 @@ import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
-import eu.kanade.tachiyomi.source.model.toSChapter
 import eu.kanade.tachiyomi.ui.browse.migration.MigrationFlags
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchCardItem
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchItem
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchPresenter
 import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.toast
 import uy.kohesive.injekt.Injekt
@@ -48,11 +47,16 @@ class SearchPresenter(
     private val getTracks: GetTracks = Injekt.get(),
     private val insertTrack: InsertTrack = Injekt.get(),
     private val setMangaCategories: SetMangaCategories = Injekt.get(),
+    preferenceStore: PreferenceStore = Injekt.get(),
 ) : GlobalSearchPresenter(initialQuery) {
 
     private val replacingMangaRelay = BehaviorRelay.create<Pair<Boolean, Manga?>>()
     private val coverCache: CoverCache by injectLazy()
     private val enhancedServices by lazy { Injekt.get<TrackManager>().services.filterIsInstance<EnhancedTrackService>() }
+
+    val migrateFlags: Preference<Int> by lazy {
+        preferenceStore.getInt("migrate_flags", Int.MAX_VALUE)
+    }
 
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
@@ -75,11 +79,10 @@ class SearchPresenter(
         return GlobalSearchItem(source, results, source.id == manga.source)
     }
 
-    override fun networkToLocalManga(sManga: SManga, sourceId: Long): eu.kanade.tachiyomi.data.database.models.Manga {
+    override suspend fun networkToLocalManga(sManga: SManga, sourceId: Long): Manga {
         val localManga = super.networkToLocalManga(sManga, sourceId)
         // For migration, displayed title should always match source rather than local DB
-        localManga.title = sManga.title
-        return localManga
+        return localManga.copy(title = sManga.title)
     }
 
     fun migrateManga(prevManga: Manga, manga: Manga, replace: Boolean) {
@@ -90,15 +93,14 @@ class SearchPresenter(
 
         presenterScope.launchIO {
             try {
-                val chapters = source.getChapterList(manga.toMangaInfo())
-                    .map { it.toSChapter() }
+                val chapters = source.getChapterList(manga.toSManga())
 
                 migrateMangaInternal(prevSource, source, chapters, prevManga, manga, replace)
             } catch (e: Throwable) {
                 withUIContext { view?.applicationContext?.toast(e.message) }
             }
 
-            presenterScope.launchUI { replacingMangaRelay.call(Pair(false, manga)) }
+            withUIContext { replacingMangaRelay.call(Pair(false, manga)) }
         }
     }
 
@@ -110,7 +112,7 @@ class SearchPresenter(
         manga: Manga,
         replace: Boolean,
     ) {
-        val flags = preferences.migrateFlags().get()
+        val flags = migrateFlags.get()
 
         val migrateChapters = MigrationFlags.hasChapters(flags)
         val migrateCategories = MigrationFlags.hasCategories(flags)
@@ -171,8 +173,11 @@ class SearchPresenter(
                 val service = enhancedServices
                     .firstOrNull { it.isTrackFrom(updatedTrack, prevManga, prevSource) }
 
-                if (service != null) service.migrateTrack(updatedTrack, manga, source)
-                else updatedTrack
+                if (service != null) {
+                    service.migrateTrack(updatedTrack, manga, source)
+                } else {
+                    updatedTrack
+                }
             }
             insertTrack.awaitAll(tracks)
         }

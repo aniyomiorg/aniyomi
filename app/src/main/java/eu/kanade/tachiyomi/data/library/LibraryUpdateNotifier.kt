@@ -16,11 +16,11 @@ import coil.transform.CircleCropTransformation
 import eu.kanade.domain.chapter.model.Chapter
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.data.download.Downloader
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.lang.chop
 import eu.kanade.tachiyomi.util.lang.launchUI
@@ -33,7 +33,7 @@ import java.text.DecimalFormatSymbols
 
 class LibraryUpdateNotifier(private val context: Context) {
 
-    private val preferences: PreferencesHelper by injectLazy()
+    private val preferences: SecurityPreferences by injectLazy()
 
     /**
      * Pending intent of action that cancels the library update
@@ -59,7 +59,7 @@ class LibraryUpdateNotifier(private val context: Context) {
             setLargeIcon(notificationBitmap)
             setOngoing(true)
             setOnlyAlertOnce(true)
-            addAction(R.drawable.ic_close_24dp, context.getString(android.R.string.cancel), cancelIntent)
+            addAction(R.drawable.ic_close_24dp, context.getString(R.string.action_cancel), cancelIntent)
         }
     }
 
@@ -71,7 +71,7 @@ class LibraryUpdateNotifier(private val context: Context) {
      * @param total the total progress.
      */
     fun showProgressNotification(manga: List<Manga>, current: Int, total: Int) {
-        if (preferences.hideNotificationContent()) {
+        if (preferences.hideNotificationContent().get()) {
             progressNotificationBuilder
                 .setContentTitle(context.getString(R.string.notification_check_updates))
                 .setContentText("($current/$total)")
@@ -157,22 +157,18 @@ class LibraryUpdateNotifier(private val context: Context) {
      * @param updates a list of manga with new updates.
      */
     fun showUpdateNotifications(updates: List<Pair<Manga, Array<Chapter>>>) {
-        if (updates.isEmpty()) {
-            return
-        }
-
         NotificationManagerCompat.from(context).apply {
             // Parent group notification
             notify(
                 Notifications.ID_NEW_CHAPTERS,
                 context.notification(Notifications.CHANNEL_NEW_CHAPTERS_EPISODES) {
                     setContentTitle(context.getString(R.string.notification_new_chapters))
-                    if (updates.size == 1 && !preferences.hideNotificationContent()) {
+                    if (updates.size == 1 && !preferences.hideNotificationContent().get()) {
                         setContentText(updates.first().first.title.chop(NOTIF_TITLE_MAX_LEN))
                     } else {
                         setContentText(context.resources.getQuantityString(R.plurals.notification_new_chapters_summary, updates.size, updates.size))
 
-                        if (!preferences.hideNotificationContent()) {
+                        if (!preferences.hideNotificationContent().get()) {
                             setStyle(
                                 NotificationCompat.BigTextStyle().bigText(
                                     updates.joinToString("\n") {
@@ -197,7 +193,7 @@ class LibraryUpdateNotifier(private val context: Context) {
             )
 
             // Per-manga notification
-            if (!preferences.hideNotificationContent()) {
+            if (!preferences.hideNotificationContent().get()) {
                 launchUI {
                     updates.forEach { (manga, chapters) ->
                         notify(manga.id.hashCode(), createNewChaptersNotification(manga, chapters))

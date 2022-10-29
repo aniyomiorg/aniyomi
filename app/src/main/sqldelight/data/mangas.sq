@@ -1,3 +1,4 @@
+import eu.kanade.tachiyomi.source.model.UpdateStrategy;
 import java.lang.String;
 import kotlin.collections.List;
 
@@ -19,7 +20,8 @@ CREATE TABLE mangas(
     viewer INTEGER NOT NULL,
     chapter_flags INTEGER NOT NULL,
     cover_last_modified INTEGER AS Long NOT NULL,
-    date_added INTEGER AS Long NOT NULL
+    date_added INTEGER AS Long NOT NULL,
+    update_strategy INTEGER AS UpdateStrategy NOT NULL DEFAULT 0
 );
 
 CREATE INDEX library_favorite_index ON mangas(favorite) WHERE favorite = 1;
@@ -72,78 +74,13 @@ FROM mangas
 WHERE favorite = 0
 GROUP BY source;
 
-getRecentlyUpdated:
-SELECT *
-FROM mangas M
-JOIN chapters C
-ON M._id = C.manga_id
-WHERE M.favorite = 1
-AND C.date_upload > :after
-AND C.date_fetch > M.date_added
-ORDER BY C.date_upload DESC;
-
-getLibrary:
-SELECT M.*, COALESCE(MC.category_id, 0) AS category
-FROM (
-    SELECT mangas.*, COALESCE(C.unreadCount, 0) AS unread_count, COALESCE(R.readCount, 0) AS read_count
-    FROM mangas
-    LEFT JOIN (
-        SELECT chapters.manga_id, COUNT(*) AS unreadCount
-        FROM chapters
-        WHERE chapters.read = 0
-        GROUP BY chapters.manga_id
-    ) AS C
-    ON mangas._id = C.manga_id
-    LEFT JOIN (
-        SELECT chapters.manga_id, COUNT(*) AS readCount
-        FROM chapters
-        WHERE chapters.read = 1
-        GROUP BY chapters.manga_id
-    ) AS R
-    WHERE mangas.favorite = 1
-    GROUP BY mangas._id
-    ORDER BY mangas.title
-) AS M
-LEFT JOIN (
-    SELECT *
-    FROM mangas_categories
-) AS MC
-ON M._id = MC.manga_id;
-
-getLastRead:
-SELECT M.*, MAX(H.last_read) AS max
-FROM mangas M
-JOIN chapters C
-ON M._id = C.manga_id
-JOIN history H
-ON C._id = H.chapter_id
-WHERE M.favorite = 1
-GROUP BY M._id
-ORDER BY max ASC;
-
-getLatestByChapterUploadDate:
-SELECT M.*, MAX(C.date_upload) AS max
-FROM mangas M
-JOIN chapters C
-ON M._id = C.manga_id
-GROUP BY M._id
-ORDER BY max ASC;
-
-getLatestByChapterFetchDate:
-SELECT M.*, MAX(C.date_fetch) AS max
-FROM mangas M
-JOIN chapters C
-ON M._id = C.manga_id
-GROUP BY M._id
-ORDER BY max ASC;
-
 deleteMangasNotInLibraryBySourceIds:
 DELETE FROM mangas
 WHERE favorite = 0 AND source IN :sourceIds;
 
 insert:
-INSERT INTO mangas(source,url,artist,author,description,genre,title,status,thumbnail_url,favorite,last_update,next_update,initialized,viewer,chapter_flags,cover_last_modified,date_added)
-VALUES (:source,:url,:artist,:author,:description,:genre,:title,:status,:thumbnailUrl,:favorite,:lastUpdate,:nextUpdate,:initialized,:viewerFlags,:chapterFlags,:coverLastModified,:dateAdded);
+INSERT INTO mangas(source,url,artist,author,description,genre,title,status,thumbnail_url,favorite,last_update,next_update,initialized,viewer,chapter_flags,cover_last_modified,date_added,update_strategy)
+VALUES (:source,:url,:artist,:author,:description,:genre,:title,:status,:thumbnailUrl,:favorite,:lastUpdate,:nextUpdate,:initialized,:viewerFlags,:chapterFlags,:coverLastModified,:dateAdded,:updateStrategy);
 
 update:
 UPDATE mangas SET
@@ -162,7 +99,8 @@ UPDATE mangas SET
     viewer = coalesce(:viewer, viewer),
     chapter_flags = coalesce(:chapterFlags, chapter_flags),
     cover_last_modified = coalesce(:coverLastModified, cover_last_modified),
-    date_added = coalesce(:dateAdded, date_added)
+    date_added = coalesce(:dateAdded, date_added),
+    update_strategy = coalesce(:updateStrategy, update_strategy)
 WHERE _id = :mangaId;
 
 selectLastInsertedRowId:

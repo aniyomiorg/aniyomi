@@ -1,13 +1,16 @@
 package eu.kanade.tachiyomi.data.saver
 
 import android.annotation.SuppressLint
+import android.content.ContentUris
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import androidx.annotation.RequiresApi
 import androidx.core.content.contentValuesOf
+import androidx.core.net.toUri
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
@@ -39,18 +42,21 @@ class ImageSaver(
         val pictureDir =
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
 
+        val folderRelativePath = "${Environment.DIRECTORY_PICTURES}/${context.getString(R.string.app_name)}/"
+        val imageLocation = (image.location as Location.Pictures).relativePath
+
         val contentValues = contentValuesOf(
             MediaStore.Images.Media.DISPLAY_NAME to image.name,
             MediaStore.Images.Media.MIME_TYPE to type.mime,
-            MediaStore.Images.Media.RELATIVE_PATH to
-                "${Environment.DIRECTORY_PICTURES}/${context.getString(R.string.app_name)}/" +
-                (image.location as Location.Pictures).relativePath,
+            MediaStore.Images.Media.RELATIVE_PATH to folderRelativePath + imageLocation,
         )
 
-        val picture = context.contentResolver.insert(
-            pictureDir,
-            contentValues,
-        ) ?: throw IOException(context.getString(R.string.error_saving_picture))
+        val picture = findUriOrDefault(folderRelativePath, "$imageLocation$filename") {
+            context.contentResolver.insert(
+                pictureDir,
+                contentValues,
+            ) ?: throw IOException(context.getString(R.string.error_saving_picture))
+        }
 
         try {
             data().use { input ->
@@ -80,9 +86,39 @@ class ImageSaver(
             }
         }
 
-        DiskUtil.scanMedia(context, destFile)
+        DiskUtil.scanMedia(context, destFile.toUri())
 
         return destFile.getUriCompat(context)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun findUriOrDefault(relativePath: String, imagePath: String, default: () -> Uri): Uri {
+        val projection = arrayOf(
+            MediaStore.MediaColumns._ID,
+            MediaStore.MediaColumns.DISPLAY_NAME,
+            MediaStore.Images.Media.MIME_TYPE,
+            MediaStore.MediaColumns.RELATIVE_PATH,
+            MediaStore.MediaColumns.DATE_MODIFIED,
+        )
+
+        val selection = "${MediaStore.MediaColumns.RELATIVE_PATH}=? AND ${MediaStore.MediaColumns.DISPLAY_NAME}=?"
+
+        context.contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            selection,
+            arrayOf(relativePath, imagePath),
+            null,
+        ).use { cursor ->
+            if (cursor != null && cursor.count >= 1) {
+                cursor.moveToFirst().let {
+                    val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID))
+
+                    return ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+                }
+            }
+        }
+        return default()
     }
 }
 

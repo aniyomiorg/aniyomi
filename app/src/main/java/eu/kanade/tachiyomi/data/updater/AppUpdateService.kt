@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.ProgressListener
 import eu.kanade.tachiyomi.network.await
-import eu.kanade.tachiyomi.network.newCallWithProgress
+import eu.kanade.tachiyomi.network.newCachelessCallWithProgress
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.storage.saveTo
@@ -119,7 +119,7 @@ class AppUpdateService : Service() {
 
         try {
             // Download the new update.
-            val call = network.client.newCallWithProgress(GET(url), progressListener)
+            val call = network.client.newCachelessCallWithProgress(GET(url), progressListener)
             runningCall = call
             val response = call.await()
 
@@ -127,16 +127,16 @@ class AppUpdateService : Service() {
             val apkFile = File(externalCacheDir, "update.apk")
 
             if (response.isSuccessful) {
-                response.body!!.source().saveTo(apkFile)
+                response.body.source().saveTo(apkFile)
             } else {
                 response.close()
                 throw Exception("Unsuccessful response")
             }
             notifier.promptInstall(apkFile.getUriCompat(this))
-        } catch (error: Exception) {
-            logcat(LogPriority.ERROR, error)
-            if (error is CancellationException ||
-                (error is StreamResetException && error.errorCode == ErrorCode.CANCEL)
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e)
+            if (e is CancellationException ||
+                (e is StreamResetException && e.errorCode == ErrorCode.CANCEL)
             ) {
                 notifier.cancel()
             } else {

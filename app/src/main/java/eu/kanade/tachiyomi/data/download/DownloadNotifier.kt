@@ -5,11 +5,11 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.util.lang.chop
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import eu.kanade.tachiyomi.util.system.notificationManager
@@ -23,7 +23,7 @@ import java.util.regex.Pattern
  */
 internal class DownloadNotifier(private val context: Context) {
 
-    private val preferences: PreferencesHelper by injectLazy()
+    private val preferences: SecurityPreferences by injectLazy()
 
     private val progressNotificationBuilder by lazy {
         context.notificationBuilder(Notifications.CHANNEL_DOWNLOADER_PROGRESS) {
@@ -42,6 +42,17 @@ internal class DownloadNotifier(private val context: Context) {
     private val errorNotificationBuilder by lazy {
         context.notificationBuilder(Notifications.CHANNEL_DOWNLOADER_ERROR) {
             setAutoCancel(false)
+        }
+    }
+
+    private val cacheNotificationBuilder by lazy {
+        context.notificationBuilder(Notifications.CHANNEL_DOWNLOADER_CACHE) {
+            setSmallIcon(R.drawable.ic_tachi)
+            setContentTitle(context.getString(R.string.download_notifier_cache_renewal))
+            setProgress(100, 100, true)
+            setOngoing(true)
+            setAutoCancel(false)
+            setOnlyAlertOnce(true)
         }
     }
 
@@ -104,7 +115,7 @@ internal class DownloadNotifier(private val context: Context) {
                 download.pages!!.size,
             )
 
-            if (preferences.hideNotificationContent()) {
+            if (preferences.hideNotificationContent().get()) {
                 setContentTitle(downloadingProgressText)
                 setContentText(null)
             } else {
@@ -232,5 +243,15 @@ internal class DownloadNotifier(private val context: Context) {
         // Reset download information
         errorThrown = true
         isDownloading = false
+    }
+
+    fun onCacheProgress() {
+        with(cacheNotificationBuilder) {
+            show(Notifications.ID_DOWNLOAD_CACHE)
+        }
+    }
+
+    fun dismissCacheProgress() {
+        context.notificationManager.cancel(Notifications.ID_DOWNLOAD_CACHE)
     }
 }

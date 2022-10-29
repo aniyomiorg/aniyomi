@@ -21,19 +21,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Block
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.Public
-import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.AttachMoney
+import androidx.compose.material.icons.outlined.Block
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.icons.outlined.DoneAll
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Pause
+import androidx.compose.material.icons.outlined.Public
+import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.Sync
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
@@ -42,7 +43,6 @@ import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -62,6 +62,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -75,7 +76,6 @@ import eu.kanade.domain.manga.model.Manga
 import eu.kanade.presentation.components.MangaCover
 import eu.kanade.presentation.components.TextButton
 import eu.kanade.presentation.util.clickableNoIndication
-import eu.kanade.presentation.util.quantityStringResource
 import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.model.SManga
@@ -85,179 +85,181 @@ import kotlin.math.roundToInt
 private val whitespaceLineRegex = Regex("[\\r\\n]{2,}", setOf(RegexOption.MULTILINE))
 
 @Composable
-fun MangaInfoHeader(
+fun MangaInfoBox(
     modifier: Modifier = Modifier,
-    windowWidthSizeClass: WindowWidthSizeClass,
+    isTabletUi: Boolean,
     appBarPadding: Dp,
     title: String,
     author: String?,
     artist: String?,
-    description: String?,
-    tagsProvider: () -> List<String>?,
     sourceName: String,
     isStubSource: Boolean,
     coverDataProvider: () -> Manga,
-    favorite: Boolean,
     status: Long,
-    trackingCount: Int,
-    fromSource: Boolean,
-    onAddToLibraryClicked: () -> Unit,
-    onWebViewClicked: (() -> Unit)?,
-    onTrackingClicked: (() -> Unit)?,
-    onTagClicked: (String) -> Unit,
-    onEditCategory: (() -> Unit)?,
     onCoverClick: () -> Unit,
     doSearch: (query: String, global: Boolean) -> Unit,
 ) {
-    val context = LocalContext.current
-    Column(modifier = modifier) {
-        Box {
-            // Backdrop
-            val backdropGradientColors = listOf(
-                Color.Transparent,
-                MaterialTheme.colorScheme.background,
-            )
-            AsyncImage(
-                model = coverDataProvider(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .matchParentSize()
-                    .drawWithContent {
-                        drawContent()
-                        drawRect(
-                            brush = Brush.verticalGradient(colors = backdropGradientColors),
-                        )
-                    }
-                    .alpha(.2f),
-            )
-
-            // Manga & source info
-            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-                if (windowWidthSizeClass == WindowWidthSizeClass.Compact) {
-                    MangaAndSourceTitlesSmall(
-                        appBarPadding = appBarPadding,
-                        coverDataProvider = coverDataProvider,
-                        onCoverClick = onCoverClick,
-                        title = title,
-                        context = context,
-                        doSearch = doSearch,
-                        author = author,
-                        artist = artist,
-                        status = status,
-                        sourceName = sourceName,
-                        isStubSource = isStubSource,
-                    )
-                } else {
-                    MangaAndSourceTitlesLarge(
-                        appBarPadding = appBarPadding,
-                        coverDataProvider = coverDataProvider,
-                        onCoverClick = onCoverClick,
-                        title = title,
-                        context = context,
-                        doSearch = doSearch,
-                        author = author,
-                        artist = artist,
-                        status = status,
-                        sourceName = sourceName,
-                        isStubSource = isStubSource,
+    Box(modifier = modifier) {
+        // Backdrop
+        val backdropGradientColors = listOf(
+            Color.Transparent,
+            MaterialTheme.colorScheme.background,
+        )
+        AsyncImage(
+            model = coverDataProvider(),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .matchParentSize()
+                .drawWithContent {
+                    drawContent()
+                    drawRect(
+                        brush = Brush.verticalGradient(colors = backdropGradientColors),
                     )
                 }
+                .alpha(.2f),
+        )
+
+        // Manga & source info
+        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
+            if (!isTabletUi) {
+                MangaAndSourceTitlesSmall(
+                    appBarPadding = appBarPadding,
+                    coverDataProvider = coverDataProvider,
+                    onCoverClick = onCoverClick,
+                    title = title,
+                    context = LocalContext.current,
+                    doSearch = doSearch,
+                    author = author,
+                    artist = artist,
+                    status = status,
+                    sourceName = sourceName,
+                    isStubSource = isStubSource,
+                )
+            } else {
+                MangaAndSourceTitlesLarge(
+                    appBarPadding = appBarPadding,
+                    coverDataProvider = coverDataProvider,
+                    onCoverClick = onCoverClick,
+                    title = title,
+                    context = LocalContext.current,
+                    doSearch = doSearch,
+                    author = author,
+                    artist = artist,
+                    status = status,
+                    sourceName = sourceName,
+                    isStubSource = isStubSource,
+                )
             }
         }
+    }
+}
 
-        // Action buttons
-        Row(modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)) {
-            val defaultActionButtonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
+@Composable
+fun MangaActionRow(
+    modifier: Modifier = Modifier,
+    favorite: Boolean,
+    trackingCount: Int,
+    onAddToLibraryClicked: () -> Unit,
+    onWebViewClicked: (() -> Unit)?,
+    onTrackingClicked: (() -> Unit)?,
+    onEditCategory: (() -> Unit)?,
+) {
+    Row(modifier = modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)) {
+        val defaultActionButtonColor = MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
+        MangaActionButton(
+            title = if (favorite) {
+                stringResource(R.string.in_library)
+            } else {
+                stringResource(R.string.add_to_library)
+            },
+            icon = if (favorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+            color = if (favorite) MaterialTheme.colorScheme.primary else defaultActionButtonColor,
+            onClick = onAddToLibraryClicked,
+            onLongClick = onEditCategory,
+        )
+        if (onTrackingClicked != null) {
             MangaActionButton(
-                title = if (favorite) {
-                    stringResource(R.string.in_library)
+                title = if (trackingCount == 0) {
+                    stringResource(R.string.manga_tracking_tab)
                 } else {
-                    stringResource(R.string.add_to_library)
+                    pluralStringResource(id = R.plurals.num_trackers, count = trackingCount, trackingCount)
                 },
-                icon = if (favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                color = if (favorite) MaterialTheme.colorScheme.primary else defaultActionButtonColor,
-                onClick = onAddToLibraryClicked,
-                onLongClick = onEditCategory,
+                icon = if (trackingCount == 0) Icons.Outlined.Sync else Icons.Outlined.Done,
+                color = if (trackingCount == 0) defaultActionButtonColor else MaterialTheme.colorScheme.primary,
+                onClick = onTrackingClicked,
             )
-            if (onTrackingClicked != null) {
-                MangaActionButton(
-                    title = if (trackingCount == 0) {
-                        stringResource(R.string.manga_tracking_tab)
-                    } else {
-                        quantityStringResource(id = R.plurals.num_trackers, quantity = trackingCount, trackingCount)
-                    },
-                    icon = if (trackingCount == 0) Icons.Default.Sync else Icons.Default.Done,
-                    color = if (trackingCount == 0) defaultActionButtonColor else MaterialTheme.colorScheme.primary,
-                    onClick = onTrackingClicked,
-                )
-            }
-            if (onWebViewClicked != null) {
-                MangaActionButton(
-                    title = stringResource(R.string.action_web_view),
-                    icon = Icons.Default.Public,
-                    color = defaultActionButtonColor,
-                    onClick = onWebViewClicked,
-                )
-            }
         }
+        if (onWebViewClicked != null) {
+            MangaActionButton(
+                title = stringResource(R.string.action_web_view),
+                icon = Icons.Outlined.Public,
+                color = defaultActionButtonColor,
+                onClick = onWebViewClicked,
+            )
+        }
+    }
+}
 
-        // Expandable description-tags
-        Column {
-            val (expanded, onExpanded) = rememberSaveable {
-                mutableStateOf(fromSource || windowWidthSizeClass != WindowWidthSizeClass.Compact)
-            }
-            val desc =
-                description.takeIf { !it.isNullOrBlank() } ?: stringResource(id = R.string.description_placeholder)
-            val trimmedDescription = remember(desc) {
-                desc
-                    .replace(whitespaceLineRegex, "\n")
-                    .trimEnd()
-            }
-            MangaSummary(
-                expandedDescription = desc,
-                shrunkDescription = trimmedDescription,
-                expanded = expanded,
+@Composable
+fun ExpandableMangaDescription(
+    modifier: Modifier = Modifier,
+    defaultExpandState: Boolean,
+    description: String?,
+    tagsProvider: () -> List<String>?,
+    onTagClicked: (String) -> Unit,
+) {
+    Column(modifier = modifier) {
+        val (expanded, onExpanded) = rememberSaveable {
+            mutableStateOf(defaultExpandState)
+        }
+        val desc =
+            description.takeIf { !it.isNullOrBlank() } ?: stringResource(R.string.description_placeholder)
+        val trimmedDescription = remember(desc) {
+            desc
+                .replace(whitespaceLineRegex, "\n")
+                .trimEnd()
+        }
+        MangaSummary(
+            expandedDescription = desc,
+            shrunkDescription = trimmedDescription,
+            expanded = expanded,
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .padding(horizontal = 16.dp)
+                .clickableNoIndication { onExpanded(!expanded) },
+        )
+        val tags = tagsProvider()
+        if (!tags.isNullOrEmpty()) {
+            Box(
                 modifier = Modifier
                     .padding(top = 8.dp)
-                    .padding(horizontal = 16.dp)
-                    .clickableNoIndication(
-                        onLongClick = { context.copyToClipboard(desc, desc) },
-                        onClick = { onExpanded(!expanded) },
-                    ),
-            )
-            val tags = tagsProvider()
-            if (!tags.isNullOrEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .padding(vertical = 12.dp)
-                        .animateContentSize(),
-                ) {
-                    if (expanded) {
-                        FlowRow(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            mainAxisSpacing = 4.dp,
-                            crossAxisSpacing = 8.dp,
-                        ) {
-                            tags.forEach {
-                                TagsChip(
-                                    text = it,
-                                    onClick = { onTagClicked(it) },
-                                )
-                            }
+                    .padding(vertical = 12.dp)
+                    .animateContentSize(),
+            ) {
+                if (expanded) {
+                    FlowRow(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        mainAxisSpacing = 4.dp,
+                        crossAxisSpacing = 8.dp,
+                    ) {
+                        tags.forEach {
+                            TagsChip(
+                                text = it,
+                                onClick = { onTagClicked(it) },
+                            )
                         }
-                    } else {
-                        LazyRow(
-                            contentPadding = PaddingValues(horizontal = 16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        ) {
-                            items(items = tags) {
-                                TagsChip(
-                                    text = it,
-                                    onClick = { onTagClicked(it) },
-                                )
-                            }
+                    }
+                } else {
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        items(items = tags) {
+                            TagsChip(
+                                text = it,
+                                onClick = { onTagClicked(it) },
+                            )
                         }
                     }
                 }
@@ -287,13 +289,14 @@ private fun MangaAndSourceTitlesLarge(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         MangaCover.Book(
-            modifier = Modifier.fillMaxWidth(0.4f),
+            modifier = Modifier.fillMaxWidth(0.65f),
             data = coverDataProvider(),
+            contentDescription = stringResource(R.string.manga_cover),
             onClick = onCoverClick,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = title.takeIf { it.isNotBlank() } ?: stringResource(R.string.unknown),
+            text = title.ifBlank { stringResource(R.string.unknown_title) },
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.clickableNoIndication(
                 onLongClick = { if (title.isNotBlank()) context.copyToClipboard(title, title) },
@@ -310,10 +313,12 @@ private fun MangaAndSourceTitlesLarge(
                 .padding(top = 2.dp)
                 .clickableNoIndication(
                     onLongClick = {
-                        if (!author.isNullOrBlank()) context.copyToClipboard(
-                            author,
-                            author,
-                        )
+                        if (!author.isNullOrBlank()) {
+                            context.copyToClipboard(
+                                author,
+                                author,
+                            )
+                        }
                     },
                     onClick = { if (!author.isNullOrBlank()) doSearch(author, true) },
                 ),
@@ -340,13 +345,13 @@ private fun MangaAndSourceTitlesLarge(
         ) {
             Icon(
                 imageVector = when (status) {
-                    SManga.ONGOING.toLong() -> Icons.Default.Schedule
-                    SManga.COMPLETED.toLong() -> Icons.Default.DoneAll
-                    SManga.LICENSED.toLong() -> Icons.Default.AttachMoney
-                    SManga.PUBLISHING_FINISHED.toLong() -> Icons.Default.Done
-                    SManga.CANCELLED.toLong() -> Icons.Default.Close
-                    SManga.ON_HIATUS.toLong() -> Icons.Default.Pause
-                    else -> Icons.Default.Block
+                    SManga.ONGOING.toLong() -> Icons.Outlined.Schedule
+                    SManga.COMPLETED.toLong() -> Icons.Outlined.DoneAll
+                    SManga.LICENSED.toLong() -> Icons.Outlined.AttachMoney
+                    SManga.PUBLISHING_FINISHED.toLong() -> Icons.Outlined.Done
+                    SManga.CANCELLED.toLong() -> Icons.Outlined.Close
+                    SManga.ON_HIATUS.toLong() -> Icons.Outlined.Pause
+                    else -> Icons.Outlined.Block
                 },
                 contentDescription = null,
                 modifier = Modifier
@@ -370,7 +375,7 @@ private fun MangaAndSourceTitlesLarge(
                 DotSeparatorText()
                 if (isStubSource) {
                     Icon(
-                        imageVector = Icons.Default.Warning,
+                        imageVector = Icons.Filled.Warning,
                         contentDescription = null,
                         modifier = Modifier
                             .padding(end = 4.dp)
@@ -414,18 +419,21 @@ private fun MangaAndSourceTitlesSmall(
                 .sizeIn(maxWidth = 100.dp)
                 .align(Alignment.Top),
             data = coverDataProvider(),
+            contentDescription = stringResource(R.string.manga_cover),
             onClick = onCoverClick,
         )
         Column(modifier = Modifier.padding(start = 16.dp)) {
             Text(
-                text = title.ifBlank { stringResource(R.string.unknown) },
+                text = title.ifBlank { stringResource(R.string.unknown_title) },
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.clickableNoIndication(
                     onLongClick = {
-                        if (title.isNotBlank()) context.copyToClipboard(
-                            title,
-                            title,
-                        )
+                        if (title.isNotBlank()) {
+                            context.copyToClipboard(
+                                title,
+                                title,
+                            )
+                        }
                     },
                     onClick = { if (title.isNotBlank()) doSearch(title, true) },
                 ),
@@ -440,10 +448,12 @@ private fun MangaAndSourceTitlesSmall(
                     .padding(top = 2.dp)
                     .clickableNoIndication(
                         onLongClick = {
-                            if (!author.isNullOrBlank()) context.copyToClipboard(
-                                author,
-                                author,
-                            )
+                            if (!author.isNullOrBlank()) {
+                                context.copyToClipboard(
+                                    author,
+                                    author,
+                                )
+                            }
                         },
                         onClick = { if (!author.isNullOrBlank()) doSearch(author, true) },
                     ),
@@ -468,13 +478,13 @@ private fun MangaAndSourceTitlesSmall(
             ) {
                 Icon(
                     imageVector = when (status) {
-                        SManga.ONGOING.toLong() -> Icons.Default.Schedule
-                        SManga.COMPLETED.toLong() -> Icons.Default.DoneAll
-                        SManga.LICENSED.toLong() -> Icons.Default.AttachMoney
-                        SManga.PUBLISHING_FINISHED.toLong() -> Icons.Default.Done
-                        SManga.CANCELLED.toLong() -> Icons.Default.Close
-                        SManga.ON_HIATUS.toLong() -> Icons.Default.Pause
-                        else -> Icons.Default.Block
+                        SManga.ONGOING.toLong() -> Icons.Outlined.Schedule
+                        SManga.COMPLETED.toLong() -> Icons.Outlined.DoneAll
+                        SManga.LICENSED.toLong() -> Icons.Outlined.AttachMoney
+                        SManga.PUBLISHING_FINISHED.toLong() -> Icons.Outlined.Done
+                        SManga.CANCELLED.toLong() -> Icons.Outlined.Close
+                        SManga.ON_HIATUS.toLong() -> Icons.Outlined.Pause
+                        else -> Icons.Outlined.Block
                     },
                     contentDescription = null,
                     modifier = Modifier
@@ -498,7 +508,7 @@ private fun MangaAndSourceTitlesSmall(
                     DotSeparatorText()
                     if (isStubSource) {
                         Icon(
-                            imageVector = Icons.Default.Warning,
+                            imageVector = Icons.Filled.Warning,
                             contentDescription = null,
                             modifier = Modifier
                                 .padding(end = 4.dp)
@@ -554,13 +564,15 @@ private fun MangaSummary(
         expandedHeight = expandedPlaceable.maxByOrNull { it.height }?.height?.coerceAtLeast(shrunkHeight) ?: 0
 
         val actualPlaceable = subcompose("description") {
-            Text(
-                text = if (expanded) expandedDescription else shrunkDescription,
-                maxLines = Int.MAX_VALUE,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.secondaryItemAlpha(),
-            )
+            SelectionContainer {
+                Text(
+                    text = if (expanded) expandedDescription else shrunkDescription,
+                    maxLines = Int.MAX_VALUE,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.secondaryItemAlpha(),
+                )
+            }
         }.map { it.measure(constraints) }
 
         val scrimPlaceable = subcompose("scrim") {
@@ -572,7 +584,7 @@ private fun MangaSummary(
                 val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_caret_down)
                 Icon(
                     painter = rememberAnimatedVectorPainter(image, !expanded),
-                    contentDescription = null,
+                    contentDescription = stringResource(if (expanded) R.string.manga_info_collapse else R.string.manga_info_expand),
                     tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.background(Brush.radialGradient(colors = colors.asReversed())),
                 )

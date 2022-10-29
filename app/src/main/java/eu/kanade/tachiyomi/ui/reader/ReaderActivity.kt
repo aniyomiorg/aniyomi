@@ -60,11 +60,13 @@ import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
 import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderSettingsSheet
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import eu.kanade.tachiyomi.ui.reader.viewer.BaseViewer
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.R2LPagerViewer
+import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.preference.toggle
 import eu.kanade.tachiyomi.util.system.applySystemAnimatorScale
 import eu.kanade.tachiyomi.util.system.createReaderThemeContext
@@ -85,6 +87,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
+import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -111,6 +114,8 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
         const val EXTRA_IS_TRANSITION = "${BuildConfig.APPLICATION_ID}.READER_IS_TRANSITION"
         const val SHARED_ELEMENT_NAME = "reader_shared_element_root"
     }
+
+    private val readerPreferences: ReaderPreferences by injectLazy()
 
     lateinit var binding: ReaderActivityBinding
 
@@ -194,7 +199,7 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
         initializeMenu()
 
         // Finish when incognito mode is disabled
-        preferences.incognitoMode().asFlow()
+        preferences.incognitoMode().changes()
             .drop(1)
             .onEach { if (!it) finish() }
             .launchIn(lifecycleScope)
@@ -271,6 +276,9 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.action_open_in_web_view -> {
+                openChapterInWebview()
+            }
             R.id.action_bookmark -> {
                 presenter.bookmarkCurrentChapter(true)
                 invalidateOptionsMenu()
@@ -446,7 +454,7 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
                     presenter.setMangaReadingMode(newReadingMode.flagValue)
 
                     menuToggleToast?.cancel()
-                    if (!preferences.showReadingMode()) {
+                    if (!readerPreferences.showReadingMode().get()) {
                         menuToggleToast = toast(newReadingMode.stringRes)
                     }
 
@@ -462,9 +470,9 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
             setOnClickListener {
                 val isPagerType = ReadingModeType.isPagerType(presenter.getMangaReadingMode())
                 val enabled = if (isPagerType) {
-                    preferences.cropBorders().toggle()
+                    readerPreferences.cropBorders().toggle()
                 } else {
-                    preferences.cropBordersWebtoon().toggle()
+                    readerPreferences.cropBordersWebtoon().toggle()
                 }
 
                 menuToggleToast?.cancel()
@@ -478,9 +486,9 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
             }
         }
         updateCropBordersShortcut()
-        listOf(preferences.cropBorders(), preferences.cropBordersWebtoon())
+        listOf(readerPreferences.cropBorders(), readerPreferences.cropBordersWebtoon())
             .forEach { pref ->
-                pref.asFlow()
+                pref.changes()
                     .onEach { updateCropBordersShortcut() }
                     .launchIn(lifecycleScope)
             }
@@ -493,7 +501,7 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
                 popupMenu(
                     items = OrientationType.values().map { it.flagValue to it.stringRes },
                     selectedItemId = presenter.manga?.orientationType
-                        ?: preferences.defaultOrientationType(),
+                        ?: readerPreferences.defaultOrientationType().get(),
                 ) {
                     val newOrientation = OrientationType.fromPreference(itemId)
 
@@ -508,9 +516,11 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
         // Settings sheet
         with(binding.actionSettings) {
             setTooltip(R.string.action_settings)
-
+            val readerSettingSheetDialog = ReaderSettingsSheet(this@ReaderActivity)
             setOnClickListener {
-                ReaderSettingsSheet(this@ReaderActivity).show()
+                if (!readerSettingSheetDialog.isShowing()) {
+                    readerSettingSheetDialog.show()
+                }
             }
 
             setOnLongClickListener {
@@ -528,9 +538,9 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
     private fun updateCropBordersShortcut() {
         val isPagerType = ReadingModeType.isPagerType(presenter.getMangaReadingMode())
         val enabled = if (isPagerType) {
-            preferences.cropBorders().get()
+            readerPreferences.cropBorders().get()
         } else {
-            preferences.cropBordersWebtoon().get()
+            readerPreferences.cropBordersWebtoon().get()
         }
 
         binding.actionCropBorders.setImageResource(
@@ -570,11 +580,11 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
                 binding.readerMenuBottom.startAnimation(bottomAnimation)
             }
 
-            if (preferences.showPageNumber().get()) {
+            if (readerPreferences.showPageNumber().get()) {
                 config?.setPageNumberVisibility(false)
             }
         } else {
-            if (preferences.fullscreen().get()) {
+            if (readerPreferences.fullscreen().get()) {
                 windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
                 windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             }
@@ -596,7 +606,7 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
                 binding.readerMenuBottom.startAnimation(bottomAnimation)
             }
 
-            if (preferences.showPageNumber().get()) {
+            if (readerPreferences.showPageNumber().get()) {
                 config?.setPageNumberVisibility(true)
             }
         }
@@ -630,10 +640,10 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
             binding.viewerContainer.removeAllViews()
         }
         viewer = newViewer
-        updateViewerInset(preferences.fullscreen().get())
+        updateViewerInset(readerPreferences.fullscreen().get())
         binding.viewerContainer.addView(newViewer.getView())
 
-        if (preferences.showReadingMode()) {
+        if (readerPreferences.showReadingMode().get()) {
             showReadingModeToast(presenter.getMangaReadingMode())
         }
 
@@ -657,6 +667,15 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
         binding.readerContainer.addView(loadingIndicator)
 
         startPostponedEnterTransition()
+    }
+
+    private fun openChapterInWebview() {
+        val manga = presenter.manga ?: return
+        val source = presenter.getSource() ?: return
+        val url = presenter.getChapterUrl() ?: return
+
+        val intent = WebViewActivity.newIntent(this, url, source.id, manga.title)
+        startActivity(intent)
     }
 
     private fun showReadingModeToast(mode: Int) {
@@ -947,10 +966,10 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
          * Initializes the reader subscriptions.
          */
         init {
-            preferences.readerTheme().asFlow()
-                .onEach {
+            readerPreferences.readerTheme().changes()
+                .onEach { theme ->
                     binding.readerContainer.setBackgroundResource(
-                        when (preferences.readerTheme().get()) {
+                        when (theme) {
                             0 -> android.R.color.white
                             2 -> R.color.reader_background_dark
                             3 -> automaticBackgroundColor()
@@ -960,41 +979,41 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
                 }
                 .launchIn(lifecycleScope)
 
-            preferences.showPageNumber().asFlow()
+            readerPreferences.showPageNumber().changes()
                 .onEach { setPageNumberVisibility(it) }
                 .launchIn(lifecycleScope)
 
-            preferences.trueColor().asFlow()
+            readerPreferences.trueColor().changes()
                 .onEach { setTrueColor(it) }
                 .launchIn(lifecycleScope)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                preferences.cutoutShort().asFlow()
+                readerPreferences.cutoutShort().changes()
                     .onEach { setCutoutShort(it) }
                     .launchIn(lifecycleScope)
             }
 
-            preferences.keepScreenOn().asFlow()
+            readerPreferences.keepScreenOn().changes()
                 .onEach { setKeepScreenOn(it) }
                 .launchIn(lifecycleScope)
 
-            preferences.customBrightness().asFlow()
+            readerPreferences.customBrightness().changes()
                 .onEach { setCustomBrightness(it) }
                 .launchIn(lifecycleScope)
 
-            preferences.colorFilter().asFlow()
+            readerPreferences.colorFilter().changes()
                 .onEach { setColorFilter(it) }
                 .launchIn(lifecycleScope)
 
-            preferences.colorFilterMode().asFlow()
-                .onEach { setColorFilter(preferences.colorFilter().get()) }
+            readerPreferences.colorFilterMode().changes()
+                .onEach { setColorFilter(readerPreferences.colorFilter().get()) }
                 .launchIn(lifecycleScope)
 
-            merge(preferences.grayscale().asFlow(), preferences.invertedColors().asFlow())
-                .onEach { setLayerPaint(preferences.grayscale().get(), preferences.invertedColors().get()) }
+            merge(readerPreferences.grayscale().changes(), readerPreferences.invertedColors().changes())
+                .onEach { setLayerPaint(readerPreferences.grayscale().get(), readerPreferences.invertedColors().get()) }
                 .launchIn(lifecycleScope)
 
-            preferences.fullscreen().asFlow()
+            readerPreferences.fullscreen().changes()
                 .onEach {
                     WindowCompat.setDecorFitsSystemWindows(window, !it)
                     updateViewerInset(it)
@@ -1058,7 +1077,7 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
          */
         private fun setCustomBrightness(enabled: Boolean) {
             if (enabled) {
-                preferences.customBrightnessValue().asFlow()
+                readerPreferences.customBrightnessValue().changes()
                     .sample(100)
                     .onEach { setCustomBrightnessValue(it) }
                     .launchIn(lifecycleScope)
@@ -1072,7 +1091,7 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
          */
         private fun setColorFilter(enabled: Boolean) {
             if (enabled) {
-                preferences.colorFilterValue().asFlow()
+                readerPreferences.colorFilterValue().changes()
                     .sample(100)
                     .onEach { setColorFilterValue(it) }
                     .launchIn(lifecycleScope)
@@ -1116,7 +1135,7 @@ class ReaderActivity : BaseRxActivity<ReaderPresenter>() {
          */
         private fun setColorFilterValue(value: Int) {
             binding.colorOverlay.isVisible = true
-            binding.colorOverlay.setFilterColor(value, preferences.colorFilterMode().get())
+            binding.colorOverlay.setFilterColor(value, readerPreferences.colorFilterMode().get())
         }
 
         private fun setLayerPaint(grayscale: Boolean, invertedColors: Boolean) {

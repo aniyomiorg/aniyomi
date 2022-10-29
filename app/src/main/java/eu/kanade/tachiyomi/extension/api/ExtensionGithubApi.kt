@@ -1,7 +1,8 @@
 package eu.kanade.tachiyomi.extension.api
 
 import android.content.Context
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.core.preference.Preference
+import eu.kanade.tachiyomi.core.preference.PreferenceStore
 import eu.kanade.tachiyomi.extension.ExtensionManager
 import eu.kanade.tachiyomi.extension.model.AvailableSources
 import eu.kanade.tachiyomi.extension.model.Extension
@@ -22,21 +23,28 @@ import java.util.concurrent.TimeUnit
 internal class ExtensionGithubApi {
 
     private val networkService: NetworkHelper by injectLazy()
-    private val preferences: PreferencesHelper by injectLazy()
+    private val preferenceStore: PreferenceStore by injectLazy()
+    private val lastExtCheck: Preference<Long> by lazy {
+        preferenceStore.getLong("last_ext_check", 0)
+    }
     private val extensionManager: ExtensionManager by injectLazy()
 
     private var requiresFallbackSource = false
 
     suspend fun findExtensions(): List<Extension.Available> {
         return withIOContext {
-            val githubResponse = if (requiresFallbackSource) null else try {
-                networkService.client
-                    .newCall(GET("${REPO_URL_PREFIX}index.min.json"))
-                    .await()
-            } catch (e: Throwable) {
-                logcat(LogPriority.ERROR, e) { "Failed to get extensions from GitHub" }
-                requiresFallbackSource = true
+            val githubResponse = if (requiresFallbackSource) {
                 null
+            } else {
+                try {
+                    networkService.client
+                        .newCall(GET("${REPO_URL_PREFIX}index.min.json"))
+                        .await()
+                } catch (e: Throwable) {
+                    logcat(LogPriority.ERROR, e) { "Failed to get extensions from GitHub" }
+                    requiresFallbackSource = true
+                    null
+                }
             }
 
             val response = githubResponse ?: run {
@@ -61,14 +69,14 @@ internal class ExtensionGithubApi {
 
     suspend fun checkForUpdates(context: Context, fromAvailableExtensionList: Boolean = false): List<Extension.Installed>? {
         // Limit checks to once a day at most
-        if (fromAvailableExtensionList.not() && Date().time < preferences.lastExtCheck().get() + TimeUnit.DAYS.toMillis(1)) {
+        if (fromAvailableExtensionList.not() && Date().time < lastExtCheck.get() + TimeUnit.DAYS.toMillis(1)) {
             return null
         }
 
         val extensions = if (fromAvailableExtensionList) {
-            extensionManager.availableExtensions
+            extensionManager.availableExtensionsFlow.value
         } else {
-            findExtensions().also { preferences.lastExtCheck().set(Date().time) }
+            findExtensions().also { lastExtCheck.set(Date().time) }
         }
 
         val installedExtensions = ExtensionLoader.loadExtensions(context)
@@ -80,7 +88,7 @@ internal class ExtensionGithubApi {
             val pkgName = installedExt.pkgName
             val availableExt = extensions.find { it.pkgName == pkgName } ?: continue
 
-            val hasUpdate = availableExt.versionCode > installedExt.versionCode
+            val hasUpdate = installedExt.isUnofficial.not() && (availableExt.versionCode > installedExt.versionCode)
             if (hasUpdate) {
                 extensionsWithUpdate.add(installedExt)
             }
@@ -92,7 +100,7 @@ internal class ExtensionGithubApi {
     private fun List<ExtensionJsonObject>.toExtensions(): List<Extension.Available> {
         return this
             .filter {
-                val libVersion = it.version.substringBeforeLast('.').toDouble()
+                val libVersion = it.extractLibVersion()
                 libVersion >= ExtensionLoader.LIB_VERSION_MIN && libVersion <= ExtensionLoader.LIB_VERSION_MAX
             }
             .map {
@@ -101,6 +109,7 @@ internal class ExtensionGithubApi {
                     pkgName = it.pkg,
                     versionName = it.version,
                     versionCode = it.code,
+                    libVersion = it.extractLibVersion(),
                     lang = it.lang,
                     isNsfw = it.nsfw == 1,
                     hasReadme = it.hasReadme == 1,
@@ -133,6 +142,10 @@ internal class ExtensionGithubApi {
         } else {
             REPO_URL_PREFIX
         }
+    }
+
+    private fun ExtensionJsonObject.extractLibVersion(): Double {
+        return version.substringBeforeLast('.').toDouble()
     }
 }
 

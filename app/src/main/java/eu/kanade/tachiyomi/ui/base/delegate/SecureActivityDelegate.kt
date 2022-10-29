@@ -5,22 +5,68 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import eu.kanade.tachiyomi.data.preference.PreferenceValues
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.ui.security.UnlockActivity
+import eu.kanade.tachiyomi.util.system.AuthenticatorUtil
 import eu.kanade.tachiyomi.util.system.AuthenticatorUtil.isAuthenticationSupported
 import eu.kanade.tachiyomi.util.view.setSecureScreen
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import java.util.Date
 
 interface SecureActivityDelegate {
     fun registerSecureActivity(activity: AppCompatActivity)
 
     companion object {
-        var locked: Boolean = true
+        /**
+         * Set to true if we need the first activity to authenticate.
+         *
+         * Always require unlock if app is killed.
+         */
+        var requireUnlock = true
+
+        fun onApplicationStopped() {
+            val preferences = Injekt.get<SecurityPreferences>()
+            if (!preferences.useAuthenticator().get()) return
+
+            if (!AuthenticatorUtil.isAuthenticating) {
+                // Return if app is closed in locked state
+                if (requireUnlock) return
+                // Save app close time if lock is delayed
+                if (preferences.lockAppAfter().get() > 0) {
+                    preferences.lastAppClosed().set(System.currentTimeMillis())
+                }
+            }
+        }
+
+        /**
+         * Checks if unlock is needed when app comes foreground.
+         */
+        fun onApplicationStart() {
+            val preferences = Injekt.get<SecurityPreferences>()
+            if (!preferences.useAuthenticator().get()) return
+
+            val lastClosedPref = preferences.lastAppClosed()
+
+            // `requireUnlock` can be true on process start or if app was closed in locked state
+            if (!AuthenticatorUtil.isAuthenticating && !requireUnlock) {
+                requireUnlock = when (val lockDelay = preferences.lockAppAfter().get()) {
+                    -1 -> false // Never
+                    0 -> true // Always
+                    else -> lastClosedPref.get() + lockDelay * 60_000 <= System.currentTimeMillis()
+                }
+            }
+
+            lastClosedPref.delete()
+        }
+
+        fun unlock() {
+            requireUnlock = false
+        }
     }
 }
 
@@ -28,7 +74,8 @@ class SecureActivityDelegateImpl : SecureActivityDelegate, DefaultLifecycleObser
 
     private lateinit var activity: AppCompatActivity
 
-    private val preferences: PreferencesHelper by injectLazy()
+    private val preferences: BasePreferences by injectLazy()
+    private val securityPreferences: SecurityPreferences by injectLazy()
 
     override fun registerSecureActivity(activity: AppCompatActivity) {
         this.activity = activity
@@ -44,30 +91,24 @@ class SecureActivityDelegateImpl : SecureActivityDelegate, DefaultLifecycleObser
     }
 
     private fun setSecureScreen() {
-        val secureScreenFlow = preferences.secureScreen().asFlow()
-        val incognitoModeFlow = preferences.incognitoMode().asFlow()
+        val secureScreenFlow = securityPreferences.secureScreen().changes()
+        val incognitoModeFlow = preferences.incognitoMode().changes()
         combine(secureScreenFlow, incognitoModeFlow) { secureScreen, incognitoMode ->
-            secureScreen == PreferenceValues.SecureScreenMode.ALWAYS ||
-                secureScreen == PreferenceValues.SecureScreenMode.INCOGNITO && incognitoMode
+            secureScreen == SecurityPreferences.SecureScreenMode.ALWAYS ||
+                secureScreen == SecurityPreferences.SecureScreenMode.INCOGNITO && incognitoMode
         }
             .onEach { activity.window.setSecureScreen(it) }
             .launchIn(activity.lifecycleScope)
     }
 
     private fun setAppLock() {
-        if (!preferences.useAuthenticator().get()) return
+        if (!securityPreferences.useAuthenticator().get()) return
         if (activity.isAuthenticationSupported()) {
-            if (!isAppLocked()) return
+            if (!SecureActivityDelegate.requireUnlock) return
             activity.startActivity(Intent(activity, UnlockActivity::class.java))
             activity.overridePendingTransition(0, 0)
         } else {
-            preferences.useAuthenticator().set(false)
+            securityPreferences.useAuthenticator().set(false)
         }
-    }
-
-    private fun isAppLocked(): Boolean {
-        if (!SecureActivityDelegate.locked) return false
-        return preferences.lockAppAfter().get() <= 0 ||
-            Date().time >= preferences.lastAppUnlock().get() + 60 * 1000 * preferences.lockAppAfter().get()
     }
 }

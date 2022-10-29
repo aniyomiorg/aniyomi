@@ -3,10 +3,10 @@ package eu.kanade.tachiyomi.data.download
 import android.content.Context
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
+import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Chapter
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.system.logcat
@@ -14,7 +14,9 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
-import uy.kohesive.injekt.injectLazy
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
+import eu.kanade.domain.chapter.model.Chapter as DomainChapter
 
 /**
  * This class is used to provide the directories where the downloads should be saved.
@@ -22,23 +24,24 @@ import uy.kohesive.injekt.injectLazy
  *
  * @param context the application context.
  */
-class DownloadProvider(private val context: Context) {
-
-    private val preferences: PreferencesHelper by injectLazy()
+class DownloadProvider(
+    private val context: Context,
+    downloadPreferences: DownloadPreferences = Injekt.get(),
+) {
 
     private val scope = MainScope()
 
     /**
      * The root directory for downloads.
      */
-    private var downloadsDir = preferences.downloadsDirectory().get().let {
+    private var downloadsDir = downloadPreferences.downloadsDirectory().get().let {
         val dir = UniFile.fromUri(context, it.toUri())
         DiskUtil.createNoMediaFile(dir, context)
         dir
     }
 
     init {
-        preferences.downloadsDirectory().asFlow()
+        downloadPreferences.downloadsDirectory().changes()
             .onEach { downloadsDir = UniFile.fromUri(context, it.toUri()) }
             .launchIn(scope)
     }
@@ -56,7 +59,7 @@ class DownloadProvider(private val context: Context) {
                 .createDirectory(getMangaDirName(mangaTitle))
         } catch (e: Throwable) {
             logcat(LogPriority.ERROR, e) { "Invalid download directory" }
-            throw Exception(context.getString(R.string.invalid_download_dir))
+            throw Exception(context.getString(R.string.invalid_location, downloadsDir))
         }
     }
 
@@ -138,10 +141,15 @@ class DownloadProvider(private val context: Context) {
     fun getChapterDirName(chapterName: String, chapterScanlator: String?): String {
         return DiskUtil.buildValidFilename(
             when {
-                chapterScanlator != null -> "${chapterScanlator}_$chapterName"
+                chapterScanlator.isNullOrBlank().not() -> "${chapterScanlator}_$chapterName"
                 else -> chapterName
             },
         )
+    }
+
+    fun isChapterDirNameChanged(oldChapter: DomainChapter, newChapter: DomainChapter): Boolean {
+        return oldChapter.name != newChapter.name ||
+            oldChapter.scanlator?.takeIf { it.isNotBlank() } != newChapter.scanlator?.takeIf { it.isNotBlank() }
     }
 
     /**
@@ -152,15 +160,21 @@ class DownloadProvider(private val context: Context) {
      */
     fun getValidChapterDirNames(chapterName: String, chapterScanlator: String?): List<String> {
         val chapterDirName = getChapterDirName(chapterName, chapterScanlator)
-        return listOf(
+        return buildList(4) {
             // Folder of images
-            chapterDirName,
+            add(chapterDirName)
 
             // Archived chapters
-            "$chapterDirName.cbz",
+            add("$chapterDirName.cbz")
 
-            // Legacy chapter directory name used in v0.9.2 and before
-            DiskUtil.buildValidFilename(chapterName),
-        )
+            if (chapterScanlator.isNullOrBlank()) {
+                // Previously null scanlator fields were converted to "" due to a bug
+                add("_$chapterDirName")
+                add("_$chapterDirName.cbz")
+            } else {
+                // Legacy chapter directory name used in v0.9.2 and before
+                add(DiskUtil.buildValidFilename(chapterName))
+            }
+        }
     }
 }

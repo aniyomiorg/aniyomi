@@ -1,8 +1,8 @@
 package eu.kanade.domain.manga.repository
 
+import eu.kanade.domain.library.model.LibraryManga
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.domain.manga.model.MangaUpdate
-import eu.kanade.tachiyomi.data.database.models.LibraryManga
 import kotlinx.coroutines.flow.Flow
 
 interface MangaRepository {
@@ -12,6 +12,8 @@ interface MangaRepository {
     suspend fun getMangaByIdAsFlow(id: Long): Flow<Manga>
 
     suspend fun getMangaByUrlAndSourceId(url: String, sourceId: Long): Manga?
+
+    fun getMangaByUrlAndSourceIdAsFlow(url: String, sourceId: Long): Flow<Manga?>
 
     suspend fun getFavorites(): List<Manga>
 
@@ -31,5 +33,5 @@ interface MangaRepository {
 
     suspend fun update(update: MangaUpdate): Boolean
 
-    suspend fun updateAll(values: List<MangaUpdate>): Boolean
+    suspend fun updateAll(mangaUpdates: List<MangaUpdate>): Boolean
 }

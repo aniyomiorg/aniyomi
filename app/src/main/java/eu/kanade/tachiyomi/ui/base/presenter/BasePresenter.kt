@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.ui.base.presenter
 
 import android.os.Bundle
-import com.fredporciuncula.flow.preferences.Preference
 import eu.kanade.core.prefs.PreferenceMutableState
+import eu.kanade.tachiyomi.core.preference.Preference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -41,15 +41,6 @@ open class BasePresenter<V> : RxPresenter<V>() {
     fun <T> Preference<T>.asState() = PreferenceMutableState(this, presenterScope)
 
     /**
-     * Subscribes an observable with [deliverFirst] and adds it to the presenter's lifecycle
-     * subscription list.
-     *
-     * @param onNext function to execute when the observable emits an item.
-     * @param onError function to execute when the observable throws an error.
-     */
-    fun <T> Observable<T>.subscribeFirst(onNext: (V, T) -> Unit, onError: ((V, Throwable) -> Unit) = { _, _ -> }) = compose(deliverFirst<T>()).subscribe(split(onNext, onError)).apply { add(this) }
-
-    /**
      * Subscribes an observable with [deliverLatestCache] and adds it to the presenter's lifecycle
      * subscription list.
      *
@@ -57,22 +48,4 @@ open class BasePresenter<V> : RxPresenter<V>() {
      * @param onError function to execute when the observable throws an error.
      */
     fun <T> Observable<T>.subscribeLatestCache(onNext: (V, T) -> Unit, onError: ((V, Throwable) -> Unit) = { _, _ -> }) = compose(deliverLatestCache<T>()).subscribe(split(onNext, onError)).apply { add(this) }
-
-    /**
-     * Subscribes an observable with [deliverLatestCache] and adds it to the presenter's lifecycle
-     * subscription list.
-     *
-     * @param onNext function to execute when the observable emits an item.
-     * @param onError function to execute when the observable throws an error.
-     */
-    fun <T> Observable<T>.subscribeLatestAnimeCache(onNext: (V, T) -> Unit, onError: ((V, Throwable) -> Unit)? = null) = compose(deliverLatestCache<T>()).subscribe(split(onNext, onError)).apply { add(this) }
-
-    /**
-     * Subscribes an observable with [deliverReplay] and adds it to the presenter's lifecycle
-     * subscription list.
-     *
-     * @param onNext function to execute when the observable emits an item.
-     * @param onError function to execute when the observable throws an error.
-     */
-    fun <T> Observable<T>.subscribeReplay(onNext: (V, T) -> Unit, onError: ((V, Throwable) -> Unit) = { _, _ -> }) = compose(deliverReplay<T>()).subscribe(split(onNext, onError)).apply { add(this) }
 }

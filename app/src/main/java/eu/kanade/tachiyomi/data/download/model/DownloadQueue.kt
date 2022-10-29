@@ -1,10 +1,12 @@
 package eu.kanade.tachiyomi.data.download.model
 
 import com.jakewharton.rxrelay.PublishRelay
+import eu.kanade.core.util.asFlow
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.tachiyomi.data.database.models.Chapter
 import eu.kanade.tachiyomi.data.download.DownloadStore
 import eu.kanade.tachiyomi.source.model.Page
+import kotlinx.coroutines.flow.Flow
 import rx.Observable
 import rx.subjects.PublishSubject
 import java.util.concurrent.CopyOnWriteArrayList
@@ -69,14 +71,20 @@ class DownloadQueue(
         updatedRelay.call(Unit)
     }
 
-    fun getActiveDownloads(): Observable<Download> =
+    private fun getActiveDownloads(): Observable<Download> =
         Observable.from(this).filter { download -> download.status == Download.State.DOWNLOADING }
 
-    fun getStatusObservable(): Observable<Download> = statusSubject.onBackpressureBuffer()
+    private fun getStatusObservable(): Observable<Download> = statusSubject
+        .startWith(getActiveDownloads())
+        .onBackpressureBuffer()
 
-    fun getUpdatedObservable(): Observable<List<Download>> = updatedRelay.onBackpressureBuffer()
+    fun statusFlow(): Flow<Download> = getStatusObservable().asFlow()
+
+    private fun getUpdatedObservable(): Observable<List<Download>> = updatedRelay.onBackpressureBuffer()
         .startWith(Unit)
         .map { this }
+
+    fun updatedFlow(): Flow<List<Download>> = getUpdatedObservable().asFlow()
 
     private fun setPagesFor(download: Download) {
         if (download.status == Download.State.DOWNLOADED || download.status == Download.State.ERROR) {
@@ -84,7 +92,7 @@ class DownloadQueue(
         }
     }
 
-    fun getProgressObservable(): Observable<Download> {
+    private fun getProgressObservable(): Observable<Download> {
         return statusSubject.onBackpressureBuffer()
             .startWith(getActiveDownloads())
             .flatMap { download ->
@@ -102,6 +110,8 @@ class DownloadQueue(
             }
             .filter { it.status == Download.State.DOWNLOADING }
     }
+
+    fun progressFlow(): Flow<Download> = getProgressObservable().asFlow()
 
     private fun setPagesSubject(pages: List<Page>?, subject: PublishSubject<Int>?) {
         pages?.forEach { it.setStatusSubject(subject) }

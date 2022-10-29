@@ -11,9 +11,9 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.Looper
 import android.webkit.WebView
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -24,27 +24,35 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.disk.DiskCache
 import coil.util.DebugLogger
+import eu.kanade.data.DatabaseHandler
 import eu.kanade.domain.DomainModule
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
 import eu.kanade.tachiyomi.data.coil.AnimeCoverKeyer
 import eu.kanade.tachiyomi.data.coil.AnimeKeyer
 import eu.kanade.tachiyomi.data.coil.DomainAnimeKeyer
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.ui.UiPreferences
+import eu.kanade.domain.ui.model.setAppCompatDelegateThemeMode
+import eu.kanade.tachiyomi.crash.CrashActivity
+import eu.kanade.tachiyomi.crash.GlobalExceptionHandler
 import eu.kanade.tachiyomi.data.coil.DomainMangaKeyer
 import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher
 import eu.kanade.tachiyomi.data.coil.MangaCoverKeyer
 import eu.kanade.tachiyomi.data.coil.MangaKeyer
 import eu.kanade.tachiyomi.data.coil.TachiyomiImageDecoder
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.data.preference.PreferenceValues
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.glance.UpdatesGridGlanceWidget
 import eu.kanade.tachiyomi.network.NetworkHelper
+import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
-import eu.kanade.tachiyomi.util.preference.asImmediateFlow
-import eu.kanade.tachiyomi.util.system.AuthenticatorUtil
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.animatorDurationScale
+import eu.kanade.tachiyomi.util.system.isPreviewBuildType
+import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.notification
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import logcat.AndroidLogcatLogger
@@ -58,13 +66,16 @@ import java.security.Security
 
 class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
 
-    private val preferences: PreferencesHelper by injectLazy()
+    private val basePreferences: BasePreferences by injectLazy()
+    private val networkPreferences: NetworkPreferences by injectLazy()
 
     private val disableIncognitoReceiver = DisableIncognitoReceiver()
 
     @SuppressLint("LaunchActivityFromNotification")
     override fun onCreate() {
         super<Application>.onCreate()
+
+        GlobalExceptionHandler.initialize(applicationContext, CrashActivity::class.java)
 
         // TLS 1.3 support for Android < 10
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -78,6 +89,7 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         }
 
         Injekt.importModule(AppModule(this))
+        Injekt.importModule(PreferenceModule(this))
         Injekt.importModule(DomainModule())
 
         setupAcra()
@@ -86,7 +98,7 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
         // Show notification to disable Incognito Mode when it's enabled
-        preferences.incognitoMode().asFlow()
+        basePreferences.incognitoMode().changes()
             .onEach { enabled ->
                 val notificationManager = NotificationManagerCompat.from(this)
                 if (enabled) {
@@ -113,18 +125,22 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
             }
             .launchIn(ProcessLifecycleOwner.get().lifecycleScope)
 
-        preferences.themeMode()
-            .asImmediateFlow {
-                AppCompatDelegate.setDefaultNightMode(
-                    when (it) {
-                        PreferenceValues.ThemeMode.light -> AppCompatDelegate.MODE_NIGHT_NO
-                        PreferenceValues.ThemeMode.dark -> AppCompatDelegate.MODE_NIGHT_YES
-                        PreferenceValues.ThemeMode.system -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                    },
-                )
-            }.launchIn(ProcessLifecycleOwner.get().lifecycleScope)
+        setAppCompatDelegateThemeMode(Injekt.get<UiPreferences>().themeMode().get())
 
-        if (!LogcatLogger.isInstalled && preferences.verboseLogging()) {
+        // Updates widget update
+        Injekt.get<DatabaseHandler>()
+            .subscribeToList { updatesViewQueries.updates(after = UpdatesGridGlanceWidget.DateLimit.timeInMillis) }
+            .drop(1)
+            .distinctUntilChanged()
+            .onEach {
+                val manager = GlanceAppWidgetManager(this)
+                if (manager.getGlanceIds(UpdatesGridGlanceWidget::class.java).isNotEmpty()) {
+                    UpdatesGridGlanceWidget().loadData(it)
+                }
+            }
+            .launchIn(ProcessLifecycleOwner.get().lifecycleScope)
+
+        if (!LogcatLogger.isInstalled && networkPreferences.verboseLogging().get()) {
             LogcatLogger.install(AndroidLogcatLogger(LogPriority.VERBOSE))
         }
     }
@@ -157,14 +173,16 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
             diskCache(diskCacheInit)
             crossfade((300 * this@App.animatorDurationScale).toInt())
             allowRgb565(getSystemService<ActivityManager>()!!.isLowRamDevice)
-            if (preferences.verboseLogging()) logger(DebugLogger())
+            if (networkPreferences.verboseLogging().get()) logger(DebugLogger())
         }.build()
     }
 
+    override fun onStart(owner: LifecycleOwner) {
+        SecureActivityDelegate.onApplicationStart()
+    }
+
     override fun onStop(owner: LifecycleOwner) {
-        if (!AuthenticatorUtil.isAuthenticating && preferences.lockAppAfter().get() >= 0) {
-            SecureActivityDelegate.locked = true
-        }
+        SecureActivityDelegate.onApplicationStopped()
     }
 
     override fun getPackageName(): String {
@@ -192,7 +210,7 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         // removed acra
     }
 
-    protected open fun setupNotificationChannels() {
+    private fun setupNotificationChannels() {
         try {
             Notifications.createChannels(this)
         } catch (e: Exception) {
@@ -204,7 +222,7 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         private var registered = false
 
         override fun onReceive(context: Context, intent: Intent) {
-            preferences.incognitoMode().set(false)
+            basePreferences.incognitoMode().set(false)
         }
 
         fun register() {

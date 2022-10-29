@@ -5,10 +5,12 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import com.jakewharton.rxrelay.BehaviorRelay
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
 import eu.kanade.domain.chapter.interactor.UpdateChapter
 import eu.kanade.domain.chapter.model.ChapterUpdate
 import eu.kanade.domain.chapter.model.toDbChapter
+import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.history.interactor.UpsertHistory
 import eu.kanade.domain.history.model.HistoryUpdate
 import eu.kanade.domain.manga.interactor.GetManga
@@ -18,10 +20,13 @@ import eu.kanade.domain.manga.model.toDbManga
 import eu.kanade.domain.track.interactor.GetTracks
 import eu.kanade.domain.track.interactor.InsertTrack
 import eu.kanade.domain.track.model.toDbTrack
+import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.tachiyomi.data.database.models.Manga
+import eu.kanade.tachiyomi.data.database.models.toDomainChapter
 import eu.kanade.tachiyomi.data.database.models.toDomainManga
 import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.download.DownloadProvider
+import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
@@ -30,26 +35,31 @@ import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingUpdateJob
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.Page
+import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.ui.reader.loader.ChapterLoader
+import eu.kanade.tachiyomi.ui.reader.loader.DownloadPageLoader
 import eu.kanade.tachiyomi.ui.reader.loader.HttpPageLoader
 import eu.kanade.tachiyomi.ui.reader.model.InsertPage
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
+import eu.kanade.tachiyomi.ui.reader.model.StencilPage
 import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import eu.kanade.tachiyomi.util.chapter.getChapterSort
 import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.lang.byteSize
 import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.launchUI
+import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.takeBytes
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.logcat
+import eu.kanade.tachiyomi.util.system.toInt
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -64,6 +74,7 @@ import uy.kohesive.injekt.injectLazy
 import java.util.Date
 import java.util.concurrent.TimeUnit
 import eu.kanade.domain.manga.model.Manga as DomainManga
+import eu.kanade.tachiyomi.data.database.models.Chapter as DbChapter
 
 /**
  * Presenter used by the activity to perform background operations.
@@ -71,7 +82,11 @@ import eu.kanade.domain.manga.model.Manga as DomainManga
 class ReaderPresenter(
     private val sourceManager: SourceManager = Injekt.get(),
     private val downloadManager: DownloadManager = Injekt.get(),
-    private val preferences: PreferencesHelper = Injekt.get(),
+    private val downloadProvider: DownloadProvider = Injekt.get(),
+    preferences: BasePreferences = Injekt.get(),
+    private val downloadPreferences: DownloadPreferences = Injekt.get(),
+    private val readerPreferences: ReaderPreferences = Injekt.get(),
+    private val trackPreferences: TrackPreferences = Injekt.get(),
     private val delayedTrackingStore: DelayedTrackingStore = Injekt.get(),
     private val getManga: GetManga = Injekt.get(),
     private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
@@ -120,6 +135,8 @@ class ReaderPresenter(
 
     private val imageSaver: ImageSaver by injectLazy()
 
+    private var chapterToDownload: Download? = null
+
     /**
      * Chapter list for the active manga. It's retrieved lazily and should be accessed for the first
      * time in a background thread to avoid blocking the UI.
@@ -132,11 +149,11 @@ class ReaderPresenter(
             ?: error("Requested chapter of id $chapterId not found in chapter list")
 
         val chaptersForReader = when {
-            (preferences.skipRead() || preferences.skipFiltered()) -> {
+            (readerPreferences.skipRead().get() || readerPreferences.skipFiltered().get()) -> {
                 val filteredChapters = chapters.filterNot {
                     when {
-                        preferences.skipRead() && it.read -> true
-                        preferences.skipFiltered() -> {
+                        readerPreferences.skipRead().get() && it.read -> true
+                        readerPreferences.skipFiltered().get() -> {
                             (manga.readFilter == DomainManga.CHAPTER_SHOW_READ.toInt() && !it.read) ||
                                 (manga.readFilter == DomainManga.CHAPTER_SHOW_UNREAD.toInt() && it.read) ||
                                 (manga.downloadedFilter == DomainManga.CHAPTER_SHOW_DOWNLOADED.toInt() && !downloadManager.isChapterDownloaded(it.name, it.scanlator, manga.title, manga.source)) ||
@@ -192,6 +209,9 @@ class ReaderPresenter(
         if (currentChapters != null) {
             currentChapters.unref()
             saveReadingProgress(currentChapters.currChapter)
+            chapterToDownload?.let {
+                downloadManager.addDownloadsToStartOfQueue(listOf(it))
+            }
         }
     }
 
@@ -222,7 +242,7 @@ class ReaderPresenter(
      */
     fun onSaveInstanceStateNonConfigurationChange() {
         val currentChapter = getCurrentChapter() ?: return
-        launchIO {
+        presenterScope.launchNonCancellable {
             saveChapterProgress(currentChapter)
         }
     }
@@ -241,7 +261,7 @@ class ReaderPresenter(
     fun init(mangaId: Long, initialChapterId: Long) {
         if (!needsInit()) return
 
-        launchIO {
+        presenterScope.launchIO {
             try {
                 val manga = getManga.await(mangaId)
                 withUIContext {
@@ -267,7 +287,7 @@ class ReaderPresenter(
 
         val context = Injekt.get<Application>()
         val source = sourceManager.getOrStub(manga.source)
-        loader = ChapterLoader(context, downloadManager, manga.toDomainManga()!!, source)
+        loader = ChapterLoader(context, downloadManager, downloadProvider, manga.toDomainManga()!!, source)
 
         Observable.just(manga).subscribeLatestCache(ReaderActivity::setManga)
         viewerChaptersRelay.subscribeLatestCache(ReaderActivity::setChapters)
@@ -319,6 +339,7 @@ class ReaderPresenter(
                 newChapters.ref()
                 oldChapters?.unref()
 
+                chapterToDownload = deleteChapterFromDownloadQueue(newChapters.currChapter)
                 viewerChaptersRelay.call(newChapters)
             }
     }
@@ -372,7 +393,7 @@ class ReaderPresenter(
         if (chapter.pageLoader is HttpPageLoader) {
             val manga = manga ?: return
             val dbChapter = chapter.chapter
-            val isDownloaded = downloadManager.isChapterDownloaded(dbChapter.name, dbChapter.scanlator, manga.title, manga.source)
+            val isDownloaded = downloadManager.isChapterDownloaded(dbChapter.name, dbChapter.scanlator, manga.title, manga.source, skipCache = true)
             if (isDownloaded) {
                 chapter.state = ReaderChapter.State.Wait
             }
@@ -405,8 +426,8 @@ class ReaderPresenter(
 
         val selectedChapter = page.chapter
 
-        // Insert page doesn't change page progress
-        if (page is InsertPage) {
+        // InsertPage and StencilPage doesn't change page progress
+        if (page is InsertPage || page is StencilPage) {
             return
         }
 
@@ -417,23 +438,69 @@ class ReaderPresenter(
             selectedChapter.chapter.read = true
             updateTrackChapterRead(selectedChapter)
             deleteChapterIfNeeded(selectedChapter)
-            deleteChapterFromDownloadQueue(currentChapters.currChapter)
         }
 
         if (selectedChapter != currentChapters.currChapter) {
             logcat { "Setting ${selectedChapter.chapter.url} as active" }
             saveReadingProgress(currentChapters.currChapter)
+            setReadStartTime()
             loadNewChapter(selectedChapter)
         }
+        val pages = page.chapter.pages ?: return
+        val inDownloadRange = page.number.toDouble() / pages.size > 0.2
+        if (inDownloadRange) {
+            downloadNextChapters()
+        }
+    }
+
+    private fun downloadNextChapters() {
+        val manga = manga ?: return
+        if (getCurrentChapter()?.pageLoader !is DownloadPageLoader) return
+        val nextChapter = viewerChaptersRelay.value?.nextChapter?.chapter ?: return
+        val chaptersNumberToDownload = downloadPreferences.autoDownloadWhileReading().get()
+        if (chaptersNumberToDownload == 0 || !manga.favorite) return
+        val isNextChapterDownloadedOrQueued = downloadManager.isChapterDownloaded(
+            nextChapter.name,
+            nextChapter.scanlator,
+            manga.title,
+            manga.source,
+            skipCache = true,
+        ) || downloadManager.getChapterDownloadOrNull(nextChapter) != null
+        if (isNextChapterDownloadedOrQueued) {
+            downloadAutoNextChapters(chaptersNumberToDownload, nextChapter.id, nextChapter.read)
+        }
+    }
+
+    private fun downloadAutoNextChapters(choice: Int, nextChapterId: Long?, isNextChapterRead: Boolean) {
+        val chaptersToDownload = getNextUnreadChaptersSorted(nextChapterId).take(choice - 1 + isNextChapterRead.toInt())
+        if (chaptersToDownload.isNotEmpty()) {
+            downloadChapters(chaptersToDownload)
+        }
+    }
+
+    private fun getNextUnreadChaptersSorted(nextChapterId: Long?): List<DbChapter> {
+        return chapterList.map { it.chapter.toDomainChapter()!! }
+            .filter { !it.read || it.id == nextChapterId }
+            .sortedWith(getChapterSort(manga?.toDomainManga()!!, false))
+            .map { it.toDbChapter() }
+            .takeLastWhile { it.id != nextChapterId }
+    }
+
+    /**
+     * Downloads the given list of chapters with the manager.
+     * @param chapters the list of chapters to download.
+     */
+    private fun downloadChapters(chapters: List<DbChapter>) {
+        downloadManager.downloadChapters(manga?.toDomainManga()!!, chapters)
     }
 
     /**
      * Removes [currentChapter] from download queue
      * if setting is enabled and [currentChapter] is queued for download
      */
-    private fun deleteChapterFromDownloadQueue(currentChapter: ReaderChapter) {
-        downloadManager.getChapterDownloadOrNull(currentChapter.chapter)?.let { download ->
-            downloadManager.deletePendingDownload(download)
+    private fun deleteChapterFromDownloadQueue(currentChapter: ReaderChapter): Download? {
+        return downloadManager.getChapterDownloadOrNull(currentChapter.chapter)?.apply {
+            downloadManager.deletePendingDownload(this)
         }
     }
 
@@ -445,8 +512,11 @@ class ReaderPresenter(
     private fun deleteChapterIfNeeded(currentChapter: ReaderChapter) {
         // Determine which chapter should be deleted and enqueue
         val currentChapterPosition = chapterList.indexOf(currentChapter)
-        val removeAfterReadSlots = preferences.removeAfterReadSlots()
+        val removeAfterReadSlots = downloadPreferences.removeAfterReadSlots().get()
         val chapterToDelete = chapterList.getOrNull(currentChapterPosition - removeAfterReadSlots)
+
+        // If chapter is completely read no need to download it
+        chapterToDownload = null
 
         // Check if deleting option is enabled and chapter exists
         if (removeAfterReadSlots != -1 && chapterToDelete != null) {
@@ -462,7 +532,7 @@ class ReaderPresenter(
      * Called when reader chapter is changed in reader or when activity is paused.
      */
     private fun saveReadingProgress(readerChapter: ReaderChapter) {
-        launchIO {
+        presenterScope.launchNonCancellable {
             saveChapterProgress(readerChapter)
             saveChapterHistory(readerChapter)
         }
@@ -537,13 +607,22 @@ class ReaderPresenter(
         return viewerChaptersRelay.value?.currChapter
     }
 
+    fun getSource() = manga?.source?.let { sourceManager.getOrStub(it) } as? HttpSource
+
+    fun getChapterUrl(): String? {
+        val sChapter = getCurrentChapter()?.chapter ?: return null
+        val source = getSource() ?: return null
+
+        return source.getChapterUrl(sChapter)
+    }
+
     /**
      * Bookmarks the currently active chapter.
      */
     fun bookmarkCurrentChapter(bookmarked: Boolean) {
         val chapter = getCurrentChapter()?.chapter ?: return
         chapter.bookmark = bookmarked // Otherwise the bookmark icon doesn't update
-        launchIO {
+        presenterScope.launchNonCancellable {
             updateChapter.await(
                 ChapterUpdate(
                     id = chapter.id!!.toLong(),
@@ -557,7 +636,7 @@ class ReaderPresenter(
      * Returns the viewer position used by this manga or the default one.
      */
     fun getMangaReadingMode(resolveDefault: Boolean = true): Int {
-        val default = preferences.defaultReadingMode()
+        val default = readerPreferences.defaultReadingMode().get()
         val readingMode = ReadingModeType.fromPreference(manga?.readingModeType)
         return when {
             resolveDefault && readingMode == ReadingModeType.DEFAULT -> default
@@ -594,7 +673,7 @@ class ReaderPresenter(
      * Returns the orientation type used by this manga or the default one.
      */
     fun getMangaOrientationType(resolveDefault: Boolean = true): Int {
-        val default = preferences.defaultOrientationType()
+        val default = readerPreferences.defaultOrientationType().get()
         val orientation = OrientationType.fromPreference(manga?.orientationType)
         return when {
             resolveDefault && orientation == OrientationType.DEFAULT -> default
@@ -652,11 +731,11 @@ class ReaderPresenter(
         val filename = generateFilename(manga, page)
 
         // Pictures directory.
-        val relativePath = if (preferences.folderPerManga()) DiskUtil.buildValidFilename(manga.title) else ""
+        val relativePath = if (readerPreferences.folderPerManga().get()) DiskUtil.buildValidFilename(manga.title) else ""
 
         // Copy file in background.
         try {
-            presenterScope.launchIO {
+            presenterScope.launchNonCancellable {
                 val uri = imageSaver.save(
                     image = Image.Page(
                         inputStream = page.stream!!,
@@ -664,7 +743,7 @@ class ReaderPresenter(
                         location = Location.Pictures.create(relativePath),
                     ),
                 )
-                launchUI {
+                withUIContext {
                     notifier.onComplete(uri)
                     view!!.onSaveImageResult(SaveImageResult.Success(uri))
                 }
@@ -692,7 +771,7 @@ class ReaderPresenter(
         val filename = generateFilename(manga, page)
 
         try {
-            presenterScope.launchIO {
+            presenterScope.launchNonCancellable {
                 destDir.deleteRecursively()
                 val uri = imageSaver.save(
                     image = Image.Page(
@@ -701,7 +780,7 @@ class ReaderPresenter(
                         location = Location.Cache,
                     ),
                 )
-                launchUI {
+                withUIContext {
                     view!!.onShareImageResult(uri, page)
                 }
             }
@@ -718,21 +797,20 @@ class ReaderPresenter(
         val manga = manga?.toDomainManga() ?: return
         val stream = page.stream ?: return
 
-        presenterScope.launchIO {
-            val result = try {
+        presenterScope.launchNonCancellable {
+            try {
                 manga.editCover(context, stream())
-            } catch (e: Exception) {
-                false
-            }
-            launchUI {
-                val resultResult = if (!result) {
-                    SetAsCoverResult.Error
-                } else if (manga.isLocal() || manga.favorite) {
-                    SetAsCoverResult.Success
-                } else {
-                    SetAsCoverResult.AddToLibraryFirst
+                withUIContext {
+                    view?.onSetAsCoverResult(
+                        if (manga.isLocal() || manga.favorite) {
+                            SetAsCoverResult.Success
+                        } else {
+                            SetAsCoverResult.AddToLibraryFirst
+                        },
+                    )
                 }
-                view?.onSetAsCoverResult(resultResult)
+            } catch (e: Exception) {
+                withUIContext { view?.onSetAsCoverResult(SetAsCoverResult.Error) }
             }
         }
     }
@@ -757,7 +835,7 @@ class ReaderPresenter(
      * will run in a background thread and errors are ignored.
      */
     private fun updateTrackChapterRead(readerChapter: ReaderChapter) {
-        if (!preferences.autoUpdateTrack()) return
+        if (!trackPreferences.autoUpdateTrack().get()) return
         val manga = manga ?: return
 
         val chapterRead = readerChapter.chapter.chapter_number.toDouble()
@@ -765,7 +843,7 @@ class ReaderPresenter(
         val trackManager = Injekt.get<TrackManager>()
         val context = Injekt.get<Application>()
 
-        launchIO {
+        presenterScope.launchNonCancellable {
             getTracks.await(manga.id!!)
                 .mapNotNull { track ->
                     val service = trackManager.getService(track.syncId)
@@ -776,12 +854,14 @@ class ReaderPresenter(
                         // for a while. The view can still be garbage collected.
                         async {
                             runCatching {
-                                if (context.isOnline()) {
+                                try {
+                                    if (!context.isOnline()) error("Couldn't update tracker as device is offline")
                                     service.update(updatedTrack.toDbTrack(), true)
                                     insertTrack.await(updatedTrack)
-                                } else {
+                                } catch (e: Exception) {
                                     delayedTrackingStore.addItem(updatedTrack)
                                     DelayedTrackingUpdateJob.setupTask(context)
+                                    throw e
                                 }
                             }
                         }
@@ -803,7 +883,7 @@ class ReaderPresenter(
         if (!chapter.chapter.read) return
         val manga = manga ?: return
 
-        launchIO {
+        presenterScope.launchNonCancellable {
             downloadManager.enqueueDeleteChapters(listOf(chapter.chapter), manga.toDomainManga()!!)
         }
     }
@@ -813,10 +893,19 @@ class ReaderPresenter(
      * are ignored.
      */
     private fun deletePendingChapters() {
-        launchIO {
+        presenterScope.launchNonCancellable {
             downloadManager.deletePendingChapters()
         }
     }
+
+    /**
+     * Subscribes an observable with [deliverFirst] and adds it to the presenter's lifecycle
+     * subscription list.
+     *
+     * @param onNext function to execute when the observable emits an item.
+     * @param onError function to execute when the observable throws an error.
+     */
+    private fun <T> Observable<T>.subscribeFirst(onNext: (ReaderActivity, T) -> Unit, onError: ((ReaderActivity, Throwable) -> Unit) = { _, _ -> }) = compose(deliverFirst<T>()).subscribe(split(onNext, onError)).apply { add(this) }
 
     companion object {
         // Safe theoretical max filename size is 255 bytes and 1 char = 2-4 bytes (UTF-8)

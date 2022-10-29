@@ -1,22 +1,21 @@
 package eu.kanade.tachiyomi.ui.browse.source.globalsearch
 
 import android.os.Bundle
-import eu.kanade.domain.manga.interactor.GetManga
-import eu.kanade.domain.manga.interactor.InsertManga
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.manga.interactor.NetworkToLocalManga
 import eu.kanade.domain.manga.interactor.UpdateManga
 import eu.kanade.domain.manga.model.toDbManga
+import eu.kanade.domain.manga.model.toDomainManga
 import eu.kanade.domain.manga.model.toMangaUpdate
+import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.database.models.toDomainManga
-import eu.kanade.tachiyomi.data.database.models.toMangaInfo
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.extension.ExtensionManager
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.MangasPage
 import eu.kanade.tachiyomi.source.model.SManga
-import eu.kanade.tachiyomi.source.model.toSManga
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourcePresenter
 import eu.kanade.tachiyomi.util.lang.runAsObservable
@@ -31,22 +30,15 @@ import rx.subjects.PublishSubject
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
+import eu.kanade.domain.manga.model.Manga as DomainManga
 
-/**
- * Presenter of [GlobalSearchController]
- * Function calls should be done from here. UI calls should be done from the controller.
- *
- * @param sourceManager manages the different sources.
- * @param db manages the database calls.
- * @param preferences manages the preference calls.
- */
 open class GlobalSearchPresenter(
     private val initialQuery: String? = "",
     private val initialExtensionFilter: String? = null,
     val sourceManager: SourceManager = Injekt.get(),
-    val preferences: PreferencesHelper = Injekt.get(),
-    private val getManga: GetManga = Injekt.get(),
-    private val insertManga: InsertManga = Injekt.get(),
+    val preferences: BasePreferences = Injekt.get(),
+    val sourcePreferences: SourcePreferences = Injekt.get(),
+    private val networkToLocalManga: NetworkToLocalManga = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
 ) : BasePresenter<GlobalSearchController>() {
 
@@ -63,7 +55,7 @@ open class GlobalSearchPresenter(
     /**
      * Subject which fetches image of given manga.
      */
-    private val fetchImageSubject = PublishSubject.create<Pair<List<Manga>, Source>>()
+    private val fetchImageSubject = PublishSubject.create<Pair<List<DomainManga>, Source>>()
 
     /**
      * Subscription for fetching images of manga.
@@ -106,9 +98,9 @@ open class GlobalSearchPresenter(
      * @return list containing enabled sources.
      */
     protected open fun getEnabledSources(): List<CatalogueSource> {
-        val languages = preferences.enabledLanguages().get()
-        val disabledSourceIds = preferences.disabledSources().get()
-        val pinnedSourceIds = preferences.pinnedSources().get()
+        val languages = sourcePreferences.enabledLanguages().get()
+        val disabledSourceIds = sourcePreferences.disabledSources().get()
+        val pinnedSourceIds = sourcePreferences.pinnedSources().get()
 
         return sourceManager.getCatalogueSources()
             .filter { it.lang in languages }
@@ -122,7 +114,7 @@ open class GlobalSearchPresenter(
         var filteredSources: List<CatalogueSource>? = null
 
         if (!filter.isNullOrEmpty()) {
-            filteredSources = extensionManager.installedExtensions
+            filteredSources = extensionManager.installedExtensionsFlow.value
                 .filter { it.pkgName == filter }
                 .flatMap { it.sources }
                 .filter { it in enabledSources }
@@ -133,8 +125,8 @@ open class GlobalSearchPresenter(
             return filteredSources
         }
 
-        val onlyPinnedSources = preferences.searchPinnedSourcesOnly()
-        val pinnedSourceIds = preferences.pinnedSources().get()
+        val onlyPinnedSources = sourcePreferences.searchPinnedSourcesOnly().get()
+        val pinnedSourceIds = sourcePreferences.pinnedSources().get()
 
         return enabledSources
             .filter { if (onlyPinnedSources) it.id.toString() in pinnedSourceIds else true }
@@ -166,7 +158,7 @@ open class GlobalSearchPresenter(
         val initialItems = sources.map { createCatalogueSearchItem(it, null) }
         var items = initialItems
 
-        val pinnedSourceIds = preferences.pinnedSources().get()
+        val pinnedSourceIds = sourcePreferences.pinnedSources().get()
 
         fetchSourcesSubscription?.unsubscribe()
         fetchSourcesSubscription = Observable.from(sources)
@@ -176,9 +168,9 @@ open class GlobalSearchPresenter(
                         .subscribeOn(Schedulers.io())
                         .onErrorReturn { MangasPage(emptyList(), false) } // Ignore timeouts or other exceptions
                         .map { it.mangas }
-                        .map { list -> list.map { networkToLocalManga(it, source.id) } } // Convert to local manga
+                        .map { list -> list.map { runBlocking { networkToLocalManga(it, source.id) } } } // Convert to local manga
                         .doOnNext { fetchImage(it, source) } // Load manga covers
-                        .map { list -> createCatalogueSearchItem(source, list.map { GlobalSearchCardItem(it.toDomainManga()!!) }) }
+                        .map { list -> createCatalogueSearchItem(source, list.map { GlobalSearchCardItem(it) }) }
                 },
                 5,
             )
@@ -216,7 +208,7 @@ open class GlobalSearchPresenter(
      *
      * @param manga the list of manga to initialize.
      */
-    private fun fetchImage(manga: List<Manga>, source: Source) {
+    private fun fetchImage(manga: List<DomainManga>, source: Source) {
         fetchImageSubject.onNext(Pair(manga, source))
     }
 
@@ -228,9 +220,9 @@ open class GlobalSearchPresenter(
         fetchImageSubscription = fetchImageSubject.observeOn(Schedulers.io())
             .flatMap { (first, source) ->
                 Observable.from(first)
-                    .filter { it.thumbnail_url == null && !it.initialized }
+                    .filter { it.thumbnailUrl == null && !it.initialized }
                     .map { Pair(it, source) }
-                    .concatMap { runAsObservable { getMangaDetails(it.first, it.second) } }
+                    .concatMap { runAsObservable { getMangaDetails(it.first.toDbManga(), it.second) } }
                     .map { Pair(source as CatalogueSource, it) }
             }
             .onBackpressureBuffer()
@@ -253,10 +245,10 @@ open class GlobalSearchPresenter(
      * @return The initialized manga.
      */
     private suspend fun getMangaDetails(manga: Manga, source: Source): Manga {
-        val networkManga = source.getMangaDetails(manga.toMangaInfo())
-        manga.copyFrom(networkManga.toSManga())
+        val networkManga = source.getMangaDetails(manga.copy())
+        manga.copyFrom(networkManga)
         manga.initialized = true
-        runBlocking { updateManga.await(manga.toDomainManga()!!.toMangaUpdate()) }
+        updateManga.await(manga.toDomainManga()!!.toMangaUpdate())
         return manga
     }
 
@@ -267,22 +259,7 @@ open class GlobalSearchPresenter(
      * @param sManga the manga from the source.
      * @return a manga from the database.
      */
-    protected open fun networkToLocalManga(sManga: SManga, sourceId: Long): Manga {
-        var localManga = runBlocking { getManga.await(sManga.url, sourceId) }
-        if (localManga == null) {
-            val newManga = Manga.create(sManga.url, sManga.title, sourceId)
-            newManga.copyFrom(sManga)
-            newManga.id = -1
-            val result = runBlocking {
-                val id = insertManga.await(newManga.toDomainManga()!!)
-                getManga.await(id!!)
-            }
-            localManga = result
-        } else if (!localManga.favorite) {
-            // if the manga isn't a favorite, set its display title from source
-            // if it later becomes a favorite, updated title will go to db
-            localManga = localManga.copy(title = sManga.title)
-        }
-        return localManga!!.toDbManga()
+    protected open suspend fun networkToLocalManga(sManga: SManga, sourceId: Long): DomainManga {
+        return networkToLocalManga.await(sManga.toDomainManga(), sourceId)
     }
 }

@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -27,7 +28,7 @@ android {
         applicationId = "xyz.jmir.tachiyomi.mi"
         minSdk = AndroidConfig.minSdk
         targetSdk = AndroidConfig.targetSdk
-        versionCode = 81
+        versionCode = 90
         versionName = "0.13.5.0"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -73,11 +74,22 @@ android {
             signingConfig = debugType.signingConfig
             versionNameSuffix = debugType.versionNameSuffix
             applicationIdSuffix = debugType.applicationIdSuffix
+            matchingFallbacks.add("release")
+        }
+        create("benchmark") {
+            initWith(getByName("release"))
+
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks.add("release")
+            isDebuggable = false
+            versionNameSuffix = "-benchmark"
+            applicationIdSuffix = ".benchmark"
         }
     }
 
     sourceSets {
         getByName("preview").res.srcDirs("src/debug/res")
+        getByName("benchmark").res.srcDirs("src/debug/res")
     }
 
     flavorDimensions.add("default")
@@ -132,7 +144,6 @@ android {
     }
 
     lint {
-        disable.addAll(listOf("MissingTranslation", "ExtraTranslation"))
         abortOnError = false
         checkReleaseBuilds = false
     }
@@ -165,11 +176,15 @@ android {
 }
 
 dependencies {
+    implementation(project(":i18n"))
+    implementation(project(":core"))
+    implementation(project(":source-api"))
+
     // Compose
+    implementation(platform(compose.bom))
     implementation(compose.activity)
     implementation(compose.foundation)
     implementation(compose.material3.core)
-    implementation(compose.material3.windowsizeclass)
     implementation(compose.material3.adapter)
     implementation(compose.material.icons)
     implementation(compose.animation)
@@ -179,6 +194,7 @@ dependencies {
     implementation(compose.accompanist.webview)
     implementation(compose.accompanist.swiperefresh)
     implementation(compose.accompanist.flowlayout)
+    implementation(compose.accompanist.permissions)
 
     implementation(androidx.paging.runtime)
     implementation(androidx.paging.compose)
@@ -192,9 +208,6 @@ dependencies {
     implementation(kotlinx.reflect)
     implementation(kotlinx.bundles.coroutines)
 
-    // Source models and interfaces from Tachiyomi 1.x
-    implementation(libs.tachiyomi.api)
-
     // AndroidX libraries
     implementation(androidx.annotation)
     implementation(androidx.appcompat)
@@ -204,8 +217,9 @@ dependencies {
     implementation(androidx.corektx)
     implementation(androidx.splashscreen)
     implementation(androidx.recyclerview)
-    implementation(androidx.swiperefreshlayout)
     implementation(androidx.viewpager)
+    implementation(androidx.glance)
+    implementation(androidx.profileinstaller)
 
     implementation(androidx.bundles.lifecycle)
 
@@ -226,9 +240,6 @@ dependencies {
     // Data serialization (JSON, protobuf)
     implementation(kotlinx.bundles.serialization)
 
-    // JavaScript engine
-    implementation(libs.bundles.js.engine)
-
     // HTML parser
     implementation(libs.jsoup)
 
@@ -239,7 +250,6 @@ dependencies {
 
     // Preferences
     implementation(libs.preferencektx)
-    implementation(libs.flowpreferences)
 
     // Model View Presenter
     implementation(libs.bundles.nucleus)
@@ -260,10 +270,8 @@ dependencies {
 
     // UI libraries
     implementation(libs.material)
-    implementation(libs.androidprocessbutton)
     implementation(libs.flexible.adapter.core)
     implementation(libs.flexible.adapter.ui)
-    implementation(libs.viewstatepageradapter)
     implementation(libs.photoview)
     implementation(libs.directionalviewpager) {
         exclude(group = "androidx.viewpager", module = "viewpager")
@@ -272,6 +280,9 @@ dependencies {
     implementation(libs.markwon)
     implementation(libs.aboutLibraries.core)
     implementation(libs.aboutLibraries.compose)
+    implementation(libs.cascade)
+    implementation(libs.numberpicker)
+    implementation(libs.bundles.voyager)
 
     // Conductor
     implementation(libs.bundles.conductor)
@@ -306,42 +317,62 @@ dependencies {
     implementation(libs.aniyomi.mpv)
 }
 
+androidComponents {
+    beforeVariants { variantBuilder ->
+        // Disables standardBenchmark
+        if (variantBuilder.buildType == "benchmark") {
+            variantBuilder.enable = variantBuilder.productFlavors.containsAll(listOf("default" to "dev"))
+        }
+    }
+}
+
 tasks {
     withType<Test> {
         useJUnitPlatform()
         testLogging {
-            events("passed", "skipped", "failed")
+            events(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
         }
+    }
+
+    withType<org.jmailen.gradle.kotlinter.tasks.LintTask>().configureEach {
+        exclude { it.file.path.contains("generated[\\\\/]".toRegex()) }
     }
 
     // See https://kotlinlang.org/docs/reference/experimental.html#experimental-status-of-experimental-api(-markers)
     withType<KotlinCompile> {
         kotlinOptions.freeCompilerArgs += listOf(
-            "-opt-in=kotlin.Experimental",
-            "-opt-in=kotlin.RequiresOptIn",
-            "-opt-in=kotlin.ExperimentalStdlibApi",
-            "-opt-in=kotlinx.coroutines.FlowPreview",
-            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-            "-opt-in=kotlinx.coroutines.InternalCoroutinesApi",
-            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
             "-opt-in=coil.annotation.ExperimentalCoilApi",
+            "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi",
+            "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi",
+            "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
             "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
             "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
             "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+            "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",
             "-opt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
-            "-opt-in=androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi",
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-opt-in=kotlinx.coroutines.FlowPreview",
+            "-opt-in=kotlinx.coroutines.InternalCoroutinesApi",
+            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
         )
-    }
 
-    // Duplicating Hebrew string assets due to some locale code issues on different devices
-    val copyHebrewStrings = task("copyHebrewStrings", type = Copy::class) {
-        from("./src/main/res/values-he")
-        into("./src/main/res/values-iw")
-        include("**/*")
+        if (project.findProperty("tachiyomi.enableComposeCompilerMetrics") == "true") {
+            kotlinOptions.freeCompilerArgs += listOf(
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                    project.buildDir.absolutePath + "/compose_metrics"
+            )
+            kotlinOptions.freeCompilerArgs += listOf(
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                    project.buildDir.absolutePath + "/compose_metrics"
+            )
+        }
     }
 
     preBuild {
-        dependsOn(formatKotlin, copyHebrewStrings)
+        val ktlintTask = if (System.getenv("GITHUB_BASE_REF") == null) formatKotlin else lintKotlin
+        dependsOn(ktlintTask)
     }
 }
 

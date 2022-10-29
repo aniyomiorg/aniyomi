@@ -27,8 +27,6 @@ import tachiyomi.decoder.ImageDecoder
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
 import java.io.InputStream
 import java.net.URLConnection
 import kotlin.math.abs
@@ -50,8 +48,8 @@ object ImageUtil {
     }
 
     fun findImageType(stream: InputStream): ImageType? {
-        try {
-            return when (getImageType(stream)?.format) {
+        return try {
+            when (getImageType(stream)?.format) {
                 Format.Avif -> ImageType.AVIF
                 Format.Gif -> ImageType.GIF
                 Format.Heif -> ImageType.HEIF
@@ -62,8 +60,8 @@ object ImageUtil {
                 else -> null
             }
         } catch (e: Exception) {
+            null
         }
-        return null
     }
 
     fun getExtensionFromMimeType(mime: String?): String {
@@ -82,7 +80,9 @@ object ImageUtil {
                 Format.Webp -> type.isAnimated && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
                 else -> false
             }
-        } catch (e: Exception) { /* Do Nothing */ }
+        } catch (e: Exception) {
+            /* Do Nothing */
+        }
         return false
     }
 
@@ -183,7 +183,8 @@ object ImageUtil {
     }
 
     enum class Side {
-        RIGHT, LEFT
+        RIGHT,
+        LEFT,
     }
 
     /**
@@ -199,71 +200,41 @@ object ImageUtil {
     /**
      * Splits tall images to improve performance of reader
      */
-    fun splitTallImage(imageFile: UniFile, imageFilePath: String): Boolean {
+    fun splitTallImage(tmpDir: UniFile, imageFile: UniFile, filenamePrefix: String): Boolean {
         if (isAnimatedAndSupported(imageFile.openInputStream()) || !isTallImage(imageFile.openInputStream())) {
             return true
         }
 
-        val options = extractImageOptions(imageFile.openInputStream(), resetAfterExtraction = false).apply { inJustDecodeBounds = false }
-        // Values are stored as they get modified during split loop
-        val imageHeight = options.outHeight
-        val imageWidth = options.outWidth
-
-        val splitHeight = (getDisplayMaxHeightInPx * 1.5).toInt()
-        // -1 so it doesn't try to split when imageHeight = getDisplayHeightInPx
-        val partCount = (imageHeight - 1) / splitHeight + 1
-
-        val optimalSplitHeight = imageHeight / partCount
-
-        val splitDataList = (0 until partCount).fold(mutableListOf<SplitData>()) { list, index ->
-            list.apply {
-                // Only continue if the list is empty or there is image remaining
-                if (isEmpty() || imageHeight > last().bottomOffset) {
-                    val topOffset = index * optimalSplitHeight
-                    var outputImageHeight = min(optimalSplitHeight, imageHeight - topOffset)
-
-                    val remainingHeight = imageHeight - (topOffset + outputImageHeight)
-                    // If remaining height is smaller or equal to 1/3th of
-                    // optimal split height then include it in current page
-                    if (remainingHeight <= (optimalSplitHeight / 3)) {
-                        outputImageHeight += remainingHeight
-                    }
-                    add(SplitData(index, topOffset, outputImageHeight))
-                }
-            }
-        }
-
-        val bitmapRegionDecoder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            BitmapRegionDecoder.newInstance(imageFile.openInputStream())
-        } else {
-            @Suppress("DEPRECATION")
-            BitmapRegionDecoder.newInstance(imageFile.openInputStream(), false)
-        }
-
+        val bitmapRegionDecoder = getBitmapRegionDecoder(imageFile.openInputStream())
         if (bitmapRegionDecoder == null) {
             logcat { "Failed to create new instance of BitmapRegionDecoder" }
             return false
         }
 
-        logcat {
-            "Splitting image with height of $imageHeight into $partCount part " +
-                "with estimated ${optimalSplitHeight}px height per split"
+        val options = extractImageOptions(imageFile.openInputStream(), resetAfterExtraction = false).apply {
+            inJustDecodeBounds = false
         }
+
+        val splitDataList = options.splitData
 
         return try {
             splitDataList.forEach { splitData ->
-                val splitPath = splitImagePath(imageFilePath, splitData.index)
+                val splitImageName = splitImageName(filenamePrefix, splitData.index)
+                // Remove pre-existing split if exists (this split shouldn't exist under normal circumstances)
+                tmpDir.findFile(splitImageName)?.delete()
 
-                val region = Rect(0, splitData.topOffset, imageWidth, splitData.bottomOffset)
+                val splitFile = tmpDir.createFile(splitImageName)
 
-                FileOutputStream(splitPath).use { outputStream ->
+                val region = Rect(0, splitData.topOffset, splitData.splitWidth, splitData.bottomOffset)
+
+                splitFile.openOutputStream().use { outputStream ->
                     val splitBitmap = bitmapRegionDecoder.decodeRegion(region, options)
                     splitBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
                     splitBitmap.recycle()
                 }
                 logcat {
                     "Success: Split #${splitData.index + 1} with topOffset=${splitData.topOffset} " +
-                        "height=${splitData.outputImageHeight} bottomOffset=${splitData.bottomOffset}"
+                        "height=${splitData.splitHeight} bottomOffset=${splitData.bottomOffset}"
                 }
             }
             imageFile.delete()
@@ -271,8 +242,8 @@ object ImageUtil {
         } catch (e: Exception) {
             // Image splits were not successfully saved so delete them and keep the original image
             splitDataList
-                .map { splitImagePath(imageFilePath, it.index) }
-                .forEach { File(it).delete() }
+                .map { splitImageName(filenamePrefix, it.index) }
+                .forEach { tmpDir.findFile(it)?.delete() }
             logcat(LogPriority.ERROR, e)
             false
         } finally {
@@ -280,15 +251,91 @@ object ImageUtil {
         }
     }
 
-    private fun splitImagePath(imageFilePath: String, index: Int) =
-        imageFilePath.substringBeforeLast(".") + "__${"%03d".format(index + 1)}.jpg"
+    private fun splitImageName(filenamePrefix: String, index: Int) = "${filenamePrefix}__${"%03d".format(index + 1)}.jpg"
+
+    /**
+     * Check whether the image is a long Strip that needs splitting
+     * @return true if the image is not animated and it's height is greater than image width and screen height
+     */
+    fun isStripSplitNeeded(imageStream: BufferedInputStream): Boolean {
+        if (isAnimatedAndSupported(imageStream)) return false
+
+        val options = extractImageOptions(imageStream)
+        val imageHeightIsBiggerThanWidth = options.outHeight > options.outWidth
+        val imageHeightBiggerThanScreenHeight = options.outHeight > optimalImageHeight
+        return imageHeightIsBiggerThanWidth && imageHeightBiggerThanScreenHeight
+    }
+
+    /**
+     * Split the imageStream according to the provided splitData
+     */
+    fun splitStrip(splitData: SplitData, streamFn: () -> InputStream): InputStream {
+        val bitmapRegionDecoder = getBitmapRegionDecoder(streamFn())
+            ?: throw Exception("Failed to create new instance of BitmapRegionDecoder")
+
+        logcat {
+            "WebtoonSplit #${splitData.index} with topOffset=${splitData.topOffset} " +
+                "splitHeight=${splitData.splitHeight} bottomOffset=${splitData.bottomOffset}"
+        }
+
+        val region = Rect(0, splitData.topOffset, splitData.splitWidth, splitData.bottomOffset)
+
+        try {
+            val splitBitmap = bitmapRegionDecoder.decodeRegion(region, null)
+            val outputStream = ByteArrayOutputStream()
+            splitBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            return ByteArrayInputStream(outputStream.toByteArray())
+        } catch (e: Throwable) {
+            throw e
+        } finally {
+            bitmapRegionDecoder.recycle()
+        }
+    }
+
+    fun getSplitDataForStream(imageStream: InputStream): List<SplitData> {
+        return extractImageOptions(imageStream).splitData
+    }
+
+    private val BitmapFactory.Options.splitData
+        get(): List<SplitData> {
+            val imageHeight = outHeight
+            val imageWidth = outWidth
+
+            // -1 so it doesn't try to split when imageHeight = optimalImageHeight
+            val partCount = (imageHeight - 1) / optimalImageHeight + 1
+            val optimalSplitHeight = imageHeight / partCount
+
+            logcat {
+                "Generating SplitData for image (height: $imageHeight): " +
+                    "$partCount parts @ ${optimalSplitHeight}px height per part"
+            }
+
+            return mutableListOf<SplitData>().apply {
+                val range = 0 until partCount
+                for (index in range) {
+                    // Only continue if the list is empty or there is image remaining
+                    if (isNotEmpty() && imageHeight <= last().bottomOffset) break
+
+                    val topOffset = index * optimalSplitHeight
+                    var splitHeight = min(optimalSplitHeight, imageHeight - topOffset)
+
+                    if (index == range.last) {
+                        val remainingHeight = imageHeight - (topOffset + splitHeight)
+                        splitHeight += remainingHeight
+                    }
+
+                    add(SplitData(index, topOffset, splitHeight, imageWidth))
+                }
+            }
+        }
 
     data class SplitData(
         val index: Int,
         val topOffset: Int,
-        val outputImageHeight: Int,
+        val splitHeight: Int,
+        val splitWidth: Int,
     ) {
-        val bottomOffset = topOffset + outputImageHeight
+        val bottomOffset = topOffset + splitHeight
     }
 
     /**
@@ -521,6 +568,17 @@ object ImageUtil {
         if (resetAfterExtraction) imageStream.reset()
         return options
     }
+
+    private fun getBitmapRegionDecoder(imageStream: InputStream): BitmapRegionDecoder? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            BitmapRegionDecoder.newInstance(imageStream)
+        } else {
+            @Suppress("DEPRECATION")
+            BitmapRegionDecoder.newInstance(imageStream, false)
+        }
+    }
+
+    private val optimalImageHeight = getDisplayMaxHeightInPx * 2
 
     // Android doesn't include some mappings
     private val SUPPLEMENTARY_MIMETYPE_MAPPING = mapOf(

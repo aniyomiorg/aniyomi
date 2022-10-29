@@ -1,93 +1,122 @@
 package eu.kanade.presentation.browse
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowDownward
+import androidx.compose.material.icons.outlined.ArrowUpward
+import androidx.compose.material.icons.outlined.Numbers
+import androidx.compose.material.icons.outlined.SortByAlpha
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import eu.kanade.domain.source.interactor.SetMigrateSorting
 import eu.kanade.domain.source.model.Source
 import eu.kanade.presentation.browse.components.BaseSourceItem
 import eu.kanade.presentation.browse.components.SourceIcon
+import eu.kanade.presentation.components.Badge
+import eu.kanade.presentation.components.BadgeGroup
 import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.ItemBadges
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.ScrollbarLazyColumn
+import eu.kanade.presentation.components.Scroller.STICKY_HEADER_KEY_PREFIX
 import eu.kanade.presentation.theme.header
 import eu.kanade.presentation.util.horizontalPadding
 import eu.kanade.presentation.util.plus
+import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.presentation.util.topPaddingValues
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.migration.sources.MigrateSourceState
 import eu.kanade.tachiyomi.ui.browse.migration.sources.MigrationSourcesPresenter
-import eu.kanade.tachiyomi.util.system.LocaleHelper
+import eu.kanade.tachiyomi.util.system.copyToClipboard
 
 @Composable
 fun MigrateSourceScreen(
-    nestedScrollInterop: NestedScrollConnection,
     presenter: MigrationSourcesPresenter,
+    contentPadding: PaddingValues,
     onClickItem: (Source) -> Unit,
-    onLongClickItem: (Source) -> Unit,
 ) {
-    val state by presenter.state.collectAsState()
-    when (state) {
-        is MigrateSourceState.Loading -> LoadingScreen()
-        is MigrateSourceState.Error -> Text(text = (state as MigrateSourceState.Error).error.message!!)
-        is MigrateSourceState.Success ->
+    val context = LocalContext.current
+    when {
+        presenter.isLoading -> LoadingScreen()
+        presenter.isEmpty -> EmptyScreen(
+            textResource = R.string.information_empty_library,
+            modifier = Modifier.padding(contentPadding),
+        )
+        else ->
             MigrateSourceList(
-                nestedScrollInterop = nestedScrollInterop,
-                list = (state as MigrateSourceState.Success).sources,
+                list = presenter.items,
+                contentPadding = contentPadding,
                 onClickItem = onClickItem,
-                onLongClickItem = onLongClickItem,
+                onLongClickItem = { source ->
+                    val sourceId = source.id.toString()
+                    context.copyToClipboard(sourceId, sourceId)
+                },
+                sortingMode = presenter.sortingMode,
+                onToggleSortingMode = { presenter.toggleSortingMode() },
+                sortingDirection = presenter.sortingDirection,
+                onToggleSortingDirection = { presenter.toggleSortingDirection() },
             )
     }
 }
 
 @Composable
-fun MigrateSourceList(
-    nestedScrollInterop: NestedScrollConnection,
+private fun MigrateSourceList(
     list: List<Pair<Source, Long>>,
+    contentPadding: PaddingValues,
     onClickItem: (Source) -> Unit,
     onLongClickItem: (Source) -> Unit,
+    sortingMode: SetMigrateSorting.Mode,
+    onToggleSortingMode: () -> Unit,
+    sortingDirection: SetMigrateSorting.Direction,
+    onToggleSortingDirection: () -> Unit,
 ) {
-    if (list.isEmpty()) {
-        EmptyScreen(textResource = R.string.information_empty_library)
-        return
-    }
-
     ScrollbarLazyColumn(
-        modifier = Modifier.nestedScroll(nestedScrollInterop),
-        contentPadding = WindowInsets.navigationBars.asPaddingValues() + topPaddingValues,
+        contentPadding = contentPadding + topPaddingValues,
     ) {
-        item(key = "title") {
-            Text(
-                text = stringResource(R.string.migration_selection_prompt),
+        stickyHeader(key = STICKY_HEADER_KEY_PREFIX) {
+            Row(
                 modifier = Modifier
-                    .animateItemPlacement()
-                    .padding(horizontal = horizontalPadding, vertical = 8.dp),
-                style = MaterialTheme.typography.header,
-            )
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(start = horizontalPadding),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.migration_selection_prompt),
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.header,
+                )
+
+                IconButton(onClick = onToggleSortingMode) {
+                    when (sortingMode) {
+                        SetMigrateSorting.Mode.ALPHABETICAL -> Icon(Icons.Outlined.SortByAlpha, contentDescription = stringResource(R.string.action_sort_alpha))
+                        SetMigrateSorting.Mode.TOTAL -> Icon(Icons.Outlined.Numbers, contentDescription = stringResource(R.string.action_sort_count))
+                    }
+                }
+                IconButton(onClick = onToggleSortingDirection) {
+                    when (sortingDirection) {
+                        SetMigrateSorting.Direction.ASCENDING -> Icon(Icons.Outlined.ArrowUpward, contentDescription = stringResource(R.string.action_asc))
+                        SetMigrateSorting.Direction.DESCENDING -> Icon(Icons.Outlined.ArrowDownward, contentDescription = stringResource(R.string.action_desc))
+                    }
+                }
+            }
         }
 
         items(
             items = list,
-            key = { (source, _) ->
-                source.id
-            },
+            key = { (source, _) -> "migrate-${source.id}" },
         ) { (source, count) ->
             MigrateSourceItem(
                 modifier = Modifier.animateItemPlacement(),
@@ -101,7 +130,7 @@ fun MigrateSourceList(
 }
 
 @Composable
-fun MigrateSourceItem(
+private fun MigrateSourceItem(
     modifier: Modifier = Modifier,
     source: Source,
     count: Long,
@@ -115,8 +144,12 @@ fun MigrateSourceItem(
         onClickItem = onClickItem,
         onLongClickItem = onLongClickItem,
         icon = { SourceIcon(source = source) },
-        action = { ItemBadges(primaryText = "$count") },
-        content = { source, showLanguageInContent ->
+        action = {
+            BadgeGroup {
+                Badge(text = "$count")
+            }
+        },
+        content = { _, sourceLangString ->
             Column(
                 modifier = Modifier
                     .padding(horizontal = horizontalPadding)
@@ -132,9 +165,10 @@ fun MigrateSourceItem(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    if (showLanguageInContent) {
+                    if (sourceLangString != null) {
                         Text(
-                            text = LocaleHelper.getDisplayName(source.lang),
+                            modifier = Modifier.secondaryItemAlpha(),
+                            text = sourceLangString,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.bodySmall,
@@ -142,6 +176,7 @@ fun MigrateSourceItem(
                     }
                     if (source.isStub) {
                         Text(
+                            modifier = Modifier.secondaryItemAlpha(),
                             text = stringResource(R.string.not_installed),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,

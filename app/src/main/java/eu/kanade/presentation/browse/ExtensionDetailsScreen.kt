@@ -1,25 +1,27 @@
 package eu.kanade.presentation.browse
 
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.util.DisplayMetrics
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -32,26 +34,28 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.browse.components.ExtensionIcon
+import eu.kanade.presentation.components.AppBar
+import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.DIVIDER_ALPHA
 import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.EmptyScreen
+import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.PreferenceRow
+import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.components.ScrollbarLazyColumn
 import eu.kanade.presentation.util.horizontalPadding
 import eu.kanade.tachiyomi.R
@@ -63,86 +67,145 @@ import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 @Composable
 fun ExtensionDetailsScreen(
-    nestedScrollInterop: NestedScrollConnection,
+    navigateUp: () -> Unit,
     presenter: ExtensionDetailsPresenter,
-    onClickUninstall: () -> Unit,
-    onClickAppInfo: () -> Unit,
     onClickSourcePreferences: (sourceId: Long) -> Unit,
-    onClickSource: (sourceId: Long) -> Unit,
 ) {
-    val extension = presenter.extension
+    val uriHandler = LocalUriHandler.current
 
-    if (extension == null) {
-        EmptyScreen(textResource = R.string.empty_screen)
-        return
-    }
-
-    val sources by presenter.sourcesState.collectAsState()
-
-    var showNsfwWarning by remember { mutableStateOf(false) }
-
-    ScrollbarLazyColumn(
-        modifier = Modifier.nestedScroll(nestedScrollInterop),
-        contentPadding = WindowInsets.navigationBars.asPaddingValues(),
-    ) {
-        when {
-            extension.isUnofficial ->
-                item {
-                    WarningBanner(R.string.unofficial_extension_message_tachiyomi)
-                }
-            extension.isObsolete ->
-                item {
-                    WarningBanner(R.string.obsolete_extension_message)
-                }
-        }
-
-        item {
-            DetailsHeader(
-                extension = extension,
-                onClickUninstall = onClickUninstall,
-                onClickAppInfo = onClickAppInfo,
-                onClickAgeRating = {
-                    showNsfwWarning = true
+    Scaffold(
+        topBar = { scrollBehavior ->
+            AppBar(
+                title = stringResource(R.string.label_extension_info),
+                navigateUp = navigateUp,
+                actions = {
+                    AppBarActions(
+                        actions = buildList {
+                            if (presenter.extension?.isUnofficial == false) {
+                                add(
+                                    AppBar.Action(
+                                        title = stringResource(R.string.whats_new),
+                                        icon = Icons.Outlined.History,
+                                        onClick = { uriHandler.openUri(presenter.getChangelogUrl()) },
+                                    ),
+                                )
+                                add(
+                                    AppBar.Action(
+                                        title = stringResource(R.string.action_faq_and_guides),
+                                        icon = Icons.Outlined.HelpOutline,
+                                        onClick = { uriHandler.openUri(presenter.getReadmeUrl()) },
+                                    ),
+                                )
+                            }
+                            addAll(
+                                listOf(
+                                    AppBar.OverflowAction(
+                                        title = stringResource(R.string.action_enable_all),
+                                        onClick = { presenter.toggleSources(true) },
+                                    ),
+                                    AppBar.OverflowAction(
+                                        title = stringResource(R.string.action_disable_all),
+                                        onClick = { presenter.toggleSources(false) },
+                                    ),
+                                    AppBar.OverflowAction(
+                                        title = stringResource(R.string.pref_clear_cookies),
+                                        onClick = { presenter.clearCookies() },
+                                    ),
+                                ),
+                            )
+                        },
+                    )
                 },
+                scrollBehavior = scrollBehavior,
             )
-        }
-
-        items(
-            items = sources,
-            key = { it.source.id },
-        ) { source ->
-            SourceSwitchPreference(
-                modifier = Modifier.animateItemPlacement(),
-                source = source,
-                onClickSourcePreferences = onClickSourcePreferences,
-                onClickSource = onClickSource,
-            )
-        }
+        },
+    ) { paddingValues ->
+        ExtensionDetails(paddingValues, presenter, onClickSourcePreferences)
     }
-    if (showNsfwWarning) {
-        NsfwWarningDialog(
-            onClickConfirm = {
-                showNsfwWarning = false
-            },
+}
+
+@Composable
+private fun ExtensionDetails(
+    contentPadding: PaddingValues,
+    presenter: ExtensionDetailsPresenter,
+    onClickSourcePreferences: (sourceId: Long) -> Unit,
+) {
+    when {
+        presenter.isLoading -> LoadingScreen()
+        presenter.extension == null -> EmptyScreen(
+            textResource = R.string.empty_screen,
+            modifier = Modifier.padding(contentPadding),
         )
+        else -> {
+            val context = LocalContext.current
+            val extension = presenter.extension
+            var showNsfwWarning by remember { mutableStateOf(false) }
+
+            ScrollbarLazyColumn(
+                contentPadding = contentPadding,
+            ) {
+                when {
+                    extension.isUnofficial ->
+                        item {
+                            WarningBanner(R.string.unofficial_extension_message)
+                        }
+                    extension.isObsolete ->
+                        item {
+                            WarningBanner(R.string.obsolete_extension_message)
+                        }
+                }
+
+                item {
+                    DetailsHeader(
+                        extension = extension,
+                        onClickUninstall = { presenter.uninstallExtension() },
+                        onClickAppInfo = {
+                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                data = Uri.fromParts("package", extension.pkgName, null)
+                                context.startActivity(this)
+                            }
+                        },
+                        onClickAgeRating = {
+                            showNsfwWarning = true
+                        },
+                    )
+                }
+
+                items(
+                    items = presenter.sources,
+                    key = { it.source.id },
+                ) { source ->
+                    SourceSwitchPreference(
+                        modifier = Modifier.animateItemPlacement(),
+                        source = source,
+                        onClickSourcePreferences = onClickSourcePreferences,
+                        onClickSource = { presenter.toggleSource(it) },
+                    )
+                }
+            }
+            if (showNsfwWarning) {
+                NsfwWarningDialog(
+                    onClickConfirm = {
+                        showNsfwWarning = false
+                    },
+                )
+            }
+        }
     }
 }
 
 @Composable
 private fun WarningBanner(@StringRes textRes: Int) {
-    Box(
+    Text(
+        text = stringResource(textRes),
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.error)
             .padding(16.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = stringResource(textRes),
-            color = MaterialTheme.colorScheme.onError,
-            style = MaterialTheme.typography.bodyMedium,
-        )
-    }
+        color = MaterialTheme.colorScheme.onError,
+        style = MaterialTheme.typography.bodyMedium,
+        textAlign = TextAlign.Center,
+    )
 }
 
 @Composable
@@ -270,7 +333,9 @@ private fun InfoText(
 
     val clickableModifier = if (onClick != null) {
         Modifier.clickable(interactionSource, indication = null) { onClick() }
-    } else Modifier
+    } else {
+        Modifier
+    }
 
     Column(
         modifier = modifier.then(clickableModifier),
@@ -340,7 +405,7 @@ private fun SourceSwitchPreference(
 }
 
 @Composable
-fun NsfwWarningDialog(
+private fun NsfwWarningDialog(
     onClickConfirm: () -> Unit,
 ) {
     AlertDialog(

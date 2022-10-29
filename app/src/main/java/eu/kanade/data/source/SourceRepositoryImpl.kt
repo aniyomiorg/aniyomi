@@ -2,13 +2,15 @@ package eu.kanade.data.source
 
 import eu.kanade.data.DatabaseHandler
 import eu.kanade.domain.source.model.Source
-import eu.kanade.domain.source.model.SourceData
+import eu.kanade.domain.source.model.SourcePagingSourceType
+import eu.kanade.domain.source.model.SourceWithCount
 import eu.kanade.domain.source.repository.SourceRepository
+import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.model.FilterList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import eu.kanade.tachiyomi.source.Source as LoadedSource
 
 class SourceRepositoryImpl(
     private val sourceManager: SourceManager,
@@ -41,21 +43,32 @@ class SourceRepositoryImpl(
         }
     }
 
-    override fun getSourcesWithNonLibraryManga(): Flow<List<Pair<LoadedSource, Long>>> {
+    override fun getSourcesWithNonLibraryManga(): Flow<List<SourceWithCount>> {
         val sourceIdWithNonLibraryManga = handler.subscribeToList { mangasQueries.getSourceIdsWithNonLibraryManga() }
         return sourceIdWithNonLibraryManga.map { sourceId ->
             sourceId.map { (sourceId, count) ->
                 val source = sourceManager.getOrStub(sourceId)
-                source to count
+                SourceWithCount(sourceMapper(source), count)
             }
         }
     }
 
-    override suspend fun getSourceData(id: Long): SourceData? {
-        return handler.awaitOneOrNull { sourcesQueries.getSourceData(id, sourceDataMapper) }
+    override fun search(
+        sourceId: Long,
+        query: String,
+        filterList: FilterList,
+    ): SourcePagingSourceType {
+        val source = sourceManager.get(sourceId) as CatalogueSource
+        return SourceSearchPagingSource(source, query, filterList)
     }
 
-    override suspend fun upsertSourceData(id: Long, lang: String, name: String) {
-        handler.await { sourcesQueries.upsert(id, lang, name) }
+    override fun getPopular(sourceId: Long): SourcePagingSourceType {
+        val source = sourceManager.get(sourceId) as CatalogueSource
+        return SourcePopularPagingSource(source)
+    }
+
+    override fun getLatest(sourceId: Long): SourcePagingSourceType {
+        val source = sourceManager.get(sourceId) as CatalogueSource
+        return SourceLatestPagingSource(source)
     }
 }

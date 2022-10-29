@@ -1,13 +1,13 @@
 package eu.kanade.domain.manga.model
 
 import eu.kanade.data.listOfStringsAdapter
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.database.models.MangaImpl
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.model.SManga
+import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView
-import tachiyomi.source.model.MangaInfo
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.Serializable
@@ -30,6 +30,7 @@ data class Manga(
     val genre: List<String>?,
     val status: Long,
     val thumbnailUrl: String?,
+    val updateStrategy: UpdateStrategy,
     val initialized: Boolean,
 ) : Serializable {
 
@@ -79,7 +80,7 @@ data class Manga(
     }
 
     fun forceDownloaded(): Boolean {
-        return favorite && Injekt.get<PreferencesHelper>().downloadedOnly().get()
+        return favorite && Injekt.get<BasePreferences>().downloadedOnly().get()
     }
 
     fun sortDescending(): Boolean {
@@ -96,6 +97,28 @@ data class Manga(
         it.status = status.toInt()
         it.thumbnail_url = thumbnailUrl
         it.initialized = initialized
+    }
+
+    fun copyFrom(other: SManga): Manga {
+        val author = other.author ?: author
+        val artist = other.artist ?: artist
+        val description = other.description ?: description
+        val genres = if (other.genre != null) {
+            other.getGenres()
+        } else {
+            genre
+        }
+        val thumbnailUrl = other.thumbnail_url ?: thumbnailUrl
+        return this.copy(
+            author = author,
+            artist = artist,
+            description = description,
+            genre = genres,
+            thumbnailUrl = thumbnailUrl,
+            status = other.status.toLong(),
+            updateStrategy = other.update_strategy,
+            initialized = other.initialized && initialized,
+        )
     }
 
     companion object {
@@ -133,17 +156,18 @@ data class Manga(
             title = "",
             source = -1L,
             favorite = false,
-            lastUpdate = -1L,
-            dateAdded = -1L,
-            viewerFlags = -1L,
-            chapterFlags = -1L,
-            coverLastModified = -1L,
+            lastUpdate = 0L,
+            dateAdded = 0L,
+            viewerFlags = 0L,
+            chapterFlags = 0L,
+            coverLastModified = 0L,
             artist = null,
             author = null,
             description = null,
             genre = null,
             status = 0L,
             thumbnailUrl = null,
+            updateStrategy = UpdateStrategy.ALWAYS_UPDATE,
             initialized = false,
         )
     }
@@ -181,19 +205,9 @@ fun Manga.toDbManga(): DbManga = MangaImpl().also {
     it.genre = genre?.let(listOfStringsAdapter::encode)
     it.status = status.toInt()
     it.thumbnail_url = thumbnailUrl
+    it.update_strategy = updateStrategy
     it.initialized = initialized
 }
-
-fun Manga.toMangaInfo(): MangaInfo = MangaInfo(
-    artist = artist ?: "",
-    author = author ?: "",
-    cover = thumbnailUrl ?: "",
-    description = description ?: "",
-    genres = genre ?: emptyList(),
-    key = url,
-    status = status.toInt(),
-    title = title,
-)
 
 fun Manga.toMangaUpdate(): MangaUpdate {
     return MangaUpdate(
@@ -213,6 +227,22 @@ fun Manga.toMangaUpdate(): MangaUpdate {
         genre = genre,
         status = status,
         thumbnailUrl = thumbnailUrl,
+        updateStrategy = updateStrategy,
+        initialized = initialized,
+    )
+}
+
+fun SManga.toDomainManga(): Manga {
+    return Manga.create().copy(
+        url = url,
+        title = title,
+        artist = artist,
+        author = author,
+        description = description,
+        genre = getGenres(),
+        status = status.toLong(),
+        thumbnailUrl = thumbnail_url,
+        updateStrategy = update_strategy,
         initialized = initialized,
     )
 }

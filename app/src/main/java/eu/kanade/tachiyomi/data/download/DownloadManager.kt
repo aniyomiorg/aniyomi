@@ -4,12 +4,12 @@ import android.content.Context
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
 import eu.kanade.domain.category.interactor.GetCategories
+import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Chapter
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.download.model.DownloadQueue
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.Page
@@ -20,37 +20,25 @@ import logcat.LogPriority
 import rx.Observable
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import uy.kohesive.injekt.injectLazy
 
 /**
  * This class is used to manage chapter downloads in the application. It must be instantiated once
  * and retrieved through dependency injection. You can use this class to queue new chapters or query
  * downloaded chapters.
- *
- * @param context the application context.
  */
 class DownloadManager(
     private val context: Context,
+    private val provider: DownloadProvider = Injekt.get(),
+    private val cache: DownloadCache = Injekt.get(),
     private val getCategories: GetCategories = Injekt.get(),
+    private val sourceManager: SourceManager = Injekt.get(),
+    private val downloadPreferences: DownloadPreferences = Injekt.get(),
 ) {
-
-    private val sourceManager: SourceManager by injectLazy()
-    private val preferences: PreferencesHelper by injectLazy()
-
-    /**
-     * Downloads provider, used to retrieve the folders where the chapters are or should be stored.
-     */
-    val provider = DownloadProvider(context)
-
-    /**
-     * Cache of downloaded chapters.
-     */
-    private val cache = DownloadCache(context, provider, sourceManager)
 
     /**
      * Downloader whose only task is to download chapters.
      */
-    private val downloader = Downloader(context, provider, cache, sourceManager)
+    private val downloader = Downloader(context, provider, cache)
 
     /**
      * Queue to delay the deletion of a list of chapters until triggered.
@@ -112,7 +100,7 @@ class DownloadManager(
         download?.let { queue.remove(it) }
         queue.add(0, toAdd)
         reorderQueue(queue)
-        if (isPaused()) {
+        if (downloader.isPaused()) {
             if (DownloadService.isRunning(context)) {
                 downloader.start()
             } else {
@@ -120,8 +108,6 @@ class DownloadManager(
             }
         }
     }
-
-    fun isPaused() = downloader.isPaused()
 
     /**
      * Reorders the download queue.
@@ -155,6 +141,20 @@ class DownloadManager(
      */
     fun downloadChapters(manga: Manga, chapters: List<Chapter>, autoStart: Boolean = true) {
         downloader.queueChapters(manga, chapters, autoStart)
+    }
+
+    /**
+     * Tells the downloader to enqueue the given list of downloads at the start of the queue.
+     *
+     * @param downloads the list of downloads to enqueue.
+     */
+    fun addDownloadsToStartOfQueue(downloads: List<Download>) {
+        if (downloads.isEmpty()) return
+        queue.toMutableList().apply {
+            addAll(0, downloads)
+            reorderQueue(this)
+        }
+        if (!DownloadService.isRunning(context)) DownloadService.start(context)
     }
 
     /**
@@ -269,10 +269,17 @@ class DownloadManager(
             val chapterDirs = provider.findChapterDirs(filteredChapters, manga, source)
             chapterDirs.forEach { it.delete() }
             cache.removeChapters(filteredChapters, manga)
-            if (cache.getDownloadCount(manga) == 0) { // Delete manga directory if empty
+
+            // Delete manga directory if empty
+            if (cache.getDownloadCount(manga) == 0) {
                 chapterDirs.firstOrNull()?.parentFile?.delete()
+                cache.removeManga(manga)
             }
+
+            // Delete source directory if empty
+            cache.removeSourceIfEmpty(source)
         }
+
         return filteredChapters
     }
 
@@ -330,6 +337,30 @@ class DownloadManager(
     }
 
     /**
+     * Renames source download folder
+     *
+     * @param oldSource the old source.
+     * @param newSource the new source.
+     */
+    fun renameSource(oldSource: Source, newSource: Source) {
+        val oldFolder = provider.findSourceDir(oldSource) ?: return
+        val newName = provider.getSourceDirName(newSource)
+
+        val capitalizationChanged = oldFolder.name.equals(newName, ignoreCase = true)
+        if (capitalizationChanged) {
+            val tempName = newName + "_tmp"
+            if (oldFolder.renameTo(tempName).not()) {
+                logcat(LogPriority.ERROR) { "Could not rename source download folder: ${oldFolder.name}." }
+                return
+            }
+        }
+
+        if (oldFolder.renameTo(newName).not()) {
+            logcat(LogPriority.ERROR) { "Could not rename source download folder: ${oldFolder.name}." }
+        }
+    }
+
+    /**
      * Renames an already downloaded chapter
      *
      * @param source the source of the manga.
@@ -361,16 +392,16 @@ class DownloadManager(
 
     private fun getChaptersToDelete(chapters: List<Chapter>, manga: Manga): List<Chapter> {
         // Retrieve the categories that are set to exclude from being deleted on read
-        val categoriesToExclude = preferences.removeExcludeCategories().get().map(String::toInt)
+        val categoriesToExclude = downloadPreferences.removeExcludeCategories().get().map(String::toLong)
 
-        val categoriesForManga = runBlocking { getCategories.await(manga.id!!) }
+        val categoriesForManga = runBlocking { getCategories.await(manga.id) }
             .map { it.id }
             .takeUnless { it.isEmpty() }
             ?: listOf(0)
 
         return if (categoriesForManga.intersect(categoriesToExclude).isNotEmpty()) {
             chapters.filterNot { it.read }
-        } else if (!preferences.removeBookmarkedChapters()) {
+        } else if (!downloadPreferences.removeBookmarkedChapters().get()) {
             chapters.filterNot { it.bookmark }
         } else {
             chapters

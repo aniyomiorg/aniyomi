@@ -11,11 +11,13 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.WebtoonLayoutManager
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
+import eu.kanade.tachiyomi.ui.reader.model.StencilPage
 import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.viewer.BaseViewer
 import eu.kanade.tachiyomi.ui.reader.viewer.ViewerNavigation.NavigationRegion
 import eu.kanade.tachiyomi.util.system.logcat
@@ -24,6 +26,7 @@ import kotlinx.coroutines.cancel
 import rx.subscriptions.CompositeSubscription
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 import kotlin.math.max
 import kotlin.math.min
 
@@ -31,6 +34,8 @@ import kotlin.math.min
  * Implementation of a [BaseViewer] to display pages with a [RecyclerView].
  */
 class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = true) : BaseViewer {
+
+    val downloadManager: DownloadManager by injectLazy()
 
     private val scope = MainScope()
 
@@ -75,7 +80,7 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
     val subscriptions = CompositeSubscription()
 
     private val threshold: Int =
-        Injekt.get<PreferencesHelper>()
+        Injekt.get<ReaderPreferences>()
             .readerHideThreshold()
             .get()
             .threshold
@@ -112,7 +117,7 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
                 }
             },
         )
-        recycler.tapListener = f@{ event ->
+        recycler.tapListener = { event ->
             val pos = PointF(event.rawX / recycler.width, event.rawY / recycler.height)
             val navigator = config.navigator
 
@@ -148,6 +153,12 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
         config.navigationModeChangedListener = {
             val showOnStart = config.navigationOverlayOnStart || config.forceNavigationOverlay
             activity.binding.navigationOverlay.setNavigation(config.navigator, showOnStart)
+        }
+
+        config.longStripSplitChangedListener = { enabled ->
+            if (!enabled) {
+                cleanupSplitStrips()
+            }
         }
 
         frame.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
@@ -198,6 +209,11 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
         val pages = page.chapter.pages ?: return
         logcat { "onPageSelected: ${page.number}/${pages.size}" }
         activity.onPageSelected(page)
+
+        // Skip preload on StencilPage
+        if (page is StencilPage) {
+            return
+        }
 
         // Preload next chapter once we're within the last 5 pages of the current chapter
         val inPreloadRange = pages.size - page.number < 5
@@ -349,5 +365,16 @@ class WebtoonViewer(val activity: ReaderActivity, val isContinuous: Boolean = tr
             max(0, position - 3),
             min(position + 3, adapter.itemCount - 1),
         )
+    }
+
+    fun onLongStripSplit(currentStrip: Any?, newStrips: List<StencilPage>) {
+        activity.runOnUiThread {
+            // Need to insert on UI thread else images will go blank
+            adapter.onLongStripSplit(currentStrip, newStrips)
+        }
+    }
+
+    private fun cleanupSplitStrips() {
+        adapter.cleanupSplitStrips()
     }
 }

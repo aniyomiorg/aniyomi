@@ -2,12 +2,13 @@ package eu.kanade.data.manga
 
 import eu.kanade.data.DatabaseHandler
 import eu.kanade.data.listOfStringsAdapter
-import eu.kanade.data.toLong
+import eu.kanade.data.updateStrategyAdapter
+import eu.kanade.domain.library.model.LibraryManga
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.domain.manga.model.MangaUpdate
 import eu.kanade.domain.manga.repository.MangaRepository
-import eu.kanade.tachiyomi.data.database.models.LibraryManga
 import eu.kanade.tachiyomi.util.system.logcat
+import eu.kanade.tachiyomi.util.system.toLong
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 
@@ -24,7 +25,11 @@ class MangaRepositoryImpl(
     }
 
     override suspend fun getMangaByUrlAndSourceId(url: String, sourceId: Long): Manga? {
-        return handler.awaitOneOrNull { mangasQueries.getMangaByUrlAndSource(url, sourceId, mangaMapper) }
+        return handler.awaitOneOrNull(inTransaction = true) { mangasQueries.getMangaByUrlAndSource(url, sourceId, mangaMapper) }
+    }
+
+    override fun getMangaByUrlAndSourceIdAsFlow(url: String, sourceId: Long): Flow<Manga?> {
+        return handler.subscribeToOneOrNull { mangasQueries.getMangaByUrlAndSource(url, sourceId, mangaMapper) }
     }
 
     override suspend fun getFavorites(): List<Manga> {
@@ -32,11 +37,11 @@ class MangaRepositoryImpl(
     }
 
     override suspend fun getLibraryManga(): List<LibraryManga> {
-        return handler.awaitList { mangasQueries.getLibrary(libraryManga) }
+        return handler.awaitList { libraryViewQueries.library(libraryManga) }
     }
 
     override fun getLibraryMangaAsFlow(): Flow<List<LibraryManga>> {
-        return handler.subscribeToList { mangasQueries.getLibrary(libraryManga) }
+        return handler.subscribeToList { libraryViewQueries.library(libraryManga) }
     }
 
     override fun getFavoritesBySourceId(sourceId: Long): Flow<List<Manga>> {
@@ -69,7 +74,7 @@ class MangaRepositoryImpl(
     }
 
     override suspend fun insert(manga: Manga): Long? {
-        return handler.awaitOneOrNull {
+        return handler.awaitOneOrNull(inTransaction = true) {
             mangasQueries.insert(
                 source = manga.source,
                 url = manga.url,
@@ -88,6 +93,7 @@ class MangaRepositoryImpl(
                 chapterFlags = manga.chapterFlags,
                 coverLastModified = manga.coverLastModified,
                 dateAdded = manga.dateAdded,
+                updateStrategy = manga.updateStrategy,
             )
             mangasQueries.selectLastInsertedRowId()
         }
@@ -103,9 +109,9 @@ class MangaRepositoryImpl(
         }
     }
 
-    override suspend fun updateAll(values: List<MangaUpdate>): Boolean {
+    override suspend fun updateAll(mangaUpdates: List<MangaUpdate>): Boolean {
         return try {
-            partialUpdate(*values.toTypedArray())
+            partialUpdate(*mangaUpdates.toTypedArray())
             true
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
@@ -113,9 +119,9 @@ class MangaRepositoryImpl(
         }
     }
 
-    private suspend fun partialUpdate(vararg values: MangaUpdate) {
+    private suspend fun partialUpdate(vararg mangaUpdates: MangaUpdate) {
         handler.await(inTransaction = true) {
-            values.forEach { value ->
+            mangaUpdates.forEach { value ->
                 mangasQueries.update(
                     source = value.source,
                     url = value.url,
@@ -134,6 +140,7 @@ class MangaRepositoryImpl(
                     coverLastModified = value.coverLastModified,
                     dateAdded = value.dateAdded,
                     mangaId = value.id,
+                    updateStrategy = value.updateStrategy?.let(updateStrategyAdapter::encode),
                 )
             }
         }

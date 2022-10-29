@@ -6,8 +6,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Dangerous
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -47,8 +47,8 @@ fun SourceIcon(
     when {
         source.isStub && icon == null -> {
             Image(
-                imageVector = Icons.Default.Warning,
-                contentDescription = "",
+                imageVector = Icons.Filled.Warning,
+                contentDescription = null,
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.error),
                 modifier = modifier.then(defaultModifier),
             )
@@ -56,14 +56,14 @@ fun SourceIcon(
         icon != null -> {
             Image(
                 bitmap = icon,
-                contentDescription = "",
+                contentDescription = null,
                 modifier = modifier.then(defaultModifier),
             )
         }
         else -> {
             Image(
                 painter = painterResource(id = R.mipmap.ic_local_source),
-                contentDescription = "",
+                contentDescription = null,
                 modifier = modifier.then(defaultModifier),
             )
         }
@@ -80,12 +80,11 @@ fun ExtensionIcon(
         is Extension.Available -> {
             AsyncImage(
                 model = extension.iconUrl,
-                contentDescription = "",
+                contentDescription = null,
                 placeholder = ColorPainter(Color(0x1F888888)),
                 error = rememberResourceBitmapPainter(id = R.drawable.cover_error),
                 modifier = modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .then(defaultModifier),
+                    .clip(MaterialTheme.shapes.extraSmall),
             )
         }
         is Extension.Installed -> {
@@ -93,20 +92,21 @@ fun ExtensionIcon(
             when (icon) {
                 Result.Error -> Image(
                     bitmap = ImageBitmap.imageResource(id = R.mipmap.ic_local_source),
-                    contentDescription = "",
-                    modifier = modifier.then(defaultModifier),
+                    contentDescription = null,
+                    modifier = modifier,
                 )
-                Result.Loading -> Box(modifier = modifier.then(defaultModifier))
+                Result.Loading -> Box(modifier = modifier)
                 is Result.Success -> Image(
                     bitmap = (icon as Result.Success<ImageBitmap>).value,
-                    contentDescription = "",
-                    modifier = modifier.then(defaultModifier),
+                    contentDescription = null,
+                    modifier = modifier,
                 )
             }
         }
         is Extension.Untrusted -> Image(
-            bitmap = ImageBitmap.imageResource(id = R.mipmap.ic_untrusted_source),
-            contentDescription = "",
+            imageVector = Icons.Filled.Dangerous,
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.error),
             modifier = modifier.then(defaultModifier),
         )
     }

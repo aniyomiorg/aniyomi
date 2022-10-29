@@ -1,39 +1,49 @@
 package eu.kanade.tachiyomi.ui.browse.source
 
-import android.os.Bundle
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.interactor.GetEnabledSources
 import eu.kanade.domain.source.interactor.ToggleSource
 import eu.kanade.domain.source.interactor.ToggleSourcePin
 import eu.kanade.domain.source.model.Pin
 import eu.kanade.domain.source.model.Source
+import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.browse.SourceUiModel
-import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
+import eu.kanade.presentation.browse.SourcesState
+import eu.kanade.presentation.browse.SourcesStateImpl
 import eu.kanade.tachiyomi.util.lang.launchIO
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import eu.kanade.tachiyomi.util.system.logcat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
+import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.TreeMap
 
 class SourcesPresenter(
+    private val presenterScope: CoroutineScope,
+    private val state: SourcesStateImpl = SourcesState() as SourcesStateImpl,
+    private val preferences: BasePreferences = Injekt.get(),
+    private val sourcePreferences: SourcePreferences = Injekt.get(),
     private val getEnabledSources: GetEnabledSources = Injekt.get(),
     private val toggleSource: ToggleSource = Injekt.get(),
     private val toggleSourcePin: ToggleSourcePin = Injekt.get(),
-) : BasePresenter<SourcesController>() {
+) : SourcesState by state {
 
-    private val _state: MutableStateFlow<SourceState> = MutableStateFlow(SourceState.Loading)
-    val state: StateFlow<SourceState> = _state.asStateFlow()
+    private val _events = Channel<Event>(Int.MAX_VALUE)
+    val events = _events.receiveAsFlow()
 
-    override fun onCreate(savedState: Bundle?) {
-        super.onCreate(savedState)
+    fun onCreate() {
         presenterScope.launchIO {
             getEnabledSources.subscribe()
                 .catch { exception ->
-                    _state.value = SourceState.Error(exception)
+                    logcat(LogPriority.ERROR, exception)
+                    _events.send(Event.FailedFetchingSources)
                 }
+                .stateIn(presenterScope)
                 .collectLatest(::collectLatestSources)
         }
     }
@@ -67,7 +77,14 @@ class SourcesPresenter(
                 }.toTypedArray(),
             )
         }
-        _state.value = SourceState.Success(uiModels)
+        state.isLoading = false
+        state.items = uiModels
+    }
+
+    fun onOpenSource(source: Source) {
+        if (!preferences.incognitoMode().get()) {
+            sourcePreferences.lastUsedSource().set(source.id)
+        }
     }
 
     fun toggleSource(source: Source) {
@@ -78,14 +95,14 @@ class SourcesPresenter(
         toggleSourcePin.await(source)
     }
 
+    sealed class Event {
+        object FailedFetchingSources : Event()
+    }
+
+    data class Dialog(val source: Source)
+
     companion object {
         const val PINNED_KEY = "pinned"
         const val LAST_USED_KEY = "last_used"
     }
-}
-
-sealed class SourceState {
-    object Loading : SourceState()
-    data class Error(val error: Throwable) : SourceState()
-    data class Success(val uiModels: List<SourceUiModel>) : SourceState()
 }

@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.data.database.models
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
-import tachiyomi.source.model.MangaInfo
 import eu.kanade.domain.manga.model.Manga as DomainManga
 
 interface Manga : SManga {
@@ -27,11 +26,6 @@ interface Manga : SManga {
 
     fun sortDescending(): Boolean {
         return chapter_flags and DomainManga.CHAPTER_SORT_DIR_MASK.toInt() == DomainManga.CHAPTER_SORT_DESC.toInt()
-    }
-
-    fun getGenres(): List<String>? {
-        if (genre.isNullOrBlank()) return null
-        return genre?.split(", ")?.map { it.trim() }?.filterNot { it.isBlank() }?.distinct()
     }
 
     private fun setChapterFlags(flag: Int, mask: Int) {
@@ -80,19 +74,6 @@ interface Manga : SManga {
     }
 }
 
-fun Manga.toMangaInfo(): MangaInfo {
-    return MangaInfo(
-        artist = this.artist ?: "",
-        author = this.author ?: "",
-        cover = this.thumbnail_url ?: "",
-        description = this.description ?: "",
-        genres = this.getGenres() ?: emptyList(),
-        key = this.url,
-        status = this.status,
-        title = this.title,
-    )
-}
-
 fun Manga.toDomainManga(): DomainManga? {
     val mangaId = id ?: return null
     return DomainManga(
@@ -112,6 +93,7 @@ fun Manga.toDomainManga(): DomainManga? {
         genre = getGenres(),
         status = status.toLong(),
         thumbnailUrl = thumbnail_url,
+        updateStrategy = update_strategy,
         initialized = initialized,
     )
 }

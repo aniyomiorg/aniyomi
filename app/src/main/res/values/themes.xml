@@ -67,9 +67,6 @@
         <item name="actionModeCloseDrawable">@drawable/ic_close_24dp</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.Tachiyomi</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Tachiyomi.BottomSheetDialog</item>
-        <item name="chipStyle">@style/Widget.Tachiyomi.Chip.Action</item>
-        <item name="chipTextColor">?android:attr/textColorPrimary</item>
-        <item name="chipBackgroundColor">?android:attr/divider</item>
         <item name="textInputStyle">@style/Widget.Material3.TextInputLayout.OutlinedBox</item>
         <item name="appBarLayoutStyle">@style/Widget.Material3.AppBarLayout</item>
         <item name="toolbarStyle">@style/Widget.Material3.Toolbar.Surface</item>
@@ -81,9 +78,6 @@
         <item name="switchPreferenceCompatStyle">@style/Widget.Tachiyomi.Switch</item>
         <item name="sliderStyle">@style/Widget.Tachiyomi.Slider</item>
         <item name="materialCardViewStyle">@style/Widget.Material3.CardView.Elevated</item>
-
-        <!-- Custom Attributes-->
-        <item name="colorFilterActive">@color/filter_light</item>
 
         <!-- Preference text appearance -->
         <item name="android:textAppearanceListItem">?attr/textAppearanceBodyLarge</item>
@@ -316,6 +310,33 @@
         <item name="colorOnSurfaceInverse">@color/yotsuba_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/yotsuba_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/yotsuba_primaryInverse</item>
+    </style>
+
+    <!--== Tidal Wave Theme ==-->
+    <style name="Theme.Tachiyomi.TidalWave">
+        <!-- Theme Colors -->
+        <item name="colorPrimary">@color/tidalwave_primary</item>
+        <item name="colorOnPrimary">@color/tidalwave_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/tidalwave_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/tidalwave_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/tidalwave_secondary</item>
+        <item name="colorOnSecondary">@color/tidalwave_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/tidalwave_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/tidalwave_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/tidalwave_tertiary</item>
+        <item name="colorOnTertiary">@color/tidalwave_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/tidalwave_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/tidalwave_onTertiaryContainer</item>
+        <item name="android:colorBackground">@color/tidalwave_background</item>
+        <item name="colorOnBackground">@color/tidalwave_onBackground</item>
+        <item name="colorSurface">@color/tidalwave_surface</item>
+        <item name="colorOnSurface">@color/tidalwave_onSurface</item>
+        <item name="colorSurfaceVariant">@color/tidalwave_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/tidalwave_onSurfaceVariant</item>
+        <item name="colorOutline">@color/tidalwave_outline</item>
+        <item name="colorOnSurfaceInverse">@color/tidalwave_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/tidalwave_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/tidalwave_primaryInverse</item>
     </style>
 
     <!--== AMOLED Mode Overlay ==-->

@@ -1,42 +1,74 @@
 package eu.kanade.tachiyomi.source
 
 import android.content.Context
-import eu.kanade.domain.source.interactor.GetSourceData
-import eu.kanade.domain.source.interactor.UpsertSourceData
 import eu.kanade.domain.source.model.SourceData
+import eu.kanade.domain.source.repository.SourceDataRepository
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.extension.ExtensionManager
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
-import eu.kanade.tachiyomi.util.lang.launchIO
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import rx.Observable
-import tachiyomi.source.model.ChapterInfo
-import tachiyomi.source.model.MangaInfo
 import uy.kohesive.injekt.injectLazy
+import java.util.concurrent.ConcurrentHashMap
 
-class SourceManager(private val context: Context) {
+class SourceManager(
+    private val context: Context,
+    private val extensionManager: ExtensionManager,
+    private val sourceRepository: SourceDataRepository,
+) {
+    private val downloadManager: DownloadManager by injectLazy()
 
-    private val extensionManager: ExtensionManager by injectLazy()
-    private val getSourceData: GetSourceData by injectLazy()
-    private val upsertSourceData: UpsertSourceData by injectLazy()
+    private val scope = CoroutineScope(Job() + Dispatchers.IO)
 
-    private val sourcesMap = mutableMapOf<Long, Source>()
-    private val stubSourcesMap = mutableMapOf<Long, StubSource>()
+    private var sourcesMap = ConcurrentHashMap<Long, Source>()
+        set(value) {
+            field = value
+            sourcesMapFlow.value = field
+        }
 
-    private val _catalogueSources: MutableStateFlow<List<CatalogueSource>> = MutableStateFlow(listOf())
-    val catalogueSources: Flow<List<CatalogueSource>> = _catalogueSources
-    val onlineSources: Flow<List<HttpSource>> =
-        _catalogueSources.map { sources -> sources.filterIsInstance<HttpSource>() }
+    private val sourcesMapFlow = MutableStateFlow(sourcesMap)
+
+    private val stubSourcesMap = ConcurrentHashMap<Long, StubSource>()
+
+    val catalogueSources: Flow<List<CatalogueSource>> = sourcesMapFlow.map { it.values.filterIsInstance<CatalogueSource>() }
+    val onlineSources: Flow<List<HttpSource>> = catalogueSources.map { sources -> sources.filterIsInstance<HttpSource>() }
 
     init {
-        createInternalSources().forEach { registerSource(it) }
+        scope.launch {
+            extensionManager.installedExtensionsFlow
+                .collectLatest { extensions ->
+                    val mutableMap = ConcurrentHashMap<Long, Source>(mapOf(LocalSource.ID to LocalSource(context)))
+                    extensions.forEach { extension ->
+                        extension.sources.forEach {
+                            mutableMap[it.id] = it
+                            registerStubSource(it.toSourceData())
+                        }
+                    }
+                    sourcesMap = mutableMap
+                }
+        }
+
+        scope.launch {
+            sourceRepository.subscribeAll()
+                .collectLatest { sources ->
+                    val mutableMap = stubSourcesMap.toMutableMap()
+                    sources.forEach {
+                        mutableMap[it.id] = StubSource(it)
+                    }
+                }
+        }
     }
 
     fun get(sourceKey: Long): Source? {
@@ -58,44 +90,20 @@ class SourceManager(private val context: Context) {
         return stubSourcesMap.values.filterNot { it.id in onlineSourceIds }
     }
 
-    internal fun registerSource(source: Source) {
-        if (!sourcesMap.containsKey(source.id)) {
-            sourcesMap[source.id] = source
-        }
-        registerStubSource(source.toSourceData())
-        triggerCatalogueSources()
-    }
-
     private fun registerStubSource(sourceData: SourceData) {
-        launchIO {
-            val dbSourceData = getSourceData.await(sourceData.id)
-
-            if (dbSourceData != sourceData) {
-                upsertSourceData.await(sourceData)
-            }
-            if (stubSourcesMap[sourceData.id]?.toSourceData() != sourceData) {
-                stubSourcesMap[sourceData.id] = StubSource(sourceData)
+        scope.launch {
+            val (id, lang, name) = sourceData
+            val dbSourceData = sourceRepository.getSourceData(id)
+            if (dbSourceData == sourceData) return@launch
+            sourceRepository.upsertSourceData(id, lang, name)
+            if (dbSourceData != null) {
+                downloadManager.renameSource(StubSource(dbSourceData), StubSource(sourceData))
             }
         }
     }
-
-    internal fun unregisterSource(source: Source) {
-        sourcesMap.remove(source.id)
-        triggerCatalogueSources()
-    }
-
-    private fun triggerCatalogueSources() {
-        _catalogueSources.update {
-            sourcesMap.values.filterIsInstance<CatalogueSource>()
-        }
-    }
-
-    private fun createInternalSources(): List<Source> = listOf(
-        LocalSource(context),
-    )
 
     private suspend fun createStubSource(id: Long): StubSource {
-        getSourceData.await(id)?.let {
+        sourceRepository.getSourceData(id)?.let {
             return StubSource(it)
         }
         extensionManager.getSourceData(id)?.let {
@@ -106,43 +114,43 @@ class SourceManager(private val context: Context) {
     }
 
     @Suppress("OverridingDeprecatedMember")
-    open inner class StubSource(val sourceData: SourceData) : Source {
-
-        override val name: String = sourceData.name
-
-        override val lang: String = sourceData.lang
+    open inner class StubSource(private val sourceData: SourceData) : Source {
 
         override val id: Long = sourceData.id
 
-        override suspend fun getMangaDetails(manga: MangaInfo): MangaInfo {
+        override val name: String = sourceData.name.ifBlank { id.toString() }
+
+        override val lang: String = sourceData.lang
+
+        override suspend fun getMangaDetails(manga: SManga): SManga {
             throw getSourceNotInstalledException()
         }
 
+        @Deprecated("Use the 1.x API instead", replaceWith = ReplaceWith("getMangaDetails"))
         override fun fetchMangaDetails(manga: SManga): Observable<SManga> {
             return Observable.error(getSourceNotInstalledException())
         }
 
-        override suspend fun getChapterList(manga: MangaInfo): List<ChapterInfo> {
+        override suspend fun getChapterList(manga: SManga): List<SChapter> {
             throw getSourceNotInstalledException()
         }
 
+        @Deprecated("Use the 1.x API instead", replaceWith = ReplaceWith("getChapterList"))
         override fun fetchChapterList(manga: SManga): Observable<List<SChapter>> {
             return Observable.error(getSourceNotInstalledException())
         }
 
-        override suspend fun getPageList(chapter: ChapterInfo): List<tachiyomi.source.model.Page> {
+        override suspend fun getPageList(chapter: SChapter): List<Page> {
             throw getSourceNotInstalledException()
         }
 
+        @Deprecated("Use the 1.x API instead", replaceWith = ReplaceWith("getPageList"))
         override fun fetchPageList(chapter: SChapter): Observable<List<Page>> {
             return Observable.error(getSourceNotInstalledException())
         }
 
         override fun toString(): String {
-            if (name.isNotBlank() && lang.isNotBlank()) {
-                return "$name (${lang.uppercase()})"
-            }
-            return id.toString()
+            return if (sourceData.isMissingInfo.not()) "$name (${lang.uppercase()})" else id.toString()
         }
 
         fun getSourceNotInstalledException(): SourceNotInstalledException {

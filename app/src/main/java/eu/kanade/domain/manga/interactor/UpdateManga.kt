@@ -7,7 +7,7 @@ import eu.kanade.domain.manga.model.isLocal
 import eu.kanade.domain.manga.model.toDbManga
 import eu.kanade.domain.manga.repository.MangaRepository
 import eu.kanade.tachiyomi.data.cache.CoverCache
-import tachiyomi.source.model.MangaInfo
+import eu.kanade.tachiyomi.source.model.SManga
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
@@ -20,23 +20,30 @@ class UpdateManga(
         return mangaRepository.update(mangaUpdate)
     }
 
-    suspend fun awaitAll(values: List<MangaUpdate>): Boolean {
-        return mangaRepository.updateAll(values)
+    suspend fun awaitAll(mangaUpdates: List<MangaUpdate>): Boolean {
+        return mangaRepository.updateAll(mangaUpdates)
     }
 
     suspend fun awaitUpdateFromSource(
         localManga: Manga,
-        remoteManga: MangaInfo,
+        remoteManga: SManga,
         manualFetch: Boolean,
         coverCache: CoverCache = Injekt.get(),
     ): Boolean {
-        // if the manga isn't a favorite, set its title from source and update in db
-        val title = if (!localManga.favorite) remoteManga.title else null
+        val remoteTitle = try {
+            remoteManga.title
+        } catch (_: UninitializedPropertyAccessException) {
+            ""
+        }
 
-        // Never refresh covers if the url is empty to avoid "losing" existing covers
-        val updateCover = remoteManga.cover.isNotEmpty() && (manualFetch || localManga.thumbnailUrl != remoteManga.cover)
-        val coverLastModified = if (updateCover) {
+        // if the manga isn't a favorite, set its title from source and update in db
+        val title = if (remoteTitle.isEmpty() || localManga.favorite) null else remoteTitle
+
+        val coverLastModified =
             when {
+                // Never refresh covers if the url is empty to avoid "losing" existing covers
+                remoteManga.thumbnail_url.isNullOrEmpty() -> null
+                !manualFetch && localManga.thumbnailUrl == remoteManga.thumbnail_url -> null
                 localManga.isLocal() -> Date().time
                 localManga.hasCustomCover(coverCache) -> {
                     coverCache.deleteFromCache(localManga.toDbManga(), false)
@@ -47,19 +54,21 @@ class UpdateManga(
                     Date().time
                 }
             }
-        } else null
+
+        val thumbnailUrl = remoteManga.thumbnail_url?.takeIf { it.isNotEmpty() }
 
         return mangaRepository.update(
             MangaUpdate(
                 id = localManga.id,
-                title = title?.takeIf { it.isNotEmpty() },
+                title = title,
                 coverLastModified = coverLastModified,
                 author = remoteManga.author,
                 artist = remoteManga.artist,
                 description = remoteManga.description,
-                genre = remoteManga.genres,
-                thumbnailUrl = remoteManga.cover.takeIf { it.isNotEmpty() },
+                genre = remoteManga.getGenres(),
+                thumbnailUrl = thumbnailUrl,
                 status = remoteManga.status.toLong(),
+                updateStrategy = remoteManga.update_strategy,
                 initialized = true,
             ),
         )

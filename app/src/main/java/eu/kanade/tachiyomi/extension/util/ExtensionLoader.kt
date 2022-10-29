@@ -4,9 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import dalvik.system.PathClassLoader
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.model.Extension
 import eu.kanade.tachiyomi.extension.model.LoadResult
 import eu.kanade.tachiyomi.source.CatalogueSource
@@ -26,7 +27,7 @@ import uy.kohesive.injekt.injectLazy
 @SuppressLint("PackageManagerGetSignatures")
 internal object ExtensionLoader {
 
-    private val preferences: PreferencesHelper by injectLazy()
+    private val preferences: SourcePreferences by injectLazy()
     private val loadNsfwSource by lazy {
         preferences.showNsfwSource().get()
     }
@@ -38,7 +39,7 @@ internal object ExtensionLoader {
     private const val METADATA_HAS_README = "tachiyomi.extension.hasReadme"
     private const val METADATA_HAS_CHANGELOG = "tachiyomi.extension.hasChangelog"
     const val LIB_VERSION_MIN = 1.2
-    const val LIB_VERSION_MAX = 1.3
+    const val LIB_VERSION_MAX = 1.4
 
     private const val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or PackageManager.GET_SIGNATURES
 
@@ -57,7 +58,14 @@ internal object ExtensionLoader {
      */
     fun loadExtensions(context: Context): List<LoadResult> {
         val pkgManager = context.packageManager
-        val installedPkgs = pkgManager.getInstalledPackages(PACKAGE_FLAGS)
+
+        @Suppress("DEPRECATION")
+        val installedPkgs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            pkgManager.getInstalledPackages(PackageManager.PackageInfoFlags.of(PACKAGE_FLAGS.toLong()))
+        } else {
+            pkgManager.getInstalledPackages(PACKAGE_FLAGS)
+        }
+
         val extPkgs = installedPkgs.filter { isPackageAnExtension(it) }
 
         if (extPkgs.isEmpty()) return emptyList()
@@ -80,10 +88,12 @@ internal object ExtensionLoader {
             context.packageManager.getPackageInfo(pkgName, PACKAGE_FLAGS)
         } catch (error: PackageManager.NameNotFoundException) {
             // Unlikely, but the package may have been uninstalled at this point
-            return LoadResult.Error(error)
+            logcat(LogPriority.ERROR, error)
+            return LoadResult.Error
         }
         if (!isPackageAnExtension(pkgInfo)) {
-            return LoadResult.Error("Tried to load a package that wasn't a extension")
+            logcat(LogPriority.WARN) { "Tried to load a package that wasn't a extension ($pkgName)" }
+            return LoadResult.Error
         }
         return loadExtension(context, pkgName, pkgInfo)
     }
@@ -102,7 +112,8 @@ internal object ExtensionLoader {
             pkgManager.getApplicationInfo(pkgName, PackageManager.GET_META_DATA)
         } catch (error: PackageManager.NameNotFoundException) {
             // Unlikely, but the package may have been uninstalled at this point
-            return LoadResult.Error(error)
+            logcat(LogPriority.ERROR, error)
+            return LoadResult.Error
         }
 
         val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Tachiyomi: ")
@@ -110,35 +121,35 @@ internal object ExtensionLoader {
         val versionCode = PackageInfoCompat.getLongVersionCode(pkgInfo)
 
         if (versionName.isNullOrEmpty()) {
-            val exception = Exception("Missing versionName for extension $extName")
-            logcat(LogPriority.WARN, exception)
-            return LoadResult.Error(exception)
+            logcat(LogPriority.WARN) { "Missing versionName for extension $extName" }
+            return LoadResult.Error
         }
 
         // Validate lib version
         val libVersion = versionName.substringBeforeLast('.').toDouble()
         if (libVersion < LIB_VERSION_MIN || libVersion > LIB_VERSION_MAX) {
-            val exception = Exception(
+            logcat(LogPriority.WARN) {
                 "Lib version is $libVersion, while only versions " +
-                    "$LIB_VERSION_MIN to $LIB_VERSION_MAX are allowed",
-            )
-            logcat(LogPriority.WARN, exception)
-            return LoadResult.Error(exception)
+                    "$LIB_VERSION_MIN to $LIB_VERSION_MAX are allowed"
+            }
+            return LoadResult.Error
         }
 
         val signatureHash = getSignatureHash(pkgInfo)
 
         if (signatureHash == null) {
-            return LoadResult.Error("Package $pkgName isn't signed")
+            logcat(LogPriority.WARN) { "Package $pkgName isn't signed" }
+            return LoadResult.Error
         } else if (signatureHash !in trustedSignatures) {
-            val extension = Extension.Untrusted(extName, pkgName, versionName, versionCode, signatureHash)
+            val extension = Extension.Untrusted(extName, pkgName, versionName, versionCode, libVersion, signatureHash)
             logcat(LogPriority.WARN) { "Extension $pkgName isn't trusted" }
             return LoadResult.Untrusted(extension)
         }
 
         val isNsfw = appInfo.metaData.getInt(METADATA_NSFW) == 1
         if (!loadNsfwSource && isNsfw) {
-            return LoadResult.Error("NSFW extension $pkgName not allowed")
+            logcat(LogPriority.WARN) { "NSFW extension $pkgName not allowed" }
+            return LoadResult.Error
         }
 
         val hasReadme = appInfo.metaData.getInt(METADATA_HAS_README, 0) == 1
@@ -165,7 +176,7 @@ internal object ExtensionLoader {
                     }
                 } catch (e: Throwable) {
                     logcat(LogPriority.ERROR, e) { "Extension load error: $extName ($it)" }
-                    return LoadResult.Error(e)
+                    return LoadResult.Error
                 }
             }
 
@@ -179,14 +190,15 @@ internal object ExtensionLoader {
         }
 
         val extension = Extension.Installed(
-            extName,
-            pkgName,
-            versionName,
-            versionCode,
-            lang,
-            isNsfw,
-            hasReadme,
-            hasChangelog,
+            name = extName,
+            pkgName = pkgName,
+            versionName = versionName,
+            versionCode = versionCode,
+            libVersion = libVersion,
+            lang = lang,
+            isNsfw = isNsfw,
+            hasReadme = hasReadme,
+            hasChangelog = hasChangelog,
             sources = sources,
             pkgFactory = appInfo.metaData.getString(METADATA_SOURCE_FACTORY),
             isUnofficial = signatureHash != officialSignature,

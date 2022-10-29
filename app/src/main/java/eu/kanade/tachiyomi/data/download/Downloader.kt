@@ -4,6 +4,7 @@ import android.content.Context
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
+import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.ChapterCache
@@ -12,7 +13,6 @@ import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.download.model.DownloadQueue
 import eu.kanade.tachiyomi.data.library.LibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.Page
@@ -34,7 +34,8 @@ import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
-import uy.kohesive.injekt.injectLazy
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.BufferedOutputStream
 import java.io.File
 import java.util.zip.CRC32
@@ -59,12 +60,10 @@ class Downloader(
     private val context: Context,
     private val provider: DownloadProvider,
     private val cache: DownloadCache,
-    private val sourceManager: SourceManager,
+    private val sourceManager: SourceManager = Injekt.get(),
+    private val chapterCache: ChapterCache = Injekt.get(),
+    private val downloadPreferences: DownloadPreferences = Injekt.get(),
 ) {
-
-    private val chapterCache: ChapterCache by injectLazy()
-
-    private val preferences: PreferencesHelper by injectLazy()
 
     /**
      * Store for persisting downloads across restarts.
@@ -317,11 +316,14 @@ class Downloader(
         val pageListObservable = if (download.pages == null) {
             // Pull page list from network and add them to download object
             download.source.fetchPageList(download.chapter)
-                .doOnNext { pages ->
+                .map { pages ->
                     if (pages.isEmpty()) {
                         throw Exception(context.getString(R.string.page_list_empty_error))
                     }
-                    download.pages = pages
+                    // Don't trust index from source
+                    val reIndexedPages = pages.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
+                    download.pages = reIndexedPages
+                    reIndexedPages
                 }
         } else {
             // Or if the page list already exists, start from the file
@@ -341,8 +343,8 @@ class Downloader(
             // Get all the URLs to the source images, fetch pages if necessary
             .flatMap { download.source.fetchAllImageUrlsFromPageList(it) }
             // Start downloading images, consider we can have downloaded images already
-            // Concurrently do 5 pages at a time
-            .flatMap({ page -> getOrDownloadImage(page, download, tmpDir) }, 5)
+            // Concurrently do 2 pages at a time
+            .flatMap({ page -> getOrDownloadImage(page, download, tmpDir).subscribeOn(Schedulers.io()) }, 2)
             .onBackpressureLatest()
             // Do when page is downloaded.
             .doOnNext { notifier.onProgressChange(download) }
@@ -393,7 +395,7 @@ class Downloader(
             // When the page is ready, set page path, progress (just in case) and status
             .doOnNext { file ->
                 val success = splitTallImageIfNeeded(page, tmpDir)
-                if (success.not()) {
+                if (!success) {
                     notifier.onError(context.getString(R.string.download_notifier_split_failed), download.chapter.name, download.manga.title)
                 }
                 page.uri = file.uri
@@ -426,7 +428,7 @@ class Downloader(
             .map { response ->
                 val file = tmpDir.createFile("$filename.tmp")
                 try {
-                    response.body!!.source().saveTo(file.openOutputStream())
+                    response.body.source().saveTo(file.openOutputStream())
                     val extension = getImageExtension(response, file)
                     file.renameTo("$filename.$extension")
                 } catch (e: Exception) {
@@ -471,7 +473,7 @@ class Downloader(
      */
     private fun getImageExtension(response: Response, file: UniFile): String {
         // Read content type if available.
-        val mime = response.body?.contentType()?.let { ct -> "${ct.type}/${ct.subtype}" }
+        val mime = response.body.contentType()?.run { if (type == "image") "image/$subtype" else null }
             // Else guess from the uri.
             ?: context.contentResolver.getType(file.uri)
             // Else read magic numbers.
@@ -481,19 +483,17 @@ class Downloader(
     }
 
     private fun splitTallImageIfNeeded(page: Page, tmpDir: UniFile): Boolean {
-        if (!preferences.splitTallImages().get()) return true
+        if (!downloadPreferences.splitTallImages().get()) return true
 
-        val filename = String.format("%03d", page.number)
-        val imageFile = tmpDir.listFiles()?.find { it.name!!.startsWith(filename) }
+        val filenamePrefix = String.format("%03d", page.number)
+        val imageFile = tmpDir.listFiles()?.firstOrNull { it.name.orEmpty().startsWith(filenamePrefix) }
             ?: throw Error(context.getString(R.string.download_notifier_split_page_not_found, page.number))
-        val imageFilePath = imageFile.filePath
-            ?: throw Error(context.getString(R.string.download_notifier_split_page_path_not_found, page.number))
 
         // check if the original page was previously splitted before then skip.
         if (imageFile.name!!.contains("__")) return true
 
         return try {
-            ImageUtil.splitTallImage(imageFile, imageFilePath)
+            ImageUtil.splitTallImage(tmpDir, imageFile, filenamePrefix)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
             false
@@ -519,7 +519,7 @@ class Downloader(
 
         download.status = if (downloadedImages.size == download.pages!!.size) {
             // Only rename the directory if it's downloaded.
-            if (preferences.saveChaptersAsCBZ().get()) {
+            if (downloadPreferences.saveChaptersAsCBZ().get()) {
                 archiveChapter(mangaDir, dirname, tmpDir)
             } else {
                 tmpDir.renameTo(dirname)
@@ -542,7 +542,7 @@ class Downloader(
         dirname: String,
         tmpDir: UniFile,
     ) {
-        val zip = mangaDir.createFile("$dirname.cbz.tmp")
+        val zip = mangaDir.createFile("$dirname.cbz$TMP_DIR_SUFFIX")
         ZipOutputStream(BufferedOutputStream(zip.openOutputStream())).use { zipOut ->
             zipOut.setMethod(ZipEntry.STORED)
 

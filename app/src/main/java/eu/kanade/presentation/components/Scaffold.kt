@@ -17,23 +17,22 @@
 package eu.kanade.presentation.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.SmallTopAppBar
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.contentColorFor
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.LayoutDirection
@@ -57,6 +56,7 @@ import androidx.compose.ui.unit.dp
  * @sample androidx.compose.material3.samples.ScaffoldWithSimpleSnackbar
  *
  * Tachiyomi changes:
+ * * Pass scroll behavior to top bar by default
  * * Remove height constraint for expanded app bar
  * * Also take account of fab height when providing inner padding
  *
@@ -73,15 +73,16 @@ import androidx.compose.ui.unit.dp
  * matching content color for [containerColor], or to the current [LocalContentColor] if
  * [containerColor] is not a color from the theme.
  * @param content content of the screen. The lambda receives a [PaddingValues] that should be
- * applied to the content root via [Modifier.padding] to properly offset top and bottom bars. If
- * using [Modifier.verticalScroll], apply this modifier to the child of the scroll, and not on
- * the scroll itself.
+ * applied to the content root via [Modifier.padding] and [Modifier.consumeWindowInsets] to
+ * properly offset top and bottom bars. If using [Modifier.verticalScroll], apply this modifier to
+ * the child of the scroll, and not on the scroll itself.
  */
 @ExperimentalMaterial3Api
 @Composable
 fun Scaffold(
     modifier: Modifier = Modifier,
-    topBar: @Composable () -> Unit = {},
+    topBarScrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
+    topBar: @Composable (TopAppBarScrollBehavior) -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
@@ -90,10 +91,16 @@ fun Scaffold(
     contentColor: Color = contentColorFor(containerColor),
     content: @Composable (PaddingValues) -> Unit,
 ) {
-    Surface(modifier = modifier, color = containerColor, contentColor = contentColor) {
+    androidx.compose.material3.Surface(
+        modifier = Modifier
+            .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
+            .then(modifier),
+        color = containerColor,
+        contentColor = contentColor,
+    ) {
         ScaffoldLayout(
             fabPosition = floatingActionButtonPosition,
-            topBar = topBar,
+            topBar = { topBar(topBarScrollBehavior) },
             bottomBar = bottomBar,
             content = content,
             snackbar = snackbarHost,
@@ -206,9 +213,25 @@ private fun ScaffoldLayout(
              * Tachiyomi: Also take account of fab height when providing inner padding
              */
             val bodyContentPlaceables = subcompose(ScaffoldLayoutContent.MainContent) {
+                val insets = WindowInsets.Companion.safeDrawing
+                    .asPaddingValues(this@SubcomposeLayout)
                 val innerPadding = PaddingValues(
-                    top = topBarHeight.toDp(),
-                    bottom = bottomBarHeight.toDp() + fabHeight.toDp(),
+                    top =
+                    if (topBarHeight == 0) {
+                        insets.calculateTopPadding()
+                    } else {
+                        topBarHeight.toDp()
+                    },
+                    bottom =
+                    (
+                        if (bottomBarHeight == 0) {
+                            insets.calculateBottomPadding()
+                        } else {
+                            bottomBarHeight.toDp()
+                        }
+                        ) + fabHeight.toDp(),
+                    start = insets.calculateLeftPadding((this@SubcomposeLayout).layoutDirection),
+                    end = insets.calculateRightPadding((this@SubcomposeLayout).layoutDirection),
                 )
                 content(innerPadding)
             }.map { it.measure(looseConstraints) }

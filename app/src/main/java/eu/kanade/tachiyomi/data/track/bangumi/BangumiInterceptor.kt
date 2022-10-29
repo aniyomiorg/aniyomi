@@ -24,35 +24,43 @@ class BangumiInterceptor(val bangumi: Bangumi) : Interceptor {
         if (currAuth.isExpired()) {
             val response = chain.proceed(BangumiApi.refreshTokenRequest(currAuth.refresh_token!!))
             if (response.isSuccessful) {
-                newAuth(json.decodeFromString<OAuth>(response.body!!.string()))
+                newAuth(json.decodeFromString<OAuth>(response.body.string()))
             } else {
                 response.close()
             }
         }
 
-        val authRequest = if (originalRequest.method == "GET") originalRequest.newBuilder()
-            .header("User-Agent", "Tachiyomi")
-            .url(
-                originalRequest.url.newBuilder()
-                    .addQueryParameter("access_token", currAuth.access_token).build(),
-            )
-            .build() else originalRequest.newBuilder()
-            .post(addToken(currAuth.access_token, originalRequest.body as FormBody))
-            .header("User-Agent", "Tachiyomi")
-            .build()
+        val authRequest = if (originalRequest.method == "GET") {
+            originalRequest.newBuilder()
+                .header("User-Agent", "Tachiyomi")
+                .url(
+                    originalRequest.url.newBuilder()
+                        .addQueryParameter("access_token", currAuth.access_token).build(),
+                )
+                .build()
+        } else {
+            originalRequest.newBuilder()
+                .post(addToken(currAuth.access_token, originalRequest.body as FormBody))
+                .header("User-Agent", "Tachiyomi")
+                .build()
+        }
 
         return chain.proceed(authRequest)
     }
 
     fun newAuth(oauth: OAuth?) {
-        this.oauth = if (oauth == null) null else OAuth(
-            oauth.access_token,
-            oauth.token_type,
-            System.currentTimeMillis() / 1000,
-            oauth.expires_in,
-            oauth.refresh_token,
-            this.oauth?.user_id,
-        )
+        this.oauth = if (oauth == null) {
+            null
+        } else {
+            OAuth(
+                oauth.access_token,
+                oauth.token_type,
+                System.currentTimeMillis() / 1000,
+                oauth.expires_in,
+                oauth.refresh_token,
+                this.oauth?.user_id,
+            )
+        }
 
         bangumi.saveToken(oauth)
     }

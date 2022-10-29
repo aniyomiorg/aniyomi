@@ -26,11 +26,6 @@
                 android:layout_height="?attr/actionBarSize"
                 android:theme="?attr/actionBarTheme" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
             <TextView
                 android:id="@+id/downloaded_only"
                 android:layout_width="match_parent"
@@ -68,7 +63,8 @@
             android:paddingTop="?attr/actionBarSize"
             app:elevation="1dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/main_nav" />
+            app:menu="@menu/main_nav"
+            app:menuGravity="center" />
 
         <eu.kanade.tachiyomi.widget.TachiyomiChangeHandlerFrameLayout
             android:id="@+id/controller_container"
@@ -80,15 +76,5 @@
             app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <eu.kanade.tachiyomi.widget.ActionModeWithToolbar
-        android:id="@+id/action_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
-
-    <include
-        android:id="@+id/fab_layout"
-        layout="@layout/main_activity_fab" />
 
 </eu.kanade.tachiyomi.widget.TachiyomiCoordinatorLayout>

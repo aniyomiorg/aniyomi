@@ -39,9 +39,9 @@ class DelayedTrackingStore(context: Context) {
         }
     }
 
-    fun clear() {
+    fun remove(track: Track) {
         preferences.edit {
-            clear()
+            remove(track.id.toString())
         }
         animePreferences.edit {
             clear()

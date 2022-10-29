@@ -1,9 +1,10 @@
 package eu.kanade.domain.source.repository
 
 import eu.kanade.domain.source.model.Source
-import eu.kanade.domain.source.model.SourceData
+import eu.kanade.domain.source.model.SourcePagingSourceType
+import eu.kanade.domain.source.model.SourceWithCount
+import eu.kanade.tachiyomi.source.model.FilterList
 import kotlinx.coroutines.flow.Flow
-import eu.kanade.tachiyomi.source.Source as LoadedSource
 
 interface SourceRepository {
 
@@ -13,9 +14,11 @@ interface SourceRepository {
 
     fun getSourcesWithFavoriteCount(): Flow<List<Pair<Source, Long>>>
 
-    fun getSourcesWithNonLibraryManga(): Flow<List<Pair<LoadedSource, Long>>>
+    fun getSourcesWithNonLibraryManga(): Flow<List<SourceWithCount>>
 
-    suspend fun getSourceData(id: Long): SourceData?
+    fun search(sourceId: Long, query: String, filterList: FilterList): SourcePagingSourceType
 
-    suspend fun upsertSourceData(id: Long, lang: String, name: String)
+    fun getPopular(sourceId: Long): SourcePagingSourceType
+
+    fun getLatest(sourceId: Long): SourcePagingSourceType
 }

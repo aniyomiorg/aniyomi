@@ -1,127 +1,107 @@
 package eu.kanade.tachiyomi.ui.setting
 
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import androidx.appcompat.widget.SearchView
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ChromeReaderMode
-import androidx.compose.material.icons.outlined.Code
-import androidx.compose.material.icons.outlined.GetApp
-import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.PlayCircle
-import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.SettingsBackupRestore
-import androidx.compose.material.icons.outlined.Sync
-import androidx.compose.material.icons.outlined.Tune
+import android.os.Bundle
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.with
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.res.painterResource
-import eu.kanade.presentation.more.settings.SettingsMainScreen
-import eu.kanade.presentation.more.settings.SettingsSection
-import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.ui.base.controller.BasicComposeController
-import eu.kanade.tachiyomi.ui.base.controller.pushController
-import eu.kanade.tachiyomi.ui.setting.search.SettingsSearchController
-import uy.kohesive.injekt.injectLazy
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.core.os.bundleOf
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.ScreenTransition
+import eu.kanade.presentation.components.TwoPanelBox
+import eu.kanade.presentation.more.settings.screen.AboutScreen
+import eu.kanade.presentation.more.settings.screen.SettingsBackupScreen
+import eu.kanade.presentation.more.settings.screen.SettingsGeneralScreen
+import eu.kanade.presentation.more.settings.screen.SettingsMainScreen
+import eu.kanade.presentation.util.LocalBackPress
+import eu.kanade.presentation.util.LocalRouter
+import eu.kanade.tachiyomi.ui.base.controller.BasicFullComposeController
+import eu.kanade.tachiyomi.util.system.isTabletUi
 
-class SettingsMainController : BasicComposeController() {
+class SettingsMainController(bundle: Bundle = bundleOf()) : BasicFullComposeController(bundle) {
 
-    private val preferences: PreferencesHelper by injectLazy()
+    private val toBackupScreen = args.getBoolean(TO_BACKUP_SCREEN)
+    private val toAboutScreen = args.getBoolean(TO_ABOUT_SCREEN)
 
-    override fun getTitle() = resources?.getString(R.string.label_settings)
+    /**
+     * Mimics [eu.kanade.tachiyomi.ui.base.controller.OneWayFadeChangeHandler]
+     */
+    private val transition = fadeIn(
+        animationSpec = tween(
+            easing = LinearEasing,
+        ),
+    ) with ExitTransition.None
 
     @Composable
-    override fun ComposeContent(nestedScrollInterop: NestedScrollConnection) {
-        val settingsSections = listOf(
-            SettingsSection(
-                titleRes = R.string.pref_category_general,
-                painter = rememberVectorPainter(Icons.Outlined.Tune),
-                onClick = { router.pushController(SettingsGeneralController()) },
-            ),
-            SettingsSection(
-                titleRes = R.string.pref_category_appearance,
-                painter = rememberVectorPainter(Icons.Outlined.Palette),
-                onClick = { router.pushController(SettingsAppearanceController()) },
-            ),
-            SettingsSection(
-                titleRes = R.string.pref_category_library,
-                painter = painterResource(R.drawable.ic_library_outline_24dp),
-                onClick = { router.pushController(SettingsLibraryController()) },
-            ),
-            SettingsSection(
-                titleRes = R.string.pref_category_player,
-                painter = rememberVectorPainter(Icons.Outlined.PlayCircle),
-                onClick = { router.pushController(SettingsPlayerController()) },
-            ),
-            SettingsSection(
-                titleRes = R.string.pref_category_reader,
-                painter = rememberVectorPainter(Icons.Outlined.ChromeReaderMode),
-                onClick = { router.pushController(SettingsReaderController()) },
-            ),
-            SettingsSection(
-                titleRes = R.string.pref_category_downloads,
-                painter = rememberVectorPainter(Icons.Outlined.GetApp),
-                onClick = { router.pushController(SettingsDownloadController()) },
-            ),
-            SettingsSection(
-                titleRes = R.string.pref_category_tracking,
-                painter = rememberVectorPainter(Icons.Outlined.Sync),
-                onClick = { router.pushController(SettingsTrackingController()) },
-            ),
-            SettingsSection(
-                titleRes = R.string.browse,
-                painter = painterResource(R.drawable.ic_browse_outline_24dp),
-                onClick = { router.pushController(SettingsBrowseController()) },
-            ),
-            SettingsSection(
-                titleRes = R.string.label_backup,
-                painter = rememberVectorPainter(Icons.Outlined.SettingsBackupRestore),
-                onClick = { router.pushController(SettingsBackupController()) },
-            ),
-            SettingsSection(
-                titleRes = R.string.pref_category_security,
-                painter = rememberVectorPainter(Icons.Outlined.Security),
-                onClick = { router.pushController(SettingsSecurityController()) },
-            ),
-            SettingsSection(
-                titleRes = R.string.pref_category_advanced,
-                painter = rememberVectorPainter(Icons.Outlined.Code),
-                onClick = { router.pushController(SettingsAdvancedController()) },
-            ),
-        )
-
-        SettingsMainScreen(
-            nestedScrollInterop = nestedScrollInterop,
-            sections = settingsSections,
-        )
+    override fun ComposeContent() {
+        CompositionLocalProvider(LocalRouter provides router) {
+            val configuration = LocalConfiguration.current
+            val isTabletUi = remember { configuration.isTabletUi() } // won't survive config change
+            if (!isTabletUi) {
+                Navigator(
+                    screen = if (toBackupScreen) {
+                        SettingsBackupScreen()
+                    } else if (toAboutScreen) {
+                        AboutScreen()
+                    } else {
+                        SettingsMainScreen
+                    },
+                    content = {
+                        CompositionLocalProvider(LocalBackPress provides this::back) {
+                            ScreenTransition(
+                                navigator = it,
+                                transition = { transition },
+                            )
+                        }
+                    },
+                )
+            } else {
+                Navigator(
+                    screen = if (toBackupScreen) {
+                        SettingsBackupScreen()
+                    } else if (toAboutScreen) {
+                        AboutScreen()
+                    } else {
+                        SettingsGeneralScreen()
+                    },
+                ) {
+                    TwoPanelBox(
+                        startContent = {
+                            CompositionLocalProvider(LocalBackPress provides this@SettingsMainController::back) {
+                                SettingsMainScreen.Content(twoPane = true)
+                            }
+                        },
+                        endContent = {
+                            ScreenTransition(
+                                navigator = it,
+                                transition = { transition },
+                            )
+                        },
+                    )
+                }
+            }
+        }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.settings_main, menu)
+    private fun back() {
+        activity?.onBackPressed()
+    }
 
-        // Initialize search option.
-        val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem.actionView as SearchView
-        searchView.maxWidth = Int.MAX_VALUE
+    companion object {
+        fun toBackupScreen(): SettingsMainController {
+            return SettingsMainController(bundleOf(TO_BACKUP_SCREEN to true))
+        }
 
-        // Change hint to show global search.
-        searchView.queryHint = applicationContext?.getString(R.string.action_search_settings)
-
-        searchItem.setOnActionExpandListener(
-            object : MenuItem.OnActionExpandListener {
-                override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                    preferences.lastSearchQuerySearchSettings().set("") // reset saved search query
-                    router.pushController(SettingsSearchController())
-                    return true
-                }
-
-                override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                    return true
-                }
-            },
-        )
+        fun toAboutScreen(): SettingsMainController {
+            return SettingsMainController(bundleOf(TO_ABOUT_SCREEN to true))
+        }
     }
 }
+
+private const val TO_BACKUP_SCREEN = "to_backup_screen"
+private const val TO_ABOUT_SCREEN = "to_about_screen"

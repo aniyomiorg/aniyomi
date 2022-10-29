@@ -2,10 +2,8 @@ package eu.kanade.presentation.browse
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -19,17 +17,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import eu.kanade.domain.source.interactor.GetRemoteManga
 import eu.kanade.domain.source.model.Pin
 import eu.kanade.domain.source.model.Source
 import eu.kanade.presentation.browse.components.BaseSourceItem
@@ -42,57 +35,60 @@ import eu.kanade.presentation.util.plus
 import eu.kanade.presentation.util.topPaddingValues
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.LocalSource
-import eu.kanade.tachiyomi.ui.browse.source.SourceState
 import eu.kanade.tachiyomi.ui.browse.source.SourcesPresenter
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SourcesScreen(
-    nestedScrollInterop: NestedScrollConnection,
     presenter: SourcesPresenter,
-    onClickItem: (Source) -> Unit,
+    contentPadding: PaddingValues,
+    onClickItem: (Source, String) -> Unit,
     onClickDisable: (Source) -> Unit,
-    onClickLatest: (Source) -> Unit,
     onClickPin: (Source) -> Unit,
 ) {
-    val state by presenter.state.collectAsState()
-
-    when (state) {
-        is SourceState.Loading -> LoadingScreen()
-        is SourceState.Error -> Text(text = (state as SourceState.Error).error.message!!)
-        is SourceState.Success -> SourceList(
-            nestedScrollConnection = nestedScrollInterop,
-            list = (state as SourceState.Success).uiModels,
-            onClickItem = onClickItem,
-            onClickDisable = onClickDisable,
-            onClickLatest = onClickLatest,
-            onClickPin = onClickPin,
+    val context = LocalContext.current
+    when {
+        presenter.isLoading -> LoadingScreen()
+        presenter.isEmpty -> EmptyScreen(
+            textResource = R.string.source_empty_screen,
+            modifier = Modifier.padding(contentPadding),
         )
+        else -> {
+            SourceList(
+                state = presenter,
+                contentPadding = contentPadding,
+                onClickItem = onClickItem,
+                onClickDisable = onClickDisable,
+                onClickPin = onClickPin,
+            )
+        }
+    }
+    LaunchedEffect(Unit) {
+        presenter.events.collectLatest { event ->
+            when (event) {
+                SourcesPresenter.Event.FailedFetchingSources -> {
+                    context.toast(R.string.internal_error)
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun SourceList(
-    nestedScrollConnection: NestedScrollConnection,
-    list: List<SourceUiModel>,
-    onClickItem: (Source) -> Unit,
+private fun SourceList(
+    state: SourcesState,
+    contentPadding: PaddingValues,
+    onClickItem: (Source, String) -> Unit,
     onClickDisable: (Source) -> Unit,
-    onClickLatest: (Source) -> Unit,
     onClickPin: (Source) -> Unit,
 ) {
-    if (list.isEmpty()) {
-        EmptyScreen(textResource = R.string.source_empty_screen)
-        return
-    }
-
-    var sourceState by remember { mutableStateOf<Source?>(null) }
-
     ScrollbarLazyColumn(
-        modifier = Modifier.nestedScroll(nestedScrollConnection),
-        contentPadding = WindowInsets.navigationBars.asPaddingValues() + topPaddingValues,
+        contentPadding = contentPadding + topPaddingValues,
     ) {
         items(
-            items = list,
+            items = state.items,
             contentType = {
                 when (it) {
                     is SourceUiModel.Header -> "header"
@@ -102,7 +98,7 @@ fun SourceList(
             key = {
                 when (it) {
                     is SourceUiModel.Header -> it.hashCode()
-                    is SourceUiModel.Item -> it.source.key()
+                    is SourceUiModel.Item -> "source-${it.source.key()}"
                 }
             },
         ) { model ->
@@ -117,32 +113,32 @@ fun SourceList(
                     modifier = Modifier.animateItemPlacement(),
                     source = model.source,
                     onClickItem = onClickItem,
-                    onLongClickItem = { sourceState = it },
-                    onClickLatest = onClickLatest,
+                    onLongClickItem = { state.dialog = SourcesPresenter.Dialog(it) },
                     onClickPin = onClickPin,
                 )
             }
         }
     }
 
-    if (sourceState != null) {
+    if (state.dialog != null) {
+        val source = state.dialog!!.source
         SourceOptionsDialog(
-            source = sourceState!!,
+            source = source,
             onClickPin = {
-                onClickPin(sourceState!!)
-                sourceState = null
+                onClickPin(source)
+                state.dialog = null
             },
             onClickDisable = {
-                onClickDisable(sourceState!!)
-                sourceState = null
+                onClickDisable(source)
+                state.dialog = null
             },
-            onDismiss = { sourceState = null },
+            onDismiss = { state.dialog = null },
         )
     }
 }
 
 @Composable
-fun SourceHeader(
+private fun SourceHeader(
     modifier: Modifier = Modifier,
     language: String,
 ) {
@@ -156,22 +152,21 @@ fun SourceHeader(
 }
 
 @Composable
-fun SourceItem(
+private fun SourceItem(
     modifier: Modifier = Modifier,
     source: Source,
-    onClickItem: (Source) -> Unit,
+    onClickItem: (Source, String) -> Unit,
     onLongClickItem: (Source) -> Unit,
-    onClickLatest: (Source) -> Unit,
     onClickPin: (Source) -> Unit,
 ) {
     BaseSourceItem(
         modifier = modifier,
         source = source,
-        onClickItem = { onClickItem(source) },
+        onClickItem = { onClickItem(source, GetRemoteManga.QUERY_POPULAR) },
         onLongClickItem = { onLongClickItem(source) },
-        action = { source ->
+        action = {
             if (source.supportsLatest) {
-                TextButton(onClick = { onClickLatest(source) }) {
+                TextButton(onClick = { onClickItem(source, GetRemoteManga.QUERY_LATEST) }) {
                     Text(
                         text = stringResource(R.string.latest),
                         style = LocalTextStyle.current.copy(
@@ -189,23 +184,24 @@ fun SourceItem(
 }
 
 @Composable
-fun SourcePinButton(
+private fun SourcePinButton(
     isPinned: Boolean,
     onClick: () -> Unit,
 ) {
     val icon = if (isPinned) Icons.Filled.PushPin else Icons.Outlined.PushPin
     val tint = if (isPinned) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+    val description = if (isPinned) R.string.action_unpin else R.string.action_pin
     IconButton(onClick = onClick) {
         Icon(
             imageVector = icon,
-            contentDescription = "",
             tint = tint,
+            contentDescription = stringResource(description),
         )
     }
 }
 
 @Composable
-fun SourceOptionsDialog(
+private fun SourceOptionsDialog(
     source: Source,
     onClickPin: () -> Unit,
     onClickDisable: () -> Unit,
@@ -213,7 +209,7 @@ fun SourceOptionsDialog(
 ) {
     AlertDialog(
         title = {
-            Text(text = source.nameWithLanguage)
+            Text(text = source.visualName)
         },
         text = {
             Column {

@@ -1,52 +1,75 @@
 package eu.kanade.tachiyomi.ui.browse.migration.sources
 
-import android.os.Bundle
 import eu.kanade.domain.source.interactor.GetSourcesWithFavoriteCount
 import eu.kanade.domain.source.interactor.SetMigrateSorting
-import eu.kanade.domain.source.model.Source
-import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
+import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.presentation.browse.MigrateSourceState
+import eu.kanade.presentation.browse.MigrateSourceStateImpl
 import eu.kanade.tachiyomi.util.lang.launchIO
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import eu.kanade.tachiyomi.util.system.logcat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
+import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class MigrationSourcesPresenter(
+    private val presenterScope: CoroutineScope,
+    private val state: MigrateSourceStateImpl = MigrateSourceState() as MigrateSourceStateImpl,
+    private val preferences: SourcePreferences = Injekt.get(),
     private val getSourcesWithFavoriteCount: GetSourcesWithFavoriteCount = Injekt.get(),
     private val setMigrateSorting: SetMigrateSorting = Injekt.get(),
-) : BasePresenter<MigrationSourcesController>() {
+) : MigrateSourceState by state {
 
-    private val _state: MutableStateFlow<MigrateSourceState> = MutableStateFlow(MigrateSourceState.Loading)
-    val state: StateFlow<MigrateSourceState> = _state.asStateFlow()
+    private val _channel = Channel<Event>(Int.MAX_VALUE)
+    val channel = _channel.receiveAsFlow()
 
-    override fun onCreate(savedState: Bundle?) {
-        super.onCreate(savedState)
-
+    fun onCreate() {
         presenterScope.launchIO {
             getSourcesWithFavoriteCount.subscribe()
                 .catch { exception ->
-                    _state.value = MigrateSourceState.Error(exception)
+                    logcat(LogPriority.ERROR, exception)
+                    _channel.send(Event.FailedFetchingSourcesWithCount)
                 }
                 .collectLatest { sources ->
-                    _state.value = MigrateSourceState.Success(sources)
+                    state.items = sources
+                    state.isLoading = false
                 }
         }
+
+        preferences.migrationSortingDirection().changes()
+            .onEach { state.sortingDirection = it }
+            .launchIn(presenterScope)
+
+        preferences.migrationSortingMode().changes()
+            .onEach { state.sortingMode = it }
+            .launchIn(presenterScope)
     }
 
-    fun setAlphabeticalSorting(isAscending: Boolean) {
-        setMigrateSorting.await(SetMigrateSorting.Mode.ALPHABETICAL, isAscending)
+    fun toggleSortingMode() {
+        val newMode = when (state.sortingMode) {
+            SetMigrateSorting.Mode.ALPHABETICAL -> SetMigrateSorting.Mode.TOTAL
+            SetMigrateSorting.Mode.TOTAL -> SetMigrateSorting.Mode.ALPHABETICAL
+        }
+
+        setMigrateSorting.await(newMode, state.sortingDirection)
     }
 
-    fun setTotalSorting(isAscending: Boolean) {
-        setMigrateSorting.await(SetMigrateSorting.Mode.TOTAL, isAscending)
-    }
-}
+    fun toggleSortingDirection() {
+        val newDirection = when (state.sortingDirection) {
+            SetMigrateSorting.Direction.ASCENDING -> SetMigrateSorting.Direction.DESCENDING
+            SetMigrateSorting.Direction.DESCENDING -> SetMigrateSorting.Direction.ASCENDING
+        }
 
-sealed class MigrateSourceState {
-    object Loading : MigrateSourceState()
-    data class Error(val error: Throwable) : MigrateSourceState()
-    data class Success(val sources: List<Pair<Source, Long>>) : MigrateSourceState()
+        setMigrateSorting.await(state.sortingMode, newDirection)
+    }
+
+    sealed class Event {
+        object FailedFetchingSourcesWithCount : Event()
+    }
 }

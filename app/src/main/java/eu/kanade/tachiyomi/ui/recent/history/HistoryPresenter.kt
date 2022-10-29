@@ -1,11 +1,15 @@
 package eu.kanade.tachiyomi.ui.recent.history
 
-import android.os.Bundle
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import androidx.paging.insertSeparators
-import androidx.paging.map
-import eu.kanade.domain.history.interactor.DeleteHistoryTable
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import eu.kanade.core.util.insertSeparators
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.chapter.model.Chapter
+import eu.kanade.domain.history.interactor.DeleteAllHistory
 import eu.kanade.domain.history.interactor.GetHistory
 import eu.kanade.domain.history.interactor.GetNextChapter
 import eu.kanade.domain.history.interactor.RemoveHistoryById
@@ -15,61 +19,56 @@ import eu.kanade.presentation.history.HistoryUiModel
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.lang.toDateKey
+import eu.kanade.tachiyomi.util.lang.withUIContext
+import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
+import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
 
-/**
- * Presenter of HistoryFragment.
- * Contains information and data for fragment.
- * Observable updates should be called from here.
- */
 class HistoryPresenter(
+    private val state: HistoryStateImpl = HistoryState() as HistoryStateImpl,
     private val getHistory: GetHistory = Injekt.get(),
     private val getNextChapter: GetNextChapter = Injekt.get(),
-    private val deleteHistoryTable: DeleteHistoryTable = Injekt.get(),
+    private val deleteAllHistory: DeleteAllHistory = Injekt.get(),
     private val removeHistoryById: RemoveHistoryById = Injekt.get(),
     private val removeHistoryByMangaId: RemoveHistoryByMangaId = Injekt.get(),
-) : BasePresenter<HistoryController>() {
+    preferences: BasePreferences = Injekt.get(),
+) : BasePresenter<HistoryController>(), HistoryState by state {
 
-    private val _query: MutableStateFlow<String> = MutableStateFlow("")
-    private val _state: MutableStateFlow<HistoryState> = MutableStateFlow(HistoryState.Loading)
-    val state: StateFlow<HistoryState> = _state.asStateFlow()
+    private val _events: Channel<Event> = Channel(Int.MAX_VALUE)
+    val events: Flow<Event> = _events.receiveAsFlow()
 
-    override fun onCreate(savedState: Bundle?) {
-        super.onCreate(savedState)
+    val isDownloadOnly: Boolean by preferences.downloadedOnly().asState()
 
-        presenterScope.launchIO {
-            _query.collectLatest { query ->
-                getHistory.subscribe(query)
-                    .catch { exception ->
-                        _state.value = HistoryState.Error(exception)
-                    }
-                    .map { pagingData ->
-                        pagingData.toHistoryUiModels()
-                    }
-                    .cachedIn(presenterScope)
-                    .let { uiModelsPagingDataFlow ->
-                        _state.value = HistoryState.Success(uiModelsPagingDataFlow)
-                    }
-            }
+    val isIncognitoMode: Boolean by preferences.incognitoMode().asState()
+
+    @Composable
+    fun getHistory(): Flow<List<HistoryUiModel>> {
+        val query = searchQuery ?: ""
+        return remember(query) {
+            getHistory.subscribe(query)
+                .distinctUntilChanged()
+                .catch { error ->
+                    logcat(LogPriority.ERROR, error)
+                    _events.send(Event.InternalError)
+                }
+                .map { pagingData ->
+                    pagingData.toHistoryUiModels()
+                }
         }
     }
 
-    private fun PagingData<HistoryWithRelations>.toHistoryUiModels(): PagingData<HistoryUiModel> {
-        return this.map {
-            HistoryUiModel.Item(it)
-        }
+    private fun List<HistoryWithRelations>.toHistoryUiModels(): List<HistoryUiModel> {
+        return map { HistoryUiModel.Item(it) }
             .insertSeparators { before, after ->
                 val beforeDate = before?.item?.readAt?.time?.toDateKey() ?: Date(0)
                 val afterDate = after?.item?.readAt?.time?.toDateKey() ?: Date(0)
@@ -79,12 +78,6 @@ class HistoryPresenter(
                     else -> null
                 }
             }
-    }
-
-    fun search(query: String) {
-        presenterScope.launchIO {
-            _query.emit(query)
-        }
     }
 
     fun removeFromHistory(history: HistoryWithRelations) {
@@ -102,17 +95,15 @@ class HistoryPresenter(
     fun getNextChapterForManga(mangaId: Long, chapterId: Long) {
         presenterScope.launchIO {
             val chapter = getNextChapter.await(mangaId, chapterId)
-            launchUI {
-                view?.openChapter(chapter)
-            }
+            _events.send(if (chapter != null) Event.OpenChapter(chapter) else Event.NoNextChapterFound)
         }
     }
 
     fun deleteAllHistory() {
         presenterScope.launchIO {
-            val result = deleteHistoryTable.await()
+            val result = deleteAllHistory.await()
             if (!result) return@launchIO
-            launchUI {
+            withUIContext {
                 view?.activity?.toast(R.string.clear_history_completed)
             }
         }
@@ -121,15 +112,33 @@ class HistoryPresenter(
     fun resumeLastChapterRead() {
         presenterScope.launchIO {
             val chapter = getNextChapter.await()
-            launchUI {
-                view?.openChapter(chapter)
-            }
+            _events.send(if (chapter != null) Event.OpenChapter(chapter) else Event.NoNextChapterFound)
         }
+    }
+
+    sealed class Dialog {
+        object DeleteAll : Dialog()
+        data class Delete(val history: HistoryWithRelations) : Dialog()
+    }
+
+    sealed class Event {
+        object InternalError : Event()
+        object NoNextChapterFound : Event()
+        data class OpenChapter(val chapter: Chapter) : Event()
     }
 }
 
-sealed class HistoryState {
-    object Loading : HistoryState()
-    data class Error(val error: Throwable) : HistoryState()
-    data class Success(val uiModels: Flow<PagingData<HistoryUiModel>>) : HistoryState()
+@Stable
+interface HistoryState {
+    var searchQuery: String?
+    var dialog: HistoryPresenter.Dialog?
+}
+
+fun HistoryState(): HistoryState {
+    return HistoryStateImpl()
+}
+
+class HistoryStateImpl : HistoryState {
+    override var searchQuery: String? by mutableStateOf(null)
+    override var dialog: HistoryPresenter.Dialog? by mutableStateOf(null)
 }

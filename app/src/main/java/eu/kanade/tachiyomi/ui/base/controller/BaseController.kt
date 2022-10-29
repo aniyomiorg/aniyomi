@@ -2,7 +2,6 @@ package eu.kanade.tachiyomi.ui.base.controller
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +10,7 @@ import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import eu.kanade.tachiyomi.util.system.logcat
+import eu.kanade.tachiyomi.util.view.hideKeyboard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -23,6 +23,8 @@ abstract class BaseController<VB : ViewBinding>(bundle: Bundle? = null) : Contro
     lateinit var viewScope: CoroutineScope
 
     init {
+        retainViewMode = RetainViewMode.RETAIN_DETACH
+
         addLifecycleListener(
             object : LifecycleListener() {
                 override fun postCreateView(controller: Controller, view: View) {
@@ -60,6 +62,8 @@ abstract class BaseController<VB : ViewBinding>(bundle: Bundle? = null) : Contro
     open fun onViewCreated(view: View) {}
 
     override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
+        view?.hideKeyboard()
+
         if (type.isEnter) {
             setTitle()
             setHasOptionsMenu(true)
@@ -73,60 +77,10 @@ abstract class BaseController<VB : ViewBinding>(bundle: Bundle? = null) : Contro
     }
 
     fun setTitle(title: String? = null) {
-        var parentController = parentController
-        while (parentController != null) {
-            if (parentController is BaseController<*> && parentController.getTitle() != null) {
-                return
-            }
-            parentController = parentController.parentController
-        }
-
         (activity as? AppCompatActivity)?.supportActionBar?.title = title ?: getTitle()
     }
 
     private fun Controller.instance(): String {
         return "${javaClass.simpleName}@${Integer.toHexString(hashCode())}"
-    }
-
-    /**
-     * Workaround for buggy menu item layout after expanding/collapsing an expandable item like a SearchView.
-     * This method should be removed when fixed upstream.
-     * Issue link: https://issuetracker.google.com/issues/37657375
-     */
-    var expandActionViewFromInteraction = false
-
-    fun MenuItem.fixExpand(onExpand: ((MenuItem) -> Boolean)? = null, onCollapse: ((MenuItem) -> Boolean)? = null) {
-        setOnActionExpandListener(
-            object : MenuItem.OnActionExpandListener {
-                override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                    return onExpand?.invoke(item) ?: true
-                }
-
-                override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                    activity?.invalidateOptionsMenu()
-
-                    return onCollapse?.invoke(item) ?: true
-                }
-            },
-        )
-
-        if (expandActionViewFromInteraction) {
-            expandActionViewFromInteraction = false
-            expandActionView()
-        }
-    }
-
-    /**
-     * Workaround for menu items not disappearing when expanding an expandable item like a SearchView.
-     * [expandActionViewFromInteraction] should be set to true in [onOptionsItemSelected] when the expandable item is selected
-     * This method should be called as part of [MenuItem.OnActionExpandListener.onMenuItemActionExpand]
-     */
-    open fun invalidateMenuOnExpand(): Boolean {
-        return if (expandActionViewFromInteraction) {
-            activity?.invalidateOptionsMenu()
-            false
-        } else {
-            true
-        }
     }
 }
