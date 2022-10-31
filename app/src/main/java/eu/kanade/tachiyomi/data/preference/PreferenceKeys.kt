@@ -136,6 +136,11 @@ object PreferenceKeys {
 
     const val autoClearChapterCache = "auto_clear_chapter_cache"
 
+    const val enableAniSkip = "pref_enable_ani_skip"
+    const val enableAutoSkip_AniSkip = "pref_enable_auto_skip_ani_skip"
+    const val waitingTimeAniSkip = "pref_waiting_time_aniskip"
+    const val enableNetflixStyleAniSkip = "pref_enable_netflixStyle_aniskip"
+
     fun trackUsername(syncId: Long) = "pref_mangasync_username_$syncId"
 
     fun trackPassword(syncId: Long) = "pref_mangasync_password_$syncId"

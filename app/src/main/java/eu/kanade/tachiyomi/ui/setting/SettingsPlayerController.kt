@@ -145,6 +145,53 @@ class SettingsPlayerController : SettingsController() {
         }
 
         preferenceCategory {
+            titleRes = R.string.pref_category_player_aniskip
+
+            switchPreference {
+                key = Keys.enableAniSkip
+                titleRes = R.string.pref_enable_aniskip
+                defaultValue = false
+            }
+
+            switchPreference {
+                key = Keys.enableAutoSkip_AniSkip
+                titleRes = R.string.pref_enable_auto_skip_ani_skip
+                defaultValue = false
+            }
+
+            switchPreference {
+                key = Keys.enableNetflixStyleAniSkip
+                titleRes = R.string.pref_enable_netflixStyle_aniskip
+                defaultValue = true
+            }
+
+            listPreference {
+                key = Keys.waitingTimeAniSkip
+                titleRes = R.string.pref_waiting_time_aniskip
+
+                entriesRes = arrayOf(
+                    R.string.pref_waiting_time_aniskip_5,
+                    R.string.pref_waiting_time_aniskip_6,
+                    R.string.pref_waiting_time_aniskip_7,
+                    R.string.pref_waiting_time_aniskip_8,
+                    R.string.pref_waiting_time_aniskip_9,
+                    R.string.pref_waiting_time_aniskip_10,
+                )
+                entryValues = arrayOf(
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "10",
+                )
+                defaultValue = "5"
+
+                summary = "%s"
+            }
+        }
+
+        preferenceCategory {
             titleRes = R.string.pref_category_internal_player
 
             preference {
