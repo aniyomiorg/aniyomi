@@ -265,6 +265,7 @@ class SettingsDownloadController : SettingsController() {
                         "idm.internet.download.manager" -> true
                         "idm.internet.download.manager.plus" -> true
                         "idm.internet.download.manager.lite" -> true
+                        "com.dv.adm" -> true
                         else -> false
                     }
                 }
@@ -342,6 +343,7 @@ class SettingsDownloadController : SettingsController() {
 
         private fun getDefaultDownloadDir(): File {
             val defaultDir = Environment.getExternalStorageDirectory().absolutePath +
+                File.separator + Environment.DIRECTORY_DOWNLOADS +
                 File.separator + resources?.getString(R.string.app_name) +
                 File.separator + "downloads"
 

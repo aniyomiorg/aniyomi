@@ -37,6 +37,7 @@ class PreferencesHelper(val context: Context) {
 
     private val defaultDownloadsDir = File(
         Environment.getExternalStorageDirectory().absolutePath + File.separator +
+            Environment.DIRECTORY_DOWNLOADS + File.separator +
             context.getString(R.string.app_name),
         "downloads",
     ).toUri()
