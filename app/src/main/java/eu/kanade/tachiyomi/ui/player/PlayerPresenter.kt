@@ -32,10 +32,14 @@ import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingUpdateJob
+import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
+import eu.kanade.tachiyomi.util.AniSkipApi
+import eu.kanade.tachiyomi.util.Stamp
 import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.episode.getEpisodeSort
 import eu.kanade.tachiyomi.util.lang.byteSize
@@ -584,6 +588,35 @@ class PlayerPresenter(
         return DiskUtil.buildValidFilename(
             "${anime.title} - ${episode.name}".takeBytes(MAX_FILE_NAME_BYTES - filenameSuffix.byteSize()),
         ) + filenameSuffix
+    }
+
+    /**
+     * Returns the response of the AniSkipApi for this episode.
+     * just works if tracking is enabled.
+     */
+
+    suspend fun aniSkipResponse(): List<Stamp>? {
+        val trackManager = Injekt.get<TrackManager>()
+        var malId: Long?
+        val episodeNumber = getCurrentEpisodeIndex() + 1
+        if (getTracks.await(animeId).isEmpty()) {
+            logcat { "AniSkip: No tracks found for anime $animeId" }
+            return null
+        }
+
+        getTracks.await(animeId).map { track ->
+            val service = trackManager.getService(track.syncId)
+            malId = when (service) {
+                is MyAnimeList -> track.remoteId
+                is Anilist -> AniSkipApi().getMalIdFromAL(track.remoteId)
+                else -> null
+            }
+            val duration = view?.player?.duration ?: return null
+            return malId?.let {
+                AniSkipApi().getResult(it.toInt(), episodeNumber, duration.toLong())
+            }
+        }
+        return null
     }
 }
 
