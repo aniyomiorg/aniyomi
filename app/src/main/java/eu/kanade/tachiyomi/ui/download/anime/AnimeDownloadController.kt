@@ -354,7 +354,9 @@ class AnimeDownloadController :
                 onUpdateProgress(download)
                 onUpdateDownloadedPages(download)
             }
-            else -> { /* unused */ }
+            else -> {
+                /* unused */
+            }
         }
     }
 

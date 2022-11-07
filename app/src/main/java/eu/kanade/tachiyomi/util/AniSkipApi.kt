@@ -16,11 +16,12 @@ import `is`.xyz.mpv.MPVLib
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import uy.kohesive.injekt.injectLazy
-import java.util.*
 
 class AniSkipApi {
     private val client = OkHttpClient()
@@ -31,7 +32,7 @@ class AniSkipApi {
         val url =
             "https://api.aniskip.com/v2/skip-times/$malId/$episodeNumber?types[]=ed&types[]=mixed-ed&types[]=mixed-op&types[]=op&types[]=recap&episodeLength=$episodeLength"
         return try {
-            val a = client.newCall(GET(url)).execute().body!!.string()
+            val a = client.newCall(GET(url)).execute().body.string()
             val res = json.decodeFromString<AniSkipResponse>(a)
             if (res.found) res.results else null
         } catch (e: Exception) {
@@ -51,7 +52,7 @@ class AniSkipApi {
                 body = buildJsonObject { put("query", query) }.toString().toRequestBody(jsonMime),
             ),
         ).execute()
-        return response.body!!.string().substringAfter("idMal\":").substringBefore("}")
+        return response.body.string().substringAfter("idMal\":").substringBefore("}")
             .toLongOrNull() ?: 0
     }
 
@@ -64,10 +65,10 @@ class AniSkipApi {
 
         fun showSkipButton(skipType: SkipType) {
             val skipButtonString = when (skipType) {
-                SkipType.ed -> R.string.player_aniskip_ed
-                SkipType.op -> R.string.player_aniskip_op
-                SkipType.recap -> R.string.player_aniskip_recap
-                SkipType.mixedOp -> R.string.player_aniskip_mixedOp
+                SkipType.ED -> R.string.player_aniskip_ed
+                SkipType.OP -> R.string.player_aniskip_op
+                SkipType.RECAP -> R.string.player_aniskip_recap
+                SkipType.MIXED_OP -> R.string.player_aniskip_mixedOp
             }
             launchUI {
                 playerControls.binding.controlsSkipIntroBtn.isVisible = true
@@ -79,10 +80,10 @@ class AniSkipApi {
         @SuppressLint("SetTextI18n")
         fun showSkipButton(skipType: SkipType, waitingTime: Int) {
             val skipTime = when (skipType) {
-                SkipType.ed -> aniSkipResponse.first { it.skipType == SkipType.ed }.interval
-                SkipType.op -> aniSkipResponse.first { it.skipType == SkipType.op }.interval
-                SkipType.recap -> aniSkipResponse.first { it.skipType == SkipType.recap }.interval
-                SkipType.mixedOp -> aniSkipResponse.first { it.skipType == SkipType.mixedOp }.interval
+                SkipType.ED -> aniSkipResponse.first { it.skipType == SkipType.ED }.interval
+                SkipType.OP -> aniSkipResponse.first { it.skipType == SkipType.OP }.interval
+                SkipType.RECAP -> aniSkipResponse.first { it.skipType == SkipType.RECAP }.interval
+                SkipType.MIXED_OP -> aniSkipResponse.first { it.skipType == SkipType.MIXED_OP }.interval
             }
             if (waitingTime > -1) {
                 if (waitingTime > 0) {
@@ -149,15 +150,15 @@ data class Stamp(
 @Suppress("EnumEntryName")
 @Serializable
 enum class SkipType {
-    op, ed, recap, @SerialName("mixed-op")
-    mixedOp, ;
+    OP, ED, RECAP, @SerialName("mixed-op")
+    MIXED_OP, ;
 
     fun getString(): String {
         return when (this) {
-            op -> "Opening"
-            ed -> "Ending"
-            recap -> "Recap"
-            mixedOp -> "Mixed-op"
+            OP -> "Opening"
+            ED -> "Ending"
+            RECAP -> "Recap"
+            MIXED_OP -> "Mixed-op"
         }
     }
 }

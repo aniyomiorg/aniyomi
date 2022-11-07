@@ -1501,7 +1501,7 @@ class PlayerActivity :
     private fun aniSkipStuff(value: Long) {
         if (aniSkipEnable) {
             // if it doesn't find the opening it will show the +85 button
-            val showNormalSkipButton = aniSkipInterval?.firstOrNull { it.skipType == SkipType.op || it.skipType == SkipType.mixedOp } == null
+            val showNormalSkipButton = aniSkipInterval?.firstOrNull { it.skipType == SkipType.OP || it.skipType == SkipType.MIXED_OP } == null
             if (showNormalSkipButton) return
 
             skipType = aniSkipInterval?.firstOrNull { it.interval.startTime <= value && it.interval.endTime > value }?.skipType
