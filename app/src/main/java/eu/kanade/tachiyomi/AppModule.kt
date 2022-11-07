@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import com.squareup.sqldelight.android.AndroidSqliteDriver
-import com.squareup.sqldelight.db.SqlDriver
 import data.History
 import data.Mangas
 import dataanime.Animehistory
@@ -69,62 +68,59 @@ class AppModule(val app: Application) : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingleton(app)
 
-        addSingletonFactory<SqlDriver> {
-            AndroidSqliteDriver(
-                schema = Database.Schema,
-                context = app,
-                name = "tachiyomi.db",
-                factory = if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    // Support database inspector in Android Studio
-                    FrameworkSQLiteOpenHelperFactory()
-                } else {
-                    RequerySQLiteOpenHelperFactory()
-                },
-                callback = object : AndroidSqliteDriver.Callback(Database.Schema) {
-                    override fun onOpen(db: SupportSQLiteDatabase) {
-                        super.onOpen(db)
-                        setPragma(db, "foreign_keys = ON")
-                        setPragma(db, "journal_mode = WAL")
-                        setPragma(db, "synchronous = NORMAL")
-                    }
-                    private fun setPragma(db: SupportSQLiteDatabase, pragma: String) {
-                        val cursor = db.query("PRAGMA $pragma")
-                        cursor.moveToFirst()
-                        cursor.close()
-                    }
-                },
-            )
-        }
+        val sqlDriverManga = AndroidSqliteDriver(
+            schema = Database.Schema,
+            context = app,
+            name = "tachiyomi.db",
+            factory = if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // Support database inspector in Android Studio
+                FrameworkSQLiteOpenHelperFactory()
+            } else {
+                RequerySQLiteOpenHelperFactory()
+            },
+            callback = object : AndroidSqliteDriver.Callback(Database.Schema) {
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    super.onOpen(db)
+                    setPragma(db, "foreign_keys = ON")
+                    setPragma(db, "journal_mode = WAL")
+                    setPragma(db, "synchronous = NORMAL")
+                }
+                private fun setPragma(db: SupportSQLiteDatabase, pragma: String) {
+                    val cursor = db.query("PRAGMA $pragma")
+                    cursor.moveToFirst()
+                    cursor.close()
+                }
+            },
+        )
 
-        addSingletonFactory<SqlDriver> {
-            AndroidSqliteDriver(
-                schema = AnimeDatabase.Schema,
-                context = app,
-                name = "tachiyomi.animedb",
-                factory = if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    // Support database inspector in Android Studio
-                    FrameworkSQLiteOpenHelperFactory()
-                } else {
-                    RequerySQLiteOpenHelperFactory()
-                },
-                callback = object : AndroidSqliteDriver.Callback(Database.Schema) {
-                    override fun onOpen(db: SupportSQLiteDatabase) {
-                        super.onOpen(db)
-                        setPragma(db, "foreign_keys = ON")
-                        setPragma(db, "journal_mode = WAL")
-                        setPragma(db, "synchronous = NORMAL")
-                    }
-                    private fun setPragma(db: SupportSQLiteDatabase, pragma: String) {
-                        val cursor = db.query("PRAGMA $pragma")
-                        cursor.moveToFirst()
-                        cursor.close()
-                    }
-                },
-            )
-        }
+        val sqlDriverAnime = AndroidSqliteDriver(
+            schema = AnimeDatabase.Schema,
+            context = app,
+            name = "tachiyomi.animedb",
+            factory = if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // Support database inspector in Android Studio
+                FrameworkSQLiteOpenHelperFactory()
+            } else {
+                RequerySQLiteOpenHelperFactory()
+            },
+            callback = object : AndroidSqliteDriver.Callback(AnimeDatabase.Schema) {
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    super.onOpen(db)
+                    setPragma(db, "foreign_keys = ON")
+                    setPragma(db, "journal_mode = WAL")
+                    setPragma(db, "synchronous = NORMAL")
+                }
+                private fun setPragma(db: SupportSQLiteDatabase, pragma: String) {
+                    val cursor = db.query("PRAGMA $pragma")
+                    cursor.moveToFirst()
+                    cursor.close()
+                }
+            },
+        )
+
         addSingletonFactory {
             Database(
-                driver = get(),
+                driver = sqlDriverManga,
                 historyAdapter = History.Adapter(
                     last_readAdapter = dateAdapter,
                 ),
@@ -137,7 +133,7 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory {
             AnimeDatabase(
-                driver = get(),
+                driver = sqlDriverAnime,
                 animehistoryAdapter = Animehistory.Adapter(
                     last_seenAdapter = dateAdapter,
                 ),
@@ -148,9 +144,9 @@ class AppModule(val app: Application) : InjektModule {
             )
         }
 
-        addSingletonFactory<DatabaseHandler> { AndroidDatabaseHandler(get(), get()) }
+        addSingletonFactory<DatabaseHandler> { AndroidDatabaseHandler(get(), sqlDriverManga) }
 
-        addSingletonFactory<AnimeDatabaseHandler> { AndroidAnimeDatabaseHandler(get(), get()) }
+        addSingletonFactory<AnimeDatabaseHandler> { AndroidAnimeDatabaseHandler(get(), sqlDriverAnime) }
 
         addSingletonFactory {
             Json {
