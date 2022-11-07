@@ -13,9 +13,8 @@ class TachiyomiNavigationRailView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
 ) : NavigationRailView(context, attrs) {
 
-    private val libraryPreferences: LibraryPreferences = Injekt.get()
-
     override fun inflateMenu(resId: Int) {
+        val libraryPreferences: LibraryPreferences = Injekt.get()
         when (libraryPreferences.bottomNavStyle().get()) {
             1 -> super.inflateMenu(R.menu.main_nav_history)
             2 -> super.inflateMenu(R.menu.main_nav_no_manga)
