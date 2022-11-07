@@ -12,7 +12,8 @@ voyager = "1.0.0-rc05"
 
 [libraries]
 android-shortcut-gradle = "com.github.zellius:android-shortcut-gradle-plugin:0.1.2"
-google-services-gradle = "com.google.gms:google-services:4.3.14"
+google-services-gradle = "com.google.gms:google-services:4.3.10"
+google-crashlytics-gradle = "com.google.firebase:firebase-crashlytics-gradle:2.8.0"
 
 rxandroid = "io.reactivex:rxandroid:1.2.1"
 rxjava = "io.reactivex:rxjava:1.3.8"
@@ -72,7 +73,9 @@ flowbinding-appcompat = { module = "io.github.reactivecircus.flowbinding:flowbin
 logcat = "com.squareup.logcat:logcat:0.1"
 
 acra-http = "ch.acra:acra-http:5.9.6"
+firebase-bom = "com.google.firebase:firebase-bom:31.0.2"
 firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.0"
+firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.1"
 
 aboutLibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlib_version" }
 aboutLibraries-gradle = { module = "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin", version.ref = "aboutlib_version" }
