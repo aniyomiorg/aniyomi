@@ -1,0 +1,82 @@
+package eu.kanade.tachiyomi.ui.download.anime
+
+import android.content.Context
+import android.os.Bundle
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadService
+import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
+import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownloadQueue
+import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
+import eu.kanade.tachiyomi.util.system.logcat
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import logcat.LogPriority
+import uy.kohesive.injekt.injectLazy
+
+class AnimeDownloadPresenter : BasePresenter<AnimeDownloadController>() {
+
+    val downloadManager: AnimeDownloadManager by injectLazy()
+
+    /**
+     * Property to get the queue from the download manager.
+     */
+    private val downloadQueue: AnimeDownloadQueue
+        get() = downloadManager.queue
+
+    private val _state = MutableStateFlow(emptyList<DownloadHeaderItem>())
+    val state = _state.asStateFlow()
+
+    override fun onCreate(savedState: Bundle?) {
+        super.onCreate(savedState)
+
+        presenterScope.launch {
+            downloadQueue.updatedFlow()
+                .catch { error -> logcat(LogPriority.ERROR, error) }
+                .map { downloads ->
+                    downloads
+                        .groupBy { it.source }
+                        .map { entry ->
+                            DownloadHeaderItem(entry.key.id, entry.key.name, entry.value.size).apply {
+                                addSubItems(0, entry.value.map { DownloadItem(it, this) })
+                            }
+                        }
+                }
+                .collect { newList -> _state.update { newList } }
+        }
+    }
+
+    fun getDownloadStatusFlow() = downloadQueue.statusFlow()
+
+    fun getDownloadProgressFlow() = downloadQueue.progressFlow()
+
+    /**
+     * Pauses the download queue.
+     */
+    fun pauseDownloads() {
+        downloadManager.pauseDownloads()
+    }
+
+    /**
+     * Clears the download queue.
+     */
+    fun clearQueue(context: Context) {
+        AnimeDownloadService.stop(context)
+        downloadManager.clearQueue()
+    }
+
+    fun reorder(downloads: List<AnimeDownload>) {
+        downloadManager.reorderQueue(downloads)
+    }
+
+    fun cancelDownload(download: AnimeDownload) {
+        downloadManager.deletePendingDownload(download)
+    }
+
+    fun cancelDownloads(downloads: List<AnimeDownload>) {
+        downloadManager.deletePendingDownloads(*downloads.toTypedArray())
+    }
+}
