@@ -1,42 +1,61 @@
 package eu.kanade.tachiyomi.ui.animelib
 
 import android.os.Bundle
-import com.jakewharton.rxrelay.BehaviorRelay
-import eu.kanade.core.util.asObservable
-import eu.kanade.data.AnimeDatabaseHandler
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastMap
+import eu.kanade.core.prefs.CheckboxState
+import eu.kanade.core.prefs.PreferenceMutableState
 import eu.kanade.domain.anime.interactor.GetAnimelibAnime
 import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.AnimeUpdate
 import eu.kanade.domain.anime.model.isLocal
-import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
-import eu.kanade.domain.category.interactor.GetCategoriesAnime
+import eu.kanade.domain.animelib.model.AnimelibAnime
+import eu.kanade.domain.animetrack.interactor.GetTracksPerAnime
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.category.interactor.GetAnimeCategories
 import eu.kanade.domain.category.interactor.SetAnimeCategories
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.episode.interactor.SetSeenStatus
-import eu.kanade.domain.episode.interactor.UpdateEpisode
+import eu.kanade.domain.episode.model.toDbEpisode
+import eu.kanade.domain.library.model.LibrarySort
+import eu.kanade.domain.library.model.sort
+import eu.kanade.domain.library.service.LibraryPreferences
+import eu.kanade.presentation.animelib.AnimelibState
+import eu.kanade.presentation.animelib.AnimelibStateImpl
+import eu.kanade.presentation.animelib.components.AnimelibToolbarTitle
+import eu.kanade.presentation.category.visualName
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadCache
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.models.toDomainAnime
-import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
-import eu.kanade.tachiyomi.ui.library.setting.SortDirectionSetting
-import eu.kanade.tachiyomi.ui.library.setting.SortModeSetting
-import eu.kanade.tachiyomi.util.lang.combineLatest
-import eu.kanade.tachiyomi.util.lang.isNullOrUnsubscribed
 import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.lang.launchNonCancellable
+import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.State
-import kotlinx.coroutines.runBlocking
-import rx.Observable
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.Collator
@@ -58,52 +77,48 @@ typealias AnimelibMap = Map<Long, List<AnimelibItem>>
  * Presenter of [AnimelibController].
  */
 class AnimelibPresenter(
-    private val handler: AnimeDatabaseHandler = Injekt.get(),
+    private val state: AnimelibStateImpl = AnimelibState() as AnimelibStateImpl,
     private val getAnimelibAnime: GetAnimelibAnime = Injekt.get(),
-    private val getTracks: GetAnimeTracks = Injekt.get(),
-    private val getCategories: GetCategoriesAnime = Injekt.get(),
+    private val getTracksPerAnime: GetTracksPerAnime = Injekt.get(),
+    private val getCategories: GetAnimeCategories = Injekt.get(),
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val setSeenStatus: SetSeenStatus = Injekt.get(),
-    private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
-    private val preferences: PreferencesHelper = Injekt.get(),
+    private val preferences: BasePreferences = Injekt.get(),
+    private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
+    private val downloadCache: AnimeDownloadCache = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
-) : BasePresenter<AnimelibController>() {
+) : BasePresenter<AnimelibController>(), AnimelibState by state {
 
-    private val context = preferences.context
+    private var loadedAnime by mutableStateOf(emptyMap<Long, List<AnimelibItem>>())
 
-    /**
-     * Categories of the animelib.
-     */
-    var categories: List<Category> = emptyList()
-        private set
+    val isLibraryEmpty by derivedStateOf { loadedAnime.isEmpty() }
 
-    /**
-     * Relay used to apply the UI filters to the last emission of the animelib.
-     */
-    private val filterTriggerRelay = BehaviorRelay.create(Unit)
+    val tabVisibility by libraryPreferences.animeCategoryTabs().asState()
+    val animeCountVisibility by libraryPreferences.animeCategoryNumberOfItems().asState()
 
-    /**
-     * Relay used to apply the UI update to the last emission of the animelib.
-     */
-    private val badgeTriggerRelay = BehaviorRelay.create(Unit)
+    val showDownloadBadges by libraryPreferences.downloadBadge().asState()
+    val showUnseenBadges by libraryPreferences.unreadBadge().asState()
+    val showLocalBadges by libraryPreferences.localBadge().asState()
+    val showLanguageBadges by libraryPreferences.languageBadge().asState()
 
-    /**
-     * Relay used to apply the selected sorting method to the last emission of the animelib.
-     */
-    private val sortTriggerRelay = BehaviorRelay.create(Unit)
+    var activeCategory: Int by libraryPreferences.lastUsedAnimeCategory().asState()
 
-    /**
-     * Animelib subscription.
-     */
-    private var animelibSubscription: Subscription? = null
+    val isDownloadOnly: Boolean by preferences.downloadedOnly().asState()
+    val isIncognitoMode: Boolean by preferences.incognitoMode().asState()
+
+    private val _filterChanges: Channel<Unit> = Channel(Int.MAX_VALUE)
+    private val filterChanges = _filterChanges.receiveAsFlow().onStart { emit(Unit) }
+
+    private var animelibSubscription: Job? = null
 
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
+
         subscribeAnimelib()
     }
 
@@ -111,98 +126,123 @@ class AnimelibPresenter(
      * Subscribes to animelib if needed.
      */
     fun subscribeAnimelib() {
-        // TODO: Move this to a coroutine world
-        if (animelibSubscription.isNullOrUnsubscribed()) {
-            animelibSubscription = getAnimelibObservable()
-                .combineLatest(badgeTriggerRelay.observeOn(Schedulers.io())) { lib, _ ->
-                    lib.apply { setBadges(animeMap) }
+        /**
+         * TODO:
+         * - Move filter and sort to getAnimeForCategory and only filter and sort the current display category instead of whole animelib as some has 5000+ items in the animelib
+         * - Create new db view and new query to just fetch the current category save as needed to instance variable
+         * - Fetch badges to maps and retrieve as needed instead of fetching all of them at once
+         */
+        if (animelibSubscription == null || animelibSubscription!!.isCancelled) {
+            animelibSubscription = presenterScope.launchIO {
+                combine(getAnimelibFlow(), getTracksPerAnime.subscribe(), filterChanges) { animelib, tracks, _ ->
+                    animelib.animeMap
+                        .applyFilters(tracks)
+                        .applySort(animelib.categories)
                 }
-                .combineLatest(getFilterObservable()) { lib, tracks ->
-                    lib.copy(animeMap = applyFilters(lib.animeMap, tracks))
-                }
-                .combineLatest(sortTriggerRelay.observeOn(Schedulers.io())) { lib, _ ->
-                    lib.copy(animeMap = applySort(lib.categories, lib.animeMap))
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeLatestCache({ view, (categories, animeMap) ->
-                    view.onNextAnimelibUpdate(categories, animeMap)
-                },)
+                    .collectLatest {
+                        state.isLoading = false
+                        loadedAnime = it
+                    }
+            }
         }
     }
 
     /**
      * Applies animelib filters to the given map of anime.
-     *
-     * @param map the map to filter.
      */
-    private fun applyFilters(map: AnimelibMap, trackMap: Map<Long, Map<Long, Boolean>>): AnimelibMap {
+    private fun AnimelibMap.applyFilters(trackMap: Map<Long, List<Long>>): AnimelibMap {
         val downloadedOnly = preferences.downloadedOnly().get()
-        val filterDownloaded = preferences.filterDownloaded().get()
-        val filterUnseen = preferences.filterUnread().get()
-        val filterStarted = preferences.filterStarted().get()
-        val filterCompleted = preferences.filterCompleted().get()
-        val loggedInServices = trackManager.services.filter { trackService -> trackService.isLogged }
+        val filterDownloaded = libraryPreferences.filterDownloaded().get()
+        val filterUnseen = libraryPreferences.filterUnread().get()
+        val filterStarted = libraryPreferences.filterStarted().get()
+        val filterBookmarked = libraryPreferences.filterBookmarked().get()
+        val filterCompleted = libraryPreferences.filterCompleted().get()
+        val loggedInTrackServices = trackManager.services.filter { trackService -> trackService.isLogged }
             .associate { trackService ->
-                Pair(trackService.id, preferences.filterTracking(trackService.id.toInt()).get())
+                trackService.id to libraryPreferences.filterTracking(trackService.id.toInt()).get()
             }
-        val isNotAnyLoggedIn = !loggedInServices.values.any()
+        val isNotLoggedInAnyTrack = loggedInTrackServices.isEmpty()
+
+        val excludedTracks = loggedInTrackServices.mapNotNull { if (it.value == State.EXCLUDE.value) it.key else null }
+        val includedTracks = loggedInTrackServices.mapNotNull { if (it.value == State.INCLUDE.value) it.key else null }
+        val trackFiltersIsIgnored = includedTracks.isEmpty() && excludedTracks.isEmpty()
 
         val filterFnDownloaded: (AnimelibItem) -> Boolean = downloaded@{ item ->
             if (!downloadedOnly && filterDownloaded == State.IGNORE.value) return@downloaded true
             val isDownloaded = when {
-                item.anime.toDomainAnime()!!.isLocal() -> true
-                item.downloadCount != -1 -> item.downloadCount > 0
-                else -> downloadManager.getDownloadCount(item.anime.toDomainAnime()!!) > 0
+                item.animelibAnime.anime.isLocal() -> true
+                item.downloadCount != -1L -> item.downloadCount > 0
+                else -> downloadManager.getDownloadCount(item.animelibAnime.anime) > 0
             }
 
-            return@downloaded if (downloadedOnly || filterDownloaded == State.INCLUDE.value) isDownloaded
-            else !isDownloaded
+            return@downloaded if (downloadedOnly || filterDownloaded == State.INCLUDE.value) {
+                isDownloaded
+            } else {
+                !isDownloaded
+            }
         }
 
-        val filterFnUnseen: (AnimelibItem) -> Boolean = unread@{ item ->
-            if (filterUnseen == State.IGNORE.value) return@unread true
-            val isUnread = item.anime.unseenCount != 0
+        val filterFnUnseen: (AnimelibItem) -> Boolean = unseen@{ item ->
+            if (filterUnseen == State.IGNORE.value) return@unseen true
+            val isUnseen = item.animelibAnime.unseenCount > 0
 
-            return@unread if (filterUnseen == State.INCLUDE.value) isUnread
-            else !isUnread
+            return@unseen if (filterUnseen == State.INCLUDE.value) {
+                isUnseen
+            } else {
+                !isUnseen
+            }
         }
 
         val filterFnStarted: (AnimelibItem) -> Boolean = started@{ item ->
             if (filterStarted == State.IGNORE.value) return@started true
-            val hasStarted = item.anime.hasStarted
+            val hasStarted = item.animelibAnime.hasStarted
 
-            return@started if (filterStarted == State.INCLUDE.value) hasStarted
-            else !hasStarted
+            return@started if (filterStarted == State.INCLUDE.value) {
+                hasStarted
+            } else {
+                !hasStarted
+            }
+        }
+
+        val filterFnBookmarked: (AnimelibItem) -> Boolean = bookmarked@{ item ->
+            if (filterBookmarked == State.IGNORE.value) return@bookmarked true
+
+            val hasBookmarks = item.animelibAnime.hasBookmarks
+
+            return@bookmarked if (filterBookmarked == State.INCLUDE.value) {
+                hasBookmarks
+            } else {
+                !hasBookmarks
+            }
         }
 
         val filterFnCompleted: (AnimelibItem) -> Boolean = completed@{ item ->
             if (filterCompleted == State.IGNORE.value) return@completed true
-            val isCompleted = item.anime.status == SAnime.COMPLETED
+            val isCompleted = item.animelibAnime.anime.status.toInt() == SAnime.COMPLETED
 
-            return@completed if (filterCompleted == State.INCLUDE.value) isCompleted
-            else !isCompleted
+            return@completed if (filterCompleted == State.INCLUDE.value) {
+                isCompleted
+            } else {
+                !isCompleted
+            }
         }
 
         val filterFnTracking: (AnimelibItem) -> Boolean = tracking@{ item ->
-            if (isNotAnyLoggedIn) return@tracking true
+            if (isNotLoggedInAnyTrack || trackFiltersIsIgnored) return@tracking true
 
-            val trackedAnime = trackMap[item.anime.id ?: -1]
+            val animeTracks = trackMap[item.animelibAnime.id].orEmpty()
 
-            val containsExclude = loggedInServices.filterValues { it == State.EXCLUDE.value }
-            val containsInclude = loggedInServices.filterValues { it == State.INCLUDE.value }
+            val exclude = animeTracks.filter { it in excludedTracks }
+            val include = animeTracks.filter { it in includedTracks }
 
-            if (!containsExclude.any() && !containsInclude.any()) return@tracking true
-
-            val exclude = trackedAnime?.filterKeys { containsExclude.containsKey(it) }?.values ?: emptyList()
-            val include = trackedAnime?.filterKeys { containsInclude.containsKey(it) }?.values ?: emptyList()
-
-            if (containsInclude.any() && containsExclude.any()) {
-                return@tracking if (exclude.isNotEmpty()) !exclude.any() else include.any()
+            // TODO: Simplify the filter logic
+            if (includedTracks.isNotEmpty() && excludedTracks.isNotEmpty()) {
+                return@tracking if (exclude.isNotEmpty()) false else include.isNotEmpty()
             }
 
-            if (containsExclude.any()) return@tracking !exclude.any()
+            if (excludedTracks.isNotEmpty()) return@tracking exclude.isEmpty()
 
-            if (containsInclude.any()) return@tracking include.any()
+            if (includedTracks.isNotEmpty()) return@tracking include.isNotEmpty()
 
             return@tracking false
         }
@@ -212,159 +252,72 @@ class AnimelibPresenter(
                 !filterFnDownloaded(item) ||
                     !filterFnUnseen(item) ||
                     !filterFnStarted(item) ||
+                    !filterFnBookmarked(item) ||
                     !filterFnCompleted(item) ||
-                    !filterFnDownloaded(item) ||
                     !filterFnTracking(item)
                 )
         }
 
-        return map.mapValues { entry -> entry.value.filter(filterFn) }
-    }
-
-    /**
-     * Sets downloaded episode count to each anime.
-     *
-     * @param map the map of anime.
-     */
-    private fun setBadges(map: AnimelibMap) {
-        val showDownloadBadges = preferences.downloadBadge().get()
-        val showUnreadBadges = preferences.unreadBadge().get()
-        val showLocalBadges = preferences.localBadge().get()
-        val showLanguageBadges = preferences.languageBadge().get()
-
-        for ((_, itemList) in map) {
-            for (item in itemList) {
-                item.downloadCount = if (showDownloadBadges) {
-                    downloadManager.getDownloadCount(item.anime.toDomainAnime()!!)
-                } else {
-                    // Unset download count if not enabled
-                    -1
-                }
-
-                item.unreadCount = if (showUnreadBadges) {
-                    item.anime.unseenCount
-                } else {
-                    // Unset unread count if not enabled
-                    -1
-                }
-
-                item.isLocal = if (showLocalBadges) {
-                    item.anime.toDomainAnime()!!.isLocal()
-                } else {
-                    // Hide / Unset local badge if not enabled
-                    false
-                }
-
-                item.sourceLanguage = if (showLanguageBadges) {
-                    sourceManager.getOrStub(item.anime.source).lang.uppercase()
-                } else {
-                    // Unset source language if not enabled
-                    ""
-                }
-            }
-        }
+        return this.mapValues { entry -> entry.value.filter(filterFn) }
     }
 
     /**
      * Applies animelib sorting to the given map of anime.
-     *
-     * @param map the map to sort.
      */
-    private fun applySort(categories: List<Category>, map: AnimelibMap): AnimelibMap {
-        val lastSeenAnime by lazy {
-            var counter = 0
-            // TODO: Make [applySort] a suspended function
-            runBlocking {
-                handler.awaitList {
-                    animesQueries.getLastSeen()
-                }.associate { it._id to counter++ }
-            }
-        }
-        val latestEpisodeAnime by lazy {
-            var counter = 0
-            // TODO: Make [applySort] a suspended function
-            runBlocking {
-                handler.awaitList {
-                    animesQueries.getLatestByEpisodeUploadDate()
-                }.associate { it._id to counter++ }
-            }
-        }
-        val chapterFetchDateAnime by lazy {
-            var counter = 0
-            // TODO: Make [applySort] a suspended function
-            runBlocking {
-                handler.awaitList {
-                    animesQueries.getLatestByEpisodeFetchDate()
-                }.associate { it._id to counter++ }
-            }
-        }
-
-        val sortingModes = categories.associate { category ->
-            category.id to SortModeSetting.get(preferences, category)
-        }
-
-        val sortDirections = categories.associate { category ->
-            category.id to SortDirectionSetting.get(preferences, category)
-        }
+    private fun AnimelibMap.applySort(categories: List<Category>): AnimelibMap {
+        val sortModes = categories.associate { it.id to it.sort }
 
         val locale = Locale.getDefault()
         val collator = Collator.getInstance(locale).apply {
             strength = Collator.PRIMARY
         }
+        val sortAlphabetically: (AnimelibItem, AnimelibItem) -> Int = { i1, i2 ->
+            collator.compare(i1.animelibAnime.anime.title.lowercase(locale), i2.animelibAnime.anime.title.lowercase(locale))
+        }
+
         val sortFn: (AnimelibItem, AnimelibItem) -> Int = { i1, i2 ->
-            val sortingMode = sortingModes[i1.anime.category.toLong()]!!
-            val sortAscending = sortDirections[i1.anime.category.toLong()]!! == SortDirectionSetting.ASCENDING
-            when (sortingMode) {
-                SortModeSetting.ALPHABETICAL -> {
-                    collator.compare(i1.anime.title.lowercase(locale), i2.anime.title.lowercase(locale))
+            val sort = sortModes[i1.animelibAnime.category]!!
+            when (sort.type) {
+                LibrarySort.Type.Alphabetical -> {
+                    sortAlphabetically(i1, i2)
                 }
-                SortModeSetting.LAST_READ -> {
-                    val anime1LastRead = lastSeenAnime[i1.anime.id!!] ?: 0
-                    val anime2LastRead = lastSeenAnime[i2.anime.id!!] ?: 0
-                    anime1LastRead.compareTo(anime2LastRead)
+                LibrarySort.Type.LastRead -> {
+                    i1.animelibAnime.lastSeen.compareTo(i2.animelibAnime.lastSeen)
                 }
-                SortModeSetting.LAST_MANGA_UPDATE -> {
-                    i2.anime.last_update.compareTo(i1.anime.last_update)
+                LibrarySort.Type.LastUpdate -> {
+                    i1.animelibAnime.anime.lastUpdate.compareTo(i2.animelibAnime.anime.lastUpdate)
                 }
-                SortModeSetting.UNREAD_COUNT -> when {
+                LibrarySort.Type.UnreadCount -> when {
                     // Ensure unread content comes first
-                    i1.anime.unseenCount == i2.anime.unseenCount -> 0
-                    i1.anime.unseenCount == 0 -> if (sortAscending) 1 else -1
-                    i2.anime.unseenCount == 0 -> if (sortAscending) -1 else 1
-                    else -> i1.anime.unseenCount.compareTo(i2.anime.unseenCount)
+                    i1.animelibAnime.unseenCount == i2.animelibAnime.unseenCount -> 0
+                    i1.animelibAnime.unseenCount == 0L -> if (sort.isAscending) 1 else -1
+                    i2.animelibAnime.unseenCount == 0L -> if (sort.isAscending) -1 else 1
+                    else -> i1.animelibAnime.unseenCount.compareTo(i2.animelibAnime.unseenCount)
                 }
-                SortModeSetting.TOTAL_CHAPTERS -> {
-                    i1.anime.totalEpisodes.compareTo(i2.anime.totalEpisodes)
+                LibrarySort.Type.TotalChapters -> {
+                    i1.animelibAnime.totalEpisodes.compareTo(i2.animelibAnime.totalEpisodes)
                 }
-                SortModeSetting.LATEST_CHAPTER -> {
-                    val anime1latestEpisode = latestEpisodeAnime[i1.anime.id!!]
-                        ?: latestEpisodeAnime.size
-                    val anime2latestEpisode = latestEpisodeAnime[i2.anime.id!!]
-                        ?: latestEpisodeAnime.size
-                    anime1latestEpisode.compareTo(anime2latestEpisode)
+                LibrarySort.Type.LatestChapter -> {
+                    i1.animelibAnime.latestUpload.compareTo(i2.animelibAnime.latestUpload)
                 }
-                SortModeSetting.CHAPTER_FETCH_DATE -> {
-                    val anime1chapterFetchDate = chapterFetchDateAnime[i1.anime.id!!] ?: 0
-                    val anime2chapterFetchDate = chapterFetchDateAnime[i2.anime.id!!] ?: 0
-                    anime1chapterFetchDate.compareTo(anime2chapterFetchDate)
+                LibrarySort.Type.ChapterFetchDate -> {
+                    i1.animelibAnime.episodeFetchedAt.compareTo(i2.animelibAnime.episodeFetchedAt)
                 }
-                SortModeSetting.DATE_ADDED -> {
-                    i2.anime.date_added.compareTo(i1.anime.date_added)
+                LibrarySort.Type.DateAdded -> {
+                    i1.animelibAnime.anime.dateAdded.compareTo(i2.animelibAnime.anime.dateAdded)
                 }
-                else -> throw IllegalStateException("Invalid SortModeSetting: $sortingMode")
+                else -> throw IllegalStateException("Invalid SortModeSetting: ${sort.type}")
             }
         }
 
-        return map.mapValues { entry ->
-            val sortAscending = sortDirections[entry.key]!! == SortDirectionSetting.ASCENDING
-
-            val comparator = if (sortAscending) {
+        return this.mapValues { entry ->
+            val comparator = if (sortModes[entry.key]!!.isAscending) {
                 Comparator(sortFn)
             } else {
                 Collections.reverseOrder(sortFn)
             }
 
-            entry.value.sortedWith(comparator)
+            entry.value.sortedWith(comparator.thenComparator(sortAlphabetically))
         }
     }
 
@@ -373,115 +326,59 @@ class AnimelibPresenter(
      *
      * @return an observable of the categories and its anime.
      */
-    private fun getAnimelibObservable(): Observable<Animelib> {
-        return Observable.combineLatest(getCategoriesObservable(), getAnimelibAnimesObservable()) { dbCategories, animelibAnime ->
-            val categories = if (animelibAnime.containsKey(0)) {
-                arrayListOf(Category.default(context)) + dbCategories
-            } else {
-                dbCategories
-            }
+    private fun getAnimelibFlow(): Flow<Animelib> {
+        val animelibAnimesFlow = combine(
+            getAnimelibAnime.subscribe(),
+            libraryPreferences.downloadBadge().changes(),
+            libraryPreferences.filterDownloaded().changes(),
+            preferences.downloadedOnly().changes(),
+            downloadCache.changes,
+        ) { libraryAnimeList, downloadBadgePref, filterDownloadedPref, downloadedOnly, _ ->
+            libraryAnimeList
+                .map { animelibAnime ->
+                    val needsDownloadCounts = downloadBadgePref ||
+                        filterDownloadedPref != State.IGNORE.value ||
+                        downloadedOnly
 
-            animelibAnime.forEach { (categoryId, animelibAnime) ->
-                val category = categories.first { category -> category.id == categoryId }
-                animelibAnime.forEach { libraryItem ->
-                    libraryItem.displayMode = category.displayMode
+                    // Display mode based on user preference: take it from global animelib setting or category
+                    AnimelibItem(animelibAnime).apply {
+                        downloadCount = if (needsDownloadCounts) {
+                            downloadManager.getDownloadCount(animelibAnime.anime).toLong()
+                        } else {
+                            0
+                        }
+                        unseenCount = animelibAnime.unseenCount
+                        isLocal = animelibAnime.anime.isLocal()
+                        sourceLanguage = sourceManager.getOrStub(animelibAnime.anime.source).lang
+                    }
                 }
-            }
-
-            this.categories = categories
+                .groupBy { it.animelibAnime.category }
+        }
+        return combine(getCategories.subscribe(), animelibAnimesFlow) { categories, animelibAnime ->
+            val displayCategories =
+                if (animelibAnime.isNotEmpty() && animelibAnime.containsKey(0).not()) {
+                    categories.filterNot { it.isSystemCategory }
+                } else {
+                    categories
+                }
+            state.categories = displayCategories
             Animelib(categories, animelibAnime)
         }
     }
 
     /**
-     * Get the categories from the database.
-     *
-     * @return an observable of the categories.
-     */
-    private fun getCategoriesObservable(): Observable<List<Category>> {
-        return getCategories.subscribe().asObservable()
-    }
-
-    /**
-     * Get the anime grouped by categories.
-     *
-     * @return an observable containing a map with the category id as key and a list of anime as the
-     * value.
-     */
-    private fun getAnimelibAnimesObservable(): Observable<AnimelibMap> {
-        val defaultLibraryDisplayMode = preferences.libraryDisplayMode()
-        val shouldSetFromCategory = preferences.categorizedDisplaySettings()
-
-        return getAnimelibAnime.subscribe().asObservable()
-            .map { list ->
-                list.map { animelibAnime ->
-                    // Display mode based on user preference: take it from global library setting or category
-                    AnimelibItem(
-                        animelibAnime,
-                        shouldSetFromCategory,
-                        defaultLibraryDisplayMode,
-                    )
-                }.groupBy { it.anime.category.toLong() }
-            }
-    }
-
-    /**
-     * Get the tracked anime from the database and checks if the filter gets changed
-     *
-     * @return an observable of tracked anime.
-     */
-    private fun getFilterObservable(): Observable<Map<Long, Map<Long, Boolean>>> {
-        return getTracksObservable().combineLatest(filterTriggerRelay.observeOn(Schedulers.io())) { tracks, _ -> tracks }
-    }
-
-    /**
-     * Get the tracked anime from the database
-     *
-     * @return an observable of tracked anime.
-     */
-    private fun getTracksObservable(): Observable<Map<Long, Map<Long, Boolean>>> {
-        // TODO: Move this to domain/data layer
-        return getTracks.subscribe()
-            .asObservable().map { tracks ->
-                tracks
-                    .groupBy { it.animeId }
-                    .mapValues { tracksForAnimeId ->
-                        // Check if any of the trackers is logged in for the current manga id
-                        tracksForAnimeId.value.associate {
-                            Pair(it.syncId, trackManager.getService(it.syncId)?.isLogged ?: false)
-                        }
-                    }
-            }
-            .observeOn(Schedulers.io())
-    }
-
-    /**
      * Requests the animelib to be filtered.
      */
-    fun requestFilterUpdate() {
-        filterTriggerRelay.call(Unit)
+    suspend fun requestFilterUpdate() = withIOContext {
+        _filterChanges.send(Unit)
     }
 
     /**
-     * Requests the animelib to have download badges added.
-     */
-    fun requestBadgesUpdate() {
-        badgeTriggerRelay.call(Unit)
-    }
-
-    /**
-     * Requests the animelib to be sorted.
-     */
-    fun requestSortUpdate() {
-        sortTriggerRelay.call(Unit)
-    }
-
-    /**
-     * Called when a anime is opened.
+     * Called when an anime is opened.
      */
     fun onOpenAnime() {
         // Avoid further db updates for the animelib when it's not needed
-        animelibSubscription?.let { remove(it) }
+        animelibSubscription?.cancel()
     }
 
     /**
@@ -491,9 +388,9 @@ class AnimelibPresenter(
      */
     suspend fun getCommonCategories(animes: List<Anime>): Collection<Category> {
         if (animes.isEmpty()) return emptyList()
-        return animes.toSet()
-            .map { getCategories.await(it.id) }
-            .reduce { set1, set2 -> set1.intersect(set2).toMutableList() }
+        return animes
+            .map { getCategories.await(it.id).toSet() }
+            .reduce { set1, set2 -> set1.intersect(set2) }
     }
 
     /**
@@ -503,9 +400,9 @@ class AnimelibPresenter(
      */
     suspend fun getMixCategories(animes: List<Anime>): Collection<Category> {
         if (animes.isEmpty()) return emptyList()
-        val animeCategories = animes.toSet().map { getCategories.await(it.id) }
-        val common = animeCategories.reduce { set1, set2 -> set1.intersect(set2).toMutableList() }
-        return animeCategories.flatten().distinct().subtract(common).toMutableList()
+        val animeCategories = animes.map { getCategories.await(it.id).toSet() }
+        val common = animeCategories.reduce { set1, set2 -> set1.intersect(set2) }
+        return animeCategories.flatten().distinct().subtract(common)
     }
 
     /**
@@ -514,10 +411,11 @@ class AnimelibPresenter(
      * @param animes the list of anime.
      */
     fun downloadUnseenEpisodes(animes: List<Anime>) {
-        animes.forEach { anime ->
-            launchIO {
+        presenterScope.launchNonCancellable {
+            animes.forEach { anime ->
                 val episodes = getEpisodeByAnimeId.await(anime.id)
                     .filter { !it.seen }
+                    .map { it.toDbEpisode() }
 
                 downloadManager.downloadEpisodes(anime, episodes)
             }
@@ -530,8 +428,8 @@ class AnimelibPresenter(
      * @param animes the list of anime.
      */
     fun markSeenStatus(animes: List<Anime>, seen: Boolean) {
-        animes.forEach { anime ->
-            launchIO {
+        presenterScope.launchNonCancellable {
+            animes.forEach { anime ->
                 setSeenStatus.await(
                     anime = anime,
                     seen = seen,
@@ -548,7 +446,7 @@ class AnimelibPresenter(
      * @param deleteEpisodes whether to delete downloaded episodes.
      */
     fun removeAnimes(animeList: List<DbAnime>, deleteFromAnimelib: Boolean, deleteEpisodes: Boolean) {
-        launchIO {
+        presenterScope.launchNonCancellable {
             val animeToDelete = animeList.distinctBy { it.id }
 
             if (deleteFromAnimelib) {
@@ -580,15 +478,134 @@ class AnimelibPresenter(
      * @param addCategories the categories to add for all animes.
      * @param removeCategories the categories to remove in all animes.
      */
-    fun setAnimeCategories(animeList: List<Anime>, addCategories: List<Category>, removeCategories: List<Category>) {
-        presenterScope.launchIO {
-            animeList.map { anime ->
+    fun setAnimeCategories(animeList: List<Anime>, addCategories: List<Long>, removeCategories: List<Long>) {
+        presenterScope.launchNonCancellable {
+            animeList.forEach { anime ->
                 val categoryIds = getCategories.await(anime.id)
-                    .subtract(removeCategories)
-                    .plus(addCategories)
                     .map { it.id }
+                    .subtract(removeCategories.toSet())
+                    .plus(addCategories)
+                    .toList()
                 setAnimeCategories.await(anime.id, categoryIds)
             }
         }
+    }
+
+    @Composable
+    fun getAnimeCountForCategory(categoryId: Long): androidx.compose.runtime.State<Int?> {
+        return produceState<Int?>(initialValue = null, loadedAnime) {
+            value = loadedAnime[categoryId]?.size
+        }
+    }
+
+    fun getColumnsPreferenceForCurrentOrientation(isLandscape: Boolean): PreferenceMutableState<Int> {
+        return (if (isLandscape) libraryPreferences.landscapeColumns() else libraryPreferences.portraitColumns()).asState()
+    }
+
+    // TODO: This is good but should we separate title from count or get categories with count from db
+    @Composable
+    fun getToolbarTitle(): androidx.compose.runtime.State<AnimelibToolbarTitle> {
+        val category = categories.getOrNull(activeCategory)
+
+        val defaultTitle = stringResource(R.string.label_animelib)
+        val categoryName = category?.visualName ?: defaultTitle
+
+        val default = remember { AnimelibToolbarTitle(defaultTitle) }
+
+        return produceState(initialValue = default, category, loadedAnime, animeCountVisibility, tabVisibility) {
+            val title = if (tabVisibility.not()) categoryName else defaultTitle
+            val count = when {
+                category == null || animeCountVisibility.not() -> null
+                tabVisibility.not() -> loadedAnime[category.id]?.size
+                else -> loadedAnime.values.flatten().distinctBy { it.animelibAnime.anime.id }.size
+            }
+
+            value = when (category) {
+                null -> default
+                else -> AnimelibToolbarTitle(title, count)
+            }
+        }
+    }
+
+    @Composable
+    fun getAnimeForCategory(page: Int): List<AnimelibItem> {
+        val unfiltered = remember(categories, loadedAnime) {
+            val categoryId = categories.getOrNull(page)?.id ?: -1
+            loadedAnime[categoryId] ?: emptyList()
+        }
+        return remember(unfiltered, searchQuery) {
+            val query = searchQuery
+            if (query.isNullOrBlank().not()) {
+                unfiltered.filter {
+                    it.filter(query!!)
+                }
+            } else {
+                unfiltered
+            }
+        }
+    }
+
+    fun clearSelection() {
+        state.selection = emptyList()
+    }
+
+    fun toggleSelection(anime: AnimelibAnime) {
+        state.selection = selection.toMutableList().apply {
+            if (fastAny { it.id == anime.id }) {
+                removeAll { it.id == anime.id }
+            } else {
+                add(anime)
+            }
+        }
+    }
+
+    /**
+     * Selects all animes between and including the given anime and the last pressed anime from the
+     * same category as the given anime
+     */
+    fun toggleRangeSelection(anime: AnimelibAnime) {
+        state.selection = selection.toMutableList().apply {
+            val lastSelected = lastOrNull()
+            if (lastSelected?.category != anime.category) {
+                add(anime)
+                return@apply
+            }
+            val items = loadedAnime[anime.category].orEmpty().fastMap { it.animelibAnime }
+            val lastAnimeIndex = items.indexOf(lastSelected)
+            val curAnimeIndex = items.indexOf(anime)
+            val selectedIds = fastMap { it.id }
+            val newSelections = when (lastAnimeIndex >= curAnimeIndex + 1) {
+                true -> items.subList(curAnimeIndex, lastAnimeIndex)
+                false -> items.subList(lastAnimeIndex, curAnimeIndex + 1)
+            }.filterNot { it.id in selectedIds }
+            addAll(newSelections)
+        }
+    }
+
+    fun selectAll(index: Int) {
+        state.selection = state.selection.toMutableList().apply {
+            val categoryId = categories[index].id
+            val items = loadedAnime[categoryId].orEmpty().fastMap { it.animelibAnime }
+            val selectedIds = fastMap { it.id }
+            val newSelections = items.filterNot { it.id in selectedIds }
+            addAll(newSelections)
+        }
+    }
+
+    fun invertSelection(index: Int) {
+        state.selection = selection.toMutableList().apply {
+            val categoryId = categories[index].id
+            val items = loadedAnime[categoryId].orEmpty().fastMap { it.animelibAnime }
+            val selectedIds = fastMap { it.id }
+            val (toRemove, toAdd) = items.partition { it.id in selectedIds }
+            val toRemoveIds = toRemove.fastMap { it.id }
+            removeAll { it.id in toRemoveIds }
+            addAll(toAdd)
+        }
+    }
+
+    sealed class Dialog {
+        data class ChangeCategory(val anime: List<Anime>, val initialSelection: List<CheckboxState<Category>>) : Dialog()
+        data class DeleteAnime(val anime: List<Anime>) : Dialog()
     }
 }

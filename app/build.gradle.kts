@@ -12,7 +12,6 @@ plugins {
 
 if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
     apply<com.google.gms.googleservices.GoogleServicesPlugin>()
-    apply<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsPlugin>()
 }
 
 shortcutHelper.setFilePath("./shortcuts.xml")
@@ -29,7 +28,7 @@ android {
         minSdk = AndroidConfig.minSdk
         targetSdk = AndroidConfig.targetSdk
         versionCode = 90
-        versionName = "0.13.5.0"
+        versionName = "0.14.0.0"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -296,7 +295,6 @@ dependencies {
     // Crash reports/analytics
     implementation(libs.acra.http)
     implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
 
     // Shizuku
     implementation(libs.bundles.shizuku)

@@ -1,0 +1,33 @@
+CREATE VIEW animelibView AS
+SELECT
+    M.*,
+    coalesce(C.total, 0) AS totalCount,
+    coalesce(C.seenCount, 0) AS seenCount,
+    coalesce(C.latestUpload, 0) AS latestUpload,
+    coalesce(C.fetchedAt, 0) AS episodeFetchedAt,
+    coalesce(C.lastSeen, 0) AS lastSeen,
+    coalesce(C.bookmarkCount, 0) AS bookmarkCount,
+    coalesce(MC.category_id, 0) AS category
+FROM animes M
+LEFT JOIN(
+    SELECT
+        episodes.anime_id,
+        count(*) AS total,
+        sum(seen) AS seenCount,
+        coalesce(max(episodes.date_upload), 0) AS latestUpload,
+        coalesce(max(animehistory.last_seen), 0) AS lastSeen,
+        coalesce(max(episodes.date_fetch), 0) AS fetchedAt,
+        sum(episodes.bookmark) AS bookmarkCount
+    FROM episodes
+    LEFT JOIN animehistory
+    ON episodes._id = animehistory.episode_id
+    GROUP BY episodes.anime_id
+) AS C
+ON M._id = C.anime_id
+LEFT JOIN animes_categories AS MC
+ON MC.anime_id = M._id
+WHERE M.favorite = 1;
+
+animelib:
+SELECT *
+FROM animelibView;

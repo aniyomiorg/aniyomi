@@ -1,22 +1,21 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.globalsearch
 
 import android.os.Bundle
-import eu.kanade.domain.anime.interactor.GetAnime
-import eu.kanade.domain.anime.interactor.InsertAnime
+import eu.kanade.domain.anime.interactor.NetworkToLocalAnime
 import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.model.toAnimeUpdate
 import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.anime.model.toDomainAnime
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
-import eu.kanade.tachiyomi.animesource.model.toSAnime
 import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
 import eu.kanade.tachiyomi.data.database.models.toDomainAnime
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.extension.AnimeExtensionManager
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourcePresenter
 import eu.kanade.tachiyomi.util.lang.runAsObservable
@@ -31,21 +30,15 @@ import rx.subjects.PublishSubject
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
+import eu.kanade.domain.anime.model.Anime as DomainAnime
 
-/**
- * Presenter of [GlobalAnimeSearchController]
- * Function calls should be done from here. UI calls should be done from the controller.
- *
- * @param sourceManager manages the different sources.
- * @param preferences manages the preference calls.
- */
 open class GlobalAnimeSearchPresenter(
     val initialQuery: String? = "",
     val initialExtensionFilter: String? = null,
     val sourceManager: AnimeSourceManager = Injekt.get(),
-    val preferences: PreferencesHelper = Injekt.get(),
-    private val getAnime: GetAnime = Injekt.get(),
-    private val insertAnime: InsertAnime = Injekt.get(),
+    val preferences: BasePreferences = Injekt.get(),
+    val sourcePreferences: SourcePreferences = Injekt.get(),
+    private val networkToLocalAnime: NetworkToLocalAnime = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
 ) : BasePresenter<GlobalAnimeSearchController>() {
 
@@ -62,7 +55,7 @@ open class GlobalAnimeSearchPresenter(
     /**
      * Subject which fetches image of given anime.
      */
-    private val fetchImageSubject = PublishSubject.create<Pair<List<Anime>, AnimeSource>>()
+    private val fetchImageSubject = PublishSubject.create<Pair<List<DomainAnime>, AnimeSource>>()
 
     /**
      * Subscription for fetching images of anime.
@@ -105,9 +98,9 @@ open class GlobalAnimeSearchPresenter(
      * @return list containing enabled sources.
      */
     protected open fun getEnabledSources(): List<AnimeCatalogueSource> {
-        val languages = preferences.enabledLanguages().get()
-        val disabledSourceIds = preferences.disabledAnimeSources().get()
-        val pinnedSourceIds = preferences.pinnedAnimeSources().get()
+        val languages = sourcePreferences.enabledLanguages().get()
+        val disabledSourceIds = sourcePreferences.disabledAnimeSources().get()
+        val pinnedSourceIds = sourcePreferences.pinnedAnimeSources().get()
 
         return sourceManager.getCatalogueSources()
             .filter { it.lang in languages }
@@ -121,7 +114,7 @@ open class GlobalAnimeSearchPresenter(
         var filteredSources: List<AnimeCatalogueSource>? = null
 
         if (!filter.isNullOrEmpty()) {
-            filteredSources = extensionManager.installedExtensions
+            filteredSources = extensionManager.installedExtensionsFlow.value
                 .filter { it.pkgName == filter }
                 .flatMap { it.sources }
                 .filter { it in enabledSources }
@@ -132,8 +125,8 @@ open class GlobalAnimeSearchPresenter(
             return filteredSources
         }
 
-        val onlyPinnedSources = preferences.searchPinnedSourcesOnly()
-        val pinnedSourceIds = preferences.pinnedAnimeSources().get()
+        val onlyPinnedSources = sourcePreferences.searchPinnedSourcesOnly().get()
+        val pinnedSourceIds = sourcePreferences.pinnedAnimeSources().get()
 
         return enabledSources
             .filter { if (onlyPinnedSources) it.id.toString() in pinnedSourceIds else true }
@@ -165,7 +158,7 @@ open class GlobalAnimeSearchPresenter(
         val initialItems = sources.map { createCatalogueSearchItem(it, null) }
         var items = initialItems
 
-        val pinnedSourceIds = preferences.pinnedAnimeSources().get()
+        val pinnedSourceIds = sourcePreferences.pinnedAnimeSources().get()
 
         fetchSourcesSubscription?.unsubscribe()
         fetchSourcesSubscription = Observable.from(sources)
@@ -175,9 +168,9 @@ open class GlobalAnimeSearchPresenter(
                         .subscribeOn(Schedulers.io())
                         .onErrorReturn { AnimesPage(emptyList(), false) } // Ignore timeouts or other exceptions
                         .map { it.animes }
-                        .map { list -> list.map { networkToLocalAnime(it, source.id) } } // Convert to local anime
+                        .map { list -> list.map { runBlocking { networkToLocalAnime(it, source.id) } } } // Convert to local anime
                         .doOnNext { fetchImage(it, source) } // Load anime covers
-                        .map { list -> createCatalogueSearchItem(source, list.map { GlobalAnimeSearchCardItem(it.toDomainAnime()!!) }) }
+                        .map { list -> createCatalogueSearchItem(source, list.map { GlobalAnimeSearchCardItem(it) }) }
                 },
                 5,
             )
@@ -215,7 +208,7 @@ open class GlobalAnimeSearchPresenter(
      *
      * @param anime the list of anime to initialize.
      */
-    private fun fetchImage(anime: List<Anime>, source: AnimeSource) {
+    private fun fetchImage(anime: List<DomainAnime>, source: AnimeSource) {
         fetchImageSubject.onNext(Pair(anime, source))
     }
 
@@ -227,9 +220,9 @@ open class GlobalAnimeSearchPresenter(
         fetchImageSubscription = fetchImageSubject.observeOn(Schedulers.io())
             .flatMap { (first, source) ->
                 Observable.from(first)
-                    .filter { it.thumbnail_url == null && !it.initialized }
+                    .filter { it.thumbnailUrl == null && !it.initialized }
                     .map { Pair(it, source) }
-                    .concatMap { runAsObservable { getAnimeDetails(it.first, it.second) } }
+                    .concatMap { runAsObservable { getAnimeDetails(it.first.toDbAnime(), it.second) } }
                     .map { Pair(source as AnimeCatalogueSource, it) }
             }
             .onBackpressureBuffer()
@@ -252,36 +245,21 @@ open class GlobalAnimeSearchPresenter(
      * @return The initialized anime.
      */
     private suspend fun getAnimeDetails(anime: Anime, source: AnimeSource): Anime {
-        val networkAnime = source.getAnimeDetails(anime.toAnimeInfo())
-        anime.copyFrom(networkAnime.toSAnime())
+        val networkAnime = source.getAnimeDetails(anime.copy())
+        anime.copyFrom(networkAnime)
         anime.initialized = true
-        runBlocking { updateAnime.await(anime.toDomainAnime()!!.toAnimeUpdate()) }
+        updateAnime.await(anime.toDomainAnime()!!.toAnimeUpdate())
         return anime
     }
 
     /**
-     * Returns a anime from the database for the given anime from network. It creates a new entry
+     * Returns an anime from the database for the given anime from network. It creates a new entry
      * if the anime is not yet in the database.
      *
      * @param sAnime the anime from the source.
-     * @return a anime from the database.
+     * @return an anime from the database.
      */
-    protected open fun networkToLocalAnime(sAnime: SAnime, sourceId: Long): Anime {
-        var localAnime = runBlocking { getAnime.await(sAnime.url, sourceId) }
-        if (localAnime == null) {
-            val newAnime = Anime.create(sAnime.url, sAnime.title, sourceId)
-            newAnime.copyFrom(sAnime)
-            newAnime.id = -1
-            val result = runBlocking {
-                val id = insertAnime.await(newAnime.toDomainAnime()!!)
-                getAnime.await(id!!)
-            }
-            localAnime = result
-        } else if (!localAnime.favorite) {
-            // if the anime isn't a favorite, set its display title from source
-            // if it later becomes a favorite, updated title will go to db
-            localAnime = localAnime.copy(title = sAnime.title)
-        }
-        return localAnime!!.toDbAnime()
+    protected open suspend fun networkToLocalAnime(sAnime: SAnime, sourceId: Long): DomainAnime {
+        return networkToLocalAnime.await(sAnime.toDomainAnime(), sourceId)
     }
 }

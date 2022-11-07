@@ -29,11 +29,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import eu.kanade.presentation.components.EpisodeDownloadAction
 import eu.kanade.presentation.components.EpisodeDownloadIndicator
-import eu.kanade.presentation.manga.EpisodeDownloadAction
 import eu.kanade.presentation.manga.components.DotSeparatorText
+import eu.kanade.presentation.util.ReadItemAlpha
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.download.model.AnimeDownload
+import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
 
 @Composable
 fun AnimeEpisodeListItem(
@@ -45,8 +46,8 @@ fun AnimeEpisodeListItem(
     seen: Boolean,
     bookmark: Boolean,
     selected: Boolean,
-    downloadState: AnimeDownload.State,
-    downloadProgress: Int,
+    downloadStateProvider: () -> AnimeDownload.State,
+    downloadProgressProvider: () -> Int,
     onLongClick: () -> Unit,
     onClick: () -> Unit,
     onDownloadClick: ((EpisodeDownloadAction) -> Unit)?,
@@ -66,13 +67,13 @@ fun AnimeEpisodeListItem(
             } else {
                 MaterialTheme.colorScheme.onSurface
             }
-            val textAlpha = remember(seen) { if (seen) SeenItemAlpha else 1f }
+            val textAlpha = remember(seen) { if (seen) ReadItemAlpha else 1f }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 var textHeight by remember { mutableStateOf(0) }
                 if (bookmark) {
                     Icon(
-                        imageVector = Icons.Default.Bookmark,
+                        imageVector = Icons.Filled.Bookmark,
                         contentDescription = stringResource(R.string.action_filter_bookmarked),
                         modifier = Modifier
                             .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
@@ -82,8 +83,8 @@ fun AnimeEpisodeListItem(
                 }
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.bodyMedium
-                        .copy(color = textColor),
+                    color = textColor,
+                    style = MaterialTheme.typography.bodyMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     onTextLayout = { textHeight = it.size.height },
@@ -109,7 +110,7 @@ fun AnimeEpisodeListItem(
                             text = watchProgress,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.alpha(SeenItemAlpha),
+                            modifier = Modifier.alpha(ReadItemAlpha),
                         )
                         if (scanlator != null) DotSeparatorText()
                     }
@@ -128,12 +129,10 @@ fun AnimeEpisodeListItem(
         if (onDownloadClick != null) {
             EpisodeDownloadIndicator(
                 modifier = Modifier.padding(start = 4.dp),
-                downloadState = downloadState,
-                downloadProgress = downloadProgress,
+                downloadStateProvider = downloadStateProvider,
+                downloadProgressProvider = downloadProgressProvider,
                 onClick = onDownloadClick,
             )
         }
     }
 }
-
-private const val SeenItemAlpha = .38f

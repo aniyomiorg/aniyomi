@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.track.shikimori
 
-import android.net.Uri
 import androidx.core.net.toUri
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
@@ -126,7 +125,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             tracking_url = baseUrl + obj["url"]!!.jsonPrimitive.content
             publishing_status = obj["status"]!!.jsonPrimitive.content
             publishing_type = obj["kind"]!!.jsonPrimitive.content
-            start_date = obj["aired_on"]!!.jsonPrimitive.contentOrNull ?: ""
+            start_date = obj.get("aired_on")!!.jsonPrimitive.contentOrNull ?: ""
         }
     }
 
@@ -140,7 +139,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             tracking_url = baseUrl + obj["url"]!!.jsonPrimitive.content
             publishing_status = obj["status"]!!.jsonPrimitive.content
             publishing_type = obj["kind"]!!.jsonPrimitive.content
-            start_date = obj["aired_on"]!!.jsonPrimitive.contentOrNull ?: ""
+            start_date = obj.get("aired_on")!!.jsonPrimitive.contentOrNull ?: ""
         }
     }
 
@@ -150,7 +149,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             media_id = obj["id"]!!.jsonPrimitive.long
             total_chapters = mangas["chapters"]!!.jsonPrimitive.int
             last_chapter_read = obj["chapters"]!!.jsonPrimitive.float
-            score = obj["score"]!!.jsonPrimitive.int.toFloat()
+            score = (obj["score"]!!.jsonPrimitive.int).toFloat()
             status = toTrackStatus(obj["status"]!!.jsonPrimitive.content)
             tracking_url = baseUrl + mangas["url"]!!.jsonPrimitive.content
         }
@@ -162,7 +161,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             media_id = obj["id"]!!.jsonPrimitive.long
             total_episodes = animes["episodes"]!!.jsonPrimitive.int
             last_episode_seen = obj["episodes"]!!.jsonPrimitive.float
-            score = obj["score"]!!.jsonPrimitive.int.toFloat()
+            score = (obj["score"]!!.jsonPrimitive.int).toFloat()
             status = toTrackStatus(obj["status"]!!.jsonPrimitive.content)
             tracking_url = baseUrl + animes["url"]!!.jsonPrimitive.content
         }
@@ -226,14 +225,13 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
         }
     }
 
-    fun getCurrentUser(): Int {
+    suspend fun getCurrentUser(): Int {
         return authClient.newCall(GET("$apiUrl/users/whoami"))
             .await()
             .parseAs<JsonObject>()
             .let {
                 it["id"]!!.jsonPrimitive.int
             }
-        }
     }
 
     suspend fun accessToken(code: String): OAuth {
@@ -271,7 +269,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
             return "$baseMangaUrl/$remoteId"
         }
 
-        fun authUrl(): Uri =
+        fun authUrl() =
             loginUrl.toUri().buildUpon()
                 .appendQueryParameter("client_id", clientId)
                 .appendQueryParameter("redirect_uri", redirectUrl)

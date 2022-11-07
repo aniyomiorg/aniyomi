@@ -42,6 +42,8 @@ class ReaderPreferences(
 
     fun alwaysShowChapterTransition() = preferenceStore.getBoolean("always_show_chapter_transition", true)
 
+    fun preserveReadingPosition() = preferenceStore.getBoolean("pref_preserve_reading_position", false)
+
     fun cropBorders() = preferenceStore.getBoolean("crop_borders", false)
 
     fun navigateToPan() = preferenceStore.getBoolean("navigate_pan", true)

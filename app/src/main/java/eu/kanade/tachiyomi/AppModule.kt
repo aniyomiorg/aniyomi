@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import com.squareup.sqldelight.android.AndroidSqliteDriver
+import com.squareup.sqldelight.db.SqlDriver
 import data.History
 import data.Mangas
 import dataanime.Animehistory
@@ -16,12 +17,6 @@ import eu.kanade.data.AnimeDatabaseHandler
 import eu.kanade.data.DatabaseHandler
 import eu.kanade.data.dateAdapter
 import eu.kanade.data.listOfStringsAdapter
-import eu.kanade.tachiyomi.animesource.AnimeSourceManager
-import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import eu.kanade.tachiyomi.data.cache.ChapterCache
-import eu.kanade.tachiyomi.data.cache.CoverCache
-import eu.kanade.tachiyomi.data.cache.EpisodeCache
-import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
 import eu.kanade.data.updateStrategyAdapter
 import eu.kanade.domain.backup.service.BackupPreferences
 import eu.kanade.domain.base.BasePreferences
@@ -30,24 +25,33 @@ import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
+import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.core.preference.AndroidPreferenceStore
 import eu.kanade.tachiyomi.core.preference.PreferenceStore
 import eu.kanade.tachiyomi.core.provider.AndroidBackupFolderProvider
 import eu.kanade.tachiyomi.core.provider.AndroidDownloadFolderProvider
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadCache
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadProvider
+import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
+import eu.kanade.tachiyomi.data.cache.ChapterCache
+import eu.kanade.tachiyomi.data.cache.CoverCache
+import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.DownloadCache
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadProvider
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
-import eu.kanade.tachiyomi.extension.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.ExtensionManager
 import eu.kanade.tachiyomi.mi.AnimeDatabase
 import eu.kanade.tachiyomi.network.JavaScriptEngine
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.isDevFlavor
 import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory
@@ -120,7 +124,7 @@ class AppModule(val app: Application) : InjektModule {
         }
         addSingletonFactory {
             Database(
-                driver = sqlDriverManga,
+                driver = get(),
                 historyAdapter = History.Adapter(
                     last_readAdapter = dateAdapter,
                 ),
@@ -133,19 +137,20 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory {
             AnimeDatabase(
-                driver = sqlDriverAnime,
+                driver = get(),
                 animehistoryAdapter = Animehistory.Adapter(
                     last_seenAdapter = dateAdapter,
                 ),
                 animesAdapter = Animes.Adapter(
                     genreAdapter = listOfStringsAdapter,
+                    update_strategyAdapter = updateStrategyAdapter,
                 ),
             )
         }
 
-        addSingletonFactory<DatabaseHandler> { AndroidDatabaseHandler(get(), sqlDriverManga) }
+        addSingletonFactory<DatabaseHandler> { AndroidDatabaseHandler(get(), get()) }
 
-        addSingletonFactory<AnimeDatabaseHandler> { AndroidAnimeDatabaseHandler(get(), sqlDriverAnime) }
+        addSingletonFactory<AnimeDatabaseHandler> { AndroidAnimeDatabaseHandler(get(), get()) }
 
         addSingletonFactory {
             Json {
@@ -161,11 +166,9 @@ class AppModule(val app: Application) : InjektModule {
         }
 
         addSingletonFactory { ChapterCache(app) }
-
         addSingletonFactory { EpisodeCache(app) }
 
         addSingletonFactory { CoverCache(app) }
-
         addSingletonFactory { AnimeCoverCache(app) }
 
         addSingletonFactory { NetworkHelper(app) }
@@ -177,11 +180,13 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { ExtensionManager(app) }
         addSingletonFactory { AnimeExtensionManager(app) }
 
+        addSingletonFactory { DownloadProvider(app) }
         addSingletonFactory { DownloadManager(app) }
         addSingletonFactory { DownloadCache(app) }
 
         addSingletonFactory { AnimeDownloadProvider(app) }
         addSingletonFactory { AnimeDownloadManager(app) }
+        addSingletonFactory { AnimeDownloadCache(app) }
 
         addSingletonFactory { TrackManager(app) }
         addSingletonFactory { DelayedTrackingStore(app) }
@@ -226,6 +231,9 @@ class PreferenceModule(val application: Application) : InjektModule {
         }
         addSingletonFactory {
             ReaderPreferences(get())
+        }
+        addSingletonFactory {
+            PlayerPreferences(get())
         }
         addSingletonFactory {
             TrackPreferences(get())

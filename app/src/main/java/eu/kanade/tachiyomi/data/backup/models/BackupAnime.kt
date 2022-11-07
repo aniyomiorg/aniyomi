@@ -1,12 +1,14 @@
-package eu.kanade.tachiyomi.data.backup.full.models
+package eu.kanade.tachiyomi.data.backup.models
 
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeImpl
 import eu.kanade.tachiyomi.data.database.models.AnimeTrackImpl
 import eu.kanade.tachiyomi.data.database.models.EpisodeImpl
+import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 
+@Suppress("DEPRECATION")
 @Serializable
 data class BackupAnime(
     // in 1.x some of these values have different names
@@ -35,6 +37,7 @@ data class BackupAnime(
     @ProtoNumber(102) var brokenHistory: List<BrokenBackupAnimeHistory> = emptyList(),
     @ProtoNumber(103) var viewer_flags: Int = 0,
     @ProtoNumber(104) var history: List<BackupAnimeHistory> = emptyList(),
+    @ProtoNumber(105) var updateStrategy: UpdateStrategy = UpdateStrategy.ALWAYS_UPDATE,
 ) {
     fun getAnimeImpl(): AnimeImpl {
         return AnimeImpl().apply {
@@ -51,6 +54,7 @@ data class BackupAnime(
             date_added = this@BackupAnime.dateAdded
             viewer_flags = this@BackupAnime.viewer_flags
             episode_flags = this@BackupAnime.episodeFlags
+            update_strategy = this@BackupAnime.updateStrategy
         }
     }
 
@@ -82,6 +86,7 @@ data class BackupAnime(
                 dateAdded = anime.dateAdded,
                 viewer_flags = anime.viewerFlags.toInt(),
                 episodeFlags = anime.episodeFlags.toInt(),
+                updateStrategy = anime.updateStrategy,
             )
         }
     }

@@ -19,7 +19,7 @@ fun sourcesTab(
     router: Router?,
     presenter: SourcesPresenter,
 ) = TabContent(
-    titleRes = R.string.label_sources,
+    titleRes = R.string.label_mangasources,
     actions = listOf(
         AppBar.Action(
             title = stringResource(R.string.action_global_search),

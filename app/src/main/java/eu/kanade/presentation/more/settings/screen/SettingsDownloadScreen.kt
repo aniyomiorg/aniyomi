@@ -18,6 +18,8 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.category.interactor.GetAnimeCategories
 import eu.kanade.domain.category.interactor.GetCategories
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.download.service.DownloadPreferences
@@ -42,8 +44,12 @@ class SettingsDownloadScreen : SearchableSettings {
     override fun getPreferences(): List<Preference> {
         val getCategories = remember { Injekt.get<GetCategories>() }
         val allCategories by getCategories.subscribe().collectAsState(initial = runBlocking { getCategories.await() })
+        val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
+        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(initial = runBlocking { getAnimeCategories.await() })
 
         val downloadPreferences = remember { Injekt.get<DownloadPreferences>() }
+        val basePreferences = remember { Injekt.get<BasePreferences>() }
+
         return listOf(
             getDownloadLocationPreference(downloadPreferences = downloadPreferences),
             Preference.PreferenceItem.SwitchPreference(
@@ -66,8 +72,10 @@ class SettingsDownloadScreen : SearchableSettings {
             getAutoDownloadGroup(
                 downloadPreferences = downloadPreferences,
                 allCategories = allCategories,
+                allAnimeCategories = allAnimeCategories,
             ),
             getDownloadAheadGroup(downloadPreferences = downloadPreferences),
+            getExternalDownloaderGroup(downloadPreferences = downloadPreferences, basePreferences = basePreferences),
         )
     }
 
@@ -184,7 +192,34 @@ class SettingsDownloadScreen : SearchableSettings {
     private fun getAutoDownloadGroup(
         downloadPreferences: DownloadPreferences,
         allCategories: List<Category>,
+        allAnimeCategories: List<Category>,
     ): Preference.PreferenceGroup {
+        val downloadNewEpisodesPref = downloadPreferences.downloadNewEpisodes()
+        val downloadNewEpisodeCategoriesPref = downloadPreferences.downloadNewEpisodeCategories()
+        val downloadNewEpisodeCategoriesExcludePref = downloadPreferences.downloadNewEpisodeCategoriesExclude()
+
+        val downloadNewEpisodes by downloadNewEpisodesPref.collectAsState()
+
+        val includedAnime by downloadNewEpisodeCategoriesPref.collectAsState()
+        val excludedAnime by downloadNewEpisodeCategoriesExcludePref.collectAsState()
+        var showAnimeDialog by rememberSaveable { mutableStateOf(false) }
+        if (showAnimeDialog) {
+            TriStateListDialog(
+                title = stringResource(R.string.anime_categories),
+                message = stringResource(R.string.pref_download_new_anime_categories_details),
+                items = allAnimeCategories,
+                initialChecked = includedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
+                initialInversed = excludedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
+                itemLabel = { it.visualName },
+                onDismissRequest = { showAnimeDialog = false },
+                onValueChanged = { newIncluded, newExcluded ->
+                    downloadNewEpisodeCategoriesPref.set(newIncluded.map { it.id.toString() }.toSet())
+                    downloadNewEpisodeCategoriesExcludePref.set(newExcluded.map { it.id.toString() }.toSet())
+                    showAnimeDialog = false
+                },
+            )
+        }
+
         val downloadNewChaptersPref = downloadPreferences.downloadNewChapters()
         val downloadNewChapterCategoriesPref = downloadPreferences.downloadNewChapterCategories()
         val downloadNewChapterCategoriesExcludePref = downloadPreferences.downloadNewChapterCategoriesExclude()
@@ -214,6 +249,20 @@ class SettingsDownloadScreen : SearchableSettings {
         return Preference.PreferenceGroup(
             title = stringResource(R.string.pref_category_auto_download),
             preferenceItems = listOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = downloadNewEpisodesPref,
+                    title = stringResource(R.string.pref_download_new_episodes),
+                ),
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(R.string.anime_categories),
+                    subtitle = getCategoriesLabel(
+                        allCategories = allAnimeCategories,
+                        included = includedAnime,
+                        excluded = excludedAnime,
+                    ),
+                    onClick = { showAnimeDialog = true },
+                    enabled = downloadNewEpisodes,
+                ),
                 Preference.PreferenceItem.SwitchPreference(
                     pref = downloadNewChaptersPref,
                     title = stringResource(R.string.pref_download_new),
@@ -250,7 +299,57 @@ class SettingsDownloadScreen : SearchableSettings {
                         }
                     },
                 ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = downloadPreferences.autoDownloadWhileWatching(),
+                    title = stringResource(R.string.auto_download_while_watching),
+                    entries = listOf(0, 2, 3, 5, 10).associateWith {
+                        if (it == 0) {
+                            stringResource(R.string.disabled)
+                        } else {
+                            pluralStringResource(id = R.plurals.next_unseen_episodes, count = it, it)
+                        }
+                    },
+                ),
                 Preference.PreferenceItem.InfoPreference(stringResource(R.string.download_ahead_info)),
+            ),
+        )
+    }
+
+    @Composable
+    private fun getExternalDownloaderGroup(downloadPreferences: DownloadPreferences, basePreferences: BasePreferences): Preference.PreferenceGroup {
+        val useExternalDownloader = downloadPreferences.useExternalDownloader()
+        val externalDownloaderPreference = downloadPreferences.externalDownloaderSelection()
+
+        val pm = basePreferences.context.packageManager
+        val installedPackages = pm.getInstalledPackages(0)
+        val supportedDownloaders = installedPackages.filter {
+            when (it.packageName) {
+                "idm.internet.download.manager" -> true
+                "idm.internet.download.manager.plus" -> true
+                "idm.internet.download.manager.lite" -> true
+                else -> false
+            }
+        }
+        val packageNames = supportedDownloaders.map { it.packageName }
+        val packageNamesReadable = supportedDownloaders
+            .map { pm.getApplicationLabel(it.applicationInfo).toString() }
+
+        val packageNamesMap: Map<String, String> =
+            packageNames.zip(packageNamesReadable)
+                .toMap()
+
+        return Preference.PreferenceGroup(
+            title = stringResource(R.string.pref_category_external_downloader),
+            preferenceItems = listOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = useExternalDownloader,
+                    title = stringResource(R.string.pref_use_external_downloader),
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = externalDownloaderPreference,
+                    title = stringResource(R.string.pref_external_downloader_selection),
+                    entries = mapOf("" to "None") + packageNamesMap,
+                ),
             ),
         )
     }

@@ -52,6 +52,7 @@ fun MangaToolbar(
     onClickDownload: ((DownloadAction) -> Unit)?,
     onClickEditCategory: (() -> Unit)?,
     onClickMigrate: (() -> Unit)?,
+    changeAnimeSkipIntro: (() -> Unit)? = null,
     // For action mode
     actionModeCounter: Int,
     onSelectAll: () -> Unit,
@@ -186,6 +187,15 @@ fun MangaToolbar(
                                         onDismissRequest()
                                     },
                                 )
+                                if (changeAnimeSkipIntro != null) {
+                                    DropdownMenuItem(
+                                        text = { Text(text = stringResource(R.string.action_change_intro_length)) },
+                                        onClick = {
+                                            changeAnimeSkipIntro.invoke()
+                                            onDismissRequest()
+                                        },
+                                    )
+                                }
                                 if (onClickShare != null) {
                                     DropdownMenuItem(
                                         text = { Text(text = stringResource(R.string.action_share)) },

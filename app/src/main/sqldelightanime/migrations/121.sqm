@@ -1,0 +1,1 @@
+ALTER TABLE animes ADD COLUMN update_strategy INTEGER NOT NULL DEFAULT 0;

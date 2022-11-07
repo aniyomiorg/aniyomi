@@ -21,7 +21,7 @@ fun migrateSourcesTab(
     val uriHandler = LocalUriHandler.current
 
     return TabContent(
-        titleRes = R.string.label_migration,
+        titleRes = R.string.label_migration_manga,
         actions = listOf(
             AppBar.Action(
                 title = stringResource(R.string.migration_help_guide),

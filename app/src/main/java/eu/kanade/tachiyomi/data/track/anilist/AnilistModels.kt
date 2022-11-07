@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.track.anilist
 
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.domain.track.service.TrackPreferences
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch

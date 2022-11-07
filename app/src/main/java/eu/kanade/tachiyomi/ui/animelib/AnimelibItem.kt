@@ -1,91 +1,35 @@
 package eu.kanade.tachiyomi.ui.animelib
 
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import com.fredporciuncula.flow.preferences.Preference
-import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import eu.davidea.flexibleadapter.items.IFilterable
-import eu.davidea.flexibleadapter.items.IFlexible
-import eu.kanade.tachiyomi.R
+import eu.kanade.domain.animelib.model.AnimelibAnime
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
-import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
-import eu.kanade.tachiyomi.databinding.SourceComfortableGridItemBinding
-import eu.kanade.tachiyomi.databinding.SourceCompactGridItemBinding
-import eu.kanade.tachiyomi.ui.library.setting.DisplayModeSetting
+import eu.kanade.tachiyomi.animesource.getNameForAnimeInfo
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class AnimelibItem(
-    val anime: AnimelibAnime,
-    private val shouldSetFromCategory: Preference<Boolean>,
-    private val defaultLibraryDisplayMode: Preference<DisplayModeSetting>,
-) :
-    AbstractFlexibleItem<AnimelibHolder<*>>(), IFilterable<String> {
-
-    private val sourceManager: AnimeSourceManager = Injekt.get()
+    val animelibAnime: AnimelibAnime,
+    private val sourceManager: AnimeSourceManager = Injekt.get(),
+) {
 
     var displayMode: Long = -1
-    var downloadCount = -1
-    var unreadCount = -1
+    var downloadCount: Long = -1
+    var unseenCount: Long = -1
     var isLocal = false
     var sourceLanguage = ""
 
-    private fun getDisplayMode(): DisplayModeSetting {
-        return if (shouldSetFromCategory.get() && anime.category != 0) {
-            DisplayModeSetting.fromFlag(displayMode)
-        } else {
-            defaultLibraryDisplayMode.get()
-        }
-    }
-
-    override fun getLayoutRes(): Int {
-        return when (getDisplayMode()) {
-            DisplayModeSetting.COMPACT_GRID, DisplayModeSetting.COVER_ONLY_GRID -> R.layout.source_compact_grid_item
-            DisplayModeSetting.COMFORTABLE_GRID -> R.layout.source_comfortable_grid_item
-            DisplayModeSetting.LIST -> R.layout.source_list_item
-        }
-    }
-
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>): AnimelibHolder<*> {
-        return when (getDisplayMode()) {
-            DisplayModeSetting.COMPACT_GRID -> {
-                AnimelibCompactGridHolder(SourceCompactGridItemBinding.bind(view), adapter, coverOnly = false)
-            }
-            DisplayModeSetting.COVER_ONLY_GRID -> {
-                AnimelibCompactGridHolder(SourceCompactGridItemBinding.bind(view), adapter, coverOnly = true)
-            }
-            DisplayModeSetting.COMFORTABLE_GRID -> {
-                AnimelibComfortableGridHolder(SourceComfortableGridItemBinding.bind(view), adapter)
-            }
-            DisplayModeSetting.LIST -> {
-                AnimelibListHolder(view, adapter)
-            }
-        }
-    }
-
-    override fun bindViewHolder(
-        adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>,
-        holder: AnimelibHolder<*>,
-        position: Int,
-        payloads: List<Any?>?,
-    ) {
-        holder.onSetValues(this)
-    }
-
     /**
-     * Filters a anime depending on a query.
+     * Filters an anime depending on a query.
      *
      * @param constraint the query to apply.
      * @return true if the anime should be included, false otherwise.
      */
-    override fun filter(constraint: String): Boolean {
-        val sourceName by lazy { sourceManager.getOrStub(anime.source).name }
-        val genres by lazy { anime.getGenres() }
-        return anime.title.contains(constraint, true) ||
-            (anime.author?.contains(constraint, true) ?: false) ||
-            (anime.artist?.contains(constraint, true) ?: false) ||
-            (anime.description?.contains(constraint, true) ?: false) ||
+    fun filter(constraint: String): Boolean {
+        val sourceName by lazy { sourceManager.getOrStub(animelibAnime.anime.source).getNameForAnimeInfo() }
+        val genres by lazy { animelibAnime.anime.genre }
+        return animelibAnime.anime.title.contains(constraint, true) ||
+            (animelibAnime.anime.author?.contains(constraint, true) ?: false) ||
+            (animelibAnime.anime.artist?.contains(constraint, true) ?: false) ||
+            (animelibAnime.anime.description?.contains(constraint, true) ?: false) ||
             if (constraint.contains(",")) {
                 constraint.split(",").all { containsSourceOrGenre(it.trim(), sourceName, genres) }
             } else {
@@ -124,13 +68,30 @@ class AnimelibItem(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is AnimelibItem) {
-            return anime.id == other.anime.id
-        }
-        return false
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AnimelibItem
+
+        if (animelibAnime != other.animelibAnime) return false
+        if (sourceManager != other.sourceManager) return false
+        if (displayMode != other.displayMode) return false
+        if (downloadCount != other.downloadCount) return false
+        if (unseenCount != other.unseenCount) return false
+        if (isLocal != other.isLocal) return false
+        if (sourceLanguage != other.sourceLanguage) return false
+
+        return true
     }
 
     override fun hashCode(): Int {
-        return anime.id!!.hashCode()
+        var result = animelibAnime.hashCode()
+        result = 31 * result + sourceManager.hashCode()
+        result = 31 * result + displayMode.hashCode()
+        result = 31 * result + downloadCount.toInt()
+        result = 31 * result + unseenCount.toInt()
+        result = 31 * result + isLocal.hashCode()
+        result = 31 * result + sourceLanguage.hashCode()
+        return result
     }
 }

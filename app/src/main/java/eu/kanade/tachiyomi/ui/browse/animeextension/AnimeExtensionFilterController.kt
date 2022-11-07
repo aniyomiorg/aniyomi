@@ -1,27 +1,20 @@
 package eu.kanade.tachiyomi.ui.browse.animeextension
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import eu.kanade.presentation.browse.AnimeExtensionFilterScreen
-import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.base.controller.ComposeController
+import eu.kanade.presentation.animebrowse.AnimeExtensionFilterScreen
+import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
 
-class AnimeExtensionFilterController : ComposeController<AnimeExtensionFilterPresenter>() {
+class AnimeExtensionFilterController : FullComposeController<AnimeExtensionFilterPresenter>() {
 
-    override fun getTitle() = resources?.getString(R.string.label_animeextensions)
-
-    override fun createPresenter(): AnimeExtensionFilterPresenter = AnimeExtensionFilterPresenter()
+    override fun createPresenter() = AnimeExtensionFilterPresenter()
 
     @Composable
-    override fun ComposeContent(nestedScrollInterop: NestedScrollConnection) {
+    override fun ComposeContent() {
         AnimeExtensionFilterScreen(
-            nestedScrollInterop = nestedScrollInterop,
+            navigateUp = router::popCurrentController,
             presenter = presenter,
-            onClickLang = { language ->
-                presenter.toggleLanguage(language)
-            },
         )
     }
 }
 
-data class FilterUiModel(val lang: String, val enabled: Boolean)
+data class AnimeFilterUiModel(val lang: String, val enabled: Boolean)

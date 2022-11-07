@@ -1,55 +1,51 @@
 package eu.kanade.tachiyomi.ui.browse.animeextension
 
 import android.app.Application
-import android.os.Bundle
 import androidx.annotation.StringRes
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import eu.kanade.domain.animeextension.interactor.GetAnimeExtensionUpdates
-import eu.kanade.domain.animeextension.interactor.GetAnimeExtensions
+import eu.kanade.domain.animeextension.interactor.GetAnimeExtensionsByType
+import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.presentation.animebrowse.AnimeExtensionState
+import eu.kanade.presentation.animebrowse.AnimeExtensionsState
+import eu.kanade.presentation.animebrowse.AnimeExtensionsStateImpl
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
+import eu.kanade.tachiyomi.animeextension.model.AnimeExtension
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.extension.AnimeExtensionManager
-import eu.kanade.tachiyomi.extension.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.model.InstallStep
-import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import rx.Observable
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class AnimeExtensionsPresenter(
+    private val presenterScope: CoroutineScope,
+    private val state: AnimeExtensionsStateImpl = AnimeExtensionState() as AnimeExtensionsStateImpl,
+    private val preferences: SourcePreferences = Injekt.get(),
     private val extensionManager: AnimeExtensionManager = Injekt.get(),
-    private val getExtensionUpdates: GetAnimeExtensionUpdates = Injekt.get(),
-    private val getExtensions: GetAnimeExtensions = Injekt.get(),
-) : BasePresenter<AnimeExtensionsController>() {
+    private val getExtensions: GetAnimeExtensionsByType = Injekt.get(),
+) : AnimeExtensionsState by state {
 
-    private val _query: MutableStateFlow<String> = MutableStateFlow("")
+    private val _query: MutableStateFlow<String?> = MutableStateFlow(null)
+    val query: StateFlow<String?> = _query.asStateFlow()
 
     private var _currentDownloads = MutableStateFlow<Map<String, InstallStep>>(hashMapOf())
 
-    private val _state: MutableStateFlow<ExtensionState> = MutableStateFlow(ExtensionState.Uninitialized)
-    val state: StateFlow<ExtensionState> = _state.asStateFlow()
-
-    var isRefreshing: Boolean by mutableStateOf(true)
-
-    override fun onCreate(savedState: Bundle?) {
-        super.onCreate(savedState)
-
-        extensionManager.findAvailableExtensions()
-
+    fun onCreate() {
         val context = Injekt.get<Application>()
-        val extensionMapper: (Map<String, InstallStep>) -> ((AnimeExtension) -> ExtensionUiModel) = { map ->
+        val extensionMapper: (Map<String, InstallStep>) -> ((AnimeExtension) -> AnimeExtensionUiModel) = { map ->
             {
-                ExtensionUiModel.Item(it, map[it.pkgName] ?: InstallStep.Idle)
+                AnimeExtensionUiModel.Item(it, map[it.pkgName] ?: InstallStep.Idle)
             }
         }
         val queryFilter: (String) -> ((AnimeExtension) -> Boolean) = { query ->
@@ -76,38 +72,37 @@ class AnimeExtensionsPresenter(
             }
         }
 
-        launchIO {
+        presenterScope.launchIO {
             combine(
                 _query,
-                getExtensions.subscribe(),
-                getExtensionUpdates.subscribe(),
                 _currentDownloads,
-            ) { query, (installed, untrusted, available), updates, downloads ->
-                isRefreshing = false
+                getExtensions.subscribe(),
+            ) { query, downloads, (_updates, _installed, _available, _untrusted) ->
+                val searchQuery = query ?: ""
 
-                val languagesWithExtensions = available
-                    .filter(queryFilter(query))
+                val languagesWithExtensions = _available
+                    .filter(queryFilter(searchQuery))
                     .groupBy { LocaleHelper.getSourceDisplayName(it.lang, context) }
                     .toSortedMap()
-                    .flatMap { (key, value) ->
+                    .flatMap { (lang, exts) ->
                         listOf(
-                            ExtensionUiModel.Header.Text(key),
-                            *value.map(extensionMapper(downloads)).toTypedArray(),
+                            AnimeExtensionUiModel.Header.Text(lang),
+                            *exts.map(extensionMapper(downloads)).toTypedArray(),
                         )
                     }
 
-                val items = mutableListOf<ExtensionUiModel>()
+                val items = mutableListOf<AnimeExtensionUiModel>()
 
-                val updates = updates.filter(queryFilter(query)).map(extensionMapper(downloads))
+                val updates = _updates.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 if (updates.isNotEmpty()) {
-                    items.add(ExtensionUiModel.Header.Resource(R.string.ext_updates_pending))
+                    items.add(AnimeExtensionUiModel.Header.Resource(R.string.ext_updates_pending))
                     items.addAll(updates)
                 }
 
-                val installed = installed.filter(queryFilter(query)).map(extensionMapper(downloads))
-                val untrusted = untrusted.filter(queryFilter(query)).map(extensionMapper(downloads))
+                val installed = _installed.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
+                val untrusted = _untrusted.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 if (installed.isNotEmpty() || untrusted.isNotEmpty()) {
-                    items.add(ExtensionUiModel.Header.Resource(R.string.ext_installed))
+                    items.add(AnimeExtensionUiModel.Header.Resource(R.string.ext_installed))
                     items.addAll(installed)
                     items.addAll(untrusted)
                 }
@@ -117,30 +112,39 @@ class AnimeExtensionsPresenter(
                 }
 
                 items
-            }.collectLatest {
-                _state.value = ExtensionState.Initialized(it)
             }
+                .stateIn(presenterScope)
+                .collectLatest {
+                    state.isLoading = false
+                    state.items = it
+                }
         }
+        presenterScope.launchIO { findAvailableExtensions() }
+
+        preferences.animeextensionUpdatesCount().changes()
+            .onEach { state.updates = it }
+            .launchIn(presenterScope)
     }
 
-    fun search(query: String) {
-        launchIO {
+    fun search(query: String?) {
+        presenterScope.launchIO {
             _query.emit(query)
         }
     }
 
     fun updateAllExtensions() {
-        launchIO {
-            val state = _state.value
-            if (state !is ExtensionState.Initialized) return@launchIO
-            state.list.mapNotNull {
-                if (it !is ExtensionUiModel.Item) return@mapNotNull null
-                if (it.extension !is AnimeExtension.Installed) return@mapNotNull null
-                if (it.extension.hasUpdate.not()) return@mapNotNull null
-                it.extension
-            }.forEach {
-                updateExtension(it)
-            }
+        presenterScope.launchIO {
+            if (state.isEmpty) return@launchIO
+            state.items
+                .mapNotNull {
+                    when {
+                        it !is AnimeExtensionUiModel.Item -> null
+                        it.extension !is AnimeExtension.Installed -> null
+                        !it.extension.hasUpdate -> null
+                        else -> it.extension
+                    }
+                }
+                .forEach { updateExtension(it) }
         }
     }
 
@@ -157,16 +161,16 @@ class AnimeExtensionsPresenter(
     }
 
     private fun removeDownloadState(extension: AnimeExtension) {
-        _currentDownloads.update { map ->
-            val map = map.toMutableMap()
+        _currentDownloads.update { _map ->
+            val map = _map.toMutableMap()
             map.remove(extension.pkgName)
             map
         }
     }
 
     private fun addDownloadState(extension: AnimeExtension, installStep: InstallStep) {
-        _currentDownloads.update { map ->
-            val map = map.toMutableMap()
+        _currentDownloads.update { _map ->
+            val map = _map.toMutableMap()
             map[extension.pkgName] = installStep
             map
         }
@@ -186,8 +190,11 @@ class AnimeExtensionsPresenter(
     }
 
     fun findAvailableExtensions() {
-        isRefreshing = true
-        extensionManager.findAvailableExtensions()
+        presenterScope.launchIO {
+            state.isRefreshing = true
+            extensionManager.findAvailableExtensions()
+            state.isRefreshing = false
+        }
     }
 
     fun trustSignature(signatureHash: String) {
@@ -195,27 +202,13 @@ class AnimeExtensionsPresenter(
     }
 }
 
-sealed interface ExtensionUiModel {
-    sealed interface Header : ExtensionUiModel {
+sealed interface AnimeExtensionUiModel {
+    sealed interface Header : AnimeExtensionUiModel {
         data class Resource(@StringRes val textRes: Int) : Header
         data class Text(val text: String) : Header
     }
     data class Item(
         val extension: AnimeExtension,
         val installStep: InstallStep,
-    ) : ExtensionUiModel {
-
-        fun key(): String {
-            return when (extension) {
-                is AnimeExtension.Installed ->
-                    if (extension.hasUpdate) "update_${extension.pkgName}" else extension.pkgName
-                else -> extension.pkgName
-            }
-        }
-    }
-}
-
-sealed class ExtensionState {
-    object Uninitialized : ExtensionState()
-    data class Initialized(val list: List<ExtensionUiModel>) : ExtensionState()
+    ) : AnimeExtensionUiModel
 }

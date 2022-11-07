@@ -1,5 +1,6 @@
 package eu.kanade.domain.library.service
 
+import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.domain.library.model.LibrarySort
 import eu.kanade.domain.manga.model.Manga
@@ -13,6 +14,7 @@ import eu.kanade.tachiyomi.widget.ExtendedNavigationView
 class LibraryPreferences(
     private val preferenceStore: PreferenceStore,
 ) {
+    fun bottomNavStyle() = preferenceStore.getInt("bottom_nav_style", 0)
 
     fun libraryDisplayMode() = preferenceStore.getObject("pref_display_mode_library", LibraryDisplayMode.default, LibraryDisplayMode.Serializer::serialize, LibraryDisplayMode.Serializer::deserialize)
 
@@ -60,41 +62,54 @@ class LibraryPreferences(
 
     fun showUpdatesNavBadge() = preferenceStore.getBoolean("library_update_show_tab_badge", false)
     fun unreadUpdatesCount() = preferenceStore.getInt("library_unread_updates_count", 0)
+    fun unseenUpdatesCount() = preferenceStore.getInt("library_unseen_updates_count", 0)
 
     // endregion
 
     // region Category
 
     fun defaultCategory() = preferenceStore.getInt("default_category", -1)
+    fun defaultAnimeCategory() = preferenceStore.getInt("default_anime_category", -1)
 
     fun lastUsedCategory() = preferenceStore.getInt("last_used_category", 0)
+    fun lastUsedAnimeCategory() = preferenceStore.getInt("last_used_anime_category", 0)
 
     fun categoryTabs() = preferenceStore.getBoolean("display_category_tabs", true)
+    fun animeCategoryTabs() = preferenceStore.getBoolean("display_anime_category_tabs", true)
 
     fun categoryNumberOfItems() = preferenceStore.getBoolean("display_number_of_items", false)
+    fun animeCategoryNumberOfItems() = preferenceStore.getBoolean("display_number_of_items_anime", false)
 
     fun categorizedDisplaySettings() = preferenceStore.getBoolean("categorized_display", false)
 
     fun libraryUpdateCategories() = preferenceStore.getStringSet("library_update_categories", emptySet())
+    fun animelibUpdateCategories() = preferenceStore.getStringSet("animelib_update_categories", emptySet())
 
     fun libraryUpdateCategoriesExclude() = preferenceStore.getStringSet("library_update_categories_exclude", emptySet())
+    fun animelibUpdateCategoriesExclude() = preferenceStore.getStringSet("animelib_update_categories_exclude", emptySet())
 
     // endregion
 
     // region Chapter
 
     fun filterChapterByRead() = preferenceStore.getLong("default_chapter_filter_by_read", Manga.SHOW_ALL)
+    fun filterEpisodeBySeen() = preferenceStore.getLong("default_episode_filter_by_seen", Anime.SHOW_ALL)
 
     fun filterChapterByDownloaded() = preferenceStore.getLong("default_chapter_filter_by_downloaded", Manga.SHOW_ALL)
+    fun filterEpisodeByDownloaded() = preferenceStore.getLong("default_episode_filter_by_downloaded", Anime.SHOW_ALL)
 
     fun filterChapterByBookmarked() = preferenceStore.getLong("default_chapter_filter_by_bookmarked", Manga.SHOW_ALL)
+    fun filterEpisodeByBookmarked() = preferenceStore.getLong("default_episode_filter_by_bookmarked", Anime.SHOW_ALL)
 
     // and upload date
     fun sortChapterBySourceOrNumber() = preferenceStore.getLong("default_chapter_sort_by_source_or_number", Manga.CHAPTER_SORTING_SOURCE)
+    fun sortEpisodeBySourceOrNumber() = preferenceStore.getLong("default_episode_sort_by_source_or_number", Anime.EPISODE_SORTING_SOURCE)
 
     fun displayChapterByNameOrNumber() = preferenceStore.getLong("default_chapter_display_by_name_or_number", Manga.CHAPTER_DISPLAY_NAME)
+    fun displayEpisodeByNameOrNumber() = preferenceStore.getLong("default_chapter_display_by_name_or_number", Anime.EPISODE_DISPLAY_NAME)
 
     fun sortChapterByAscendingOrDescending() = preferenceStore.getLong("default_chapter_sort_by_ascending_or_descending", Manga.CHAPTER_SORT_DESC)
+    fun sortEpisodeByAscendingOrDescending() = preferenceStore.getLong("default_chapter_sort_by_ascending_or_descending", Anime.EPISODE_SORT_DESC)
 
     fun setChapterSettingsDefault(manga: Manga) {
         filterChapterByRead().set(manga.unreadFilterRaw)
@@ -103,6 +118,15 @@ class LibraryPreferences(
         sortChapterBySourceOrNumber().set(manga.sorting)
         displayChapterByNameOrNumber().set(manga.displayMode)
         sortChapterByAscendingOrDescending().set(if (manga.sortDescending()) Manga.CHAPTER_SORT_DESC else Manga.CHAPTER_SORT_ASC)
+    }
+
+    fun setEpisodeSettingsDefault(anime: Anime) {
+        filterEpisodeBySeen().set(anime.unseenFilterRaw)
+        filterEpisodeByDownloaded().set(anime.downloadedFilterRaw)
+        filterEpisodeByBookmarked().set(anime.bookmarkedFilterRaw)
+        sortEpisodeBySourceOrNumber().set(anime.sorting)
+        displayEpisodeByNameOrNumber().set(anime.displayMode)
+        sortEpisodeByAscendingOrDescending().set(if (anime.sortDescending()) Anime.EPISODE_SORT_DESC else Anime.EPISODE_SORT_ASC)
     }
 
     fun autoClearChapterCache() = preferenceStore.getBoolean("auto_clear_chapter_cache", false)

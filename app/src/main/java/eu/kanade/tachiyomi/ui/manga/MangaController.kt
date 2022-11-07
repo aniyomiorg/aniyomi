@@ -18,7 +18,7 @@ import androidx.core.os.bundleOf
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import eu.kanade.data.chapter.NoChaptersException
-import eu.kanade.presentation.components.ChangeMangaCategoriesDialog
+import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.components.DuplicateMangaDialog
 import eu.kanade.presentation.components.LoadingScreen
@@ -49,8 +49,8 @@ import eu.kanade.tachiyomi.ui.manga.track.TrackItem
 import eu.kanade.tachiyomi.ui.manga.track.TrackSearchDialog
 import eu.kanade.tachiyomi.ui.manga.track.TrackSheet
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
-import eu.kanade.tachiyomi.ui.recent.history.HistoryController
-import eu.kanade.tachiyomi.ui.recent.updates.UpdatesController
+import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
+import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.system.isTabletUi
 import eu.kanade.tachiyomi.util.system.logcat
@@ -148,7 +148,7 @@ class MangaController : FullComposeController<MangaPresenter> {
         val onDismissRequest = { presenter.dismissDialog() }
         when (val dialog = (state as? MangaScreenState.Success)?.dialog) {
             is Dialog.ChangeCategory -> {
-                ChangeMangaCategoriesDialog(
+                ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,
                     onDismissRequest = onDismissRequest,
                     onEditCategories = {
@@ -288,8 +288,8 @@ class MangaController : FullComposeController<MangaPresenter> {
                 router.handleBack()
                 previousController.search(query)
             }
-            is UpdatesController,
-            is HistoryController,
+            is UpdatesTabsController,
+            is HistoryTabsController,
             -> {
                 // Manually navigate to LibraryController
                 router.handleBack()

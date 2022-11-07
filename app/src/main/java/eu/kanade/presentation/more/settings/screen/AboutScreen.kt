@@ -114,7 +114,7 @@ class AboutScreen : Screen {
                 item {
                     TextPreferenceWidget(
                         title = stringResource(R.string.help_translate),
-                        onPreferenceClick = { uriHandler.openUri("https://tachiyomi.org/help/contribution/#translation") },
+                        onPreferenceClick = { uriHandler.openUri("https://aniyomi.jmir.xyz/help/contribution/#translation") },
                     )
                 }
 
@@ -128,7 +128,7 @@ class AboutScreen : Screen {
                 item {
                     TextPreferenceWidget(
                         title = stringResource(R.string.privacy_policy),
-                        onPreferenceClick = { uriHandler.openUri("https://tachiyomi.org/privacy") },
+                        onPreferenceClick = { uriHandler.openUri("https://aniyomi.jmir.xyz/privacy") },
                     )
                 }
 
@@ -142,32 +142,22 @@ class AboutScreen : Screen {
                         LinkIcon(
                             label = stringResource(R.string.website),
                             painter = rememberVectorPainter(Icons.Outlined.Public),
-                            url = "https://tachiyomi.org",
+                            url = "https://aniyomi.jmir.xyz",
                         )
                         LinkIcon(
                             label = "Discord",
                             painter = painterResource(R.drawable.ic_discord_24dp),
-                            url = "https://discord.gg/tachiyomi",
-                        )
-                        LinkIcon(
-                            label = "Twitter",
-                            painter = painterResource(R.drawable.ic_twitter_24dp),
-                            url = "https://twitter.com/tachiyomiorg",
-                        )
-                        LinkIcon(
-                            label = "Facebook",
-                            painter = painterResource(R.drawable.ic_facebook_24dp),
-                            url = "https://facebook.com/tachiyomiorg",
+                            url = "https://discord.gg/F32UjdJZrR",
                         )
                         LinkIcon(
                             label = "Reddit",
                             painter = painterResource(R.drawable.ic_reddit_24dp),
-                            url = "https://www.reddit.com/r/Tachiyomi",
+                            url = "https://www.reddit.com/r/Aniyomi",
                         )
                         LinkIcon(
                             label = "GitHub",
                             painter = painterResource(R.drawable.ic_github_24dp),
-                            url = "https://github.com/tachiyomiorg",
+                            url = "https://github.com/jmir1/aniyomi",
                         )
                     }
                 }

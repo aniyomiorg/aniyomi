@@ -10,17 +10,16 @@ import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
 import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchPresenter
 import eu.kanade.tachiyomi.ui.browse.migration.AnimeMigrationFlags
+import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import kotlinx.coroutines.runBlocking
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import uy.kohesive.injekt.injectLazy
 
 class AnimeSearchController(
     private var anime: Anime? = null,
@@ -50,8 +49,8 @@ class AnimeSearchController(
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        anime = savedInstanceState.getSerializable(::anime.name) as? Anime
-        newAnime = savedInstanceState.getSerializable(::newAnime.name) as? Anime
+        anime = savedInstanceState.getSerializableCompat(::anime.name)
+        newAnime = savedInstanceState.getSerializableCompat(::newAnime.name)
     }
 
     fun migrateAnime(anime: Anime? = null, newAnime: Anime?) {
@@ -100,11 +99,10 @@ class AnimeSearchController(
 
     class MigrationDialog(private val anime: Anime? = null, private val newAnime: Anime? = null, private val callingController: Controller? = null) : DialogController() {
 
-        private val preferences: PreferencesHelper by injectLazy()
-
         @Suppress("DEPRECATION")
         override fun onCreateDialog(savedViewState: Bundle?): Dialog {
-            val prefValue = preferences.migrateFlags().get()
+            val migrateFlags = ((targetController as AnimeSearchController).presenter as AnimeSearchPresenter).migrateFlags
+            val prefValue = migrateFlags.get()
             val enabledFlagsPositions = AnimeMigrationFlags.getEnabledFlagsPositions(prefValue)
             val items = AnimeMigrationFlags.titles(anime)
                 .map { resources?.getString(it) }
@@ -123,7 +121,7 @@ class AnimeSearchController(
                     val selectedIndices = mutableListOf<Int>()
                     selected.forEachIndexed { i, b -> if (b) selectedIndices.add(i) }
                     val newValue = AnimeMigrationFlags.getFlagsFromPositions(selectedIndices.toTypedArray())
-                    preferences.migrateFlags().set(newValue)
+                    migrateFlags.set(newValue)
 
                     if (callingController != null) {
                         if (callingController.javaClass == AnimeSourceSearchController::class.java) {
@@ -146,7 +144,7 @@ class AnimeSearchController(
     }
 
     override fun onTitleClick(source: AnimeCatalogueSource) {
-        presenter.preferences.lastUsedAnimeSource().set(source.id)
+        presenter.sourcePreferences.lastUsedAnimeSource().set(source.id)
 
         router.pushController(AnimeSourceSearchController(anime, source, presenter.query))
     }

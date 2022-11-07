@@ -6,11 +6,10 @@ import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.AnimeUpdate
 import eu.kanade.domain.anime.model.hasCustomCover
-import eu.kanade.domain.anime.model.toAnimeInfo
 import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
 import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
-import eu.kanade.domain.category.interactor.GetCategoriesAnime
+import eu.kanade.domain.category.interactor.GetAnimeCategories
 import eu.kanade.domain.category.interactor.SetAnimeCategories
 import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
@@ -20,7 +19,8 @@ import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
-import eu.kanade.tachiyomi.animesource.model.toSEpisode
+import eu.kanade.tachiyomi.core.preference.Preference
+import eu.kanade.tachiyomi.core.preference.PreferenceStore
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -29,7 +29,6 @@ import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchI
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchPresenter
 import eu.kanade.tachiyomi.ui.browse.migration.AnimeMigrationFlags
 import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.toast
 import uy.kohesive.injekt.Injekt
@@ -44,15 +43,20 @@ class AnimeSearchPresenter(
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
-    private val getCategories: GetCategoriesAnime = Injekt.get(),
+    private val getCategories: GetAnimeCategories = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val insertTrack: InsertAnimeTrack = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
+    preferenceStore: PreferenceStore = Injekt.get(),
 ) : GlobalAnimeSearchPresenter(initialQuery) {
 
     private val replacingAnimeRelay = BehaviorRelay.create<Pair<Boolean, Anime?>>()
     private val coverCache: AnimeCoverCache by injectLazy()
     private val enhancedServices by lazy { Injekt.get<TrackManager>().services.filterIsInstance<EnhancedTrackService>() }
+
+    val migrateFlags: Preference<Int> by lazy {
+        preferenceStore.getInt("migrate_flags", Int.MAX_VALUE)
+    }
 
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
@@ -75,11 +79,10 @@ class AnimeSearchPresenter(
         return GlobalAnimeSearchItem(source, results, source.id == anime.source)
     }
 
-    override fun networkToLocalAnime(sAnime: SAnime, sourceId: Long): eu.kanade.tachiyomi.data.database.models.Anime {
+    override suspend fun networkToLocalAnime(sAnime: SAnime, sourceId: Long): Anime {
         val localAnime = super.networkToLocalAnime(sAnime, sourceId)
         // For migration, displayed title should always match source rather than local DB
-        localAnime.title = sAnime.title
-        return localAnime
+        return localAnime.copy(title = sAnime.title)
     }
 
     fun migrateAnime(prevAnime: Anime, anime: Anime, replace: Boolean) {
@@ -90,15 +93,14 @@ class AnimeSearchPresenter(
 
         presenterScope.launchIO {
             try {
-                val episodes = source.getEpisodeList(anime.toAnimeInfo())
-                    .map { it.toSEpisode() }
+                val episodes = source.getEpisodeList(anime.toSAnime())
 
                 migrateAnimeInternal(prevSource, source, episodes, prevAnime, anime, replace)
             } catch (e: Throwable) {
                 withUIContext { view?.applicationContext?.toast(e.message) }
             }
 
-            presenterScope.launchUI { replacingAnimeRelay.call(Pair(false, anime)) }
+            withUIContext { replacingAnimeRelay.call(Pair(false, anime)) }
         }
     }
 
@@ -110,7 +112,7 @@ class AnimeSearchPresenter(
         anime: Anime,
         replace: Boolean,
     ) {
-        val flags = preferences.migrateFlags().get()
+        val flags = migrateFlags.get()
 
         val migrateEpisodes = AnimeMigrationFlags.hasEpisodes(flags)
         val migrateCategories = AnimeMigrationFlags.hasCategories(flags)
@@ -171,8 +173,11 @@ class AnimeSearchPresenter(
                 val service = enhancedServices
                     .firstOrNull { it.isTrackFrom(updatedTrack, prevAnime, prevSource) }
 
-                if (service != null) service.migrateTrack(updatedTrack, anime, source)
-                else updatedTrack
+                if (service != null) {
+                    service.migrateTrack(updatedTrack, anime, source)
+                } else {
+                    updatedTrack
+                }
             }
             insertTrack.awaitAll(tracks)
         }

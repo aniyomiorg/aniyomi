@@ -47,7 +47,7 @@ internal class DownloadNotifier(private val context: Context) {
 
     private val cacheNotificationBuilder by lazy {
         context.notificationBuilder(Notifications.CHANNEL_DOWNLOADER_CACHE) {
-            setSmallIcon(R.drawable.ic_tachi)
+            setSmallIcon(R.drawable.ic_ani)
             setContentTitle(context.getString(R.string.download_notifier_cache_renewal))
             setProgress(100, 100, true)
             setOngoing(true)

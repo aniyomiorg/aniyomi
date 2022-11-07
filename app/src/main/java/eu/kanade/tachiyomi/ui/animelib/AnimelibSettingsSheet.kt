@@ -4,18 +4,19 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import com.bluelinelabs.conductor.Router
-import eu.kanade.domain.category.interactor.UpdateCategoryAnime
-import eu.kanade.domain.category.model.CategoryUpdate
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.category.interactor.SetDisplayModeForCategory
+import eu.kanade.domain.category.interactor.SetSortModeForCategory
+import eu.kanade.domain.category.model.Category
+import eu.kanade.domain.library.model.LibraryDisplayMode
+import eu.kanade.domain.library.model.LibrarySort
+import eu.kanade.domain.library.model.display
+import eu.kanade.domain.library.model.sort
+import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Category
-import eu.kanade.tachiyomi.data.database.models.toDomainCategory
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.ui.library.setting.DisplayModeSetting
-import eu.kanade.tachiyomi.ui.library.setting.SortDirectionSetting
-import eu.kanade.tachiyomi.ui.library.setting.SortModeSetting
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView
 import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup.State
@@ -30,7 +31,8 @@ import uy.kohesive.injekt.injectLazy
 class AnimelibSettingsSheet(
     router: Router,
     private val trackManager: TrackManager = Injekt.get(),
-    private val updateCategory: UpdateCategoryAnime = Injekt.get(),
+    private val setDisplayModeForCategory: SetDisplayModeForCategory = Injekt.get(),
+    private val setSortModeForCategory: SetSortModeForCategory = Injekt.get(),
     onGroupClickListener: (ExtendedNavigationView.Group) -> Unit,
 ) : TabbedBottomSheetDialog(router.activity!!) {
 
@@ -76,7 +78,7 @@ class AnimelibSettingsSheet(
     )
 
     /**
-     * Filters group (unread, downloaded, ...).
+     * Filters group (unseen, downloaded, ...).
      */
     inner class Filter @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
         Settings(context, attrs) {
@@ -99,6 +101,7 @@ class AnimelibSettingsSheet(
             private val downloaded = Item.TriStateGroup(R.string.action_filter_downloaded, this)
             private val unseen = Item.TriStateGroup(R.string.action_filter_unseen, this)
             private val started = Item.TriStateGroup(R.string.action_filter_started, this)
+            private val bookmarked = Item.TriStateGroup(R.string.action_filter_bookmarked, this)
             private val completed = Item.TriStateGroup(R.string.completed, this)
             private val trackFilters: Map<Long, Item.TriStateGroup>
 
@@ -107,18 +110,17 @@ class AnimelibSettingsSheet(
             override val footer = null
 
             init {
-                trackManager.services.filter { service ->
-                    service.isLogged && service !is MangaTrackService
-                }.also { services ->
-                    val size = services.size
-                    trackFilters = services.associate { service ->
-                        Pair(service.id, Item.TriStateGroup(getServiceResId(service, size), this))
+                trackManager.services.filter { service -> service.isLogged && service !is MangaTrackService }
+                    .also { services ->
+                        val size = services.size
+                        trackFilters = services.associate { service ->
+                            Pair(service.id, Item.TriStateGroup(getServiceResId(service, size), this))
+                        }
+                        val list: MutableList<Item> = mutableListOf(downloaded, unseen, started, bookmarked, completed)
+                        if (size > 1) list.add(Item.Header(R.string.action_filter_tracked))
+                        list.addAll(trackFilters.values)
+                        items = list
                     }
-                    val list: MutableList<Item> = mutableListOf(downloaded, unseen, started, completed)
-                    if (size > 1) list.add(Item.Header(R.string.action_filter_tracked))
-                    list.addAll(trackFilters.values)
-                    items = list
-                }
             }
 
             private fun getServiceResId(service: TrackService, size: Int): Int {
@@ -130,14 +132,15 @@ class AnimelibSettingsSheet(
                     downloaded.state = State.INCLUDE.value
                     downloaded.enabled = false
                 } else {
-                    downloaded.state = preferences.filterDownloaded().get()
+                    downloaded.state = libraryPreferences.filterDownloaded().get()
                 }
-                unseen.state = preferences.filterUnread().get()
-                started.state = preferences.filterStarted().get()
-                completed.state = preferences.filterCompleted().get()
+                unseen.state = libraryPreferences.filterUnread().get()
+                started.state = libraryPreferences.filterStarted().get()
+                bookmarked.state = libraryPreferences.filterBookmarked().get()
+                completed.state = libraryPreferences.filterCompleted().get()
 
                 trackFilters.forEach { trackFilter ->
-                    trackFilter.value.state = preferences.filterTracking(trackFilter.key.toInt()).get()
+                    trackFilter.value.state = libraryPreferences.filterTracking(trackFilter.key.toInt()).get()
                 }
             }
 
@@ -151,14 +154,15 @@ class AnimelibSettingsSheet(
                 }
                 item.state = newState
                 when (item) {
-                    downloaded -> preferences.filterDownloaded().set(newState)
-                    unseen -> preferences.filterUnread().set(newState)
-                    started -> preferences.filterStarted().set(newState)
-                    completed -> preferences.filterCompleted().set(newState)
+                    downloaded -> libraryPreferences.filterDownloaded().set(newState)
+                    unseen -> libraryPreferences.filterUnread().set(newState)
+                    started -> libraryPreferences.filterStarted().set(newState)
+                    bookmarked -> libraryPreferences.filterBookmarked().set(newState)
+                    completed -> libraryPreferences.filterCompleted().set(newState)
                     else -> {
                         trackFilters.forEach { trackFilter ->
                             if (trackFilter.value == item) {
-                                preferences.filterTracking(trackFilter.key.toInt()).set(newState)
+                                libraryPreferences.filterTracking(trackFilter.key.toInt()).set(newState)
                             }
                         }
                     }
@@ -170,7 +174,7 @@ class AnimelibSettingsSheet(
     }
 
     /**
-     * Sorting group (alphabetically, by last read, ...) and ascending or descending.
+     * Sorting group (alphabetically, by last seen, ...) and ascending or descending.
      */
     inner class Sort @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
         Settings(context, attrs) {
@@ -190,12 +194,12 @@ class AnimelibSettingsSheet(
         inner class SortGroup : Group {
 
             private val alphabetically = Item.MultiSort(R.string.action_sort_alpha, this)
-            private val total = Item.MultiSort(R.string.action_sort_total_episodes, this)
+            private val total = Item.MultiSort(R.string.action_sort_total, this)
             private val lastSeen = Item.MultiSort(R.string.action_sort_last_seen, this)
-            private val lastChecked = Item.MultiSort(R.string.action_sort_last_anime_update, this)
+            private val lastChecked = Item.MultiSort(R.string.action_sort_last_manga_update, this)
             private val unseen = Item.MultiSort(R.string.action_sort_unseen_count, this)
             private val latestEpisode = Item.MultiSort(R.string.action_sort_latest_episode, this)
-            private val episodeFetchDate = Item.MultiSort(R.string.action_sort_chapter_fetch_date, this)
+            private val episodeFetchDate = Item.MultiSort(R.string.action_sort_episode_fetch_date, this)
             private val dateAdded = Item.MultiSort(R.string.action_sort_date_added, this)
 
             override val header = null
@@ -204,29 +208,25 @@ class AnimelibSettingsSheet(
             override val footer = null
 
             override fun initModels() {
-                val sorting = SortModeSetting.get(preferences, currentCategory?.toDomainCategory())
-                val order = if (SortDirectionSetting.get(preferences, currentCategory?.toDomainCategory()) == SortDirectionSetting.ASCENDING) {
-                    Item.MultiSort.SORT_ASC
-                } else {
-                    Item.MultiSort.SORT_DESC
-                }
+                val sort = currentCategory?.sort ?: LibrarySort.default
+                val order = if (sort.isAscending) Item.MultiSort.SORT_ASC else Item.MultiSort.SORT_DESC
 
                 alphabetically.state =
-                    if (sorting == SortModeSetting.ALPHABETICAL) order else Item.MultiSort.SORT_NONE
+                    if (sort.type == LibrarySort.Type.Alphabetical) order else Item.MultiSort.SORT_NONE
                 lastSeen.state =
-                    if (sorting == SortModeSetting.LAST_READ) order else Item.MultiSort.SORT_NONE
+                    if (sort.type == LibrarySort.Type.LastRead) order else Item.MultiSort.SORT_NONE
                 lastChecked.state =
-                    if (sorting == SortModeSetting.LAST_MANGA_UPDATE) order else Item.MultiSort.SORT_NONE
+                    if (sort.type == LibrarySort.Type.LastUpdate) order else Item.MultiSort.SORT_NONE
                 unseen.state =
-                    if (sorting == SortModeSetting.UNREAD_COUNT) order else Item.MultiSort.SORT_NONE
+                    if (sort.type == LibrarySort.Type.UnreadCount) order else Item.MultiSort.SORT_NONE
                 total.state =
-                    if (sorting == SortModeSetting.TOTAL_CHAPTERS) order else Item.MultiSort.SORT_NONE
+                    if (sort.type == LibrarySort.Type.TotalChapters) order else Item.MultiSort.SORT_NONE
                 latestEpisode.state =
-                    if (sorting == SortModeSetting.LATEST_CHAPTER) order else Item.MultiSort.SORT_NONE
+                    if (sort.type == LibrarySort.Type.LatestChapter) order else Item.MultiSort.SORT_NONE
                 episodeFetchDate.state =
-                    if (sorting == SortModeSetting.CHAPTER_FETCH_DATE) order else Item.MultiSort.SORT_NONE
+                    if (sort.type == LibrarySort.Type.ChapterFetchDate) order else Item.MultiSort.SORT_NONE
                 dateAdded.state =
-                    if (sorting == SortModeSetting.DATE_ADDED) order else Item.MultiSort.SORT_NONE
+                    if (sort.type == LibrarySort.Type.DateAdded) order else Item.MultiSort.SORT_NONE
             }
 
             override fun onItemClicked(item: Item) {
@@ -244,76 +244,45 @@ class AnimelibSettingsSheet(
                     else -> throw Exception("Unknown state")
                 }
 
-                setSortModePreference(item)
-
-                setSortDirectionPreference(item)
+                setSortPreference(item)
 
                 item.group.items.forEach { adapter.notifyItemChanged(it) }
             }
 
-            private fun setSortDirectionPreference(item: Item.MultiStateGroup) {
-                val flag = if (item.state == Item.MultiSort.SORT_ASC) {
-                    SortDirectionSetting.ASCENDING
-                } else {
-                    SortDirectionSetting.DESCENDING
-                }
-
-                if (preferences.categorizedDisplaySettings().get() && currentCategory != null && currentCategory?.id != 0) {
-                    currentCategory?.sortDirection = flag.flag.toInt()
-
-                    sheetScope.launchIO {
-                        updateCategory.await(
-                            CategoryUpdate(
-                                id = currentCategory!!.id?.toLong()!!,
-                                flags = currentCategory!!.flags.toLong(),
-                            ),
-                        )
-                    }
-                } else {
-                    preferences.librarySortingAscending().set(flag)
-                }
-            }
-
-            private fun setSortModePreference(item: Item) {
-                val flag = when (item) {
-                    alphabetically -> SortModeSetting.ALPHABETICAL
-                    lastSeen -> SortModeSetting.LAST_READ
-                    lastChecked -> SortModeSetting.LAST_MANGA_UPDATE
-                    unseen -> SortModeSetting.UNREAD_COUNT
-                    total -> SortModeSetting.TOTAL_CHAPTERS
-                    latestEpisode -> SortModeSetting.LATEST_CHAPTER
-                    episodeFetchDate -> SortModeSetting.CHAPTER_FETCH_DATE
-                    dateAdded -> SortModeSetting.DATE_ADDED
+            private fun setSortPreference(item: Item.MultiStateGroup) {
+                val mode = when (item) {
+                    alphabetically -> LibrarySort.Type.Alphabetical
+                    lastSeen -> LibrarySort.Type.LastRead
+                    lastChecked -> LibrarySort.Type.LastUpdate
+                    unseen -> LibrarySort.Type.UnreadCount
+                    total -> LibrarySort.Type.TotalChapters
+                    latestEpisode -> LibrarySort.Type.LatestChapter
+                    episodeFetchDate -> LibrarySort.Type.ChapterFetchDate
+                    dateAdded -> LibrarySort.Type.DateAdded
                     else -> throw NotImplementedError("Unknown display mode")
                 }
-
-                if (preferences.categorizedDisplaySettings().get() && currentCategory != null && currentCategory?.id != 0) {
-                    currentCategory?.sortMode = flag.flag.toInt()
-
-                    sheetScope.launchIO {
-                        updateCategory.await(
-                            CategoryUpdate(
-                                id = currentCategory!!.id?.toLong()!!,
-                                flags = currentCategory!!.flags.toLong(),
-                            ),
-                        )
-                    }
+                val direction = if (item.state == Item.MultiSort.SORT_ASC) {
+                    LibrarySort.Direction.Ascending
                 } else {
-                    preferences.librarySortingMode().set(flag)
+                    LibrarySort.Direction.Descending
+                }
+
+                sheetScope.launchIO {
+                    setSortModeForCategory.await(currentCategory!!, mode, direction)
                 }
             }
         }
     }
 
     /**
-     * Display group, to show the animelib as a list or a grid.
+     * Display group, to show the library as a list or a grid.
      */
     inner class Display @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-        AnimelibSettingsSheet.Settings(context, attrs) {
+        Settings(context, attrs) {
 
-        private val displayGroup: AnimelibSettingsSheet.Display.DisplayGroup
-        private val badgeGroup: AnimelibSettingsSheet.Display.BadgeGroup
-        private val tabsGroup: AnimelibSettingsSheet.Display.TabsGroup
+        private val displayGroup: DisplayGroup
+        private val badgeGroup: BadgeGroup
+        private val tabsGroup: TabsGroup
 
         init {
             displayGroup = DisplayGroup()
@@ -330,12 +299,8 @@ class AnimelibSettingsSheet(
         }
 
         // Gets user preference of currently selected display mode at current category
-        private fun getDisplayModePreference(): DisplayModeSetting {
-            return if (preferences.categorizedDisplaySettings().get() && currentCategory != null && currentCategory?.id != 0) {
-                DisplayModeSetting.fromFlag(currentCategory?.displayMode?.toLong())
-            } else {
-                preferences.libraryDisplayMode().get()
-            }
+        private fun getDisplayModePreference(): LibraryDisplayMode {
+            return currentCategory?.display ?: LibraryDisplayMode.default
         }
 
         inner class DisplayGroup : Group {
@@ -367,43 +332,32 @@ class AnimelibSettingsSheet(
             }
 
             // Sets display group selections based on given mode
-            fun setGroupSelections(mode: DisplayModeSetting) {
-                compactGrid.checked = mode == DisplayModeSetting.COMPACT_GRID
-                comfortableGrid.checked = mode == DisplayModeSetting.COMFORTABLE_GRID
-                coverOnlyGrid.checked = mode == DisplayModeSetting.COVER_ONLY_GRID
-                list.checked = mode == DisplayModeSetting.LIST
+            fun setGroupSelections(mode: LibraryDisplayMode) {
+                compactGrid.checked = mode == LibraryDisplayMode.CompactGrid
+                comfortableGrid.checked = mode == LibraryDisplayMode.ComfortableGrid
+                coverOnlyGrid.checked = mode == LibraryDisplayMode.CoverOnlyGrid
+                list.checked = mode == LibraryDisplayMode.List
             }
 
             private fun setDisplayModePreference(item: Item) {
                 val flag = when (item) {
-                    compactGrid -> DisplayModeSetting.COMPACT_GRID
-                    comfortableGrid -> DisplayModeSetting.COMFORTABLE_GRID
-                    coverOnlyGrid -> DisplayModeSetting.COVER_ONLY_GRID
-                    list -> DisplayModeSetting.LIST
+                    compactGrid -> LibraryDisplayMode.CompactGrid
+                    comfortableGrid -> LibraryDisplayMode.ComfortableGrid
+                    coverOnlyGrid -> LibraryDisplayMode.CoverOnlyGrid
+                    list -> LibraryDisplayMode.List
                     else -> throw NotImplementedError("Unknown display mode")
                 }
 
-                if (preferences.categorizedDisplaySettings().get() && currentCategory != null && currentCategory?.id != 0) {
-                    currentCategory?.displayMode = flag.flag.toInt()
-
-                    sheetScope.launchIO {
-                        updateCategory.await(
-                            CategoryUpdate(
-                                id = currentCategory!!.id?.toLong()!!,
-                                flags = currentCategory!!.flags.toLong(),
-                            ),
-                        )
-                    }
-                } else {
-                    preferences.libraryDisplayMode().set(flag)
+                sheetScope.launchIO {
+                    setDisplayModeForCategory.await(currentCategory!!, flag)
                 }
             }
         }
 
         inner class BadgeGroup : Group {
-            private val downloadBadge = Item.CheckboxGroup(R.string.action_display_download_badge_anime, this)
+            private val downloadBadge = Item.CheckboxGroup(R.string.action_display_download_badge, this)
             private val unseenBadge = Item.CheckboxGroup(R.string.action_display_unseen_badge, this)
-            private val localBadge = Item.CheckboxGroup(R.string.action_display_local_badge_anime, this)
+            private val localBadge = Item.CheckboxGroup(R.string.action_display_local_badge, this)
             private val languageBadge = Item.CheckboxGroup(R.string.action_display_language_badge, this)
 
             override val header = Item.Header(R.string.badges_header)
@@ -411,20 +365,20 @@ class AnimelibSettingsSheet(
             override val footer = null
 
             override fun initModels() {
-                downloadBadge.checked = preferences.downloadBadge().get()
-                unseenBadge.checked = preferences.unreadBadge().get()
-                localBadge.checked = preferences.localBadge().get()
-                languageBadge.checked = preferences.languageBadge().get()
+                downloadBadge.checked = libraryPreferences.downloadBadge().get()
+                unseenBadge.checked = libraryPreferences.unreadBadge().get()
+                localBadge.checked = libraryPreferences.localBadge().get()
+                languageBadge.checked = libraryPreferences.languageBadge().get()
             }
 
             override fun onItemClicked(item: Item) {
                 item as Item.CheckboxGroup
                 item.checked = !item.checked
                 when (item) {
-                    downloadBadge -> preferences.downloadBadge().set(item.checked)
-                    unseenBadge -> preferences.unreadBadge().set(item.checked)
-                    localBadge -> preferences.localBadge().set(item.checked)
-                    languageBadge -> preferences.languageBadge().set(item.checked)
+                    downloadBadge -> libraryPreferences.downloadBadge().set((item.checked))
+                    unseenBadge -> libraryPreferences.unreadBadge().set((item.checked))
+                    localBadge -> libraryPreferences.localBadge().set((item.checked))
+                    languageBadge -> libraryPreferences.languageBadge().set((item.checked))
                     else -> {}
                 }
                 adapter.notifyItemChanged(item)
@@ -440,16 +394,16 @@ class AnimelibSettingsSheet(
             override val footer = null
 
             override fun initModels() {
-                showTabs.checked = preferences.animeCategoryTabs().get()
-                showNumberOfItems.checked = preferences.animeCategoryNumberOfItems().get()
+                showTabs.checked = libraryPreferences.categoryTabs().get()
+                showNumberOfItems.checked = libraryPreferences.categoryNumberOfItems().get()
             }
 
             override fun onItemClicked(item: Item) {
                 item as Item.CheckboxGroup
                 item.checked = !item.checked
                 when (item) {
-                    showTabs -> preferences.animeCategoryTabs().set(item.checked)
-                    showNumberOfItems -> preferences.animeCategoryNumberOfItems().set(item.checked)
+                    showTabs -> libraryPreferences.categoryTabs().set(item.checked)
+                    showNumberOfItems -> libraryPreferences.categoryNumberOfItems().set(item.checked)
                     else -> {}
                 }
                 adapter.notifyItemChanged(item)
@@ -460,7 +414,8 @@ class AnimelibSettingsSheet(
     open inner class Settings(context: Context, attrs: AttributeSet?) :
         ExtendedNavigationView(context, attrs) {
 
-        val preferences: PreferencesHelper by injectLazy()
+        val preferences: BasePreferences by injectLazy()
+        val libraryPreferences: LibraryPreferences by injectLazy()
         lateinit var adapter: Adapter
 
         /**

@@ -2,13 +2,27 @@ package eu.kanade.tachiyomi.data.backup
 
 import android.content.Context
 import android.net.Uri
+import androidx.preference.PreferenceManager
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.backup.models.BackupAnime
+import eu.kanade.tachiyomi.data.backup.models.BackupAnimeHistory
+import eu.kanade.tachiyomi.data.backup.models.BackupAnimeSource
 import eu.kanade.tachiyomi.data.backup.models.BackupCategory
 import eu.kanade.tachiyomi.data.backup.models.BackupHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
+import eu.kanade.tachiyomi.data.backup.models.BackupPreference
 import eu.kanade.tachiyomi.data.backup.models.BackupSerializer
 import eu.kanade.tachiyomi.data.backup.models.BackupSource
+import eu.kanade.tachiyomi.data.backup.models.BooleanPreferenceValue
+import eu.kanade.tachiyomi.data.backup.models.FloatPreferenceValue
+import eu.kanade.tachiyomi.data.backup.models.IntPreferenceValue
+import eu.kanade.tachiyomi.data.backup.models.LongPreferenceValue
+import eu.kanade.tachiyomi.data.backup.models.StringPreferenceValue
+import eu.kanade.tachiyomi.data.backup.models.StringSetPreferenceValue
+import eu.kanade.tachiyomi.data.database.models.Anime
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Chapter
+import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.Manga
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
@@ -37,6 +51,7 @@ class BackupRestorer(
      * Mapping of source ID to source name from backup data
      */
     private var sourceMapping: Map<Long, String> = emptyMap()
+    private var animeSourceMapping: Map<Long, String> = emptyMap()
 
     private val errors = mutableListOf<Pair<Date, String>>()
 
@@ -61,7 +76,7 @@ class BackupRestorer(
     fun writeErrorLog(): File {
         try {
             if (errors.isNotEmpty()) {
-                val file = context.createFileInCacheDir("tachiyomi_restore.txt")
+                val file = context.createFileInCacheDir("aniyomi_restore.txt")
                 val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
 
                 file.bufferedWriter().use { out ->
@@ -82,16 +97,23 @@ class BackupRestorer(
         val backupString = context.contentResolver.openInputStream(uri)!!.source().gzip().buffer().use { it.readByteArray() }
         val backup = backupManager.parser.decodeFromByteArray(BackupSerializer, backupString)
 
-        restoreAmount = backup.backupManga.size + 1 // +1 for categories
+        restoreAmount = backup.backupManga.size + backup.backupAnime.size + 2 // +2 for categories
 
         // Restore categories
         if (backup.backupCategories.isNotEmpty()) {
             restoreCategories(backup.backupCategories)
         }
 
+        if (backup.backupAnimeCategories.isNotEmpty()) {
+            restoreCategories(backup.backupAnimeCategories)
+        }
+
         // Store source mapping for error messages
         val backupMaps = backup.backupBrokenSources.map { BackupSource(it.name, it.sourceId) } + backup.backupSources
         sourceMapping = backupMaps.associate { it.sourceId to it.name }
+
+        val backupAnimeMaps = backup.backupBrokenAnimeSources.map { BackupAnimeSource(it.name, it.sourceId) } + backup.backupAnimeSources
+        animeSourceMapping = backupAnimeMaps.associate { it.sourceId to it.name }
 
         // Restore individual manga
         backup.backupManga.forEach {
@@ -102,7 +124,19 @@ class BackupRestorer(
             restoreManga(it, backup.backupCategories)
         }
 
+        backup.backupAnime.forEach {
+            if (job?.isActive != true) {
+                return false
+            }
+
+            restoreAnime(it, backup.backupAnimeCategories)
+        }
+
         // TODO: optionally trigger online library + tracker update
+
+        if (backup.backupPreferences.isNotEmpty()) {
+            restorePreferences(backup.backupPreferences)
+        }
 
         return true
     }
@@ -183,12 +217,107 @@ class BackupRestorer(
         backupManager.restoreTracking(manga, tracks)
     }
 
+    private suspend fun restoreAnime(backupAnime: BackupAnime, backupCategories: List<BackupCategory>) {
+        val anime = backupAnime.getAnimeImpl()
+        val episodes = backupAnime.getEpisodesImpl()
+        val categories = backupAnime.categories.map { it.toInt() }
+        val history =
+            backupAnime.brokenHistory.map { BackupAnimeHistory(it.url, it.lastSeen) } + backupAnime.history
+        val tracks = backupAnime.getTrackingImpl()
+
+        try {
+            val dbAnime = backupManager.getAnimeFromDatabase(anime.url, anime.source)
+            if (dbAnime == null) {
+                // Anime not in database
+                restoreExistingAnime(anime, episodes, categories, history, tracks, backupCategories)
+            } else {
+                // Anime in database
+                // Copy information from anime already in database
+                backupManager.restoreExistingAnime(anime, dbAnime)
+                // Fetch rest of anime information
+                restoreNewAnime(anime, episodes, categories, history, tracks, backupCategories)
+            }
+        } catch (e: Exception) {
+            val sourceName = sourceMapping[anime.source] ?: anime.source.toString()
+            errors.add(Date() to "${anime.title} [$sourceName]: ${e.message}")
+        }
+
+        restoreProgress += 1
+        showRestoreProgress(restoreProgress, restoreAmount, anime.title)
+    }
+
+    /**
+     * Fetches anime information
+     *
+     * @param anime anime that needs updating
+     * @param episodes episodes of anime that needs updating
+     * @param categories categories that need updating
+     */
+    private suspend fun restoreExistingAnime(
+        anime: Anime,
+        episodes: List<Episode>,
+        categories: List<Int>,
+        history: List<BackupAnimeHistory>,
+        tracks: List<AnimeTrack>,
+        backupCategories: List<BackupCategory>,
+    ) {
+        val fetchedAnime = backupManager.restoreNewAnime(anime)
+        fetchedAnime.id ?: return
+
+        backupManager.restoreEpisodes(fetchedAnime, episodes)
+        restoreExtras(fetchedAnime, categories, history, tracks, backupCategories)
+    }
+
+    private suspend fun restoreNewAnime(
+        backupAnime: Anime,
+        episodes: List<Episode>,
+        categories: List<Int>,
+        history: List<BackupAnimeHistory>,
+        tracks: List<AnimeTrack>,
+        backupCategories: List<BackupCategory>,
+    ) {
+        backupManager.restoreEpisodes(backupAnime, episodes)
+        restoreExtras(backupAnime, categories, history, tracks, backupCategories)
+    }
+
+    private suspend fun restoreExtras(anime: Anime, categories: List<Int>, history: List<BackupAnimeHistory>, tracks: List<AnimeTrack>, backupCategories: List<BackupCategory>) {
+        backupManager.restoreAnimeCategories(anime, categories, backupCategories)
+        backupManager.restoreAnimeHistory(history)
+        backupManager.restoreAnimeTracking(anime, tracks)
+    }
+
+    private fun restorePreferences(preferences: List<BackupPreference>) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        preferences.forEach { pref ->
+            when (pref.value) {
+                is IntPreferenceValue -> {
+                    prefs.edit().putInt(pref.key, pref.value.value).apply()
+                }
+                is LongPreferenceValue -> {
+                    prefs.edit().putLong(pref.key, pref.value.value).apply()
+                }
+                is FloatPreferenceValue -> {
+                    prefs.edit().putFloat(pref.key, pref.value.value).apply()
+                }
+                is StringPreferenceValue -> {
+                    prefs.edit().putString(pref.key, pref.value.value).apply()
+                }
+                is BooleanPreferenceValue -> {
+                    prefs.edit().putBoolean(pref.key, pref.value.value).apply()
+                }
+                is StringSetPreferenceValue -> {
+                    prefs.edit().putStringSet(pref.key, pref.value.value).apply()
+                }
+            }
+        }
+    }
+
     /**
      * Called to update dialog in [BackupConst]
      *
      * @param progress restore progress
-     * @param amount total restoreAmount of manga
-     * @param title title of restored manga
+     * @param amount total restoreAmount of anime and manga
+     * @param title title of restored anime and manga
      */
     private fun showRestoreProgress(progress: Int, amount: Int, title: String) {
         notifier.showRestoreProgress(title, progress, amount)

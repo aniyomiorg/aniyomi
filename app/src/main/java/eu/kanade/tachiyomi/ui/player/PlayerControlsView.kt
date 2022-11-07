@@ -14,9 +14,9 @@ import android.widget.SeekBar
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.databinding.PrefSkipIntroLengthBinding
+import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.PickerDialog
 import `is`.xyz.mpv.SpeedPickerDialog
@@ -61,7 +61,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         override fun onStopTrackingTouch(seekBar: SeekBar) {
             val newPos = seekBar.progress
-            if (preferences.getPlayerSmoothSeek()) activity.player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
+            if (playerPreferences.playerSmoothSeek().get()) activity.player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
             userIsOperatingSeekbar = false
             animationHandler.removeCallbacks(hideUiForSeekRunnable)
             animationHandler.postDelayed(hideUiForSeekRunnable, 500L)
@@ -130,7 +130,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         animationHandler.postDelayed(hideUiForSeekRunnable, delay)
     }
 
-    private val preferences: PreferencesHelper by injectLazy()
+    private val playerPreferences: PlayerPreferences by injectLazy()
 
     private tailrec fun Context.getActivity(): PlayerActivity? = this as? PlayerActivity
         ?: (this as? ContextWrapper)?.baseContext?.getActivity()
@@ -156,14 +156,14 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.pipBtn.setOnClickListener { activity.startPiP() }
 
-        binding.pipBtn.isVisible = !preferences.pipOnExit() && activity.deviceSupportsPip
+        binding.pipBtn.isVisible = !playerPreferences.pipOnExit().get() && activity.deviceSupportsPip
 
         binding.controlsSkipIntroBtn.setOnLongClickListener { skipIntroLengthDialog(); true }
 
         binding.playbackPositionBtn.setOnClickListener {
             if (activity.player.timePos != null && activity.player.duration != null) {
-                preferences.invertedDurationTxt().set(false)
-                preferences.invertedPlaybackTxt().set(!preferences.invertedPlaybackTxt().get())
+                playerPreferences.invertedDurationTxt().set(false)
+                playerPreferences.invertedPlaybackTxt().set(!playerPreferences.invertedPlaybackTxt().get())
                 updatePlaybackPos(activity.player.timePos!!)
                 updatePlaybackDuration(activity.player.duration!!)
             }
@@ -171,8 +171,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.playbackDurationBtn.setOnClickListener {
             if (activity.player.timePos != null && activity.player.duration != null) {
-                preferences.invertedPlaybackTxt().set(false)
-                preferences.invertedDurationTxt().set(!preferences.invertedDurationTxt().get())
+                playerPreferences.invertedPlaybackTxt().set(false)
+                playerPreferences.invertedDurationTxt().set(!playerPreferences.invertedDurationTxt().get())
                 updatePlaybackPos(activity.player.timePos!!)
                 updatePlaybackDuration(activity.player.duration!!)
             }
@@ -228,20 +228,24 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         if (hide) {
             binding.controlsView.isVisible = false
             binding.lockedView.isVisible = false
-        } else showAndFadeControls()
+        } else {
+            showAndFadeControls()
+        }
     }
 
     @SuppressLint("SetTextI18n")
     internal fun updatePlaybackPos(position: Int) {
         if (activity.player.duration != null) {
-            if (preferences.invertedPlaybackTxt().get()) {
+            if (playerPreferences.invertedPlaybackTxt().get()) {
                 binding.playbackPositionTxt.text =
                     "-${Utils.prettyTime(activity.player.duration!! - position)}"
-            } else if (preferences.invertedDurationTxt().get()) {
+            } else if (playerPreferences.invertedDurationTxt().get()) {
                 binding.playbackPositionTxt.text = Utils.prettyTime(position)
                 binding.playbackDurationTxt.text =
                     "-${Utils.prettyTime(activity.player.duration!! - position)}"
-            } else binding.playbackPositionTxt.text = Utils.prettyTime(position)
+            } else {
+                binding.playbackPositionTxt.text = Utils.prettyTime(position)
+            }
         }
 
         binding.playbackSeekbar.progress = position
@@ -251,7 +255,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     @SuppressLint("SetTextI18n")
     internal fun updatePlaybackDuration(duration: Int) {
-        if (!preferences.invertedDurationTxt().get() && activity.player.duration != null) {
+        if (!playerPreferences.invertedDurationTxt().get() && activity.player.duration != null) {
             binding.playbackDurationTxt.text = Utils.prettyTime(duration)
         }
 
@@ -273,7 +277,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun updateSpeedButton() {
         binding.cycleSpeedBtn.text = context.getString(R.string.ui_speed, activity.player.playbackSpeed)
-        activity.player.playbackSpeed?.let { preferences.setPlayerSpeed(it.toFloat()) }
+        activity.player.playbackSpeed?.let { playerPreferences.playerSpeed().set(it.toFloat()) }
     }
 
     internal fun showAndFadeControls() {
@@ -364,7 +368,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             setView(picker.buildView(LayoutInflater.from(context)))
             setPositiveButton(R.string.dialog_ok) { _, _ ->
                 picker.number?.let {
-                    preferences.setPlayerSpeed(it.toFloat())
+                    playerPreferences.playerSpeed().set(it.toFloat())
                     if (picker.isInteger()) {
                         MPVLib.setPropertyInt("speed", it.toInt())
                     } else {
@@ -398,11 +402,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
             setView(binding.root)
             setNeutralButton(R.string.label_default) { _, _ ->
-                activity.presenter.setAnimeSkipIntroLength(preferences.defaultIntroLength().get())
+                activity.presenter.setAnimeSkipIntroLength(playerPreferences.defaultIntroLength().get())
             }
             setPositiveButton(R.string.dialog_ok) { dialog, _ ->
                 when (newSkipIntroLength) {
-                    0 -> activity.presenter.setAnimeSkipIntroLength(preferences.defaultIntroLength().get())
+                    0 -> activity.presenter.setAnimeSkipIntroLength(playerPreferences.defaultIntroLength().get())
                     activity.presenter.getAnimeSkipIntroLength() -> dialog.cancel()
                     else -> activity.presenter.setAnimeSkipIntroLength(newSkipIntroLength)
                 }

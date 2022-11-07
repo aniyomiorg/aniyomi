@@ -5,12 +5,12 @@ import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.model.hasCustomCover
 import eu.kanade.domain.anime.model.isLocal
 import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.toDomainAnime
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.InputStream
@@ -20,25 +20,26 @@ import eu.kanade.domain.anime.model.Anime as DomainAnime
 /**
  * Call before updating [Anime.thumbnail_url] to ensure old cover can be cleared from cache
  */
-fun Anime.prepUpdateCover(coverCache: AnimeCoverCache, remoteAnime: SAnime, refreshSameUrl: Boolean) {
+fun DomainAnime.prepUpdateCover(coverCache: AnimeCoverCache, remoteAnime: SAnime, refreshSameUrl: Boolean): DomainAnime {
     // Never refresh covers if the new url is null, as the current url has possibly become invalid
-    val newUrl = remoteAnime.thumbnail_url ?: return
+    val newUrl = remoteAnime.thumbnail_url ?: return this
 
     // Never refresh covers if the url is empty to avoid "losing" existing covers
-    if (newUrl.isEmpty()) return
+    if (newUrl.isEmpty()) return this
 
-    if (!refreshSameUrl && thumbnail_url == newUrl) return
+    if (!refreshSameUrl && thumbnailUrl == newUrl) return this
 
-    when {
-        toDomainAnime()!!.isLocal() -> {
-            cover_last_modified = Date().time
+    return when {
+        isLocal() -> {
+            this.copy(coverLastModified = Date().time)
         }
-        toDomainAnime()!!.hasCustomCover(coverCache) -> {
+        hasCustomCover(coverCache) -> {
             coverCache.deleteFromCache(this, false)
+            this
         }
         else -> {
-            cover_last_modified = Date().time
             coverCache.deleteFromCache(this, false)
+            this.copy(coverLastModified = Date().time)
         }
     }
 }
@@ -50,17 +51,23 @@ fun Anime.removeCovers(coverCache: AnimeCoverCache = Injekt.get()): Int {
     return coverCache.deleteFromCache(this, true)
 }
 
-fun DomainAnime.shouldDownloadNewEpisodes(dbCategories: List<Long>, prefs: PreferencesHelper): Boolean {
+fun DomainAnime.removeCovers(coverCache: AnimeCoverCache = Injekt.get()): DomainAnime {
+    if (isLocal()) return this
+    coverCache.deleteFromCache(this, true)
+    return copy(coverLastModified = Date().time)
+}
+
+fun DomainAnime.shouldDownloadNewEpisodes(dbCategories: List<Long>, preferences: DownloadPreferences): Boolean {
     if (!favorite) return false
 
-    val categories = dbCategories.ifEmpty { listOf(0) }
+    val categories = dbCategories.ifEmpty { listOf(0L) }
 
     // Boolean to determine if user wants to automatically download new episodes.
-    val downloadNewEpisode = prefs.downloadNewChapter().get()
-    if (!downloadNewEpisode) return false
+    val downloadNewEpisodes = preferences.downloadNewEpisodes().get()
+    if (!downloadNewEpisodes) return false
 
-    val includedCategories = prefs.downloadNewEpisodeCategories().get().map { it.toLong() }
-    val excludedCategories = prefs.downloadNewEpisodeCategoriesExclude().get().map { it.toLong() }
+    val includedCategories = preferences.downloadNewEpisodeCategories().get().map { it.toLong() }
+    val excludedCategories = preferences.downloadNewEpisodeCategoriesExclude().get().map { it.toLong() }
 
     // Default: Download from all categories
     if (includedCategories.isEmpty() && excludedCategories.isEmpty()) return true
@@ -80,15 +87,12 @@ suspend fun DomainAnime.editCover(
     stream: InputStream,
     updateAnime: UpdateAnime = Injekt.get(),
     coverCache: AnimeCoverCache = Injekt.get(),
-): Boolean {
-    return if (isLocal()) {
-        LocalAnimeSource.updateCover(context, toDbAnime(), stream)
+) {
+    if (isLocal()) {
+        LocalAnimeSource.updateCover(context, toSAnime(), stream)
         updateAnime.awaitUpdateCoverLastModified(id)
     } else if (favorite) {
         coverCache.setCustomCoverToCache(toDbAnime(), stream)
         updateAnime.awaitUpdateCoverLastModified(id)
-    } else {
-        // We should never reach this block
-        false
     }
 }

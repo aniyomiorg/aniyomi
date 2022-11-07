@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import eu.kanade.data.source.NoResultsException
+import eu.kanade.data.chapter.NoChaptersException
 import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.domain.source.interactor.GetRemoteManga
@@ -225,7 +225,7 @@ fun BrowseSourceContent(
 
     val getErrorMessage: (LoadState.Error) -> String = { state ->
         when {
-            state.error is NoResultsException -> context.getString(R.string.no_results_found)
+            state.error is NoChaptersException -> context.getString(R.string.no_results_found)
             state.error.message.isNullOrEmpty() -> ""
             state.error.message.orEmpty().startsWith("HTTP error") -> "${state.error.message}: ${context.getString(R.string.http_error_hint)}"
             else -> state.error.message.orEmpty()

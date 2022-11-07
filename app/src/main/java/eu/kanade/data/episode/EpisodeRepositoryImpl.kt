@@ -1,11 +1,11 @@
 package eu.kanade.data.episode
 
 import eu.kanade.data.AnimeDatabaseHandler
-import eu.kanade.data.toLong
 import eu.kanade.domain.episode.model.Episode
 import eu.kanade.domain.episode.model.EpisodeUpdate
 import eu.kanade.domain.episode.repository.EpisodeRepository
 import eu.kanade.tachiyomi.util.system.logcat
+import eu.kanade.tachiyomi.util.system.toLong
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 
@@ -81,6 +81,10 @@ class EpisodeRepositoryImpl(
 
     override suspend fun getEpisodeByAnimeId(animeId: Long): List<Episode> {
         return handler.awaitList { episodesQueries.getEpisodesByAnimeId(animeId, episodeMapper) }
+    }
+
+    override suspend fun getBookmarkedEpisodesByAnimeId(animeId: Long): List<Episode> {
+        return handler.awaitList { episodesQueries.getBookmarkedEpisodesByAnimeId(animeId, episodeMapper) }
     }
 
     override suspend fun getEpisodeById(id: Long): Episode? {

@@ -5,8 +5,6 @@ import eu.kanade.tachiyomi.core.preference.PreferenceStore
 import eu.kanade.tachiyomi.core.preference.getEnum
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.util.system.DeviceUtil
-import eu.kanade.tachiyomi.util.system.isPreviewBuildType
-import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 
 class BasePreferences(
     val context: Context,
@@ -26,5 +24,6 @@ class BasePreferences(
         if (DeviceUtil.isMiui) PreferenceValues.ExtensionInstaller.LEGACY else PreferenceValues.ExtensionInstaller.PACKAGEINSTALLER,
     )
 
-    fun acraEnabled() = preferenceStore.getBoolean("acra.enable", isPreviewBuildType || isReleaseBuildType)
+    // acra is disabled
+    fun acraEnabled() = preferenceStore.getBoolean("acra.enable", false)
 }

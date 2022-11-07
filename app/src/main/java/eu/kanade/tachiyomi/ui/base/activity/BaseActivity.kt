@@ -8,7 +8,6 @@ import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegateImpl
 import eu.kanade.tachiyomi.ui.base.delegate.ThemingDelegate
 import eu.kanade.tachiyomi.ui.base.delegate.ThemingDelegateImpl
-import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.prepareTabletUiContext
 import uy.kohesive.injekt.injectLazy
 
@@ -20,11 +19,7 @@ open class BaseActivity :
     protected val preferences: BasePreferences by injectLazy()
 
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(
-            LocaleHelper
-                .createLocaleWrapper(newBase)
-                .prepareTabletUiContext(),
-        )
+        super.attachBaseContext(newBase.prepareTabletUiContext())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

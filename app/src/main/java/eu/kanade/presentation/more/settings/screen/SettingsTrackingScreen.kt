@@ -51,6 +51,7 @@ import eu.kanade.tachiyomi.data.track.anilist.AnilistApi
 import eu.kanade.tachiyomi.data.track.bangumi.BangumiApi
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeListApi
 import eu.kanade.tachiyomi.data.track.shikimori.ShikimoriApi
+import eu.kanade.tachiyomi.data.track.simkl.SimklApi
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withUIContext
@@ -139,6 +140,12 @@ class SettingsTrackingScreen : SearchableSettings {
                         service = trackManager.shikimori,
                         login = { context.openInBrowser(ShikimoriApi.authUrl(), forceDefaultBrowser = true) },
                         logout = { dialog = LogoutDialog(trackManager.shikimori) },
+                    ),
+                    Preference.PreferenceItem.TrackingPreference(
+                        title = stringResource(trackManager.simkl.nameRes()),
+                        service = trackManager.simkl,
+                        login = { context.openInBrowser(SimklApi.authUrl(), forceDefaultBrowser = true) },
+                        logout = { dialog = LogoutDialog(trackManager.simkl) },
                     ),
                     Preference.PreferenceItem.TrackingPreference(
                         title = stringResource(trackManager.bangumi.nameRes()),

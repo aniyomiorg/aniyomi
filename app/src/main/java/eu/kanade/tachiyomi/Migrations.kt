@@ -4,21 +4,21 @@ import android.content.Context
 import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateJob
 import eu.kanade.domain.backup.service.BackupPreferences
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
+import eu.kanade.tachiyomi.animeextension.AnimeExtensionUpdateJob
 import eu.kanade.tachiyomi.core.preference.PreferenceStore
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
+import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateJob
 import eu.kanade.tachiyomi.data.backup.BackupCreatorJob
 import eu.kanade.tachiyomi.data.library.LibraryUpdateJob
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.updater.AppUpdateJob
-import eu.kanade.tachiyomi.extension.AnimeExtensionUpdateJob
 import eu.kanade.tachiyomi.extension.ExtensionUpdateJob
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
@@ -216,9 +216,9 @@ object Migrations {
                     libraryPreferences.libraryUpdateInterval().set(3)
                     LibraryUpdateJob.setupTask(context, 3)
                 }
-                val animeupdateInterval = preferences.libraryUpdateInterval().get()
+                val animeupdateInterval = libraryPreferences.libraryUpdateInterval().get()
                 if (animeupdateInterval == 1 || animeupdateInterval == 2) {
-                    preferences.libraryUpdateInterval().set(3)
+                    libraryPreferences.libraryUpdateInterval().set(3)
                     AnimelibUpdateJob.setupTask(context, 3)
                 }
             }
@@ -339,6 +339,12 @@ object Migrations {
                     libraryPreferences.sortChapterBySourceOrNumber(),
                     libraryPreferences.displayChapterByNameOrNumber(),
                     libraryPreferences.sortChapterByAscendingOrDescending(),
+                    libraryPreferences.filterEpisodeBySeen(),
+                    libraryPreferences.filterEpisodeByDownloaded(),
+                    libraryPreferences.filterEpisodeByBookmarked(),
+                    libraryPreferences.sortEpisodeBySourceOrNumber(),
+                    libraryPreferences.displayEpisodeByNameOrNumber(),
+                    libraryPreferences.sortEpisodeByAscendingOrDescending(),
                 )
 
                 prefs.edit {

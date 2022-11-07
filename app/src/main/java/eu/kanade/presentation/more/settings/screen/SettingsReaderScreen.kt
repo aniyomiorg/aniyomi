@@ -139,6 +139,10 @@ class SettingsReaderScreen : SearchableSettings {
                     pref = readerPreferences.alwaysShowChapterTransition(),
                     title = stringResource(R.string.pref_always_show_chapter_transition),
                 ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = readerPreferences.preserveReadingPosition(),
+                    title = stringResource(R.string.pref_preserve_reading_position),
+                ),
             ),
         )
     }

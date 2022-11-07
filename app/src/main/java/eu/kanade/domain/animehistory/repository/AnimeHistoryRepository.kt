@@ -1,17 +1,14 @@
 package eu.kanade.domain.animehistory.repository
 
-import androidx.paging.PagingSource
 import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
 import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
-import eu.kanade.domain.episode.model.Episode
+import kotlinx.coroutines.flow.Flow
 
 interface AnimeHistoryRepository {
 
-    fun getHistory(query: String): PagingSource<Long, AnimeHistoryWithRelations>
+    fun getHistory(query: String): Flow<List<AnimeHistoryWithRelations>>
 
     suspend fun getLastHistory(): AnimeHistoryWithRelations?
-
-    suspend fun getNextEpisode(animeId: Long, episodeId: Long): Episode?
 
     suspend fun resetHistory(historyId: Long)
 

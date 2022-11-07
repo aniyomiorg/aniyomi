@@ -2,12 +2,13 @@ package eu.kanade.data.anime
 
 import eu.kanade.data.AnimeDatabaseHandler
 import eu.kanade.data.listOfStringsAdapter
-import eu.kanade.data.toLong
+import eu.kanade.data.updateStrategyAdapter
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.AnimeUpdate
 import eu.kanade.domain.anime.repository.AnimeRepository
-import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
+import eu.kanade.domain.animelib.model.AnimelibAnime
 import eu.kanade.tachiyomi.util.system.logcat
+import eu.kanade.tachiyomi.util.system.toLong
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 
@@ -24,7 +25,11 @@ class AnimeRepositoryImpl(
     }
 
     override suspend fun getAnimeByUrlAndSourceId(url: String, sourceId: Long): Anime? {
-        return handler.awaitOneOrNull { animesQueries.getAnimeByUrlAndSource(url, sourceId, animeMapper) }
+        return handler.awaitOneOrNull(inTransaction = true) { animesQueries.getAnimeByUrlAndSource(url, sourceId, animeMapper) }
+    }
+
+    override fun getAnimeByUrlAndSourceIdAsFlow(url: String, sourceId: Long): Flow<Anime?> {
+        return handler.subscribeToOneOrNull { animesQueries.getAnimeByUrlAndSource(url, sourceId, animeMapper) }
     }
 
     override suspend fun getFavorites(): List<Anime> {
@@ -32,11 +37,11 @@ class AnimeRepositoryImpl(
     }
 
     override suspend fun getAnimelibAnime(): List<AnimelibAnime> {
-        return handler.awaitList { animesQueries.getAnimelib(animelibAnime) }
+        return handler.awaitList { animelibViewQueries.animelib(animelibAnime) }
     }
 
     override fun getAnimelibAnimeAsFlow(): Flow<List<AnimelibAnime>> {
-        return handler.subscribeToList { animesQueries.getAnimelib(animelibAnime) }
+        return handler.subscribeToList { animelibViewQueries.animelib(animelibAnime) }
     }
 
     override fun getFavoritesBySourceId(sourceId: Long): Flow<List<Anime>> {
@@ -69,7 +74,7 @@ class AnimeRepositoryImpl(
     }
 
     override suspend fun insert(anime: Anime): Long? {
-        return handler.awaitOneOrNull {
+        return handler.awaitOneOrNull(inTransaction = true) {
             animesQueries.insert(
                 source = anime.source,
                 url = anime.url,
@@ -88,6 +93,7 @@ class AnimeRepositoryImpl(
                 episodeFlags = anime.episodeFlags,
                 coverLastModified = anime.coverLastModified,
                 dateAdded = anime.dateAdded,
+                updateStrategy = anime.updateStrategy,
             )
             animesQueries.selectLastInsertedRowId()
         }
@@ -103,9 +109,9 @@ class AnimeRepositoryImpl(
         }
     }
 
-    override suspend fun updateAll(values: List<AnimeUpdate>): Boolean {
+    override suspend fun updateAll(animeUpdates: List<AnimeUpdate>): Boolean {
         return try {
-            partialUpdate(*values.toTypedArray())
+            partialUpdate(*animeUpdates.toTypedArray())
             true
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
@@ -113,9 +119,9 @@ class AnimeRepositoryImpl(
         }
     }
 
-    private suspend fun partialUpdate(vararg values: AnimeUpdate) {
+    private suspend fun partialUpdate(vararg animeUpdates: AnimeUpdate) {
         handler.await(inTransaction = true) {
-            values.forEach { value ->
+            animeUpdates.forEach { value ->
                 animesQueries.update(
                     source = value.source,
                     url = value.url,
@@ -134,6 +140,7 @@ class AnimeRepositoryImpl(
                     coverLastModified = value.coverLastModified,
                     dateAdded = value.dateAdded,
                     animeId = value.id,
+                    updateStrategy = value.updateStrategy?.let(updateStrategyAdapter::encode),
                 )
             }
         }

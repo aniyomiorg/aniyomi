@@ -4,35 +4,31 @@ package eu.kanade.tachiyomi.util.episode
  * -R> = regex conversion.
  */
 object EpisodeRecognition {
+
+    private const val NUMBER_PATTERN = """([0-9]+)(\.[0-9]+)?(\.?[a-z]+)?"""
+
     /**
      * All cases with Ch.xx
      * Mokushiroku Alice Vol.1 Ch. 4: Misrepresentation -R> 4
      */
-    private val basic = Regex("""(?<=ep\.) *([0-9]+)(\.[0-9]+)?(\.?[a-z]+)?""")
+    private val basic = Regex("""(?<=ep\.) *$NUMBER_PATTERN""")
 
     /**
-     * Regex used when only one number occurrence
      * Example: Bleach 567: Down With Snowwhite -R> 567
      */
-    private val occurrence = Regex("""([0-9]+)(\.[0-9]+)?(\.?[a-z]+)?""")
-
-    /**
-     * Regex used when anime title removed
-     * Example: Solanin 028 Vol. 2 -> 028 Vol.2 -> 028Vol.2 -R> 028
-     */
-    private val withoutAnime = Regex("""^([0-9]+)(\.[0-9]+)?(\.?[a-z]+)?""")
+    private val number = Regex(NUMBER_PATTERN)
 
     /**
      * Regex used to remove unwanted tags
      * Example Prison School 12 v.1 vol004 version1243 volume64 -R> Prison School 12
      */
-    private val unwanted = Regex("""(?<![a-z])(v|ver|vol|version|volume|season|s).?[0-9]+""")
+    private val unwanted = Regex("""\b(?:v|ver|vol|version|volume|season|s)[^a-z]?[0-9]+""")
 
     /**
      * Regex used to remove unwanted whitespace
      * Example One Piece 12 special -R> One Piece 12special
      */
-    private val unwantedWhiteSpace = Regex("""(\s)(extra|special|omake)""")
+    private val unwantedWhiteSpace = Regex("""\s(?=extra|special|omake)""")
 
     fun parseEpisodeNumber(animeTitle: String, episodeName: String, episodeNumber: Float? = null): Float {
         // If episode number is known return.
@@ -43,40 +39,23 @@ object EpisodeRecognition {
         // Get chapter title with lower case
         var name = episodeName.lowercase()
 
+        // Remove anime title from episode title.
+        name = name.replace(animeTitle.lowercase(), "").trim()
+
         // Remove comma's or hyphens.
         name = name.replace(',', '.').replace('-', '.')
 
         // Remove unwanted white spaces.
-        unwantedWhiteSpace.findAll(name).let {
-            it.forEach { occurrence -> name = name.replace(occurrence.value, occurrence.value.trim()) }
-        }
+        name = unwantedWhiteSpace.replace(name, "")
 
         // Remove unwanted tags.
-        unwanted.findAll(name).let {
-            it.forEach { occurrence -> name = name.replace(occurrence.value, "") }
-        }
+        name = unwanted.replace(name, "")
 
         // Check base case ch.xx
-        getEpisodeNumberFromMatch(basic.find(name))?.let { return it }
-
-        // Check one number occurrence.
-        val occurrences: MutableList<MatchResult> = arrayListOf()
-        occurrence.findAll(name).let {
-            it.forEach { occurrence -> occurrences.add(occurrence) }
-        }
-
-        if (occurrences.size == 1) {
-            getEpisodeNumberFromMatch(occurrences[0])?.let { return it }
-        }
-
-        // Remove manga title from chapter title.
-        val nameWithoutAnime = name.replace(animeTitle.lowercase(), "").trim()
-
-        // Check if first value is number after title remove.
-        getEpisodeNumberFromMatch(withoutAnime.find(nameWithoutAnime))?.let { return it }
+        basic.find(name)?.let { return getEpisodeNumberFromMatch(it) }
 
         // Take the first number encountered.
-        getEpisodeNumberFromMatch(occurrence.find(nameWithoutAnime))?.let { return it }
+        number.find(name)?.let { return getEpisodeNumberFromMatch(it) }
 
         return episodeNumber ?: -1f
     }
@@ -86,8 +65,8 @@ object EpisodeRecognition {
      * @param match result of regex
      * @return chapter number if found else null
      */
-    private fun getEpisodeNumberFromMatch(match: MatchResult?): Float? {
-        return match?.let {
+    private fun getEpisodeNumberFromMatch(match: MatchResult): Float {
+        return match.let {
             val initial = it.groups[1]?.value?.toFloat()!!
             val subChapterDecimal = it.groups[2]?.value
             val subChapterAlpha = it.groups[3]?.value
@@ -120,11 +99,9 @@ object EpisodeRecognition {
                 return .97f
             }
 
-            return if (alpha[0] == '.') {
-                // Take value after (.)
-                parseAlphaPostFix(alpha[1])
-            } else {
-                parseAlphaPostFix(alpha[0])
+            val trimmedAlpha = alpha.trimStart('.')
+            if (trimmedAlpha.length == 1) {
+                return parseAlphaPostFix(trimmedAlpha[0])
             }
         }
 
@@ -135,6 +112,8 @@ object EpisodeRecognition {
      * x.a -> x.1, x.b -> x.2, etc
      */
     private fun parseAlphaPostFix(alpha: Char): Float {
-        return ("0." + (alpha.code - 96).toString()).toFloat()
+        val number = alpha.code - ('a'.code - 1)
+        if (number >= 10) return 0f
+        return number / 10f
     }
 }

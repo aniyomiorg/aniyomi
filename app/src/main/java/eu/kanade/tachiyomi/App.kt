@@ -24,31 +24,31 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.disk.DiskCache
 import coil.util.DebugLogger
+import eu.kanade.data.AnimeDatabaseHandler
 import eu.kanade.data.DatabaseHandler
 import eu.kanade.domain.DomainModule
-import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
-import eu.kanade.tachiyomi.data.coil.AnimeCoverKeyer
-import eu.kanade.tachiyomi.data.coil.AnimeKeyer
-import eu.kanade.tachiyomi.data.coil.DomainAnimeKeyer
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.ui.model.setAppCompatDelegateThemeMode
 import eu.kanade.tachiyomi.crash.CrashActivity
 import eu.kanade.tachiyomi.crash.GlobalExceptionHandler
+import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher
+import eu.kanade.tachiyomi.data.coil.AnimeCoverKeyer
+import eu.kanade.tachiyomi.data.coil.AnimeKeyer
+import eu.kanade.tachiyomi.data.coil.DomainAnimeKeyer
 import eu.kanade.tachiyomi.data.coil.DomainMangaKeyer
 import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher
 import eu.kanade.tachiyomi.data.coil.MangaCoverKeyer
 import eu.kanade.tachiyomi.data.coil.MangaKeyer
 import eu.kanade.tachiyomi.data.coil.TachiyomiImageDecoder
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.glance.AnimeUpdatesGridGlanceWidget
 import eu.kanade.tachiyomi.glance.UpdatesGridGlanceWidget
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.animatorDurationScale
-import eu.kanade.tachiyomi.util.system.isPreviewBuildType
-import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.notification
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -140,6 +140,18 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
             }
             .launchIn(ProcessLifecycleOwner.get().lifecycleScope)
 
+        Injekt.get<AnimeDatabaseHandler>()
+            .subscribeToList { animeupdatesViewQueries.animeupdates(after = AnimeUpdatesGridGlanceWidget.DateLimit.timeInMillis) }
+            .drop(1)
+            .distinctUntilChanged()
+            .onEach {
+                val manager = GlanceAppWidgetManager(this)
+                if (manager.getGlanceIds(AnimeUpdatesGridGlanceWidget::class.java).isNotEmpty()) {
+                    AnimeUpdatesGridGlanceWidget().loadData(it)
+                }
+            }
+            .launchIn(ProcessLifecycleOwner.get().lifecycleScope)
+
         if (!LogcatLogger.isInstalled && networkPreferences.verboseLogging().get()) {
             LogcatLogger.install(AndroidLogcatLogger(LogPriority.VERBOSE))
         }
@@ -166,8 +178,8 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
                 add(MangaCoverFetcher.MangaCoverFactory(lazy(callFactoryInit), lazy(diskCacheInit)))
                 add(MangaKeyer())
                 add(DomainMangaKeyer())
-                add(MangaCoverKeyer())
                 add(AnimeCoverKeyer())
+                add(MangaCoverKeyer())
             }
             callFactory(callFactoryInit)
             diskCache(diskCacheInit)

@@ -14,11 +14,12 @@ class BaselineProfileGenerator {
 
     @Test
     fun generate() = baselineProfileRule.collectBaselineProfile(
-        packageName = "eu.kanade.tachiyomi.benchmark",
+        packageName = "xyz.jmir.tachiyomi.mi.benchmark",
         profileBlock = {
             pressHome()
             startActivityAndWait()
 
+            device.findObject(By.text("Manga")).click()
             device.findObject(By.text("Updates")).click()
             device.findObject(By.text("History")).click()
             device.findObject(By.text("More")).click()

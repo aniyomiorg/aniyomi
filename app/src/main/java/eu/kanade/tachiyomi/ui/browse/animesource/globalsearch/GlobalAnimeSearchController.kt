@@ -10,9 +10,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.databinding.GlobalSearchControllerBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.SearchableNucleusController
@@ -33,7 +34,8 @@ open class GlobalAnimeSearchController(
     GlobalAnimeSearchCardAdapter.OnAnimeClickListener,
     GlobalAnimeSearchAdapter.OnTitleClickListener {
 
-    private val preferences: PreferencesHelper by injectLazy()
+    private val preferences: BasePreferences by injectLazy()
+    private val sourcePreferences: SourcePreferences by injectLazy()
 
     /**
      * Adapter containing search results grouped by lang.
@@ -101,11 +103,23 @@ open class GlobalAnimeSearchController(
             inflater,
             R.menu.global_search,
             R.id.action_search,
-            null,
-            false, // the onMenuItemActionExpand will handle this
         )
 
         optionsMenuSearchItem = menu.findItem(R.id.action_search)
+
+        // Focus search on launch from browse screen
+        if (initialQuery.isNullOrEmpty()) {
+            optionsMenuSearchItem?.expandActionView()
+        }
+    }
+
+    override fun onSearchMenuItemActionCollapse(item: MenuItem?) {
+        super.onSearchMenuItemActionCollapse(item)
+        // Close this screen if query is empty
+        // i.e. launch from browse screen and clicking the back button icon without making any search
+        if (presenter.query.isEmpty()) {
+            router.popCurrentController()
+        }
     }
 
     override fun onSearchMenuItemActionExpand(item: MenuItem?) {
@@ -179,7 +193,7 @@ open class GlobalAnimeSearchController(
      * @param searchResult result of search.
      */
     fun setItems(searchResult: List<GlobalAnimeSearchItem>) {
-        if (searchResult.isEmpty() && preferences.searchPinnedSourcesOnly()) {
+        if (searchResult.isEmpty() && sourcePreferences.searchPinnedSourcesOnly().get()) {
             binding.emptyView.show(R.string.no_pinned_sources)
         } else {
             binding.emptyView.hide()
@@ -197,7 +211,7 @@ open class GlobalAnimeSearchController(
     }
 
     /**
-     * Called from the presenter when a anime is initialized.
+     * Called from the presenter when an anime is initialized.
      *
      * @param anime the initialized anime.
      */
@@ -210,7 +224,7 @@ open class GlobalAnimeSearchController(
      */
     override fun onTitleClick(source: AnimeCatalogueSource) {
         if (!preferences.incognitoMode().get()) {
-            preferences.lastUsedAnimeSource().set(source.id)
+            sourcePreferences.lastUsedAnimeSource().set(source.id)
         }
         router.pushController(BrowseAnimeSourceController(source, presenter.query).withFadeTransaction())
     }

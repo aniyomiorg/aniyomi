@@ -1,19 +1,24 @@
 package eu.kanade.tachiyomi.ui.browse.animesource
 
-import android.os.Bundle
 import eu.kanade.domain.animesource.interactor.GetEnabledAnimeSources
 import eu.kanade.domain.animesource.interactor.ToggleAnimeSource
 import eu.kanade.domain.animesource.interactor.ToggleAnimeSourcePin
 import eu.kanade.domain.animesource.model.AnimeSource
 import eu.kanade.domain.animesource.model.Pin
-import eu.kanade.presentation.browse.AnimeSourceUiModel
-import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.presentation.animebrowse.AnimeSourceUiModel
+import eu.kanade.presentation.animebrowse.AnimeSourcesState
+import eu.kanade.presentation.animebrowse.AnimeSourcesStateImpl
 import eu.kanade.tachiyomi.util.lang.launchIO
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import eu.kanade.tachiyomi.util.system.logcat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
+import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.TreeMap
@@ -23,21 +28,26 @@ import java.util.TreeMap
  * Function calls should be done from here. UI calls should be done from the controller.
  */
 class AnimeSourcesPresenter(
+    private val presenterScope: CoroutineScope,
+    private val state: AnimeSourcesStateImpl = AnimeSourcesState() as AnimeSourcesStateImpl,
+    private val preferences: BasePreferences = Injekt.get(),
+    private val sourcePreferences: SourcePreferences = Injekt.get(),
     private val getEnabledAnimeSources: GetEnabledAnimeSources = Injekt.get(),
     private val toggleSource: ToggleAnimeSource = Injekt.get(),
     private val toggleSourcePin: ToggleAnimeSourcePin = Injekt.get(),
-) : BasePresenter<AnimeSourcesController>() {
+) : AnimeSourcesState by state {
 
-    private val _state: MutableStateFlow<AnimeSourceState> = MutableStateFlow(AnimeSourceState.Loading)
-    val state: StateFlow<AnimeSourceState> = _state.asStateFlow()
+    private val _events = Channel<Event>(Int.MAX_VALUE)
+    val events = _events.receiveAsFlow()
 
-    override fun onCreate(savedState: Bundle?) {
-        super.onCreate(savedState)
+    fun onCreate() {
         presenterScope.launchIO {
             getEnabledAnimeSources.subscribe()
                 .catch { exception ->
-                    _state.value = AnimeSourceState.Error(exception)
+                    logcat(LogPriority.ERROR, exception)
+                    _events.send(Event.FailedFetchingSources)
                 }
+                .stateIn(presenterScope)
                 .collectLatest(::collectLatestAnimeSources)
         }
     }
@@ -71,7 +81,14 @@ class AnimeSourcesPresenter(
                 }.toTypedArray(),
             )
         }
-        _state.value = AnimeSourceState.Success(uiModels)
+        state.isLoading = false
+        state.items = uiModels
+    }
+
+    fun onOpenSource(source: AnimeSource) {
+        if (!preferences.incognitoMode().get()) {
+            sourcePreferences.lastUsedSource().set(source.id)
+        }
     }
 
     fun toggleSource(source: AnimeSource) {
@@ -82,14 +99,14 @@ class AnimeSourcesPresenter(
         toggleSourcePin.await(source)
     }
 
+    sealed class Event {
+        object FailedFetchingSources : Event()
+    }
+
+    data class Dialog(val source: AnimeSource)
+
     companion object {
         const val PINNED_KEY = "pinned"
         const val LAST_USED_KEY = "last_used"
     }
-}
-
-sealed class AnimeSourceState {
-    object Loading : AnimeSourceState()
-    data class Error(val error: Throwable) : AnimeSourceState()
-    data class Success(val uiModels: List<AnimeSourceUiModel>) : AnimeSourceState()
 }

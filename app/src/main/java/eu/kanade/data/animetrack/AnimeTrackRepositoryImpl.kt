@@ -44,9 +44,9 @@ class AnimeTrackRepositoryImpl(
         insertValues(*tracks.toTypedArray())
     }
 
-    private suspend fun insertValues(vararg values: AnimeTrack) {
+    private suspend fun insertValues(vararg tracks: AnimeTrack) {
         handler.await(inTransaction = true) {
-            values.forEach { animeTrack ->
+            tracks.forEach { animeTrack ->
                 anime_syncQueries.insert(
                     animeId = animeTrack.animeId,
                     syncId = animeTrack.syncId,

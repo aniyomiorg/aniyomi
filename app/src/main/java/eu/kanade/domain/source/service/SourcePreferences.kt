@@ -16,11 +16,17 @@ class SourcePreferences(
 
     fun disabledSources() = preferenceStore.getStringSet("hidden_catalogues", emptySet())
 
+    fun disabledAnimeSources() = preferenceStore.getStringSet("hidden_anime_catalogues", emptySet())
+
     fun pinnedSources() = preferenceStore.getStringSet("pinned_catalogues", emptySet())
+
+    fun pinnedAnimeSources() = preferenceStore.getStringSet("pinned_anime_catalogues", emptySet())
 
     fun duplicatePinnedSources() = preferenceStore.getBoolean("duplicate_pinned_sources", false)
 
     fun lastUsedSource() = preferenceStore.getLong("last_catalogue_source", -1)
+
+    fun lastUsedAnimeSource() = preferenceStore.getLong("last_anime_catalogue_source", -1)
 
     fun showNsfwSource() = preferenceStore.getBoolean("show_nsfw_source", true)
 
@@ -30,7 +36,11 @@ class SourcePreferences(
 
     fun extensionUpdatesCount() = preferenceStore.getInt("ext_updates_count", 0)
 
+    fun animeextensionUpdatesCount() = preferenceStore.getInt("animeext_updates_count", 0)
+
     fun trustedSignatures() = preferenceStore.getStringSet("trusted_signatures", emptySet())
 
     fun searchPinnedSourcesOnly() = preferenceStore.getBoolean("search_pinned_sources_only", false)
+
+    fun searchAnimePinnedSourcesOnly() = preferenceStore.getBoolean("search_pinned_anime_sources_only", false)
 }

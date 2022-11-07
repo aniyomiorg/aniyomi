@@ -38,7 +38,7 @@ data class Episode(
             url = sEpisode.url,
             dateUpload = sEpisode.date_upload,
             episodeNumber = sEpisode.episode_number,
-            scanlator = sEpisode.scanlator,
+            scanlator = sEpisode.scanlator?.ifBlank { null },
         )
     }
 

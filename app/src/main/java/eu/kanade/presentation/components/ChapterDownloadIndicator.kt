@@ -205,7 +205,7 @@ private fun ErrorIndicator(
     ) {
         Icon(
             imageVector = Icons.Outlined.ErrorOutline,
-            contentDescription = stringResource(R.string.chapter_error),
+            contentDescription = stringResource(R.string.download_error),
             modifier = Modifier.size(IndicatorSize),
             tint = MaterialTheme.colorScheme.error,
         )

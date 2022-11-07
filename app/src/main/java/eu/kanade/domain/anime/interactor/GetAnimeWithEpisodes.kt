@@ -24,4 +24,8 @@ class GetAnimeWithEpisodes(
     suspend fun awaitAnime(id: Long): Anime {
         return animeRepository.getAnimeById(id)
     }
+
+    suspend fun awaitEpisodes(id: Long): List<Episode> {
+        return episodeRepository.getEpisodeByAnimeId(id)
+    }
 }

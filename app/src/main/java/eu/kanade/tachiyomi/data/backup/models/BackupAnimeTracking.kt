@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.data.backup.full.models
+package eu.kanade.tachiyomi.data.backup.models
 
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.AnimeTrackImpl
@@ -12,7 +12,8 @@ data class BackupAnimeTracking(
     @ProtoNumber(1) var syncId: Int,
     // LibraryId is not null in 1.x
     @ProtoNumber(2) var libraryId: Long,
-    @Deprecated("Use mediaId instead", level = DeprecationLevel.WARNING) @ProtoNumber(3)
+    @Deprecated("Use mediaId instead", level = DeprecationLevel.WARNING)
+    @ProtoNumber(3)
     var mediaIdInt: Int = 0,
     // trackingUrl is called mediaUrl in 1.x
     @ProtoNumber(4) var trackingUrl: String = "",
@@ -31,6 +32,7 @@ data class BackupAnimeTracking(
     fun getTrackingImpl(): AnimeTrackImpl {
         return AnimeTrackImpl().apply {
             sync_id = this@BackupAnimeTracking.syncId
+            @Suppress("DEPRECATION")
             media_id = if (this@BackupAnimeTracking.mediaIdInt != 0) {
                 this@BackupAnimeTracking.mediaIdInt.toLong()
             } else {
@@ -69,20 +71,7 @@ data class BackupAnimeTracking(
     }
 }
 
-val backupAnimeTrackMapper = {
-        _id: Long,
-        anime_id: Long,
-        syncId: Long,
-        mediaId: Long,
-        libraryId: Long?,
-        title: String,
-        lastEpisodeSeen: Double,
-        totalEpisodes: Long,
-        status: Long,
-        score: Float,
-        remoteUrl: String,
-        startDate: Long,
-        finishDate: Long,  ->
+val backupAnimeTrackMapper = { _id: Long, anime_id: Long, syncId: Long, mediaId: Long, libraryId: Long?, title: String, lastEpisodeSeen: Double, totalEpisodes: Long, status: Long, score: Float, remoteUrl: String, startDate: Long, finishDate: Long ->
     BackupAnimeTracking(
         syncId = syncId.toInt(),
         mediaId = mediaId,

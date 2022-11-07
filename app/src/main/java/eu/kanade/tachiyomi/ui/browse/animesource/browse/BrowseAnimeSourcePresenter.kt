@@ -1,30 +1,50 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.browse
 
+import android.content.res.Configuration
 import android.os.Bundle
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.dp
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import eu.davidea.flexibleadapter.items.IFlexible
+import eu.kanade.core.prefs.CheckboxState
+import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.interactor.GetDuplicateLibraryAnime
-import eu.kanade.domain.anime.interactor.InsertAnime
+import eu.kanade.domain.anime.interactor.NetworkToLocalAnime
 import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.model.toAnimeUpdate
 import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.anime.model.toDomainAnime
+import eu.kanade.domain.animesource.interactor.GetRemoteAnime
 import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
 import eu.kanade.domain.animetrack.model.toDomainTrack
-import eu.kanade.domain.category.interactor.GetCategoriesAnime
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.category.interactor.GetAnimeCategories
 import eu.kanade.domain.category.interactor.SetAnimeCategories
 import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.episode.interactor.SetAnimeDefaultEpisodeFlags
 import eu.kanade.domain.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.library.service.LibraryPreferences
+import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.presentation.animebrowse.BrowseAnimeSourceState
+import eu.kanade.presentation.animebrowse.BrowseAnimeSourceStateImpl
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
-import eu.kanade.tachiyomi.animesource.model.SAnime
-import eu.kanade.tachiyomi.animesource.model.toSAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.toAnimeInfo
-import eu.kanade.tachiyomi.data.database.models.toDomainAnime
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.EnhancedTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
@@ -42,24 +62,17 @@ import eu.kanade.tachiyomi.ui.browse.animesource.filter.TextItem
 import eu.kanade.tachiyomi.ui.browse.animesource.filter.TextSectionItem
 import eu.kanade.tachiyomi.ui.browse.animesource.filter.TriStateItem
 import eu.kanade.tachiyomi.ui.browse.animesource.filter.TriStateSectionItem
-import eu.kanade.tachiyomi.util.episode.EpisodeSettingsHelper
 import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.withUIContext
+import eu.kanade.tachiyomi.util.lang.withIOContext
+import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.system.logcat
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import logcat.LogPriority
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
@@ -69,309 +82,215 @@ import eu.kanade.domain.category.model.Category as DomainCategory
 open class BrowseAnimeSourcePresenter(
     private val sourceId: Long,
     searchQuery: String? = null,
+    private val state: BrowseAnimeSourceStateImpl = BrowseAnimeSourceState(searchQuery) as BrowseAnimeSourceStateImpl,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
-    private val prefs: PreferencesHelper = Injekt.get(),
+    preferences: BasePreferences = Injekt.get(),
+    sourcePreferences: SourcePreferences = Injekt.get(),
+    private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
+    private val getRemoteAnime: GetRemoteAnime = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
     private val getDuplicateLibraryAnime: GetDuplicateLibraryAnime = Injekt.get(),
-    private val getCategories: GetCategoriesAnime = Injekt.get(),
+    private val getCategories: GetAnimeCategories = Injekt.get(),
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
-    private val insertAnime: InsertAnime = Injekt.get(),
+    private val setAnimeDefaultEpisodeFlags: SetAnimeDefaultEpisodeFlags = Injekt.get(),
+    private val networkToLocalAnime: NetworkToLocalAnime = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
     private val insertTrack: InsertAnimeTrack = Injekt.get(),
     private val syncEpisodesWithTrackServiceTwoWay: SyncEpisodesWithTrackServiceTwoWay = Injekt.get(),
-) : BasePresenter<BrowseAnimeSourceController>() {
-
-    /**
-     * Selected source.
-     */
-    lateinit var source: AnimeCatalogueSource
-
-    /**
-     * Modifiable list of filters.
-     */
-    var sourceFilters = AnimeFilterList()
-        set(value) {
-            field = value
-            filterItems = value.toItems()
-        }
-
-    var filterItems: List<IFlexible<*>> = emptyList()
-
-    /**
-     * List of filters used by the [Pager]. If empty alongside [query], the popular query is used.
-     */
-    var appliedFilters = AnimeFilterList()
-
-    /**
-     * Pager containing a list of anime results.
-     */
-    private lateinit var pager: AnimePager
-
-    /**
-     * Subscription for the pager.
-     */
-    private var pagerSubscription: Subscription? = null
-
-    /**
-     * Subscription for one request from the pager.
-     */
-    private var nextPageJob: Job? = null
+) : BasePresenter<BrowseAnimeSourceController>(), BrowseAnimeSourceState by state {
 
     private val loggedServices by lazy { Injekt.get<TrackManager>().services.filter { it.isLogged } }
 
-    init {
-        query = searchQuery ?: ""
+    var displayMode by sourcePreferences.sourceDisplayMode().asState()
+
+    val isDownloadOnly: Boolean by preferences.downloadedOnly().asState()
+    val isIncognitoMode: Boolean by preferences.incognitoMode().asState()
+
+    @Composable
+    fun getColumnsPreferenceForCurrentOrientation(): State<GridCells> {
+        val isLandscape =
+            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+        return produceState<GridCells>(initialValue = GridCells.Adaptive(128.dp), isLandscape) {
+            (if (isLandscape) libraryPreferences.landscapeColumns() else libraryPreferences.portraitColumns())
+                .changes()
+                .collectLatest { columns ->
+                    value =
+                        if (columns == 0) GridCells.Adaptive(128.dp) else GridCells.Fixed(columns)
+                }
+        }
+    }
+
+    @Composable
+    fun getAnimeList(): Flow<PagingData<DomainAnime>> {
+        return remember(currentFilter) {
+            Pager(
+                PagingConfig(pageSize = 25),
+            ) {
+                getRemoteAnime.subscribe(sourceId, currentFilter.query, currentFilter.filters)
+            }.flow
+                .map {
+                    it.map { sAnime ->
+                        withIOContext {
+                            networkToLocalAnime.await(sAnime.toDomainAnime(), sourceId)
+                        }
+                    }
+                }
+                .cachedIn(presenterScope)
+        }
+    }
+
+    @Composable
+    fun getAnime(initialAnime: DomainAnime): State<DomainAnime> {
+        return produceState(initialValue = initialAnime) {
+            getAnime.subscribe(initialAnime.url, initialAnime.source)
+                .collectLatest { anime ->
+                    if (anime == null) return@collectLatest
+                    withIOContext {
+                        initializeAnime(anime)
+                    }
+                    value = anime
+                }
+        }
+    }
+
+    fun reset() {
+        state.filters = source!!.getFilterList()
+        if (currentFilter !is AnimeFilter.UserInput) return
+        state.currentFilter = (currentFilter as AnimeFilter.UserInput).copy(filters = state.filters)
+    }
+
+    fun search(query: String? = null, filters: AnimeFilterList? = null) {
+        AnimeFilter.valueOf(query ?: "").let {
+            if (it !is AnimeFilter.UserInput) {
+                state.currentFilter = it
+                return
+            }
+        }
+        val input: AnimeFilter.UserInput =
+            if (currentFilter is AnimeFilter.UserInput) currentFilter as AnimeFilter.UserInput else AnimeFilter.UserInput()
+        state.currentFilter = input.copy(
+            query = query ?: input.query,
+            filters = filters ?: input.filters,
+        )
     }
 
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
 
-        source = sourceManager.get(sourceId) as? AnimeCatalogueSource ?: return
-
-        sourceFilters = source.getFilterList()
-
-        if (savedState != null) {
-            query = savedState.getString(::query.name, "")
-        }
-
-        restartPager()
-    }
-
-    override fun onSave(state: Bundle) {
-        state.putString(::query.name, query)
-        super.onSave(state)
+        state.source = sourceManager.get(sourceId) as? AnimeCatalogueSource ?: return
+        state.filters = source!!.getFilterList()
     }
 
     /**
-     * Restarts the pager for the active source with the provided query and filters.
+     * Initialize an anime.
      *
-     * @param query the query.
-     * @param filters the current state of the filters (for search mode).
+     * @return anime to initialize.
      */
-    fun restartPager(query: String = this.query, filters: AnimeFilterList = this.appliedFilters) {
-        this.query = query
-        this.appliedFilters = filters
-
-        // Create a new pager.
-        pager = createPager(query, filters)
-
-        val sourceId = source.id
-
-        val sourceDisplayMode = prefs.sourceDisplayMode()
-
-        // Prepare the pager.
-        pagerSubscription?.let { remove(it) }
-        pagerSubscription = pager.results()
-            .observeOn(Schedulers.io())
-            .map { (first, second) -> first to second.map { networkToLocalAnime(it, sourceId).toDomainAnime()!! } }
-            .doOnNext { initializeAnimes(it.second) }
-            .map { (first, second) -> first to second.map { AnimeSourceItem(it, sourceDisplayMode) } }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeReplay(
-                { view, (page, animes) ->
-                    view.onAddPage(page, animes)
-                },
-                { _, error ->
-                    logcat(LogPriority.ERROR, error)
-                },
-            )
-
-        // Request first page.
-        requestNext()
-    }
-
-    /**
-     * Requests the next page for the active pager.
-     */
-    fun requestNext() {
-        if (!hasNextPage()) return
-
-        nextPageJob?.cancel()
-        nextPageJob = launchIO {
+    private suspend fun initializeAnime(anime: DomainAnime) {
+        if (anime.thumbnailUrl != null || anime.initialized) return
+        withNonCancellableContext {
             try {
-                pager.requestNextPage()
-            } catch (e: Throwable) {
-                withUIContext { view?.onAddPageError(e) }
+                val networkAnime = source!!.getAnimeDetails(anime.toSAnime())
+                val updatedAnime = anime.copyFrom(networkAnime)
+                    .copy(initialized = true)
+
+                updateAnime.await(updatedAnime.toAnimeUpdate())
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e)
             }
         }
     }
 
     /**
-     * Returns true if the last fetched page has a next page.
-     */
-    fun hasNextPage(): Boolean {
-        return pager.hasNextPage
-    }
-
-    /**
-     * Returns a anime from the database for the given anime from network. It creates a new entry
-     * if the anime is not yet in the database.
-     *
-     * @param sAnime the anime from the source.
-     * @return a anime from the database.
-     */
-    private fun networkToLocalAnime(sAnime: SAnime, sourceId: Long): Anime {
-        var localAnime = runBlocking { getAnime.await(sAnime.url, sourceId) }
-        if (localAnime == null) {
-            val newAnime = Anime.create(sAnime.url, sAnime.title, sourceId)
-            newAnime.copyFrom(sAnime)
-            newAnime.id = -1
-            val result = runBlocking {
-                val id = insertAnime.await(newAnime.toDomainAnime()!!)
-                getAnime.await(id!!)
-            }
-            localAnime = result
-        } else if (!localAnime.favorite) {
-            // if the anime isn't a favorite, set its display title from source
-            // if it later becomes a favorite, updated title will go to db
-            localAnime = localAnime.copy(title = sAnime.title)
-        }
-        return localAnime?.toDbAnime()!!
-    }
-
-    /**
-     * Initialize a list of anime.
-     *
-     * @param animes the list of anime to initialize.
-     */
-    fun initializeAnimes(animes: List<DomainAnime>) {
-        presenterScope.launchIO {
-            animes.asFlow()
-                .filter { it.thumbnailUrl == null && !it.initialized }
-                .map { getAnimeDetails(it.toDbAnime()) }
-                .onEach {
-                    withUIContext {
-                        @Suppress("DEPRECATION")
-                        view?.onAnimeInitialized(it.toDomainAnime()!!)
-                    }
-                }
-                .catch { e -> logcat(LogPriority.ERROR, e) }
-                .collect()
-        }
-    }
-
-    /**
-     * Returns the initialized anime.
-     *
-     * @param anime the anime to initialize.
-     * @return the initialized anime
-     */
-    private suspend fun getAnimeDetails(anime: Anime): Anime {
-        try {
-            val networkAnime = source.getAnimeDetails(anime.toAnimeInfo())
-            anime.copyFrom(networkAnime.toSAnime())
-            anime.initialized = true
-            updateAnime.await(
-                anime
-                    .toDomainAnime()
-                    ?.toAnimeUpdate()!!,
-            )
-        } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e)
-        }
-        return anime
-    }
-
-    /**
-     * Adds or removes a anime from the library.
+     * Adds or removes an anime from the library.
      *
      * @param anime the anime to update.
      */
-    fun changeAnimeFavorite(anime: Anime) {
-        anime.favorite = !anime.favorite
-        anime.date_added = when (anime.favorite) {
-            true -> Date().time
-            false -> 0
-        }
-
-        if (!anime.favorite) {
-            anime.removeCovers(coverCache)
-        } else {
-            EpisodeSettingsHelper.applySettingDefaults(anime.toDomainAnime()!!)
-
-            autoAddTrack(anime)
-        }
-
-        runBlocking {
-            updateAnime.await(
-                anime
-                    .toDomainAnime()
-                    ?.toAnimeUpdate()!!,
+    fun changeAnimeFavorite(anime: DomainAnime) {
+        presenterScope.launch {
+            var new = anime.copy(
+                favorite = !anime.favorite,
+                dateAdded = when (anime.favorite) {
+                    true -> 0
+                    false -> Date().time
+                },
             )
+
+            if (!new.favorite) {
+                new = new.removeCovers(coverCache)
+            } else {
+                setAnimeDefaultEpisodeFlags.await(anime)
+
+                autoAddTrack(anime)
+            }
+
+            updateAnime.await(new.toAnimeUpdate())
         }
     }
 
-    private fun autoAddTrack(anime: Anime) {
-        launchIO {
-            loggedServices
-                .filterIsInstance<EnhancedTrackService>()
-                .filter { it.accept(source) }
-                .forEach { service ->
-                    try {
-                        service.match(anime)?.let { track ->
-                            track.anime_id = anime.id!!
-                            (service as TrackService).bind(track)
-                            insertTrack.await(track.toDomainTrack()!!)
+    fun getSourceOrStub(anime: DomainAnime): AnimeSource {
+        return sourceManager.getOrStub(anime.source)
+    }
 
-                            val episodes = getEpisodeByAnimeId.await(anime.id!!)
-                            syncEpisodesWithTrackServiceTwoWay.await(episodes, track.toDomainTrack()!!, service)
-                        }
-                    } catch (e: Exception) {
-                        logcat(LogPriority.WARN, e) { "Could not match anime: ${anime.title} with service $service" }
-                    }
+    fun addFavorite(anime: DomainAnime) {
+        presenterScope.launch {
+            val categories = getCategories()
+            val defaultCategoryId = libraryPreferences.defaultAnimeCategory().get()
+            val defaultCategory = categories.find { it.id == defaultCategoryId.toLong() }
+
+            when {
+                // Default category set
+                defaultCategory != null -> {
+                    moveAnimeToCategories(anime, defaultCategory)
+
+                    changeAnimeFavorite(anime)
                 }
-        }
-    }
+                // Automatic 'Default' or no categories
+                defaultCategoryId == 0 || categories.isEmpty() -> {
+                    moveAnimeToCategories(anime)
 
-    /**
-     * Set the filter states for the current source.
-     *
-     * @param filters a list of active filters.
-     */
-    fun setSourceFilter(filters: AnimeFilterList) {
-        restartPager(filters = filters)
-    }
-
-    open fun createPager(query: String, filters: AnimeFilterList): AnimePager {
-        return AnimeSourcePager(source, query, filters)
-    }
-
-    private fun AnimeFilterList.toItems(): List<IFlexible<*>> {
-        return mapNotNull { filter ->
-            when (filter) {
-                is AnimeFilter.Header -> HeaderItem(filter)
-                is AnimeFilter.Separator -> SeparatorItem(filter)
-                is AnimeFilter.CheckBox -> CheckboxItem(filter)
-                is AnimeFilter.TriState -> TriStateItem(filter)
-                is AnimeFilter.Text -> TextItem(filter)
-                is AnimeFilter.Select<*> -> SelectItem(filter)
-                is AnimeFilter.Group<*> -> {
-                    val group = GroupItem(filter)
-                    val subItems = filter.state.mapNotNull {
-                        when (it) {
-                            is AnimeFilter.CheckBox -> CheckboxSectionItem(it)
-                            is AnimeFilter.TriState -> TriStateSectionItem(it)
-                            is AnimeFilter.Text -> TextSectionItem(it)
-                            is AnimeFilter.Select<*> -> SelectSectionItem(it)
-                            else -> null
-                        }
-                    }
-                    subItems.forEach { it.header = group }
-                    group.subItems = subItems
-                    group
+                    changeAnimeFavorite(anime)
                 }
-                is AnimeFilter.Sort -> {
-                    val group = SortGroup(filter)
-                    val subItems = filter.values.map {
-                        SortItem(it, group)
-                    }
-                    group.subItems = subItems
-                    group
+
+                // Choose a category
+                else -> {
+                    val preselectedIds = getCategories.await(anime.id).map { it.id }
+                    state.dialog = Dialog.ChangeAnimeCategory(
+                        anime,
+                        categories.mapAsCheckboxState { it.id in preselectedIds },
+                    )
                 }
             }
         }
+    }
+
+    private suspend fun autoAddTrack(anime: DomainAnime) {
+        loggedServices
+            .filterIsInstance<EnhancedTrackService>()
+            .filter { it.accept(source!!) }
+            .forEach { service ->
+                try {
+                    service.match(anime.toDbAnime())?.let { track ->
+                        track.anime_id = anime.id
+                        (service as TrackService).bind(track)
+                        insertTrack.await(track.toDomainTrack()!!)
+
+                        val chapters = getEpisodeByAnimeId.await(anime.id)
+                        syncEpisodesWithTrackServiceTwoWay.await(
+                            chapters,
+                            track.toDomainTrack()!!,
+                            service,
+                        )
+                    }
+                } catch (e: Exception) {
+                    logcat(
+                        LogPriority.WARN,
+                        e,
+                    ) { "Could not match anime: ${anime.title} with service $service" }
+                }
+            }
     }
 
     /**
@@ -380,61 +299,90 @@ open class BrowseAnimeSourcePresenter(
      * @return List of categories, not including the default category
      */
     suspend fun getCategories(): List<DomainCategory> {
-        return getCategories.subscribe().firstOrNull() ?: emptyList()
+        return getCategories.subscribe()
+            .firstOrNull()
+            ?.filterNot { it.isSystemCategory }
+            ?: emptyList()
     }
 
     suspend fun getDuplicateLibraryAnime(anime: DomainAnime): DomainAnime? {
         return getDuplicateLibraryAnime.await(anime.title, anime.source)
     }
 
-    /**
-     * Gets the category id's the anime is in, if the anime is not in a category, returns the default id.
-     *
-     * @param anime the anime to get categories from.
-     * @return Array of category ids the anime is in, if none returns default id
-     */
-    fun getAnimeCategoryIds(anime: DomainAnime): Array<Long?> {
-        return runBlocking { getCategories.await(anime.id) }
-            .map { it.id }
-            .toTypedArray()
+    fun moveAnimeToCategories(anime: DomainAnime, vararg categories: DomainCategory) {
+        moveAnimeToCategories(anime, categories.filter { it.id != 0L }.map { it.id })
     }
 
-    /**
-     * Move the given anime to categories.
-     *
-     * @param categories the selected categories.
-     * @param anime the anime to move.
-     */
-    private fun moveAnimeToCategories(anime: Anime, categories: List<DomainCategory>) {
+    fun moveAnimeToCategories(anime: DomainAnime, categoryIds: List<Long>) {
         presenterScope.launchIO {
             setAnimeCategories.await(
-                animeId = anime.id!!,
-                categoryIds = categories.filter { it.id != 0L }.map { it.id },
+                animeId = anime.id,
+                categoryIds = categoryIds.toList(),
             )
         }
     }
 
-    /**
-     * Move the given anime to the category.
-     *
-     * @param category the selected category.
-     * @param anime the anime to move.
-     */
-    fun moveAnimeToCategory(anime: Anime, category: DomainCategory?) {
-        moveAnimeToCategories(anime, listOfNotNull(category))
+    sealed class AnimeFilter(open val query: String, open val filters: AnimeFilterList) {
+        object Popular : AnimeFilter(query = GetRemoteAnime.QUERY_POPULAR, filters = AnimeFilterList())
+        object Latest : AnimeFilter(query = GetRemoteAnime.QUERY_LATEST, filters = AnimeFilterList())
+        data class UserInput(
+            override val query: String = "",
+            override val filters: AnimeFilterList = AnimeFilterList(),
+        ) : AnimeFilter(query = query, filters = filters)
+
+        companion object {
+            fun valueOf(query: String): AnimeFilter {
+                return when (query) {
+                    GetRemoteAnime.QUERY_POPULAR -> Popular
+                    GetRemoteAnime.QUERY_LATEST -> Latest
+                    else -> UserInput(query = query)
+                }
+            }
+        }
     }
 
-    /**
-     * Update anime to use selected categories.
-     *
-     * @param anime needed to change
-     * @param selectedCategories selected categories
-     */
-    fun updateAnimeCategories(anime: Anime, selectedCategories: List<DomainCategory>) {
-        if (!anime.favorite) {
-            changeAnimeFavorite(anime)
-        }
+    sealed class Dialog {
+        data class RemoveAnime(val anime: DomainAnime) : Dialog()
+        data class AddDuplicateAnime(val anime: DomainAnime, val duplicate: DomainAnime) : Dialog()
+        data class ChangeAnimeCategory(
+            val anime: DomainAnime,
+            val initialSelection: List<CheckboxState.State<DomainCategory>>,
+        ) : Dialog()
+    }
+}
 
-        moveAnimeToCategories(anime, selectedCategories)
+fun AnimeFilterList.toItems(): List<IFlexible<*>> {
+    return mapNotNull { filter ->
+        when (filter) {
+            is AnimeFilter.Header -> HeaderItem(filter)
+            is AnimeFilter.Separator -> SeparatorItem(filter)
+            is AnimeFilter.CheckBox -> CheckboxItem(filter)
+            is AnimeFilter.TriState -> TriStateItem(filter)
+            is AnimeFilter.Text -> TextItem(filter)
+            is AnimeFilter.Select<*> -> SelectItem(filter)
+            is AnimeFilter.Group<*> -> {
+                val group = GroupItem(filter)
+                val subItems = filter.state.mapNotNull {
+                    when (it) {
+                        is AnimeFilter.CheckBox -> CheckboxSectionItem(it)
+                        is AnimeFilter.TriState -> TriStateSectionItem(it)
+                        is AnimeFilter.Text -> TextSectionItem(it)
+                        is AnimeFilter.Select<*> -> SelectSectionItem(it)
+                        else -> null
+                    }
+                }
+                subItems.forEach { it.header = group }
+                group.subItems = subItems
+                group
+            }
+            is AnimeFilter.Sort -> {
+                val group = SortGroup(filter)
+                val subItems = filter.values.map {
+                    SortItem(it, group)
+                }
+                group.subItems = subItems
+                group
+            }
+        }
     }
 }

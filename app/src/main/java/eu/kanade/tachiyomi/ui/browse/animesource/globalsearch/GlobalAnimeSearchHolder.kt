@@ -75,7 +75,7 @@ class GlobalAnimeSearchHolder(view: View, val adapter: GlobalAnimeSearchAdapter)
     }
 
     /**
-     * Called from the presenter when a anime is initialized.
+     * Called from the presenter when an anime is initialized.
      *
      * @param anime the initialized anime.
      */

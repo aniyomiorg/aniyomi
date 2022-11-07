@@ -6,8 +6,6 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
@@ -19,6 +17,7 @@ import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.databinding.TrackSearchDialogBinding
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
+import eu.kanade.tachiyomi.util.view.hideKeyboard
 import eu.kanade.tachiyomi.util.view.setNavigationBarTransparentCompat
 import eu.kanade.tachiyomi.widget.TachiyomiFullscreenDialog
 import kotlinx.coroutines.flow.filter
@@ -105,7 +104,7 @@ class TrackSearchDialog : DialogController {
                 if (query != currentlySearched) {
                     currentlySearched = query
                     search(it.view.text.toString())
-                    it.view.context.getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(it.view.windowToken, 0)
+                    it.view.hideKeyboard()
                     it.view.clearFocus()
                 }
             }

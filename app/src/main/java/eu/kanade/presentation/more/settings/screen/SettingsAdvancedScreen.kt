@@ -31,6 +31,7 @@ import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.ChapterCache
+import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -52,8 +53,6 @@ import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.isPackageInstalled
-import eu.kanade.tachiyomi.util.system.isPreviewBuildType
-import eu.kanade.tachiyomi.util.system.isReleaseBuildType
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.setDefaultSettings
@@ -84,7 +83,7 @@ class SettingsAdvancedScreen : SearchableSettings {
                 pref = basePreferences.acraEnabled(),
                 title = stringResource(R.string.pref_enable_acra),
                 subtitle = stringResource(R.string.pref_acra_summary),
-                enabled = isPreviewBuildType || isReleaseBuildType,
+                enabled = false, // acra is disabled
             ),
             Preference.PreferenceItem.TextPreference(
                 title = stringResource(R.string.pref_dump_crash_logs),
@@ -159,19 +158,21 @@ class SettingsAdvancedScreen : SearchableSettings {
         val libraryPreferences = remember { Injekt.get<LibraryPreferences>() }
 
         val chapterCache = remember { Injekt.get<ChapterCache>() }
+        val episodeCache = remember { Injekt.get<EpisodeCache>() }
         var readableSizeSema by remember { mutableStateOf(0) }
         val readableSize = remember(readableSizeSema) { chapterCache.readableSize }
+        val readableAnimeSize = remember(readableSizeSema) { episodeCache.readableSize }
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.label_data),
             preferenceItems = listOf(
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_clear_chapter_cache),
-                    subtitle = stringResource(R.string.used_cache, readableSize),
+                    subtitle = stringResource(R.string.used_cache_both, readableAnimeSize, readableSize),
                     onClick = {
                         scope.launchNonCancellable {
                             try {
-                                val deletedFiles = chapterCache.clear()
+                                val deletedFiles = chapterCache.clear() + episodeCache.clear()
                                 withUIContext {
                                     context.toast(context.getString(R.string.cache_deleted, deletedFiles))
                                     readableSizeSema++
@@ -191,6 +192,11 @@ class SettingsAdvancedScreen : SearchableSettings {
                     title = stringResource(R.string.pref_clear_database),
                     subtitle = stringResource(R.string.pref_clear_database_summary),
                     onClick = { navigator.push(ClearDatabaseScreen()) },
+                ),
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(R.string.pref_clear_anime_database),
+                    subtitle = stringResource(R.string.pref_clear_anime_database_summary),
+                    onClick = { navigator.push(ClearAnimeDatabaseScreen()) },
                 ),
             ),
         )

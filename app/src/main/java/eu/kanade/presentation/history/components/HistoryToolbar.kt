@@ -30,7 +30,7 @@ fun HistoryToolbar(
     val focusManager = LocalFocusManager.current
 
     if (state.searchQuery == null) {
-        HistoryRegularToolbar(
+        eu.kanade.presentation.animehistory.components.HistoryRegularToolbar(
             onClickSearch = { state.searchQuery = "" },
             onClickDelete = { state.dialog = HistoryPresenter.Dialog.DeleteAll },
             incognitoMode = incognitoMode,

@@ -6,8 +6,8 @@ import eu.kanade.domain.anime.model.hasCustomCover
 import eu.kanade.domain.anime.model.isLocal
 import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.anime.repository.AnimeRepository
+import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import tachiyomi.animesource.model.AnimeInfo
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
@@ -20,23 +20,30 @@ class UpdateAnime(
         return animeRepository.update(animeUpdate)
     }
 
-    suspend fun awaitAll(values: List<AnimeUpdate>): Boolean {
-        return animeRepository.updateAll(values)
+    suspend fun awaitAll(animeUpdates: List<AnimeUpdate>): Boolean {
+        return animeRepository.updateAll(animeUpdates)
     }
 
     suspend fun awaitUpdateFromSource(
         localAnime: Anime,
-        remoteAnime: AnimeInfo,
+        remoteAnime: SAnime,
         manualFetch: Boolean,
         coverCache: AnimeCoverCache = Injekt.get(),
     ): Boolean {
-        // if the anime isn't a favorite, set its title from source and update in db
-        val title = if (!localAnime.favorite) remoteAnime.title else null
+        val remoteTitle = try {
+            remoteAnime.title
+        } catch (_: UninitializedPropertyAccessException) {
+            ""
+        }
 
-        // Never refresh covers if the url is empty to avoid "losing" existing covers
-        val updateCover = remoteAnime.cover.isNotEmpty() && (manualFetch || localAnime.thumbnailUrl != remoteAnime.cover)
-        val coverLastModified = if (updateCover) {
+        // if the anime isn't a favorite, set its title from source and update in db
+        val title = if (remoteTitle.isEmpty() || localAnime.favorite) null else remoteTitle
+
+        val coverLastModified =
             when {
+                // Never refresh covers if the url is empty to avoid "losing" existing covers
+                remoteAnime.thumbnail_url.isNullOrEmpty() -> null
+                !manualFetch && localAnime.thumbnailUrl == remoteAnime.thumbnail_url -> null
                 localAnime.isLocal() -> Date().time
                 localAnime.hasCustomCover(coverCache) -> {
                     coverCache.deleteFromCache(localAnime.toDbAnime(), false)
@@ -47,19 +54,21 @@ class UpdateAnime(
                     Date().time
                 }
             }
-        } else null
+
+        val thumbnailUrl = remoteAnime.thumbnail_url?.takeIf { it.isNotEmpty() }
 
         return animeRepository.update(
             AnimeUpdate(
                 id = localAnime.id,
-                title = title?.takeIf { it.isNotEmpty() },
+                title = title,
                 coverLastModified = coverLastModified,
                 author = remoteAnime.author,
                 artist = remoteAnime.artist,
                 description = remoteAnime.description,
-                genre = remoteAnime.genres,
-                thumbnailUrl = remoteAnime.cover.takeIf { it.isNotEmpty() },
+                genre = remoteAnime.getGenres(),
+                thumbnailUrl = thumbnailUrl,
                 status = remoteAnime.status.toLong(),
+                updateStrategy = remoteAnime.update_strategy,
                 initialized = true,
             ),
         )

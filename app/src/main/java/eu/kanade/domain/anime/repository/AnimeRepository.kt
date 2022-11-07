@@ -2,7 +2,7 @@ package eu.kanade.domain.anime.repository
 
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.AnimeUpdate
-import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
+import eu.kanade.domain.animelib.model.AnimelibAnime
 import kotlinx.coroutines.flow.Flow
 
 interface AnimeRepository {
@@ -12,6 +12,8 @@ interface AnimeRepository {
     suspend fun getAnimeByIdAsFlow(id: Long): Flow<Anime>
 
     suspend fun getAnimeByUrlAndSourceId(url: String, sourceId: Long): Anime?
+
+    fun getAnimeByUrlAndSourceIdAsFlow(url: String, sourceId: Long): Flow<Anime?>
 
     suspend fun getFavorites(): List<Anime>
 
@@ -31,5 +33,5 @@ interface AnimeRepository {
 
     suspend fun update(update: AnimeUpdate): Boolean
 
-    suspend fun updateAll(values: List<AnimeUpdate>): Boolean
+    suspend fun updateAll(animeUpdates: List<AnimeUpdate>): Boolean
 }

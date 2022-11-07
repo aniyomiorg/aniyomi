@@ -7,27 +7,28 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.model.Anime
-import androidx.core.net.toUri
 import eu.kanade.domain.chapter.interactor.GetChapter
 import eu.kanade.domain.chapter.interactor.UpdateChapter
 import eu.kanade.domain.chapter.model.Chapter
 import eu.kanade.domain.chapter.model.toChapterUpdate
 import eu.kanade.domain.chapter.model.toDbChapter
+import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.episode.interactor.GetEpisode
 import eu.kanade.domain.episode.interactor.UpdateEpisode
 import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.domain.episode.model.toEpisodeUpdate
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.manga.interactor.GetManga
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadService
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.backup.BackupRestoreService
-import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService
@@ -355,23 +356,23 @@ class NotificationReceiver : BroadcastReceiver() {
     /**
      * Method called when user wants to mark anime episodes as seen
      *
-     * @param chapterUrls URLs of episodes to mark as seen
+     * @param episodeUrls URLs of episodes to mark as seen
      * @param animeId id of anime
      */
-    private fun markAsSeen(chapterUrls: Array<String>, animeId: Long) {
-        val preferences: PreferencesHelper = Injekt.get()
+    private fun markAsSeen(episodeUrls: Array<String>, animeId: Long) {
+        val downloadPreferences: DownloadPreferences = Injekt.get()
         val sourceManager: AnimeSourceManager = Injekt.get()
 
         launchIO {
-            val toUpdate = chapterUrls.mapNotNull { getEpisode.await(it, animeId) }
+            val toUpdate = episodeUrls.mapNotNull { getEpisode.await(it, animeId) }
                 .map {
                     val episode = it.copy(seen = true)
-                    if (preferences.removeAfterMarkedAsRead()) {
+                    if (downloadPreferences.removeAfterMarkedAsRead().get()) {
                         val anime = getAnime.await(animeId)
                         if (anime != null) {
                             val source = sourceManager.get(anime.source)
                             if (source != null) {
-                                animedownloadManager.deleteEpisodes(listOf(it), anime, source)
+                                animedownloadManager.deleteEpisodes(listOf(it.toDbEpisode()), anime, source)
                             }
                         }
                     }
@@ -406,7 +407,7 @@ class NotificationReceiver : BroadcastReceiver() {
     private fun downloadEpisodes(episodeUrls: Array<String>, animeId: Long) {
         launchIO {
             val anime = getAnime.await(animeId)
-            val episodes = episodeUrls.mapNotNull { getEpisode.await(it, animeId) }
+            val episodes = episodeUrls.mapNotNull { getEpisode.await(it, animeId)?.toDbEpisode() }
             if (anime != null && episodes.isNotEmpty()) {
                 animedownloadManager.downloadEpisodes(anime, episodes)
             }
@@ -649,7 +650,7 @@ class NotificationReceiver : BroadcastReceiver() {
         }
 
         /**
-         * Returns [PendingIntent] that marks a episode as seen and deletes it if preferred
+         * Returns [PendingIntent] that marks an episode as seen and deletes it if preferred
          *
          * @param context context of application
          * @param anime anime of episode

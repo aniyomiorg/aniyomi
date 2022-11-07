@@ -121,7 +121,7 @@ fun AnimeHistoryItem(
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-                style = textStyle
+                style = textStyle,
             )
             val seenAt = remember { history.seenAt?.toTimestampString() ?: "" }
             Text(

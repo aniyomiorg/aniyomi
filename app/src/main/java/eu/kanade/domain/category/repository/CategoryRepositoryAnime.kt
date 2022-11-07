@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface CategoryRepositoryAnime {
 
+    suspend fun get(id: Long): Category?
+
     suspend fun getAll(): List<Category>
 
     fun getAllAsFlow(): Flow<List<Category>>
@@ -14,13 +16,13 @@ interface CategoryRepositoryAnime {
 
     fun getCategoriesByAnimeIdAsFlow(animeId: Long): Flow<List<Category>>
 
-    @Throws(DuplicateNameException::class)
-    suspend fun insert(name: String, order: Long)
+    suspend fun insert(category: Category)
 
-    @Throws(DuplicateNameException::class)
-    suspend fun update(payload: CategoryUpdate)
+    suspend fun updatePartial(update: CategoryUpdate)
+
+    suspend fun updatePartial(updates: List<CategoryUpdate>)
+
+    suspend fun updateAllFlags(flags: Long?)
 
     suspend fun delete(categoryId: Long)
-
-    suspend fun checkDuplicateName(name: String): Boolean
 }

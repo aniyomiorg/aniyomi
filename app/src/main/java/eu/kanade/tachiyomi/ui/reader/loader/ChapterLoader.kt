@@ -5,13 +5,13 @@ import com.github.junrar.exception.UnsupportedRarV5Exception
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.download.DownloadProvider
 import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
+import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.logcat
 import rx.Completable
 import rx.Observable
@@ -30,7 +30,7 @@ class ChapterLoader(
     private val source: Source,
 ) {
 
-    private val preferences: PreferencesHelper by injectLazy()
+    private val readerPreferences: ReaderPreferences by injectLazy()
 
     /**
      * Returns a completable that assigns the page loader and loads the its pages. It just
@@ -65,7 +65,7 @@ class ChapterLoader(
 
                 // If the chapter is partially read, set the starting page to the last the user read
                 // otherwise use the requested page.
-                if (!chapter.chapter.read || preferences.preserveReadingPosition()) {
+                if (!chapter.chapter.read || readerPreferences.preserveReadingPosition().get()) {
                     chapter.requestedPage = chapter.chapter.last_page_read
                 }
             }

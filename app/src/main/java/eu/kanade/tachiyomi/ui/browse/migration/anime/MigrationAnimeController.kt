@@ -2,15 +2,14 @@ package eu.kanade.tachiyomi.ui.browse.migration.anime
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.core.os.bundleOf
-import eu.kanade.presentation.browse.MigrateAnimeScreen
+import eu.kanade.presentation.animebrowse.MigrateAnimeScreen
 import eu.kanade.tachiyomi.ui.anime.AnimeController
-import eu.kanade.tachiyomi.ui.base.controller.ComposeController
+import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
 import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.browse.migration.search.AnimeSearchController
 
-class MigrationAnimeController : ComposeController<MigrationAnimePresenter> {
+class MigrationAnimeController : FullComposeController<MigrateAnimePresenter> {
 
     constructor(sourceId: Long, sourceName: String?) : super(
         bundleOf(
@@ -28,14 +27,13 @@ class MigrationAnimeController : ComposeController<MigrationAnimePresenter> {
     private val sourceId: Long = args.getLong(SOURCE_ID_EXTRA)
     private val sourceName: String? = args.getString(SOURCE_NAME_EXTRA)
 
-    override fun getTitle(): String? = sourceName
-
-    override fun createPresenter(): MigrationAnimePresenter = MigrationAnimePresenter(sourceId)
+    override fun createPresenter() = MigrateAnimePresenter(sourceId)
 
     @Composable
-    override fun ComposeContent(nestedScrollInterop: NestedScrollConnection) {
+    override fun ComposeContent() {
         MigrateAnimeScreen(
-            nestedScrollInterop = nestedScrollInterop,
+            navigateUp = router::popCurrentController,
+            title = sourceName,
             presenter = presenter,
             onClickItem = {
                 router.pushController(AnimeSearchController(it.id))

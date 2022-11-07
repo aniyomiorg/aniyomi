@@ -18,7 +18,7 @@ import java.io.IOException
 
 /**
  * Class used to create episode cache
- * For each image in a episode a file is created
+ * For each image in an episode a file is created
  * For each episode a Json list is created and converted to a file.
  * The files are in format *md5key*.0
  *
@@ -105,7 +105,7 @@ class EpisodeCache(private val context: Context) {
      * Add page list to disk cache.
      *
      * @param episode the episode.
-     * @param pages list of pages.
+     * @param video the video.
      */
     fun putPageListToCache(episode: Episode, video: Video) {
         // Convert list of pages to json string.
@@ -179,12 +179,12 @@ class EpisodeCache(private val context: Context) {
             editor = diskCache.edit(key) ?: throw IOException("Unable to edit key")
 
             // Get OutputStream and write image with Okio.
-            response.body!!.source().saveTo(editor.newOutputStream(0))
+            response.body.source().saveTo(editor.newOutputStream(0))
 
             diskCache.flush()
             editor.commit()
         } finally {
-            response.body?.close()
+            response.body.close()
             editor?.abortUnlessCommitted()
         }
     }

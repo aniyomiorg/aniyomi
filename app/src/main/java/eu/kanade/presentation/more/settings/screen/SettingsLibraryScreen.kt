@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.bluelinelabs.conductor.Router
 import com.chargemap.compose.numberpicker.NumberPicker
+import eu.kanade.domain.category.interactor.GetAnimeCategories
 import eu.kanade.domain.category.interactor.GetCategories
 import eu.kanade.domain.category.interactor.ResetCategoryFlags
 import eu.kanade.domain.category.model.Category
@@ -48,6 +49,7 @@ import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.ui.animecategory.AnimeCategoryController
 import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.category.CategoryController
 import kotlinx.coroutines.launch
@@ -65,13 +67,15 @@ class SettingsLibraryScreen : SearchableSettings {
     @Composable
     override fun getPreferences(): List<Preference> {
         val getCategories = remember { Injekt.get<GetCategories>() }
-        val libraryPreferences = remember { Injekt.get<LibraryPreferences>() }
         val allCategories by getCategories.subscribe().collectAsState(initial = runBlocking { getCategories.await() })
+        val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
+        val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(initial = runBlocking { getAnimeCategories.await() })
+        val libraryPreferences = remember { Injekt.get<LibraryPreferences>() }
 
         return mutableListOf(
             getDisplayGroup(libraryPreferences),
             getCategoriesGroup(LocalRouter.currentOrThrow, allCategories, libraryPreferences),
-            getGlobalUpdateGroup(allCategories, libraryPreferences),
+            getGlobalUpdateGroup(allCategories, allAnimeCategories, libraryPreferences),
         )
     }
 
@@ -121,6 +125,8 @@ class SettingsLibraryScreen : SearchableSettings {
 
         val defaultCategory by libraryPreferences.defaultCategory().collectAsState()
         val selectedCategory = allCategories.find { it.id == defaultCategory.toLong() }
+        val defaultAnimeCategory by libraryPreferences.defaultAnimeCategory().collectAsState()
+        val selectedAnimeCategory = allCategories.find { it.id == defaultAnimeCategory.toLong() }
 
         // For default category
         val ids = listOf(libraryPreferences.defaultCategory().defaultValue()) +
@@ -129,8 +135,23 @@ class SettingsLibraryScreen : SearchableSettings {
             allCategories.map { it.visualName(context) }
 
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.categories),
+            title = stringResource(R.string.general_categories),
             preferenceItems = listOf(
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(R.string.action_edit_anime_categories),
+                    subtitle = pluralStringResource(
+                        id = R.plurals.num_categories,
+                        count = userCategoriesCount,
+                        userCategoriesCount,
+                    ),
+                    onClick = { router?.pushController(AnimeCategoryController()) },
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = libraryPreferences.defaultAnimeCategory(),
+                    title = stringResource(R.string.default_anime_category),
+                    subtitle = selectedAnimeCategory?.visualName ?: stringResource(R.string.default_category_summary),
+                    entries = ids.zip(labels).toMap(),
+                ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.action_edit_categories),
                     subtitle = pluralStringResource(
@@ -165,17 +186,41 @@ class SettingsLibraryScreen : SearchableSettings {
     @Composable
     private fun getGlobalUpdateGroup(
         allCategories: List<Category>,
+        allAnimeCategories: List<Category>,
         libraryPreferences: LibraryPreferences,
     ): Preference.PreferenceGroup {
         val context = LocalContext.current
 
         val libraryUpdateIntervalPref = libraryPreferences.libraryUpdateInterval()
+        val libraryUpdateInterval by libraryUpdateIntervalPref.collectAsState()
         val libraryUpdateDeviceRestrictionPref = libraryPreferences.libraryUpdateDeviceRestriction()
         val libraryUpdateMangaRestrictionPref = libraryPreferences.libraryUpdateMangaRestriction()
+
+        val animelibUpdateCategoriesPref = libraryPreferences.animelibUpdateCategories()
+        val animelibUpdateCategoriesExcludePref = libraryPreferences.animelibUpdateCategoriesExclude()
+
+        val includedAnime by animelibUpdateCategoriesPref.collectAsState()
+        val excludedAnime by animelibUpdateCategoriesExcludePref.collectAsState()
+        var showAnimeDialog by rememberSaveable { mutableStateOf(false) }
+        if (showAnimeDialog) {
+            TriStateListDialog(
+                title = stringResource(R.string.anime_categories),
+                message = stringResource(R.string.pref_animelib_update_categories_details),
+                items = allAnimeCategories,
+                initialChecked = includedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
+                initialInversed = excludedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
+                itemLabel = { it.visualName },
+                onDismissRequest = { showAnimeDialog = false },
+                onValueChanged = { newIncluded, newExcluded ->
+                    animelibUpdateCategoriesPref.set(newIncluded.map { it.id.toString() }.toSet())
+                    animelibUpdateCategoriesExcludePref.set(newExcluded.map { it.id.toString() }.toSet())
+                    showAnimeDialog = false
+                },
+            )
+        }
+
         val libraryUpdateCategoriesPref = libraryPreferences.libraryUpdateCategories()
         val libraryUpdateCategoriesExcludePref = libraryPreferences.libraryUpdateCategoriesExclude()
-
-        val libraryUpdateInterval by libraryUpdateIntervalPref.collectAsState()
 
         val included by libraryUpdateCategoriesPref.collectAsState()
         val excluded by libraryUpdateCategoriesExcludePref.collectAsState()
@@ -240,6 +285,15 @@ class SettingsLibraryScreen : SearchableSettings {
                         MANGA_NON_READ to stringResource(R.string.pref_update_only_started),
                         MANGA_NON_COMPLETED to stringResource(R.string.pref_update_only_non_completed),
                     ),
+                ),
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(R.string.anime_categories),
+                    subtitle = getCategoriesLabel(
+                        allCategories = allAnimeCategories,
+                        included = included,
+                        excluded = excluded,
+                    ),
+                    onClick = { showAnimeDialog = true },
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.categories),

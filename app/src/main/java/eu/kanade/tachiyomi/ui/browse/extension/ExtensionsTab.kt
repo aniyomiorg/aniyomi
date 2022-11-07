@@ -19,7 +19,7 @@ fun extensionsTab(
     router: Router?,
     presenter: ExtensionsPresenter,
 ) = TabContent(
-    titleRes = R.string.label_extensions,
+    titleRes = R.string.label_mangaextensions,
     badgeNumber = presenter.updates.takeIf { it > 0 },
     actions = listOf(
         AppBar.Action(

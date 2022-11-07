@@ -16,6 +16,7 @@ import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.GetApp
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.PlayCircleOutline
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.SettingsBackupRestore
@@ -214,6 +215,12 @@ private val items = listOf(
         subtitleRes = R.string.pref_reader_summary,
         icon = Icons.Outlined.ChromeReaderMode,
         screen = SettingsReaderScreen(),
+    ),
+    Item(
+        titleRes = R.string.pref_category_player,
+        subtitleRes = R.string.pref_player_summary,
+        icon = Icons.Outlined.PlayCircleOutline,
+        screen = SettingsPlayerScreen(),
     ),
     Item(
         titleRes = R.string.pref_category_downloads,

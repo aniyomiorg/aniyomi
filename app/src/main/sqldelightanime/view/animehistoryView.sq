@@ -25,13 +25,6 @@ JOIN (
 ) AS max_last_seen
 ON episodes.anime_id = max_last_seen.anime_id;
 
-countHistory:
-SELECT count(*)
-FROM animehistoryView
-WHERE animehistoryView.seenAt > 0
-AND maxSeenAtEpisodeId = animehistoryView.episodeId
-AND lower(animehistoryView.title) LIKE ('%' || :query || '%');
-
 animehistory:
 SELECT
 id,
@@ -48,8 +41,7 @@ FROM animehistoryView
 WHERE animehistoryView.seenAt > 0
 AND maxSeenAtEpisodeId = animehistoryView.episodeId
 AND lower(animehistoryView.title) LIKE ('%' || :query || '%')
-ORDER BY seenAt DESC
-LIMIT :limit OFFSET :offset;
+ORDER BY seenAt DESC;
 
 getLatestAnimeHistory:
 SELECT

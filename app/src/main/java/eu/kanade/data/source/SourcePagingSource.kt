@@ -1,6 +1,7 @@
 package eu.kanade.data.source
 
 import androidx.paging.PagingState
+import eu.kanade.data.chapter.NoChaptersException
 import eu.kanade.domain.source.model.SourcePagingSourceType
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.model.FilterList
@@ -22,7 +23,7 @@ abstract class SourcePagingSource(
             withIOContext {
                 requestNextPage(page.toInt())
                     .takeIf { it.mangas.isNotEmpty() }
-                    ?: throw NoResultsException()
+                    ?: throw NoChaptersException()
             }
         } catch (e: Exception) {
             return LoadResult.Error(e)

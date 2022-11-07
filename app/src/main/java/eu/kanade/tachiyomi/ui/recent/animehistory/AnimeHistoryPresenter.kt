@@ -1,90 +1,116 @@
 package eu.kanade.tachiyomi.ui.recent.animehistory
 
-import android.os.Bundle
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import androidx.paging.insertSeparators
-import androidx.paging.map
-import eu.kanade.domain.animehistory.interactor.DeleteAnimeHistoryTable
+import android.app.Activity
+import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.core.app.ActivityCompat
+import eu.kanade.core.util.insertSeparators
+import eu.kanade.domain.anime.interactor.GetAnime
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.animehistory.interactor.DeleteAllAnimeHistory
 import eu.kanade.domain.animehistory.interactor.GetAnimeHistory
 import eu.kanade.domain.animehistory.interactor.GetNextEpisode
 import eu.kanade.domain.animehistory.interactor.RemoveAnimeHistoryByAnimeId
 import eu.kanade.domain.animehistory.interactor.RemoveAnimeHistoryById
 import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
-import eu.kanade.presentation.animehistory.HistoryUiModel
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.episode.model.toDbEpisode
+import eu.kanade.presentation.animehistory.AnimeHistoryUiModel
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
+import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.ui.anime.AnimeController
+import eu.kanade.tachiyomi.ui.anime.AnimeController.Companion.EXT_ANIME
+import eu.kanade.tachiyomi.ui.anime.AnimeController.Companion.EXT_EPISODE
+import eu.kanade.tachiyomi.ui.player.EpisodeLoader
+import eu.kanade.tachiyomi.ui.player.ExternalIntents
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
+import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.lang.toDateKey
+import eu.kanade.tachiyomi.util.lang.withUIContext
+import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
+import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
 
-/**
- * Presenter of HistoryFragment.
- * Contains information and data for fragment.
- * Observable updates should be called from here.
- */
 class AnimeHistoryPresenter(
+    private val presenterScope: CoroutineScope,
+    private val state: AnimeHistoryStateImpl = AnimeHistoryState() as AnimeHistoryStateImpl,
+    private val getAnime: GetAnime = Injekt.get(),
     private val getAnimeHistory: GetAnimeHistory = Injekt.get(),
     private val getNextEpisode: GetNextEpisode = Injekt.get(),
-    private val deleteAnimeHistoryTable: DeleteAnimeHistoryTable = Injekt.get(),
+    private val deleteAllAnimeHistory: DeleteAllAnimeHistory = Injekt.get(),
     private val removeAnimeHistoryById: RemoveAnimeHistoryById = Injekt.get(),
     private val removeAnimeHistoryByAnimeId: RemoveAnimeHistoryByAnimeId = Injekt.get(),
-) : BasePresenter<AnimeHistoryController>() {
+    private val sourceManager: AnimeSourceManager = Injekt.get(),
+    preferences: BasePreferences = Injekt.get(),
+    playerPreferences: PlayerPreferences = Injekt.get(),
+) : AnimeHistoryState by state {
 
-    private val _query: MutableStateFlow<String> = MutableStateFlow("")
-    private val _state: MutableStateFlow<HistoryState> = MutableStateFlow(HistoryState.Loading)
-    val state: StateFlow<HistoryState> = _state.asStateFlow()
+    var context: Context? = null
+    var activity: Activity? = null
 
-    override fun onCreate(savedState: Bundle?) {
-        super.onCreate(savedState)
+    private val _events: Channel<Event> = Channel(Int.MAX_VALUE)
+    val events: Flow<Event> = _events.receiveAsFlow()
 
-        presenterScope.launchIO {
-            _query.collectLatest { query ->
-                getAnimeHistory.subscribe(query)
-                    .catch { exception ->
-                        _state.value = HistoryState.Error(exception)
-                    }
-                    .map { pagingData ->
-                        pagingData.toAnimeHistoryUiModels()
-                    }
-                    .cachedIn(presenterScope)
-                    .let { uiModelsPagingDataFlow ->
-                        _state.value = HistoryState.Success(uiModelsPagingDataFlow)
-                    }
-            }
+    val isDownloadOnly = preferences.downloadedOnly().get()
+
+    val isIncognitoMode = preferences.incognitoMode().get()
+
+    val useExternalPlayer = playerPreferences.alwaysUseExternalPlayer().get()
+
+    fun onCreate(context: Context?, activity: Activity?) {
+        this.context = context
+        this.activity = activity
+    }
+
+    @Composable
+    fun getAnimeHistory(): Flow<List<AnimeHistoryUiModel>> {
+        val query = searchQuery ?: ""
+        return remember(query) {
+            getAnimeHistory.subscribe(query)
+                .distinctUntilChanged()
+                .catch { error ->
+                    logcat(LogPriority.ERROR, error)
+                    _events.send(Event.InternalError)
+                }
+                .map { pagingData ->
+                    pagingData.toAnimeHistoryUiModels()
+                }
         }
     }
 
-    private fun PagingData<AnimeHistoryWithRelations>.toAnimeHistoryUiModels(): PagingData<HistoryUiModel> {
-        return this.map {
-            HistoryUiModel.Item(it)
-        }
+    private fun List<AnimeHistoryWithRelations>.toAnimeHistoryUiModels(): List<AnimeHistoryUiModel> {
+        return map { AnimeHistoryUiModel.Item(it) }
             .insertSeparators { before, after ->
                 val beforeDate = before?.item?.seenAt?.time?.toDateKey() ?: Date(0)
                 val afterDate = after?.item?.seenAt?.time?.toDateKey() ?: Date(0)
                 when {
-                    beforeDate.time != afterDate.time && afterDate.time != 0L -> HistoryUiModel.Header(afterDate)
+                    beforeDate.time != afterDate.time && afterDate.time != 0L -> AnimeHistoryUiModel.Header(afterDate)
                     // Return null to avoid adding a separator between two items.
                     else -> null
                 }
             }
-    }
-
-    fun search(query: String) {
-        presenterScope.launchIO {
-            _query.emit(query)
-        }
     }
 
     fun removeFromHistory(history: AnimeHistoryWithRelations) {
@@ -102,18 +128,16 @@ class AnimeHistoryPresenter(
     fun getNextEpisodeForAnime(animeId: Long, episodeId: Long) {
         presenterScope.launchIO {
             val episode = getNextEpisode.await(animeId, episodeId)!!
-            launchUI {
-                view?.openEpisode(episode)
-            }
+            _events.send(Event.OpenEpisode(episode))
         }
     }
 
-    fun deleteAllHistory() {
+    fun deleteAllAnimeHistory() {
         presenterScope.launchIO {
-            val result = deleteAnimeHistoryTable.await()
+            val result = deleteAllAnimeHistory.await()
             if (!result) return@launchIO
-            launchUI {
-                view?.activity?.toast(R.string.clear_history_completed)
+            withUIContext {
+                context?.toast(R.string.clear_history_completed)
             }
         }
     }
@@ -121,17 +145,87 @@ class AnimeHistoryPresenter(
     fun resumeLastEpisodeSeen() {
         presenterScope.launchIO {
             val episode = getNextEpisode.await()
-            launchUI {
-                if (episode != null) {
-                    view?.openEpisode(episode)
-                }
+            _events.send(if (episode != null) Event.OpenEpisode(episode) else Event.NoNextEpisodeFound)
+        }
+    }
+
+    fun openEpisode(episode: Episode) {
+        presenterScope.launchNonCancellable {
+            val anime = getAnime.await(episode.animeId) ?: return@launchNonCancellable
+            val source = sourceManager.get(anime.source) ?: return@launchNonCancellable
+
+            if (useExternalPlayer) {
+                openEpisodeExternal(episode, anime, source)
+            } else {
+                openEpisodeInternal(episode)
             }
         }
     }
+
+    private fun openEpisodeInternal(episode: Episode) {
+        context!!.startActivity(PlayerActivity.newIntent(context!!, episode.animeId, episode.id))
+    }
+
+    private fun openEpisodeExternal(episode: Episode, anime: Anime, source: AnimeSource) {
+        launchIO {
+            val video = try {
+                EpisodeLoader.getLink(episode.toDbEpisode(), anime.toDbAnime(), source)
+                    .awaitSingle()
+            } catch (e: Exception) {
+                launchUI { context!!.toast(e.message) }
+                return@launchIO
+            }
+            if (video != null) {
+                EXT_EPISODE = episode
+                EXT_ANIME = anime
+
+                val extIntent = ExternalIntents(anime, source).getExternalIntent(
+                    episode,
+                    video,
+                    context!!,
+                )
+                if (extIntent != null) {
+                    try {
+                        ActivityCompat.startActivityForResult(
+                            activity!!,
+                            extIntent,
+                            AnimeController.REQUEST_EXTERNAL,
+                            null,
+                        )
+                    } catch (e: Exception) {
+                        launchUI { context!!.toast(e.message) }
+                        return@launchIO
+                    }
+                }
+            } else {
+                launchUI { context!!.toast("Couldn't find any video links.") }
+                return@launchIO
+            }
+        }
+    }
+
+    sealed class Dialog {
+        object DeleteAll : Dialog()
+        data class Delete(val history: AnimeHistoryWithRelations) : Dialog()
+    }
+
+    sealed class Event {
+        object InternalError : Event()
+        object NoNextEpisodeFound : Event()
+        data class OpenEpisode(val episode: Episode) : Event()
+    }
 }
 
-sealed class HistoryState {
-    object Loading : HistoryState()
-    data class Error(val error: Throwable) : HistoryState()
-    data class Success(val uiModels: Flow<PagingData<HistoryUiModel>>) : HistoryState()
+@Stable
+interface AnimeHistoryState {
+    var searchQuery: String?
+    var dialog: AnimeHistoryPresenter.Dialog?
+}
+
+fun AnimeHistoryState(): AnimeHistoryState {
+    return AnimeHistoryStateImpl()
+}
+class AnimeHistoryStateImpl : AnimeHistoryState {
+    override var searchQuery: String? by mutableStateOf(null)
+    override var dialog: AnimeHistoryPresenter.Dialog? by mutableStateOf(null)
 }

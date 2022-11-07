@@ -4,7 +4,11 @@ CREATE TABLE animesources(
     name TEXT NOT NULL
 );
 
-getAnimeSourceData:
+findAll:
+SELECT *
+FROM animesources;
+
+findOne:
 SELECT *
 FROM animesources
 WHERE _id = :id;

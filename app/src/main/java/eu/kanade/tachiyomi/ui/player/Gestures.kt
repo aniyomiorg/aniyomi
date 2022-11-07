@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
 
@@ -17,9 +17,9 @@ class Gestures(
 
     private val trigger = width.coerceAtMost(height) / 20
 
-    private val preferences: PreferencesHelper by injectLazy()
+    private val preferences: PlayerPreferences by injectLazy()
 
-    val interval = preferences.skipLengthPreference()
+    val interval = preferences.skipLengthPreference().get()
 
     override fun onDown(event: MotionEvent): Boolean {
         return true

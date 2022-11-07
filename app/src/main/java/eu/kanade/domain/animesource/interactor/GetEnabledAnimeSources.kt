@@ -4,23 +4,23 @@ import eu.kanade.domain.animesource.model.AnimeSource
 import eu.kanade.domain.animesource.model.Pin
 import eu.kanade.domain.animesource.model.Pins
 import eu.kanade.domain.animesource.repository.AnimeSourceRepository
+import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 class GetEnabledAnimeSources(
     private val repository: AnimeSourceRepository,
-    private val preferences: PreferencesHelper,
+    private val preferences: SourcePreferences,
 ) {
 
     fun subscribe(): Flow<List<AnimeSource>> {
         return combine(
-            preferences.pinnedAnimeSources().asFlow(),
-            preferences.enabledLanguages().asFlow(),
-            preferences.disabledAnimeSources().asFlow(),
-            preferences.lastUsedAnimeSource().asFlow(),
+            preferences.pinnedAnimeSources().changes(),
+            preferences.enabledLanguages().changes(),
+            preferences.disabledAnimeSources().changes(),
+            preferences.lastUsedAnimeSource().changes(),
             repository.getSources(),
         ) { pinnedSourceIds, enabledLanguages, disabledSources, lastUsedSource, sources ->
             val duplicatePins = preferences.duplicatePinnedSources().get()

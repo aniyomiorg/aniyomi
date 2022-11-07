@@ -1,5 +1,7 @@
 package eu.kanade.domain.anime.model
 
+import eu.kanade.tachiyomi.source.model.UpdateStrategy
+
 data class AnimeUpdate(
     val id: Long,
     val source: Long? = null,
@@ -17,5 +19,6 @@ data class AnimeUpdate(
     val genre: List<String>? = null,
     val status: Long? = null,
     val thumbnailUrl: String? = null,
+    val updateStrategy: UpdateStrategy? = null,
     val initialized: Boolean? = null,
 )

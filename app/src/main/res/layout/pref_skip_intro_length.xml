@@ -5,13 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-        <eu.kanade.tachiyomi.widget.MinMaxNumberPicker
-            android:id="@+id/skip_intro_column"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:max="255"
-            app:min="1" />
+    <eu.kanade.tachiyomi.widget.MinMaxNumberPicker
+        android:id="@+id/skip_intro_column"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:max="255"
+        app:min="1" />
 
 
 </LinearLayout>

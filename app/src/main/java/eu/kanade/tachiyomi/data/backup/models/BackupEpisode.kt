@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.data.backup.full.models
+package eu.kanade.tachiyomi.data.backup.models
 
 import eu.kanade.tachiyomi.data.database.models.EpisodeImpl
 import kotlinx.serialization.Serializable
@@ -39,20 +39,7 @@ data class BackupEpisode(
     }
 }
 
-val backupEpisodeMapper = {
-        _: Long,
-        _: Long,
-        url: String,
-        name: String,
-        scanlator: String?,
-        seen: Boolean,
-        bookmark: Boolean,
-        lastSecondSeen: Long,
-        totalSeconds: Long,
-        episodeNumber: Float,
-        source_order: Long,
-        dateFetch: Long,
-        dateUpload: Long,  ->
+val backupEpisodeMapper = { _: Long, _: Long, url: String, name: String, scanlator: String?, seen: Boolean, bookmark: Boolean, lastSecondSeen: Long, totalSeconds: Long, episodeNumber: Float, source_order: Long, dateFetch: Long, dateUpload: Long ->
     BackupEpisode(
         url = url,
         name = name,

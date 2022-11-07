@@ -2,20 +2,20 @@ package eu.kanade.domain.animesource.interactor
 
 import eu.kanade.domain.animesource.model.AnimeSource
 import eu.kanade.domain.animesource.repository.AnimeSourceRepository
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
 class GetLanguagesWithAnimeSources(
     private val repository: AnimeSourceRepository,
-    private val preferences: PreferencesHelper,
+    private val preferences: SourcePreferences,
 ) {
 
     fun subscribe(): Flow<Map<String, List<AnimeSource>>> {
         return combine(
-            preferences.enabledLanguages().asFlow(),
-            preferences.disabledSources().asFlow(),
+            preferences.enabledLanguages().changes(),
+            preferences.disabledSources().changes(),
             repository.getOnlineSources(),
         ) { enabledLanguage, disabledSource, onlineSources ->
             val sortedSources = onlineSources.sortedWith(

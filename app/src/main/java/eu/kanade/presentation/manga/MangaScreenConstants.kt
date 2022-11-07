@@ -9,14 +9,6 @@ enum class DownloadAction {
     ALL_CHAPTERS,
 }
 
-enum class EpisodeDownloadAction {
-    START,
-    START_NOW,
-    CANCEL,
-    DELETE,
-    START_ALT,
-}
-
 enum class EditCoverAction {
     EDIT,
     DELETE,

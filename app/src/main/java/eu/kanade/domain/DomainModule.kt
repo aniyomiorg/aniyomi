@@ -2,8 +2,10 @@ package eu.kanade.domain
 
 import eu.kanade.data.anime.AnimeRepositoryImpl
 import eu.kanade.data.animehistory.AnimeHistoryRepositoryImpl
+import eu.kanade.data.animesource.AnimeSourceDataRepositoryImpl
 import eu.kanade.data.animesource.AnimeSourceRepositoryImpl
 import eu.kanade.data.animetrack.AnimeTrackRepositoryImpl
+import eu.kanade.data.animeupdates.AnimeUpdatesRepositoryImpl
 import eu.kanade.data.category.CategoryRepositoryImpl
 import eu.kanade.data.category.CategoryRepositoryImplAnime
 import eu.kanade.data.chapter.ChapterRepositoryImpl
@@ -13,10 +15,12 @@ import eu.kanade.data.manga.MangaRepositoryImpl
 import eu.kanade.data.source.SourceDataRepositoryImpl
 import eu.kanade.data.source.SourceRepositoryImpl
 import eu.kanade.data.track.TrackRepositoryImpl
+import eu.kanade.data.updates.UpdatesRepositoryImpl
 import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.interactor.GetAnimeWithEpisodes
 import eu.kanade.domain.anime.interactor.GetAnimelibAnime
 import eu.kanade.domain.anime.interactor.GetDuplicateLibraryAnime
+import eu.kanade.domain.anime.interactor.NetworkToLocalAnime
 import eu.kanade.domain.anime.interactor.SetAnimeEpisodeFlags
 import eu.kanade.domain.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.anime.interactor.UpdateAnime
@@ -24,47 +28,50 @@ import eu.kanade.domain.anime.repository.AnimeRepository
 import eu.kanade.domain.animedownload.interactor.DeleteAnimeDownload
 import eu.kanade.domain.animeextension.interactor.GetAnimeExtensionLanguages
 import eu.kanade.domain.animeextension.interactor.GetAnimeExtensionSources
-import eu.kanade.domain.animeextension.interactor.GetAnimeExtensionUpdates
-import eu.kanade.domain.animeextension.interactor.GetAnimeExtensions
-import eu.kanade.domain.animehistory.interactor.DeleteAnimeHistoryTable
+import eu.kanade.domain.animeextension.interactor.GetAnimeExtensionsByType
+import eu.kanade.domain.animehistory.interactor.DeleteAllAnimeHistory
 import eu.kanade.domain.animehistory.interactor.GetAnimeHistory
 import eu.kanade.domain.animehistory.interactor.GetNextEpisode
 import eu.kanade.domain.animehistory.interactor.RemoveAnimeHistoryByAnimeId
 import eu.kanade.domain.animehistory.interactor.RemoveAnimeHistoryById
 import eu.kanade.domain.animehistory.interactor.UpsertAnimeHistory
 import eu.kanade.domain.animehistory.repository.AnimeHistoryRepository
-import eu.kanade.domain.animesource.interactor.GetAnimeSourceData
 import eu.kanade.domain.animesource.interactor.GetAnimeSourcesWithFavoriteCount
 import eu.kanade.domain.animesource.interactor.GetAnimeSourcesWithNonLibraryAnime
 import eu.kanade.domain.animesource.interactor.GetEnabledAnimeSources
 import eu.kanade.domain.animesource.interactor.GetLanguagesWithAnimeSources
+import eu.kanade.domain.animesource.interactor.GetRemoteAnime
 import eu.kanade.domain.animesource.interactor.ToggleAnimeSource
 import eu.kanade.domain.animesource.interactor.ToggleAnimeSourcePin
-import eu.kanade.domain.animesource.interactor.UpsertAnimeSourceData
+import eu.kanade.domain.animesource.repository.AnimeSourceDataRepository
 import eu.kanade.domain.animesource.repository.AnimeSourceRepository
 import eu.kanade.domain.animetrack.interactor.DeleteAnimeTrack
 import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
+import eu.kanade.domain.animetrack.interactor.GetTracksPerAnime
 import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
 import eu.kanade.domain.animetrack.repository.AnimeTrackRepository
-import eu.kanade.data.updates.UpdatesRepositoryImpl
+import eu.kanade.domain.animeupdates.interactor.GetAnimeUpdates
+import eu.kanade.domain.animeupdates.repository.AnimeUpdatesRepository
+import eu.kanade.domain.category.interactor.CreateAnimeCategoryWithName
 import eu.kanade.domain.category.interactor.CreateCategoryWithName
+import eu.kanade.domain.category.interactor.DeleteAnimeCategory
 import eu.kanade.domain.category.interactor.DeleteCategory
-import eu.kanade.domain.category.interactor.DeleteCategoryAnime
+import eu.kanade.domain.category.interactor.GetAnimeCategories
 import eu.kanade.domain.category.interactor.GetCategories
-import eu.kanade.domain.category.interactor.GetCategoriesAnime
-import eu.kanade.domain.category.interactor.SetAnimeCategories
-import eu.kanade.domain.category.interactor.RenameCategory
 import eu.kanade.domain.category.interactor.RenameAnimeCategory
-import eu.kanade.domain.category.interactor.ReorderCategory
+import eu.kanade.domain.category.interactor.RenameCategory
 import eu.kanade.domain.category.interactor.ReorderAnimeCategory
-import eu.kanade.domain.category.interactor.ResetCategoryFlags
+import eu.kanade.domain.category.interactor.ReorderCategory
 import eu.kanade.domain.category.interactor.ResetAnimeCategoryFlags
-import eu.kanade.domain.category.interactor.SetDisplayModeForCategory
+import eu.kanade.domain.category.interactor.ResetCategoryFlags
+import eu.kanade.domain.category.interactor.SetAnimeCategories
 import eu.kanade.domain.category.interactor.SetDisplayModeForAnimeCategory
+import eu.kanade.domain.category.interactor.SetDisplayModeForCategory
 import eu.kanade.domain.category.interactor.SetMangaCategories
+import eu.kanade.domain.category.interactor.SetSortModeForAnimeCategory
 import eu.kanade.domain.category.interactor.SetSortModeForCategory
+import eu.kanade.domain.category.interactor.UpdateAnimeCategory
 import eu.kanade.domain.category.interactor.UpdateCategory
-import eu.kanade.domain.category.interactor.UpdateCategoryAnime
 import eu.kanade.domain.category.repository.CategoryRepository
 import eu.kanade.domain.category.repository.CategoryRepositoryAnime
 import eu.kanade.domain.chapter.interactor.GetChapter
@@ -79,6 +86,7 @@ import eu.kanade.domain.chapter.repository.ChapterRepository
 import eu.kanade.domain.download.interactor.DeleteDownload
 import eu.kanade.domain.episode.interactor.GetEpisode
 import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.episode.interactor.SetAnimeDefaultEpisodeFlags
 import eu.kanade.domain.episode.interactor.SetSeenStatus
 import eu.kanade.domain.episode.interactor.ShouldUpdateDbEpisode
 import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
@@ -129,15 +137,14 @@ import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addFactory
 import uy.kohesive.injekt.api.addSingletonFactory
 import uy.kohesive.injekt.api.get
-import eu.kanade.domain.anime.interactor.GetFavorites as GetFavoritesAnime
+import eu.kanade.domain.anime.interactor.GetAnimeFavorites as GetFavoritesAnime
 import eu.kanade.domain.anime.interactor.ResetViewerFlags as ResetViewerFlagsAnime
 
 class DomainModule : InjektModule {
 
     override fun InjektRegistrar.registerInjectables() {
-
         addSingletonFactory<CategoryRepositoryAnime> { CategoryRepositoryImplAnime(get()) }
-        addFactory { GetCategoriesAnime(get()) }
+        addFactory { GetAnimeCategories(get()) }
         addFactory { ResetAnimeCategoryFlags(get(), get()) }
         addFactory { SetDisplayModeForAnimeCategory(get(), get()) }
         addFactory { SetSortModeForAnimeCategory(get(), get()) }
@@ -190,7 +197,7 @@ class DomainModule : InjektModule {
 
         addSingletonFactory<AnimeTrackRepository> { AnimeTrackRepositoryImpl(get()) }
         addFactory { DeleteAnimeTrack(get()) }
-        addFactory { GetAnimeTracksPerAnime(get()) 
+        addFactory { GetTracksPerAnime(get()) }
         addFactory { GetAnimeTracks(get()) }
         addFactory { InsertAnimeTrack(get()) }
 
@@ -200,15 +207,6 @@ class DomainModule : InjektModule {
         addFactory { GetTracks(get()) }
         addFactory { InsertTrack(get()) }
 
-        addSingletonFactory<ChapterRepository> { ChapterRepositoryImpl(get()) }
-        addFactory { GetChapter(get()) }
-        addFactory { GetChapterByMangaId(get()) }
-        addFactory { UpdateChapter(get()) }
-        addFactory { SetReadStatus(get(), get(), get(), get()) }
-        addFactory { ShouldUpdateDbChapter() }
-        addFactory { SyncChaptersWithSource(get(), get(), get(), get()) }
-        addFactory { SyncChaptersWithTrackServiceTwoWay(get(), get()) }
-
         addSingletonFactory<EpisodeRepository> { EpisodeRepositoryImpl(get()) }
         addFactory { GetEpisode(get()) }
         addFactory { GetEpisodeByAnimeId(get()) }
@@ -217,6 +215,15 @@ class DomainModule : InjektModule {
         addFactory { ShouldUpdateDbEpisode() }
         addFactory { SyncEpisodesWithSource(get(), get(), get(), get()) }
         addFactory { SyncEpisodesWithTrackServiceTwoWay(get(), get()) }
+
+        addSingletonFactory<ChapterRepository> { ChapterRepositoryImpl(get()) }
+        addFactory { GetChapter(get()) }
+        addFactory { GetChapterByMangaId(get()) }
+        addFactory { UpdateChapter(get()) }
+        addFactory { SetReadStatus(get(), get(), get(), get()) }
+        addFactory { ShouldUpdateDbChapter() }
+        addFactory { SyncChaptersWithSource(get(), get(), get(), get()) }
+        addFactory { SyncChaptersWithTrackServiceTwoWay(get(), get()) }
 
         addSingletonFactory<AnimeHistoryRepository> { AnimeHistoryRepositoryImpl(get()) }
         addFactory { DeleteAllAnimeHistory(get()) }
@@ -237,7 +244,7 @@ class DomainModule : InjektModule {
         addFactory { UpsertHistory(get()) }
         addFactory { RemoveHistoryById(get()) }
         addFactory { RemoveHistoryByMangaId(get()) }
-        
+
         addFactory { DeleteDownload(get(), get()) }
 
         addFactory { GetExtensionsByType(get(), get()) }
@@ -257,8 +264,6 @@ class DomainModule : InjektModule {
         addFactory { GetRemoteAnime(get()) }
         addFactory { GetAnimeSourcesWithFavoriteCount(get(), get()) }
         addFactory { GetAnimeSourcesWithNonLibraryAnime(get()) }
-        addFactory { SetAnimeMigrateSorting(get()) }
-        addFactory { ToggleAnimeLanguage(get()) }
         addFactory { ToggleAnimeSource(get()) }
         addFactory { ToggleAnimeSourcePin(get()) }
 

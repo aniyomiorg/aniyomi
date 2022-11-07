@@ -150,7 +150,7 @@ data class Stamp(
 @Serializable
 enum class SkipType {
     op, ed, recap, @SerialName("mixed-op")
-    mixedOp;
+    mixedOp, ;
 
     fun getString(): String {
         return when (this) {

@@ -36,13 +36,13 @@ import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animeextension.api.AnimeExtensionGithubApi
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
 import eu.kanade.tachiyomi.data.updater.AppUpdateResult
 import eu.kanade.tachiyomi.databinding.MainActivityBinding
-import eu.kanade.tachiyomi.extension.api.AnimeExtensionGithubApi
 import eu.kanade.tachiyomi.extension.api.ExtensionGithubApi
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.animelib.AnimelibController
@@ -57,15 +57,14 @@ import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceControl
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
 import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceController
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
-import eu.kanade.tachiyomi.ui.download.DownloadTabsController
+import eu.kanade.tachiyomi.ui.download.anime.AnimeDownloadController
+import eu.kanade.tachiyomi.ui.download.manga.DownloadController
 import eu.kanade.tachiyomi.ui.library.LibraryController
 import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.more.NewUpdateDialogController
 import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
 import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
-import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
-import eu.kanade.tachiyomi.ui.recent.history.HistoryController
 import eu.kanade.tachiyomi.ui.setting.SettingsMainController
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
@@ -85,8 +84,6 @@ import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import eu.kanade.tachiyomi.ui.download.anime.DownloadController as AnimeDownloadController
-import eu.kanade.tachiyomi.ui.download.manga.DownloadController as MangaDownloadController
 import kotlin.time.Duration.Companion.seconds
 
 class MainActivity : BaseActivity() {
@@ -99,12 +96,10 @@ class MainActivity : BaseActivity() {
 
     private lateinit var router: Router
 
-    private val startScreenId by lazy {
-        getNavId(preferences.startScreen())
-    }
+    private val startScreenId = R.id.nav_animelib
 
     private fun getNavId(index: Int): Int {
-        return when (preferences.bottomNavStyle()) {
+        return when (libraryPreferences.bottomNavStyle().get()) {
             1 -> startScreenArrayHistory.getOrNull(index)
             2 -> startScreenArrayNoManga.getOrNull(index)
             else -> startScreenArrayDefault.getOrNull(index)
@@ -199,29 +194,16 @@ class MainActivity : BaseActivity() {
                         controller?.showSettingsSheet()
                     }
                     R.id.nav_updates -> {
-                        if (router.backstackSize == 1) {
-                            router.pushController(DownloadTabsController())
-                        }
+                        val controller = router.getControllerWithTag(id.toString()) as? UpdatesTabsController
+                        controller?.openDownloadQueue()
                     }
                     R.id.nav_animelib -> {
                         val controller = router.getControllerWithTag(id.toString()) as? AnimelibController
                         controller?.showSettingsSheet()
                     }
                     R.id.nav_history -> {
-                        if (router.backstackSize == 1) {
-                            try {
-                                when (router.backstack[0].controller) {
-                                    is HistoryController -> {
-                                        (router.backstack[0].controller as HistoryController).resumeLastChapterRead()
-                                    }
-                                    is AnimeHistoryController -> {
-                                        (router.backstack[0].controller as AnimeHistoryController).resumeLastEpisodeSeen()
-                                    }
-                                }
-                            } catch (e: Exception) {
-                                toast(R.string.cant_open_last_read_chapter)
-                            }
-                        }
+                        val controller = router.getControllerWithTag(id.toString()) as? HistoryTabsController
+                        controller?.resumeLastItem()
                     }
                     R.id.nav_more -> {
                         if (router.backstackSize == 1) {
@@ -285,7 +267,7 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        merge(libraryPreferences.showUpdatesNavBadge().asFlow(), libraryPreferences.unreadUpdatesCount().asFlow(), libraryPreferences.unseenUpdatesCount().asFlow())
+        merge(libraryPreferences.showUpdatesNavBadge().changes(), libraryPreferences.unseenUpdatesCount().changes(), libraryPreferences.unseenUpdatesCount().changes())
             .onEach { setUnreadUpdatesBadge() }
             .launchIn(lifecycleScope)
 
@@ -293,8 +275,8 @@ class MainActivity : BaseActivity() {
             .asHotFlow { setExtensionsBadge() }
             .launchIn(lifecycleScope)
 
-        preferences.animeextensionUpdatesCount()
-            .asImmediateFlow { setExtensionsBadge() }
+        sourcePreferences.animeextensionUpdatesCount()
+            .asHotFlow { setExtensionsBadge() }
             .launchIn(lifecycleScope)
 
         preferences.downloadedOnly()
@@ -410,8 +392,11 @@ class MainActivity : BaseActivity() {
 
             // Extension updates
             try {
-                AnimeExtensionGithubApi().checkForUpdates(this@MainActivity)?.let { pendingUpdates ->
-                    preferences.animeextensionUpdatesCount().set(pendingUpdates.size)
+                AnimeExtensionGithubApi().checkForUpdates(
+                    this@MainActivity,
+                    fromAvailableExtensionList = true,
+                )?.let { pendingUpdates ->
+                    sourcePreferences.animeextensionUpdatesCount().set(pendingUpdates.size)
                 }
                 ExtensionGithubApi().checkForUpdates(
                     this@MainActivity,
@@ -427,8 +412,10 @@ class MainActivity : BaseActivity() {
 
     private fun setUnreadUpdatesBadge() {
         val updates = if (libraryPreferences.showUpdatesNavBadge().get()) {
-            libraryPreferences.unreadUpdatesCount().get() + libraryPreferences.unseenUpdatesCount().get()
-        } else 0
+            libraryPreferences.unreadUpdatesCount().get() + libraryPreferences.unreadUpdatesCount().get()
+        } else {
+            0
+        }
         if (updates > 0) {
             nav.getOrCreateBadge(R.id.nav_updates).apply {
                 number = updates
@@ -495,7 +482,7 @@ class MainActivity : BaseActivity() {
                     router.popToRoot()
                 }
                 setSelectedNavItem(R.id.nav_more)
-                router.pushController(MangaDownloadController())
+                router.pushController(DownloadController())
             }
             SHORTCUT_ANIME_DOWNLOADS -> {
                 if (router.backstackSize > 1) {
@@ -577,6 +564,7 @@ class MainActivity : BaseActivity() {
             // Regular back (i.e. closing the app)
             if (libraryPreferences.autoClearChapterCache().get()) {
                 chapterCache.clear()
+                episodeCache.clear()
             }
             super.onBackPressed()
         }
@@ -636,7 +624,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun getNavIdForId(id: Int): Int? {
-        return when (preferences.bottomNavStyle()) {
+        return when (libraryPreferences.bottomNavStyle().get()) {
             1 -> startScreenArrayHistory.firstOrNull { it == id }
             2 -> startScreenArrayNoManga.firstOrNull { it == id }
             else -> startScreenArrayDefault.firstOrNull { it == id }
@@ -648,7 +636,7 @@ class MainActivity : BaseActivity() {
             R.id.nav_library -> LibraryController()
             R.id.nav_updates -> UpdatesTabsController()
             R.id.nav_history -> HistoryTabsController()
-            R.id.nav_browse -> BrowseController()
+            R.id.nav_browse -> BrowseController(toExtensions = false)
             R.id.nav_more -> MoreController()
             else -> AnimelibController()
         }

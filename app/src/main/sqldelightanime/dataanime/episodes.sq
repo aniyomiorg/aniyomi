@@ -29,6 +29,13 @@ SELECT *
 FROM episodes
 WHERE anime_id = :animeId;
 
+getBookmarkedEpisodesByAnimeId:
+SELECT *
+FROM episodes
+WHERE bookmark
+AND anime_id = :animeId;
+
+
 getEpisodeByUrl:
 SELECT *
 FROM episodes

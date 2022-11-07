@@ -14,6 +14,7 @@ import eu.kanade.domain.library.model.display
 import eu.kanade.domain.library.model.sort
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -120,11 +121,6 @@ class LibrarySettingsSheet(
                         list.addAll(trackFilters.values)
                         items = list
                     }
-                    val list: MutableList<Item> = mutableListOf(downloaded, unread, started, completed)
-                    if (size > 1) list.add(Item.Header(R.string.action_filter_tracked))
-                    list.addAll(trackFilters.values)
-                    items = list
-                }
             }
 
             private fun getServiceResId(service: TrackService, size: Int): Int {

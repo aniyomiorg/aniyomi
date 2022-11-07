@@ -15,7 +15,7 @@ import uy.kohesive.injekt.api.get
 
 class BackupFileValidator(
     private val sourceManager: SourceManager = Injekt.get(),
-    private val animesourceManager: AnimeSourceManager = Injekt.get()
+    private val animesourceManager: AnimeSourceManager = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
 ) {
 
@@ -59,8 +59,11 @@ class BackupFileValidator(
                 .filter { animesourceManager.get(it.key) == null }
                 .values.map {
                     val id = it.toLongOrNull()
-                    if (id == null) it
-                    else animesourceManager.getOrStub(id).toString()
+                    if (id == null) {
+                        it
+                    } else {
+                        animesourceManager.getOrStub(id).toString()
+                    }
                 }
                 .distinct()
                 .sorted()

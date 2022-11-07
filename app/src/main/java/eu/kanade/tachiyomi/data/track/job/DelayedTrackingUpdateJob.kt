@@ -29,12 +29,13 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
     CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        val getAnime = Injekt.get<GetAnime>()
         val getManga = Injekt.get<GetManga>()
-        val getAnimeTracks = Injekt.get<GetAnimeTracks>()
         val getTracks = Injekt.get<GetTracks>()
-        val insertAnimeTrack = Injekt.get<InsertAnimeTrack>()
         val insertTrack = Injekt.get<InsertTrack>()
+
+        val getAnime = Injekt.get<GetAnime>()
+        val getAnimeTracks = Injekt.get<GetAnimeTracks>()
+        val insertAnimeTrack = Injekt.get<InsertAnimeTrack>()
 
         val trackManager = Injekt.get<TrackManager>()
         val delayedTrackingStore = Injekt.get<DelayedTrackingStore>()
@@ -61,7 +62,7 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
             }
 
             val animeTracks = delayedTrackingStore.getAnimeItems().mapNotNull {
-                val anime = getAnime.await(it.animeId) ?: return@withContext
+                val anime = getAnime.await(it.animeId) ?: return@withIOContext
                 getAnimeTracks.await(anime.id)
                     .find { track -> track.id == it.trackId }
                     ?.copy(lastEpisodeSeen = it.lastEpisodeSeen.toDouble())
@@ -74,12 +75,11 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
                         service.update(track.toDbTrack(), true)
                         insertAnimeTrack.await(track)
                     }
+                    delayedTrackingStore.remove(track)
                 } catch (e: Exception) {
                     logcat(LogPriority.ERROR, e)
                 }
             }
-
-            delayedTrackingStore.clear()
         }
 
         return Result.success()

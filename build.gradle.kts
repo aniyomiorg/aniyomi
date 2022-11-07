@@ -2,7 +2,6 @@ buildscript {
     dependencies {
         classpath(libs.android.shortcut.gradle)
         classpath(libs.google.services.gradle)
-        classpath(libs.google.firebase.crashlytics)
         classpath(libs.aboutLibraries.gradle)
         classpath(kotlinx.serialization.gradle)
         classpath(libs.sqldelight.gradle)

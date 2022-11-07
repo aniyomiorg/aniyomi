@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.data.database.models
 
 import eu.kanade.tachiyomi.animesource.model.SAnime
-import tachiyomi.animesource.model.AnimeInfo
 import eu.kanade.domain.anime.model.Anime as DomainAnime
 
 interface Anime : SAnime {
@@ -25,11 +24,6 @@ interface Anime : SAnime {
 
     fun sortDescending(): Boolean {
         return episode_flags and DomainAnime.EPISODE_SORT_DIR_MASK.toInt() == DomainAnime.EPISODE_SORT_DESC.toInt()
-    }
-
-    fun getGenres(): List<String>? {
-        if (genre.isNullOrBlank()) return null
-        return genre?.split(", ")?.map { it.trim() }?.filterNot { it.isBlank() }?.distinct()
     }
 
     private fun setEpisodeFlags(flag: Int, mask: Int) {
@@ -74,19 +68,6 @@ interface Anime : SAnime {
     }
 }
 
-fun Anime.toAnimeInfo(): AnimeInfo {
-    return AnimeInfo(
-        artist = this.artist ?: "",
-        author = this.author ?: "",
-        cover = this.thumbnail_url ?: "",
-        description = this.description ?: "",
-        genres = this.getGenres() ?: emptyList(),
-        key = this.url,
-        status = this.status,
-        title = this.title,
-    )
-}
-
 fun Anime.toDomainAnime(): DomainAnime? {
     val mangaId = id ?: return null
     return DomainAnime(
@@ -107,5 +88,6 @@ fun Anime.toDomainAnime(): DomainAnime? {
         status = status.toLong(),
         thumbnailUrl = thumbnail_url,
         initialized = initialized,
+        updateStrategy = update_strategy,
     )
 }

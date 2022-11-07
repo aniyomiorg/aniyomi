@@ -38,6 +38,17 @@ class SettingsGeneralScreen : SearchableSettings {
         val libraryPrefs = remember { Injekt.get<LibraryPreferences>() }
         return mutableListOf<Preference>().apply {
             add(
+                Preference.PreferenceItem.ListPreference(
+                    pref = libraryPrefs.bottomNavStyle(),
+                    title = stringResource(R.string.pref_bottom_nav_style),
+                    entries = mapOf(
+                        0 to stringResource(R.string.pref_bottom_nav_no_history),
+                        1 to stringResource(R.string.pref_bottom_nav_no_updates),
+                        2 to stringResource(R.string.pref_bottom_nav_no_manga),
+                    ),
+                ),
+            )
+            add(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = libraryPrefs.showUpdatesNavBadge(),
                     title = stringResource(R.string.pref_library_update_show_tab_badge),

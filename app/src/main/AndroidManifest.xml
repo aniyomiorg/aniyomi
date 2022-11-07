@@ -141,7 +141,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".extension.util.AnimeExtensionInstallActivity"
+            android:name=".animeextension.util.AnimeExtensionInstallActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="false" />
 
@@ -225,12 +225,6 @@
             android:name=".data.notification.NotificationReceiver"
             android:exported="false" />
 
-        <receiver android:name="androidx.media.session.MediaButtonReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON"/>
-            </intent-filter>
-        </receiver>
-
         <receiver
             android:name=".glance.UpdatesGridGlanceReceiver"
             android:enabled="@bool/glance_appwidget_available"
@@ -258,7 +252,7 @@
             android:exported="false" />
 
         <service
-            android:name=".data.download.AnimeDownloadService"
+            android:name=".data.animedownload.AnimeDownloadService"
             android:exported="false" />
 
         <service
@@ -272,7 +266,7 @@
         <service android:name=".extension.util.ExtensionInstallService"
             android:exported="false" />
 
-        <service android:name=".extension.util.AnimeExtensionInstallService"
+        <service android:name=".animeextension.util.AnimeExtensionInstallService"
             android:exported="false" />
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"

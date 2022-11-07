@@ -107,10 +107,12 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                 putJsonArray("seasons") {
                     addJsonObject {
                         put("number", 1)
-                        if (add) putJsonArray("episodes") {
-                            for (epNum in 1..track.last_episode_seen.toInt()) {
-                                addJsonObject {
-                                    put("number", epNum)
+                        if (add) {
+                            putJsonArray("episodes") {
+                                for (epNum in 1..track.last_episode_seen.toInt()) {
+                                    addJsonObject {
+                                        put("number", epNum)
+                                    }
                                 }
                             }
                         }

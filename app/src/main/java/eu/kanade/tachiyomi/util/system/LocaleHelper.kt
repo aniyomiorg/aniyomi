@@ -1,23 +1,15 @@
 package eu.kanade.tachiyomi.util.system
 
 import android.content.Context
-import android.content.ContextWrapper
-import android.content.res.Configuration
-import android.os.Build
-import android.os.LocaleList
 import androidx.core.os.LocaleListCompat
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.ui.browse.source.SourcesPresenter
-import uy.kohesive.injekt.injectLazy
 import java.util.Locale
 
 /**
  * Utility class to change the application's language in runtime.
  */
 object LocaleHelper {
-
-    private val preferences: PreferencesHelper by injectLazy()
 
     /**
      * Returns display name of a string language code.
@@ -61,20 +53,8 @@ object LocaleHelper {
     /**
      * Return English display string from string language code
      */
-    fun getSimpleLocaleDisplay(lang: String): String {
-        val sp = lang.split("_", "-")
-        return Locale(sp[0]).getDisplayLanguage(getLocaleFromString(null))
-    }
-
-    /**
-     * Returns the locale for the value stored in preferences, defaults to main system language.
-     *
-     * @param pref the string value stored in preferences.
-     */
-    private fun getLocaleFromString(pref: String?): Locale {
-        if (pref.isNullOrEmpty()) {
-            return LocaleListCompat.getDefault()[0]!!
-        }
-        return getLocale(pref)
+    fun getSimpleLocaleDisplayName(): String {
+        val sp = Locale.getDefault().language.split("_", "-")
+        return Locale(sp[0]).getDisplayLanguage(LocaleListCompat.getDefault()[0]!!)
     }
 }

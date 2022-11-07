@@ -23,10 +23,12 @@ import androidx.customview.view.AbsSavedState
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.util.system.applySystemAnimatorScale
 import eu.kanade.tachiyomi.util.system.pxToDp
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 class TachiyomiBottomNavigationView @JvmOverloads constructor(
     context: Context,
@@ -35,8 +37,10 @@ class TachiyomiBottomNavigationView @JvmOverloads constructor(
     defStyleRes: Int = R.style.Widget_Design_BottomNavigationView,
 ) : BottomNavigationView(context, attrs, defStyleAttr, defStyleRes) {
 
+    private val libraryPreferences: LibraryPreferences = Injekt.get()
+
     override fun inflateMenu(resId: Int) {
-        when (PreferencesHelper(context).bottomNavStyle()) {
+        when (libraryPreferences.bottomNavStyle().get()) {
             1 -> super.inflateMenu(R.menu.main_nav_history)
             2 -> super.inflateMenu(R.menu.main_nav_no_manga)
             else -> super.inflateMenu(resId)

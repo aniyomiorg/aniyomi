@@ -149,10 +149,11 @@ class SettingsBackupScreen : SearchableSettings {
     ) {
         val choices = remember {
             mapOf(
-                BackupConst.BACKUP_CATEGORY to R.string.categories,
-                BackupConst.BACKUP_CHAPTER to R.string.chapters,
+                BackupConst.BACKUP_CATEGORY to R.string.general_categories,
+                BackupConst.BACKUP_CHAPTER to R.string.chapters_episodes,
                 BackupConst.BACKUP_TRACK to R.string.track,
                 BackupConst.BACKUP_HISTORY to R.string.history,
+                BackupConst.BACKUP_PREFS to R.string.settings,
             )
         }
         val flags = remember { choices.keys.toMutableStateList() }

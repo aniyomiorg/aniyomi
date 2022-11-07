@@ -1,20 +1,17 @@
 package eu.kanade.domain.animesource.interactor
 
 import eu.kanade.domain.animesource.model.AnimeSource
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.util.preference.minusAssign
-import eu.kanade.tachiyomi.util.preference.plusAssign
+import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.tachiyomi.core.preference.getAndSet
 
 class ToggleAnimeSourcePin(
-    private val preferences: PreferencesHelper,
+    private val preferences: SourcePreferences,
 ) {
 
     fun await(source: AnimeSource) {
         val isPinned = source.id.toString() in preferences.pinnedAnimeSources().get()
-        if (isPinned) {
-            preferences.pinnedAnimeSources() -= source.id.toString()
-        } else {
-            preferences.pinnedAnimeSources() += source.id.toString()
+        preferences.pinnedAnimeSources().getAndSet { pinned ->
+            if (isPinned) pinned.minus("${source.id}") else pinned.plus("${source.id}")
         }
     }
 }

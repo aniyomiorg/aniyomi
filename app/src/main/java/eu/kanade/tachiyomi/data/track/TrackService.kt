@@ -4,10 +4,11 @@ import androidx.annotation.CallSuper
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.track.service.TrackPreferences
+import eu.kanade.tachiyomi.data.database.models.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.network.NetworkHelper
 import okhttp3.OkHttpClient
@@ -67,7 +68,7 @@ abstract class TrackService(val id: Long) {
 
     abstract suspend fun bind(track: Track, hasReadChapters: Boolean = false): Track
 
-    abstract suspend fun bind(track: AnimeTrack, hasReadChapters: Boolean = false): AnimeTrack
+    abstract suspend fun bind(track: AnimeTrack, hasSeenEpisodes: Boolean = false): AnimeTrack
 
     abstract suspend fun search(query: String): List<TrackSearch>
 

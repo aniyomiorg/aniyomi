@@ -13,11 +13,11 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.requestPermissionsSafe
-import eu.kanade.tachiyomi.ui.browse.extension.animeExtensionsTab
+import eu.kanade.tachiyomi.ui.browse.animeextension.animeExtensionsTab
+import eu.kanade.tachiyomi.ui.browse.animesource.animeSourcesTab
 import eu.kanade.tachiyomi.ui.browse.extension.extensionsTab
-import eu.kanade.tachiyomi.ui.browse.migration.sources.migrateAnimeSourcesTab
+import eu.kanade.tachiyomi.ui.browse.migration.animesources.migrateAnimeSourcesTab
 import eu.kanade.tachiyomi.ui.browse.migration.sources.migrateSourcesTab
-import eu.kanade.tachiyomi.ui.browse.source.animeSourcesTab
 import eu.kanade.tachiyomi.ui.browse.source.sourcesTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 
@@ -45,12 +45,12 @@ class BrowseController : FullComposeController<BrowsePresenter>, RootController 
                 sourcesTab(router, presenter.sourcesPresenter),
                 animeExtensionsTab(router, presenter.animeExtensionsPresenter),
                 extensionsTab(router, presenter.extensionsPresenter),
-                migrateSourcesTab(router, presenter.migrationSourcesPresenter),
                 migrateAnimeSourcesTab(router, presenter.migrationAnimeSourcesPresenter),
+                migrateSourcesTab(router, presenter.migrationSourcesPresenter),
             ),
             startIndex = 1.takeIf { toExtensions },
             searchQuery = query,
-            onChangeSearchQuery = { presenter.extensionsPresenter.search(it) },
+            onChangeSearchQuery = { presenter.animeExtensionsPresenter.search(it) },
             placeholderRes = R.string.action_search_hint,
             incognitoMode = presenter.isIncognitoMode,
             downloadedOnlyMode = presenter.isDownloadOnly,

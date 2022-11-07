@@ -9,7 +9,7 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
  *
  * @param context the context of the fragment containing this adapter.
  */
-class DownloadAdapter(controller: DownloadController) : FlexibleAdapter<AbstractFlexibleItem<*>>(
+class DownloadAdapter(controller: AnimeDownloadController) : FlexibleAdapter<AbstractFlexibleItem<*>>(
     null,
     controller,
     true,

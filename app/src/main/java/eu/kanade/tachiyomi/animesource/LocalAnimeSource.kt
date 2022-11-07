@@ -10,32 +10,20 @@ import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
-import eu.kanade.tachiyomi.animesource.model.toAnimeInfo
-import eu.kanade.tachiyomi.animesource.model.toEpisodeInfo
-import eu.kanade.tachiyomi.animesource.model.toSAnime
-import eu.kanade.tachiyomi.animesource.model.toSEpisode
-import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
+import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
 import eu.kanade.tachiyomi.util.system.ImageUtil
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.decodeFromStream
-import kotlinx.serialization.json.intOrNull
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonPrimitive
 import logcat.LogPriority
 import rx.Observable
-import tachiyomi.animesource.model.AnimeInfo
-import tachiyomi.animesource.model.EpisodeInfo
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.InputStream
@@ -43,7 +31,6 @@ import java.util.concurrent.TimeUnit
 
 class LocalAnimeSource(
     private val context: Context,
-    private val coverCache: AnimeCoverCache = Injekt.get(),
 ) : AnimeCatalogueSource, UnmeteredSource {
 
     private val json: Json by injectLazy()
@@ -102,7 +89,9 @@ class LocalAnimeSource(
                     }
                 }
 
-                else -> { /* Do nothing */ }
+                else -> {
+                    /* Do nothing */
+                }
             }
         }
 
@@ -122,11 +111,10 @@ class LocalAnimeSource(
 
         // Fetch episodes of all the anime
         animes.forEach { anime ->
-            val animeInfo = anime.toAnimeInfo()
             runBlocking {
-                val episodes = getEpisodeList(animeInfo)
+                val episodes = getEpisodeList(anime)
                 if (episodes.isNotEmpty()) {
-                    val episode = episodes.last().toSEpisode()
+                    val episode = episodes.last()
                     // Copy the cover from the first episode found if not available
                     if (anime.thumbnail_url == null) {
                         try {
@@ -143,42 +131,45 @@ class LocalAnimeSource(
     }
 
     // Anime details related
-    override suspend fun getAnimeDetails(anime: AnimeInfo): AnimeInfo {
-        var animeInfo = anime
-
+    override suspend fun getAnimeDetails(anime: SAnime): SAnime = withIOContext {
         val baseDirsFile = getBaseDirectoriesFiles(context)
 
-        val coverFile = getCoverFile(anime.key, baseDirsFile)
-
-        coverFile?.let {
-            animeInfo = animeInfo.copy(cover = it.absolutePath)
+        getCoverFile(anime.url, baseDirsFile)?.let {
+            anime.thumbnail_url = it.absolutePath
         }
 
-        val localDetails = getAnimeDirsFiles(anime.key, baseDirsFile)
-            .firstOrNull { it.extension.equals("json", ignoreCase = true) }
+        val animeDirFiles = getAnimeDirsFiles(anime.url, baseDirsFile).toList()
 
-        if (localDetails != null) {
-            val obj = json.decodeFromStream<JsonObject>(localDetails.inputStream())
+        animeDirFiles
+            .firstOrNull { it.extension == "json" }
+            ?.let { file ->
+                json.decodeFromStream<AnimeDetails>(file.inputStream()).run {
+                    title?.let { anime.title = it }
+                    author?.let { anime.author = it }
+                    artist?.let { anime.artist = it }
+                    description?.let { anime.description = it }
+                    genre?.let { anime.genre = it.joinToString() }
+                    status?.let { anime.status = it }
+                }
+            }
 
-            animeInfo = animeInfo.copy(
-                title = obj["title"]?.jsonPrimitive?.contentOrNull ?: anime.title,
-                author = obj["author"]?.jsonPrimitive?.contentOrNull ?: anime.author,
-                artist = obj["artist"]?.jsonPrimitive?.contentOrNull ?: anime.artist,
-                description = obj["description"]?.jsonPrimitive?.contentOrNull ?: anime.description,
-                genres = obj["genre"]?.jsonArray?.map { it.jsonPrimitive.content } ?: anime.genres,
-                status = obj["status"]?.jsonPrimitive?.intOrNull ?: anime.status,
-            )
-        }
-
-        return animeInfo
+        return@withIOContext anime
     }
 
-    // Episodes
-    override suspend fun getEpisodeList(anime: AnimeInfo): List<EpisodeInfo> {
-        val sAnime = anime.toSAnime()
+    @Serializable
+    class AnimeDetails(
+        val title: String? = null,
+        val author: String? = null,
+        val artist: String? = null,
+        val description: String? = null,
+        val genre: List<String>? = null,
+        val status: Int? = null,
+    )
 
+    // Episodes
+    override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> {
         val baseDirsFile = getBaseDirectoriesFiles(context)
-        return getAnimeDirsFiles(anime.key, baseDirsFile)
+        return getAnimeDirsFiles(anime.url, baseDirsFile)
             // Only keep supported formats
             .filter { it.isDirectory || isSupportedFile(it.extension) }
             .map { episodeFile ->
@@ -191,12 +182,11 @@ class LocalAnimeSource(
                     }
                     date_upload = episodeFile.lastModified()
 
-                    episode_number = EpisodeRecognition.parseEpisodeNumber(sAnime.title, this.name, this.episode_number)
+                    episode_number = EpisodeRecognition.parseEpisodeNumber(anime.title, this.name, this.episode_number)
                 }
             }
-            .map { it.toEpisodeInfo() }
             .sortedWith { e1, e2 ->
-                val e = e2.number.compareTo(e1.number)
+                val e = e2.episode_number.compareTo(e1.episode_number)
                 if (e == 0) e2.name.compareToCaseInsensitiveNaturalOrder(e1.name) else e
             }
             .toList()
@@ -215,7 +205,7 @@ class LocalAnimeSource(
     )
 
     // Unused stuff
-    override suspend fun getVideoList(episode: EpisodeInfo) = throw UnsupportedOperationException("Unused")
+    override suspend fun getVideoList(episode: SEpisode) = throw UnsupportedOperationException("Unused")
 
     // Miscellaneous
     private fun isSupportedFile(extension: String): Boolean {

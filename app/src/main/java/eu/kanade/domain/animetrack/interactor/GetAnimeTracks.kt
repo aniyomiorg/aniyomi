@@ -19,10 +19,6 @@ class GetAnimeTracks(
         }
     }
 
-    fun subscribe(): Flow<List<AnimeTrack>> {
-        return animetrackRepository.getAnimeTracksAsFlow()
-    }
-
     fun subscribe(animeId: Long): Flow<List<AnimeTrack>> {
         return animetrackRepository.getAnimeTracksByAnimeIdAsFlow(animeId)
     }

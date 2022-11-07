@@ -11,6 +11,7 @@ import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.databinding.TrackChaptersDialogBinding
 import eu.kanade.tachiyomi.ui.base.controller.DialogController
+import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -31,7 +32,7 @@ class SetTrackEpisodesDialog<T> : DialogController
 
     @Suppress("unused")
     constructor(bundle: Bundle) : super(bundle) {
-        val track = bundle.getSerializable(KEY_ITEM_TRACK) as AnimeTrack
+        val track = bundle.getSerializableCompat<AnimeTrack>(KEY_ITEM_TRACK)!!
         val service = Injekt.get<TrackManager>().getService(track.sync_id.toLong())!!
         item = TrackItem(track, service)
     }
@@ -58,7 +59,7 @@ class SetTrackEpisodesDialog<T> : DialogController
                 np.clearFocus()
                 listener.setEpisodesSeen(item, np.value)
             }
-            .setNegativeButton(android.R.string.cancel, null)
+            .setNegativeButton(R.string.action_cancel, null)
             .create()
     }
 

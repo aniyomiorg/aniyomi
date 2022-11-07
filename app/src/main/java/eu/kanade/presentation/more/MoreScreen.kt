@@ -20,24 +20,26 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.components.AppStateBanners
 import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.ScrollbarLazyColumn
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.ui.more.AnimeDownloadQueueState
 import eu.kanade.tachiyomi.ui.more.DownloadQueueState
 import eu.kanade.tachiyomi.ui.more.MoreController
 import eu.kanade.tachiyomi.ui.more.MorePresenter
+import eu.kanade.tachiyomi.widget.TachiyomiBottomNavigationView
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import eu.kanade.tachiyomi.widget.TachiyomiBottomNavigationView
 
 @Composable
 fun MoreScreen(
     presenter: MorePresenter,
     onClickHistory: () -> Unit,
+    onClickAnimeDownloadQueue: () -> Unit,
     onClickDownloadQueue: () -> Unit,
     onClickAnimeCategories: () -> Unit,
     onClickCategories: () -> Unit,
@@ -48,7 +50,9 @@ fun MoreScreen(
     val uriHandler = LocalUriHandler.current
     val downloadQueueState by presenter.downloadQueueState.collectAsState()
 
-    val preferences: PreferencesHelper = Injekt.get()
+    val animeDownloadQueueState by presenter.animeDownloadQueueState.collectAsState()
+
+    val libraryPreferences: LibraryPreferences = Injekt.get()
 
     ScrollbarLazyColumn(
         modifier = Modifier.statusBarsPadding(),
@@ -87,21 +91,49 @@ fun MoreScreen(
         item { Divider() }
 
         item {
-            val bottomNavStyle = preferences.bottomNavStyle()
-            val titleRes = when (preferences.bottomNavStyle()) {
+            val bottomNavStyle = libraryPreferences.bottomNavStyle().get()
+            val titleRes = when (bottomNavStyle) {
                 1 -> R.string.label_recent_updates
                 2 -> R.string.label_manga
                 else -> R.string.label_recent_manga
             }
-            val painter = when (bottomNavStyle) {
-                1 -> painterResource(R.drawable.ic_updates_outline_24dp)
-                2 -> rememberVectorPainter(Icons.Outlined.CollectionsBookmark)
-                else -> rememberVectorPainter(Icons.Outlined.History)
+            val icon = when (bottomNavStyle) {
+                1 -> ImageVector.vectorResource(id = R.drawable.ic_updates_outline_24dp)
+                2 -> Icons.Outlined.CollectionsBookmark
+                else -> Icons.Outlined.History
             }
-            PreferenceRow(
+            TextPreferenceWidget(
                 title = stringResource(titleRes),
-                painter = painter,
-                onClick = onClickHistory,
+                icon = icon,
+                onPreferenceClick = onClickHistory,
+            )
+        }
+        item {
+            TextPreferenceWidget(
+                title = stringResource(R.string.label_anime_download_queue),
+                subtitle = when (animeDownloadQueueState) {
+                    AnimeDownloadQueueState.Stopped -> null
+                    is AnimeDownloadQueueState.Paused -> {
+                        val pending = (animeDownloadQueueState as AnimeDownloadQueueState.Paused).pending
+                        if (pending == 0) {
+                            stringResource(R.string.paused)
+                        } else {
+                            "${stringResource(R.string.paused)} • ${
+                            pluralStringResource(
+                                id = R.plurals.download_queue_summary,
+                                count = pending,
+                                pending,
+                            )
+                            }"
+                        }
+                    }
+                    is AnimeDownloadQueueState.Downloading -> {
+                        val pending = (animeDownloadQueueState as AnimeDownloadQueueState.Downloading).pending
+                        pluralStringResource(id = R.plurals.download_queue_summary, count = pending, pending)
+                    }
+                },
+                icon = Icons.Outlined.GetApp,
+                onPreferenceClick = onClickAnimeDownloadQueue,
             )
         }
         item {

@@ -16,24 +16,27 @@ import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
 import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
 import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
 import eu.kanade.domain.animetrack.model.toDbTrack
+import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.episode.interactor.UpdateEpisode
 import eu.kanade.domain.episode.model.Episode
 import eu.kanade.domain.episode.model.EpisodeUpdate
 import eu.kanade.domain.episode.model.toDbEpisode
+import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
-import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
 import eu.kanade.tachiyomi.data.track.job.DelayedTrackingUpdateJob
 import eu.kanade.tachiyomi.ui.anime.AnimeController.Companion.EXT_ANIME
 import eu.kanade.tachiyomi.ui.anime.AnimeController.Companion.EXT_EPISODE
 import eu.kanade.tachiyomi.ui.anime.AnimeController.Companion.REQUEST_EXTERNAL
+import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.isOnline
@@ -50,7 +53,6 @@ import java.util.Date
 import eu.kanade.tachiyomi.data.database.models.Episode as DbEpisode
 
 class ExternalIntents(val anime: Anime, val source: AnimeSource) {
-    private val preferences: PreferencesHelper by injectLazy()
 
     fun getExternalIntent(episode: Episode, video: Video, context: Context): Intent? {
         val videoUrl = if (video.videoUrl == null) {
@@ -78,18 +80,24 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
                 uri
             }
         }
-        val pkgName = preferences.externalPlayerPreference()
+        val pkgName = playerPreferences.externalPlayerPreference().get()
         val anime = anime
         val lastSecondSeen = if (episode.seen) {
-            if ((!preferences.preserveWatchingPosition()) ||
+            if ((!playerPreferences.preserveWatchingPosition().get()) ||
                 (
-                    preferences.preserveWatchingPosition() &&
+                    playerPreferences.preserveWatchingPosition().get() &&
                         episode.lastSecondSeen == episode.totalSeconds
                     )
-            ) 1L else episode.lastSecondSeen
-        } else episode.lastSecondSeen
+            ) {
+                1L
+            } else {
+                episode.lastSecondSeen
+            }
+        } else {
+            episode.lastSecondSeen
+        }
 
-        return if (pkgName.isNullOrEmpty()) {
+        return if (pkgName.isEmpty()) {
             Intent(Intent.ACTION_VIEW).apply {
                 setDataAndTypeAndNormalize(videoUrl, getMime(videoUrl))
                 putExtra("title", anime.title + " - " + episode.name)
@@ -107,7 +115,9 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
                     putExtra("http-header-fields", headersString)
                 }
             }
-        } else standardIntentForPackage(pkgName, context, videoUrl, episode, video)
+        } else {
+            standardIntentForPackage(pkgName, context, videoUrl, episode, video)
+        }
     }
 
     private fun makeErrorToast(context: Context, e: Exception?) {
@@ -115,7 +125,7 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
     }
 
     private fun standardIntentForPackage(pkgName: String, context: Context, uri: Uri, episode: Episode, video: Video): Intent {
-        val lastSecondSeen = if (episode.seen && !preferences.preserveWatchingPosition()) {
+        val lastSecondSeen = if (episode.seen && !playerPreferences.preserveWatchingPosition().get()) {
             0L
         } else {
             episode.lastSecondSeen
@@ -241,22 +251,25 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
         private val insertTrack: InsertAnimeTrack = Injekt.get()
         private val downloadManager: AnimeDownloadManager by injectLazy()
         private val delayedTrackingStore: DelayedTrackingStore = Injekt.get()
-        private val preferences: PreferencesHelper by injectLazy()
+        private val playerPreferences: PlayerPreferences = Injekt.get()
+        private val downloadPreferences: DownloadPreferences = Injekt.get()
+        private val trackPreferences: TrackPreferences = Injekt.get()
+        private val basePreferences: BasePreferences by injectLazy()
 
         private suspend fun saveEpisodeHistory(episode: Episode) {
-            if (preferences.incognitoMode().get()) return
+            if (basePreferences.incognitoMode().get()) return
             upsertHistory.await(
                 AnimeHistoryUpdate(episode.id, Date()),
             )
         }
 
         private suspend fun saveEpisodeProgress(domainEpisode: Episode?, anime: Anime, seconds: Long, totalSeconds: Long) {
-            if (preferences.incognitoMode().get()) return
+            if (basePreferences.incognitoMode().get()) return
             val episode = domainEpisode?.toDbEpisode() ?: return
             if (totalSeconds > 0L) {
                 episode.last_second_seen = seconds
                 episode.total_seconds = totalSeconds
-                val progress = preferences.progressPreference()
+                val progress = playerPreferences.progressPreference().get()
                 if (!episode.seen) episode.seen = episode.last_second_seen >= episode.total_seconds * progress
                 updateEpisode.await(
                     EpisodeUpdate(
@@ -267,17 +280,17 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
                         totalSeconds = episode.total_seconds,
                     ),
                 )
-                if (preferences.autoUpdateTrack() && episode.seen) {
+                if (trackPreferences.autoUpdateTrack().get() && episode.seen) {
                     updateTrackEpisodeSeen(episode, anime)
                 }
                 if (episode.seen) {
                     deleteEpisodeIfNeeded(episode.toDomainEpisode()!!, anime)
-                    deleteEpisodeFromDownloadQueue(episode.toDomainEpisode()!!)
+                    deleteEpisodeFromDownloadQueue(episode)
                 }
             }
         }
 
-        private fun deleteEpisodeFromDownloadQueue(episode: Episode) {
+        private fun deleteEpisodeFromDownloadQueue(episode: DbEpisode) {
             downloadManager.getEpisodeDownloadOrNull(episode)?.let { download ->
                 downloadManager.deletePendingDownload(download)
             }
@@ -296,7 +309,7 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
                 .sortedWith { e1, e2 -> sortFunction(e1, e2) }
 
             val currentEpisodePosition = episodes.indexOf(episode)
-            val removeAfterReadSlots = preferences.removeAfterReadSlots()
+            val removeAfterReadSlots = downloadPreferences.removeAfterReadSlots().get()
             val episodeToDelete = episodes.getOrNull(currentEpisodePosition - removeAfterReadSlots)
 
             // Check if deleting option is enabled and chapter exists
@@ -306,7 +319,7 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
         }
 
         private fun updateTrackEpisodeSeen(episode: DbEpisode, anime: Anime) {
-            if (!preferences.autoUpdateTrack()) return
+            if (!trackPreferences.autoUpdateTrack().get()) return
 
             val episodeSeen = episode.episode_number.toDouble()
 
@@ -347,7 +360,7 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
             if (!episode.seen) return
 
             launchIO {
-                downloadManager.enqueueDeleteEpisodes(listOf(episode), anime)
+                downloadManager.enqueueDeleteEpisodes(listOf(episode.toDbEpisode()), anime)
             }
         }
     }

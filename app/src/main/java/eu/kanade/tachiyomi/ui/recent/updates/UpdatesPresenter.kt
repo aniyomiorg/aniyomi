@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.ui.recent.updates
 
-import android.os.Bundle
+import android.content.Context
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,11 +23,11 @@ import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.source.SourceManager
-import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.logcat
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -45,6 +45,7 @@ import java.util.Calendar
 import java.util.Date
 
 class UpdatesPresenter(
+    private val presenterScope: CoroutineScope,
     private val state: UpdatesStateImpl = UpdatesState() as UpdatesStateImpl,
     private val updateChapter: UpdateChapter = Injekt.get(),
     private val setReadStatus: SetReadStatus = Injekt.get(),
@@ -57,14 +58,16 @@ class UpdatesPresenter(
     basePreferences: BasePreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
     libraryPreferences: LibraryPreferences = Injekt.get(),
-) : BasePresenter<UpdatesController>(), UpdatesState by state {
+) : UpdatesState by state {
 
-    val isDownloadOnly: Boolean by basePreferences.downloadedOnly().asState()
-    val isIncognitoMode: Boolean by basePreferences.incognitoMode().asState()
+    val isDownloadOnly = basePreferences.downloadedOnly().get()
+    val isIncognitoMode = basePreferences.incognitoMode().get()
 
-    val lastUpdated by libraryPreferences.libraryUpdateLastTimestamp().asState()
+    lateinit var context: Context
 
-    val relativeTime: Int by uiPreferences.relativeTime().asState()
+    val lastUpdated = libraryPreferences.libraryUpdateLastTimestamp().get()
+
+    val relativeTime = uiPreferences.relativeTime().get()
     val dateFormat: DateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
 
     private val _events: Channel<Event> = Channel(Int.MAX_VALUE)
@@ -73,8 +76,8 @@ class UpdatesPresenter(
     // First and last selected index in list
     private val selectedPositions: Array<Int> = arrayOf(-1, -1)
 
-    override fun onCreate(savedState: Bundle?) {
-        super.onCreate(savedState)
+    fun onCreate(context: Context) {
+        this.context = context
 
         presenterScope.launchIO {
             // Set date limit for recent chapters
@@ -171,7 +174,7 @@ class UpdatesPresenter(
                 ChapterDownloadAction.START -> {
                     downloadChapters(items)
                     if (items.any { it.downloadStateProvider() == Download.State.ERROR }) {
-                        DownloadService.start(view!!.activity!!)
+                        DownloadService.start(context)
                     }
                 }
                 ChapterDownloadAction.START_NOW -> {

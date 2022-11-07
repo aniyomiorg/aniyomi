@@ -3,7 +3,7 @@ package eu.kanade.domain.animesource.interactor
 import eu.kanade.domain.animesource.model.AnimeSource
 import eu.kanade.domain.animesource.repository.AnimeSourceRepository
 import eu.kanade.domain.source.interactor.SetMigrateSorting
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import java.text.Collator
@@ -12,13 +12,13 @@ import java.util.Locale
 
 class GetAnimeSourcesWithFavoriteCount(
     private val repository: AnimeSourceRepository,
-    private val preferences: PreferencesHelper,
+    private val preferences: SourcePreferences,
 ) {
 
     fun subscribe(): Flow<List<Pair<AnimeSource, Long>>> {
         return combine(
-            preferences.migrationSortingDirection().asFlow(),
-            preferences.migrationSortingMode().asFlow(),
+            preferences.migrationSortingDirection().changes(),
+            preferences.migrationSortingMode().changes(),
             repository.getSourcesWithFavoriteCount(),
         ) { direction, mode, list ->
             list.sortedWith(sortFn(direction, mode))

@@ -1,95 +1,53 @@
 package eu.kanade.tachiyomi.ui.recent
 
-import android.view.LayoutInflater
+import android.Manifest
 import android.view.View
-import com.bluelinelabs.conductor.Controller
-import com.bluelinelabs.conductor.ControllerChangeHandler
-import com.bluelinelabs.conductor.ControllerChangeType
-import com.bluelinelabs.conductor.Router
-import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.viewpager.RouterPagerAdapter
-import com.google.android.material.tabs.TabLayout
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.databinding.PagerControllerBinding
+import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
-import eu.kanade.tachiyomi.ui.base.controller.RxController
-import eu.kanade.tachiyomi.ui.base.controller.TabbedController
+import eu.kanade.tachiyomi.ui.base.controller.requestPermissionsSafe
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
-import eu.kanade.tachiyomi.ui.recent.history.HistoryController
+import eu.kanade.tachiyomi.ui.recent.animehistory.animeHistoryTab
+import eu.kanade.tachiyomi.ui.recent.history.historyTab
 
-class HistoryTabsController() :
-    RxController<PagerControllerBinding>(),
-    RootController,
-    TabbedController {
+class HistoryTabsController : FullComposeController<HistoryTabsPresenter>(), RootController {
 
-    private var adapter: HistoryTabsAdapter? = null
+    override fun createPresenter() = HistoryTabsPresenter()
 
-    override fun getTitle(): String {
-        return resources!!.getString(R.string.history)
+    @Composable
+    override fun ComposeContent() {
+        TabbedScreen(
+            titleRes = R.string.browse,
+            tabs = listOf(
+                animeHistoryTab(router, presenter.animeHistoryPresenter),
+                historyTab(router, presenter.historyPresenter),
+            ),
+            incognitoMode = presenter.isIncognitoMode,
+            downloadedOnlyMode = presenter.isDownloadOnly,
+        )
+
+        LaunchedEffect(Unit) {
+            (activity as? MainActivity)?.ready = true
+        }
     }
-
-    override fun createBinding(inflater: LayoutInflater) = PagerControllerBinding.inflate(inflater)
 
     override fun onViewCreated(view: View) {
         super.onViewCreated(view)
-
-        adapter = HistoryTabsAdapter()
-        binding.pager.adapter = adapter
+        requestPermissionsSafe(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 301)
     }
 
-    override fun onDestroyView(view: View) {
-        super.onDestroyView(view)
-        adapter = null
-    }
-
-    override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
-        super.onChangeStarted(handler, type)
-        if (type.isEnter) {
-            (activity as? MainActivity)?.binding?.tabs?.apply {
-                setupWithViewPager(binding.pager)
-            }
-        }
-    }
-
-    override fun configureTabs(tabs: TabLayout): Boolean {
-        with(tabs) {
-            tabGravity = TabLayout.GRAVITY_FILL
-            tabMode = TabLayout.MODE_FIXED
-        }
-        return true
-    }
-
-    private inner class HistoryTabsAdapter : RouterPagerAdapter(this@HistoryTabsController) {
-
-        private val tabTitles = listOf(
-            R.string.label_animehistory,
-            R.string.label_history,
-        )
-            .map { resources!!.getString(it) }
-
-        override fun getCount(): Int {
-            return tabTitles.size
-        }
-
-        override fun configureRouter(router: Router, position: Int) {
-            if (!router.hasRootController()) {
-                val controller: Controller = when (position) {
-                    HISTORY_CONTROLLER -> HistoryController()
-                    ANIME_HISTORY_CONTROLLER -> AnimeHistoryController()
-                    else -> error("Wrong position $position")
-                }
-                router.setRoot(RouterTransaction.with(controller))
-            }
-        }
-
-        override fun getPageTitle(position: Int): CharSequence {
-            return tabTitles[position]
+    fun resumeLastItem() {
+        if (isCurrentHistoryTabManga) {
+            presenter.resumeLastChapterRead()
+        } else {
+            presenter.resumeLastEpisodeSeen()
         }
     }
 
     companion object {
-        const val ANIME_HISTORY_CONTROLLER = 0
-        const val HISTORY_CONTROLLER = 1
+        var isCurrentHistoryTabManga = true
     }
 }

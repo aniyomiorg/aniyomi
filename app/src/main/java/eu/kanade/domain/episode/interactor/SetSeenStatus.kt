@@ -3,17 +3,16 @@ package eu.kanade.domain.episode.interactor
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.repository.AnimeRepository
 import eu.kanade.domain.animedownload.interactor.DeleteAnimeDownload
+import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.episode.model.Episode
 import eu.kanade.domain.episode.model.EpisodeUpdate
 import eu.kanade.domain.episode.repository.EpisodeRepository
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
 import eu.kanade.tachiyomi.util.system.logcat
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.withContext
 import logcat.LogPriority
 
 class SetSeenStatus(
-    private val preferences: PreferencesHelper,
+    private val downloadPreferences: DownloadPreferences,
     private val deleteDownload: DeleteAnimeDownload,
     private val animeRepository: AnimeRepository,
     private val episodeRepository: EpisodeRepository,
@@ -27,49 +26,44 @@ class SetSeenStatus(
         )
     }
 
-    suspend fun await(seen: Boolean, vararg values: Episode): Result = withContext(NonCancellable) f@{
-        val episodes = values.filterNot { it.seen == seen }
-
-        if (episodes.isEmpty()) {
-            return@f Result.NoEpisodes
-        }
-
-        val anime = episodes.fold(mutableSetOf<Anime>()) { acc, episode ->
-            if (acc.all { it.id != episode.animeId }) {
-                acc += animeRepository.getAnimeById(episode.animeId)
+    suspend fun await(seen: Boolean, vararg episodes: Episode): Result = withNonCancellableContext {
+        val episodesToUpdate = episodes.filter {
+            when (seen) {
+                true -> !it.seen
+                false -> it.seen || it.lastSecondSeen > 0
             }
-            acc
+        }
+        if (episodesToUpdate.isEmpty()) {
+            return@withNonCancellableContext Result.NoEpisodes
         }
 
         try {
             episodeRepository.updateAll(
-                episodes.map { episode ->
-                    mapper(episode, seen)
-                },
+                episodesToUpdate.map { mapper(it, seen) },
             )
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
-            return@f Result.InternalError(e)
+            return@withNonCancellableContext Result.InternalError(e)
         }
 
-        if (seen && preferences.removeAfterMarkedAsRead()) {
-            anime.forEach { anime ->
-                deleteDownload.awaitAll(
-                    anime = anime,
-                    values = episodes
-                        .filter { anime.id == it.animeId }
-                        .toTypedArray(),
-                )
-            }
+        if (seen && downloadPreferences.removeAfterMarkedAsRead().get()) {
+            episodesToUpdate
+                .groupBy { it.animeId }
+                .forEach { (animeId, episodes) ->
+                    deleteDownload.awaitAll(
+                        anime = animeRepository.getAnimeById(animeId),
+                        episodes = episodes.toTypedArray(),
+                    )
+                }
         }
 
         Result.Success
     }
 
-    suspend fun await(animeId: Long, seen: Boolean): Result = withContext(NonCancellable) f@{
-        return@f await(
+    suspend fun await(animeId: Long, seen: Boolean): Result = withNonCancellableContext {
+        await(
             seen = seen,
-            values = episodeRepository
+            episodes = episodeRepository
                 .getEpisodeByAnimeId(animeId)
                 .toTypedArray(),
         )

@@ -1,7 +1,7 @@
 package eu.kanade.domain.anime.interactor
 
 import eu.kanade.domain.anime.repository.AnimeRepository
-import eu.kanade.tachiyomi.data.database.models.AnimelibAnime
+import eu.kanade.domain.animelib.model.AnimelibAnime
 import kotlinx.coroutines.flow.Flow
 
 class GetAnimelibAnime(

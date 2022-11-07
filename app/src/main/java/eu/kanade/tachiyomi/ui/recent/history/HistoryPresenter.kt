@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.recent.history
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -17,12 +18,12 @@ import eu.kanade.domain.history.interactor.RemoveHistoryByMangaId
 import eu.kanade.domain.history.model.HistoryWithRelations
 import eu.kanade.presentation.history.HistoryUiModel
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.toDateKey
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -35,6 +36,7 @@ import uy.kohesive.injekt.api.get
 import java.util.Date
 
 class HistoryPresenter(
+    private val presenterScope: CoroutineScope,
     private val state: HistoryStateImpl = HistoryState() as HistoryStateImpl,
     private val getHistory: GetHistory = Injekt.get(),
     private val getNextChapter: GetNextChapter = Injekt.get(),
@@ -42,14 +44,20 @@ class HistoryPresenter(
     private val removeHistoryById: RemoveHistoryById = Injekt.get(),
     private val removeHistoryByMangaId: RemoveHistoryByMangaId = Injekt.get(),
     preferences: BasePreferences = Injekt.get(),
-) : BasePresenter<HistoryController>(), HistoryState by state {
+) : HistoryState by state {
+
+    var context: Context? = null
 
     private val _events: Channel<Event> = Channel(Int.MAX_VALUE)
     val events: Flow<Event> = _events.receiveAsFlow()
 
-    val isDownloadOnly: Boolean by preferences.downloadedOnly().asState()
+    val isDownloadOnly = preferences.downloadedOnly().get()
 
-    val isIncognitoMode: Boolean by preferences.incognitoMode().asState()
+    val isIncognitoMode = preferences.incognitoMode().get()
+
+    fun onCreate(context: Context?) {
+        this.context = context
+    }
 
     @Composable
     fun getHistory(): Flow<List<HistoryUiModel>> {
@@ -104,7 +112,7 @@ class HistoryPresenter(
             val result = deleteAllHistory.await()
             if (!result) return@launchIO
             withUIContext {
-                view?.activity?.toast(R.string.clear_history_completed)
+                context?.toast(R.string.clear_history_completed)
             }
         }
     }

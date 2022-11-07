@@ -1,23 +1,24 @@
 package eu.kanade.domain.animesource.interactor
 
 import eu.kanade.domain.animesource.model.AnimeSource
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
-import eu.kanade.tachiyomi.util.preference.minusAssign
-import eu.kanade.tachiyomi.util.preference.plusAssign
+import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.tachiyomi.core.preference.getAndSet
 
 class ToggleAnimeSource(
-    private val preferences: PreferencesHelper,
+    private val preferences: SourcePreferences,
 ) {
 
-    fun await(source: AnimeSource, enable: Boolean = source.id.toString() in preferences.disabledAnimeSources().get()) {
+    fun await(source: AnimeSource, enable: Boolean = isEnabled(source.id)) {
         await(source.id, enable)
     }
 
-    fun await(sourceId: Long, enable: Boolean = sourceId.toString() in preferences.disabledAnimeSources().get()) {
-        if (enable) {
-            preferences.disabledAnimeSources() -= sourceId.toString()
-        } else {
-            preferences.disabledAnimeSources() += sourceId.toString()
+    fun await(sourceId: Long, enable: Boolean = isEnabled(sourceId)) {
+        preferences.disabledAnimeSources().getAndSet { disabled ->
+            if (enable) disabled.minus("$sourceId") else disabled.plus("$sourceId")
         }
+    }
+
+    private fun isEnabled(sourceId: Long): Boolean {
+        return sourceId.toString() in preferences.disabledAnimeSources().get()
     }
 }

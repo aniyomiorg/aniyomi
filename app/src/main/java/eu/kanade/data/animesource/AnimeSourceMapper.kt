@@ -11,7 +11,7 @@ val animesourceMapper: (eu.kanade.tachiyomi.animesource.AnimeSource) -> AnimeSou
         source.lang,
         source.name,
         supportsLatest = false,
-        isStub = source is AnimeSourceManager.StubSource,
+        isStub = source is AnimeSourceManager.StubAnimeSource,
     )
 }
 

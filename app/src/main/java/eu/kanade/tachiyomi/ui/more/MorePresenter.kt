@@ -1,9 +1,9 @@
 package eu.kanade.tachiyomi.ui.more
 
 import android.os.Bundle
-import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.AnimeDownloadService
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
@@ -28,66 +28,31 @@ class MorePresenter(
     private var _state: MutableStateFlow<DownloadQueueState> = MutableStateFlow(DownloadQueueState.Stopped)
     val downloadQueueState: StateFlow<DownloadQueueState> = _state.asStateFlow()
 
-    private var isDownloading: Boolean = false
-    private var isDownloadingAnime: Boolean = false
-    private var isDownloadingManga: Boolean = false
-    private var downloadQueueSize: Int = 0
-    private var downloadQueueSizeAnime: Int = 0
-    private var downloadQueueSizeManga: Int = 0
-    private var untilDestroySubscriptions = CompositeSubscription()
+    private var _stateAnime: MutableStateFlow<AnimeDownloadQueueState> = MutableStateFlow(AnimeDownloadQueueState.Stopped)
+    val animeDownloadQueueState: StateFlow<AnimeDownloadQueueState> = _stateAnime.asStateFlow()
 
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
 
-        if (untilDestroySubscriptions.isUnsubscribed) {
-            untilDestroySubscriptions = CompositeSubscription()
+        // Handle running/paused status change and queue progress updating
+        presenterScope.launchIO {
+            combine(
+                AnimeDownloadService.isRunning,
+                animedownloadManager.queue.updatedFlow(),
+            ) { isRunning, downloadQueue -> Pair(isRunning, downloadQueue.size) }
+                .collectLatest { (isDownloading, downloadQueueSize) ->
+                    val pendingDownloadExists = downloadQueueSize != 0
+                    _stateAnime.value = when {
+                        !pendingDownloadExists -> AnimeDownloadQueueState.Stopped
+                        !isDownloading && !pendingDownloadExists -> AnimeDownloadQueueState.Paused(0)
+                        !isDownloading && pendingDownloadExists -> AnimeDownloadQueueState.Paused(
+                            downloadQueueSize,
+                        )
+                        else -> AnimeDownloadQueueState.Downloading(downloadQueueSize)
+                    }
+                }
         }
 
-        initDownloadQueueSummary()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        untilDestroySubscriptions.unsubscribe()
-    }
-
-    private fun initDownloadQueueSummary() {
-        // Handle running/paused status change
-        DownloadService.runningRelay
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeUntilDestroy { isRunning ->
-                isDownloadingManga = isRunning
-                isDownloading = isDownloadingManga || isDownloadingAnime
-                updateDownloadQueueState()
-            }
-
-        AnimeDownloadService.runningRelay
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeUntilDestroy { isRunning ->
-                isDownloadingAnime = isRunning
-                isDownloading = isDownloadingManga || isDownloadingAnime
-                updateDownloadQueueState()
-            }
-
-        // Handle queue progress updating
-        downloadManager.queue.getUpdatedObservable()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeUntilDestroy {
-                downloadQueueSizeManga = it.size
-                downloadQueueSize = downloadQueueSizeManga + downloadQueueSizeAnime
-                updateDownloadQueueState()
-            }
-
-        animedownloadManager.queue.getUpdatedObservable()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeUntilDestroy {
-                downloadQueueSizeAnime = it.size
-                downloadQueueSize = downloadQueueSizeManga + downloadQueueSizeAnime
-                updateDownloadQueueState()
-            }
-    }
-
-    private fun updateDownloadQueueState() {
         presenterScope.launchIO {
             combine(
                 DownloadService.isRunning,
@@ -98,7 +63,9 @@ class MorePresenter(
                     _state.value = when {
                         !pendingDownloadExists -> DownloadQueueState.Stopped
                         !isDownloading && !pendingDownloadExists -> DownloadQueueState.Paused(0)
-                        !isDownloading && pendingDownloadExists -> DownloadQueueState.Paused(downloadQueueSize)
+                        !isDownloading && pendingDownloadExists -> DownloadQueueState.Paused(
+                            downloadQueueSize,
+                        )
                         else -> DownloadQueueState.Downloading(downloadQueueSize)
                     }
                 }
@@ -110,4 +77,10 @@ sealed class DownloadQueueState {
     object Stopped : DownloadQueueState()
     data class Paused(val pending: Int) : DownloadQueueState()
     data class Downloading(val pending: Int) : DownloadQueueState()
+}
+
+sealed class AnimeDownloadQueueState {
+    object Stopped : AnimeDownloadQueueState()
+    data class Paused(val pending: Int) : AnimeDownloadQueueState()
+    data class Downloading(val pending: Int) : AnimeDownloadQueueState()
 }

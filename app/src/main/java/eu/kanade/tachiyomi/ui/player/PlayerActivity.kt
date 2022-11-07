@@ -48,7 +48,9 @@ import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
+import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
+import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
@@ -64,6 +66,7 @@ import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import nucleus.factory.RequiresPresenter
+import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.InputStream
 import kotlin.math.abs
@@ -85,6 +88,10 @@ class PlayerActivity :
             }
         }
     }
+
+    private val playerPreferences: PlayerPreferences by injectLazy()
+
+    private val networkPreferences: NetworkPreferences by injectLazy()
 
     override fun onNewIntent(intent: Intent) {
         val anime = intent.extras!!.getLong("anime", -1)
@@ -113,7 +120,7 @@ class PlayerActivity :
 
     lateinit var binding: PlayerActivityBinding
 
-    private val langName = LocaleHelper.getSimpleLocaleDisplay(preferences.lang().get())
+    private val langName = LocaleHelper.getSimpleLocaleDisplayName()
 
     internal val player get() = binding.player
 
@@ -167,7 +174,9 @@ class PlayerActivity :
         AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
             .setOnAudioFocusChangeListener(audioFocusChangeListener)
             .build()
-    } else null
+    } else {
+        null
+    }
 
     @Suppress("DEPRECATION")
     private fun requestAudioFocus() {
@@ -262,7 +271,7 @@ class PlayerActivity :
 
     private var currentVideoList: List<Video>? = null
 
-    private var playerViewMode: Int = preferences.getPlayerViewMode()
+    private var playerViewMode: Int = playerPreferences.playerViewMode().get()
 
     private var playerIsDestroyed = true
 
@@ -294,7 +303,7 @@ class PlayerActivity :
 
         binding = PlayerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationType()
+        this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationType().get()
 
         window.statusBarColor = 70000000
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
@@ -303,15 +312,15 @@ class PlayerActivity :
 
         setVisibilities()
 
-        if (preferences.hideControls()) {
+        if (playerPreferences.hideControls().get()) {
             playerControls.hideControls(true)
         } else {
             playerControls.showAndFadeControls()
         }
-        toggleAutoplay(preferences.autoplayEnabled().get())
+        toggleAutoplay(playerPreferences.autoplayEnabled().get())
 
         setMpvConf()
-        val logLevel = if (preferences.verboseLogging()) "info" else "warn"
+        val logLevel = if (networkPreferences.verboseLogging().get()) "info" else "warn"
         player.initialize(applicationContext.filesDir.path, logLevel)
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
@@ -325,13 +334,13 @@ class PlayerActivity :
         }
 
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        fineVolume = if (preferences.playerVolumeValue().get() == -1.0F) audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()else preferences.playerVolumeValue().get()
+        fineVolume = if (playerPreferences.playerVolumeValue().get() == -1.0F) audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()else playerPreferences.playerVolumeValue().get()
         verticalScrollRight(0F)
         maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
         playerControls.binding.volumeBar.max = maxVolume
         playerControls.binding.volumeBar.secondaryProgress = maxVolume
 
-        brightness = if (preferences.playerBrightnessValue().get() == -1.0F) Utils.getScreenBrightness(this) ?: 0.5F else preferences.playerBrightnessValue().get()
+        brightness = if (playerPreferences.playerBrightnessValue().get() == -1.0F) Utils.getScreenBrightness(this) ?: 0.5F else playerPreferences.playerBrightnessValue().get()
         verticalScrollLeft(0F)
 
         volumeControlStream = AudioManager.STREAM_MUSIC
@@ -360,7 +369,7 @@ class PlayerActivity :
 
     private fun setMpvConf() {
         val mpvConfFile = File("${applicationContext.filesDir.path}/mpv.conf")
-        preferences.mpvConf()?.let { mpvConfFile.writeText(it) }
+        playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
     }
 
     /**
@@ -499,7 +508,7 @@ class PlayerActivity :
                 showLoadingIndicator(false)
             }
             isInPipMode -> {
-                if (preferences.pipEpisodeToasts()) {
+                if (playerPreferences.pipEpisodeToasts().get()) {
                     launchUI { toast(epTxt) }
                 }
             }
@@ -518,7 +527,9 @@ class PlayerActivity :
         playerControls.binding.toggleAutoplay.isChecked = isAutoplay
         playerControls.binding.toggleAutoplay.thumbDrawable = if (isAutoplay) {
             ContextCompat.getDrawable(playerControls.context, R.drawable.ic_play_circle_filled_24)
-        } else ContextCompat.getDrawable(playerControls.context, R.drawable.ic_pause_circle_filled_24)
+        } else {
+            ContextCompat.getDrawable(playerControls.context, R.drawable.ic_pause_circle_filled_24)
+        }
 
         if (isAutoplay) {
             playerControls.binding.playerInformation.text = getString(R.string.enable_auto_play)
@@ -526,12 +537,12 @@ class PlayerActivity :
             playerControls.binding.playerInformation.text = getString(R.string.disable_auto_play)
         }
 
-        if (!preferences.autoplayEnabled().get() == isAutoplay) {
+        if (!playerPreferences.autoplayEnabled().get() == isAutoplay) {
             animationHandler.removeCallbacks(playerInformationRunnable)
             playerControls.binding.playerInformation.visibility = View.VISIBLE
             animationHandler.postDelayed(playerInformationRunnable, 1000L)
         }
-        preferences.autoplayEnabled().set(isAutoplay)
+        playerPreferences.autoplayEnabled().set(isAutoplay)
     }
 
     fun toggleControls() = playerControls.toggleControls()
@@ -601,13 +612,13 @@ class PlayerActivity :
                 playerControls.binding.playerInformation.text = getString(R.string.video_stretch_screen)
             }
         }
-        if (playerViewMode != preferences.getPlayerViewMode()) {
+        if (playerViewMode != playerPreferences.playerViewMode().get()) {
             animationHandler.removeCallbacks(playerInformationRunnable)
             playerControls.binding.playerInformation.visibility = View.VISIBLE
             animationHandler.postDelayed(playerInformationRunnable, 1000L)
         }
 
-        preferences.setPlayerViewMode(playerViewMode)
+        playerPreferences.playerViewMode().set(playerViewMode)
     }
 
     @Suppress("DEPRECATION")
@@ -620,7 +631,7 @@ class PlayerActivity :
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && preferences.playerFullscreen()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && playerPreferences.playerFullscreen().get()) {
             window.attributes.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
@@ -630,9 +641,9 @@ class PlayerActivity :
     @SuppressLint("SourceLockedOrientationActivity")
     fun rotatePlayer(view: View) {
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            this.requestedOrientation = preferences.defaultPlayerOrientationLandscape()
+            this.requestedOrientation = playerPreferences.defaultPlayerOrientationLandscape().get()
         } else {
-            this.requestedOrientation = preferences.defaultPlayerOrientationPortrait()
+            this.requestedOrientation = playerPreferences.defaultPlayerOrientationPortrait().get()
         }
     }
 
@@ -665,7 +676,9 @@ class PlayerActivity :
             }
 
             animationHandler.postDelayed(doubleTapPlayPauseRunnable, 500L)
-        } else binding.playPauseView.visibility = View.GONE
+        } else {
+            binding.playPauseView.visibility = View.GONE
+        }
     }
 
     private lateinit var doubleTapBg: ImageView
@@ -768,8 +781,11 @@ class PlayerActivity :
 
         playerControls.binding.volumeText.text = newVolume.toString()
         playerControls.binding.volumeBar.progress = newVolume
-        if (newVolume == 0) playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_off_24dp)
-        else playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_on_24dp)
+        if (newVolume == 0) {
+            playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_off_24dp)
+        } else {
+            playerControls.binding.volumeImg.setImageResource(R.drawable.ic_volume_on_24dp)
+        }
         if (diff != 0F) showGestureView("volume")
     }
 
@@ -828,7 +844,7 @@ class PlayerActivity :
         val newDiff = newPos - initialSeek
 
         playerControls.hideUiForSeek()
-        if (preferences.getPlayerSmoothSeek() && final) player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
+        if (playerPreferences.playerSmoothSeek().get() && final) player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
         playerControls.updatePlaybackPos(newPos)
 
         val diffText = Utils.prettyTime(newDiff, true)
@@ -918,21 +934,21 @@ class PlayerActivity :
         stats = !stats
     }
 
-    var gestureVolumeBrightness: Boolean = preferences.gestureVolumeBrightness().get()
+    var gestureVolumeBrightness: Boolean = playerPreferences.gestureVolumeBrightness().get()
         set(value) {
-            preferences.gestureVolumeBrightness().set(value)
+            playerPreferences.gestureVolumeBrightness().set(value)
             field = value
         }
 
-    var gestureHorizontalSeek: Boolean = preferences.gestureHorizontalSeek().get()
+    var gestureHorizontalSeek: Boolean = playerPreferences.gestureHorizontalSeek().get()
         set(value) {
-            preferences.gestureHorizontalSeek().set(value)
+            playerPreferences.gestureHorizontalSeek().set(value)
             field = value
         }
 
-    var screenshotSubs: Boolean = preferences.screenshotSubtitles().get()
+    var screenshotSubs: Boolean = playerPreferences.screenshotSubtitles().get()
         set(value) {
-            preferences.screenshotSubtitles().set(value)
+            playerPreferences.screenshotSubtitles().set(value)
             field = value
         }
 
@@ -1039,7 +1055,7 @@ class PlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     fun switchDecoder(view: View) {
         player.cycleHwdec()
-        preferences.getPlayerViewMode()
+        playerPreferences.playerViewMode().get()
         playerControls.updateDecoderButton()
     }
 
@@ -1111,8 +1127,8 @@ class PlayerActivity :
     }
 
     override fun onDestroy() {
-        preferences.playerVolumeValue().set(fineVolume)
-        preferences.playerBrightnessValue().set(brightness)
+        playerPreferences.playerVolumeValue().set(fineVolume)
+        playerPreferences.playerBrightnessValue().set(brightness)
         presenter.deletePendingEpisodes()
         MPVLib.removeLogObserver(this)
         if (!playerIsDestroyed) {
@@ -1126,8 +1142,9 @@ class PlayerActivity :
 
     override fun onBackPressed() {
         if (deviceSupportsPip) {
-            if (player.paused == false && preferences.pipOnExit()) startPiP()
-            else {
+            if (player.paused == false && playerPreferences.pipOnExit().get()) {
+                startPiP()
+            } else {
                 finishAndRemoveTask()
                 super.onBackPressed()
             }
@@ -1138,7 +1155,7 @@ class PlayerActivity :
     }
 
     override fun onUserLeaveHint() {
-        if (player.paused == false && preferences.pipOnExit()) startPiP()
+        if (player.paused == false && playerPreferences.pipOnExit().get()) startPiP()
         super.onUserLeaveHint()
     }
 
@@ -1154,7 +1171,9 @@ class PlayerActivity :
         }
         if (deviceSupportsPip && isInPipMode &&
             powerManager.isInteractive
-        ) finishAndRemoveTask()
+        ) {
+            finishAndRemoveTask()
+        }
 
         super.onStop()
     }
@@ -1166,11 +1185,11 @@ class PlayerActivity :
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
         isInPipMode = isInPictureInPictureMode
         isPipStarted = isInPipMode
         playerControls.lockControls(isInPipMode)
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode)
 
         if (isInPictureInPictureMode) {
             // On Android TV it is required to hide controller in this PIP change callback
@@ -1307,7 +1326,7 @@ class PlayerActivity :
         currentVideoList?.firstOrNull()?.let {
             setHttpOptions(it)
             presenter.currentEpisode?.let { episode ->
-                if ((episode.seen && !preferences.preserveWatchingPosition()) || fromStart) episode.last_second_seen = 1L
+                if ((episode.seen && !playerPreferences.preserveWatchingPosition().get()) || fromStart) episode.last_second_seen = 1L
                 MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
                 playerControls.updatePlaybackDuration(episode.total_seconds.toInt() / 1000)
             }
@@ -1392,7 +1411,7 @@ class PlayerActivity :
 
     @SuppressLint("SourceLockedOrientationActivity")
     private fun fileLoaded() {
-        MPVLib.setPropertyDouble("speed", preferences.getPlayerSpeed().toDouble())
+        MPVLib.setPropertyDouble("speed", playerPreferences.playerSpeed().get().toDouble())
         clearTracks()
         player.loadTracks()
         subTracks += player.tracks.getOrElse("sub") { emptyList() }
@@ -1452,29 +1471,29 @@ class PlayerActivity :
 
         launchUI {
             showLoadingIndicator(false)
-            if (preferences.adjustOrientationVideoDimensions()) {
+            if (playerPreferences.adjustOrientationVideoDimensions().get()) {
                 if ((player.videoW ?: 1) / (player.videoH ?: 1) >= 1) {
-                    this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationLandscape()
+                    this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationLandscape().get()
                     switchOrientation(true)
                 } else {
-                    this@PlayerActivity.requestedOrientation = preferences.defaultPlayerOrientationPortrait()
+                    this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationPortrait().get()
                     switchOrientation(false)
                 }
             }
         }
         // aniSkip stuff
-        waitingAniSkip = preferences.waitingTimeAniSkip()!!.toInt()
+        waitingAniSkip = playerPreferences.waitingTimeAniSkip().get().toInt()
         runBlocking {
             aniSkipInterval = presenter.aniSkipResponse()
         }
     }
 
-    private val aniSkipEnable = preferences.aniSkipEnabled()
-    private val autoSkipAniSkip = preferences.autoSkipAniSkip()
-    private val netflixStyle = preferences.enableNetflixStyleAniSkip()
+    private val aniSkipEnable = playerPreferences.aniSkipEnabled().get()
+    private val autoSkipAniSkip = playerPreferences.autoSkipAniSkip().get()
+    private val netflixStyle = playerPreferences.enableNetflixStyleAniSkip().get()
 
     private var aniSkipInterval: List<Stamp>? = null
-    private var waitingAniSkip = preferences.waitingTimeAniSkip()!!.toInt()
+    private var waitingAniSkip = playerPreferences.waitingTimeAniSkip().get()
 
     var skipType: SkipType? = null
 
@@ -1490,7 +1509,7 @@ class PlayerActivity :
                 val aniSkipPlayerUtils = AniSkipApi.PlayerUtils(binding, aniSkipInterval!!)
                 if (netflixStyle) {
                     // show a toast with the seconds before the skip
-                    if (waitingAniSkip == preferences.waitingTimeAniSkip()!!.toInt()) {
+                    if (waitingAniSkip == playerPreferences.waitingTimeAniSkip().get()) {
                         Toast.makeText(
                             this,
                             "AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}",
@@ -1544,7 +1563,7 @@ class PlayerActivity :
 
     private fun endFile(eofReached: Boolean) {
         animationHandler.removeCallbacks(nextEpisodeRunnable)
-        if (eofReached && preferences.autoplayEnabled().get()) {
+        if (eofReached && playerPreferences.autoplayEnabled().get()) {
             animationHandler.postDelayed(nextEpisodeRunnable, 1000L)
         }
     }

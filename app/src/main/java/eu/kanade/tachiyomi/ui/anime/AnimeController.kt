@@ -5,72 +5,67 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedDispatcherOwner
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.os.bundleOf
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.data.episode.NoEpisodesException
-import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.toDbAnime
-import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.presentation.anime.AnimeScreen
+import eu.kanade.presentation.anime.components.DeleteEpisodesDialog
+import eu.kanade.presentation.components.ChangeCategoryDialog
+import eu.kanade.presentation.components.DuplicateAnimeDialog
+import eu.kanade.presentation.components.EpisodeDownloadAction
+import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.manga.DownloadAction
-import eu.kanade.presentation.manga.EpisodeDownloadAction
-import eu.kanade.presentation.util.calculateWindowWidthSizeClass
+import eu.kanade.presentation.manga.components.DownloadCustomAmountDialog
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.isLocalOrStub
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.data.download.AnimeDownloadService
-import eu.kanade.tachiyomi.data.download.model.AnimeDownload
-import eu.kanade.tachiyomi.data.preference.PreferencesHelper
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadService
+import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.databinding.PrefSkipIntroLengthBinding
 import eu.kanade.tachiyomi.network.HttpException
-import eu.kanade.tachiyomi.ui.anime.episode.DownloadCustomEpisodesDialog
+import eu.kanade.tachiyomi.ui.anime.AnimePresenter.Dialog
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodesSettingsSheet
 import eu.kanade.tachiyomi.ui.anime.info.AnimeFullCoverDialog
 import eu.kanade.tachiyomi.ui.anime.track.TrackItem
 import eu.kanade.tachiyomi.ui.anime.track.TrackSearchDialog
 import eu.kanade.tachiyomi.ui.anime.track.TrackSheet
+import eu.kanade.tachiyomi.ui.animecategory.AnimeCategoryController
 import eu.kanade.tachiyomi.ui.animelib.AnimelibController
-import eu.kanade.tachiyomi.ui.animelib.ChangeAnimeCategoriesDialog
 import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
 import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.base.controller.withFadeTransaction
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
-import eu.kanade.tachiyomi.ui.browse.animesource.latest.LatestUpdatesController
 import eu.kanade.tachiyomi.ui.browse.migration.search.AnimeSearchController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryController
-import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesController
+import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
+import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
+import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
-import eu.kanade.tachiyomi.util.lang.withUIContext
+import eu.kanade.tachiyomi.util.system.isTabletUi
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
-import eu.kanade.tachiyomi.widget.materialdialogs.QuadStateTextView
-import eu.kanade.tachiyomi.widget.materialdialogs.await
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
@@ -78,10 +73,7 @@ import uy.kohesive.injekt.api.get
 import eu.kanade.domain.anime.model.Anime as DomainAnime
 import eu.kanade.domain.episode.model.Episode as DomainEpisode
 
-class AnimeController :
-    FullComposeController<AnimePresenter>,
-    ChangeAnimeCategoriesDialog.Listener,
-    DownloadCustomEpisodesDialog.Listener {
+class AnimeController : FullComposeController<AnimePresenter> {
 
     @Suppress("unused")
     constructor(bundle: Bundle) : this(bundle.getLong(ANIME_EXTRA))
@@ -105,7 +97,7 @@ class AnimeController :
 
     private val snackbarHostState = SnackbarHostState()
 
-    private val preferences: PreferencesHelper = Injekt.get()
+    private val playerPreferences: PlayerPreferences = Injekt.get()
 
     override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
         super.onChangeStarted(handler, type)
@@ -127,46 +119,99 @@ class AnimeController :
     @Composable
     override fun ComposeContent() {
         val state by presenter.state.collectAsState()
-        if (state is AnimeScreenState.Success) {
-            val successState = state as AnimeScreenState.Success
-            val isHttpSource = remember { successState.source is AnimeHttpSource }
-            AnimeScreen(
-                state = successState,
-                snackbarHostState = snackbarHostState,
-                windowWidthSizeClass = calculateWindowWidthSizeClass(),
-                onBackClicked = router::popCurrentController,
-                onEpisodeClicked = this::openEpisode,
-                onDownloadEpisode = this::onDownloadEpisodes.takeIf { !successState.source.isLocalOrStub() },
-                onAddToLibraryClicked = this::onFavoriteClick,
-                onWebViewClicked = this::openAnimeInWebView.takeIf { isHttpSource },
-                onTrackingClicked = trackSheet::show.takeIf { successState.trackingAvailable },
-                onTagClicked = this::performGenreSearch,
-                onFilterButtonClicked = settingsSheet::show,
-                onRefresh = presenter::fetchAllFromSource,
-                onContinueWatching = this::continueWatching,
-                onSearch = this::performSearch,
-                onCoverClicked = this::openCoverDialog,
-                onShareClicked = this::shareAnime.takeIf { isHttpSource },
-                onDownloadActionClicked = this::runDownloadEpisodeAction.takeIf { !successState.source.isLocalOrStub() },
-                onEditCategoryClicked = this::onCategoriesClick.takeIf { successState.anime.favorite },
-                onMigrateClicked = this::migrateAnime.takeIf { successState.anime.favorite },
-                onMultiBookmarkClicked = presenter::bookmarkEpisodes,
-                onMultiMarkAsSeenClicked = presenter::markEpisodesSeen,
-                onMarkPreviousAsSeenClicked = presenter::markPreviousEpisodeSeen,
-                onMultiDeleteClicked = this::deleteEpisodesWithConfirmation,
-                changeAnimeSkipIntro = this::changeAnimeSkipIntro.takeIf { successState.anime.favorite },
-            )
-        } else {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
+        if (state is AnimeScreenState.Loading) {
+            LoadingScreen()
+            return
         }
-    }
 
-    // Let compose view handle this
-    override fun handleBack(): Boolean {
-        (activity as? OnBackPressedDispatcherOwner)?.onBackPressedDispatcher?.onBackPressed()
-        return true
+        val successState = state as AnimeScreenState.Success
+        val isHttpSource = remember { successState.source is AnimeHttpSource }
+        val scope = rememberCoroutineScope()
+
+        val configuration = LocalConfiguration.current
+        val isTabletUi = remember { configuration.isTabletUi() } // won't survive config change
+
+        AnimeScreen(
+            state = successState,
+            snackbarHostState = snackbarHostState,
+            isTabletUi = isTabletUi,
+            onBackClicked = router::popCurrentController,
+            onEpisodeClicked = this::openEpisode,
+            onDownloadEpisode = this::onDownloadEpisodes.takeIf { !successState.source.isLocalOrStub() },
+            onAddToLibraryClicked = this::onFavoriteClick,
+            onWebViewClicked = this::openAnimeInWebView.takeIf { isHttpSource },
+            onTrackingClicked = trackSheet::show.takeIf { successState.trackingAvailable },
+            onTagClicked = this::performGenreSearch,
+            onFilterButtonClicked = settingsSheet::show,
+            onRefresh = presenter::fetchAllFromSource,
+            onContinueWatching = this::continueWatching,
+            onSearch = this::performSearch,
+            onCoverClicked = this::openCoverDialog,
+            onShareClicked = this::shareAnime.takeIf { isHttpSource },
+            onDownloadActionClicked = this::runDownloadEpisodeAction.takeIf { !successState.source.isLocalOrStub() },
+            onEditCategoryClicked = presenter::promptChangeCategories.takeIf { successState.anime.favorite },
+            onMigrateClicked = this::migrateAnime.takeIf { successState.anime.favorite },
+            onMultiBookmarkClicked = presenter::bookmarkEpisodes,
+            onMultiMarkAsSeenClicked = presenter::markEpisodesSeen,
+            onMarkPreviousAsSeenClicked = presenter::markPreviousEpisodeSeen,
+            onMultiDeleteClicked = presenter::showDeleteEpisodeDialog,
+            changeAnimeSkipIntro = this::changeAnimeSkipIntro.takeIf { successState.anime.favorite },
+            onEpisodeSelected = presenter::toggleSelection,
+            onAllEpisodeSelected = presenter::toggleAllSelection,
+            onInvertSelection = presenter::invertSelection,
+        )
+
+        val onDismissRequest = { presenter.dismissDialog() }
+        when (val dialog = (state as? AnimeScreenState.Success)?.dialog) {
+            is Dialog.ChangeCategory -> {
+                ChangeCategoryDialog(
+                    initialSelection = dialog.initialSelection,
+                    onDismissRequest = onDismissRequest,
+                    onEditCategories = {
+                        router.pushController(AnimeCategoryController())
+                    },
+                    onConfirm = { include, _ ->
+                        presenter.moveAnimeToCategoriesAndAddToLibrary(dialog.anime, include)
+                    },
+                )
+            }
+            is Dialog.DeleteEpisodes -> {
+                DeleteEpisodesDialog(
+                    onDismissRequest = onDismissRequest,
+                    onConfirm = {
+                        presenter.toggleAllSelection(false)
+                        deleteEpisodes(dialog.episodes)
+                    },
+                )
+            }
+            is Dialog.DownloadCustomAmount -> {
+                DownloadCustomAmountDialog(
+                    maxAmount = dialog.max,
+                    onDismissRequest = onDismissRequest,
+                    onConfirm = { amount ->
+                        val episodesToDownload = presenter.getUnseenEpisodesSorted().take(amount)
+                        if (episodesToDownload.isNotEmpty()) {
+                            scope.launch { downloadEpisodes(episodesToDownload) }
+                        }
+                    },
+                )
+            }
+            is Dialog.DuplicateAnime -> {
+                DuplicateAnimeDialog(
+                    onDismissRequest = onDismissRequest,
+                    onConfirm = {
+                        presenter.toggleFavorite(
+                            onRemoved = {},
+                            onAdded = {},
+                            checkDuplicate = false,
+                        )
+                    },
+                    onOpenAnime = { router.pushController(AnimeController(dialog.duplicate.id)) },
+                    duplicateFrom = presenter.getAnimeSourceOrStub(dialog.duplicate),
+                )
+            }
+            null -> {}
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View {
@@ -190,7 +235,7 @@ class AnimeController :
         val source = presenter.source as? AnimeHttpSource ?: return
 
         val url = try {
-            source.animeDetailsRequest(anime.toDbAnime()).url.toString()
+            source.getAnimeUrl(anime.toSAnime())
         } catch (e: Exception) {
             return
         }
@@ -225,12 +270,12 @@ class AnimeController :
         }
     }
 
-    fun shareAnime() {
+    private fun shareAnime() {
         val context = view?.context ?: return
         val anime = presenter.anime ?: return
         val source = presenter.source as? AnimeHttpSource ?: return
         try {
-            val url = source.animeDetailsRequest(anime.toDbAnime()).url.toString()
+            val url = source.getAnimeUrl(anime.toSAnime())
             val intent = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
                 putExtra(Intent.EXTRA_TEXT, url)
@@ -241,36 +286,16 @@ class AnimeController :
         }
     }
 
-    private fun onFavoriteClick(checkDuplicate: Boolean = true) {
+    private fun onFavoriteClick() {
         presenter.toggleFavorite(
             onRemoved = this::onFavoriteRemoved,
-            onAdded = { activity?.toast(activity?.getString(R.string.manga_added_library)) },
-            onDuplicateExists = if (checkDuplicate) {
-                {
-                    AddDuplicateAnimeDialog(
-                        target = this,
-                        libraryAnime = it,
-                        onAddToLibrary = { onFavoriteClick(checkDuplicate = false) },
-                    ).showDialog(router)
-                }
-            } else null,
-            onRequireCategory = { anime, categories ->
-                val ids = presenter.getAnimeCategoryIds(anime)
-                val preselected = categories.map {
-                    if (it.id in ids) {
-                        QuadStateTextView.State.CHECKED.ordinal
-                    } else {
-                        QuadStateTextView.State.UNCHECKED.ordinal
-                    }
-                }.toTypedArray()
-                showChangeCategoryDialog(anime, categories, preselected)
-            },
+            onAdded = { activity?.toast(R.string.manga_added_library) },
         )
     }
 
     private fun onFavoriteRemoved() {
         val context = activity ?: return
-        context.toast(activity?.getString(R.string.manga_removed_library))
+        context.toast(R.string.manga_removed_library)
         viewScope.launch {
             if (!presenter.hasDownloads()) return@launch
             val result = snackbarHostState.showSnackbar(
@@ -282,40 +307,6 @@ class AnimeController :
                 presenter.deleteDownloads()
             }
         }
-    }
-
-    private fun onCategoriesClick() {
-        viewScope.launchIO {
-            val anime = presenter.anime ?: return@launchIO
-            val categories = presenter.getCategories()
-
-            val ids = presenter.getAnimeCategoryIds(anime)
-            val preselected = categories.map {
-                if (it.id in ids) {
-                    QuadStateTextView.State.CHECKED.ordinal
-                } else {
-                    QuadStateTextView.State.UNCHECKED.ordinal
-                }
-            }.toTypedArray()
-
-            withUIContext {
-                showChangeCategoryDialog(anime, categories, preselected)
-            }
-        }
-    }
-
-    private fun showChangeCategoryDialog(anime: Anime, categories: List<Category>, preselected: Array<Int>) {
-        ChangeAnimeCategoriesDialog(this, listOf(anime), categories, preselected.toIntArray())
-            .showDialog(router)
-    }
-
-    override fun updateCategoriesForAnimes(
-        animes: List<Anime>,
-        addCategories: List<Category>,
-        removeCategories: List<Category>,
-    ) {
-        val changed = animes.firstOrNull() ?: return
-        presenter.moveAnimeToCategoriesAndAddToLibrary(changed, addCategories)
     }
 
     /**
@@ -338,17 +329,14 @@ class AnimeController :
                 router.handleBack()
                 previousController.search(query)
             }
-            is AnimeUpdatesController,
-            is AnimeHistoryController, -> {
+            is UpdatesTabsController,
+            is HistoryTabsController,
+            -> {
                 // Manually navigate to AnimelibController
                 router.handleBack()
                 (router.activity as MainActivity).setSelectedNavItem(R.id.nav_animelib)
                 val controller = router.getControllerWithTag(R.id.nav_animelib.toString()) as AnimelibController
                 controller.search(query)
-            }
-            is LatestUpdatesController -> {
-                // Search doesn't currently work in source Latest view
-                return
             }
             is BrowseAnimeSourceController -> {
                 router.handleBack()
@@ -405,7 +393,7 @@ class AnimeController :
     }
 
     private fun openEpisode(episode: DomainEpisode, altPlayer: Boolean = false) {
-        if (preferences.alwaysUseExternalPlayer() != altPlayer) {
+        if (playerPreferences.alwaysUseExternalPlayer().get() != altPlayer) {
             openEpisodeExternal(episode)
         } else {
             openEpisodeInternal(episode)
@@ -424,25 +412,28 @@ class AnimeController :
         val source = presenter.source ?: return
         launchIO {
             val video = try {
-                EpisodeLoader.getLink(episode.toDbEpisode(), anime.toDbAnime(), source).awaitSingle()
+                EpisodeLoader.getLink(episode.toDbEpisode(), anime.toDbAnime(), source)
+                    .awaitSingle()
             } catch (e: Exception) {
                 launchUI { context.toast(e.message) }
                 return@launchIO
             }
             if (video != null) {
                 EXT_EPISODE = episode
-                EXT_ANIME = presenter.anime
+                EXT_ANIME = anime
 
                 val extIntent = ExternalIntents(anime, source).getExternalIntent(
                     episode,
                     video,
                     context,
                 )
-                if (extIntent != null) try {
-                    startActivityForResult(extIntent, REQUEST_EXTERNAL)
-                } catch (e: Exception) {
-                    launchUI { context.toast(e.message) }
-                    return@launchIO
+                if (extIntent != null) {
+                    try {
+                        startActivityForResult(extIntent, REQUEST_EXTERNAL)
+                    } catch (e: Exception) {
+                        launchUI { context.toast(e.message) }
+                        return@launchIO
+                    }
                 }
             } else {
                 launchUI { context.toast("Couldn't find any video links.") }
@@ -453,7 +444,7 @@ class AnimeController :
 
     fun onFetchEpisodesError(error: Throwable) {
         if (error is NoEpisodesException) {
-            activity?.toast(activity?.getString(R.string.no_episodes_error))
+            activity?.toast(R.string.no_episodes_error)
         } else {
             activity?.toast(error.message)
         }
@@ -474,8 +465,7 @@ class AnimeController :
                     }
                 }
                 EpisodeDownloadAction.START_NOW -> {
-                    val episodeId = items.singleOrNull()?.episode?.id ?: return@launch
-                    presenter.startDownloadingNow(episodeId)
+                    downloadEpisodes(items.map { it.episode }, startNow = true)
                 }
                 EpisodeDownloadAction.CANCEL -> {
                     val episodeId = items.singleOrNull()?.episode?.id ?: return@launch
@@ -494,11 +484,13 @@ class AnimeController :
         }
     }
 
-    private suspend fun downloadEpisodes(
-        episodes: List<DomainEpisode>,
-        alt: Boolean = false,
-    ) {
-        presenter.downloadEpisodes(episodes, alt = alt)
+    private suspend fun downloadEpisodes(episodes: List<DomainEpisode>, startNow: Boolean = false, alt: Boolean = false) {
+        if (startNow) {
+            val episodeId = episodes.singleOrNull()?.id ?: return
+            presenter.startDownloadingNow(episodeId)
+        } else {
+            presenter.downloadEpisodes(episodes, alt)
+        }
 
         if (!presenter.isFavoritedAnime) {
             val result = snackbarHostState.showSnackbar(
@@ -512,16 +504,7 @@ class AnimeController :
         }
     }
 
-    private fun deleteEpisodesWithConfirmation(episodes: List<DomainEpisode>) {
-        viewScope.launch {
-            val result = MaterialAlertDialogBuilder(activity!!)
-                .setMessage(R.string.confirm_delete_episodes)
-                .await(android.R.string.ok, android.R.string.cancel)
-            if (result == AlertDialog.BUTTON_POSITIVE) deleteEpisodes(episodes)
-        }
-    }
-
-    fun deleteEpisodes(episodes: List<DomainEpisode>) {
+    private fun deleteEpisodes(episodes: List<DomainEpisode>) {
         if (episodes.isEmpty()) return
         presenter.deleteEpisodes(episodes)
     }
@@ -534,7 +517,7 @@ class AnimeController :
             DownloadAction.NEXT_5_CHAPTERS -> presenter.getUnseenEpisodesSorted().take(5)
             DownloadAction.NEXT_10_CHAPTERS -> presenter.getUnseenEpisodesSorted().take(10)
             DownloadAction.CUSTOM -> {
-                showCustomDownloadDialog()
+                presenter.showDownloadCustomDialog()
                 return
             }
             DownloadAction.UNREAD_CHAPTERS -> presenter.getUnseenEpisodes()
@@ -543,21 +526,6 @@ class AnimeController :
             }
         }
         if (!episodesToDownload.isNullOrEmpty()) {
-            viewScope.launch { downloadEpisodes(episodesToDownload) }
-        }
-    }
-
-    private fun showCustomDownloadDialog() {
-        val availableEpisodes = presenter.processedEpisodes?.count() ?: return
-        DownloadCustomEpisodesDialog(
-            this,
-            availableEpisodes,
-        ).showDialog(router)
-    }
-
-    override fun downloadCustomEpisodes(amount: Int) {
-        val episodesToDownload = presenter.getUnseenEpisodesSorted().take(amount)
-        if (episodesToDownload.isNotEmpty()) {
             viewScope.launch { downloadEpisodes(episodesToDownload) }
         }
     }

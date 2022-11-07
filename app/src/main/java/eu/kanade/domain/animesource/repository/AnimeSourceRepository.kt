@@ -1,9 +1,10 @@
 package eu.kanade.domain.animesource.repository
 
 import eu.kanade.domain.animesource.model.AnimeSource
-import eu.kanade.domain.animesource.model.AnimeSourceData
+import eu.kanade.domain.animesource.model.AnimeSourcePagingSourceType
+import eu.kanade.domain.animesource.model.AnimeSourceWithCount
+import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import kotlinx.coroutines.flow.Flow
-import eu.kanade.tachiyomi.animesource.AnimeSource as LoadedAnimeSource
 
 interface AnimeSourceRepository {
 
@@ -13,9 +14,11 @@ interface AnimeSourceRepository {
 
     fun getSourcesWithFavoriteCount(): Flow<List<Pair<AnimeSource, Long>>>
 
-    fun getSourcesWithNonLibraryAnime(): Flow<List<Pair<LoadedAnimeSource, Long>>>
+    fun getSourcesWithNonLibraryAnime(): Flow<List<AnimeSourceWithCount>>
 
-    suspend fun getAnimeSourceData(id: Long): AnimeSourceData?
+    fun search(sourceId: Long, query: String, filterList: AnimeFilterList): AnimeSourcePagingSourceType
 
-    suspend fun upsertAnimeSourceData(id: Long, lang: String, name: String)
+    fun getPopular(sourceId: Long): AnimeSourcePagingSourceType
+
+    fun getLatest(sourceId: Long): AnimeSourcePagingSourceType
 }

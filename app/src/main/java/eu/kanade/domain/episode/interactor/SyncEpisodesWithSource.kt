@@ -1,16 +1,19 @@
 package eu.kanade.domain.episode.interactor
 
+import eu.kanade.data.episode.CleanupEpisodeName
 import eu.kanade.data.episode.NoEpisodesException
 import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.domain.episode.model.toEpisodeUpdate
 import eu.kanade.domain.episode.repository.EpisodeRepository
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.animesource.LocalAnimeSource
+import eu.kanade.tachiyomi.animesource.isLocal
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.data.download.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadProvider
 import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -20,6 +23,7 @@ import java.util.TreeSet
 
 class SyncEpisodesWithSource(
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
+    private val downloadProvider: AnimeDownloadProvider = Injekt.get(),
     private val episodeRepository: EpisodeRepository = Injekt.get(),
     private val shouldUpdateDbEpisode: ShouldUpdateDbEpisode = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
@@ -27,12 +31,20 @@ class SyncEpisodesWithSource(
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
 ) {
 
+    /**
+     * Method to synchronize db episodes with source ones
+     *
+     * @param rawSourceEpisodes the episodes from the source.
+     * @param anime the anime the episodes belong to.
+     * @param source the source the anime belongs to.
+     * @return Newly added episodes
+     */
     suspend fun await(
         rawSourceEpisodes: List<SEpisode>,
         anime: Anime,
         source: AnimeSource,
-    ): Pair<List<Episode>, List<Episode>> {
-        if (rawSourceEpisodes.isEmpty() && source.id != LocalAnimeSource.ID) {
+    ): List<Episode> {
+        if (rawSourceEpisodes.isEmpty() && !source.isLocal()) {
             throw NoEpisodesException()
         }
 
@@ -41,6 +53,7 @@ class SyncEpisodesWithSource(
             .mapIndexed { i, sEpisode ->
                 Episode.create()
                     .copyFromSEpisode(sEpisode)
+                    .copy(name = CleanupEpisodeName.await(sEpisode.name, anime.title))
                     .copy(animeId = anime.id, sourceOrder = i.toLong())
             }
 
@@ -94,8 +107,11 @@ class SyncEpisodesWithSource(
                 toAdd.add(toAddEpisode)
             } else {
                 if (shouldUpdateDbEpisode.await(dbEpisode, episode)) {
-                    if (dbEpisode.name != episode.name && downloadManager.isEpisodeDownloaded(dbEpisode.name, dbEpisode.scanlator, anime.title, anime.source)) {
-                        downloadManager.renameEpisode(source, anime, dbEpisode, episode)
+                    val shouldRenameEpisode = downloadProvider.isEpisodeDirNameChanged(dbEpisode, episode) &&
+                        downloadManager.isEpisodeDownloaded(dbEpisode.name, dbEpisode.scanlator, anime.title, anime.source)
+
+                    if (shouldRenameEpisode) {
+                        downloadManager.renameEpisode(source, anime, dbEpisode.toDbEpisode(), episode.toDbEpisode())
                     }
                     var toChangeEpisode = dbEpisode.copy(
                         name = episode.name,
@@ -113,18 +129,18 @@ class SyncEpisodesWithSource(
 
         // Return if there's nothing to add, delete or change, avoiding unnecessary db transactions.
         if (toAdd.isEmpty() && toDelete.isEmpty() && toChange.isEmpty()) {
-            return Pair(emptyList(), emptyList())
+            return emptyList()
         }
 
         val reAdded = mutableListOf<Episode>()
 
         val deletedEpisodeNumbers = TreeSet<Float>()
         val deletedSeenEpisodeNumbers = TreeSet<Float>()
+        val deletedBookmarkedEpisodeNumbers = TreeSet<Float>()
 
         toDelete.forEach { episode ->
-            if (episode.seen) {
-                deletedSeenEpisodeNumbers.add(episode.episodeNumber)
-            }
+            if (episode.seen) deletedSeenEpisodeNumbers.add(episode.episodeNumber)
+            if (episode.bookmark) deletedBookmarkedEpisodeNumbers.add(episode.episodeNumber)
             deletedEpisodeNumbers.add(episode.episodeNumber)
         }
 
@@ -133,20 +149,19 @@ class SyncEpisodesWithSource(
 
         // Date fetch is set in such a way that the upper ones will have bigger value than the lower ones
         // Sources MUST return the episodes from most to less recent, which is common.
-
         var itemCount = toAdd.size
         var updatedToAdd = toAdd.map { toAddItem ->
             var episode = toAddItem.copy(dateFetch = rightNow + itemCount--)
 
-            if (episode.isRecognizedNumber.not() && episode.episodeNumber !in deletedEpisodeNumbers) return@map episode
+            if (episode.isRecognizedNumber.not() || episode.episodeNumber !in deletedEpisodeNumbers) return@map episode
 
-            if (episode.episodeNumber in deletedSeenEpisodeNumbers) {
-                episode = episode.copy(seen = true)
-            }
+            episode = episode.copy(
+                seen = episode.episodeNumber in deletedSeenEpisodeNumbers,
+                bookmark = episode.episodeNumber in deletedBookmarkedEpisodeNumbers,
+            )
 
             // Try to to use the fetch date of the original entry to not pollute 'Updates' tab
-            val oldDateFetch = deletedEpisodeNumberDateFetchMap[episode.episodeNumber]
-            oldDateFetch?.let {
+            deletedEpisodeNumberDateFetchMap[episode.episodeNumber]?.let {
                 episode = episode.copy(dateFetch = it)
             }
 
@@ -173,7 +188,8 @@ class SyncEpisodesWithSource(
         // Note that last_update actually represents last time the episode list changed at all
         updateAnime.awaitUpdateLastUpdate(anime.id)
 
-        @Suppress("ConvertArgumentToSet") // See tachiyomiorg/tachiyomi#6372.
-        return Pair(updatedToAdd.subtract(reAdded).toList(), toDelete.subtract(reAdded).toList())
+        val reAddedUrls = reAdded.map { it.url }.toHashSet()
+
+        return updatedToAdd.filterNot { it.url in reAddedUrls }
     }
 }

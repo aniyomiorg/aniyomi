@@ -6,12 +6,12 @@ import eu.kanade.tachiyomi.util.storage.DiskUtil
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
+import eu.kanade.domain.anime.model.Anime as DomainAnime
 
 /**
  * Class used to create cover cache.
  * It is used to store the covers of the library.
- * Makes use of Glide (which can avoid repeating requests) to download covers.
- * Names of files are created with the md5 of the anime_thumbnail URL.
+ * Names of files are created with the md5 of the thumbnail URL.
  *
  * @param context the application context.
  * @constructor creates an instance of the cover cache.
@@ -85,6 +85,20 @@ class AnimeCoverCache(private val context: Context) {
         }
 
         return deleted
+    }
+
+    fun deleteFromCache(anime: DomainAnime, deleteCustomCover: Boolean = false): Int {
+        var amountDeleted = 0
+
+        getCoverFile(anime.thumbnailUrl)?.let {
+            if (it.exists() && it.delete()) amountDeleted++
+        }
+
+        if (deleteCustomCover && deleteCustomCover(anime.id)) {
+            amountDeleted++
+        }
+
+        return amountDeleted
     }
 
     /**

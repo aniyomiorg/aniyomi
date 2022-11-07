@@ -170,17 +170,17 @@ class DoubleTapSecondsView(context: Context, attrs: AttributeSet?) : LinearLayou
             addUpdateListener { update(it.animatedValue as Float) }
             addListener(
                 object : AnimatorListener {
-                    override fun onAnimationStart(animation: Animator?) {
+                    override fun onAnimationStart(animation: Animator) {
                         start()
                     }
 
-                    override fun onAnimationEnd(animation: Animator?) {
+                    override fun onAnimationEnd(animation: Animator) {
                         end()
                     }
 
-                    override fun onAnimationCancel(animation: Animator?) = Unit
+                    override fun onAnimationCancel(animation: Animator) = Unit
 
-                    override fun onAnimationRepeat(animation: Animator?) = Unit
+                    override fun onAnimationRepeat(animation: Animator) = Unit
                 },
             )
         }
