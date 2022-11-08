@@ -44,6 +44,7 @@ sealed class AnimeExtension {
         override val isNsfw: Boolean,
         override val hasReadme: Boolean,
         override val hasChangelog: Boolean,
+        val sources: List<AvailableAnimeSources>,
         val apkName: String,
         val iconUrl: String,
     ) : AnimeExtension()

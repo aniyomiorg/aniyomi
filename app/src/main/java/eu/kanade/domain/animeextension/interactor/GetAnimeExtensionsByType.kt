@@ -38,6 +38,20 @@ class GetAnimeExtensionsByType(
                         _untrusted.none { it.pkgName == extension.pkgName } &&
                         (showNsfwSources || extension.isNsfw.not())
                 }
+                .flatMap { ext ->
+                    if (ext.sources.isEmpty()) {
+                        return@flatMap if (ext.lang in _activeLanguages) listOf(ext) else emptyList()
+                    }
+                    ext.sources.filter { it.lang in _activeLanguages }
+                        .map {
+                            ext.copy(
+                                name = it.name,
+                                lang = it.lang,
+                                pkgName = "${ext.pkgName}-${it.id}",
+                                sources = listOf(it),
+                            )
+                        }
+                }
                 .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
 
             AnimeExtensions(updates, installed, available, untrusted)

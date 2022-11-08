@@ -56,8 +56,11 @@ class AnimeExtensionsPresenter(
                     if (input.isEmpty()) return@any false
                     when (extension) {
                         is AnimeExtension.Available -> {
-                            extension.name.contains(input, ignoreCase = true) ||
-                                extension.pkgName.contains(input, ignoreCase = true)
+                            extension.sources.any {
+                                it.name.contains(input, ignoreCase = true) ||
+                                    it.baseUrl.contains(input, ignoreCase = true) ||
+                                    it.id == input.toLongOrNull()
+                            } || extension.name.contains(input, ignoreCase = true)
                         }
                         is AnimeExtension.Installed -> {
                             extension.sources.any {

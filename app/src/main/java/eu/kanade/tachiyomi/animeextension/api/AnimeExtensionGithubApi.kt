@@ -4,6 +4,7 @@ import android.content.Context
 import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
 import eu.kanade.tachiyomi.animeextension.model.AnimeExtension
 import eu.kanade.tachiyomi.animeextension.model.AnimeLoadResult
+import eu.kanade.tachiyomi.animeextension.model.AvailableAnimeSources
 import eu.kanade.tachiyomi.animeextension.util.AnimeExtensionLoader
 import eu.kanade.tachiyomi.core.preference.Preference
 import eu.kanade.tachiyomi.core.preference.PreferenceStore
@@ -112,13 +113,24 @@ internal class AnimeExtensionGithubApi {
                     libVersion = it.extractLibVersion(),
                     lang = it.lang,
                     isNsfw = it.nsfw == 1,
-                    // need to implement new extension stuff
-                    hasReadme = false,
-                    hasChangelog = false,
+                    hasReadme = it.hasReadme == 1,
+                    hasChangelog = it.hasChangelog == 1,
+                    sources = it.sources?.toAnimeExtensionSources() ?: emptyList(),
                     apkName = it.apk,
                     iconUrl = "${getUrlPrefix()}icon/${it.apk.replace(".apk", ".png")}",
                 )
             }
+    }
+
+    private fun List<AnimeExtensionSourceJsonObject>.toAnimeExtensionSources(): List<AvailableAnimeSources> {
+        return this.map {
+            AvailableAnimeSources(
+                id = it.id,
+                lang = it.lang,
+                name = it.name,
+                baseUrl = it.baseUrl,
+            )
+        }
     }
 
     fun getApkUrl(extension: AnimeExtension.Available): String {
@@ -142,12 +154,23 @@ private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/jmir1/ani
 private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/jmir1/aniyomi-extensions@repo/"
 
 @Serializable
-data class AnimeExtensionJsonObject(
+private data class AnimeExtensionJsonObject(
     val name: String,
     val pkg: String,
     val apk: String,
-    val version: String,
-    val code: Long,
     val lang: String,
+    val code: Long,
+    val version: String,
     val nsfw: Int,
+    val hasReadme: Int = 0,
+    val hasChangelog: Int = 0,
+    val sources: List<AnimeExtensionSourceJsonObject>?,
+)
+
+@Serializable
+private data class AnimeExtensionSourceJsonObject(
+    val id: Long,
+    val lang: String,
+    val name: String,
+    val baseUrl: String,
 )

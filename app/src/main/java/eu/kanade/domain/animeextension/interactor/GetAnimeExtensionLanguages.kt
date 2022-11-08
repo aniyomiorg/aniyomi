@@ -16,7 +16,13 @@ class GetAnimeExtensionLanguages(
             extensionManager.availableExtensionsFlow,
         ) { enabledLanguage, availableExtensions ->
             availableExtensions
-                .map { it.lang }
+                .flatMap { ext ->
+                    if (ext.sources.isEmpty()) {
+                        listOf(ext.lang)
+                    } else {
+                        ext.sources.map { it.lang }
+                    }
+                }
                 .distinct()
                 .sortedWith(
                     compareBy(
