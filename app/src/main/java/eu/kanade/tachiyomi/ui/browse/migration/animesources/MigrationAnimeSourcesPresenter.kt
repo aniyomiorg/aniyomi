@@ -5,7 +5,6 @@ import eu.kanade.domain.source.interactor.SetMigrateSorting
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.animebrowse.MigrateAnimeSourceState
 import eu.kanade.presentation.animebrowse.MigrateAnimeSourceStateImpl
-import eu.kanade.presentation.browse.MigrateSourceState
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +20,7 @@ import uy.kohesive.injekt.api.get
 
 class MigrationAnimeSourcesPresenter(
     private val presenterScope: CoroutineScope,
-    private val state: MigrateAnimeSourceStateImpl = MigrateSourceState() as MigrateAnimeSourceStateImpl,
+    private val state: MigrateAnimeSourceStateImpl = MigrateAnimeSourceState() as MigrateAnimeSourceStateImpl,
     private val preferences: SourcePreferences = Injekt.get(),
     private val getSourcesWithFavoriteCount: GetAnimeSourcesWithFavoriteCount = Injekt.get(),
     private val setMigrateSorting: SetMigrateSorting = Injekt.get(),

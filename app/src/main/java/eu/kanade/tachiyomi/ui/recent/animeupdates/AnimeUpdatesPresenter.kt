@@ -78,8 +78,8 @@ class AnimeUpdatesPresenter(
     val isDownloadOnly = basePreferences.downloadedOnly().get()
     val isIncognitoMode = basePreferences.incognitoMode().get()
 
-    lateinit var activity: Activity
-    lateinit var context: Context
+    var activity: Activity? = null
+    var context: Context? = null
 
     val lastUpdated = libraryPreferences.libraryUpdateLastTimestamp().get()
 
@@ -94,9 +94,9 @@ class AnimeUpdatesPresenter(
     // First and last selected index in list
     private val selectedPositions: Array<Int> = arrayOf(-1, -1)
 
-    fun onCreate(activity: Activity, context: Context) {
+    fun onCreate(activity: Activity?) {
         this.activity = activity
-        this.context = context
+        this.context = activity
 
         presenterScope.launchIO {
             // Set date limit for recent episodes
@@ -192,7 +192,7 @@ class AnimeUpdatesPresenter(
                 EpisodeDownloadAction.START -> {
                     downloadEpisodes(items)
                     if (items.any { it.downloadStateProvider() == AnimeDownload.State.ERROR }) {
-                        AnimeDownloadService.start(context)
+                        AnimeDownloadService.start(context!!)
                     }
                 }
                 EpisodeDownloadAction.START_NOW -> {
@@ -209,7 +209,7 @@ class AnimeUpdatesPresenter(
                 EpisodeDownloadAction.START_ALT -> {
                     downloadEpisodesAlternatively(items)
                     if (items.any { it.downloadStateProvider() == AnimeDownload.State.ERROR }) {
-                        AnimeDownloadService.start(context)
+                        AnimeDownloadService.start(context!!)
                     }
                 }
             }
@@ -331,10 +331,13 @@ class AnimeUpdatesPresenter(
     }
 
     private fun openEpisodeInternal(episode: Episode) {
+        val context = context ?: return
         context.startActivity(PlayerActivity.newIntent(context, episode.animeId, episode.id))
     }
 
     private fun openEpisodeExternal(episode: Episode, anime: Anime, source: AnimeSource) {
+        val context = context ?: return
+        val activity = activity ?: return
         launchIO {
             val video = try {
                 EpisodeLoader.getLink(episode.toDbEpisode(), anime.toDbAnime(), source)

@@ -22,7 +22,7 @@ class UpdatesTabsPresenter(
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
 
-        animeUpdatesPresenter.onCreate(view!!.activity!!, view!!.activity!!)
-        updatesPresenter.onCreate(view!!.activity!!)
+        animeUpdatesPresenter.onCreate(view?.activity)
+        updatesPresenter.onCreate(view?.activity)
     }
 }

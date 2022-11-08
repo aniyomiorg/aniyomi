@@ -63,7 +63,7 @@ class UpdatesPresenter(
     val isDownloadOnly = basePreferences.downloadedOnly().get()
     val isIncognitoMode = basePreferences.incognitoMode().get()
 
-    lateinit var context: Context
+    var context: Context? = null
 
     val lastUpdated = libraryPreferences.libraryUpdateLastTimestamp().get()
 
@@ -76,7 +76,7 @@ class UpdatesPresenter(
     // First and last selected index in list
     private val selectedPositions: Array<Int> = arrayOf(-1, -1)
 
-    fun onCreate(context: Context) {
+    fun onCreate(context: Context?) {
         this.context = context
 
         presenterScope.launchIO {
@@ -169,6 +169,7 @@ class UpdatesPresenter(
 
     fun downloadChapters(items: List<UpdatesItem>, action: ChapterDownloadAction) {
         if (items.isEmpty()) return
+        val context = context ?: return
         presenterScope.launch {
             when (action) {
                 ChapterDownloadAction.START -> {
