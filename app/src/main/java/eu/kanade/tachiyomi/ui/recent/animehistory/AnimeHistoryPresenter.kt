@@ -68,7 +68,6 @@ class AnimeHistoryPresenter(
 ) : AnimeHistoryState by state {
 
     var context: Context? = null
-    var activity: Activity? = null
 
     private val _events: Channel<Event> = Channel(Int.MAX_VALUE)
     val events: Flow<Event> = _events.receiveAsFlow()
@@ -79,9 +78,8 @@ class AnimeHistoryPresenter(
 
     val useExternalPlayer = playerPreferences.alwaysUseExternalPlayer().get()
 
-    fun onCreate(context: Context?, activity: Activity?) {
+    fun onCreate(context: Context?) {
         this.context = context
-        this.activity = activity
     }
 
     @Composable
@@ -149,30 +147,30 @@ class AnimeHistoryPresenter(
         }
     }
 
-    fun openEpisode(episode: Episode) {
+    fun openEpisode(episode: Episode, context: Context) {
         presenterScope.launchNonCancellable {
             val anime = getAnime.await(episode.animeId) ?: return@launchNonCancellable
             val source = sourceManager.get(anime.source) ?: return@launchNonCancellable
 
             if (useExternalPlayer) {
-                openEpisodeExternal(episode, anime, source)
+                openEpisodeExternal(episode, anime, source, context)
             } else {
-                openEpisodeInternal(episode)
+                openEpisodeInternal(episode, context)
             }
         }
     }
 
-    private fun openEpisodeInternal(episode: Episode) {
-        context!!.startActivity(PlayerActivity.newIntent(context!!, episode.animeId, episode.id))
+    private fun openEpisodeInternal(episode: Episode, context: Context) {
+        context.startActivity(PlayerActivity.newIntent(context, episode.animeId, episode.id))
     }
 
-    private fun openEpisodeExternal(episode: Episode, anime: Anime, source: AnimeSource) {
+    private fun openEpisodeExternal(episode: Episode, anime: Anime, source: AnimeSource, context: Context) {
         launchIO {
             val video = try {
                 EpisodeLoader.getLink(episode.toDbEpisode(), anime.toDbAnime(), source)
                     .awaitSingle()
             } catch (e: Exception) {
-                launchUI { context!!.toast(e.message) }
+                launchUI { context.toast(e.message) }
                 return@launchIO
             }
             if (video != null) {
@@ -182,23 +180,24 @@ class AnimeHistoryPresenter(
                 val extIntent = ExternalIntents(anime, source).getExternalIntent(
                     episode,
                     video,
-                    context!!,
+                    context,
                 )
                 if (extIntent != null) {
                     try {
+                        val activity = context as Activity
                         ActivityCompat.startActivityForResult(
-                            activity!!,
+                            activity,
                             extIntent,
                             AnimeController.REQUEST_EXTERNAL,
                             null,
                         )
                     } catch (e: Exception) {
-                        launchUI { context!!.toast(e.message) }
+                        launchUI { context.toast(e.message) }
                         return@launchIO
                     }
                 }
             } else {
-                launchUI { context!!.toast("Couldn't find any video links.") }
+                launchUI { context.toast("Couldn't find any video links.") }
                 return@launchIO
             }
         }

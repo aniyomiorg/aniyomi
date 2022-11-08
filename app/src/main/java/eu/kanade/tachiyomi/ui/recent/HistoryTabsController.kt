@@ -4,6 +4,7 @@ import android.Manifest
 import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import eu.kanade.presentation.components.PagerState
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
@@ -16,6 +17,8 @@ class HistoryTabsController : FullComposeController<HistoryTabsPresenter>(), Roo
 
     override fun createPresenter() = HistoryTabsPresenter()
 
+    private val state = PagerState(currentPage = TAB_ANIME)
+
     @Composable
     override fun ComposeContent() {
         TabbedScreen(
@@ -26,6 +29,7 @@ class HistoryTabsController : FullComposeController<HistoryTabsPresenter>(), Roo
             ),
             incognitoMode = presenter.isIncognitoMode,
             downloadedOnlyMode = presenter.isDownloadOnly,
+            state = state,
         )
 
         LaunchedEffect(Unit) {
@@ -39,14 +43,13 @@ class HistoryTabsController : FullComposeController<HistoryTabsPresenter>(), Roo
     }
 
     fun resumeLastItem() {
-        if (isCurrentHistoryTabManga) {
+        if (state.currentPage == TAB_MANGA) {
             presenter.resumeLastChapterRead()
         } else {
             presenter.resumeLastEpisodeSeen()
         }
     }
-
-    companion object {
-        var isCurrentHistoryTabManga = true
-    }
 }
+
+private const val TAB_ANIME = 0
+private const val TAB_MANGA = 1

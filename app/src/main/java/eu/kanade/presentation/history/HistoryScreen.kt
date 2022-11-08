@@ -18,7 +18,6 @@ import eu.kanade.presentation.history.components.HistoryToolbar
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
-import eu.kanade.tachiyomi.ui.recent.HistoryTabsController.Companion.isCurrentHistoryTabManga
 import eu.kanade.tachiyomi.ui.recent.history.HistoryPresenter
 import eu.kanade.tachiyomi.ui.recent.history.HistoryPresenter.Dialog
 import eu.kanade.tachiyomi.util.system.toast
@@ -33,8 +32,6 @@ fun HistoryScreen(
     onClickResume: (HistoryWithRelations) -> Unit,
 ) {
     val context = LocalContext.current
-
-    isCurrentHistoryTabManga = true
 
     Scaffold(
         topBar = { scrollBehavior ->

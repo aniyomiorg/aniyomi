@@ -17,13 +17,11 @@ import eu.kanade.presentation.history.components.HistoryDeleteAllDialog
 import eu.kanade.presentation.history.components.HistoryDeleteDialog
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.recent.HistoryTabsController.Companion.isCurrentHistoryTabManga
 import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryPresenter
 import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryPresenter.Dialog
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.widget.TachiyomiBottomNavigationView
 import kotlinx.coroutines.flow.collectLatest
-import uy.kohesive.injekt.api.get
 import java.util.Date
 
 @Composable
@@ -33,8 +31,6 @@ fun AnimeHistoryScreen(
     onClickResume: (AnimeHistoryWithRelations) -> Unit,
 ) {
     val context = LocalContext.current
-
-    isCurrentHistoryTabManga = false
 
     Scaffold(
         topBar = { scrollBehavior ->
@@ -104,7 +100,7 @@ fun AnimeHistoryScreen(
                 AnimeHistoryPresenter.Event.InternalError -> context.toast(R.string.internal_error)
                 AnimeHistoryPresenter.Event.NoNextEpisodeFound -> context.toast(R.string.no_next_episode)
                 is AnimeHistoryPresenter.Event.OpenEpisode -> {
-                    presenter.openEpisode(event.episode)
+                    presenter.openEpisode(event.episode, context)
                 }
             }
         }

@@ -22,7 +22,7 @@ class HistoryTabsPresenter(
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
 
-        animeHistoryPresenter.onCreate(view?.activity, view?.activity)
+        animeHistoryPresenter.onCreate(view?.activity)
         historyPresenter.onCreate(view?.activity)
     }
 
