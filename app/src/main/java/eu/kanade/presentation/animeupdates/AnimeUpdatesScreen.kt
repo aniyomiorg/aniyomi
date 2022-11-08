@@ -35,7 +35,6 @@ import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
-import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController.Companion.isCurrentUpdateTabManga
 import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesItem
 import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesPresenter
 import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesPresenter.Dialog
@@ -64,8 +63,6 @@ fun AnimeUpdateScreen(
         }
     }
     BackHandler(onBack = internalOnBackPressed)
-
-    isCurrentUpdateTabManga = false
 
     val context = LocalContext.current
     val onUpdateLibrary = {

@@ -33,7 +33,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
-import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController.Companion.isCurrentUpdateTabManga
 import eu.kanade.tachiyomi.ui.recent.updates.UpdatesItem
 import eu.kanade.tachiyomi.ui.recent.updates.UpdatesPresenter
 import eu.kanade.tachiyomi.ui.recent.updates.UpdatesPresenter.Dialog
@@ -60,8 +59,6 @@ fun UpdateScreen(
         }
     }
     BackHandler(onBack = internalOnBackPressed)
-
-    isCurrentUpdateTabManga = true
 
     val context = LocalContext.current
     val onUpdateLibrary = {

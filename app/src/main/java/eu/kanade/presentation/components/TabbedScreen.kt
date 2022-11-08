@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabPosition
 import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,12 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import eu.kanade.tachiyomi.widget.TachiyomiBottomNavigationView
 import kotlinx.coroutines.launch
 
 @Composable
 fun TabbedScreen(
-    @StringRes titleRes: Int,
+    @StringRes titleRes: Int?,
     tabs: List<TabContent>,
     startIndex: Int? = null,
     searchQuery: String? = null,
@@ -29,9 +32,10 @@ fun TabbedScreen(
     onChangeSearchQuery: (String?) -> Unit = {},
     incognitoMode: Boolean,
     downloadedOnlyMode: Boolean,
+    state: PagerState = rememberPagerState(),
+    scrollable: Boolean = false,
 ) {
     val scope = rememberCoroutineScope()
-    val state = rememberPagerState()
 
     LaunchedEffect(startIndex) {
         if (startIndex != null) {
@@ -42,12 +46,14 @@ fun TabbedScreen(
     Scaffold(
         topBar = {
             if (searchQuery == null) {
-                AppBar(
-                    title = stringResource(titleRes),
-                    actions = {
-                        AppBarActions(tabs[state.currentPage].actions)
-                    },
-                )
+                if (titleRes != null) {
+                    AppBar(
+                        title = stringResource(titleRes),
+                        actions = {
+                            AppBarActions(tabs[state.currentPage].actions)
+                        },
+                    )
+                }
             } else {
                 SearchToolbar(
                     searchQuery = searchQuery,
@@ -72,7 +78,8 @@ fun TabbedScreen(
                 end = contentPadding.calculateEndPadding(LocalLayoutDirection.current),
             ),
         ) {
-            TabRow(
+            FlexibleTabRow(
+                scrollable = scrollable,
                 selectedTabIndex = state.currentPage,
                 indicator = { TabIndicator(it[state.currentPage]) },
             ) {
@@ -111,3 +118,28 @@ data class TabContent(
     val actions: List<AppBar.Action> = emptyList(),
     val content: @Composable (contentPadding: PaddingValues) -> Unit,
 )
+
+@Composable
+private fun FlexibleTabRow(
+    scrollable: Boolean,
+    selectedTabIndex: Int,
+    indicator: @Composable (List<TabPosition>) -> Unit,
+    block: @Composable () -> Unit,
+) {
+    return if (scrollable) {
+        ScrollableTabRow(
+            selectedTabIndex = selectedTabIndex,
+            indicator = indicator,
+            edgePadding = 13.dp,
+        ) {
+            block()
+        }
+    } else {
+        TabRow(
+            selectedTabIndex = selectedTabIndex,
+            indicator = indicator,
+        ) {
+            block()
+        }
+    }
+}

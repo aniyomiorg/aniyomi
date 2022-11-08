@@ -187,12 +187,13 @@ class AnimeUpdatesPresenter(
 
     fun downloadEpisodes(items: List<AnimeUpdatesItem>, action: EpisodeDownloadAction) {
         if (items.isEmpty()) return
+        val context = context ?: return
         presenterScope.launch {
             when (action) {
                 EpisodeDownloadAction.START -> {
                     downloadEpisodes(items)
                     if (items.any { it.downloadStateProvider() == AnimeDownload.State.ERROR }) {
-                        AnimeDownloadService.start(context!!)
+                        AnimeDownloadService.start(context)
                     }
                 }
                 EpisodeDownloadAction.START_NOW -> {
@@ -209,7 +210,7 @@ class AnimeUpdatesPresenter(
                 EpisodeDownloadAction.START_ALT -> {
                     downloadEpisodesAlternatively(items)
                     if (items.any { it.downloadStateProvider() == AnimeDownload.State.ERROR }) {
-                        AnimeDownloadService.start(context!!)
+                        AnimeDownloadService.start(context)
                     }
                 }
             }

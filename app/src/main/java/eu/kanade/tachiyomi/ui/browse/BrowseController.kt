@@ -54,6 +54,7 @@ class BrowseController : FullComposeController<BrowsePresenter>, RootController 
             placeholderRes = R.string.action_search_hint,
             incognitoMode = presenter.isIncognitoMode,
             downloadedOnlyMode = presenter.isDownloadOnly,
+            scrollable = true,
         )
 
         LaunchedEffect(Unit) {

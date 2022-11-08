@@ -5,7 +5,6 @@ import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import eu.kanade.presentation.components.TabbedScreen
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
 import eu.kanade.tachiyomi.ui.base.controller.requestPermissionsSafe
@@ -20,7 +19,7 @@ class HistoryTabsController : FullComposeController<HistoryTabsPresenter>(), Roo
     @Composable
     override fun ComposeContent() {
         TabbedScreen(
-            titleRes = R.string.browse,
+            titleRes = null,
             tabs = listOf(
                 animeHistoryTab(router, presenter.animeHistoryPresenter),
                 historyTab(router, presenter.historyPresenter),

@@ -124,7 +124,7 @@ class AnimeDownloadController :
                     titleContent = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = stringResource(R.string.label_download_queue),
+                                text = stringResource(R.string.label_anime_download_queue),
                                 maxLines = 1,
                                 modifier = Modifier.weight(1f, false),
                                 overflow = TextOverflow.Ellipsis,
