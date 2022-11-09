@@ -12,9 +12,13 @@ import eu.kanade.core.prefs.CheckboxState
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.isLocal
 import eu.kanade.domain.anime.model.toDbAnime
+import eu.kanade.domain.animelib.model.AnimelibAnime
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.presentation.animelib.AnimelibScreen
 import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.DeleteLibraryMangaDialog
+import eu.kanade.presentation.manga.DownloadAction
+import eu.kanade.presentation.manga.components.DownloadCustomAmountDialog
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.ui.anime.AnimeController
@@ -24,6 +28,7 @@ import eu.kanade.tachiyomi.ui.base.controller.pushController
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchController
 import eu.kanade.tachiyomi.ui.category.CategoryController
 import eu.kanade.tachiyomi.ui.main.MainActivity
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.toast
@@ -43,22 +48,33 @@ class AnimelibController(
     @Composable
     override fun ComposeContent() {
         val context = LocalContext.current
+        val getAnimeForCategory = presenter.getAnimeForCategory(page = presenter.activeCategory)
+
         AnimelibScreen(
             presenter = presenter,
             onAnimeClicked = ::openAnime,
+            onContinueWatchingClicked = ::continueWatching,
             onGlobalSearchClicked = {
                 router.pushController(GlobalAnimeSearchController(presenter.searchQuery))
             },
             onChangeCategoryClicked = ::showAnimeCategoriesDialog,
             onMarkAsSeenClicked = { markSeenStatus(true) },
             onMarkAsUnseenClicked = { markSeenStatus(false) },
-            onDownloadClicked = ::downloadUnseenEpisodes,
+            onDownloadClicked = ::runDownloadEpisodeAction,
             onDeleteClicked = ::showDeleteAnimeDialog,
             onClickFilter = ::showSettingsSheet,
             onClickRefresh = {
                 val started = AnimelibUpdateService.start(context, it)
                 context.toast(if (started) R.string.updating_category else R.string.update_already_running)
                 started
+            },
+            onClickOpenRandomAnime = {
+                val items = getAnimeForCategory.map { it.animelibAnime.anime.id }
+                if (getAnimeForCategory.isNotEmpty()) {
+                    openAnime(items.random())
+                } else {
+                    context.toast(R.string.information_no_entries_found)
+                }
             },
             onClickInvertSelection = { presenter.invertSelection(presenter.activeCategory) },
             onClickSelectAll = { presenter.selectAll(presenter.activeCategory) },
@@ -87,6 +103,16 @@ class AnimelibController(
                     onDismissRequest = onDismissRequest,
                     onConfirm = { deleteAnime, deleteEpisode ->
                         presenter.removeAnimes(dialog.anime.map { it.toDbAnime() }, deleteAnime, deleteEpisode)
+                        presenter.clearSelection()
+                    },
+                )
+            }
+            is AnimelibPresenter.Dialog.DownloadCustomAmount -> {
+                DownloadCustomAmountDialog(
+                    maxAmount = dialog.max,
+                    onDismissRequest = onDismissRequest,
+                    onConfirm = { amount ->
+                        presenter.downloadUnseenEpisodes(dialog.anime, amount)
                         presenter.clearSelection()
                     },
                 )
@@ -174,6 +200,19 @@ class AnimelibController(
         router.pushController(AnimeController(animeId))
     }
 
+    private fun continueWatching(animelibAnime: AnimelibAnime) {
+        viewScope.launchIO {
+            val episode = presenter.getNextUnseenEpisode(animelibAnime.anime)
+            if (episode != null) openEpisode(episode)
+        }
+    }
+
+    private fun openEpisode(episode: Episode) {
+        activity?.run {
+            startActivity(PlayerActivity.newIntent(this, episode.animeId, episode.id))
+        }
+    }
+
     /**
      * Clear all of the anime currently selected, and
      * invalidate the action mode to revert the top toolbar
@@ -208,9 +247,22 @@ class AnimelibController(
         }
     }
 
-    private fun downloadUnseenEpisodes() {
-        val animeList = presenter.selection.toList()
-        presenter.downloadUnseenEpisodes(animeList.map { it.anime })
+    private fun runDownloadEpisodeAction(action: DownloadAction) {
+        val mangas = presenter.selection.map { it.anime }.toList()
+        when (action) {
+            DownloadAction.NEXT_1_CHAPTER -> presenter.downloadUnseenEpisodes(mangas, 1)
+            DownloadAction.NEXT_5_CHAPTERS -> presenter.downloadUnseenEpisodes(mangas, 5)
+            DownloadAction.NEXT_10_CHAPTERS -> presenter.downloadUnseenEpisodes(mangas, 10)
+            DownloadAction.UNREAD_CHAPTERS -> presenter.downloadUnseenEpisodes(mangas, null)
+            DownloadAction.CUSTOM -> {
+                presenter.dialog = AnimelibPresenter.Dialog.DownloadCustomAmount(
+                    mangas,
+                    presenter.selection.maxOf { it.unseenCount }.toInt(),
+                )
+                return
+            }
+            else -> {}
+        }
         presenter.clearSelection()
     }
 

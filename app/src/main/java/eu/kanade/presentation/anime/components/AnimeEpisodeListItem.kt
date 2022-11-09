@@ -1,6 +1,5 @@
 package eu.kanade.presentation.anime.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,6 +31,8 @@ import eu.kanade.presentation.components.EpisodeDownloadAction
 import eu.kanade.presentation.components.EpisodeDownloadIndicator
 import eu.kanade.presentation.manga.components.DotSeparatorText
 import eu.kanade.presentation.util.ReadItemAlpha
+import eu.kanade.presentation.util.SecondaryItemAlpha
+import eu.kanade.presentation.util.selectedBackground
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
 
@@ -46,6 +46,7 @@ fun AnimeEpisodeListItem(
     seen: Boolean,
     bookmark: Boolean,
     selected: Boolean,
+    downloadIndicatorEnabled: Boolean,
     downloadStateProvider: () -> AnimeDownload.State,
     downloadProgressProvider: () -> Int,
     onLongClick: () -> Unit,
@@ -54,7 +55,7 @@ fun AnimeEpisodeListItem(
 ) {
     Row(
         modifier = modifier
-            .background(if (selected) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent)
+            .selectedBackground(selected)
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick,
@@ -68,6 +69,7 @@ fun AnimeEpisodeListItem(
                 MaterialTheme.colorScheme.onSurface
             }
             val textAlpha = remember(seen) { if (seen) ReadItemAlpha else 1f }
+            val textSubtitleAlpha = remember(seen) { if (seen) ReadItemAlpha else SecondaryItemAlpha }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 var textHeight by remember { mutableStateOf(0) }
@@ -92,7 +94,7 @@ fun AnimeEpisodeListItem(
                 )
             }
             Spacer(modifier = Modifier.height(6.dp))
-            Row(modifier = Modifier.alpha(textAlpha)) {
+            Row(modifier = Modifier.alpha(textSubtitleAlpha)) {
                 ProvideTextStyle(
                     value = MaterialTheme.typography.bodyMedium
                         .copy(color = textColor, fontSize = 12.sp),
@@ -128,6 +130,7 @@ fun AnimeEpisodeListItem(
         // Download view
         if (onDownloadClick != null) {
             EpisodeDownloadIndicator(
+                enabled = downloadIndicatorEnabled,
                 modifier = Modifier.padding(start = 4.dp),
                 downloadStateProvider = downloadStateProvider,
                 downloadProgressProvider = downloadProgressProvider,

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabPosition
@@ -28,7 +29,6 @@ fun TabbedScreen(
     tabs: List<TabContent>,
     startIndex: Int? = null,
     searchQuery: String? = null,
-    @StringRes placeholderRes: Int? = null,
     onChangeSearchQuery: (String?) -> Unit = {},
     incognitoMode: Boolean,
     downloadedOnlyMode: Boolean,
@@ -45,28 +45,16 @@ fun TabbedScreen(
 
     Scaffold(
         topBar = {
-            if (searchQuery == null) {
-                if (titleRes != null) {
-                    AppBar(
-                        title = stringResource(titleRes),
-                        actions = {
-                            AppBarActions(tabs[state.currentPage].actions)
-                        },
-                    )
-                }
-            } else {
+            if (titleRes != null) {
+                val tab = tabs[state.currentPage]
+                val searchEnabled = tab.searchEnabled
+
                 SearchToolbar(
-                    searchQuery = searchQuery,
-                    placeholderText = placeholderRes?.let { stringResource(it) },
-                    onChangeSearchQuery = {
-                        onChangeSearchQuery(it)
-                    },
-                    onClickCloseSearch = {
-                        onChangeSearchQuery(null)
-                    },
-                    onClickResetSearch = {
-                        onChangeSearchQuery("")
-                    },
+                    titleContent = { AppBarTitle(stringResource(titleRes)) },
+                    searchEnabled = searchEnabled,
+                    searchQuery = if (searchEnabled) searchQuery else null,
+                    onChangeSearchQuery = onChangeSearchQuery,
+                    actions = { AppBarActions(tab.actions) },
                 )
             }
         },
@@ -87,9 +75,8 @@ fun TabbedScreen(
                     Tab(
                         selected = state.currentPage == index,
                         onClick = { scope.launch { state.animateScrollToPage(index) } },
-                        text = {
-                            TabText(stringResource(tab.titleRes), tab.badgeNumber, state.currentPage == index)
-                        },
+                        text = { TabText(text = stringResource(tab.titleRes), badgeCount = tab.badgeNumber) },
+                        unselectedContentColor = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -115,6 +102,7 @@ fun TabbedScreen(
 data class TabContent(
     @StringRes val titleRes: Int,
     val badgeNumber: Int? = null,
+    val searchEnabled: Boolean = false,
     val actions: List<AppBar.Action> = emptyList(),
     val content: @Composable (contentPadding: PaddingValues) -> Unit,
 )

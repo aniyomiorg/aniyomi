@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.os.bundleOf
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
@@ -38,6 +37,8 @@ import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.databinding.PrefSkipIntroLengthBinding
 import eu.kanade.tachiyomi.network.HttpException
+import eu.kanade.tachiyomi.ui.HistoryTabsController
+import eu.kanade.tachiyomi.ui.UpdatesTabsController
 import eu.kanade.tachiyomi.ui.anime.AnimePresenter.Dialog
 import eu.kanade.tachiyomi.ui.anime.episode.EpisodesSettingsSheet
 import eu.kanade.tachiyomi.ui.anime.info.AnimeFullCoverDialog
@@ -57,8 +58,6 @@ import eu.kanade.tachiyomi.ui.player.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
-import eu.kanade.tachiyomi.ui.recent.HistoryTabsController
-import eu.kanade.tachiyomi.ui.recent.UpdatesTabsController
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.launchIO

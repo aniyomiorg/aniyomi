@@ -26,10 +26,12 @@ fun AnimelibList(
     showUnreadBadges: Boolean,
     showLocalBadges: Boolean,
     showLanguageBadges: Boolean,
+    showContinueWatchingButton: Boolean,
     contentPadding: PaddingValues,
     selection: List<AnimelibAnime>,
     onClick: (AnimelibAnime) -> Unit,
     onLongClick: (AnimelibAnime) -> Unit,
+    onClickContinueWatching: (AnimelibAnime) -> Unit,
     searchQuery: String?,
     onGlobalSearchClicked: () -> Unit,
 ) {
@@ -78,8 +80,10 @@ fun AnimelibList(
                         item = animelibItem,
                     )
                 },
+                showContinueReadingButton = showContinueWatchingButton,
                 onLongClick = { onLongClick(animelibItem.animelibAnime) },
                 onClick = { onClick(animelibItem.animelibAnime) },
+                onClickContinueReading = { onClickContinueWatching(animelibItem.animelibAnime) },
             )
         }
     }

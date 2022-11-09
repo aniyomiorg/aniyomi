@@ -26,11 +26,9 @@ import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.database.models.toDomainAnime
-import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
@@ -56,7 +54,6 @@ import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
 import eu.kanade.tachiyomi.util.system.isOnline
 import eu.kanade.tachiyomi.util.system.logcat
-import eu.kanade.tachiyomi.util.system.toInt
 import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -70,7 +67,6 @@ import uy.kohesive.injekt.injectLazy
 import java.util.Date
 import java.util.concurrent.TimeUnit
 import eu.kanade.domain.anime.model.Anime as DomainAnime
-import eu.kanade.tachiyomi.data.database.models.Episode as DbEpisode
 
 class PlayerPresenter(
     private val sourceManager: AnimeSourceManager = Injekt.get(),
@@ -110,8 +106,6 @@ class PlayerPresenter(
     private var currentVideoList: List<Video>? = null
 
     private val imageSaver: ImageSaver by injectLazy()
-
-    private var episodeToDownload: AnimeDownload? = null
 
     /**
      * Episode list for the active anime. It's retrieved lazily and should be accessed for the first
@@ -350,47 +344,6 @@ class PlayerPresenter(
                 deleteEpisodeFromDownloadQueue(episode)
             }
         }
-    }
-
-    private fun downloadNextEpisodes() {
-        val anime = anime ?: return
-        val index = getCurrentEpisodeIndex()
-        if (index == episodeList.lastIndex) return
-        val nextEpisode = episodeList[index + 1]
-        val episodesNumberToDownload = downloadPreferences.autoDownloadWhileWatching().get()
-        if (episodesNumberToDownload == 0 || !anime.favorite) return
-        val isNextEpisodeDownloadedOrQueued = downloadManager.isEpisodeDownloaded(
-            nextEpisode.name,
-            nextEpisode.scanlator,
-            anime.title,
-            anime.source,
-        ) || downloadManager.getEpisodeDownloadOrNull(nextEpisode) != null
-        if (isNextEpisodeDownloadedOrQueued) {
-            downloadAutoNextEpisodes(episodesNumberToDownload, nextEpisode.id, nextEpisode.seen)
-        }
-    }
-
-    private fun downloadAutoNextEpisodes(choice: Int, nextEpisodeId: Long?, isNextEpisodeSeen: Boolean) {
-        val episodesToDownload = getNextUnreadEpisodesSorted(nextEpisodeId).take(choice - 1 + isNextEpisodeSeen.toInt())
-        if (episodesToDownload.isNotEmpty()) {
-            downloadEpisodes(episodesToDownload)
-        }
-    }
-
-    private fun getNextUnreadEpisodesSorted(nextEpisodeId: Long?): List<DbEpisode> {
-        return episodeList.filter { !it.seen || it.id == nextEpisodeId }
-            .map { it.toDomainEpisode()!! }
-            .sortedWith(getEpisodeSort(anime?.toDomainAnime()!!, false))
-            .takeLastWhile { it.id != nextEpisodeId }
-            .map { it.toDbEpisode() }
-    }
-
-    /**
-     * Downloads the given list of episodes with the manager.
-     * @param episodes the list of episodes to download.
-     */
-    private fun downloadEpisodes(episodes: List<DbEpisode>) {
-        downloadManager.downloadEpisodes(anime?.toDomainAnime()!!, episodes)
     }
 
     private fun deleteEpisodeFromDownloadQueue(episode: Episode) {

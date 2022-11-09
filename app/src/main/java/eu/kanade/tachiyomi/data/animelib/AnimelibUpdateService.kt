@@ -416,8 +416,7 @@ class AnimelibUpdateService(
     private fun downloadEpisodes(anime: Anime, episodes: List<Episode>) {
         // We don't want to start downloading while the library is updating, because websites
         // may don't like it and they could ban the user.
-        val dbEpisodes = episodes.map { it.toDbEpisode() }
-        downloadManager.downloadEpisodes(anime, dbEpisodes, false)
+        downloadManager.downloadEpisodes(anime, episodes.map { it.toDbEpisode() }, false)
     }
 
     /**

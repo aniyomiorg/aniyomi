@@ -16,9 +16,10 @@ import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.history.components.HistoryDeleteAllDialog
 import eu.kanade.presentation.history.components.HistoryDeleteDialog
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.animehistory.AnimeHistoryPresenter
+import eu.kanade.tachiyomi.ui.animehistory.AnimeHistoryPresenter.Dialog
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryPresenter
-import eu.kanade.tachiyomi.ui.recent.animehistory.AnimeHistoryPresenter.Dialog
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.widget.TachiyomiBottomNavigationView
 import kotlinx.coroutines.flow.collectLatest
@@ -29,6 +30,7 @@ fun AnimeHistoryScreen(
     presenter: AnimeHistoryPresenter,
     onClickCover: (AnimeHistoryWithRelations) -> Unit,
     onClickResume: (AnimeHistoryWithRelations) -> Unit,
+    navigateUp: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
 
@@ -39,18 +41,18 @@ fun AnimeHistoryScreen(
                 incognitoMode = presenter.isIncognitoMode,
                 downloadedOnlyMode = presenter.isDownloadOnly,
                 scrollBehavior = scrollBehavior,
+                navigateUp = navigateUp,
             )
         },
     ) { contentPadding ->
-        val items by presenter.getAnimeHistory().collectAsState(initial = null)
-        val contentPaddingWithNavBar =
-            TachiyomiBottomNavigationView.withBottomNavPadding(contentPadding)
+        val items by presenter.getHistory().collectAsState(initial = null)
+        val contentPaddingWithNavBar = TachiyomiBottomNavigationView.withBottomNavPadding(contentPadding)
         items.let {
             if (it == null) {
                 LoadingScreen()
             } else if (it.isEmpty()) {
                 EmptyScreen(
-                    textResource = R.string.information_no_recent_manga,
+                    textResource = R.string.information_no_recent_anime,
                     modifier = Modifier.padding(contentPaddingWithNavBar),
                 )
             } else {
@@ -63,13 +65,13 @@ fun AnimeHistoryScreen(
                 )
             }
         }
+
         LaunchedEffect(items) {
             if (items != null) {
-                (presenter.context as? MainActivity)?.ready = true
+                (presenter.view?.activity as? MainActivity)?.ready = true
             }
         }
     }
-
     val onDismissRequest = { presenter.dialog = null }
     when (val dialog = presenter.dialog) {
         is Dialog.Delete -> {
@@ -88,7 +90,7 @@ fun AnimeHistoryScreen(
             HistoryDeleteAllDialog(
                 onDismissRequest = onDismissRequest,
                 onDelete = {
-                    presenter.deleteAllAnimeHistory()
+                    presenter.removeAllHistory()
                 },
             )
         }
@@ -100,7 +102,9 @@ fun AnimeHistoryScreen(
                 AnimeHistoryPresenter.Event.InternalError -> context.toast(R.string.internal_error)
                 AnimeHistoryPresenter.Event.NoNextEpisodeFound -> context.toast(R.string.no_next_episode)
                 is AnimeHistoryPresenter.Event.OpenEpisode -> {
-                    presenter.openEpisode(event.episode, context)
+                    // TODO: FIX FOR EXTERNAL PLAYER
+                    val intent = PlayerActivity.newIntent(context, event.episode.animeId, event.episode.id)
+                    context.startActivity(intent)
                 }
             }
         }

@@ -260,6 +260,6 @@ open class GlobalAnimeSearchPresenter(
      * @return an anime from the database.
      */
     protected open suspend fun networkToLocalAnime(sAnime: SAnime, sourceId: Long): DomainAnime {
-        return networkToLocalAnime.await(sAnime.toDomainAnime(), sourceId)
+        return networkToLocalAnime.await(sAnime.toDomainAnime(sourceId))
     }
 }

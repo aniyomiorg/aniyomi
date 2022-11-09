@@ -6,8 +6,12 @@ import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.util.fastAll
 import eu.kanade.domain.category.model.Category
+import eu.kanade.domain.library.model.LibraryManga
 import eu.kanade.domain.library.model.display
 import eu.kanade.domain.manga.model.isLocal
 import eu.kanade.presentation.components.EmptyScreen
@@ -17,6 +21,7 @@ import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.library.components.LibraryContent
 import eu.kanade.presentation.library.components.LibraryToolbar
+import eu.kanade.presentation.manga.DownloadAction
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.library.LibraryPresenter
 import eu.kanade.tachiyomi.widget.TachiyomiBottomNavigationView
@@ -25,18 +30,23 @@ import eu.kanade.tachiyomi.widget.TachiyomiBottomNavigationView
 fun LibraryScreen(
     presenter: LibraryPresenter,
     onMangaClicked: (Long) -> Unit,
+    onContinueReadingClicked: (LibraryManga) -> Unit,
     onGlobalSearchClicked: () -> Unit,
     onChangeCategoryClicked: () -> Unit,
     onMarkAsReadClicked: () -> Unit,
     onMarkAsUnreadClicked: () -> Unit,
-    onDownloadClicked: () -> Unit,
+    onDownloadClicked: (DownloadAction) -> Unit,
     onDeleteClicked: () -> Unit,
     onClickUnselectAll: () -> Unit,
     onClickSelectAll: () -> Unit,
     onClickInvertSelection: () -> Unit,
     onClickFilter: () -> Unit,
     onClickRefresh: (Category?) -> Boolean,
+    onClickOpenRandomManga: () -> Unit,
+    navigateUp: (() -> Unit)? = null,
 ) {
+    val haptic = LocalHapticFeedback.current
+
     Scaffold(
         topBar = { scrollBehavior ->
             val title by presenter.getToolbarTitle()
@@ -51,7 +61,9 @@ fun LibraryScreen(
                 onClickInvertSelection = onClickInvertSelection,
                 onClickFilter = onClickFilter,
                 onClickRefresh = { onClickRefresh(null) },
+                onClickOpenRandomManga = onClickOpenRandomManga,
                 scrollBehavior = scrollBehavior.takeIf { !tabVisible }, // For scroll overlay when no tab
+                navigateUp = navigateUp,
             )
         },
         bottomBar = {
@@ -60,7 +72,7 @@ fun LibraryScreen(
                 onChangeCategoryClicked = onChangeCategoryClicked,
                 onMarkAsReadClicked = onMarkAsReadClicked,
                 onMarkAsUnreadClicked = onMarkAsUnreadClicked,
-                onDownloadClicked = onDownloadClicked.takeIf { presenter.selection.none { it.manga.isLocal() } },
+                onDownloadClicked = onDownloadClicked.takeIf { presenter.selection.fastAll { !it.manga.isLocal() } },
                 onDeleteClicked = onDeleteClicked,
             )
         },
@@ -96,8 +108,12 @@ fun LibraryScreen(
             showMangaCount = presenter.mangaCountVisibility,
             onChangeCurrentPage = { presenter.activeCategory = it },
             onMangaClicked = onMangaClicked,
+            onContinueReadingClicked = onContinueReadingClicked,
             onToggleSelection = { presenter.toggleSelection(it) },
-            onToggleRangeSelection = { presenter.toggleRangeSelection(it) },
+            onToggleRangeSelection = {
+                presenter.toggleRangeSelection(it)
+                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            },
             onRefresh = onClickRefresh,
             onGlobalSearchClicked = onGlobalSearchClicked,
             getNumberOfMangaForCategory = { presenter.getMangaCountForCategory(it) },
@@ -108,6 +124,7 @@ fun LibraryScreen(
             showUnreadBadges = presenter.showUnreadBadges,
             showLocalBadges = presenter.showLocalBadges,
             showLanguageBadges = presenter.showLanguageBadges,
+            showContinueReadingButton = presenter.showContinueReadingButton,
             isIncognitoMode = presenter.isIncognitoMode,
             isDownloadOnly = presenter.isDownloadOnly,
         )

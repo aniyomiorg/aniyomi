@@ -8,7 +8,7 @@ flowbinding_version = "1.2.0"
 shizuku_version = "12.2.0"
 sqldelight = "1.5.4"
 leakcanary = "2.9.1"
-voyager = "1.0.0-rc05"
+voyager = "1.0.0-rc06"
 
 [libraries]
 android-shortcut-gradle = "com.github.zellius:android-shortcut-gradle-plugin:0.1.2"
@@ -33,7 +33,7 @@ jsoup = "org.jsoup:jsoup:1.15.3"
 
 disklrucache = "com.jakewharton:disklrucache:2.0.2"
 unifile = "com.github.tachiyomiorg:unifile:17bec43"
-junrar = "com.github.junrar:junrar:7.5.3"
+junrar = "com.github.junrar:junrar:7.5.4"
 
 sqlitektx = "androidx.sqlite:sqlite-ktx:2.3.0-beta01"
 sqlite-android = "com.github.requery:sqlite-android:3.36.0"

@@ -9,12 +9,16 @@ import androidx.compose.ui.platform.LocalContext
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import eu.kanade.core.prefs.CheckboxState
+import eu.kanade.domain.chapter.model.Chapter
+import eu.kanade.domain.library.model.LibraryManga
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.domain.manga.model.isLocal
 import eu.kanade.domain.manga.model.toDbManga
 import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.DeleteLibraryMangaDialog
 import eu.kanade.presentation.library.LibraryScreen
+import eu.kanade.presentation.manga.DownloadAction
+import eu.kanade.presentation.manga.components.DownloadCustomAmountDialog
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
@@ -24,6 +28,7 @@ import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchController
 import eu.kanade.tachiyomi.ui.category.CategoryController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.manga.MangaController
+import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.toast
@@ -42,17 +47,25 @@ class LibraryController(
 
     @Composable
     override fun ComposeContent() {
+        val navigateUp: (() -> Unit)? = if (presenter.fromMore && router != null) {
+            { router.popCurrentController() }
+        } else {
+            null
+        }
         val context = LocalContext.current
+        val getMangaForCategory = presenter.getMangaForCategory(page = presenter.activeCategory)
+
         LibraryScreen(
             presenter = presenter,
             onMangaClicked = ::openManga,
+            onContinueReadingClicked = ::continueReading,
             onGlobalSearchClicked = {
                 router.pushController(GlobalSearchController(presenter.searchQuery))
             },
             onChangeCategoryClicked = ::showMangaCategoriesDialog,
             onMarkAsReadClicked = { markReadStatus(true) },
             onMarkAsUnreadClicked = { markReadStatus(false) },
-            onDownloadClicked = ::downloadUnreadChapters,
+            onDownloadClicked = ::runDownloadChapterAction,
             onDeleteClicked = ::showDeleteMangaDialog,
             onClickFilter = ::showSettingsSheet,
             onClickRefresh = {
@@ -60,9 +73,18 @@ class LibraryController(
                 context.toast(if (started) R.string.updating_category else R.string.update_already_running)
                 started
             },
+            onClickOpenRandomManga = {
+                val items = getMangaForCategory.map { it.libraryManga.manga.id }
+                if (getMangaForCategory.isNotEmpty()) {
+                    openManga(items.random())
+                } else {
+                    context.toast(R.string.information_no_entries_found)
+                }
+            },
             onClickInvertSelection = { presenter.invertSelection(presenter.activeCategory) },
             onClickSelectAll = { presenter.selectAll(presenter.activeCategory) },
             onClickUnselectAll = ::clearSelection,
+            navigateUp = navigateUp,
         )
 
         val onDismissRequest = { presenter.dialog = null }
@@ -87,6 +109,16 @@ class LibraryController(
                     onDismissRequest = onDismissRequest,
                     onConfirm = { deleteManga, deleteChapter ->
                         presenter.removeMangas(dialog.manga.map { it.toDbManga() }, deleteManga, deleteChapter)
+                        presenter.clearSelection()
+                    },
+                )
+            }
+            is LibraryPresenter.Dialog.DownloadCustomAmount -> {
+                DownloadCustomAmountDialog(
+                    maxAmount = dialog.max,
+                    onDismissRequest = onDismissRequest,
+                    onConfirm = { amount ->
+                        presenter.downloadUnreadChapters(dialog.manga, amount)
                         presenter.clearSelection()
                     },
                 )
@@ -174,6 +206,19 @@ class LibraryController(
         router.pushController(MangaController(mangaId))
     }
 
+    private fun continueReading(libraryManga: LibraryManga) {
+        viewScope.launchIO {
+            val chapter = presenter.getNextUnreadChapter(libraryManga.manga)
+            if (chapter != null) openChapter(chapter)
+        }
+    }
+
+    private fun openChapter(chapter: Chapter) {
+        activity?.run {
+            startActivity(ReaderActivity.newIntent(this, chapter.mangaId, chapter.id))
+        }
+    }
+
     /**
      * Clear all of the manga currently selected, and
      * invalidate the action mode to revert the top toolbar
@@ -208,9 +253,22 @@ class LibraryController(
         }
     }
 
-    private fun downloadUnreadChapters() {
-        val mangaList = presenter.selection.toList()
-        presenter.downloadUnreadChapters(mangaList.map { it.manga })
+    private fun runDownloadChapterAction(action: DownloadAction) {
+        val mangas = presenter.selection.map { it.manga }.toList()
+        when (action) {
+            DownloadAction.NEXT_1_CHAPTER -> presenter.downloadUnreadChapters(mangas, 1)
+            DownloadAction.NEXT_5_CHAPTERS -> presenter.downloadUnreadChapters(mangas, 5)
+            DownloadAction.NEXT_10_CHAPTERS -> presenter.downloadUnreadChapters(mangas, 10)
+            DownloadAction.UNREAD_CHAPTERS -> presenter.downloadUnreadChapters(mangas, null)
+            DownloadAction.CUSTOM -> {
+                presenter.dialog = LibraryPresenter.Dialog.DownloadCustomAmount(
+                    mangas,
+                    presenter.selection.maxOf { it.unreadCount }.toInt(),
+                )
+                return
+            }
+            else -> {}
+        }
         presenter.clearSelection()
     }
 

@@ -118,7 +118,9 @@ class AnimeExtensionDetailsPresenter(
     }
 
     fun toggleSources(enable: Boolean) {
-        extension?.sources?.forEach { toggleSource.await(it.id, enable) }
+        extension?.sources
+            ?.map { it.id }
+            ?.let { toggleSource.await(it, enable) }
     }
 
     private fun createUrl(url: String, pkgName: String, pkgFactory: String?, path: String = ""): String {

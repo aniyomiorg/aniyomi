@@ -5,7 +5,9 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.core.os.bundleOf
 import eu.kanade.domain.animesource.model.AnimeSource
 import eu.kanade.presentation.animebrowse.BrowseAnimeSourceScreen
@@ -50,6 +52,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
     override fun ComposeContent() {
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
+        val haptic = LocalHapticFeedback.current
 
         BrowseAnimeSourceScreen(
             presenter = presenter,
@@ -64,6 +67,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
                         duplicateAnime != null -> presenter.dialog = Dialog.AddDuplicateAnime(anime, duplicateAnime)
                         else -> presenter.addFavorite(anime)
                     }
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 }
             },
             onWebViewClick = f@{
@@ -119,11 +123,7 @@ open class BrowseAnimeSourceController(bundle: Bundle) :
 
     private fun navigateUp() {
         when {
-            presenter.searchQuery != null -> presenter.searchQuery = null
-            presenter.isUserQuery -> {
-                val (_, filters) = presenter.currentFilter as BrowseAnimeSourcePresenter.AnimeFilter.UserInput
-                presenter.search(query = "", filters = filters)
-            }
+            !presenter.isUserQuery && presenter.searchQuery != null -> presenter.searchQuery = null
             else -> router.popCurrentController()
         }
     }

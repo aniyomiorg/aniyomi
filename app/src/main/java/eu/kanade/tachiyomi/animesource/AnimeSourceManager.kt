@@ -31,13 +31,7 @@ class AnimeSourceManager(
 
     private val scope = CoroutineScope(Job() + Dispatchers.IO)
 
-    private var sourcesMap = ConcurrentHashMap<Long, AnimeSource>()
-        set(value) {
-            field = value
-            sourcesMapFlow.value = field
-        }
-
-    private val sourcesMapFlow = MutableStateFlow(sourcesMap)
+    private val sourcesMapFlow = MutableStateFlow(ConcurrentHashMap<Long, AnimeSource>())
 
     private val stubSourcesMap = ConcurrentHashMap<Long, StubAnimeSource>()
 
@@ -55,7 +49,7 @@ class AnimeSourceManager(
                             registerStubSource(it.toSourceData())
                         }
                     }
-                    sourcesMap = mutableMap
+                    sourcesMapFlow.value = mutableMap
                 }
         }
 
@@ -71,18 +65,18 @@ class AnimeSourceManager(
     }
 
     fun get(sourceKey: Long): AnimeSource? {
-        return sourcesMap[sourceKey]
+        return sourcesMapFlow.value[sourceKey]
     }
 
     fun getOrStub(sourceKey: Long): AnimeSource {
-        return sourcesMap[sourceKey] ?: stubSourcesMap.getOrPut(sourceKey) {
+        return sourcesMapFlow.value[sourceKey] ?: stubSourcesMap.getOrPut(sourceKey) {
             runBlocking { createStubSource(sourceKey) }
         }
     }
 
-    fun getOnlineSources() = sourcesMap.values.filterIsInstance<AnimeHttpSource>()
+    fun getOnlineSources() = sourcesMapFlow.value.values.filterIsInstance<AnimeHttpSource>()
 
-    fun getCatalogueSources() = sourcesMap.values.filterIsInstance<AnimeCatalogueSource>()
+    fun getCatalogueSources() = sourcesMapFlow.value.values.filterIsInstance<AnimeCatalogueSource>()
 
     fun getStubSources(): List<StubAnimeSource> {
         val onlineSourceIds = getOnlineSources().map { it.id }

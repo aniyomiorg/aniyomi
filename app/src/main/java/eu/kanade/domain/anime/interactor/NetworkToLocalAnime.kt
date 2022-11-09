@@ -7,11 +7,11 @@ class NetworkToLocalAnime(
     private val animeRepository: AnimeRepository,
 ) {
 
-    suspend fun await(anime: Anime, sourceId: Long): Anime {
-        val localAnime = getAnime(anime.url, sourceId)
+    suspend fun await(anime: Anime): Anime {
+        val localAnime = getAnime(anime.url, anime.source)
         return when {
             localAnime == null -> {
-                val id = insertAnime(anime.copy(source = sourceId))
+                val id = insertAnime(anime)
                 anime.copy(id = id!!)
             }
             !localAnime.favorite -> {

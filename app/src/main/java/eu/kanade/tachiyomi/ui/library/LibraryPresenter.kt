@@ -19,7 +19,9 @@ import eu.kanade.domain.category.interactor.SetMangaCategories
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
 import eu.kanade.domain.chapter.interactor.SetReadStatus
+import eu.kanade.domain.chapter.model.Chapter
 import eu.kanade.domain.chapter.model.toDbChapter
+import eu.kanade.domain.history.interactor.GetNextChapters
 import eu.kanade.domain.library.model.LibraryManga
 import eu.kanade.domain.library.model.LibrarySort
 import eu.kanade.domain.library.model.sort
@@ -44,6 +46,7 @@ import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
+import eu.kanade.tachiyomi.util.chapter.getNextUnread
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.withIOContext
@@ -76,9 +79,10 @@ typealias LibraryMap = Map<Long, List<LibraryItem>>
 class LibraryPresenter(
     private val state: LibraryStateImpl = LibraryState() as LibraryStateImpl,
     private val getLibraryManga: GetLibraryManga = Injekt.get(),
-    private val getTracksPerManga: GetTracksPerManga = Injekt.get(),
     private val getCategories: GetCategories = Injekt.get(),
-    private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
+    private val getTracksPerManga: GetTracksPerManga = Injekt.get(),
+    private val getNextChapters: GetNextChapters = Injekt.get(),
+    private val getChaptersByMangaId: GetChapterByMangaId = Injekt.get(),
     private val setReadStatus: SetReadStatus = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
     private val setMangaCategories: SetMangaCategories = Injekt.get(),
@@ -105,8 +109,11 @@ class LibraryPresenter(
 
     var activeCategory: Int by libraryPreferences.lastUsedCategory().asState()
 
+    val showContinueReadingButton by libraryPreferences.showContinueReadingButton().asState()
+
     val isDownloadOnly: Boolean by preferences.downloadedOnly().asState()
     val isIncognitoMode: Boolean by preferences.incognitoMode().asState()
+    val fromMore: Boolean = libraryPreferences.bottomNavStyle().get() == 2
 
     private val _filterChanges: Channel<Unit> = Channel(Int.MAX_VALUE)
     private val filterChanges = _filterChanges.receiveAsFlow().onStart { emit(Unit) }
@@ -389,6 +396,10 @@ class LibraryPresenter(
             .reduce { set1, set2 -> set1.intersect(set2) }
     }
 
+    suspend fun getNextUnreadChapter(manga: Manga): Chapter? {
+        return getChaptersByMangaId.await(manga.id).getNextUnread(manga, downloadManager)
+    }
+
     /**
      * Returns the mix (non-common) categories for the given list of manga.
      *
@@ -402,18 +413,27 @@ class LibraryPresenter(
     }
 
     /**
-     * Queues all unread chapters from the given list of manga.
+     * Queues the amount specified of unread chapters from the list of mangas given.
      *
      * @param mangas the list of manga.
+     * @param amount the amount to queue or null to queue all
      */
-    fun downloadUnreadChapters(mangas: List<Manga>) {
+    fun downloadUnreadChapters(mangas: List<Manga>, amount: Int?) {
         presenterScope.launchNonCancellable {
             mangas.forEach { manga ->
-                val chapters = getChapterByMangaId.await(manga.id)
-                    .filter { !it.read }
-                    .map { it.toDbChapter() }
+                val chapters = getNextChapters.await(manga.id)
+                    .filterNot { chapter ->
+                        downloadManager.queue.any { chapter.id == it.chapter.id } ||
+                            downloadManager.isChapterDownloaded(
+                                chapter.name,
+                                chapter.scanlator,
+                                manga.title,
+                                manga.source,
+                            )
+                    }
+                    .let { if (amount != null) it.take(amount) else it }
 
-                downloadManager.downloadChapters(manga, chapters)
+                downloadManager.downloadChapters(manga, chapters.map { it.toDbChapter() })
             }
         }
     }
@@ -526,7 +546,7 @@ class LibraryPresenter(
 
     @Composable
     fun getMangaForCategory(page: Int): List<LibraryItem> {
-        val unfiltered = remember(categories, loadedManga) {
+        val unfiltered = remember(categories, loadedManga, page) {
             val categoryId = categories.getOrNull(page)?.id ?: -1
             loadedManga[categoryId] ?: emptyList()
         }
@@ -604,5 +624,6 @@ class LibraryPresenter(
     sealed class Dialog {
         data class ChangeCategory(val manga: List<Manga>, val initialSelection: List<CheckboxState<Category>>) : Dialog()
         data class DeleteManga(val manga: List<Manga>) : Dialog()
+        data class DownloadCustomAmount(val manga: List<Manga>, val max: Int) : Dialog()
     }
 }

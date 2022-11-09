@@ -21,6 +21,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.util.fastAll
+import androidx.compose.ui.util.fastAny
 import eu.kanade.presentation.components.AnimeBottomActionMenu
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.EmptyScreen
@@ -33,12 +35,12 @@ import eu.kanade.presentation.updates.updatesLastUpdatedItem
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
+import eu.kanade.tachiyomi.ui.animeupdates.AnimeUpdatesItem
+import eu.kanade.tachiyomi.ui.animeupdates.AnimeUpdatesPresenter
+import eu.kanade.tachiyomi.ui.animeupdates.AnimeUpdatesPresenter.Dialog
+import eu.kanade.tachiyomi.ui.animeupdates.AnimeUpdatesPresenter.Event
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
-import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesItem
-import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesPresenter
-import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesPresenter.Dialog
-import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesPresenter.Event
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.widget.TachiyomiBottomNavigationView
 import kotlinx.coroutines.delay
@@ -54,6 +56,7 @@ fun AnimeUpdateScreen(
     presenter: AnimeUpdatesPresenter,
     onClickCover: (AnimeUpdatesItem) -> Unit,
     onBackClicked: () -> Unit,
+    navigateUp: (() -> Unit)? = null,
 ) {
     val internalOnBackPressed = {
         if (presenter.selectionMode) {
@@ -82,6 +85,7 @@ fun AnimeUpdateScreen(
                 onInvertSelection = { presenter.invertSelection() },
                 onCancelActionMode = { presenter.toggleAllSelection(false) },
                 scrollBehavior = scrollBehavior,
+                navigateUp = navigateUp,
             )
         },
         bottomBar = {
@@ -199,6 +203,7 @@ private fun AnimeUpdatesAppBar(
     onInvertSelection: () -> Unit,
     onCancelActionMode: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
+    navigateUp: (() -> Unit)? = null,
 ) {
     AppBar(
         modifier = modifier,
@@ -230,6 +235,7 @@ private fun AnimeUpdatesAppBar(
         downloadedOnlyMode = downloadedOnlyMode,
         incognitoMode = incognitoMode,
         scrollBehavior = scrollBehavior,
+        navigateUp = navigateUp,
     )
 }
 
@@ -248,24 +254,24 @@ private fun AnimeUpdatesBottomBar(
         modifier = Modifier.fillMaxWidth(),
         onBookmarkClicked = {
             onMultiBookmarkClicked.invoke(selected, true)
-        }.takeIf { selected.any { !it.update.bookmark } },
+        }.takeIf { selected.fastAny { !it.update.bookmark } },
         onRemoveBookmarkClicked = {
             onMultiBookmarkClicked.invoke(selected, false)
-        }.takeIf { selected.all { it.update.bookmark } },
+        }.takeIf { selected.fastAll { it.update.bookmark } },
         onMarkAsSeenClicked = {
             onMultiMarkAsSeenClicked(selected, true)
-        }.takeIf { selected.any { !it.update.seen } },
+        }.takeIf { selected.fastAny { !it.update.seen } },
         onMarkAsUnseenClicked = {
             onMultiMarkAsSeenClicked(selected, false)
-        }.takeIf { selected.any { it.update.seen } },
+        }.takeIf { selected.fastAny { it.update.seen } },
         onDownloadClicked = {
             onDownloadEpisode(selected, EpisodeDownloadAction.START)
         }.takeIf {
-            selected.any { it.downloadStateProvider() != AnimeDownload.State.DOWNLOADED }
+            selected.fastAny { it.downloadStateProvider() != AnimeDownload.State.DOWNLOADED }
         },
         onDeleteClicked = {
             onMultiDeleteClicked(selected)
-        }.takeIf { selected.any { it.downloadStateProvider() == AnimeDownload.State.DOWNLOADED } },
+        }.takeIf { selected.fastAny { it.downloadStateProvider() == AnimeDownload.State.DOWNLOADED } },
         onExternalClicked = {
             onOpenEpisode(selected, true)
         }.takeIf { !playerPreferences.alwaysUseExternalPlayer().get() && selected.size == 1 },

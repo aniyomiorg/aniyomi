@@ -283,12 +283,14 @@ class AnimelibSettingsSheet(
         private val displayGroup: DisplayGroup
         private val badgeGroup: BadgeGroup
         private val tabsGroup: TabsGroup
+        private val otherGroup: OtherGroup
 
         init {
             displayGroup = DisplayGroup()
             badgeGroup = BadgeGroup()
             tabsGroup = TabsGroup()
-            setGroups(listOf(displayGroup, badgeGroup, tabsGroup))
+            otherGroup = OtherGroup()
+            setGroups(listOf(displayGroup, badgeGroup, tabsGroup, otherGroup))
         }
 
         // Refreshes Display Setting selections
@@ -404,6 +406,28 @@ class AnimelibSettingsSheet(
                 when (item) {
                     showTabs -> libraryPreferences.categoryTabs().set(item.checked)
                     showNumberOfItems -> libraryPreferences.categoryNumberOfItems().set(item.checked)
+                    else -> {}
+                }
+                adapter.notifyItemChanged(item)
+            }
+        }
+
+        inner class OtherGroup : Group {
+            private val showContinueWatchingButton = Item.CheckboxGroup(R.string.action_display_show_continue_reading_button, this)
+
+            override val header = Item.Header(R.string.other_header)
+            override val items = listOf(showContinueWatchingButton)
+            override val footer = null
+
+            override fun initModels() {
+                showContinueWatchingButton.checked = libraryPreferences.showContinueReadingButton().get()
+            }
+
+            override fun onItemClicked(item: Item) {
+                item as Item.CheckboxGroup
+                item.checked = !item.checked
+                when (item) {
+                    showContinueWatchingButton -> libraryPreferences.showContinueReadingButton().set(item.checked)
                     else -> {}
                 }
                 adapter.notifyItemChanged(item)

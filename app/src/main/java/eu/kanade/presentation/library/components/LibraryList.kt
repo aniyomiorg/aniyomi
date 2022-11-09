@@ -2,6 +2,7 @@ package eu.kanade.presentation.library.components
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -26,10 +27,12 @@ fun LibraryList(
     showUnreadBadges: Boolean,
     showLocalBadges: Boolean,
     showLanguageBadges: Boolean,
+    showContinueReadingButton: Boolean,
     contentPadding: PaddingValues,
     selection: List<LibraryManga>,
     onClick: (LibraryManga) -> Unit,
     onLongClick: (LibraryManga) -> Unit,
+    onClickContinueReading: (LibraryManga) -> Unit,
     searchQuery: String?,
     onGlobalSearchClicked: () -> Unit,
 ) {
@@ -39,7 +42,10 @@ fun LibraryList(
     ) {
         item {
             if (searchQuery.isNullOrEmpty().not()) {
-                TextButton(onClick = onGlobalSearchClicked) {
+                TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = onGlobalSearchClicked,
+                ) {
                     Text(
                         text = stringResource(R.string.action_global_search_query, searchQuery!!),
                         modifier = Modifier.zIndex(99f),
@@ -68,8 +74,10 @@ fun LibraryList(
                     UnreadBadge(enabled = showUnreadBadges, item = libraryItem)
                     LanguageBadge(showLanguage = showLanguageBadges, showLocal = showLocalBadges, item = libraryItem)
                 },
+                showContinueReadingButton = showContinueReadingButton,
                 onLongClick = { onLongClick(libraryItem.libraryManga) },
                 onClick = { onClick(libraryItem.libraryManga) },
+                onClickContinueReading = { onClickContinueReading(libraryItem.libraryManga) },
             )
         }
     }

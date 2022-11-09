@@ -131,7 +131,7 @@ open class BrowseSourcePresenter(
                 .map {
                     it.map { sManga ->
                         withIOContext {
-                            networkToLocalManga.await(sManga.toDomainManga(), sourceId)
+                            networkToLocalManga.await(sManga.toDomainManga(sourceId))
                         }
                     }
                 }
@@ -154,15 +154,15 @@ open class BrowseSourcePresenter(
     }
 
     fun reset() {
-        state.filters = source!!.getFilterList()
-        if (currentFilter !is Filter.UserInput) return
-        state.currentFilter = (currentFilter as Filter.UserInput).copy(filters = state.filters)
+        val source = source ?: return
+        state.filters = source.getFilterList()
     }
 
     fun search(query: String? = null, filters: FilterList? = null) {
         Filter.valueOf(query ?: "").let {
             if (it !is Filter.UserInput) {
                 state.currentFilter = it
+                state.searchQuery = null
                 return
             }
         }

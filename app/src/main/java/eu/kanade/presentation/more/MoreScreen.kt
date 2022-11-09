@@ -1,5 +1,9 @@
 package eu.kanade.presentation.more
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CloudOff
@@ -24,6 +28,7 @@ import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.components.AppStateBanners
 import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.ScrollbarLazyColumn
+import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.tachiyomi.R
@@ -40,6 +45,7 @@ fun MoreScreen(
     presenter: MorePresenter,
     onClickHistory: () -> Unit,
     onClickAnimeDownloadQueue: () -> Unit,
+    isFDroid: Boolean,
     onClickDownloadQueue: () -> Unit,
     onClickAnimeCategories: () -> Unit,
     onClickCategories: () -> Unit,
@@ -56,8 +62,21 @@ fun MoreScreen(
 
     ScrollbarLazyColumn(
         modifier = Modifier.statusBarsPadding(),
-        contentPadding = TachiyomiBottomNavigationView.withBottomNavPadding(),
+        contentPadding = TachiyomiBottomNavigationView.withBottomNavPadding(
+            WindowInsets.navigationBars.asPaddingValues(),
+        ),
     ) {
+        if (isFDroid) {
+            item {
+                WarningBanner(
+                    textRes = R.string.fdroid_warning,
+                    modifier = Modifier.clickable {
+                        uriHandler.openUri("https://tachiyomi.org/help/faq/#how-do-i-migrate-from-the-f-droid-version")
+                    },
+                )
+            }
+        }
+
         item {
             LogoHeader()
         }

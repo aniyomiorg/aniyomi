@@ -110,9 +110,11 @@
     <string name="action_disable_all">Disable all</string>
     <string name="action_edit">Edit</string>
     <string name="action_add">Add</string>
+    <string name="action_open_random_manga">Open random entry</string>
     <string name="action_add_category">Add category</string>
-    <string name="action_edit_categories">Edit manga categories</string>
+    <string name="action_edit_categories">Edit categories</string>
     <string name="action_edit_anime_categories">Edit anime categories</string>
+    <string name="action_edit_manga_categories">Edit manga categories</string>
     <string name="action_rename_category">Rename category</string>
     <string name="action_move_category">Set categories</string>
     <string name="delete_category_confirmation">Do you wish to delete the category \"%s\"?</string>
@@ -156,6 +158,7 @@
     <string name="action_display_language_badge">Language</string>
     <string name="action_display_show_tabs">Show category tabs</string>
     <string name="action_display_show_number_of_items">Show number of items</string>
+    <string name="action_display_show_continue_reading_button">Show continue watching/reading button</string>
     <string name="action_disable">Disable</string>
     <string name="action_pin">Pin</string>
     <string name="action_unpin">Unpin</string>
@@ -300,7 +303,7 @@
     <string name="restrictions">Restrictions: %s</string>
     <string name="only_update_restrictions">Only update: %s</string>
 
-    <string name="pref_library_update_manga_restriction">Skip updating titles</string>
+    <string name="pref_library_update_manga_restriction">Skip updating entries</string>
     <string name="pref_update_only_completely_read">With unseen episode(s)/unread chapter(s)</string>
     <string name="pref_update_only_non_completed">With \"Completed\" status</string>
     <string name="pref_update_only_started">That haven\'t been started</string>
@@ -402,7 +405,7 @@
     <string name="pref_reader_actions">Actions</string>
     <string name="pref_read_with_long_tap">Show on long tap</string>
     <string name="pref_create_folder_per_manga">Save pages into separate folders</string>
-    <string name="pref_create_folder_per_manga_summary">Creates folders according to entries\' titles</string>
+    <string name="pref_create_folder_per_manga_summary">Creates folders according to entries\' title</string>
     <string name="pref_reader_theme">Background color</string>
     <string name="white_background">White</string>
     <string name="gray_background">Gray</string>
@@ -669,6 +672,7 @@
 
 
     <!-- More -->
+    <string name="fdroid_warning">F-Droid builds are not officially supported.\nTap to learn more.</string>
     <string name="label_downloaded_only">Downloaded only</string>
     <string name="pref_incognito_mode">Incognito mode</string>
     <string name="pref_incognito_mode_summary">Pauses your history</string>
@@ -701,6 +705,7 @@
     <string name="downloaded_episodes">Downloaded episodes</string>
     <string name="badges_header">Badges</string>
     <string name="tabs_header">Tabs</string>
+    <string name="other_header">Other</string>
 
     <!-- Catalogue fragment -->
     <!-- missing prompt after Compose rewrite #7901 -->
@@ -961,8 +966,8 @@
     <string name="notification_new_chapters">New chapters found</string>
     <string name="notification_new_episodes">New episodes found</string>
     <plurals name="notification_new_chapters_summary">
-        <item quantity="one">For %d title</item>
-        <item quantity="other">For %d titles</item>
+        <item quantity="one">For %d entry</item>
+        <item quantity="other">For %d entries</item>
     </plurals>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one">For 1 title</item>
@@ -1037,6 +1042,7 @@
     <string name="information_no_recent_manga">Nothing read recently</string>
     <string name="information_no_recent_anime">Nothing watched recently</string>
     <string name="information_empty_library">Your library is empty</string>
+    <string name="information_no_entries_found">No entries found in this category</string>
     <string name="getting_started_guide">Getting started guide</string>
     <string name="information_empty_category">You have no categories. Tap the plus button to create one for organizing your library.</string>
     <string name="information_empty_category_dialog">You don\'t have any categories yet.</string>

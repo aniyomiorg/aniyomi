@@ -6,8 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import eu.kanade.core.util.insertSeparators
-import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesItem
-import eu.kanade.tachiyomi.ui.recent.animeupdates.AnimeUpdatesPresenter
+import eu.kanade.tachiyomi.ui.animeupdates.AnimeUpdatesItem
+import eu.kanade.tachiyomi.ui.animeupdates.AnimeUpdatesPresenter
 import eu.kanade.tachiyomi.util.lang.toDateKey
 import java.util.Date
 

@@ -22,14 +22,14 @@ import kotlin.math.roundToInt
 
 fun Modifier.selectedBackground(isSelected: Boolean): Modifier = composed {
     if (isSelected) {
-        val alpha = if (isSystemInDarkTheme()) 0.08f else 0.22f
+        val alpha = if (isSystemInDarkTheme()) 0.16f else 0.22f
         background(MaterialTheme.colorScheme.secondary.copy(alpha = alpha))
     } else {
         this
     }
 }
 
-fun Modifier.secondaryItemAlpha(): Modifier = this.alpha(.78f)
+fun Modifier.secondaryItemAlpha(): Modifier = this.alpha(SecondaryItemAlpha)
 
 fun Modifier.clickableNoIndication(
     onLongClick: (() -> Unit)? = null,

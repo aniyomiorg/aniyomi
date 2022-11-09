@@ -29,11 +29,9 @@ import eu.kanade.domain.animedownload.interactor.DeleteAnimeDownload
 import eu.kanade.domain.animeextension.interactor.GetAnimeExtensionLanguages
 import eu.kanade.domain.animeextension.interactor.GetAnimeExtensionSources
 import eu.kanade.domain.animeextension.interactor.GetAnimeExtensionsByType
-import eu.kanade.domain.animehistory.interactor.DeleteAllAnimeHistory
 import eu.kanade.domain.animehistory.interactor.GetAnimeHistory
-import eu.kanade.domain.animehistory.interactor.GetNextEpisode
-import eu.kanade.domain.animehistory.interactor.RemoveAnimeHistoryByAnimeId
-import eu.kanade.domain.animehistory.interactor.RemoveAnimeHistoryById
+import eu.kanade.domain.animehistory.interactor.GetNextEpisodes
+import eu.kanade.domain.animehistory.interactor.RemoveAnimeHistory
 import eu.kanade.domain.animehistory.interactor.UpsertAnimeHistory
 import eu.kanade.domain.animehistory.repository.AnimeHistoryRepository
 import eu.kanade.domain.animesource.interactor.GetAnimeSourcesWithFavoriteCount
@@ -96,11 +94,9 @@ import eu.kanade.domain.episode.repository.EpisodeRepository
 import eu.kanade.domain.extension.interactor.GetExtensionLanguages
 import eu.kanade.domain.extension.interactor.GetExtensionSources
 import eu.kanade.domain.extension.interactor.GetExtensionsByType
-import eu.kanade.domain.history.interactor.DeleteAllHistory
 import eu.kanade.domain.history.interactor.GetHistory
-import eu.kanade.domain.history.interactor.GetNextChapter
-import eu.kanade.domain.history.interactor.RemoveHistoryById
-import eu.kanade.domain.history.interactor.RemoveHistoryByMangaId
+import eu.kanade.domain.history.interactor.GetNextChapters
+import eu.kanade.domain.history.interactor.RemoveHistory
 import eu.kanade.domain.history.interactor.UpsertHistory
 import eu.kanade.domain.history.repository.HistoryRepository
 import eu.kanade.domain.manga.interactor.GetDuplicateLibraryManga
@@ -171,7 +167,7 @@ class DomainModule : InjektModule {
         addFactory { GetAnimelibAnime(get()) }
         addFactory { GetAnimeWithEpisodes(get(), get()) }
         addFactory { GetAnime(get()) }
-        addFactory { GetNextEpisode(get(), get(), get(), get()) }
+        addFactory { GetNextEpisodes(get(), get(), get()) }
         addFactory { ResetViewerFlagsAnime(get()) }
         addFactory { SetAnimeEpisodeFlags(get()) }
         addFactory { SetAnimeDefaultEpisodeFlags(get(), get(), get()) }
@@ -186,7 +182,7 @@ class DomainModule : InjektModule {
         addFactory { GetLibraryManga(get()) }
         addFactory { GetMangaWithChapters(get(), get()) }
         addFactory { GetManga(get()) }
-        addFactory { GetNextChapter(get(), get(), get(), get()) }
+        addFactory { GetNextChapters(get(), get(), get()) }
         addFactory { ResetViewerFlags(get()) }
         addFactory { SetMangaChapterFlags(get()) }
         addFactory { SetMangaDefaultChapterFlags(get(), get(), get()) }
@@ -226,11 +222,9 @@ class DomainModule : InjektModule {
         addFactory { SyncChaptersWithTrackServiceTwoWay(get(), get()) }
 
         addSingletonFactory<AnimeHistoryRepository> { AnimeHistoryRepositoryImpl(get()) }
-        addFactory { DeleteAllAnimeHistory(get()) }
         addFactory { GetAnimeHistory(get()) }
         addFactory { UpsertAnimeHistory(get()) }
-        addFactory { RemoveAnimeHistoryById(get()) }
-        addFactory { RemoveAnimeHistoryByAnimeId(get()) }
+        addFactory { RemoveAnimeHistory(get()) }
 
         addFactory { DeleteAnimeDownload(get(), get()) }
 
@@ -239,11 +233,9 @@ class DomainModule : InjektModule {
         addFactory { GetAnimeExtensionLanguages(get(), get()) }
 
         addSingletonFactory<HistoryRepository> { HistoryRepositoryImpl(get()) }
-        addFactory { DeleteAllHistory(get()) }
         addFactory { GetHistory(get()) }
         addFactory { UpsertHistory(get()) }
-        addFactory { RemoveHistoryById(get()) }
-        addFactory { RemoveHistoryByMangaId(get()) }
+        addFactory { RemoveHistory(get()) }
 
         addFactory { DeleteDownload(get(), get()) }
 

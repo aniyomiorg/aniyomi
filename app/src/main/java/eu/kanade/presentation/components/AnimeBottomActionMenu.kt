@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.DoneAll
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Input
+import androidx.compose.material.icons.outlined.Label
 import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.RemoveDone
 import androidx.compose.material.ripple.rememberRipple
@@ -37,8 +39,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -48,6 +52,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.manga.DownloadAction
 import eu.kanade.tachiyomi.R
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -190,6 +195,7 @@ private fun RowScope.Button(
     toConfirm: Boolean,
     onLongClick: () -> Unit,
     onClick: () -> Unit,
+    content: (@Composable () -> Unit)? = null,
 ) {
     val animatedWeight by animateFloatAsState(if (toConfirm) 2f else 1f)
     Column(
@@ -220,6 +226,104 @@ private fun RowScope.Button(
                 maxLines = 1,
                 style = MaterialTheme.typography.labelSmall,
             )
+        }
+        content?.invoke()
+    }
+}
+
+@Composable
+fun AnimelibBottomActionMenu(
+    visible: Boolean,
+    modifier: Modifier = Modifier,
+    onChangeCategoryClicked: (() -> Unit)?,
+    onMarkAsSeenClicked: (() -> Unit)?,
+    onMarkAsUnseenClicked: (() -> Unit)?,
+    onDownloadClicked: ((DownloadAction) -> Unit)?,
+    onDeleteClicked: (() -> Unit)?,
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = expandVertically(expandFrom = Alignment.Bottom),
+        exit = shrinkVertically(shrinkTowards = Alignment.Bottom),
+    ) {
+        val scope = rememberCoroutineScope()
+        Surface(
+            modifier = modifier,
+            shape = MaterialTheme.shapes.large.copy(bottomEnd = ZeroCornerSize, bottomStart = ZeroCornerSize),
+            tonalElevation = 3.dp,
+        ) {
+            val haptic = LocalHapticFeedback.current
+            val confirm = remember { mutableStateListOf(false, false, false, false, false) }
+            var resetJob: Job? = remember { null }
+            val onLongClickItem: (Int) -> Unit = { toConfirmIndex ->
+                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                (0 until 5).forEach { i -> confirm[i] = i == toConfirmIndex }
+                resetJob?.cancel()
+                resetJob = scope.launch {
+                    delay(1.seconds)
+                    if (isActive) confirm[toConfirmIndex] = false
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .padding(horizontal = 8.dp, vertical = 12.dp),
+            ) {
+                if (onChangeCategoryClicked != null) {
+                    Button(
+                        title = stringResource(R.string.action_move_category),
+                        icon = Icons.Outlined.Label,
+                        toConfirm = confirm[0],
+                        onLongClick = { onLongClickItem(0) },
+                        onClick = onChangeCategoryClicked,
+                    )
+                }
+                if (onMarkAsSeenClicked != null) {
+                    Button(
+                        title = stringResource(R.string.action_mark_as_seen),
+                        icon = Icons.Outlined.DoneAll,
+                        toConfirm = confirm[1],
+                        onLongClick = { onLongClickItem(1) },
+                        onClick = onMarkAsSeenClicked,
+                    )
+                }
+                if (onMarkAsUnseenClicked != null) {
+                    Button(
+                        title = stringResource(R.string.action_mark_as_unseen),
+                        icon = Icons.Outlined.RemoveDone,
+                        toConfirm = confirm[2],
+                        onLongClick = { onLongClickItem(2) },
+                        onClick = onMarkAsUnseenClicked,
+                    )
+                }
+                if (onDownloadClicked != null) {
+                    var downloadExpanded by remember { mutableStateOf(false) }
+                    Button(
+                        title = stringResource(R.string.action_download),
+                        icon = Icons.Outlined.Download,
+                        toConfirm = confirm[3],
+                        onLongClick = { onLongClickItem(3) },
+                        onClick = { downloadExpanded = !downloadExpanded },
+                    ) {
+                        val onDismissRequest = { downloadExpanded = false }
+                        AnimeDownloadDropdownMenu(
+                            expanded = downloadExpanded,
+                            onDismissRequest = onDismissRequest,
+                            onDownloadClicked = onDownloadClicked,
+                            includeDownloadAllOption = false,
+                        )
+                    }
+                }
+                if (onDeleteClicked != null) {
+                    Button(
+                        title = stringResource(R.string.action_delete),
+                        icon = Icons.Outlined.Delete,
+                        toConfirm = confirm[4],
+                        onLongClick = { onLongClickItem(4) },
+                        onClick = onDeleteClicked,
+                    )
+                }
+            }
         }
     }
 }

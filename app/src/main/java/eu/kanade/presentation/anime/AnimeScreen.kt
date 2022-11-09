@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
@@ -44,6 +43,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.util.fastAll
+import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastMap
 import eu.kanade.domain.episode.model.Episode
 import eu.kanade.presentation.anime.components.AnimeActionRow
 import eu.kanade.presentation.anime.components.AnimeEpisodeListItem
@@ -214,7 +216,7 @@ private fun AnimeScreenSmallImpl(
     val episodes = remember(state) { state.processedEpisodes.toList() }
 
     val internalOnBackPressed = {
-        if (episodes.any { it.selected }) {
+        if (episodes.fastAny { it.selected }) {
             onAllEpisodeSelected(false)
         } else {
             onBackClicked()
@@ -222,8 +224,6 @@ private fun AnimeScreenSmallImpl(
     }
     BackHandler(onBack = internalOnBackPressed)
     Scaffold(
-        modifier = Modifier
-            .padding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal).asPaddingValues()),
         topBar = {
             val firstVisibleItemIndex by remember {
                 derivedStateOf { episodeListState.firstVisibleItemIndex }
@@ -270,13 +270,13 @@ private fun AnimeScreenSmallImpl(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = episodes.any { !it.episode.seen } && episodes.none { it.selected },
+                visible = episodes.fastAny { !it.episode.seen } && episodes.fastAll { !it.selected },
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
                 ExtendedFloatingActionButton(
                     text = {
-                        val id = if (episodes.any { it.episode.seen }) {
+                        val id = if (episodes.fastAny { it.episode.seen }) {
                             R.string.action_resume
                         } else {
                             R.string.action_start
@@ -291,11 +291,6 @@ private fun AnimeScreenSmallImpl(
                     },
                     onClick = onContinueWatching,
                     expanded = episodeListState.isScrollingUp() || episodeListState.isScrolledToEnd(),
-                    modifier = Modifier
-                        .padding(
-                            WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
-                                .asPaddingValues(),
-                        ),
                 )
             }
         },
@@ -305,17 +300,21 @@ private fun AnimeScreenSmallImpl(
         SwipeRefresh(
             refreshing = state.isRefreshingData,
             onRefresh = onRefresh,
-            enabled = episodes.none { it.selected },
+            enabled = episodes.fastAll { !it.selected },
             indicatorPadding = contentPadding,
         ) {
+            val layoutDirection = LocalLayoutDirection.current
             VerticalFastScroller(
                 listState = episodeListState,
                 topContentPadding = topPadding,
+                endContentPadding = contentPadding.calculateEndPadding(layoutDirection),
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxHeight(),
                     state = episodeListState,
                     contentPadding = PaddingValues(
+                        start = contentPadding.calculateStartPadding(layoutDirection),
+                        end = contentPadding.calculateEndPadding(layoutDirection),
                         bottom = contentPadding.calculateBottomPadding(),
                     ),
                 ) {
@@ -369,6 +368,7 @@ private fun AnimeScreenSmallImpl(
                         contentType = MangaScreenItem.CHAPTER_HEADER,
                     ) {
                         EpisodeHeader(
+                            enabled = episodes.fastAll { !it.selected },
                             episodeCount = episodes.size,
                             onClick = onFilterClicked,
                         )
@@ -433,7 +433,7 @@ fun AnimeScreenLargeImpl(
     SwipeRefresh(
         refreshing = state.isRefreshingData,
         onRefresh = onRefresh,
-        enabled = episodes.none { it.selected },
+        enabled = episodes.fastAll { !it.selected },
         indicatorPadding = PaddingValues(
             start = insetPadding.calculateStartPadding(layoutDirection),
             top = with(density) { topBarHeight.toDp() },
@@ -443,7 +443,7 @@ fun AnimeScreenLargeImpl(
         val episodeListState = rememberLazyListState()
 
         val internalOnBackPressed = {
-            if (episodes.any { it.selected }) {
+            if (episodes.fastAny { it.selected }) {
                 onAllEpisodeSelected(false)
             } else {
                 onBackClicked()
@@ -452,12 +452,11 @@ fun AnimeScreenLargeImpl(
         BackHandler(onBack = internalOnBackPressed)
 
         Scaffold(
-            modifier = Modifier.padding(insetPadding),
             topBar = {
                 MangaToolbar(
                     modifier = Modifier.onSizeChanged { topBarHeight = (it.height) },
                     title = state.anime.title,
-                    titleAlphaProvider = { if (episodes.any { it.selected }) 1f else 0f },
+                    titleAlphaProvider = { if (episodes.fastAny { it.selected }) 1f else 0f },
                     backgroundAlphaProvider = { 1f },
                     hasFilters = state.anime.episodesFiltered(),
                     incognitoMode = state.isIncognitoMode,
@@ -468,6 +467,7 @@ fun AnimeScreenLargeImpl(
                     onClickDownload = onDownloadActionClicked,
                     onClickEditCategory = onEditCategoryClicked,
                     onClickMigrate = onMigrateClicked,
+                    changeAnimeSkipIntro = changeAnimeSkipIntro,
                     actionModeCounter = episodes.count { it.selected },
                     onSelectAll = { onAllEpisodeSelected(true) },
                     onInvertSelection = { onInvertSelection() },
@@ -493,13 +493,13 @@ fun AnimeScreenLargeImpl(
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             floatingActionButton = {
                 AnimatedVisibility(
-                    visible = episodes.any { !it.episode.seen } && episodes.none { it.selected },
+                    visible = episodes.fastAny { !it.episode.seen } && episodes.fastAll { !it.selected },
                     enter = fadeIn(),
                     exit = fadeOut(),
                 ) {
                     ExtendedFloatingActionButton(
                         text = {
-                            val id = if (episodes.any { it.episode.seen }) {
+                            val id = if (episodes.fastAny { it.episode.seen }) {
                                 R.string.action_resume
                             } else {
                                 R.string.action_start
@@ -509,17 +509,20 @@ fun AnimeScreenLargeImpl(
                         icon = { Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = null) },
                         onClick = onContinueWatching,
                         expanded = episodeListState.isScrollingUp() || episodeListState.isScrolledToEnd(),
-                        modifier = Modifier
-                            .padding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom).asPaddingValues()),
                     )
                 }
             },
         ) { contentPadding ->
             TwoPanelBox(
+                modifier = Modifier.padding(
+                    start = contentPadding.calculateStartPadding(layoutDirection),
+                    end = contentPadding.calculateEndPadding(layoutDirection),
+                ),
                 startContent = {
                     Column(
                         modifier = Modifier
-                            .verticalScroll(rememberScrollState()),
+                            .verticalScroll(rememberScrollState())
+                            .padding(bottom = contentPadding.calculateBottomPadding()),
                     ) {
                         AnimeInfoBox(
                             isTabletUi = true,
@@ -568,6 +571,7 @@ fun AnimeScreenLargeImpl(
                                 contentType = MangaScreenItem.CHAPTER_HEADER,
                             ) {
                                 EpisodeHeader(
+                                    enabled = episodes.fastAll { !it.selected },
                                     episodeCount = episodes.size,
                                     onClick = onFilterButtonClicked,
                                 )
@@ -604,35 +608,35 @@ private fun SharedAnimeBottomActionMenu(
         visible = selected.isNotEmpty(),
         modifier = modifier.fillMaxWidth(fillFraction),
         onBookmarkClicked = {
-            onMultiBookmarkClicked.invoke(selected.map { it.episode }, true)
-        }.takeIf { selected.any { !it.episode.bookmark } },
+            onMultiBookmarkClicked.invoke(selected.fastMap { it.episode }, true)
+        }.takeIf { selected.fastAny { !it.episode.bookmark } },
         onRemoveBookmarkClicked = {
-            onMultiBookmarkClicked.invoke(selected.map { it.episode }, false)
-        }.takeIf { selected.all { it.episode.bookmark } },
+            onMultiBookmarkClicked.invoke(selected.fastMap { it.episode }, false)
+        }.takeIf { selected.fastAll { it.episode.bookmark } },
         onMarkAsSeenClicked = {
-            onMultiMarkAsSeenClicked(selected.map { it.episode }, true)
-        }.takeIf { selected.any { !it.episode.seen } },
+            onMultiMarkAsSeenClicked(selected.fastMap { it.episode }, true)
+        }.takeIf { selected.fastAny { !it.episode.seen } },
         onMarkAsUnseenClicked = {
-            onMultiMarkAsSeenClicked(selected.map { it.episode }, false)
-        }.takeIf { selected.any { it.episode.seen || it.episode.lastSecondSeen > 0L } },
+            onMultiMarkAsSeenClicked(selected.fastMap { it.episode }, false)
+        }.takeIf { selected.fastAny { it.episode.seen || it.episode.lastSecondSeen > 0L } },
         onMarkPreviousAsSeenClicked = {
             onMarkPreviousAsSeenClicked(selected[0].episode)
         }.takeIf { selected.size == 1 },
         onDownloadClicked = {
             onDownloadEpisode!!(selected.toList(), EpisodeDownloadAction.START)
         }.takeIf {
-            onDownloadEpisode != null && selected.any { it.downloadState != AnimeDownload.State.DOWNLOADED }
+            onDownloadEpisode != null && selected.fastAny { it.downloadState != AnimeDownload.State.DOWNLOADED }
         },
         onDeleteClicked = {
-            onMultiDeleteClicked(selected.map { it.episode })
+            onMultiDeleteClicked(selected.fastMap { it.episode })
         }.takeIf {
-            onDownloadEpisode != null && selected.any { it.downloadState == AnimeDownload.State.DOWNLOADED }
+            onDownloadEpisode != null && selected.fastAny { it.downloadState == AnimeDownload.State.DOWNLOADED }
         },
         onExternalClicked = {
-            onEpisodeClicked(selected.map { it.episode }.first(), true)
+            onEpisodeClicked(selected.fastMap { it.episode }.first(), true)
         }.takeIf { !preferences.alwaysUseExternalPlayer().get() && selected.size == 1 },
         onInternalClicked = {
-            onEpisodeClicked(selected.map { it.episode }.first(), true)
+            onEpisodeClicked(selected.fastMap { it.episode }.first(), true)
         }.takeIf { preferences.alwaysUseExternalPlayer().get() && selected.size == 1 },
     )
 }
@@ -658,6 +662,7 @@ private fun LazyListScope.sharedEpisodeItems(
             seen = episodeItem.episode.seen,
             bookmark = episodeItem.episode.bookmark,
             selected = episodeItem.selected,
+            downloadIndicatorEnabled = episodes.fastAll { !it.selected },
             downloadStateProvider = { episodeItem.downloadState },
             downloadProgressProvider = { episodeItem.downloadProgress },
             onLongClick = {
@@ -689,7 +694,7 @@ private fun onEpisodeItemClick(
 ) {
     when {
         episodeItem.selected -> onToggleSelection(false)
-        episodes.any { it.selected } -> onToggleSelection(true)
+        episodes.fastAny { it.selected } -> onToggleSelection(true)
         else -> onEpisodeClicked(episodeItem.episode, false)
     }
 }

@@ -28,8 +28,8 @@ android {
         applicationId = "xyz.jmir.tachiyomi.mi"
         minSdk = AndroidConfig.minSdk
         targetSdk = AndroidConfig.targetSdk
-        versionCode = 90
-        versionName = "0.14.0.0"
+        versionCode = 91
+        versionName = "0.14.2.0"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -60,6 +60,7 @@ android {
         named("debug") {
             versionNameSuffix = "-${getCommitCount()}"
             applicationIdSuffix = ".debug"
+            isPseudoLocalesEnabled = true
         }
         named("release") {
             isShrinkResources = true
@@ -100,7 +101,8 @@ android {
             dimension = "default"
         }
         create("dev") {
-            resourceConfigurations.addAll(listOf("en", "de", "ar", "xxhdpi"))
+            // Include pseudolocales: https://developer.android.com/guide/topics/resources/pseudolocales
+            resourceConfigurations.addAll(listOf("en", "en_XA", "ar_XB", "xxhdpi"))
             dimension = "default"
         }
     }
@@ -114,7 +116,6 @@ android {
             "META-INF/README.md",
             "META-INF/NOTICE",
             "META-INF/*.kotlin_module",
-            "META-INF/*.version",
         ))
 
         jniLibs.pickFirsts.addAll(listOf(
@@ -206,6 +207,8 @@ dependencies {
     implementation(libs.sqldelight.android.paging)
 
     implementation(kotlinx.reflect)
+
+    implementation(platform(kotlinx.coroutines.bom))
     implementation(kotlinx.bundles.coroutines)
 
     // AndroidX libraries
@@ -329,6 +332,11 @@ androidComponents {
             variantBuilder.enable = variantBuilder.productFlavors.containsAll(listOf("default" to "dev"))
         }
     }
+    onVariants(selector().withFlavor("default" to "standard")) {
+        // Only excluding in standard flavor because this breaks
+        // Layout Inspector's Compose tree
+        it.packaging.resources.excludes.add("META-INF/*.version")
+    }
 }
 
 tasks {
@@ -347,7 +355,6 @@ tasks {
     withType<KotlinCompile> {
         kotlinOptions.freeCompilerArgs += listOf(
             "-opt-in=coil.annotation.ExperimentalCoilApi",
-            "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi",
             "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi",
             "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
             "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",

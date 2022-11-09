@@ -272,6 +272,10 @@ class AnimeDownloader(
      * @param autoStart whether to start the downloader after enqueing the episodes.
      */
     fun queueEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean, changeDownloader: Boolean = false) = launchIO {
+        if (episodes.isEmpty()) {
+            return@launchIO
+        }
+
         val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: return@launchIO
         val wasEmpty = queue.isEmpty()
         // Called in background thread, the operation can be slow with SAF.

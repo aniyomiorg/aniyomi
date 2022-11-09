@@ -21,11 +21,13 @@ fun AnimelibCompactGrid(
     showUnreadBadges: Boolean,
     showLocalBadges: Boolean,
     showLanguageBadges: Boolean,
+    showContinueWatchingButton: Boolean,
     columns: Int,
     contentPadding: PaddingValues,
     selection: List<AnimelibAnime>,
     onClick: (AnimelibAnime) -> Unit,
     onLongClick: (AnimelibAnime) -> Unit,
+    onClickContinueWatching: (AnimelibAnime) -> Unit,
     searchQuery: String?,
     onGlobalSearchClicked: () -> Unit,
 ) {
@@ -68,8 +70,10 @@ fun AnimelibCompactGrid(
                         item = animelibItem,
                     )
                 },
+                showContinueReadingButton = showContinueWatchingButton,
                 onLongClick = { onLongClick(animelibItem.animelibAnime) },
                 onClick = { onClick(animelibItem.animelibAnime) },
+                onClickContinueReading = { onClickContinueWatching(animelibItem.animelibAnime) },
             )
         }
     }

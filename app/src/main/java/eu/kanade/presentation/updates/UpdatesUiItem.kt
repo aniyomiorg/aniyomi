@@ -1,7 +1,6 @@
 package eu.kanade.presentation.updates
 
 import android.text.format.DateUtils
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -43,9 +41,10 @@ import eu.kanade.presentation.components.MangaCover
 import eu.kanade.presentation.components.RelativeDateHeader
 import eu.kanade.presentation.util.ReadItemAlpha
 import eu.kanade.presentation.util.horizontalPadding
+import eu.kanade.presentation.util.selectedBackground
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.model.Download
-import eu.kanade.tachiyomi.ui.recent.updates.UpdatesItem
+import eu.kanade.tachiyomi.ui.updates.UpdatesItem
 import java.text.DateFormat
 import java.util.Date
 import kotlin.time.Duration.Companion.minutes
@@ -135,6 +134,7 @@ fun LazyListScope.updatesUiItems(
                     onDownloadChapter = {
                         if (selectionMode.not()) onDownloadChapter(listOf(updatesItem), it)
                     },
+                    downloadIndicatorEnabled = selectionMode.not(),
                     downloadStateProvider = updatesItem.downloadStateProvider,
                     downloadProgressProvider = updatesItem.downloadProgressProvider,
                 )
@@ -153,13 +153,14 @@ fun UpdatesUiItem(
     onClickCover: () -> Unit,
     onDownloadChapter: (ChapterDownloadAction) -> Unit,
     // Download Indicator
+    downloadIndicatorEnabled: Boolean,
     downloadStateProvider: () -> Download.State,
     downloadProgressProvider: () -> Int,
 ) {
     val haptic = LocalHapticFeedback.current
     Row(
         modifier = modifier
-            .background(if (selected) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent)
+            .selectedBackground(selected)
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = {
@@ -225,6 +226,7 @@ fun UpdatesUiItem(
             }
         }
         ChapterDownloadIndicator(
+            enabled = downloadIndicatorEnabled,
             modifier = Modifier.padding(start = 4.dp),
             downloadStateProvider = downloadStateProvider,
             downloadProgressProvider = downloadProgressProvider,

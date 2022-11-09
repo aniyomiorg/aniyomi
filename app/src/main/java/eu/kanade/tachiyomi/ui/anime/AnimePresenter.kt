@@ -10,8 +10,6 @@ import eu.kanade.domain.anime.interactor.GetAnimeWithEpisodes
 import eu.kanade.domain.anime.interactor.GetDuplicateLibraryAnime
 import eu.kanade.domain.anime.interactor.SetAnimeEpisodeFlags
 import eu.kanade.domain.anime.interactor.UpdateAnime
-import eu.kanade.domain.anime.model.TriStateFilter
-import eu.kanade.domain.anime.model.isLocal
 import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.animetrack.interactor.DeleteAnimeTrack
 import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
@@ -29,6 +27,7 @@ import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
 import eu.kanade.domain.episode.interactor.UpdateEpisode
 import eu.kanade.domain.episode.model.EpisodeUpdate
+import eu.kanade.domain.episode.model.applyFilters
 import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.ui.UiPreferences
@@ -46,6 +45,7 @@ import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.ui.anime.track.TrackItem
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
 import eu.kanade.tachiyomi.util.episode.getEpisodeSort
+import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.toRelativeString
@@ -76,7 +76,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 import logcat.LogPriority
-import okhttp3.internal.format
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DateFormat
@@ -581,13 +580,7 @@ class AnimePresenter(
      */
     fun getNextUnseenEpisode(): DomainEpisode? {
         val successState = successState ?: return null
-        return successState.processedEpisodes.map { it.episode }.let { episodes ->
-            if (successState.anime.sortDescending()) {
-                episodes.findLast { !it.seen }
-            } else {
-                episodes.find { !it.seen }
-            }
-        }
+        return successState.episodes.getNextUnseen(successState.anime)
     }
 
     fun getUnseenEpisodes(): List<DomainEpisode> {
@@ -1097,40 +1090,6 @@ sealed class AnimeScreenState {
 
         val processedEpisodes: Sequence<EpisodeItem>
             get() = episodes.applyFilters(anime)
-
-        /**
-         * Applies the view filters to the list of episodes obtained from the database.
-         * @return an observable of the list of episodes filtered and sorted.
-         */
-        private fun List<EpisodeItem>.applyFilters(anime: DomainAnime): Sequence<EpisodeItem> {
-            val isLocalAnime = anime.isLocal()
-            val unseenFilter = anime.unseenFilter
-            val downloadedFilter = anime.downloadedFilter
-            val bookmarkedFilter = anime.bookmarkedFilter
-            return asSequence()
-                .filter { (episode) ->
-                    when (unseenFilter) {
-                        TriStateFilter.DISABLED -> true
-                        TriStateFilter.ENABLED_IS -> !episode.seen
-                        TriStateFilter.ENABLED_NOT -> episode.seen
-                    }
-                }
-                .filter { (episode) ->
-                    when (bookmarkedFilter) {
-                        TriStateFilter.DISABLED -> true
-                        TriStateFilter.ENABLED_IS -> episode.bookmark
-                        TriStateFilter.ENABLED_NOT -> !episode.bookmark
-                    }
-                }
-                .filter {
-                    when (downloadedFilter) {
-                        TriStateFilter.DISABLED -> true
-                        TriStateFilter.ENABLED_IS -> it.isDownloaded || isLocalAnime
-                        TriStateFilter.ENABLED_NOT -> !it.isDownloaded && !isLocalAnime
-                    }
-                }
-                .sortedWith { (episode1), (episode2) -> getEpisodeSort(anime).invoke(episode1, episode2) }
-        }
     }
 }
 

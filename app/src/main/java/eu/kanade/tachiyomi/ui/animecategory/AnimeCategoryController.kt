@@ -1,18 +1,17 @@
 package eu.kanade.tachiyomi.ui.animecategory
 
 import androidx.compose.runtime.Composable
-import eu.kanade.presentation.category.AnimeCategoryScreen
-import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
+import androidx.compose.runtime.CompositionLocalProvider
+import cafe.adriel.voyager.navigator.Navigator
+import eu.kanade.presentation.util.LocalRouter
+import eu.kanade.tachiyomi.ui.base.controller.BasicFullComposeController
 
-class AnimeCategoryController : FullComposeController<AnimeCategoryPresenter>() {
-
-    override fun createPresenter() = AnimeCategoryPresenter()
+class AnimeCategoryController : BasicFullComposeController() {
 
     @Composable
     override fun ComposeContent() {
-        AnimeCategoryScreen(
-            presenter = presenter,
-            navigateUp = router::popCurrentController,
-        )
+        CompositionLocalProvider(LocalRouter provides router) {
+            Navigator(screen = AnimeCategoryScreen())
+        }
     }
 }

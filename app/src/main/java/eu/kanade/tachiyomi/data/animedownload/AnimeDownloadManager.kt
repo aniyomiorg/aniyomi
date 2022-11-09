@@ -140,8 +140,8 @@ class AnimeDownloadManager(
      * @param episodes the list of episodes to enqueue.
      * @param autoStart whether to start the downloader after enqueing the episodes.
      */
-    fun downloadEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean = true) {
-        downloader.queueEpisodes(anime, episodes, autoStart)
+    fun downloadEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean = true, alt: Boolean = false) {
+        downloader.queueEpisodes(anime, episodes, autoStart, alt)
     }
 
     /**

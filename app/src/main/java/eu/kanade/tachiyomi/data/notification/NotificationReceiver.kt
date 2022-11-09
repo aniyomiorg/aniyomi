@@ -390,11 +390,9 @@ class NotificationReceiver : BroadcastReceiver() {
      */
     private fun downloadChapters(chapterUrls: Array<String>, mangaId: Long) {
         launchIO {
-            val manga = getManga.await(mangaId)
+            val manga = getManga.await(mangaId) ?: return@launchIO
             val chapters = chapterUrls.mapNotNull { getChapter.await(it, mangaId)?.toDbChapter() }
-            if (manga != null && chapters.isNotEmpty()) {
-                downloadManager.downloadChapters(manga, chapters)
-            }
+            downloadManager.downloadChapters(manga, chapters)
         }
     }
 
@@ -406,11 +404,9 @@ class NotificationReceiver : BroadcastReceiver() {
      */
     private fun downloadEpisodes(episodeUrls: Array<String>, animeId: Long) {
         launchIO {
-            val anime = getAnime.await(animeId)
+            val anime = getAnime.await(animeId) ?: return@launchIO
             val episodes = episodeUrls.mapNotNull { getEpisode.await(it, animeId)?.toDbEpisode() }
-            if (anime != null && episodes.isNotEmpty()) {
-                animedownloadManager.downloadEpisodes(anime, episodes)
-            }
+            animedownloadManager.downloadEpisodes(anime, episodes)
         }
     }
 

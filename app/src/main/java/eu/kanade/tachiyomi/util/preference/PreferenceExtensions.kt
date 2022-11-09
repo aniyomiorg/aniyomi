@@ -1,7 +1,9 @@
 package eu.kanade.tachiyomi.util.preference
 
 import android.widget.CompoundButton
+import eu.kanade.core.prefs.PreferenceMutableState
 import eu.kanade.tachiyomi.core.preference.Preference
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 
@@ -30,4 +32,8 @@ operator fun <T> Preference<Set<T>>.minusAssign(item: T) {
 fun Preference<Boolean>.toggle(): Boolean {
     set(!get())
     return get()
+}
+
+fun <T> Preference<T>.asState(presenterScope: CoroutineScope): PreferenceMutableState<T> {
+    return PreferenceMutableState(this, presenterScope)
 }

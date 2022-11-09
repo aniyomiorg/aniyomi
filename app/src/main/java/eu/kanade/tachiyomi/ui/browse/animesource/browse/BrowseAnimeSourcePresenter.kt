@@ -133,7 +133,7 @@ open class BrowseAnimeSourcePresenter(
                 .map {
                     it.map { sAnime ->
                         withIOContext {
-                            networkToLocalAnime.await(sAnime.toDomainAnime(), sourceId)
+                            networkToLocalAnime.await(sAnime.toDomainAnime(sourceId))
                         }
                     }
                 }

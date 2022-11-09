@@ -18,6 +18,7 @@ import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.AnimeUpdate
 import eu.kanade.domain.anime.model.isLocal
+import eu.kanade.domain.animehistory.interactor.GetNextEpisodes
 import eu.kanade.domain.animelib.model.AnimelibAnime
 import eu.kanade.domain.animetrack.interactor.GetTracksPerAnime
 import eu.kanade.domain.base.BasePreferences
@@ -26,6 +27,7 @@ import eu.kanade.domain.category.interactor.SetAnimeCategories
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.episode.interactor.SetSeenStatus
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.domain.library.model.LibrarySort
 import eu.kanade.domain.library.model.sort
@@ -44,6 +46,7 @@ import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.database.models.toDomainAnime
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.base.presenter.BasePresenter
+import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.withIOContext
@@ -79,9 +82,10 @@ typealias AnimelibMap = Map<Long, List<AnimelibItem>>
 class AnimelibPresenter(
     private val state: AnimelibStateImpl = AnimelibState() as AnimelibStateImpl,
     private val getAnimelibAnime: GetAnimelibAnime = Injekt.get(),
-    private val getTracksPerAnime: GetTracksPerAnime = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
-    private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
+    private val getTracksPerAnime: GetTracksPerAnime = Injekt.get(),
+    private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
+    private val getEpisodesByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val setSeenStatus: SetSeenStatus = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
@@ -107,6 +111,8 @@ class AnimelibPresenter(
     val showLanguageBadges by libraryPreferences.languageBadge().asState()
 
     var activeCategory: Int by libraryPreferences.lastUsedAnimeCategory().asState()
+
+    val showContinueWatchingButton by libraryPreferences.showContinueReadingButton().asState()
 
     val isDownloadOnly: Boolean by preferences.downloadedOnly().asState()
     val isIncognitoMode: Boolean by preferences.incognitoMode().asState()
@@ -393,6 +399,10 @@ class AnimelibPresenter(
             .reduce { set1, set2 -> set1.intersect(set2) }
     }
 
+    suspend fun getNextUnseenEpisode(anime: Anime): Episode? {
+        return getEpisodesByAnimeId.await(anime.id).getNextUnseen(anime, downloadManager)
+    }
+
     /**
      * Returns the mix (non-common) categories for the given list of anime.
      *
@@ -406,18 +416,27 @@ class AnimelibPresenter(
     }
 
     /**
-     * Queues all unread episodes from the given list of anime.
+     * Queues the amount specified of unseen episodes from the list of animes given.
      *
      * @param animes the list of anime.
+     * @param amount the amount to queue or null to queue all
      */
-    fun downloadUnseenEpisodes(animes: List<Anime>) {
+    fun downloadUnseenEpisodes(animes: List<Anime>, amount: Int?) {
         presenterScope.launchNonCancellable {
             animes.forEach { anime ->
-                val episodes = getEpisodeByAnimeId.await(anime.id)
-                    .filter { !it.seen }
-                    .map { it.toDbEpisode() }
+                val episodes = getNextEpisodes.await(anime.id)
+                    .filterNot { episode ->
+                        downloadManager.queue.any { episode.id == it.episode.id } ||
+                            downloadManager.isEpisodeDownloaded(
+                                episode.name,
+                                episode.scanlator,
+                                anime.title,
+                                anime.source,
+                            )
+                    }
+                    .let { if (amount != null) it.take(amount) else it }
 
-                downloadManager.downloadEpisodes(anime, episodes)
+                downloadManager.downloadEpisodes(anime, episodes.map { it.toDbEpisode() })
             }
         }
     }
@@ -529,7 +548,7 @@ class AnimelibPresenter(
 
     @Composable
     fun getAnimeForCategory(page: Int): List<AnimelibItem> {
-        val unfiltered = remember(categories, loadedAnime) {
+        val unfiltered = remember(categories, loadedAnime, page) {
             val categoryId = categories.getOrNull(page)?.id ?: -1
             loadedAnime[categoryId] ?: emptyList()
         }
@@ -607,5 +626,6 @@ class AnimelibPresenter(
     sealed class Dialog {
         data class ChangeCategory(val anime: List<Anime>, val initialSelection: List<CheckboxState<Category>>) : Dialog()
         data class DeleteAnime(val anime: List<Anime>) : Dialog()
+        data class DownloadCustomAmount(val anime: List<Anime>, val max: Int) : Dialog()
     }
 }

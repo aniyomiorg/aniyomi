@@ -232,7 +232,7 @@ fun Anime.toAnimeUpdate(): AnimeUpdate {
     )
 }
 
-fun SAnime.toDomainAnime(): Anime {
+fun SAnime.toDomainAnime(sourceId: Long): Anime {
     return Anime.create().copy(
         url = url,
         title = title,
@@ -244,6 +244,7 @@ fun SAnime.toDomainAnime(): Anime {
         thumbnailUrl = thumbnail_url,
         updateStrategy = update_strategy,
         initialized = initialized,
+        source = sourceId,
     )
 }
 

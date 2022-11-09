@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.util.fastMap
 import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.bluelinelabs.conductor.Router
@@ -74,7 +75,7 @@ class SettingsLibraryScreen : SearchableSettings {
 
         return mutableListOf(
             getDisplayGroup(libraryPreferences),
-            getCategoriesGroup(LocalRouter.currentOrThrow, allCategories, libraryPreferences),
+            getCategoriesGroup(LocalRouter.currentOrThrow, allCategories, allAnimeCategories, libraryPreferences),
             getGlobalUpdateGroup(allCategories, allAnimeCategories, libraryPreferences),
         )
     }
@@ -117,22 +118,28 @@ class SettingsLibraryScreen : SearchableSettings {
     private fun getCategoriesGroup(
         router: Router?,
         allCategories: List<Category>,
+        allAnimeCategories: List<Category>,
         libraryPreferences: LibraryPreferences,
     ): Preference.PreferenceGroup {
         val context = LocalContext.current
         val scope = rememberCoroutineScope()
         val userCategoriesCount = allCategories.filterNot(Category::isSystemCategory).size
+        val userAnimeCategoriesCount = allAnimeCategories.filterNot(Category::isSystemCategory).size
 
         val defaultCategory by libraryPreferences.defaultCategory().collectAsState()
         val selectedCategory = allCategories.find { it.id == defaultCategory.toLong() }
         val defaultAnimeCategory by libraryPreferences.defaultAnimeCategory().collectAsState()
-        val selectedAnimeCategory = allCategories.find { it.id == defaultAnimeCategory.toLong() }
+        val selectedAnimeCategory = allAnimeCategories.find { it.id == defaultAnimeCategory.toLong() }
 
         // For default category
         val ids = listOf(libraryPreferences.defaultCategory().defaultValue()) +
-            allCategories.map { it.id.toInt() }
+            allCategories.fastMap { it.id.toInt() }
+        val animeIds = listOf(libraryPreferences.defaultAnimeCategory().defaultValue()) +
+            allAnimeCategories.fastMap { it.id.toInt() }
         val labels = listOf(stringResource(R.string.default_category_summary)) +
-            allCategories.map { it.visualName(context) }
+            allCategories.fastMap { it.visualName(context) }
+        val animeLabels = listOf(stringResource(R.string.default_category_summary)) +
+            allAnimeCategories.fastMap { it.visualName(context) }
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.general_categories),
@@ -141,8 +148,8 @@ class SettingsLibraryScreen : SearchableSettings {
                     title = stringResource(R.string.action_edit_anime_categories),
                     subtitle = pluralStringResource(
                         id = R.plurals.num_categories,
-                        count = userCategoriesCount,
-                        userCategoriesCount,
+                        count = userAnimeCategoriesCount,
+                        userAnimeCategoriesCount,
                     ),
                     onClick = { router?.pushController(AnimeCategoryController()) },
                 ),
@@ -150,10 +157,10 @@ class SettingsLibraryScreen : SearchableSettings {
                     pref = libraryPreferences.defaultAnimeCategory(),
                     title = stringResource(R.string.default_anime_category),
                     subtitle = selectedAnimeCategory?.visualName ?: stringResource(R.string.default_category_summary),
-                    entries = ids.zip(labels).toMap(),
+                    entries = animeIds.zip(animeLabels).toMap(),
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.action_edit_categories),
+                    title = stringResource(R.string.action_edit_manga_categories),
                     subtitle = pluralStringResource(
                         id = R.plurals.num_categories,
                         count = userCategoriesCount,

@@ -1,6 +1,5 @@
 package eu.kanade.presentation.manga.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -32,6 +30,8 @@ import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.components.ChapterDownloadIndicator
 import eu.kanade.presentation.util.ReadItemAlpha
+import eu.kanade.presentation.util.SecondaryItemAlpha
+import eu.kanade.presentation.util.selectedBackground
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.model.Download
 
@@ -45,6 +45,7 @@ fun MangaChapterListItem(
     read: Boolean,
     bookmark: Boolean,
     selected: Boolean,
+    downloadIndicatorEnabled: Boolean,
     downloadStateProvider: () -> Download.State,
     downloadProgressProvider: () -> Int,
     onLongClick: () -> Unit,
@@ -53,7 +54,7 @@ fun MangaChapterListItem(
 ) {
     Row(
         modifier = modifier
-            .background(if (selected) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent)
+            .selectedBackground(selected)
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick,
@@ -67,6 +68,7 @@ fun MangaChapterListItem(
                 MaterialTheme.colorScheme.onSurface
             }
             val textAlpha = remember(read) { if (read) ReadItemAlpha else 1f }
+            val textSubtitleAlpha = remember(read) { if (read) ReadItemAlpha else SecondaryItemAlpha }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 var textHeight by remember { mutableStateOf(0) }
@@ -91,7 +93,7 @@ fun MangaChapterListItem(
                 )
             }
             Spacer(modifier = Modifier.height(6.dp))
-            Row(modifier = Modifier.alpha(textAlpha)) {
+            Row(modifier = Modifier.alpha(textSubtitleAlpha)) {
                 ProvideTextStyle(
                     value = MaterialTheme.typography.bodyMedium
                         .copy(color = textColor, fontSize = 12.sp),
@@ -127,6 +129,7 @@ fun MangaChapterListItem(
         // Download view
         if (onDownloadClick != null) {
             ChapterDownloadIndicator(
+                enabled = downloadIndicatorEnabled,
                 modifier = Modifier.padding(start = 4.dp),
                 downloadStateProvider = downloadStateProvider,
                 downloadProgressProvider = downloadProgressProvider,

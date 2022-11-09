@@ -38,6 +38,7 @@ fun AnimelibContent(
     showAnimeCount: Boolean,
     onChangeCurrentPage: (Int) -> Unit,
     onAnimeClicked: (Long) -> Unit,
+    onContinueWatchingClicked: (AnimelibAnime) -> Unit,
     onToggleSelection: (AnimelibAnime) -> Unit,
     onToggleRangeSelection: (AnimelibAnime) -> Unit,
     onRefresh: (Category?) -> Boolean,
@@ -50,6 +51,7 @@ fun AnimelibContent(
     showUnseenBadges: Boolean,
     showLocalBadges: Boolean,
     showLanguageBadges: Boolean,
+    showContinueWatchingButton: Boolean,
     isDownloadOnly: Boolean,
     isIncognitoMode: Boolean,
 ) {
@@ -69,12 +71,13 @@ fun AnimelibContent(
 
         if (isAnimelibEmpty.not() && showPageTabs && categories.size > 1) {
             LibraryTabs(
-                state = pagerState,
                 categories = categories,
+                currentPageIndex = pagerState.currentPage,
                 showMangaCount = showAnimeCount,
                 getNumberOfMangaForCategory = getNumberOfAnimeForCategory,
                 isDownloadOnly = isDownloadOnly,
                 isIncognitoMode = isIncognitoMode,
+                onTabItemClick = { scope.launch { pagerState.animateScrollToPage(it) } },
             )
         }
 
@@ -87,6 +90,9 @@ fun AnimelibContent(
         }
         val onLongClickAnime = { anime: AnimelibAnime ->
             onToggleRangeSelection(anime)
+        }
+        val onClickContinueWatching = { anime: AnimelibAnime ->
+            onContinueWatchingClicked(anime)
         }
 
         SwipeRefresh(
@@ -115,8 +121,10 @@ fun AnimelibContent(
                 showUnreadBadges = showUnseenBadges,
                 showLocalBadges = showLocalBadges,
                 showLanguageBadges = showLanguageBadges,
+                showContinueWatchingButton = showContinueWatchingButton,
                 onClickAnime = onClickAnime,
                 onLongClickAnime = onLongClickAnime,
+                onClickContinueWatching = onClickContinueWatching,
                 onGlobalSearchClicked = onGlobalSearchClicked,
                 searchQuery = state.searchQuery,
             )

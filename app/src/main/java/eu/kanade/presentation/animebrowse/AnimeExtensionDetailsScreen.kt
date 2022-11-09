@@ -4,8 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.util.DisplayMetrics
-import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -53,9 +51,11 @@ import eu.kanade.presentation.components.DIVIDER_ALPHA
 import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.PreferenceRow
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.components.ScrollbarLazyColumn
+import eu.kanade.presentation.components.WarningBanner
+import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
+import eu.kanade.presentation.more.settings.widget.TrailingWidgetBuffer
 import eu.kanade.presentation.util.horizontalPadding
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animeextension.model.AnimeExtension
@@ -194,20 +194,6 @@ private fun AnimeExtensionDetails(
 }
 
 @Composable
-private fun WarningBanner(@StringRes textRes: Int) {
-    Text(
-        text = stringResource(textRes),
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.error)
-            .padding(16.dp),
-        color = MaterialTheme.colorScheme.onError,
-        style = MaterialTheme.typography.bodyMedium,
-        textAlign = TextAlign.Center,
-    )
-}
-
-@Composable
 private fun DetailsHeader(
     extension: AnimeExtension,
     onClickAgeRating: () -> Unit,
@@ -238,6 +224,7 @@ private fun DetailsHeader(
             Text(
                 text = extension.name,
                 style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center,
             )
 
             val strippedPkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.extension.")
@@ -375,15 +362,14 @@ private fun SourceSwitchPreference(
 ) {
     val context = LocalContext.current
 
-    PreferenceRow(
+    TextPreferenceWidget(
         modifier = modifier,
         title = if (source.labelAsName) {
             source.source.toString()
         } else {
             LocaleHelper.getSourceDisplayName(source.source.lang, context)
         },
-        onClick = { onClickSource(source.source.id) },
-        action = {
+        widget = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -397,8 +383,13 @@ private fun SourceSwitchPreference(
                     }
                 }
 
-                Switch(checked = source.enabled, onCheckedChange = null)
+                Switch(
+                    checked = source.enabled,
+                    onCheckedChange = null,
+                    modifier = Modifier.padding(start = TrailingWidgetBuffer),
+                )
             }
         },
+        onPreferenceClick = { onClickSource(source.source.id) },
     )
 }

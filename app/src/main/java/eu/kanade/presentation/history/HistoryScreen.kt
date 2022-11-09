@@ -16,10 +16,10 @@ import eu.kanade.presentation.history.components.HistoryDeleteAllDialog
 import eu.kanade.presentation.history.components.HistoryDeleteDialog
 import eu.kanade.presentation.history.components.HistoryToolbar
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.history.HistoryPresenter
+import eu.kanade.tachiyomi.ui.history.HistoryPresenter.Dialog
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
-import eu.kanade.tachiyomi.ui.recent.history.HistoryPresenter
-import eu.kanade.tachiyomi.ui.recent.history.HistoryPresenter.Dialog
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.widget.TachiyomiBottomNavigationView
 import kotlinx.coroutines.flow.collectLatest
@@ -30,6 +30,7 @@ fun HistoryScreen(
     presenter: HistoryPresenter,
     onClickCover: (HistoryWithRelations) -> Unit,
     onClickResume: (HistoryWithRelations) -> Unit,
+    navigateUp: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
 
@@ -40,6 +41,7 @@ fun HistoryScreen(
                 incognitoMode = presenter.isIncognitoMode,
                 downloadedOnlyMode = presenter.isDownloadOnly,
                 scrollBehavior = scrollBehavior,
+                navigateUp = navigateUp,
             )
         },
     ) { contentPadding ->
@@ -66,7 +68,7 @@ fun HistoryScreen(
 
         LaunchedEffect(items) {
             if (items != null) {
-                (presenter.context as? MainActivity)?.ready = true
+                (presenter.view?.activity as? MainActivity)?.ready = true
             }
         }
     }
@@ -88,7 +90,7 @@ fun HistoryScreen(
             HistoryDeleteAllDialog(
                 onDismissRequest = onDismissRequest,
                 onDelete = {
-                    presenter.deleteAllHistory()
+                    presenter.removeAllHistory()
                 },
             )
         }
