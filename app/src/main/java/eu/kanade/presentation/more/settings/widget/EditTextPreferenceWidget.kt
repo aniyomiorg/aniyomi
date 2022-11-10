@@ -27,6 +27,7 @@ fun EditTextPreferenceWidget(
     icon: ImageVector?,
     value: String,
     onConfirm: suspend (String) -> Boolean,
+    singleLine: Boolean = true,
 ) {
     var isDialogShown by remember { mutableStateOf(false) }
 
@@ -50,7 +51,7 @@ fun EditTextPreferenceWidget(
                 OutlinedTextField(
                     value = textFieldValue,
                     onValueChange = { textFieldValue = it },
-                    singleLine = true,
+                    singleLine = singleLine,
                     modifier = Modifier.fillMaxWidth(),
                 )
             },

@@ -4,21 +4,21 @@ import android.content.Context
 import android.net.Uri
 import androidx.preference.PreferenceManager
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.backup.models.BackupAnime
-import eu.kanade.tachiyomi.data.backup.models.BackupAnimeHistory
-import eu.kanade.tachiyomi.data.backup.models.BackupAnimeSource
-import eu.kanade.tachiyomi.data.backup.models.BackupCategory
-import eu.kanade.tachiyomi.data.backup.models.BackupHistory
-import eu.kanade.tachiyomi.data.backup.models.BackupManga
-import eu.kanade.tachiyomi.data.backup.models.BackupPreference
-import eu.kanade.tachiyomi.data.backup.models.BackupSerializer
-import eu.kanade.tachiyomi.data.backup.models.BackupSource
-import eu.kanade.tachiyomi.data.backup.models.BooleanPreferenceValue
-import eu.kanade.tachiyomi.data.backup.models.FloatPreferenceValue
-import eu.kanade.tachiyomi.data.backup.models.IntPreferenceValue
-import eu.kanade.tachiyomi.data.backup.models.LongPreferenceValue
-import eu.kanade.tachiyomi.data.backup.models.StringPreferenceValue
-import eu.kanade.tachiyomi.data.backup.models.StringSetPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.BackupAnime
+import eu.kanade.tachiyomi.data.backup.full.models.BackupAnimeHistory
+import eu.kanade.tachiyomi.data.backup.full.models.BackupAnimeSource
+import eu.kanade.tachiyomi.data.backup.full.models.BackupCategory
+import eu.kanade.tachiyomi.data.backup.full.models.BackupHistory
+import eu.kanade.tachiyomi.data.backup.full.models.BackupManga
+import eu.kanade.tachiyomi.data.backup.full.models.BackupPreference
+import eu.kanade.tachiyomi.data.backup.full.models.BackupSerializer
+import eu.kanade.tachiyomi.data.backup.full.models.BackupSource
+import eu.kanade.tachiyomi.data.backup.full.models.BooleanPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.FloatPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.IntPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.LongPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.StringPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.StringSetPreferenceValue
 import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Chapter
@@ -291,22 +291,34 @@ class BackupRestorer(
         preferences.forEach { pref ->
             when (pref.value) {
                 is IntPreferenceValue -> {
-                    prefs.edit().putInt(pref.key, pref.value.value).apply()
+                    if (prefs.all[pref.key] is Int?) {
+                        prefs.edit().putInt(pref.key, pref.value.value).apply()
+                    }
                 }
                 is LongPreferenceValue -> {
-                    prefs.edit().putLong(pref.key, pref.value.value).apply()
+                    if (prefs.all[pref.key] is Long?) {
+                        prefs.edit().putLong(pref.key, pref.value.value).apply()
+                    }
                 }
                 is FloatPreferenceValue -> {
-                    prefs.edit().putFloat(pref.key, pref.value.value).apply()
+                    if (prefs.all[pref.key] is Float?) {
+                        prefs.edit().putFloat(pref.key, pref.value.value).apply()
+                    }
                 }
                 is StringPreferenceValue -> {
-                    prefs.edit().putString(pref.key, pref.value.value).apply()
+                    if (prefs.all[pref.key] is String?) {
+                        prefs.edit().putString(pref.key, pref.value.value).apply()
+                    }
                 }
                 is BooleanPreferenceValue -> {
-                    prefs.edit().putBoolean(pref.key, pref.value.value).apply()
+                    if (prefs.all[pref.key] is Boolean?) {
+                        prefs.edit().putBoolean(pref.key, pref.value.value).apply()
+                    }
                 }
                 is StringSetPreferenceValue -> {
-                    prefs.edit().putStringSet(pref.key, pref.value.value).apply()
+                    if (prefs.all[pref.key] is Set<*>?) {
+                        prefs.edit().putStringSet(pref.key, pref.value.value).apply()
+                    }
                 }
             }
         }

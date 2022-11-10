@@ -140,6 +140,21 @@ internal fun PreferenceItem(
                     },
                 )
             }
+            is Preference.PreferenceItem.MultiLineEditTextPreference -> {
+                val values by item.pref.collectAsState()
+                EditTextPreferenceWidget(
+                    title = item.title,
+                    subtitle = item.subtitle,
+                    icon = item.icon,
+                    value = values,
+                    onConfirm = {
+                        val accepted = item.onValueChanged(it)
+                        if (accepted) item.pref.set(it)
+                        accepted
+                    },
+                    singleLine = false,
+                )
+            }
             is Preference.PreferenceItem.AppThemePreference -> {
                 val value by item.pref.collectAsState()
                 val amoled by Injekt.get<UiPreferences>().themeDarkAmoled().collectAsState()

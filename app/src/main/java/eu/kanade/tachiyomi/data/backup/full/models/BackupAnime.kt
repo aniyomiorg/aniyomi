@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.data.backup.models
+package eu.kanade.tachiyomi.data.backup.full.models
 
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeImpl

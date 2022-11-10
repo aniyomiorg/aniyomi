@@ -69,7 +69,11 @@ sealed class AndroidPreference<T>(
         defaultValue: String,
     ) : AndroidPreference<String>(preferences, keyFlow, key, defaultValue) {
         override fun read(preferences: SharedPreferences, key: String, defaultValue: String): String {
-            return preferences.getString(key, defaultValue) ?: defaultValue
+            return try {
+                preferences.getString(key, defaultValue) ?: defaultValue
+            } catch (e: ClassCastException) {
+                defaultValue
+            }
         }
 
         override fun write(key: String, value: String): Editor.() -> Unit = {
@@ -84,7 +88,11 @@ sealed class AndroidPreference<T>(
         defaultValue: Long,
     ) : AndroidPreference<Long>(preferences, keyFlow, key, defaultValue) {
         override fun read(preferences: SharedPreferences, key: String, defaultValue: Long): Long {
-            return preferences.getLong(key, defaultValue)
+            return try {
+                preferences.getLong(key, defaultValue)
+            } catch (e: ClassCastException) {
+                defaultValue
+            }
         }
 
         override fun write(key: String, value: Long): Editor.() -> Unit = {
@@ -99,7 +107,11 @@ sealed class AndroidPreference<T>(
         defaultValue: Int,
     ) : AndroidPreference<Int>(preferences, keyFlow, key, defaultValue) {
         override fun read(preferences: SharedPreferences, key: String, defaultValue: Int): Int {
-            return preferences.getInt(key, defaultValue)
+            return try {
+                preferences.getInt(key, defaultValue)
+            } catch (e: ClassCastException) {
+                defaultValue
+            }
         }
 
         override fun write(key: String, value: Int): Editor.() -> Unit = {
@@ -114,7 +126,11 @@ sealed class AndroidPreference<T>(
         defaultValue: Float,
     ) : AndroidPreference<Float>(preferences, keyFlow, key, defaultValue) {
         override fun read(preferences: SharedPreferences, key: String, defaultValue: Float): Float {
-            return preferences.getFloat(key, defaultValue)
+            return try {
+                preferences.getFloat(key, defaultValue)
+            } catch (e: ClassCastException) {
+                defaultValue
+            }
         }
 
         override fun write(key: String, value: Float): Editor.() -> Unit = {
@@ -129,7 +145,11 @@ sealed class AndroidPreference<T>(
         defaultValue: Boolean,
     ) : AndroidPreference<Boolean>(preferences, keyFlow, key, defaultValue) {
         override fun read(preferences: SharedPreferences, key: String, defaultValue: Boolean): Boolean {
-            return preferences.getBoolean(key, defaultValue)
+            return try {
+                preferences.getBoolean(key, defaultValue)
+            } catch (e: ClassCastException) {
+                defaultValue
+            }
         }
 
         override fun write(key: String, value: Boolean): Editor.() -> Unit = {
@@ -144,7 +164,11 @@ sealed class AndroidPreference<T>(
         defaultValue: Set<String>,
     ) : AndroidPreference<Set<String>>(preferences, keyFlow, key, defaultValue) {
         override fun read(preferences: SharedPreferences, key: String, defaultValue: Set<String>): Set<String> {
-            return preferences.getStringSet(key, defaultValue) ?: defaultValue
+            return try {
+                preferences.getStringSet(key, defaultValue) ?: defaultValue
+            } catch (e: ClassCastException) {
+                defaultValue
+            }
         }
 
         override fun write(key: String, value: Set<String>): Editor.() -> Unit = {

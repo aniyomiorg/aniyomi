@@ -119,6 +119,18 @@ sealed class Preference {
         ) : PreferenceItem<String>()
 
         /**
+         * A [PreferenceItem] that shows a multi-line EditText in the dialog.
+         */
+        data class MultiLineEditTextPreference(
+            val pref: PreferenceData<String>,
+            override val title: String,
+            override val subtitle: String? = "%s",
+            override val icon: ImageVector? = null,
+            override val enabled: Boolean = true,
+            override val onValueChanged: suspend (newValue: String) -> Boolean = { true },
+        ) : PreferenceItem<String>()
+
+        /**
          * A [PreferenceItem] that shows previews of [AppTheme] selection.
          */
         data class AppThemePreference(

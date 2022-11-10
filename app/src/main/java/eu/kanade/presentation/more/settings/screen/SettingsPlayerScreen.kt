@@ -31,6 +31,7 @@ import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
+import eu.kanade.tachiyomi.util.preference.asState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -232,9 +233,16 @@ class SettingsPlayerScreen : SearchableSettings {
                     title = stringResource(R.string.pref_pip_on_exit),
                     enabled = deviceHasPip,
                 ),
-                Preference.PreferenceItem.EditTextPreference(
+                Preference.PreferenceItem.MultiLineEditTextPreference(
                     pref = mpvConf,
                     title = stringResource(R.string.pref_mpv_conf),
+                    subtitle = mpvConf.asState(scope).value
+                        .lines().take(2)
+                        .joinToString(
+                            separator = "\n",
+                            postfix = if (mpvConf.asState(scope).value.lines().size > 2) "\n..." else "",
+                        ),
+
                 ),
             ),
         )
