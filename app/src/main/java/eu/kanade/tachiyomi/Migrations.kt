@@ -22,6 +22,7 @@ import eu.kanade.tachiyomi.data.updater.AppUpdateJob
 import eu.kanade.tachiyomi.extension.ExtensionUpdateJob
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
+import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.preference.minusAssign
@@ -51,6 +52,7 @@ object Migrations {
         securityPreferences: SecurityPreferences,
         libraryPreferences: LibraryPreferences,
         readerPreferences: ReaderPreferences,
+        playerPreferences: PlayerPreferences,
         backupPreferences: BackupPreferences,
     ): Boolean {
         val lastVersionCode = preferenceStore.getInt("last_version_code", 0)
@@ -362,6 +364,19 @@ object Migrations {
                     prefs.edit {
                         val themeMode = prefs.getString(uiPreferences.themeMode().key(), null) ?: return@edit
                         putString(uiPreferences.themeMode().key(), themeMode.uppercase())
+                    }
+                }
+            }
+            if (oldVersion < 92) {
+                if (playerPreferences.progressPreference().isSet()) {
+                    prefs.edit {
+                        val progressString = try {
+                            prefs.getString(playerPreferences.progressPreference().key(), null)
+                        } catch (e: ClassCastException) {
+                            null
+                        } ?: return@edit
+                        val newProgress = progressString.toFloatOrNull() ?: return@edit
+                        putFloat(playerPreferences.progressPreference().key(), newProgress)
                     }
                 }
             }
