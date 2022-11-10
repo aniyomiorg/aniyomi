@@ -100,28 +100,9 @@ class AnimeDownloadQueue(
         }
     }
 
-    private fun getProgressObservable(): Observable<AnimeDownload> {
-        return statusSubject.onBackpressureBuffer()
-            .startWith(getActiveDownloads())
-            .flatMap { download ->
-                if (download.status == AnimeDownload.State.DOWNLOADING) {
-                    val pageStatusSubject = PublishSubject.create<Int>()
-                    setPagesSubject(download.video, pageStatusSubject)
-                    return@flatMap pageStatusSubject
-                        .onBackpressureBuffer()
-                        .filter { it == Video.READY }
-                        .map { download }
-                } else if (download.status == AnimeDownload.State.DOWNLOADED || download.status == AnimeDownload.State.ERROR) {
-                    setPagesSubject(download.video, null)
-                }
-                Observable.just(download)
-            }
-            .filter { it.status == AnimeDownload.State.DOWNLOADING }
-    }
+    fun progressFlow(): Flow<AnimeDownload> = getPreciseProgressObservable().asFlow()
 
-    fun progressFlow(): Flow<AnimeDownload> = getProgressObservable().asFlow()
-
-    fun getPreciseProgressObservable(): Observable<AnimeDownload> {
+    private fun getPreciseProgressObservable(): Observable<AnimeDownload> {
         return progressSubject.onBackpressureLatest()
     }
 
