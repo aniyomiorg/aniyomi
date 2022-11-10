@@ -399,7 +399,6 @@ object Migrations {
                         }
                     }
                 }
-
             }
             return true
         }
