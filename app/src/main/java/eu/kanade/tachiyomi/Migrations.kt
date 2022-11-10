@@ -380,6 +380,27 @@ object Migrations {
                     }
                 }
             }
+            if (oldVersion < 93) {
+                listOf(
+                    playerPreferences.defaultPlayerOrientationType(),
+                    playerPreferences.defaultPlayerOrientationLandscape(),
+                    playerPreferences.defaultPlayerOrientationPortrait(),
+                    playerPreferences.skipLengthPreference(),
+                ).forEach { pref ->
+                    if (pref.isSet()) {
+                        prefs.edit {
+                            val oldString = try {
+                                prefs.getString(pref.key(), null)
+                            } catch (e: ClassCastException) {
+                                null
+                            } ?: return@edit
+                            val newInt = oldString.toIntOrNull() ?: return@edit
+                            putInt(pref.key(), newInt)
+                        }
+                    }
+                }
+
+            }
             return true
         }
 
