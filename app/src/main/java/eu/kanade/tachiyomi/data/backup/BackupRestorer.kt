@@ -105,7 +105,7 @@ class BackupRestorer(
         }
 
         if (backup.backupAnimeCategories.isNotEmpty()) {
-            restoreCategories(backup.backupAnimeCategories)
+            restoreAnimeCategories(backup.backupAnimeCategories)
         }
 
         // Store source mapping for error messages
@@ -146,6 +146,13 @@ class BackupRestorer(
 
         restoreProgress += 1
         showRestoreProgress(restoreProgress, restoreAmount, context.getString(R.string.categories))
+    }
+
+    private suspend fun restoreAnimeCategories(backupCategories: List<BackupCategory>) {
+        backupManager.restoreAnimeCategories(backupCategories)
+
+        restoreProgress += 1
+        showRestoreProgress(restoreProgress, restoreAmount, context.getString(R.string.anime_categories))
     }
 
     private suspend fun restoreManga(backupManga: BackupManga, backupCategories: List<BackupCategory>) {

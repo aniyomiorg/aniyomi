@@ -5,8 +5,8 @@ import android.util.AttributeSet
 import android.view.View
 import com.bluelinelabs.conductor.Router
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.category.interactor.SetDisplayModeForCategory
-import eu.kanade.domain.category.interactor.SetSortModeForCategory
+import eu.kanade.domain.category.interactor.SetDisplayModeForAnimeCategory
+import eu.kanade.domain.category.interactor.SetSortModeForAnimeCategory
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.domain.library.model.LibrarySort
@@ -31,8 +31,8 @@ import uy.kohesive.injekt.injectLazy
 class AnimelibSettingsSheet(
     router: Router,
     private val trackManager: TrackManager = Injekt.get(),
-    private val setDisplayModeForCategory: SetDisplayModeForCategory = Injekt.get(),
-    private val setSortModeForCategory: SetSortModeForCategory = Injekt.get(),
+    private val setDisplayModeForCategory: SetDisplayModeForAnimeCategory = Injekt.get(),
+    private val setSortModeForCategory: SetSortModeForAnimeCategory = Injekt.get(),
     onGroupClickListener: (ExtendedNavigationView.Group) -> Unit,
 ) : TabbedBottomSheetDialog(router.activity!!) {
 
@@ -357,9 +357,9 @@ class AnimelibSettingsSheet(
         }
 
         inner class BadgeGroup : Group {
-            private val downloadBadge = Item.CheckboxGroup(R.string.action_display_download_badge, this)
+            private val downloadBadge = Item.CheckboxGroup(R.string.action_display_download_badge_anime, this)
             private val unseenBadge = Item.CheckboxGroup(R.string.action_display_unseen_badge, this)
-            private val localBadge = Item.CheckboxGroup(R.string.action_display_local_badge, this)
+            private val localBadge = Item.CheckboxGroup(R.string.action_display_local_badge_anime, this)
             private val languageBadge = Item.CheckboxGroup(R.string.action_display_language_badge, this)
 
             override val header = Item.Header(R.string.badges_header)
