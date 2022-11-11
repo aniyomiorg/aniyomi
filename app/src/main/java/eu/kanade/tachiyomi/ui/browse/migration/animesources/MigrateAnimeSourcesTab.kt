@@ -11,7 +11,7 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.base.controller.pushController
-import eu.kanade.tachiyomi.ui.browse.migration.manga.MigrationMangaController
+import eu.kanade.tachiyomi.ui.browse.migration.anime.MigrationAnimeController
 
 @Composable
 fun migrateAnimeSourcesTab(
@@ -37,7 +37,7 @@ fun migrateAnimeSourcesTab(
                 contentPadding = contentPadding,
                 onClickItem = { source ->
                     router?.pushController(
-                        MigrationMangaController(
+                        MigrationAnimeController(
                             source.id,
                             source.name,
                         ),
