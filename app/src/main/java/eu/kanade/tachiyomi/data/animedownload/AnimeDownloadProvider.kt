@@ -147,6 +147,21 @@ class AnimeDownloadProvider(
         )
     }
 
+    /**
+     * Returns the episode directory name for an episode.
+     *
+     * @param episodeName the name of the episode to query.
+     * @param episodeScanlator scanlator of the episode to query
+     */
+    fun getOldEpisodeDirName(episodeName: String, episodeScanlator: String?): String {
+        return DiskUtil.buildValidFilename(
+            when {
+                episodeScanlator != null -> "${episodeScanlator}_$episodeName"
+                else -> episodeName
+            },
+        )
+    }
+
     fun isEpisodeDirNameChanged(oldEpisode: DomainEpisode, newEpisode: DomainEpisode): Boolean {
         return oldEpisode.name != newEpisode.name ||
             oldEpisode.scanlator?.takeIf { it.isNotBlank() } != newEpisode.scanlator?.takeIf { it.isNotBlank() }
@@ -160,6 +175,7 @@ class AnimeDownloadProvider(
      */
     fun getValidEpisodeDirNames(episodeName: String, episodeScanlator: String?): List<String> {
         val episodeDirName = getEpisodeDirName(episodeName, episodeScanlator)
-        return listOf(episodeDirName)
+        val oldEpisodeDirName = getOldEpisodeDirName(episodeName, episodeScanlator)
+        return listOf(episodeDirName, oldEpisodeDirName)
     }
 }
