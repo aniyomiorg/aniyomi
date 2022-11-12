@@ -1497,7 +1497,6 @@ class PlayerActivity :
 
     var skipType: SkipType? = null
 
-    @SuppressLint("SetTextI18n")
     private fun aniSkipStuff(value: Long) {
         if (aniSkipEnable) {
             // if it doesn't find the opening it will show the +85 button
@@ -1510,11 +1509,7 @@ class PlayerActivity :
                 if (netflixStyle) {
                     // show a toast with the seconds before the skip
                     if (waitingAniSkip == playerPreferences.waitingTimeAniSkip().get()) {
-                        Toast.makeText(
-                            this,
-                            "AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}",
-                            Toast.LENGTH_SHORT,
-                        ).show()
+                        toast("AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}")
                     }
                     aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)
                     waitingAniSkip--

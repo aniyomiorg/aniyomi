@@ -147,10 +147,18 @@ data class Stamp(
     val episodeLength: Double,
 )
 
-@Suppress("EnumEntryName")
 @Serializable
 enum class SkipType {
-    OP, ED, RECAP, @SerialName("mixed-op")
+    @SerialName("op")
+    OP,
+
+    @SerialName("ed")
+    ED,
+
+    @SerialName("recap")
+    RECAP,
+
+    @SerialName("mixed-op")
     MIXED_OP, ;
 
     fun getString(): String {
