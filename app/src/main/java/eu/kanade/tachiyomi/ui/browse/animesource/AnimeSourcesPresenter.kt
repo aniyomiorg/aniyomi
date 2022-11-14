@@ -88,7 +88,7 @@ class AnimeSourcesPresenter(
 
     fun onOpenSource(source: AnimeSource) {
         if (!preferences.incognitoMode().get()) {
-            sourcePreferences.lastUsedSource().set(source.id)
+            sourcePreferences.lastUsedAnimeSource().set(source.id)
         }
     }
 
