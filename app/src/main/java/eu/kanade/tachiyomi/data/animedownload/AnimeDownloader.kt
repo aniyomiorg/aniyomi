@@ -449,7 +449,8 @@ class AnimeDownloader(
                 if (preferences.useExternalDownloader().get() == download.changeDownloader) {
                     downloadVideo(video, download, tmpDir, filename)
                 } else {
-                    downloadVideoExternal(video, download.source, tmpDir, filename)
+                    val betterFileName = DiskUtil.buildValidFilename("${download.anime.title} - ${download.episode.name}")
+                    downloadVideoExternal(video, download.source, tmpDir, betterFileName)
                 }
             }
         }
@@ -616,18 +617,37 @@ class AnimeDownloader(
                 val intent: Intent
                 if (!pkgName.isNullOrEmpty()) {
                     intent = pm.getLaunchIntentForPackage(pkgName)!!
-                    intent.apply {
-                        // TODO: this only works for 1DM
-                        component = ComponentName(pkgName, "${pkgName.substringBeforeLast(".")}.Downloader")
-                        action = Intent.ACTION_VIEW
-                        data = Uri.parse(video.videoUrl)
-                        putExtra("extra_filename", filename)
+                    when {
+                        // 1DM
+                        pkgName.startsWith("idm.internet.download.manager") -> {
+                            intent.apply {
+                                component = ComponentName(pkgName, "${pkgName.substringBeforeLast(".")}.Downloader")
+                                action = Intent.ACTION_VIEW
+                                data = Uri.parse(video.videoUrl)
+                                putExtra("extra_filename", filename)
+                            }
+                        }
+                        // ADM
+                        pkgName.startsWith("com.dv.adm") -> {
+                            intent.apply {
+                                component = ComponentName(pkgName, "$pkgName.AEditor")
+                                action = Intent.ACTION_VIEW
+                                putExtra("com.dv.get.ACTION_LIST_ADD", "${Uri.parse(video.videoUrl)}<info>$filename.mp4")
+                                putExtra("com.dv.get.ACTION_LIST_PATH", tmpDir.filePath!!.substringBeforeLast("_"))
+                            }
+                            it.delete()
+                            tmpDir.delete()
+                            queue.find { Anime -> Anime.video == video }?.let { Anime ->
+                                Anime.status = AnimeDownload.State.DOWNLOADED
+                                completeAnimeDownload(Anime)
+                            }
+                        }
                     }
                 } else {
                     intent = Intent(Intent.ACTION_VIEW)
                     intent.apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        data = Uri.parse(video.videoUrl)
+                        setDataAndType(Uri.parse(video.videoUrl), "video/*")
                         putExtra("extra_filename", filename)
                     }
                 }
