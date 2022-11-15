@@ -36,6 +36,7 @@ class BrowseController : FullComposeController<BrowsePresenter>, RootController 
 
     @Composable
     override fun ComposeContent() {
+        val animeQuery by presenter.animeExtensionsPresenter.query.collectAsState()
         val query by presenter.extensionsPresenter.query.collectAsState()
 
         TabbedScreen(
@@ -50,10 +51,12 @@ class BrowseController : FullComposeController<BrowsePresenter>, RootController 
             ),
             startIndex = 1.takeIf { toExtensions },
             searchQuery = query,
-            onChangeSearchQuery = { presenter.animeExtensionsPresenter.search(it) },
+            onChangeSearchQuery = { presenter.extensionsPresenter.search(it) },
             incognitoMode = presenter.isIncognitoMode,
             downloadedOnlyMode = presenter.isDownloadOnly,
             scrollable = true,
+            searchQueryAnime = animeQuery,
+            onChangeSearchQueryAnime = { presenter.animeExtensionsPresenter.search(it) },
         )
 
         LaunchedEffect(Unit) {

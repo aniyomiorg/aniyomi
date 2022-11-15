@@ -34,6 +34,8 @@ fun TabbedScreen(
     downloadedOnlyMode: Boolean,
     state: PagerState = rememberPagerState(),
     scrollable: Boolean = false,
+    searchQueryAnime: String? = null,
+    onChangeSearchQueryAnime: (String?) -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
 
@@ -49,11 +51,21 @@ fun TabbedScreen(
                 val tab = tabs[state.currentPage]
                 val searchEnabled = tab.searchEnabled
 
+                val actualQuery = when (state.currentPage) {
+                    3 -> searchQuery
+                    else -> searchQueryAnime
+                }
+
+                val actualOnChange = when (state.currentPage) {
+                    3 -> onChangeSearchQuery
+                    else -> onChangeSearchQueryAnime
+                }
+
                 SearchToolbar(
                     titleContent = { AppBarTitle(stringResource(titleRes)) },
                     searchEnabled = searchEnabled,
-                    searchQuery = if (searchEnabled) searchQuery else null,
-                    onChangeSearchQuery = onChangeSearchQuery,
+                    searchQuery = if (searchEnabled) actualQuery else null,
+                    onChangeSearchQuery = actualOnChange,
                     actions = { AppBarActions(tab.actions) },
                 )
             }
