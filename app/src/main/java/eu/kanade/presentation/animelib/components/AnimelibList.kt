@@ -70,7 +70,7 @@ fun AnimelibList(
                         enabled = showDownloadBadges,
                         item = animelibItem,
                     )
-                    UnreadBadge(
+                    UnseenBadge(
                         enabled = showUnreadBadges,
                         item = animelibItem,
                     )

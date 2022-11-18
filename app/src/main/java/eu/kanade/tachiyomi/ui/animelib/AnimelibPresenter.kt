@@ -102,8 +102,8 @@ class AnimelibPresenter(
 
     val isLibraryEmpty by derivedStateOf { loadedAnime.isEmpty() }
 
-    val tabVisibility by libraryPreferences.animeCategoryTabs().asState()
-    val animeCountVisibility by libraryPreferences.animeCategoryNumberOfItems().asState()
+    val tabVisibility by libraryPreferences.categoryTabs().asState()
+    val animeCountVisibility by libraryPreferences.categoryNumberOfItems().asState()
 
     val showDownloadBadges by libraryPreferences.downloadBadge().asState()
     val showUnseenBadges by libraryPreferences.unreadBadge().asState()

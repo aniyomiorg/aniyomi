@@ -22,7 +22,7 @@ fun DownloadsBadge(
 }
 
 @Composable
-fun UnreadBadge(
+fun UnseenBadge(
     enabled: Boolean,
     item: AnimelibItem,
 ) {

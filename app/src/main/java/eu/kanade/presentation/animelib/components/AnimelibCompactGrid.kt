@@ -58,7 +58,7 @@ fun AnimelibCompactGrid(
                         enabled = showDownloadBadges,
                         item = animelibItem,
                     )
-                    UnreadBadge(
+                    UnseenBadge(
                         enabled = showUnreadBadges,
                         item = animelibItem,
                     )

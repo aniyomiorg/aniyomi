@@ -57,7 +57,7 @@ fun AnimelibComfortableGrid(
                         enabled = showDownloadBadges,
                         item = animelibItem,
                     )
-                    UnreadBadge(
+                    UnseenBadge(
                         enabled = showUnreadBadges,
                         item = animelibItem,
                     )

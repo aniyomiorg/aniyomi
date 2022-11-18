@@ -77,10 +77,8 @@ class LibraryPreferences(
     fun lastUsedAnimeCategory() = preferenceStore.getInt("last_used_anime_category", 0)
 
     fun categoryTabs() = preferenceStore.getBoolean("display_category_tabs", true)
-    fun animeCategoryTabs() = preferenceStore.getBoolean("display_anime_category_tabs", true)
 
     fun categoryNumberOfItems() = preferenceStore.getBoolean("display_number_of_items", false)
-    fun animeCategoryNumberOfItems() = preferenceStore.getBoolean("display_number_of_items_anime", false)
 
     fun categorizedDisplaySettings() = preferenceStore.getBoolean("categorized_display", false)
 
