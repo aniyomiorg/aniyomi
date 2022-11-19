@@ -1,5 +1,6 @@
 package eu.kanade.presentation.history
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,7 +15,6 @@ import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.history.components.HistoryContent
 import eu.kanade.presentation.history.components.HistoryDeleteAllDialog
 import eu.kanade.presentation.history.components.HistoryDeleteDialog
-import eu.kanade.presentation.history.components.HistoryToolbar
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.history.HistoryPresenter
 import eu.kanade.tachiyomi.ui.history.HistoryPresenter.Dialog
@@ -28,23 +28,13 @@ import java.util.Date
 @Composable
 fun HistoryScreen(
     presenter: HistoryPresenter,
+    contentPadding: PaddingValues,
     onClickCover: (HistoryWithRelations) -> Unit,
     onClickResume: (HistoryWithRelations) -> Unit,
-    navigateUp: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
 
-    Scaffold(
-        topBar = { scrollBehavior ->
-            HistoryToolbar(
-                state = presenter,
-                incognitoMode = presenter.isIncognitoMode,
-                downloadedOnlyMode = presenter.isDownloadOnly,
-                scrollBehavior = scrollBehavior,
-                navigateUp = navigateUp,
-            )
-        },
-    ) { contentPadding ->
+    Scaffold {
         val items by presenter.getHistory().collectAsState(initial = null)
         val contentPaddingWithNavBar = TachiyomiBottomNavigationView.withBottomNavPadding(contentPadding)
         items.let {

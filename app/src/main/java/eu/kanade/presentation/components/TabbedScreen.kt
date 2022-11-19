@@ -1,5 +1,6 @@
 package eu.kanade.presentation.components
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -50,14 +51,15 @@ fun TabbedScreen(
             if (titleRes != null) {
                 val tab = tabs[state.currentPage]
                 val searchEnabled = tab.searchEnabled
+                Log.i("asfmovie", state.currentPage.toString())
 
-                val actualQuery = when (state.currentPage) {
-                    3 -> searchQuery
+                val actualQuery = when (state.currentPage % 2) {
+                    1 -> searchQuery // History and Browse
                     else -> searchQueryAnime
                 }
 
-                val actualOnChange = when (state.currentPage) {
-                    3 -> onChangeSearchQuery
+                val actualOnChange = when (state.currentPage % 2) {
+                    1 -> onChangeSearchQuery // History and Browse
                     else -> onChangeSearchQueryAnime
                 }
 

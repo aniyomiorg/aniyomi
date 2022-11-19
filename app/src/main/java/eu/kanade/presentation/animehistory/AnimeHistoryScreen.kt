@@ -1,5 +1,6 @@
 package eu.kanade.presentation.animehistory
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
 import eu.kanade.presentation.animehistory.components.AnimeHistoryContent
-import eu.kanade.presentation.animehistory.components.AnimeHistoryToolbar
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.Scaffold
@@ -28,23 +28,13 @@ import java.util.Date
 @Composable
 fun AnimeHistoryScreen(
     presenter: AnimeHistoryPresenter,
+    contentPadding: PaddingValues,
     onClickCover: (AnimeHistoryWithRelations) -> Unit,
     onClickResume: (AnimeHistoryWithRelations) -> Unit,
-    navigateUp: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
 
-    Scaffold(
-        topBar = { scrollBehavior ->
-            AnimeHistoryToolbar(
-                state = presenter,
-                incognitoMode = presenter.isIncognitoMode,
-                downloadedOnlyMode = presenter.isDownloadOnly,
-                scrollBehavior = scrollBehavior,
-                navigateUp = navigateUp,
-            )
-        },
-    ) { contentPadding ->
+    Scaffold {
         val items by presenter.getHistory().collectAsState(initial = null)
         val contentPaddingWithNavBar = TachiyomiBottomNavigationView.withBottomNavPadding(contentPadding)
         items.let {

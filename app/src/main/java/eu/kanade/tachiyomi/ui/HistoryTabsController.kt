@@ -7,6 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.components.PagerState
 import eu.kanade.presentation.components.TabbedScreen
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.animehistory.animeHistoryTab
 import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
@@ -27,14 +28,18 @@ class HistoryTabsController : FullComposeController<HistoryTabsPresenter>(), Roo
         val libraryPreferences: LibraryPreferences = Injekt.get()
         val fromMore = libraryPreferences.bottomNavStyle().get() == 0
         TabbedScreen(
-            titleRes = null,
+            titleRes = R.string.label_recent_manga,
             tabs = listOf(
                 animeHistoryTab(router, presenter.animeHistoryPresenter, fromMore),
                 historyTab(router, presenter.historyPresenter, fromMore),
             ),
-            incognitoMode = false,
-            downloadedOnlyMode = false,
+            incognitoMode = presenter.isIncognitoMode,
+            downloadedOnlyMode = presenter.isDownloadOnly,
             state = state,
+            searchQuery = presenter.historyPresenter.searchQuery,
+            onChangeSearchQuery = { presenter.historyPresenter.searchQuery = it },
+            searchQueryAnime = presenter.animeHistoryPresenter.searchQuery,
+            onChangeSearchQueryAnime = { presenter.animeHistoryPresenter.searchQuery = it },
         )
 
         LaunchedEffect(Unit) {
