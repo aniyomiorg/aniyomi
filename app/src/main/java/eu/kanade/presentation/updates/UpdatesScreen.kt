@@ -4,13 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FlipToBack
-import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.SelectAll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,10 +13,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
-import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.FastScrollLazyColumn
@@ -50,9 +41,9 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun UpdateScreen(
     presenter: UpdatesPresenter,
+    contentPadding: PaddingValues,
     onClickCover: (UpdatesItem) -> Unit,
     onBackClicked: () -> Unit,
-    navigateUp: (() -> Unit)? = null,
 ) {
     val internalOnBackPressed = {
         if (presenter.selectionMode) {
@@ -71,19 +62,6 @@ fun UpdateScreen(
     }
 
     Scaffold(
-        topBar = { scrollBehavior ->
-            UpdatesAppBar(
-                incognitoMode = presenter.isIncognitoMode,
-                downloadedOnlyMode = presenter.isDownloadOnly,
-                onUpdateLibrary = { onUpdateLibrary() },
-                actionModeCounter = presenter.selected.size,
-                onSelectAll = { presenter.toggleAllSelection(true) },
-                onInvertSelection = { presenter.invertSelection() },
-                onCancelActionMode = { presenter.toggleAllSelection(false) },
-                scrollBehavior = scrollBehavior,
-                navigateUp = navigateUp,
-            )
-        },
         bottomBar = {
             UpdatesBottomBar(
                 selected = presenter.selected,
@@ -95,7 +73,7 @@ fun UpdateScreen(
                 },
             )
         },
-    ) { contentPadding ->
+    ) {
         val contentPaddingWithNavBar = TachiyomiBottomNavigationView.withBottomNavPadding(contentPadding)
         when {
             presenter.isLoading -> LoadingScreen()
@@ -184,54 +162,6 @@ private fun UpdateScreenContent(
             }
         }
     }
-}
-
-@Composable
-private fun UpdatesAppBar(
-    modifier: Modifier = Modifier,
-    incognitoMode: Boolean,
-    downloadedOnlyMode: Boolean,
-    onUpdateLibrary: () -> Unit,
-    // For action mode
-    actionModeCounter: Int,
-    onSelectAll: () -> Unit,
-    onInvertSelection: () -> Unit,
-    onCancelActionMode: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior,
-    navigateUp: (() -> Unit)? = null,
-) {
-    AppBar(
-        modifier = modifier,
-        title = stringResource(R.string.label_recent_updates),
-        actions = {
-            IconButton(onClick = onUpdateLibrary) {
-                Icon(
-                    imageVector = Icons.Outlined.Refresh,
-                    contentDescription = stringResource(R.string.action_update_library),
-                )
-            }
-        },
-        actionModeCounter = actionModeCounter,
-        onCancelActionMode = onCancelActionMode,
-        actionModeActions = {
-            IconButton(onClick = onSelectAll) {
-                Icon(
-                    imageVector = Icons.Outlined.SelectAll,
-                    contentDescription = stringResource(R.string.action_select_all),
-                )
-            }
-            IconButton(onClick = onInvertSelection) {
-                Icon(
-                    imageVector = Icons.Outlined.FlipToBack,
-                    contentDescription = stringResource(R.string.action_select_inverse),
-                )
-            }
-        },
-        downloadedOnlyMode = downloadedOnlyMode,
-        incognitoMode = incognitoMode,
-        scrollBehavior = scrollBehavior,
-        navigateUp = navigateUp,
-    )
 }
 
 @Composable

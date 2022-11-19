@@ -47,9 +47,9 @@
     <string name="label_default">Default</string>
     <string name="label_warning">Warning</string>
 
-    <string name="pref_bottom_nav_no_history">Moves History to the More tab</string>
-    <string name="pref_bottom_nav_no_updates">Moves Updates to the More tab</string>
-    <string name="pref_bottom_nav_no_manga">Moves Manga to the More tab</string>
+    <string name="pref_bottom_nav_no_history">Move History to the More tab</string>
+    <string name="pref_bottom_nav_no_updates">Move Updates to the More tab</string>
+    <string name="pref_bottom_nav_no_manga">Move Manga to the More tab</string>
 
     <string name="unlock_app">Unlock Aniyomi</string>
     <string name="confirm_lock_change">Authenticate to confirm change</string>

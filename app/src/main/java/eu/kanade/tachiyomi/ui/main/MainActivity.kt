@@ -98,14 +98,6 @@ class MainActivity : BaseActivity() {
 
     private val startScreenId = R.id.nav_animelib
 
-    private fun getNavId(index: Int): Int {
-        return when (libraryPreferences.bottomNavStyle().get()) {
-            1 -> startScreenArrayHistory.getOrNull(index)
-            2 -> startScreenArrayNoManga.getOrNull(index)
-            else -> startScreenArrayDefault.getOrNull(index)
-        } ?: R.id.nav_animelib
-    }
-
     private var isConfirmingExit: Boolean = false
     private var isHandlingShortcut: Boolean = false
 

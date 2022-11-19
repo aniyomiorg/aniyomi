@@ -1,5 +1,6 @@
 package eu.kanade.presentation.components
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -50,23 +51,28 @@ fun TabbedScreen(
             if (titleRes != null) {
                 val tab = tabs[state.currentPage]
                 val searchEnabled = tab.searchEnabled
+                Log.i("asfmovie", state.currentPage.toString())
 
-                val actualQuery = when (state.currentPage) {
-                    3 -> searchQuery
+                val actualQuery = when (state.currentPage % 2) {
+                    1 -> searchQuery // History and Browse
                     else -> searchQueryAnime
                 }
 
-                val actualOnChange = when (state.currentPage) {
-                    3 -> onChangeSearchQuery
+                val actualOnChange = when (state.currentPage % 2) {
+                    1 -> onChangeSearchQuery // History and Browse
                     else -> onChangeSearchQueryAnime
                 }
 
+                val appBarTitleText = if (tab.numberTitle == 0) stringResource(titleRes) else tab.numberTitle.toString()
                 SearchToolbar(
-                    titleContent = { AppBarTitle(stringResource(titleRes)) },
+                    titleContent = { AppBarTitle(appBarTitleText) },
                     searchEnabled = searchEnabled,
                     searchQuery = if (searchEnabled) actualQuery else null,
                     onChangeSearchQuery = actualOnChange,
                     actions = { AppBarActions(tab.actions) },
+                    cancelAction = tab.cancelAction,
+                    actionMode = tab.numberTitle != 0,
+                    navigateUp = tab.navigateUp,
                 )
             }
         },
@@ -117,6 +123,9 @@ data class TabContent(
     val searchEnabled: Boolean = false,
     val actions: List<AppBar.Action> = emptyList(),
     val content: @Composable (contentPadding: PaddingValues) -> Unit,
+    val numberTitle: Int = 0,
+    val cancelAction: () -> Unit = {},
+    val navigateUp: (() -> Unit)? = null,
 )
 
 @Composable
