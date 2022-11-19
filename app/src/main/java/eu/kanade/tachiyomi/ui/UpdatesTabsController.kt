@@ -7,6 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.components.PagerState
 import eu.kanade.presentation.components.TabbedScreen
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.animeupdates.animeUpdatesTab
 import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
 import eu.kanade.tachiyomi.ui.base.controller.RootController
@@ -30,13 +31,13 @@ class UpdatesTabsController : FullComposeController<UpdatesTabsPresenter>(), Roo
         val libraryPreferences: LibraryPreferences = Injekt.get()
         val fromMore = libraryPreferences.bottomNavStyle().get() == 1
         TabbedScreen(
-            titleRes = null,
+            titleRes = R.string.label_recent_updates,
             tabs = listOf(
                 animeUpdatesTab(router, presenter.animeUpdatesPresenter, activity, fromMore),
                 updatesTab(router, presenter.updatesPresenter, activity, fromMore),
             ),
-            incognitoMode = false,
-            downloadedOnlyMode = false,
+            incognitoMode = presenter.isIncognitoMode,
+            downloadedOnlyMode = presenter.isDownloadOnly,
             state = state,
         )
 

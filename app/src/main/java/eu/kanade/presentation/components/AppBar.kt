@@ -240,6 +240,8 @@ fun SearchToolbar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    cancelAction: () -> Unit = {},
+    actionMode: Boolean = false,
 ) {
     val focusRequester = remember { FocusRequester() }
     var searchClickCount by remember { mutableStateOf(0) }
@@ -323,10 +325,11 @@ fun SearchToolbar(
 
             key("actions") { actions() }
         },
-        isActionMode = false,
+        isActionMode = actionMode,
         downloadedOnlyMode = downloadedOnlyMode,
         incognitoMode = incognitoMode,
         scrollBehavior = scrollBehavior,
+        onCancelActionMode = cancelAction,
     )
     LaunchedEffect(searchClickCount) {
         if (searchQuery == null) return@LaunchedEffect

@@ -61,12 +61,16 @@ fun TabbedScreen(
                     else -> onChangeSearchQueryAnime
                 }
 
+                val appBarTitleText = if (tab.numberTitle == 0) stringResource(titleRes) else tab.numberTitle.toString()
                 SearchToolbar(
-                    titleContent = { AppBarTitle(stringResource(titleRes)) },
+                    titleContent = { AppBarTitle(appBarTitleText) },
                     searchEnabled = searchEnabled,
                     searchQuery = if (searchEnabled) actualQuery else null,
                     onChangeSearchQuery = actualOnChange,
                     actions = { AppBarActions(tab.actions) },
+                    cancelAction = tab.cancelAction,
+                    actionMode = tab.numberTitle != 0,
+                    navigateUp = tab.navigateUp,
                 )
             }
         },
@@ -117,6 +121,9 @@ data class TabContent(
     val searchEnabled: Boolean = false,
     val actions: List<AppBar.Action> = emptyList(),
     val content: @Composable (contentPadding: PaddingValues) -> Unit,
+    val numberTitle: Int = 0,
+    val cancelAction: () -> Unit = {},
+    val navigateUp: (() -> Unit)? = null,
 )
 
 @Composable
