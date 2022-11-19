@@ -1,5 +1,6 @@
 package eu.kanade.presentation.more.settings.screen
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -15,12 +16,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.app.ActivityCompat
 import androidx.core.os.LocaleListCompat
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.drop
 import org.xmlpull.v1.XmlPullParser
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -36,6 +40,14 @@ class SettingsGeneralScreen : SearchableSettings {
     override fun getPreferences(): List<Preference> {
         val prefs = remember { Injekt.get<BasePreferences>() }
         val libraryPrefs = remember { Injekt.get<LibraryPreferences>() }
+        val context = LocalContext.current
+
+        LaunchedEffect(Unit) {
+            libraryPrefs.bottomNavStyle().changes()
+                .drop(1)
+                .collectLatest { (context as? Activity)?.let { ActivityCompat.recreate(it) } }
+        }
+
         return mutableListOf<Preference>().apply {
             add(
                 Preference.PreferenceItem.ListPreference(
@@ -62,7 +74,6 @@ class SettingsGeneralScreen : SearchableSettings {
                 ),
             )
 
-            val context = LocalContext.current
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 add(
                     Preference.PreferenceItem.TextPreference(
