@@ -4,8 +4,8 @@ contact_links:
     url: https://github.com/jmir1/aniyomi-extensions/issues/new/choose
     about: Issues and requests for extensions and sources should be opened in the aniyomi-extensions repository instead
   - name: 📦 Aniyomi extensions
-    url: https://github.com/jmir1/aniyomi-extensions
+    url: https://aniyomi.jmir.xyz/extensions
     about: Anime extensions and sources
-- name: Aniyomi help discord
+  - name: 🧑‍💻 Aniyomi help discord
     url: https://discord.gg/F32UjdJZrR
     about: Common questions are answered here
