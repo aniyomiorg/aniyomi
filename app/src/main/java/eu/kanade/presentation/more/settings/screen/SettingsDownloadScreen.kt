@@ -133,7 +133,7 @@ class SettingsDownloadScreen : SearchableSettings {
         return remember {
             val file = UniFile.fromFile(
                 File(
-                    "${Environment.getExternalStorageDirectory().absolutePath}${File.separator}$appName",
+                    "${Environment.getExternalStorageDirectory().absolutePath}${File.separator}${Environment.DIRECTORY_DOWNLOADS}${File.separator}$appName",
                     "downloads",
                 ),
             )!!
@@ -328,6 +328,7 @@ class SettingsDownloadScreen : SearchableSettings {
                 "idm.internet.download.manager" -> true
                 "idm.internet.download.manager.plus" -> true
                 "idm.internet.download.manager.lite" -> true
+                "com.dv.adm" -> true
                 else -> false
             }
         }
