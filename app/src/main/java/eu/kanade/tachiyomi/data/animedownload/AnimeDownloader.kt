@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFmpegSession
 import com.arthenica.ffmpegkit.FFprobeSession
@@ -629,11 +630,16 @@ class AnimeDownloader(
                         }
                         // ADM
                         pkgName.startsWith("com.dv.adm") -> {
+                            val headers = (video.headers ?: source.headers).toList()
+                            val bundle = Bundle()
+                            headers.forEach { a -> bundle.putString(a.first, a.second.replace("http", "h_ttp")) }
+
                             intent.apply {
                                 component = ComponentName(pkgName, "$pkgName.AEditor")
                                 action = Intent.ACTION_VIEW
                                 putExtra("com.dv.get.ACTION_LIST_ADD", "${Uri.parse(video.videoUrl)}<info>$filename.mp4")
                                 putExtra("com.dv.get.ACTION_LIST_PATH", tmpDir.filePath!!.substringBeforeLast("_"))
+                                putExtra("android.media.intent.extra.HTTP_HEADERS", bundle)
                             }
                             it.delete()
                             tmpDir.delete()
