@@ -21,6 +21,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.data.episode.NoEpisodesException
 import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.episode.model.toDbEpisode
+import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.presentation.anime.AnimeScreen
 import eu.kanade.presentation.anime.components.DeleteEpisodesDialog
 import eu.kanade.presentation.components.ChangeCategoryDialog
@@ -98,6 +99,8 @@ class AnimeController : FullComposeController<AnimePresenter> {
 
     private val playerPreferences: PlayerPreferences = Injekt.get()
 
+    private val trackPreferences: TrackPreferences = Injekt.get()
+
     override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
         super.onChangeStarted(handler, type)
         val actionBar = (activity as? AppCompatActivity)?.supportActionBar
@@ -170,6 +173,7 @@ class AnimeController : FullComposeController<AnimePresenter> {
                         router.pushController(AnimeCategoryController())
                     },
                     onConfirm = { include, _ ->
+                        if (!dialog.anime.favorite) onFavoriteAdded()
                         presenter.moveAnimeToCategoriesAndAddToLibrary(dialog.anime, include)
                     },
                 )
@@ -288,8 +292,18 @@ class AnimeController : FullComposeController<AnimePresenter> {
     private fun onFavoriteClick() {
         presenter.toggleFavorite(
             onRemoved = this::onFavoriteRemoved,
-            onAdded = { activity?.toast(R.string.manga_added_library) },
+            onAdded = this::onFavoriteAdded,
         )
+    }
+
+    private fun onFavoriteAdded() {
+        val successState = presenter.state.value as AnimeScreenState.Success
+        if (trackPreferences.trackOnAddingToLibrary().get() && successState.trackingAvailable) {
+            trackSheet.show()
+            trackSheet.setOnDismissListener { activity?.toast(R.string.manga_added_library) }
+        } else {
+            activity?.toast(R.string.manga_added_library)
+        }
     }
 
     private fun onFavoriteRemoved() {

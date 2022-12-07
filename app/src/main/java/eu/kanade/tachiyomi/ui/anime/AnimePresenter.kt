@@ -207,7 +207,7 @@ class AnimePresenter(
                     anime = anime,
                     source = Injekt.get<AnimeSourceManager>().getOrStub(anime.source),
                     isFromSource = isFromSource,
-                    trackingAvailable = trackManager.hasLoggedServices(),
+                    trackingAvailable = trackManager.hasLoggedAnimeServices(),
                     episodes = episodes,
                     isRefreshingData = needRefreshInfo || needRefreshEpisode,
                     isIncognitoMode = incognitoMode,
