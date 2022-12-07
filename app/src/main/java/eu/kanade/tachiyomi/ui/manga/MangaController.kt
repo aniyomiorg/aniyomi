@@ -18,6 +18,7 @@ import androidx.core.os.bundleOf
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import eu.kanade.data.chapter.NoChaptersException
+import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.components.DuplicateMangaDialog
@@ -57,6 +58,8 @@ import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import eu.kanade.domain.chapter.model.Chapter as DomainChapter
 
 class MangaController : FullComposeController<MangaPresenter> {
@@ -82,6 +85,8 @@ class MangaController : FullComposeController<MangaPresenter> {
     private lateinit var trackSheet: TrackSheet
 
     private val snackbarHostState = SnackbarHostState()
+
+    private val trackPreferences: TrackPreferences = Injekt.get()
 
     override fun onChangeStarted(handler: ControllerChangeHandler, type: ControllerChangeType) {
         super.onChangeStarted(handler, type)
@@ -155,6 +160,7 @@ class MangaController : FullComposeController<MangaPresenter> {
                         router.pushController(CategoryController())
                     },
                     onConfirm = { include, _ ->
+                        if (!dialog.manga.favorite) onFavoriteAdded()
                         presenter.moveMangaToCategoriesAndAddToLibrary(dialog.manga, include)
                     },
                 )
@@ -248,8 +254,18 @@ class MangaController : FullComposeController<MangaPresenter> {
     private fun onFavoriteClick() {
         presenter.toggleFavorite(
             onRemoved = this::onFavoriteRemoved,
-            onAdded = { activity?.toast(R.string.manga_added_library) },
+            onAdded = this::onFavoriteAdded,
         )
+    }
+
+    private fun onFavoriteAdded() {
+        val successState = presenter.state.value as MangaScreenState.Success
+        if (trackPreferences.trackOnAddingToLibrary().get() && successState.trackingAvailable) {
+            trackSheet.show()
+            trackSheet.setOnDismissListener { activity?.toast(R.string.manga_added_library) }
+        } else {
+            activity?.toast(R.string.manga_added_library)
+        }
     }
 
     private fun onFavoriteRemoved() {

@@ -206,7 +206,7 @@ class MangaPresenter(
                     manga = manga,
                     source = Injekt.get<SourceManager>().getOrStub(manga.source),
                     isFromSource = isFromSource,
-                    trackingAvailable = trackManager.hasLoggedServices(),
+                    trackingAvailable = trackManager.hasLoggedMangaServices(),
                     chapters = chapters,
                     isRefreshingData = needRefreshInfo || needRefreshChapter,
                     isIncognitoMode = incognitoMode,
