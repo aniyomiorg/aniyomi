@@ -1,6 +1,6 @@
 package eu.kanade.domain.animehistory.model
 
-import eu.kanade.domain.manga.model.MangaCover
+import eu.kanade.domain.anime.model.AnimeCover
 import java.util.Date
 
 data class AnimeHistoryWithRelations(
@@ -10,5 +10,5 @@ data class AnimeHistoryWithRelations(
     val title: String,
     val episodeNumber: Float,
     val seenAt: Date?,
-    val coverData: MangaCover,
+    val coverData: AnimeCover,
 )

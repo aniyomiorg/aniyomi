@@ -11,8 +11,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.zIndex
+import eu.kanade.domain.anime.model.AnimeCover
 import eu.kanade.domain.animelib.model.AnimelibAnime
-import eu.kanade.domain.manga.model.MangaCover
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.MangaListItem
 import eu.kanade.presentation.util.plus
@@ -58,10 +58,10 @@ fun AnimelibList(
             MangaListItem(
                 isSelected = selection.fastAny { it.id == animelibItem.animelibAnime.id },
                 title = anime.title,
-                coverData = MangaCover(
-                    mangaId = anime.id,
+                coverData = AnimeCover(
+                    animeId = anime.id,
                     sourceId = anime.source,
-                    isMangaFavorite = anime.favorite,
+                    isAnimeFavorite = anime.favorite,
                     url = anime.thumbnailUrl,
                     lastModified = anime.coverLastModified,
                 ),

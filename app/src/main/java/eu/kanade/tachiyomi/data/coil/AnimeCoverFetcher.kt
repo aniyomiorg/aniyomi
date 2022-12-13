@@ -10,7 +10,7 @@ import coil.fetch.SourceResult
 import coil.network.HttpException
 import coil.request.Options
 import coil.request.Parameters
-import eu.kanade.domain.manga.model.MangaCover
+import eu.kanade.domain.anime.model.AnimeCover
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
@@ -310,18 +310,18 @@ class AnimeCoverFetcher(
     class AnimeCoverFactory(
         private val callFactoryLazy: Lazy<Call.Factory>,
         private val diskCacheLazy: Lazy<DiskCache>,
-    ) : Fetcher.Factory<MangaCover> {
+    ) : Fetcher.Factory<AnimeCover> {
 
         private val coverCache: AnimeCoverCache by injectLazy()
         private val sourceManager: AnimeSourceManager by injectLazy()
 
-        override fun create(data: MangaCover, options: Options, imageLoader: ImageLoader): Fetcher {
+        override fun create(data: AnimeCover, options: Options, imageLoader: ImageLoader): Fetcher {
             return AnimeCoverFetcher(
                 url = data.url,
-                isLibraryAnime = data.isMangaFavorite,
+                isLibraryAnime = data.isAnimeFavorite,
                 options = options,
                 coverFileLazy = lazy { coverCache.getCoverFile(data.url) },
-                customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.mangaId) },
+                customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.animeId) },
                 diskCacheKeyLazy = lazy { AnimeCoverKeyer().key(data, options) },
                 sourceLazy = lazy { sourceManager.get(data.sourceId) as? AnimeHttpSource },
                 callFactoryLazy = callFactoryLazy,

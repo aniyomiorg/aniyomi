@@ -14,9 +14,9 @@ import eu.kanade.domain.manga.model.Manga as DomainManga
 class MangaKeyer : Keyer<Manga> {
     override fun key(data: Manga, options: Options): String {
         return if (data.toDomainManga()!!.hasCustomCover()) {
-            "${data.id};${data.cover_last_modified}"
+            "manga;${data.id};${data.cover_last_modified}"
         } else {
-            "${data.thumbnail_url};${data.cover_last_modified}"
+            "manga;${data.thumbnail_url};${data.cover_last_modified}"
         }
     }
 }
@@ -24,9 +24,9 @@ class MangaKeyer : Keyer<Manga> {
 class DomainMangaKeyer : Keyer<DomainManga> {
     override fun key(data: DomainManga, options: Options): String {
         return if (data.hasCustomCover()) {
-            "${data.id};${data.coverLastModified}"
+            "manga;${data.id};${data.coverLastModified}"
         } else {
-            "${data.thumbnailUrl};${data.coverLastModified}"
+            "manga;${data.thumbnailUrl};${data.coverLastModified}"
         }
     }
 }
@@ -34,9 +34,9 @@ class DomainMangaKeyer : Keyer<DomainManga> {
 class MangaCoverKeyer : Keyer<MangaCover> {
     override fun key(data: MangaCover, options: Options): String {
         return if (Injekt.get<CoverCache>().getCustomCoverFile(data.mangaId).exists()) {
-            "${data.mangaId};${data.lastModified}"
+            "manga;${data.mangaId};${data.lastModified}"
         } else {
-            "${data.url};${data.lastModified}"
+            "manga;${data.url};${data.lastModified}"
         }
     }
 }

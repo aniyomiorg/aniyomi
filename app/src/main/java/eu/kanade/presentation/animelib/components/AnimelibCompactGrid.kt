@@ -6,8 +6,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastAny
+import eu.kanade.domain.anime.model.AnimeCover
 import eu.kanade.domain.animelib.model.AnimelibAnime
-import eu.kanade.domain.manga.model.MangaCover
 import eu.kanade.presentation.components.MangaCompactGridItem
 import eu.kanade.presentation.library.components.LazyLibraryGrid
 import eu.kanade.presentation.library.components.globalSearchItem
@@ -46,10 +46,10 @@ fun AnimelibCompactGrid(
             MangaCompactGridItem(
                 isSelected = selection.fastAny { it.id == animelibItem.animelibAnime.id },
                 title = anime.title.takeIf { showTitle },
-                coverData = MangaCover(
-                    mangaId = anime.id,
+                coverData = AnimeCover(
+                    animeId = anime.id,
                     sourceId = anime.source,
-                    isMangaFavorite = anime.favorite,
+                    isAnimeFavorite = anime.favorite,
                     url = anime.thumbnailUrl,
                     lastModified = anime.coverLastModified,
                 ),

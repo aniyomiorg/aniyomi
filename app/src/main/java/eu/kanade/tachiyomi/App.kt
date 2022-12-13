@@ -183,6 +183,7 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
             }
             callFactory(callFactoryInit)
             diskCache(diskCacheInit)
+            diskCache(diskCacheInit)
             crossfade((300 * this@App.animatorDurationScale).toInt())
             allowRgb565(getSystemService<ActivityManager>()!!.isLowRamDevice)
             if (networkPreferences.verboseLogging().get()) logger(DebugLogger())
@@ -261,6 +262,27 @@ private const val ACTION_DISABLE_INCOGNITO_MODE = "tachi.action.DISABLE_INCOGNIT
 internal object CoilDiskCache {
 
     private const val FOLDER_NAME = "image_cache"
+    private var instance: DiskCache? = null
+
+    @Synchronized
+    fun get(context: Context): DiskCache {
+        return instance ?: run {
+            val safeCacheDir = context.cacheDir.apply { mkdirs() }
+            // Create the singleton disk cache instance.
+            DiskCache.Builder()
+                .directory(safeCacheDir.resolve(FOLDER_NAME))
+                .build()
+                .also { instance = it }
+        }
+    }
+}
+
+/**
+ * Direct copy of Coil's internal SingletonDiskCache so that [MangaCoverFetcher] can access it.
+ */
+internal object CoilDiskCacheAnime {
+
+    private const val FOLDER_NAME = "anime_image_cache"
     private var instance: DiskCache? = null
 
     @Synchronized

@@ -1,8 +1,8 @@
 package eu.kanade.data.animehistory
 
+import eu.kanade.domain.anime.model.AnimeCover
 import eu.kanade.domain.animehistory.model.AnimeHistory
 import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
-import eu.kanade.domain.manga.model.MangaCover
 import java.util.Date
 
 val animehistoryMapper: (Long, Long, Date?) -> AnimeHistory = { id, episodeId, seenAt ->
@@ -22,10 +22,10 @@ val animehistoryWithRelationsMapper: (Long, Long, Long, String, String?, Long, B
         title = title,
         episodeNumber = episodeNumber,
         seenAt = seenAt,
-        coverData = MangaCover(
-            mangaId = animeId,
+        coverData = AnimeCover(
+            animeId = animeId,
             sourceId = sourceId,
-            isMangaFavorite = isFavorite,
+            isAnimeFavorite = isFavorite,
             url = thumbnailUrl,
             lastModified = coverLastModified,
         ),

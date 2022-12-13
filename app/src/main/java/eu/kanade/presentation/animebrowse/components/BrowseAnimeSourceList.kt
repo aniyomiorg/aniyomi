@@ -10,7 +10,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.manga.model.MangaCover
+import eu.kanade.domain.anime.model.AnimeCover
 import eu.kanade.presentation.browse.components.BrowseSourceLoadingItem
 import eu.kanade.presentation.components.Badge
 import eu.kanade.presentation.components.CommonMangaItemDefaults
@@ -62,10 +62,10 @@ fun BrowseAnimeSourceListItem(
 ) {
     MangaListItem(
         title = anime.title,
-        coverData = MangaCover(
-            mangaId = anime.id,
+        coverData = AnimeCover(
+            animeId = anime.id,
             sourceId = anime.source,
-            isMangaFavorite = anime.favorite,
+            isAnimeFavorite = anime.favorite,
             url = anime.thumbnailUrl,
             lastModified = anime.coverLastModified,
         ),

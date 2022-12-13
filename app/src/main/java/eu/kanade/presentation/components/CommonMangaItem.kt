@@ -59,7 +59,7 @@ private const val GridSelectedCoverAlpha = 0.76f
 fun MangaCompactGridItem(
     isSelected: Boolean = false,
     title: String? = null,
-    coverData: eu.kanade.domain.manga.model.MangaCover,
+    coverData: eu.kanade.domain.manga.model.CommonCover,
     coverAlpha: Float = 1f,
     coverBadgeStart: (@Composable RowScope.() -> Unit)? = null,
     coverBadgeEnd: (@Composable RowScope.() -> Unit)? = null,
@@ -142,7 +142,7 @@ private fun BoxScope.CoverTextOverlay(
 fun MangaComfortableGridItem(
     isSelected: Boolean = false,
     title: String,
-    coverData: eu.kanade.domain.manga.model.MangaCover,
+    coverData: eu.kanade.domain.manga.model.CommonCover,
     coverAlpha: Float = 1f,
     coverBadgeStart: (@Composable RowScope.() -> Unit)? = null,
     coverBadgeEnd: (@Composable RowScope.() -> Unit)? = null,
@@ -308,7 +308,7 @@ private fun Modifier.selectedOutline(
 fun MangaListItem(
     isSelected: Boolean = false,
     title: String,
-    coverData: eu.kanade.domain.manga.model.MangaCover,
+    coverData: eu.kanade.domain.manga.model.CommonCover,
     coverAlpha: Float = 1f,
     badge: @Composable RowScope.() -> Unit,
     showContinueReadingButton: Boolean = false,

@@ -1,6 +1,6 @@
 package eu.kanade.domain.animeupdates.model
 
-import eu.kanade.domain.manga.model.MangaCover
+import eu.kanade.domain.anime.model.AnimeCover
 
 data class AnimeUpdatesWithRelations(
     val animeId: Long,
@@ -12,5 +12,5 @@ data class AnimeUpdatesWithRelations(
     val bookmark: Boolean,
     val sourceId: Long,
     val dateFetch: Long,
-    val coverData: MangaCover,
+    val coverData: AnimeCover,
 )

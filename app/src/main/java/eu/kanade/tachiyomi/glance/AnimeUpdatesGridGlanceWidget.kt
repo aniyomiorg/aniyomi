@@ -44,7 +44,7 @@ import coil.size.Precision
 import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
 import eu.kanade.data.AnimeDatabaseHandler
-import eu.kanade.domain.manga.model.MangaCover
+import eu.kanade.domain.anime.model.AnimeCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.ui.anime.AnimeController
@@ -223,10 +223,10 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
             .map { animeupdatesView ->
                 val request = ImageRequest.Builder(app)
                     .data(
-                        MangaCover(
-                            mangaId = animeupdatesView.animeId,
+                        AnimeCover(
+                            animeId = animeupdatesView.animeId,
                             sourceId = animeupdatesView.source,
-                            isMangaFavorite = animeupdatesView.favorite,
+                            isAnimeFavorite = animeupdatesView.favorite,
                             url = animeupdatesView.thumbnailUrl,
                             lastModified = animeupdatesView.coverLastModified,
                         ),

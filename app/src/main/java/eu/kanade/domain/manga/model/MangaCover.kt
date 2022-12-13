@@ -9,4 +9,4 @@ data class MangaCover(
     val isMangaFavorite: Boolean,
     val url: String?,
     val lastModified: Long,
-)
+) : CommonCover
