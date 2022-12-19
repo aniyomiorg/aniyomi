@@ -272,7 +272,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         if (binding.cycleDecoderBtn.visibility != View.VISIBLE && binding.cycleDecoderBtn.visibility != View.VISIBLE) {
             return
         }
-        binding.cycleDecoderBtn.text = if (activity.player.hwdecActive) "HW" else "SW"
+        binding.cycleDecoderBtn.text = when (activity.player.hwdecActive) {
+            "mediacodec" -> "HW+"
+            "no" -> "SW"
+            else -> "HW"
+        }
     }
 
     internal fun updateSpeedButton() {

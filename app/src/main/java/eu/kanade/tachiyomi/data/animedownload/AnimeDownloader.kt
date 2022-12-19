@@ -533,7 +533,7 @@ class AnimeDownloader(
                 video.progress = (100 * it.time.toLong() / duration).toInt()
             }
         }
-        val session = FFmpegSession(ffmpegOptions, {}, logCallback, statisticsCallback)
+        val session = FFmpegSession.create(ffmpegOptions, {}, logCallback, statisticsCallback)
 
         val inputDuration = getDuration(ffprobeCommand(video.videoUrl!!, headerOptions)) ?: 0F
         FFmpegKitConfig.ffmpegExecute(session)
@@ -553,7 +553,7 @@ class AnimeDownloader(
     }
 
     private fun getDuration(ffprobeCommand: Array<String>): Float? {
-        val session = FFprobeSession(ffprobeCommand)
+        val session = FFprobeSession.create(ffprobeCommand)
         FFmpegKitConfig.ffprobeExecute(session)
         return session.allLogsAsString.trim().toFloatOrNull()
     }
