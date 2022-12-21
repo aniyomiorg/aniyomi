@@ -49,6 +49,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -440,7 +441,7 @@ class AnimeDownloader(
         }
 
         // Try to find the video file.
-        val videoFile = tmpDir.listFiles()!!.find { it.name!!.startsWith("$filename.mp4") }
+        val videoFile = tmpDir.listFiles()!!.find { it.name!!.startsWith("$filename.mkv") }
 
         // If the video is already downloaded, do nothing. Otherwise download from network
         val pageObservable = when {
@@ -509,11 +510,15 @@ class AnimeDownloader(
     private fun ffmpegObservable(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
         isFFmpegRunning = true
         val headers = video.headers ?: download.source.headers
-        val headerOptions = headers.joinToString("", "-headers '", "'") { "${it.first}: ${it.second}\r\n" }
-        val videoFile = tmpDir.findFile("$filename.mp4")
-            ?: tmpDir.createFile("$filename.mp4")!!
+        val headerOptions = headers.joinToString("", "-headers '", "'") {
+            "${it.first}: ${it.second}\r\n"
+        }
+        val videoFile = tmpDir.findFile("$filename.mkv")
+            ?: tmpDir.createFile("$filename.mkv")!!
         val ffmpegFilename = { videoFile.uri.toFFmpegString(context) }
-        val ffmpegOptions = FFmpegKitConfig.parseArguments(headerOptions + " -i '${video.videoUrl}' -c copy \"${ffmpegFilename()}\" -y")
+
+        val ffmpegOptions = getFFmpegOptions(video, headerOptions, ffmpegFilename())
+
         val ffprobeCommand = { file: String, ffprobeHeaders: String? ->
             FFmpegKitConfig.parseArguments("${ffprobeHeaders?.plus(" ") ?: ""}-v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"$file\"")
         }
@@ -522,7 +527,7 @@ class AnimeDownloader(
         var nextLineIsDuration = false
         val logCallback = LogCallback { log ->
             if (nextLineIsDuration) {
-                duration = parseDuration(log.message)
+                parseDuration(log.message)?.let { duration = it }
                 nextLineIsDuration = false
             }
             if (log.message == "  Duration: ") nextLineIsDuration = true
@@ -540,7 +545,7 @@ class AnimeDownloader(
         val outputDuration = getDuration(ffprobeCommand(ffmpegFilename(), null)) ?: 0F
         // allow for slight errors
         if (inputDuration > outputDuration * 1.01F) {
-            tmpDir.findFile("$filename.mp4")?.delete()
+            tmpDir.findFile("$filename.mkv")?.delete()
         }
         session.failStackTrace?.let { trace ->
             logcat(LogPriority.ERROR) { trace }
@@ -548,8 +553,31 @@ class AnimeDownloader(
         }
         return Observable.just(session)
             .map {
-                tmpDir.findFile("$filename.mp4") ?: throw Exception("Downloaded file not found")
+                tmpDir.findFile("$filename.mkv") ?: throw Exception("Downloaded file not found")
             }
+    }
+
+    private fun getFFmpegOptions(video: Video, headerOptions: String, ffmpegFilename: String): Array<String> {
+        val subtitleInputs = video.subtitleTracks.joinToString(" ", postfix = " ") {
+            "-i \"${it.url}\""
+        }
+        val subtitleMaps = video.subtitleTracks.indices.joinToString(" ") {
+            val index = it + 1
+            "-map $index"
+        }
+        val subtitleMetadata = video.subtitleTracks.mapIndexed { i, sub ->
+            "-metadata:s:s:$i \"title=${sub.lang}\""
+        }.joinToString(" ")
+
+        Locale("")
+        return FFmpegKitConfig.parseArguments(
+            headerOptions +
+                " -i \"${video.videoUrl}\" " + subtitleInputs +
+                subtitleMaps + " -map 0" +
+                " -c:a copy -c:v copy -c:s ass " +
+                subtitleMetadata +
+                " \"$ffmpegFilename\" -y",
+        )
     }
 
     private fun getDuration(ffprobeCommand: Array<String>): Float? {
@@ -563,13 +591,13 @@ class AnimeDownloader(
      *
      * @param durationString the string formatted in HOURS:MINUTES:SECONDS.HUNDREDTHS
      */
-    private fun parseDuration(durationString: String): Long {
+    private fun parseDuration(durationString: String): Long? {
         val splitString = durationString.split(":")
-        assert(splitString.lastIndex == 2)
+        if (splitString.lastIndex != 2) return null
         val hours = splitString[0].toLong()
         val minutes = splitString[1].toLong()
         val secondsString = splitString[2].split(".")
-        assert(secondsString.lastIndex == 1)
+        if (secondsString.lastIndex != 1) return null
         val fullSeconds = secondsString[0].toLong()
         val hundredths = secondsString[1].toLong()
         return hours * 3600000L + minutes * 60000L + fullSeconds * 1000L + hundredths * 10L
