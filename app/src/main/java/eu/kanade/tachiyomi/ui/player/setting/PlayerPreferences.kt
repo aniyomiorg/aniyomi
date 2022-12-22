@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.player.setting
 
+import android.os.Build
 import eu.kanade.tachiyomi.core.preference.PreferenceStore
 
 class PlayerPreferences(
@@ -64,4 +65,11 @@ class PlayerPreferences(
     fun waitingTimeAniSkip() = preferenceStore.getInt("pref_waiting_time_aniskip", 5)
 
     fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean("pref_enable_netflixStyle_aniskip", false)
+
+    private val defaultHwDec = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        "mediacodec"
+    } else {
+        "mediacodec-copy"
+    }
+    fun standardHwDec() = preferenceStore.getString("pref_hwdec", defaultHwDec)
 }

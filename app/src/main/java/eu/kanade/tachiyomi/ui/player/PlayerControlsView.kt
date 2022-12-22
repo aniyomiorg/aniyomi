@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.player
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
@@ -148,6 +149,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         // Long click controls
         binding.cycleSpeedBtn.setOnLongClickListener { pickSpeed(); true }
+        binding.cycleDecoderBtn.setOnLongClickListener { pickDecoder(); true }
 
         binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
 
@@ -359,6 +361,34 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         speedPickerDialog(picker, R.string.title_speed_dialog) {
             updateSpeedButton()
             restore()
+        }
+    }
+
+    private fun pickDecoder() {
+        val restore = pauseForDialog()
+
+        val items = mutableListOf(
+            Pair("HW (mediacodec-copy)", "mediacodec-copy"),
+            Pair("SW", "no"),
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            items.add(0, Pair("HW+ (mediacodec)", "mediacodec"))
+        }
+        var hwdecActive = playerPreferences.standardHwDec().get()
+        val selectedIndex = items.indexOfFirst { it.second == hwdecActive }
+        with(activity.HideBarsMaterialAlertDialogBuilder(activity)) {
+            setTitle(R.string.player_hwdec_dialog_title)
+            setSingleChoiceItems(items.map { it.first }.toTypedArray(), selectedIndex) { _, idx ->
+                hwdecActive = items[idx].second
+            }
+            setPositiveButton(R.string.dialog_ok) { _, _ ->
+                playerPreferences.standardHwDec().set(hwdecActive)
+                MPVLib.setPropertyString("hwdec", hwdecActive)
+            }
+            setNegativeButton(R.string.dialog_cancel) { dialog, _ -> dialog.cancel() }
+            setOnDismissListener { restore() }
+            create()
+            show()
         }
     }
 

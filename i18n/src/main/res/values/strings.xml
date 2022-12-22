@@ -1134,6 +1134,7 @@
     <string name="player_aniskip_dontskip">Don\'t skip</string>
     <string name="player_aniskip_dontskip_toast">Skip in %d seconds</string>
     <string name="player_aniskip_skip">%s Skipped</string>
+    <string name="player_hwdec_dialog_title">Set default hardware decoding mode</string>
 
     <!-- App widget -->
     <string name="appwidget_updates_description">See your recently updated library entries</string>

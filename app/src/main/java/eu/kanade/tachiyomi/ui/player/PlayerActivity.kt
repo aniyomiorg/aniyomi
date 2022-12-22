@@ -322,6 +322,8 @@ class PlayerActivity :
         setMpvConf()
         val logLevel = if (networkPreferences.verboseLogging().get()) "info" else "warn"
         player.initialize(applicationContext.filesDir.path, logLevel)
+        val hwDec = playerPreferences.standardHwDec().get()
+        MPVLib.setOptionString("hwdec", hwDec)
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
         MPVLib.addLogObserver(this)
@@ -1054,8 +1056,23 @@ class PlayerActivity :
 
     @Suppress("UNUSED_PARAMETER")
     fun switchDecoder(view: View) {
-        player.cycleHwdec()
-        playerPreferences.playerViewMode().get()
+        val standardHwDec = playerPreferences.standardHwDec().get()
+        val currentHwDec = player.hwdecActive
+
+        if (standardHwDec == currentHwDec) {
+            val hwDecEnabled = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                "mediacodec"
+            } else {
+                "mediacodec-copy"
+            }
+            val otherHwDec = when (standardHwDec) {
+                "no" -> hwDecEnabled
+                else -> "no"
+            }
+            MPVLib.setPropertyString("hwdec", otherHwDec)
+        } else {
+            MPVLib.setOptionString("hwdec", standardHwDec)
+        }
         playerControls.updateDecoderButton()
     }
 
