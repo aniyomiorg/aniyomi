@@ -10,11 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
 import eu.kanade.presentation.animehistory.components.AnimeHistoryContent
+import eu.kanade.presentation.animehistory.components.AnimeHistoryDeleteDialog
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.history.components.HistoryDeleteAllDialog
-import eu.kanade.presentation.history.components.HistoryDeleteDialog
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.animehistory.AnimeHistoryPresenter
 import eu.kanade.tachiyomi.ui.animehistory.AnimeHistoryPresenter.Dialog
@@ -65,7 +65,7 @@ fun AnimeHistoryScreen(
     val onDismissRequest = { presenter.dialog = null }
     when (val dialog = presenter.dialog) {
         is Dialog.Delete -> {
-            HistoryDeleteDialog(
+            AnimeHistoryDeleteDialog(
                 onDismissRequest = onDismissRequest,
                 onDelete = { all ->
                     if (all) {

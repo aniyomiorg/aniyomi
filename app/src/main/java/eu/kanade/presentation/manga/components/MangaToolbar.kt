@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import eu.kanade.presentation.components.AnimeDownloadDropdownMenu
 import eu.kanade.presentation.components.AppStateBanners
 import eu.kanade.presentation.components.DownloadDropdownMenu
 import eu.kanade.presentation.components.OverflowMenu
@@ -53,6 +54,7 @@ fun MangaToolbar(
     actionModeCounter: Int,
     onSelectAll: () -> Unit,
     onInvertSelection: () -> Unit,
+    manga: Boolean = true,
 ) {
     Column(
         modifier = modifier,
@@ -100,11 +102,19 @@ fun MangaToolbar(
                                 )
                             }
                             val onDismissRequest = { onDownloadExpanded(false) }
-                            DownloadDropdownMenu(
-                                expanded = downloadExpanded,
-                                onDismissRequest = onDismissRequest,
-                                onDownloadClicked = onClickDownload,
-                            )
+                            if (manga) {
+                                DownloadDropdownMenu(
+                                    expanded = downloadExpanded,
+                                    onDismissRequest = onDismissRequest,
+                                    onDownloadClicked = onClickDownload,
+                                )
+                            } else {
+                                AnimeDownloadDropdownMenu(
+                                    expanded = downloadExpanded,
+                                    onDismissRequest = onDismissRequest,
+                                    onDownloadClicked = onClickDownload,
+                                )
+                            }
                         }
                     }
 

@@ -16,7 +16,7 @@ import eu.kanade.domain.animelib.model.AnimelibAnime
 import eu.kanade.domain.episode.model.Episode
 import eu.kanade.presentation.animelib.AnimelibScreen
 import eu.kanade.presentation.components.ChangeCategoryDialog
-import eu.kanade.presentation.components.DeleteLibraryMangaDialog
+import eu.kanade.presentation.components.DeleteAnimelibAnimeDialog
 import eu.kanade.presentation.manga.DownloadAction
 import eu.kanade.presentation.manga.components.DownloadCustomAmountDialog
 import eu.kanade.tachiyomi.R
@@ -98,8 +98,8 @@ class AnimelibController(
                 )
             }
             is AnimelibPresenter.Dialog.DeleteAnime -> {
-                DeleteLibraryMangaDialog(
-                    containsLocalManga = dialog.anime.any(Anime::isLocal),
+                DeleteAnimelibAnimeDialog(
+                    containsLocalAnime = dialog.anime.any(Anime::isLocal),
                     onDismissRequest = onDismissRequest,
                     onConfirm = { deleteAnime, deleteEpisode ->
                         presenter.removeAnimes(dialog.anime.map { it.toDbAnime() }, deleteAnime, deleteEpisode)

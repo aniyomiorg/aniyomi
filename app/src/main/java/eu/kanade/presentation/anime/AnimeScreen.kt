@@ -253,6 +253,7 @@ private fun AnimeScreenSmallImpl(
                 actionModeCounter = episodes.count { it.selected },
                 onSelectAll = { onAllEpisodeSelected(true) },
                 onInvertSelection = { onInvertSelection() },
+                manga = false,
             )
         },
         bottomBar = {
@@ -471,6 +472,7 @@ fun AnimeScreenLargeImpl(
                     actionModeCounter = episodes.count { it.selected },
                     onSelectAll = { onAllEpisodeSelected(true) },
                     onInvertSelection = { onInvertSelection() },
+                    manga = false,
                 )
             },
             bottomBar = {
