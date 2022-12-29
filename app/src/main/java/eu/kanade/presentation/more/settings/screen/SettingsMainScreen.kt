@@ -211,16 +211,16 @@ private val items = listOf(
         screen = SettingsLibraryScreen(),
     ),
     Item(
-        titleRes = R.string.pref_category_reader,
-        subtitleRes = R.string.pref_reader_summary,
-        icon = Icons.Outlined.ChromeReaderMode,
-        screen = SettingsReaderScreen(),
-    ),
-    Item(
         titleRes = R.string.pref_category_player,
         subtitleRes = R.string.pref_player_summary,
         icon = Icons.Outlined.PlayCircleOutline,
         screen = SettingsPlayerScreen(),
+    ),
+    Item(
+        titleRes = R.string.pref_category_reader,
+        subtitleRes = R.string.pref_reader_summary,
+        icon = Icons.Outlined.ChromeReaderMode,
+        screen = SettingsReaderScreen(),
     ),
     Item(
         titleRes = R.string.pref_category_downloads,

@@ -189,14 +189,14 @@ class SettingsAdvancedScreen : SearchableSettings {
                     title = stringResource(R.string.pref_auto_clear_chapter_cache),
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_clear_database),
-                    subtitle = stringResource(R.string.pref_clear_database_summary),
-                    onClick = { navigator.push(ClearDatabaseScreen()) },
-                ),
-                Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_clear_anime_database),
                     subtitle = stringResource(R.string.pref_clear_anime_database_summary),
                     onClick = { navigator.push(ClearAnimeDatabaseScreen()) },
+                ),
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(R.string.pref_clear_database),
+                    subtitle = stringResource(R.string.pref_clear_database_summary),
+                    onClick = { navigator.push(ClearDatabaseScreen()) },
                 ),
             ),
         )

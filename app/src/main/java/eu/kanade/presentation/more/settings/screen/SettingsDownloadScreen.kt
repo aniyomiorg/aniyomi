@@ -290,17 +290,6 @@ class SettingsDownloadScreen : SearchableSettings {
             title = stringResource(R.string.download_ahead),
             preferenceItems = listOf(
                 Preference.PreferenceItem.ListPreference(
-                    pref = downloadPreferences.autoDownloadWhileReading(),
-                    title = stringResource(R.string.auto_download_while_reading),
-                    entries = listOf(0, 2, 3, 5, 10).associateWith {
-                        if (it == 0) {
-                            stringResource(R.string.disabled)
-                        } else {
-                            pluralStringResource(id = R.plurals.next_unread_chapters, count = it, it)
-                        }
-                    },
-                ),
-                Preference.PreferenceItem.ListPreference(
                     pref = downloadPreferences.autoDownloadWhileWatching(),
                     title = stringResource(R.string.auto_download_while_watching),
                     entries = listOf(0, 2, 3, 5, 10).associateWith {
@@ -308,6 +297,17 @@ class SettingsDownloadScreen : SearchableSettings {
                             stringResource(R.string.disabled)
                         } else {
                             pluralStringResource(id = R.plurals.next_unseen_episodes, count = it, it)
+                        }
+                    },
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = downloadPreferences.autoDownloadWhileReading(),
+                    title = stringResource(R.string.auto_download_while_reading),
+                    entries = listOf(0, 2, 3, 5, 10).associateWith {
+                        if (it == 0) {
+                            stringResource(R.string.disabled)
+                        } else {
+                            pluralStringResource(id = R.plurals.next_unread_chapters, count = it, it)
                         }
                     },
                 ),
