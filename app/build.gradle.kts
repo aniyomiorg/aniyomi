@@ -117,17 +117,6 @@ android {
             "META-INF/NOTICE",
             "META-INF/*.kotlin_module",
         ))
-
-        jniLibs.pickFirsts.addAll(listOf(
-            "**/libavcodec.so",
-            "**/libavdevice.so",
-            "**/libavfilter.so",
-            "**/libavformat.so",
-            "**/libavutil.so",
-            "**/libswresample.so",
-            "**/libswscale.so",
-            "**/libc++_shared.so",
-        ))
     }
 
     dependenciesInfo {
@@ -317,12 +306,11 @@ dependencies {
 
     implementation(libs.leakcanary.plumber)
 
-    // FFmpeg
-    implementation(libs.ffmpeg.kit)
-    implementation(libs.arthenica.smartexceptions)
-
     // mpv-android
     implementation(libs.aniyomi.mpv)
+    // FFmpeg-kit
+    implementation(libs.ffmpeg.kit)
+    implementation(libs.arthenica.smartexceptions)
 }
 
 androidComponents {
