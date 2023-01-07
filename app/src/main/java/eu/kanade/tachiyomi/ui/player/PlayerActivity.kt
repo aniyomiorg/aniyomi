@@ -1457,9 +1457,10 @@ class PlayerActivity :
                     }
                 } ?: run {
                 val mpvSub = player.tracks.getOrElse("sub") { emptyList() }
-                    .first { player.sid == it.mpvId }
-                selectedSub = subTracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
-                    .coerceAtLeast(0)
+                    .firstOrNull { player.sid == it.mpvId }
+                selectedSub = mpvSub?.let {
+                    subTracks.indexOfFirst { it.url == mpvSub.mpvId.toString() }
+                }?.coerceAtLeast(0) ?: 0
             }
         }
         if (hadPreviousAudio) {
@@ -1480,9 +1481,10 @@ class PlayerActivity :
                     }
                 } ?: run {
                 val mpvAudio = player.tracks.getOrElse("audio") { emptyList() }
-                    .first { player.aid == it.mpvId }
-                selectedAudio = audioTracks.indexOfFirst { it.url == mpvAudio.mpvId.toString() }
-                    .coerceAtLeast(0)
+                    .firstOrNull { player.aid == it.mpvId }
+                selectedAudio = mpvAudio?.let {
+                    audioTracks.indexOfFirst { it.url == mpvAudio.mpvId.toString() }
+                }?.coerceAtLeast(0) ?: 0
             }
         }
 

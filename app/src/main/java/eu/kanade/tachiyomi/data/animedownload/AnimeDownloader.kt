@@ -565,7 +565,7 @@ class AnimeDownloader(
         }
         val subtitleMaps = video.subtitleTracks.indices.joinToString(" ") {
             val index = it + 1
-            "-map $index"
+            "-map $index:s"
         }
         val subtitleMetadata = video.subtitleTracks.mapIndexed { i, sub ->
             "-metadata:s:s:$i \"title=${sub.lang}\""
@@ -575,7 +575,7 @@ class AnimeDownloader(
         return FFmpegKitConfig.parseArguments(
             headerOptions +
                 " -i \"${video.videoUrl}\" " + subtitleInputs +
-                subtitleMaps + " -map 0" +
+                "-map 0:v -map 0:a " + subtitleMaps + " -map 0:s?" +
                 " -f matroska -c:a copy -c:v copy -c:s ass " +
                 subtitleMetadata +
                 " \"$ffmpegFilename\" -y",
