@@ -812,6 +812,20 @@ class NotificationReceiver : BroadcastReceiver() {
         }
 
         /**
+         * Returns [PendingIntent] that opens the extensions controller.
+         *
+         * @param context context of application
+         * @return [PendingIntent]
+         */
+        internal fun openAnimeExtensionsPendingActivity(context: Context): PendingIntent {
+            val intent = Intent(context, MainActivity::class.java).apply {
+                action = MainActivity.SHORTCUT_ANIMEEXTENSIONS
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            }
+            return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        }
+
+        /**
          * Returns [PendingIntent] that starts a share activity for a backup file.
          *
          * @param context context of application

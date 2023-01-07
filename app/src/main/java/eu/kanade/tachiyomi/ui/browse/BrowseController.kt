@@ -26,11 +26,15 @@ class BrowseController : FullComposeController<BrowsePresenter>, RootController 
     @Suppress("unused")
     constructor(bundle: Bundle? = null) : this(bundle?.getBoolean(TO_EXTENSIONS_EXTRA) ?: false)
 
-    constructor(toExtensions: Boolean = false) : super(
-        bundleOf(TO_EXTENSIONS_EXTRA to toExtensions),
+    constructor(toExtensions: Boolean = false, toAnimeExtensions: Boolean = false) : super(
+        bundleOf(
+            TO_EXTENSIONS_EXTRA to toExtensions,
+            TO_ANIMEEXTENSIONS_EXTRA to toAnimeExtensions,
+        ),
     )
 
     private val toExtensions = args.getBoolean(TO_EXTENSIONS_EXTRA, false)
+    private val toAnimeExtensions = args.getBoolean(TO_ANIMEEXTENSIONS_EXTRA, false)
 
     override fun createPresenter() = BrowsePresenter()
 
@@ -49,7 +53,7 @@ class BrowseController : FullComposeController<BrowsePresenter>, RootController 
                 migrateAnimeSourcesTab(router, presenter.migrationAnimeSourcesPresenter),
                 migrateSourcesTab(router, presenter.migrationSourcesPresenter),
             ),
-            startIndex = 1.takeIf { toExtensions },
+            startIndex = 2.takeIf { toAnimeExtensions } ?: 3.takeIf { toExtensions },
             searchQuery = query,
             onChangeSearchQuery = { presenter.extensionsPresenter.search(it) },
             incognitoMode = presenter.isIncognitoMode,
@@ -71,3 +75,4 @@ class BrowseController : FullComposeController<BrowsePresenter>, RootController 
 }
 
 private const val TO_EXTENSIONS_EXTRA = "to_extensions"
+private const val TO_ANIMEEXTENSIONS_EXTRA = "to_animeextensions"

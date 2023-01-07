@@ -57,7 +57,7 @@ class AnimeExtensionUpdateJob(private val context: Context, workerParams: Worker
                     setContentText(extNames)
                     setStyle(NotificationCompat.BigTextStyle().bigText(extNames))
                     setSmallIcon(R.drawable.ic_extension_24dp)
-                    setContentIntent(NotificationReceiver.openExtensionsPendingActivity(context))
+                    setContentIntent(NotificationReceiver.openAnimeExtensionsPendingActivity(context))
                     setAutoCancel(true)
                 },
             )
