@@ -19,6 +19,7 @@ import uy.kohesive.injekt.injectLazy
 import java.net.URI
 import java.net.URISyntaxException
 import java.security.MessageDigest
+import java.util.concurrent.TimeUnit
 
 /**
  * A simple implementation for sources from a website.
@@ -307,7 +308,10 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param video the page whose source image has to be downloaded.
      */
     fun fetchVideo(video: Video): Observable<Response> {
-        return client.newCachelessCallWithProgress(videoRequest(video, video.totalBytesDownloaded), video)
+        val animeDownloadClient = client.newBuilder()
+            .callTimeout(30, TimeUnit.MINUTES)
+            .build()
+        return animeDownloadClient.newCachelessCallWithProgress(videoRequest(video, video.totalBytesDownloaded), video)
             .asObservableSuccess()
     }
 
