@@ -526,7 +526,11 @@ class AnimelibPresenter(
     fun getToolbarTitle(): androidx.compose.runtime.State<AnimelibToolbarTitle> {
         val category = categories.getOrNull(activeCategory)
 
-        val defaultTitle = stringResource(R.string.label_animelib)
+        val defaultTitle = if (libraryPreferences.bottomNavStyle().get() == 2) {
+            stringResource(R.string.label_library)
+        } else {
+            stringResource(R.string.label_animelib)
+        }
         val categoryName = category?.visualName ?: defaultTitle
 
         val default = remember { AnimelibToolbarTitle(defaultTitle) }
