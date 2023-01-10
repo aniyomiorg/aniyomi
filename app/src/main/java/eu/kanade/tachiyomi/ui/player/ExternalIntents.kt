@@ -132,7 +132,11 @@ class ExternalIntents(val anime: Anime, val source: AnimeSource) {
         }
         return Intent(Intent.ACTION_VIEW).apply {
             if (isPackageInstalled(pkgName, context.packageManager)) {
-                component = getComponent(pkgName)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && pkgName.contains("vlc")) {
+                    setPackage(pkgName)
+                } else {
+                    component = getComponent(pkgName)
+                }
             }
             setDataAndType(uri, "video/*")
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
