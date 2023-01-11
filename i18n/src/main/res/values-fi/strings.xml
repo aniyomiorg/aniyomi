@@ -73,7 +73,6 @@
     <string name="label_extensions">Laajennukset</string>
     <string name="label_extension_info">Laajennuksen tiedot</string>
     <string name="action_filter">Suodatus</string>
-    <string name="action_filter_downloaded">Ladattu</string>
     <string name="action_filter_bookmarked">Kirjanmerkki</string>
     <string name="action_filter_unread">Lukemattomat</string>
     <string name="action_filter_empty">Poista suodattimet</string>
@@ -239,7 +238,6 @@
     <string name="login_success">Kirjauduttu sisään</string>
     <string name="unknown_error">Tuntematon virhe</string>
     <string name="updating_category">Päivitetään kategoriaa</string>
-    <string name="local_source_badge">Paikallinen</string>
     <string name="no_more_results">Ei enempää tuloksia</string>
     <string name="action_global_search_hint">Globaali haku…</string>
     <string name="delete_downloads_for_manga">Poista ladatut luvut\?</string>
@@ -262,7 +260,6 @@
     <string name="title">Nimike</string>
     <string name="status">Tila</string>
     <string name="track_status">Tila</string>
-    <string name="track_start_date">Aloitettu</string>
     <string name="track_type">Tyyppi</string>
     <string name="error_category_exists">Tämän niminen kategoria on jo olemassa!</string>
     <string name="snack_categories_deleted">Kategoriat poistettu</string>
@@ -484,7 +481,6 @@
     <string name="no_pinned_sources">Sinulla ei ole kiinnitettyjä lähteitä</string>
     <string name="channel_complete">Valmis</string>
     <string name="channel_progress">Edistyminen</string>
-    <string name="download_notifier_download_finish">Lataus valmis</string>
     <string name="channel_errors">Virheet</string>
     <string name="backup_restore_missing_trackers">Seurantapalvelimet joihin et ole kirjautunut sisään:</string>
     <string name="pref_remove_bookmarked_chapters">Poista kirjanmerkityt luvut</string>
@@ -579,7 +575,6 @@
     <string name="on">Päällä</string>
     <string name="getting_started_guide">Aloitusopas</string>
     <string name="download_queue_size_warning">Varoitus: massalataukset voivat johtaa siihen, että lähteet muuttuvat hitaammiksi käyttää ja/tai ne estävät Tachiyomin käytön. Napauta saadaksesi lisätietoja.</string>
-    <string name="pref_library_update_show_tab_badge">Näytä lukemattomien määrä päivitys ikoneissa</string>
     <string name="pref_library_update_refresh_trackers_summary">Päivitä seurantapalvelimet kirjaston päivityksen yhteydessä</string>
     <plurals name="relative_time">
         <item quantity="one">Eilen</item>
@@ -591,7 +586,6 @@
     <string name="theme_greenapple">Vihreä omena</string>
     <string name="recently">Viimeaikoina</string>
     <string name="label_default">Oletus</string>
-    <string name="action_filter_started">Aloitettu</string>
     <string name="action_display_local_badge">Laitteelle tallennettu manga</string>
     <string name="pref_library_update_refresh_trackers">Päivitä seurantapalvelimet automaattisesti</string>
     <string name="action_sort_count">Yhteenlaskettu manga</string>
@@ -717,7 +711,6 @@
     <string name="cover_saved">Kansikuva tallennettu</string>
     <string name="error_saving_cover">Virhe tallentaessa kansikuvaa</string>
     <string name="notification_update_skipped">%1$d päivitys(tä) ohitettu</string>
-    <string name="tracker_komga_warning">Tämä seurantapalvelu on yhteensopiva vain Komga-lähteen kanssa.</string>
     <string name="loader_rar5_error">RARv5-muoto ei ole tuettu</string>
     <string name="skipped_reason_not_caught_up">Ohitettu, koska sarjassa on luettomia lukuja</string>
     <string name="skipped_reason_not_always_update">Ohitettu, koska sarja ei vaadi päivityksiä</string>

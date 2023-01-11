@@ -9,18 +9,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabPosition
 import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.tachiyomi.widget.TachiyomiBottomNavigationView
 import kotlinx.coroutines.launch
 
 @Composable
@@ -38,6 +40,8 @@ fun TabbedScreen(
     onChangeSearchQueryAnime: (String?) -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
+    val state = rememberPagerState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(startIndex) {
         if (startIndex != null) {
@@ -74,6 +78,7 @@ fun TabbedScreen(
                 )
             }
         },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { contentPadding ->
         Column(
             modifier = Modifier.padding(
@@ -97,8 +102,6 @@ fun TabbedScreen(
                 }
             }
 
-            AppStateBanners(downloadedOnlyMode, incognitoMode)
-
             HorizontalPager(
                 count = tabs.size,
                 modifier = Modifier.fillMaxSize(),
@@ -106,9 +109,8 @@ fun TabbedScreen(
                 verticalAlignment = Alignment.Top,
             ) { page ->
                 tabs[page].content(
-                    TachiyomiBottomNavigationView.withBottomNavPadding(
-                        PaddingValues(bottom = contentPadding.calculateBottomPadding()),
-                    ),
+                    PaddingValues(bottom = contentPadding.calculateBottomPadding()),
+                    snackbarHostState,
                 )
             }
         }
@@ -120,7 +122,7 @@ data class TabContent(
     val badgeNumber: Int? = null,
     val searchEnabled: Boolean = false,
     val actions: List<AppBar.Action> = emptyList(),
-    val content: @Composable (contentPadding: PaddingValues) -> Unit,
+    val content: @Composable (contentPadding: PaddingValues, snackbarHostState: SnackbarHostState) -> Unit,
     val numberTitle: Int = 0,
     val cancelAction: () -> Unit = {},
     val navigateUp: (() -> Unit)? = null,

@@ -17,12 +17,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.source.interactor.GetRemoteManga
 import eu.kanade.domain.source.model.Pin
 import eu.kanade.domain.source.model.Source
 import eu.kanade.presentation.browse.components.BaseSourceItem
@@ -30,110 +28,66 @@ import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.ScrollbarLazyColumn
 import eu.kanade.presentation.theme.header
-import eu.kanade.presentation.util.horizontalPadding
+import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.plus
-import eu.kanade.presentation.util.topPaddingValues
+import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.LocalSource
-import eu.kanade.tachiyomi.ui.browse.source.SourcesPresenter
+import eu.kanade.tachiyomi.ui.browse.source.SourcesState
+import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
-import eu.kanade.tachiyomi.util.system.toast
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SourcesScreen(
-    presenter: SourcesPresenter,
+    state: SourcesState,
     contentPadding: PaddingValues,
-    onClickItem: (Source, String) -> Unit,
-    onClickDisable: (Source) -> Unit,
+    onClickItem: (Source, Listing) -> Unit,
     onClickPin: (Source) -> Unit,
+    onLongClickItem: (Source) -> Unit,
 ) {
-    val context = LocalContext.current
     when {
-        presenter.isLoading -> LoadingScreen()
-        presenter.isEmpty -> EmptyScreen(
+        state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+        state.isEmpty -> EmptyScreen(
             textResource = R.string.source_empty_screen,
             modifier = Modifier.padding(contentPadding),
         )
         else -> {
-            SourceList(
-                state = presenter,
-                contentPadding = contentPadding,
-                onClickItem = onClickItem,
-                onClickDisable = onClickDisable,
-                onClickPin = onClickPin,
-            )
-        }
-    }
-    LaunchedEffect(Unit) {
-        presenter.events.collectLatest { event ->
-            when (event) {
-                SourcesPresenter.Event.FailedFetchingSources -> {
-                    context.toast(R.string.internal_error)
+            ScrollbarLazyColumn(
+                contentPadding = contentPadding + topSmallPaddingValues,
+            ) {
+                items(
+                    items = state.items,
+                    contentType = {
+                        when (it) {
+                            is SourceUiModel.Header -> "header"
+                            is SourceUiModel.Item -> "item"
+                        }
+                    },
+                    key = {
+                        when (it) {
+                            is SourceUiModel.Header -> it.hashCode()
+                            is SourceUiModel.Item -> "source-${it.source.key()}"
+                        }
+                    },
+                ) { model ->
+                    when (model) {
+                        is SourceUiModel.Header -> {
+                            SourceHeader(
+                                modifier = Modifier.animateItemPlacement(),
+                                language = model.language,
+                            )
+                        }
+                        is SourceUiModel.Item -> SourceItem(
+                            modifier = Modifier.animateItemPlacement(),
+                            source = model.source,
+                            onClickItem = onClickItem,
+                            onLongClickItem = onLongClickItem,
+                            onClickPin = onClickPin,
+                        )
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun SourceList(
-    state: SourcesState,
-    contentPadding: PaddingValues,
-    onClickItem: (Source, String) -> Unit,
-    onClickDisable: (Source) -> Unit,
-    onClickPin: (Source) -> Unit,
-) {
-    ScrollbarLazyColumn(
-        contentPadding = contentPadding + topPaddingValues,
-    ) {
-        items(
-            items = state.items,
-            contentType = {
-                when (it) {
-                    is SourceUiModel.Header -> "header"
-                    is SourceUiModel.Item -> "item"
-                }
-            },
-            key = {
-                when (it) {
-                    is SourceUiModel.Header -> it.hashCode()
-                    is SourceUiModel.Item -> "source-${it.source.key()}"
-                }
-            },
-        ) { model ->
-            when (model) {
-                is SourceUiModel.Header -> {
-                    SourceHeader(
-                        modifier = Modifier.animateItemPlacement(),
-                        language = model.language,
-                    )
-                }
-                is SourceUiModel.Item -> SourceItem(
-                    modifier = Modifier.animateItemPlacement(),
-                    source = model.source,
-                    onClickItem = onClickItem,
-                    onLongClickItem = { state.dialog = SourcesPresenter.Dialog(it) },
-                    onClickPin = onClickPin,
-                )
-            }
-        }
-    }
-
-    if (state.dialog != null) {
-        val source = state.dialog!!.source
-        SourceOptionsDialog(
-            source = source,
-            onClickPin = {
-                onClickPin(source)
-                state.dialog = null
-            },
-            onClickDisable = {
-                onClickDisable(source)
-                state.dialog = null
-            },
-            onDismiss = { state.dialog = null },
-        )
     }
 }
 
@@ -146,7 +100,7 @@ private fun SourceHeader(
     Text(
         text = LocaleHelper.getSourceDisplayName(language, context),
         modifier = modifier
-            .padding(horizontal = horizontalPadding, vertical = 8.dp),
+            .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
         style = MaterialTheme.typography.header,
     )
 }
@@ -155,18 +109,18 @@ private fun SourceHeader(
 private fun SourceItem(
     modifier: Modifier = Modifier,
     source: Source,
-    onClickItem: (Source, String) -> Unit,
+    onClickItem: (Source, Listing) -> Unit,
     onLongClickItem: (Source) -> Unit,
     onClickPin: (Source) -> Unit,
 ) {
     BaseSourceItem(
         modifier = modifier,
         source = source,
-        onClickItem = { onClickItem(source, GetRemoteManga.QUERY_POPULAR) },
+        onClickItem = { onClickItem(source, Listing.Popular) },
         onLongClickItem = { onLongClickItem(source) },
         action = {
             if (source.supportsLatest) {
-                TextButton(onClick = { onClickItem(source, GetRemoteManga.QUERY_LATEST) }) {
+                TextButton(onClick = { onClickItem(source, Listing.Latest) }) {
                     Text(
                         text = stringResource(R.string.latest),
                         style = LocalTextStyle.current.copy(
@@ -201,7 +155,7 @@ private fun SourcePinButton(
 }
 
 @Composable
-private fun SourceOptionsDialog(
+fun SourceOptionsDialog(
     source: Source,
     onClickPin: () -> Unit,
     onClickDisable: () -> Unit,

@@ -2,13 +2,15 @@ package eu.kanade.tachiyomi.data.download
 
 import android.content.Context
 import com.hippo.unifile.UniFile
-import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
+import eu.kanade.domain.chapter.model.Chapter
 import eu.kanade.domain.download.service.DownloadPreferences
+import eu.kanade.domain.manga.model.COMIC_INFO_FILE
+import eu.kanade.domain.manga.model.ComicInfo
 import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.manga.model.getComicInfo
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.ChapterCache
-import eu.kanade.tachiyomi.data.database.models.Chapter
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.download.model.DownloadQueue
 import eu.kanade.tachiyomi.data.library.LibraryUpdateNotifier
@@ -24,11 +26,13 @@ import eu.kanade.tachiyomi.util.lang.launchNow
 import eu.kanade.tachiyomi.util.lang.plusAssign
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.storage.DiskUtil
+import eu.kanade.tachiyomi.util.storage.DiskUtil.NOMEDIA_FILE
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.system.ImageUtil
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.async
 import logcat.LogPriority
+import nl.adaptivity.xmlutil.serialization.XML
 import okhttp3.Response
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -63,12 +67,13 @@ class Downloader(
     private val sourceManager: SourceManager = Injekt.get(),
     private val chapterCache: ChapterCache = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
+    private val xml: XML = Injekt.get(),
 ) {
 
     /**
      * Store for persisting downloads across restarts.
      */
-    private val store = DownloadStore(context, sourceManager)
+    private val store = DownloadStore(context)
 
     /**
      * Queue where active downloads are kept.
@@ -89,11 +94,6 @@ class Downloader(
      * Relay to send a list of downloads to the downloader.
      */
     private val downloadsRelay = PublishRelay.create<List<Download>>()
-
-    /**
-     * Relay to subscribe to the downloader status.
-     */
-    val runningRelay: BehaviorRelay<Boolean> = BehaviorRelay.create(false)
 
     /**
      * Whether the downloader is running.
@@ -196,10 +196,8 @@ class Downloader(
     private fun initializeSubscriptions() {
         if (isRunning) return
         isRunning = true
-        runningRelay.call(true)
 
         subscriptions.clear()
-
         subscriptions += downloadsRelay.concatMapIterable { it }
             // Concurrently download from 5 different sources
             .groupBy { it.source }
@@ -231,7 +229,6 @@ class Downloader(
     private fun destroySubscriptions() {
         if (!isRunning) return
         isRunning = false
-        runningRelay.call(false)
 
         subscriptions.clear()
     }
@@ -256,7 +253,7 @@ class Downloader(
                 // Filter out those already downloaded.
                 .filter { provider.findChapterDir(it.name, it.scanlator, manga.title, source) == null }
                 // Add chapters to queue from the start.
-                .sortedByDescending { it.source_order }
+                .sortedByDescending { it.sourceOrder }
         }
 
         // Runs in main thread (synchronization needed).
@@ -319,7 +316,7 @@ class Downloader(
 
         val pageListObservable = if (download.pages == null) {
             // Pull page list from network and add them to download object
-            download.source.fetchPageList(download.chapter)
+            download.source.fetchPageList(download.chapter.toSChapter())
                 .map { pages ->
                     if (pages.isEmpty()) {
                         throw Exception(context.getString(R.string.page_list_empty_error))
@@ -379,14 +376,15 @@ class Downloader(
             return Observable.just(page)
         }
 
-        val filename = String.format("%03d", page.number)
+        val digitCount = (download.pages?.size ?: 0).toString().length.coerceAtLeast(3)
+        val filename = String.format("%0${digitCount}d", page.number)
         val tmpFile = tmpDir.findFile("$filename.tmp")
 
-        // Delete temp file if it exists.
+        // Delete temp file if it exists
         tmpFile?.delete()
 
-        // Try to find the image file.
-        val imageFile = tmpDir.listFiles()!!.find { it.name!!.startsWith("$filename.") || it.name!!.contains("${filename}__001") }
+        // Try to find the image file
+        val imageFile = tmpDir.listFiles()?.firstOrNull { it.name!!.startsWith("$filename.") || it.name!!.startsWith("${filename}__001") }
 
         // If the image is already downloaded, do nothing. Otherwise download from network
         val pageObservable = when {
@@ -405,13 +403,13 @@ class Downloader(
                 page.uri = file.uri
                 page.progress = 100
                 download.downloadedImages++
-                page.status = Page.READY
+                page.status = Page.State.READY
             }
             .map { page }
             // Mark this page as error and allow to download the remaining
             .onErrorReturn {
                 page.progress = 0
-                page.status = Page.ERROR
+                page.status = Page.State.ERROR
                 notifier.onError(it.message, download.chapter.name, download.manga.title)
                 page
             }
@@ -426,7 +424,7 @@ class Downloader(
      * @param filename the filename of the image.
      */
     private fun downloadImage(page: Page, source: HttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
-        page.status = Page.DOWNLOAD_IMAGE
+        page.status = Page.State.DOWNLOAD_IMAGE
         page.progress = 0
         return source.fetchImage(page)
             .map { response ->
@@ -493,8 +491,8 @@ class Downloader(
         val imageFile = tmpDir.listFiles()?.firstOrNull { it.name.orEmpty().startsWith(filenamePrefix) }
             ?: throw Error(context.getString(R.string.download_notifier_split_page_not_found, page.number))
 
-        // check if the original page was previously splitted before then skip.
-        if (imageFile.name!!.contains("__")) return true
+        // If the original page was previously split, then skip
+        if (imageFile.name.orEmpty().startsWith("${filenamePrefix}__")) return true
 
         return try {
             ImageUtil.splitTallImage(tmpDir, imageFile, filenamePrefix)
@@ -518,11 +516,33 @@ class Downloader(
         tmpDir: UniFile,
         dirname: String,
     ) {
-        // Ensure that the chapter folder has all the images.
-        val downloadedImages = tmpDir.listFiles().orEmpty().filterNot { it.name!!.endsWith(".tmp") || (it.name!!.contains("__") && !it.name!!.contains("__001.jpg")) }
+        // Page list hasn't been initialized
+        val downloadPageCount = download.pages?.size ?: return
+        // Ensure that all pages has been downloaded
+        if (download.downloadedImages < downloadPageCount) return
+        // Ensure that the chapter folder has all the pages
+        val downloadedImagesCount = tmpDir.listFiles().orEmpty().count {
+            val fileName = it.name.orEmpty()
+            when {
+                fileName in listOf(COMIC_INFO_FILE, NOMEDIA_FILE) -> false
+                fileName.endsWith(".tmp") -> false
+                // Only count the first split page and not the others
+                fileName.contains("__") && !fileName.endsWith("__001.jpg") -> false
+                else -> true
+            }
+        }
 
-        download.status = if (downloadedImages.size == download.pages!!.size) {
-            // Only rename the directory if it's downloaded.
+        download.status = if (downloadedImagesCount == downloadPageCount) {
+            // TODO: Uncomment when #8537 is resolved
+//            val chapterUrl = download.source.getChapterUrl(download.chapter)
+//            createComicInfoFile(
+//                tmpDir,
+//                download.manga,
+//                download.chapter.toDomainChapter()!!,
+//                chapterUrl,
+//            )
+
+            // Only rename the directory if it's downloaded
             if (downloadPreferences.saveChaptersAsCBZ().get()) {
                 archiveChapter(mangaDir, dirname, tmpDir)
             } else {
@@ -573,12 +593,35 @@ class Downloader(
     }
 
     /**
+     * Creates a ComicInfo.xml file inside the given directory.
+     *
+     * @param dir the directory in which the ComicInfo file will be generated.
+     * @param manga the manga.
+     * @param chapter the chapter.
+     * @param chapterUrl the resolved URL for the chapter.
+     */
+    private fun createComicInfoFile(
+        dir: UniFile,
+        manga: Manga,
+        chapter: Chapter,
+        chapterUrl: String,
+    ) {
+        val comicInfo = getComicInfo(manga, chapter, chapterUrl)
+        val comicInfoString = xml.encodeToString(ComicInfo.serializer(), comicInfo)
+        // Remove the old file
+        dir.findFile(COMIC_INFO_FILE)?.delete()
+        dir.createFile(COMIC_INFO_FILE).openOutputStream().use {
+            it.write(comicInfoString.toByteArray())
+        }
+    }
+
+    /**
      * Completes a download. This method is called in the main thread.
      */
     private fun completeDownload(download: Download) {
         // Delete successful downloads from queue
         if (download.status == Download.State.DOWNLOADED) {
-            // remove downloaded chapter from queue
+            // Remove downloaded chapter from queue
             queue.remove(download)
         }
         if (areAllDownloadsFinished()) {

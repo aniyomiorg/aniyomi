@@ -144,7 +144,6 @@
     <string name="action_filter_empty">ማጣሪያውን ያስወግዱ</string>
     <string name="action_filter_unread">ያልተነበበ</string>
     <string name="action_filter_bookmarked">ዕልባት ተደርጓል</string>
-    <string name="action_filter_downloaded">ወርዷል</string>
     <string name="action_filter">ማጣሪያ</string>
     <string name="action_menu">ምናሌ</string>
     <string name="action_settings">ማስተካከያዎች</string>
@@ -260,7 +259,6 @@
     <string name="channel_complete">ተጠናቀቀ</string>
     <string name="channel_progress">እድገት</string>
     <string name="channel_common">የተለመደ</string>
-    <string name="download_notifier_download_finish">ማውረድ ተጠናቅቋል</string>
     <string name="download_notifier_download_paused_chapters">ማውረድ ለአፍታ ቆሟል</string>
     <string name="color_filter_r_value">ቀ</string>
     <string name="color_filter_b_value">ቢ</string>

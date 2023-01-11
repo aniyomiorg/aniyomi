@@ -18,7 +18,6 @@
     <string name="label_help">Pomoc</string>
     <string name="action_settings">Nastavenia</string>
     <string name="action_filter">Filter</string>
-    <string name="action_filter_downloaded">Stiahnuté</string>
     <string name="action_filter_bookmarked">Uložené</string>
     <string name="action_filter_unread">Neprečítané</string>
     <string name="action_filter_empty">Zrušiť filter</string>
@@ -211,7 +210,6 @@
     <string name="login_success">Prihlásený</string>
     <string name="unknown_error">Neznáma chyba</string>
     <string name="updating_category">Aktualizuje sa kategória</string>
-    <string name="local_source_badge">Lokálny</string>
     <string name="no_more_results">Žiadne ďalšie výsledky</string>
     <string name="local_source">Lokálny zdroj</string>
     <string name="other_source">Ostatné</string>
@@ -256,7 +254,6 @@
     <string name="title">Názov</string>
     <string name="status">Stav</string>
     <string name="track_status">Stav</string>
-    <string name="track_start_date">Zahájeno</string>
     <string name="track_type">Typ</string>
     <string name="error_category_exists">Kategória s týmto názvom už existuje!</string>
     <string name="snack_categories_deleted">Kategórie boli odstránené</string>
@@ -366,7 +363,6 @@
     <string name="action_display_show_number_of_items">Zobraziť počet položiek</string>
     <string name="action_order_by_upload_date">Podľa dátumu nahratia</string>
     <string name="action_start">Začať</string>
-    <string name="action_filter_started">Začaté</string>
     <string name="action_display_cover_only_grid">Mriežka len s obalmi</string>
     <string name="action_display_local_badge">Lokálna manga</string>
     <string name="action_display_language_badge">Jazyk</string>
@@ -414,7 +410,6 @@
     <string name="lock_always">Vždy</string>
     <string name="lock_never">Nikdy</string>
     <string name="pref_library_update_manga_restriction">Preskočiť aktualizáciu titulov</string>
-    <string name="pref_library_update_show_tab_badge">Zobraziť počet neprečítaných kapitol na ikone Aktualizácie</string>
     <string name="pref_show_nsfw_source">Zobraziť v zoznamoch zdrojov a rozšírení</string>
     <string name="pref_category_nsfw_content">NSFW (18+) zdroje</string>
     <string name="recently">Nedávno</string>
@@ -509,11 +504,9 @@
     <string name="download_ahead_info">Funguje iba na položkách v knižnici a ak je aktuálna kapitola a nasledujúca kapitola už stiahnutá</string>
     <string name="unknown_status">Neznámy stav</string>
     <string name="on_hiatus">Prestávka</string>
-    <string name="tracker_komga_warning">Tento sledovač je kompatibilný iba so zdrojom Komga.</string>
     <string name="add_tracking">Pridať sledovanie</string>
     <string name="unfinished_list">Nedokončený zoznam</string>
     <string name="information_empty_category_dialog">Zatiaľ nemáte žiadne kategórie.</string>
-    <string name="download_notifier_download_finish">Sťahovanie dokončené</string>
     <string name="ext_info_age_rating">Vekové hodnotenie</string>
     <string name="date">Dátum</string>
     <string name="pref_true_color_summary">Znižuje pruhovanie farieb, ale môže ovplyvniť výkon</string>
@@ -564,7 +557,6 @@
     <string name="pref_category_for_this_series">Pre túto sériu</string>
     <string name="pref_webtoon_side_padding">Bočné odsadenie</string>
     <string name="pref_category_auto_download">Automatické sťahovanie</string>
-    <string name="pref_duplicate_pinned_sources_summary">Opakovať pripnuté zdroje v ich príslušných jazykových skupinách</string>
     <string name="source_empty_screen">Nenašiel sa žiadny zdroj</string>
     <string name="download_notifier_split_failed">Stiahnutý obrázok sa nepodarilo rozdeliť</string>
     <string name="channel_progress">Priebeh</string>
@@ -622,7 +614,6 @@
     <string name="tapping_inverted_vertical">Vertikálne</string>
     <string name="backup_restore_missing_trackers">Sledovače, do ktorých nie ste prihlásení:</string>
     <string name="pref_dns_over_https">DNS cez HTTPS (DoH)</string>
-    <string name="pref_duplicate_pinned_sources">Zobraziť duplicitné pripnuté zdroje</string>
     <string name="invalid_backup_file">Neplatný záložný súbor</string>
     <string name="restore_duration">%02d min., %02d s</string>
     <string name="multi_lang">Viacjazyčné</string>

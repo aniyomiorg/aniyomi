@@ -54,6 +54,7 @@ import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.more.settings.Preference
+import eu.kanade.presentation.util.runOnEnterKeyPressed
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.isLTR
 
@@ -108,7 +109,8 @@ class SettingsSearchScreen : Screen {
                                 onValueChange = { textFieldValue = it },
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .focusRequester(focusRequester),
+                                    .focusRequester(focusRequester)
+                                    .runOnEnterKeyPressed(action = focusManager::clearFocus),
                                 textStyle = MaterialTheme.typography.bodyLarge
                                     .copy(color = MaterialTheme.colorScheme.onSurface),
                                 singleLine = true,
@@ -210,43 +212,43 @@ private fun SearchResult(
     }
 
     Crossfade(targetState = result) {
-        LazyColumn(
-            modifier = modifier.fillMaxSize(),
-            state = listState,
-            contentPadding = contentPadding,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            when {
-                it == null -> {
-                    /* Don't show anything just yet */
-                }
-                // No result
-                it.isEmpty() -> item { EmptyScreen(stringResource(R.string.no_results_found)) }
-                // Show result list
-                else -> items(
-                    items = it,
-                    key = { i -> i.hashCode() },
-                ) { item ->
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onItemClick(item) }
-                            .padding(horizontal = 24.dp, vertical = 14.dp),
-                    ) {
-                        Text(
-                            text = item.title,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1,
-                            fontWeight = FontWeight.Normal,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                        Text(
-                            text = item.breadcrumbs,
-                            modifier = Modifier.paddingFromBaseline(top = 16.dp),
-                            maxLines = 1,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            style = MaterialTheme.typography.bodySmall,
-                        )
+        when {
+            it == null -> {}
+            it.isEmpty() -> {
+                EmptyScreen(stringResource(R.string.no_results_found))
+            }
+            else -> {
+                LazyColumn(
+                    modifier = modifier.fillMaxSize(),
+                    state = listState,
+                    contentPadding = contentPadding,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    items(
+                        items = it,
+                        key = { i -> i.hashCode() },
+                    ) { item ->
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onItemClick(item) }
+                                .padding(horizontal = 24.dp, vertical = 14.dp),
+                        ) {
+                            Text(
+                                text = item.title,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1,
+                                fontWeight = FontWeight.Normal,
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                            Text(
+                                text = item.breadcrumbs,
+                                modifier = Modifier.paddingFromBaseline(top = 16.dp),
+                                maxLines = 1,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
                     }
                 }
             }
@@ -280,16 +282,16 @@ private fun getLocalizedBreadcrumb(path: String, node: String?): String {
 }
 
 private val settingScreens = listOf(
-    SettingsGeneralScreen(),
-    SettingsAppearanceScreen(),
-    SettingsLibraryScreen(),
-    SettingsReaderScreen(),
-    SettingsDownloadScreen(),
-    SettingsTrackingScreen(),
-    SettingsBrowseScreen(),
-    SettingsBackupScreen(),
-    SettingsSecurityScreen(),
-    SettingsAdvancedScreen(),
+    SettingsGeneralScreen,
+    SettingsAppearanceScreen,
+    SettingsLibraryScreen,
+    SettingsReaderScreen,
+    SettingsDownloadScreen,
+    SettingsTrackingScreen,
+    SettingsBrowseScreen,
+    SettingsBackupScreen,
+    SettingsSecurityScreen,
+    SettingsAdvancedScreen,
 )
 
 private data class SettingsData(

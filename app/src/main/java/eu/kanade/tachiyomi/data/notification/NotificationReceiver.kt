@@ -14,7 +14,6 @@ import eu.kanade.domain.chapter.interactor.GetChapter
 import eu.kanade.domain.chapter.interactor.UpdateChapter
 import eu.kanade.domain.chapter.model.Chapter
 import eu.kanade.domain.chapter.model.toChapterUpdate
-import eu.kanade.domain.chapter.model.toDbChapter
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.episode.interactor.GetEpisode
 import eu.kanade.domain.episode.interactor.UpdateEpisode
@@ -36,9 +35,9 @@ import eu.kanade.tachiyomi.data.updater.AppUpdateService
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.manga.MangaController
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
+import eu.kanade.tachiyomi.util.Constants
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.getUriCompat
@@ -277,7 +276,6 @@ class NotificationReceiver : BroadcastReceiver() {
      * @param notificationId id of notification
      */
     private fun deleteImage(context: Context, path: String, notificationId: Int) {
-        // Dismiss notification
         dismissNotification(context, notificationId)
 
         // Delete file
@@ -343,7 +341,7 @@ class NotificationReceiver : BroadcastReceiver() {
                         if (manga != null) {
                             val source = sourceManager.get(manga.source)
                             if (source != null) {
-                                downloadManager.deleteChapters(listOf(it.toDbChapter()), manga, source)
+                                downloadManager.deleteChapters(listOf(it), manga, source)
                             }
                         }
                     }
@@ -391,7 +389,7 @@ class NotificationReceiver : BroadcastReceiver() {
     private fun downloadChapters(chapterUrls: Array<String>, mangaId: Long) {
         launchIO {
             val manga = getManga.await(mangaId) ?: return@launchIO
-            val chapters = chapterUrls.mapNotNull { getChapter.await(it, mangaId)?.toDbChapter() }
+            val chapters = chapterUrls.mapNotNull { getChapter.await(it, mangaId) }
             downloadManager.downloadChapters(manga, chapters)
         }
     }
@@ -689,7 +687,7 @@ class NotificationReceiver : BroadcastReceiver() {
             val newIntent =
                 Intent(context, MainActivity::class.java).setAction(MainActivity.SHORTCUT_MANGA)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(MangaController.MANGA_EXTRA, manga.id)
+                    .putExtra(Constants.MANGA_EXTRA, manga.id)
                     .putExtra("notificationId", manga.id.hashCode())
                     .putExtra("groupId", groupId)
             return PendingIntent.getActivity(context, manga.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)

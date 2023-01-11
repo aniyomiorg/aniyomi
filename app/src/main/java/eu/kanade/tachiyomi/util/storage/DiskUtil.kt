@@ -1,11 +1,15 @@
 package eu.kanade.tachiyomi.util.storage
 
+import android.Manifest
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Environment
 import android.os.StatFs
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.core.content.ContextCompat
+import com.google.accompanist.permissions.rememberPermissionState
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.util.lang.Hash
 import java.io.File
@@ -62,9 +66,9 @@ object DiskUtil {
      */
     fun createNoMediaFile(dir: UniFile?, context: Context?) {
         if (dir != null && dir.exists()) {
-            val nomedia = dir.findFile(".nomedia")
+            val nomedia = dir.findFile(NOMEDIA_FILE)
             if (nomedia == null) {
-                dir.createFile(".nomedia")
+                dir.createFile(NOMEDIA_FILE)
                 context?.let { scanMedia(it, dir.uri) }
             }
         }
@@ -112,4 +116,17 @@ object DiskUtil {
             else -> true
         }
     }
+
+    /**
+     * Launches request for [Manifest.permission.WRITE_EXTERNAL_STORAGE] permission
+     */
+    @Composable
+    fun RequestStoragePermission() {
+        val permissionState = rememberPermissionState(permission = Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        LaunchedEffect(Unit) {
+            permissionState.launchPermissionRequest()
+        }
+    }
+
+    const val NOMEDIA_FILE = ".nomedia"
 }

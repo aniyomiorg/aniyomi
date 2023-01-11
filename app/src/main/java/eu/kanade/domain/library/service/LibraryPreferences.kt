@@ -62,9 +62,9 @@ class LibraryPreferences(
 
     fun languageBadge() = preferenceStore.getBoolean("display_language_badge", false)
 
-    fun showUpdatesNavBadge() = preferenceStore.getBoolean("library_update_show_tab_badge", false)
+    fun newShowUpdatesCount() = preferenceStore.getBoolean("library_show_updates_count", true)
     fun unreadUpdatesCount() = preferenceStore.getInt("library_unread_updates_count", 0)
-    fun unseenUpdatesCount() = preferenceStore.getInt("library_unseen_updates_count", 0)
+    fun newUpdatesCount() = preferenceStore.getInt("library_unseen_updates_count", 0)
 
     // endregion
 

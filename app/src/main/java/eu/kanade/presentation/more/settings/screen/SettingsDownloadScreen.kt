@@ -34,7 +34,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 
-class SettingsDownloadScreen : SearchableSettings {
+object SettingsDownloadScreen : SearchableSettings {
 
     @ReadOnlyComposable
     @Composable

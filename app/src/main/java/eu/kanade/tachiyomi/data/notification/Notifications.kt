@@ -39,12 +39,8 @@ object Notifications {
     const val CHANNEL_DOWNLOADER_PROGRESS = "downloader_progress_channel"
     const val ID_DOWNLOAD_CHAPTER_PROGRESS = -201
     const val ID_DOWNLOAD_EPISODE_PROGRESS = -205
-    const val CHANNEL_DOWNLOADER_COMPLETE = "downloader_complete_channel"
-    const val ID_DOWNLOAD_CHAPTER_COMPLETE = -203
     const val CHANNEL_DOWNLOADER_ERROR = "downloader_error_channel"
     const val ID_DOWNLOAD_CHAPTER_ERROR = -202
-    const val CHANNEL_DOWNLOADER_CACHE = "downloader_cache_renewal"
-    const val ID_DOWNLOAD_CACHE = -204
 
     /**
      * Notification channel and ids used by the library updater.
@@ -91,10 +87,12 @@ object Notifications {
 
     private val deprecatedChannels = listOf(
         "downloader_channel",
+        "downloader_complete_channel",
         "backup_restore_complete_channel",
         "library_channel",
         "library_progress_channel",
         "updates_ext_channel",
+        "downloader_cache_renewal",
     )
 
     /**
@@ -154,18 +152,8 @@ object Notifications {
                     setGroup(GROUP_DOWNLOADER)
                     setShowBadge(false)
                 },
-                buildNotificationChannel(CHANNEL_DOWNLOADER_COMPLETE, IMPORTANCE_LOW) {
-                    setName(context.getString(R.string.channel_complete))
-                    setGroup(GROUP_DOWNLOADER)
-                    setShowBadge(false)
-                },
                 buildNotificationChannel(CHANNEL_DOWNLOADER_ERROR, IMPORTANCE_LOW) {
                     setName(context.getString(R.string.channel_errors))
-                    setGroup(GROUP_DOWNLOADER)
-                    setShowBadge(false)
-                },
-                buildNotificationChannel(CHANNEL_DOWNLOADER_CACHE, IMPORTANCE_LOW) {
-                    setName(context.getString(R.string.channel_downloader_cache))
                     setGroup(GROUP_DOWNLOADER)
                     setShowBadge(false)
                 },

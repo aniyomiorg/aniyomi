@@ -51,8 +51,8 @@ import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.components.ExtendedFloatingActionButton
 import eu.kanade.presentation.components.LazyColumn
 import eu.kanade.presentation.components.MangaBottomActionMenu
+import eu.kanade.presentation.components.PullRefresh
 import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.components.SwipeRefresh
 import eu.kanade.presentation.components.TwoPanelBox
 import eu.kanade.presentation.components.VerticalFastScroller
 import eu.kanade.presentation.manga.components.ChapterHeader
@@ -80,6 +80,7 @@ fun MangaScreen(
     onDownloadChapter: ((List<ChapterItem>, ChapterDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
+    onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
     onTagClicked: (String) -> Unit,
     onFilterButtonClicked: () -> Unit,
@@ -116,6 +117,7 @@ fun MangaScreen(
             onDownloadChapter = onDownloadChapter,
             onAddToLibraryClicked = onAddToLibraryClicked,
             onWebViewClicked = onWebViewClicked,
+            onWebViewLongClicked = onWebViewLongClicked,
             onTrackingClicked = onTrackingClicked,
             onTagClicked = onTagClicked,
             onFilterClicked = onFilterButtonClicked,
@@ -144,6 +146,7 @@ fun MangaScreen(
             onDownloadChapter = onDownloadChapter,
             onAddToLibraryClicked = onAddToLibraryClicked,
             onWebViewClicked = onWebViewClicked,
+            onWebViewLongClicked = onWebViewLongClicked,
             onTrackingClicked = onTrackingClicked,
             onTagClicked = onTagClicked,
             onFilterButtonClicked = onFilterButtonClicked,
@@ -175,6 +178,7 @@ private fun MangaScreenSmallImpl(
     onDownloadChapter: ((List<ChapterItem>, ChapterDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
+    onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
     onTagClicked: (String) -> Unit,
     onFilterClicked: () -> Unit,
@@ -234,8 +238,6 @@ private fun MangaScreenSmallImpl(
                 titleAlphaProvider = { animatedTitleAlpha },
                 backgroundAlphaProvider = { animatedBgAlpha },
                 hasFilters = state.manga.chaptersFiltered(),
-                incognitoMode = state.isIncognitoMode,
-                downloadedOnlyMode = state.isDownloadedOnlyMode,
                 onBackClicked = internalOnBackPressed,
                 onClickFilter = onFilterClicked,
                 onClickShare = onShareClicked,
@@ -283,7 +285,7 @@ private fun MangaScreenSmallImpl(
     ) { contentPadding ->
         val topPadding = contentPadding.calculateTopPadding()
 
-        SwipeRefresh(
+        PullRefresh(
             refreshing = state.isRefreshingData,
             onRefresh = onRefresh,
             enabled = chapters.fastAll { !it.selected },
@@ -332,6 +334,7 @@ private fun MangaScreenSmallImpl(
                             trackingCount = state.trackingCount,
                             onAddToLibraryClicked = onAddToLibraryClicked,
                             onWebViewClicked = onWebViewClicked,
+                            onWebViewLongClicked = onWebViewLongClicked,
                             onTrackingClicked = onTrackingClicked,
                             onEditCategory = onEditCategoryClicked,
                         )
@@ -381,6 +384,7 @@ fun MangaScreenLargeImpl(
     onDownloadChapter: ((List<ChapterItem>, ChapterDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
+    onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
     onTagClicked: (String) -> Unit,
     onFilterButtonClicked: () -> Unit,
@@ -415,7 +419,7 @@ fun MangaScreenLargeImpl(
 
     val insetPadding = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()
     var topBarHeight by remember { mutableStateOf(0) }
-    SwipeRefresh(
+    PullRefresh(
         refreshing = state.isRefreshingData,
         onRefresh = onRefresh,
         enabled = chapters.fastAll { !it.selected },
@@ -444,8 +448,6 @@ fun MangaScreenLargeImpl(
                     titleAlphaProvider = { if (chapters.fastAny { it.selected }) 1f else 0f },
                     backgroundAlphaProvider = { 1f },
                     hasFilters = state.manga.chaptersFiltered(),
-                    incognitoMode = state.isIncognitoMode,
-                    downloadedOnlyMode = state.isDownloadedOnlyMode,
                     onBackClicked = internalOnBackPressed,
                     onClickFilter = onFilterButtonClicked,
                     onClickShare = onShareClicked,
@@ -525,6 +527,7 @@ fun MangaScreenLargeImpl(
                             trackingCount = state.trackingCount,
                             onAddToLibraryClicked = onAddToLibraryClicked,
                             onWebViewClicked = onWebViewClicked,
+                            onWebViewLongClicked = onWebViewLongClicked,
                             onTrackingClicked = onTrackingClicked,
                             onEditCategory = onEditCategoryClicked,
                         )

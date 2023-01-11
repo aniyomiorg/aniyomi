@@ -11,7 +11,6 @@
     <!-- Actions -->
     <string name="action_settings">Impostazioni</string>
     <string name="action_filter">Filtro</string>
-    <string name="action_filter_downloaded">Scaricati</string>
     <string name="action_filter_bookmarked">Segnalibri</string>
     <string name="action_filter_unread">Non letti</string>
     <string name="action_filter_empty">Rimuovi filtro</string>
@@ -230,7 +229,7 @@
     <string name="download_notifier_text_only_wifi">Nessuna connessione Wi-Fi disponibile</string>
     <string name="download_notifier_no_network">Nessuna connessione di rete disponibile</string>
     <string name="categories">Categorie</string>
-    <string name="manga">Manga</string>
+    <string name="manga">Voci della libreria</string>
     <string name="history">Cronologia</string>
     <string name="action_sort_total">Capitoli totali</string>
     <string name="action_add">Aggiungi</string>
@@ -293,7 +292,6 @@
     <string name="double_tap_anim_speed_0">Senza animazione</string>
     <string name="double_tap_anim_speed_normal">Normale</string>
     <string name="double_tap_anim_speed_fast">Veloce</string>
-    <string name="local_source_badge">Locale</string>
     <string name="other_source">Altro</string>
     <string name="action_global_search_hint">Ricerca globale…</string>
     <string name="latest">Ultimi</string>
@@ -307,7 +305,6 @@
     <string name="download_custom">Personalizzato</string>
     <string name="repeating">Rileggendo</string>
     <string name="track_status">Stato</string>
-    <string name="track_start_date">Iniziato</string>
     <string name="track_type">Tipo</string>
     <string name="snack_categories_deleted">Categorie rimosse</string>
     <string name="migration_dialog_what_to_include">Seleziona i dati da includere</string>
@@ -397,9 +394,9 @@
         <item quantity="other">%1$d nuovi capitoli</item>
     </plurals>
     <plurals name="notification_new_chapters_summary">
-        <item quantity="one">Per %d titolo</item>
-        <item quantity="many">Per %d titoli</item>
-        <item quantity="other">Per %d titoli</item>
+        <item quantity="one">Per %d voce</item>
+        <item quantity="many">Per %d voci</item>
+        <item quantity="other">Per %d voci</item>
     </plurals>
     <string name="notification_check_updates">Cercando nuovi capitoli</string>
     <string name="http_error_hint">Controlla il sito in WebView</string>
@@ -527,7 +524,6 @@
     <string name="channel_progress">Progresso</string>
     <string name="channel_errors">Errori</string>
     <string name="channel_complete">Completo</string>
-    <string name="download_notifier_download_finish">Download completato</string>
     <string name="no_pinned_sources">Non hai fonti fissate</string>
     <string name="pref_remove_bookmarked_chapters">Consenti eliminazione capitoli con segnalibro</string>
     <string name="pref_category_delete_chapters">Elimina capitoli</string>
@@ -607,7 +603,7 @@
     <string name="rotation_landscape">Orizzontale</string>
     <string name="rotation_portrait">Verticale</string>
     <string name="automatic_background">Automatico</string>
-    <string name="pref_create_folder_per_manga_summary">Crea cartelle in base ai titoli delle voci</string>
+    <string name="pref_create_folder_per_manga_summary">Crea cartelle in base al titolo delle voci</string>
     <string name="cancel_all_for_series">Annulla tutti per questa serie</string>
     <string name="pref_create_folder_per_manga">Salva pagine in cartelle separate</string>
     <string name="pref_reader_actions">Azioni</string>
@@ -635,7 +631,6 @@
     <string name="action_start_downloading_now">Inizia a scaricare ora</string>
     <string name="about_dont_kill_my_app">Alcuni produttori hanno restrizioni aggiuntive per le app che chiudono i servizi in secondo piano. Questo sito ha più informazioni su come risolvere il problema.</string>
     <string name="notification_updating">Aggiornando libreria... (%1$d/%2$d)</string>
-    <string name="tracker_komga_warning">Questo tracker è compatibile solo con la fonte Komga.</string>
     <string name="pref_lowest">Più basso</string>
     <string name="pref_low">Basso</string>
     <string name="pref_high">Alto</string>
@@ -691,7 +686,6 @@
     <string name="connected_to_wifi">Solo su Wi-Fi</string>
     <string name="update_72hour">Ogni 3 giorni</string>
     <string name="download_queue_size_warning">Attenzione: grossi download di massa possono rallentare le fonti e/o bloccare tachiyomi. Tocca per saperne di più.</string>
-    <string name="pref_library_update_show_tab_badge">Mostra numero di capitoli non letti nell\'icona degli aggiornamenti</string>
     <string name="ext_update_all">Aggiorna tutto</string>
     <string name="channel_app_updates">Aggiornamenti dell\'applicazione</string>
     <string name="pref_auto_clear_chapter_cache">Cancella la cache capitoli alla chiusura dell\'app</string>
@@ -700,7 +694,7 @@
     <string name="extension_api_error">Impossibile ottenere l\'elenco estensioni</string>
     <string name="privacy_policy">Politica sulla privacy</string>
     <string name="pref_update_only_completely_read">Con capitoli non letti</string>
-    <string name="pref_library_update_manga_restriction">Salta l\'aggiornamento di serie</string>
+    <string name="pref_library_update_manga_restriction">Salta l\'aggiornamento delle voci</string>
     <string name="library_errors_help">Per un aiuto su come risolvere gli errori di aggiornamento della libreria vedi %1$s</string>
     <string name="save_chapter_as_cbz">Salva come archivio CBZ</string>
     <string name="cancelled">Cancellata</string>
@@ -715,7 +709,6 @@
 \n
 \nVuoi comunque continuare\?</string>
     <string name="action_display_cover_only_grid">Griglia con solo copertine</string>
-    <string name="action_filter_started">Iniziati</string>
     <string name="pref_update_only_started">Che non sono state iniziate</string>
     <string name="skipped_reason_completed">Saltato perché la serie è completa</string>
     <string name="skipped_reason_not_caught_up">Saltato perché ci sono capitoli non letti</string>
@@ -734,8 +727,6 @@
     <string name="pref_clear_webview_data">Cancella dati WebView</string>
     <string name="webview_data_deleted">Dati WebView cancellati</string>
     <string name="action_close">Chiudi</string>
-    <string name="pref_duplicate_pinned_sources">Mostra fonti duplicate appuntate</string>
-    <string name="pref_duplicate_pinned_sources_summary">Ripetere le fonti appuntate nei rispettivi gruppi di lingue</string>
     <string name="battery_not_low">Quando la batteria non è scarica</string>
     <string name="source_filter_empty_screen">Nessuna fonte installata trovata</string>
     <string name="source_empty_screen">Nessuna fonte trovata</string>
@@ -806,16 +797,50 @@
     <string name="pref_backup_summary">Backup manuali e automatici</string>
     <string name="pref_security_summary">Blocco app, schermo protetto</string>
     <string name="pref_advanced_summary">Registro arresti anomali, ottimizzazioni batteria</string>
-    <string name="crash_screen_title">Si è verificato un errore imprevisto</string>
+    <string name="crash_screen_title">Ops!</string>
     <string name="crash_screen_restart_application">Riavvia l\'applicazione</string>
     <string name="invalid_location">Posizione invalida: %s</string>
     <string name="unknown_title">Titolo sconosciuto</string>
     <string name="error_user_agent_string_invalid">Stringa «user agent» non valida</string>
     <string name="updates_last_update_info_just_now">Proprio adesso</string>
-    <string name="channel_downloader_cache">Cache di download</string>
+    <string name="channel_downloader_cache">Indicizzazione</string>
     <string name="download_notifier_cache_renewal">Indicizzazione dei download</string>
     <string name="action_open_random_manga">Apri una voce casuale</string>
     <string name="information_no_entries_found">Nessuna voce trovata in questa categoria</string>
     <string name="fdroid_warning">Le versioni F-Droid non sono ufficialmente supportate.
 \nToccare per saperne di più.</string>
+    <string name="action_display_show_continue_reading_button">Mostra il pulsante per continuare la lettura</string>
+    <string name="other_header">Altro</string>
+    <string name="track_remove_date_conf_title">Rimuovere la data\?</string>
+    <string name="track_remove_finish_date_conf_text">Verrà rimossa la data di fine precedentemente selezionata da %s</string>
+    <string name="track_remove_start_date_conf_text">Verrà rimossa la data di inizio precedentemente selezionata da %s</string>
+    <string name="pref_invalidate_download_cache">Invalida l\'indice dei download</string>
+    <string name="enhanced_tracking_warning">Questo tracker è compatibile solo con la fonte %1$s.</string>
+    <string name="pref_invalidate_download_cache_summary">Forza l\'app a ricontrollare i capitoli scaricati</string>
+    <string name="label_started">Iniziati</string>
+    <string name="label_overview_section">Panoramica</string>
+    <string name="label_titles_section">Voci</string>
+    <string name="label_stats">Statistiche</string>
+    <string name="label_completed_titles">Voci completate</string>
+    <string name="label_local">In locale</string>
+    <string name="label_read_duration">Durata lettura</string>
+    <string name="label_tracked_titles">Voci tracciate</string>
+    <string name="label_used">In uso</string>
+    <string name="not_applicable">N/D</string>
+    <string name="minute_short">%d min</string>
+    <string name="label_downloaded">Scaricati</string>
+    <string name="label_titles_in_global_update">Nell\'aggiornamento globale</string>
+    <string name="label_read_chapters">Letti</string>
+    <string name="label_mean_score">Punteggio medio</string>
+    <string name="hour_short">%d o</string>
+    <string name="label_total_chapters">Totale</string>
+    <string name="label_tracker_section">Trackers</string>
+    <string name="seconds_short">%d s</string>
+    <string name="day_short">%d g</string>
+    <string name="action_not_now">Non ora</string>
+    <string name="information_no_manga_category">La categoria è vuota</string>
+    <string name="pref_library_update_show_tab_badge">Mostra il numero dei capitoli non letti nell\'icona Novità</string>
+    <string name="pref_worker_info">Informazioni sui processi</string>
+    <string name="copied_to_clipboard_plain">Copiato negli appunti</string>
+    <string name="ext_miui_warning">L\'installazione delle estensioni potrebbe non funzionare se è attivata l\'ottimizzazione MIUI. Provate a disabilitarla o ad installed le estensioni dal sito web.</string>
 </resources>

@@ -11,7 +11,6 @@
     <!-- Actions -->
     <string name="action_settings">Ajustes</string>
     <string name="action_filter">Filtrar</string>
-    <string name="action_filter_downloaded">Descargados</string>
     <string name="action_filter_unread">Sin leer</string>
     <string name="action_filter_empty">Quitar filtro</string>
     <string name="action_search">Buscar</string>
@@ -270,7 +269,6 @@
     <string name="download_notifier_downloader_title">Descargador</string>
     <string name="action_global_search">Búsqueda global</string>
     <string name="action_display_download_badge">Capítulos descargados</string>
-    <string name="local_source_badge">Local</string>
     <string name="other_source">Otros</string>
     <string name="action_global_search_hint">Búsqueda global…</string>
     <string name="latest">Recientes</string>
@@ -313,7 +311,6 @@
     <string name="download_custom">Personalizado</string>
     <string name="repeating">Releyendo</string>
     <string name="track_status">Estado</string>
-    <string name="track_start_date">Empezado</string>
     <string name="track_type">Tipo</string>
     <string name="transition_finished">Finalizado:</string>
     <string name="transition_current">Actual:</string>
@@ -523,7 +520,6 @@
         <item quantity="other">%d servicios de seguimiento</item>
     </plurals>
     <string name="no_pinned_sources">Todavía no has anclado ninguna fuente</string>
-    <string name="download_notifier_download_finish">Descarga completada</string>
     <string name="channel_complete">Terminadas</string>
     <string name="channel_progress">En progreso</string>
     <string name="channel_errors">Con errores</string>
@@ -534,9 +530,9 @@
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Esto no evita que las extensiones extraoficiales o que estén mal clasificadas muestren contenido para mayores de 18 años en la aplicación.</string>
     <plurals name="missing_chapters_warning">
-        <item quantity="one">Se ha omitido un capítulo, esto podría deberse a que la fuente no lo tenga o a que tus ajustes lo estén filtrando</item>
-        <item quantity="many">Se han omitido %d capítulos, esto podría deberse a que la fuente no los tenga o a que tus ajustes los estén filtrando</item>
-        <item quantity="other">Se han omitido %d capítulos, esto podría deberse a que la fuente no los tenga o a que tus ajustes los estén filtrando</item>
+        <item quantity="one">Saltándose %d capítulo, falta la fuente o se ha filtrado</item>
+        <item quantity="many">Saltándose %d capítulos, faltan las fuentes o se han filtrado</item>
+        <item quantity="other">Saltándose %d capítulos, faltan las fuentes o se han filtrado</item>
     </plurals>
     <string name="no_chapters_error">No hay capítulos</string>
     <string name="chapter_settings_updated">Se han actualizado los ajustes predeterminados de capítulo</string>
@@ -627,7 +623,6 @@
     <string name="error_no_match">No se han encontrado coincidencias</string>
     <string name="source_unsupported">Fuente no soportada</string>
     <string name="unread">Sin leer</string>
-    <string name="tracker_komga_warning">Este servicio de seguimiento sólo es compatible con la fuente Komga.</string>
     <string name="error_sharing_cover">Error al compartir portada</string>
     <string name="error_saving_cover">Error al guardar portada</string>
     <string name="cover_saved">Portada guardada</string>
@@ -689,7 +684,6 @@
     <string name="connected_to_wifi">Solo con Wi-Fi</string>
     <string name="update_72hour">Cada 3 días</string>
     <string name="download_queue_size_warning">Advertencia: Las descargas grandes pueden llevar a que las fuentes se vuelvan cada vez más lentas y en casos extremos que los servidores limiten o impidan el acceso a Tachiyomi. Toca aquí para más información.</string>
-    <string name="pref_library_update_show_tab_badge">Mostrar el número de capítulos sin leer en el icono de actualizaciones</string>
     <string name="ext_update_all">Actualizar todos</string>
     <string name="channel_app_updates">Actualizaciones de la aplicación</string>
     <string name="pref_auto_clear_chapter_cache">Borrar la caché de capítulos al cerrar la aplicación</string>
@@ -713,7 +707,6 @@
     <string name="confirm_manga_add_duplicate">Tienes un elemento en tu biblioteca con el mismo nombre pero de distinto origen (%1$s).
 \n
 \n¿Quieres seguir\?</string>
-    <string name="action_filter_started">Empezados</string>
     <string name="pref_update_only_started">Series sin empezar</string>
     <string name="skipped_reason_completed">Omitido porque la serie está completa</string>
     <string name="skipped_reason_not_caught_up">Omitido porque hay capítulos sin leer</string>
@@ -732,8 +725,6 @@
     <string name="webview_data_deleted">Se han limpiado los datos del WebView</string>
     <string name="pref_clear_webview_data">Limpiar datos del WebView</string>
     <string name="action_close">Cerrar</string>
-    <string name="pref_duplicate_pinned_sources_summary">Repetir fuentes ancladas en sus respectivos grupos de idiomas</string>
-    <string name="pref_duplicate_pinned_sources">Mostrar fuentes duplicadas ancladas</string>
     <string name="battery_not_low">Cuando la batería no esté baja</string>
     <string name="source_filter_empty_screen">No se ha instalado ninguna fuente</string>
     <string name="source_empty_screen">No se ha encontrado ninguna fuente</string>
@@ -788,8 +779,8 @@
     <string name="pref_long_strip_split">Separar imágenes más altas que anchas (en desarrollo)</string>
     <string name="updates_last_update_info">La biblioteca se actualizó: %s</string>
     <string name="remove_manga">Estás a punto de borrar «%s» de tu biblioteca</string>
-    <string name="popular">Popular</string>
-    <string name="multi_lang">Multi</string>
+    <string name="popular">Conocido</string>
+    <string name="multi_lang">Varios idiomas</string>
     <string name="missing_storage_permission">No se han concedido los permisos de almacenamiento</string>
     <string name="skipped_reason_not_always_update">Saltando, porque este manga no necesita actualizarse</string>
     <string name="action_search_hint">Buscar…</string>
@@ -804,15 +795,50 @@
     <string name="pref_security_summary">Pantalla segura y bloqueo de la aplicación</string>
     <string name="pref_backup_summary">Copias de respaldo manuales y automáticas</string>
     <string name="pref_browse_summary">Fuentes, extensiones y búsqueda global</string>
-    <string name="crash_screen_title">Tenemos un problema</string>
+    <string name="crash_screen_title">¡Vaya!</string>
     <string name="crash_screen_restart_application">Reiniciar la aplicación</string>
     <string name="unknown_title">Título desconocido</string>
     <string name="invalid_location">Ubicación incorrecta: %s</string>
     <string name="updates_last_update_info_just_now">Ahora mismo</string>
     <string name="error_user_agent_string_invalid">El nombre de agente de usuario no vale</string>
     <string name="download_notifier_cache_renewal">Reindexando descargas</string>
-    <string name="channel_downloader_cache">Caché de descargas</string>
+    <string name="channel_downloader_cache">Índice</string>
     <string name="action_open_random_manga">Abrir manga al azar</string>
-    <string name="information_no_entries_found">No se ha encontrado ningún manga en esta categoría</string>
-    <string name="fdroid_warning">No damos soporte oficial a las versiones de F-Droid. Toca para más información.</string>
+    <string name="information_no_entries_found">Parece que esta categoría está vacía</string>
+    <string name="fdroid_warning">Las compilaciones de F-Droid no son oficialmente compatibles. 
+\nToque para obtener más información.</string>
+    <string name="action_display_show_continue_reading_button">Mostrar el botón de seguir leyendo</string>
+    <string name="other_header">Más cosas</string>
+    <string name="track_remove_start_date_conf_text">Al hacer esto %s ya no aparecerá como empezado ese día</string>
+    <string name="track_remove_date_conf_title">¿Quieres quitar esta fecha\?</string>
+    <string name="track_remove_finish_date_conf_text">Al hacer esto %s ya no aparecerá como terminado ese día</string>
+    <string name="pref_invalidate_download_cache">Reconstruir el índice de descargas</string>
+    <string name="enhanced_tracking_warning">Este servicio de seguimiento solo funciona con %1$s.</string>
+    <string name="pref_invalidate_download_cache_summary">Forzar a la aplicación a volver a comprobar los capítulos descargados</string>
+    <string name="label_started">Empezados</string>
+    <string name="label_local">En el dispositivo</string>
+    <string name="label_completed_titles">Manga completado</string>
+    <string name="label_read_duration">Tiempo de lectura</string>
+    <string name="label_read_chapters">Leídos</string>
+    <string name="label_tracker_section">Con seguimiento</string>
+    <string name="label_total_chapters">En total</string>
+    <string name="label_titles_in_global_update">Actualizado de forma global</string>
+    <string name="label_mean_score">Puntuación media</string>
+    <string name="day_short">%dd</string>
+    <string name="hour_short">%dh</string>
+    <string name="minute_short">%dm</string>
+    <string name="label_used">En uso</string>
+    <string name="not_applicable">No disponible</string>
+    <string name="label_tracked_titles">Manga en servicios de seguimiento</string>
+    <string name="label_downloaded">Descargados</string>
+    <string name="label_stats">Estadísticas</string>
+    <string name="label_overview_section">Sumario</string>
+    <string name="label_titles_section">Manga</string>
+    <string name="seconds_short">%ds</string>
+    <string name="action_not_now">Ahora no</string>
+    <string name="information_no_manga_category">La categoría está vacía</string>
+    <string name="pref_library_update_show_tab_badge">Mostrar los capítulos por leer en el icono de actualizar</string>
+    <string name="copied_to_clipboard_plain">Se ha copiado al portapapeles</string>
+    <string name="pref_worker_info">Detalles sobre hilos de trabajo</string>
+    <string name="ext_miui_warning">Puede que no sea posible instalar extensiones si activas la optimización de MIUI. Es recomendable desactivarla o probar a instalar la extensión desde la propia web.</string>
 </resources>

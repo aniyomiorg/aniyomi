@@ -11,7 +11,6 @@
     <!-- Actions -->
     <string name="action_settings">Paramètres</string>
     <string name="action_filter">Filtre</string>
-    <string name="action_filter_downloaded">Téléchargés</string>
     <string name="action_filter_bookmarked">Signets</string>
     <string name="action_filter_unread">Non lus</string>
     <string name="action_filter_empty">Retirer le filtre</string>
@@ -239,7 +238,7 @@
     <string name="snack_categories_deleted">Catégories supprimées</string>
     <string name="action_undo">Annuler</string>
     <string name="categories">Catégories</string>
-    <string name="manga">Manga</string>
+    <string name="manga">Entrées de la bibliothèque</string>
     <string name="history">Historique</string>
     <string name="app_not_available">Application indisponible</string>
     <string name="update_weekly">Chaque semaine</string>
@@ -276,7 +275,6 @@
     <string name="latest">Récents</string>
     <string name="browse">Explorer</string>
     <string name="action_display_download_badge">Chapitres téléchargés</string>
-    <string name="local_source_badge">Local</string>
     <string name="channel_common">Général</string>
     <string name="information_empty_category">Vous n\'avez aucune catégorie. Appuyez sur le bouton « + » pour en créer une afin d\'organiser votre bibliothèque.</string>
     <string name="label_extensions">Extensions</string>
@@ -305,7 +303,6 @@
     <string name="custom_download">Télécharger une quantité personnalisée</string>
     <string name="download_custom">Personnalisé</string>
     <string name="track_status">Statut</string>
-    <string name="track_start_date">Démarré</string>
     <string name="track_type">Type</string>
     <string name="migration_dialog_what_to_include">Sélectionner les données à inclure</string>
     <string name="label_migration">Migrer</string>
@@ -338,7 +335,7 @@
     <string name="no_results_found">Aucun résultat trouvé</string>
     <string name="migration_selection_prompt">Sélectionnez une source depuis laquelle migrer</string>
     <string name="pref_category_library">Bibliothèque</string>
-    <string name="obsolete_extension_message">Cette extension n’est plus disponible.</string>
+    <string name="obsolete_extension_message">Cette extension n\'est plus disponible. Elle peut ne pas fonctionner correctement et causer des problèmes avec l\'application. Il est recommandé de la désinstaller.</string>
     <string name="pref_date_format">Format de date</string>
     <string name="pref_category_library_update">Mises à jour</string>
     <string name="action_webview_back">Précédent</string>
@@ -398,9 +395,9 @@
     <string name="email">Adresse courriel</string>
     <string name="pref_always_show_chapter_transition">Toujours afficher la transition entre les chapitres</string>
     <plurals name="notification_new_chapters_summary">
-        <item quantity="one">Pour %d titre</item>
-        <item quantity="many">Pour %d titres</item>
-        <item quantity="other">Pour %d titres</item>
+        <item quantity="one">Pour %d entrée</item>
+        <item quantity="many">Pour %d entrées</item>
+        <item quantity="other">Pour %d entrées</item>
     </plurals>
     <string name="action_menu">Menu</string>
     <string name="action_reorganize_by">Réorganiser</string>
@@ -528,7 +525,6 @@
     <string name="no_pinned_sources">Vous n\'avez aucune source épinglée</string>
     <string name="channel_complete">Compléter</string>
     <string name="channel_progress">Progression</string>
-    <string name="download_notifier_download_finish">Téléchargement terminé</string>
     <string name="channel_errors">Erreurs</string>
     <string name="backup_restore_missing_trackers">Traceurs non connectés :</string>
     <string name="pref_remove_bookmarked_chapters">Permettre la suppression des chapitres marqués d\'un marque-page</string>
@@ -635,7 +631,6 @@
     <string name="information_empty_category_dialog">Vous n\'avez pas encore de catégories.</string>
     <string name="action_start_downloading_now">Commencer à télécharger</string>
     <string name="notification_updating">Mise à jour de la bibliothèque… (%1$d/%2$d)</string>
-    <string name="tracker_komga_warning">Ce traqueur est uniquement compatible avec la source Komga.</string>
     <string name="restore_miui_warning">La sauvegarde/restauration peut ne pas fonctionner correctement si l\'optimisation MIUI est désactivée.</string>
     <string name="enhanced_tracking_info">Services qui fournissent des fonctionnalités améliorées pour des sources spécifiques. Les entrées sont automatiquement suivies lorsqu\'elles sont ajoutées à votre bibliothèque.</string>
     <string name="enhanced_services">Services avancés</string>
@@ -692,7 +687,6 @@
     <string name="connected_to_wifi">Uniquement en Wi-Fi</string>
     <string name="update_72hour">Tous les 3 jours</string>
     <string name="download_queue_size_warning">Attention : les téléchargements massifs peuvent entraîner un ralentissement des sources ou le blocage de Tachiyomi. Appuyez pour en savoir plus.</string>
-    <string name="pref_library_update_show_tab_badge">Afficher le nombre de messages non lus sur l\'icône des mises à jour</string>
     <string name="ext_update_all">Tout mettre à jour</string>
     <string name="channel_app_updates">Mises à jour de l\'application</string>
     <string name="pref_auto_clear_chapter_cache">Effacer le cache du chapitre à la fermeture de l\'application</string>
@@ -717,7 +711,6 @@
     <string name="pref_navigate_pan">Panoramique des images larges en appuyant</string>
     <string name="pref_landscape_zoom">Agrandir les images en paysage</string>
     <string name="pref_update_only_started">Qui n\'ont pas encore commencé</string>
-    <string name="action_filter_started">Commencé</string>
     <string name="skipped_reason_completed">Sauté car la série est terminée</string>
     <string name="skipped_reason_not_started">Sauté car aucun chapitre n\'est lu</string>
     <string name="skipped_reason_not_caught_up">Sauté car il y a des chapitres non lus</string>
@@ -736,8 +729,6 @@
     <string name="webview_data_deleted">Données WebView effacées</string>
     <string name="action_close">Fermer</string>
     <string name="battery_not_low">Quand la batterie n\'est pas faible</string>
-    <string name="pref_duplicate_pinned_sources_summary">Répéter les sources épinglées dans leurs groupes linguistiques respectifs</string>
-    <string name="pref_duplicate_pinned_sources">Afficher les sources épinglées en double</string>
     <string name="source_filter_empty_screen">Aucune source installée trouvée</string>
     <string name="action_sort_last_manga_update">Dernière mise à jour</string>
     <string name="action_sort_unread_count">Nombre de non-lus</string>
@@ -796,7 +787,7 @@
     <string name="missing_storage_permission">Autorisations de stockage non accordées</string>
     <string name="action_search_hint">Recherche…</string>
     <string name="skipped_reason_not_always_update">Passées car la série ne nécessite pas de mise à jour</string>
-    <string name="crash_screen_title">Une erreur inattendue s\'est produite</string>
+    <string name="crash_screen_title">Oups !</string>
     <string name="pref_appearance_summary">Thème, format de la date et de l\'heure</string>
     <string name="pref_downloads_summary">Téléchargement automatique, téléchargement anticipé</string>
     <string name="pref_tracking_summary">Synchronisation unidirectionnelle de la progression, synchronisation améliorée</string>
@@ -813,4 +804,41 @@
     <string name="error_user_agent_string_invalid">Chaîne d\'agent utilisateur invalide</string>
     <string name="unknown_title">Titre inconnu</string>
     <string name="updates_last_update_info_just_now">À l\'instant</string>
+    <string name="action_open_random_manga">Ouvrir une entrée au hasard</string>
+    <string name="fdroid_warning">Les versions de F-Droid ne sont pas officiellement prises en charge.
+\nAppuyez pour en savoir plus.</string>
+    <string name="information_no_entries_found">Aucune entrée trouvée dans cette catégorie</string>
+    <string name="download_notifier_cache_renewal">Indexation des téléchargements</string>
+    <string name="channel_downloader_cache">Indexation</string>
+    <string name="action_display_show_continue_reading_button">Afficher le bouton Continuer la lecture</string>
+    <string name="track_remove_start_date_conf_text">Ceci supprimera la date de début que vous avez précédemment sélectionnée dans la base de données de %s</string>
+    <string name="other_header">Autre</string>
+    <string name="track_remove_date_conf_title">Retirer la date \?</string>
+    <string name="track_remove_finish_date_conf_text">Ceci supprimera la date de fin que vous aviez précédemment sélectionnée dans la base de données de %s</string>
+    <string name="pref_invalidate_download_cache">Invalider l\'index des téléchargements</string>
+    <string name="enhanced_tracking_warning">Ce tracker est uniquement compatible avec la source %1$s.</string>
+    <string name="pref_invalidate_download_cache_summary">Forcer l\'application à revérifier les chapitres téléchargés</string>
+    <string name="label_stats">Statistiques</string>
+    <string name="label_overview_section">Aperçu</string>
+    <string name="label_total_chapters">Total</string>
+    <string name="label_local">Local</string>
+    <string name="label_started">Commencé</string>
+    <string name="label_downloaded">Téléchargé</string>
+    <string name="information_no_manga_category">La catégorie est vide</string>
+    <string name="label_titles_section">Entrées</string>
+    <string name="label_titles_in_global_update">Dans la mise à jour globale</string>
+    <string name="label_read_chapters">Lus</string>
+    <string name="label_tracker_section">Traqueurs</string>
+    <string name="label_used">Utilisé</string>
+    <string name="not_applicable">s. o.</string>
+    <string name="day_short">%d j</string>
+    <string name="hour_short">%d h</string>
+    <string name="minute_short">%d min</string>
+    <string name="seconds_short">%d s</string>
+    <string name="action_not_now">Pas maintenant</string>
+    <string name="label_completed_titles">Entrées terminées</string>
+    <string name="label_read_duration">Durée de lecture</string>
+    <string name="label_tracked_titles">Entrées suivies</string>
+    <string name="label_mean_score">Note moyenne</string>
+    <string name="pref_library_update_show_tab_badge">Afficher le nombre de chapitres non lus sur l\'icône des mises à jour</string>
 </resources>

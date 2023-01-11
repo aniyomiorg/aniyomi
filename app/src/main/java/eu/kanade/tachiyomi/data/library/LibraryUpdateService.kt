@@ -13,7 +13,6 @@ import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
 import eu.kanade.domain.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.domain.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
 import eu.kanade.domain.chapter.model.Chapter
-import eu.kanade.domain.chapter.model.toDbChapter
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.library.model.LibraryManga
 import eu.kanade.domain.library.service.LibraryPreferences
@@ -27,6 +26,7 @@ import eu.kanade.domain.track.interactor.InsertTrack
 import eu.kanade.domain.track.model.toDbTrack
 import eu.kanade.domain.track.model.toDomainTrack
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.core.preference.getAndSet
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadService
@@ -102,7 +102,7 @@ class LibraryUpdateService(
 
     private lateinit var wakeLock: PowerManager.WakeLock
     private lateinit var notifier: LibraryUpdateNotifier
-    private var ioScope: CoroutineScope? = null
+    private var scope: CoroutineScope? = null
 
     private var mangaToUpdate: List<LibraryManga> = mutableListOf()
     private var updateJob: Job? = null
@@ -190,7 +190,7 @@ class LibraryUpdateService(
      */
     override fun onDestroy() {
         updateJob?.cancel()
-        ioScope?.cancel()
+        scope?.cancel()
         if (wakeLock.isHeld) {
             wakeLock.release()
         }
@@ -222,7 +222,7 @@ class LibraryUpdateService(
 
         // Unsubscribe from any previous subscription if needed
         updateJob?.cancel()
-        ioScope?.cancel()
+        scope?.cancel()
 
         // If this is a chapter update; set the last update time to now
         if (target == Target.CHAPTERS) {
@@ -238,8 +238,8 @@ class LibraryUpdateService(
             logcat(LogPriority.ERROR, exception)
             stopSelf(startId)
         }
-        ioScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-        updateJob = ioScope?.launch(handler) {
+        scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        updateJob = scope?.launch(handler) {
             when (target) {
                 Target.CHAPTERS -> updateChapterList()
                 Target.COVERS -> updateCovers()
@@ -314,7 +314,6 @@ class LibraryUpdateService(
         val failedUpdates = CopyOnWriteArrayList<Pair<Manga, String?>>()
         val hasDownloads = AtomicBoolean(false)
         val loggedServices by lazy { trackManager.services.filter { it.isLogged && it !is AnimeTrackService } }
-        val currentUnreadUpdatesCount = libraryPreferences.unreadUpdatesCount().get()
         val restrictions = libraryPreferences.libraryUpdateMangaRestriction().get()
 
         withIOContext {
@@ -364,6 +363,8 @@ class LibraryUpdateService(
                                                         hasDownloads.set(true)
                                                     }
 
+                                                    libraryPreferences.newUpdatesCount().getAndSet { it + newChapters.size }
+
                                                     // Convert to the manga that contains new chapters
                                                     newUpdates.add(manga to newChapters.toTypedArray())
                                                 }
@@ -394,8 +395,6 @@ class LibraryUpdateService(
 
         if (newUpdates.isNotEmpty()) {
             notifier.showUpdateNotifications(newUpdates)
-            val newChapterCount = newUpdates.sumOf { it.second.size }
-            libraryPreferences.unreadUpdatesCount().set(currentUnreadUpdatesCount + newChapterCount)
             if (hasDownloads.get()) {
                 DownloadService.start(this)
             }
@@ -416,7 +415,7 @@ class LibraryUpdateService(
     private fun downloadChapters(manga: Manga, chapters: List<Chapter>) {
         // We don't want to start downloading while the library is updating, because websites
         // may don't like it and they could ban the user.
-        downloadManager.downloadChapters(manga, chapters.map { it.toDbChapter() }, false)
+        downloadManager.downloadChapters(manga, chapters, false)
     }
 
     /**

@@ -33,26 +33,9 @@ internal class DownloadNotifier(private val context: Context) {
         }
     }
 
-    private val completeNotificationBuilder by lazy {
-        context.notificationBuilder(Notifications.CHANNEL_DOWNLOADER_COMPLETE) {
-            setAutoCancel(false)
-        }
-    }
-
     private val errorNotificationBuilder by lazy {
         context.notificationBuilder(Notifications.CHANNEL_DOWNLOADER_ERROR) {
             setAutoCancel(false)
-        }
-    }
-
-    private val cacheNotificationBuilder by lazy {
-        context.notificationBuilder(Notifications.CHANNEL_DOWNLOADER_CACHE) {
-            setSmallIcon(R.drawable.ic_ani)
-            setContentTitle(context.getString(R.string.download_notifier_cache_renewal))
-            setProgress(100, 100, true)
-            setOngoing(true)
-            setAutoCancel(false)
-            setOnlyAlertOnce(true)
         }
     }
 
@@ -167,25 +150,10 @@ internal class DownloadNotifier(private val context: Context) {
     }
 
     /**
-     *  This function shows a notification to inform download tasks are done.
+     * Resets the state once downloads are completed.
      */
     fun onComplete() {
         dismissProgress()
-
-        if (!errorThrown) {
-            // Create notification
-            with(completeNotificationBuilder) {
-                setContentTitle(context.getString(R.string.download_notifier_downloader_title))
-                setContentText(context.getString(R.string.download_notifier_download_finish))
-                setSmallIcon(android.R.drawable.stat_sys_download_done)
-                clearActions()
-                setAutoCancel(true)
-                setContentIntent(NotificationHandler.openDownloadManagerPendingActivity(context))
-                setProgress(0, 0, false)
-
-                show(Notifications.ID_DOWNLOAD_CHAPTER_COMPLETE)
-            }
-        }
 
         // Reset states to default
         errorThrown = false
@@ -243,15 +211,5 @@ internal class DownloadNotifier(private val context: Context) {
         // Reset download information
         errorThrown = true
         isDownloading = false
-    }
-
-    fun onCacheProgress() {
-        with(cacheNotificationBuilder) {
-            show(Notifications.ID_DOWNLOAD_CACHE)
-        }
-    }
-
-    fun dismissCacheProgress() {
-        context.notificationManager.cancel(Notifications.ID_DOWNLOAD_CACHE)
     }
 }

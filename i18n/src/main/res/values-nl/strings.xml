@@ -12,7 +12,6 @@
     <string name="label_backup">Back-up en herstel</string>
     <string name="action_settings">Instellingen</string>
     <string name="action_filter">Filter</string>
-    <string name="action_filter_downloaded">Gedownload</string>
     <string name="action_filter_unread">Ongelezen</string>
     <string name="action_filter_empty">Verwijder filter</string>
     <string name="action_sort_alpha">Alfabetisch</string>
@@ -239,7 +238,6 @@
     <string name="plan_to_read">Van plan te lezen</string>
     <string name="action_global_search">Globaal zoeken</string>
     <string name="action_display_download_badge">Gedownloade hoofdstukken</string>
-    <string name="local_source_badge">Lokaal</string>
     <string name="other_source">Anders</string>
     <string name="action_global_search_hint">Globaal zoeken…</string>
     <string name="latest">Nieuwste</string>
@@ -278,7 +276,6 @@
     <string name="download_custom">Aangepast</string>
     <string name="repeating">Opnieuw aan het lezen</string>
     <string name="track_status">Status</string>
-    <string name="track_start_date">Gestart</string>
     <string name="track_type">Soort</string>
     <string name="transition_finished">Afgerond:</string>
     <string name="transition_current">Huidige:</string>
@@ -484,7 +481,6 @@
     <string name="no_pinned_sources">Je hebt geen vastgepinde bronnen</string>
     <string name="channel_complete">Voltooid</string>
     <string name="channel_progress">Voortgang</string>
-    <string name="download_notifier_download_finish">Download voltooid</string>
     <string name="channel_errors">Fouten</string>
     <string name="backup_restore_missing_trackers">Niet-ingelogde trackers:</string>
     <string name="pref_remove_bookmarked_chapters">Verwijderen van hoofdstukken met bladwijzers toestaan</string>
@@ -600,7 +596,6 @@
     <string name="theme_midnightdusk">Nachtschemering</string>
     <string name="theme_greenapple">Groene Appel</string>
     <string name="pref_app_theme">Appthema</string>
-    <string name="tracker_komga_warning">Deze tracker werkt alleen met de Komga-bron.</string>
     <string name="enhanced_tracking_info">Diensten die uitgebreidere functionaliteit bieden voor bepaalde bronnen. Het tracken van manga gebeurt automatisch wanneer je deze toevoegt aan je bibliotheek.</string>
     <string name="enhanced_services">Verbeterde diensten</string>
     <string name="theme_monet">Dynamisch</string>
@@ -645,7 +640,6 @@
     <string name="action_sort_count">Totaal aantal manga</string>
     <string name="pref_verbose_logging_summary">Houd uitgebreide logs bij in de systeemlogs (verslechterd de werking van de app)</string>
     <string name="channel_app_updates">App updates</string>
-    <string name="pref_library_update_show_tab_badge">Geef ongelezen aantal weer op het Update icoon</string>
     <string name="download_queue_size_warning">Waarschuwing: grote bulk downloads kunnen leiden tot trager werkende bronnen en/of Tachiyomi blokkeren</string>
     <string name="ext_update_all">Alles updaten</string>
     <string name="update_72hour">Iedere 3 dagen</string>
@@ -677,7 +671,6 @@
     <string name="action_show_manga">Laat manga zien</string>
     <string name="action_display_cover_only_grid">Alleen-cover rooster</string>
     <string name="rotation_reverse_portrait">Omgedraaid portret-modus</string>
-    <string name="action_filter_started">Begonnen</string>
     <string name="action_move_to_top_all_for_series">Breng serie naar boven</string>
     <string name="pref_update_only_started">Geen gelezen hoofdstukken</string>
     <string name="skipped_reason_completed">Overgeslagen want de serie is af</string>
@@ -713,8 +706,6 @@
     <string name="action_sort_unread_count">Ongelezen aantal</string>
     <string name="download_ahead_info">Werkt alleen bij vermeldingen in de bibliotheek en als het huidige hoofdstuk en het volgende al gedownload zijn</string>
     <string name="pref_user_agent_string">Standaard \'user-agent-string\'</string>
-    <string name="pref_duplicate_pinned_sources">Laat gedupliceerde vastgezette bronnen zien</string>
-    <string name="pref_duplicate_pinned_sources_summary">Herhaal vastgezetten bronnen in hun respectieve taal groepen</string>
     <plurals name="next_unread_chapters">
         <item quantity="one">Volgende ongelezen hoofdstuk</item>
         <item quantity="other">Volgende aantal %d ongelezen hoofdstukken</item>

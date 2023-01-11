@@ -45,7 +45,6 @@
     <string name="action_filter_empty">Forigi filtrilon</string>
     <string name="action_filter_unread">Nelegitaj</string>
     <string name="action_filter_bookmarked">Legosignitaj</string>
-    <string name="action_filter_downloaded">Elŝutitaj</string>
     <string name="action_filter">Filtrilo</string>
     <string name="action_menu">Menuo</string>
     <string name="action_settings">Agordoj</string>
@@ -234,7 +233,6 @@
     <string name="channel_errors">Eraroj</string>
     <string name="channel_complete">Finitaj</string>
     <string name="channel_progress">Progreso</string>
-    <string name="download_notifier_download_finish">Elŝutado finita</string>
     <string name="download_notifier_title_error">Eraro</string>
     <string name="update_check_notification_update_available">Nova versio disponebla!</string>
     <string name="update_check_notification_download_error">Elŝutada eraro</string>
@@ -436,7 +434,6 @@
     <string name="custom_filter">Propra filtrilo</string>
     <string name="source_unsupported">Fonto ne subtenita</string>
     <string name="myanimelist_relogin">Bonvole ensalutu al MAL denove</string>
-    <string name="track_start_date">Komencita</string>
     <string name="plan_to_read">Planas legi</string>
     <string name="paused">Paŭzita</string>
     <string name="on_hold">Haltetita</string>
@@ -449,7 +446,6 @@
     <string name="chapter_not_found">Ĉapitro netrovita</string>
     <string name="local_source">Loka fonta</string>
     <string name="http_error_hint">Kontroli retejon en WebView</string>
-    <string name="local_source_badge">Loka</string>
     <string name="updating_category">Ĝisdatigi kategorion</string>
     <string name="check_for_updates">Kontroli por trovi ĝisdatigojn</string>
     <string name="help_translate">Helpu traduki</string>
@@ -509,7 +505,6 @@
     <string name="pref_library_update_restriction">Aktualigi limigojn</string>
     <string name="track_finished_reading_date">Findato</string>
     <string name="track_started_reading_date">Komencdato</string>
-    <string name="tracker_komga_warning">Ĉi-ŝanĝspurilo nur kongruas kun Komga fonto.</string>
     <string name="pref_refresh_library_tracking">Aktualigi ŝanĝspuradon</string>
     <string name="backup_restore_missing_trackers">Ŝanĝspuriloj ne ensalutintaj al:</string>
     <string name="action_filter_tracked">Ŝanĝspurata</string>
@@ -541,4 +536,6 @@
     <string name="pref_show_navigation_mode_summary">Montri tuŝetzonojn kiam malfermas legilon</string>
     <string name="pref_library_update_refresh_metadata">Aŭtomate aktualigi metadatumoj</string>
     <string name="secure_screen_summary">Kaŝi aplikaĵan enhavon kiam ŝaltumas aplikaĵojn kaj malebligi ekrankopion</string>
+    <string name="label_stats">Statistiko</string>
+    <string name="label_warning">Averto</string>
 </resources>

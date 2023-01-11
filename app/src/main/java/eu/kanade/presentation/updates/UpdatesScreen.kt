@@ -1,11 +1,18 @@
 package eu.kanade.presentation.updates
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FlipToBack
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.SelectAll
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,145 +27,91 @@ import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.MangaBottomActionMenu
+import eu.kanade.presentation.components.PullRefresh
 import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.components.SwipeRefresh
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.model.Download
-import eu.kanade.tachiyomi.data.library.LibraryUpdateService
-import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.ui.updates.UpdatesItem
-import eu.kanade.tachiyomi.ui.updates.UpdatesPresenter
-import eu.kanade.tachiyomi.ui.updates.UpdatesPresenter.Dialog
-import eu.kanade.tachiyomi.ui.updates.UpdatesPresenter.Event
-import eu.kanade.tachiyomi.util.system.toast
-import eu.kanade.tachiyomi.widget.TachiyomiBottomNavigationView
+import eu.kanade.tachiyomi.ui.updates.UpdatesState
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.Date
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun UpdateScreen(
-    presenter: UpdatesPresenter,
-    contentPadding: PaddingValues,
+    state: UpdatesState,
+    snackbarHostState: SnackbarHostState,
+    lastUpdated: Long,
+    relativeTime: Int,
     onClickCover: (UpdatesItem) -> Unit,
-    onBackClicked: () -> Unit,
+    onSelectAll: (Boolean) -> Unit,
+    onInvertSelection: () -> Unit,
+    onUpdateLibrary: () -> Boolean,
+    onDownloadChapter: (List<UpdatesItem>, ChapterDownloadAction) -> Unit,
+    onMultiBookmarkClicked: (List<UpdatesItem>, bookmark: Boolean) -> Unit,
+    onMultiMarkAsReadClicked: (List<UpdatesItem>, read: Boolean) -> Unit,
+    onMultiDeleteClicked: (List<UpdatesItem>) -> Unit,
+    onUpdateSelected: (UpdatesItem, Boolean, Boolean, Boolean) -> Unit,
+    onOpenChapter: (UpdatesItem) -> Unit,
 ) {
-    val internalOnBackPressed = {
-        if (presenter.selectionMode) {
-            presenter.toggleAllSelection(false)
-        } else {
-            onBackClicked()
-        }
-    }
-    BackHandler(onBack = internalOnBackPressed)
+    BackHandler(enabled = state.selectionMode, onBack = { onSelectAll(false) })
 
     val context = LocalContext.current
-    val onUpdateLibrary = {
-        val started = LibraryUpdateService.start(context)
-        context.toast(if (started) R.string.updating_library else R.string.update_already_running)
-        started
-    }
 
     Scaffold(
         bottomBar = {
             UpdatesBottomBar(
-                selected = presenter.selected,
-                onDownloadChapter = presenter::downloadChapters,
-                onMultiBookmarkClicked = presenter::bookmarkUpdates,
-                onMultiMarkAsReadClicked = presenter::markUpdatesRead,
-                onMultiDeleteClicked = {
-                    presenter.dialog = Dialog.DeleteConfirmation(it)
-                },
+                selected = state.selected,
+                onDownloadChapter = onDownloadChapter,
+                onMultiBookmarkClicked = onMultiBookmarkClicked,
+                onMultiMarkAsReadClicked = onMultiMarkAsReadClicked,
+                onMultiDeleteClicked = onMultiDeleteClicked,
             )
         },
-    ) {
-        val contentPaddingWithNavBar = TachiyomiBottomNavigationView.withBottomNavPadding(contentPadding)
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+    ) { contentPadding ->
         when {
-            presenter.isLoading -> LoadingScreen()
-            presenter.uiModels.isEmpty() -> EmptyScreen(
+            state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+            state.items.isEmpty() -> EmptyScreen(
                 textResource = R.string.information_no_recent,
-                modifier = Modifier.padding(contentPaddingWithNavBar),
+                modifier = Modifier.padding(contentPadding),
             )
             else -> {
-                UpdateScreenContent(
-                    presenter = presenter,
-                    contentPadding = contentPaddingWithNavBar,
-                    onUpdateLibrary = onUpdateLibrary,
-                    onClickCover = onClickCover,
-                )
-            }
-        }
-    }
-}
+                val scope = rememberCoroutineScope()
+                var isRefreshing by remember { mutableStateOf(false) }
 
-@Composable
-private fun UpdateScreenContent(
-    presenter: UpdatesPresenter,
-    contentPadding: PaddingValues,
-    onUpdateLibrary: () -> Boolean,
-    onClickCover: (UpdatesItem) -> Unit,
-) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    var isRefreshing by remember { mutableStateOf(false) }
+                PullRefresh(
+                    refreshing = isRefreshing,
+                    onRefresh = {
+                        val started = onUpdateLibrary()
+                        if (!started) return@PullRefresh
+                        scope.launch {
+                            // Fake refresh status but hide it after a second as it's a long running task
+                            isRefreshing = true
+                            delay(1.seconds)
+                            isRefreshing = false
+                        }
+                    },
+                    enabled = !state.selectionMode,
+                    indicatorPadding = contentPadding,
+                ) {
+                    FastScrollLazyColumn(
+                        contentPadding = contentPadding,
+                    ) {
+                        if (lastUpdated > 0L) {
+                            updatesLastUpdatedItem(lastUpdated)
+                        }
 
-    SwipeRefresh(
-        refreshing = isRefreshing,
-        onRefresh = {
-            val started = onUpdateLibrary()
-            if (!started) return@SwipeRefresh
-            scope.launch {
-                // Fake refresh status but hide it after a second as it's a long running task
-                isRefreshing = true
-                delay(1.seconds)
-                isRefreshing = false
-            }
-        },
-        enabled = presenter.selectionMode.not(),
-        indicatorPadding = contentPadding,
-    ) {
-        FastScrollLazyColumn(
-            contentPadding = contentPadding,
-        ) {
-            if (presenter.lastUpdated > 0L) {
-                updatesLastUpdatedItem(presenter.lastUpdated)
-            }
-
-            updatesUiItems(
-                uiModels = presenter.uiModels,
-                selectionMode = presenter.selectionMode,
-                onUpdateSelected = presenter::toggleSelection,
-                onClickCover = onClickCover,
-                onClickUpdate = {
-                    val intent = ReaderActivity.newIntent(context, it.update.mangaId, it.update.chapterId)
-                    context.startActivity(intent)
-                },
-                onDownloadChapter = presenter::downloadChapters,
-                relativeTime = presenter.relativeTime,
-                dateFormat = presenter.dateFormat,
-            )
-        }
-    }
-
-    val onDismissDialog = { presenter.dialog = null }
-    when (val dialog = presenter.dialog) {
-        is Dialog.DeleteConfirmation -> {
-            UpdatesDeleteConfirmationDialog(
-                onDismissRequest = onDismissDialog,
-                onConfirm = {
-                    presenter.toggleAllSelection(false)
-                    presenter.deleteChapters(dialog.toDelete)
-                },
-            )
-        }
-        null -> {}
-    }
-    LaunchedEffect(Unit) {
-        presenter.events.collectLatest { event ->
-            when (event) {
-                Event.InternalError -> context.toast(R.string.internal_error)
+                        updatesUiItems(
+                            uiModels = state.getUiModel(context, relativeTime),
+                            selectionMode = state.selectionMode,
+                            onUpdateSelected = onUpdateSelected,
+                            onClickCover = onClickCover,
+                            onClickUpdate = onOpenChapter,
+                            onDownloadChapter = onDownloadChapter,
+                        )
+                    }
+                }
             }
         }
     }
@@ -199,6 +152,6 @@ private fun UpdatesBottomBar(
 }
 
 sealed class UpdatesUiModel {
-    data class Header(val date: Date) : UpdatesUiModel()
+    data class Header(val date: String) : UpdatesUiModel()
     data class Item(val item: UpdatesItem) : UpdatesUiModel()
 }

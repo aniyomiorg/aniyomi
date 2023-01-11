@@ -39,7 +39,6 @@ object Migrations {
     /**
      * Performs a migration when the application is updated.
      *
-     * @param preferences Preferences of the application.
      * @return true if a migration is performed, false otherwise.
      */
     fun upgrade(
@@ -397,6 +396,12 @@ object Migrations {
                             val newInt = oldString.toIntOrNull() ?: return@edit
                             putInt(pref.key(), newInt)
                         }
+                val trackingQueuePref = context.getSharedPreferences("tracking_queue", Context.MODE_PRIVATE)
+                trackingQueuePref.all.forEach {
+                    val (_, lastChapterRead) = it.value.toString().split(":")
+                    trackingQueuePref.edit {
+                        remove(it.key)
+                        putFloat(it.key, lastChapterRead.toFloat())
                     }
                 }
             }

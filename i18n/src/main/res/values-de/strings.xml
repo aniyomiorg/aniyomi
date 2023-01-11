@@ -2,7 +2,7 @@
 <resources>
     <string name="name">Name</string>
     <string name="categories">Kategorien</string>
-    <string name="manga">Manga</string>
+    <string name="manga">Bibliothekseinträge</string>
     <string name="chapters">Kapitel</string>
     <string name="history">Verlauf</string>
     <string name="label_settings">Einstellungen</string>
@@ -12,7 +12,6 @@
     <string name="label_backup">Sichern und Wiederherstellen</string>
     <string name="action_settings">Einstellungen</string>
     <string name="action_filter">Filter</string>
-    <string name="action_filter_downloaded">Heruntergeladen</string>
     <string name="action_filter_bookmarked">Lesezeichen</string>
     <string name="action_filter_unread">Ungelesen</string>
     <string name="action_filter_empty">Filter löschen</string>
@@ -243,7 +242,6 @@
     <string name="browse">Stöbern</string>
     <string name="channel_common">Allgemein</string>
     <string name="action_display_download_badge">Heruntergelade Kapitel</string>
-    <string name="local_source_badge">Lokal</string>
     <string name="information_empty_category">Keine Kategorien vorhanden. Tippe auf die Plus-Schaltfläche, um eine Kategorie zum Sortieren deiner Bibliothek zu erstellen.</string>
     <string name="label_migration">Migrieren</string>
     <string name="label_extensions">Erweiterungen</string>
@@ -280,7 +278,6 @@
     <string name="download_custom">Benutzerdefiniert</string>
     <string name="repeating">Am Wiederlesen</string>
     <string name="track_status">Status</string>
-    <string name="track_start_date">Angefangen</string>
     <string name="track_type">Typ</string>
     <string name="transition_finished">Beendet:</string>
     <string name="transition_current">Aktuell:</string>
@@ -412,7 +409,7 @@
     <string name="check_for_updates">Nach Aktualisierungen suchen</string>
     <string name="last_used_source">Zuletzt genutzt</string>
     <string name="local_source_help_guide">Anleitung für lokale Quellen</string>
-    <string name="restore_duration">%02d Min., %02d Sek.</string>
+    <string name="restore_duration">%02d min, %02d s</string>
     <string name="downloaded_only_summary">Filtert alle Einträge in deiner Bibliothek</string>
     <plurals name="download_queue_summary">
         <item quantity="one">%1$s verbleibend</item>
@@ -482,7 +479,6 @@
         <item quantity="other">%d Tracker</item>
     </plurals>
     <string name="no_pinned_sources">Du hast keine angehefteten Quellen</string>
-    <string name="download_notifier_download_finish">Download abgeschlossen</string>
     <string name="channel_complete">Abgeschlossen</string>
     <string name="channel_progress">Fortschritt</string>
     <string name="channel_errors">Fehler</string>
@@ -602,7 +598,6 @@
     <string name="pref_app_theme">App-Design</string>
     <string name="enhanced_services">Erweiterte Anbieter</string>
     <string name="enhanced_tracking_info">Anbieter, die für bestimmte Quellen erweiterte Funktionen anbieten. Einträge werden automatisch getrackt, wenn sie deiner Bibliothek hinzugefügt werden.</string>
-    <string name="tracker_komga_warning">Dieser Tracker ist nur mit der Komga-Quelle kompatibel.</string>
     <string name="theme_monet">Dynamisch</string>
     <string name="label_background_activity">Hintergrundaktivität</string>
     <string name="pref_lowest">Niedrigste</string>
@@ -646,7 +641,6 @@
     <string name="connected_to_wifi">Nur über WLAN</string>
     <string name="update_72hour">Alle 3 Tage</string>
     <string name="download_queue_size_warning">Achtung: Große Downloads könnten dazu führen, dass Quellen langsamer werden und/oder Tachiyomi blockieren. Tippe, um mehr zu erfahren.</string>
-    <string name="pref_library_update_show_tab_badge">Anzahl von Ungelesenem auf dem „Neues“-Symbol anzeigen</string>
     <string name="ext_update_all">Alle aktualisieren</string>
     <string name="channel_app_updates">Anwendungsaktualisierungen</string>
     <string name="pref_auto_clear_chapter_cache">Kapitel-Zwischenspeicher beim Schließen der App löschen</string>
@@ -670,7 +664,6 @@
     <string name="action_display_cover_only_grid">Nur-Cover-Kacheln</string>
     <string name="pref_landscape_zoom">Bild im Querformat vergrößern</string>
     <string name="pref_navigate_pan">Beim Tippen innerhalb breiter Seiten navigieren</string>
-    <string name="action_filter_started">Angefangen</string>
     <string name="pref_update_only_started">Die noch nicht begonnen wurden</string>
     <string name="skipped_reason_completed">Übersprungen, da die Serie abgeschlossen ist</string>
     <string name="skipped_reason_not_caught_up">Übersprungen, weil es ungelesene Kapitel gibt</string>
@@ -690,11 +683,9 @@
     <string name="webview_data_deleted">WebView-Daten gelöscht</string>
     <string name="action_close">Schließen</string>
     <string name="battery_not_low">Wenn der Akkustand nicht niedrig ist</string>
-    <string name="pref_duplicate_pinned_sources_summary">Angeheftete Quellen in ihren jeweiligen Sprachgruppen wiederholen</string>
-    <string name="pref_duplicate_pinned_sources">Doppelte angeheftete Quellen anzeigen</string>
     <string name="source_filter_empty_screen">Keine installierte Quelle gefunden</string>
     <string name="source_empty_screen">Keine Quelle gefunden</string>
-    <string name="action_sort_unread_count">Ungelesenenanzahl</string>
+    <string name="action_sort_unread_count">Anzahl an Ungelesenem</string>
     <string name="action_sort_last_manga_update">Letzte Aktualisierungsprüfung</string>
     <string name="split_tall_images">Hohe Bilder teilen</string>
     <string name="split_tall_images_summary">Verbessert die Leserleistung</string>
@@ -757,7 +748,7 @@
     <string name="crash_screen_restart_application">Anwendung neustarten</string>
     <string name="pref_tracking_summary">Einweg-Synchronisation, erweiterte Synchronisation</string>
     <string name="pref_browse_summary">Quellen, Erweiterungen, globale Suche</string>
-    <string name="crash_screen_title">Ein unerwarteter Fehler ist aufgetreten</string>
+    <string name="crash_screen_title">Ups!</string>
     <string name="pref_advanced_summary">Absturzprotokolle ausgeben, Akkuverbrauch-Optimierung</string>
     <string name="pref_backup_summary">Manuelle und automatische Datensicherungen</string>
     <string name="crash_screen_description">%s ist auf einen unerwarteten Fehler gestoßen. Wir empfehlen dir, einen Screenshot von dieser Nachricht zu machen, die Absturzprotokolle auszugeben und sie dann in unserem Support-Kanal auf Discord zu teilen.</string>
@@ -766,10 +757,44 @@
     <string name="invalid_location">Ungültiger Speicherort: %s</string>
     <string name="error_user_agent_string_invalid">Ungültiger User-Agent-Text</string>
     <string name="updates_last_update_info_just_now">Gerade eben</string>
-    <string name="channel_downloader_cache">Download-Zwischenspeicher</string>
+    <string name="channel_downloader_cache">Indizierung</string>
     <string name="download_notifier_cache_renewal">Downloads werden indiziert</string>
     <string name="action_open_random_manga">Zufälligen Eintrag öffnen</string>
     <string name="information_no_entries_found">Keine Einträge in dieser Kategorie gefunden</string>
     <string name="fdroid_warning">F-Droid-Builds werden nicht offiziell unterstützt.
 \nTippe, um mehr zu erfahren.</string>
+    <string name="action_display_show_continue_reading_button">Weiterlesen-Button anzeigen</string>
+    <string name="other_header">Andere</string>
+    <string name="pref_invalidate_download_cache">Index der Downloads invalidieren</string>
+    <string name="track_remove_date_conf_title">Datum entfernen\?</string>
+    <string name="track_remove_start_date_conf_text">Dies wird dein zuvor gewähltes Startdatum von %s entfernen</string>
+    <string name="track_remove_finish_date_conf_text">Dies wird dein zuvor gewähltes Enddatum von %s entfernen</string>
+    <string name="enhanced_tracking_warning">Dieser Tracker ist nur mit der %1$s-Quelle kompatibel.</string>
+    <string name="pref_invalidate_download_cache_summary">App zwingen, heruntergeladene Kapitel erneut zu überprüfen</string>
+    <string name="label_overview_section">Übersicht</string>
+    <string name="label_downloaded">Heruntergeladen</string>
+    <string name="label_read_duration">Lesedauer</string>
+    <string name="label_titles_in_global_update">In der globalen Aktualisierung</string>
+    <string name="label_total_chapters">Insgesamt</string>
+    <string name="label_read_chapters">Gelesen</string>
+    <string name="label_mean_score">Durchschnittswert</string>
+    <string name="label_used">Verwendet</string>
+    <string name="not_applicable">n. a.</string>
+    <string name="day_short">%d d</string>
+    <string name="hour_short">%d h</string>
+    <string name="label_local">Lokal</string>
+    <string name="label_tracked_titles">Getrackte Einträge</string>
+    <string name="label_completed_titles">Abgeschlossene Einträge</string>
+    <string name="label_stats">Statistiken</string>
+    <string name="label_started">Gestartet</string>
+    <string name="label_titles_section">Einträge</string>
+    <string name="label_tracker_section">Tracker</string>
+    <string name="minute_short">%d min</string>
+    <string name="seconds_short">%d s</string>
+    <string name="action_not_now">Nicht jetzt</string>
+    <string name="information_no_manga_category">Kategorie ist leer</string>
+    <string name="pref_library_update_show_tab_badge">Anzahl an Ungelesenem auf dem „Neues“-Symbol anzeigen</string>
+    <string name="copied_to_clipboard_plain">In die Zwischenablage kopiert</string>
+    <string name="pref_worker_info">Worker-Infos</string>
+    <string name="ext_miui_warning">Das Installieren von Erweiterungen funktioniert möglicherweise nicht richtig, wenn die MIUI-Optimierung aktiviert ist. Versuche, sie zu deaktivieren oder installiere Erweiterungen stattdessen von der Webseite.</string>
 </resources>

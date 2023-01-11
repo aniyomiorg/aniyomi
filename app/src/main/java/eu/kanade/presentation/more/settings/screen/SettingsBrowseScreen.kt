@@ -16,7 +16,7 @@ import eu.kanade.tachiyomi.util.system.AuthenticatorUtil.authenticate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class SettingsBrowseScreen : SearchableSettings {
+object SettingsBrowseScreen : SearchableSettings {
 
     @ReadOnlyComposable
     @Composable
@@ -29,16 +29,6 @@ class SettingsBrowseScreen : SearchableSettings {
         val sourcePreferences = remember { Injekt.get<SourcePreferences>() }
         val preferences = remember { Injekt.get<BasePreferences>() }
         return listOf(
-            Preference.PreferenceGroup(
-                title = stringResource(R.string.label_sources),
-                preferenceItems = listOf(
-                    Preference.PreferenceItem.SwitchPreference(
-                        pref = sourcePreferences.duplicatePinnedSources(),
-                        title = stringResource(R.string.pref_duplicate_pinned_sources),
-                        subtitle = stringResource(R.string.pref_duplicate_pinned_sources_summary),
-                    ),
-                ),
-            ),
             Preference.PreferenceGroup(
                 title = stringResource(R.string.label_extensions),
                 preferenceItems = listOf(

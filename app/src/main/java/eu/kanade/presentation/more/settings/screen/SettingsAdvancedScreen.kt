@@ -30,8 +30,10 @@ import eu.kanade.domain.manga.repository.MangaRepository
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
+import eu.kanade.tachiyomi.data.download.DownloadCache
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -48,6 +50,7 @@ import eu.kanade.tachiyomi.network.PREF_DOH_MULLVAD
 import eu.kanade.tachiyomi.network.PREF_DOH_NJALLA
 import eu.kanade.tachiyomi.network.PREF_DOH_QUAD101
 import eu.kanade.tachiyomi.network.PREF_DOH_QUAD9
+import eu.kanade.tachiyomi.network.PREF_DOH_SHECAN
 import eu.kanade.tachiyomi.util.CrashLogUtil
 import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.withUIContext
@@ -65,7 +68,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 
-class SettingsAdvancedScreen : SearchableSettings {
+object SettingsAdvancedScreen : SearchableSettings {
     @ReadOnlyComposable
     @Composable
     @StringRes
@@ -115,6 +118,7 @@ class SettingsAdvancedScreen : SearchableSettings {
     private fun getBackgroundActivityGroup(): Preference.PreferenceGroup {
         val context = LocalContext.current
         val uriHandler = LocalUriHandler.current
+        val navigator = LocalNavigator.currentOrThrow
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.label_background_activity),
@@ -145,6 +149,10 @@ class SettingsAdvancedScreen : SearchableSettings {
                     title = "Don't kill my app!",
                     subtitle = stringResource(R.string.about_dont_kill_my_app),
                     onClick = { uriHandler.openUri("https://dontkillmyapp.com/") },
+                ),
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(R.string.pref_worker_info),
+                    onClick = { navigator.push(WorkerInfoScreen) },
                 ),
             ),
         )
@@ -187,6 +195,12 @@ class SettingsAdvancedScreen : SearchableSettings {
                 Preference.PreferenceItem.SwitchPreference(
                     pref = libraryPreferences.autoClearChapterCache(),
                     title = stringResource(R.string.pref_auto_clear_chapter_cache),
+                ),
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(R.string.pref_invalidate_download_cache),
+                    subtitle = stringResource(R.string.pref_invalidate_download_cache_summary),
+                    onClick = { Injekt.get<DownloadCache>().invalidateCache()
+                        Injekt.get<AnimeDownloadCache>().invalidateCache() },
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_clear_database),
@@ -258,6 +272,7 @@ class SettingsAdvancedScreen : SearchableSettings {
                         PREF_DOH_MULLVAD to "Mullvad",
                         PREF_DOH_CONTROLD to "Control D",
                         PREF_DOH_NJALLA to "Njalla",
+                        PREF_DOH_SHECAN to "Shecan",
                     ),
                     onValueChanged = {
                         context.toast(R.string.requires_app_restart)

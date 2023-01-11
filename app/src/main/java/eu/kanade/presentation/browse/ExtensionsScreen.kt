@@ -2,6 +2,7 @@ package eu.kanade.presentation.browse
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -40,24 +42,27 @@ import eu.kanade.presentation.browse.components.ExtensionIcon
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.SwipeRefresh
+import eu.kanade.presentation.components.PullRefresh
+import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.manga.components.DotSeparatorNoSpaceText
 import eu.kanade.presentation.theme.header
-import eu.kanade.presentation.util.horizontalPadding
+import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.plus
 import eu.kanade.presentation.util.secondaryItemAlpha
-import eu.kanade.presentation.util.topPaddingValues
+import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.model.Extension
 import eu.kanade.tachiyomi.extension.model.InstallStep
 import eu.kanade.tachiyomi.ui.browse.extension.ExtensionUiModel
-import eu.kanade.tachiyomi.ui.browse.extension.ExtensionsPresenter
+import eu.kanade.tachiyomi.ui.browse.extension.ExtensionsState
+import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 @Composable
 fun ExtensionScreen(
-    presenter: ExtensionsPresenter,
+    state: ExtensionsState,
     contentPadding: PaddingValues,
+    searchQuery: String? = null,
     onLongClickItem: (Extension) -> Unit,
     onClickItemCancel: (Extension) -> Unit,
     onInstallExtension: (Extension.Available) -> Unit,
@@ -68,20 +73,27 @@ fun ExtensionScreen(
     onClickUpdateAll: () -> Unit,
     onRefresh: () -> Unit,
 ) {
-    SwipeRefresh(
-        refreshing = presenter.isRefreshing,
+    PullRefresh(
+        refreshing = state.isRefreshing,
         onRefresh = onRefresh,
-        enabled = !presenter.isLoading,
+        enabled = !state.isLoading,
     ) {
         when {
-            presenter.isLoading -> LoadingScreen()
-            presenter.isEmpty -> EmptyScreen(
-                textResource = R.string.empty_screen,
-                modifier = Modifier.padding(contentPadding),
-            )
+            state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+            state.isEmpty -> {
+                val msg = if (!searchQuery.isNullOrEmpty()) {
+                    R.string.no_results_found
+                } else {
+                    R.string.empty_screen
+                }
+                EmptyScreen(
+                    textResource = msg,
+                    modifier = Modifier.padding(contentPadding),
+                )
+            }
             else -> {
                 ExtensionContent(
-                    state = presenter,
+                    state = state,
                     contentPadding = contentPadding,
                     onLongClickItem = onLongClickItem,
                     onClickItemCancel = onClickItemCancel,
@@ -111,10 +123,29 @@ private fun ExtensionContent(
     onClickUpdateAll: () -> Unit,
 ) {
     var trustState by remember { mutableStateOf<Extension.Untrusted?>(null) }
+    val showMiuiWarning = DeviceUtil.isMiui && !DeviceUtil.isMiuiOptimizationDisabled()
+    val uriHandler = LocalUriHandler.current
 
     FastScrollLazyColumn(
-        contentPadding = contentPadding + topPaddingValues,
+        contentPadding = if (showMiuiWarning) {
+            contentPadding
+        } else {
+            contentPadding + topSmallPaddingValues
+        },
     ) {
+        if (showMiuiWarning) {
+            item {
+                WarningBanner(
+                    textRes = R.string.ext_miui_warning,
+                    modifier = Modifier
+                        .padding(bottom = MaterialTheme.padding.small)
+                        .clickable {
+                            uriHandler.openUri("https://tachiyomi.org/extensions")
+                        },
+                )
+            }
+        }
+
         items(
             items = state.items,
             contentType = {
@@ -272,7 +303,7 @@ private fun ExtensionItemContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.padding(start = horizontalPadding),
+        modifier = modifier.padding(start = MaterialTheme.padding.medium),
     ) {
         Text(
             text = extension.name,
@@ -396,7 +427,7 @@ fun ExtensionHeader(
     action: @Composable RowScope.() -> Unit = {},
 ) {
     Row(
-        modifier = modifier.padding(horizontal = horizontalPadding),
+        modifier = modifier.padding(horizontal = MaterialTheme.padding.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(

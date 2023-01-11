@@ -27,7 +27,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.AnimeDownloadDropdownMenu
-import eu.kanade.presentation.components.AppStateBanners
 import eu.kanade.presentation.components.DownloadDropdownMenu
 import eu.kanade.presentation.components.OverflowMenu
 import eu.kanade.presentation.manga.DownloadAction
@@ -41,8 +40,6 @@ fun MangaToolbar(
     titleAlphaProvider: () -> Float,
     backgroundAlphaProvider: () -> Float = titleAlphaProvider,
     hasFilters: Boolean,
-    incognitoMode: Boolean,
-    downloadedOnlyMode: Boolean,
     onBackClicked: () -> Unit,
     onClickFilter: () -> Unit,
     onClickShare: (() -> Unit)?,
@@ -171,7 +168,5 @@ fun MangaToolbar(
                     .copy(alpha = if (isActionMode) 1f else backgroundAlphaProvider()),
             ),
         )
-
-        AppStateBanners(downloadedOnlyMode, incognitoMode)
     }
 }

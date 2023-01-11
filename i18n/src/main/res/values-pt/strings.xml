@@ -11,7 +11,6 @@
     <!-- Actions -->
     <string name="action_settings">Definições</string>
     <string name="action_filter">Filtro</string>
-    <string name="action_filter_downloaded">Transferido</string>
     <string name="action_filter_unread">Não Lido</string>
     <string name="action_filter_empty">Remover filtro</string>
     <string name="action_search">Procurar</string>
@@ -279,7 +278,6 @@
     <string name="pref_skip_read_chapters">Ignorar capítulos marcados como lido</string>
     <string name="pref_refresh_library_tracking">Atualizar monitorização</string>
     <string name="pref_refresh_library_tracking_summary">Atualiza estado, avaliações e últimos capítulos lidos dos serviços de monitorização</string>
-    <string name="local_source_badge">Local</string>
     <string name="no_more_results">Sem mais resultados</string>
     <string name="local_source">Fonte local</string>
     <string name="other_source">Outras</string>
@@ -297,7 +295,6 @@
     <string name="manga_tracking_tab">Monitorização</string>
     <string name="repeating">Relendo</string>
     <string name="track_status">Estado</string>
-    <string name="track_start_date">Começado</string>
     <string name="track_type">Tipo</string>
     <string name="error_category_exists">Já existe uma categoria com este nome!</string>
     <string name="snack_categories_deleted">Categorias eliminadas</string>
@@ -524,7 +521,6 @@
     <string name="no_pinned_sources">Você não possui fontes fixadas</string>
     <string name="channel_complete">Completo</string>
     <string name="channel_progress">Progresso</string>
-    <string name="download_notifier_download_finish">Transferência concluída</string>
     <string name="channel_errors">Erros</string>
     <string name="backup_restore_missing_trackers">Monitorizadores sem sessão iniciada:</string>
     <string name="pref_remove_bookmarked_chapters">Permitir a eliminação de capítulos marcados</string>
@@ -658,7 +654,6 @@
     <string name="label_warning">Aviso</string>
     <string name="confirm_lock_change">Autentifique-se para confirmar a mudança</string>
     <string name="label_default">Padrão</string>
-    <string name="pref_library_update_show_tab_badge">Mostrar número de capítulos não lidos no ícone de Atualizações</string>
     <string name="action_sort_count">Total de mangás</string>
     <string name="action_display_language_badge">Idioma</string>
     <string name="pref_category_appearance">Aparência</string>
@@ -676,7 +671,6 @@
     <string name="notification_size_warning">Grandes atualizações prejudicam as fontes e podem levar a atualizações lentas e ainda ao aumento do uso da bateria. Toque para saber mais.</string>
     <string name="library_errors_help">Para obter ajuda sobre como corrigir erros de atualização da biblioteca, veja %1$s</string>
     <string name="pref_auto_clear_chapter_cache">Limpar a cache de capítulos ao fechar a app</string>
-    <string name="tracker_komga_warning">Este serviço de monitorização só é compatível com a fonte Komga.</string>
     <string name="pref_update_only_completely_read">Com capítulo(s) não lidos</string>
     <string name="pref_hide_threshold">Sensibilidade para ocultar menu ao deslocar</string>
     <string name="pref_high">Alta</string>
@@ -705,7 +699,6 @@
     <string name="cancelled">Cancelado</string>
     <string name="action_faq_and_guides">Perguntas frequentes e Guias</string>
     <string name="action_show_manga">Mostrar mangá</string>
-    <string name="action_filter_started">Iniciado</string>
     <string name="disabled_nav">Desativado</string>
     <string name="action_display_cover_only_grid">Grelha apenas de capas</string>
     <string name="action_close">Fechar</string>
@@ -733,9 +726,7 @@
     <string name="webtoon_side_padding_5">5%</string>
     <string name="update_check_open">Abrir no GitHub</string>
     <string name="error_saving_picture">Erro ao guardar a imagem</string>
-    <string name="pref_duplicate_pinned_sources">Mostrar fontes fixadas duplicadas</string>
-    <string name="pref_duplicate_pinned_sources_summary">Repita as fontes fixadas nos seus respetivos grupos de idiomas</string>
-    <string name="action_sort_last_manga_update">Última mangá atualizada</string>
+    <string name="action_sort_last_manga_update">Último mangá atualizado</string>
     <string name="action_sort_unread_count">Contagem de não lidos</string>
     <string name="split_tall_images">Dividir imagens altas</string>
     <string name="split_tall_images_summary">Melhora o desempenho do leitor</string>
@@ -792,4 +783,10 @@
     <string name="skipped_reason_not_always_update">Ignorado porque a série não requer atualizações</string>
     <string name="action_search_hint">Pesquisar…</string>
     <string name="missing_storage_permission">Permissões de armazenamento não concedidas</string>
+    <string name="action_display_show_continue_reading_button">Exibir botão de \"continuar lendo\"</string>
+    <string name="pref_general_summary">Linguagem do aplicativo, notificações</string>
+    <string name="pref_appearance_summary">Tema, data e formato de hora</string>
+    <string name="pref_library_summary">Categorias, atualização de mangás</string>
+    <string name="pref_reader_summary">Modo leitura, exibir, navegação</string>
+    <string name="action_open_random_manga">Abrir mangá aleatório</string>
 </resources>

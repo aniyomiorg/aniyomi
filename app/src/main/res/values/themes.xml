@@ -58,12 +58,12 @@
         <item name="android:enforceStatusBarContrast" tools:targetApi="Q">false</item>
         <item name="android:itemTextAppearance">@style/TextAppearance.Widget.Menu</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.Tachiyomi.MaterialAlertDialog</item>
+        <item name="alertDialogTheme">@style/ThemeOverlay.Tachiyomi.MaterialAlertDialog</item>
         <item name="textAppearanceButton">@style/TextAppearance.Widget.Button</item>
         <item name="android:buttonStyle">?attr/borderlessButtonStyle</item>
         <item name="android:backgroundDimAmount">0.32</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionOverflowButtonStyle">@style/Theme.Tachiyomi.ActionButton.Overflow</item>
-        <item name="actionModeCloseButtonStyle">@style/Theme.Tachiyomi.ActionMode.CloseButton</item>
         <item name="actionModeCloseDrawable">@drawable/ic_close_24dp</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.Tachiyomi</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Tachiyomi.BottomSheetDialog</item>
@@ -71,8 +71,6 @@
         <item name="appBarLayoutStyle">@style/Widget.Material3.AppBarLayout</item>
         <item name="toolbarStyle">@style/Widget.Material3.Toolbar.Surface</item>
         <item name="tabStyle">@style/Widget.Tachiyomi.TabLayout</item>
-        <item name="bottomNavigationStyle">@style/Widget.Tachiyomi.BottomNavigationView</item>
-        <item name="navigationRailStyle">@style/Widget.Tachiyomi.NavigationRailView</item>
         <item name="switchStyle">@style/Widget.Tachiyomi.Switch</item>
         <item name="materialSwitchStyle">@style/Widget.Material3.CompoundButton.MaterialSwitch</item>
         <item name="switchPreferenceCompatStyle">@style/Widget.Tachiyomi.Switch</item>

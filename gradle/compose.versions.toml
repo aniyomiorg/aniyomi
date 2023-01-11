@@ -1,7 +1,7 @@
 [versions]
-compiler = "1.3.2"
-compose-bom = "2022.10.00"
-accompanist = "0.27.0"
+compiler = "1.4.0-alpha02"
+compose-bom = "2022.12.00"
+accompanist = "0.28.0"
 
 [libraries]
 activity = "androidx.activity:activity-compose:1.6.1"
@@ -13,10 +13,15 @@ ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-util = { module = "androidx.compose.ui:ui-util" }
 
 material3-core = { module = "androidx.compose.material3:material3" }
-material3-adapter = "com.google.android.material:compose-theme-adapter-3:1.0.21"
 material-icons = { module = "androidx.compose.material:material-icons-extended" }
 
+# Here until M3's swipeable became public https://issuetracker.google.com/issues/234640556
+# Using alpha version for PullRefresh fix
+# TODO: use default version after next Compose BOM is released
+material-core = { module = "androidx.compose.material:material", version = "1.4.0-alpha03" }
+
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
-accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
+accompanist-themeadapter = { module = "com.google.accompanist:accompanist-themeadapter-material3", version.ref = "accompanist" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }

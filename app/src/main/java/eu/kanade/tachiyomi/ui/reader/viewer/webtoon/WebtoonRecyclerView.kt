@@ -221,8 +221,7 @@ class WebtoonRecyclerView @JvmOverloads constructor(
         }
 
         override fun onLongTapConfirmed(ev: MotionEvent) {
-            val listener = longTapListener
-            if (listener != null && listener.invoke(ev)) {
+            if (longTapListener?.invoke(ev) == true) {
                 performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             }
         }

@@ -23,6 +23,7 @@ import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.service.TrackPreferences
+import eu.kanade.domain.track.store.DelayedTrackingStore
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -43,7 +44,6 @@ import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadProvider
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.data.track.job.DelayedTrackingStore
 import eu.kanade.tachiyomi.extension.ExtensionManager
 import eu.kanade.tachiyomi.mi.AnimeDatabase
 import eu.kanade.tachiyomi.network.JavaScriptEngine
@@ -55,6 +55,8 @@ import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.isDevFlavor
 import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory
 import kotlinx.serialization.json.Json
+import nl.adaptivity.xmlutil.XmlDeclMode
+import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.UnknownChildHandler
 import nl.adaptivity.xmlutil.serialization.XML
 import uy.kohesive.injekt.api.InjektModule
@@ -158,6 +160,9 @@ class AppModule(val app: Application) : InjektModule {
             XML {
                 unknownChildHandler = UnknownChildHandler { _, _, _, _, _ -> emptyList() }
                 autoPolymorphic = true
+                xmlDeclMode = XmlDeclMode.Charset
+                indent = 4
+                xmlVersion = XmlVersion.XML10
             }
         }
 

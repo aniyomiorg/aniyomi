@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,29 +24,27 @@ import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.OverflowMenu
 import eu.kanade.presentation.components.Pill
 import eu.kanade.presentation.components.SearchToolbar
-import eu.kanade.presentation.library.LibraryState
 import eu.kanade.presentation.theme.active
 import eu.kanade.tachiyomi.R
 
 @Composable
 fun LibraryToolbar(
-    state: LibraryState,
+    hasActiveFilters: Boolean,
+    selectedCount: Int,
     title: LibraryToolbarTitle,
-    incognitoMode: Boolean,
-    downloadedOnlyMode: Boolean,
     onClickUnselectAll: () -> Unit,
     onClickSelectAll: () -> Unit,
     onClickInvertSelection: () -> Unit,
     onClickFilter: () -> Unit,
     onClickRefresh: () -> Unit,
     onClickOpenRandomManga: () -> Unit,
+    searchQuery: String?,
+    onSearchQueryChange: (String?) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior?,
     navigateUp: (() -> Unit)? = null,
 ) = when {
-    state.selectionMode -> LibrarySelectionToolbar(
-        state = state,
-        incognitoMode = incognitoMode,
-        downloadedOnlyMode = downloadedOnlyMode,
+    selectedCount > 0 -> LibrarySelectionToolbar(
+        selectedCount = selectedCount,
         onClickUnselectAll = onClickUnselectAll,
         onClickSelectAll = onClickSelectAll,
         onClickInvertSelection = onClickInvertSelection,
@@ -53,11 +52,9 @@ fun LibraryToolbar(
     )
     else -> LibraryRegularToolbar(
         title = title,
-        hasFilters = state.hasActiveFilters,
-        incognitoMode = incognitoMode,
-        downloadedOnlyMode = downloadedOnlyMode,
-        searchQuery = state.searchQuery,
-        onChangeSearchQuery = { state.searchQuery = it },
+        hasFilters = hasActiveFilters,
+        searchQuery = searchQuery,
+        onSearchQueryChange = onSearchQueryChange,
         onClickFilter = onClickFilter,
         onClickRefresh = onClickRefresh,
         onClickOpenRandomManga = onClickOpenRandomManga,
@@ -70,10 +67,8 @@ fun LibraryToolbar(
 fun LibraryRegularToolbar(
     title: LibraryToolbarTitle,
     hasFilters: Boolean,
-    incognitoMode: Boolean,
-    downloadedOnlyMode: Boolean,
     searchQuery: String?,
-    onChangeSearchQuery: (String?) -> Unit,
+    onSearchQueryChange: (String?) -> Unit,
     onClickFilter: () -> Unit,
     onClickRefresh: () -> Unit,
     onClickOpenRandomManga: () -> Unit,
@@ -100,7 +95,7 @@ fun LibraryRegularToolbar(
             }
         },
         searchQuery = searchQuery,
-        onChangeSearchQuery = onChangeSearchQuery,
+        onChangeSearchQuery = onSearchQueryChange,
         actions = {
             val filterTint = if (hasFilters) MaterialTheme.colorScheme.active else LocalContentColor.current
             IconButton(onClick = onClickFilter) {
@@ -124,8 +119,6 @@ fun LibraryRegularToolbar(
                 )
             }
         },
-        incognitoMode = incognitoMode,
-        downloadedOnlyMode = downloadedOnlyMode,
         scrollBehavior = scrollBehavior,
         navigateUp = navigateUp,
     )
@@ -133,16 +126,14 @@ fun LibraryRegularToolbar(
 
 @Composable
 fun LibrarySelectionToolbar(
-    state: LibraryState,
-    incognitoMode: Boolean,
-    downloadedOnlyMode: Boolean,
+    selectedCount: Int,
     onClickUnselectAll: () -> Unit,
     onClickSelectAll: () -> Unit,
     onClickInvertSelection: () -> Unit,
     navigateUp: (() -> Unit)? = null,
 ) {
     AppBar(
-        titleContent = { Text(text = "${state.selection.size}") },
+        titleContent = { Text(text = "$selectedCount") },
         actions = {
             IconButton(onClick = onClickSelectAll) {
                 Icon(Icons.Outlined.SelectAll, contentDescription = stringResource(R.string.action_select_all))
@@ -159,6 +150,7 @@ fun LibrarySelectionToolbar(
     )
 }
 
+@Immutable
 data class LibraryToolbarTitle(
     val text: String,
     val numberOfManga: Int? = null,

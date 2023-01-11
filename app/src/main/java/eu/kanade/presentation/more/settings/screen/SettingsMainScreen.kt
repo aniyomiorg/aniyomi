@@ -85,39 +85,34 @@ object SettingsMainScreen : Screen {
         Scaffold(
             topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState),
             topBar = { scrollBehavior ->
-                // https://issuetracker.google.com/issues/249688556
-                MaterialTheme(
-                    colorScheme = MaterialTheme.colorScheme.copy(surface = containerColor),
-                ) {
-                    TopAppBar(
-                        title = {
-                            Text(
-                                text = stringResource(R.string.label_settings),
-                                modifier = Modifier.padding(start = 8.dp),
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(R.string.label_settings),
+                            modifier = Modifier.padding(start = 8.dp),
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = backPress::invoke) {
+                            Icon(
+                                imageVector = Icons.Outlined.ArrowBack,
+                                contentDescription = stringResource(R.string.abc_action_bar_up_description),
                             )
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = backPress::invoke) {
-                                Icon(
-                                    imageVector = Icons.Outlined.ArrowBack,
-                                    contentDescription = stringResource(R.string.abc_action_bar_up_description),
-                                )
-                            }
-                        },
-                        actions = {
-                            AppBarActions(
-                                listOf(
-                                    AppBar.Action(
-                                        title = stringResource(R.string.action_search),
-                                        icon = Icons.Outlined.Search,
-                                        onClick = { navigator.navigate(SettingsSearchScreen(), twoPane) },
-                                    ),
+                        }
+                    },
+                    actions = {
+                        AppBarActions(
+                            listOf(
+                                AppBar.Action(
+                                    title = stringResource(R.string.action_search),
+                                    icon = Icons.Outlined.Search,
+                                    onClick = { navigator.navigate(SettingsSearchScreen(), twoPane) },
                                 ),
-                            )
-                        },
-                        scrollBehavior = scrollBehavior,
-                    )
-                }
+                            ),
+                        )
+                    },
+                    scrollBehavior = scrollBehavior,
+                )
             },
             containerColor = containerColor,
             content = { contentPadding ->
@@ -181,90 +176,90 @@ object SettingsMainScreen : Screen {
     private fun Navigator.navigate(screen: Screen, twoPane: Boolean) {
         if (twoPane) replaceAll(screen) else push(screen)
     }
+
+    private data class Item(
+        @StringRes val titleRes: Int,
+        @StringRes val subtitleRes: Int,
+        val formatSubtitle: @Composable () -> String = { stringResource(subtitleRes) },
+        val icon: ImageVector,
+        val screen: Screen,
+    )
+
+    private val items = listOf(
+        Item(
+            titleRes = R.string.pref_category_general,
+            subtitleRes = R.string.pref_general_summary,
+            icon = Icons.Outlined.Tune,
+            screen = SettingsGeneralScreen,
+        ),
+        Item(
+            titleRes = R.string.pref_category_appearance,
+            subtitleRes = R.string.pref_appearance_summary,
+            icon = Icons.Outlined.Palette,
+            screen = SettingsAppearanceScreen,
+        ),
+        Item(
+            titleRes = R.string.pref_category_library,
+            subtitleRes = R.string.pref_library_summary,
+            icon = Icons.Outlined.CollectionsBookmark,
+            screen = SettingsLibraryScreen,
+        ),
+        Item(
+            titleRes = R.string.pref_category_reader,
+            subtitleRes = R.string.pref_reader_summary,
+            icon = Icons.Outlined.ChromeReaderMode,
+            screen = SettingsReaderScreen,
+        ),
+        Item(
+            titleRes = R.string.pref_category_player,
+            subtitleRes = R.string.pref_player_summary,
+            icon = Icons.Outlined.PlayCircleOutline,
+            screen = SettingsPlayerScreen(),
+        ),
+        Item(
+            titleRes = R.string.pref_category_downloads,
+            subtitleRes = R.string.pref_downloads_summary,
+            icon = Icons.Outlined.GetApp,
+            screen = SettingsDownloadScreen,
+        ),
+        Item(
+            titleRes = R.string.pref_category_tracking,
+            subtitleRes = R.string.pref_tracking_summary,
+            icon = Icons.Outlined.Sync,
+            screen = SettingsTrackingScreen,
+        ),
+        Item(
+            titleRes = R.string.browse,
+            subtitleRes = R.string.pref_browse_summary,
+            icon = Icons.Outlined.Explore,
+            screen = SettingsBrowseScreen,
+        ),
+        Item(
+            titleRes = R.string.label_backup,
+            subtitleRes = R.string.pref_backup_summary,
+            icon = Icons.Outlined.SettingsBackupRestore,
+            screen = SettingsBackupScreen,
+        ),
+        Item(
+            titleRes = R.string.pref_category_security,
+            subtitleRes = R.string.pref_security_summary,
+            icon = Icons.Outlined.Security,
+            screen = SettingsSecurityScreen,
+        ),
+        Item(
+            titleRes = R.string.pref_category_advanced,
+            subtitleRes = R.string.pref_advanced_summary,
+            icon = Icons.Outlined.Code,
+            screen = SettingsAdvancedScreen,
+        ),
+        Item(
+            titleRes = R.string.pref_category_about,
+            subtitleRes = 0,
+            formatSubtitle = {
+                "${stringResource(R.string.app_name)} ${AboutScreen.getVersionName(withBuildDate = false)}"
+            },
+            icon = Icons.Outlined.Info,
+            screen = AboutScreen,
+        ),
+    )
 }
-
-private data class Item(
-    @StringRes val titleRes: Int,
-    @StringRes val subtitleRes: Int,
-    val formatSubtitle: @Composable () -> String = { stringResource(subtitleRes) },
-    val icon: ImageVector,
-    val screen: Screen,
-)
-
-private val items = listOf(
-    Item(
-        titleRes = R.string.pref_category_general,
-        subtitleRes = R.string.pref_general_summary,
-        icon = Icons.Outlined.Tune,
-        screen = SettingsGeneralScreen(),
-    ),
-    Item(
-        titleRes = R.string.pref_category_appearance,
-        subtitleRes = R.string.pref_appearance_summary,
-        icon = Icons.Outlined.Palette,
-        screen = SettingsAppearanceScreen(),
-    ),
-    Item(
-        titleRes = R.string.pref_category_library,
-        subtitleRes = R.string.pref_library_summary,
-        icon = Icons.Outlined.CollectionsBookmark,
-        screen = SettingsLibraryScreen(),
-    ),
-    Item(
-        titleRes = R.string.pref_category_reader,
-        subtitleRes = R.string.pref_reader_summary,
-        icon = Icons.Outlined.ChromeReaderMode,
-        screen = SettingsReaderScreen(),
-    ),
-    Item(
-        titleRes = R.string.pref_category_player,
-        subtitleRes = R.string.pref_player_summary,
-        icon = Icons.Outlined.PlayCircleOutline,
-        screen = SettingsPlayerScreen(),
-    ),
-    Item(
-        titleRes = R.string.pref_category_downloads,
-        subtitleRes = R.string.pref_downloads_summary,
-        icon = Icons.Outlined.GetApp,
-        screen = SettingsDownloadScreen(),
-    ),
-    Item(
-        titleRes = R.string.pref_category_tracking,
-        subtitleRes = R.string.pref_tracking_summary,
-        icon = Icons.Outlined.Sync,
-        screen = SettingsTrackingScreen(),
-    ),
-    Item(
-        titleRes = R.string.browse,
-        subtitleRes = R.string.pref_browse_summary,
-        icon = Icons.Outlined.Explore,
-        screen = SettingsBrowseScreen(),
-    ),
-    Item(
-        titleRes = R.string.label_backup,
-        subtitleRes = R.string.pref_backup_summary,
-        icon = Icons.Outlined.SettingsBackupRestore,
-        screen = SettingsBackupScreen(),
-    ),
-    Item(
-        titleRes = R.string.pref_category_security,
-        subtitleRes = R.string.pref_security_summary,
-        icon = Icons.Outlined.Security,
-        screen = SettingsSecurityScreen(),
-    ),
-    Item(
-        titleRes = R.string.pref_category_advanced,
-        subtitleRes = R.string.pref_advanced_summary,
-        icon = Icons.Outlined.Code,
-        screen = SettingsAdvancedScreen(),
-    ),
-    Item(
-        titleRes = R.string.pref_category_about,
-        subtitleRes = 0,
-        formatSubtitle = {
-            "${stringResource(R.string.app_name)} ${AboutScreen.getVersionName(withBuildDate = false)}"
-        },
-        icon = Icons.Outlined.Info,
-        screen = AboutScreen(),
-    ),
-)

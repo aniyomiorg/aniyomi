@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="categories">Kategorie</string>
-    <string name="manga">Manga</string>
+    <string name="manga">Záznamy v knihovně</string>
     <string name="chapters">Kapitoly</string>
     <string name="history">Historie</string>
     <string name="label_settings">Nastavení</string>
@@ -13,7 +13,6 @@
     <string name="label_extension_info">Informace o rozšíření</string>
     <string name="action_settings">Nastavení</string>
     <string name="action_filter">Filtr</string>
-    <string name="action_filter_downloaded">Staženo</string>
     <string name="action_filter_unread">Nepřečteno</string>
     <string name="action_filter_empty">Odstranit filtr</string>
     <string name="action_sort_alpha">Abecedně</string>
@@ -239,7 +238,6 @@
     <string name="pref_enable_acra">Odesílat hlášení o pádu</string>
     <string name="pref_acra_summary">Pomáhá opravit chyby. Nebudou odeslány žádné citlivé údaje</string>
     <string name="updating_category">Aktualizuji kategorie</string>
-    <string name="local_source_badge">Lokální</string>
     <string name="local_source">Lokální zdroj</string>
     <string name="other_source">Ostatní</string>
     <string name="latest">Nejnovější</string>
@@ -255,7 +253,6 @@
     <string name="on_hold">Pozastaveno</string>
     <string name="status">Stav</string>
     <string name="track_status">Stav</string>
-    <string name="track_start_date">Započato</string>
     <string name="snack_categories_deleted">Kategorie smazány</string>
     <string name="set_as_cover">Nastavit jako obal</string>
     <string name="cover_updated">Obal aktualizován</string>
@@ -464,7 +461,6 @@
     <string name="channel_errors">Chyby</string>
     <string name="channel_complete">Dokončeno</string>
     <string name="channel_progress">Postup</string>
-    <string name="download_notifier_download_finish">Stahování dokončeno</string>
     <string name="chapter_settings_updated">Výchozí nastavení kapitol aktualizováno</string>
     <string name="information_webview_outdated">Prosím aktualizujte aplikaci WebView pro lepší kompatibilitu</string>
     <string name="information_webview_required">Je nutné mít nainstalovanou aplikaci WebView</string>
@@ -598,10 +594,9 @@
     <string name="information_empty_category_dialog">Nemáte žádné kategorie.</string>
     <string name="action_start_downloading_now">Začít stahovat nyní</string>
     <string name="notification_updating">Aktualizuji knihovnu… (%1$d / %2$d)</string>
-    <string name="tracker_komga_warning">Tento sledovač je kompatibilní pouze se zdrojem Komga.</string>
     <string name="about_dont_kill_my_app">Někteří výrobci používají další omezení aplikací, která vypíná služby na pozadí. Na této webové stránce najdete další informace o tom, jak to opravit.</string>
     <string name="restore_miui_warning">Pokud je MIUI optimalizace vypnutá, zálohování/obnovování nemusí fungovat správně.</string>
-    <string name="enhanced_tracking_info">Služby, které poskytují rozšířené funkce pro konkrétní zdroje. Položky jsou po přidání do knihovny automaticky sledovány.</string>
+    <string name="enhanced_tracking_info">Služby, které poskytují rozšířené funkce pro konkrétní zdroje. Záznamy jsou po přidání do knihovny automaticky sledovány.</string>
     <string name="enhanced_services">Rozšířené služby</string>
     <string name="tracking_guide">Návod ke sledování</string>
     <string name="pref_dark_theme_pure_black">Čistě černý tmavý režim</string>
@@ -655,7 +650,6 @@
     <string name="connected_to_wifi">Jen na Wi-Fi</string>
     <string name="pref_verbose_logging">Podrobné protokolování</string>
     <string name="download_queue_size_warning">Varování: hromadné stahování může vést k tomu, že zdroje zpomalí a/nebo zablokují Tachiyomi. Klepnutím se dozvíte více.</string>
-    <string name="pref_library_update_show_tab_badge">Zobrazit počet nepřečtených kapitol na ikoně Aktualizace</string>
     <string name="ext_update_all">Aktualizovat vše</string>
     <string name="pref_verbose_logging_summary">Vypisovat podrobné informace do systémového protokolu (sníží výkon aplikace)</string>
     <string name="channel_app_updates">Aktualizace aplikace</string>
@@ -684,7 +678,6 @@
     <string name="notification_update_skipped">%1$d aktualizace(í) přeskočena(y)</string>
     <string name="on_hiatus">Má pauzu</string>
     <string name="skipped_reason_not_caught_up">Přeskočeno, protože obsahuje nepřečtené kapitoly</string>
-    <string name="action_filter_started">Zahájeno</string>
     <string name="channel_skipped">Přeskočeno</string>
     <string name="action_move_to_top_all_for_series">Přesunout sérii na začátek</string>
     <string name="learn_more">Klepnutím se dozvíte více</string>
@@ -702,7 +695,6 @@
     <string name="rotation_reverse_portrait">Obrácené na výšku</string>
     <string name="pref_clear_webview_data">Vyčistit data WebView</string>
     <string name="webview_data_deleted">Data z WebView vyčištěna</string>
-    <string name="pref_duplicate_pinned_sources_summary">Opakovat připnuté zdroje v jejich příslušných jazykových skupinách</string>
     <string name="reading_list">Seznam četby</string>
     <string name="wish_list">Seznam přání</string>
     <string name="network_not_metered">Pouze na neměřené síti</string>
@@ -712,7 +704,6 @@
     <string name="complete_list">Seznam dokončených</string>
     <string name="on_hold_list">Seznam pozastavených</string>
     <string name="unfinished_list">Seznam nedokončených</string>
-    <string name="pref_duplicate_pinned_sources">Zobrazit duplicitní připnuté zdroje</string>
     <string name="ext_info_language">Jazyk</string>
     <string name="ext_info_age_rating">Věkové hodnocení</string>
     <string name="ext_info_version">Verze</string>
@@ -774,15 +765,49 @@
     <string name="crash_screen_description">%s narazil na neočekávanou chybu. Doporučujeme vám pořídit snímek obrazovky, vypsat protokoly o selhání a poté je sdílet v našem kanálu podpory na Discordu.</string>
     <string name="crash_screen_restart_application">Restartujte aplikaci</string>
     <string name="pref_backup_summary">Ruční a automatické zálohování</string>
-    <string name="crash_screen_title">Došlo k neočekávané chybě</string>
+    <string name="crash_screen_title">Ups!</string>
     <string name="invalid_location">Neplatné umístění: %s</string>
     <string name="unknown_title">Neznámý titul</string>
     <string name="error_user_agent_string_invalid">Neplatný řetězec uživatelského agenta</string>
     <string name="updates_last_update_info_just_now">Právě teď</string>
     <string name="download_notifier_cache_renewal">Indexování stažených souborů</string>
-    <string name="channel_downloader_cache">Stáhnout mezipaměť</string>
+    <string name="channel_downloader_cache">Indexování</string>
     <string name="information_no_entries_found">V této kategorii nebyly nalezeny žádné položky</string>
     <string name="action_open_random_manga">Otevřít náhodnou položku</string>
     <string name="fdroid_warning">F-Droid sestavení nejsou oficiálně podporovány.
 \nKlepnutím zobrazíte další informace.</string>
+    <string name="other_header">Ostatní</string>
+    <string name="action_display_show_continue_reading_button">Zobrazit tlačítko pokračovat ve čtení</string>
+    <string name="track_remove_date_conf_title">Odstranit datum\?</string>
+    <string name="track_remove_finish_date_conf_text">Tím se odstraní dříve vybrané datum ukončení z %s</string>
+    <string name="track_remove_start_date_conf_text">Tím se odstraní dříve vybrané datum zahájení z %s</string>
+    <string name="pref_invalidate_download_cache">Zneplatnit index stahování</string>
+    <string name="enhanced_tracking_warning">Tento sledovač je kompatibilní pouze se zdrojem %1$s.</string>
+    <string name="pref_invalidate_download_cache_summary">Vynutit aplikaci znovu zkontrolovat stažené kapitoly</string>
+    <string name="label_started">Započato</string>
+    <string name="label_local">Lokální</string>
+    <string name="label_downloaded">Staženo</string>
+    <string name="label_completed_titles">Dokončené položky</string>
+    <string name="label_titles_in_global_update">V globální aktualizaci</string>
+    <string name="label_total_chapters">Celkem</string>
+    <string name="label_read_chapters">Přečteno</string>
+    <string name="label_tracker_section">Sledovače</string>
+    <string name="label_tracked_titles">Sledované položky</string>
+    <string name="label_mean_score">Průměrné skóre</string>
+    <string name="label_used">Použité</string>
+    <string name="not_applicable">N/A</string>
+    <string name="minute_short">%dm</string>
+    <string name="label_titles_section">Položky</string>
+    <string name="label_stats">Statistiky</string>
+    <string name="label_overview_section">Přehled</string>
+    <string name="label_read_duration">Doba čtení</string>
+    <string name="hour_short">%dh</string>
+    <string name="day_short">%dd</string>
+    <string name="seconds_short">%ds</string>
+    <string name="action_not_now">Teď ne</string>
+    <string name="information_no_manga_category">Kategorie je prázdná</string>
+    <string name="pref_library_update_show_tab_badge">Zobrazit počet nepřečtených kapitol na ikoně Aktualizace</string>
+    <string name="copied_to_clipboard_plain">Zkopírováno do schránky</string>
+    <string name="pref_worker_info">Informace o pracovníkovi</string>
+    <string name="ext_miui_warning">Instalace rozšíření nemusí fungovat, pokud je povolena optimalizace MIUI. Zkuste ji zakázat nebo místo toho instalovat z webových stránek.</string>
 </resources>

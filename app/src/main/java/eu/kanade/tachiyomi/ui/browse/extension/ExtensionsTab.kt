@@ -3,65 +3,57 @@ package eu.kanade.tachiyomi.ui.browse.extension
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
-import com.bluelinelabs.conductor.Router
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.ExtensionScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.model.Extension
-import eu.kanade.tachiyomi.ui.base.controller.pushController
-import eu.kanade.tachiyomi.ui.browse.extension.details.ExtensionDetailsController
+import eu.kanade.tachiyomi.ui.browse.extension.details.ExtensionDetailsScreen
 
 @Composable
 fun extensionsTab(
-    router: Router?,
-    presenter: ExtensionsPresenter,
-) = TabContent(
-    titleRes = R.string.label_mangaextensions,
-    badgeNumber = presenter.updates.takeIf { it > 0 },
-    searchEnabled = true,
-    actions = listOf(
-        AppBar.Action(
-            title = stringResource(R.string.action_filter),
-            icon = Icons.Outlined.Translate,
-            onClick = { router?.pushController(ExtensionFilterController()) },
+    extensionsScreenModel: ExtensionsScreenModel,
+): TabContent {
+    val navigator = LocalNavigator.currentOrThrow
+    val state by extensionsScreenModel.state.collectAsState()
+    val searchQuery by extensionsScreenModel.query.collectAsState()
+
+    return TabContent(
+        titleRes = R.string.label_mangaextensions,
+        badgeNumber = state.updates.takeIf { it > 0 },
+        searchEnabled = true,
+        actions = listOf(
+            AppBar.Action(
+                title = stringResource(R.string.action_filter),
+                icon = Icons.Outlined.Translate,
+                onClick = { navigator.push(ExtensionFilterScreen()) },
+            ),
         ),
-    ),
-    content = { contentPadding ->
-        ExtensionScreen(
-            presenter = presenter,
-            contentPadding = contentPadding,
-            onLongClickItem = { extension ->
-                when (extension) {
-                    is Extension.Available -> presenter.installExtension(extension)
-                    else -> presenter.uninstallExtension(extension.pkgName)
-                }
-            },
-            onClickItemCancel = { extension ->
-                presenter.cancelInstallUpdateExtension(extension)
-            },
-            onClickUpdateAll = {
-                presenter.updateAllExtensions()
-            },
-            onInstallExtension = {
-                presenter.installExtension(it)
-            },
-            onOpenExtension = {
-                router?.pushController(ExtensionDetailsController(it.pkgName))
-            },
-            onTrustExtension = {
-                presenter.trustSignature(it.signatureHash)
-            },
-            onUninstallExtension = {
-                presenter.uninstallExtension(it.pkgName)
-            },
-            onUpdateExtension = {
-                presenter.updateExtension(it)
-            },
-            onRefresh = {
-                presenter.findAvailableExtensions()
-            },
-        )
-    },
-)
+        content = { contentPadding, _ ->
+            ExtensionScreen(
+                state = state,
+                contentPadding = contentPadding,
+                searchQuery = searchQuery,
+                onLongClickItem = { extension ->
+                    when (extension) {
+                        is Extension.Available -> extensionsScreenModel.installExtension(extension)
+                        else -> extensionsScreenModel.uninstallExtension(extension.pkgName)
+                    }
+                },
+                onClickItemCancel = extensionsScreenModel::cancelInstallUpdateExtension,
+                onClickUpdateAll = extensionsScreenModel::updateAllExtensions,
+                onInstallExtension = extensionsScreenModel::installExtension,
+                onOpenExtension = { navigator.push(ExtensionDetailsScreen(it.pkgName)) },
+                onTrustExtension = { extensionsScreenModel.trustSignature(it.signatureHash) },
+                onUninstallExtension = { extensionsScreenModel.uninstallExtension(it.pkgName) },
+                onUpdateExtension = extensionsScreenModel::updateExtension,
+                onRefresh = extensionsScreenModel::findAvailableExtensions,
+            )
+        },
+    )
+}

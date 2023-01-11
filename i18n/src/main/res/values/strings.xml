@@ -39,6 +39,7 @@
     <string name="label_backup">Backup and restore</string>
     <string name="label_migration_manga">Migrate Manga</string>
     <string name="label_migration_anime">Migrate Anime</string>
+    <string name="label_stats">Statistics</string>
     <string name="label_extensions">Extensions</string>
     <string name="label_mangaextensions">Manga Extensions</string>
     <string name="label_animeextensions">Anime Extensions</string>
@@ -51,6 +52,11 @@
     <string name="pref_bottom_nav_no_updates">Move Updates to the More tab</string>
     <string name="pref_bottom_nav_no_manga">Move Manga to the More tab</string>
 
+    <!-- Shared labels -->
+    <string name="label_started">Started</string>
+    <string name="label_local">Local</string>
+    <string name="label_downloaded">Downloaded</string>
+
     <string name="unlock_app">Unlock Aniyomi</string>
     <string name="confirm_lock_change">Authenticate to confirm change</string>
     <string name="confirm_exit">Press back again to exit</string>
@@ -59,12 +65,10 @@
     <string name="action_settings">Settings</string>
     <string name="action_menu">Menu</string>
     <string name="action_filter">Filter</string>
-    <string name="action_filter_downloaded">Downloaded</string>
     <string name="action_filter_bookmarked">Bookmarked</string>
     <string name="action_filter_tracked">Tracked</string>
     <string name="action_filter_unread">Unread</string>
     <string name="action_filter_unseen">Unseen</string>
-    <string name="action_filter_started">Started</string>
     <!-- reserved for #4048 -->
     <string name="action_filter_empty">Remove filter</string>
     <string name="action_sort_alpha">Alphabetically</string>
@@ -194,6 +198,7 @@
     <string name="action_start_download_externally">Use external downloader</string>
     <string name="action_start_download_internally">Use internal downloader</string>
     <string name="action_faq_and_guides">FAQ and Guides</string>
+    <string name="action_not_now">Not now</string>
 
     <!-- Operations -->
     <string name="loading">Loading…</string>
@@ -362,6 +367,7 @@
     <string name="ext_installer_shizuku" translatable="false">Shizuku</string>
     <string name="ext_installer_shizuku_stopped">Shizuku is not running</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Install and start Shizuku to use Shizuku as extension installer.</string>
+    <string name="ext_miui_warning">Installing extensions may not work if MIUI Optimization is enabled. Try disabling it or installing from the website instead.</string>
 
       <!-- Reader section -->
     <string name="pref_fullscreen">Fullscreen</string>
@@ -566,11 +572,10 @@
     <string name="tracking_info">One-way sync to update the chapter progress in tracking services. Set up tracking for individual entries from their tracking button.</string>
     <string name="enhanced_services">Enhanced services</string>
     <string name="enhanced_tracking_info">Services that provide enhanced features for specific sources. Entries are automatically tracked when added to your library.</string>
+    <string name="enhanced_tracking_warning">This tracker is only compatible with the %1$s source.</string>
     <string name="action_track">Track</string>
 
       <!-- Browse section -->
-    <string name="pref_duplicate_pinned_sources">Show duplicated pinned sources</string>
-    <string name="pref_duplicate_pinned_sources_summary">Repeat pinned sources in their respective language groups</string>
     <string name="pref_enable_automatic_extension_updates">Check for extension updates</string>
     <string name="pref_search_pinned_sources_only">Only include pinned sources</string>
 
@@ -627,6 +632,8 @@
     <string name="cache_deleted">Cache cleared. %1$d files have been deleted</string>
     <string name="cache_delete_error">Error occurred while clearing</string>
     <string name="pref_auto_clear_chapter_cache">Clear episode/chapter cache on app close</string>
+    <string name="pref_invalidate_download_cache">Invalidate downloads index</string>
+    <string name="pref_invalidate_download_cache_summary">Force app to recheck downloaded chapters and episodes</string>
     <string name="pref_clear_database">Clear Manga database</string>
     <string name="pref_clear_anime_database">Clear Anime database</string>
     <string name="pref_clear_database_summary">Delete history for manga that are not saved in your library</string>
@@ -656,6 +663,7 @@
     <string name="pref_tablet_ui_mode">Tablet UI</string>
     <string name="pref_verbose_logging">Verbose logging</string>
     <string name="pref_verbose_logging_summary">Print verbose logs to system log (reduces app performance)</string>
+    <string name="pref_worker_info">Worker info</string>
 
       <!-- About section -->
     <string name="website">Website</string>
@@ -699,7 +707,6 @@
 
     <!-- Library fragment -->
     <string name="updating_category">Updating category</string>
-    <string name="local_source_badge">Local</string>
     <string name="manga_from_library">Manga from library</string>
     <string name="anime_from_library">Anime from library</string>
     <string name="downloaded_chapters">Downloaded chapters</string>
@@ -764,6 +771,7 @@
     </plurals>
     <string name="delete_downloads_for_manga">Delete downloaded chapters?</string>
     <string name="delete_downloads_for_anime">Delete downloaded episodes?</string>
+    <string name="copied_to_clipboard_plain">Copied to clipboard</string>
     <string name="copied_to_clipboard">Copied to clipboard:\n%1$s</string>
     <string name="clipboard_copy_error">Failed to copy to clipboard</string>
     <string name="source_not_installed">Source not installed: %1$s</string>
@@ -820,11 +828,11 @@
     <string name="tracker_myanimelist" translatable="false">MyAnimeList</string>
     <string name="tracker_kitsu" translatable="false">Kitsu</string>
     <string name="tracker_komga" translatable="false">Komga</string>
-    <string name="tracker_komga_warning">This tracker is only compatible with the Komga source.</string>
     <string name="tracker_bangumi" translatable="false">Bangumi</string>
     <string name="tracker_shikimori" translatable="false">Shikimori</string>
     <string name="tracker_simkl" translatable="false">Simkl</string>
     <string name="tracker_manga_updates" translatable="false">MangaUpdates</string>
+    <string name="tracker_kavita" translatable="false">Kavita</string>
     <string name="manga_tracking_tab">Tracking</string>
     <plurals name="num_trackers">
         <item quantity="one">%d tracker</item>
@@ -856,13 +864,15 @@
     <string name="title">Title</string>
     <string name="status">Status</string>
     <string name="track_status">Status</string>
-    <string name="track_start_date">Started</string>
     <string name="track_started_reading_date">Start date</string>
     <string name="track_finished_reading_date">Finish date</string>
     <string name="track_type">Type</string>
     <string name="myanimelist_relogin">Please login to MAL again</string>
     <string name="source_unsupported">Source is not supported</string>
     <string name="error_no_match">No match found</string>
+    <string name="track_remove_date_conf_title">Remove date?</string>
+    <string name="track_remove_start_date_conf_text">This will remove your previously selected start date from %s</string>
+    <string name="track_remove_finish_date_conf_text">This will remove your previously selected finish date from %s</string>
 
     <!-- Category activity -->
     <string name="error_category_exists">A category with this name already exists!</string>
@@ -950,9 +960,27 @@
     <string name="not_installed">Not installed</string>
 
     <!-- Crash screen -->
-    <string name="crash_screen_title">An Unexpected Error Occurred</string>
+    <string name="crash_screen_title">Whoops!</string>
     <string name="crash_screen_description">%s ran into an unexpected error. We suggest you screenshot this message, dump the crash logs, and then share it in our support channel on Discord.</string>
     <string name="crash_screen_restart_application">Restart the application</string>
+
+    <!-- Stats screen -->
+    <string name="label_overview_section">Overview</string>
+    <string name="label_completed_titles">Completed entries</string>
+    <string name="label_read_duration">Read duration</string>
+    <string name="label_titles_section">Entries</string>
+    <string name="label_titles_in_global_update">In global update</string>
+    <string name="label_total_chapters">Total</string>
+    <string name="label_read_chapters">Read</string>
+    <string name="label_tracker_section">Trackers</string>
+    <string name="label_tracked_titles">Tracked entries</string>
+    <string name="label_mean_score">Mean score</string>
+    <string name="label_used">Used</string>
+    <string name="not_applicable">N/A</string>
+    <string name="day_short">%dd</string>
+    <string name="hour_short">%dh</string>
+    <string name="minute_short">%dm</string>
+    <string name="seconds_short">%ds</string>
 
     <!-- Downloads activity and service -->
     <string name="download_queue_error">Couldn\'t download chapters. You can try again in the downloads section</string>
@@ -1043,6 +1071,7 @@
     <string name="information_no_recent_manga">Nothing read recently</string>
     <string name="information_no_recent_anime">Nothing watched recently</string>
     <string name="information_empty_library">Your library is empty</string>
+    <string name="information_no_manga_category">Category is empty</string>
     <string name="information_no_entries_found">No entries found in this category</string>
     <string name="getting_started_guide">Getting started guide</string>
     <string name="information_empty_category">You have no categories. Tap the plus button to create one for organizing your library.</string>
@@ -1063,7 +1092,7 @@
     <string name="download_notifier_no_network">No network connection available</string>
     <string name="download_notifier_download_paused_chapters">Chapter download paused</string>
     <string name="download_notifier_download_paused_episodes">Episode download paused</string>
-    <string name="download_notifier_download_finish">Download completed</string>
+    <string name="download_notifier_download_paused">Downloads paused</string>
     <string name="download_notifier_split_page_not_found">Page %d not found while splitting</string>
     <string name="download_notifier_split_page_path_not_found">Couldn\'t find file path of page %d</string>
     <string name="download_notifier_split_failed">Couldn\'t split downloaded image</string>
@@ -1078,7 +1107,7 @@
     <string name="channel_new_chapters_episodes">Chapter/Episode updates</string>
     <string name="channel_app_updates">App updates</string>
     <string name="channel_ext_updates">Extension updates</string>
-    <string name="channel_downloader_cache">Download cache</string>
+    <string name="channel_downloader_cache">Indexing</string>
     <string name="channel_crash_logs">Crash logs</string>
 
     <!-- S Pen actions -->

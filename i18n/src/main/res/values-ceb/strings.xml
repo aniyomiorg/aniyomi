@@ -7,11 +7,9 @@
     <string name="confirm_exit">Pindota balik pag-usab aron makagawas</string>
     <string name="action_settings">Mga setting</string>
     <string name="action_menu">Menu</string>
-    <string name="action_filter_downloaded">Gi-download</string>
     <string name="action_filter_bookmarked">Gi-bookmark</string>
     <string name="action_filter_tracked">Gisubay</string>
     <string name="action_filter_unread">Wala mabasa</string>
-    <string name="action_filter_started">Nagsugod</string>
     <string name="action_sort_alpha">Alpabetiko</string>
     <string name="action_sort_count">Kinatibuk sa manga</string>
     <string name="action_sort_total">Kinatibuk sa mga kapitulo</string>
@@ -161,7 +159,6 @@
     <string name="pref_library_update_manga_restriction">Laktawan ang pag-update sa mga titulo</string>
     <string name="pref_update_only_completely_read">Uban sa wala pa mabasa nga (mga) kapitulo</string>
     <string name="pref_update_only_started">Wala pa kana nagsugod</string>
-    <string name="pref_library_update_show_tab_badge">Ipakita ang wala pa mabasa nga ihap sa icon sa Updates</string>
     <string name="pref_library_update_refresh_metadata">Awtomatikong i-refresh ang metadata</string>
     <string name="default_category_summary">Pangutana kanunay</string>
     <plurals name="lock_after_mins">
@@ -344,7 +341,6 @@
     <string name="pref_download_new_categories_details">Ang manga sa wala iapil nga mga kategorya dili ma-download bisan kung naa usab sila sa mga gilakip nga kategorya.</string>
     <string name="save_chapter_as_cbz">I-save ingon CBZ archive</string>
     <string name="tracking_guide">Giya sa pagsubay</string>
-    <string name="pref_duplicate_pinned_sources_summary">Balika ang gipin nga mga tinubdan sa ilang tagsa-tagsa ka grupo sa pinulongan</string>
     <string name="pref_enable_automatic_extension_updates">Susiha ang mga update sa extension</string>
     <string name="network_not_metered">Lamang sa ummetered network</string>
     <string name="ext_info_language">Pinulongan sa Extension</string>
@@ -376,7 +372,6 @@
     <string name="fourth_to_last">Ika-upat hangtod sa kataposang pagbasa sa kapitulo</string>
     <string name="pref_download_new">Pag-download sa bag-ong mga kapitulo</string>
     <string name="enhanced_tracking_info">Mga serbisyo nga naghatag dugang nga mga bahin alang sa piho nga mga gigikanan. Awtomatikong gisubay ang Manga kon idugang sa imong librarya.</string>
-    <string name="pref_duplicate_pinned_sources">Ipakita ang mga duplicate nga gi-pin nga mga tinubdan</string>
     <string name="tracking_info">Usa ka paagi nga pag-sync aron ma-update ang pag-uswag sa kapitulo sa mga serbisyo sa pagsubay. I-set up ang tracking para sa indibidwal nga manga entries gikan sa ilang tracking button.</string>
     <string name="enhanced_services">Gipalambo nga mga serbisyo</string>
     <string name="pref_auto_update_manga_sync">Ang pag-uswag sa pag-update pagkahuman sa pagbasa</string>
@@ -495,4 +490,7 @@
     <string name="email">Email Address</string>
     <string name="unknown_error">Wala mailhi nga sayup</string>
     <string name="username">Username</string>
+    <string name="action_display_show_continue_reading_button">Ipakita ang buton sa pagpadayon sa pagbasa</string>
+    <string name="action_search_hint">Pangitaa…</string>
+    <string name="action_open_random_manga">Bukas nga random entry</string>
 </resources>

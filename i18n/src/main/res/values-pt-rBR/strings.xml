@@ -2,7 +2,7 @@
 <resources>
     <string name="name">Nome</string>
     <string name="categories">Categorias</string>
-    <string name="manga">Mangás</string>
+    <string name="manga">Itens da biblioteca</string>
     <string name="chapters">Capítulos</string>
     <string name="track">Monitoramento</string>
     <string name="history">Histórico</string>
@@ -14,7 +14,6 @@
     <string name="label_backup">Backup e restauração</string>
     <string name="action_settings">Configurações</string>
     <string name="action_filter">Filtrar</string>
-    <string name="action_filter_downloaded">Disponível offline</string>
     <string name="action_filter_bookmarked">Favorito</string>
     <string name="action_filter_unread">Não lido</string>
     <string name="action_filter_empty">Remover filtros</string>
@@ -235,7 +234,7 @@
     <string name="download_notifier_unknown_error">Não foi possível realizar o download do capítulo devido a um erro inesperado</string>
     <string name="download_notifier_text_only_wifi">Conexão Wi-Fi indisponível</string>
     <string name="download_notifier_no_network">Conexão à rede indisponível</string>
-    <string name="download_notifier_download_paused_chapters">Download pausado</string>
+    <string name="download_notifier_download_paused_chapters">Downloads pausados</string>
     <string name="action_global_search">Pesquisa global</string>
     <string name="other_source">Outras</string>
     <string name="action_global_search_hint">Pesquisa global…</string>
@@ -243,7 +242,6 @@
     <string name="browse">Navegar</string>
     <string name="channel_common">Comum</string>
     <string name="action_display_download_badge">Capítulos disponíveis offline</string>
-    <string name="local_source_badge">Local</string>
     <string name="information_empty_category">Você ainda não tem nenhuma categoria. Toque no botão Adicionar para criar uma e organizar a sua biblioteca.</string>
     <string name="label_migration">Migrar</string>
     <string name="label_extensions">Extensões</string>
@@ -280,7 +278,6 @@
     <string name="repeating">Relendo</string>
     <string name="pager_viewer">Paginação</string>
     <string name="track_status">Estado</string>
-    <string name="track_start_date">Começado</string>
     <string name="track_type">Tipo</string>
     <string name="transition_finished">Concluído:</string>
     <string name="transition_current">Atual:</string>
@@ -492,7 +489,6 @@
         <item quantity="other">%d monitoradores</item>
     </plurals>
     <string name="no_pinned_sources">Você não tem fontes fixadas</string>
-    <string name="download_notifier_download_finish">Download concluído</string>
     <string name="channel_progress">Andamento</string>
     <string name="channel_complete">Concluído</string>
     <string name="channel_errors">Erros</string>
@@ -613,7 +609,6 @@
     <string name="pref_app_theme">Tema do aplicativo</string>
     <string name="enhanced_tracking_info">Serviços que oferecem recursos aprimorados para fontes específicas. Os itens são automaticamente monitorados quando adicionados em sua biblioteca.</string>
     <string name="enhanced_services">Serviços aprimorados</string>
-    <string name="tracker_komga_warning">Este serviço de monitoramento só é compatível com a fonte Komga.</string>
     <string name="theme_monet">Dinâmico</string>
     <string name="label_background_activity">Atividade em segundo plano</string>
     <string name="pref_lowest">Mais baixa</string>
@@ -658,7 +653,6 @@
     <string name="connected_to_wifi">Somente no Wi-Fi</string>
     <string name="update_72hour">A cada 3 dias</string>
     <string name="download_queue_size_warning">Aviso: grandes downloads em massa podem levar as fontes a ficarem lentas e/ou começarem a bloquear o Tachiyomi. Toque para saber mais.</string>
-    <string name="pref_library_update_show_tab_badge">Mostrar a contagem de não lidos no ícone de Atualizações</string>
     <string name="ext_update_all">Atualizar tudo</string>
     <string name="channel_app_updates">Atualizações do aplicativo</string>
     <string name="pref_auto_clear_chapter_cache">Limpar o cache de capítulos ao fechar o aplicativo</string>
@@ -682,7 +676,6 @@
     <string name="pref_navigate_pan">Navegar imagens longas ao tocar</string>
     <string name="pref_landscape_zoom">Dar zoom em imagens horizontais</string>
     <string name="action_display_cover_only_grid">Grade somente com capas</string>
-    <string name="action_filter_started">Iniciado</string>
     <string name="pref_update_only_started">Que não tiveram a leitura iniciada</string>
     <string name="skipped_reason_completed">Pulado porque a série está finalizada</string>
     <string name="skipped_reason_not_caught_up">Pulado porque há capítulos não lidos</string>
@@ -701,8 +694,6 @@
     <string name="pref_clear_webview_data">Limpar os dados da WebView</string>
     <string name="webview_data_deleted">Dados da WebView limpos</string>
     <string name="action_close">Fechar</string>
-    <string name="pref_duplicate_pinned_sources">Mostrar fontes fixadas duplicadas</string>
-    <string name="pref_duplicate_pinned_sources_summary">Repete as fontes fixadas em seus respectivos grupos de idioma</string>
     <string name="battery_not_low">Quando a bateria não está fraca</string>
     <string name="source_filter_empty_screen">Nenhuma fonte instalada foi encontrada</string>
     <string name="source_empty_screen">Nenhuma fonte encontrada</string>
@@ -754,7 +745,7 @@
         <item quantity="other">Próximos %d capítulos não lidos</item>
     </plurals>
     <string name="are_you_sure">Você tem certeza\?</string>
-    <string name="multi_lang">Múltiplas</string>
+    <string name="multi_lang">Múltiplos</string>
     <string name="pref_long_strip_split">Dividir imagens compridas (BETA)</string>
     <string name="updates_last_update_info">Última atualização da biblioteca: %s</string>
     <string name="remove_manga">Você está prestes a remover \"%s\" de sua biblioteca</string>
@@ -772,7 +763,7 @@
     <string name="pref_backup_summary">Backups manuais e automáticos</string>
     <string name="pref_security_summary">Bloqueio do aplicativo, tela segura</string>
     <string name="pref_advanced_summary">Exportar registros de travamento, otimizações de bateria</string>
-    <string name="crash_screen_title">Ocorreu um erro inesperado</string>
+    <string name="crash_screen_title">Ooops!</string>
     <string name="crash_screen_restart_application">Reiniciar o aplicativo</string>
     <string name="crash_screen_description">%s teve um erro inesperado. Nós sugerimos que você capture a tela com essa mensagem, exporte os registros de travamento e então compartilhá-los no nosso canal de suporte no Discord.</string>
     <string name="unknown_title">Título desconhecido</string>
@@ -780,9 +771,43 @@
     <string name="error_user_agent_string_invalid">Valor de user agent inválido</string>
     <string name="updates_last_update_info_just_now">Agora</string>
     <string name="download_notifier_cache_renewal">Indexando os downloads</string>
-    <string name="channel_downloader_cache">Cache de downloads</string>
+    <string name="channel_downloader_cache">Indexando</string>
     <string name="action_open_random_manga">Abrir um item aleatório</string>
     <string name="information_no_entries_found">Nenhum item encontrado nesta categoria</string>
     <string name="fdroid_warning">Compilações do F-Droid não são suportadas oficialmente.
 \nToque para saber mais.</string>
+    <string name="action_display_show_continue_reading_button">Mostrar o botão de continuar a leitura</string>
+    <string name="other_header">Outros</string>
+    <string name="track_remove_date_conf_title">Remover data\?</string>
+    <string name="track_remove_start_date_conf_text">Isto irá remover sua data de início selecionada anteriormente no %s</string>
+    <string name="track_remove_finish_date_conf_text">Isto irá remover sua data de término selecionada anteriormente no %s</string>
+    <string name="pref_invalidate_download_cache">Invalidar o índice de downloads</string>
+    <string name="enhanced_tracking_warning">Este monitorador é compatível somente com a fonte %1$s.</string>
+    <string name="pref_invalidate_download_cache_summary">Força o aplicativo a checar novamente por capítulos disponíveis offline</string>
+    <string name="label_local">Local</string>
+    <string name="label_downloaded">Disponíveis offline</string>
+    <string name="label_overview_section">Visão geral</string>
+    <string name="label_completed_titles">Itens completos</string>
+    <string name="label_read_duration">Duração de leitura</string>
+    <string name="label_titles_section">Itens</string>
+    <string name="label_titles_in_global_update">Na atualização global</string>
+    <string name="label_tracker_section">Monitoradores</string>
+    <string name="label_used">Usados</string>
+    <string name="day_short">%dd</string>
+    <string name="hour_short">%dh</string>
+    <string name="minute_short">%dm</string>
+    <string name="label_read_chapters">Lidos</string>
+    <string name="label_tracked_titles">Itens monitorados</string>
+    <string name="label_stats">Estatísticas</string>
+    <string name="label_started">Iniciados</string>
+    <string name="label_total_chapters">Total</string>
+    <string name="label_mean_score">Avaliação média</string>
+    <string name="not_applicable">N/A</string>
+    <string name="seconds_short">%ds</string>
+    <string name="action_not_now">Agora não</string>
+    <string name="information_no_manga_category">A categoria está vazia</string>
+    <string name="pref_library_update_show_tab_badge">Mostrar a contagem no ícone de Atualizações</string>
+    <string name="copied_to_clipboard_plain">Copiado para a área de transferência</string>
+    <string name="pref_worker_info">Informações do worker</string>
+    <string name="ext_miui_warning">A instalação de extensões pode não funcionar se a Otimização da MIUI estiver habilitada. Tente desabilitá-la ou instalar as extensões a partir do site.</string>
 </resources>

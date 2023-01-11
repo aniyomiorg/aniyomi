@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.databinding.ReaderReadingModeSettingsBinding
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.PagerViewer
@@ -43,22 +44,22 @@ class ReaderReadingModeSettings @JvmOverloads constructor(context: Context, attr
     private fun initGeneralPreferences() {
         binding.viewer.onItemSelectedListener = { position ->
             val readingModeType = ReadingModeType.fromSpinner(position)
-            (context as ReaderActivity).presenter.setMangaReadingMode(readingModeType.flagValue)
+            (context as ReaderActivity).viewModel.setMangaReadingMode(readingModeType.flagValue)
 
-            val mangaViewer = (context as ReaderActivity).presenter.getMangaReadingMode()
+            val mangaViewer = (context as ReaderActivity).viewModel.getMangaReadingMode()
             if (mangaViewer == ReadingModeType.WEBTOON.flagValue || mangaViewer == ReadingModeType.CONTINUOUS_VERTICAL.flagValue) {
                 initWebtoonPreferences()
             } else {
                 initPagerPreferences()
             }
         }
-        binding.viewer.setSelection((context as ReaderActivity).presenter.manga?.readingModeType?.let { ReadingModeType.fromPreference(it).prefValue } ?: ReadingModeType.DEFAULT.prefValue)
+        binding.viewer.setSelection((context as ReaderActivity).viewModel.manga?.readingModeType?.let { ReadingModeType.fromPreference(it.toInt()).prefValue } ?: ReadingModeType.DEFAULT.prefValue)
 
         binding.rotationMode.onItemSelectedListener = { position ->
             val rotationType = OrientationType.fromSpinner(position)
-            (context as ReaderActivity).presenter.setMangaOrientationType(rotationType.flagValue)
+            (context as ReaderActivity).viewModel.setMangaOrientationType(rotationType.flagValue)
         }
-        binding.rotationMode.setSelection((context as ReaderActivity).presenter.manga?.orientationType?.let { OrientationType.fromPreference(it).prefValue } ?: OrientationType.DEFAULT.prefValue)
+        binding.rotationMode.setSelection((context as ReaderActivity).viewModel.manga?.orientationType?.let { OrientationType.fromPreference(it.toInt()).prefValue } ?: OrientationType.DEFAULT.prefValue)
     }
 
     /**
@@ -68,7 +69,7 @@ class ReaderReadingModeSettings @JvmOverloads constructor(context: Context, attr
         binding.webtoonPrefsGroup.root.isVisible = false
         binding.pagerPrefsGroup.root.isVisible = true
 
-        binding.pagerPrefsGroup.tappingInverted.bindToPreference(readerPreferences.pagerNavInverted())
+        binding.pagerPrefsGroup.tappingInverted.bindToPreference(readerPreferences.pagerNavInverted(), PreferenceValues.TappingInvertMode::class.java)
         binding.pagerPrefsGroup.navigatePan.bindToPreference(readerPreferences.navigateToPan())
 
         binding.pagerPrefsGroup.pagerNav.bindToPreference(readerPreferences.navigationModePager())
@@ -104,7 +105,7 @@ class ReaderReadingModeSettings @JvmOverloads constructor(context: Context, attr
         binding.pagerPrefsGroup.root.isVisible = false
         binding.webtoonPrefsGroup.root.isVisible = true
 
-        binding.webtoonPrefsGroup.tappingInverted.bindToPreference(readerPreferences.webtoonNavInverted())
+        binding.webtoonPrefsGroup.tappingInverted.bindToPreference(readerPreferences.webtoonNavInverted(), PreferenceValues.TappingInvertMode::class.java)
 
         binding.webtoonPrefsGroup.webtoonNav.bindToPreference(readerPreferences.navigationModeWebtoon())
         readerPreferences.navigationModeWebtoon()

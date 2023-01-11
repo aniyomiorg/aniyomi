@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.util.system
 import android.content.Context
 import androidx.core.os.LocaleListCompat
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.source.SourcesPresenter
+import eu.kanade.tachiyomi.ui.browse.source.SourcesScreenModel
 import java.util.Locale
 
 /**
@@ -11,13 +11,18 @@ import java.util.Locale
  */
 object LocaleHelper {
 
+    val comparator = compareBy<String>(
+        { getDisplayName(it) },
+        { it == "all" },
+    )
+
     /**
      * Returns display name of a string language code.
      */
     fun getSourceDisplayName(lang: String?, context: Context): String {
         return when (lang) {
-            SourcesPresenter.LAST_USED_KEY -> context.getString(R.string.last_used_source)
-            SourcesPresenter.PINNED_KEY -> context.getString(R.string.pinned_sources)
+            SourcesScreenModel.LAST_USED_KEY -> context.getString(R.string.last_used_source)
+            SourcesScreenModel.PINNED_KEY -> context.getString(R.string.pinned_sources)
             "other" -> context.getString(R.string.other_source)
             "all" -> context.getString(R.string.multi_lang)
             else -> getDisplayName(lang)

@@ -1,5 +1,6 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 plugins {
     id("com.android.application")
@@ -29,7 +30,7 @@ android {
         minSdk = AndroidConfig.minSdk
         targetSdk = AndroidConfig.targetSdk
         versionCode = 93
-        versionName = "0.14.2.0"
+        versionName = "0.14.3"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -145,6 +146,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -170,27 +173,29 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":source-api"))
 
+    coreLibraryDesugaring(libs.desugar)
+
     // Compose
     implementation(platform(compose.bom))
     implementation(compose.activity)
     implementation(compose.foundation)
     implementation(compose.material3.core)
-    implementation(compose.material3.adapter)
+    implementation(compose.material.core)
     implementation(compose.material.icons)
     implementation(compose.animation)
     implementation(compose.animation.graphics)
     implementation(compose.ui.tooling)
     implementation(compose.ui.util)
     implementation(compose.accompanist.webview)
-    implementation(compose.accompanist.swiperefresh)
     implementation(compose.accompanist.flowlayout)
     implementation(compose.accompanist.permissions)
+    implementation(compose.accompanist.themeadapter)
+    implementation(compose.accompanist.systemuicontroller)
 
     implementation(androidx.paging.runtime)
     implementation(androidx.paging.compose)
 
     implementation(libs.bundles.sqlite)
-    implementation(androidx.sqlite)
     implementation(libs.sqldelight.android.driver)
     implementation(libs.sqldelight.coroutines)
     implementation(libs.sqldelight.android.paging)
@@ -243,15 +248,11 @@ dependencies {
     // Preferences
     implementation(libs.preferencektx)
 
-    // Model View Presenter
-    implementation(libs.bundles.nucleus)
-
     // Dependency injection
     implementation(libs.injekt.core)
 
     // Image loading
     implementation(libs.bundles.coil)
-
     implementation(libs.subsamplingscaleimageview) {
         exclude(module = "image-decoder")
     }
@@ -269,18 +270,12 @@ dependencies {
         exclude(group = "androidx.viewpager", module = "viewpager")
     }
     implementation(libs.insetter)
-    implementation(libs.markwon)
-    implementation(libs.aboutLibraries.core)
+    implementation(libs.bundles.richtext)
     implementation(libs.aboutLibraries.compose)
     implementation(libs.cascade)
-    implementation(libs.numberpicker)
     implementation(libs.bundles.voyager)
-
-    // Conductor
-    implementation(libs.bundles.conductor)
-
-    // FlowBinding
-    implementation(libs.bundles.flowbinding)
+    implementation(libs.wheelpicker)
+    implementation(libs.materialmotion.core)
 
     // Logging
     implementation(libs.logcat)
@@ -335,7 +330,7 @@ tasks {
         }
     }
 
-    withType<org.jmailen.gradle.kotlinter.tasks.LintTask>().configureEach {
+    withType<LintTask>().configureEach {
         exclude { it.file.path.contains("generated[\\\\/]".toRegex()) }
     }
 
@@ -344,8 +339,10 @@ tasks {
         kotlinOptions.freeCompilerArgs += listOf(
             "-opt-in=coil.annotation.ExperimentalCoilApi",
             "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi",
+            "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
             "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
             "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+            "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
             "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
             "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi",
             "-opt-in=androidx.compose.animation.ExperimentalAnimationApi",

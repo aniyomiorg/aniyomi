@@ -29,7 +29,7 @@ import org.xmlpull.v1.XmlPullParser
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class SettingsGeneralScreen : SearchableSettings {
+object SettingsGeneralScreen : SearchableSettings {
 
     @Composable
     @ReadOnlyComposable
@@ -62,7 +62,7 @@ class SettingsGeneralScreen : SearchableSettings {
             )
             add(
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = libraryPrefs.showUpdatesNavBadge(),
+                    pref = libraryPrefs.newShowUpdatesCount(),
                     title = stringResource(R.string.pref_library_update_show_tab_badge),
                 ),
             )

@@ -2,7 +2,7 @@
 <resources>
     <string name="name">Nom</string>
     <string name="categories">Categories</string>
-    <string name="manga">Mangues</string>
+    <string name="manga">Elements de la biblioteca</string>
     <string name="chapters">Capítols</string>
     <string name="track">En seguiment</string>
     <string name="history">Historial</string>
@@ -17,7 +17,6 @@
     <string name="label_extension_info">Informació de l\'extensió</string>
     <string name="action_settings">Configuració</string>
     <string name="action_filter">Filtra</string>
-    <string name="action_filter_downloaded">Baixats</string>
     <string name="action_filter_bookmarked">Marcats</string>
     <string name="action_filter_unread">No llegits</string>
     <string name="action_filter_empty">Elimina el filtre</string>
@@ -194,7 +193,6 @@
     <string name="login_success">S\'ha iniciat la sessió</string>
     <string name="unknown_error">S\'ha produït un error desconegut</string>
     <string name="updating_category">S\'està actualitzant la categoria</string>
-    <string name="local_source_badge">Local</string>
     <string name="no_more_results">No hi ha més resultats</string>
     <string name="local_source">Font local</string>
     <string name="other_source">Altres</string>
@@ -239,7 +237,6 @@
     <string name="title">Títol</string>
     <string name="status">Estat</string>
     <string name="track_status">Estat</string>
-    <string name="track_start_date">Començat</string>
     <string name="track_type">Tipus</string>
     <string name="error_category_exists">Ja hi ha una categoria amb aquest nom!</string>
     <string name="snack_categories_deleted">S\'han suprimit les categories</string>
@@ -288,7 +285,7 @@
     <string name="download_notifier_unknown_error">No s\'ha pogut baixar el capítol a causa d\'un error inesperat</string>
     <string name="download_notifier_text_only_wifi">No hi ha cap connexió Wi-Fi disponible</string>
     <string name="download_notifier_no_network">No hi ha cap connexió de xarxa disponible</string>
-    <string name="download_notifier_download_paused_chapters">Baixada pausada</string>
+    <string name="download_notifier_download_paused">Baixades pausades</string>
     <string name="channel_common">General</string>
     <string name="pref_read_with_long_tap">Mostra amb un toc llarg</string>
     <string name="action_open_in_web_view">Obre en una WebView</string>
@@ -482,7 +479,6 @@
         <item quantity="other">%d seguidors</item>
     </plurals>
     <string name="no_pinned_sources">No teniu cap origen fixat</string>
-    <string name="download_notifier_download_finish">Baixada completada</string>
     <string name="channel_complete">Completada</string>
     <string name="channel_progress">Progrés</string>
     <string name="channel_errors">Errors</string>
@@ -649,7 +645,6 @@
     <string name="action_faq_and_guides">PMF i guies</string>
     <string name="pref_library_update_manga_restriction">Omet les actualitzacions dels elements</string>
     <string name="pref_update_only_completely_read">Amb capítols no llegits</string>
-    <string name="pref_library_update_show_tab_badge">Mostra el comptador de no llegits a la icona d\'actualitzacions</string>
     <string name="webtoon_side_padding_5">5%</string>
     <string name="save_chapter_as_cbz">Desa com a arxiu CBZ</string>
     <string name="backup_info">També hauríeu de desar còpies de les còpies de seguretat en altres llocs.</string>
@@ -657,7 +652,6 @@
     <string name="pref_verbose_logging_summary">Imprimeix registres detallats al registre del sistema (redueix el rendiment de l\'aplicació)</string>
     <string name="publishing_finished">Publicació finalitzada</string>
     <string name="on_hiatus">En pausa</string>
-    <string name="tracker_komga_warning">Aquest seguidor només és compatible amb la font de Komga.</string>
     <string name="channel_app_updates">Actualitzacions de l\'aplicació</string>
     <string name="action_track">Segueix</string>
     <string name="ext_app_info">Informació de l\'aplicació</string>
@@ -670,7 +664,6 @@
 \nVoleu continuar igualment\?</string>
     <string name="pref_navigate_pan">Fes panoràmiques les imatges amples en fer un toc</string>
     <string name="action_display_cover_only_grid">Graella només a la portada</string>
-    <string name="action_filter_started">Començats</string>
     <string name="pref_update_only_started">Que no s\'hagin començat</string>
     <string name="skipped_reason_completed">S\'ha omès perquè la sèrie està completada</string>
     <string name="skipped_reason_not_started">S\'ha omès perquè no hi ha cap capítol llegit</string>
@@ -689,8 +682,6 @@
     <string name="pref_clear_webview_data">Neteja les dades del WebView</string>
     <string name="webview_data_deleted">S\'han netejat les dades del WebView</string>
     <string name="action_close">Tanca</string>
-    <string name="pref_duplicate_pinned_sources">Mostra les fonts fixades duplicades</string>
-    <string name="pref_duplicate_pinned_sources_summary">Repeteix les fonts fixades a llurs grups de llengua</string>
     <string name="battery_not_low">Quan la bateria no sigui baixa</string>
     <string name="source_filter_empty_screen">No s\'ha trobat cap font instal·lada</string>
     <string name="source_empty_screen">No s\'ha trobat cap font</string>
@@ -767,9 +758,17 @@
     <string name="action_search_hint">Cerca…</string>
     <string name="updates_last_update_info">Biblioteca actualitzada per darrera vegada: %s</string>
     <string name="download_notifier_cache_renewal">S\'estan indexant les baixades</string>
-    <string name="channel_downloader_cache">Memòria cau de baixades</string>
+    <string name="channel_downloader_cache">Indexació</string>
     <string name="action_open_random_manga">Obre un element aleatori</string>
     <string name="fdroid_warning">Les compilacions de F-Droid no tenen assistència oficial.
 \nPremeu per a obtenir-ne més informació.</string>
     <string name="information_no_entries_found">No s\'ha trobat cap element en aquesta categoria</string>
+    <string name="action_display_show_continue_reading_button">Mostra el botó per a continuar llegint</string>
+    <string name="other_header">Altres</string>
+    <string name="pref_invalidate_download_cache">Invalida l\'índex de baixades</string>
+    <string name="track_remove_finish_date_conf_text">S\'eliminarà la data de finalització seleccionada de %s</string>
+    <string name="track_remove_date_conf_title">Voleu eliminar-ne la data\?</string>
+    <string name="track_remove_start_date_conf_text">S\'eliminarà la data d\'inici seleccionada de %s</string>
+    <string name="enhanced_tracking_warning">Aquest seguidor només és compatible amb la font %1$s.</string>
+    <string name="pref_invalidate_download_cache_summary">Força que l\'aplicació torni a comprovar els capítols baixats</string>
 </resources>
