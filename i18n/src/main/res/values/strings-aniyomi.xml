@@ -203,7 +203,7 @@
     </plurals>
     <plurals name="notification_episodes_generic">
         <item quantity="one">1 new episode</item>
-        <item quantity="other">%1$d new episode</item>
+        <item quantity="other">%1$d new episodes</item>
     </plurals>
     <string name="information_no_recent_anime">Nothing watched recently</string>
     <!-- Do not translate "WebView" -->
