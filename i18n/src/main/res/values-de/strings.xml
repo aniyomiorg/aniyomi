@@ -946,7 +946,6 @@
     <string name="no_next_episode">Nächste Folge nicht gefunden!</string>
     <string name="player_aniskip_recap">Zusammenfassung überspringen</string>
     <string name="episode_settings_updated">Standard-Folgeneinstellungen aktualisiert</string>
-    <string name="anime_description_cover"></string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
     <string name="disable_auto_play">Automatische Wiedergabe ist aus</string>
     <plurals name="notification_episodes_multiple_and_more">
