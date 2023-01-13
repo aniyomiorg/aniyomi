@@ -263,4 +263,18 @@
     <string name="player_aniskip_dontskip_toast">Skip in %d seconds</string>
     <string name="player_aniskip_skip">%s Skipped</string>
     <string name="player_hwdec_dialog_title">Set default hardware decoding mode</string>
+    <string name="notification_episodes_single">Episode %1$s</string>
+    <string name="notification_episodes_single_and_more">Episode %1$s and %2$d more</string>
+    <string name="notification_episodes_multiple">Episodes %1$s</string>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one">Episodes %1$s and 1 more</item>
+        <item quantity="other">Episodes %1$s and %2$d more</item>
+    </plurals>
+    <string name="episode_settings">Episode settings</string>
+    <string name="pref_backup_flags">Backup options</string>
+    <string name="label_mangaextensions">Manga Extensions</string>
+    <string name="label_animeextensions">Anime Extensions</string>
+    <string name="label_migration_manga">Migrate Manga</string>
+    <string name="label_migration_anime">Migrate Anime</string>
+    <string name="settings">Settings</string>
 </resources>

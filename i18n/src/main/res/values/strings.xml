@@ -12,7 +12,6 @@
     <string name="chapters">Chapters</string>
     <string name="track">Tracking</string>
     <string name="history">History</string>
-    <string name="settings">Settings</string>
 
     <!-- Activities and fragments labels (toolbar title) -->
     <string name="label_more">More</string>
@@ -22,11 +21,7 @@
     <string name="label_recent_manga">History</string>
     <string name="label_sources">Sources</string>
     <string name="label_backup">Backup and restore</string>
-    <string name="label_migration_manga">Migrate Manga</string>
-    <string name="label_migration_anime">Migrate Anime</string>
     <string name="label_extensions">Extensions</string>
-    <string name="label_mangaextensions">Manga Extensions</string>
-    <string name="label_animeextensions">Anime Extensions</string>
     <string name="label_extension_info">Extension info</string>
     <string name="label_help">Help</string>
     <string name="label_default">Default</string>
@@ -450,7 +445,6 @@
     <string name="pref_backup_directory">Backup location</string>
     <string name="pref_backup_service_category">Automatic backups</string>
     <string name="pref_backup_interval">Backup frequency</string>
-    <string name="pref_backup_flags">Backup options</string>
     <string name="pref_backup_slots">Maximum backups</string>
     <string name="backup_created">Backup created</string>
     <string name="invalid_backup_file">Invalid backup file</string>
@@ -636,7 +630,6 @@
     <string name="error_sharing_cover">Error sharing cover</string>
     <string name="confirm_delete_chapters">Are you sure you want to delete the selected chapters?</string>
     <string name="chapter_settings">Chapter settings</string>
-    <string name="episode_settings">Episode settings</string>
     <string name="confirm_set_chapter_settings">Are you sure you want to save these settings as default?</string>
     <string name="set_chapter_settings_as_default">Set as default</string>
     <string name="no_chapters_error">No chapters found</string>
@@ -777,13 +770,6 @@
     <plurals name="notification_chapters_multiple_and_more">
         <item quantity="one">Chapters %1$s and 1 more</item>
         <item quantity="other">Chapters %1$s and %2$d more</item>
-    </plurals>
-    <string name="notification_episodes_single">Episode %1$s</string>
-    <string name="notification_episodes_single_and_more">Episode %1$s and %2$d more</string>
-    <string name="notification_episodes_multiple">Episodes %1$s</string>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="one">Episodes %1$s and 1 more</item>
-        <item quantity="other">Episodes %1$s and %2$d more</item>
     </plurals>
     <string name="notification_update_error">%1$d update(s) failed</string>
     <string name="notification_update_skipped">%1$d update(s) skipped</string>
