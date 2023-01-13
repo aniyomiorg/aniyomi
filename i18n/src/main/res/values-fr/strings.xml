@@ -813,4 +813,26 @@
     <string name="error_user_agent_string_invalid">Chaîne d\'agent utilisateur invalide</string>
     <string name="unknown_title">Titre inconnu</string>
     <string name="updates_last_update_info_just_now">À l\'instant</string>
+    <string name="general_categories">Catégories</string>
+    <string name="anime_categories">Catégories des animés</string>
+    <string name="manga_anime">Entrées de la bibliothèque</string>
+    <string name="label_anime_download_queue">File d\'attente pour le téléchargement d\'animés</string>
+    <string name="notification_episodes_multiple">Épisodes %1$s</string>
+    <string name="pref_bottom_nav_no_history">Déplacer l\'historique vers l\'onglet Plus</string>
+    <string name="label_mangaextensions">Extensions des mangas</string>
+    <string name="label_animeextensions">Extensions d\'animés</string>
+    <string name="label_migration_manga">Migrer les mangas</string>
+    <string name="label_migration_anime">Migrer les animés</string>
+    <string name="chapters_episodes">Chapitres et épisodes</string>
+    <string name="label_animelib">Animé</string>
+    <string name="label_animesources">Sources d\'animés</string>
+    <string name="backup_settings_warning">Avertissement : La sauvegarde des paramètres stocke également les mots de passe de vos pistes, ne partagez pas ce fichier de sauvegarde !</string>
+    <string name="episodes">Épisodes</string>
+    <string name="label_mangalibrary">Manga</string>
+    <string name="label_manga">Manga</string>
+    <string name="label_mangasources">Sources des mangas</string>
+    <string name="pref_bottom_nav_no_updates">Déplacer les mises à jour vers l\'onglet Plus</string>
+    <string name="episode_settings">Paramètres des épisodes</string>
+    <string name="pref_backup_flags">Options de sauvegarde</string>
+    <string name="settings">Paramètres</string>
 </resources>
