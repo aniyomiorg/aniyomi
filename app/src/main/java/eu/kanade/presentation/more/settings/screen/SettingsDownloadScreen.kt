@@ -207,7 +207,7 @@ class SettingsDownloadScreen : SearchableSettings {
         if (showAnimeDialog) {
             TriStateListDialog(
                 title = stringResource(R.string.anime_categories),
-                message = stringResource(R.string.pref_download_new_anime_categories_details),
+                message = stringResource(R.string.pref_download_new_categories_details),
                 items = allAnimeCategories,
                 initialChecked = includedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
                 initialInversed = excludedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
