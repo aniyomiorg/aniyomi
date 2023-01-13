@@ -73,13 +73,13 @@
     <string name="pref_category_player">Player</string>
     <string name="pref_category_progress">Progress</string>
     <string name="pref_progress_mark_as_seen">At what point to mark the episode as seen</string>
-    <string name="pref_progress_70">70%</string>
-    <string name="pref_progress_75">75%</string>
-    <string name="pref_progress_80">80%</string>
-    <string name="pref_progress_85">85%</string>
-    <string name="pref_progress_90">90%</string>
-    <string name="pref_progress_95">95%</string>
-    <string name="pref_progress_100">100%</string>
+    <string name="pref_progress_70" translatable="false">70%</string>
+    <string name="pref_progress_75" translatable="false">75%</string>
+    <string name="pref_progress_80" translatable="false">80%</string>
+    <string name="pref_progress_85" translatable="false">85%</string>
+    <string name="pref_progress_90" translatable="false">90%</string>
+    <string name="pref_progress_95" translatable="false">95%</string>
+    <string name="pref_progress_100" translatable="false">100%</string>
     <string name="pref_preserve_watching_position">Preserve watch position on seen episodes</string>
     <string name="pref_category_player_orientation">Orientation</string>
     <string name="pref_default_player_orientation">Default orientation</string>
@@ -90,10 +90,10 @@
     <string name="pref_default_intro_length">Default skip intro length</string>
     <string name="pref_intro_length">Skip intro length</string>
     <string name="pref_skip_length">Double tap to skip length</string>
-    <string name="pref_skip_30">30s</string>
-    <string name="pref_skip_20">20s</string>
-    <string name="pref_skip_10">10s</string>
-    <string name="pref_skip_5">5s</string>
+    <string name="pref_skip_30" translatable="false">30s</string>
+    <string name="pref_skip_20" translatable="false">20s</string>
+    <string name="pref_skip_10" translatable="false">10s</string>
+    <string name="pref_skip_5" translatable="false">5s</string>
     <string name="pref_skip_disable">Disable</string>
     <string name="pref_player_smooth_seek">Enable precise seeking</string>
     <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
