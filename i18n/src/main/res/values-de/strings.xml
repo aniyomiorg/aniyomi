@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Name</string>
-    <string name="categories">Kategorien</string>
+    <string name="categories">Mangakategorien</string>
     <string name="manga">Manga</string>
     <string name="chapters">Kapitel</string>
     <string name="history">Verlauf</string>
     <string name="label_settings">Einstellungen</string>
-    <string name="label_download_queue">Download-Warteschlange</string>
+    <string name="label_download_queue">Manga-Downloadwarteschlange</string>
     <string name="label_library">Bibliothek</string>
     <string name="label_recent_manga">Verlauf</string>
     <string name="label_backup">Sichern und Wiederherstellen</string>
@@ -804,7 +804,7 @@
     <string name="action_order_by_episode_number">Nach Folgennummer</string>
     <string name="manga_anime">Bibliothekseinträge</string>
     <string name="chapters_episodes">Kapitel und Folgen</string>
-    <string name="label_anime_download_queue">Anime-Download-Warteschlange</string>
+    <string name="label_anime_download_queue">Anime-Downloadwarteschlange</string>
     <string name="label_mangalibrary">Manga</string>
     <string name="action_show_anime">Eintrag anzeigen</string>
     <string name="action_display_download_badge_anime">Heruntergeladene Folgen</string>
@@ -813,7 +813,7 @@
     <string name="label_animelib">Anime</string>
     <string name="label_animesources">Anime-Quellen</string>
     <string name="pref_bottom_nav_no_history">Verschiebe Verlauf in den Mehr-Tab</string>
-    <string name="action_sort_total_episodes">Gesamtanzahl Folgen</string>
+    <string name="action_sort_total_episodes">Folgenanzahl</string>
     <string name="action_previous_episode">Vorherige Folge</string>
     <string name="action_play">Play</string>
     <string name="action_display_show_continue_reading_button">Zeige Fortsetzen-Button</string>
@@ -855,7 +855,7 @@
     <string name="pref_backup_flags">Sicherungsoptionen</string>
     <string name="pref_player_hide_controls">Player-Bedienelemente beim Öffnen verstecken</string>
     <string name="general_categories">Kategorien</string>
-    <string name="anime_categories">Anime-Kategorien</string>
+    <string name="anime_categories">Animekategorien</string>
     <string name="label_manga">Manga</string>
     <string name="action_mark_previous_as_seen">Vorherige Folgen als gesehen markieren</string>
     <string name="action_download_unread">Ungelesene Kapitel herunterladen</string>
