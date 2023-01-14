@@ -3,7 +3,7 @@
     <string name="name">Nom</string>
     <!-- Activities and fragments labels (toolbar title) -->
     <string name="label_settings">Paramètres</string>
-    <string name="label_download_queue">File de téléchargement</string>
+    <string name="label_download_queue">File de téléchargement de mangas</string>
     <string name="label_library">Bibliothèque</string>
     <string name="label_recent_manga">Historique</string>
     <string name="label_recent_updates">Nouveautés</string>
@@ -739,7 +739,7 @@
     <string name="pref_duplicate_pinned_sources_summary">Répéter les sources épinglées dans leurs groupes linguistiques respectifs</string>
     <string name="pref_duplicate_pinned_sources">Afficher les sources épinglées en double</string>
     <string name="source_filter_empty_screen">Aucune source installée trouvée</string>
-    <string name="action_sort_last_manga_update">Dernière mise à jour</string>
+    <string name="action_sort_last_manga_update">Dernière mise à jour du manga</string>
     <string name="action_sort_unread_count">Nombre de non-lus</string>
     <string name="source_empty_screen">Aucune source trouvée</string>
     <string name="split_tall_images">Fractionner les images trop grandes</string>
@@ -813,4 +813,29 @@
     <string name="error_user_agent_string_invalid">Chaîne d\'agent utilisateur invalide</string>
     <string name="unknown_title">Titre inconnu</string>
     <string name="updates_last_update_info_just_now">À l\'instant</string>
+    <string name="pref_bottom_nav_no_manga">Déplacer le Manga vers l\'onglet Plus</string>
+    <string name="action_filter_unseen">Non vus</string>
+    <string name="action_mark_as_unseen">Marquer comme non vu</string>
+    <string name="action_mark_previous_as_seen">Marquer les précédents comme vus</string>
+    <string name="action_sort_last_seen">Dernier vu</string>
+    <string name="action_mark_as_seen">Marquer comme vu</string>
+    <string name="action_sort_episode_fetch_date">Date de récupération d\'épisode</string>
+    <string name="action_sort_total_episodes">Nombre d\'épisodes</string>
+    <string name="backup_settings_warning">Avertissement : La sauvegarde des paramètres stocke également les mots de passe de vos pistes, ne partagez pas ce fichier de sauvegarde !</string>
+    <string name="label_manga">Manga</string>
+    <string name="label_mangasources">Sources des mangas</string>
+    <string name="pref_bottom_nav_no_updates">Déplacer les mises à jour vers l\'onglet Plus</string>
+    <string name="action_sort_unseen_count">Nombre de non-vus</string>
+    <string name="general_categories">Catégories</string>
+    <string name="anime_categories">Catégories des animés</string>
+    <string name="manga_anime">Entrées de la bibliothèque</string>
+    <string name="chapters_episodes">Chapitres et épisodes</string>
+    <string name="episodes">Épisodes</string>
+    <string name="label_anime_download_queue">File de téléchargement d\'animés</string>
+    <string name="label_mangalibrary">Manga</string>
+    <string name="label_animelib">Animé</string>
+    <string name="label_animesources">Sources d\'animés</string>
+    <string name="pref_bottom_nav_no_history">Déplacer l\'historique vers l\'onglet Plus</string>
+    <string name="action_sort_latest_episode">Dernier épisode</string>
+    <string name="action_sort_last_anime_update">Dernière mise à jour d\'animé</string>
 </resources>
