@@ -52,6 +52,11 @@ import eu.kanade.tachiyomi.data.backup.BackupCreatorJob
 import eu.kanade.tachiyomi.data.backup.BackupFileValidator
 import eu.kanade.tachiyomi.data.backup.BackupRestoreService
 import eu.kanade.tachiyomi.data.backup.full.models.Backup
+import eu.kanade.tachiyomi.data.preference.FLAG_CATEGORIES
+import eu.kanade.tachiyomi.data.preference.FLAG_CHAPTERS
+import eu.kanade.tachiyomi.data.preference.FLAG_HISTORY
+import eu.kanade.tachiyomi.data.preference.FLAG_SETTINGS
+import eu.kanade.tachiyomi.data.preference.FLAG_TRACK
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.toast
@@ -399,6 +404,25 @@ class SettingsBackupScreen : SearchableSettings {
                     enabled = backupInterval != 0,
                     title = stringResource(R.string.pref_backup_slots),
                     entries = listOf(2, 3, 4, 5).associateWith { it.toString() },
+                ),
+                Preference.PreferenceItem.MultiSelectListPreference(
+                    pref = backupPreferences.backupFlags(),
+                    enabled = backupInterval != 0,
+                    title = stringResource(R.string.pref_backup_flags),
+                    subtitle = stringResource(R.string.pref_backup_flags_summ),
+                    entries = mapOf(
+                        FLAG_CATEGORIES to stringResource(R.string.general_categories),
+                        FLAG_CHAPTERS to stringResource(R.string.chapters_episodes),
+                        FLAG_HISTORY to stringResource(R.string.history),
+                        FLAG_TRACK to stringResource(R.string.track),
+                        FLAG_SETTINGS to stringResource(R.string.settings),
+                    ),
+                    onValueChanged = {
+                        if (it.contains(FLAG_SETTINGS)) {
+                            context.toast(R.string.backup_settings_warning, Toast.LENGTH_LONG)
+                        }
+                        true
+                    },
                 ),
                 Preference.PreferenceItem.InfoPreference(stringResource(R.string.backup_info)),
             ),
