@@ -50,6 +50,6 @@ class MoreController :
     }
 
     companion object {
-        const val URL_HELP = "https://aniyomi.jmir.xyz/help/"
+        const val URL_HELP = "https://aniyomi.org/help/"
     }
 }

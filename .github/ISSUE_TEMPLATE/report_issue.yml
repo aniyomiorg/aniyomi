@@ -95,7 +95,7 @@ body:
           required: true
         - label: If this is an issue with an extension, I should be opening an issue in the [extensions repository](https://github.com/jmir1/aniyomi-extensions/issues/new/choose).
           required: true
-        - label: I have tried the [troubleshooting guide](https://aniyomi.jmir.xyz/help/guides/troubleshooting/).
+        - label: I have tried the [troubleshooting guide](https://aniyomi.org/help/guides/troubleshooting/).
           required: true
         - label: I have updated the app to version **[0.12.3.8](https://github.com/jmir1/aniyomi/releases/latest)**.
           required: true

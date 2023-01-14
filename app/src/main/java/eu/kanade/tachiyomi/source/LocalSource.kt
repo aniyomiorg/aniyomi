@@ -408,7 +408,7 @@ class LocalSource(
 
     companion object {
         const val ID = 0L
-        const val HELP_URL = "https://aniyomi.jmir.xyz/help/guides/local-manga/"
+        const val HELP_URL = "https://aniyomi.org/help/guides/local-manga/"
 
         private const val DEFAULT_COVER_NAME = "cover.jpg"
         private val LATEST_THRESHOLD = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)

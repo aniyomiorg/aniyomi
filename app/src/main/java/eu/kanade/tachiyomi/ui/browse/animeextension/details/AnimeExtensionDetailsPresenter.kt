@@ -87,7 +87,7 @@ class AnimeExtensionDetailsPresenter(
         extension ?: return ""
 
         if (!extension.hasReadme) {
-            return "https://aniyomi.jmir.xyz/help/faq/#extensions"
+            return "https://aniyomi.org/help/faq/#extensions"
         }
 
         val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.animeextension.")

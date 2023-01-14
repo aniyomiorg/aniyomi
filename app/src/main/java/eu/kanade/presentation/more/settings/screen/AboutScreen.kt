@@ -113,7 +113,7 @@ class AboutScreen : Screen {
                 item {
                     TextPreferenceWidget(
                         title = stringResource(R.string.help_translate),
-                        onPreferenceClick = { uriHandler.openUri("https://aniyomi.jmir.xyz/help/contribution/#translation") },
+                        onPreferenceClick = { uriHandler.openUri("https://aniyomi.org/help/contribution/#translation") },
                     )
                 }
 
@@ -127,7 +127,7 @@ class AboutScreen : Screen {
                 item {
                     TextPreferenceWidget(
                         title = stringResource(R.string.privacy_policy),
-                        onPreferenceClick = { uriHandler.openUri("https://aniyomi.jmir.xyz/privacy") },
+                        onPreferenceClick = { uriHandler.openUri("https://aniyomi.org/privacy") },
                     )
                 }
 
@@ -141,7 +141,7 @@ class AboutScreen : Screen {
                         LinkIcon(
                             label = stringResource(R.string.website),
                             painter = rememberVectorPainter(Icons.Outlined.Public),
-                            url = "https://aniyomi.jmir.xyz",
+                            url = "https://aniyomi.org",
                         )
                         LinkIcon(
                             label = "Discord",

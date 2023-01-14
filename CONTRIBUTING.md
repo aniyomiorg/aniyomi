@@ -30,7 +30,7 @@ Before you start, please note that the ability to use following technologies is 
 
 # Translations
 
-Translations are done externally via Weblate. See [our website](https://aniyomi.jmir.xyz/help/contribution/#translation) for more details.
+Translations are done externally via Weblate. See [our website](https://aniyomi.org/help/contribution/#translation) for more details.
 
 
 # Forks
