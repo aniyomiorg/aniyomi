@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Name</string>
-    <string name="categories">Mangakategorien</string>
+    <string name="categories">Manga-Kategorien</string>
     <string name="manga">Manga</string>
     <string name="chapters">Kapitel</string>
     <string name="history">Verlauf</string>
@@ -855,7 +855,7 @@
     <string name="pref_backup_flags">Sicherungsoptionen</string>
     <string name="pref_player_hide_controls">Player-Bedienelemente beim Öffnen verstecken</string>
     <string name="general_categories">Kategorien</string>
-    <string name="anime_categories">Animekategorien</string>
+    <string name="anime_categories">Anime-Kategorien</string>
     <string name="label_manga">Manga</string>
     <string name="action_mark_previous_as_seen">Vorherige Folgen als gesehen markieren</string>
     <string name="action_download_unread">Ungelesene Kapitel herunterladen</string>
@@ -968,7 +968,7 @@
     <string name="stats_header">Statistiken anzeigen</string>
     <string name="toggle_stats">Statistiken aktivieren</string>
     <string name="enable_auto_play">Automatische Wiedergabe ist an</string>
-    <string name="pref_enable_auto_skip_ani_skip">Automatisches Überspringen aktrivieren</string>
+    <string name="pref_enable_auto_skip_ani_skip">Automatisches Überspringen aktivieren</string>
     <string name="pref_waiting_time_aniskip">Button-Wartezeit</string>
     <string name="pref_waiting_time_aniskip_5">5 Sekunden</string>
     <string name="label_animeextensions">Anime-Erweiterungen</string>
