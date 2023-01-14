@@ -15,7 +15,6 @@
     <string name="pref_bottom_nav_no_history">Verschiebe Verlauf in den Mehr-Tab</string>
     <string name="pref_bottom_nav_no_updates">Verschiebe Neues in den Mehr-Tab</string>
     <string name="pref_bottom_nav_no_manga">Verschiebe Manga in den Mehr-Tab</string>
-    <string name="unlock_app">Aniyomi entsperren</string>
     <string name="action_filter_unseen">Ungesehen</string>
     <string name="action_sort_total_episodes">Folgenanzahl</string>
     <string name="action_sort_last_seen">Zuletzt gesehen</string>
@@ -116,8 +115,7 @@
     <string name="pref_clear_anime_database">Anime-Datenbank leeren</string>
     <string name="pref_clear_manga_database_summary">Verlauf für Einträge löschen, die nicht in deiner Bibliothek gespeichert sind</string>
     <string name="pref_clear_anime_database_summary">Verlauf für Anime-Einträge löschen, die nicht in deiner Bibliothek gespeichert sind</string>
-    <string name="clear_database_confirmation">Bist du dir sicher\? Die gelesenen Kapitel und Fortschritte von Einträgen, die nicht in deiner Bibliothek sind, werden gelöscht</string>
-    <string name="pref_refresh_library_tracking_summary">Synchronisiert den Lesestatus, die Bewertung und das zuletzt gelesene Kapitel mit den angemeldeten Trackinganbietern</string>
+    <string name="clear_database_confirmation">Bist du dir sicher? Die gelesenen Kapitel und Fortschritte von Einträgen, die nicht in deiner Bibliothek sind, werden gelöscht</string>
     <string name="pref_incognito_mode_summary">Leseverlauf pausieren</string>
     <string name="manga_from_library">Aus der Bibliothek</string>
     <string name="anime_from_library">Anime aus der Bibliothek</string>
@@ -127,7 +125,7 @@
     <string name="episode_not_found">Folge nicht gefunden</string>
     <string name="local_invalid_episode_format">Ungültiges Folgen-Format</string>
     <string name="unknown_studio">Unbekanntes Studio</string>
-    <string name="delete_downloads_for_anime">Heruntergeladene Folgen löschen\?</string>
+    <string name="delete_downloads_for_anime">Heruntergeladene Folgen löschen?</string>
     <string name="snack_add_to_manga_library">Zur Bibliothek hinzufügen\?</string>
     <string name="snack_add_to_anime_library">Anime zur Bibliothek hinzufügen\?</string>
     <string name="display_mode_episode">Folge %1$s</string>
@@ -137,7 +135,7 @@
     <string name="show_episode_number">Folgennummer</string>
     <string name="sort_by_episode_number">Nach Folgennummer</string>
     <string name="download_unseen">Ungesehene</string>
-    <string name="confirm_delete_episodes">Bist du sicher, dass du die ausgewählten Folgen löschen willst\?</string>
+    <string name="confirm_delete_episodes">Bist du sicher, dass du die ausgewählten Folgen löschen willst?</string>
     <string name="also_set_chapter_settings_for_library">Auch für alle Einträge in meiner Bibliothek anwenden</string>
     <string name="also_set_episode_settings_for_library">Auch für alle Anime in meiner Bibliothek anwenden</string>
     <string name="no_episodes_error">Keine Folgen gefunden</string>
@@ -149,7 +147,7 @@
     <string name="want_to_read">Will ich lesen</string>
     <string name="want_to_watch">Will ich schauen</string>
     <string name="repeating_anime">Am Wiederschauen</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Das Datum dieser Folge wird gelöscht. Bist du sicher\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Das Datum dieser Folge wird gelöscht. Bist du sicher?</string>
     <string name="dialog_with_checkbox_reset_anime">Alle Folgen dieses Animes zurücksetzen</string>
     <string name="dialog_with_checkbox_reset">Alle Kapitel dieses Eintrags zurücksetzen</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
