@@ -194,9 +194,9 @@ class AnimelibSettingsSheet(
         inner class SortGroup : Group {
 
             private val alphabetically = Item.MultiSort(R.string.action_sort_alpha, this)
-            private val total = Item.MultiSort(R.string.action_sort_total, this)
+            private val total = Item.MultiSort(R.string.action_sort_total_episodes, this)
             private val lastSeen = Item.MultiSort(R.string.action_sort_last_seen, this)
-            private val lastChecked = Item.MultiSort(R.string.action_sort_last_manga_update, this)
+            private val lastChecked = Item.MultiSort(R.string.action_sort_last_anime_update, this)
             private val unseen = Item.MultiSort(R.string.action_sort_unseen_count, this)
             private val latestEpisode = Item.MultiSort(R.string.action_sort_latest_episode, this)
             private val episodeFetchDate = Item.MultiSort(R.string.action_sort_episode_fetch_date, this)
