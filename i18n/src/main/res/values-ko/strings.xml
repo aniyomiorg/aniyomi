@@ -886,7 +886,6 @@
     <string name="video_crop_screen">화면에 맞게 자르기</string>
     <string name="playback_speed_dialog_reset">초기화</string>
     <string name="quality_dialog_header">동영상 화질 변경:</string>
-    <string name="pref_track_on_add_library"></string>
     <string name="playback_options_title">재생 옵션</string>
     <string name="episode_settings">회차 설정</string>
     <string name="pref_enable_aniskip">애니스킵 사용</string>
