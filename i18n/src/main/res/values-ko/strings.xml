@@ -948,7 +948,7 @@
     <string name="pref_player_summary">진행 상황 조정, 내부 플레이어, 외부 플레이어</string>
     <string name="pref_progress_mark_as_seen">회차를 본 것으로 표시할 시점</string>
     <string name="pref_player_hide_controls">플레이어를 열 때 플레이어 조작 숨기기</string>
-    <string name="pref_player_smooth_seek_summary">활성화되면 검색이 키프레임에 초점을 맞추지 않아 느리지만 정확한 검색이 가능합니다.</string>
+    <string name="pref_player_smooth_seek_summary">활성화되면 검색이 키프레임에 초점을 맞추지 않아 느리지만 정확한 검색이 가능함</string>
     <string name="pref_external_downloader_selection">다운로더 앱 기본 설정</string>
     <string name="pref_remove_exclude_categories_anime_prefix">애니메이션:</string>
     <string name="used_cache_both">애니메이션에서 사용: %1$s, 만화에서 사용: %2$s</string>
@@ -960,4 +960,6 @@
     <string name="video_stretch_screen">화면에 맞게 늘림</string>
     <string name="audio_dialog_header">오디오 트랙 변경:</string>
     <string name="player_aniskip_ed">엔딩 건너뛰기</string>
+    <string name="player_aniskip_dontskip">건너뛰지 마세요</string>
+    <string name="pref_track_on_add_library">서재에 추가할 때 동기화 메뉴 열기</string>
 </resources>
