@@ -838,4 +838,7 @@
     <string name="pref_bottom_nav_no_history">Déplacer l\'historique vers l\'onglet Plus</string>
     <string name="action_sort_latest_episode">Dernier épisode</string>
     <string name="action_sort_last_anime_update">Dernière mise à jour d\'animé</string>
+    <string name="action_sort_last_checked">Dernière vérification</string>
+    <string name="action_download_unseen">Télécharger les épisodes inédits</string>
+    <string name="action_play_internally">Lire avec le lecteur interne</string>
 </resources>
