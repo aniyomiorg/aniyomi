@@ -815,8 +815,8 @@
     <string name="pref_bottom_nav_no_history">Verschiebe Verlauf in den Mehr-Tab</string>
     <string name="action_sort_total_episodes">Folgenanzahl</string>
     <string name="action_previous_episode">Vorherige Folge</string>
-    <string name="action_play">Play</string>
-    <string name="action_display_show_continue_reading_button">Zeige Fortsetzen-Button</string>
+    <string name="action_play">Abspielen</string>
+    <string name="action_display_show_continue_reading_button">Fortsetzen-Knopf anzeigen</string>
     <string name="action_start_download_externally">Externen Downloader benutzen</string>
     <string name="currently_reading">Am Schauen</string>
     <string name="pref_pip_episode_toasts">Popupbenachrichtigung beim Folgenwechsel im PiP-Modus anzeigen</string>
@@ -969,7 +969,7 @@
     <string name="toggle_stats">Statistiken aktivieren</string>
     <string name="enable_auto_play">Automatische Wiedergabe ist an</string>
     <string name="pref_enable_auto_skip_ani_skip">Automatisches Überspringen aktivieren</string>
-    <string name="pref_waiting_time_aniskip">Button-Wartezeit</string>
+    <string name="pref_waiting_time_aniskip">Knopf-Wartezeit</string>
     <string name="pref_waiting_time_aniskip_5">5 Sekunden</string>
     <string name="label_animeextensions">Anime-Erweiterungen</string>
     <string name="pref_remove_exclude_categories_prefix">Manga:</string>
