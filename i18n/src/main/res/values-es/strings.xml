@@ -63,7 +63,7 @@
     <string name="pref_library_update_restriction">Restricciones de actualización automática del dispositivo</string>
     <string name="charging">Mientras se carga la batería</string>
     <string name="pref_update_only_non_completed">Series completadas</string>
-    <string name="pref_auto_update_manga_sync">Actualizar progreso al terminar un capítulo</string>
+    <string name="pref_auto_update_manga_sync">Actualizar progreso al terminar de leer/ver</string>
     <!-- Reader section -->
     <string name="pref_fullscreen">Pantalla completa</string>
     <string name="pref_page_transitions">Transiciones de página animadas</string>
@@ -98,22 +98,22 @@
     <string name="rotation_force_landscape">Forzar en horizontal</string>
     <!-- Downloads section -->
     <string name="pref_download_directory">Carpeta de descarga</string>
-    <string name="pref_remove_after_marked_as_read">Borrarlos tras marcarlos como leídos de forma manual</string>
-    <string name="pref_remove_after_read">Borrar el capítulo al terminarlo</string>
+    <string name="pref_remove_after_marked_as_read">Tras marcarlos como leídos/vistos de forma manual</string>
+    <string name="pref_remove_after_read">Después de leer/ver borrar automáticamente</string>
     <string name="custom_dir">Ubicación personalizada</string>
     <!-- Sources section -->
     <!-- Sync section -->
     <string name="services">Servicios</string>
     <!-- Advanced section -->
-    <string name="pref_clear_chapter_cache">Vaciar la caché de capítulos</string>
+    <string name="pref_clear_chapter_cache">Vaciar la caché de capítulos y episodios</string>
     <string name="used_cache">Usado: %1$s</string>
     <string name="cache_deleted">Se vació la caché. Se han eliminado %1$d archivos</string>
     <string name="cache_delete_error">Se produjo un error al limpiar</string>
     <string name="pref_clear_cookies">Borrar cookies</string>
     <string name="cookies_cleared">Cookies borradas</string>
-    <string name="pref_clear_database">Borrar la base de datos</string>
+    <string name="pref_clear_database">Borrar la base de datos de manga</string>
     <string name="pref_clear_database_summary">Borrar el historial del manga que no esté guardado en tu biblioteca</string>
-    <string name="clear_database_confirmation">¿Estás seguro\? Los capítulos leídos y el progreso del manga que no esté en la biblioteca se perderá</string>
+    <string name="clear_database_confirmation">¿Estás seguro\? Episodios y capítulos completados y progreso que no esté en la biblioteca se perderá</string>
     <string name="clear_database_completed">Entradas eliminadas</string>
     <!-- About section -->
     <string name="version">Versión</string>
@@ -223,7 +223,7 @@
     <string name="app_not_available">Aplicación no disponible</string>
     <string name="update_weekly">Semanales</string>
     <string name="all">Todos</string>
-    <string name="default_category">Categoría predeterminada</string>
+    <string name="default_category">Categoría predeterminada de manga</string>
     <string name="default_category_summary">Preguntar siempre</string>
     <string name="pref_crop_borders">Recortar bordes</string>
     <string name="pref_custom_color_filter">Filtro de color personalizado</string>
@@ -300,7 +300,7 @@
     <string name="copy">Copiar</string>
     <string name="untrusted_extension_message">Esta extensión está firmada por una fuente sin certificar y por lo tanto no se ha activado.
 \n
-\nUna extensión maliciosa puede leer credenciales de inicio guardadas en Tachiyomi o ejecutar cualquier tipo de código en tu dispositivo.
+\nUna extensión maliciosa puede leer credenciales de inicio guardadas en Aniyomi o ejecutar cualquier tipo de código en tu dispositivo.
 \n
 \nAl confiar en este certificado aceptas estos riesgos.</string>
     <string name="double_tap_anim_speed_0">Sin animación</string>
@@ -528,8 +528,8 @@
     <string name="channel_progress">En progreso</string>
     <string name="channel_errors">Con errores</string>
     <string name="backup_restore_missing_trackers">Servicios de seguimiento sin conectar:</string>
-    <string name="pref_remove_bookmarked_chapters">Permitir el borrado de capítulos marcados como favoritos</string>
-    <string name="pref_category_delete_chapters">Borrar capítulos</string>
+    <string name="pref_remove_bookmarked_chapters">Permitir el borrado de capítulos/episodios marcados como favoritos</string>
+    <string name="pref_category_delete_chapters">Borrar capítulos/episodios</string>
     <string name="ext_nsfw_warning">Puede contener contenido para adultos (+18)</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Esto no evita que las extensiones extraoficiales o que estén mal clasificadas muestren contenido para mayores de 18 años en la aplicación.</string>
@@ -548,7 +548,7 @@
     <string name="action_search_settings">Ajustes de búsqueda</string>
     <string name="downloaded_chapters">Capítulos descargados</string>
     <string name="manga_from_library">Manga en la biblioteca</string>
-    <string name="pref_incognito_mode_summary">Pausa el historial de lectura</string>
+    <string name="pref_incognito_mode_summary">Pausa el historial</string>
     <string name="pref_incognito_mode">Modo incógnito</string>
     <string name="pref_clear_history">Borrar historial</string>
     <string name="clear_history_confirmation">¿Estás seguro\? Perderás todo el historial.</string>
@@ -671,7 +671,7 @@
     <string name="pref_category_appearance">Apariencia</string>
     <string name="confirm_lock_change">Identifícate para confirmar el cambio</string>
     <string name="label_default">Predeterminado</string>
-    <string name="pref_remove_exclude_categories">Categorías excluidas</string>
+    <string name="pref_remove_exclude_categories">Categorías excluidas de manga</string>
     <string name="help_translate">Ayudar a traducir</string>
     <string name="action_sort_count">Por número de manga</string>
     <string name="ext_installer_pref">Instalador</string>
@@ -689,15 +689,15 @@
     <string name="connected_to_wifi">Solo con Wi-Fi</string>
     <string name="update_72hour">Cada 3 días</string>
     <string name="download_queue_size_warning">Advertencia: Las descargas grandes pueden llevar a que las fuentes se vuelvan cada vez más lentas y en casos extremos que los servidores limiten o impidan el acceso a Tachiyomi. Toca aquí para más información.</string>
-    <string name="pref_library_update_show_tab_badge">Mostrar el número de capítulos sin leer en el icono de actualizaciones</string>
+    <string name="pref_library_update_show_tab_badge">Mostrar el número sin ver/sin leer en el icono de actualizaciones</string>
     <string name="ext_update_all">Actualizar todos</string>
     <string name="channel_app_updates">Actualizaciones de la aplicación</string>
-    <string name="pref_auto_clear_chapter_cache">Borrar la caché de capítulos al cerrar la aplicación</string>
+    <string name="pref_auto_clear_chapter_cache">Borrar la caché de episodios/capítulos al cerrar la aplicación</string>
     <string name="database_clean">Base de datos limpia</string>
     <string name="clear_database_source_item_count">Hay %1$d manga que no pertenece a la biblioteca en la base de datos</string>
     <string name="extension_api_error">No se pudo descargar el listado de extensiones</string>
     <string name="privacy_policy">Política de privacidad</string>
-    <string name="pref_update_only_completely_read">Con capítulos sin leer</string>
+    <string name="pref_update_only_completely_read">Con episodio(s) sin ver/capítulo(s) sin leer</string>
     <string name="pref_library_update_manga_restriction">Omitir actualizaciones</string>
     <string name="library_errors_help">Si necesitas ayuda para resolver los errores de actualización de la biblioteca mira en %1$s</string>
     <string name="save_chapter_as_cbz">Guardar como archivo CBZ</string>
@@ -863,4 +863,81 @@
     <string name="action_display_download_badge_anime">Episodios descargados</string>
     <string name="action_screen_fit">Modo ajustar a pantalla</string>
     <string name="action_display_show_continue_reading_button">Mostrar botón de continuar viendo/leyendo</string>
+    <string name="pref_player_summary">Control de progreso, reproductor interno, reproductor externo</string>
+    <string name="default_anime_category">Categoría predeterminada de anime</string>
+    <string name="pref_adjust_orientation_video_dimensions">Ajustar la orientación basado en las dimensiones del video</string>
+    <string name="pref_intro_length">Duración de saltar intro</string>
+    <string name="pref_player_hide_controls">Ocultar los controles del reproducción cuando se abre el reproductor</string>
+    <string name="pref_mpv_conf">Edita el archivo de configuración MPV para más ajustes de reproducción</string>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one">Siguientes episodios sin ver</item>
+        <item quantity="many">Siguientes %d episodios sin ver</item>
+        <item quantity="other">Siguientes %d episodios sin ver</item>
+    </plurals>
+    <string name="download_ahead_info_anime">Solo funciona en entradas en biblioteca y si el episodio actual junto al siguiente ya se encuentran descargados</string>
+    <string name="episode_not_found">Episodio no encontrado</string>
+    <string name="display_mode_episode">Episodio %1$s</string>
+    <string name="used_cache_both">Usado por anime: %1$s, usado por manga: %2$s</string>
+    <string name="pref_clear_anime_database_summary">Borrar el historial del anime que no esté guardado en tu biblioteca</string>
+    <string name="local_manga_source">Fuente local de manga</string>
+    <string name="local_anime_source">Fuente local de anime</string>
+    <string name="local_invalid_episode_format">Formato de episodio no válido</string>
+    <string name="unknown_studio">Estudio desconocido</string>
+    <string name="download_1_episode">Siguiente episodio</string>
+    <plurals name="anime_num_episodes">
+        <item quantity="one">1 episodio</item>
+        <item quantity="many">%1$s episodios</item>
+        <item quantity="other">%1$s episodios</item>
+    </plurals>
+    <string name="delete_downloads_for_anime">¿Borrar episodios descargados\?</string>
+    <string name="snack_add_to_animelib">¿Agregar anime a la biblioteca\?</string>
+    <string name="download_10_episodes">Siguientes 10 episodios</string>
+    <string name="download_unseen">Sin ver</string>
+    <string name="confirm_delete_episodes">¿Seguro que quieres eliminar los episodios seleccionados\?</string>
+    <string name="also_set_episode_settings_for_library">Aplicar también a todo el anime en mi biblioteca</string>
+    <string name="pref_track_on_add_library">Abrir menú de rastreador al añadir a biblioteca</string>
+    <string name="pref_use_external_downloader">Siempre usar descargador externo para anime</string>
+    <string name="pref_external_downloader_selection">Preferencia de app de descarga</string>
+    <string name="pref_remove_exclude_categories_prefix">Manga:</string>
+    <string name="pref_external_player_preference">Preferencia de reproductor externo</string>
+    <string name="pref_default_portrait_orientation">Retrato por defecto</string>
+    <string name="pref_category_external_player">Reproductor externo</string>
+    <string name="pref_remove_exclude_categories_anime">Categorías excluidas de anime</string>
+    <string name="rotation_sensor_portrait">Sensor retrato</string>
+    <string name="playertitle">%1$s - %2$s</string>
+    <string name="pref_player_smooth_seek">Activar búsqueda precisa</string>
+    <string name="pref_always_use_external_player">Siempre usar reproductor externo</string>
+    <string name="pref_animelib_update_categories_details">El anime de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
+    <string name="unofficial_extension_message_aniyomi">Esta extensión no es de la lista oficial de extensiones de Aniyomi.</string>
+    <string name="pref_player_fullscreen">Mostrar contenido en recorte de pantalla</string>
+    <string name="episode_download_progress">%1$d%%</string>
+    <string name="pref_download_new_episodes">Descargar nuevos episodios</string>
+    <string name="auto_download_while_watching">Descarga automática mientras se reproduce</string>
+    <string name="pref_backup_flags_summ">Que información incluir en el archivo de respaldo</string>
+    <string name="pref_default_player_orientation">Orientación por defecto</string>
+    <string name="pref_default_landscape_orientation">Paisaje por defecto</string>
+    <string name="pref_category_internal_player">Reproductor interno</string>
+    <string name="pref_default_intro_length">Duración por defecto de saltar intro</string>
+    <string name="pref_clear_anime_database">Borrar la base de datos de anime</string>
+    <string name="pref_category_player">Reproductor</string>
+    <string name="pref_category_progress">Progreso</string>
+    <string name="pref_progress_mark_as_seen">A qué punto marcar el episodio como visto</string>
+    <string name="pref_category_player_orientation">Orientación</string>
+    <string name="pref_skip_disable">Desactivar</string>
+    <string name="pref_pip_on_exit">Automáticamente cambiar al modo imagen-en-imagen al salir del reproductor</string>
+    <string name="anime_from_library">Anime en la biblioteca</string>
+    <string name="download_5_episodes">Siguientes 5 episodios</string>
+    <string name="pref_player_smooth_seek_summary">Mientras activado, la búsqueda no se concentrara en fotogramas clave, llevando a búsqueda más lenta pero precisa</string>
+    <string name="pref_pip_episode_toasts">Mostrar brindis por episodio al cambiar de episodio en modo imagen-en-imagen</string>
+    <string name="pref_category_external_downloader">Descargador externo</string>
+    <string name="pref_preserve_watching_position">Preservar posición de reproducción en episodios vistos</string>
+    <string name="pref_bottom_nav_style">Estilo de navegación inferior</string>
+    <string name="episode_downloading_progress">Descargando (%d%%)</string>
+    <string name="pref_skip_length">Duración de toque doble para saltar</string>
+    <string name="pref_remove_exclude_categories_anime_prefix">Anime:</string>
+    <string name="show_episode_number">Número de episodio</string>
+    <string name="rotation_reverse_landscape">Paisaje invertido</string>
+    <string name="downloaded_episodes">Episodios descargados</string>
+    <string name="rotation_sensor_landscape">Sensor paisaje</string>
+    <string name="sort_by_episode_number">Por número de episodio</string>
 </resources>
