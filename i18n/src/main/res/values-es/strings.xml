@@ -850,4 +850,17 @@
     <string name="action_remove_bookmark_episode">Quitar episodio de marcadores</string>
     <string name="label_animesources">Fuentes de Anime</string>
     <string name="action_play_internally">Reproducir internamente</string>
+    <string name="action_order_by_episode_number">Por número de episodio</string>
+    <string name="action_start_download_internally">Usar descargador interno</string>
+    <string name="action_start_download_externally">Usar descargador externo</string>
+    <string name="action_show_anime">Mostrar anime</string>
+    <string name="action_display_unseen_badge">Episodios sin ver</string>
+    <string name="action_previous_episode">Episodio anterior</string>
+    <string name="action_play">Reproducir</string>
+    <string name="action_player_pip">Modo imagen-en-imagen</string>
+    <string name="action_next_episode">Siguiente episodio</string>
+    <string name="action_display_local_badge_anime">Anime local</string>
+    <string name="action_display_download_badge_anime">Episodios descargados</string>
+    <string name="action_screen_fit">Modo ajustar a pantalla</string>
+    <string name="action_display_show_continue_reading_button">Mostrar botón de continuar viendo/leyendo</string>
 </resources>
