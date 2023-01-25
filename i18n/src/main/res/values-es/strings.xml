@@ -197,7 +197,7 @@
     <string name="download_notifier_title_error">Error</string>
     <string name="download_notifier_unknown_error">No se ha podido descargar el capítulo debido a un error inesperado</string>
     <string name="download_notifier_text_only_wifi">No estás conectado a ninguna red Wi-Fi</string>
-    <string name="categories">Categorías de Manga</string>
+    <string name="categories">Categorías de los mangas</string>
     <string name="manga">Manga</string>
     <string name="track">Seguimiento</string>
     <string name="history">Historial</string>
@@ -820,14 +820,14 @@
     <string name="label_mangalibrary">Manga</string>
     <string name="label_manga">Manga</string>
     <string name="label_anime_download_queue">Cola de descargas de Anime</string>
-    <string name="pref_bottom_nav_no_updates">Mover Actualizaciones a la pestaña Mas</string>
+    <string name="pref_bottom_nav_no_updates">Mover las actualizaciones a la pestaña Más</string>
     <string name="label_animelib">Anime</string>
-    <string name="pref_bottom_nav_no_history">Mover Historial a la pestaña Mas</string>
+    <string name="pref_bottom_nav_no_history">Mover historial a la pestaña Más</string>
     <string name="action_sort_total_episodes">Episodios totales</string>
-    <string name="pref_bottom_nav_no_manga">Mover Manga a la pestaña Mas</string>
-    <string name="action_sort_last_checked">Ultima revision</string>
+    <string name="pref_bottom_nav_no_manga">Desplazar Manga a la pestaña Más</string>
+    <string name="action_sort_last_checked">Última comprobación</string>
     <string name="action_sort_last_seen">Ultimo visto</string>
-    <string name="action_sort_unseen_count">Cantidad sin ver</string>
+    <string name="action_sort_unseen_count">Número de episodios no vistos</string>
     <string name="action_mark_as_unseen">Marcar como no visto</string>
     <string name="action_download_unread">Descargar capítulos sin leer</string>
     <string name="action_edit_anime_categories">Editar categorías de anime</string>
@@ -842,7 +842,7 @@
     <string name="backup_settings_warning">Advertencia: Respaldar las configuraciones guardara tus contraseñas de seguimiento también, ¡no compartas este archivo de respaldo!</string>
     <string name="action_sort_last_anime_update">Ultima actualización de Anime</string>
     <string name="action_play_externally">Reproducir externamente</string>
-    <string name="action_sort_episode_fetch_date">Fecha de recibimiento del Episodio</string>
+    <string name="action_sort_episode_fetch_date">Fecha de lanzamiento del episodio</string>
     <string name="action_mark_previous_as_seen">Marcar anteriores como vistos</string>
     <string name="action_download_unseen">Descargar episodios sin ver</string>
     <string name="action_edit_manga_categories">Editar categorías de manga</string>
