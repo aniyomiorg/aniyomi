@@ -15,7 +15,6 @@
     <string name="pref_bottom_nav_no_history">Mover historial a la pestaña Más</string>
     <string name="pref_bottom_nav_no_updates">Mover las actualizaciones a la pestaña Más</string>
     <string name="pref_bottom_nav_no_manga">Desplazar Manga a la pestaña Más</string>
-    <string name="unlock_app">Desbloquear Aniyomi</string>
     <string name="action_filter_unseen">Sin ver</string>
     <string name="action_sort_total_episodes">Episodios totales</string>
     <string name="action_sort_last_seen">Ultimo visto</string>
@@ -117,7 +116,6 @@
     <string name="pref_clear_manga_database_summary">Borrar el historial del manga que no esté guardado en tu biblioteca</string>
     <string name="pref_clear_anime_database_summary">Borrar el historial del anime que no esté guardado en tu biblioteca</string>
     <string name="clear_database_confirmation">¿Estás seguro\? Se perderán los episodios y capítulos completados, así como el progreso de las entradas que no están en la biblioteca</string>
-    <string name="pref_refresh_library_tracking_summary">Actualiza estados, puntuaciones y últimos capítulos leídos desde tus servicios de seguimiento</string>
     <string name="pref_incognito_mode_summary">Pausa el historial</string>
     <string name="manga_from_library">Manga en la biblioteca</string>
     <string name="anime_from_library">Anime en la biblioteca</string>
@@ -149,7 +147,7 @@
     <string name="want_to_read">Quiero leer</string>
     <string name="want_to_watch">Quiero ver</string>
     <string name="repeating_anime">Volver a mirar</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Esto eliminará la fecha de visualización de este episodio. ¿Seguro\?</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Esto eliminará la fecha de visualización de este episodio. ¿Seguro?</string>
     <string name="dialog_with_checkbox_reset_anime">Restablecer todos los episodios de este anime</string>
     <string name="dialog_with_checkbox_reset">Reiniciar todos los capítulos de este manga</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
