@@ -125,7 +125,7 @@
     <string name="episode_not_found">Episodio no encontrado</string>
     <string name="local_invalid_episode_format">Formato de episodio no válido</string>
     <string name="unknown_studio">Estudio desconocido</string>
-    <string name="delete_downloads_for_anime">¿Borrar episodios descargados\?</string>
+    <string name="delete_downloads_for_anime">¿Borrar episodios descargados?</string>
     <string name="snack_add_to_manga_library">¿Añadir manga a la biblioteca\?</string>
     <string name="snack_add_to_anime_library">¿Agregar anime a la biblioteca\?</string>
     <string name="display_mode_episode">Episodio %1$s</string>
@@ -135,7 +135,7 @@
     <string name="show_episode_number">Número de episodio</string>
     <string name="sort_by_episode_number">Por número de episodio</string>
     <string name="download_unseen">Sin ver</string>
-    <string name="confirm_delete_episodes">¿Seguro que quieres eliminar los episodios seleccionados\?</string>
+    <string name="confirm_delete_episodes">¿Seguro que quieres eliminar los episodios seleccionados?</string>
     <string name="also_set_chapter_settings_for_library">Aplicar también a todo el manga en mi biblioteca</string>
     <string name="also_set_episode_settings_for_library">Aplicar también a todo el anime en mi biblioteca</string>
     <string name="no_episodes_error">No se han encontrado episodios</string>
