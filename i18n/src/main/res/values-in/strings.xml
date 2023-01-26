@@ -753,4 +753,27 @@
     <string name="unknown_title">Judul tidak diketahui</string>
     <string name="error_user_agent_string_invalid">String agen pengguna tidak valid</string>
     <string name="updates_last_update_info_just_now">Baru saja</string>
+    <string name="label_animelib">Anime</string>
+    <string name="general_categories">Kategori</string>
+    <string name="anime_categories">Kategori Anime</string>
+    <string name="chapters_episodes">Bab dan episode</string>
+    <string name="episodes">Episode</string>
+    <string name="action_sort_episode_fetch_date">Tanggal pengambilan episode</string>
+    <string name="backup_settings_warning">Peringantan: Back up ini akan menyimpan kata sandi anda, jangan bagikan file backup ini!</string>
+    <string name="action_sort_last_anime_update">Update anime terbaru</string>
+    <string name="label_animesources">Sumber Anime</string>
+    <string name="action_filter_unseen">Belum dilihat</string>
+    <string name="action_sort_last_checked">terakhir di cek</string>
+    <string name="pref_bottom_nav_no_updates">Pindahkan Update ke banyak tab</string>
+    <string name="label_anime_download_queue">Antrian Download Anime</string>
+    <string name="label_manga">Manga</string>
+    <string name="label_mangasources">Sumber Manga</string>
+    <string name="label_mangalibrary">Manga</string>
+    <string name="pref_bottom_nav_no_history">Pindahkan Histori ke banyak tab</string>
+    <string name="pref_bottom_nav_no_manga">Pindahkan Manga ke banyak tab</string>
+    <string name="action_sort_total_episodes">total episode</string>
+    <string name="action_sort_last_seen">Terakhir dilihat</string>
+    <string name="action_sort_latest_episode">episode terbaru</string>
+    <string name="action_mark_as_seen">Tandai sudah ditonton</string>
+    <string name="action_mark_as_unseen">tandai belum ditonton</string>
 </resources>
