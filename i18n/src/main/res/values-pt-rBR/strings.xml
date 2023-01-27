@@ -792,7 +792,6 @@
     <string name="enable_auto_play">A reprodução automática está ativada</string>
     <string name="pref_bottom_nav_no_manga">Mover Mangá para a guia Mais</string>
     <string name="action_download_unseen">Baixar episódios não assistidos</string>
-    <string name="pref_player_smooth_seek_summary"></string>
     <string name="delete_downloads_for_anime">Excluir episódios baixados\?</string>
     <string name="audio_dialog_header">Alterar faixa de áudio:</string>
     <string name="action_edit_anime_categories">Editar categorias de animes</string>
@@ -856,7 +855,7 @@
     <plurals name="notification_episodes_generic">
         <item quantity="one">1 novo episódio</item>
         <item quantity="many">%1$d novos episódios</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="player_aniskip_op">Pular Abertura</string>
     <string name="action_mark_previous_as_seen">Marcar anterior como visto</string>
@@ -886,7 +885,7 @@
     <plurals name="anime_num_episodes">
         <item quantity="one">1 episódio</item>
         <item quantity="many">%1$s episódios</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="display_mode_episode">Episódio %1$s</string>
     <string name="download_5_episodes">Próximos 5 episódios</string>
@@ -904,7 +903,7 @@
     <plurals name="seconds">
         <item quantity="one">%d segundo</item>
         <item quantity="many">%d segundos</item>
-        <item quantity="other"></item>
+        <item quantity="other"/>
     </plurals>
     <string name="video_fit_screen">Ajustar a tela</string>
     <string name="subtitle_dialog_header">Alterar faixa de legenda:</string>
