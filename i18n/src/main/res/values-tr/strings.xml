@@ -772,4 +772,14 @@
     <string name="information_no_entries_found">Bu kategoride girdi bulunamadı</string>
     <string name="fdroid_warning">F-Droid derlemeleri resmi olarak desteklenmemektedir.
 \nDaha fazla bilgi edinmek için dokunun.</string>
+    <string name="chapters_episodes">Manga ve Anime bölümleri</string>
+    <string name="label_anime_download_queue">Anime İndirme Kuyruğu</string>
+    <string name="anime_categories">Anime Kategorileri</string>
+    <string name="backup_settings_warning">Uyarı: Yedekleme ayarları, izleme şifrelerinizi de saklayacaktır, bu yedekleme dosyasını paylaşmayın!</string>
+    <string name="label_animelib">Anime</string>
+    <string name="general_categories">Kategoriler</string>
+    <string name="manga_anime">Kütüphane girdileri</string>
+    <string name="label_mangalibrary">Manga</string>
+    <string name="episodes">Anime Bölümleri</string>
+    <string name="label_manga">Manga</string>
 </resources>
