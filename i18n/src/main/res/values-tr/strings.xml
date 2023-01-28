@@ -782,4 +782,24 @@
     <string name="label_mangalibrary">Manga</string>
     <string name="episodes">Anime Bölümleri</string>
     <string name="label_manga">Manga</string>
+    <string name="action_download_unseen">Okunmamış Anime Bölümlerini İndir</string>
+    <string name="action_filter_unseen">İzlenmemiş</string>
+    <string name="action_sort_total_episodes">Toplam Anime Bölüm Sayısı</string>
+    <string name="action_sort_last_seen">Son Görülen</string>
+    <string name="action_sort_last_checked">Son Kontrol Edilen</string>
+    <string name="action_mark_previous_as_seen">Öncekini Görülmüş Olarak İşaretle</string>
+    <string name="action_mark_as_unseen">İzlenmemiş Olarak İşaretle</string>
+    <string name="action_download_unread">Okunmamış Manga Bölümleri İndir</string>
+    <string name="label_mangasources">Manga Kaynakları</string>
+    <string name="action_sort_latest_episode">En Sonuncu Anime Bölümü</string>
+    <string name="action_play_externally">Harici olarak oynat</string>
+    <string name="pref_bottom_nav_no_manga">Manga\'yı Daha Fazla Sekmesine Taşı</string>
+    <string name="label_animesources">Anime Kaynakları</string>
+    <string name="action_sort_episode_fetch_date">Anime Bölümü Çıkış Tarihi</string>
+    <string name="pref_bottom_nav_no_updates">Güncellemeler\'i Daha Fazla Sekmesine Taşı</string>
+    <string name="pref_bottom_nav_no_history">Geçmiş\'i Daha Fazla Sekmesine Taşı</string>
+    <string name="action_sort_last_anime_update">En Sonuncu Anime Güncellemesi</string>
+    <string name="action_sort_unseen_count">İzlenmemiş Sayısı</string>
+    <string name="action_mark_as_seen">İzlenmiş Olarak İşaretle</string>
+    <string name="action_play_internally">Dahili Olarak Oynat</string>
 </resources>
