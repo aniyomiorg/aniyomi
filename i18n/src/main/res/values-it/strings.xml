@@ -818,4 +818,15 @@
     <string name="information_no_entries_found">Nessuna voce trovata in questa categoria</string>
     <string name="fdroid_warning">Le versioni F-Droid non sono ufficialmente supportate.
 \nToccare per saperne di più.</string>
+    <string name="backup_settings_warning">Attenzione: Il backup delle impostazioni memorizzerà le tue password, non condividere questo file di backup!</string>
+    <string name="label_mangasources">Fonti Manga</string>
+    <string name="label_animesources">Fonti Anime</string>
+    <string name="chapters_episodes">Capitoli ed episodi</string>
+    <string name="label_mangalibrary">Manga</string>
+    <string name="episodes">Episodi</string>
+    <string name="pref_bottom_nav_no_history">Sposta Cronologia nella scheda Altro</string>
+    <string name="label_animelib">Anime</string>
+    <string name="label_manga">Manga</string>
+    <string name="general_categories">Categorie</string>
+    <string name="anime_categories">Categorie Anime</string>
 </resources>
