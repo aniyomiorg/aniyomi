@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Nome</string>
-    <string name="categories">Categorias</string>
+    <string name="categories">Categorias de Mangá</string>
     <string name="manga">Mangás</string>
     <string name="chapters">Capítulos</string>
     <string name="track">Monitoramento</string>
@@ -81,8 +81,8 @@
     <string name="pref_library_update_restriction">Restrições do dispositivo para atualizações automáticas</string>
     <string name="charging">Quando carregando</string>
     <string name="pref_update_only_non_completed">Com o estado \"Completo\"</string>
-    <string name="pref_auto_update_manga_sync">Atualizar o progresso após a leitura</string>
-    <string name="default_category">Categoria padrão</string>
+    <string name="pref_auto_update_manga_sync">Atualize o progresso após ler/assistir</string>
+    <string name="default_category">Categoria de mangá padrão</string>
     <string name="default_category_summary">Sempre perguntar</string>
     <string name="pref_fullscreen">Tela cheia</string>
     <string name="pref_page_transitions">Animar as transições de página</string>
@@ -123,8 +123,8 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">Local de download</string>
-    <string name="pref_remove_after_marked_as_read">Após marcado como lido manualmente</string>
-    <string name="pref_remove_after_read">Excluir automaticamente após a leitura</string>
+    <string name="pref_remove_after_marked_as_read">Depois de marcado manualmente como lido/assistido</string>
+    <string name="pref_remove_after_read">Depois de ler/assistir exclua automaticamente</string>
     <string name="custom_dir">Local personalizado</string>
     <string name="disabled">Desativado</string>
     <string name="last_read_chapter">Último capítulo lido</string>
@@ -147,15 +147,15 @@
     <string name="backup_choice">Do que você deseja fazer backup\?</string>
     <string name="restoring_backup">Restaurando backup</string>
     <string name="creating_backup">Criando backup</string>
-    <string name="pref_clear_chapter_cache">Limpar o cache de capítulos</string>
+    <string name="pref_clear_chapter_cache">Limpar cache de capítulos e episódios</string>
     <string name="used_cache">Utilizado: %1$s</string>
     <string name="cache_deleted">Cache limpo. %1$d arquivos foram excluídos</string>
     <string name="cache_delete_error">Ocorreu um erro ao limpar</string>
     <string name="pref_clear_cookies">Limpar os cookies</string>
     <string name="cookies_cleared">Cookies limpos</string>
-    <string name="pref_clear_database">Limpar o banco de dados</string>
-    <string name="pref_clear_database_summary">Exclui o histórico de itens que não estão salvos em sua biblioteca</string>
-    <string name="clear_database_confirmation">Tem certeza\? Os capítulos lidos e o progresso em itens que não estão na sua biblioteca serão perdidos</string>
+    <string name="pref_clear_database">Limpar banco de dados de mangá</string>
+    <string name="pref_clear_database_summary">Excluir histórico de mangás que não estão salvos em sua biblioteca</string>
+    <string name="clear_database_confirmation">Tem certeza\? Os episódios e capítulos concluídos e o progresso dos itens que não estão na sua biblioteca serão perdidos</string>
     <string name="clear_database_completed">Entradas excluídas</string>
     <string name="pref_refresh_library_tracking">Atualizar o monitoramento</string>
     <string name="pref_refresh_library_tracking_summary">Atualiza os estados, as avaliações e os últimos capítulos lidos dos serviços de monitoramento</string>
@@ -203,8 +203,8 @@
     <string name="error_category_exists">Já existe uma categoria com este nome!</string>
     <string name="snack_categories_deleted">Categorias excluídas</string>
     <string name="dialog_with_checkbox_remove_description">Isso irá remover a data de leitura deste capítulo. Você tem certeza\?</string>
-    <string name="dialog_with_checkbox_reset">Redefinir todos os capítulos deste item</string>
-    <string name="snack_add_to_library">Adicionar à biblioteca\?</string>
+    <string name="dialog_with_checkbox_reset">Redefinir todos os capítulos deste mangá</string>
+    <string name="snack_add_to_library">Adicionar mangá à biblioteca\?</string>
     <string name="picture_saved">Imagem salva</string>
     <string name="custom_filter">Filtro personalizado</string>
     <string name="set_as_cover">Usar como capa</string>
@@ -260,7 +260,7 @@
     <string name="untrusted_extension">Extensão não confiável</string>
     <string name="untrusted_extension_message">Esta extensão foi assinada com um certificado não confiável e não foi ativada.
 \n
-\nUma extensão maliciosa poderia ler quaisquer credenciais de login armazenadas no Tachiyomi ou executar códigos arbitrários.
+\nUma extensão maliciosa pode ler qualquer credencial de login armazenada no Aniyomi ou executar código arbitrário.
 \n
 \nAo confiar neste certificado, você estará aceitando estes riscos.</string>
     <string name="pref_double_tap_anim_speed">Velocidade da animação do toque duplo</string>
@@ -339,7 +339,7 @@
     <string name="pref_cutout_short">Mostrar conteúdo na área de recorte da tela</string>
     <string name="information_cloudflare_bypass_failure">Falha ao contornar o Cloudflare</string>
     <string name="information_webview_outdated">Por favor, atualize o aplicativo de WebView para uma melhor compatibilidade</string>
-    <string name="channel_new_chapters_episodes">Atualizações de capítulos</string>
+    <string name="channel_new_chapters_episodes">Atualizações de capítulo/episódio</string>
     <string name="unlock_app">Desbloquear o Aniyomi</string>
     <string name="secure_screen_summary">A tela segura oculta os conteúdos do aplicativo durante a troca de aplicativos e impede capturas de tela</string>
     <string name="pref_category_display">Visualização</string>
@@ -404,7 +404,7 @@
     <string name="manga_info_expand">Mais</string>
     <string name="pref_confirm_exit">Confirmar ao sair</string>
     <string name="confirm_exit">Pressione voltar novamente para sair</string>
-    <string name="information_webview_required">A WebView é necessária para o Tachiyomi</string>
+    <string name="information_webview_required">A WebView é necessária para Aniyomi</string>
     <string name="licenses">Licenças de código aberto</string>
     <string name="website">Site</string>
     <string name="label_downloaded_only">Somente disponíveis offline</string>
@@ -481,7 +481,7 @@
     <string name="unknown_author">Autor desconhecido</string>
     <string name="updated_version">Atualizado para v%1$s</string>
     <string name="whats_new">O que há de novo</string>
-    <string name="download_insufficient_space">Não foi possível fazer o download dos capítulos devido ao pouco espaço de armazenamento</string>
+    <string name="download_insufficient_space">Não foi possível fazer o download devido ao pouco espaço de armazenamento</string>
     <string name="action_sort_date_added">Data de inclusão</string>
     <string name="action_global_search_query">Pesquisar por \"%1$s\" globalmente</string>
     <string name="pref_category_reading_mode">Modo de leitura</string>
@@ -497,8 +497,8 @@
     <string name="channel_complete">Concluído</string>
     <string name="channel_errors">Erros</string>
     <string name="backup_restore_missing_trackers">Monitoradores sem login realizado:</string>
-    <string name="pref_remove_bookmarked_chapters">Permitir a exclusão de capítulos favoritos</string>
-    <string name="pref_category_delete_chapters">Excluir capítulos</string>
+    <string name="pref_remove_bookmarked_chapters">Permitir exclusão de capítulos/episódios marcados</string>
+    <string name="pref_category_delete_chapters">Excluir capítulos/episódios</string>
     <string name="ext_nsfw_warning">As fontes desta extensão podem ter conteúdo NSFW (+18)</string>
     <string name="ext_nsfw_short">+18</string>
     <string name="parental_controls_info">Isso não impede que extensões não oficiais ou potencialmente sinalizadas de maneira incorreta apresentem conteúdo NSFW (+18) no aplicativo.</string>
@@ -515,9 +515,9 @@
     <string name="chapter_settings">Configurações de capítulo</string>
     <string name="share_page_info">%1$s: %2$s, página %3$d</string>
     <string name="action_search_settings">Pesquisar nas configurações</string>
-    <string name="manga_from_library">Da biblioteca</string>
+    <string name="manga_from_library">Mangá da biblioteca</string>
     <string name="downloaded_chapters">Capítulos disponíveis offline</string>
-    <string name="pref_incognito_mode_summary">Pausa o histórico de leitura</string>
+    <string name="pref_incognito_mode_summary">Pausar seu histórico</string>
     <string name="pref_incognito_mode">Modo anônimo</string>
     <string name="pref_clear_history">Limpar o histórico</string>
     <string name="clear_history_confirmation">Você tem certeza\? Todo o histórico será perdido.</string>
@@ -563,7 +563,7 @@
     <string name="exclude">Excluir: %s</string>
     <string name="include">Incluir: %s</string>
     <string name="action_sort_chapter_fetch_date">Data de busca do capítulo</string>
-    <string name="pref_library_update_categories_details">Os itens nas categorias excluídas não serão atualizados mesmo que eles também estejam nas categorias incluídas.</string>
+    <string name="pref_library_update_categories_details">Os mangás nas categorias excluídas não serão atualizados, mesmo que também estejam nas categorias incluídas.</string>
     <string name="pref_download_new_categories_details">Os itens nas categorias excluídas não serão disponibilizados offline mesmo que eles também estejam nas categorias incluídas.</string>
     <string name="pref_category_auto_download">Download automático</string>
     <string name="action_show_errors">Toque para ver os detalhes</string>
@@ -589,7 +589,7 @@
     <string name="pref_library_update_refresh_trackers_summary">Atualizar os monitoradores durante a atualização da biblioteca</string>
     <string name="pref_library_update_refresh_trackers">Atualizar os monitoradores automaticamente</string>
     <string name="restrictions">Restrições: %s</string>
-    <string name="action_display_local_badge">Fonte local</string>
+    <string name="action_display_local_badge">Mangá local</string>
     <string name="off">Desligado</string>
     <string name="on">Ligado</string>
     <string name="error_sharing_cover">Erro ao compartilhar a capa</string>
@@ -640,7 +640,7 @@
     <string name="action_track">Monitorar</string>
     <string name="getting_started_guide">Guia de introdução</string>
     <string name="pref_tablet_ui_mode">Interface de tablet</string>
-    <string name="pref_remove_exclude_categories">Categorias ignoradas</string>
+    <string name="pref_remove_exclude_categories">Categorias de mangá excluídas</string>
     <string name="help_translate">Ajudar a traduzir</string>
     <string name="ext_app_info">Informações</string>
     <string name="ext_installer_shizuku_stopped">O Shizuku não está em execução</string>
@@ -657,16 +657,16 @@
     <string name="backup_info">Você deve manter cópias em outros locais também.</string>
     <string name="connected_to_wifi">Somente no Wi-Fi</string>
     <string name="update_72hour">A cada 3 dias</string>
-    <string name="download_queue_size_warning">Aviso: grandes downloads em massa podem levar as fontes a ficarem lentas e/ou começarem a bloquear o Tachiyomi. Toque para saber mais.</string>
-    <string name="pref_library_update_show_tab_badge">Mostrar a contagem de não lidos no ícone de Atualizações</string>
+    <string name="download_queue_size_warning">Aviso: grandes downloads em massa podem tornar as fontes mais lentas e/ou começarem a bloquear o Aniyomi. Toque para saber mais.</string>
+    <string name="pref_library_update_show_tab_badge">Mostrar a contagem de não vistos/lidos no ícone de Atualizações</string>
     <string name="ext_update_all">Atualizar tudo</string>
     <string name="channel_app_updates">Atualizações do aplicativo</string>
-    <string name="pref_auto_clear_chapter_cache">Limpar o cache de capítulos ao fechar o aplicativo</string>
+    <string name="pref_auto_clear_chapter_cache">Limpar cache de episódio/capítulo ao fechar o aplicativo</string>
     <string name="clear_database_source_item_count">%1$d itens que não estão na biblioteca no banco de dados</string>
     <string name="database_clean">Nada a ser limpo</string>
     <string name="extension_api_error">Erro ao obter a lista de extensões</string>
     <string name="privacy_policy">Política de privacidade</string>
-    <string name="pref_update_only_completely_read">Com capítulos não lidos</string>
+    <string name="pref_update_only_completely_read">Com episódio(s) não visto(s)/capítulo(s) não lido(s)</string>
     <string name="pref_library_update_manga_restriction">Pular a atualização de itens</string>
     <string name="library_errors_help">Para obter ajuda sobre como corrigir erros de atualização da biblioteca, veja %1$s</string>
     <string name="save_chapter_as_cbz">Salvar como arquivo CBZ</string>
@@ -675,7 +675,7 @@
     <string name="on_hiatus">Em hiato</string>
     <string name="action_faq_and_guides">FAQ e Guias</string>
     <string name="webtoon_side_padding_5">5%</string>
-    <string name="action_show_manga">Mostrar o item</string>
+    <string name="action_show_manga">Mostrar mangá</string>
     <string name="confirm_manga_add_duplicate">Você tem um item na sua biblioteca com o mesmo nome, mas de uma fonte diferente (%1$s).
 \n
 \nVocê deseja continuar mesmo assim\?</string>
@@ -707,7 +707,7 @@
     <string name="source_filter_empty_screen">Nenhuma fonte instalada foi encontrada</string>
     <string name="source_empty_screen">Nenhuma fonte encontrada</string>
     <string name="action_sort_unread_count">Contagem de não lidos</string>
-    <string name="action_sort_last_manga_update">Ultima checagem de atualização</string>
+    <string name="action_sort_last_manga_update">Última atualização do mangá</string>
     <string name="split_tall_images">Dividir imagens compridas</string>
     <string name="split_tall_images_summary">Melhora o desempenho do leitor</string>
     <string name="download_notifier_split_page_not_found">Página %d não encontrada durante a divisão</string>
@@ -838,14 +838,14 @@
     <string name="screenshot_header">Fazer captura de tela</string>
     <string name="pref_clear_anime_database">Limpar banco de dados de anime</string>
     <string name="label_mangasources">Fontes de Mangá</string>
-    <string name="anime_categories">Categorias de anime</string>
+    <string name="anime_categories">Categorias de Anime</string>
     <string name="general_categories">Categorias</string>
     <string name="episodes">Episódios</string>
     <string name="label_animelib">Anime</string>
     <string name="label_animesources">Fontes de Anime</string>
     <string name="action_sort_last_seen">Visto da última vez</string>
     <string name="chapters_episodes">Capítulos e episódios</string>
-    <string name="backup_settings_warning">Aviso: o backup das configurações também armazenará suas senhas de rastreamento, não compartilhe este arquivo de backup!</string>
+    <string name="backup_settings_warning">Aviso: o backup das configurações também armazenará suas senhas de rastreamento, então não compartilhe este arquivo de backup!</string>
     <string name="label_mangalibrary">Mangá</string>
     <string name="label_manga">Mangá</string>
     <string name="pref_bottom_nav_no_history">Mover Histórico para a guia Mais</string>
@@ -868,7 +868,7 @@
     <string name="action_play">Play</string>
     <string name="action_show_anime">Mostrar anime</string>
     <string name="pref_player_summary">Controle de progresso, reprodutor interno, reprodutor externo</string>
-    <string name="pref_preserve_watching_position">Preservar a posição de exibição nos episódios vistos</string>
+    <string name="pref_preserve_watching_position">Lembrar a posição de reprodução nos episódios vistos</string>
     <string name="pref_category_player_orientation">Orientação</string>
     <string name="pref_remove_exclude_categories_anime">Categorias de anime excluídas</string>
     <string name="pref_remove_exclude_categories_anime_prefix">Anime:</string>
@@ -889,7 +889,7 @@
     </plurals>
     <string name="display_mode_episode">Episódio %1$s</string>
     <string name="download_5_episodes">Próximos 5 episódios</string>
-    <string name="currently_watching">Atualmente assistindo</string>
+    <string name="currently_watching">Assistindo atualmente</string>
     <string name="used_cache_both">Usado por anime: %1$s, usado por mangá: %2$s</string>
     <string name="local_invalid_episode_format">Formato de episódio inválido</string>
     <string name="show_episode_number">Número do episódio</string>
@@ -928,4 +928,28 @@
     <string name="label_animeextensions">Extensões de Anime</string>
     <string name="settings">Configurações</string>
     <string name="label_anime_download_queue">Fila de download de anime</string>
+    <string name="pref_player_hide_controls">Ocultar os controles de reprodução ao abrir o player</string>
+    <string name="pref_player_smooth_seek_summary">Quando ativado, a busca não se concentrará nos quadros-chave, levando a uma busca mais lenta mas mais precisa</string>
+    <string name="stats_page_1">Página 1</string>
+    <string name="pref_backup_flags">Opções de backup</string>
+    <string name="stats_page_3">Página 3</string>
+    <string name="pref_player_smooth_seek">Ativar busca precisa</string>
+    <string name="pref_enable_aniskip">Habilitar o AniSkip</string>
+    <string name="action_display_local_badge_anime">Anime local</string>
+    <string name="information_no_recent_anime">Nada assistido recentemente</string>
+    <string name="pref_category_player_aniskip">Configurações do AniSkip</string>
+    <string name="pref_category_external_player">Player externo</string>
+    <string name="pref_backup_flags_summ">Quais informações incluir no arquivo de backup</string>
+    <string name="stats_page_2">Página 2</string>
+    <string name="playback_speed_dialog_reset">Redefinir</string>
+    <string name="pref_always_use_external_player">Sempre usar player externo</string>
+    <string name="pref_external_player_preference">Preferência do player externo</string>
+    <string name="pref_skip_disable">Desativar</string>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one">Episódios %1$s e mais 1</item>
+        <item quantity="many">Episódios %1$s e %2$d mais</item>
+        <item quantity="other">Episódios %1$s e %2$d mais</item>
+    </plurals>
+    <string name="action_view_episodes">Ver episódios</string>
+    <string name="dialog_with_checkbox_reset_anime">Redefinir todos os episódios deste anime</string>
 </resources>
