@@ -145,7 +145,7 @@
     <string name="backup_choice">Apa saja yang ingin Anda cadangkan\?</string>
     <string name="restoring_backup">Memulihkan cadangan</string>
     <string name="creating_backup">Membuat cadangan</string>
-    <string name="pref_clear_chapter_cache">Hapus cache bab</string>
+    <string name="pref_clear_chapter_cache">Hapus cache chapter dan episode</string>
     <string name="used_cache">Terpakai: %1$s</string>
     <string name="cache_deleted">Cache dibersihkan %1$d berkas telah dihapus</string>
     <string name="cache_delete_error">Terjadi kesalahan saat membersihkan</string>
@@ -153,10 +153,10 @@
     <string name="cookies_cleared">Cookies dihapus</string>
     <string name="pref_clear_database">Hapus database</string>
     <string name="pref_clear_database_summary">Hapus riwayat manga yang tidak disimpan di pustaka Anda</string>
-    <string name="clear_database_confirmation">Apakah Anda yakin\? Bab yang telah dibaca dan progres manga bukan-pustaka akan hilang</string>
+    <string name="clear_database_confirmation">Apakah Anda yakin\? episode/chapter yang sudah dilihat dan juga daftar dalam pustaka semua akan hilang</string>
     <string name="clear_database_completed">Entri dihapus</string>
     <string name="pref_refresh_library_tracking">Segarkan pelacakan metadata</string>
-    <string name="pref_refresh_library_tracking_summary">Perbarui status, nilai dan bab terakhir yang dibaca dari layanan pelacakan</string>
+    <string name="pref_refresh_library_tracking_summary">Perbarui status, nilai dan proses terakhir yang dibaca dari layanan pelacakan</string>
     <string name="version">Versi</string>
     <string name="pref_enable_acra">Kirim laporan kerusakan</string>
     <string name="pref_acra_summary">Bantu memperbaiki bug. Tidak ada data sensitif yang akan dikirim</string>
@@ -201,7 +201,7 @@
     <string name="error_category_exists">Kategori dengan nama ini sudah ada!</string>
     <string name="snack_categories_deleted">Kategori dihapus</string>
     <string name="dialog_with_checkbox_remove_description">Ini akan menghapus tanggal baca bab ini. Apakah Anda yakin\?</string>
-    <string name="dialog_with_checkbox_reset">Setel ulang semua bab untuk manga ini</string>
+    <string name="dialog_with_checkbox_reset">Setel ulang semua chapter untuk manga ini</string>
     <string name="snack_add_to_library">Tambahkan manga ke pustaka\?</string>
     <string name="picture_saved">Gambar disimpan</string>
     <string name="custom_filter">Filter khusus</string>
@@ -343,7 +343,7 @@
     <string name="paused">Dijeda</string>
     <string name="information_cloudflare_bypass_failure">Gagal untuk menembus Cloudflare</string>
     <string name="information_webview_outdated">Harap perbarui aplikasi WebView untuk kompatibilitas yang lebih baik</string>
-    <string name="channel_new_chapters_episodes">Pembaruan bab</string>
+    <string name="channel_new_chapters_episodes">Pembaruan chapter/episode</string>
     <string name="notification_check_updates">Memeriksa bab baru</string>
     <string name="pref_disable_battery_optimization">Nonaktifkan optimisasi baterai</string>
     <string name="battery_optimization_disabled">Optimalisasi baterai sudah dimatikan</string>
@@ -461,7 +461,7 @@
     <string name="unknown_author">Penulis tidak diketahui</string>
     <string name="updated_version">Diperbarui ke v%1$s</string>
     <string name="whats_new">Apa yang baru</string>
-    <string name="download_insufficient_space">Tidak dapat mengunduh bab karena ruang penyimpanan rendah</string>
+    <string name="download_insufficient_space">Tidak dapat mengunduh karena ruang penyimpanan rendah</string>
     <string name="action_global_search_query">Pencarian untuk \"%1$s\" secara global</string>
     <string name="pref_category_reading_mode">Mode membaca</string>
     <string name="pref_category_theme">Tema</string>
@@ -477,8 +477,8 @@
     <string name="backup_restore_missing_trackers">Pelacakan tidak tersinkronisasi di:</string>
     <string name="ext_nsfw_warning">Sumber dari ekstensi ini mungkin berisi konten DEWASA (18+)</string>
     <string name="ext_nsfw_short">18+</string>
-    <string name="pref_remove_bookmarked_chapters">Hapus bab yang ditandai</string>
-    <string name="pref_category_delete_chapters">Hapus bab</string>
+    <string name="pref_remove_bookmarked_chapters">Hapus tanda pada chapter/episode</string>
+    <string name="pref_category_delete_chapters">Hapus chapter/episode</string>
     <string name="parental_controls_info">Hal ini tidak mencegah ekstensi yang tidak resmi atau berpotensi salah ditandai untuk menampilkan konten NSFW (18+) di dalam aplikasi.</string>
     <plurals name="missing_chapters_warning">
         <item quantity="other">Melewati %d bab, entah sumber kehilangan mereka atau karena sudah difilter</item>
@@ -642,7 +642,7 @@
     <string name="clear_database_source_item_count">%1$d manga diluar kategori pustaka pada database</string>
     <string name="extension_api_error">Gagal mendapatkan daftar ekstensi</string>
     <string name="pref_library_update_manga_restriction">Lewati pembaruan judul</string>
-    <string name="pref_update_only_completely_read">Dengan bab yang belum dibaca</string>
+    <string name="pref_update_only_completely_read">Dengan episode belum dilihat (s)/chapter belul dibaca(s)</string>
     <string name="privacy_policy">Kebijakan privasi</string>
     <string name="publishing_finished">Penerbitan selesai</string>
     <string name="cancelled">Dibatalkan</string>
@@ -756,10 +756,10 @@
     <string name="label_animelib">Anime</string>
     <string name="general_categories">Kategori</string>
     <string name="anime_categories">Kategori Anime</string>
-    <string name="chapters_episodes">Bab dan episode</string>
+    <string name="chapters_episodes">chapter dan episode</string>
     <string name="episodes">Episode</string>
     <string name="action_sort_episode_fetch_date">Tanggal pengambilan episode</string>
-    <string name="backup_settings_warning">Peringantan: Back up ini akan menyimpan kata sandi anda, jangan bagikan file backup ini!</string>
+    <string name="backup_settings_warning">Peringatan: Backup-an ini akan menyimpan kata sandi anda, jangan bagikan file backup ini!</string>
     <string name="action_sort_last_anime_update">Update anime terbaru</string>
     <string name="label_animesources">Sumber Anime</string>
     <string name="action_filter_unseen">Belum dilihat</string>
@@ -794,7 +794,7 @@
     <string name="action_order_by_episode_number">Dengan jumlah episode</string>
     <string name="action_play_externally">Mulai secara eksternal</string>
     <string name="action_download_unread">Unduh chapter yang tidak terbaca</string>
-    <string name="action_view_episodes">Liat Episode</string>
+    <string name="action_view_episodes">Lihat Episode</string>
     <string name="action_edit_anime_categories">Ubah kategori anime</string>
     <string name="action_start_download_internally">Gunakan pengunduhan internal</string>
     <string name="pref_backup_flags_summ">informasi untuk memasukkan dalam file cadangan</string>
@@ -871,7 +871,7 @@
     <string name="label_animeextensions">Anime Ekstension</string>
     <string name="label_migration_manga">Migrasi Manga</string>
     <string name="settings">Pengaturan</string>
-    <string name="action_play">Putar/dimulai</string>
+    <string name="action_play">Putar</string>
     <string name="toggle_horizontal_seek_gesture">ubah gestur gerakan horisontal</string>
     <string name="pref_waiting_time_aniskip">Tombol waktu habis</string>
     <string name="action_display_unseen_badge">Episode belum dilihat</string>
@@ -912,7 +912,7 @@
     <string name="pref_default_landscape_orientation">Standar orientasi lanskap</string>
     <string name="unknown_studio">Studio tidak diketahui</string>
     <string name="show_episode_number">Nomor episode</string>
-    <string name="also_set_episode_settings_for_library">Hanya terima semua anime yang ada di perpustakaan</string>
+    <string name="also_set_episode_settings_for_library">juga terapkan untuk semua anime di pustaka saya</string>
     <string name="pref_category_player">pemutar</string>
     <string name="screenshot_header">Tangkap layar</string>
     <plurals name="notification_new_episodes_summary">
@@ -939,7 +939,7 @@
     <string name="pref_remove_exclude_categories_anime_prefix">Anime:</string>
     <string name="pref_category_external_downloader">Pengunduhan eksternal</string>
     <string name="pref_clear_anime_database">Bersihkan database Anime</string>
-    <string name="anime_from_library">Anime dari perpustakaan</string>
+    <string name="anime_from_library">Anime dari pustaka</string>
     <string name="episode_not_found">episode tidak ditemukan</string>
     <string name="local_invalid_episode_format">format episode tidak ditemukan</string>
     <string name="used_cache_both">Digunakan oleh anime: %1$s, digunakan oleh manga: %2$s</string>
