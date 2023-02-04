@@ -841,7 +841,7 @@
     <string name="player_aniskip_dontskip_toast">Lewati dalam %d detik</string>
     <string name="stats_header">Tampilkan statistik</string>
     <string name="toggle_stats">Ubah status</string>
-    <string name="no_previous_episode">Episode terdahulu tidak ditemukan!</string>
+    <string name="no_previous_episode">Episode sebelumnya tidak ditemukan!</string>
     <string name="disable_auto_play">Otomatis memutar mati</string>
     <string name="video_fit_screen">Sesuaikan dengan layar</string>
     <string name="video_stretch_screen">Perluas ke layar</string>
