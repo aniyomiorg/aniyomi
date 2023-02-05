@@ -89,7 +89,7 @@
     <string name="episode_not_found">Episódio não encontrado</string>
     <string name="local_invalid_episode_format">Formato de episódio inválido</string>
     <string name="unknown_studio">Estúdio desconhecido</string>
-    <string name="delete_downloads_for_anime">Apagar episódios descarregados\?</string>
+    <string name="delete_downloads_for_anime">Apagar episódios descarregados?</string>
     <string name="snack_add_to_manga_library">Adicionar mangá à biblioteca?</string>
     <string name="snack_add_to_anime_library">Adicionar anime à biblioteca?</string>
     <string name="display_mode_episode">Episódio %1$s</string>
