@@ -178,7 +178,7 @@
     <string name="cache_delete_error">清除时出现错误</string>
     <string name="pref_clear_cookies">清除 Cookies</string>
     <string name="cookies_cleared">Cookies 已清除</string>
-    <string name="pref_clear_database">清理数据库</string>
+    <string name="pref_clear_database">清除漫画数据库</string>
     <string name="pref_clear_database_summary">删除未添加到书架的漫画记录</string>
     <string name="clear_database_confirmation">你确定吗？不在书架中的漫画的已读章节和进度将会丢失</string>
     <string name="clear_database_completed">数据已删除</string>
@@ -214,7 +214,7 @@
     <string name="display_mode_chapter">第 %1$s 章</string>
     <string name="chapter_downloading_progress">正在下载（%1$d/%2$d）</string>
     <string name="download_error">错误</string>
-    <string name="download_paused">搁置中</string>
+    <string name="download_paused">下载搁置中</string>
     <string name="show_title">图源标题</string>
     <string name="show_chapter_number">章节编号</string>
     <string name="sort_by_source">按图源</string>
@@ -861,7 +861,7 @@
     <string name="auto_download_while_watching">在观看的同时自动下载</string>
     <string name="local_anime_source">本地动画资源</string>
     <string name="episode_not_found">未找到剧集</string>
-    <string name="delete_downloads_for_anime">要删除已下载的剧集？</string>
+    <string name="delete_downloads_for_anime">要删除已下载的剧集吗？</string>
     <string name="confirm_delete_episodes">确定要删除选中的剧集吗？</string>
     <string name="currently_watching">当前正在观看</string>
     <string name="pref_remove_exclude_categories_prefix">漫画：</string>
@@ -881,4 +881,49 @@
     <string name="local_invalid_episode_format">剧集文件格式无效</string>
     <string name="currently_reading">当前正在阅读</string>
     <string name="stats_header">显示统计数据</string>
+    <string name="stats_page_2">第二页</string>
+    <string name="stats_page_3">第三页</string>
+    <string name="episode_downloading_progress">下载中（%d%%）</string>
+    <string name="playback_speed_dialog_title">更改播放速度：</string>
+    <string name="playback_options_quality">画质</string>
+    <string name="video_stretch_screen">拉伸至屏幕</string>
+    <string name="subtitle_dialog_header">选择字幕：</string>
+    <string name="stats_page_1">第一页</string>
+    <string name="disable_auto_play">自动播放已禁用</string>
+    <string name="player_overlay_back">后退</string>
+    <string name="video_list_empty_error">未找到视频</string>
+    <string name="notification_new_episodes">发现新的剧集</string>
+    <plurals name="notification_episodes_generic">
+        <item quantity="other">有%1$d个新的剧集</item>
+    </plurals>
+    <string name="information_no_recent_anime">最近未观看</string>
+    <string name="episode_settings_updated">已更新默认剧集设置</string>
+    <string name="download_notifier_download_paused_episodes">剧集下载已暂停</string>
+    <string name="player_controls_skip_intro_text">+%1$d秒</string>
+    <plurals name="seconds">
+        <item quantity="other">%d秒</item>
+    </plurals>
+    <string name="no_next_episode">未找到下一集！</string>
+    <string name="no_previous_episode">未找到上一集！</string>
+    <string name="label_animeupdates">动画</string>
+    <string name="toggle_stats">启用数据统计</string>
+    <string name="enable_auto_play">自动播放已启用</string>
+    <string name="video_fit_screen">适应屏幕</string>
+    <string name="playback_speed_dialog_reset">重置</string>
+    <string name="audio_dialog_header">选择音轨：</string>
+    <string name="playback_options_speed">播放速度</string>
+    <string name="playback_options_title">播放选项</string>
+    <string name="used_cache_both">被动画占用：%1$s，被漫画占用：%2$s</string>
+    <string name="display_mode_episode">第%1$s集</string>
+    <string name="stats_page">数据统计页</string>
+    <string name="episode_download_progress">%1$d%%</string>
+    <plurals name="anime_num_episodes">
+        <item quantity="other">%1$s个剧集</item>
+    </plurals>
+    <string name="quality_dialog_header">选择画质：</string>
+    <string name="playertitle">%1$s - %2$s</string>
+    <string name="label_history">漫画</string>
+    <string name="label_updates">漫画</string>
+    <string name="video_crop_screen">裁剪至屏幕</string>
+    <string name="label_animehistory">动画</string>
 </resources>
