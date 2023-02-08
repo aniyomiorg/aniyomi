@@ -213,4 +213,5 @@
     <string name="action_global_manga_search">全局漫画搜索</string>
     <string name="action_global_anime_search">全局动画搜索</string>
     <string name="unofficial_anime_extension_message">此插件不是Aniyomi官方插件。</string>
+    <string name="stats_header"></string>
 </resources>
