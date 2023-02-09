@@ -52,7 +52,7 @@ body:
       label: Aniyomi version
       description: You can find your Aniyomi version in **More → About**.
       placeholder: |
-        Example: "0.12.3.8"
+        Example: "0.12.3.9"
     validations:
       required: true
 
@@ -97,7 +97,7 @@ body:
           required: true
         - label: I have tried the [troubleshooting guide](https://aniyomi.jmir.xyz/help/guides/troubleshooting/).
           required: true
-        - label: I have updated the app to version **[0.12.3.8](https://github.com/jmir1/aniyomi/releases/latest)**.
+        - label: I have updated the app to version **[0.12.3.9](https://github.com/jmir1/aniyomi/releases/latest)**.
           required: true
         - label: I have updated all installed extensions.
           required: true
