@@ -32,7 +32,7 @@ body:
           required: true
         - label: If this is an issue with an extension, I should be opening an issue in the [extensions repository](https://github.com/jmir1/aniyomi-extensions/issues/new/choose).
           required: true
-        - label: I have updated the app to version **[0.12.3.9](https://github.com/jmir1/aniyomi/releases/latest)**.
+        - label: I have updated the app to version **[0.12.3.10](https://github.com/jmir1/aniyomi/releases/latest)**.
           required: true
         - label: I will fill out all of the requested information in this form.
           required: true

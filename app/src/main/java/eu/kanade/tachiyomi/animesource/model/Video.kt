@@ -28,6 +28,14 @@ open class Video(
         audioTracks: List<Track> = emptyList(),
     ) : this(url, quality, videoUrl, null, headers, subtitleTracks, audioTracks)
 
+    constructor(
+        url: String,
+        quality: String,
+        videoUrl: String?,
+        uri: Uri?,
+        headers: Headers? = null,
+    ) : this(url, quality, videoUrl, uri, headers, emptyList(), emptyList())
+
     @Transient
     @Volatile
     var status: Int = 0
