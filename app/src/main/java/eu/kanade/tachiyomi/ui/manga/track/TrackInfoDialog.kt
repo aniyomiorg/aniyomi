@@ -55,7 +55,7 @@ import eu.kanade.presentation.manga.TrackServiceSearch
 import eu.kanade.presentation.manga.TrackStatusSelector
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Track
-import eu.kanade.tachiyomi.data.track.EnhancedTrackService
+import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
@@ -139,7 +139,7 @@ data class TrackInfoDialogHomeScreen(
                 )
             },
             onNewSearch = {
-                if (it.service is EnhancedTrackService) {
+                if (it.service is EnhancedMangaTrackService) {
                     sm.registerEnhancedTracking(it)
                 } else {
                     navigator.push(
@@ -183,12 +183,12 @@ data class TrackInfoDialogHomeScreen(
                     val syncTwoWayService = Injekt.get<SyncChaptersWithTrackServiceTwoWay>()
                     trackItems.forEach {
                         val track = it.track ?: return@forEach
-                        val domainTrack = it.service.refresh(track).toDomainTrack() ?: return@forEach
+                        val domainTrack = it.service.mangaService.refresh(track).toDomainTrack() ?: return@forEach
                         insertTrack.await(domainTrack)
 
-                        if (it.service is EnhancedTrackService) {
+                        if (it.service is EnhancedMangaTrackService) {
                             val allChapters = getMangaWithChapters.awaitChapters(mangaId)
-                            syncTwoWayService.await(allChapters, domainTrack, it.service)
+                            syncTwoWayService.await(allChapters, domainTrack, it.service.mangaService)
                         }
                     }
                 } catch (e: Exception) {
@@ -207,12 +207,12 @@ data class TrackInfoDialogHomeScreen(
         }
 
         fun registerEnhancedTracking(item: TrackItem) {
-            item.service as EnhancedTrackService
+            item.service as EnhancedMangaTrackService
             coroutineScope.launchNonCancellable {
                 val manga = Injekt.get<GetManga>().await(mangaId) ?: return@launchNonCancellable
                 try {
                     val matchResult = item.service.match(manga) ?: throw Exception()
-                    item.service.registerTracking(matchResult, mangaId)
+                    item.service.mangaService.registerTracking(matchResult, mangaId)
                 } catch (e: Exception) {
                     withUIContext { Injekt.get<Application>().toast(R.string.error_no_match) }
                 }
@@ -231,7 +231,7 @@ data class TrackInfoDialogHomeScreen(
                 // Map to TrackItem
                 .map { service -> TrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
                 // Show only if the service supports this manga's source
-                .filter { (it.service as? EnhancedTrackService)?.accept(source) ?: true }
+                .filter { (it.service as? EnhancedMangaTrackService)?.accept(source) ?: true }
         }
 
         data class State(
@@ -270,7 +270,7 @@ private data class TrackStatusSelectorScreen(
     ) : StateScreenModel<Model.State>(State(track.status)) {
 
         fun getSelections(): Map<Int, String> {
-            return service.getStatusList().associateWith { service.getStatus(it) }
+            return service.mangaService.getStatusList().associateWith { service.getStatus(it) }
         }
 
         fun setSelection(selection: Int) {
@@ -279,7 +279,7 @@ private data class TrackStatusSelectorScreen(
 
         fun setStatus() {
             coroutineScope.launchNonCancellable {
-                service.setRemoteStatus(track, state.value.selection)
+                service.mangaService.setRemoteStatus(track, state.value.selection)
             }
         }
 
@@ -311,6 +311,7 @@ private data class TrackChapterSelectorScreen(
             range = remember { sm.getRange() },
             onConfirm = { sm.setChapter(); navigator.pop() },
             onDismissRequest = navigator::pop,
+            isAnime = false,
         )
     }
 
@@ -334,7 +335,7 @@ private data class TrackChapterSelectorScreen(
 
         fun setChapter() {
             coroutineScope.launchNonCancellable {
-                service.setRemoteLastChapterRead(track, state.value.selection)
+                service.mangaService.setRemoteLastChapterRead(track, state.value.selection)
             }
         }
 
@@ -372,10 +373,10 @@ private data class TrackScoreSelectorScreen(
     private class Model(
         private val track: Track,
         private val service: TrackService,
-    ) : StateScreenModel<Model.State>(State(service.displayScore(track))) {
+    ) : StateScreenModel<Model.State>(State(service.mangaService.displayScore(track))) {
 
         fun getSelections(): List<String> {
-            return service.getScoreList()
+            return service.mangaService.getScoreList()
         }
 
         fun setSelection(selection: String) {
@@ -384,7 +385,7 @@ private data class TrackScoreSelectorScreen(
 
         fun setScore() {
             coroutineScope.launchNonCancellable {
-                service.setRemoteScore(track, state.value.selection)
+                service.mangaService.setRemoteScore(track, state.value.selection)
             }
         }
 
@@ -458,9 +459,9 @@ private data class TrackDateSelectorScreen(
                     .toInstant()
                     .toEpochMilli()
                 if (start) {
-                    service.setRemoteStartDate(track, millis)
+                    service.mangaService.setRemoteStartDate(track, millis)
                 } else {
-                    service.setRemoteFinishDate(track, millis)
+                    service.mangaService.setRemoteFinishDate(track, millis)
                 }
             }
         }
@@ -548,9 +549,9 @@ private data class TrackDateRemoverScreen(
         fun removeDate() {
             coroutineScope.launchNonCancellable {
                 if (start) {
-                    service.setRemoteStartDate(track, 0)
+                    service.mangaService.setRemoteStartDate(track, 0)
                 } else {
-                    service.setRemoteFinishDate(track, 0)
+                    service.mangaService.setRemoteFinishDate(track, 0)
                 }
             }
         }
@@ -612,7 +613,7 @@ data class TrackServiceSearchScreen(
 
                 val result = withIOContext {
                     try {
-                        val results = service.search(query)
+                        val results = service.mangaService.search(query)
                         Result.success(results)
                     } catch (e: Throwable) {
                         Result.failure(e)
@@ -628,7 +629,7 @@ data class TrackServiceSearchScreen(
         }
 
         fun registerTracking(item: Track) {
-            coroutineScope.launchNonCancellable { service.registerTracking(item, mangaId) }
+            coroutineScope.launchNonCancellable { service.mangaService.registerTracking(item, mangaId) }
         }
 
         fun updateSelection(selected: TrackSearch) {

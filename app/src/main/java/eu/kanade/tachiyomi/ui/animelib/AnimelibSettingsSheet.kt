@@ -1,9 +1,9 @@
 package eu.kanade.tachiyomi.ui.animelib
 
+import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import com.bluelinelabs.conductor.Router
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.category.interactor.SetDisplayModeForAnimeCategory
 import eu.kanade.domain.category.interactor.SetSortModeForAnimeCategory
@@ -14,7 +14,7 @@ import eu.kanade.domain.library.model.display
 import eu.kanade.domain.library.model.sort
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.track.MangaTrackService
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -29,12 +29,11 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 class AnimelibSettingsSheet(
-    router: Router,
+    activity: Activity,
     private val trackManager: TrackManager = Injekt.get(),
     private val setDisplayModeForCategory: SetDisplayModeForAnimeCategory = Injekt.get(),
     private val setSortModeForCategory: SetSortModeForAnimeCategory = Injekt.get(),
-    onGroupClickListener: (ExtendedNavigationView.Group) -> Unit,
-) : TabbedBottomSheetDialog(router.activity!!) {
+) : TabbedBottomSheetDialog(activity) {
 
     val filters: Filter
     private val sort: Sort
@@ -43,14 +42,9 @@ class AnimelibSettingsSheet(
     val sheetScope = CoroutineScope(Job() + Dispatchers.IO)
 
     init {
-        filters = Filter(router.activity!!)
-        filters.onGroupClicked = onGroupClickListener
-
-        sort = Sort(router.activity!!)
-        sort.onGroupClicked = onGroupClickListener
-
-        display = Display(router.activity!!)
-        display.onGroupClicked = onGroupClickListener
+        filters = Filter(activity)
+        sort = Sort(activity)
+        display = Display(activity)
     }
 
     /**
@@ -98,9 +92,9 @@ class AnimelibSettingsSheet(
 
         inner class FilterGroup : Group {
 
-            private val downloaded = Item.TriStateGroup(R.string.action_filter_downloaded, this)
+            private val downloaded = Item.TriStateGroup(R.string.label_downloaded, this)
             private val unseen = Item.TriStateGroup(R.string.action_filter_unseen, this)
-            private val started = Item.TriStateGroup(R.string.action_filter_started, this)
+            private val started = Item.TriStateGroup(R.string.label_started, this)
             private val bookmarked = Item.TriStateGroup(R.string.action_filter_bookmarked, this)
             private val completed = Item.TriStateGroup(R.string.completed, this)
             private val trackFilters: Map<Long, Item.TriStateGroup>
@@ -110,7 +104,7 @@ class AnimelibSettingsSheet(
             override val footer = null
 
             init {
-                trackManager.services.filter { service -> service.isLogged && service !is MangaTrackService }
+                trackManager.services.filter { service -> service.isLogged && service is AnimeTrackService }
                     .also { services ->
                         val size = services.size
                         trackFilters = services.associate { service ->

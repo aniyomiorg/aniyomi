@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.viewholders.ExpandableViewHolder
 import eu.kanade.tachiyomi.databinding.DownloadHeaderBinding
-import eu.kanade.tachiyomi.ui.download.anime.DownloadAdapter
+import eu.kanade.tachiyomi.ui.download.anime.AnimeDownloadAdapter
 
 class DownloadHeaderHolder(view: View, adapter: FlexibleAdapter<*>) : ExpandableViewHolder(view, adapter) {
 
@@ -30,6 +30,6 @@ class DownloadHeaderHolder(view: View, adapter: FlexibleAdapter<*>) : Expandable
         super.onItemReleased(position)
         binding.container.isDragged = false
         mAdapter.expandAll()
-        (mAdapter as DownloadAdapter).downloadItemListener.onItemReleased(position)
+        (mAdapter as AnimeDownloadAdapter).downloadItemListener.onItemReleased(position)
     }
 }

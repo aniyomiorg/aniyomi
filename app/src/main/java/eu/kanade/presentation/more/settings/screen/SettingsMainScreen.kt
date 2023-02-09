@@ -214,7 +214,7 @@ object SettingsMainScreen : Screen {
             titleRes = R.string.pref_category_player,
             subtitleRes = R.string.pref_player_summary,
             icon = Icons.Outlined.PlayCircleOutline,
-            screen = SettingsPlayerScreen(),
+            screen = SettingsPlayerScreen,
         ),
         Item(
             titleRes = R.string.pref_category_downloads,

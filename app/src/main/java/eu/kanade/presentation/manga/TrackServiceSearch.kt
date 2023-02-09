@@ -208,7 +208,7 @@ fun TrackServiceSearch(
 }
 
 @Composable
-private fun SearchResultItem(
+fun SearchResultItem(
     title: String,
     coverUrl: String,
     type: String,
@@ -292,7 +292,7 @@ private fun SearchResultItem(
 }
 
 @Composable
-private fun SearchResultItemDetails(
+fun SearchResultItemDetails(
     title: String,
     text: String,
 ) {

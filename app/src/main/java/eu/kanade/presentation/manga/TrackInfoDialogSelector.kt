@@ -96,9 +96,15 @@ fun TrackChapterSelector(
     range: Iterable<Int>,
     onConfirm: () -> Unit,
     onDismissRequest: () -> Unit,
+    isAnime: Boolean,
 ) {
+    val titleText = when(isAnime) {
+        true -> R.string.chapters
+        false -> R.string.episodes
+    }
+
     BaseSelector(
-        title = stringResource(R.string.chapters),
+        title = stringResource(titleText),
         content = {
             WheelTextPicker(
                 modifier = Modifier.align(Alignment.Center),
@@ -191,7 +197,7 @@ fun TrackDateSelector(
 }
 
 @Composable
-private fun BaseSelector(
+fun BaseSelector(
     title: String,
     content: @Composable BoxScope.() -> Unit,
     thirdButton: @Composable (RowScope.() -> Unit)? = null,

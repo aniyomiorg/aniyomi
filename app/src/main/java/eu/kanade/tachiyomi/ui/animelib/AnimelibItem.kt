@@ -18,12 +18,12 @@ class AnimelibItem(
     var sourceLanguage = ""
 
     /**
-     * Filters an anime depending on a query.
+     * Checks if a query matches the anime
      *
-     * @param constraint the query to apply.
-     * @return true if the anime should be included, false otherwise.
+     * @param constraint the query to check.
+     * @return true if the anime matches the query, false otherwise.
      */
-    fun filter(constraint: String): Boolean {
+    fun matches(constraint: String): Boolean {
         val sourceName by lazy { sourceManager.getOrStub(animelibAnime.anime.source).getNameForAnimeInfo() }
         val genres by lazy { animelibAnime.anime.genre }
         return animelibAnime.anime.title.contains(constraint, true) ||

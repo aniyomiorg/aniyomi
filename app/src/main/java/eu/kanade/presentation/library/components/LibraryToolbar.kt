@@ -144,8 +144,6 @@ fun LibrarySelectionToolbar(
         },
         isActionMode = true,
         onCancelActionMode = onClickUnselectAll,
-        incognitoMode = incognitoMode,
-        downloadedOnlyMode = downloadedOnlyMode,
         navigateUp = navigateUp,
     )
 }

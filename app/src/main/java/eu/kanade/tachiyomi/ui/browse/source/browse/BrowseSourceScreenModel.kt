@@ -36,7 +36,7 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.interactor.InsertTrack
 import eu.kanade.domain.track.model.toDomainTrack
 import eu.kanade.tachiyomi.data.cache.CoverCache
-import eu.kanade.tachiyomi.data.track.EnhancedTrackService
+import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.CatalogueSource
@@ -309,17 +309,17 @@ class BrowseSourceScreenModel(
 
     private suspend fun autoAddTrack(manga: Manga) {
         loggedServices
-            .filterIsInstance<EnhancedTrackService>()
+            .filterIsInstance<EnhancedMangaTrackService>()
             .filter { it.accept(source) }
             .forEach { service ->
                 try {
                     service.match(manga)?.let { track ->
                         track.manga_id = manga.id
-                        (service as TrackService).bind(track)
+                        (service as TrackService).mangaService.bind(track)
                         insertTrack.await(track.toDomainTrack()!!)
 
                         val chapters = getChapterByMangaId.await(manga.id)
-                        syncChaptersWithTrackServiceTwoWay.await(chapters, track.toDomainTrack()!!, service)
+                        syncChaptersWithTrackServiceTwoWay.await(chapters, track.toDomainTrack()!!, service.mangaService)
                     }
                 } catch (e: Exception) {
                     logcat(LogPriority.WARN, e) { "Could not match manga: ${manga.title} with service $service" }

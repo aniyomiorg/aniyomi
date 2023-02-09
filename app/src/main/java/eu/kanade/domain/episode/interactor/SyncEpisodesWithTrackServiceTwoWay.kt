@@ -5,7 +5,7 @@ import eu.kanade.domain.animetrack.model.AnimeTrack
 import eu.kanade.domain.animetrack.model.toDbTrack
 import eu.kanade.domain.episode.model.Episode
 import eu.kanade.domain.episode.model.toEpisodeUpdate
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
@@ -19,7 +19,7 @@ class SyncEpisodesWithTrackServiceTwoWay(
     suspend fun await(
         episodes: List<Episode>,
         remoteTrack: AnimeTrack,
-        service: TrackService,
+        service: AnimeTrackService,
     ) {
         val sortedEpisodes = episodes.sortedBy { it.episodeNumber }
         val episodeUpdates = sortedEpisodes

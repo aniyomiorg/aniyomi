@@ -8,6 +8,8 @@ class SetAnimeViewerFlags(
 ) {
 
     suspend fun awaitSetSkipIntroLength(id: Long, skipIntroLength: Long) {
+        // TODO: Convert to proper flag format
+        // val anime = animeRepository.getAnimeById(id)
         animeRepository.update(
             AnimeUpdate(
                 id = id,

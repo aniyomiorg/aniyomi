@@ -19,7 +19,7 @@ import eu.kanade.data.updates.UpdatesRepositoryImpl
 import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.interactor.GetAnimeWithEpisodes
 import eu.kanade.domain.anime.interactor.GetAnimelibAnime
-import eu.kanade.domain.anime.interactor.GetDuplicateLibraryAnime
+import eu.kanade.domain.anime.interactor.GetDuplicateAnimelibAnime
 import eu.kanade.domain.anime.interactor.NetworkToLocalAnime
 import eu.kanade.domain.anime.interactor.SetAnimeEpisodeFlags
 import eu.kanade.domain.anime.interactor.SetAnimeViewerFlags
@@ -163,7 +163,7 @@ class DomainModule : InjektModule {
         addFactory { DeleteCategory(get()) }
 
         addSingletonFactory<AnimeRepository> { AnimeRepositoryImpl(get()) }
-        addFactory { GetDuplicateLibraryAnime(get()) }
+        addFactory { GetDuplicateAnimelibAnime(get()) }
         addFactory { GetFavoritesAnime(get()) }
         addFactory { GetAnimelibAnime(get()) }
         addFactory { GetAnimeWithEpisodes(get(), get()) }
@@ -246,7 +246,7 @@ class DomainModule : InjektModule {
         addFactory { GetExtensionLanguages(get(), get()) }
 
         addSingletonFactory<AnimeUpdatesRepository> { AnimeUpdatesRepositoryImpl(get()) }
-        addFactory { GetAnimeUpdates(get(), get()) }
+        addFactory { GetAnimeUpdates(get()) }
 
         addSingletonFactory<UpdatesRepository> { UpdatesRepositoryImpl(get()) }
         addFactory { GetUpdates(get()) }

@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import eu.kanade.domain.animesource.model.AnimeSource
 import eu.kanade.presentation.browse.components.BaseBrowseItem
-import eu.kanade.presentation.util.horizontalPadding
+import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
@@ -44,7 +44,7 @@ private val defaultIcon: @Composable RowScope.(AnimeSource) -> Unit = { source -
 private val defaultContent: @Composable RowScope.(AnimeSource, String?) -> Unit = { source, sourceLangString ->
     Column(
         modifier = Modifier
-            .padding(horizontal = horizontalPadding)
+            .padding(horizontal = MaterialTheme.padding.medium)
             .weight(1f),
     ) {
         Text(

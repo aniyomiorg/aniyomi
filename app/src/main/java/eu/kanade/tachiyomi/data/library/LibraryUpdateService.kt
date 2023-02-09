@@ -35,8 +35,8 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
-import eu.kanade.tachiyomi.data.track.EnhancedTrackService
+import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
+import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.SourceManager
@@ -313,7 +313,7 @@ class LibraryUpdateService(
         val skippedUpdates = CopyOnWriteArrayList<Pair<Manga, String?>>()
         val failedUpdates = CopyOnWriteArrayList<Pair<Manga, String?>>()
         val hasDownloads = AtomicBoolean(false)
-        val loggedServices by lazy { trackManager.services.filter { it.isLogged && it !is AnimeTrackService } }
+        val loggedServices by lazy { trackManager.services.filter { it.isLogged && it is MangaTrackService } }
         val restrictions = libraryPreferences.libraryUpdateMangaRestriction().get()
 
         withIOContext {
@@ -363,7 +363,7 @@ class LibraryUpdateService(
                                                         hasDownloads.set(true)
                                                     }
 
-                                                    libraryPreferences.newUpdatesCount().getAndSet { it + newChapters.size }
+                                                    libraryPreferences.newMangaUpdatesCount().getAndSet { it + newChapters.size }
 
                                                     // Convert to the manga that contains new chapters
                                                     newUpdates.add(manga to newChapters.toTypedArray())
@@ -496,7 +496,7 @@ class LibraryUpdateService(
      */
     private suspend fun updateTrackings() {
         var progressCount = 0
-        val loggedServices = trackManager.services.filter { it.isLogged && it !is AnimeTrackService }
+        val loggedServices = trackManager.services.filter { it.isLogged && it is MangaTrackService }
 
         mangaToUpdate.forEach { libraryManga ->
             val manga = libraryManga.manga
@@ -522,12 +522,12 @@ class LibraryUpdateService(
                         val service = trackManager.getService(track.syncId)
                         if (service != null && service in loggedServices) {
                             try {
-                                val updatedTrack = service.refresh(track.toDbTrack())
+                                val updatedTrack = service.mangaService.refresh(track.toDbTrack())
                                 insertTrack.await(updatedTrack.toDomainTrack()!!)
 
-                                if (service is EnhancedTrackService) {
+                                if (service is EnhancedMangaTrackService) {
                                     val chapters = getChapterByMangaId.await(manga.id)
-                                    syncChaptersWithTrackServiceTwoWay.await(chapters, track, service)
+                                    syncChaptersWithTrackServiceTwoWay.await(chapters, track, service.mangaService)
                                 }
                             } catch (e: Throwable) {
                                 // Ignore errors and continue

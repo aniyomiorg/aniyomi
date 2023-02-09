@@ -35,7 +35,7 @@ import eu.kanade.tachiyomi.util.preference.asState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class SettingsPlayerScreen : SearchableSettings {
+object SettingsPlayerScreen : SearchableSettings {
 
     @ReadOnlyComposable
     @Composable
@@ -66,8 +66,8 @@ class SettingsPlayerScreen : SearchableSettings {
                 title = stringResource(R.string.pref_preserve_watching_position),
             ),
             getOrientationGroup(playerPreferences = playerPreferences),
-            getAniskipGroup(playerPreferences = playerPreferences),
             getInternalPlayerGroup(playerPreferences = playerPreferences, basePreferences = basePreferences),
+            getAniskipGroup(playerPreferences = playerPreferences),
             getExternalPlayerGroup(playerPreferences = playerPreferences, basePreferences = basePreferences),
         )
     }
@@ -115,48 +115,6 @@ class SettingsPlayerScreen : SearchableSettings {
                         ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to stringResource(R.string.rotation_landscape),
                         ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE to stringResource(R.string.rotation_reverse_landscape),
                         ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE to stringResource(R.string.rotation_sensor_landscape),
-                    ),
-                ),
-            ),
-        )
-    }
-
-    @Composable
-    private fun getAniskipGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
-        val enableAniSkip = playerPreferences.aniSkipEnabled()
-        val enableAutoAniSkip = playerPreferences.autoSkipAniSkip()
-        val enableNetflixAniSkip = playerPreferences.enableNetflixStyleAniSkip()
-        val waitingTimeAniSkip = playerPreferences.waitingTimeAniSkip()
-
-        val isAniSkipEnabled by enableAniSkip.collectAsState()
-
-        return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_player_aniskip),
-            preferenceItems = listOf(
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = enableAniSkip,
-                    title = stringResource(R.string.pref_enable_aniskip),
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = enableAutoAniSkip,
-                    title = stringResource(R.string.pref_enable_auto_skip_ani_skip),
-                    enabled = isAniSkipEnabled,
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = enableNetflixAniSkip,
-                    title = stringResource(R.string.pref_enable_netflix_style_aniskip),
-                    enabled = isAniSkipEnabled,
-                ),
-                Preference.PreferenceItem.ListPreference(
-                    pref = waitingTimeAniSkip,
-                    title = stringResource(R.string.pref_waiting_time_aniskip),
-                    entries = mapOf(
-                        5 to stringResource(R.string.pref_waiting_time_aniskip_5),
-                        6 to stringResource(R.string.pref_waiting_time_aniskip_6),
-                        7 to stringResource(R.string.pref_waiting_time_aniskip_7),
-                        8 to stringResource(R.string.pref_waiting_time_aniskip_8),
-                        9 to stringResource(R.string.pref_waiting_time_aniskip_9),
-                        10 to stringResource(R.string.pref_waiting_time_aniskip_10),
                     ),
                 ),
             ),
@@ -249,6 +207,48 @@ class SettingsPlayerScreen : SearchableSettings {
     }
 
     @Composable
+    private fun getAniskipGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
+        val enableAniSkip = playerPreferences.aniSkipEnabled()
+        val enableAutoAniSkip = playerPreferences.autoSkipAniSkip()
+        val enableNetflixAniSkip = playerPreferences.enableNetflixStyleAniSkip()
+        val waitingTimeAniSkip = playerPreferences.waitingTimeAniSkip()
+
+        val isAniSkipEnabled by enableAniSkip.collectAsState()
+
+        return Preference.PreferenceGroup(
+            title = stringResource(R.string.pref_category_player_aniskip),
+            preferenceItems = listOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableAniSkip,
+                    title = stringResource(R.string.pref_enable_aniskip),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableAutoAniSkip,
+                    title = stringResource(R.string.pref_enable_auto_skip_ani_skip),
+                    enabled = isAniSkipEnabled,
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableNetflixAniSkip,
+                    title = stringResource(R.string.pref_enable_netflix_style_aniskip),
+                    enabled = isAniSkipEnabled,
+                ),
+                Preference.PreferenceItem.ListPreference(
+                    pref = waitingTimeAniSkip,
+                    title = stringResource(R.string.pref_waiting_time_aniskip),
+                    entries = mapOf(
+                        5 to stringResource(R.string.pref_waiting_time_aniskip_5),
+                        6 to stringResource(R.string.pref_waiting_time_aniskip_6),
+                        7 to stringResource(R.string.pref_waiting_time_aniskip_7),
+                        8 to stringResource(R.string.pref_waiting_time_aniskip_8),
+                        9 to stringResource(R.string.pref_waiting_time_aniskip_9),
+                        10 to stringResource(R.string.pref_waiting_time_aniskip_10),
+                    ),
+                ),
+            ),
+        )
+    }
+
+    @Composable
     private fun getExternalPlayerGroup(playerPreferences: PlayerPreferences, basePreferences: BasePreferences): Preference.PreferenceGroup {
         val alwaysUseExternalPlayer = playerPreferences.alwaysUseExternalPlayer()
         val externalPlayerPreference = playerPreferences.externalPlayerPreference()
@@ -290,6 +290,7 @@ class SettingsPlayerScreen : SearchableSettings {
         )
     }
 
+    // TODO: chnage to new wheel Picker
     @Composable
     private fun SkipIntroLengthDialog(
         initialSkipIntroLength: Int,

@@ -21,12 +21,6 @@ interface Episode : SEpisode, Serializable {
     var date_fetch: Long
 
     var source_order: Int
-
-    companion object {
-        fun create(): Episode = EpisodeImpl().apply {
-            episode_number = -1f
-        }
-    }
 }
 
 fun Episode.toDomainEpisode(): DomainEpisode? {

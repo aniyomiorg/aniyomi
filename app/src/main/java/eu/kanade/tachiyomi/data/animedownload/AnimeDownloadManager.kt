@@ -1,18 +1,16 @@
 package eu.kanade.tachiyomi.data.animedownload
 
 import android.content.Context
-import com.hippo.unifile.UniFile
-import com.jakewharton.rxrelay.BehaviorRelay
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.category.interactor.GetAnimeCategories
 import eu.kanade.domain.download.service.DownloadPreferences
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownloadQueue
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.runBlocking
@@ -52,12 +50,6 @@ class AnimeDownloadManager(
         get() = downloader.queue
 
     /**
-     * Subject for subscribing to downloader status.
-     */
-    val runningRelay: BehaviorRelay<Boolean>
-        get() = downloader.runningRelay
-
-    /**
      * Tells the downloader to begin downloads.
      *
      * @return true if it's started, false otherwise (empty queue).
@@ -91,12 +83,23 @@ class AnimeDownloadManager(
         downloader.clearQueue(isNotification)
     }
 
+    /**
+     * Returns the download from queue if the episode is queued for download
+     * else it will return null which means that the episode is not queued for download
+     *
+     * @param episodeId the episode to check.
+     */
+    fun getQueuedDownloadOrNull(episodeId: Long): AnimeDownload? {
+        return queue.find { it.episode.id == episodeId }
+    }
+
+
     fun startDownloadNow(episodeId: Long?) {
         if (episodeId == null) return
-        val download = downloader.queue.find { it.episode.id == episodeId }
+        val download = getQueuedDownloadOrNull(episodeId)
         // If not in queue try to start a new download
         val toAdd = download ?: runBlocking { AnimeDownload.fromEpisodeId(episodeId) } ?: return
-        val queue = downloader.queue.toMutableList()
+        val queue = queue.toMutableList()
         download?.let { queue.remove(it) }
         queue.add(0, toAdd)
         reorderQueue(queue)
@@ -120,13 +123,13 @@ class AnimeDownloadManager(
 
         if (downloads.isEmpty()) {
             AnimeDownloadService.stop(context)
-            downloader.queue.clear()
+            queue.clear()
             return
         }
 
         downloader.pause()
-        downloader.queue.clear()
-        downloader.queue.addAll(downloads)
+        queue.clear()
+        queue.addAll(downloads)
 
         if (wasRunning) {
             downloader.start()
@@ -179,16 +182,7 @@ class AnimeDownloadManager(
      * @return an observable containing the list of pages from the episode.
      */
     fun buildVideo(source: AnimeSource, anime: Anime, episode: Episode): Observable<Video> {
-        return buildVideo(provider.findEpisodeDir(episode.name, episode.scanlator, anime.title, source))
-    }
-
-    /**
-     * Builds the page list of a downloaded episode.
-     *
-     * @param episodeDir the file where the episode is downloaded.
-     * @return an observable containing the list of pages from the episode.
-     */
-    private fun buildVideo(episodeDir: UniFile?): Observable<Video> {
+        val episodeDir = provider.findEpisodeDir(episode.name, episode.scanlator, anime.title, source)
         return Observable.fromCallable {
             val files = episodeDir?.listFiles().orEmpty()
                 .filter { "video" in it.type.orEmpty() }
@@ -198,7 +192,7 @@ class AnimeDownloadManager(
             }
 
             val file = files[0]
-            Video(file.uri.toString(), "download: " + file.uri.toString(), file.uri.toString(), file.uri).apply { status = Video.READY }
+            Video(file.uri.toString(), "download: " + file.uri.toString(), file.uri.toString(), file.uri).apply { status = Video.State.READY }
         }
     }
 
@@ -206,28 +200,24 @@ class AnimeDownloadManager(
      * Returns true if the episode is downloaded.
      *
      * @param episodeName the name of the episode to query.
-     * @param chapterScanlator scanlator of the chapter to query
+     * @param episodeScanlator scanlator of the episode to query
      * @param animeTitle the title of the anime to query.
      * @param sourceId the id of the source of the episode.
      */
     fun isEpisodeDownloaded(
         episodeName: String,
-        chapterScanlator: String?,
+        episodeScanlator: String?,
         animeTitle: String,
         sourceId: Long,
     ): Boolean {
-        return cache.isEpisodeDownloaded(episodeName, chapterScanlator, animeTitle, sourceId)
+        return cache.isEpisodeDownloaded(episodeName, episodeScanlator, animeTitle, sourceId)
     }
 
     /**
-     * Returns the download from queue if the episode is queued for download
-     * else it will return null which means that the episode is not queued for download
-     *
-     * @param episode the episode to check.
+     * Returns the amount of downloaded episodes.
      */
-    fun getEpisodeDownloadOrNull(episode: Episode): AnimeDownload? {
-        return downloader.queue
-            .firstOrNull { it.episode.id == episode.id && it.episode.anime_id == episode.anime_id }
+    fun getDownloadCount(): Int {
+        return cache.getTotalDownloadCount()
     }
 
     /**
@@ -239,22 +229,8 @@ class AnimeDownloadManager(
         return cache.getDownloadCount(anime)
     }
 
-    /**
-     * Calls delete episode, which deletes a temp download.
-     *
-     * @param download the download to cancel.
-     */
-    fun deletePendingDownload(download: AnimeDownload) {
-        deleteEpisodes(listOf(download.episode), download.anime, download.source, true)
-    }
-
-    fun deletePendingDownloads(vararg downloads: AnimeDownload) {
-        val downloadsByAnime = downloads.groupBy { it.anime.id }
-        downloadsByAnime.map { entry ->
-            val anime = entry.value.first().anime
-            val source = entry.value.first().source
-            deleteEpisodes(entry.value.map { it.episode }, anime, source, true)
-        }
+    fun cancelQueuedDownloads(downloads: List<AnimeDownload>) {
+        removeFromDownloadQueue(downloads.map { it.episode })
     }
 
     /**
@@ -264,45 +240,20 @@ class AnimeDownloadManager(
      * @param anime the anime of the episodes.
      * @param source the source of the episodes.
      */
-    fun deleteEpisodes(episodes: List<Episode>, anime: Anime, source: AnimeSource, isCancelling: Boolean = false): List<Episode> {
-        val filteredEpisodes = if (isCancelling) {
-            episodes
-        } else {
-            getEpisodesToDelete(episodes, anime)
-        }
-        launchIO {
-            removeFromDownloadQueue(filteredEpisodes)
+    fun deleteEpisodes(episodes: List<Episode>, anime: Anime, source: AnimeSource) {
+        val filteredEpisodes = getEpisodesToDelete(episodes, anime)
+        if (filteredEpisodes.isNotEmpty()) {
+            launchIO {
+                removeFromDownloadQueue(filteredEpisodes)
 
-            val episodeDirs = provider.findEpisodeDirs(filteredEpisodes, anime, source)
-            episodeDirs.forEach { it.delete() }
-            cache.removeEpisodes(filteredEpisodes, anime)
+                val (animeDir, episodeDirs) = provider.findEpisodeDirs(filteredEpisodes, anime, source)
+                episodeDirs.forEach { it.delete() }
+                cache.removeEpisodes(filteredEpisodes, anime)
 
-            // Delete anime directory if empty
-            if (cache.getDownloadCount(anime) == 0) {
-                episodeDirs.firstOrNull()?.parentFile?.delete()
-                cache.removeAnime(anime)
-            }
-
-            // Delete source directory if empty
-            cache.removeSourceIfEmpty(source)
-        }
-        return filteredEpisodes
-    }
-
-    private fun removeFromDownloadQueue(episodes: List<Episode>) {
-        val wasRunning = downloader.isRunning
-        if (wasRunning) {
-            downloader.pause()
-        }
-
-        downloader.queue.remove(episodes)
-
-        if (wasRunning) {
-            if (downloader.queue.isEmpty()) {
-                AnimeDownloadService.stop(context)
-                downloader.stop()
-            } else if (downloader.queue.isNotEmpty()) {
-                downloader.start()
+                // Delete anime directory if empty
+                if (animeDir?.listFiles()?.isEmpty() == true) {
+                    deleteAnime(anime, source, removeQueued = false)
+                }
             }
         }
     }
@@ -312,12 +263,39 @@ class AnimeDownloadManager(
      *
      * @param anime the anime to delete.
      * @param source the source of the anime.
+     * @param removeQueued whether to also remove queued downloads.
      */
-    fun deleteAnime(anime: Anime, source: AnimeSource) {
+    fun deleteAnime(anime: Anime, source: AnimeSource, removeQueued: Boolean = true) {
         launchIO {
-            downloader.queue.remove(anime)
+            if (removeQueued) {
+                queue.remove(anime)
+            }
             provider.findAnimeDir(anime.title, source)?.delete()
             cache.removeAnime(anime)
+            // Delete source directory if empty
+            val sourceDir = provider.findSourceDir(source)
+            if (sourceDir?.listFiles()?.isEmpty() == true) {
+                sourceDir.delete()
+                cache.removeSource(source)
+            }
+        }
+    }
+
+    private fun removeFromDownloadQueue(episodes: List<Episode>) {
+        val wasRunning = downloader.isRunning
+        if (wasRunning) {
+            downloader.pause()
+        }
+
+        queue.remove(episodes)
+
+        if (wasRunning) {
+            if (queue.isEmpty()) {
+                AnimeDownloadService.stop(context)
+                downloader.stop()
+            } else if (queue.isNotEmpty()) {
+                downloader.start()
+            }
         }
     }
 
@@ -327,7 +305,7 @@ class AnimeDownloadManager(
      * @param episodes the list of episodes to delete.
      * @param anime the anime of the episodes.
      */
-    fun enqueueDeleteEpisodes(episodes: List<Episode>, anime: Anime) {
+    fun enqueueEpisodesToDelete(episodes: List<Episode>, anime: Anime) {
         pendingDeleter.addEpisodes(getEpisodesToDelete(episodes, anime), anime)
     }
 
@@ -356,13 +334,13 @@ class AnimeDownloadManager(
         if (capitalizationChanged) {
             val tempName = newName + "_tmp"
             if (oldFolder.renameTo(tempName).not()) {
-                logcat(LogPriority.ERROR) { "Could not rename source download folder: ${oldFolder.name}." }
+                logcat(LogPriority.ERROR) { "Failed to rename source download folder: ${oldFolder.name}" }
                 return
             }
         }
 
         if (oldFolder.renameTo(newName).not()) {
-            logcat(LogPriority.ERROR) { "Could not rename source download folder: ${oldFolder.name}." }
+            logcat(LogPriority.ERROR) { "Failed to rename source download folder: ${oldFolder.name}" }
         }
     }
 
@@ -388,13 +366,13 @@ class AnimeDownloadManager(
             cache.removeEpisode(oldEpisode, anime)
             cache.addEpisode(newName, animeDir, anime)
         } else {
-            logcat(LogPriority.ERROR) { "Could not rename downloaded episode: " + oldNames.joinToString() }
+            logcat(LogPriority.ERROR) { "Could not rename downloaded episode: ${oldNames.joinToString()}" }
         }
     }
 
     private fun getEpisodesToDelete(episodes: List<Episode>, anime: Anime): List<Episode> {
         // Retrieve the categories that are set to exclude from being deleted on read
-        val categoriesToExclude = downloadPreferences.removeExcludeCategories().get().map(String::toLong)
+        val categoriesToExclude = downloadPreferences.removeExcludeAnimeCategories().get().map(String::toLong)
 
         val categoriesForAnime = runBlocking { getCategories.await(anime.id) }
             .map { it.id }

@@ -1,12 +1,20 @@
 package eu.kanade.tachiyomi.data.animedownload.model
 
-import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.core.util.asFlow
 import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadStore
-import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.tachiyomi.util.lang.launchNonCancellable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.shareIn
 import rx.Observable
 import rx.subjects.PublishSubject
 import java.util.concurrent.CopyOnWriteArrayList
@@ -16,37 +24,47 @@ class AnimeDownloadQueue(
     val queue: MutableList<AnimeDownload> = CopyOnWriteArrayList(),
 ) : List<AnimeDownload> by queue {
 
+    private val scope = CoroutineScope(Dispatchers.IO)
+
     private val statusSubject = PublishSubject.create<AnimeDownload>()
 
     private val progressSubject = PublishSubject.create<AnimeDownload>()
 
-    private val updatedRelay = PublishRelay.create<Unit>()
+    private val _updates: Channel<Unit> = Channel(Channel.UNLIMITED)
+    val updates = _updates.receiveAsFlow()
+        .onStart { emit(Unit) }
+        .map { queue }
+        .shareIn(scope, SharingStarted.Eagerly, 1)
 
     fun addAll(downloads: List<AnimeDownload>) {
         downloads.forEach { download ->
-            download.setStatusSubject(statusSubject)
-            download.setProgressSubject(progressSubject)
-            download.setStatusCallback(::setPagesFor)
-            download.setProgressCallback(::setProgressFor)
+            download.statusSubject = statusSubject
+            download.progressSubject = progressSubject
+            download.statusCallback = ::setVideoFor
+            download.progressCallback = ::setProgressFor
             download.status = AnimeDownload.State.QUEUE
         }
         queue.addAll(downloads)
         store.addAll(downloads)
-        updatedRelay.call(Unit)
+        scope.launchNonCancellable {
+            _updates.send(Unit)
+        }
     }
 
     fun remove(download: AnimeDownload) {
         val removed = queue.remove(download)
         store.remove(download)
-        download.setStatusSubject(null)
-        download.setProgressSubject(null)
-        download.setStatusCallback(null)
-        download.setProgressCallback(null)
+        download.statusSubject = null
+        download.progressSubject = null
+        download.statusCallback = null
+        download.progressCallback = null
         if (download.status == AnimeDownload.State.DOWNLOADING || download.status == AnimeDownload.State.QUEUE) {
             download.status = AnimeDownload.State.NOT_DOWNLOADED
         }
         if (removed) {
-            updatedRelay.call(Unit)
+            scope.launchNonCancellable {
+                _updates.send(Unit)
+            }
         }
     }
 
@@ -55,9 +73,7 @@ class AnimeDownloadQueue(
     }
 
     fun remove(episodes: List<Episode>) {
-        for (episode in episodes) {
-            remove(episode)
-        }
+        episodes.forEach(::remove)
     }
 
     fun remove(anime: Anime) {
@@ -66,18 +82,24 @@ class AnimeDownloadQueue(
 
     fun clear() {
         queue.forEach { download ->
-            download.setStatusSubject(null)
-            download.setProgressSubject(null)
-            download.setStatusCallback(null)
-            download.setProgressCallback(null)
+            download.statusSubject = null
+            download.progressSubject = null
+            download.statusCallback = null
+            download.progressCallback = null
             if (download.status == AnimeDownload.State.DOWNLOADING || download.status == AnimeDownload.State.QUEUE) {
                 download.status = AnimeDownload.State.NOT_DOWNLOADED
             }
         }
         queue.clear()
         store.clear()
-        updatedRelay.call(Unit)
+        scope.launchNonCancellable {
+            _updates.send(Unit)
+        }
     }
+
+    fun statusFlow(): Flow<AnimeDownload> = getStatusObservable().asFlow()
+
+    fun progressFlow(): Flow<AnimeDownload> = getProgressObservable().asFlow()
 
     private fun getActiveDownloads(): Observable<AnimeDownload> =
         Observable.from(this).filter { download -> download.status == AnimeDownload.State.DOWNLOADING }
@@ -86,28 +108,18 @@ class AnimeDownloadQueue(
         .startWith(getActiveDownloads())
         .onBackpressureBuffer()
 
-    fun statusFlow(): Flow<AnimeDownload> = getStatusObservable().asFlow()
-
-    private fun getUpdatedObservable(): Observable<List<AnimeDownload>> = updatedRelay.onBackpressureBuffer()
-        .startWith(Unit)
-        .map { this }
-
-    fun updatedFlow(): Flow<List<AnimeDownload>> = getUpdatedObservable().asFlow()
-
-    private fun setPagesFor(download: AnimeDownload) {
-        if (download.status == AnimeDownload.State.DOWNLOADED || download.status == AnimeDownload.State.ERROR) {
-            setPagesSubject(download.video, null)
-        }
-    }
-
-    fun progressFlow(): Flow<AnimeDownload> = getPreciseProgressObservable().asFlow()
-
-    private fun getPreciseProgressObservable(): Observable<AnimeDownload> {
+    private fun getProgressObservable(): Observable<AnimeDownload> {
         return progressSubject.onBackpressureLatest()
     }
 
-    private fun setPagesSubject(video: Video?, subject: PublishSubject<Int>?) {
-        video?.setStatusSubject(subject)
+    private fun setVideoFor(download: AnimeDownload) {
+        if (download.status == AnimeDownload.State.DOWNLOADED || download.status == AnimeDownload.State.ERROR) {
+            setVideoSubject(download.video, null)
+        }
+    }
+
+    private fun setVideoSubject(video: Video?, subject: PublishSubject<Video.State>?) {
+        video?.statusSubject = subject
     }
 
     private fun setProgressFor(download: AnimeDownload) {
@@ -116,7 +128,7 @@ class AnimeDownloadQueue(
         }
     }
 
-    private fun setProgressSubject(video: Video?, subject: PublishSubject<Int>?) {
-        video?.setProgressSubject(subject)
+    private fun setProgressSubject(video: Video?, subject: PublishSubject<Video.State>?) {
+        video?.progressSubject = subject
     }
 }

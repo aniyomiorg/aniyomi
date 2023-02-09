@@ -10,7 +10,6 @@ import eu.kanade.domain.history.interactor.GetNextChapters
 import eu.kanade.domain.history.interactor.RemoveHistory
 import eu.kanade.domain.history.model.HistoryWithRelations
 import eu.kanade.presentation.history.HistoryUiModel
-import eu.kanade.tachiyomi.ui.HistoryTabsController
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.toDateKey
 import eu.kanade.tachiyomi.util.lang.withIOContext
@@ -32,18 +31,14 @@ import uy.kohesive.injekt.api.get
 import java.util.Date
 
 class HistoryScreenModel(
-    val view: HistoryTabsController?,
     private val getHistory: GetHistory = Injekt.get(),
     private val getNextChapters: GetNextChapters = Injekt.get(),
     private val removeHistory: RemoveHistory = Injekt.get(),
-    private val preferences: BasePreferences = Injekt.get(),
 ) : StateScreenModel<HistoryState>(HistoryState()) {
 
     private val _events: Channel<Event> = Channel(Channel.UNLIMITED)
     val events: Flow<Event> = _events.receiveAsFlow()
 
-    val isDownloadOnly: Boolean by preferences.downloadedOnly().asState(presenterScope)
-    val isIncognitoMode: Boolean by preferences.incognitoMode().asState(presenterScope)
     init {
         coroutineScope.launch {
             state.map { it.searchQuery }
@@ -109,6 +104,8 @@ class HistoryScreenModel(
             _events.send(Event.HistoryCleared)
         }
     }
+
+    val getSearchQuery = mutableState.value.searchQuery
 
     fun updateSearchQuery(query: String?) {
         mutableState.update { it.copy(searchQuery = query) }

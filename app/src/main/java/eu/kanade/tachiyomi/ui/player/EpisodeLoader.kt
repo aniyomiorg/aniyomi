@@ -1,15 +1,15 @@
 package eu.kanade.tachiyomi.ui.player
 
 import android.net.Uri
+import eu.kanade.domain.anime.model.Anime
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.database.models.Anime
 import eu.kanade.tachiyomi.data.database.models.Episode
-import eu.kanade.tachiyomi.data.database.models.toDomainAnime
+import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
 import eu.kanade.tachiyomi.util.system.logcat
 import rx.Observable
 import uy.kohesive.injekt.Injekt
@@ -67,7 +67,7 @@ class EpisodeLoader {
             source: AnimeSource,
             downloadManager: AnimeDownloadManager,
         ): Observable<List<Video>> {
-            return downloadManager.buildVideo(source, anime.toDomainAnime()!!, episode)
+            return downloadManager.buildVideo(source, anime, episode.toDomainEpisode()!!)
                 .onErrorReturn { null }
                 .map {
                     if (it == null) {

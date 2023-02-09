@@ -73,7 +73,7 @@ class AnimeExtensionManager(
     private val _availableAnimeExtensionsFlow = MutableStateFlow(emptyList<AnimeExtension.Available>())
     val availableExtensionsFlow = _availableAnimeExtensionsFlow.asStateFlow()
 
-    private var availableAnimeExtensionsSourcesData: Map<Long, AnimeSourceData> = mapOf()
+    private var availableAnimeExtensionsSourcesData: Map<Long, AnimeSourceData> = emptyMap()
 
     private fun setupAvailableAnimeExtensionsSourcesDataMap(animeextensions: List<AnimeExtension.Available>) {
         if (animeextensions.isEmpty()) return

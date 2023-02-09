@@ -15,8 +15,12 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.browse.animeextension.AnimeExtensionsScreenModel
+import eu.kanade.tachiyomi.ui.browse.animeextension.animeExtensionsTab
+import eu.kanade.tachiyomi.ui.browse.animesource.animeSourcesTab
 import eu.kanade.tachiyomi.ui.browse.extension.ExtensionsScreenModel
 import eu.kanade.tachiyomi.ui.browse.extension.extensionsTab
+import eu.kanade.tachiyomi.ui.browse.migration.animesources.migrateAnimeSourceTab
 import eu.kanade.tachiyomi.ui.browse.migration.sources.migrateSourceTab
 import eu.kanade.tachiyomi.ui.browse.source.sourcesTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
@@ -32,7 +36,7 @@ data class BrowseTab(
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_browse_enter)
             return TabOptions(
-                index = 3u,
+                index = 6u,
                 title = stringResource(R.string.browse),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
@@ -46,16 +50,24 @@ data class BrowseTab(
         val extensionsScreenModel = rememberScreenModel { ExtensionsScreenModel() }
         val extensionsQuery by extensionsScreenModel.query.collectAsState()
 
+        val animeExtensionsScreenModel = rememberScreenModel { AnimeExtensionsScreenModel() }
+        val animeExtensionsQuery by animeExtensionsScreenModel.query.collectAsState()
+
         TabbedScreen(
             titleRes = R.string.browse,
             tabs = listOf(
+                animeSourcesTab(),
                 sourcesTab(),
+                animeExtensionsTab(animeExtensionsScreenModel),
                 extensionsTab(extensionsScreenModel),
+                migrateAnimeSourceTab(),
                 migrateSourceTab(),
             ),
-            startIndex = 1.takeIf { toExtensions },
+            startIndex = 2.takeIf { toExtensions },
             searchQuery = extensionsQuery,
             onChangeSearchQuery = extensionsScreenModel::search,
+            searchQueryAnime = animeExtensionsQuery,
+            onChangeSearchQueryAnime = animeExtensionsScreenModel::search,
         )
 
         // For local source

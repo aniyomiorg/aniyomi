@@ -5,7 +5,6 @@ import androidx.core.content.edit
 import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.episode.interactor.GetEpisode
-import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
@@ -14,27 +13,24 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import uy.kohesive.injekt.injectLazy
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 /**
  * This class is used to persist active downloads across application restarts.
- *
- * @param context the application context.
  */
 class AnimeDownloadStore(
     context: Context,
-    private val sourceManager: AnimeSourceManager,
+    private val sourceManager: AnimeSourceManager = Injekt.get(),
+    private val json: Json = Injekt.get(),
+    private val getAnime: GetAnime = Injekt.get(),
+    private val getEpisode: GetEpisode = Injekt.get(),
 ) {
 
     /**
      * Preference file where active downloads are stored.
      */
     private val preferences = context.getSharedPreferences("active_downloads", Context.MODE_PRIVATE)
-
-    private val json: Json by injectLazy()
-
-    private val getAnime: GetAnime by injectLazy()
-    private val getEpisode: GetEpisode by injectLazy()
 
     /**
      * Counter used to keep the queue order.
@@ -98,7 +94,7 @@ class AnimeDownloadStore(
                     runBlocking { getAnime.await(animeId) }
                 } ?: continue
                 val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: continue
-                val episode = runBlocking { getEpisode.await(episodeId) }?.toDbEpisode() ?: continue
+                val episode = runBlocking { getEpisode.await(episodeId) } ?: continue
                 downloads.add(AnimeDownload(source, anime, episode))
             }
         }
@@ -130,14 +126,14 @@ class AnimeDownloadStore(
             null
         }
     }
-
-    /**
-     * Class used for download serialization
-     *
-     * @param animeId the id of the anime.
-     * @param chapterId the id of the chapter.
-     * @param order the order of the download in the queue.
-     */
-    @Serializable
-    data class AnimeDownloadObject(val animeId: Long, val chapterId: Long, val order: Int)
 }
+
+/**
+ * Class used for download serialization
+ *
+ * @param animeId the id of the anime.
+ * @param episodeId the id of the episode.
+ * @param order the order of the download in the queue.
+ */
+@Serializable
+private data class AnimeDownloadObject(val animeId: Long, val episodeId: Long, val order: Int)

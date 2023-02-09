@@ -10,3 +10,13 @@ data class AnimeCover(
     val url: String?,
     val lastModified: Long,
 ) : eu.kanade.domain.manga.model.CommonCover
+
+fun Anime.asAnimeCover(): AnimeCover {
+    return AnimeCover(
+        animeId = id,
+        sourceId = source,
+        isAnimeFavorite = favorite,
+        url = thumbnailUrl,
+        lastModified = coverLastModified,
+    )
+}

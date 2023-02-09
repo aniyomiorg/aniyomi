@@ -44,7 +44,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.preference.Preference
 import eu.kanade.tachiyomi.core.preference.PreferenceStore
 import eu.kanade.tachiyomi.data.cache.CoverCache
-import eu.kanade.tachiyomi.data.track.EnhancedTrackService
+import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
@@ -210,7 +210,7 @@ class MigrateDialogScreenModel(
         preferenceStore.getInt("migrate_flags", Int.MAX_VALUE)
     }
 
-    private val enhancedServices by lazy { Injekt.get<TrackManager>().services.filterIsInstance<EnhancedTrackService>() }
+    private val enhancedServices by lazy { Injekt.get<TrackManager>().services.filterIsInstance<EnhancedMangaTrackService>() }
 
     suspend fun migrateManga(oldManga: Manga, newManga: Manga, replace: Boolean) {
         val source = sourceManager.get(newManga.source) ?: return

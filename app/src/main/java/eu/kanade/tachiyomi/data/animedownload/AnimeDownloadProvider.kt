@@ -5,9 +5,9 @@ import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.download.service.DownloadPreferences
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.MainScope
@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import eu.kanade.domain.episode.model.Episode as DomainEpisode
 
 /**
  * This class is used to provide the directories where the downloads should be saved.
@@ -105,9 +104,9 @@ class AnimeDownloadProvider(
      * @param anime the anime of the episode.
      * @param source the source of the episode.
      */
-    fun findEpisodeDirs(episodes: List<Episode>, anime: Anime, source: AnimeSource): List<UniFile> {
-        val animeDir = findAnimeDir(anime.title, source) ?: return emptyList()
-        return episodes.mapNotNull { episode ->
+    fun findEpisodeDirs(episodes: List<Episode>, anime: Anime, source: AnimeSource): Pair<UniFile?, List<UniFile>> {
+        val animeDir = findAnimeDir(anime.title, source) ?: return null to emptyList()
+        return animeDir to episodes.mapNotNull { episode ->
             getValidEpisodeDirNames(episode.name, episode.scanlator).asSequence()
                 .mapNotNull { animeDir.findFile(it) }
                 .firstOrNull()
@@ -162,7 +161,7 @@ class AnimeDownloadProvider(
         )
     }
 
-    fun isEpisodeDirNameChanged(oldEpisode: DomainEpisode, newEpisode: DomainEpisode): Boolean {
+    fun isEpisodeDirNameChanged(oldEpisode: Episode, newEpisode: Episode): Boolean {
         return oldEpisode.name != newEpisode.name ||
             oldEpisode.scanlator?.takeIf { it.isNotBlank() } != newEpisode.scanlator?.takeIf { it.isNotBlank() }
     }

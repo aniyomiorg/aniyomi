@@ -2,6 +2,7 @@ package eu.kanade.presentation.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -16,10 +17,10 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BookmarkAdd
@@ -99,7 +100,11 @@ fun AnimeBottomActionMenu(
             }
             Row(
                 modifier = Modifier
-                    .padding(WindowInsets.navigationBars.only(WindowInsetsSides.Bottom).asPaddingValues())
+                    .padding(
+                        WindowInsets.navigationBars
+                            .only(WindowInsetsSides.Bottom)
+                            .asPaddingValues(),
+                    )
                     .padding(horizontal = 8.dp, vertical = 12.dp),
             ) {
                 if (onBookmarkClicked != null) {
@@ -235,16 +240,16 @@ private fun RowScope.Button(
 fun AnimelibBottomActionMenu(
     visible: Boolean,
     modifier: Modifier = Modifier,
-    onChangeCategoryClicked: (() -> Unit)?,
-    onMarkAsSeenClicked: (() -> Unit)?,
-    onMarkAsUnseenClicked: (() -> Unit)?,
+    onChangeCategoryClicked: () -> Unit,
+    onMarkAsSeenClicked: () -> Unit,
+    onMarkAsUnseenClicked: () -> Unit,
     onDownloadClicked: ((DownloadAction) -> Unit)?,
-    onDeleteClicked: (() -> Unit)?,
+    onDeleteClicked: () -> Unit,
 ) {
     AnimatedVisibility(
         visible = visible,
-        enter = expandVertically(expandFrom = Alignment.Bottom),
-        exit = shrinkVertically(shrinkTowards = Alignment.Bottom),
+        enter = expandVertically(animationSpec = tween(delayMillis = 300)),
+        exit = shrinkVertically(animationSpec = tween()),
     ) {
         val scope = rememberCoroutineScope()
         Surface(
@@ -266,36 +271,33 @@ fun AnimelibBottomActionMenu(
             }
             Row(
                 modifier = Modifier
-                    .navigationBarsPadding()
+                    .windowInsetsPadding(
+                        WindowInsets.navigationBars
+                            .only(WindowInsetsSides.Bottom),
+                    )
                     .padding(horizontal = 8.dp, vertical = 12.dp),
             ) {
-                if (onChangeCategoryClicked != null) {
-                    Button(
-                        title = stringResource(R.string.action_move_category),
-                        icon = Icons.Outlined.Label,
-                        toConfirm = confirm[0],
-                        onLongClick = { onLongClickItem(0) },
-                        onClick = onChangeCategoryClicked,
-                    )
-                }
-                if (onMarkAsSeenClicked != null) {
-                    Button(
-                        title = stringResource(R.string.action_mark_as_seen),
-                        icon = Icons.Outlined.DoneAll,
-                        toConfirm = confirm[1],
-                        onLongClick = { onLongClickItem(1) },
-                        onClick = onMarkAsSeenClicked,
-                    )
-                }
-                if (onMarkAsUnseenClicked != null) {
-                    Button(
-                        title = stringResource(R.string.action_mark_as_unseen),
-                        icon = Icons.Outlined.RemoveDone,
-                        toConfirm = confirm[2],
-                        onLongClick = { onLongClickItem(2) },
-                        onClick = onMarkAsUnseenClicked,
-                    )
-                }
+                Button(
+                    title = stringResource(R.string.action_move_category),
+                    icon = Icons.Outlined.Label,
+                    toConfirm = confirm[0],
+                    onLongClick = { onLongClickItem(0) },
+                    onClick = onChangeCategoryClicked,
+                )
+                Button(
+                    title = stringResource(R.string.action_mark_as_read),
+                    icon = Icons.Outlined.DoneAll,
+                    toConfirm = confirm[1],
+                    onLongClick = { onLongClickItem(1) },
+                    onClick = onMarkAsSeenClicked,
+                )
+                Button(
+                    title = stringResource(R.string.action_mark_as_unread),
+                    icon = Icons.Outlined.RemoveDone,
+                    toConfirm = confirm[2],
+                    onLongClick = { onLongClickItem(2) },
+                    onClick = onMarkAsUnseenClicked,
+                )
                 if (onDownloadClicked != null) {
                     var downloadExpanded by remember { mutableStateOf(false) }
                     Button(
@@ -314,15 +316,13 @@ fun AnimelibBottomActionMenu(
                         )
                     }
                 }
-                if (onDeleteClicked != null) {
-                    Button(
-                        title = stringResource(R.string.action_delete),
-                        icon = Icons.Outlined.Delete,
-                        toConfirm = confirm[4],
-                        onLongClick = { onLongClickItem(4) },
-                        onClick = onDeleteClicked,
-                    )
-                }
+                Button(
+                    title = stringResource(R.string.action_delete),
+                    icon = Icons.Outlined.Delete,
+                    toConfirm = confirm[4],
+                    onLongClick = { onLongClickItem(4) },
+                    onClick = onDeleteClicked,
+                )
             }
         }
     }

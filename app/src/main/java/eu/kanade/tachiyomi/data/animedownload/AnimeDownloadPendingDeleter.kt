@@ -3,21 +3,23 @@ package eu.kanade.tachiyomi.data.animedownload
 import android.content.Context
 import androidx.core.content.edit
 import eu.kanade.domain.anime.model.Anime
-import eu.kanade.tachiyomi.data.database.models.Episode
+import eu.kanade.domain.episode.model.Episode
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import uy.kohesive.injekt.injectLazy
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 /**
  * Class used to keep a list of episodes for future deletion.
  *
  * @param context the application context.
  */
-class AnimeDownloadPendingDeleter(context: Context) {
-
-    private val json: Json by injectLazy()
+class AnimeDownloadPendingDeleter(
+    context: Context,
+    private val json: Json = Injekt.get(),
+) {
 
     /**
      * Preferences used to store the list of episodes to delete.
@@ -121,6 +123,36 @@ class AnimeDownloadPendingDeleter(context: Context) {
     }
 
     /**
+     * Returns a anime entry from a anime model.
+     */
+    private fun Anime.toEntry() = AnimeEntry(id, url, title, source)
+
+    /**
+     * Returns a episode entry from a episode model.
+     */
+    private fun Episode.toEntry() = EpisodeEntry(id, url, name, scanlator)
+
+    /**
+     * Returns a anime model from a anime entry.
+     */
+    private fun AnimeEntry.toModel() = Anime.create().copy(
+        url = url,
+        title = title,
+        source = source,
+        id = id,
+    )
+
+    /**
+     * Returns a episode model from a episode entry.
+     */
+    private fun EpisodeEntry.toModel() = Episode.create().copy(
+        id = id,
+        url = url,
+        name = name,
+        scanlator = scanlator,
+    )
+
+    /**
      * Class used to save an entry of episodes with their anime into preferences.
      */
     @Serializable
@@ -150,42 +182,4 @@ class AnimeDownloadPendingDeleter(context: Context) {
         val title: String,
         val source: Long,
     )
-
-    /**
-     * Returns an anime entry from an anime model.
-     */
-    private fun Anime.toEntry(): AnimeEntry {
-        return AnimeEntry(id, url, title, source)
-    }
-
-    /**
-     * Returns an episode entry from an episode model.
-     */
-    private fun Episode.toEntry(): EpisodeEntry {
-        return EpisodeEntry(id!!, url, name, scanlator)
-    }
-
-    /**
-     * Returns an anime model from an anime entry.
-     */
-    private fun AnimeEntry.toModel(): Anime {
-        return Anime.create().copy(
-            url = url,
-            title = title,
-            source = source,
-            id = id,
-        )
-    }
-
-    /**
-     * Returns an episode model from an episode entry.
-     */
-    private fun EpisodeEntry.toModel(): Episode {
-        return Episode.create().also {
-            it.id = id
-            it.url = url
-            it.name = name
-            it.scanlator = scanlator
-        }
-    }
 }

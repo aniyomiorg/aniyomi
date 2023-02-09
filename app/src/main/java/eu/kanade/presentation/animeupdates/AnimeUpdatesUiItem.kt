@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,15 +36,14 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.domain.animeupdates.model.AnimeUpdatesWithRelations
 import eu.kanade.presentation.components.EpisodeDownloadAction
 import eu.kanade.presentation.components.EpisodeDownloadIndicator
+import eu.kanade.presentation.components.ListGroupHeader
 import eu.kanade.presentation.components.MangaCover
-import eu.kanade.presentation.components.RelativeDateHeader
 import eu.kanade.presentation.util.ReadItemAlpha
-import eu.kanade.presentation.util.horizontalPadding
+import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.selectedBackground
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.animeupdates.AnimeUpdatesItem
-import java.text.DateFormat
 import java.util.Date
 import kotlin.time.Duration.Companion.minutes
 
@@ -65,7 +63,7 @@ fun LazyListScope.animeupdatesLastUpdatedItem(
         Box(
             modifier = Modifier
                 .animateItemPlacement()
-                .padding(horizontal = horizontalPadding, vertical = 8.dp),
+                .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
         ) {
             Text(
                 text = if (time.isNullOrEmpty()) {
@@ -73,9 +71,7 @@ fun LazyListScope.animeupdatesLastUpdatedItem(
                 } else {
                     stringResource(R.string.updates_last_update_info, time)
                 },
-                style = LocalTextStyle.current.copy(
-                    fontStyle = FontStyle.Italic,
-                ),
+                fontStyle = FontStyle.Italic,
             )
         }
     }
@@ -88,8 +84,6 @@ fun LazyListScope.animeupdatesUiItems(
     onClickCover: (AnimeUpdatesItem) -> Unit,
     onClickUpdate: (AnimeUpdatesItem) -> Unit,
     onDownloadEpisode: (List<AnimeUpdatesItem>, EpisodeDownloadAction) -> Unit,
-    relativeTime: Int,
-    dateFormat: DateFormat,
 ) {
     items(
         items = uiModels,
@@ -108,11 +102,9 @@ fun LazyListScope.animeupdatesUiItems(
     ) { item ->
         when (item) {
             is AnimeUpdatesUiModel.Header -> {
-                RelativeDateHeader(
+                ListGroupHeader(
                     modifier = Modifier.animateItemPlacement(),
-                    date = item.date,
-                    relativeTime = relativeTime,
-                    dateFormat = dateFormat,
+                    text = item.date,
                 )
             }
             is AnimeUpdatesUiModel.Item -> {
@@ -130,11 +122,10 @@ fun LazyListScope.animeupdatesUiItems(
                             else -> onClickUpdate(updatesItem)
                         }
                     },
-                    onClickCover = { if (selectionMode.not()) onClickCover(updatesItem) },
-                    onDownloadEpisode = {
-                        if (selectionMode.not()) onDownloadEpisode(listOf(updatesItem), it)
-                    },
-                    downloadIndicatorEnabled = selectionMode.not(),
+                    onClickCover = { onClickCover(updatesItem) }.takeIf { !selectionMode },
+                    onDownloadEpisode = { action: EpisodeDownloadAction ->
+                        onDownloadEpisode(listOf(updatesItem), action)
+                    }.takeIf { !selectionMode },
                     downloadStateProvider = updatesItem.downloadStateProvider,
                     downloadProgressProvider = updatesItem.downloadProgressProvider,
                 )
@@ -150,10 +141,9 @@ fun AnimeUpdatesUiItem(
     selected: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
-    onClickCover: () -> Unit,
-    onDownloadEpisode: (EpisodeDownloadAction) -> Unit,
+    onClickCover: (() -> Unit)?,
+    onDownloadEpisode: ((EpisodeDownloadAction) -> Unit)?,
     // Download Indicator
-    downloadIndicatorEnabled: Boolean,
     downloadStateProvider: () -> AnimeDownload.State,
     downloadProgressProvider: () -> Int,
 ) {
@@ -169,7 +159,7 @@ fun AnimeUpdatesUiItem(
                 },
             )
             .height(56.dp)
-            .padding(horizontal = horizontalPadding),
+            .padding(horizontal = MaterialTheme.padding.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         MangaCover.Square(
@@ -181,7 +171,7 @@ fun AnimeUpdatesUiItem(
         )
         Column(
             modifier = Modifier
-                .padding(horizontal = horizontalPadding)
+                .padding(horizontal = MaterialTheme.padding.medium)
                 .weight(1f),
         ) {
             val bookmark = remember(update.bookmark) { update.bookmark }
@@ -217,8 +207,8 @@ fun AnimeUpdatesUiItem(
                 Text(
                     text = update.episodeName,
                     maxLines = 1,
-                    style = MaterialTheme.typography.bodySmall
-                        .copy(color = secondaryTextColor),
+                    color = secondaryTextColor,
+                    style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     onTextLayout = { textHeight = it.size.height },
                     modifier = Modifier.alpha(textAlpha),
@@ -226,11 +216,11 @@ fun AnimeUpdatesUiItem(
             }
         }
         EpisodeDownloadIndicator(
-            enabled = downloadIndicatorEnabled,
+            enabled = onDownloadEpisode != null,
             modifier = Modifier.padding(start = 4.dp),
             downloadStateProvider = downloadStateProvider,
             downloadProgressProvider = downloadProgressProvider,
-            onClick = onDownloadEpisode,
+            onClick = { onDownloadEpisode?.invoke(it) },
         )
     }
 }

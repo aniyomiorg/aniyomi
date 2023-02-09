@@ -13,7 +13,6 @@ import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
 import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
 import eu.kanade.domain.animetrack.model.toDbTrack
-import eu.kanade.domain.manga.interactor.GetManga
 import eu.kanade.domain.track.interactor.GetTracks
 import eu.kanade.domain.track.interactor.InsertTrack
 import eu.kanade.domain.track.model.toDbTrack
@@ -33,7 +32,6 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
         val getTracks = Injekt.get<GetTracks>()
         val insertTrack = Injekt.get<InsertTrack>()
 
-        val getAnime = Injekt.get<GetAnime>()
         val getAnimeTracks = Injekt.get<GetAnimeTracks>()
         val insertAnimeTrack = Injekt.get<InsertAnimeTrack>()
 
@@ -41,7 +39,7 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
         val delayedTrackingStore = Injekt.get<DelayedTrackingStore>()
 
         withIOContext {
-            val tracks = delayedTrackingStore.getItems().mapNotNull {
+            val tracks = delayedTrackingStore.getMangaItems().mapNotNull {
                 val track = getTracks.awaitOne(it.trackId)
                 if (track == null) {
                     delayedTrackingStore.remove(it.trackId)
@@ -53,7 +51,7 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
                 try {
                     val service = trackManager.getService(track.syncId)
                     if (service != null && service.isLogged) {
-                        service.update(track.toDbTrack(), true)
+                        service.mangaService.update(track.toDbTrack(), true)
                         insertTrack.await(track)
                     }
                     delayedTrackingStore.remove(track.id)
@@ -63,20 +61,21 @@ class DelayedTrackingUpdateJob(context: Context, workerParams: WorkerParameters)
             }
 
             val animeTracks = delayedTrackingStore.getAnimeItems().mapNotNull {
-                val anime = getAnime.await(it.animeId) ?: return@withIOContext
-                getAnimeTracks.await(anime.id)
-                    .find { track -> track.id == it.trackId }
-                    ?.copy(lastEpisodeSeen = it.lastEpisodeSeen.toDouble())
+                val animeTrack = getAnimeTracks.awaitOne(it.trackId)
+                if (animeTrack == null) {
+                    delayedTrackingStore.remove(it.trackId)
+                }
+                animeTrack
             }
 
-            animeTracks.forEach { track ->
+            animeTracks.forEach { animeTrack ->
                 try {
-                    val service = trackManager.getService(track.syncId)
+                    val service = trackManager.getService(animeTrack.syncId)
                     if (service != null && service.isLogged) {
-                        service.update(track.toDbTrack(), true)
-                        insertAnimeTrack.await(track)
+                        service.animeService.update(animeTrack.toDbTrack(), true)
+                        insertAnimeTrack.await(animeTrack)
                     }
-                    delayedTrackingStore.remove(track)
+                    delayedTrackingStore.remove(animeTrack.id)
                 } catch (e: Exception) {
                     logcat(LogPriority.ERROR, e)
                 }

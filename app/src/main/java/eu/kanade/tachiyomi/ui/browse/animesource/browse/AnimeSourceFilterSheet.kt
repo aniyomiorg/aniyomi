@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.browse.animesource.browse
 
-import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -13,12 +12,12 @@ import eu.kanade.tachiyomi.widget.SimpleNavigationView
 import eu.kanade.tachiyomi.widget.sheet.BaseBottomSheetDialog
 
 class AnimeSourceFilterSheet(
-    activity: Activity,
+    context: Context,
     private val onFilterClicked: () -> Unit,
     private val onResetClicked: () -> Unit,
-) : BaseBottomSheetDialog(activity) {
+) : BaseBottomSheetDialog(context) {
 
-    private var filterNavView: FilterNavigationView = FilterNavigationView(activity)
+    private var filterNavView: FilterNavigationView = FilterNavigationView(context)
 
     override fun createView(inflater: LayoutInflater): View {
         filterNavView.onFilterClicked = {

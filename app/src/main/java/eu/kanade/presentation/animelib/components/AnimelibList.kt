@@ -3,35 +3,29 @@ package eu.kanade.presentation.animelib.components
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
-import androidx.compose.ui.zIndex
 import eu.kanade.domain.anime.model.AnimeCover
 import eu.kanade.domain.animelib.model.AnimelibAnime
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.MangaListItem
+import eu.kanade.presentation.library.components.DownloadsBadge
+import eu.kanade.presentation.library.components.GlobalSearchItem
+import eu.kanade.presentation.library.components.LanguageBadge
+import eu.kanade.presentation.library.components.UnreadBadge
 import eu.kanade.presentation.util.plus
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.animelib.AnimelibItem
 
 @Composable
 fun AnimelibList(
     items: List<AnimelibItem>,
-    showDownloadBadges: Boolean,
-    showUnreadBadges: Boolean,
-    showLocalBadges: Boolean,
-    showLanguageBadges: Boolean,
-    showContinueWatchingButton: Boolean,
     contentPadding: PaddingValues,
     selection: List<AnimelibAnime>,
     onClick: (AnimelibAnime) -> Unit,
     onLongClick: (AnimelibAnime) -> Unit,
-    onClickContinueWatching: (AnimelibAnime) -> Unit,
+    onClickContinueWatching: ((AnimelibAnime) -> Unit)?,
     searchQuery: String?,
     onGlobalSearchClicked: () -> Unit,
 ) {
@@ -40,13 +34,12 @@ fun AnimelibList(
         contentPadding = contentPadding + PaddingValues(vertical = 8.dp),
     ) {
         item {
-            if (searchQuery.isNullOrEmpty().not()) {
-                TextButton(onClick = onGlobalSearchClicked) {
-                    Text(
-                        text = stringResource(R.string.action_global_search_query, searchQuery!!),
-                        modifier = Modifier.zIndex(99f),
-                    )
-                }
+            if (!searchQuery.isNullOrEmpty()) {
+                GlobalSearchItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    searchQuery = searchQuery,
+                    onClick = onGlobalSearchClicked,
+                )
             }
         }
 
@@ -66,24 +59,20 @@ fun AnimelibList(
                     lastModified = anime.coverLastModified,
                 ),
                 badge = {
-                    DownloadsBadge(
-                        enabled = showDownloadBadges,
-                        item = animelibItem,
-                    )
-                    UnseenBadge(
-                        enabled = showUnreadBadges,
-                        item = animelibItem,
-                    )
+                    DownloadsBadge(count = animelibItem.downloadCount.toInt())
+                    UnreadBadge(count = animelibItem.unseenCount.toInt())
                     LanguageBadge(
-                        showLanguage = showLanguageBadges,
-                        showLocal = showLocalBadges,
-                        item = animelibItem,
+                        isLocal = animelibItem.isLocal,
+                        sourceLanguage = animelibItem.sourceLanguage,
                     )
                 },
-                showContinueReadingButton = showContinueWatchingButton,
                 onLongClick = { onLongClick(animelibItem.animelibAnime) },
                 onClick = { onClick(animelibItem.animelibAnime) },
-                onClickContinueReading = { onClickContinueWatching(animelibItem.animelibAnime) },
+                onClickContinueReading = if (onClickContinueWatching != null) {
+                    { onClickContinueWatching(animelibItem.animelibAnime) }
+                } else {
+                    null
+                },
             )
         }
     }

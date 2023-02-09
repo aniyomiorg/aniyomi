@@ -16,7 +16,6 @@ import eu.kanade.tachiyomi.ui.base.controller.requestPermissionsSafe
 import eu.kanade.tachiyomi.ui.download.anime.AnimeDownloadController
 import eu.kanade.tachiyomi.ui.download.manga.DownloadController
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.updates.updatesTab
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

@@ -17,12 +17,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.animesource.interactor.GetRemoteAnime
 import eu.kanade.domain.animesource.model.AnimeSource
 import eu.kanade.domain.animesource.model.Pin
 import eu.kanade.presentation.animebrowse.components.BaseAnimeSourceItem
@@ -30,110 +28,68 @@ import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.ScrollbarLazyColumn
 import eu.kanade.presentation.theme.header
-import eu.kanade.presentation.util.horizontalPadding
+import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.plus
-import eu.kanade.presentation.util.topPaddingValues
+import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
-import eu.kanade.tachiyomi.ui.browse.animesource.AnimeSourcesPresenter
+import eu.kanade.tachiyomi.ui.browse.animesource.AnimeSourcesState
+import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun AnimeSourcesScreen(
-    presenter: AnimeSourcesPresenter,
+    state: AnimeSourcesState,
     contentPadding: PaddingValues,
-    onClickItem: (AnimeSource, String) -> Unit,
-    onClickDisable: (AnimeSource) -> Unit,
+    onClickItem: (AnimeSource, Listing) -> Unit,
     onClickPin: (AnimeSource) -> Unit,
+    onLongClickItem: (AnimeSource) -> Unit,
 ) {
-    val context = LocalContext.current
     when {
-        presenter.isLoading -> LoadingScreen()
-        presenter.isEmpty -> EmptyScreen(
+        state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
+        state.isEmpty -> EmptyScreen(
             textResource = R.string.source_empty_screen,
             modifier = Modifier.padding(contentPadding),
         )
         else -> {
-            AnimeSourceList(
-                state = presenter,
-                contentPadding = contentPadding,
-                onClickItem = onClickItem,
-                onClickDisable = onClickDisable,
-                onClickPin = onClickPin,
-            )
-        }
-    }
-    LaunchedEffect(Unit) {
-        presenter.events.collectLatest { event ->
-            when (event) {
-                AnimeSourcesPresenter.Event.FailedFetchingSources -> {
-                    context.toast(R.string.internal_error)
+            ScrollbarLazyColumn(
+                contentPadding = contentPadding + topSmallPaddingValues,
+            ) {
+                items(
+                    items = state.items,
+                    contentType = {
+                        when (it) {
+                            is AnimeSourceUiModel.Header -> "header"
+                            is AnimeSourceUiModel.Item -> "item"
+                        }
+                    },
+                    key = {
+                        when (it) {
+                            is AnimeSourceUiModel.Header -> it.hashCode()
+                            is AnimeSourceUiModel.Item -> "source-${it.source.key()}"
+                        }
+                    },
+                ) { model ->
+                    when (model) {
+                        is AnimeSourceUiModel.Header -> {
+                            AnimeSourceHeader(
+                                modifier = Modifier.animateItemPlacement(),
+                                language = model.language,
+                            )
+                        }
+                        is AnimeSourceUiModel.Item -> AnimeSourceItem(
+                            modifier = Modifier.animateItemPlacement(),
+                            source = model.source,
+                            onClickItem = onClickItem,
+                            onLongClickItem = onLongClickItem,
+                            onClickPin = onClickPin,
+                        )
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun AnimeSourceList(
-    state: AnimeSourcesState,
-    contentPadding: PaddingValues,
-    onClickItem: (AnimeSource, String) -> Unit,
-    onClickDisable: (AnimeSource) -> Unit,
-    onClickPin: (AnimeSource) -> Unit,
-) {
-    ScrollbarLazyColumn(
-        contentPadding = contentPadding + topPaddingValues,
-    ) {
-        items(
-            items = state.items,
-            contentType = {
-                when (it) {
-                    is AnimeSourceUiModel.Header -> "header"
-                    is AnimeSourceUiModel.Item -> "item"
-                }
-            },
-            key = {
-                when (it) {
-                    is AnimeSourceUiModel.Header -> it.hashCode()
-                    is AnimeSourceUiModel.Item -> "source-${it.source.key()}"
-                }
-            },
-        ) { model ->
-            when (model) {
-                is AnimeSourceUiModel.Header -> {
-                    AnimeSourceHeader(
-                        modifier = Modifier.animateItemPlacement(),
-                        language = model.language,
-                    )
-                }
-                is AnimeSourceUiModel.Item -> AnimeSourceItem(
-                    modifier = Modifier.animateItemPlacement(),
-                    source = model.source,
-                    onClickItem = onClickItem,
-                    onLongClickItem = { state.dialog = AnimeSourcesPresenter.Dialog(it) },
-                    onClickPin = onClickPin,
-                )
-            }
-        }
-    }
-
-    if (state.dialog != null) {
-        val source = state.dialog!!.source
-        AnimeSourceOptionsDialog(
-            source = source,
-            onClickPin = {
-                onClickPin(source)
-                state.dialog = null
-            },
-            onClickDisable = {
-                onClickDisable(source)
-                state.dialog = null
-            },
-            onDismiss = { state.dialog = null },
-        )
     }
 }
 
@@ -146,7 +102,7 @@ private fun AnimeSourceHeader(
     Text(
         text = LocaleHelper.getSourceDisplayName(language, context),
         modifier = modifier
-            .padding(horizontal = horizontalPadding, vertical = 8.dp),
+            .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
         style = MaterialTheme.typography.header,
     )
 }
@@ -155,18 +111,18 @@ private fun AnimeSourceHeader(
 private fun AnimeSourceItem(
     modifier: Modifier = Modifier,
     source: AnimeSource,
-    onClickItem: (AnimeSource, String) -> Unit,
+    onClickItem: (AnimeSource, Listing) -> Unit,
     onLongClickItem: (AnimeSource) -> Unit,
     onClickPin: (AnimeSource) -> Unit,
 ) {
     BaseAnimeSourceItem(
         modifier = modifier,
         source = source,
-        onClickItem = { onClickItem(source, GetRemoteAnime.QUERY_POPULAR) },
+        onClickItem = { onClickItem(source, Listing.Popular) },
         onLongClickItem = { onLongClickItem(source) },
         action = {
             if (source.supportsLatest) {
-                TextButton(onClick = { onClickItem(source, GetRemoteAnime.QUERY_LATEST) }) {
+                TextButton(onClick = { onClickItem(source, Listing.Latest) }) {
                     Text(
                         text = stringResource(id = R.string.latest),
                         style = LocalTextStyle.current.copy(
@@ -201,7 +157,7 @@ private fun AnimeSourcePinButton(
 }
 
 @Composable
-private fun AnimeSourceOptionsDialog(
+fun AnimeSourceOptionsDialog(
     source: AnimeSource,
     onClickPin: () -> Unit,
     onClickDisable: () -> Unit,

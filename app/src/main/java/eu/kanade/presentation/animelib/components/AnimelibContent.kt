@@ -19,8 +19,7 @@ import eu.kanade.core.prefs.PreferenceMutableState
 import eu.kanade.domain.animelib.model.AnimelibAnime
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.library.model.LibraryDisplayMode
-import eu.kanade.presentation.animelib.AnimelibState
-import eu.kanade.presentation.components.SwipeRefresh
+import eu.kanade.presentation.components.PullRefresh
 import eu.kanade.presentation.components.rememberPagerState
 import eu.kanade.presentation.library.components.LibraryTabs
 import eu.kanade.tachiyomi.ui.animelib.AnimelibItem
@@ -30,30 +29,24 @@ import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun AnimelibContent(
-    state: AnimelibState,
+    categories: List<Category>,
+    searchQuery: String?,
+    selection: List<AnimelibAnime>,
     contentPadding: PaddingValues,
     currentPage: () -> Int,
-    isAnimelibEmpty: Boolean,
+    hasActiveFilters: Boolean,
     showPageTabs: Boolean,
-    showAnimeCount: Boolean,
     onChangeCurrentPage: (Int) -> Unit,
     onAnimeClicked: (Long) -> Unit,
-    onContinueWatchingClicked: (AnimelibAnime) -> Unit,
+    onContinueWatchingClicked: ((AnimelibAnime) -> Unit)?,
     onToggleSelection: (AnimelibAnime) -> Unit,
     onToggleRangeSelection: (AnimelibAnime) -> Unit,
     onRefresh: (Category?) -> Boolean,
     onGlobalSearchClicked: () -> Unit,
-    getNumberOfAnimeForCategory: @Composable (Long) -> State<Int?>,
+    getNumberOfAnimeForCategory: (Category) -> Int?,
     getDisplayModeForPage: @Composable (Int) -> LibraryDisplayMode,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
-    getAnimelibForPage: @Composable (Int) -> List<AnimelibItem>,
-    showDownloadBadges: Boolean,
-    showUnseenBadges: Boolean,
-    showLocalBadges: Boolean,
-    showLanguageBadges: Boolean,
-    showContinueWatchingButton: Boolean,
-    isDownloadOnly: Boolean,
-    isIncognitoMode: Boolean,
+    getAnimelibForPage: (Int) -> List<AnimelibItem>,
 ) {
     Column(
         modifier = Modifier.padding(
@@ -62,44 +55,34 @@ fun AnimelibContent(
             end = contentPadding.calculateEndPadding(LocalLayoutDirection.current),
         ),
     ) {
-        val categories = state.categories
         val coercedCurrentPage = remember { currentPage().coerceAtMost(categories.lastIndex) }
         val pagerState = rememberPagerState(coercedCurrentPage)
 
         val scope = rememberCoroutineScope()
         var isRefreshing by remember(pagerState.currentPage) { mutableStateOf(false) }
 
-        if (isAnimelibEmpty.not() && showPageTabs && categories.size > 1) {
+        if (showPageTabs && categories.size > 1) {
             LibraryTabs(
                 categories = categories,
                 currentPageIndex = pagerState.currentPage,
-                showMangaCount = showAnimeCount,
                 getNumberOfMangaForCategory = getNumberOfAnimeForCategory,
-                isDownloadOnly = isDownloadOnly,
-                isIncognitoMode = isIncognitoMode,
-                onTabItemClick = { scope.launch { pagerState.animateScrollToPage(it) } },
-            )
+            ) { scope.launch { pagerState.animateScrollToPage(it) } }
         }
 
+        val notSelectionMode = selection.isEmpty()
         val onClickAnime = { anime: AnimelibAnime ->
-            if (state.selectionMode.not()) {
+            if (notSelectionMode) {
                 onAnimeClicked(anime.anime.id)
             } else {
                 onToggleSelection(anime)
             }
         }
-        val onLongClickAnime = { anime: AnimelibAnime ->
-            onToggleRangeSelection(anime)
-        }
-        val onClickContinueWatching = { anime: AnimelibAnime ->
-            onContinueWatchingClicked(anime)
-        }
 
-        SwipeRefresh(
+        PullRefresh(
             refreshing = isRefreshing,
             onRefresh = {
                 val started = onRefresh(categories[currentPage()])
-                if (!started) return@SwipeRefresh
+                if (!started) return@PullRefresh
                 scope.launch {
                     // Fake refresh status but hide it after a second as it's a long running task
                     isRefreshing = true
@@ -107,26 +90,22 @@ fun AnimelibContent(
                     isRefreshing = false
                 }
             },
-            enabled = state.selectionMode.not(),
+            enabled = notSelectionMode,
         ) {
             AnimelibPager(
                 state = pagerState,
                 contentPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding()),
                 pageCount = categories.size,
-                selectedAnime = state.selection,
+                hasActiveFilters = hasActiveFilters,
+                selectedAnime = selection,
+                searchQuery = searchQuery,
+                onGlobalSearchClicked = onGlobalSearchClicked,
                 getDisplayModeForPage = getDisplayModeForPage,
                 getColumnsForOrientation = getColumnsForOrientation,
                 getAnimelibForPage = getAnimelibForPage,
-                showDownloadBadges = showDownloadBadges,
-                showUnreadBadges = showUnseenBadges,
-                showLocalBadges = showLocalBadges,
-                showLanguageBadges = showLanguageBadges,
-                showContinueWatchingButton = showContinueWatchingButton,
                 onClickAnime = onClickAnime,
-                onLongClickAnime = onLongClickAnime,
-                onClickContinueWatching = onClickContinueWatching,
-                onGlobalSearchClicked = onGlobalSearchClicked,
-                searchQuery = state.searchQuery,
+                onLongClickAnime = onToggleRangeSelection,
+                onClickContinueWatching = onContinueWatchingClicked,
             )
         }
 

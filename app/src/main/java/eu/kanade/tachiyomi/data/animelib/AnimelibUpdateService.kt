@@ -24,11 +24,11 @@ import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
 import eu.kanade.domain.episode.model.Episode
-import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.core.preference.getAndSet
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadService
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService.Companion.start
@@ -37,8 +37,8 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
-import eu.kanade.tachiyomi.data.track.EnhancedTrackService
-import eu.kanade.tachiyomi.data.track.MangaTrackService
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
+import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.UnmeteredSource
@@ -102,7 +102,7 @@ class AnimelibUpdateService(
 
     private lateinit var wakeLock: PowerManager.WakeLock
     private lateinit var notifier: AnimelibUpdateNotifier
-    private var ioScope: CoroutineScope? = null
+    private var scope: CoroutineScope? = null
 
     private var animeToUpdate: List<AnimelibAnime> = mutableListOf()
     private var updateJob: Job? = null
@@ -189,7 +189,7 @@ class AnimelibUpdateService(
      */
     override fun onDestroy() {
         updateJob?.cancel()
-        ioScope?.cancel()
+        scope?.cancel()
         if (wakeLock.isHeld) {
             wakeLock.release()
         }
@@ -221,7 +221,7 @@ class AnimelibUpdateService(
 
         // Unsubscribe from any previous subscription if needed
         updateJob?.cancel()
-        ioScope?.cancel()
+        scope?.cancel()
 
         // If this is a episode update; set the last update time to now
         if (target == Target.EPISODES) {
@@ -237,8 +237,8 @@ class AnimelibUpdateService(
             logcat(LogPriority.ERROR, exception)
             stopSelf(startId)
         }
-        ioScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-        updateJob = ioScope?.launch(handler) {
+        scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        updateJob = scope?.launch(handler) {
             when (target) {
                 Target.EPISODES -> updateEpisodeList()
                 Target.COVERS -> updateCovers()
@@ -313,8 +313,7 @@ class AnimelibUpdateService(
         val skippedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val failedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val hasDownloads = AtomicBoolean(false)
-        val loggedServices by lazy { trackManager.services.filter { it.isLogged && it !is MangaTrackService } }
-        val currentUnseenUpdatesCount = libraryPreferences.unseenUpdatesCount().get()
+        val loggedServices by lazy { trackManager.services.filter { it.isLogged && it is AnimeTrackService } }
         val restrictions = libraryPreferences.libraryUpdateMangaRestriction().get()
 
         withIOContext {
@@ -364,6 +363,8 @@ class AnimelibUpdateService(
                                                         hasDownloads.set(true)
                                                     }
 
+                                                    libraryPreferences.newAnimeUpdatesCount().getAndSet { it + newEpisodes.size }
+
                                                     // Convert to the anime that contains new chapters
                                                     newUpdates.add(anime to newEpisodes.toTypedArray())
                                                 }
@@ -394,8 +395,6 @@ class AnimelibUpdateService(
 
         if (newUpdates.isNotEmpty()) {
             notifier.showUpdateNotifications(newUpdates)
-            val newEpisodeCount = newUpdates.sumOf { it.second.size }
-            libraryPreferences.unseenUpdatesCount().set(currentUnseenUpdatesCount + newEpisodeCount)
             if (hasDownloads.get()) {
                 AnimeDownloadService.start(this)
             }
@@ -416,7 +415,7 @@ class AnimelibUpdateService(
     private fun downloadEpisodes(anime: Anime, episodes: List<Episode>) {
         // We don't want to start downloading while the library is updating, because websites
         // may don't like it and they could ban the user.
-        downloadManager.downloadEpisodes(anime, episodes.map { it.toDbEpisode() }, false)
+        downloadManager.downloadEpisodes(anime, episodes, false)
     }
 
     /**
@@ -497,7 +496,7 @@ class AnimelibUpdateService(
      */
     private suspend fun updateTrackings() {
         var progressCount = 0
-        val loggedServices = trackManager.services.filter { it.isLogged && it !is MangaTrackService }
+        val loggedServices = trackManager.services.filter { it.isLogged && it is AnimeTrackService }
 
         animeToUpdate.forEach { animelibAnime ->
             val anime = animelibAnime.anime
@@ -526,12 +525,12 @@ class AnimelibUpdateService(
                         val service = trackManager.getService(track.syncId)
                         if (service != null && service in loggedServices) {
                             try {
-                                val updatedTrack = service.refresh(track.toDbTrack())
+                                val updatedTrack = service.animeService.refresh(track.toDbTrack())
                                 insertTrack.await(updatedTrack.toDomainTrack()!!)
 
-                                if (service is EnhancedTrackService) {
+                                if (service is EnhancedAnimeTrackService) {
                                     val episodes = getEpisodeByAnimeId.await(anime.id)
-                                    syncEpisodesWithTrackServiceTwoWay.await(episodes, track, service)
+                                    syncEpisodesWithTrackServiceTwoWay.await(episodes, track, service.animeService)
                                 }
                             } catch (e: Throwable) {
                                 // Ignore errors and continue

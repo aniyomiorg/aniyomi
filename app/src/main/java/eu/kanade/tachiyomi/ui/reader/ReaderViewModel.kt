@@ -815,10 +815,10 @@ class ReaderViewModel(
                             runCatching {
                                 try {
                                     if (!context.isOnline()) error("Couldn't update tracker as device is offline")
-                                    service.update(updatedTrack.toDbTrack(), true)
+                                    service.mangaService.update(updatedTrack.toDbTrack(), true)
                                     insertTrack.await(updatedTrack)
                                 } catch (e: Exception) {
-                                    delayedTrackingStore.addItem(updatedTrack)
+                                    delayedTrackingStore.addMangaItem(updatedTrack)
                                     DelayedTrackingUpdateJob.setupTask(context)
                                     throw e
                                 }

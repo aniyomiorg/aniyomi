@@ -18,7 +18,6 @@ import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.episode.interactor.GetEpisode
 import eu.kanade.domain.episode.interactor.UpdateEpisode
 import eu.kanade.domain.episode.model.Episode
-import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.domain.episode.model.toEpisodeUpdate
 import eu.kanade.domain.manga.interactor.GetManga
 import eu.kanade.domain.manga.model.Manga
@@ -33,7 +32,6 @@ import eu.kanade.tachiyomi.data.download.DownloadService
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.data.updater.AppUpdateService
 import eu.kanade.tachiyomi.source.SourceManager
-import eu.kanade.tachiyomi.ui.anime.AnimeController
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
@@ -370,7 +368,7 @@ class NotificationReceiver : BroadcastReceiver() {
                         if (anime != null) {
                             val source = sourceManager.get(anime.source)
                             if (source != null) {
-                                animedownloadManager.deleteEpisodes(listOf(it.toDbEpisode()), anime, source)
+                                animedownloadManager.deleteEpisodes(listOf(it), anime, source)
                             }
                         }
                     }
@@ -403,7 +401,7 @@ class NotificationReceiver : BroadcastReceiver() {
     private fun downloadEpisodes(episodeUrls: Array<String>, animeId: Long) {
         launchIO {
             val anime = getAnime.await(animeId) ?: return@launchIO
-            val episodes = episodeUrls.mapNotNull { getEpisode.await(it, animeId)?.toDbEpisode() }
+            val episodes = episodeUrls.mapNotNull { getEpisode.await(it, animeId) }
             animedownloadManager.downloadEpisodes(anime, episodes)
         }
     }
@@ -624,7 +622,7 @@ class NotificationReceiver : BroadcastReceiver() {
          */
         internal fun openEpisodePendingActivity(context: Context, anime: Anime, episode: Episode): PendingIntent {
             val newIntent = PlayerActivity.newIntent(context, anime.id, episode.id)
-            return PendingIntent.getActivity(context, AnimeController.REQUEST_INTERNAL, newIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            return PendingIntent.getActivity(context, Constants.REQUEST_INTERNAL, newIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 
         /**
@@ -637,7 +635,7 @@ class NotificationReceiver : BroadcastReceiver() {
             val newIntent =
                 Intent(context, MainActivity::class.java).setAction(MainActivity.SHORTCUT_ANIME)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(AnimeController.ANIME_EXTRA, anime.id)
+                    .putExtra(Constants.ANIME_EXTRA, anime.id)
                     .putExtra("notificationId", anime.id.hashCode())
                     .putExtra("groupId", groupId)
             return PendingIntent.getActivity(context, anime.id.hashCode(), newIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)

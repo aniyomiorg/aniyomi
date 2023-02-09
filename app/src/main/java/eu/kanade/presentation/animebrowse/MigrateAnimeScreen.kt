@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.presentation.anime.components.BaseAnimeListItem
 import eu.kanade.presentation.components.AppBar
@@ -15,20 +13,16 @@ import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.migration.anime.MigrateAnimePresenter
-import eu.kanade.tachiyomi.ui.browse.migration.anime.MigrateAnimePresenter.Event
-import eu.kanade.tachiyomi.util.system.toast
-import kotlinx.coroutines.flow.collectLatest
+import eu.kanade.tachiyomi.ui.browse.migration.anime.MigrateAnimeState
 
 @Composable
 fun MigrateAnimeScreen(
     navigateUp: () -> Unit,
     title: String?,
-    presenter: MigrateAnimePresenter,
+    state: MigrateAnimeState,
     onClickItem: (Anime) -> Unit,
     onClickCover: (Anime) -> Unit,
 ) {
-    val context = LocalContext.current
     Scaffold(
         topBar = { scrollBehavior ->
             AppBar(
@@ -38,30 +32,20 @@ fun MigrateAnimeScreen(
             )
         },
     ) { contentPadding ->
-        when {
-            presenter.isLoading -> LoadingScreen()
-            presenter.isEmpty -> EmptyScreen(
+        if (state.isEmpty) {
+            EmptyScreen(
                 textResource = R.string.empty_screen,
                 modifier = Modifier.padding(contentPadding),
             )
-            else -> {
-                MigrateAnimeContent(
-                    contentPadding = contentPadding,
-                    state = presenter,
-                    onClickItem = onClickItem,
-                    onClickCover = onClickCover,
-                )
-            }
+            return@Scaffold
         }
-    }
-    LaunchedEffect(Unit) {
-        presenter.events.collectLatest { event ->
-            when (event) {
-                Event.FailedFetchingFavorites -> {
-                    context.toast(R.string.internal_error)
-                }
-            }
-        }
+
+        MigrateAnimeContent(
+            contentPadding = contentPadding,
+            state = state,
+            onClickItem = onClickItem,
+            onClickCover = onClickCover,
+        )
     }
 }
 
@@ -75,7 +59,7 @@ private fun MigrateAnimeContent(
     FastScrollLazyColumn(
         contentPadding = contentPadding,
     ) {
-        items(state.items) { anime ->
+        items(state.titles) { anime ->
             MigrateAnimeItem(
                 anime = anime,
                 onClickItem = onClickItem,

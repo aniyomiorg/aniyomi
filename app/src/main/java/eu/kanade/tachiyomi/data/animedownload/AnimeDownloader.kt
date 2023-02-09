@@ -13,10 +13,10 @@ import com.arthenica.ffmpegkit.LogCallback
 import com.arthenica.ffmpegkit.SessionState
 import com.arthenica.ffmpegkit.StatisticsCallback
 import com.hippo.unifile.UniFile
-import com.jakewharton.rxrelay.BehaviorRelay
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.download.service.DownloadPreferences
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -26,7 +26,6 @@ import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownloadQueue
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateNotifier
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
-import eu.kanade.tachiyomi.data.database.models.Episode
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -34,6 +33,7 @@ import eu.kanade.tachiyomi.util.lang.launchNow
 import eu.kanade.tachiyomi.util.lang.plusAssign
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.storage.DiskUtil
+import eu.kanade.tachiyomi.util.storage.DiskUtil.NOMEDIA_FILE
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
 import eu.kanade.tachiyomi.util.system.ImageUtil
@@ -77,7 +77,7 @@ class AnimeDownloader(
     /**
      * Store for persisting downloads across restarts.
      */
-    private val store = AnimeDownloadStore(context, sourceManager)
+    private val store = AnimeDownloadStore(context)
 
     /**
      * Queue where active downloads are kept.
@@ -100,10 +100,8 @@ class AnimeDownloader(
     private val downloadsRelay = PublishRelay.create<List<AnimeDownload>>()
 
     /**
-     * Relay to subscribe to the downloader status.
+     * Preference for user's choice of external downloader
      */
-    val runningRelay: BehaviorRelay<Boolean> = BehaviorRelay.create(false)
-
     private val preferences: DownloadPreferences by injectLazy()
 
     /**
@@ -219,10 +217,8 @@ class AnimeDownloader(
     private fun initializeSubscriptions() {
         if (isRunning) return
         isRunning = true
-        runningRelay.call(true)
 
         subscriptions.clear()
-
         subscriptions += downloadsRelay.concatMapIterable { it }
             // Concurrently download from 5 different sources
             .groupBy { it.source }
@@ -254,7 +250,6 @@ class AnimeDownloader(
     private fun destroySubscriptions() {
         if (!isRunning) return
         isRunning = false
-        runningRelay.call(false)
 
         isFFmpegRunning = false
         FFmpegKitConfig.getSessions().filter {
@@ -286,7 +281,7 @@ class AnimeDownloader(
                 // Filter out those already downloaded.
                 .filter { provider.findEpisodeDir(it.name, it.scanlator, anime.title, source) == null }
                 // Add episodes to queue from the start.
-                .sortedByDescending { it.source_order }
+                .sortedByDescending { it.sourceOrder }
         }
 
         // Runs in main thread (synchronization needed).
@@ -436,12 +431,12 @@ class AnimeDownloader(
         if (video.bytesDownloaded == 0L) {
             val tmpFile = tmpDir.findFile("$filename.tmp")
 
-            // Delete temp file if it exists.
+            // Delete temp file if it exists
             tmpFile?.delete()
         }
 
-        // Try to find the video file.
-        val videoFile = tmpDir.listFiles()!!.find { it.name!!.startsWith("$filename.") }
+        // Try to find the video file
+        val videoFile = tmpDir.listFiles()?.firstOrNull { it.name!!.startsWith("$filename.") }
 
         // If the video is already downloaded, do nothing. Otherwise download from network
         val pageObservable = when {
@@ -732,11 +727,11 @@ class AnimeDownloader(
         tmpDir: UniFile,
         dirname: String,
     ) {
-        // Ensure that the episode folder has all the images.
-        val downloadedImages = tmpDir.listFiles().orEmpty().filterNot { it.name!!.endsWith(".tmp") }
+        // Ensure that the episode folder has the full video
+        val downloadedVideo = tmpDir.listFiles().orEmpty().filterNot { it.name!!.endsWith(".tmp") }
 
-        download.status = if (downloadedImages.size == 1) {
-            // Only rename the directory if it's downloaded.
+        download.status = if (downloadedVideo.size == 1) {
+            // Only rename the directory if it's downloaded
             tmpDir.renameTo(dirname)
             cache.addEpisode(dirname, animeDir, download.anime)
 
@@ -753,7 +748,7 @@ class AnimeDownloader(
     private fun completeAnimeDownload(download: AnimeDownload) {
         // Delete successful downloads from queue
         if (download.status == AnimeDownload.State.DOWNLOADED) {
-            // remove downloaded episode from queue
+            // Remove downloaded episode from queue
             queue.remove(download)
         }
         if (areAllAnimeDownloadsFinished()) {

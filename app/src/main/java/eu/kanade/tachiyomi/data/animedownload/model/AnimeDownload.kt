@@ -3,11 +3,10 @@ package eu.kanade.tachiyomi.data.animedownload.model
 import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.episode.interactor.GetEpisode
-import eu.kanade.domain.episode.model.toDbEpisode
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.data.database.models.Episode
 import rx.subjects.PublishSubject
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -43,38 +42,22 @@ data class AnimeDownload(
         }
 
     @Transient
-    private var statusSubject: PublishSubject<AnimeDownload>? = null
+    var statusSubject: PublishSubject<AnimeDownload>? = null
 
     @Transient
-    private var progressSubject: PublishSubject<AnimeDownload>? = null
+    var progressSubject: PublishSubject<AnimeDownload>? = null
 
     @Transient
-    private var statusCallback: ((AnimeDownload) -> Unit)? = null
+    var statusCallback: ((AnimeDownload) -> Unit)? = null
 
     @Transient
-    private var progressCallback: ((AnimeDownload) -> Unit)? = null
+    var progressCallback: ((AnimeDownload) -> Unit)? = null
 
     val progress: Int
         get() {
             val video = video ?: return 0
             return video.progress
         }
-
-    fun setStatusSubject(subject: PublishSubject<AnimeDownload>?) {
-        statusSubject = subject
-    }
-
-    fun setProgressSubject(subject: PublishSubject<AnimeDownload>?) {
-        progressSubject = subject
-    }
-
-    fun setStatusCallback(f: ((AnimeDownload) -> Unit)?) {
-        statusCallback = f
-    }
-
-    fun setProgressCallback(f: ((AnimeDownload) -> Unit)?) {
-        progressCallback = f
-    }
 
     enum class State(val value: Int) {
         NOT_DOWNLOADED(0),
@@ -95,7 +78,7 @@ data class AnimeDownload(
             val anime = getAnimeById.await(episode.animeId) ?: return null
             val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: return null
 
-            return AnimeDownload(source, anime, episode.toDbEpisode())
+            return AnimeDownload(source, anime, episode)
         }
     }
 }

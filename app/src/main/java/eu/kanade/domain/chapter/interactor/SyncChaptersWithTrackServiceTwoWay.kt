@@ -5,7 +5,7 @@ import eu.kanade.domain.chapter.model.toChapterUpdate
 import eu.kanade.domain.track.interactor.InsertTrack
 import eu.kanade.domain.track.model.Track
 import eu.kanade.domain.track.model.toDbTrack
-import eu.kanade.tachiyomi.data.track.TrackService
+import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
@@ -19,7 +19,7 @@ class SyncChaptersWithTrackServiceTwoWay(
     suspend fun await(
         chapters: List<Chapter>,
         remoteTrack: Track,
-        service: TrackService,
+        service: MangaTrackService,
     ) {
         val sortedChapters = chapters.sortedBy { it.chapterNumber }
         val chapterUpdates = sortedChapters

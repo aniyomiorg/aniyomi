@@ -13,29 +13,29 @@ class GetNextEpisodes(
     private val historyRepository: AnimeHistoryRepository,
 ) {
 
-    suspend fun await(onlyUnread: Boolean = true): List<Episode> {
+    suspend fun await(onlyUnseen: Boolean = true): List<Episode> {
         val history = historyRepository.getLastHistory() ?: return emptyList()
-        return await(history.animeId, history.episodeId, onlyUnread)
+        return await(history.animeId, history.episodeId, onlyUnseen)
     }
 
-    suspend fun await(animeId: Long, onlyUnread: Boolean = true): List<Episode> {
+    suspend fun await(animeId: Long, onlyUnseen: Boolean = true): List<Episode> {
         val anime = getAnime.await(animeId) ?: return emptyList()
         val episodes = getEpisodeByAnimeId.await(animeId)
             .sortedWith(getEpisodeSort(anime, sortDescending = false))
 
-        return if (onlyUnread) {
+        return if (onlyUnseen) {
             episodes.filterNot { it.seen }
         } else {
             episodes
         }
     }
 
-    suspend fun await(animeId: Long, fromEpisodeId: Long, onlyUnread: Boolean = true): List<Episode> {
-        val episodes = await(animeId, onlyUnread)
+    suspend fun await(animeId: Long, fromEpisodeId: Long, onlyUnseen: Boolean = true): List<Episode> {
+        val episodes = await(animeId, onlyUnseen)
         val currEpisodeIndex = episodes.indexOfFirst { it.id == fromEpisodeId }
         val nextEpisodes = episodes.subList(max(0, currEpisodeIndex), episodes.size)
 
-        if (onlyUnread) {
+        if (onlyUnseen) {
             return nextEpisodes
         }
 

@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import eu.kanade.domain.library.model.LibraryDisplayMode
-import eu.kanade.presentation.animebrowse.BrowseAnimeSourceState
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.AppBarTitle
@@ -27,7 +26,8 @@ import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 
 @Composable
 fun BrowseAnimeSourceToolbar(
-    state: BrowseAnimeSourceState,
+    searchQuery: String?,
+    onSearchQueryChange: (String?) -> Unit,
     source: AnimeCatalogueSource?,
     displayMode: LibraryDisplayMode,
     onDisplayModeChange: (LibraryDisplayMode) -> Unit,
@@ -44,8 +44,8 @@ fun BrowseAnimeSourceToolbar(
     SearchToolbar(
         navigateUp = navigateUp,
         titleContent = { AppBarTitle(title) },
-        searchQuery = state.searchQuery,
-        onChangeSearchQuery = { state.searchQuery = it },
+        searchQuery = searchQuery,
+        onChangeSearchQuery = onSearchQueryChange,
         onSearch = onSearch,
         onClickCloseSearch = navigateUp,
         actions = {

@@ -10,9 +10,18 @@ class GetAnimeTracks(
     private val animetrackRepository: AnimeTrackRepository,
 ) {
 
+    suspend fun awaitOne(id: Long): AnimeTrack? {
+        return try {
+            animetrackRepository.getTrackByAnimeId(id)
+        } catch (e: Exception) {
+            logcat(LogPriority.ERROR, e)
+            null
+        }
+    }
+
     suspend fun await(animeId: Long): List<AnimeTrack> {
         return try {
-            animetrackRepository.getAnimeTracksByAnimeId(animeId)
+            animetrackRepository.getTracksByAnimeId(animeId)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
             emptyList()
@@ -20,6 +29,6 @@ class GetAnimeTracks(
     }
 
     fun subscribe(animeId: Long): Flow<List<AnimeTrack>> {
-        return animetrackRepository.getAnimeTracksByAnimeIdAsFlow(animeId)
+        return animetrackRepository.getTracksByAnimeIdAsFlow(animeId)
     }
 }

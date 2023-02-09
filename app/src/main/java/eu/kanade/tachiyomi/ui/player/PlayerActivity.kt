@@ -33,6 +33,7 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -42,20 +43,25 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.notification.NotificationReceiver
+import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.network.NetworkPreferences
-import eu.kanade.tachiyomi.ui.base.activity.BaseRxActivity
+import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
 import eu.kanade.tachiyomi.util.lang.launchIO
+import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.launchUI
+import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.powerManager
@@ -63,18 +69,17 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import nucleus.factory.RequiresPresenter
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.InputStream
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-@RequiresPresenter(PlayerPresenter::class)
-class PlayerActivity :
-    BaseRxActivity<PlayerPresenter>(),
+class PlayerActivity : BaseActivity(),
     MPVLib.EventObserver,
     MPVLib.LogObserver {
 
@@ -93,6 +98,8 @@ class PlayerActivity :
 
     private val networkPreferences: NetworkPreferences by injectLazy()
 
+    val viewModel by viewModels<PlayerViewModel>()
+
     override fun onNewIntent(intent: Intent) {
         val anime = intent.extras!!.getLong("anime", -1)
         val episode = intent.extras!!.getLong("episode", -1)
@@ -100,13 +107,10 @@ class PlayerActivity :
             finish()
             return
         }
-        launchIO {
-            presenter.saveEpisodeProgress(player.timePos, player.duration)
-            presenter.saveEpisodeHistory()
-        }
+        viewModel.saveCurrentEpisodeWatchingProgress()
 
-        presenter.anime = null
-        presenter.init(anime, episode)
+        viewModel.mutableState.update { it.copy(anime = null) }
+        launchIO { viewModel.init(anime, episode) }
         super.onNewIntent(intent)
     }
 
@@ -347,14 +351,24 @@ class PlayerActivity :
 
         volumeControlStream = AudioManager.STREAM_MUSIC
 
-        if (presenter?.needsInit() == true) {
+        if (viewModel.needsInit()) {
             val anime = intent.extras!!.getLong("anime", -1)
             val episode = intent.extras!!.getLong("episode", -1)
             if (anime == -1L || episode == -1L) {
                 finish()
                 return
             }
-            presenter.init(anime, episode)
+            NotificationReceiver.dismissNotification(this, anime.hashCode(), Notifications.ID_NEW_EPISODES)
+
+            lifecycleScope.launchNonCancellable {
+                val initResult = viewModel.init(anime, episode)
+                if (!initResult.getOrDefault(false)) {
+                    val exception = initResult.exceptionOrNull() ?: IllegalStateException("Unknown err")
+                    withUIContext {
+                        setInitialEpisodeError(exception)
+                    }
+                }
+            }
         }
         val dm = DisplayMetrics()
         windowManager.defaultDisplay.getRealMetrics(dm)
@@ -372,6 +386,18 @@ class PlayerActivity :
     private fun setMpvConf() {
         val mpvConfFile = File("${applicationContext.filesDir.path}/mpv.conf")
         playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        if (!isChangingConfigurations) {
+            viewModel.onSaveInstanceStateNonConfigurationChange()
+        }
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onPause() {
+        viewModel.saveCurrentEpisodeWatchingProgress()
+        super.onPause()
     }
 
     /**
@@ -484,34 +510,36 @@ class PlayerActivity :
      * to the next episode if [previous] is false
      */
     internal fun switchEpisode(previous: Boolean, autoPlay: Boolean = false) {
-        val switchMethod = if (previous && !autoPlay) {
-            { callback: () -> Unit -> presenter.previousEpisode(player.timePos, player.duration, callback) }
-        } else {
-            { callback: () -> Unit -> presenter.nextEpisode(player.timePos, player.duration, callback, autoPlay) }
-        }
-        val errorRes = if (previous) R.string.no_previous_episode else R.string.no_next_episode
+        lifecycleScope.launch {
+            val switchMethod =
+                if (previous && !autoPlay) viewModel.previousEpisode()
+                else viewModel.nextEpisode()
 
-        val wasPlayerPaused = player.paused
-        player.paused = true
-        showLoadingIndicator(true)
+            val errorRes = if (previous) R.string.no_previous_episode else R.string.no_next_episode
 
-        val epTxt = switchMethod {
-            if (wasPlayerPaused == false || autoPlay) {
-                player.paused = false
-            }
-        }
+            player.paused = true
+            showLoadingIndicator(true)
 
-        when {
-            epTxt == "Invalid" -> return
-            epTxt == null -> {
-                if (presenter.anime != null && !autoPlay) {
-                    launchUI { toast(errorRes) }
+            when (switchMethod) {
+                null -> {
+                    if (viewModel.anime != null && !autoPlay) {
+                        launchUI { toast(errorRes) }
+                    }
+                    showLoadingIndicator(false)
                 }
-                showLoadingIndicator(false)
-            }
-            isInPipMode -> {
-                if (playerPreferences.pipEpisodeToasts().get()) {
-                    launchUI { toast(epTxt) }
+                else -> {
+                    if(switchMethod.first != null) {
+                        when {
+                            switchMethod.first!!.isEmpty() -> setInitialEpisodeError(Exception("Video list is empty."))
+                            else -> setVideoList(switchMethod.first!!)
+                        }
+                    } else {
+                        logcat(LogPriority.ERROR) { "Error getting links." }
+                    }
+
+                    if (isInPipMode && playerPreferences.pipEpisodeToasts().get()) {
+                        launchUI { toast(switchMethod.second) }
+                    }
                 }
             }
         }
@@ -519,7 +547,7 @@ class PlayerActivity :
 
     // Fade out Player information text
     private val playerInformationRunnable = Runnable {
-        AnimationUtils.loadAnimation(this, R.anim.fade_out_short).also { fadeAnimation ->
+        AnimationUtils.loadAnimation(this, R.anim.player_fade_out).also { fadeAnimation ->
             playerControls.binding.playerInformation.startAnimation(fadeAnimation)
             playerControls.binding.playerInformation.visibility = View.GONE
         }
@@ -954,7 +982,7 @@ class PlayerActivity :
             field = value
         }
 
-    fun takeScreenshot(): InputStream? {
+    private fun takeScreenshot(): InputStream? {
         val filename = cacheDir.path + "/${System.currentTimeMillis()}_mpv_screenshot_tmp.png"
         val subtitleFlag = if (screenshotSubs) {
             "subtitles"
@@ -974,7 +1002,7 @@ class PlayerActivity :
      * will call [onShareImageResult] with the path the image was saved on when it's ready.
      */
     fun shareImage() {
-        presenter.shareImage()
+        viewModel.shareImage(takeScreenshot(),player.timePos)
     }
 
     /**
@@ -982,8 +1010,8 @@ class PlayerActivity :
      * default sharing tool.
      */
     fun onShareImageResult(uri: Uri, seconds: String) {
-        val anime = presenter.anime ?: return
-        val episode = presenter.currentEpisode ?: return
+        val anime = viewModel.anime ?: return
+        val episode = viewModel.currentEpisode ?: return
 
         val intent = uri.toShareIntent(
             context = applicationContext,
@@ -997,19 +1025,19 @@ class PlayerActivity :
      * external storage to the presenter.
      */
     fun saveImage() {
-        presenter.saveImage()
+        viewModel.saveImage(takeScreenshot(),player.timePos)
     }
 
     /**
      * Called from the presenter when a screenshot is saved or fails. It shows a message
      * or logs the event depending on the [result].
      */
-    fun onSaveImageResult(result: PlayerPresenter.SaveImageResult) {
+    fun onSaveImageResult(result: PlayerViewModel.SaveImageResult) {
         when (result) {
-            is PlayerPresenter.SaveImageResult.Success -> {
+            is PlayerViewModel.SaveImageResult.Success -> {
                 toast(R.string.picture_saved)
             }
-            is PlayerPresenter.SaveImageResult.Error -> {
+            is PlayerViewModel.SaveImageResult.Error -> {
                 logcat(LogPriority.ERROR, result.error)
             }
         }
@@ -1020,19 +1048,19 @@ class PlayerActivity :
      * as the cover to the presenter.
      */
     fun setAsCover() {
-        presenter.setAsCover(this)
+        viewModel.setAsCover(this, takeScreenshot())
     }
 
     /**
      * Called from the presenter when a screenshot is set as cover or fails.
      * It shows a different message depending on the [result].
      */
-    fun onSetAsCoverResult(result: PlayerPresenter.SetAsCoverResult) {
+    fun onSetAsCoverResult(result: PlayerViewModel.SetAsCoverResult) {
         toast(
             when (result) {
-                PlayerPresenter.SetAsCoverResult.Success -> R.string.cover_updated
-                PlayerPresenter.SetAsCoverResult.AddToLibraryFirst -> R.string.notification_first_add_to_library
-                PlayerPresenter.SetAsCoverResult.Error -> R.string.notification_cover_update_failed
+                PlayerViewModel.SetAsCoverResult.Success -> R.string.cover_updated
+                PlayerViewModel.SetAsCoverResult.AddToLibraryFirst -> R.string.notification_first_add_to_library
+                PlayerViewModel.SetAsCoverResult.Error -> R.string.notification_cover_update_failed
             },
         )
     }
@@ -1093,7 +1121,7 @@ class PlayerActivity :
             skipType.let { MPVLib.command(arrayOf("seek", "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}", "absolute")) }
             AniSkipApi.PlayerUtils(binding, aniSkipInterval!!).skipAnimation(skipType!!)
         } else if (playerControls.binding.controlsSkipIntroBtn.text != "") {
-            doubleTapSeek(presenter.getAnimeSkipIntroLength(), isDoubleTap = false)
+            doubleTapSeek(viewModel.getAnimeSkipIntroLength(), isDoubleTap = false)
             playerControls.resetControlsFade()
         }
     }
@@ -1110,14 +1138,14 @@ class PlayerActivity :
     }
 
     private fun updateEpisodeText() {
-        playerControls.binding.titleMainTxt.text = presenter.anime?.title
-        playerControls.binding.titleSecondaryTxt.text = presenter.currentEpisode?.name
-        playerControls.binding.controlsSkipIntroBtn.text = getString(R.string.player_controls_skip_intro_text, presenter.getAnimeSkipIntroLength())
+        playerControls.binding.titleMainTxt.text = viewModel.anime?.title
+        playerControls.binding.titleSecondaryTxt.text = viewModel.currentEpisode?.name
+        playerControls.binding.controlsSkipIntroBtn.text = getString(R.string.player_controls_skip_intro_text, viewModel.getAnimeSkipIntroLength())
     }
 
     private fun updatePlaylistButtons() {
-        val plCount = presenter.episodeList.size
-        val plPos = presenter.getCurrentEpisodeIndex()
+        val plCount = viewModel.episodeList.size
+        val plPos = viewModel.getCurrentEpisodeIndex()
 
         val grey = ContextCompat.getColor(this, R.color.tint_disabled)
         val white = ContextCompat.getColor(this, R.color.tint_normal)
@@ -1146,7 +1174,7 @@ class PlayerActivity :
     override fun onDestroy() {
         playerPreferences.playerVolumeValue().set(fineVolume)
         playerPreferences.playerBrightnessValue().set(brightness)
-        presenter.deletePendingEpisodes()
+        viewModel.deletePendingEpisodes()
         MPVLib.removeLogObserver(this)
         if (!playerIsDestroyed) {
             playerIsDestroyed = true
@@ -1177,18 +1205,11 @@ class PlayerActivity :
     }
 
     override fun onStop() {
-        launchIO {
-            presenter.saveEpisodeHistory()
-        }
+        viewModel.saveCurrentEpisodeWatchingProgress()
         if (!playerIsDestroyed) {
-            launchIO {
-                presenter.saveEpisodeProgress(player.timePos, player.duration)
-            }
             player.paused = true
         }
-        if (deviceSupportsPip && isInPipMode &&
-            powerManager.isInteractive
-        ) {
+        if (deviceSupportsPip && isInPipMode && powerManager.isInteractive) {
             finishAndRemoveTask()
         }
 
@@ -1337,12 +1358,12 @@ class PlayerActivity :
         finish()
     }
 
-    fun setVideoList(videos: List<Video>, fromStart: Boolean = false) {
+    private fun setVideoList(videos: List<Video>, fromStart: Boolean = false) {
         if (playerIsDestroyed) return
         currentVideoList = videos
         currentVideoList?.firstOrNull()?.let {
             setHttpOptions(it)
-            presenter.currentEpisode?.let { episode ->
+            viewModel.currentEpisode?.let { episode ->
                 if ((episode.seen && !playerPreferences.preserveWatchingPosition().get()) || fromStart) episode.last_second_seen = 1L
                 MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
                 playerControls.updatePlaybackDuration(episode.total_seconds.toInt() / 1000)
@@ -1384,8 +1405,8 @@ class PlayerActivity :
     }
 
     private fun setHttpOptions(video: Video) {
-        if (presenter.isEpisodeOnline() != true) return
-        val source = presenter.source as AnimeHttpSource
+        if (viewModel.isEpisodeOnline() != true) return
+        val source = viewModel.source as AnimeHttpSource
 
         val headers = video.headers?.toMultimap()
             ?.mapValues { it.value.getOrNull(0) ?: "" }
@@ -1501,9 +1522,9 @@ class PlayerActivity :
             }
         }
         // aniSkip stuff
-        waitingAniSkip = playerPreferences.waitingTimeAniSkip().get().toInt()
+        waitingAniSkip = playerPreferences.waitingTimeAniSkip().get()
         runBlocking {
-            aniSkipInterval = presenter.aniSkipResponse()
+            aniSkipInterval = viewModel.aniSkipResponse(player.duration)
         }
     }
 

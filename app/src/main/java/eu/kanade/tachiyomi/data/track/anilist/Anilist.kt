@@ -6,6 +6,8 @@ import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
+import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
@@ -14,8 +16,9 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 import eu.kanade.domain.track.model.Track as DomainTrack
+import eu.kanade.domain.animetrack.model.AnimeTrack as DomainAnimeTrack
 
-class Anilist(private val context: Context, id: Long) : TrackService(id) {
+class Anilist(private val context: Context, id: Long) : TrackService(id), MangaTrackService, AnimeTrackService {
 
     companion object {
         const val READING = 1
@@ -112,6 +115,11 @@ class Anilist(private val context: Context, id: Long) : TrackService(id) {
     }
 
     override fun get10PointScore(track: DomainTrack): Float {
+        // Score is stored in 100 point format
+        return track.score / 10f
+    }
+
+    override fun get10PointScore(track: DomainAnimeTrack): Float {
         // Score is stored in 100 point format
         return track.score / 10f
     }

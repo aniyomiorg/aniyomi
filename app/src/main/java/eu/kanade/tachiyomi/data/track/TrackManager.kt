@@ -41,7 +41,7 @@ class TrackManager(context: Context) {
 
     fun hasLoggedServices() = services.any { it.isLogged }
 
-    fun hasLoggedMangaServices() = services.any { it.isLogged && it !is AnimeTrackService }
+    fun hasLoggedMangaServices() = services.any { it.isLogged && it is MangaTrackService }
 
-    fun hasLoggedAnimeServices() = services.any { it.isLogged && it !is MangaTrackService }
+    fun hasLoggedAnimeServices() = services.any { it.isLogged && it is AnimeTrackService }
 }

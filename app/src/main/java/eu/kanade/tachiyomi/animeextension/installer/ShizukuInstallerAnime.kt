@@ -20,7 +20,7 @@ import java.io.InputStream
 
 class ShizukuInstallerAnime(private val service: Service) : InstallerAnime(service) {
 
-    private val ioScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private val shizukuDeadListener = Shizuku.OnBinderDeadListener {
         logcat(LogPriority.ERROR) { "Shizuku was killed prematurely" }
@@ -46,7 +46,7 @@ class ShizukuInstallerAnime(private val service: Service) : InstallerAnime(servi
     @Suppress("BlockingMethodInNonBlockingContext")
     override fun processEntry(entry: Entry) {
         super.processEntry(entry)
-        ioScope.launch {
+        scope.launch {
             var sessionId: String? = null
             try {
                 val size = service.getUriSize(entry.uri) ?: throw IllegalStateException()
@@ -88,7 +88,7 @@ class ShizukuInstallerAnime(private val service: Service) : InstallerAnime(servi
     override fun onDestroy() {
         Shizuku.removeBinderDeadListener(shizukuDeadListener)
         Shizuku.removeRequestPermissionResultListener(shizukuPermissionListener)
-        ioScope.cancel()
+        scope.cancel()
         super.onDestroy()
     }
 
@@ -116,7 +116,7 @@ class ShizukuInstallerAnime(private val service: Service) : InstallerAnime(servi
                 false
             }
         } else {
-            logcat(LogPriority.ERROR) { "Shizuku is not ready to use." }
+            logcat(LogPriority.ERROR) { "Shizuku is not ready to use" }
             service.toast(R.string.ext_installer_shizuku_stopped)
             service.stopSelf()
             false

@@ -63,11 +63,6 @@ fun AnimeEpisodeListItem(
             .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp),
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            val textColor = if (bookmark && !seen) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.onSurface
-            }
             val textAlpha = remember(seen) { if (seen) ReadItemAlpha else 1f }
             val textSubtitleAlpha = remember(seen) { if (seen) ReadItemAlpha else SecondaryItemAlpha }
 
@@ -85,7 +80,6 @@ fun AnimeEpisodeListItem(
                 }
                 Text(
                     text = title,
-                    color = textColor,
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -96,8 +90,7 @@ fun AnimeEpisodeListItem(
             Spacer(modifier = Modifier.height(6.dp))
             Row(modifier = Modifier.alpha(textSubtitleAlpha)) {
                 ProvideTextStyle(
-                    value = MaterialTheme.typography.bodyMedium
-                        .copy(color = textColor, fontSize = 12.sp),
+                    value = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
                 ) {
                     if (date != null) {
                         Text(

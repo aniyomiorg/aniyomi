@@ -78,7 +78,7 @@ fun TrackInfoDialogHome(
     ) {
         trackItems.forEach { item ->
             if (item.track != null) {
-                val supportsScoring = item.service.getScoreList().isNotEmpty()
+                val supportsScoring = item.service.mangaService.getScoreList().isNotEmpty()
                 val supportsReadingDates = item.service.supportsReadingDates
                 TrackInfoItem(
                     title = item.track.title,
@@ -95,7 +95,7 @@ fun TrackInfoDialogHome(
                         }
                     },
                     onChaptersClick = { onChapterClick(item) },
-                    score = item.service.displayScore(item.track)
+                    score = item.service.mangaService.displayScore(item.track)
                         .takeIf { supportsScoring && item.track.score != 0F },
                     onScoreClick = { onScoreClick(item) }
                         .takeIf { supportsScoring },
@@ -232,7 +232,7 @@ private fun TrackInfoItem(
 }
 
 @Composable
-private fun TrackDetailsItem(
+fun TrackDetailsItem(
     modifier: Modifier = Modifier,
     text: String?,
     placeholder: String = "",
@@ -277,7 +277,7 @@ private fun TrackInfoItemEmpty(
 }
 
 @Composable
-private fun TrackInfoItemMenu(
+fun TrackInfoItemMenu(
     onOpenInBrowser: () -> Unit,
     onRemoved: () -> Unit,
 ) {

@@ -6,6 +6,8 @@ import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
+import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
@@ -14,7 +16,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class Shikimori(private val context: Context, id: Long) : TrackService(id) {
+class Shikimori(private val context: Context, id: Long) : TrackService(id), MangaTrackService, AnimeTrackService {
 
     companion object {
         const val READING = 1
@@ -36,6 +38,10 @@ class Shikimori(private val context: Context, id: Long) : TrackService(id) {
 
     override fun getScoreList(): List<String> {
         return IntRange(0, 10).map(Int::toString)
+    }
+
+    override fun indexToScore(index: Int): Float {
+        return index.toFloat()
     }
 
     override fun displayScore(track: Track): String {

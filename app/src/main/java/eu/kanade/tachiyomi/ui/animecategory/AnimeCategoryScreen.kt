@@ -7,22 +7,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.uniqueScreenKey
+import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.category.AnimeCategoryScreen
 import eu.kanade.presentation.category.components.CategoryCreateDialog
 import eu.kanade.presentation.category.components.CategoryDeleteDialog
 import eu.kanade.presentation.category.components.CategoryRenameDialog
 import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.util.LocalRouter
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.collectLatest
 
 class AnimeCategoryScreen : Screen {
 
+    override val key = uniqueScreenKey
+
     @Composable
     override fun Content() {
         val context = LocalContext.current
-        val router = LocalRouter.currentOrThrow
+        val navigator = LocalNavigator.currentOrThrow
         val screenModel = rememberScreenModel { AnimeCategoryScreenModel() }
 
         val state by screenModel.state.collectAsState()
@@ -36,30 +39,30 @@ class AnimeCategoryScreen : Screen {
 
         AnimeCategoryScreen(
             state = successState,
-            onClickCreate = { screenModel.showDialog(CategoryDialog.Create) },
-            onClickRename = { screenModel.showDialog(CategoryDialog.Rename(it)) },
-            onClickDelete = { screenModel.showDialog(CategoryDialog.Delete(it)) },
+            onClickCreate = { screenModel.showDialog(AnimeCategoryDialog.Create) },
+            onClickRename = { screenModel.showDialog(AnimeCategoryDialog.Rename(it)) },
+            onClickDelete = { screenModel.showDialog(AnimeCategoryDialog.Delete(it)) },
             onClickMoveUp = screenModel::moveUp,
             onClickMoveDown = screenModel::moveDown,
-            navigateUp = router::popCurrentController,
+            navigateUp = navigator::pop,
         )
 
         when (val dialog = successState.dialog) {
             null -> {}
-            CategoryDialog.Create -> {
+            AnimeCategoryDialog.Create -> {
                 CategoryCreateDialog(
                     onDismissRequest = screenModel::dismissDialog,
                     onCreate = { screenModel.createCategory(it) },
                 )
             }
-            is CategoryDialog.Rename -> {
+            is AnimeCategoryDialog.Rename -> {
                 CategoryRenameDialog(
                     onDismissRequest = screenModel::dismissDialog,
                     onRename = { screenModel.renameCategory(dialog.category, it) },
                     category = dialog.category,
                 )
             }
-            is CategoryDialog.Delete -> {
+            is AnimeCategoryDialog.Delete -> {
                 CategoryDeleteDialog(
                     onDismissRequest = screenModel::dismissDialog,
                     onDelete = { screenModel.deleteCategory(dialog.category.id) },
@@ -70,7 +73,7 @@ class AnimeCategoryScreen : Screen {
 
         LaunchedEffect(Unit) {
             screenModel.events.collectLatest { event ->
-                if (event is CategoryEvent.LocalizedMessage) {
+                if (event is AnimeCategoryEvent.LocalizedMessage) {
                     context.toast(event.stringRes)
                 }
             }

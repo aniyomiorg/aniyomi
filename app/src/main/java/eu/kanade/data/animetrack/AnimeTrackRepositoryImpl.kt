@@ -9,7 +9,11 @@ class AnimeTrackRepositoryImpl(
     private val handler: AnimeDatabaseHandler,
 ) : AnimeTrackRepository {
 
-    override suspend fun getAnimeTracksByAnimeId(animeId: Long): List<AnimeTrack> {
+    override suspend fun getTrackByAnimeId(id: Long): AnimeTrack? {
+        return handler.awaitOneOrNull { anime_syncQueries.getTrackByAnimeId(id, animetrackMapper) }
+    }
+
+    override suspend fun getTracksByAnimeId(animeId: Long): List<AnimeTrack> {
         return handler.awaitList {
             anime_syncQueries.getTracksByAnimeId(animeId, animetrackMapper)
         }
@@ -21,7 +25,7 @@ class AnimeTrackRepositoryImpl(
         }
     }
 
-    override fun getAnimeTracksByAnimeIdAsFlow(animeId: Long): Flow<List<AnimeTrack>> {
+    override fun getTracksByAnimeIdAsFlow(animeId: Long): Flow<List<AnimeTrack>> {
         return handler.subscribeToList {
             anime_syncQueries.getTracksByAnimeId(animeId, animetrackMapper)
         }

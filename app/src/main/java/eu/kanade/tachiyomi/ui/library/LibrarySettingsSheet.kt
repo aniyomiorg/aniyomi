@@ -14,7 +14,7 @@ import eu.kanade.domain.library.model.display
 import eu.kanade.domain.library.model.sort
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.track.AnimeTrackService
+import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -104,7 +104,7 @@ class LibrarySettingsSheet(
             override val footer = null
 
             init {
-                trackManager.services.filter { service -> service.isLogged && service !is AnimeTrackService }
+                trackManager.services.filter { service -> service.isLogged && service is MangaTrackService }
                     .also { services ->
                         val size = services.size
                         trackFilters = services.associate { service ->

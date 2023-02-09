@@ -1,3 +1,138 @@
 package eu.kanade.tachiyomi.data.track
 
-interface MangaTrackService
+import android.app.Application
+import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
+import eu.kanade.domain.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.track.interactor.InsertTrack
+import eu.kanade.domain.track.model.toDbTrack
+import eu.kanade.domain.track.model.toDomainTrack
+import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.util.lang.withIOContext
+import eu.kanade.tachiyomi.util.lang.withUIContext
+import eu.kanade.tachiyomi.util.system.logcat
+import eu.kanade.tachiyomi.util.system.toast
+import logcat.LogPriority
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
+import eu.kanade.domain.track.model.Track as DomainTrack
+
+interface MangaTrackService {
+
+    // Common functions
+    fun getCompletionStatus(): Int
+
+    fun getScoreList(): List<String>
+
+    fun indexToScore(index: Int): Float {
+        return index.toFloat()
+    }
+
+    // Anime specific functions
+    fun getStatusList(): List<Int>
+
+    fun getReadingStatus(): Int
+
+    fun getRereadingStatus(): Int
+
+    // TODO: Store all scores as 10 point in the future maybe?
+    fun get10PointScore(track: DomainTrack): Float {
+        return track.score
+    }
+
+    fun displayScore(track: Track): String
+
+    suspend fun update(track: Track, didReadChapter: Boolean = false): Track
+
+    suspend fun bind(track: Track, hasReadChapters: Boolean = false): Track
+
+    suspend fun search(query: String): List<TrackSearch>
+
+    suspend fun refresh(track: Track): Track
+
+    suspend fun registerTracking(item: Track, mangaId: Long) {
+        item.manga_id = mangaId
+        try {
+            withIOContext {
+                val allChapters = Injekt.get<GetChapterByMangaId>().await(mangaId)
+                val hasReadChapters = allChapters.any { it.read }
+                bind(item, hasReadChapters)
+
+                val track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
+
+                Injekt.get<InsertTrack>().await(track)
+
+                // Update chapter progress if newer chapters marked read locally
+                if (hasReadChapters) {
+                    val latestLocalReadChapterNumber = allChapters
+                        .sortedBy { it.chapterNumber }
+                        .takeWhile { it.read }
+                        .lastOrNull()
+                        ?.chapterNumber?.toDouble() ?: -1.0
+
+                    if (latestLocalReadChapterNumber > track.lastChapterRead) {
+                        val updatedTrack = track.copy(
+                            lastChapterRead = latestLocalReadChapterNumber,
+                        )
+                        setRemoteLastChapterRead(updatedTrack.toDbTrack(), latestLocalReadChapterNumber.toInt())
+                    }
+                }
+
+                if (this is EnhancedMangaTrackService) {
+                    Injekt.get<SyncChaptersWithTrackServiceTwoWay>().await(allChapters, track, this@MangaTrackService)
+                }
+            }
+        } catch (e: Throwable) {
+            withUIContext { Injekt.get<Application>().toast(e.message) }
+        }
+    }
+
+    suspend fun setRemoteStatus(track: Track, status: Int) {
+        track.status = status
+        if (track.status == getCompletionStatus() && track.total_chapters != 0) {
+            track.last_chapter_read = track.total_chapters.toFloat()
+        }
+        withIOContext { updateRemote(track) }
+    }
+
+    suspend fun setRemoteLastChapterRead(track: Track, chapterNumber: Int) {
+        if (track.last_chapter_read == 0F && track.last_chapter_read < chapterNumber && track.status != getRereadingStatus()) {
+            track.status = getReadingStatus()
+        }
+        track.last_chapter_read = chapterNumber.toFloat()
+        if (track.total_chapters != 0 && track.last_chapter_read.toInt() == track.total_chapters) {
+            track.status = getCompletionStatus()
+        }
+        withIOContext { updateRemote(track) }
+    }
+
+    suspend fun setRemoteScore(track: Track, scoreString: String) {
+        track.score = indexToScore(getScoreList().indexOf(scoreString))
+        withIOContext { updateRemote(track) }
+    }
+
+    suspend fun setRemoteStartDate(track: Track, epochMillis: Long) {
+        track.started_reading_date = epochMillis
+        withIOContext { updateRemote(track) }
+    }
+
+    suspend fun setRemoteFinishDate(track: Track, epochMillis: Long) {
+        track.finished_reading_date = epochMillis
+        withIOContext { updateRemote(track) }
+    }
+
+    private suspend fun updateRemote(track: Track) {
+        withIOContext {
+            try {
+                update(track)
+                track.toDomainTrack(idRequired = false)?.let {
+                    Injekt.get<InsertTrack>().await(it)
+                }
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e) { "Failed to update remote track data id=${track.id}" }
+                withUIContext { Injekt.get<Application>().toast(e.message) }
+            }
+        }
+    }
+
+}

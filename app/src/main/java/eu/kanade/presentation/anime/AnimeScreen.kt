@@ -56,8 +56,8 @@ import eu.kanade.presentation.components.AnimeBottomActionMenu
 import eu.kanade.presentation.components.EpisodeDownloadAction
 import eu.kanade.presentation.components.ExtendedFloatingActionButton
 import eu.kanade.presentation.components.LazyColumn
+import eu.kanade.presentation.components.PullRefresh
 import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.components.SwipeRefresh
 import eu.kanade.presentation.components.TwoPanelBox
 import eu.kanade.presentation.components.VerticalFastScroller
 import eu.kanade.presentation.manga.DownloadAction
@@ -81,10 +81,11 @@ fun AnimeScreen(
     snackbarHostState: SnackbarHostState,
     isTabletUi: Boolean,
     onBackClicked: () -> Unit,
-    onEpisodeClicked: (Episode, Boolean) -> Unit,
+    onEpisodeClicked: (episode: Episode, alt: Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
+    onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
     onTagClicked: (String) -> Unit,
     onFilterButtonClicked: () -> Unit,
@@ -122,6 +123,7 @@ fun AnimeScreen(
             onDownloadEpisode = onDownloadEpisode,
             onAddToLibraryClicked = onAddToLibraryClicked,
             onWebViewClicked = onWebViewClicked,
+            onWebViewLongClicked = onWebViewLongClicked,
             onTrackingClicked = onTrackingClicked,
             onTagClicked = onTagClicked,
             onFilterClicked = onFilterButtonClicked,
@@ -151,6 +153,7 @@ fun AnimeScreen(
             onDownloadEpisode = onDownloadEpisode,
             onAddToLibraryClicked = onAddToLibraryClicked,
             onWebViewClicked = onWebViewClicked,
+            onWebViewLongClicked = onWebViewLongClicked,
             onTrackingClicked = onTrackingClicked,
             onTagClicked = onTagClicked,
             onFilterButtonClicked = onFilterButtonClicked,
@@ -183,6 +186,7 @@ private fun AnimeScreenSmallImpl(
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
+    onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
     onTagClicked: (String) -> Unit,
     onFilterClicked: () -> Unit,
@@ -242,8 +246,6 @@ private fun AnimeScreenSmallImpl(
                 titleAlphaProvider = { animatedTitleAlpha },
                 backgroundAlphaProvider = { animatedBgAlpha },
                 hasFilters = state.anime.episodesFiltered(),
-                incognitoMode = state.isIncognitoMode,
-                downloadedOnlyMode = state.isDownloadedOnlyMode,
                 onBackClicked = internalOnBackPressed,
                 onClickFilter = onFilterClicked,
                 onClickShare = onShareClicked,
@@ -298,7 +300,7 @@ private fun AnimeScreenSmallImpl(
     ) { contentPadding ->
         val topPadding = contentPadding.calculateTopPadding()
 
-        SwipeRefresh(
+        PullRefresh(
             refreshing = state.isRefreshingData,
             onRefresh = onRefresh,
             enabled = episodes.fastAll { !it.selected },
@@ -347,6 +349,7 @@ private fun AnimeScreenSmallImpl(
                             trackingCount = state.trackingCount,
                             onAddToLibraryClicked = onAddToLibraryClicked,
                             onWebViewClicked = onWebViewClicked,
+                            onWebViewLongClicked = onWebViewLongClicked,
                             onTrackingClicked = onTrackingClicked,
                             onEditCategory = onEditCategoryClicked,
                         )
@@ -396,6 +399,7 @@ fun AnimeScreenLargeImpl(
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
+    onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
     onTagClicked: (String) -> Unit,
     onFilterButtonClicked: () -> Unit,
@@ -431,7 +435,8 @@ fun AnimeScreenLargeImpl(
 
     val insetPadding = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal).asPaddingValues()
     var topBarHeight by remember { mutableStateOf(0) }
-    SwipeRefresh(
+
+    PullRefresh(
         refreshing = state.isRefreshingData,
         onRefresh = onRefresh,
         enabled = episodes.fastAll { !it.selected },
@@ -460,8 +465,6 @@ fun AnimeScreenLargeImpl(
                     titleAlphaProvider = { if (episodes.fastAny { it.selected }) 1f else 0f },
                     backgroundAlphaProvider = { 1f },
                     hasFilters = state.anime.episodesFiltered(),
-                    incognitoMode = state.isIncognitoMode,
-                    downloadedOnlyMode = state.isDownloadedOnlyMode,
                     onBackClicked = internalOnBackPressed,
                     onClickFilter = onFilterButtonClicked,
                     onClickShare = onShareClicked,
@@ -544,6 +547,7 @@ fun AnimeScreenLargeImpl(
                             trackingCount = state.trackingCount,
                             onAddToLibraryClicked = onAddToLibraryClicked,
                             onWebViewClicked = onWebViewClicked,
+                            onWebViewLongClicked = onWebViewLongClicked,
                             onTrackingClicked = onTrackingClicked,
                             onEditCategory = onEditCategoryClicked,
                         )

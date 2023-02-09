@@ -85,11 +85,11 @@ class AnimeDownloadService : Service() {
     /**
      * Subscriptions to store while the service is running.
      */
-    private lateinit var ioScope: CoroutineScope
+    private lateinit var scope: CoroutineScope
 
     override fun onCreate() {
         super.onCreate()
-        ioScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
         startForeground(Notifications.ID_DOWNLOAD_EPISODE_PROGRESS, getPlaceholderNotification())
         wakeLock = acquireWakeLock(javaClass.name)
         _isRunning.value = true
@@ -98,7 +98,7 @@ class AnimeDownloadService : Service() {
     }
 
     override fun onDestroy() {
-        ioScope?.cancel()
+        scope?.cancel()
         _isRunning.value = false
         downloadManager.stopDownloads()
         wakeLock.releaseIfHeld()
@@ -143,7 +143,7 @@ class AnimeDownloadService : Service() {
                     stopSelf()
                 }
             }
-            .launchIn(ioScope)
+            .launchIn(scope)
     }
 
     /**
@@ -161,7 +161,7 @@ class AnimeDownloadService : Service() {
             .catch {
                 // Ignore errors
             }
-            .launchIn(ioScope)
+            .launchIn(scope)
     }
 
     private fun PowerManager.WakeLock.releaseIfHeld() {

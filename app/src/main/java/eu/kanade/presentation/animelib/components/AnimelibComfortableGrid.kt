@@ -9,24 +9,22 @@ import androidx.compose.ui.util.fastAny
 import eu.kanade.domain.anime.model.AnimeCover
 import eu.kanade.domain.animelib.model.AnimelibAnime
 import eu.kanade.presentation.components.MangaComfortableGridItem
+import eu.kanade.presentation.library.components.DownloadsBadge
+import eu.kanade.presentation.library.components.LanguageBadge
 import eu.kanade.presentation.library.components.LazyLibraryGrid
+import eu.kanade.presentation.library.components.UnreadBadge
 import eu.kanade.presentation.library.components.globalSearchItem
 import eu.kanade.tachiyomi.ui.animelib.AnimelibItem
 
 @Composable
 fun AnimelibComfortableGrid(
     items: List<AnimelibItem>,
-    showDownloadBadges: Boolean,
-    showUnreadBadges: Boolean,
-    showLocalBadges: Boolean,
-    showLanguageBadges: Boolean,
-    showContinueWatchingButton: Boolean,
     columns: Int,
     contentPadding: PaddingValues,
     selection: List<AnimelibAnime>,
     onClick: (AnimelibAnime) -> Unit,
     onLongClick: (AnimelibAnime) -> Unit,
-    onClickContinueWatching: (AnimelibAnime) -> Unit,
+    onClickContinueWatching: ((AnimelibAnime) -> Unit)?,
     searchQuery: String?,
     onGlobalSearchClicked: () -> Unit,
 ) {
@@ -53,26 +51,22 @@ fun AnimelibComfortableGrid(
                     lastModified = anime.coverLastModified,
                 ),
                 coverBadgeStart = {
-                    DownloadsBadge(
-                        enabled = showDownloadBadges,
-                        item = animelibItem,
-                    )
-                    UnseenBadge(
-                        enabled = showUnreadBadges,
-                        item = animelibItem,
-                    )
+                    DownloadsBadge(count = animelibItem.downloadCount.toInt())
+                    UnreadBadge(count = animelibItem.unseenCount.toInt())
                 },
                 coverBadgeEnd = {
                     LanguageBadge(
-                        showLanguage = showLanguageBadges,
-                        showLocal = showLocalBadges,
-                        item = animelibItem,
+                        isLocal = animelibItem.isLocal,
+                        sourceLanguage = animelibItem.sourceLanguage,
                     )
                 },
-                showContinueReadingButton = showContinueWatchingButton,
                 onLongClick = { onLongClick(animelibItem.animelibAnime) },
                 onClick = { onClick(animelibItem.animelibAnime) },
-                onClickContinueReading = { onClickContinueWatching(animelibItem.animelibAnime) },
+                onClickContinueReading = if (onClickContinueWatching != null) {
+                    { onClickContinueWatching(animelibItem.animelibAnime) }
+                } else {
+                    null
+                },
             )
         }
     }

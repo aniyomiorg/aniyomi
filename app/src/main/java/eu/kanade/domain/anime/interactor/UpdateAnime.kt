@@ -4,7 +4,6 @@ import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.AnimeUpdate
 import eu.kanade.domain.anime.model.hasCustomCover
 import eu.kanade.domain.anime.model.isLocal
-import eu.kanade.domain.anime.model.toDbAnime
 import eu.kanade.domain.anime.repository.AnimeRepository
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
@@ -46,11 +45,11 @@ class UpdateAnime(
                 !manualFetch && localAnime.thumbnailUrl == remoteAnime.thumbnail_url -> null
                 localAnime.isLocal() -> Date().time
                 localAnime.hasCustomCover(coverCache) -> {
-                    coverCache.deleteFromCache(localAnime.toDbAnime(), false)
+                    coverCache.deleteFromCache(localAnime, false)
                     null
                 }
                 else -> {
-                    coverCache.deleteFromCache(localAnime.toDbAnime(), false)
+                    coverCache.deleteFromCache(localAnime, false)
                     Date().time
                 }
             }

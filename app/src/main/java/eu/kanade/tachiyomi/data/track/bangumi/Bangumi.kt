@@ -6,6 +6,8 @@ import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
+import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
@@ -14,7 +16,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class Bangumi(private val context: Context, id: Long) : TrackService(id) {
+class Bangumi(private val context: Context, id: Long) : TrackService(id), MangaTrackService, AnimeTrackService {
 
     private val json: Json by injectLazy()
 
@@ -27,6 +29,10 @@ class Bangumi(private val context: Context, id: Long) : TrackService(id) {
 
     override fun getScoreList(): List<String> {
         return IntRange(0, 10).map(Int::toString)
+    }
+
+    override fun indexToScore(index: Int): Float {
+        return index.toFloat()
     }
 
     override fun displayScore(track: Track): String {
@@ -97,7 +103,7 @@ class Bangumi(private val context: Context, id: Long) : TrackService(id) {
         }
     }
 
-    override suspend fun bind(track: AnimeTrack, hasReadChapters: Boolean): AnimeTrack {
+    override suspend fun bind(track: AnimeTrack, hasSeenEpisodes: Boolean): AnimeTrack {
         val statusTrack = api.statusLibAnime(track)
         val remoteTrack = api.findLibAnime(track)
         return if (remoteTrack != null && statusTrack != null) {
@@ -105,7 +111,7 @@ class Bangumi(private val context: Context, id: Long) : TrackService(id) {
             track.library_id = remoteTrack.library_id
 
             if (track.status != COMPLETED) {
-                track.status = if (hasReadChapters) READING else statusTrack.status
+                track.status = if (hasSeenEpisodes) READING else statusTrack.status
             }
 
             track.status = statusTrack.status
@@ -115,7 +121,7 @@ class Bangumi(private val context: Context, id: Long) : TrackService(id) {
             refresh(track)
         } else {
             // Set default fields if it's not found in the list
-            track.status = if (hasReadChapters) READING else PLAN_TO_READ
+            track.status = if (hasSeenEpisodes) READING else PLAN_TO_READ
             track.score = 0F
             add(track)
             update(track)

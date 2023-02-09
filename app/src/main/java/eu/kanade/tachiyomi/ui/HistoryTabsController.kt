@@ -1,55 +1,71 @@
 package eu.kanade.tachiyomi.ui
 
-import android.Manifest
-import android.view.View
+import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
+import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.presentation.components.PagerState
 import eu.kanade.presentation.components.TabbedScreen
+import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.animehistory.AnimeHistoryScreenModel
 import eu.kanade.tachiyomi.ui.animehistory.animeHistoryTab
-import eu.kanade.tachiyomi.ui.base.controller.FullComposeController
-import eu.kanade.tachiyomi.ui.base.controller.RootController
-import eu.kanade.tachiyomi.ui.base.controller.requestPermissionsSafe
+import eu.kanade.tachiyomi.ui.history.HistoryScreenModel
 import eu.kanade.tachiyomi.ui.history.historyTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
+import eu.kanade.tachiyomi.util.storage.DiskUtil
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class HistoryTabsController : FullComposeController<HistoryTabsPresenter>(), RootController {
+data class HistoriesTab() : Tab {
 
-    override fun createPresenter() = HistoryTabsPresenter()
-
-    private val state = PagerState(currentPage = TAB_ANIME)
+    override val options: TabOptions
+        @Composable
+        get() {
+            val isSelected = LocalTabNavigator.current.current.key == key
+            val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_browse_enter)
+            return TabOptions(
+                index = 3u,
+                title = stringResource(R.string.history),
+                icon = rememberAnimatedVectorPainter(image, isSelected),
+            )
+        }
 
     @Composable
-    override fun ComposeContent() {
+    override fun Content() {
+        val context = LocalContext.current
+        // Hoisted for extensions tab's search bar
+        val historyScreenModel = rememberScreenModel { HistoryScreenModel() }
+
+        val animeHistoryScreenModel = rememberScreenModel { AnimeHistoryScreenModel() }
+
         val libraryPreferences: LibraryPreferences = Injekt.get()
         val fromMore = libraryPreferences.bottomNavStyle().get() == 0
+
         TabbedScreen(
             titleRes = R.string.label_recent_manga,
             tabs = listOf(
-                animeHistoryTab(router, presenter.animeHistoryPresenter, fromMore),
-                historyTab(router, presenter.historyPresenter, fromMore),
+                animeHistoryTab(),
+                historyTab(),
             ),
-            incognitoMode = presenter.isIncognitoMode,
-            downloadedOnlyMode = presenter.isDownloadOnly,
-            state = state,
-            searchQuery = presenter.historyPresenter.searchQuery,
-            onChangeSearchQuery = { presenter.historyPresenter.searchQuery = it },
-            searchQueryAnime = presenter.animeHistoryPresenter.searchQuery,
-            onChangeSearchQueryAnime = { presenter.animeHistoryPresenter.searchQuery = it },
+            searchQuery = historyScreenModel.getSearchQuery,
+            onChangeSearchQuery = historyScreenModel::updateSearchQuery,
+            searchQueryAnime = animeHistoryScreenModel.getSearchQuery,
+            onChangeSearchQueryAnime = animeHistoryScreenModel::updateSearchQuery,
         )
 
         LaunchedEffect(Unit) {
-            (activity as? MainActivity)?.ready = true
+            (context as? MainActivity)?.ready = true
         }
-    }
 
-    override fun onViewCreated(view: View) {
-        super.onViewCreated(view)
-        requestPermissionsSafe(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 301)
+        // For local source
+        DiskUtil.RequestStoragePermission()
     }
 
     fun resumeLastItem() {
@@ -63,3 +79,5 @@ class HistoryTabsController : FullComposeController<HistoryTabsPresenter>(), Roo
 
 private const val TAB_ANIME = 0
 private const val TAB_MANGA = 1
+
+// TODO: Fix History, updates and download tabs

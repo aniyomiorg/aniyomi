@@ -42,8 +42,9 @@ import eu.kanade.presentation.components.NavigationRail
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.animelib.AnimelibTab
 import eu.kanade.tachiyomi.ui.browse.BrowseTab
-import eu.kanade.tachiyomi.ui.download.DownloadQueueScreen
+import eu.kanade.tachiyomi.ui.download.manga.DownloadQueueScreen
 import eu.kanade.tachiyomi.ui.history.HistoryTab
 import eu.kanade.tachiyomi.ui.library.LibraryTab
 import eu.kanade.tachiyomi.ui.manga.MangaScreen
@@ -58,6 +59,7 @@ import soup.compose.material.motion.animation.materialFadeThroughIn
 import soup.compose.material.motion.animation.materialFadeThroughOut
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 
 object HomeScreen : Screen {
 
@@ -67,19 +69,43 @@ object HomeScreen : Screen {
 
     private const val TabFadeDuration = 200
 
-    private val tabs = listOf(
+    private val preferences: LibraryPreferences by injectLazy()
+
+    private val tabsNoHistory = listOf(
+        AnimelibTab,
         LibraryTab,
+        UpdatesTab,
+        BrowseTab(),
+        MoreTab
+    )
+
+    private val tabsNoUpdates = listOf(
+        AnimelibTab,
+        LibraryTab,
+        HistoryTab,
+        BrowseTab(),
+        MoreTab
+    )
+
+    private val tabsNoManga = listOf(
+        AnimelibTab,
         UpdatesTab,
         HistoryTab,
         BrowseTab(),
-        MoreTab,
+        MoreTab
     )
+
+    private val tabs = when (preferences.bottomNavStyle().get()) {
+        0 -> tabsNoHistory
+        1 -> tabsNoUpdates
+        else -> tabsNoManga
+    }
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         TabNavigator(
-            tab = LibraryTab,
+            tab = AnimelibTab,
         ) { tabNavigator ->
             // Provide usable navigator to content screen
             CompositionLocalProvider(LocalNavigator provides navigator) {
@@ -134,22 +160,23 @@ object HomeScreen : Screen {
                 }
             }
 
-            val goToLibraryTab = { tabNavigator.current = LibraryTab }
+            val goToAnimelibTab = { tabNavigator.current = AnimelibTab }
             BackHandler(
-                enabled = tabNavigator.current != LibraryTab,
-                onBack = goToLibraryTab,
+                enabled = tabNavigator.current != AnimelibTab,
+                onBack = goToAnimelibTab,
             )
 
             LaunchedEffect(Unit) {
                 launch {
                     librarySearchEvent.receiveAsFlow().collectLatest {
-                        goToLibraryTab()
-                        LibraryTab.search(it)
+                        goToAnimelibTab()
+                        AnimelibTab.search(it)
                     }
                 }
                 launch {
                     openTabEvent.receiveAsFlow().collectLatest {
                         tabNavigator.current = when (it) {
+                            is Tab.Animelib -> AnimelibTab
                             is Tab.Library -> LibraryTab
                             Tab.Updates -> UpdatesTab
                             Tab.History -> HistoryTab
@@ -157,6 +184,9 @@ object HomeScreen : Screen {
                             is Tab.More -> MoreTab
                         }
 
+                        if (it is Tab.Animelib && it.animeIdToOpen != null) {
+                            navigator.push(MangaScreen(it.animeIdToOpen))
+                        }
                         if (it is Tab.Library && it.mangaIdToOpen != null) {
                             navigator.push(MangaScreen(it.mangaIdToOpen))
                         }
@@ -235,7 +265,7 @@ object HomeScreen : Screen {
                             val pref = Injekt.get<LibraryPreferences>()
                             combine(
                                 pref.newShowUpdatesCount().changes(),
-                                pref.newUpdatesCount().changes(),
+                                pref.newMangaUpdatesCount().changes(),
                             ) { show, count -> if (show) count else 0 }
                                 .collectLatest { value = it }
                         }
@@ -292,6 +322,7 @@ object HomeScreen : Screen {
     }
 
     sealed class Tab {
+        data class Animelib(val animeIdToOpen: Long? = null) : Tab()
         data class Library(val mangaIdToOpen: Long? = null) : Tab()
         object Updates : Tab()
         object History : Tab()

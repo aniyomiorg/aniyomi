@@ -47,7 +47,7 @@ import eu.kanade.data.AnimeDatabaseHandler
 import eu.kanade.domain.anime.model.AnimeCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
-import eu.kanade.tachiyomi.ui.anime.AnimeController
+import eu.kanade.tachiyomi.util.Constants
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.dpToPx
@@ -136,7 +136,7 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
                                 ) {
                                     val intent = Intent(LocalContext.current, MainActivity::class.java).apply {
                                         action = MainActivity.SHORTCUT_ANIME
-                                        putExtra(AnimeController.ANIME_EXTRA, animeId)
+                                        putExtra(Constants.ANIME_EXTRA, animeId)
                                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 

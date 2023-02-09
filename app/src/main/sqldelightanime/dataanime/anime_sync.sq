@@ -25,6 +25,12 @@ getAnimeTracks:
 SELECT *
 FROM anime_sync;
 
+getTrackByAnimeId:
+SELECT *
+FROM anime_sync
+WHERE _id = :id;
+
+
 getTracksByAnimeId:
 SELECT *
 FROM anime_sync

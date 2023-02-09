@@ -1,17 +1,14 @@
 package eu.kanade.domain.anime.model
 
-import eu.kanade.data.listOfStringsAdapter
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.manga.model.TriStateFilter
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import eu.kanade.tachiyomi.data.database.models.AnimeImpl
 import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
-import eu.kanade.tachiyomi.widget.ExtendedNavigationView
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.Serializable
-import eu.kanade.tachiyomi.data.database.models.Anime as DbAnime
 
 data class Anime(
     val id: Long,
@@ -48,6 +45,9 @@ data class Anime(
 
     val bookmarkedFilterRaw: Long
         get() = episodeFlags and EPISODE_BOOKMARKED_MASK
+
+    val skipIntroLength: Long
+        get() = viewerFlags
 
     val unseenFilter: TriStateFilter
         get() = when (unseenFilterRaw) {
@@ -171,42 +171,6 @@ data class Anime(
             initialized = false,
         )
     }
-}
-
-enum class TriStateFilter {
-    DISABLED, // Disable filter
-    ENABLED_IS, // Enabled with "is" filter
-    ENABLED_NOT, // Enabled with "not" filter
-}
-
-fun TriStateFilter.toTriStateGroupState(): ExtendedNavigationView.Item.TriStateGroup.State {
-    return when (this) {
-        TriStateFilter.DISABLED -> ExtendedNavigationView.Item.TriStateGroup.State.IGNORE
-        TriStateFilter.ENABLED_IS -> ExtendedNavigationView.Item.TriStateGroup.State.INCLUDE
-        TriStateFilter.ENABLED_NOT -> ExtendedNavigationView.Item.TriStateGroup.State.EXCLUDE
-    }
-}
-
-// TODO: Remove when all deps are migrated
-fun Anime.toDbAnime(): DbAnime = AnimeImpl().also {
-    it.id = id
-    it.source = source
-    it.favorite = favorite
-    it.last_update = lastUpdate
-    it.date_added = dateAdded
-    it.viewer_flags = viewerFlags.toInt()
-    it.episode_flags = episodeFlags.toInt()
-    it.cover_last_modified = coverLastModified
-    it.url = url
-    it.title = title
-    it.artist = artist
-    it.author = author
-    it.description = description
-    it.genre = genre?.let(listOfStringsAdapter::encode)
-    it.status = status.toInt()
-    it.thumbnail_url = thumbnailUrl
-    it.update_strategy = updateStrategy
-    it.initialized = initialized
 }
 
 fun Anime.toAnimeUpdate(): AnimeUpdate {

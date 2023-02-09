@@ -367,7 +367,7 @@ class UpdatesScreenModel(
     }
 
     fun resetNewUpdatesCount() {
-        libraryPreferences.newUpdatesCount().set(0)
+        libraryPreferences.newMangaUpdatesCount().set(0)
     }
 
     sealed class Dialog {

@@ -163,6 +163,7 @@ fun AnimeActionRow(
     trackingCount: Int,
     onAddToLibraryClicked: () -> Unit,
     onWebViewClicked: (() -> Unit)?,
+    onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
     onEditCategory: (() -> Unit)?,
 ) {
@@ -197,6 +198,7 @@ fun AnimeActionRow(
                 icon = Icons.Outlined.Public,
                 color = defaultActionButtonColor,
                 onClick = onWebViewClicked,
+                onLongClick = onWebViewLongClicked,
             )
         }
     }

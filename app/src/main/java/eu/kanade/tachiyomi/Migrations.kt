@@ -396,18 +396,20 @@ object Migrations {
                             val newInt = oldString.toIntOrNull() ?: return@edit
                             putInt(pref.key(), newInt)
                         }
-                val trackingQueuePref = context.getSharedPreferences("tracking_queue", Context.MODE_PRIVATE)
-                trackingQueuePref.all.forEach {
-                    val (_, lastChapterRead) = it.value.toString().split(":")
-                    trackingQueuePref.edit {
-                        remove(it.key)
-                        putFloat(it.key, lastChapterRead.toFloat())
+                        val trackingQueuePref =
+                            context.getSharedPreferences("tracking_queue", Context.MODE_PRIVATE)
+                        trackingQueuePref.all.forEach {
+                            val (_, lastChapterRead) = it.value.toString().split(":")
+                            trackingQueuePref.edit {
+                                remove(it.key)
+                                putFloat(it.key, lastChapterRead.toFloat())
+                            }
+                        }
                     }
+                    return true
                 }
             }
-            return true
         }
-
         return false
     }
 }

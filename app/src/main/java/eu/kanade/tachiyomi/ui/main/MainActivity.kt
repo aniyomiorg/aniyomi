@@ -67,7 +67,9 @@ import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animeextension.api.AnimeExtensionGithubApi
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
+import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.DownloadCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
@@ -431,11 +433,8 @@ class MainActivity : BaseActivity() {
                 HomeScreen.openTab(HomeScreen.Tab.More(toDownloads = true))
             }
             SHORTCUT_ANIME_DOWNLOADS -> {
-                if (router.backstackSize > 1) {
-                    router.popToRoot()
-                }
-                setSelectedNavItem(R.id.nav_more)
-                router.pushController(AnimeDownloadController())
+                navigator.popUntilRoot()
+                HomeScreen.openTab(HomeScreen.Tab.More(toDownloads = true))
             }
             Intent.ACTION_SEARCH, Intent.ACTION_SEND, "com.google.android.gms.actions.SEARCH_ACTION" -> {
                 // If the intent match the "standard" Android search intent
@@ -459,11 +458,9 @@ class MainActivity : BaseActivity() {
             INTENT_ANIMESEARCH -> {
                 val query = intent.getStringExtra(INTENT_SEARCH_QUERY)
                 if (query != null && query.isNotEmpty()) {
-                    val filter = intent.getStringExtra(INTENT_SEARCH_FILTER)
-                    if (router.backstackSize > 1) {
-                        router.popToRoot()
-                    }
-                    router.pushController(GlobalAnimeSearchController(query, filter))
+                    val filter = intent.getStringExtra(INTENT_SEARCH_FILTER) ?: ""
+                    navigator.popUntilRoot()
+                    navigator.push(GlobalSearchScreen(query, filter))
                 }
             }
             else -> {

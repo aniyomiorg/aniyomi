@@ -27,24 +27,4 @@ class AnimeTrackImpl : AnimeTrack {
     override var finished_watching_date: Long = 0
 
     override var tracking_url: String = ""
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as AnimeTrackImpl
-
-        if (anime_id != other.anime_id) return false
-        if (sync_id != other.sync_id) return false
-        if (media_id != other.media_id) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = anime_id.hashCode()
-        result = 31 * result + sync_id
-        result = 31 * result + media_id.hashCode()
-        return result
-    }
 }

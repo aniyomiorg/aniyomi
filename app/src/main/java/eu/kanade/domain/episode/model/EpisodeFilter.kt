@@ -1,7 +1,7 @@
 package eu.kanade.domain.episode.model
 
 import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.TriStateFilter
+import eu.kanade.domain.manga.model.TriStateFilter
 import eu.kanade.domain.anime.model.isLocal
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload

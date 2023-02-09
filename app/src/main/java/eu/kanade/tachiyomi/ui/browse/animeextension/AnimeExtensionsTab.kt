@@ -3,65 +3,56 @@ package eu.kanade.tachiyomi.ui.browse.animeextension
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
-import com.bluelinelabs.conductor.Router
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.animebrowse.AnimeExtensionScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animeextension.model.AnimeExtension
-import eu.kanade.tachiyomi.ui.base.controller.pushController
-import eu.kanade.tachiyomi.ui.browse.animeextension.details.AnimeExtensionDetailsController
+import eu.kanade.tachiyomi.ui.browse.animeextension.details.AnimeExtensionDetailsScreen
 
 @Composable
 fun animeExtensionsTab(
-    router: Router?,
-    presenter: AnimeExtensionsPresenter,
-) = TabContent(
-    titleRes = R.string.label_animeextensions,
-    badgeNumber = presenter.updates.takeIf { it > 0 },
-    searchEnabled = true,
-    actions = listOf(
-        AppBar.Action(
-            title = stringResource(R.string.action_filter),
-            icon = Icons.Outlined.Translate,
-            onClick = { router?.pushController(AnimeExtensionFilterController()) },
+    extensionsScreenModel: AnimeExtensionsScreenModel,
+): TabContent {
+    val navigator = LocalNavigator.currentOrThrow
+    val state by extensionsScreenModel.state.collectAsState()
+    val searchQuery by extensionsScreenModel.query.collectAsState()
+    return TabContent(
+        titleRes = R.string.label_animeextensions,
+        badgeNumber = state.updates.takeIf { it > 0 },
+        searchEnabled = true,
+        actions = listOf(
+            AppBar.Action(
+                title = stringResource(R.string.action_filter),
+                icon = Icons.Outlined.Translate,
+                onClick = { navigator.push(AnimeExtensionFilterScreen()) },
+            ),
         ),
-    ),
-    content = { contentPadding ->
-        AnimeExtensionScreen(
-            presenter = presenter,
-            contentPadding = contentPadding,
-            onLongClickItem = { extension ->
-                when (extension) {
-                    is AnimeExtension.Available -> presenter.installExtension(extension)
-                    else -> presenter.uninstallExtension(extension.pkgName)
-                }
-            },
-            onClickItemCancel = { extension ->
-                presenter.cancelInstallUpdateExtension(extension)
-            },
-            onClickUpdateAll = {
-                presenter.updateAllExtensions()
-            },
-            onInstallExtension = {
-                presenter.installExtension(it)
-            },
-            onOpenExtension = {
-                router?.pushController(AnimeExtensionDetailsController(it.pkgName))
-            },
-            onTrustExtension = {
-                presenter.trustSignature(it.signatureHash)
-            },
-            onUninstallExtension = {
-                presenter.uninstallExtension(it.pkgName)
-            },
-            onUpdateExtension = {
-                presenter.updateExtension(it)
-            },
-            onRefresh = {
-                presenter.findAvailableExtensions()
-            },
-        )
-    },
-)
+        content = { contentPadding, _ ->
+            AnimeExtensionScreen(
+                state = state,
+                contentPadding = contentPadding,
+                searchQuery = searchQuery,
+                onLongClickItem = { extension ->
+                    when (extension) {
+                        is AnimeExtension.Available -> extensionsScreenModel.installExtension(extension)
+                        else -> extensionsScreenModel.uninstallExtension(extension.pkgName)
+                    }
+                },
+                onClickItemCancel = extensionsScreenModel::cancelInstallUpdateExtension,
+                onClickUpdateAll = extensionsScreenModel::updateAllExtensions,
+                onInstallExtension = extensionsScreenModel::installExtension,
+                onOpenExtension = { navigator.push(AnimeExtensionDetailsScreen(it.pkgName)) },
+                onTrustExtension = { extensionsScreenModel.trustSignature(it.signatureHash) },
+                onUninstallExtension = { extensionsScreenModel.uninstallExtension(it.pkgName) },
+                onUpdateExtension = extensionsScreenModel::updateExtension,
+                onRefresh = extensionsScreenModel::findAvailableExtensions,
+            )
+        },
+    )
+}

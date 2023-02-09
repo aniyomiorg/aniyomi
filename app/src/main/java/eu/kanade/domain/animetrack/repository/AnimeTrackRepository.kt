@@ -5,11 +5,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface AnimeTrackRepository {
 
-    suspend fun getAnimeTracksByAnimeId(animeId: Long): List<AnimeTrack>
+    suspend fun getTrackByAnimeId(id: Long): AnimeTrack?
+
+    suspend fun getTracksByAnimeId(animeId: Long): List<AnimeTrack>
 
     fun getAnimeTracksAsFlow(): Flow<List<AnimeTrack>>
 
-    fun getAnimeTracksByAnimeIdAsFlow(animeId: Long): Flow<List<AnimeTrack>>
+    fun getTracksByAnimeIdAsFlow(animeId: Long): Flow<List<AnimeTrack>>
 
     suspend fun delete(animeId: Long, syncId: Long)
 

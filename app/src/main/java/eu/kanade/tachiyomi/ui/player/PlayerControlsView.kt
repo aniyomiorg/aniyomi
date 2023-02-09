@@ -237,17 +237,21 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     @SuppressLint("SetTextI18n")
     internal fun updatePlaybackPos(position: Int) {
-        if (activity.player.duration != null) {
-            if (playerPreferences.invertedPlaybackTxt().get()) {
-                binding.playbackPositionTxt.text =
-                    "-${Utils.prettyTime(activity.player.duration!! - position)}"
-            } else if (playerPreferences.invertedDurationTxt().get()) {
+        val duration = activity.player.duration
+        val invertedPlayback = playerPreferences.invertedPlaybackTxt().get()
+        val invertedDuration = playerPreferences.invertedDurationTxt().get()
+
+        if (duration != null) {
+            if (invertedPlayback) {
+                binding.playbackPositionTxt.text = "-${Utils.prettyTime(duration - position)}"
+            } else if (invertedDuration) {
                 binding.playbackPositionTxt.text = Utils.prettyTime(position)
-                binding.playbackDurationTxt.text =
-                    "-${Utils.prettyTime(activity.player.duration!! - position)}"
+                binding.playbackDurationTxt.text = "-${Utils.prettyTime(duration - position)}"
             } else {
                 binding.playbackPositionTxt.text = Utils.prettyTime(position)
             }
+            activity.viewModel.onSecondReached(position, duration)
+
         }
 
         binding.playbackSeekbar.progress = position
@@ -421,14 +425,14 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     private fun skipIntroLengthDialog() {
         val restore = pauseForDialog()
 
-        var newSkipIntroLength = activity.presenter.getAnimeSkipIntroLength()
+        var newSkipIntroLength = activity.viewModel.getAnimeSkipIntroLength()
 
         with(activity.HideBarsMaterialAlertDialogBuilder(context)) {
             setTitle(R.string.pref_intro_length)
             val binding = PrefSkipIntroLengthBinding.inflate(LayoutInflater.from(activity))
 
             with(binding.skipIntroColumn) {
-                value = activity.presenter.getAnimeSkipIntroLength()
+                value = activity.viewModel.getAnimeSkipIntroLength()
                 setOnValueChangedListener { _, _, newValue ->
                     newSkipIntroLength = newValue
                 }
@@ -436,13 +440,13 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
             setView(binding.root)
             setNeutralButton(R.string.label_default) { _, _ ->
-                activity.presenter.setAnimeSkipIntroLength(playerPreferences.defaultIntroLength().get())
+                activity.viewModel.setAnimeSkipIntroLength(playerPreferences.defaultIntroLength().get())
             }
             setPositiveButton(R.string.dialog_ok) { dialog, _ ->
                 when (newSkipIntroLength) {
-                    0 -> activity.presenter.setAnimeSkipIntroLength(playerPreferences.defaultIntroLength().get())
-                    activity.presenter.getAnimeSkipIntroLength() -> dialog.cancel()
-                    else -> activity.presenter.setAnimeSkipIntroLength(newSkipIntroLength)
+                    0 -> activity.viewModel.setAnimeSkipIntroLength(playerPreferences.defaultIntroLength().get())
+                    activity.viewModel.getAnimeSkipIntroLength() -> dialog.cancel()
+                    else -> activity.viewModel.setAnimeSkipIntroLength(newSkipIntroLength)
                 }
             }
             setNegativeButton(R.string.dialog_cancel) { dialog, _ -> dialog.cancel() }

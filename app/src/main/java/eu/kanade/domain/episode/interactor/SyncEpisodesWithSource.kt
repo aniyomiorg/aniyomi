@@ -5,7 +5,6 @@ import eu.kanade.data.episode.NoEpisodesException
 import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.episode.model.Episode
-import eu.kanade.domain.episode.model.toDbEpisode
 import eu.kanade.domain.episode.model.toEpisodeUpdate
 import eu.kanade.domain.episode.repository.EpisodeRepository
 import eu.kanade.tachiyomi.animesource.AnimeSource
@@ -111,7 +110,7 @@ class SyncEpisodesWithSource(
                         downloadManager.isEpisodeDownloaded(dbEpisode.name, dbEpisode.scanlator, anime.title, anime.source)
 
                     if (shouldRenameEpisode) {
-                        downloadManager.renameEpisode(source, anime, dbEpisode.toDbEpisode(), episode.toDbEpisode())
+                        downloadManager.renameEpisode(source, anime, dbEpisode, episode)
                     }
                     var toChangeEpisode = dbEpisode.copy(
                         name = episode.name,

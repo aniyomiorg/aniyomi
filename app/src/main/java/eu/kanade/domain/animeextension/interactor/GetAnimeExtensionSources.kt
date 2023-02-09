@@ -3,7 +3,6 @@ package eu.kanade.domain.animeextension.interactor
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animeextension.model.AnimeExtension
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.ui.browse.animeextension.details.AnimeExtensionSourceItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -30,3 +29,9 @@ class GetAnimeExtensionSources(
         }
     }
 }
+
+data class AnimeExtensionSourceItem(
+    val source: AnimeSource,
+    val enabled: Boolean,
+    val labelAsName: Boolean,
+)

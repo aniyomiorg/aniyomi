@@ -6,25 +6,23 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.AnimeCover
 import eu.kanade.presentation.browse.components.BrowseSourceLoadingItem
-import eu.kanade.presentation.components.Badge
+import eu.kanade.presentation.browse.InLibraryBadge
 import eu.kanade.presentation.components.CommonMangaItemDefaults
 import eu.kanade.presentation.components.MangaComfortableGridItem
 import eu.kanade.presentation.util.plus
-import eu.kanade.tachiyomi.R
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun BrowseAnimeSourceComfortableGrid(
-    animeList: LazyPagingItems<Anime>,
-    getAnimeState: @Composable ((Anime) -> State<Anime>),
+    animeList: LazyPagingItems<StateFlow<Anime>>,
     columns: GridCells,
     contentPadding: PaddingValues,
     onAnimeClick: (Anime) -> Unit,
@@ -43,8 +41,7 @@ fun BrowseAnimeSourceComfortableGrid(
         }
 
         items(animeList.itemCount) { index ->
-            val initialAnime = animeList[index] ?: return@items
-            val anime by getAnimeState(initialAnime)
+            val anime by animeList[index]?.collectAsState() ?: return@items
             BrowseAnimeSourceComfortableGridItem(
                 anime = anime,
                 onClick = { onAnimeClick(anime) },
@@ -77,9 +74,7 @@ fun BrowseAnimeSourceComfortableGridItem(
         ),
         coverAlpha = if (anime.favorite) CommonMangaItemDefaults.BrowseFavoriteCoverAlpha else 1f,
         coverBadgeStart = {
-            if (anime.favorite) {
-                Badge(text = stringResource(R.string.in_library))
-            }
+            InLibraryBadge(enabled = anime.favorite)
         },
         onLongClick = onLongClick,
         onClick = onClick,
