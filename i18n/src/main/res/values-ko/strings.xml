@@ -760,7 +760,7 @@
     <string name="fdroid_warning">F-Droid 빌드는 공식적으로 지원되지 않습니다.
 \n자세히 알아보려면 탭하세요.</string>
     <string name="stats_header">통계 표시</string>
-    <string name="notification_episodes_single_and_more">회차 %1$s 및 %2$d 자세히 보기</string>
+    <string name="notification_episodes_single_and_more">%1$s화와 그 외 %2$d화</string>
     <string name="action_bookmark_episode">회차 북마크</string>
     <string name="pref_remove_exclude_categories_anime">제외된 애니메이션 카테고리</string>
     <string name="download_1_episode">다음 회차</string>
@@ -785,7 +785,7 @@
     <string name="pref_category_progress">진행 상황</string>
     <string name="snack_add_to_animelib">서재에 애니메이션을 추가하시겠습니까\?</string>
     <string name="dialog_with_checkbox_reset_anime">이 애니메이션의 모든 에피소드 초기화</string>
-    <string name="toggle_volume_brightness_gestures">볼륨 및 밝기 제스처 전환</string>
+    <string name="toggle_volume_brightness_gestures">볼륨 및 밝기 제스처 활성화</string>
     <string name="player_hwdec_dialog_title">기본 하드웨어 디코딩 모드 설정</string>
     <string name="pref_bottom_nav_no_history">더보기 탭으로 기록 이동</string>
     <string name="action_filter_unseen">보기 전</string>
@@ -805,7 +805,7 @@
     <string name="disable_auto_play">자동 재생이 사용 중지됨</string>
     <string name="player_aniskip_op">오프닝 건너뛰기</string>
     <string name="pref_waiting_time_aniskip_9">9초</string>
-    <string name="notification_episodes_single">회차 %1$s</string>
+    <string name="notification_episodes_single">%1$s회차</string>
     <string name="label_migration_anime">애니메이션 데이터 이전</string>
     <string name="action_edit_anime_categories">애니메이션 카테고리 수정</string>
     <string name="pref_category_player_orientation">방향</string>
@@ -840,7 +840,7 @@
     <string name="pref_clear_anime_database">애니메이션 데이터베이스 삭제</string>
     <string name="episode_not_found">에피소드를 찾을 수 없음</string>
     <plurals name="anime_num_episodes">
-        <item quantity="other">%1$s 회차</item>
+        <item quantity="other">%1$s화</item>
     </plurals>
     <string name="download_unseen">안봄</string>
     <string name="currently_reading">현재 읽는 중</string>
@@ -853,7 +853,7 @@
     <plurals name="seconds">
         <item quantity="other">%d 초</item>
     </plurals>
-    <string name="no_next_episode">다음 에피소드를 찾을 수 없습니다!</string>
+    <string name="no_next_episode">다음 회차를 찾을 수 없습니다!</string>
     <string name="pref_waiting_time_aniskip_10">10초</string>
     <string name="label_animesources">애니메이션 소스</string>
     <string name="local_anime_source">로컬 애니메이션 소스</string>
@@ -874,13 +874,13 @@
     <string name="pref_download_new_episodes">새로운 회차 다운로드</string>
     <string name="pref_backup_flags_summ">백업 파일에 포함할 정보</string>
     <string name="local_manga_source">로컬 만화 소스</string>
-    <string name="display_mode_episode">회차 %1$s</string>
+    <string name="display_mode_episode">%1$s화</string>
     <string name="download_10_episodes">다음 10 회차</string>
     <string name="stats_page_1">페이지 1</string>
     <string name="stats_page_3">3페이지</string>
     <string name="notification_new_episodes">새로운 회차 발견</string>
     <plurals name="notification_episodes_generic">
-        <item quantity="other">%1$d 새로운 회차</item>
+        <item quantity="other">%1$d개의 새로운 회차</item>
     </plurals>
     <string name="video_fit_screen">화면에 맞추기</string>
     <string name="video_crop_screen">화면에 맞게 자르기</string>
@@ -888,7 +888,7 @@
     <string name="quality_dialog_header">동영상 화질 변경:</string>
     <string name="playback_options_title">재생 옵션</string>
     <string name="episode_settings">회차 설정</string>
-    <string name="pref_enable_aniskip">애니스킵 사용</string>
+    <string name="pref_enable_aniskip">AniSkip 사용</string>
     <string name="label_animeextensions">애니메이션 확장기능</string>
     <string name="label_anime_download_queue">애니메이션 다운로드 대기열</string>
     <string name="label_manga">만화</string>
@@ -919,7 +919,7 @@
     <string name="screenshot_header">스크린 샷 찍기</string>
     <string name="playback_options_speed">재생 속도</string>
     <string name="player_aniskip_recap">요약 건너뛰기</string>
-    <string name="notification_episodes_multiple">회차 %1$s</string>
+    <string name="notification_episodes_multiple">%1$s화</string>
     <string name="pref_backup_flags">백업 옵션</string>
     <string name="action_sort_last_checked">마지막으로 확인</string>
     <string name="action_next_episode">다음 회차</string>
@@ -932,14 +932,14 @@
     <string name="playback_speed_dialog_title">재생 속도 변경:</string>
     <string name="action_change_intro_length">인트로 길이 변경</string>
     <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="other">회차 %1$s 및 %2$d 자세히 보기</item>
+        <item quantity="other">%1$s화와 그 외 %2$d화</item>
     </plurals>
     <string name="pref_bottom_nav_no_updates">더 보기 탭으로 업데이트 이동</string>
     <string name="rotation_sensor_landscape">자동 가로</string>
     <string name="pref_skip_disable">끄기</string>
     <string name="confirm_delete_episodes">선택된 회차를 삭제하시겠습니까\?</string>
     <string name="screenshot_show_subs">스크린 샷에 자막 표시</string>
-    <string name="pref_category_player_aniskip">애니스킵 설정</string>
+    <string name="pref_category_player_aniskip">AniSkip 설정</string>
     <string name="backup_settings_warning">경고: 설정을 백업하면 동기화 암호도 저장되므로 이 백업 파일을 공유하지 마십시오!</string>
     <string name="label_animelib">애니메이션</string>
     <string name="action_sort_last_anime_update">마지막 애니메이션 업데이트</string>
@@ -956,10 +956,21 @@
     <string name="episode_settings_updated">업데이트된 기본 회차 설정</string>
     <string name="dialog_with_checkbox_remove_description_anime">이 회차의 시청 날짜가 삭제됩니다. 확실합니까\?</string>
     <string name="player_controls_skip_intro_text">+%1$d 초</string>
-    <string name="no_previous_episode">이전 에피소드를 찾을 수 없습니다!</string>
+    <string name="no_previous_episode">이전 회차를 찾을 수 없습니다!</string>
     <string name="video_stretch_screen">화면에 맞게 늘림</string>
     <string name="audio_dialog_header">오디오 트랙 변경:</string>
     <string name="player_aniskip_ed">엔딩 건너뛰기</string>
-    <string name="player_aniskip_dontskip">건너뛰지 마세요</string>
+    <string name="player_aniskip_dontskip">건너뛰지 않기</string>
     <string name="pref_track_on_add_library">서재에 추가할 때 동기화 메뉴 열기</string>
+    <string name="toggle_stats">통계 활성화</string>
+    <string name="not_interesting">관심 없음</string>
+    <string name="action_order_by_episode_number">회차 번호 순</string>
+    <string name="sort_by_episode_number">회차 번호 순</string>
+    <string name="pref_waiting_time_aniskip">버튼 시간 초과</string>
+    <string name="player_aniskip_dontskip_toast">%d초 후에 건너뛰기</string>
+    <string name="player_aniskip_mixedOp">MixedOp 건너뛰기</string>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="other">%d개의 애니메이션</item>
+    </plurals>
+    <string name="toggle_horizontal_seek_gesture">가로 탐색 제스처 활성화</string>
 </resources>
