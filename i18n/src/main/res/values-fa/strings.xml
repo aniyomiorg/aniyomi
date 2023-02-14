@@ -454,7 +454,7 @@
     <string name="history">تاریخچه</string>
     <string name="chapters">قسمت ها</string>
     <string name="manga">مانگا</string>
-    <string name="categories">دسته بندی ها</string>
+    <string name="categories">دسته بندی مانگا ها</string>
     <string name="channel_errors">خطاها</string>
     <string name="channel_complete">تکمیل شده</string>
     <string name="channel_progress">پیشرفت</string>
@@ -644,4 +644,6 @@
     <string name="publishing_finished">انتشار به پایان رسید</string>
     <string name="local_invalid_format">قالب فصل نامعتبر است</string>
     <string name="cancelled">لغو شد</string>
+    <string name="general_categories">دسته بندی ها</string>
+    <string name="anime_categories">دسته بندی انیمه ها</string>
 </resources>
