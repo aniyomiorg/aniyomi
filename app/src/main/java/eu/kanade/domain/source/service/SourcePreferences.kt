@@ -42,5 +42,5 @@ class SourcePreferences(
 
     fun searchPinnedSourcesOnly() = preferenceStore.getBoolean("search_pinned_sources_only", false)
 
-    fun searchAnimePinnedSourcesOnly() = preferenceStore.getBoolean("search_pinned_anime_sources_only", false)
+    fun searchPinnedAnimeSourcesOnly() = preferenceStore.getBoolean("search_pinned_anime_sources_only", false)
 }

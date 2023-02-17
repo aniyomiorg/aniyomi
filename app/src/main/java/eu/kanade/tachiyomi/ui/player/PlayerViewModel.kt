@@ -40,11 +40,8 @@ import eu.kanade.tachiyomi.data.saver.Location
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
-import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
-import eu.kanade.tachiyomi.ui.reader.model.InsertPage
-import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
-import eu.kanade.tachiyomi.ui.reader.model.StencilPage
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.Stamp
 import eu.kanade.tachiyomi.util.editCover
@@ -73,7 +70,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
@@ -190,7 +186,6 @@ class PlayerViewModel(
         }
     }
 
-
     /**
      * Called when the user pressed the back button and is going to leave the player. Used to
      * trigger deletion of the downloaded episodes.
@@ -231,16 +226,12 @@ class PlayerViewModel(
         return anime == null
     }
 
-    private fun needsInit(newAnimeId: Long): Boolean {
-        return animeId != newAnimeId
-    }
-
     /**
      * Initializes this presenter with the given [animeId] and [initialEpisodeId]. This method will
      * fetch the anime from the database and initialize the initial episode.
      */
-    suspend fun init(animeId: Long, initialEpisodeId: Long): Result<Boolean> {
-        if (!needsInit()) return Result.success(true)
+    suspend fun init(animeId: Long, initialEpisodeId: Long): Pair<List<Video>?, Result<Boolean>> {
+        if (!needsInit()) return Pair(currentVideoList, Result.success(true))
         return withIOContext {
             try {
                 val anime = getAnime.await(animeId)
@@ -249,20 +240,23 @@ class PlayerViewModel(
                     if (episodeId == -1L) episodeId = initialEpisodeId
 
                     checkTrackers(anime)
-
-                    val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
                     val source = sourceManager.getOrStub(anime.source)
 
                     episodeList = initEpisodeList()
-                    currentVideoList = EpisodeLoader.getLinks(currentEpisode, anime, source).asFlow().first()
+                    currentEpisode = episodeList.first { initialEpisodeId == it.id }
 
-                    Result.success(true)
+                    val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
+
+                    currentVideoList = EpisodeLoader.getLinks(currentEpisode, anime, source).asFlow().first()
+                    episodeId = currentEpisode.id!!
+
+                    Pair(currentVideoList, Result.success(true))
                 } else {
                     // Unlikely but okay
-                    Result.success(false)
+                    Pair(currentVideoList, Result.success(false))
                 }
             } catch (e: Throwable) {
-                Result.failure(e)
+                Pair(currentVideoList, Result.failure(e))
             }
         }
     }
@@ -273,7 +267,7 @@ class PlayerViewModel(
         return source is AnimeHttpSource && !EpisodeLoader.isDownloaded(episode, anime)
     }
 
-    suspend fun nextEpisode(): Pair<List<Video>?,String?>? {
+    suspend fun nextEpisode(): Pair<List<Video>?, String?>? {
         val anime = anime ?: return null
         val source = sourceManager.getOrStub(anime.source)
 
@@ -281,18 +275,20 @@ class PlayerViewModel(
         if (index == episodeList.lastIndex) return null
         currentEpisode = episodeList[index + 1]
 
-       return withIOContext {
+        return withIOContext {
             try {
                 val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
                 currentVideoList = EpisodeLoader.getLinks(currentEpisode, anime, source).asFlow().first()
+                episodeId = currentEpisode.id!!
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links." }
             }
-           Pair(currentVideoList, anime.title + " - " + episodeList[index + 1].name )
+
+            Pair(currentVideoList, anime.title + " - " + episodeList[index + 1].name)
         }
     }
 
-    suspend fun previousEpisode(): Pair<List<Video>?,String?>? {
+    suspend fun previousEpisode(): Pair<List<Video>?, String?>? {
         val anime = anime ?: return null
         val source = sourceManager.getOrStub(anime.source)
 
@@ -304,10 +300,11 @@ class PlayerViewModel(
             try {
                 val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
                 currentVideoList = EpisodeLoader.getLinks(currentEpisode, anime, source).asFlow().first()
+                episodeId = currentEpisode.id!!
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links." }
             }
-            Pair(currentVideoList, anime.title + " - " + episodeList[index + 1].name)
+            Pair(currentVideoList, anime.title + " - " + episodeList[index - 1].name)
         }
     }
 
@@ -322,20 +319,18 @@ class PlayerViewModel(
         if (episodeId == -1L) return
         val episodes = runBlocking { getEpisodeByAnimeId.await(anime.id) }
 
-        val selectedEpisode = episodes.find { it.id == episodeId }!!.toDbEpisode()
-
         val seconds = position * 1000L
         val totalSeconds = duration * 1000L
+        // Save last second seen and mark as seen if needed
+        currentEpisode.last_second_seen = seconds
+        currentEpisode.total_seconds = totalSeconds
 
-        // Save last page read and mark as read if needed
-        selectedEpisode.last_second_seen = seconds
-        selectedEpisode.total_seconds = totalSeconds
         val progress = playerPreferences.progressPreference().get()
         val shouldTrack = !incognitoMode || hasTrackers
-        if (selectedEpisode.last_second_seen >= selectedEpisode.total_seconds * progress && shouldTrack) {
-            selectedEpisode.seen = true
-            updateTrackEpisodeSeen(selectedEpisode)
-            deleteEpisodeIfNeeded(selectedEpisode)
+        if (currentEpisode.last_second_seen >= currentEpisode.total_seconds * progress && shouldTrack) {
+            currentEpisode.seen = true
+            updateTrackEpisodeSeen(currentEpisode)
+            deleteEpisodeIfNeeded(currentEpisode)
         }
 
         saveWatchingProgress(currentEpisode)
@@ -357,8 +352,11 @@ class PlayerViewModel(
         val currentEpisode = currentEpisode ?: return
         val nextEpisode = episodeList[getCurrentEpisodeIndex() + 1]
         viewModelScope.launchIO {
-            if (EpisodeLoader.isDownloaded(currentEpisode, anime)
-                && EpisodeLoader.isDownloaded(nextEpisode, anime)) return@launchIO
+            if (EpisodeLoader.isDownloaded(currentEpisode, anime) &&
+                EpisodeLoader.isDownloaded(nextEpisode, anime)
+            ) {
+                return@launchIO
+            }
             val episodesToDownload = getNextEpisodes.await(anime.id, nextEpisode.id!!)
                 .take(amount)
             downloadManager.downloadEpisodes(
@@ -450,8 +448,8 @@ class PlayerViewModel(
         viewModelScope.launchNonCancellable {
             updateEpisode.await(
                 EpisodeUpdate(
-                        id = episode.id!!.toLong(),
-                        bookmark = bookmarked,
+                    id = episode.id!!.toLong(),
+                    bookmark = bookmarked,
                 ),
             )
         }
@@ -461,7 +459,7 @@ class PlayerViewModel(
      * Saves the screenshot on the pictures directory and notifies the UI of the result.
      * There's also a notification to allow sharing the image somewhere else or deleting it.
      */
-    fun saveImage(image: InputStream?, timePos: Int?) {
+    fun saveImage(imageStream: () -> InputStream, timePos: Int?) {
         val anime = anime ?: return
 
         val context = Injekt.get<Application>()
@@ -473,7 +471,6 @@ class PlayerViewModel(
 
         // Pictures directory.
         val relativePath = DiskUtil.buildValidFilename(anime.title)
-        val imageStream = { image!! }
 
         // Copy file in background.
         viewModelScope.launchNonCancellable {
@@ -503,7 +500,7 @@ class PlayerViewModel(
      * get a path to the file and it has to be decompressed somewhere first. Only the last shared
      * image will be kept so it won't be taking lots of internal disk space.
      */
-    fun shareImage(image: InputStream?, timePos: Int?) {
+    fun shareImage(imageStream: () -> InputStream, timePos: Int?) {
         val anime = anime ?: return
 
         val context = Injekt.get<Application>()
@@ -511,7 +508,6 @@ class PlayerViewModel(
 
         val seconds = timePos?.let { Utils.prettyTime(it) } ?: return
         val filename = generateFilename(anime, seconds) ?: return
-        val imageStream = { image!! }
 
         try {
             viewModelScope.launchIO {
@@ -605,7 +601,6 @@ class PlayerViewModel(
                 .forEach { logcat(LogPriority.INFO, it) }
         }
     }
-
 
     /**
      * Enqueues this [episode] to be deleted when [deletePendingEpisodes] is called. The download

@@ -33,7 +33,6 @@ import eu.kanade.tachiyomi.util.lang.launchNow
 import eu.kanade.tachiyomi.util.lang.plusAssign
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.storage.DiskUtil
-import eu.kanade.tachiyomi.util.storage.DiskUtil.NOMEDIA_FILE
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
 import eu.kanade.tachiyomi.util.system.ImageUtil
@@ -346,7 +345,7 @@ class AnimeDownloader(
 
         val videoObservable = if (download.video == null) {
             // Pull video from network and add them to download object
-            download.source.fetchVideoList(download.episode).map { it.first() }
+            download.source.fetchVideoList(download.episode.toSEpisode()).map { it.first() }
                 .doOnNext { video ->
                     if (video == null) {
                         throw Exception(context.getString(R.string.video_list_empty_error))
@@ -458,13 +457,13 @@ class AnimeDownloader(
                 video.videoUrl = file.uri.path
                 video.progress = 100
                 download.downloadedImages++
-                video.status = Video.READY
+                video.status = Video.State.READY
             }
             .map { video }
             // Mark this video as error and allow to download the remaining
             .onErrorReturn {
                 video.progress = 0
-                video.status = Video.ERROR
+                video.status = Video.State.ERROR
                 notifier.onError(it.message, download.episode.name, download.anime.title)
                 video
             }
@@ -479,7 +478,7 @@ class AnimeDownloader(
      * @param filename the filename of the video.
      */
     private fun downloadVideo(video: Video, download: AnimeDownload, tmpDir: UniFile, filename: String): Observable<UniFile> {
-        video.status = Video.DOWNLOAD_IMAGE
+        video.status = Video.State.DOWNLOAD_IMAGE
         video.progress = 0
         var tries = 0
         return newObservable(video, download, tmpDir, filename)
@@ -632,7 +631,7 @@ class AnimeDownloader(
      * @param filename the filename of the video.
      */
     private fun downloadVideoExternal(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
-        video.status = Video.DOWNLOAD_IMAGE
+        video.status = Video.State.DOWNLOAD_IMAGE
         video.progress = 0
         return Observable.just(tmpDir.createFile("$filename.mp4")).map {
             try {

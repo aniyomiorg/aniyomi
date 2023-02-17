@@ -36,8 +36,6 @@ import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.ui.browse.animesource.AnimeSourcesState
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
-import eu.kanade.tachiyomi.util.system.toast
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun AnimeSourcesScreen(

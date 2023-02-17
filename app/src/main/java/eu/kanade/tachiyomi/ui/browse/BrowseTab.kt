@@ -36,7 +36,7 @@ data class BrowseTab(
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_browse_enter)
             return TabOptions(
-                index = 6u,
+                index = 3u,
                 title = stringResource(R.string.browse),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
@@ -68,6 +68,7 @@ data class BrowseTab(
             onChangeSearchQuery = extensionsScreenModel::search,
             searchQueryAnime = animeExtensionsQuery,
             onChangeSearchQueryAnime = animeExtensionsScreenModel::search,
+            scrollable = true,
         )
 
         // For local source

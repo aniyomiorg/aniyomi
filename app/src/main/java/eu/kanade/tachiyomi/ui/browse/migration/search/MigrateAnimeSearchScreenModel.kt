@@ -2,9 +2,9 @@ package eu.kanade.tachiyomi.ui.browse.migration.search
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -38,7 +38,7 @@ class MigrateAnimeSearchScreenModel(
     }
 
     val incognitoMode = preferences.incognitoMode()
-    val lastUsedSourceId = sourcePreferences.lastUsedSource()
+    val lastUsedSourceId = sourcePreferences.lastUsedAnimeSource()
 
     override fun getEnabledSources(): List<AnimeCatalogueSource> {
         val enabledLanguages = sourcePreferences.enabledLanguages().get()

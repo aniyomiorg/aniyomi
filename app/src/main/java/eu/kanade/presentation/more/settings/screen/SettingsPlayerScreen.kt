@@ -6,10 +6,7 @@ import android.os.Build
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,14 +20,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
-import com.chargemap.compose.numberpicker.NumberPicker
+import com.commandiron.wheel_picker_compose.WheelTextPicker
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.preference.asState
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -124,7 +120,7 @@ object SettingsPlayerScreen : SearchableSettings {
     @Composable
     private fun getInternalPlayerGroup(playerPreferences: PlayerPreferences, basePreferences: BasePreferences): Preference.PreferenceGroup {
         val scope = rememberCoroutineScope()
-        val defaultSkipIntroLength by playerPreferences.skipLengthPreference().stateIn(scope).collectAsState()
+        val defaultSkipIntroLength by playerPreferences.defaultIntroLength().stateIn(scope).collectAsState()
         val skipLengthPreference = playerPreferences.skipLengthPreference()
         val playerSmoothSeek = playerPreferences.playerSmoothSeek()
         val playerFullscreen = playerPreferences.playerFullscreen()
@@ -142,7 +138,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 initialSkipIntroLength = defaultSkipIntroLength,
                 onDismissRequest = { showDialog = false },
                 onValueChanged = { skipIntroLength ->
-                    playerPreferences.skipLengthPreference().set(skipIntroLength)
+                    playerPreferences.defaultIntroLength().set(skipIntroLength)
                     showDialog = false
                 },
             )
@@ -290,15 +286,14 @@ object SettingsPlayerScreen : SearchableSettings {
         )
     }
 
-    // TODO: chnage to new wheel Picker
     @Composable
     private fun SkipIntroLengthDialog(
         initialSkipIntroLength: Int,
         onDismissRequest: () -> Unit,
         onValueChanged: (skipIntroLength: Int) -> Unit,
     ) {
-        var skipIntroLengthValue by rememberSaveable { mutableStateOf(initialSkipIntroLength) }
-
+        val skipIntroLengthValue by rememberSaveable { mutableStateOf(initialSkipIntroLength) }
+        var newLength = 0
         AlertDialog(
             onDismissRequest = onDismissRequest,
             title = { Text(text = stringResource(R.string.pref_intro_length)) },
@@ -308,16 +303,13 @@ object SettingsPlayerScreen : SearchableSettings {
                         modifier = Modifier.weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        NumberPicker(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clipToBounds(),
-                            value = skipIntroLengthValue,
-                            onValueChange = { skipIntroLengthValue = it },
-                            range = 1..255,
-                            label = { it.toString() },
-                            dividersColor = MaterialTheme.colorScheme.primary,
-                            textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
+                        WheelTextPicker(
+                            texts = remember { 1..255 }.map { "$it" },
+                            onScrollFinished = {
+                                newLength = it
+                                null
+                            },
+                            startIndex = skipIntroLengthValue,
                         )
                     }
                 }
@@ -328,7 +320,7 @@ object SettingsPlayerScreen : SearchableSettings {
                 }
             },
             confirmButton = {
-                TextButton(onClick = { onValueChanged(skipIntroLengthValue) }) {
+                TextButton(onClick = { onValueChanged(newLength) }) {
                     Text(text = stringResource(android.R.string.ok))
                 }
             },

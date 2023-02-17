@@ -1,17 +1,11 @@
 package eu.kanade.presentation.updates
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FlipToBack
-import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.SelectAll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,8 +25,8 @@ import eu.kanade.presentation.components.PullRefresh
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.model.Download
-import eu.kanade.tachiyomi.ui.updates.UpdatesItem
-import eu.kanade.tachiyomi.ui.updates.UpdatesState
+import eu.kanade.tachiyomi.ui.updates.manga.UpdatesItem
+import eu.kanade.tachiyomi.ui.updates.manga.UpdatesState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -41,6 +35,7 @@ import kotlin.time.Duration.Companion.seconds
 fun UpdateScreen(
     state: UpdatesState,
     snackbarHostState: SnackbarHostState,
+    contentPadding: PaddingValues,
     lastUpdated: Long,
     relativeTime: Int,
     onClickCover: (UpdatesItem) -> Unit,
@@ -69,7 +64,7 @@ fun UpdateScreen(
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-    ) { contentPadding ->
+    ) {
         when {
             state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
             state.items.isEmpty() -> EmptyScreen(

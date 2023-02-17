@@ -50,7 +50,8 @@ import eu.kanade.tachiyomi.network.JavaScriptEngine
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.source.SourceManager
-import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.ExternalIntents
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.system.isDevFlavor
 import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory
@@ -193,6 +194,8 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { DelayedTrackingStore(app) }
 
         addSingletonFactory { ImageSaver(app) }
+
+        addSingletonFactory { ExternalIntents() }
 
         // Asynchronously init expensive components for a faster cold start
         ContextCompat.getMainExecutor(app).execute {

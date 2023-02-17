@@ -103,6 +103,7 @@ object SettingsDownloadScreen : SearchableSettings {
         }
 
         val defaultDirPair = rememberDefaultDownloadDir()
+        val externalDownloaderDirPair = rememberExternalDownloaderDownloadDir()
         val customDirEntryKey = currentDir.takeIf { it != defaultDirPair.first } ?: "custom"
 
         return Preference.PreferenceItem.ListPreference(
@@ -115,6 +116,7 @@ object SettingsDownloadScreen : SearchableSettings {
             },
             entries = mapOf(
                 defaultDirPair,
+                externalDownloaderDirPair,
                 customDirEntryKey to stringResource(R.string.custom_dir),
             ),
             onValueChanged = {
@@ -129,6 +131,20 @@ object SettingsDownloadScreen : SearchableSettings {
 
     @Composable
     private fun rememberDefaultDownloadDir(): Pair<String, String> {
+        val appName = stringResource(R.string.app_name)
+        return remember {
+            val file = UniFile.fromFile(
+                File(
+                    "${Environment.getExternalStorageDirectory().absolutePath}${File.separator}$appName",
+                    "downloads",
+                ),
+            )!!
+            file.uri.toString() + "\n" to file.filePath!!
+        }
+    }
+
+    @Composable
+    private fun rememberExternalDownloaderDownloadDir(): Pair<String, String> {
         val appName = stringResource(R.string.app_name)
         return remember {
             val file = UniFile.fromFile(

@@ -13,8 +13,8 @@ import eu.kanade.presentation.browse.components.GlobalSearchToolbar
 import eu.kanade.presentation.components.LazyColumn
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import eu.kanade.tachiyomi.ui.browse.migration.search.MigrateAnimeSearchState
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.AnimeSearchItemResult
+import eu.kanade.tachiyomi.ui.browse.migration.search.MigrateAnimeSearchState
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 @Composable

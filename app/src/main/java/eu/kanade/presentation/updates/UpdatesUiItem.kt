@@ -43,7 +43,7 @@ import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.selectedBackground
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.model.Download
-import eu.kanade.tachiyomi.ui.updates.UpdatesItem
+import eu.kanade.tachiyomi.ui.updates.manga.UpdatesItem
 import java.util.Date
 import kotlin.time.Duration.Companion.minutes
 

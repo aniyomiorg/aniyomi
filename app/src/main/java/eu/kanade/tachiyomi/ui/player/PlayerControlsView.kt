@@ -17,7 +17,7 @@ import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.databinding.PrefSkipIntroLengthBinding
-import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.PickerDialog
 import `is`.xyz.mpv.SpeedPickerDialog
@@ -251,7 +251,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 binding.playbackPositionTxt.text = Utils.prettyTime(position)
             }
             activity.viewModel.onSecondReached(position, duration)
-
         }
 
         binding.playbackSeekbar.progress = position

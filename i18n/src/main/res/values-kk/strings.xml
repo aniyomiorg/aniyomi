@@ -683,7 +683,7 @@
     <string name="download_notifier_unknown_error">Белгісіз қателіктің кесірінен тарау жүктеп алынбады</string>
     <string name="download_notifier_split_page_path_not_found">Бет файлының жолы %d табылмады</string>
     <string name="channel_skipped">Өткізуп жіберілді</string>
-    <string name="channel_new_chapters">Тарау жаңартулары</string>
+    <string name="channel_new_chapters_episodes">Тарау жаңартулары</string>
     <string name="channel_app_updates">Қолданба жаңартулары</string>
     <string name="channel_ext_updates">Кеңейту жаңартулары</string>
     <string name="spen_previous_page">Алдыңғы бет</string>

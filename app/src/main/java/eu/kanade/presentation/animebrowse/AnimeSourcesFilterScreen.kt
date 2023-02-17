@@ -83,7 +83,7 @@ private fun AnimeSourcesFilterContent(
                 AnimeSourcesFilterItem(
                     modifier = Modifier.animateItemPlacement(),
                     source = source,
-                    enabled = "${source.id}" !in state.disabledSources,
+                    isEnabled = "${source.id}" !in state.disabledSources,
                     onClickItem = onClickSource,
                 )
             }

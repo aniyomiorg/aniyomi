@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.components.ScrollbarLazyColumn
@@ -33,9 +34,9 @@ import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.more.AnimeDownloadQueueState
 import eu.kanade.tachiyomi.ui.more.DownloadQueueState
 import eu.kanade.tachiyomi.util.Constants
+import uy.kohesive.injekt.injectLazy
 
 @Composable
 fun MoreScreen(
@@ -45,9 +46,8 @@ fun MoreScreen(
     incognitoMode: Boolean,
     onIncognitoModeChange: (Boolean) -> Unit,
     isFDroid: Boolean,
-    onClickHistory: () -> Unit,
+    onClickAlt: () -> Unit,
     onClickDownloadQueue: () -> Unit,
-    onClickAnimeCategories: () -> Unit,
     onClickCategories: () -> Unit,
     onClickStats: () -> Unit,
     onClickBackupAndRestore: () -> Unit,
@@ -101,22 +101,24 @@ fun MoreScreen(
 
             item { Divider() }
 
+            val libraryPreferences: LibraryPreferences by injectLazy()
+
             item {
                 val bottomNavStyle = libraryPreferences.bottomNavStyle().get()
                 val titleRes = when (bottomNavStyle) {
+                    0 -> R.string.label_recent_manga
                     1 -> R.string.label_recent_updates
-                    2 -> R.string.label_manga
-                    else -> R.string.label_recent_manga
+                    else -> R.string.label_manga
                 }
                 val icon = when (bottomNavStyle) {
+                    0 -> Icons.Outlined.History
                     1 -> ImageVector.vectorResource(id = R.drawable.ic_updates_outline_24dp)
-                    2 -> Icons.Outlined.CollectionsBookmark
-                    else -> Icons.Outlined.History
+                    else -> Icons.Outlined.CollectionsBookmark
                 }
                 TextPreferenceWidget(
                     title = stringResource(titleRes),
                     icon = icon,
-                    onPreferenceClick = onClickHistory,
+                    onPreferenceClick = onClickAlt,
                 )
             }
 
@@ -151,7 +153,7 @@ fun MoreScreen(
             }
             item {
                 TextPreferenceWidget(
-                    title = stringResource(R.string.categories),
+                    title = stringResource(R.string.general_categories),
                     icon = Icons.Outlined.Label,
                     onPreferenceClick = onClickCategories,
                 )

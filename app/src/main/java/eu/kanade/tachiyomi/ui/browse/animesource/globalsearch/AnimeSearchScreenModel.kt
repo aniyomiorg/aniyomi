@@ -9,8 +9,8 @@ import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.interactor.NetworkToLocalAnime
 import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.toDomainAnime
 import eu.kanade.domain.anime.model.toAnimeUpdate
+import eu.kanade.domain.anime.model.toDomainAnime
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
@@ -42,7 +42,7 @@ abstract class AnimeSearchScreenModel<T>(
     protected lateinit var extensionFilter: String
 
     private val sources by lazy { getSelectedSources() }
-    private val pinnedSources by lazy { sourcePreferences.pinnedSources().get() }
+    private val pinnedSources by lazy { sourcePreferences.pinnedAnimeSources().get() }
 
     private val sortComparator = { map: Map<AnimeCatalogueSource, AnimeSearchItemResult> ->
         compareBy<AnimeCatalogueSource>(
@@ -95,8 +95,8 @@ abstract class AnimeSearchScreenModel<T>(
         val enabledSources = getEnabledSources()
 
         if (filter.isEmpty()) {
-            val shouldSearchPinnedOnly = sourcePreferences.searchPinnedSourcesOnly().get()
-            val pinnedSources = sourcePreferences.pinnedSources().get()
+            val shouldSearchPinnedOnly = sourcePreferences.searchPinnedAnimeSourcesOnly().get()
+            val pinnedSources = sourcePreferences.pinnedAnimeSources().get()
 
             return enabledSources.filter {
                 if (shouldSearchPinnedOnly) {

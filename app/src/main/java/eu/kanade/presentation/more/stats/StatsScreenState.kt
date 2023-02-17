@@ -8,10 +8,18 @@ sealed class StatsScreenState {
     object Loading : StatsScreenState()
 
     @Immutable
-    data class Success(
-        val overview: StatsData.Overview,
-        val titles: StatsData.Titles,
+    data class SuccessManga(
+        val overview: StatsData.MangaOverview,
+        val titles: StatsData.MangaTitles,
         val chapters: StatsData.Chapters,
+        val trackers: StatsData.Trackers,
+    ) : StatsScreenState()
+
+    @Immutable
+    data class SuccessAnime(
+        val overview: StatsData.AnimeOverview,
+        val titles: StatsData.AnimeTitles,
+        val episodes: StatsData.Episodes,
         val trackers: StatsData.Trackers,
     ) : StatsScreenState()
 }

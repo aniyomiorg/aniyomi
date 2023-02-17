@@ -60,7 +60,6 @@ class AnimeDownloadCache(
         .onStart { emit(Unit) }
         .shareIn(scope, SharingStarted.Eagerly, 1)
 
-
     /**
      * The interval after which this cache should be invalidated. 1 hour shouldn't cause major
      * issues, as the cache is only used for UI feedback.
@@ -272,38 +271,38 @@ class AnimeDownloadCache(
                     }?.id
                 }
 
-                sourceDirs.values
-                    .map { sourceDir ->
-                        async {
-                            val animeDirs = sourceDir.dir.listFiles().orEmpty()
-                                .filterNot { it.name.isNullOrBlank() }
-                                .associate { it.name!! to AnimeDirectory(it) }
+            sourceDirs.values
+                .map { sourceDir ->
+                    async {
+                        val animeDirs = sourceDir.dir.listFiles().orEmpty()
+                            .filterNot { it.name.isNullOrBlank() }
+                            .associate { it.name!! to AnimeDirectory(it) }
 
-                            sourceDir.animeDirs = ConcurrentHashMap(animeDirs)
+                        sourceDir.animeDirs = ConcurrentHashMap(animeDirs)
 
-                            animeDirs.values.forEach { animeDir ->
-                                val episodeDirs = animeDir.dir.listFiles().orEmpty()
-                                    .mapNotNull {
-                                        when {
-                                            // Ignore incomplete downloads
-                                            it.name?.endsWith(AnimeDownloader.TMP_DIR_SUFFIX) == true -> null
-                                            // Folder of images
-                                            it.isDirectory -> it.name
-                                            // MP4 files
-                                            it.isFile && it.name?.endsWith(".mp4") == true -> it.name!!.substringBeforeLast(".mp4")
-                                            // MKV files
-                                            it.isFile && it.name?.endsWith(".mkv") == true -> it.name!!.substringBeforeLast(".mkv")
-                                            // Anything else is irrelevant
-                                            else -> null
-                                        }
+                        animeDirs.values.forEach { animeDir ->
+                            val episodeDirs = animeDir.dir.listFiles().orEmpty()
+                                .mapNotNull {
+                                    when {
+                                        // Ignore incomplete downloads
+                                        it.name?.endsWith(AnimeDownloader.TMP_DIR_SUFFIX) == true -> null
+                                        // Folder of images
+                                        it.isDirectory -> it.name
+                                        // MP4 files
+                                        it.isFile && it.name?.endsWith(".mp4") == true -> it.name!!.substringBeforeLast(".mp4")
+                                        // MKV files
+                                        it.isFile && it.name?.endsWith(".mkv") == true -> it.name!!.substringBeforeLast(".mkv")
+                                        // Anything else is irrelevant
+                                        else -> null
                                     }
-                                    .toMutableSet()
+                                }
+                                .toMutableSet()
 
-                                animeDir.episodeDirs = episodeDirs
-                            }
+                            animeDir.episodeDirs = episodeDirs
                         }
                     }
-                    .awaitAll()
+                }
+                .awaitAll()
         }.also {
             it.invokeOnCompletion(onCancelling = true) { exception ->
                 if (exception != null && exception !is CancellationException) {

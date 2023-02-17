@@ -4,9 +4,9 @@ import eu.kanade.tachiyomi.animesource.model.Video
 import rx.Observable
 
 fun AnimeHttpSource.getVideoUrl(video: Video): Observable<Video> {
-    video.status = Video.LOAD_VIDEO
+    video.status = Video.State.LOAD_VIDEO
     return fetchVideoUrl(video)
-        .doOnError { video.status = Video.ERROR }
+        .doOnError { video.status = Video.State.ERROR }
         .onErrorReturn { null }
         .doOnNext { video.videoUrl = it }
         .map { video }

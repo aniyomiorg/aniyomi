@@ -93,7 +93,6 @@ class AnimeDownloadManager(
         return queue.find { it.episode.id == episodeId }
     }
 
-
     fun startDownloadNow(episodeId: Long?) {
         if (episodeId == null) return
         val download = getQueuedDownloadOrNull(episodeId)

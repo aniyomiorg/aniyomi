@@ -29,7 +29,6 @@ interface Anime : SAnime {
     var skipIntroLength: Int
         get() = viewer_flags and 0x000000FF
         set(skipIntro) = setViewerFlags(skipIntro, 0x000000FF)
-
 }
 
 fun Anime.toDomainAnime(): DomainAnime? {

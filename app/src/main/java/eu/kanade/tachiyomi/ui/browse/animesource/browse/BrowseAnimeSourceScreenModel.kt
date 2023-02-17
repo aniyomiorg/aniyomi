@@ -21,8 +21,8 @@ import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.interactor.GetDuplicateAnimelibAnime
 import eu.kanade.domain.anime.interactor.NetworkToLocalAnime
 import eu.kanade.domain.anime.interactor.UpdateAnime
-import eu.kanade.domain.anime.model.toAnimeUpdate
 import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.anime.model.toAnimeUpdate
 import eu.kanade.domain.anime.model.toDomainAnime
 import eu.kanade.domain.animesource.interactor.GetRemoteAnime
 import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
@@ -299,10 +299,12 @@ class BrowseAnimeSourceScreenModel(
                 // Choose a category
                 else -> {
                     val preselectedIds = getCategories.await(anime.id).map { it.id }
-                    setDialog(Dialog.ChangeAnimeCategory(
-                        anime,
-                        categories.mapAsCheckboxState { it.id in preselectedIds },
-                    ))
+                    setDialog(
+                        Dialog.ChangeAnimeCategory(
+                            anime,
+                            categories.mapAsCheckboxState { it.id in preselectedIds },
+                        ),
+                    )
                 }
             }
         }
@@ -320,7 +322,7 @@ class BrowseAnimeSourceScreenModel(
                         insertTrack.await(track.toDomainTrack()!!)
 
                         val chapters = getEpisodeByAnimeId.await(anime.id)
-                        syncEpisodesWithTrackServiceTwoWay.await(chapters, track.toDomainTrack()!!, service.animeService )
+                        syncEpisodesWithTrackServiceTwoWay.await(chapters, track.toDomainTrack()!!, service.animeService)
                     }
                 } catch (e: Exception) {
                     logcat(

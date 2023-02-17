@@ -19,8 +19,8 @@ import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.util.padding
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchState
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.AnimeSearchItemResult
+import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchState
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 @Composable

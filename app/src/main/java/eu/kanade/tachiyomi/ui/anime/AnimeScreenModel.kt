@@ -15,7 +15,6 @@ import eu.kanade.domain.anime.interactor.GetDuplicateAnimelibAnime
 import eu.kanade.domain.anime.interactor.SetAnimeEpisodeFlags
 import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.manga.model.TriStateFilter
 import eu.kanade.domain.anime.model.isLocal
 import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
 import eu.kanade.domain.animetrack.model.toDbTrack
@@ -30,6 +29,7 @@ import eu.kanade.domain.episode.interactor.UpdateEpisode
 import eu.kanade.domain.episode.model.Episode
 import eu.kanade.domain.episode.model.EpisodeUpdate
 import eu.kanade.domain.library.service.LibraryPreferences
+import eu.kanade.domain.manga.model.TriStateFilter
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.EpisodeDownloadAction
@@ -41,8 +41,8 @@ import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadService
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
-import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
+import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.network.HttpException
@@ -57,7 +57,6 @@ import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
 import eu.kanade.tachiyomi.util.system.logcat
-import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.catch
@@ -123,6 +122,7 @@ class AnimeInfoScreenModel(
 
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedEpisodeIds: HashSet<Long> = HashSet()
+
     /**
      * Helper function to update the UI state only if it's currently in success state
      */
@@ -252,10 +252,9 @@ class AnimeInfoScreenModel(
                 if (trackPreferences.trackOnAddingToLibrary().get() && loggedServices.isNotEmpty()) {
                     showTrackDialog()
                 }
-            }
+            },
         )
     }
-
 
     /**
      * Update favorite status of anime, (removes / adds) anime (to / from) library.
@@ -610,7 +609,6 @@ class AnimeInfoScreenModel(
         }
     }
 
-
     fun runEpisodeDownloadActions(
         items: List<EpisodeItem>,
         action: EpisodeDownloadAction,
@@ -789,7 +787,7 @@ class AnimeInfoScreenModel(
             TriStateFilter.ENABLED_NOT -> Anime.EPISODE_SHOW_NOT_BOOKMARKED
         }
 
-       coroutineScope.launchNonCancellable {
+        coroutineScope.launchNonCancellable {
             setAnimeEpisodeFlags.awaitSetBookmarkFilter(anime, flag)
         }
     }
@@ -829,7 +827,6 @@ class AnimeInfoScreenModel(
         }
     }
 
-
     fun toggleSelection(
         item: EpisodeItem,
         selected: Boolean,
@@ -841,7 +838,7 @@ class AnimeInfoScreenModel(
                 val selectedIndex = successState.processedEpisodes.indexOfFirst { it.episode.id == item.episode.id }
                 if (selectedIndex < 0) return@apply
 
-                val selectedItem = get(selectedIndex )
+                val selectedItem = get(selectedIndex)
                 if ((selectedItem.selected && selected) || (!selectedItem.selected && !selected)) return@apply
 
                 val firstSelection = none { it.selected }
@@ -855,10 +852,10 @@ class AnimeInfoScreenModel(
                     } else {
                         // Try to select the items in-between when possible
                         val range: IntRange
-                        if (selectedIndex  < selectedPositions[0]) {
-                            range = selectedIndex  + 1 until selectedPositions[0]
+                        if (selectedIndex < selectedPositions[0]) {
+                            range = selectedIndex + 1 until selectedPositions[0]
                             selectedPositions[0] = selectedIndex
-                        } else if (selectedIndex  > selectedPositions[1]) {
+                        } else if (selectedIndex > selectedPositions[1]) {
                             range = (selectedPositions[1] + 1) until selectedIndex
                             selectedPositions[1] = selectedIndex
                         } else {
@@ -876,15 +873,15 @@ class AnimeInfoScreenModel(
                     }
                 } else if (userSelected && !fromLongPress) {
                     if (!selected) {
-                        if (selectedIndex  == selectedPositions[0]) {
+                        if (selectedIndex == selectedPositions[0]) {
                             selectedPositions[0] = indexOfFirst { it.selected }
-                        } else if (selectedIndex  == selectedPositions[1]) {
+                        } else if (selectedIndex == selectedPositions[1]) {
                             selectedPositions[1] = indexOfLast { it.selected }
                         }
                     } else {
-                        if (selectedIndex  < selectedPositions[0]) {
+                        if (selectedIndex < selectedPositions[0]) {
                             selectedPositions[0] = selectedIndex
-                        } else if (selectedIndex  > selectedPositions[1]) {
+                        } else if (selectedIndex > selectedPositions[1]) {
                             selectedPositions[1] = selectedIndex
                         }
                     }

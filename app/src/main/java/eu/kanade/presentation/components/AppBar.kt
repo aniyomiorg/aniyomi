@@ -1,9 +1,12 @@
 package eu.kanade.presentation.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,6 +33,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -149,22 +153,41 @@ fun AppBar(
 fun AppBarTitle(
     title: String?,
     subtitle: String? = null,
+    count: Int = 0,
 ) {
-    Column {
-        title?.let {
+    if (count > 0) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = it,
+                text = title!!,
                 maxLines = 1,
+                modifier = Modifier.weight(1f, false),
                 overflow = TextOverflow.Ellipsis,
+            )
+            val pillAlpha = if (isSystemInDarkTheme()) 0.12f else 0.08f
+            Pill(
+                text = "$count",
+                modifier = Modifier.padding(start = 4.dp),
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = pillAlpha),
+                fontSize = 14.sp,
             )
         }
-        subtitle?.let {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+    } else {
+        Column {
+            title?.let {
+                Text(
+                    text = it,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            subtitle?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }
@@ -317,8 +340,6 @@ fun SearchToolbar(
             key("actions") { actions() }
         },
         isActionMode = false,
-        downloadedOnlyMode = downloadedOnlyMode,
-        incognitoMode = incognitoMode,
         scrollBehavior = scrollBehavior,
         onCancelActionMode = cancelAction,
     )

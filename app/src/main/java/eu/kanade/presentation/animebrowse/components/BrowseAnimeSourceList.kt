@@ -10,8 +10,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.AnimeCover
-import eu.kanade.presentation.browse.components.BrowseSourceLoadingItem
 import eu.kanade.presentation.browse.InLibraryBadge
+import eu.kanade.presentation.browse.components.BrowseSourceLoadingItem
 import eu.kanade.presentation.components.CommonMangaItemDefaults
 import eu.kanade.presentation.components.LazyColumn
 import eu.kanade.presentation.components.MangaListItem

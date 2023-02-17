@@ -126,15 +126,15 @@ class AnimelibSettingsSheet(
                     downloaded.state = State.INCLUDE.value
                     downloaded.enabled = false
                 } else {
-                    downloaded.state = libraryPreferences.filterDownloaded().get()
+                    downloaded.state = libraryPreferences.filterDownloadedAnime().get()
                 }
-                unseen.state = libraryPreferences.filterUnread().get()
-                started.state = libraryPreferences.filterStarted().get()
-                bookmarked.state = libraryPreferences.filterBookmarked().get()
-                completed.state = libraryPreferences.filterCompleted().get()
+                unseen.state = libraryPreferences.filterUnseen().get()
+                started.state = libraryPreferences.filterStartedAnime().get()
+                bookmarked.state = libraryPreferences.filterBookmarkedAnime().get()
+                completed.state = libraryPreferences.filterCompletedAnime().get()
 
                 trackFilters.forEach { trackFilter ->
-                    trackFilter.value.state = libraryPreferences.filterTracking(trackFilter.key.toInt()).get()
+                    trackFilter.value.state = libraryPreferences.filterTrackingAnime(trackFilter.key.toInt()).get()
                 }
             }
 
@@ -148,15 +148,15 @@ class AnimelibSettingsSheet(
                 }
                 item.state = newState
                 when (item) {
-                    downloaded -> libraryPreferences.filterDownloaded().set(newState)
-                    unseen -> libraryPreferences.filterUnread().set(newState)
-                    started -> libraryPreferences.filterStarted().set(newState)
-                    bookmarked -> libraryPreferences.filterBookmarked().set(newState)
-                    completed -> libraryPreferences.filterCompleted().set(newState)
+                    downloaded -> libraryPreferences.filterDownloadedAnime().set(newState)
+                    unseen -> libraryPreferences.filterUnseen().set(newState)
+                    started -> libraryPreferences.filterStartedAnime().set(newState)
+                    bookmarked -> libraryPreferences.filterBookmarkedAnime().set(newState)
+                    completed -> libraryPreferences.filterCompletedAnime().set(newState)
                     else -> {
                         trackFilters.forEach { trackFilter ->
                             if (trackFilter.value == item) {
-                                libraryPreferences.filterTracking(trackFilter.key.toInt()).set(newState)
+                                libraryPreferences.filterTrackingAnime(trackFilter.key.toInt()).set(newState)
                             }
                         }
                     }

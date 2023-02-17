@@ -52,6 +52,15 @@ object SettingsBrowseScreen : SearchableSettings {
                 ),
             ),
             Preference.PreferenceGroup(
+                title = stringResource(R.string.action_global_search),
+                preferenceItems = listOf(
+                    Preference.PreferenceItem.SwitchPreference(
+                        pref = sourcePreferences.searchPinnedAnimeSourcesOnly(),
+                        title = stringResource(R.string.pref_search_pinned_sources_only),
+                    ),
+                ),
+            ),
+            Preference.PreferenceGroup(
                 title = stringResource(R.string.pref_category_nsfw_content),
                 preferenceItems = listOf(
                     Preference.PreferenceItem.SwitchPreference(

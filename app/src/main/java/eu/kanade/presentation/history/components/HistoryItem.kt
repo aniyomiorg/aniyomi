@@ -102,7 +102,7 @@ fun AnimeHistoryItem(
         modifier = modifier
             .clickable(onClick = onClickResume)
             .height(HISTORY_ITEM_HEIGHT)
-            .padding(horizontal = horizontalPadding, vertical = 8.dp),
+            .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         MangaCover.Book(
@@ -113,7 +113,7 @@ fun AnimeHistoryItem(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(start = horizontalPadding, end = 8.dp),
+                .padding(start = MaterialTheme.padding.medium, end = MaterialTheme.padding.small),
         ) {
             val textStyle = MaterialTheme.typography.bodyMedium
             Text(

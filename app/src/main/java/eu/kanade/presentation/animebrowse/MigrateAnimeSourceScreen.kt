@@ -39,12 +39,12 @@ import eu.kanade.presentation.util.plus
 import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.migration.animesources.MigrateAnimeSourcesState
+import eu.kanade.tachiyomi.ui.browse.migration.animesources.MigrateAnimeSourceState
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 
 @Composable
 fun MigrateAnimeSourceScreen(
-    state: MigrateAnimeSourcesState,
+    state: MigrateAnimeSourceState,
     contentPadding: PaddingValues,
     onClickItem: (AnimeSource) -> Unit,
     onToggleSortingDirection: () -> Unit,

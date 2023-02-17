@@ -15,33 +15,34 @@ import eu.kanade.core.util.fastFilter
 import eu.kanade.core.util.fastFilterNot
 import eu.kanade.core.util.fastMapNotNull
 import eu.kanade.core.util.fastPartition
+import eu.kanade.domain.anime.interactor.GetAnimelibAnime
+import eu.kanade.domain.anime.interactor.UpdateAnime
+import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.anime.model.AnimeUpdate
+import eu.kanade.domain.anime.model.isLocal
+import eu.kanade.domain.animehistory.interactor.GetNextEpisodes
+import eu.kanade.domain.animelib.model.AnimelibAnime
+import eu.kanade.domain.animetrack.interactor.GetTracksPerAnime
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.category.interactor.GetAnimeCategories
 import eu.kanade.domain.category.interactor.SetAnimeCategories
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.episode.interactor.SetSeenStatus
-import eu.kanade.domain.animehistory.interactor.GetNextEpisodes
+import eu.kanade.domain.episode.model.Episode
 import eu.kanade.domain.library.model.LibrarySort
 import eu.kanade.domain.library.model.sort
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.anime.interactor.GetAnimelibAnime
-import eu.kanade.domain.anime.interactor.UpdateAnime
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.AnimeUpdate
-import eu.kanade.domain.anime.model.isLocal
-import eu.kanade.domain.animelib.model.AnimelibAnime
-import eu.kanade.domain.animetrack.interactor.GetTracksPerAnime
-import eu.kanade.domain.episode.model.Episode
 import eu.kanade.presentation.library.components.LibraryToolbarTitle
 import eu.kanade.presentation.manga.DownloadAction
-import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadCache
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadCache
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
+import eu.kanade.tachiyomi.data.track.AnimeTrackService
+import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNonCancellable
@@ -337,11 +338,11 @@ class AnimelibScreenModel(
             libraryPreferences.languageBadge().changes(),
 
             preferences.downloadedOnly().changes(),
-            libraryPreferences.filterDownloaded().changes(),
-            libraryPreferences.filterUnread().changes(),
-            libraryPreferences.filterStarted().changes(),
-            libraryPreferences.filterBookmarked().changes(),
-            libraryPreferences.filterCompleted().changes(),
+            libraryPreferences.filterDownloadedAnime().changes(),
+            libraryPreferences.filterUnseen().changes(),
+            libraryPreferences.filterStartedAnime().changes(),
+            libraryPreferences.filterBookmarkedAnime().changes(),
+            libraryPreferences.filterCompletedAnime().changes(),
             transform = {
                 ItemPreferences(
                     downloadBadge = it[0] as Boolean,
@@ -406,10 +407,10 @@ class AnimelibScreenModel(
      * @return map of track id with the filter value
      */
     private fun getTrackingFilterFlow(): Flow<Map<Long, Int>> {
-        val loggedServices = trackManager.services.filter { it.isLogged }
+        val loggedServices = trackManager.services.filter { it.isLogged && it is AnimeTrackService }
         return if (loggedServices.isNotEmpty()) {
             val prefFlows = loggedServices
-                .map { libraryPreferences.filterTracking(it.id.toInt()).changes() }
+                .map { libraryPreferences.filterTrackingAnime(it.id.toInt()).changes() }
                 .toTypedArray()
             combine(*prefFlows) {
                 loggedServices

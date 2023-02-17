@@ -9,7 +9,6 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
 import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
 import eu.kanade.domain.animetrack.model.toDbTrack

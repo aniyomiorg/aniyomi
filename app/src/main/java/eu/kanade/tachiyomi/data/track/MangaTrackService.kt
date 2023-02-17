@@ -134,5 +134,4 @@ interface MangaTrackService {
             }
         }
     }
-
 }

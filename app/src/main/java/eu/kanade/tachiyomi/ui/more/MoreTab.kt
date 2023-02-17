@@ -19,16 +19,21 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.core.prefs.asState
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.more.MoreScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadService
-import eu.kanade.tachiyomi.ui.category.CategoryScreen
-import eu.kanade.tachiyomi.ui.download.DownloadQueueScreen
-import eu.kanade.tachiyomi.ui.download.manga.DownloadQueueScreen
+import eu.kanade.tachiyomi.ui.category.CategoriesTab
+import eu.kanade.tachiyomi.ui.download.DownloadsTab
+import eu.kanade.tachiyomi.ui.history.HistoriesTab
+import eu.kanade.tachiyomi.ui.library.LibraryTab
 import eu.kanade.tachiyomi.ui.setting.SettingsScreen
-import eu.kanade.tachiyomi.ui.stats.StatsScreen
+import eu.kanade.tachiyomi.ui.stats.StatsTab
+import eu.kanade.tachiyomi.ui.updates.UpdatesTab
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.isInstalledFromFDroid
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,6 +43,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 
 object MoreTab : Tab {
 
@@ -70,9 +76,10 @@ object MoreTab : Tab {
             incognitoMode = screenModel.incognitoMode,
             onIncognitoModeChange = { screenModel.incognitoMode = it },
             isFDroid = context.isInstalledFromFDroid(),
-            onClickDownloadQueue = { navigator.push(DownloadQueueScreen) },
-            onClickCategories = { navigator.push(CategoryScreen()) },
-            onClickStats = { navigator.push(StatsScreen()) },
+            onClickAlt = { navigator.push(altOpen) },
+            onClickDownloadQueue = { navigator.push(DownloadsTab()) },
+            onClickCategories = { navigator.push(CategoriesTab()) },
+            onClickStats = { navigator.push(StatsTab()) },
             onClickBackupAndRestore = { navigator.push(SettingsScreen.toBackupScreen()) },
             onClickSettings = { navigator.push(SettingsScreen.toMainScreen()) },
             onClickAbout = { navigator.push(SettingsScreen.toAboutScreen()) },
@@ -80,8 +87,17 @@ object MoreTab : Tab {
     }
 }
 
+private val libraryPreferences: LibraryPreferences by injectLazy()
+
+private val altOpen = when (libraryPreferences.bottomNavStyle().get()) {
+    0 -> HistoriesTab(true)
+    1 -> UpdatesTab(fromMore = true, inMiddle = false)
+    else -> LibraryTab
+}
+
 private class MoreScreenModel(
     private val downloadManager: DownloadManager = Injekt.get(),
+    private val animeDownloadManager: AnimeDownloadManager = Injekt.get(),
     preferences: BasePreferences = Injekt.get(),
 ) : ScreenModel {
 
@@ -97,15 +113,23 @@ private class MoreScreenModel(
             combine(
                 DownloadService.isRunning,
                 downloadManager.queue.updates,
-            ) { isRunning, downloadQueue -> Pair(isRunning, downloadQueue.size) }
-                .collectLatest { (isDownloading, downloadQueueSize) ->
-                    val pendingDownloadExists = downloadQueueSize != 0
-                    _state.value = when {
-                        !pendingDownloadExists -> DownloadQueueState.Stopped
-                        !isDownloading && !pendingDownloadExists -> DownloadQueueState.Paused(0)
-                        !isDownloading && pendingDownloadExists -> DownloadQueueState.Paused(downloadQueueSize)
-                        else -> DownloadQueueState.Downloading(downloadQueueSize)
-                    }
+            ) { isRunningManga, mangaDownloadQueue -> Pair(isRunningManga, mangaDownloadQueue.size) }
+                .collectLatest { (isDownloadingManga, mangaDownloadQueueSize) ->
+                    combine(
+                        AnimeDownloadService.isRunning,
+                        animeDownloadManager.queue.updates,
+                    ) { isRunningAnime, animeDownloadQueue -> Pair(isRunningAnime, animeDownloadQueue.size) }
+                        .collectLatest { (isDownloadingAnime, animeDownloadQueueSize) ->
+                            val isDownloading = isDownloadingAnime || isDownloadingManga
+                            val downloadQueueSize = mangaDownloadQueueSize + animeDownloadQueueSize
+                            val pendingDownloadExists = downloadQueueSize != 0
+                            _state.value = when {
+                                !pendingDownloadExists -> DownloadQueueState.Stopped
+                                !isDownloading && !pendingDownloadExists -> DownloadQueueState.Paused(0)
+                                !isDownloading && pendingDownloadExists -> DownloadQueueState.Paused(downloadQueueSize)
+                                else -> DownloadQueueState.Downloading(downloadQueueSize)
+                            }
+                        }
                 }
         }
     }

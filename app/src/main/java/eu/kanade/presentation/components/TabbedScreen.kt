@@ -32,15 +32,12 @@ fun TabbedScreen(
     startIndex: Int? = null,
     searchQuery: String? = null,
     onChangeSearchQuery: (String?) -> Unit = {},
-    incognitoMode: Boolean = false,
-    downloadedOnlyMode: Boolean = false,
     state: PagerState = rememberPagerState(),
     scrollable: Boolean = false,
     searchQueryAnime: String? = null,
     onChangeSearchQueryAnime: (String?) -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
-    val state = rememberPagerState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(startIndex) {
@@ -65,9 +62,8 @@ fun TabbedScreen(
                     else -> onChangeSearchQueryAnime
                 }
 
-                val appBarTitleText = if (tab.numberTitle == 0) stringResource(titleRes) else tab.numberTitle.toString()
                 SearchToolbar(
-                    titleContent = { AppBarTitle(appBarTitleText) },
+                    titleContent = { AppBarTitle(stringResource(titleRes), null, tab.numberTitle) },
                     searchEnabled = searchEnabled,
                     searchQuery = if (searchEnabled) actualQuery else null,
                     onChangeSearchQuery = actualOnChange,

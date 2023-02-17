@@ -18,7 +18,7 @@ class GlobalAnimeSearchScreenModel(
 ) : AnimeSearchScreenModel<GlobalAnimeSearchState>(GlobalAnimeSearchState(searchQuery = initialQuery)) {
 
     val incognitoMode = preferences.incognitoMode()
-    val lastUsedSourceId = sourcePreferences.lastUsedSource()
+    val lastUsedSourceId = sourcePreferences.lastUsedAnimeSource()
 
     init {
         extensionFilter = initialExtensionFilter

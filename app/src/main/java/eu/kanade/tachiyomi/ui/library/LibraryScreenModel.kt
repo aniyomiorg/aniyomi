@@ -38,6 +38,7 @@ import eu.kanade.presentation.manga.DownloadAction
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.download.DownloadCache
 import eu.kanade.tachiyomi.data.download.DownloadManager
+import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.SManga
@@ -406,7 +407,7 @@ class LibraryScreenModel(
      * @return map of track id with the filter value
      */
     private fun getTrackingFilterFlow(): Flow<Map<Long, Int>> {
-        val loggedServices = trackManager.services.filter { it.isLogged }
+        val loggedServices = trackManager.services.filter { it.isLogged && it is MangaTrackService }
         return if (loggedServices.isNotEmpty()) {
             val prefFlows = loggedServices
                 .map { libraryPreferences.filterTracking(it.id.toInt()).changes() }

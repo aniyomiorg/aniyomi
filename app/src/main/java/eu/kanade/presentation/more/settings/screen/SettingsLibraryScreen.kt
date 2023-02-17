@@ -35,8 +35,8 @@ import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.category.interactor.GetAnimeCategories
 import com.commandiron.wheel_picker_compose.WheelPicker
+import eu.kanade.domain.category.interactor.GetAnimeCategories
 import eu.kanade.domain.category.interactor.GetCategories
 import eu.kanade.domain.category.interactor.ResetCategoryFlags
 import eu.kanade.domain.category.model.Category
@@ -55,8 +55,7 @@ import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.ui.animecategory.AnimeCategoryScreen
-import eu.kanade.tachiyomi.ui.category.CategoryScreen
+import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import uy.kohesive.injekt.Injekt
@@ -155,7 +154,7 @@ object SettingsLibraryScreen : SearchableSettings {
                         count = userAnimeCategoriesCount,
                         userAnimeCategoriesCount,
                     ),
-                    onClick = { navigator.push(AnimeCategoryScreen()) },
+                    onClick = { navigator.push(CategoriesTab(false)) },
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.defaultAnimeCategory(),
@@ -170,7 +169,7 @@ object SettingsLibraryScreen : SearchableSettings {
                         count = userCategoriesCount,
                         userCategoriesCount,
                     ),
-                    onClick = { navigator.push(CategoryScreen()) },
+                    onClick = { navigator.push(CategoriesTab(true)) },
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.defaultCategory(),

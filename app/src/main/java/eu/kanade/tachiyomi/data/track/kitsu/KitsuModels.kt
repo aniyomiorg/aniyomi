@@ -173,6 +173,7 @@ class KitsuLibAnime(obj: JsonObject, anime: JsonObject) {
         else -> throw Exception("Unknown status")
     }
 }
+
 @Serializable
 data class OAuth(
     val access_token: String,

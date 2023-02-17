@@ -66,7 +66,6 @@ import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animeextension.api.AnimeExtensionGithubApi
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
@@ -75,6 +74,8 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
 import eu.kanade.tachiyomi.data.updater.AppUpdateResult
 import eu.kanade.tachiyomi.data.updater.RELEASE_URL
+import eu.kanade.tachiyomi.ui.animelib.AnimelibSettingsSheet
+import eu.kanade.tachiyomi.ui.animelib.AnimelibTab
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceScreen
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchScreen
@@ -83,7 +84,9 @@ import eu.kanade.tachiyomi.ui.library.LibrarySettingsSheet
 import eu.kanade.tachiyomi.ui.library.LibraryTab
 import eu.kanade.tachiyomi.ui.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.more.NewUpdateScreen
+import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.util.Constants
+import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.dpToPx
 import eu.kanade.tachiyomi.util.system.isNavigationBarNeedsScrim
 import eu.kanade.tachiyomi.util.system.logcat
@@ -116,13 +119,16 @@ class MainActivity : BaseActivity() {
     private val animeDownloadCache: AnimeDownloadCache by injectLazy()
     private val downloadCache: DownloadCache by injectLazy()
 
+    private val externalIntents: ExternalIntents by injectLazy()
+
     // To be checked by splash screen. If true then splash screen will be removed.
     var ready = false
 
     /**
      * Sheet containing filter/sort/display items.
      */
-    private var settingsSheet: LibrarySettingsSheet? = null
+    private var animeSettingsSheet: AnimelibSettingsSheet? = null
+    private var mangaSettingsSheet: LibrarySettingsSheet? = null
 
     private var isHandlingShortcut: Boolean = false
     private lateinit var navigator: Navigator
@@ -160,9 +166,14 @@ class MainActivity : BaseActivity() {
         // Draw edge-to-edge
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        settingsSheet = LibrarySettingsSheet(this)
+        animeSettingsSheet = AnimelibSettingsSheet(this)
+        AnimelibTab.openSettingsSheetEvent
+            .onEach(::showAnimeSettingsSheet)
+            .launchIn(lifecycleScope)
+
+        mangaSettingsSheet = LibrarySettingsSheet(this)
         LibraryTab.openSettingsSheetEvent
-            .onEach(::showSettingsSheet)
+            .onEach(::showMangaSettingsSheet)
             .launchIn(lifecycleScope)
 
         setComposeContent {
@@ -302,11 +313,23 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun showSettingsSheet(category: Category? = null) {
+    private fun showAnimeSettingsSheet(category: Category? = null) {
         if (category != null) {
-            settingsSheet?.show(category)
+            animeSettingsSheet?.show(category)
         } else {
-            lifecycleScope.launch { LibraryTab.requestOpenSettingsSheet() }
+            lifecycleScope.launch {
+                AnimelibTab.requestOpenSettingsSheet()
+            }
+        }
+    }
+
+    private fun showMangaSettingsSheet(category: Category? = null) {
+        if (category != null) {
+            mangaSettingsSheet?.show(category)
+        } else {
+            lifecycleScope.launch {
+                LibraryTab.requestOpenSettingsSheet()
+            }
         }
     }
 
@@ -475,8 +498,10 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
-        settingsSheet?.sheetScope?.cancel()
-        settingsSheet = null
+        animeSettingsSheet?.sheetScope?.cancel()
+        mangaSettingsSheet?.sheetScope?.cancel()
+        animeSettingsSheet = null
+        mangaSettingsSheet = null
         super.onDestroy()
     }
 
@@ -492,6 +517,12 @@ class MainActivity : BaseActivity() {
 
     init {
         registerSecureActivity(this)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        launchIO { externalIntents.onActivityResult(requestCode, resultCode, data) }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     companion object {
@@ -517,29 +548,5 @@ class MainActivity : BaseActivity() {
         const val INTENT_ANIMESEARCH = "eu.kanade.tachiyomi.ANIMESEARCH"
         const val INTENT_SEARCH_QUERY = "query"
         const val INTENT_SEARCH_FILTER = "filter"
-
-        private val startScreenArrayDefault = intArrayOf(
-            R.id.nav_animelib,
-            R.id.nav_animelib,
-            R.id.nav_library,
-            R.id.nav_updates,
-            R.id.nav_browse,
-        )
-
-        private val startScreenArrayHistory = intArrayOf(
-            R.id.nav_animelib,
-            R.id.nav_animelib,
-            R.id.nav_library,
-            R.id.nav_history,
-            R.id.nav_browse,
-        )
-
-        private val startScreenArrayNoManga = intArrayOf(
-            R.id.nav_animelib,
-            R.id.nav_animelib,
-            R.id.nav_updates,
-            R.id.nav_history,
-            R.id.nav_browse,
-        )
     }
 }

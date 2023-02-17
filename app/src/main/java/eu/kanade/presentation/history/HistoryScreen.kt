@@ -2,55 +2,32 @@ package eu.kanade.presentation.history
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DeleteSweep
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import eu.kanade.domain.history.model.HistoryWithRelations
-import eu.kanade.presentation.components.AppBarTitle
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.components.SearchToolbar
 import eu.kanade.presentation.history.components.HistoryContent
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.history.HistoryScreenModel
-import eu.kanade.tachiyomi.ui.history.HistoryState
+import eu.kanade.tachiyomi.ui.history.manga.HistoryState
+import eu.kanade.tachiyomi.ui.history.manga.MangaHistoryScreenModel
 import java.util.Date
 
 @Composable
 fun HistoryScreen(
     state: HistoryState,
+    contentPadding: PaddingValues,
     snackbarHostState: SnackbarHostState,
-    onSearchQueryChange: (String?) -> Unit,
     onClickCover: (mangaId: Long) -> Unit,
     onClickResume: (mangaId: Long, chapterId: Long) -> Unit,
-    onDialogChange: (HistoryScreenModel.Dialog?) -> Unit,
+    onDialogChange: (MangaHistoryScreenModel.Dialog?) -> Unit,
 ) {
     Scaffold(
-        topBar = { scrollBehavior ->
-            SearchToolbar(
-                titleContent = { AppBarTitle(stringResource(R.string.history)) },
-                searchQuery = state.searchQuery,
-                onChangeSearchQuery = onSearchQueryChange,
-                actions = {
-                    IconButton(onClick = { onDialogChange(HistoryScreenModel.Dialog.DeleteAll) }) {
-                        Icon(
-                            Icons.Outlined.DeleteSweep,
-                            contentDescription = stringResource(R.string.pref_clear_history),
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior,
-            )
-        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-    ) { contentPadding ->
+    ) { _ ->
         state.list.let {
             if (it == null) {
                 LoadingScreen(modifier = Modifier.padding(contentPadding))
@@ -70,7 +47,7 @@ fun HistoryScreen(
                     contentPadding = contentPadding,
                     onClickCover = { history -> onClickCover(history.mangaId) },
                     onClickResume = { history -> onClickResume(history.mangaId, history.chapterId) },
-                    onClickDelete = { item -> onDialogChange(HistoryScreenModel.Dialog.Delete(item)) },
+                    onClickDelete = { item -> onDialogChange(MangaHistoryScreenModel.Dialog.Delete(item)) },
                 )
             }
         }

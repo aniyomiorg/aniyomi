@@ -10,7 +10,6 @@ import eu.kanade.presentation.anime.components.BaseAnimeListItem
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.FastScrollLazyColumn
-import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.migration.anime.MigrateAnimeState

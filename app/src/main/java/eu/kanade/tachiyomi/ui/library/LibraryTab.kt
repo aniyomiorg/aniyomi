@@ -31,6 +31,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.library.model.LibraryManga
 import eu.kanade.domain.library.model.display
+import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.domain.manga.model.isLocal
 import eu.kanade.presentation.components.ChangeCategoryDialog
@@ -47,7 +48,7 @@ import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchScreen
-import eu.kanade.tachiyomi.ui.category.CategoryScreen
+import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.manga.MangaScreen
@@ -57,16 +58,21 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import uy.kohesive.injekt.injectLazy
 
 object LibraryTab : Tab {
+
+    val libraryPreferences: LibraryPreferences by injectLazy()
+    private val fromMore = libraryPreferences.bottomNavStyle().get() == 2
 
     override val options: TabOptions
         @Composable
         get() {
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library_enter)
+            val index: UShort = if (fromMore) 5u else 1u
             return TabOptions(
-                index = 0u,
+                index = index,
                 title = stringResource(R.string.label_library),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
@@ -100,6 +106,8 @@ object LibraryTab : Tab {
             scope.launch { sendSettingsSheetIntent(state.categories[screenModel.activeCategoryIndex]) }
         }
 
+        val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
+
         Scaffold(
             topBar = { scrollBehavior ->
                 val title = state.getToolbarTitle(
@@ -130,6 +138,7 @@ object LibraryTab : Tab {
                     searchQuery = state.searchQuery,
                     onSearchQueryChange = screenModel::search,
                     scrollBehavior = scrollBehavior.takeIf { !tabVisible }, // For scroll overlay when no tab
+                    navigateUp = navigateUp,
                 )
             },
             bottomBar = {
@@ -208,7 +217,7 @@ object LibraryTab : Tab {
                     onDismissRequest = onDismissRequest,
                     onEditCategories = {
                         screenModel.clearSelection()
-                        navigator.push(CategoryScreen())
+                        navigator.push(CategoriesTab(true))
                     },
                     onConfirm = { include, exclude ->
                         screenModel.clearSelection()

@@ -71,7 +71,7 @@ import eu.kanade.tachiyomi.animesource.getNameForAnimeInfo
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.anime.AnimeScreenState
 import eu.kanade.tachiyomi.ui.anime.EpisodeItem
-import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -252,6 +252,7 @@ private fun AnimeScreenSmallImpl(
                 onClickDownload = onDownloadActionClicked,
                 onClickEditCategory = onEditCategoryClicked,
                 onClickMigrate = onMigrateClicked,
+                changeAnimeSkipIntro = changeAnimeSkipIntro,
                 actionModeCounter = episodes.count { it.selected },
                 onSelectAll = { onAllEpisodeSelected(true) },
                 onInvertSelection = { onInvertSelection() },

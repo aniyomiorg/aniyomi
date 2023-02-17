@@ -4,10 +4,6 @@ import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.animetrack.model.AnimeTrack
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.track.model.Track
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
-import eu.kanade.tachiyomi.source.Source
 
 /**
  * An Enhanced Track Service will never prompt the user to match a manga with the remote.

@@ -44,8 +44,8 @@ import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.animelib.AnimelibTab
 import eu.kanade.tachiyomi.ui.browse.BrowseTab
-import eu.kanade.tachiyomi.ui.download.manga.DownloadQueueScreen
-import eu.kanade.tachiyomi.ui.history.HistoryTab
+import eu.kanade.tachiyomi.ui.download.DownloadsTab
+import eu.kanade.tachiyomi.ui.history.HistoriesTab
 import eu.kanade.tachiyomi.ui.library.LibraryTab
 import eu.kanade.tachiyomi.ui.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.more.MoreTab
@@ -69,33 +69,33 @@ object HomeScreen : Screen {
 
     private const val TabFadeDuration = 200
 
-    private val preferences: LibraryPreferences by injectLazy()
+    private val libraryPreferences: LibraryPreferences by injectLazy()
 
     private val tabsNoHistory = listOf(
         AnimelibTab,
         LibraryTab,
-        UpdatesTab,
+        UpdatesTab(fromMore = false, inMiddle = true),
         BrowseTab(),
-        MoreTab
+        MoreTab,
     )
 
     private val tabsNoUpdates = listOf(
         AnimelibTab,
         LibraryTab,
-        HistoryTab,
+        HistoriesTab(false),
         BrowseTab(),
-        MoreTab
+        MoreTab,
     )
 
     private val tabsNoManga = listOf(
         AnimelibTab,
-        UpdatesTab,
-        HistoryTab,
+        UpdatesTab(fromMore = false, inMiddle = false),
+        HistoriesTab(false),
         BrowseTab(),
-        MoreTab
+        MoreTab,
     )
 
-    private val tabs = when (preferences.bottomNavStyle().get()) {
+    private val tabs = when (libraryPreferences.bottomNavStyle().get()) {
         0 -> tabsNoHistory
         1 -> tabsNoUpdates
         else -> tabsNoManga
@@ -178,8 +178,11 @@ object HomeScreen : Screen {
                         tabNavigator.current = when (it) {
                             is Tab.Animelib -> AnimelibTab
                             is Tab.Library -> LibraryTab
-                            Tab.Updates -> UpdatesTab
-                            Tab.History -> HistoryTab
+                            is Tab.Updates -> UpdatesTab(
+                                libraryPreferences.bottomNavStyle().get() == 1,
+                                libraryPreferences.bottomNavStyle().get() == 0,
+                            )
+                            is Tab.History -> HistoriesTab(false)
                             is Tab.Browse -> BrowseTab(it.toExtensions)
                             is Tab.More -> MoreTab
                         }
@@ -191,7 +194,7 @@ object HomeScreen : Screen {
                             navigator.push(MangaScreen(it.mangaIdToOpen))
                         }
                         if (it is Tab.More && it.toDownloads) {
-                            navigator.push(DownloadQueueScreen)
+                            navigator.push(DownloadsTab())
                         }
                     }
                 }
@@ -260,14 +263,14 @@ object HomeScreen : Screen {
         BadgedBox(
             badge = {
                 when {
-                    tab is UpdatesTab -> {
+                    UpdatesTab::class.isInstance(tab) -> {
                         val count by produceState(initialValue = 0) {
                             val pref = Injekt.get<LibraryPreferences>()
                             combine(
-                                pref.newShowUpdatesCount().changes(),
+                                pref.newAnimeUpdatesCount().changes(),
                                 pref.newMangaUpdatesCount().changes(),
-                            ) { show, count -> if (show) count else 0 }
-                                .collectLatest { value = it }
+                            ) { countAnime, countManga -> countAnime + countManga }
+                                .collectLatest { value = if (pref.newShowUpdatesCount().get()) it else 0 }
                         }
                         if (count > 0) {
                             Badge {
@@ -285,7 +288,11 @@ object HomeScreen : Screen {
                     }
                     BrowseTab::class.isInstance(tab) -> {
                         val count by produceState(initialValue = 0) {
-                            Injekt.get<SourcePreferences>().extensionUpdatesCount().changes()
+                            val pref = Injekt.get<SourcePreferences>()
+                            combine(
+                                pref.extensionUpdatesCount().changes(),
+                                pref.animeextensionUpdatesCount().changes(),
+                            ) { extCount, animeExtCount -> extCount + animeExtCount }
                                 .collectLatest { value = it }
                         }
                         if (count > 0) {

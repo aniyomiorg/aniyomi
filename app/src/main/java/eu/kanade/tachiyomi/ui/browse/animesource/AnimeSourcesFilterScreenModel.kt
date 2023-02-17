@@ -3,9 +3,9 @@ package eu.kanade.tachiyomi.ui.browse.animesource
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.animesource.interactor.GetLanguagesWithAnimeSources
-import eu.kanade.domain.source.interactor.ToggleLanguage
 import eu.kanade.domain.animesource.interactor.ToggleAnimeSource
 import eu.kanade.domain.animesource.model.AnimeSource
+import eu.kanade.domain.source.interactor.ToggleLanguage
 import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
@@ -27,7 +27,7 @@ class AnimeSourcesFilterScreenModel(
             combine(
                 getLanguagesWithSources.subscribe(),
                 preferences.enabledLanguages().changes(),
-                preferences.disabledSources().changes(),
+                preferences.disabledAnimeSources().changes(),
             ) { a, b, c -> Triple(a, b, c) }
                 .catch { throwable ->
                     mutableState.update {

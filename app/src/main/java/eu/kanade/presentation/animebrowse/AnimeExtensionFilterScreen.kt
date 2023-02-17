@@ -13,13 +13,13 @@ import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.animeextension.AnimeExtensionFilterState
+import eu.kanade.tachiyomi.ui.browse.extension.ExtensionFilterState
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 @Composable
 fun AnimeExtensionFilterScreen(
     navigateUp: () -> Unit,
-    state: AnimeExtensionFilterState.Success,
+    state: ExtensionFilterState.Success,
     onClickToggle: (String) -> Unit,
 ) {
     Scaffold(
@@ -31,13 +31,13 @@ fun AnimeExtensionFilterScreen(
             )
         },
     ) { contentPadding ->
-            if (state.isEmpty) {
-                EmptyScreen(
-                    textResource = R.string.empty_screen,
-                    modifier = Modifier.padding(contentPadding),
-                )
-                return@Scaffold
-            }
+        if (state.isEmpty) {
+            EmptyScreen(
+                textResource = R.string.empty_screen,
+                modifier = Modifier.padding(contentPadding),
+            )
+            return@Scaffold
+        }
         AnimeExtensionFilterContent(
             contentPadding = contentPadding,
             state = state,
@@ -49,7 +49,7 @@ fun AnimeExtensionFilterScreen(
 @Composable
 private fun AnimeExtensionFilterContent(
     contentPadding: PaddingValues,
-    state: AnimeExtensionFilterState.Success,
+    state: ExtensionFilterState.Success,
     onClickLang: (String) -> Unit,
 ) {
     val context = LocalContext.current

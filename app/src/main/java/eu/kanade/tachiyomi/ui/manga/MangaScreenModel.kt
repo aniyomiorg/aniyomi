@@ -103,7 +103,7 @@ class MangaInfoScreenModel(
     private val successState: MangaScreenState.Success?
         get() = state.value as? MangaScreenState.Success
 
-    private val loggedServices by lazy { trackManager.services.filter { it.isLogged && it is MangaTrackService} }
+    private val loggedServices by lazy { trackManager.services.filter { it.isLogged && it is MangaTrackService } }
 
     val manga: Manga?
         get() = successState?.manga

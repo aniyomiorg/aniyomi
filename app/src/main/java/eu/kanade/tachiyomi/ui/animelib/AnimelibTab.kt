@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.animelib
 
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
@@ -28,31 +29,34 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.animelib.model.AnimelibAnime
-import eu.kanade.domain.library.model.display
-import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.isLocal
+import eu.kanade.domain.animelib.model.AnimelibAnime
+import eu.kanade.domain.category.model.Category
+import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.library.model.display
+import eu.kanade.domain.library.service.LibraryPreferences
+import eu.kanade.presentation.animelib.components.AnimelibContent
+import eu.kanade.presentation.components.AnimelibBottomActionMenu
 import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.DeleteAnimelibAnimeDialog
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.EmptyScreenAction
-import eu.kanade.presentation.components.AnimelibBottomActionMenu
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.animelib.components.AnimelibContent
 import eu.kanade.presentation.library.components.LibraryToolbar
 import eu.kanade.presentation.manga.components.DownloadCustomAmountDialog
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
+import eu.kanade.tachiyomi.ui.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchScreen
-import eu.kanade.tachiyomi.ui.category.CategoryScreen
+import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.anime.AnimeScreen
+import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.lang.launchIO
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -72,7 +76,7 @@ object AnimelibTab : Tab {
                 R.string.label_animelib
             }
             val isSelected = LocalTabNavigator.current.current.key == key
-            val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library_enter)
+            val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_animelibrary_leave)
             return TabOptions(
                 index = 0u,
                 title = stringResource(title),
@@ -106,6 +110,23 @@ object AnimelibTab : Tab {
         }
         val onClickFilter: () -> Unit = {
             scope.launch { sendSettingsSheetIntent(state.categories[screenModel.activeCategoryIndex]) }
+        }
+
+        fun openEpisodeInternal(context: Context, animeId: Long, episodeId: Long) {
+            context.startActivity(PlayerActivity.newIntent(context, animeId, episodeId))
+        }
+
+        suspend fun openEpisodeExternal(context: Context, animeId: Long, episodeId: Long) {
+            context.startActivity(ExternalIntents.newIntent(context, animeId, episodeId))
+        }
+
+        suspend fun openEpisode(episode: Episode) {
+            val playerPreferences: PlayerPreferences by injectLazy()
+            if (playerPreferences.alwaysUseExternalPlayer().get()) {
+                openEpisodeExternal(context, episode.animeId, episode.id)
+            } else {
+                openEpisodeInternal(context, episode.animeId, episode.id)
+            }
         }
 
         Scaffold(
@@ -183,13 +204,8 @@ object AnimelibTab : Tab {
                         onContinueWatchingClicked = { it: AnimelibAnime ->
                             scope.launchIO {
                                 val episode = screenModel.getNextUnseenEpisode(it.anime)
-                                if (episode != null) {
-                                    context.startActivity(PlayerActivity.newIntent(context, episode.animeId, episode.id))
-                                } else {
-                                    snackbarHostState.showSnackbar(context.getString(R.string.no_next_episode))
-                                }
+                                if (episode != null) openEpisode(episode)
                             }
-                            // TODO: External Intent
                             Unit
                         }.takeIf { state.showAnimeContinueButton },
                         onToggleSelection = { screenModel.toggleSelection(it) },
@@ -217,7 +233,7 @@ object AnimelibTab : Tab {
                     onDismissRequest = onDismissRequest,
                     onEditCategories = {
                         screenModel.clearSelection()
-                        navigator.push(CategoryScreen())
+                        navigator.push(CategoriesTab(false))
                     },
                     onConfirm = { include, exclude ->
                         screenModel.clearSelection()

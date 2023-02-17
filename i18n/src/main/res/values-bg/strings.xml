@@ -269,9 +269,6 @@
     <string name="delete_downloads_for_manga">Да се изтрият ли изтеглените глави?</string>
     <string name="download_paused">На пауза</string>
     <string name="download_notifier_download_paused_chapters">Изтеглянето спряно</string>
-    <string name="backup_restore_content">За възстановяването се изтеглят данни от източника, за които може да бъде отчетен разход на данни.
-\n
-\nСъщо проверете дали сте изтеглили всички необходими разширения и сте влезли коректно в източниците и услугите за проследяване преди възстановяването.</string>
     <string name="chapter_paused">На пауза</string>
     <string name="download_notifier_download_paused">Изтеглянето спряно</string>
     <string name="action_global_search">Глобално търсене</string>

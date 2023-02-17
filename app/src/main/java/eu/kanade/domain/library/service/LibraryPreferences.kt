@@ -50,6 +50,18 @@ class LibraryPreferences(
 
     fun filterTracking(name: Int) = preferenceStore.getInt("pref_filter_library_tracked_$name", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
 
+    fun filterDownloadedAnime() = preferenceStore.getInt("pref_filter_animelib_downloaded", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
+
+    fun filterUnseen() = preferenceStore.getInt("pref_filter_animelib_unread", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
+
+    fun filterStartedAnime() = preferenceStore.getInt("pref_filter_animelib_started", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
+
+    fun filterBookmarkedAnime() = preferenceStore.getInt("pref_filter_animelib_bookmarked", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
+
+    fun filterCompletedAnime() = preferenceStore.getInt("pref_filter_animelib_completed", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
+
+    fun filterTrackingAnime(name: Int) = preferenceStore.getInt("pref_filter_animelib_tracked_$name", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
+
     // endregion
 
     // region Badges

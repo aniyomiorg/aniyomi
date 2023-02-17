@@ -98,7 +98,7 @@ fun TrackChapterSelector(
     onDismissRequest: () -> Unit,
     isAnime: Boolean,
 ) {
-    val titleText = when(isAnime) {
+    val titleText = when (isAnime) {
         true -> R.string.chapters
         false -> R.string.episodes
     }

@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
-import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
@@ -27,35 +26,35 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.commandiron.wheel_picker_compose.WheelTextPicker
 import eu.kanade.domain.anime.interactor.SetAnimeViewerFlags
-import eu.kanade.domain.episode.model.Episode
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.anime.model.hasCustomCover
+import eu.kanade.domain.episode.model.Episode
+import eu.kanade.presentation.anime.AnimeScreen
+import eu.kanade.presentation.anime.EpisodeSettingsDialog
+import eu.kanade.presentation.anime.components.AnimeCoverDialog
+import eu.kanade.presentation.anime.components.DeleteEpisodesDialog
 import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.DuplicateAnimeDialog
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.NavigatorAdaptiveSheet
-import eu.kanade.presentation.anime.EpisodeSettingsDialog
-import eu.kanade.presentation.manga.EditCoverAction
-import eu.kanade.presentation.anime.AnimeScreen
-import eu.kanade.presentation.anime.components.DeleteEpisodesDialog
-import eu.kanade.presentation.manga.components.DownloadCustomAmountDialog
-import eu.kanade.presentation.anime.components.AnimeCoverDialog
 import eu.kanade.presentation.manga.BaseSelector
-import eu.kanade.presentation.manga.TrackChapterSelector
+import eu.kanade.presentation.manga.EditCoverAction
+import eu.kanade.presentation.manga.components.DownloadCustomAmountDialog
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.isLocalOrStub
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.data.cache.CoverCache
-import eu.kanade.tachiyomi.ui.browse.migration.search.MigrateAnimeSearchScreen
+import eu.kanade.tachiyomi.ui.anime.track.AnimeTrackInfoDialogHomeScreen
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.GlobalAnimeSearchScreen
-import eu.kanade.tachiyomi.ui.animecategory.AnimeCategoryScreen
+import eu.kanade.tachiyomi.ui.browse.migration.search.MigrateAnimeSearchScreen
+import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.home.HomeScreen
-import eu.kanade.tachiyomi.ui.anime.track.AnimeTrackInfoDialogHomeScreen
+import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withIOContext
@@ -64,10 +63,7 @@ import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
 class AnimeScreen(
@@ -116,7 +112,12 @@ class AnimeScreen(
             snackbarHostState = screenModel.snackbarHostState,
             isTabletUi = isTabletUi(),
             onBackClicked = navigator::pop,
-            onEpisodeClicked = { episode, alt -> openEpisode(context, episode, alt) },
+            onEpisodeClicked = { episode, alt ->
+                scope.launchIO {
+                    openEpisode(context, episode, alt)
+                }
+                Unit
+            },
             onDownloadEpisode = screenModel::runEpisodeDownloadActions.takeIf { !successState.source.isLocalOrStub() },
             onAddToLibraryClicked = {
                 screenModel.toggleFavorite()
@@ -128,14 +129,19 @@ class AnimeScreen(
             onTagClicked = { scope.launch { performGenreSearch(navigator, it, screenModel.source!!) } },
             onFilterButtonClicked = screenModel::showSettingsDialog,
             onRefresh = screenModel::fetchAllFromSource,
-            onContinueWatching = { continueWatching(context, screenModel.getNextUnseenEpisode()) },
+            onContinueWatching = {
+                scope.launchIO {
+                    continueWatching(context, screenModel.getNextUnseenEpisode())
+                }
+                Unit
+            },
             onSearch = { query, global -> scope.launch { performSearch(navigator, query, global) } },
             onCoverClicked = screenModel::showCoverDialog,
             onShareClicked = { shareAnime(context, screenModel.anime, screenModel.source) }.takeIf { isAnimeHttpSource },
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
             onEditCategoryClicked = screenModel::promptChangeCategories.takeIf { successState.anime.favorite },
             onMigrateClicked = { navigator.push(MigrateAnimeSearchScreen(successState.anime.id)) }.takeIf { successState.anime.favorite },
-            changeAnimeSkipIntro = {screenModel::showAnimeSkipIntroDialog.takeIf { successState.anime.favorite }},
+            changeAnimeSkipIntro = { screenModel::showAnimeSkipIntroDialog.takeIf { successState.anime.favorite } },
             onMultiBookmarkClicked = screenModel::bookmarkEpisodes,
             onMultiMarkAsSeenClicked = screenModel::markEpisodesSeen,
             onMarkPreviousAsSeenClicked = screenModel::markPreviousEpisodeSeen,
@@ -152,7 +158,7 @@ class AnimeScreen(
                 ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,
                     onDismissRequest = onDismissRequest,
-                    onEditCategories = { navigator.push(AnimeCategoryScreen()) },
+                    onEditCategories = { navigator.push(CategoriesTab(false)) },
                     onConfirm = { include, _ ->
                         screenModel.moveAnimeToCategoriesAndAddToLibrary(dialog.anime, include)
                     },
@@ -242,13 +248,24 @@ class AnimeScreen(
         }
     }
 
-    private fun continueWatching(context: Context, unseenEpisode: Episode?) {
+    private suspend fun continueWatching(context: Context, unseenEpisode: Episode?) {
         if (unseenEpisode != null) openEpisode(context, unseenEpisode)
     }
+    private fun openEpisodeInternal(context: Context, animeId: Long, episodeId: Long) {
+        context.startActivity(PlayerActivity.newIntent(context, animeId, episodeId))
+    }
 
-    // TODO: External Player support
-    private fun openEpisode(context: Context, episode: Episode, alt: Boolean = false) {
-        context.startActivity(PlayerActivity.newIntent(context, episode.animeId, episode.id))
+    private suspend fun openEpisodeExternal(context: Context, animeId: Long, episodeId: Long) {
+        context.startActivity(ExternalIntents.newIntent(context, animeId, episodeId))
+    }
+
+    private suspend fun openEpisode(context: Context, episode: Episode, altPlayer: Boolean = false) {
+        val playerPreferences: PlayerPreferences by injectLazy()
+        if (playerPreferences.alwaysUseExternalPlayer().get() != altPlayer) {
+            openEpisodeExternal(context, episode.animeId, episode.id)
+        } else {
+            openEpisodeInternal(context, episode.animeId, episode.id)
+        }
     }
 
     private fun getAnimeUrl(anime_: Anime?, source_: AnimeSource?): String? {
@@ -347,6 +364,7 @@ fun ChangeIntroLength(
     anime: Anime,
     onDismissRequest: () -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
     val setAnimeViewerFlags: SetAnimeViewerFlags by injectLazy()
     val titleText = R.string.action_change_intro_length
     var newLength = 0
@@ -364,10 +382,12 @@ fun ChangeIntroLength(
             )
         },
         onConfirm = {
-            launchIO {
+            scope.launchIO {
                 setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, newLength.toLong())
                 onDismissRequest()
-            }},
+            }
+            Unit
+        },
         onDismissRequest = onDismissRequest,
     )
 }

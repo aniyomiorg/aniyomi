@@ -220,7 +220,6 @@ data class AnimeExtensionsState(
     val isEmpty = items.isEmpty()
 }
 
-
 sealed interface AnimeExtensionUiModel {
     sealed interface Header : AnimeExtensionUiModel {
         data class Resource(@StringRes val textRes: Int) : Header

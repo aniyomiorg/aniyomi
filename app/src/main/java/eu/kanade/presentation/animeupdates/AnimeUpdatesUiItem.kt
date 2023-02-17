@@ -43,7 +43,7 @@ import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.selectedBackground
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
-import eu.kanade.tachiyomi.ui.animeupdates.AnimeUpdatesItem
+import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
 import java.util.Date
 import kotlin.time.Duration.Companion.minutes
 
@@ -82,7 +82,7 @@ fun LazyListScope.animeupdatesUiItems(
     selectionMode: Boolean,
     onUpdateSelected: (AnimeUpdatesItem, Boolean, Boolean, Boolean) -> Unit,
     onClickCover: (AnimeUpdatesItem) -> Unit,
-    onClickUpdate: (AnimeUpdatesItem) -> Unit,
+    onClickUpdate: (AnimeUpdatesItem, altPlayer: Boolean) -> Unit,
     onDownloadEpisode: (List<AnimeUpdatesItem>, EpisodeDownloadAction) -> Unit,
 ) {
     items(
@@ -119,7 +119,7 @@ fun LazyListScope.animeupdatesUiItems(
                     onClick = {
                         when {
                             selectionMode -> onUpdateSelected(updatesItem, !updatesItem.selected, true, false)
-                            else -> onClickUpdate(updatesItem)
+                            else -> onClickUpdate(updatesItem, false)
                         }
                     },
                     onClickCover = { onClickCover(updatesItem) }.takeIf { !selectionMode },

@@ -199,8 +199,10 @@ object SettingsAdvancedScreen : SearchableSettings {
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_invalidate_download_cache),
                     subtitle = stringResource(R.string.pref_invalidate_download_cache_summary),
-                    onClick = { Injekt.get<DownloadCache>().invalidateCache()
-                        Injekt.get<AnimeDownloadCache>().invalidateCache() },
+                    onClick = {
+                        Injekt.get<DownloadCache>().invalidateCache()
+                        Injekt.get<AnimeDownloadCache>().invalidateCache()
+                    },
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_clear_database),

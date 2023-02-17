@@ -54,7 +54,7 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
-import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
@@ -79,12 +79,12 @@ import java.io.InputStream
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-class PlayerActivity : BaseActivity(),
+class PlayerActivity :
+    BaseActivity(),
     MPVLib.EventObserver,
     MPVLib.LogObserver {
 
     companion object {
-
         fun newIntent(context: Context, animeId: Long?, episodeId: Long?): Intent {
             return Intent(context, PlayerActivity::class.java).apply {
                 putExtra("anime", animeId)
@@ -110,7 +110,9 @@ class PlayerActivity : BaseActivity(),
         viewModel.saveCurrentEpisodeWatchingProgress()
 
         viewModel.mutableState.update { it.copy(anime = null) }
-        launchIO { viewModel.init(anime, episode) }
+        launchIO {
+            viewModel.init(anime, episode).first?.let { setVideoList(it) }
+        }
         super.onNewIntent(intent)
     }
 
@@ -362,12 +364,13 @@ class PlayerActivity : BaseActivity(),
 
             lifecycleScope.launchNonCancellable {
                 val initResult = viewModel.init(anime, episode)
-                if (!initResult.getOrDefault(false)) {
-                    val exception = initResult.exceptionOrNull() ?: IllegalStateException("Unknown err")
+                if (!initResult.second.getOrDefault(false)) {
+                    val exception = initResult.second.exceptionOrNull() ?: IllegalStateException("Unknown err")
                     withUIContext {
                         setInitialEpisodeError(exception)
                     }
                 }
+                lifecycleScope.launch { setVideoList(initResult.first!!) }
             }
         }
         val dm = DisplayMetrics()
@@ -512,8 +515,11 @@ class PlayerActivity : BaseActivity(),
     internal fun switchEpisode(previous: Boolean, autoPlay: Boolean = false) {
         lifecycleScope.launch {
             val switchMethod =
-                if (previous && !autoPlay) viewModel.previousEpisode()
-                else viewModel.nextEpisode()
+                if (previous && !autoPlay) {
+                    viewModel.previousEpisode()
+                } else {
+                    viewModel.nextEpisode()
+                }
 
             val errorRes = if (previous) R.string.no_previous_episode else R.string.no_next_episode
 
@@ -528,7 +534,7 @@ class PlayerActivity : BaseActivity(),
                     showLoadingIndicator(false)
                 }
                 else -> {
-                    if(switchMethod.first != null) {
+                    if (switchMethod.first != null) {
                         when {
                             switchMethod.first!!.isEmpty() -> setInitialEpisodeError(Exception("Video list is empty."))
                             else -> setVideoList(switchMethod.first!!)
@@ -1002,14 +1008,14 @@ class PlayerActivity : BaseActivity(),
      * will call [onShareImageResult] with the path the image was saved on when it's ready.
      */
     fun shareImage() {
-        viewModel.shareImage(takeScreenshot(),player.timePos)
+        viewModel.shareImage({ takeScreenshot()!! }, player.timePos)
     }
 
     /**
      * Called from the presenter when a screenshot is ready to be shared. It shows Android's
      * default sharing tool.
      */
-    fun onShareImageResult(uri: Uri, seconds: String) {
+    private fun onShareImageResult(uri: Uri, seconds: String) {
         val anime = viewModel.anime ?: return
         val episode = viewModel.currentEpisode ?: return
 
@@ -1025,7 +1031,7 @@ class PlayerActivity : BaseActivity(),
      * external storage to the presenter.
      */
     fun saveImage() {
-        viewModel.saveImage(takeScreenshot(),player.timePos)
+        viewModel.saveImage({ takeScreenshot()!! }, player.timePos)
     }
 
     /**

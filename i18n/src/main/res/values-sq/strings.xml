@@ -106,7 +106,7 @@
     <string name="spen_previous_page">Faqja e meparshme</string>
     <string name="channel_ext_updates">Përditësimet shtesë</string>
     <string name="channel_app_updates">Përditësimet e aplikacioneve</string>
-    <string name="channel_new_chapters">Përditësimet e kapitullit</string>
+    <string name="channel_new_chapters_episodes">Përditësimet e kapitullit</string>
     <string name="channel_skipped">U anashkalua</string>
     <string name="download_notifier_cache_renewal">Shkarkimet e indeksimit</string>
     <string name="download_notifier_split_failed">Imazhi i shkarkuar nuk mund të ndahej</string>

@@ -1,18 +1,11 @@
 package eu.kanade.presentation.animeupdates
 
-import android.content.Context
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FlipToBack
-import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.SelectAll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,12 +23,11 @@ import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.PullRefresh
 import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.updates.updatesLastUpdatedItem
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
-import eu.kanade.tachiyomi.ui.animeupdates.AnimeUpdatesItem
-import eu.kanade.tachiyomi.ui.animeupdates.AnimeUpdatesState
-import eu.kanade.tachiyomi.ui.player.setting.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
+import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.Injekt
@@ -46,6 +38,7 @@ import kotlin.time.Duration.Companion.seconds
 fun AnimeUpdateScreen(
     state: AnimeUpdatesState,
     snackbarHostState: SnackbarHostState,
+    contentPadding: PaddingValues,
     lastUpdated: Long,
     relativeTime: Int,
     onClickCover: (AnimeUpdatesItem) -> Unit,
@@ -54,10 +47,10 @@ fun AnimeUpdateScreen(
     onUpdateLibrary: () -> Boolean,
     onDownloadEpisode: (List<AnimeUpdatesItem>, EpisodeDownloadAction) -> Unit,
     onMultiBookmarkClicked: (List<AnimeUpdatesItem>, bookmark: Boolean) -> Unit,
-    onMultiMarkAsReadClicked: (List<AnimeUpdatesItem>, read: Boolean) -> Unit,
+    onMultiMarkAsSeenClicked: (List<AnimeUpdatesItem>, seen: Boolean) -> Unit,
     onMultiDeleteClicked: (List<AnimeUpdatesItem>) -> Unit,
     onUpdateSelected: (AnimeUpdatesItem, Boolean, Boolean, Boolean) -> Unit,
-    onOpenEpisode: (List<AnimeUpdatesItem>, context: Context, altPlayer: Boolean) -> Unit,
+    onOpenEpisode: (AnimeUpdatesItem, altPlayer: Boolean) -> Unit,
 ) {
     BackHandler(enabled = state.selectionMode, onBack = { onSelectAll(false) })
 
@@ -69,13 +62,13 @@ fun AnimeUpdateScreen(
                 selected = state.selected,
                 onDownloadEpisode = onDownloadEpisode,
                 onMultiBookmarkClicked = onMultiBookmarkClicked,
-                onMultiMarkAsSeenClicked = onMultiMarkAsReadClicked,
+                onMultiMarkAsSeenClicked = onMultiMarkAsSeenClicked,
                 onMultiDeleteClicked = onMultiDeleteClicked,
                 onOpenEpisode = onOpenEpisode,
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-    ) { contentPadding ->
+    ) {
         when {
             state.isLoading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
             state.items.isEmpty() -> EmptyScreen(
@@ -105,14 +98,14 @@ fun AnimeUpdateScreen(
                         contentPadding = contentPadding,
                     ) {
                         if (lastUpdated > 0L) {
-                            updatesLastUpdatedItem(lastUpdated)
+                            animeupdatesLastUpdatedItem(lastUpdated)
                         }
                         animeupdatesUiItems(
                             uiModels = state.getUiModel(context, relativeTime),
                             selectionMode = state.selectionMode,
                             onUpdateSelected = onUpdateSelected,
                             onClickCover = onClickCover,
-                            onClickUpdate = { onOpenEpisode },
+                            onClickUpdate = onOpenEpisode,
                             onDownloadEpisode = onDownloadEpisode,
                         )
                     }
@@ -129,10 +122,9 @@ private fun AnimeUpdatesBottomBar(
     onMultiBookmarkClicked: (List<AnimeUpdatesItem>, bookmark: Boolean) -> Unit,
     onMultiMarkAsSeenClicked: (List<AnimeUpdatesItem>, seen: Boolean) -> Unit,
     onMultiDeleteClicked: (List<AnimeUpdatesItem>) -> Unit,
-    onOpenEpisode: (List<AnimeUpdatesItem>, context: Context, altPlayer: Boolean) -> Unit,
+    onOpenEpisode: (AnimeUpdatesItem, altPlayer: Boolean) -> Unit,
 ) {
     val playerPreferences: PlayerPreferences = Injekt.get()
-    val context = LocalContext.current
     AnimeBottomActionMenu(
         visible = selected.isNotEmpty(),
         modifier = Modifier.fillMaxWidth(),
@@ -157,10 +149,10 @@ private fun AnimeUpdatesBottomBar(
             onMultiDeleteClicked(selected)
         }.takeIf { selected.fastAny { it.downloadStateProvider() == AnimeDownload.State.DOWNLOADED } },
         onExternalClicked = {
-            onOpenEpisode(selected, context, true)
+            onOpenEpisode(selected[0], true)
         }.takeIf { !playerPreferences.alwaysUseExternalPlayer().get() && selected.size == 1 },
         onInternalClicked = {
-            onOpenEpisode(selected, context,false)
+            onOpenEpisode(selected[0], true)
         }.takeIf { playerPreferences.alwaysUseExternalPlayer().get() && selected.size == 1 },
     )
 }
