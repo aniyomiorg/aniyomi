@@ -339,11 +339,11 @@ class LibraryUpdateNotifier(private val context: Context) {
     }
 
     companion object {
-        const val HELP_WARNING_URL = "https://aniyomi.jmir.xyz/help/faq/#why-does-the-app-warn-about-large-bulk-updates-and-downloads"
+        const val HELP_WARNING_URL = "https://aniyomi.org/help/faq/#why-does-the-app-warn-about-large-bulk-updates-and-downloads"
     }
 }
 
 private const val NOTIF_MAX_CHAPTERS = 5
 private const val NOTIF_TITLE_MAX_LEN = 45
 private const val NOTIF_ICON_SIZE = 192
-private const val HELP_SKIPPED_URL = "https://aniyomi.jmir.xyz/help/faq/#why-does-global-update-skip-some-entries"
+private const val HELP_SKIPPED_URL = "https://aniyomi.org/help/faq/#why-does-global-update-skip-some-entries"

@@ -31,7 +31,7 @@ fun Screen.migrateAnimeSourceTab(): TabContent {
                 title = stringResource(R.string.migration_help_guide),
                 icon = Icons.Outlined.HelpOutline,
                 onClick = {
-                    uriHandler.openUri("https://aniyomi.jmir.xyz/help/guides/source-migration/")
+                    uriHandler.openUri("https://aniyomi.org/help/guides/source-migration/")
                 },
             ),
         ),

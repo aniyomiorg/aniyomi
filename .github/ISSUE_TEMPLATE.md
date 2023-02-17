@@ -5,7 +5,7 @@ I acknowledge that:
 - I have updated:
   - To the latest version of the app (stable is v0.12.3.8)
   - All extensions
-- I have tried the troubleshooting guide: https://aniyomi.jmir.xyz/help/guides/troubleshooting-problems/
+- I have tried the troubleshooting guide: https://aniyomi.org/help/guides/troubleshooting-problems/
 - If this is an issue with an anime extension, that I should be opening an issue in https://github.com/jmir1/aniyomi-extensions
 - I have searched the existing issues and this is new ticket **NOT** a duplicate or related to another open or closed issue
 - I will fill out the title and the information in this template
