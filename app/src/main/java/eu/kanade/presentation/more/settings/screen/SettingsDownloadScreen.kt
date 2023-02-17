@@ -139,7 +139,7 @@ object SettingsDownloadScreen : SearchableSettings {
                     "downloads",
                 ),
             )!!
-            file.uri.toString() + "\n" to file.filePath!!
+            file.uri.toString() to file.filePath!!
         }
     }
 
@@ -153,7 +153,7 @@ object SettingsDownloadScreen : SearchableSettings {
                     "downloads",
                 ),
             )!!
-            file.uri.toString() to file.filePath!!
+            "(ADM)" + file.uri.toString() to file.filePath!!
         }
     }
 

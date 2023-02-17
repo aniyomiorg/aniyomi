@@ -180,12 +180,13 @@ class MainActivity : BaseActivity() {
             val incognito by preferences.incognitoMode().collectAsState()
             val downloadOnly by preferences.downloadedOnly().collectAsState()
             val indexing by downloadCache.isRenewing.collectAsState()
+            val indexingAnime by animeDownloadCache.isRenewing.collectAsState()
 
             // Set statusbar color considering the top app state banner
             val systemUiController = rememberSystemUiController()
             val isSystemInDarkTheme = isSystemInDarkTheme()
             val statusBarBackgroundColor = when {
-                indexing -> IndexingBannerBackgroundColor
+                indexing || indexingAnime -> IndexingBannerBackgroundColor
                 downloadOnly -> DownloadedOnlyBannerBackgroundColor
                 incognito -> IncognitoModeBannerBackgroundColor
                 else -> MaterialTheme.colorScheme.surface
@@ -240,7 +241,7 @@ class MainActivity : BaseActivity() {
                         AppStateBanners(
                             downloadedOnlyMode = downloadOnly,
                             incognitoMode = incognito,
-                            indexing = indexing,
+                            indexing = indexing || indexingAnime,
                             modifier = Modifier.windowInsetsPadding(scaffoldInsets),
                         )
                     },
@@ -511,6 +512,7 @@ class MainActivity : BaseActivity() {
             libraryPreferences.autoClearChapterCache().get()
         ) {
             chapterCache.clear()
+            episodeCache.clear()
         }
         super.onBackPressed()
     }

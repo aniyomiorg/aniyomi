@@ -8,14 +8,13 @@
     <string name="chapters_episodes">Chapters and episodes</string>
     <string name="episodes">Episodes</string>
     <string name="backup_settings_warning">Warning: Backing up settings will store your track passwords as well, do not share this backup file!</string>
-    <string name="label_download_queue">Manga Download queue</string>
-    <string name="label_anime_download_queue">Anime Download queue</string>
     <string name="label_mangalibrary">Manga</string>
     <string name="label_animelib">Anime</string>
     <string name="label_anime">Anime</string>
     <string name="label_manga">Manga</string>
     <string name="label_mangasources">Manga Sources</string>
     <string name="label_animesources">Anime Sources</string>
+    <string name="label_watched_duration">Watched duration</string>
     <string name="label_watched_episodes">Watched</string>
     <string name="pref_bottom_nav_no_history">Move History to the More tab</string>
     <string name="pref_bottom_nav_no_updates">Move Updates to the More tab</string>
@@ -214,6 +213,7 @@
     <string name="download_notifier_download_paused_chapters">Chapter download paused</string>
     <string name="download_notifier_download_paused_episodes">Episode download paused</string>
     <string name="channel_new_chapters_episodes">Chapter/Episode updates</string>
+    <string name="pref_invalidate_download_cache_summary">Force app to recheck downloaded chapters and episodes</string>
 
     <string name="player_controls_skip_intro_text">+%1$d s</string>
 

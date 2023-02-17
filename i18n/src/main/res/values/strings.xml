@@ -35,7 +35,6 @@
     <string name="label_local">Local</string>
     <string name="label_downloaded">Downloaded</string>
 
-    <string name="unlock_app">Unlock Aniyomi</string>
     <string name="confirm_lock_change">Authenticate to confirm change</string>
     <string name="confirm_exit">Press back again to exit</string>
 
@@ -495,6 +494,7 @@
     <string name="used_cache">Used: %1$s</string>
     <string name="cache_deleted">Cache cleared. %1$d files have been deleted</string>
     <string name="cache_delete_error">Error occurred while clearing</string>
+    <string name="pref_invalidate_download_cache">Invalidate downloads index</string>
     <string name="clear_database_source_item_count">%1$d non-library entries in database</string>
     <string name="clear_database_completed">Entries deleted</string>
     <string name="database_clean">Nothing to clear</string>
@@ -766,12 +766,10 @@
     <string name="label_overview_section">Overview</string>
     <string name="label_completed_titles">Completed entries</string>
     <string name="label_read_duration">Read duration</string>
-    <string name="label_watched_duration">Watched duration</string>
     <string name="label_titles_section">Entries</string>
     <string name="label_titles_in_global_update">In global update</string>
     <string name="label_total_chapters">Total</string>
     <string name="label_read_chapters">Read</string>
-    <string name="label_watched_episodes">Watched</string>
     <string name="label_tracker_section">Trackers</string>
     <string name="label_tracked_titles">Tracked entries</string>
     <string name="label_mean_score">Mean score</string>

@@ -160,7 +160,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
         NotificationManagerCompat.from(context).apply {
             // Parent group notification
             notify(
-                Notifications.ID_NEW_CHAPTERS,
+                Notifications.ID_NEW_EPISODES,
                 context.notification(Notifications.CHANNEL_NEW_CHAPTERS_EPISODES) {
                     setContentTitle(context.getString(R.string.notification_new_episodes))
                     if (updates.size == 1 && !preferences.hideNotificationContent().get()) {
@@ -182,7 +182,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
                     setSmallIcon(R.drawable.ic_ani)
                     setLargeIcon(notificationBitmap)
 
-                    setGroup(Notifications.GROUP_NEW_CHAPTERS)
+                    setGroup(Notifications.GROUP_NEW_EPISODES)
                     setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
                     setGroupSummary(true)
                     priority = NotificationCompat.PRIORITY_HIGH

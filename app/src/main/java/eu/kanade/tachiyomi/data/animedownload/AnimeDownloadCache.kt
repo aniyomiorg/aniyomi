@@ -252,6 +252,7 @@ class AnimeDownloadCache(
 
         renewalJob = scope.launchIO {
             var sources = getSources()
+
             // Try to wait until extensions and sources have loaded
             withTimeout(30.seconds) {
                 while (!extensionManager.isInitialized) {
@@ -263,6 +264,7 @@ class AnimeDownloadCache(
                     sources = getSources()
                 }
             }
+
             val sourceDirs = rootDownloadsDir.dir.listFiles().orEmpty()
                 .associate { it.name to SourceDirectory(it) }
                 .mapNotNullKeys { entry ->
@@ -270,6 +272,8 @@ class AnimeDownloadCache(
                         provider.getSourceDirName(it).equals(entry.key, ignoreCase = true)
                     }?.id
                 }
+
+            rootDownloadsDir.sourceDirs = sourceDirs
 
             sourceDirs.values
                 .map { sourceDir ->
