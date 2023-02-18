@@ -1545,9 +1545,8 @@ class PlayerActivity :
 
     private fun aniSkipStuff(value: Long) {
         if (aniSkipEnable) {
-            // if it doesn't find the opening it will show the +85 button
-            val showNormalSkipButton = aniSkipInterval?.firstOrNull { it.skipType == SkipType.OP || it.skipType == SkipType.MIXED_OP } == null
-            if (showNormalSkipButton) return
+            // if it doesn't find any interval it will show the +85 button
+            if (aniSkipInterval == null) return
 
             skipType = aniSkipInterval?.firstOrNull { it.interval.startTime <= value && it.interval.endTime > value }?.skipType
             skipType?.let { skipType ->
@@ -1566,7 +1565,7 @@ class PlayerActivity :
                 }
             } ?: run {
                 launchUI {
-                    playerControls.binding.controlsSkipIntroBtn.isVisible = false
+                    playerControls.binding.controlsSkipIntroBtn.text = getString(R.string.player_controls_skip_intro_text, presenter.getAnimeSkipIntroLength())
                 }
             }
         }
