@@ -1565,7 +1565,7 @@ class PlayerActivity :
                 }
             } ?: run {
                 launchUI {
-                    playerControls.binding.controlsSkipIntroBtn.text = getString(R.string.player_controls_skip_intro_text, presenter.getAnimeSkipIntroLength())
+                    playerControls.binding.controlsSkipIntroBtn.text = getString(R.string.player_controls_skip_intro_text, this@run.viewModel.getAnimeSkipIntroLength())
                 }
             }
         }
