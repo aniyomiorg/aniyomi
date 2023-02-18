@@ -22,6 +22,7 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.drop
@@ -45,7 +46,16 @@ object SettingsGeneralScreen : SearchableSettings {
         LaunchedEffect(Unit) {
             libraryPrefs.bottomNavStyle().changes()
                 .drop(1)
-                .collectLatest { (context as? Activity)?.let { ActivityCompat.recreate(it) } }
+                .collectLatest { value ->
+                    HomeScreen.tabs = when (value) {
+                        0 -> HomeScreen.tabsNoHistory
+                        1 -> HomeScreen.tabsNoUpdates
+                        else -> HomeScreen.tabsNoManga
+                    }
+                    (context as? Activity)?.let {
+                        ActivityCompat.recreate(it)
+                    }
+                }
         }
 
         return mutableListOf<Preference>().apply {
