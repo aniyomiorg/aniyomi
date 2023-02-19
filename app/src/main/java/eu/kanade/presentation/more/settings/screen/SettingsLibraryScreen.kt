@@ -125,13 +125,13 @@ object SettingsLibraryScreen : SearchableSettings {
             title = stringResource(R.string.pref_category_display),
             preferenceItems = listOf(
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_animelib_columns),
+                    title = stringResource(R.string.pref_library_anime_columns),
                     subtitle = "${stringResource(R.string.portrait)}: ${getColumnValue(animePortraitColumns)}, " +
                         "${stringResource(R.string.landscape)}: ${getColumnValue(animeLandscapeColumns)}",
                     onClick = { showAnimeDialog = true },
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_library_columns),
+                    title = stringResource(R.string.pref_library_manga_columns),
                     subtitle = "${stringResource(R.string.portrait)}: ${getColumnValue(mangaPortraitColumns)}, " +
                         "${stringResource(R.string.landscape)}: ${getColumnValue(mangaLandscapeColumns)}",
                     onClick = { showDialog = true },
