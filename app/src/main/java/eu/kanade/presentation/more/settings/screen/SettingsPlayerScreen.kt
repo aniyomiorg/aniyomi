@@ -127,6 +127,8 @@ object SettingsPlayerScreen : SearchableSettings {
         val playerHideControls = playerPreferences.hideControls()
         val pipEpisodeToasts = playerPreferences.pipEpisodeToasts()
         val pipOnExit = playerPreferences.pipOnExit()
+        val rememberPlayerBrightness = playerPreferences.rememberPlayerBrightness()
+        val rememberPlayerVolume = playerPreferences.rememberPlayerVolume()
         val mpvConf = playerPreferences.mpvConf()
 
         val deviceHasPip = basePreferences.context.packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) &&
@@ -186,6 +188,14 @@ object SettingsPlayerScreen : SearchableSettings {
                     pref = pipOnExit,
                     title = stringResource(R.string.pref_pip_on_exit),
                     enabled = deviceHasPip,
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = rememberPlayerBrightness,
+                    title = stringResource(R.string.pref_remember_brightness),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = rememberPlayerVolume,
+                    title = stringResource(R.string.pref_remember_volume),
                 ),
                 Preference.PreferenceItem.MultiLineEditTextPreference(
                     pref = mpvConf,

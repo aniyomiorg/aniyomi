@@ -12,7 +12,11 @@ class PlayerPreferences(
 
     fun pipOnExit() = preferenceStore.getBoolean("pref_pip_on_exit", false)
 
+    fun rememberPlayerBrightness() = preferenceStore.getBoolean("pref_remember_brightness", false)
+
     fun playerBrightnessValue() = preferenceStore.getFloat("player_brightness_value", -1.0F)
+
+    fun rememberPlayerVolume() = preferenceStore.getBoolean("pref_remember_volume", false)
 
     fun playerVolumeValue() = preferenceStore.getFloat("player_volume_value", -1.0F)
 
