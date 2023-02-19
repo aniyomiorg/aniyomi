@@ -66,11 +66,13 @@ import uy.kohesive.injekt.injectLazy
 
 object AnimelibTab : Tab {
 
+    val libraryPreferences: LibraryPreferences by injectLazy()
+    private val fromMore = libraryPreferences.bottomNavStyle().get() == 2
+
     override val options: TabOptions
         @Composable
         get() {
-            val libraryPreferences: LibraryPreferences by injectLazy()
-            val title = if (libraryPreferences.bottomNavStyle().get() == 2) {
+            val title = if (fromMore) {
                 R.string.label_library
             } else {
                 R.string.label_animelib
@@ -129,10 +131,12 @@ object AnimelibTab : Tab {
             }
         }
 
+        val defaultTitle = if (fromMore) stringResource(R.string.label_library) else stringResource(R.string.label_animelib)
+
         Scaffold(
             topBar = { scrollBehavior ->
                 val title = state.getToolbarTitle(
-                    defaultTitle = stringResource(R.string.label_library),
+                    defaultTitle = defaultTitle,
                     defaultCategoryTitle = stringResource(R.string.label_default),
                     page = screenModel.activeCategoryIndex,
                 )

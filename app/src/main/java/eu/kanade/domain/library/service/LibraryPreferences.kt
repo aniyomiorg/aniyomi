@@ -20,9 +20,13 @@ class LibraryPreferences(
 
     fun librarySortingMode() = preferenceStore.getObject("library_sorting_mode", LibrarySort.default, LibrarySort.Serializer::serialize, LibrarySort.Serializer::deserialize)
 
-    fun portraitColumns() = preferenceStore.getInt("pref_library_columns_portrait_key", 0)
+    fun mangaPortraitColumns() = preferenceStore.getInt("pref_library_columns_portrait_key", 0)
 
-    fun landscapeColumns() = preferenceStore.getInt("pref_library_columns_landscape_key", 0)
+    fun animePortraitColumns() = preferenceStore.getInt("pref_animelib_columns_portrait_key", 0)
+
+    fun mangaLandscapeColumns() = preferenceStore.getInt("pref_library_columns_landscape_key", 0)
+
+    fun animeLandscapeColumns() = preferenceStore.getInt("pref_animelib_columns_landscape_key", 0)
 
     fun libraryUpdateInterval() = preferenceStore.getInt("pref_library_update_interval_key", 24)
     fun libraryUpdateLastTimestamp() = preferenceStore.getLong("library_update_last_timestamp", 0L)

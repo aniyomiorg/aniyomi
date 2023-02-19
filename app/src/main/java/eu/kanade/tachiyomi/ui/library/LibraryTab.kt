@@ -68,12 +68,17 @@ object LibraryTab : Tab {
     override val options: TabOptions
         @Composable
         get() {
+            val title = if (fromMore) {
+                R.string.label_library
+            } else {
+                R.string.label_mangalibrary
+            }
             val isSelected = LocalTabNavigator.current.current.key == key
             val image = AnimatedImageVector.animatedVectorResource(R.drawable.anim_library_enter)
             val index: UShort = if (fromMore) 5u else 1u
             return TabOptions(
                 index = index,
-                title = stringResource(R.string.label_mangalibrary),
+                title = stringResource(title),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
@@ -108,10 +113,12 @@ object LibraryTab : Tab {
 
         val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
 
+        val defaultTitle = if (fromMore) stringResource(R.string.label_library) else stringResource(R.string.label_mangalibrary)
+
         Scaffold(
             topBar = { scrollBehavior ->
                 val title = state.getToolbarTitle(
-                    defaultTitle = stringResource(R.string.label_library),
+                    defaultTitle = defaultTitle,
                     defaultCategoryTitle = stringResource(R.string.label_default),
                     page = screenModel.activeCategoryIndex,
                 )
