@@ -33,7 +33,7 @@ import eu.kanade.domain.anime.model.AnimeUpdate
 import eu.kanade.domain.anime.model.hasCustomCover
 import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
 import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
-import eu.kanade.domain.category.interactor.GetCategories
+import eu.kanade.domain.category.interactor.GetAnimeCategories
 import eu.kanade.domain.category.interactor.SetAnimeCategories
 import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
@@ -198,7 +198,7 @@ class MigrateAnimeDialogScreenModel(
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val syncEpisodesWithAnimeSource: SyncEpisodesWithSource = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
-    private val getCategories: GetCategories = Injekt.get(),
+    private val getCategories: GetAnimeCategories = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),
     private val getTracks: GetAnimeTracks = Injekt.get(),
     private val insertTrack: InsertAnimeTrack = Injekt.get(),
@@ -227,8 +227,7 @@ class MigrateAnimeDialogScreenModel(
                 sourceEpisodes = episodes,
                 replace = replace,
             )
-        } catch (e: Throwable) {
-        }
+        } catch (_: Throwable) { }
     }
 
     private suspend fun migrateAnimeInternal(
