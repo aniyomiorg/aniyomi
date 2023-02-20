@@ -73,7 +73,7 @@ object LibraryTab : Tab {
             val index: UShort = if (fromMore) 5u else 1u
             return TabOptions(
                 index = index,
-                title = stringResource(R.string.label_library),
+                title = stringResource(R.string.label_mangalibrary),
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }

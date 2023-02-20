@@ -71,7 +71,7 @@ object HomeScreen : Screen {
 
     private val libraryPreferences: LibraryPreferences by injectLazy()
 
-    private val tabsNoHistory = listOf(
+    val tabsNoHistory = listOf(
         AnimelibTab,
         LibraryTab,
         UpdatesTab(fromMore = false, inMiddle = true),
@@ -79,7 +79,7 @@ object HomeScreen : Screen {
         MoreTab,
     )
 
-    private val tabsNoUpdates = listOf(
+    val tabsNoUpdates = listOf(
         AnimelibTab,
         LibraryTab,
         HistoriesTab(false),
@@ -87,7 +87,7 @@ object HomeScreen : Screen {
         MoreTab,
     )
 
-    private val tabsNoManga = listOf(
+    val tabsNoManga = listOf(
         AnimelibTab,
         UpdatesTab(fromMore = false, inMiddle = false),
         HistoriesTab(false),
@@ -95,7 +95,7 @@ object HomeScreen : Screen {
         MoreTab,
     )
 
-    private val tabs = when (libraryPreferences.bottomNavStyle().get()) {
+    var tabs = when (libraryPreferences.bottomNavStyle().get()) {
         0 -> tabsNoHistory
         1 -> tabsNoUpdates
         else -> tabsNoManga
