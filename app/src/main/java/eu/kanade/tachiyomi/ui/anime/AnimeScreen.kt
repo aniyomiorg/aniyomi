@@ -382,12 +382,16 @@ fun ChangeIntroLength(
             Box {
                 WheelTextPicker(
                     modifier = Modifier.align(Alignment.Center),
-                    texts = remember { 1..255 }.map { "$it" },
+                    texts = remember { 1..255 }.map { "$it s" },
                     onScrollFinished = {
                         newLength = it + 1
                         null
                     },
-                    startIndex = anime.viewerFlags.toInt() - 1,
+                    startIndex = if (anime.viewerFlags > 0) {
+                        anime.viewerFlags.toInt() - 1
+                    } else {
+                        84
+                    },
                 )
             }
         },
