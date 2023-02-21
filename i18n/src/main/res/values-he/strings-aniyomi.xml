@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="categories">קטגוריות</string>
+    <string name="label_download_queue">תור ההורדות</string>
+    <string name="unlock_app">שחרר את Aniyomi</string>
+    <string name="action_sort_last_manga_update">עדכון אחרון</string>
+    <string name="action_show_manga">הראה פריט</string>
+    <string name="action_display_local_badge">מקור מקומי</string>
+    <string name="pref_update_only_completely_read">עם פרק(ים) שלא נקרא(ו)</string>
+    <string name="pref_library_update_show_tab_badge">הראה מספור של פרקים שלא נקראו באייקון העדכונים</string>
+    <string name="default_category">קטגוריית ברירת המחדל</string>
+    <string name="pref_library_update_categories_details">מנגה הנמצאת בקטגוריית מנועי העדכונים לא תעודכן גם אם היא נכללת בקטגורייה אחרת שכן מתעדכנת.</string>
+    <string name="untrusted_extension_message">תוסף זה נחתם עם אישור לא מהימן ולא הופעל.
+\n
+\nתוסף זדוני יכול לקרוא את אישורי ההתחברות המאוחסנים ב-Tachiyomi או להריץ קוד שרירותי.
+\n
+\nעל ידי אמון באישור זה אתה מקבל סיכונים אלה.</string>
+    <string name="pref_category_delete_chapters">מחק פרקים</string>
+    <string name="pref_remove_after_marked_as_read">אחרי שמסומן ידנית כנקרא</string>
+    <string name="pref_remove_after_read">אוטומטי לאחר סיום הקריאה</string>
+    <string name="pref_remove_bookmarked_chapters">אפשר מחיקת פרקים שסומנו</string>
+    <string name="pref_remove_exclude_categories">קטגוריות מוחרגות</string>
+    <string name="pref_auto_update_manga_sync">עדכן התקדמות לאחר הקריאה</string>
+    <string name="pref_clear_chapter_cache">נקה את זיכרון המטמון של הפרקים</string>
+    <string name="pref_auto_clear_chapter_cache">נקה את זיכרון המטמון של הפרקים כשהאפליקציה נסגרת</string>
+    <string name="pref_clear_database">נקה את מסד הנתונים</string>
+    <string name="pref_clear_database_summary">מחק את היסטוריית המנגה שאינם שמורים בספריה שלך</string>
+    <string name="clear_database_confirmation">האם אתה בטוח\? פרקים שנקראו וההתקדמות של מנגה שאינה בספרייה יאבדו</string>
+    <string name="pref_refresh_library_tracking_summary">עדכן סטטוס, ציון ופרק אחרון שנקרא משירותי המעקב</string>
+    <string name="pref_incognito_mode_summary">עוצר את קריאת ההיסטוריה</string>
+    <string name="manga_from_library">מנגה מתוך הספרייה</string>
+    <string name="snack_add_to_library">להוסיף מאנגה לספרייה\?</string>
+    <string name="download_error">שגיאה</string>
+    <string name="download_paused">מושהה</string>
+    <string name="dialog_with_checkbox_reset">אפס את כל הפרקים למאנגה זו</string>
+    <string name="download_insufficient_space">לא ניתן להוריד פרקים כי אין מספיק מקום אחסון</string>
+    <string name="download_queue_size_warning">אזהרה: הורדות גדולות עלולות לגרום להאטה במקורות ו/או לחסימת Tachiyomi. לחץ כדי ללמוד עוד.</string>
+    <string name="information_webview_required">WebView נצרך ל-Tachiyomi</string>
+    <string name="download_notifier_download_paused_chapters">ההורדה מושהית</string>
+    <string name="channel_new_chapters_episodes">עדכונים לפרק</string>
+    </resources>

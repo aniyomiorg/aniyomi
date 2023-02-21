@@ -92,14 +92,11 @@
     <string name="track">ट्र्याकिंग</string>
     <string name="chapters">अध्यायहरू</string>
     <string name="manga">माङ्गा</string>
-    <string name="categories">वर्गहरू</string>
     <string name="information_empty_category">तपाईंसँग कुनै वर्गहरू छैन। तपाईंको पुस्तकालय व्यवस्थित गर्न प्लस बटन थिच्नुहोस्।</string>
     <string name="information_empty_library">तपाईंको पुस्तकालय खाली छ</string>
     <string name="information_no_recent_manga">हालै केहि पढेको छैन</string>
     <string name="information_no_recent">कुनै नयाँ अपडेटहरू छैन</string>
-    <string name="label_download_queue">डाउनलोड कतार</string>
     <string name="confirm_exit">बाहिर निस्किन फेरि फिर्ता थिच्नुहोस्</string>
-    <string name="unlock_app">अनलक ताचियोमी</string>
     <string name="information_no_downloads">कुनै डाउनलोडहरू छैन</string>
     <string name="label_help">मद्दत</string>
     <string name="label_extension_info">एक्सटेनशनको जानकारी</string>
@@ -181,13 +178,11 @@
     <string name="action_show_errors">विवरणहरू हेर्न ट्याप गर्नुहोस्</string>
     <string name="action_sort">क्रमबद्ध</string>
     <string name="cancel_all_for_series">यी श्रृंखलाका सबै रद्द गर्नुहोस्</string>
-    <string name="action_display_local_badge">लोकल माङ्गा</string>
     <string name="action_open_in_web_view">WebViewमा खोल्नुहोस्</string>
     <string name="confirm_lock_change">परिवर्तन पुष्टि गर्न प्रमाणित गर्नुहोस्</string>
     <string name="label_default">पूर्वनिर्धारित</string>
     <string name="pref_tablet_ui_mode">ट्याब्लेट UI</string>
     <string name="battery_optimization_setting_activity_not_found">डिवाइसको सेटतींगशरू खोलन सकिएन</string>
-    <string name="pref_incognito_mode_summary">पढिएको इतिहास रोक्नु</string>
     <string name="pref_incognito_mode">इन्कोग्निटो मोड</string>
     <string name="label_downloaded_only">डाउनलोड मात्र</string>
     <string name="pref_acra_summary">कुनै पनि बगहरू ठीक गर्न मद्दत गर्दछ। कुनै संवेदनशील डाटा पठाइने छैन</string>
@@ -268,20 +263,12 @@
     <string name="label_warning">चेतावनी</string>
     <string name="action_display_language_badge">भाषा</string>
     <string name="parental_controls_info">यसले अनौपचारिक वा सम्भावित रूपमा गलत रूपमा फ्ल्याग गरिएका एक्सटेनशनहरूलाई एप भित्र NSFW (18+) सामग्री सरफेस गर्नबाट रोक्दैन।</string>
-    <string name="default_category">पूर्वनिर्धारित वर्ग</string>
     <string name="categorized_display_settings">क्रमबद्ध र प्रदर्शनको लागि प्रति-वर्गका सेटिङहरू</string>
     <string name="include">समावेश गर्नुहोस्: %s</string>
-    <string name="pref_library_update_show_tab_badge">अपडेट आइकनमा नपढिएको संख्या देखाउनुहोस्</string>
-    <string name="pref_library_update_categories_details">\"बहिष्कृत\" वर्गहरूमा रहेका माङ्गा \"समावेश गरिएका\" वर्गहरूमा भए पनि अपडेट हुने छैनन्।</string>
     <string name="ext_app_info">एप जानकारी</string>
     <string name="untrusted_extension">अविश्वसनीय एक्सटेनशन</string>
     <string name="exclude">समावेश नगर्नुहोस्: %s</string>
     <string name="ext_installer_pref">इंस्टलर</string>
-    <string name="untrusted_extension_message">यो एक्सटेनशन एक अविश्वसनीय प्रमाणपत्र संग हस्ताक्षर गरिएको थियो र सक्रिय गरिएको थिएन।
-\n
-\nएउटा खराब एक्सटेनशनले ताचियोमीमा भण्डारण गरिएका कुनै पनि लगइन प्रमाणहरू पढ्न वा स्वेच्छाचारी कोड कार्यान्वयन गर्न सक्छ।
-\n
-\nयस प्रमाणपत्रमा विश्वास गरेर तपाईंले यी जोखिमहरू स्वीकार गर्नुहुन्छ।</string>
     <string name="pref_fullscreen">पूर्ण स्क्रिन</string>
     <string name="pref_show_navigation_mode_summary">रिडर खोल्दा ट्याप क्षेत्रहरू देखाउनुहोस्</string>
     <string name="pref_dual_page_invert_summary">यदि दोहोरो पृष्ठ विभाजनको प्लेसमेन्ट पढ्ने दिशासँग मेल खाँदैन</string>
@@ -330,8 +317,6 @@
     <string name="second_to_last">दोस्रो अन्तिम अध्याय</string>
     <string name="pref_category_auto_download">स्वत: डाउनलोड गर्नुहोस्</string>
     <string name="tracking_guide">ट्र्याकिङ गाइड</string>
-    <string name="pref_auto_update_manga_sync">पढिसकेपछि प्रगति अपडेट गर्नुहोस्</string>
-    <string name="pref_remove_bookmarked_chapters">बुकमार्क गरिएका अध्यायहरू हटाउन अनुमति दिनुहोस्</string>
     <string name="last_read_chapter">पछिल्लो पढिएको अध्याय</string>
     <string name="enhanced_tracking_info">सेवाहरू जसले विशिष्ट स्रोतहरूको लागि परिष्कृत सुविधाहरू प्रदान गर्दछ। तपाईंको पुस्तकालयमा थप्दा माङ्गा स्वतः ट्र्याक गरिन्छ।</string>
     <string name="action_track">ट्र्याक</string>
@@ -391,10 +376,7 @@
     <string name="pref_low">कम</string>
     <string name="pref_high">उच्च</string>
     <string name="pref_lowest">सबैभन्दा कम</string>
-    <string name="pref_category_delete_chapters">अध्यायहरू हटाउनुहोस्</string>
     <string name="custom_dir">कस्टम स्थान</string>
-    <string name="pref_remove_after_marked_as_read">आफै पढिएको रूपमा चिन्ह लगाइएपछि</string>
-    <string name="pref_remove_after_read">पढिसकेपछि स्वचालित रूपमा हटाउनुहोस्</string>
     <string name="save_chapter_as_cbz">CBZ आर्काईब को रूपमा बचत गर्नुहोस्</string>
     <string name="fourth_to_last">चौथो अन्तिम अध्याय</string>
     <string name="pref_download_new">नयाँ अध्यायहरू डाउनलोड गर्नुहोस्</string>
@@ -404,13 +386,10 @@
         <item quantity="other">%d एक्सटेनशन अपडेटहरु उपलब्ध छन्</item>
     </plurals>
     <string name="download_notifier_text_only_wifi">कुनै Wi-Fi जडान उपलब्ध छैन</string>
-    <string name="download_notifier_download_paused_chapters">डाउनलोड रोकियो</string>
     <string name="download_notifier_no_network">कुनै नेटवर्क जडान उपलब्ध छैन</string>
     <string name="tracking_info">ट्र्याकिङ सेवाहरूमा अध्याय प्रगति अपडेट गर्न एकतर्फी सिङ्क। तिनीहरूको ट्र्याकिङ बटनबाट व्यक्तिगत माङ्गा प्रविष्टिहरूको लागि ट्र्याकिङ सेट अप गर्नुहोस्।</string>
     <string name="backup_restore_missing_trackers">ट्र्याकरहरूमा लगइन छैनन्:</string>
     <string name="backup_restore_missing_sources">हराएको स्रोतहरु:</string>
-    <string name="pref_clear_chapter_cache">अध्याय क्यास खाली गर्नुहोस्</string>
-    <string name="pref_remove_exclude_categories">बहिष्कृत वर्गहरू</string>
     <string name="fifth_to_last">पाँचौं अन्तिम अध्याय</string>
     <string name="pref_download_new_categories_details">\"बहिष्कृत\" वर्गहरूमा माङ्गा \"समावेश गरिएका\" वर्गहरूमा भए पनि डाउनलोड गरिने छैन।</string>
     <plurals name="notification_chapters_multiple_and_more">
@@ -430,10 +409,8 @@
     <string name="notification_chapters_single">अध्याय %1$s</string>
     <string name="scale_type_original_size">मूल आकार</string>
     <string name="pref_zoom_start">जुम सुरु स्थिति</string>
-    <string name="pref_auto_clear_chapter_cache">एप बन्दमा अध्याय क्यास खाली गर्नुहोस्</string>
     <string name="information_webview_outdated">राम्रो संगतताको लागि कृपया WebView एप अपडेट गर्नुहोस्</string>
     <string name="pref_library_update_manga_restriction">अपडेट गर्न छोड्नुहोस्</string>
-    <string name="pref_update_only_completely_read">नपढेका अध्यायहरू छन्</string>
     <string name="pref_viewer_nav">नेभिगेसन लेआउट</string>
     <string name="pager_viewer">पृष्ठांकित</string>
     <string name="pref_image_scale_type">स्केल को प्रकार</string>
@@ -473,7 +450,6 @@
     <string name="no_more_results">थप परिणामहरू छैनन्</string>
     <string name="local_source">लोकल स्रोत</string>
     <string name="other_source">अन्य</string>
-    <string name="manga_from_library">पुस्तकालयबाट माङ्गा</string>
     <string name="tabs_header">ट्याबहरू</string>
     <string name="latest">पछिल्लो</string>
     <string name="local_filter_order_by">द्वारा अर्डर गर्नुहोस्</string>
@@ -500,7 +476,6 @@
         <item quantity="one">%1$s बाँकी</item>
         <item quantity="other">%1$s बाँकी</item>
     </plurals>
-    <string name="pref_clear_database">डाटाबेस खाली गर्नुहोस्</string>
     <string name="pref_verbose_logging">वर्बोज लगिङ</string>
     <string name="username">युजर्नेम</string>
     <string name="login">लग-इन</string>
@@ -517,11 +492,8 @@
     <string name="unknown_status">अज्ञात स्थिति</string>
     <string name="licensed">इजाजतपत्र प्राप्त</string>
     <string name="password">पासवर्ड</string>
-    <string name="pref_clear_database_summary">पुस्तकालयमा नभएका माङ्गाको इतिहास हटाउनुहोस्</string>
-    <string name="clear_database_confirmation">साच्चै हो\? पढेका अध्यायहरू र गैर-पुस्तकालय माङ्गाको प्रगति हराउनेछ</string>
     <string name="database_clean">डाटाबेस सफा गर्नुहोस</string>
     <string name="pref_refresh_library_tracking">ट्र्याकिङ ताजा गर्नुहोस्</string>
-    <string name="pref_refresh_library_tracking_summary">ट्र्याकिङ सेवाहरूबाट स्थिति, स्कोर र अन्तिम पढिएको अध्याय अपडेट गर्दछ</string>
     <string name="version">संस्करण</string>
     <string name="website">वेबसाइट</string>
     <string name="help_translate">अनुवाद गर्न मद्दत गर्नुहोस्</string>
@@ -554,7 +526,6 @@
     <string name="clear_history_confirmation">तपाइँ पक्का हुनुहुन्छ\? सबै इतिहासहरू मेटिनेछन्।</string>
     <string name="transition_pages_error">पृष्टहरू लोड हुन असफल: %1$s</string>
     <string name="source_not_installed">स्रोत स्थापना नागरिएको: %1$s</string>
-    <string name="download_paused">रोकिएको</string>
     <string name="chapter_downloading_progress">डाउनलोड गर्दै (%1$d/%2$d)</string>
     <string name="sort_by_number">अध्याय संख्या द्वारा</string>
     <string name="sort_by_upload_date">अपलोड मिति द्वारा</string>
@@ -572,7 +543,6 @@
     <string name="chapter_settings">अध्याय सेटिङ</string>
     <string name="set_chapter_settings_as_default">पूर्वनिर्धारित सेटमा रहनुहोस्</string>
     <string name="confirm_set_image_as_cover">यो चित्र कभरको रूपमा राख्न चाहनुहुन्छ\?</string>
-    <string name="dialog_with_checkbox_reset">यो मंगाको सबै अध्यायहरूको रिसेट</string>
     <string name="download_all">सबै</string>
     <string name="download_unread">नपढिएको</string>
     <string name="cover_saved">कभर बचत भयो</string>
@@ -589,24 +559,20 @@
     <string name="cover_updated">कभर अपडेट भयो</string>
     <string name="share_page_info">%1$s: %2$s, पृष्ट %3$d</string>
     <string name="pref_clear_history">इतिहास हटाउनुहोस्</string>
-    <string name="snack_add_to_library">माङ्गा पुस्तकालयमा राख्ने\?</string>
     <string name="transition_next">अर्को:</string>
     <string name="viewer">पढ्ने मोड</string>
     <string name="transition_finished">सकिएको:</string>
     <string name="updating_library">पुस्तकालय अपडेट हुँदै</string>
     <string name="confirm_set_chapter_settings">के तपाईँ यी पूर्वनिर्धारित सेटिङहरूमा नै राख्न चाहनुहुन्छ\?</string>
-    <string name="also_set_chapter_settings_for_library">सबै पुस्तकालयका माङ्गामा लागू गर्नुहोस्</string>
     <string name="no_chapters_error">अध्यायहरू भेटिएन</string>
     <string name="track_status">स्थिति</string>
     <string name="picture_saved">फोटो सेभ भयो</string>
-    <string name="action_show_manga">माङ्गा देखाउनुहोस्</string>
     <string name="unread">नपढिएको</string>
     <string name="paused">रोकिएको</string>
     <string name="transition_no_next">अर्को अध्याय छैन</string>
     <string name="manga_cover">कभर</string>
     <string name="confirm_manga_add_duplicate">तपाईँको पुस्तकालयमा सोही नाम गरिएको श्रृंखला अर्कै (%1$s) स्रोतमा रहेको छ!
 \nके तपाईँ जारी राख्न चाहनुहुन्छ\?</string>
-    <string name="download_error">त्रुटि</string>
     <string name="show_title">स्रोत शीर्षक</string>
     <string name="sort_by_source">स्रोत द्वारा</string>
     <plurals name="num_trackers">
@@ -636,12 +602,10 @@
     <string name="action_faq_and_guides">बारम्बार सोधिएका प्रश्न उत्तर र गाइडहरू</string>
     <string name="manga_download">डाउनलोड</string>
     <string name="transition_no_previous">पहिलेको अध्याय छैन</string>
-    <string name="download_insufficient_space">थोरै जम्मा गर्ने ठाउँ भएको कारणले अध्याय डाउनलोड हुन सकिँदएन</string>
     <string name="custom_download">कस्टम मात्रा डाउनलोड गर्नुहोस्</string>
     <string name="download_5">अर्को ५ अध्यायहरू</string>
     <string name="download_10">अर्को १० अध्यायहरू</string>
     <string name="download_custom">कस्टम</string>
-    <string name="download_queue_size_warning">सावधान: ठूलो हिस्सामा डाउनलोड गर्नाले स्रोत ढिलो चल्न अनि/वा ताचियोमीलाई अवरुद्घ गर्न सक्नेछ।</string>
     <string name="notification_updating">पुस्तकालय अपडेट गर्दै...(%1$d/%2$d)</string>
     <string name="tracker_komga_warning">यो ट्रयाकर कोग्मामा कोस्रोत सँग मात्र चलाउन मिल्छ!</string>
     <string name="manga_tracking_tab">ट्र्याकिङ</string>
@@ -649,7 +613,6 @@
     <string name="reading">पढ्दै</string>
     <string name="file_picker_error">कुनै फाइल पिकर एप फेला परेन</string>
     <string name="update_check_confirm">डाउनलोड गर्नुहोस्</string>
-    <string name="channel_new_chapters_episodes">अध्याय अपडेटहरू</string>
     <string name="skipped_reason_completed">श्रृङ्खला पूरा भएकोले छोडियो</string>
     <string name="learn_more">अधिक जानकारी</string>
     <string name="update_check_no_new_updates">कुनै नयाँ अपडेटहरू उपलब्ध छैनन्</string>
@@ -665,7 +628,6 @@
     <string name="channel_errors">त्रुटिहरू</string>
     <string name="skipped_reason_not_started">छाडियो किनभने कुनै अध्याय पढिएको छैन</string>
     <string name="notification_size_warning">चेतावनी: ठूला अपडेटहरूले स्रोतहरूलाई हानि पुर्‍याउँछ र ढिलो अपडेटहरू निम्त्याउन सक्छ र ब्याट्री प्रयोग पनि बढ्छ</string>
-    <string name="information_webview_required">ताचियोमी को लागि WebView आवश्यक छ</string>
     <string name="action_move_to_top_all_for_series">शृंखलालाई शीर्षमा सर्नुहोस्</string>
     <string name="rotation_reverse_portrait">पोर्ट्रेट उल्ट्याउनु</string>
     <string name="skipped_reason_not_caught_up">नपढिएका अध्यायहरू भएकाले छोडियो</string>
@@ -685,7 +647,6 @@
     <string name="action_sort_unread_count">अपठित संख्या</string>
     <string name="action_close">बन्द</string>
     <string name="pref_library_summary">वर्गहरु, ग्लोबल अपडेट</string>
-    <string name="action_sort_last_manga_update">पछिल्लो माङ्गा अपडेट</string>
     <string name="delete_category_confirmation">के तपाई \"%s\" वर्ग हटाउन चाहनु हुन्छ\?</string>
     <string name="delete_category">वर्ग हटाउनुहोस्</string>
     <string name="action_search_hint">खोज्नु…</string>

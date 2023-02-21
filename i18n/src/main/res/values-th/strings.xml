@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">ชื่อ</string>
-    <string name="categories">หมวดหมู่</string>
     <string name="manga">มังงะ</string>
     <string name="chapters">ตอน</string>
     <string name="track">ติดตาม</string>
     <string name="history">ประวัติ</string>
     <string name="label_settings">ตั้งค่า</string>
-    <string name="label_download_queue">คิวดาวน์โหลด</string>
     <string name="label_library">คลัง</string>
     <string name="label_backup">สำรองข้อมูลและการเรียกคืน</string>
     <string name="label_extensions">ส่วนขยาย</string>
@@ -98,17 +96,10 @@
     <string name="update_never">ปิด</string>
     <string name="pref_library_update_restriction">อัปเดตข้อจำกัดของอุปกรณ์โดยอัตโนมัติ</string>
     <string name="pref_update_only_non_completed">ที่มีสถานะ \"จบแล้ว\"</string>
-    <string name="pref_auto_update_manga_sync">อัปเดตความคืบหน้าหลังอ่าน</string>
-    <string name="default_category">หมวดหมู่เริ่มต้น</string>
     <string name="ext_trust">เชื่อถือได้</string>
     <string name="ext_untrusted">ไม่น่าเชื่อถือ</string>
     <string name="ext_uninstall">ถอนการติดตั้ง</string>
     <string name="untrusted_extension">ส่วนขยายที่ไม่น่าเชื่อถือ</string>
-    <string name="untrusted_extension_message">ส่วนขยายนี้ลงนามด้วยใบรับรองที่ไม่น่าเชื่อถือและจะไม่ถูกเปิดใช้งาน
-\n
-\nส่วนขยายที่เป็นอันตรายสามารถอ่านข้อมูลการเข้าสู่ระบบที่จัดเก็บไว้ใน Tachiyomi หรือเรียกใช้โค้ดโดยอำเภอใจ
-\n
-\nการเชื่อถือใบรับรองนี้แสดงว่าคุณยอมรับความเสี่ยงเหล่านี้</string>
     <string name="pref_fullscreen">เต็มหน้าจอ</string>
     <string name="pref_page_transitions">แสดงแอนิเมชั่นเมื่อเปลี่ยนหน้า</string>
     <string name="pref_double_tap_anim_speed">ความเร็วแอนิเมชั่นเมื่อแตะ 2 ครั้ง</string>
@@ -149,8 +140,6 @@
     <string name="color_filter_b_value">น้ำเงิน</string>
     <string name="color_filter_a_value">โปร่งใส</string>
     <string name="pref_download_directory">ตําแหน่งที่ดาวน์โหลด</string>
-    <string name="pref_remove_after_marked_as_read">หลังจากทําเครื่องหมายว่าอ่านแล้วด้วยตนเอง</string>
-    <string name="pref_remove_after_read">ลบอัตโนมัติหลังจากที่อ่านแล้ว</string>
     <string name="custom_dir">ตําแหน่งกําหนดเอง</string>
     <string name="disabled">ปิดการใช้งาน</string>
     <string name="last_read_chapter">ตอนที่อ่านล่าสุด</string>
@@ -173,18 +162,13 @@
     <string name="backup_choice">ต้องการสำรองข้อมูลใดบ้าง\?</string>
     <string name="restoring_backup">กำลังคืนค่าการสำรองข้อมูล</string>
     <string name="creating_backup">กำลังสร้างการสำรองข้อมูล</string>
-    <string name="pref_clear_chapter_cache">ล้างแคชตอน</string>
     <string name="used_cache">ใช้ไปแล้ว: %1$s</string>
     <string name="cache_deleted">ล้างแคชแล้ว แฟ้ม %1$d รายการได้ถูกลบ</string>
     <string name="cache_delete_error">เกิดข้อผิดพลาดขณะกำลังล้าง</string>
     <string name="pref_clear_cookies">ล้างคุกกี้</string>
     <string name="cookies_cleared">ล้างคุกกี้แล้ว</string>
-    <string name="pref_clear_database">ล้างฐานข้อมูล</string>
-    <string name="pref_clear_database_summary">ลบประวัติมังงะที่ไม่ได้บันทึกไว้ในคลัง</string>
-    <string name="clear_database_confirmation">แน่ใจไหม\? ข้อมูลการอ่านของมังงะที่ไม่ได้อยู่ในคลังจะหายไป</string>
     <string name="clear_database_completed">ลบรายการแล้ว</string>
     <string name="pref_refresh_library_tracking">โหลดข้อมูลการติดตามใหม่</string>
-    <string name="pref_refresh_library_tracking_summary">อัปเดตสถานะคะแนนและตอนสุดท้ายที่อ่านจากบริการติดตาม</string>
     <string name="version">เวอร์ชัน</string>
     <string name="pref_enable_acra">ส่งรายงานความผิดพลาด</string>
     <string name="pref_acra_summary">ช่วยแก้ไขจุดบกพร่องต่างๆ จะไม่มีการส่งข้อมูลที่สำคัญ</string>
@@ -214,8 +198,6 @@
     <string name="source_not_installed">ไม่ได้ติดตั้งแหลงที่มา: %1$s</string>
     <string name="display_mode_chapter">ตอนที่ %1$s</string>
     <string name="chapter_downloading_progress">กำลังดาวน์โหลด (%1$d/%2$d)</string>
-    <string name="download_error">เกิดข้อผิดพลาด</string>
-    <string name="download_paused">หยุดชั่วคราว</string>
     <string name="show_title">ชื่อตามแหล่งที่มา</string>
     <string name="show_chapter_number">หมายเลขตอน</string>
     <string name="sort_by_source">ตามแหล่งที่มา</string>
@@ -254,8 +236,6 @@
     <string name="error_category_exists">หมวดหมู่ที่มีชื่อนี้มีอยู่แล้ว!</string>
     <string name="snack_categories_deleted">หมวดหมู่ถูกลบแล้ว</string>
     <string name="dialog_with_checkbox_remove_description">การดำเนินการนี้จะลบวันที่อ่านของตอนนี้ คุณแน่ใจไหม\?</string>
-    <string name="dialog_with_checkbox_reset">รีเซ็ตตอนทั้งหมดสำหรับมังงะนี้</string>
-    <string name="snack_add_to_library">เพิ่มมังงะไปยังคลัง\?</string>
     <string name="picture_saved">บันทึกรูปภาพแล้ว</string>
     <string name="custom_filter">ตัวกรอง</string>
     <string name="set_as_cover">ตั้งเป็นปก</string>
@@ -298,13 +278,10 @@
     <string name="download_notifier_unknown_error">ไม่สามารถดาวน์โหลดตอนได้เนื่องจากข้อผิดพลาดที่ไม่คาดคิด</string>
     <string name="download_notifier_text_only_wifi">ไม่มีการเชื่อมต่อ Wi-Fi</string>
     <string name="download_notifier_no_network">ไม่มีการเชื่อมต่อเครือข่าย</string>
-    <string name="download_notifier_download_paused_chapters">การดาวน์โหลดหยุดชั่วคราว</string>
     <string name="channel_common">ทั่วไป</string>
     <string name="filter_mode_multiply">หลากหลาย</string>
     <string name="filter_mode_darken">เบิร์น / มืดขึ้น</string>
     <string name="migration_selection_prompt">เลือกแหล่งที่มาที่จะย้ายจาก</string>
-    <string name="pref_remove_bookmarked_chapters">อนุญาตให้ลบตอนที่บุ๊คมาร์คไว้</string>
-    <string name="pref_category_delete_chapters">การลบตอน</string>
     <string name="pref_always_show_chapter_transition">แสดงการเปลี่ยนผ่านตอนเสมอ</string>
     <string name="rotation_landscape">แนวนอน</string>
     <string name="rotation_portrait">แนวตั้ง</string>
@@ -344,7 +321,6 @@
     <string name="exclude">ที่ยกเว้นไว้: %s</string>
     <string name="include">ที่รวมไว้: %s</string>
     <string name="none">ไม่มี</string>
-    <string name="pref_library_update_categories_details">มังงะในหมวดหมู่ที่ยกเว้นจะไม่ได้รับการอัปเดตแม้ว่าจะอยู่ในหมวดหมู่ที่รวมอยู่ด้วยก็ตาม</string>
     <plurals name="num_categories">
         <item quantity="other">หมวดหมู่ %d</item>
     </plurals>
@@ -410,7 +386,6 @@
     <string name="action_filter_tracked">ติดตามแล้ว</string>
     <string name="action_menu">เมนู</string>
     <string name="confirm_exit">กดกลับอีกครั้งเพื่อออก</string>
-    <string name="unlock_app">ปลดล็อก Tachiyomi</string>
     <string name="label_sources">แหล่งที่มา</string>
     <string name="label_more">เพิ่มเติม</string>
     <string name="webtoon_side_padding_25">25%</string>
@@ -451,7 +426,6 @@
     </plurals>
     <string name="no_chapters_error">ไม่พบตอน</string>
     <string name="set_chapter_settings_as_default">ตั้งเป็นค่าเริ่มต้น</string>
-    <string name="also_set_chapter_settings_for_library">นําไปใช้กับมังงะทั้งหมดในคลังด้วย</string>
     <string name="confirm_set_chapter_settings">แน่ใจหรือไม่ว่าต้องการบันทึกการตั้งค่าเหล่านี้เป็นค่าเริ่มต้น\?</string>
     <string name="chapter_settings">การตั้งค่าตอน</string>
     <string name="sort_by_upload_date">ตามวันที่อัปโหลด</string>
@@ -474,7 +448,6 @@
     <string name="tabs_header">แท็บ</string>
     <string name="badges_header">เครื่องหมาย</string>
     <string name="downloaded_chapters">ตอนที่ดาวน์โหลดแล้ว</string>
-    <string name="manga_from_library">มังงะจากคลัง</string>
     <string name="logout_success">ออกจากระบบแล้ว</string>
     <string name="logout">ออกจากระบบ</string>
     <string name="logout_title">ออกจากระบบจาก %1$s\?</string>
@@ -484,7 +457,6 @@
     </plurals>
     <string name="downloaded_only_summary">กรองมังงะทั้งหมดในคลังของคุณ</string>
     <string name="notification_incognito_text">ปิดใช้งานโหมดไม่ระบุตัวตน</string>
-    <string name="pref_incognito_mode_summary">หยุดประวัติการอ่านชั่วคราว</string>
     <string name="pref_incognito_mode">โหมดไม่ระบุตัวตน</string>
     <string name="label_downloaded_only">ดาวน์โหลดแล้วเท่านั้น</string>
     <string name="updated_version">อัปเดตเป็น v%1$s แล้ว</string>
@@ -526,7 +498,6 @@
     <string name="pref_download_new_categories_details">มังงะในหมวดหมู่ที่ยกเว้นไว้จะไม่ถูกดาวน์โหลดแม้ว่าจะอยู่ในหมวดหมู่ที่รวมอยู่ด้วยก็ตาม</string>
     <string name="pref_category_auto_download">ดาวน์โหลดอัตโนมัติ</string>
     <string name="notification_check_updates">กำลังตรวจสอบตอนหาใหม่</string>
-    <string name="download_insufficient_space">ไม่สามารถดาวน์โหลดตอนได้เนื่องจากพื้นที่จัดเก็บเหลือน้อย</string>
     <string name="update_check_eol">ไม่รองรับ Android เวอร์ชันนี้อีกต่อไป</string>
     <string name="file_picker_error">ไม่พบแอปเลือกแฟ้ม</string>
     <plurals name="notification_chapters_multiple_and_more">
@@ -544,14 +515,12 @@
     <string name="spen_previous_page">หน้าก่อน</string>
     <string name="channel_crash_logs">บันทึกข้อขัดข้อง</string>
     <string name="channel_ext_updates">การอัปเดตส่วนขยาย</string>
-    <string name="channel_new_chapters_episodes">อัปเดตตอน</string>
     <string name="channel_errors">ข้อผิดพลาด</string>
     <string name="channel_complete">เสร็จสมบูรณ์</string>
     <string name="channel_progress">ความคืบหน้า</string>
     <string name="download_notifier_download_finish">การดาวน์โหลดเสร็จสิ้นแล้ว</string>
     <string name="chapter_settings_updated">อัปเดตการตั้งค่าตอนเริ่มต้นแล้ว</string>
     <string name="information_webview_outdated">โปรดอัปเดตแอพ WebView เพื่อความเข้ากันได้ที่ดีขึ้น</string>
-    <string name="information_webview_required">Tachiyomi จำเป็นต้องใช้ WebView</string>
     <string name="information_cloudflare_bypass_failure">ไม่สามารถเลี่ยงผ่าน Cloudflare ได้</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="other">มีการอัปเดตส่วนขยาย %d รายการพร้อมใช้งาน</item>
@@ -559,7 +528,6 @@
     <string name="information_empty_category_dialog">คุณยังไม่มีหมวดหมู่</string>
     <string name="confirm_lock_change">ยืนยันการเปลี่ยนแปลง</string>
     <string name="relative_time_today">วันนี้</string>
-    <string name="pref_update_only_completely_read">มีตอนที่ยังไม่ได้อ่าน</string>
     <string name="off">ปิด</string>
     <string name="on">เปิด</string>
     <string name="save_chapter_as_cbz">บันทึกเป็นแฟ้ม CBZ</string>
@@ -567,7 +535,6 @@
     <string name="library_errors_help">สำหรับความช่วยเหลือเกี่ยวกับวิธีการแก้ไขข้อผิดพลาดในการอัปเดตคลัง ไปยัง %1$s</string>
     <string name="local_filter_order_by">เรียงตาม</string>
     <string name="date">วันที่</string>
-    <string name="pref_library_update_show_tab_badge">แสดงไอคอนจำนวนตอนที่ยังไม่ได้อ่าน</string>
     <string name="categorized_display_settings">การตั้งค่าตามหมวดหมู่สำหรับการจัดเรียงและแสดงผล</string>
     <string name="ext_install_service_notif">กำลังติดตั้งส่วนขยาย…</string>
     <string name="pref_hide_threshold">ความเร็วในการซ่อนเมนูบนเมื่อเลื่อน</string>
@@ -622,13 +589,10 @@
     <string name="pref_highest">เร็วที่สุด</string>
     <string name="pref_high">เร็ว</string>
     <string name="tracking_guide">คู่มือการติดตาม</string>
-    <string name="pref_remove_exclude_categories">หมวดหมู่ที่ยกเว้น</string>
     <string name="enhanced_tracking_info">บริการที่มีคุณลักษณะขั้นสูงสำหรับแหล่งที่มาเฉพาะ มังงะจะถูกติดตามโดยอัตโนมัติเมื่อเพิ่มลงในคลัง</string>
     <string name="ext_app_info">ข้อมูลแอพ</string>
     <string name="extension_api_error">เกิดข้อผิดพลาดในการรับรายการส่วนขยาย</string>
-    <string name="pref_auto_clear_chapter_cache">ล้างแคชตอนในเมื่อปิดแอพ</string>
     <string name="label_warning">คำเตือน</string>
-    <string name="action_display_local_badge">มังงะในเครื่อง</string>
     <string name="action_display_language_badge">ภาษา</string>
     <string name="theme_strawberrydaiquiri">สตรอว์เบอร์รีแด๊กเคอรี่</string>
     <string name="theme_tako">ทาโกะ</string>
@@ -643,7 +607,6 @@
     <string name="update_72hour">ทุก 3 วัน</string>
     <string name="restrictions">ข้อจำกัด: %s</string>
     <string name="connected_to_wifi">เฉพาะขณะเชื่อมต่อ Wi-Fi</string>
-    <string name="download_queue_size_warning">คำเตือน: การดาวน์โหลดจำนวนมากอาจทำให้แหล่งข้อมูลทำงานช้าลงและ/หรือปิดกั้น Tachiyomi แตะเพื่อเรียนรู้เพิ่มเติม</string>
     <string name="notification_updating">กำลังอัปเดตคลัง… (%1$d/%2$d)</string>
     <string name="notification_size_warning">การอัปเดตจำนวนมากเป็นอันตรายต่อแหล่งที่มาและอาจทำให้การอัปเดตช้าลงและใช้งานแบตเตอรี่เพิ่มขึ้น แตะเพื่อเรียนรู้เพิ่มเติม</string>
     <string name="publishing_finished">เผยแพร่จบแล้ว</string>
@@ -656,7 +619,6 @@
     <string name="pref_landscape_zoom">ซูมภาพแนวนอน</string>
     <string name="skipped_reason_not_caught_up">ถูกข้ามเนื่องจากมีตอนที่ยังไม่ได้อ่าน</string>
     <string name="skipped_reason_not_started">ถูกข้ามเนื่องจากยังไม่มีตอนใด ๆ ถูกอ่าน</string>
-    <string name="action_show_manga">แสดงมังงะ</string>
     <string name="confirm_manga_add_duplicate">มีรายการในคลังที่มีชื่อเดียวกัน แต่มาจากคนละแหล่งที่มา (%1$s)
 \n
 \nยังต้องการดำเนินการต่อหรือไม่\?</string>
@@ -683,7 +645,6 @@
     <string name="source_filter_empty_screen">ไม่พบแหล่งที่มาที่ติดตั้งแล้ว</string>
     <string name="source_empty_screen">ไม่พบแหล่งที่มาใด ๆ</string>
     <string name="action_sort_unread_count">จำนวนตอนที่ยังไม่ได้อ่าน</string>
-    <string name="action_sort_last_manga_update">มังงะที่อัปเดตล่าสุด</string>
     <string name="split_tall_images">แยกรูปภาพสูงยาว</string>
     <string name="download_notifier_split_page_not_found">ไม่พบหน้า %d ขณะกำลังแยกหน้า</string>
     <string name="split_tall_images_summary">เพิ่มประสิทธิภาพตัวอ่าน</string>

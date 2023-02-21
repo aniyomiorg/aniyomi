@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Nume</string>
-    <string name="categories">Categorii</string>
     <string name="manga">Manga</string>
     <string name="chapters">Capitole</string>
     <string name="track">Urmărind</string>
     <string name="history">Istoric</string>
     <string name="label_settings">Setări</string>
-    <string name="label_download_queue">Descărcări în așteptare</string>
     <string name="label_library">Bibliotecă</string>
     <string name="label_recent_manga">Istoric</string>
     <string name="label_recent_updates">Actualizări</string>
@@ -84,8 +82,6 @@
     <string name="pref_library_update_restriction">Actualizează automat restricțiile dispozitivului</string>
     <string name="charging">La încărcare</string>
     <string name="pref_update_only_non_completed">Cu statutul \"Completată\"</string>
-    <string name="pref_auto_update_manga_sync">Actualizarea progresului după citire</string>
-    <string name="default_category">Categorie implicită</string>
     <string name="default_category_summary">Întreabă mereu</string>
     <string name="ext_update">Actualizează</string>
     <string name="ext_install">Instalează</string>
@@ -97,11 +93,6 @@
     <string name="ext_untrusted">Nesigură</string>
     <string name="ext_uninstall">Dezinstalează</string>
     <string name="untrusted_extension">Extensie nesigură</string>
-    <string name="untrusted_extension_message">Extensia a fost semnată cu un certificat nesigur și nu a fost activată.
-\n
-\nO extensie periculoasă ar putea citi orice date de logare stocate în Tachiyomi sau executa cod periculos.
-\n
-\nPrin acordarea încrederii acestui certificat acceptați riscurile menționate.</string>
     <string name="pref_fullscreen">Ecran complet</string>
     <string name="pref_page_transitions">Animați tranzițiile de pagini</string>
     <string name="action_display_download_badge">Capitole descărcate</string>
@@ -148,8 +139,6 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">Locația descărcărilor</string>
-    <string name="pref_remove_after_marked_as_read">După ce a fost marcat manual ca citit</string>
-    <string name="pref_remove_after_read">După citire ștergeți automat</string>
     <string name="custom_dir">Locație personalizată</string>
     <string name="disabled">Deactivat</string>
     <string name="last_read_chapter">Ultimul capitol citit</string>
@@ -172,18 +161,13 @@
     <string name="backup_choice">Doriți să creați o copie de rezervă\?</string>
     <string name="restoring_backup">Restaurând copia de rezervă</string>
     <string name="creating_backup">Creând copia de rezervă</string>
-    <string name="pref_clear_chapter_cache">Curățare capitole depozitate</string>
     <string name="used_cache">Folosit: %1$s</string>
     <string name="cache_deleted">Depozit curățat. %1$d fișiere au fost șterse</string>
     <string name="cache_delete_error">A apărut o eroare în timpul ștergerii</string>
     <string name="pref_clear_cookies">Curăță cookies</string>
     <string name="cookies_cleared">Cookies curățate</string>
-    <string name="pref_clear_database">Curățați baza de date</string>
-    <string name="pref_clear_database_summary">Ștergeți istoricul pentru manga care nu sunt salvate în bibliotecă</string>
-    <string name="clear_database_confirmation">Ești sigur\? Capitolele citite și progresul oricărei manga ce nu este în bibliotecă vor fi pierdute</string>
     <string name="clear_database_completed">Înregistrări șterse</string>
     <string name="pref_refresh_library_tracking">Reîncărca urmărirea</string>
-    <string name="pref_refresh_library_tracking_summary">Actualizează starea, scorul și ultimul capitol citit de la serviciile de urmărire</string>
     <string name="version">Versiune</string>
     <string name="pref_enable_acra">Trimite rapoarte pt. eșuări</string>
     <string name="pref_acra_summary">Ajută la rezolvarea bug-urilor. Informațiile sensibile nu vor fi trimise</string>
@@ -213,8 +197,6 @@
     <string name="source_not_installed">Sursa nu este instalată:%1$s</string>
     <string name="display_mode_chapter">Capitolul %1$s</string>
     <string name="chapter_downloading_progress">Se descarcă (%1$d/%2$d)</string>
-    <string name="download_error">Eroare</string>
-    <string name="download_paused">Întrerupt</string>
     <string name="show_title">Titlul sursei</string>
     <string name="show_chapter_number">Numărul capitolului</string>
     <string name="sort_by_source">După sursă</string>
@@ -244,8 +226,6 @@
     <string name="error_category_exists">O categorie cu acest nume deja există!</string>
     <string name="snack_categories_deleted">Categoriile au fost șterse</string>
     <string name="dialog_with_checkbox_remove_description">Acest lucru va șterge data citirii acestui capitol. Ești sigur\?</string>
-    <string name="dialog_with_checkbox_reset">Resetează toate capitolele pentru acest manga</string>
-    <string name="snack_add_to_library">Adaugă manga în bibliotecă\?</string>
     <string name="picture_saved">Imagine salvată</string>
     <string name="custom_filter">Filtru personalizat</string>
     <string name="set_as_cover">Stabilește ca și copertă</string>
@@ -288,7 +268,6 @@
     <string name="download_notifier_unknown_error">Nu s-a putut descărca capitolul din cauza unei erori neașteptate</string>
     <string name="download_notifier_text_only_wifi">Nu este disponibilă nicio conexiune Wi Fi</string>
     <string name="download_notifier_no_network">Nici o conexiune la internet valabilă</string>
-    <string name="download_notifier_download_paused_chapters">Descărcare întreruptă</string>
     <string name="channel_common">General</string>
     <string name="action_open_in_web_view">Deschide în WebView</string>
     <string name="pref_true_color">Culoare 32-bit</string>
@@ -325,7 +304,6 @@
     <string name="pref_manage_notifications">Gestionați notificările</string>
     <string name="pref_category_security">Securitate</string>
     <string name="lock_with_biometrics">Deblocare necesară</string>
-    <string name="unlock_app">Deblochează Aniyomi</string>
     <string name="action_sort_latest_chapter">Ultimul capitol</string>
     <string name="lock_when_idle">Blocați când este inactiv</string>
     <string name="lock_always">Întotdeauna</string>
@@ -340,7 +318,6 @@
     <string name="pref_cutout_short">Afișare conținut în zona decupată</string>
     <string name="information_cloudflare_bypass_failure">A eșuat evitarea Cloudflare</string>
     <string name="information_webview_outdated">Actualizați aplicația WebView pentru o compatibilitate mai bună</string>
-    <string name="channel_new_chapters_episodes">Actualizări de capitole</string>
     <string name="secure_screen_summary">Ecranul securizat ascunde conținutul aplicațiilor la schimbarea aplicațiilor și blochează capturile de ecran</string>
     <string name="pref_category_display">Afișare</string>
     <plurals name="notification_chapters_generic">
@@ -400,7 +377,6 @@
     <string name="add_tracking">Urmărește</string>
     <string name="in_library">În bibliotecă</string>
     <string name="add_to_library">Adaugă în bibliotecă</string>
-    <string name="information_webview_required">WebView este necesar pentru Tachiyomi</string>
     <string name="recent_manga_time">Ch. %1$s - %2$s</string>
     <string name="manga_info_collapse">Mai puțin</string>
     <string name="manga_info_expand">Mai mult</string>
@@ -481,7 +457,6 @@
     <string name="unknown_author">Autor necunoscut</string>
     <string name="updated_version">Actualizat la v%1$s</string>
     <string name="whats_new">Ce este nou</string>
-    <string name="download_insufficient_space">Nu s-au putut descărca capitole din cauza spațiului de stocare redus</string>
     <string name="action_global_search_query">Căutați „%1$s” la nivel global</string>
     <string name="pref_category_reading_mode">Mod citire</string>
     <string name="pref_category_theme">Temă</string>
@@ -496,8 +471,6 @@
         <item quantity="other">%d trackere</item>
     </plurals>
     <string name="backup_restore_missing_trackers">Trackerele nu sunt conectate la:</string>
-    <string name="pref_remove_bookmarked_chapters">Permite ștergerea capitolelor marcate</string>
-    <string name="pref_category_delete_chapters">Ștergeți capitole</string>
     <string name="ext_nsfw_warning">Sursele din această extensie pot avea conținut NSFW (18+)</string>
     <string name="ext_nsfw_short">Peste 18</string>
     <string name="parental_controls_info">Acest lucru nu împiedică extensiile neoficiale sau potențial semnalizate incorect să iasă la suprafață cu conținut 18+ în cadrul aplicației.</string>
@@ -511,13 +484,10 @@
     <string name="chapter_settings_updated">S-au actualizat setările implicite ale capitolului</string>
     <string name="share_page_info">%1$s: %2$s, pagina %3$d</string>
     <string name="set_chapter_settings_as_default">Setați ca implicit</string>
-    <string name="also_set_chapter_settings_for_library">De asemenea, se aplică la toate manga în biblioteca mea</string>
     <string name="confirm_set_chapter_settings">Sigur doriți să salvați aceste setări ca implicite\?</string>
     <string name="chapter_settings">Setările capitolului</string>
     <string name="downloaded_chapters">Capitole descărcate</string>
-    <string name="manga_from_library">Manga din bibliotecă</string>
     <string name="action_search_settings">Setări de căutare</string>
-    <string name="pref_incognito_mode_summary">Întrerupe citirea istoricului</string>
     <string name="pref_incognito_mode">Modul incognito</string>
     <string name="pref_clear_history">Sterge istoricul</string>
     <string name="clear_history_confirmation">Esti sigur\? Toată istoria va fi pierdută.</string>
@@ -539,7 +509,6 @@
     <string name="action_order_by_upload_date">După data postării</string>
     <string name="exclude">Excludeți: %s</string>
     <string name="include">Includeți: %s</string>
-    <string name="pref_library_update_categories_details">Manga din categoriile excluse nu vor fi actualizate, chiar dacă se află și în categoriile incluse.</string>
     <string name="action_show_errors">Atingeți pentru a vedea detaliile</string>
     <string name="action_display_show_number_of_items">Afișare număr de elemente</string>
     <string name="none">Nici unul</string>
@@ -581,7 +550,6 @@
     <string name="theme_midnightdusk">Amurg de Miazănoapte</string>
     <string name="channel_app_updates">Actualizări de aplicație</string>
     <string name="theme_tealturquoise">Teal și turcoaz</string>
-    <string name="action_display_local_badge">Manga local</string>
     <string name="pref_category_appearance">Aspect</string>
     <string name="pref_app_theme">Tematică Aplicație</string>
     <string name="theme_greenapple">Măr Verde</string>
@@ -600,7 +568,6 @@
     <string name="skipped_reason_completed">Ignorata deoarece seria este completa</string>
     <string name="skipped_reason_not_started">Ignorat din cauza lipsei de capitolel citite</string>
     <string name="local_invalid_format">Format de capitol invalid</string>
-    <string name="download_queue_size_warning">Atentie : actualizarile mari la gramada vor face sursele mai incete si pot/vor bloca Tachiyomi. Apasa pentru mai multe informatii.</string>
     <string name="getting_started_guide">Ghidul de inceput</string>
     <string name="notification_update_error">%1$d actualizari esuate</string>
     <string name="skipped_reason_not_caught_up">Ignorata deoarece sunt capitole necitite</string>
@@ -616,7 +583,6 @@
     <string name="network_not_metered">Numai în rețea necontorizată</string>
     <string name="date">Dată</string>
     <string name="pref_hide_threshold">Sensibilitatea pentru ascunderea meniului la defilare</string>
-    <string name="action_show_manga">Afișați manga</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Instalați și porniți Shizuku pentru a utiliza Shizuku ca instalator de extensii.</string>
     <string name="clear_database_source_item_count">%1$d manga(uri) non-bibliotecă în baza de date</string>
     <string name="confirm_manga_add_duplicate">Aveți o intrare în bibliotecă cu același nume, dar de la o sursă diferită (%1$s).
@@ -649,7 +615,6 @@
     <string name="ext_installer_shizuku_stopped">Shizuku nu rulează</string>
     <string name="pref_app_language">Limba aplicației</string>
     <string name="restrictions">Restricții: %s</string>
-    <string name="pref_library_update_show_tab_badge">Afișați numărul de necitite pe pictograma Actualizări</string>
     <string name="pref_library_update_refresh_trackers">Reîmprospătați automat trackerele</string>
     <string name="pref_highest">Cel mai înalt</string>
     <string name="pref_high">Înalt</string>
@@ -657,7 +622,6 @@
     <string name="pref_clear_webview_data">Ștergeți datele WebView</string>
     <string name="on_hold_list">Lista în așteptare</string>
     <string name="download_notifier_split_failed">Nu s-a putut diviza imaginea descărcată</string>
-    <string name="pref_update_only_completely_read">Cu capitol(e) necitit(e)</string>
     <string name="pref_lowest">Cel mai scăzut</string>
     <string name="unfinished_list">Lista neterminată</string>
     <string name="pref_relative_time_short">Scurt (Astăzi, Ieri)</string>
@@ -673,7 +637,6 @@
     <string name="custom_cover">Copertă personalizată</string>
     <string name="manga_cover">Copertă</string>
     <string name="update_already_running">O actualizare rulează deja</string>
-    <string name="pref_remove_exclude_categories">Categorii excluse</string>
     <string name="pref_relative_time_long">Lung (Scurt+, acum n zile)</string>
     <string name="categorized_display_settings">Setări per categorie pentru sortare și afișare</string>
     <string name="rotation_type">Tip de rotație</string>
@@ -684,9 +647,7 @@
     <string name="ext_info_version">Versiune</string>
     <string name="ext_info_language">Limbă</string>
     <string name="save_chapter_as_cbz">Salvează ca arhivă CBZ</string>
-    <string name="action_sort_last_manga_update">Ultima actualizare manga</string>
     <string name="action_filter_started">Început</string>
-    <string name="pref_auto_clear_chapter_cache">Șterge memoria cache a capitolului la închiderea aplicației</string>
     <string name="local_filter_order_by">Ordonează după</string>
     <string name="cant_open_last_read_chapter">Nu se poate deschide ultimul capitol citit</string>
     <string name="extension_api_error">Nu s-a putut obține lista de extensii</string>

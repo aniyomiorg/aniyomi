@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="categories">အမျိုးအစားများ</string>
+    <string name="label_download_queue">ဒေါင်းလုဒ်အစဉ်</string>
+    <string name="unlock_app">Aniyomi ကိုဖွင့်ပါ</string>
+    <string name="default_category">ပုံသေအမျိုးအစား</string>
+    </resources>

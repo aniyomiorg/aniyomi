@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">名前</string>
-    <string name="categories">カテゴリー</string>
     <string name="manga">漫画</string>
     <string name="chapters">章</string>
     <string name="history">履歴</string>
     <string name="label_settings">設定</string>
-    <string name="label_download_queue">ダウンロードキュー</string>
     <string name="label_library">ライブラリ</string>
     <string name="label_recent_manga">履歴</string>
     <string name="label_recent_updates">新着</string>
@@ -75,8 +73,6 @@
     <string name="pref_library_update_restriction">自動更新の条件</string>
     <string name="charging">充電中</string>
     <string name="pref_update_only_non_completed">ステータスが「完結済み」</string>
-    <string name="pref_auto_update_manga_sync">読んだ後に読書進捗を更新</string>
-    <string name="default_category">デフォルトカテゴリー</string>
     <string name="default_category_summary">毎回尋ねる</string>
     <string name="ext_update">更新</string>
     <string name="ext_install">インストール</string>
@@ -127,8 +123,6 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">ダウンロードフォルダ</string>
-    <string name="pref_remove_after_marked_as_read">手動で既読にした後</string>
-    <string name="pref_remove_after_read">読んだ後自動で削除</string>
     <string name="custom_dir">カスタムディレクトリ</string>
     <string name="disabled">無効</string>
     <string name="second_to_last">最後に読んだ章の2番目</string>
@@ -142,10 +136,7 @@
     <string name="pref_backup_interval">バックアップ頻度</string>
     <string name="pref_backup_slots">最大バックアップ数</string>
     <string name="backup_created">バックアップが作成されました</string>
-    <string name="pref_clear_chapter_cache">チャプタキャッシュをクリア</string>
     <string name="cache_delete_error">消去中にエラーが発生しました</string>
-    <string name="pref_clear_database">データベースをクリア</string>
-    <string name="pref_clear_database_summary">ライブラリにない項目の履歴を削除</string>
     <string name="version">バージョン</string>
     <string name="pref_enable_acra">クラッシュレポートを送信する</string>
     <string name="login_title">%1$sにログイン</string>
@@ -165,11 +156,6 @@
     <string name="action_open_in_web_view">WebViewで開く</string>
     <string name="pref_category_reader">ビューア</string>
     <string name="pref_category_tracking">同期</string>
-    <string name="untrusted_extension_message">この拡張機能は信頼できない証明書でサインされているため、有効にされていません。
-\n
-\n悪意のある拡張機能はTachiyomiに保存されているすべてのログイン情報を読み取ることや、任意コード実行をすることができます。
-\n
-\nこれらのリスクを受け入れ、この証明書を信頼しますか？</string>
     <string name="pref_show_page_number">ページ数を表示</string>
     <string name="pref_keep_screen_on">画面を常にON</string>
     <string name="scale_type_fit_height">高さに合わせる</string>
@@ -188,10 +174,8 @@
     <string name="cache_deleted">キャッシュを削除しました。%1$d件のファイルは削除されました</string>
     <string name="pref_clear_cookies">Cookiesを削除</string>
     <string name="cookies_cleared">Cookiesを削除しました</string>
-    <string name="clear_database_confirmation">データベースをクリアしてもよろしいですか？ライブラリにない項目の読んだ章と読書進捗はすべて失われます</string>
     <string name="clear_database_completed">エントリーを削除しました</string>
     <string name="pref_refresh_library_tracking">追跡情報を更新</string>
-    <string name="pref_refresh_library_tracking_summary">同期サービスでステータス、評価と最後に読んだ章を更新</string>
     <string name="pref_acra_summary">バグの修正などに役立ちます。個人情報を送信しません</string>
     <string name="unknown_error">不明なエラー</string>
     <string name="updating_category">カテゴリーを更新中</string>
@@ -211,8 +195,6 @@
 \n%1$s</string>
     <string name="display_mode_chapter">第%1$s章</string>
     <string name="chapter_downloading_progress">ダウンロード中（%1$d/%2$d）</string>
-    <string name="download_error">エラー</string>
-    <string name="download_paused">一時停止済み</string>
     <string name="show_title">ソースタイトル</string>
     <string name="show_chapter_number">章の数</string>
     <string name="sort_by_source">ソースに基づいた順</string>
@@ -241,8 +223,6 @@
     <string name="error_category_exists">この名前が既に存在しています！</string>
     <string name="snack_categories_deleted">カテゴリーが削除されました</string>
     <string name="dialog_with_checkbox_remove_description">この章の読書日時を削除してもよろしいですか？</string>
-    <string name="dialog_with_checkbox_reset">この項目の章をすべてリセット</string>
-    <string name="snack_add_to_library">ライブラリに追加しますか？</string>
     <string name="picture_saved">画像を保存しました</string>
     <string name="custom_filter">カスタム フィルタ</string>
     <string name="set_as_cover">カバーとして設定</string>
@@ -277,7 +257,6 @@
     <string name="download_notifier_unknown_error">予期せぬエラーが発生したため、ダウンロードは失敗しました</string>
     <string name="download_notifier_text_only_wifi">Wi-Fi接続は利用できません</string>
     <string name="download_notifier_no_network">ネットワーク接続が利用できません</string>
-    <string name="download_notifier_download_paused_chapters">ダウンロード一時停止済み</string>
     <string name="channel_common">一般設定</string>
     <string name="repeating">読み返し中</string>
     <string name="source_not_installed">未インストールのソース：%1$s</string>
@@ -328,7 +307,6 @@
         <item quantity="other">%1$s分後</item>
     </plurals>
     <string name="secure_screen">セキュア画面</string>
-    <string name="unlock_app">Aniyomiのロックを解除する</string>
     <plurals name="notification_chapters_generic">
         <item quantity="other">%1$d新しい章</item>
     </plurals>
@@ -413,9 +391,7 @@
     <string name="action_select_inverse">選択を反転</string>
     <string name="action_menu">メニュー</string>
     <string name="confirm_exit">もう一度押して終了します</string>
-    <string name="channel_new_chapters_episodes">章の更新</string>
     <string name="information_webview_outdated">WebViewアプリを更新して互換性を向上させてください</string>
-    <string name="information_webview_required">TachiyomiはWebViewを必要としています</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="other">%d件の拡張機能の更新が利用可能</item>
     </plurals>
@@ -467,7 +443,6 @@
     <string name="channel_complete">完了</string>
     <string name="channel_progress">プログレス</string>
     <string name="download_notifier_download_finish">ダウンロード完了</string>
-    <string name="download_insufficient_space">空き領域不足のため、章をダウンロードできませんでした</string>
     <plurals name="num_trackers">
         <item quantity="other">%d個のトラッカー</item>
     </plurals>
@@ -477,8 +452,6 @@
     <string name="action_sort_date_added">ライブラリへの追加日付順</string>
     <string name="channel_errors">エラー</string>
     <string name="backup_restore_missing_trackers">ログインしていないトラッカー：</string>
-    <string name="pref_remove_bookmarked_chapters">ブックマークした章の削除を許可</string>
-    <string name="pref_category_delete_chapters">章を削除</string>
     <string name="ext_nsfw_warning">この拡張機能のソースには成人向けのコンテンツが含まれる可能性があります</string>
     <string name="ext_nsfw_short">成人向け</string>
     <string name="parental_controls_info">非公式や誤ってフラグ付けされた可能性のある拡張機能の成人向けのコンテンツはこれからも表示される恐れがあります。</string>
@@ -489,13 +462,10 @@
     <string name="chapter_settings_updated">デフォルトの章設定を更新しました</string>
     <string name="share_page_info">%1$s：%2$s、第%3$dページ</string>
     <string name="set_chapter_settings_as_default">デフォルトとして設定</string>
-    <string name="also_set_chapter_settings_for_library">ライブラリにあるすべての項目にも適用</string>
     <string name="confirm_set_chapter_settings">デフォルト設定として保存しますか？</string>
     <string name="chapter_settings">章の設定</string>
     <string name="action_search_settings">検索設定</string>
     <string name="downloaded_chapters">ダウンロードした章の数</string>
-    <string name="manga_from_library">ライブラリ内から</string>
-    <string name="pref_incognito_mode_summary">閲覧履歴の記録を一時停止します</string>
     <string name="pref_incognito_mode">シークレット モード</string>
     <string name="pref_clear_history">履歴を全消去</string>
     <string name="clear_history_confirmation">履歴がすべて失われます。続行しますか？</string>
@@ -542,7 +512,6 @@
     <string name="exclude">下記を除外：%s</string>
     <string name="include">下記を含む：%s</string>
     <string name="none">なし</string>
-    <string name="pref_library_update_categories_details">含まれているカテゴリーに入っていても、除外対象カテゴリーにある項目は更新されません。</string>
     <string name="action_show_errors">タップで詳細を表示</string>
     <string name="action_sort_chapter_fetch_date">章の取得された日付順</string>
     <string name="information_empty_category_dialog">まだカテゴリを登録していません。</string>
@@ -574,7 +543,6 @@
     <string name="pref_library_update_refresh_trackers">トラッカーを自動でリロード</string>
     <string name="restrictions">制限：%s</string>
     <string name="cancel_all_for_series">このシリーズの全項目をキャンセル</string>
-    <string name="action_display_local_badge">ローカル ソース</string>
     <string name="rotation_landscape">横向き</string>
     <string name="rotation_portrait">縦向き</string>
     <string name="pref_dark_theme_pure_black">真っ黒モード</string>
@@ -609,7 +577,6 @@
     <string name="getting_started_guide">入門ガイド</string>
     <string name="pref_tablet_ui_mode">タブレットUI</string>
     <string name="action_track">追跡</string>
-    <string name="pref_remove_exclude_categories">除外されるカテゴリー</string>
     <string name="pref_hide_threshold">メニューを自動非表示するスクロール量</string>
     <string name="pref_category_timestamps">タイムスタンプ</string>
     <string name="theme_tealturquoise">青緑&amp;土耳古石</string>
@@ -631,19 +598,15 @@
     <string name="action_display_language_badge">言語</string>
     <string name="label_warning">警告</string>
     <string name="pref_verbose_logging">Verboseログ出力</string>
-    <string name="download_queue_size_warning">警告：大量の一括ダウンロードにより、ソースは遅くなったり、Tachiyomiを接続禁止したりする恐れがあります。詳しくはタップでご覧ください。</string>
     <string name="update_72hour">3日ごと</string>
     <string name="connected_to_wifi">Wi-Fi接続時のみ</string>
-    <string name="pref_library_update_show_tab_badge">更新アイコンで未読カウンターを表示</string>
     <string name="ext_update_all">全て更新</string>
     <string name="channel_app_updates">アプリ更新</string>
     <string name="clear_database_source_item_count">データベースにはライブラリにない項目は%1$d件あります</string>
-    <string name="pref_auto_clear_chapter_cache">アプリ終了時に章のキャッシュを消去</string>
     <string name="database_clean">消去できるものはありませんでした</string>
     <string name="extension_api_error">拡張機能リストを取得できませんでした</string>
     <string name="privacy_policy">プライバシーポリシー</string>
     <string name="pref_library_update_manga_restriction">項目更新のスキップ</string>
-    <string name="pref_update_only_completely_read">未読の章あり</string>
     <string name="library_errors_help">ライブラリ更新エラーの修正については、%1$sをご覧ください</string>
     <string name="save_chapter_as_cbz">CBZアーカイブとして保存</string>
     <string name="publishing_finished">完結済み</string>
@@ -651,7 +614,6 @@
     <string name="on_hiatus">休載中</string>
     <string name="action_faq_and_guides">よくあるご質問とガイド</string>
     <string name="webtoon_side_padding_5">5%</string>
-    <string name="action_show_manga">項目を表示</string>
     <string name="action_display_cover_only_grid">表紙グリッド</string>
     <string name="action_filter_started">開始済み</string>
     <string name="pref_update_only_started">読み始めていない</string>
@@ -682,7 +644,6 @@
     <string name="pref_duplicate_pinned_sources_summary">各言語グループでもピン留め済みのソースを重複して表示します</string>
     <string name="source_empty_screen">ソースが見つかりません</string>
     <string name="source_filter_empty_screen">インストール済みのソースが見つかりません</string>
-    <string name="action_sort_last_manga_update">前回の更新確認</string>
     <string name="action_sort_unread_count">未読の章数</string>
     <string name="split_tall_images">長い画像を分割</string>
     <string name="split_tall_images_summary">ビューアのパフォーマンスを改善します</string>

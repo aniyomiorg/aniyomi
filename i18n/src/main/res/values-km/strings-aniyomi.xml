@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="categories">ការតម្រៀបថ្នាក់</string>
+    <string name="label_download_queue">កំពុងទាញយក</string>
+    <string name="unlock_app">បើកតាឈិយ៉ូមិ</string>
+    <string name="action_show_manga">បង្ហាញម៊េងហ្គា</string>
+    <string name="action_display_local_badge">ម៊េងហ្គាដែលមានស្រាប់ក្នុងឧបករណ៍</string>
+    <string name="default_category">ថ្នាក់ធម្មតា</string>
+    </resources>

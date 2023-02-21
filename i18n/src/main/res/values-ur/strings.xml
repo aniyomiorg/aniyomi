@@ -12,7 +12,6 @@
     <string name="action_sort_total">کل ابواب</string>
     <string name="action_download">ڈاؤن لوڈ</string>
     <string name="action_resume">از سر نو شروع کریں</string>
-    <string name="action_show_manga">مانگا دکھائیں</string>
     <string name="action_open_in_web_view">WebView میں کھولیں</string>
     <string name="action_migrate">انتقال</string>
     <string name="action_display_list">فہرست</string>

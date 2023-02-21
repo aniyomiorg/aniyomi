@@ -74,12 +74,10 @@
     <string name="action_menu">Menu</string>
     <string name="action_settings">Pagsasaayos</string>
     <string name="confirm_exit">Pindutin muli para umalis</string>
-    <string name="unlock_app">Buksan ang Aniyomi</string>
     <string name="history">Nakaraan</string>
     <string name="track">Tina-track</string>
     <string name="chapters">Mga Kabanata</string>
     <string name="manga">Manga</string>
-    <string name="categories">Kategorya</string>
     <string name="information_empty_category">Wala ka pang kategorya. Pindutin ang plus button para makagawa ka ng isa para maayos mo ang Aklatan mo.</string>
     <string name="information_empty_library">Bakante ang Aklatan mo</string>
     <string name="information_no_recent_manga">Walang binasa kamakailan</string>
@@ -94,7 +92,6 @@
     <string name="label_recent_manga">Nakaraan</string>
     <string name="label_recent_updates">Bago</string>
     <string name="label_library">Aklatan</string>
-    <string name="label_download_queue">Mga Dina-download</string>
     <string name="label_settings">Mga Settings</string>
     <string name="label_more">Higit pa</string>
     <string name="name">Pangalan</string>
@@ -127,8 +124,6 @@
     <string name="last_read_chapter">Huling nabasang kabanata</string>
     <string name="disabled">Sarado</string>
     <string name="custom_dir">Pinili kong lugar</string>
-    <string name="pref_remove_after_marked_as_read">Pagkamarkahang nabasa na</string>
-    <string name="pref_remove_after_read">Pagkatapos basahin, kusang burahin</string>
     <string name="pref_download_directory">Lugar ng paglalagyan</string>
     <string name="webtoon_side_padding_25">25%</string>
     <string name="webtoon_side_padding_15">15%</string>
@@ -199,11 +194,6 @@
     <string name="pref_fullscreen">Naka-fullscreen</string>
     <string name="unofficial_extension_message">Wala sa opisyal na listahan ng mga extension ng Tachiyomi ang extension na ito.</string>
     <string name="obsolete_extension_message">Hindi na available ang extension na ito. Maaaring hindi ito gumana nang maayos at maaaring magdulot ng mga isyu sa app. Inirerekomenda ang pag-uninstall nito.</string>
-    <string name="untrusted_extension_message">Pinirmahan ang extension na ito gamit ang isang kaduda-dudang certificate at hindi muna pinagana.
-\n
-\nMaaaring mabasa ng isang kaduda-dudang extension ang kahit anong credentials sa pag-login na nakatago sa Tachiyomi o di kaya nama\'y magsimula ng delikadong code.
-\n
-\nTinatanggap mo ang mga bantang ito sa pagtiwala sa certificate na ito.</string>
     <string name="untrusted_extension">Kaduda-dudang extension</string>
     <string name="ext_uninstall">I-uninstall</string>
     <string name="ext_trust">Tiwala</string>
@@ -223,7 +213,6 @@
         <item quantity="other">%d (na) kategorya</item>
     </plurals>
     <string name="default_category_summary">Palaging tanungin</string>
-    <string name="default_category">Panimulang lagayan</string>
     <string name="pref_library_update_refresh_metadata_summary">Maghanap ng mga bagong cover at detalye kapag nag-a-update ng Aklatan</string>
     <string name="pref_library_update_refresh_metadata">Kusang sariwain ang metadata</string>
     <string name="pref_update_only_non_completed">May \"Kumpleto\" na estado</string>
@@ -261,7 +250,6 @@
     <string name="pref_enable_automatic_extension_updates">Tumingin ng mga update sa extension</string>
     <string name="tracking_info">One-way na pag-sync upang i-update ang pag-unlad ng kabanata sa mga serbisyo sa pagsubaybay. I-set up ang pagsubaybay para sa mga indibidwal na entry mula sa kanilang button sa pagsubaybay.</string>
     <string name="services">Mga Serbisyo</string>
-    <string name="pref_auto_update_manga_sync">I-update ang progress pagkabasa</string>
     <string name="pref_download_new">I-download ang mga bago</string>
     <string name="fifth_to_last">Panlima sa huling nabasa</string>
     <string name="fourth_to_last">Pang-apat sa huling nabasa</string>
@@ -274,16 +262,13 @@
     <string name="tapping_inverted_horizontal">Pahiga</string>
     <string name="channel_ext_updates">Mga update sa extension</string>
     <string name="tapping_inverted_none">Wala</string>
-    <string name="channel_new_chapters_episodes">Mga update sa kabanata</string>
     <string name="channel_common">Komon</string>
-    <string name="download_notifier_download_paused_chapters">Nakahinto ang pag-download</string>
     <string name="download_notifier_no_network">Walang koneksyon sa Internet</string>
     <string name="download_notifier_text_only_wifi">Walang koneksyon sa Wifi</string>
     <string name="download_notifier_unknown_error">Di ma-download ang kabanata dahil sa isang di-inaasahang error</string>
     <string name="download_notifier_title_error">Nagka-error</string>
     <string name="download_notifier_downloader_title">Taga-download</string>
     <string name="information_webview_outdated">Paki-update po ang WebView app para sa mas maayos na paggana</string>
-    <string name="information_webview_required">Kailangan ng Tachiyomi ang WebView</string>
     <string name="information_cloudflare_bypass_failure">Bigong ma-bypass ang Cloudflare</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">Ang extension ay available upang i-update</item>
@@ -317,7 +302,6 @@
     </plurals>
     <string name="notification_new_chapters">May mga bagong kabanata</string>
     <string name="notification_check_updates">Naghahanap ng mga bagong kabanata</string>
-    <string name="download_insufficient_space">Di ma-download ang mga kabanata dahil sa mababang espasyo</string>
     <string name="download_queue_error">Di ma-download ang mga kabanata. Subukan mo uli ito sa Dina-download</string>
     <string name="copy">Kopyahin</string>
     <string name="migrate">Ilipat</string>
@@ -345,7 +329,6 @@
     <string name="set_as_cover">Gawing cover</string>
     <string name="custom_filter">Pinili kong filter</string>
     <string name="picture_saved">Na-save na ang larawan</string>
-    <string name="dialog_with_checkbox_reset">I-reset ang lahat ng chapters sa entry na ito</string>
     <string name="dialog_with_checkbox_remove_description">Tatanggalin nito ang petsa ng pagbasa sa kabanatang ito. Sigurado ka ba\?</string>
     <string name="snack_categories_deleted">Binura na ang mga kategorya</string>
     <string name="error_category_exists">Mayroong kapangalan ang kategoryang ito!</string>
@@ -378,11 +361,8 @@
     <string name="sort_by_source">Base sa source</string>
     <string name="show_title">Pangalan ng source</string>
     <string name="show_chapter_number">Kabanata</string>
-    <string name="download_paused">Nakahinto</string>
-    <string name="download_error">Nagka-error</string>
     <string name="chapter_downloading_progress">Dina-download (%1$d/%2$d)</string>
     <string name="display_mode_chapter">Kabanata %1$s</string>
-    <string name="snack_add_to_library">Idagdag sa library\?</string>
     <string name="source_not_installed">Di naka-install ang source: %1$s</string>
     <string name="copied_to_clipboard">Kinopya sa clipboard:
 \n%1$s</string>
@@ -447,17 +427,12 @@
     <string name="battery_optimization_disabled">Nakapatay na ang pag-o-optimisa sa baterya</string>
     <string name="pref_disable_battery_optimization">Patayin ang pag-o-optimisa sa baterya</string>
     <string name="pref_disable_battery_optimization_summary">Nakatutulong sa pag-update at pag-backup sa likuran</string>
-    <string name="pref_refresh_library_tracking_summary">Inia-update ang estado, iskor, at huling nabasang kabanata mula sa mga tracker</string>
     <string name="pref_refresh_library_tracking">Sariwain ang pagta-track</string>
     <string name="pref_refresh_library_covers">Sariwain ang mga cover sa Aklatan</string>
     <string name="clear_database_completed">Binura na</string>
-    <string name="clear_database_confirmation">Sigurado ka ba\? Mga basa na chapters at mga progress sa mga entry ng non-library ay mawawala</string>
-    <string name="pref_clear_database_summary">Burahin ang history para sa mga entry na hindi naka-save sa iyong library</string>
-    <string name="pref_clear_database">Linisin ang database</string>
     <string name="cache_delete_error">Nagka-error habang nililinis</string>
     <string name="cache_deleted">Nalinis na ang cache. Binura ang %1$d (na) file</string>
     <string name="used_cache">Nagamit: %1$s</string>
-    <string name="pref_clear_chapter_cache">Linisin ang cache ng kabanata</string>
     <string name="label_data">Data</string>
     <string name="cookies_cleared">Nalinis na ang mga cookie</string>
     <string name="requires_app_restart">Nangangailangang buksan muli ang app para gumana</string>
@@ -487,8 +462,6 @@
     <string name="channel_progress">Takbo</string>
     <string name="download_notifier_download_finish">Tapos na sa pag-download</string>
     <string name="backup_restore_missing_trackers">Di naka-login sa (mga) tracker:</string>
-    <string name="pref_remove_bookmarked_chapters">Burahin din ang may pananda</string>
-    <string name="pref_category_delete_chapters">Magbura ng kabanata</string>
     <string name="parental_controls_info">Hindi nito naiiwasan ang pagpapakita ng mga NSFW (18+) sa mga di-opisyal o posibleng maling naka-flag na extension sa loob ng app.</string>
     <string name="ext_nsfw_warning">Posibleng may NSFW (18+) content ang mga source mula sa extension na ito</string>
     <string name="ext_nsfw_short">18+</string>
@@ -501,12 +474,9 @@
     <string name="set_chapter_settings_as_default">Ipagpaubaya</string>
     <string name="chapter_settings_updated">Ini-update na ang Ipagpaubaya</string>
     <string name="share_page_info">%1$s: %2$s, pahina %3$d</string>
-    <string name="also_set_chapter_settings_for_library">Gawin din sa lahat ng mga entry sa aking library</string>
     <string name="chapter_settings">Pagsasaayos ng Kabanata</string>
     <string name="downloaded_chapters">Mga naka-download na kabanata</string>
-    <string name="manga_from_library">Galing sa library</string>
     <string name="action_search_settings">Maghanap</string>
-    <string name="pref_incognito_mode_summary">Hinihinto ang pagtala sa nakaraan</string>
     <string name="pref_incognito_mode">Nakatago</string>
     <string name="pref_clear_history">Linisin ang nakaraan</string>
     <string name="clear_history_completed">Nalinis na ang nakaraan</string>
@@ -553,7 +523,6 @@
     <string name="exclude">Di-kasama: %s</string>
     <string name="include">Kasama: %s</string>
     <string name="none">Wala</string>
-    <string name="pref_library_update_categories_details">Ang mga entry sa mga ibinukod na kategorya ay hindi maa-update kahit na sila ay kasama rin sa mga kategoryang kasama.</string>
     <string name="action_sort_chapter_fetch_date">Petsa kinuha</string>
     <string name="action_show_errors">Pindutin para makita ang detalye</string>
     <string name="update_check_eol">Di na suportado ang bersyong ito ng Android</string>
@@ -584,7 +553,6 @@
     <string name="manga_cover">Cover</string>
     <string name="off">Patayin</string>
     <string name="on">Buksan</string>
-    <string name="action_display_local_badge">Lokal na pinanggagalingan</string>
     <string name="categorized_display_settings">Pagpapakita kada kategorya</string>
     <string name="information_empty_category_dialog">Wala ka pang kategorya.</string>
     <string name="tracking_guide">Gabay sa pag-track</string>
@@ -629,7 +597,6 @@
     <string name="getting_started_guide">Gabay sa Pagsisimula</string>
     <string name="pref_tablet_ui_mode">Pang-tablet na UI</string>
     <string name="help_translate">Tumulong sa pagsalin</string>
-    <string name="pref_remove_exclude_categories">Kategoryang di-kasama</string>
     <string name="ext_app_info">Patungkol</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Paki-install at buksan ang Shizuku para magamit ito bilang taga-install ng extension.</string>
     <string name="ext_installer_shizuku_stopped">Di tumatakbo ang Shizuku</string>
@@ -645,17 +612,13 @@
     <string name="backup_info">Dapat nagtatabi rin kayo ng mga kopya ng backup sa ibang mga lugar.</string>
     <string name="connected_to_wifi">Sa Wi-Fi lang</string>
     <string name="update_72hour">Kada 3 araw</string>
-    <string name="download_queue_size_warning">Babala: maaari pong humantong sa pagbagal at/o pagharang ng mga source sa Tachiyomi ang mga malalaking maramihang pag-download. Pakipindot po ito para matuto pa.</string>
-    <string name="pref_library_update_show_tab_badge">Ipakita ang bilang ng di pa nabasa sa Bago</string>
     <string name="channel_app_updates">Mga update sa app</string>
     <string name="ext_update_all">I-update lahat</string>
     <string name="clear_database_source_item_count">May %1$d na mga entry na non-library sa database</string>
-    <string name="pref_auto_clear_chapter_cache">Linisin ang cache ng kabanata pagkasara</string>
     <string name="database_clean">Walang malilinis</string>
     <string name="extension_api_error">Bigong makuha ang mga extension</string>
     <string name="privacy_policy">Patakaran sa Pagkapribado</string>
     <string name="library_errors_help">Para makahingi ng tulong sa pag-ayos sa mga error sa pag-update ng Aklatan, tingnan ang %1$s</string>
-    <string name="pref_update_only_completely_read">May di pa nababasang kabanata</string>
     <string name="pref_library_update_manga_restriction">Laktawan ang pag-update</string>
     <string name="save_chapter_as_cbz">I-save bilang CBZ archive</string>
     <string name="publishing_finished">Tapos na\'ng mailathala</string>
@@ -663,7 +626,6 @@
     <string name="cancelled">Kinansela</string>
     <string name="action_faq_and_guides">Mga Madalas Itanong at Gabay</string>
     <string name="webtoon_side_padding_5">5%</string>
-    <string name="action_show_manga">Ipakita ang mga entry</string>
     <string name="action_filter_started">Nasimulan</string>
     <string name="action_display_cover_only_grid">Pabalat lang</string>
     <string name="skipped_reason_completed">Nilaktawan dahil tapos na ang serye</string>
@@ -694,7 +656,6 @@
     <string name="pref_duplicate_pinned_sources_summary">Ulitin ang pag-pin sa mga source sa kani-kanilang mga wika</string>
     <string name="source_filter_empty_screen">Walang nakitang naka-install na source</string>
     <string name="source_empty_screen">Walang nakitang source</string>
-    <string name="action_sort_last_manga_update">Huling update ng pag-tsek</string>
     <string name="action_sort_unread_count">Dami ng di pa nabasa</string>
     <string name="split_tall_images">Hatiin ang mga matatangkad na larawan</string>
     <string name="split_tall_images_summary">Pinapahusay ang performance ng reader</string>

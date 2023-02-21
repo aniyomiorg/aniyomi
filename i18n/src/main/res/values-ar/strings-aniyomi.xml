@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="categories">الفئات</string>
+    <string name="label_download_queue">قائمة التنزيلات</string>
+    <string name="unlock_app">افتح Aniyomi</string>
+    <string name="action_sort_last_manga_update">آخر تحديث للمانجا</string>
+    <string name="action_show_manga">أظهر المانجا</string>
+    <string name="action_display_local_badge">المانجا المحلية</string>
+    <string name="pref_update_only_completely_read">مع فصل (فصول) غير مقروءة</string>
+    <string name="pref_library_update_show_tab_badge">إظهار عدد الفصول الغير مقروء على أيقونة التحديثات</string>
+    <string name="default_category">الفئة الافتراضية</string>
+    <string name="pref_library_update_categories_details">المانجا في الفئات المستبعدة لن يتم تحديثها حتى و ان كانت أيضا في الفئات المضمنة.</string>
+    <string name="untrusted_extension_message">هذه اﻹضافة موقعة بشهادة غير موثوق بها ولم يتم تفعيلها.
+\n
+\nيمكن لأي إضافة خبيثة قراءة بيانات اعتماد تسجيل الدخول المخزنة في Tachiyomi أو تنفيذ تعليمات برمجية عشوائية.
+\n
+\nبالثقة في هذه الشهادة تقبل هذه المخاطر.</string>
+    <string name="pref_category_delete_chapters">حذف الفصول</string>
+    <string name="pref_remove_after_marked_as_read">بعد وضع علامة \"مقروءة\" يدوياً</string>
+    <string name="pref_remove_after_read">الحذف تلقائيا بعد القراءة</string>
+    <string name="pref_remove_bookmarked_chapters">حذف الفصول ذات العلامة المرجعية</string>
+    <string name="pref_remove_exclude_categories">فئات المستثناة</string>
+    <string name="pref_auto_update_manga_sync">تحديث تقدّم الفصول بعد القراءة</string>
+    <string name="pref_clear_chapter_cache">مسح الذاكرة المؤقتة للفصول</string>
+    <string name="pref_auto_clear_chapter_cache">امسح ملفات التخزين المؤقت عند إغلاق التطبيق</string>
+    <string name="pref_clear_database">محو قاعدة البيانات</string>
+    <string name="pref_clear_database_summary">مسح سجلّ المانجا التي ليست محفوظة في مكتبتك</string>
+    <string name="clear_database_confirmation">هل أنت متأكد؟ الفصول المقروءة ومستوى التقدم للمانجا الغير الموجودة في مكتبتك سيتم فقده</string>
+    <string name="pref_refresh_library_tracking_summary">تحديث الحالة، والتقييم، وآخر فصل: عن طريق خدمات التتبع</string>
+    <string name="pref_incognito_mode_summary">إيقاف سجل القراءة</string>
+    <string name="manga_from_library">مانغا من المكتبة</string>
+    <string name="snack_add_to_library">إضافة المانجا إلى المكتبة؟</string>
+    <string name="download_error">خطأ</string>
+    <string name="download_paused">متوقّف</string>
+    <string name="also_set_chapter_settings_for_library">تطبيق أيضًا على جميع المانجا في المكتبة</string>
+    <string name="dialog_with_checkbox_reset">إعادة تعيين جميع الفصول لهذه المانجا</string>
+    <string name="download_insufficient_space">تعذّر تنزيل الفصول بسبب انخفاض مساحة التخزين</string>
+    <string name="download_queue_size_warning">تحذير: التحميلات كبيرة الحجم والعدد يمكن أن تؤدي إلى تباطؤ المصادر و/أو ان تقوم المصادر بحظر Tachiyomi۔ اضغط لمعرفة المزيد۔</string>
+    <string name="information_webview_required">يتطلب Tachiyomi وجود WebView</string>
+    <string name="download_notifier_download_paused_chapters">تم إيقاف التنزيل مؤقتاً</string>
+    <string name="channel_new_chapters_episodes">تحديثات الفصول</string>
+    </resources>

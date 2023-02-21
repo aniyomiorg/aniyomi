@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Namn</string>
-    <string name="categories">Kategorier</string>
     <string name="manga">Manga</string>
     <string name="chapters">Kapitel</string>
     <string name="track">Spårning</string>
     <string name="history">Historik</string>
     <string name="label_settings">Inställningar</string>
-    <string name="label_download_queue">Nedladdningskö</string>
     <string name="label_library">Bibliotek</string>
     <string name="label_recent_manga">Historik</string>
     <string name="label_recent_updates">Uppdateringar</string>
@@ -86,8 +84,6 @@
     <string name="pref_library_update_restriction">Automatiska uppdateringar av enhetsbegränsningar</string>
     <string name="charging">Vid laddning</string>
     <string name="pref_update_only_non_completed">Med status \"Avslutat\"</string>
-    <string name="pref_auto_update_manga_sync">Uppdatera förlopp efter läsning</string>
-    <string name="default_category">Standardkategori</string>
     <string name="default_category_summary">Fråga alltid</string>
     <string name="ext_update">Uppdatera</string>
     <string name="ext_install">Installera</string>
@@ -99,11 +95,6 @@
     <string name="ext_untrusted">Opålitlig</string>
     <string name="ext_uninstall">Avinstallera</string>
     <string name="untrusted_extension">Opålitlig extension</string>
-    <string name="untrusted_extension_message">Detta tillägg tecknades med ett otillförlitligt certifikat och var inte aktiverat.
-\n
-\nEtt skadligt tillägg kan läsa inloggningsuppgifter som är lagrade i Tachiyomi eller utföra godtycklig kod.
-\n
-\nGenom att lita på detta certifikat accepterar du dessa risker.</string>
     <string name="pref_fullscreen">Fullskärm</string>
     <string name="pref_page_transitions">Animera sidbyten</string>
     <string name="pref_double_tap_anim_speed">Animationshastighet för dubbelklick</string>
@@ -148,8 +139,6 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">Nedladdningsplats</string>
-    <string name="pref_remove_after_marked_as_read">Efter manuellt markerad som läst</string>
-    <string name="pref_remove_after_read">Ta bort automatiskt efter läsning</string>
     <string name="custom_dir">Anpassad plats</string>
     <string name="disabled">Inaktiverad</string>
     <string name="last_read_chapter">Senaste lästa kapitel</string>
@@ -172,18 +161,13 @@
     <string name="backup_choice">Vad vill du säkerhetskopiera\?</string>
     <string name="restoring_backup">Återställer säkerhetskopia</string>
     <string name="creating_backup">Skapar säkerhetskopia</string>
-    <string name="pref_clear_chapter_cache">Rensa kapitelcache</string>
     <string name="used_cache">Används: %1$s</string>
     <string name="cache_deleted">Cache rensad. %1$d filer har tagits bort</string>
     <string name="cache_delete_error">Fel inträffade vid rensning</string>
     <string name="pref_clear_cookies">Radera cookies</string>
     <string name="cookies_cleared">Cookies rensade</string>
-    <string name="pref_clear_database">Rensa databas</string>
-    <string name="pref_clear_database_summary">Ta bort historik för manga som inte finns i ditt bibliotek</string>
-    <string name="clear_database_confirmation">Är du säker\? Lästa kapitel och framsteg av icke-bibliotek manga kommer att gå förlorade</string>
     <string name="clear_database_completed">Inlägg raderade</string>
     <string name="pref_refresh_library_tracking">Uppdatera spårning</string>
-    <string name="pref_refresh_library_tracking_summary">Uppdaterar status, betyg och senaste kapitel läst från spårningstjänsterna</string>
     <string name="version">Version</string>
     <string name="pref_enable_acra">Skicka kraschrapporter</string>
     <string name="pref_acra_summary">Hjälper till att fixa eventuella buggar. Inga känsliga uppgifter skickas</string>
@@ -213,8 +197,6 @@
     <string name="source_not_installed">Källa inte installerad: %1$s</string>
     <string name="display_mode_chapter">Kapitel %1$s</string>
     <string name="chapter_downloading_progress">Laddar ner (%1$d/%2$d)</string>
-    <string name="download_error">Fel</string>
-    <string name="download_paused">Pausad</string>
     <string name="show_title">Källtitel</string>
     <string name="show_chapter_number">Kapitelnummer</string>
     <string name="sort_by_source">Efter källa</string>
@@ -244,8 +226,6 @@
     <string name="error_category_exists">En kategori med detta namn finns redan!</string>
     <string name="snack_categories_deleted">Kategorier raderade</string>
     <string name="dialog_with_checkbox_remove_description">Detta kommer att ta bort läs datumet för detta kapitel. Är du säker\?</string>
-    <string name="dialog_with_checkbox_reset">Återställ alla kapitel för denna manga</string>
-    <string name="snack_add_to_library">Lägg till manga i biblioteket\?</string>
     <string name="picture_saved">Bild sparad</string>
     <string name="custom_filter">Anpassat filter</string>
     <string name="set_as_cover">Ställ in som omslag</string>
@@ -288,7 +268,6 @@
     <string name="download_notifier_unknown_error">Kunde inte ladda ned kapitel på grund av ett oförväntat fel</string>
     <string name="download_notifier_text_only_wifi">Ingen WiFi-anslutning tillgänglig</string>
     <string name="download_notifier_no_network">Ingen nätverksanslutning tillgänglig</string>
-    <string name="download_notifier_download_paused_chapters">Nedladdning pausad</string>
     <string name="channel_common">Vanlig</string>
     <string name="action_open_in_web_view">Öppna i WebView</string>
     <string name="pref_true_color">32-bitars färg</string>
@@ -338,8 +317,6 @@
     <string name="pref_cutout_short">Visa innehåll i utskärningsområdet</string>
     <string name="information_cloudflare_bypass_failure">Det gick inte att kringgå Cloudflare</string>
     <string name="information_webview_outdated">Uppdatera WebView-appen för bättre kompatibilitet</string>
-    <string name="channel_new_chapters_episodes">Kapiteluppdateringar</string>
-    <string name="unlock_app">Lås upp Aniyomi</string>
     <string name="secure_screen_summary">Säker skärm döljer appinnehållet när du byter app och blockerar skärmdumpar</string>
     <string name="pref_category_display">Skärmvisning</string>
     <plurals name="notification_chapters_generic">
@@ -399,7 +376,6 @@
     <string name="manga_info_expand">Mer</string>
     <string name="pref_confirm_exit">Bekräfta utgång</string>
     <string name="confirm_exit">Tryck tillbaka igen för att gå ur</string>
-    <string name="information_webview_required">WebView krävs för Tachiyomi</string>
     <string name="recent_manga_time">Kapitel %1$s - %2$s</string>
     <string name="local_source_help_guide">Lokal källa guide</string>
     <string name="last_used_source">Senast använd</string>
@@ -470,7 +446,6 @@
     <string name="requires_app_restart">Kräver omstart av appen för att börja gälla</string>
     <string name="label_network">Nätverk</string>
     <string name="action_disable">Inaktivera</string>
-    <string name="download_insufficient_space">Det gick inte att ladda ner kapitelt på grund av lågt lagringsutrymme</string>
     <string name="action_global_search_query">Sök efter \"%1$s\" globalt</string>
     <string name="updated_version">Uppdaterad till v%1$s</string>
     <string name="whats_new">Vad är nytt</string>
@@ -485,8 +460,6 @@
         <item quantity="other">%d spårare</item>
     </plurals>
     <string name="no_pinned_sources">Du har inga fästa källor</string>
-    <string name="pref_remove_bookmarked_chapters">Tillåt att radera bokmärkta kapitel</string>
-    <string name="pref_category_delete_chapters">Ta bort kapitel</string>
     <string name="ext_nsfw_warning">Källor från detta tillägg kan innehålla NSFW(18+) innehåll</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="backup_restore_missing_trackers">Spårare som inte har loggats in:</string>
@@ -501,11 +474,8 @@
     <string name="share_page_info">%1$s: %2$s, sida %3$d</string>
     <string name="no_chapters_error">Inga kapitel hittades</string>
     <string name="set_chapter_settings_as_default">Ange som standard</string>
-    <string name="also_set_chapter_settings_for_library">Gäller även all manga i biblioteket</string>
     <string name="chapter_settings">Kapitelinställningar</string>
     <string name="downloaded_chapters">Nedladdade kapitel</string>
-    <string name="manga_from_library">Manga från biblioteket</string>
-    <string name="pref_incognito_mode_summary">Pausar läshistoriken</string>
     <string name="pref_incognito_mode">Inkognitoläge</string>
     <string name="pref_clear_history">Rensa historik</string>
     <string name="clear_history_confirmation">Är du säker\? All historik kommer att försvinna.</string>
@@ -554,7 +524,6 @@
     <string name="action_sort_chapter_fetch_date">Datum för hämtning av kapitel</string>
     <string name="pref_download_new_categories_details">Manga i uteslutna kategorier laddas inte ner även om de också ingår i inkluderade kategorier.</string>
     <string name="pref_category_auto_download">Ladda ned automatiskt</string>
-    <string name="pref_library_update_categories_details">Manga i uteslutna kategorier uppdateras inte även om de också ingår i inkluderade kategorier.</string>
     <string name="action_show_errors">Tryck för att se detaljer</string>
     <string name="update_check_eol">Denna Android-version stöds inte längre</string>
     <string name="clipboard_copy_error">Kunde inte kopiera till urklipp</string>
@@ -578,7 +547,6 @@
     <string name="pref_library_update_refresh_trackers_summary">Uppdatera spårare när du uppdaterar biblioteket</string>
     <string name="pref_library_update_refresh_trackers">Uppdatera spårare automatiskt</string>
     <string name="restrictions">Begränsningar: %s</string>
-    <string name="action_display_local_badge">Lokal manga</string>
     <string name="off">Av</string>
     <string name="on">På</string>
     <string name="error_sharing_cover">Fel vid delning av omslag</string>
@@ -629,7 +597,6 @@
     <string name="action_track">Spår</string>
     <string name="pref_tablet_ui_mode">Tablettgränssnitt</string>
     <string name="help_translate">Hjälp till med översättning</string>
-    <string name="pref_remove_exclude_categories">Uteslutna kategorier</string>
     <string name="ext_app_info">Appinformation</string>
     <string name="ext_installer_shizuku_stopped">Shizuku körs inte</string>
     <string name="ext_installer_legacy">Äldre</string>
@@ -644,12 +611,9 @@
     <string name="action_display_language_badge">Språk</string>
     <string name="connected_to_wifi">Bara över Wi-Fi</string>
     <string name="notification_size_warning">Stora uppdateringar skadar källor och kan leda till långsammare uppdateringar samt en ökad batterianvändning. Tryck för att få veta mer.</string>
-    <string name="download_queue_size_warning">Varning: stora massnerladdningar kan leda till att källor blir långsamma och/eller blockerar Tachiyomi. Tryck för att få veta mer.</string>
     <string name="update_72hour">Var 3:e dag</string>
-    <string name="pref_library_update_show_tab_badge">Visa antalet olästa på ikonen Uppdateringar</string>
     <string name="ext_update_all">Uppdatera alla</string>
     <string name="channel_app_updates">Appuppdateringar</string>
-    <string name="pref_auto_clear_chapter_cache">Rensa kapitelcache när appen stängs</string>
     <string name="clear_database_source_item_count">%1$d manga i databasen som inte är biblioteksmanga</string>
     <string name="database_clean">Inget att rensa</string>
     <string name="library_errors_help">För hjälp med att åtgärda fel i biblioteksuppdateringar, se %1$s</string>
@@ -660,10 +624,8 @@
     <string name="save_chapter_as_cbz">Spara som CBZ-arkiv</string>
     <string name="privacy_policy">Integritetspolicy</string>
     <string name="action_faq_and_guides">Vanliga frågor och guider</string>
-    <string name="pref_update_only_completely_read">Med olästa kapitel</string>
     <string name="extension_api_error">Det gick inte att hämta tilläggslistan</string>
     <string name="webtoon_side_padding_5">5%</string>
-    <string name="action_show_manga">Visa manga</string>
     <string name="action_filter_started">Startad</string>
     <string name="action_display_cover_only_grid">Endast omslags-rutnät</string>
     <string name="pref_update_only_started">Som inte har startats</string>
@@ -693,7 +655,6 @@
     <string name="action_close">Stäng</string>
     <string name="pref_duplicate_pinned_sources_summary">Upprepa källor som är upptagna i sina respektive språkgrupper</string>
     <string name="source_filter_empty_screen">Ingen installerad källa hittades</string>
-    <string name="action_sort_last_manga_update">Sista manga-uppdateringen</string>
     <string name="action_sort_unread_count">Antal olästa</string>
     <string name="split_tall_images">Dela upp höga bilder</string>
     <string name="split_tall_images_summary">Förbättrar läsarens prestanda</string>

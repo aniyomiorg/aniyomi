@@ -48,7 +48,6 @@
     <string name="set_as_cover">تنظیم به عنوان عکس روی جلد</string>
     <string name="custom_filter">فیلتر سفارشی</string>
     <string name="picture_saved">عکس ذخیره شد</string>
-    <string name="dialog_with_checkbox_reset">ریست اطلاعات همه قسمت های این مانگا</string>
     <string name="dialog_with_checkbox_remove_description">با این کار تاریخ خواندن این قسمت حذف می شود. مطمئنید؟</string>
     <string name="snack_categories_deleted">دسته بندی ها حذف شدند</string>
     <string name="error_category_exists">دسته بندی با این نام قبلا ساخته شده است!</string>
@@ -81,11 +80,8 @@
     <string name="sort_by_number">بر اساس شماره قسمت</string>
     <string name="show_chapter_number">شماره قسمت</string>
     <string name="show_title">عنوان منبع</string>
-    <string name="download_paused">متوقف</string>
-    <string name="download_error">خطا</string>
     <string name="chapter_downloading_progress">درحال بارگیری (%1$d/%2$d)</string>
     <string name="display_mode_chapter">قسمت %1$s</string>
-    <string name="snack_add_to_library">مانگا به کتابخانه اضافه شود؟</string>
     <string name="source_not_installed">منبع نصب نشده است: %1$s</string>
     <string name="copied_to_clipboard">کپی شد:
 \n%1$s</string>
@@ -96,7 +92,6 @@
     <string name="manga_added_library">به کتابخانه اضافه شد</string>
     <string name="remove_from_library">حذف از کتابخانه</string>
     <string name="in_library">در کتابخانه</string>
-    <string name="pref_refresh_library_tracking_summary">وضعیت خواندن، امتیاز و آخرین قسمت خوانده شده را از سایت خدمات ردیابی آپدیت می‌کند</string>
     <string name="pref_refresh_library_tracking">تازه کردن ردیابی</string>
     <string name="tracking_info">برای به روز رسانی وضعیت پیشرفت قسمت ها، در سایت های خدمات ردیابی، همگام سازی یک طرفه انجام دهید. برای ردیابی هر مانگا از تب ردیابی اقدام کنید.</string>
     <string name="webtoon_viewer">وب تون(Webtoon)</string>
@@ -104,7 +99,6 @@
     <string name="filter_mode_lighten">Dodge / Lighten</string>
     <string name="update_12hour">هر ۱۲ ساعت یکبار</string>
     <string name="action_move_category">انتخاب دسته بندی</string>
-    <string name="unlock_app">بازکردن تاچی یومی</string>
     <string name="information_empty_category">هیچ دسته بندی وجود ندارد. با زدن دکمه به علاوه دسته بندی جدیدی بسازید.</string>
     <string name="information_empty_library">کتابخانه شما خالی است</string>
     <string name="information_no_recent_manga">هیچ چیز مانگاای به تازگی خوانده شده</string>
@@ -119,7 +113,6 @@
     <string name="label_recent_manga">سابقه</string>
     <string name="label_recent_updates">آپدیت ها</string>
     <string name="label_library">کتابخانه</string>
-    <string name="label_download_queue">صف دانلود</string>
     <string name="label_settings">تنضیمات</string>
     <string name="label_more">بیشتر</string>
     <string name="name">نام</string>
@@ -151,7 +144,6 @@
     <string name="pref_search_pinned_sources_only">فقط افزونه‌های پین شده شامل شوند</string>
     <string name="pref_enable_automatic_extension_updates">بررسی برای به افزونه‌های آپدیت‌شده</string>
     <string name="services">خدمات</string>
-    <string name="pref_auto_update_manga_sync">بعد از خوانده‌شدن، وضعیت قسمت بروزرسانی شود</string>
     <string name="pref_download_new">دانلود قسمت‌های جدید</string>
     <string name="fifth_to_last">پنجم به آخرین قسمت خوانده‌شده</string>
     <string name="fourth_to_last">چهارم به آخرین قسمت خوانده‌شده</string>
@@ -159,8 +151,6 @@
     <string name="second_to_last">دوم به آخرین قسمت خوانده‌شده</string>
     <string name="last_read_chapter">آخرین قسمت خوانده شده</string>
     <string name="disabled">غیرفعال شده</string>
-    <string name="pref_remove_after_read">بعد از خواندن به‌صورت خودکار پاک کن</string>
-    <string name="pref_remove_after_marked_as_read">بعد از آن‌هایی که به صورت دستی به عنوان خوانده‌شده علامت‌گذاری شده‌اند</string>
     <string name="webtoon_side_padding_25">۲۵٪</string>
     <string name="webtoon_side_padding_20">۲۰٪</string>
     <string name="webtoon_side_padding_15">۱۵٪</string>
@@ -195,16 +185,13 @@
     </plurals>
     <string name="action_bookmark">نشانک قسمت</string>
     <string name="channel_ext_updates">آپدیت افزونه‌ها</string>
-    <string name="channel_new_chapters_episodes">به روزرسانی قسمت‌ها</string>
     <string name="channel_common">عمومی</string>
-    <string name="download_notifier_download_paused_chapters">دانلود متوقف شد</string>
     <string name="download_notifier_no_network">اتصال شبکه در دسترس نیست</string>
     <string name="download_notifier_text_only_wifi">اتصال وای فای در دسترس نیست</string>
     <string name="download_notifier_unknown_error">به علت خطای غیرمنتظره بارگیری این چپتر، ممکن نیست</string>
     <string name="download_notifier_title_error">خطا</string>
     <string name="download_notifier_downloader_title">سیستم دانلود کننده</string>
     <string name="information_webview_outdated">لطفا برنامه وب نما را برای سازگاری بهتر آپدیت کنید</string>
-    <string name="information_webview_required">وب نما برای تاچیومی مورد نیاز است</string>
     <string name="information_cloudflare_bypass_failure">عدم موفقیت در دور زدن کولدفیر</string>
     <string name="color_filter_a_value">opacity</string>
     <string name="color_filter_b_value">آبی</string>
@@ -258,11 +245,6 @@
     <string name="pref_fullscreen">تمام صفحه</string>
     <string name="unofficial_extension_message">این افزونه در لیست افزونه‌های رسمی تاچیومی نیست.</string>
     <string name="obsolete_extension_message">این افزونه دیگر موجود نیست.</string>
-    <string name="untrusted_extension_message">این افزونه با یک گواهی نامطمئن امضا شده است و فعال نشده است.
-\n
-\nیک افزونه مخرب می تواند هر گونه طلاعات ورود به سیستم ذخیره شده تاچیومی را بخواند یا کدهای دلخواه(احتمالا خطرناک) را اجرا کند.
-\n
-\nبا اعتماد به این گواهی شما این خطرات را می‌پذیرید.</string>
     <string name="untrusted_extension">افزونه نامطمئن</string>
     <string name="ext_uninstall">حذف نصب</string>
     <string name="ext_untrusted">نامطمئن</string>
@@ -277,7 +259,6 @@
     <string name="ext_updates_pending">آپدیت‌های در انتظار</string>
     <string name="all">همه</string>
     <string name="default_category_summary">همیشه بپرس</string>
-    <string name="default_category">دسته بندی پیشفرض</string>
     <string name="pref_library_update_refresh_metadata_summary">هنگام آپدیت عکس روی جلد و اطلاعات مانگا ها (در صورت تغییر) آپدیت شوند</string>
     <string name="pref_library_update_refresh_metadata">متادیتا فقط به صورت خودکار آپدیت شود</string>
     <string name="pref_update_only_non_completed">با وضعیت \"کامل‌شده\"</string>
@@ -392,15 +373,11 @@
     <string name="pref_disable_battery_optimization">غیر فعال کردن بهینه سازی باتری</string>
     <string name="pref_refresh_library_covers">تازه کردن عکس روی جلد مانگاها</string>
     <string name="clear_database_completed">اطلاعات حذف شدند</string>
-    <string name="clear_database_confirmation">آیا مطمئن هستید؟ اطلاعات قسمت های خوانده شده برای مانگاهایی که در کتابخانه اضافه نشده از دست خواهد رفت</string>
-    <string name="pref_clear_database_summary">حذف سابقه برای مانگاهایی که در کتابخانه ذخیره نشده اند</string>
-    <string name="pref_clear_database">پاک کردن پایگاه داده</string>
     <string name="cookies_cleared">کوکی ها پاک شدند</string>
     <string name="pref_clear_cookies">پاک کردن کوکی ها</string>
     <string name="cache_delete_error">هنگام پاک کردن حافظه نهان خطایی روی داد</string>
     <string name="cache_deleted">حافظه نهان پاک شد. %1$d فایل پاک شدند</string>
     <string name="used_cache">مصرف شده: %1$s</string>
-    <string name="pref_clear_chapter_cache">پاک کردن حافظه پنهان قسمت‌ها</string>
     <string name="label_data">اطلاعات</string>
     <string name="restoring_backup_canceled">بازیابی لغو شده</string>
     <string name="restoring_backup_error">بازیابی نسخه پشتیبان ناموفق بود</string>
@@ -454,12 +431,10 @@
     <string name="history">تاریخچه</string>
     <string name="chapters">قسمت ها</string>
     <string name="manga">مانگا</string>
-    <string name="categories">دسته بندی مانگا ها</string>
     <string name="channel_errors">خطاها</string>
     <string name="channel_complete">تکمیل شده</string>
     <string name="channel_progress">پیشرفت</string>
     <string name="download_notifier_download_finish">دانلود تکمیل شد</string>
-    <string name="download_insufficient_space">به دلیل فضای کم دیسک امکان دانلود قسمت ها وجود ندارد</string>
     <string name="loader_not_implemented_error">منبع یافت نشد</string>
     <plurals name="num_trackers">
         <item quantity="one">۱ ردیاب</item>
@@ -484,8 +459,6 @@
     <string name="updated_version">به نسخه v%1$s آپدیت شد</string>
     <string name="action_search_settings">جست و جوی تنضیمات</string>
     <string name="downloaded_chapters">قسمت های دانلود شده</string>
-    <string name="manga_from_library">مانگاهای کتابخانه</string>
-    <string name="pref_incognito_mode_summary">متوقف کردن تاریخچه خواندن</string>
     <string name="pref_incognito_mode">حالت ناشناس</string>
     <string name="clear_history_confirmation">آیا مطمئن هستید؟ تمام سابقه از دست خواهد رفت.</string>
     <string name="clear_history_completed">سابقه پاک شد</string>
@@ -494,10 +467,7 @@
     <string name="parental_controls_info">این کار از نمایش محتوای 18+ (محتوای نامناسب) توسط افزونه‌های غیررسمی یا اشتباه برچسب‌خورده جلوگیری نمی‌کند.</string>
     <string name="no_chapters_error">هیچ قسمتی پیدا نشد</string>
     <string name="set_chapter_settings_as_default">تنظیم به عنوان پیشفرض</string>
-    <string name="also_set_chapter_settings_for_library">همچنین برای تمام مانگاهای موجود در کتابخانه من اعمال شود</string>
     <string name="confirm_set_chapter_settings">آیا مطمئن هستید که می خواهید این تنظیمات را به صورت پیش فرض ذخیره کنید؟</string>
-    <string name="pref_remove_bookmarked_chapters">اجازه‌ی پاک‌کردن قسمت‌های نشانک‌گذاری شده را بده</string>
-    <string name="pref_category_delete_chapters">حذف قسمت ها</string>
     <string name="ext_nsfw_warning">منابع این افزونه ممکن است شامل محتوای نامناسب (+18) باشند</string>
     <string name="spen_next_page">صفحه بعدی</string>
     <string name="spen_previous_page">صفحه قبلی</string>
@@ -546,10 +516,8 @@
     <string name="pref_landscape_zoom">بزرگنمایی تصویر چشم انداز</string>
     <string name="update_check_fdroid_migration_info">نسخه جدیدی از نسخه‌های رسمی موجود است. برای یادگیری نحوه انتقال از نسخه‌های غیررسمی اف دروید، ضربه بزنید.</string>
     <string name="channel_skipped">رد شده</string>
-    <string name="action_sort_last_manga_update">آخرین به‌روزرسانی مانگا</string>
     <string name="action_sort_unread_count">تعداد نخوانده‌ها</string>
     <string name="skipped_reason_completed">به دلیل کامل‌بودن سری، رد شد</string>
-    <string name="action_display_local_badge">مانگای محلی</string>
     <string name="action_display_show_number_of_items">نمایش تعداد موارد</string>
     <string name="action_desc">نزولی</string>
     <string name="pref_category_appearance">ظاهر</string>
@@ -559,7 +527,6 @@
     <string name="action_asc">صعودی</string>
     <string name="action_display_language_badge">زبان</string>
     <string name="action_faq_and_guides">پرسش و پاسخ‌های متداول و راهنمایی‌ها</string>
-    <string name="action_show_manga">نمایش مانگا</string>
     <string name="cancel_all_for_series">لغو همه برای این سری</string>
     <string name="pref_dark_theme_pure_black">حالت تاریک مشکی خالص</string>
     <string name="action_close">بستن</string>
@@ -585,8 +552,6 @@
     <string name="pref_relative_format">برچسب‌های زمانی نسبی</string>
     <string name="pref_relative_time_short">کوتاه (امروز، دیروز)</string>
     <string name="pref_relative_time_long">طولانی (کوتاه+، n روز پیش)</string>
-    <string name="pref_update_only_completely_read">با قسمت‌(های) خوانده‌نشده</string>
-    <string name="pref_library_update_show_tab_badge">تعداد خوانده‌نشده را بر روی آیکون به‌روزرسانی نشان بده</string>
     <string name="pref_library_update_refresh_trackers">ردیاب‌ها را به طور خودکار تازه کن</string>
     <string name="battery_not_low">هنگامی که باتری کم نیست</string>
     <string name="pref_library_update_manga_restriction">تیترهای در حال به‌روزرسانی را رد کن</string>
@@ -609,7 +574,6 @@
     <string name="rotation_reverse_portrait">عمودی معکوس</string>
     <string name="pref_hide_threshold">حساسیت مخفی کردن منو هنگام بالا و پایین بردن صفحه</string>
     <string name="pref_highest">بالاترین</string>
-    <string name="pref_remove_exclude_categories">دسته‌بندی‌های محذوف</string>
     <string name="pref_high">بالا</string>
     <string name="pref_dual_page_split">دو صفحه جدا</string>
     <string name="pref_dual_page_invert_summary">اگر قرارگیری دو صفحه‌ی جدا با جهت خوانش تطابق ندارد</string>
@@ -638,12 +602,9 @@
     <string name="none">هیچ‌کدام</string>
     <string name="include">شامل: %s</string>
     <string name="exclude">بدون: %s</string>
-    <string name="pref_library_update_categories_details">مانگاهایی که در دسته‌بندی های حذف‌شده هستند، حتی اگر هم‌زمان در دسته‌بندی های مشمول باشند به‌روزرسانی نمی‌شوند.</string>
     <string name="save_chapter_as_cbz">ذخیره به عنوان فایل آرشیو CBZ</string>
     <string name="split_tall_images">نصف کردن خودکار عکس های بلند</string>
     <string name="publishing_finished">انتشار به پایان رسید</string>
     <string name="local_invalid_format">قالب فصل نامعتبر است</string>
     <string name="cancelled">لغو شد</string>
-    <string name="general_categories">دسته بندی ها</string>
-    <string name="anime_categories">دسته بندی انیمه ها</string>
-</resources>
+    </resources>

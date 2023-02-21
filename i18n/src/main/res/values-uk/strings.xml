@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Ім\'я</string>
-    <string name="categories">Категорії</string>
     <string name="manga">Манґа</string>
     <string name="chapters">Глави</string>
     <string name="track">Відстеження</string>
     <string name="history">Історія</string>
     <string name="label_settings">Налаштування</string>
-    <string name="label_download_queue">Черга завантаження</string>
     <string name="label_library">Бібліотека</string>
     <string name="label_recent_manga">Історія</string>
     <string name="label_recent_updates">Оновлення</string>
@@ -86,8 +84,6 @@
     <string name="pref_library_update_restriction">Обмеження пристрою для автоматичних оновлень</string>
     <string name="charging">Коли заряджається</string>
     <string name="pref_update_only_non_completed">З статусом \"Завершено\"</string>
-    <string name="pref_auto_update_manga_sync">Оновлювати прогрес після прочитання</string>
-    <string name="default_category">Категорія за замовчуванням</string>
     <string name="default_category_summary">Завжди запитувати</string>
     <string name="ext_update">Оновлення</string>
     <string name="ext_install">Встановити</string>
@@ -99,11 +95,6 @@
     <string name="ext_untrusted">Ненадійне</string>
     <string name="ext_uninstall">Видалити</string>
     <string name="untrusted_extension">Ненадійне розширення</string>
-    <string name="untrusted_extension_message">Це розширення було підписано ненадійним сертифікатом та не було активовано.
-\n
-\nЗловмисне розширення может зчитувати будь-які облікові дані для входу, що зберігаються в Tachiyomi, або виконувати довільний код.
-\n
-\nДовіряючи цьому сертифікату, ви приймаєте ці ризики.</string>
     <string name="pref_fullscreen">Повноекранний режим</string>
     <string name="pref_page_transitions">Анімація переходів сторінки</string>
     <string name="pref_double_tap_anim_speed">Швидкість анімації при подвійному натиснені</string>
@@ -148,8 +139,6 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">Директорія завантаження</string>
-    <string name="pref_remove_after_marked_as_read">Після того, як було відмічено прочитаним вручну</string>
-    <string name="pref_remove_after_read">Автоматично видаляти після прочитання</string>
     <string name="custom_dir">Користувацька директорія</string>
     <string name="disabled">Вимкнено</string>
     <string name="last_read_chapter">Остання прочитана глава</string>
@@ -172,18 +161,13 @@
     <string name="backup_choice">Що ви хочете зберегти до резервної копії\?</string>
     <string name="restoring_backup">Відновлення резервної копії</string>
     <string name="creating_backup">Створення резервної копії</string>
-    <string name="pref_clear_chapter_cache">Очистити кеш розділів та епізодів</string>
     <string name="used_cache">Використано: %1$s</string>
     <string name="cache_deleted">Кеш очищено %1$d файлів було видалено</string>
     <string name="cache_delete_error">Виникла помилка при видаленні кешу</string>
     <string name="pref_clear_cookies">Очистити реп`яшки</string>
     <string name="cookies_cleared">Реп`яшки очищено</string>
-    <string name="pref_clear_database">Очистити базу даних</string>
-    <string name="pref_clear_database_summary">Видалити історію для манґи, котра не знаходиться в вашій бібліотеці</string>
-    <string name="clear_database_confirmation">Ви впевнені\? Прочитані розділи і прогрес не бібліотечної манґи будуть втрачені</string>
     <string name="clear_database_completed">Дані видалено</string>
     <string name="pref_refresh_library_tracking">Оновити відстеження</string>
-    <string name="pref_refresh_library_tracking_summary">Оновлює статус, оцінку та прогрес із служб відстеження</string>
     <string name="version">Версія</string>
     <string name="pref_enable_acra">Надсилати звіти про падіння</string>
     <string name="pref_acra_summary">Допомагає виправляти будь-які баги. Особисті дані не передаються</string>
@@ -213,8 +197,6 @@
     <string name="source_not_installed">Джерело не встановлено: %1$s</string>
     <string name="display_mode_chapter">Глава %1$s</string>
     <string name="chapter_downloading_progress">Завантажується (%1$d/%2$d)</string>
-    <string name="download_error">Помилка</string>
-    <string name="download_paused">Пауза</string>
     <string name="show_title">Назва джерела</string>
     <string name="show_chapter_number">Номер глави</string>
     <string name="sort_by_source">За каталогом</string>
@@ -244,8 +226,6 @@
     <string name="error_category_exists">Категорія з таким іменем вже існує!</string>
     <string name="snack_categories_deleted">Категорію видалено</string>
     <string name="dialog_with_checkbox_remove_description">Ця дія видалить дату прочитання глави. Ви впевнені\?</string>
-    <string name="dialog_with_checkbox_reset">Скинути усі розділи для цієї манґи</string>
-    <string name="snack_add_to_library">Додати манґу до бібліотеки\?</string>
     <string name="picture_saved">Картинку збережено</string>
     <string name="custom_filter">Користувацький фільтр</string>
     <string name="set_as_cover">Встановити як обкладинку</string>
@@ -288,7 +268,6 @@
     <string name="download_notifier_unknown_error">Невідома помилка при завантаженні глави</string>
     <string name="download_notifier_text_only_wifi">Немає Wi-Fi підключення</string>
     <string name="download_notifier_no_network">Немає мережевого з`єднання</string>
-    <string name="download_notifier_download_paused_chapters">Завантаження призупинено</string>
     <string name="channel_common">Звичайний</string>
     <string name="pref_read_with_long_tap">Показувати при довгому натисканні</string>
     <string name="action_open_in_web_view">Відкрити у WebView</string>
@@ -340,8 +319,6 @@
     <string name="pref_cutout_short">Відображати вміст обітнутої області</string>
     <string name="information_cloudflare_bypass_failure">Не вдалось обійти Cloudflare</string>
     <string name="information_webview_outdated">Будь ласка, оновіть WebView для кращої сумісності</string>
-    <string name="channel_new_chapters_episodes">Оновлення розділів/епізодів</string>
-    <string name="unlock_app">Відчинити Aniyomi</string>
     <string name="secure_screen_summary">Ховати вміст застосунку при перемиканні програм та блокувати скріншоти</string>
     <string name="pref_category_display">Відображення</string>
     <plurals name="notification_chapters_generic">
@@ -405,7 +382,6 @@
     <string name="add_to_library">Додати до бібліотеки</string>
     <string name="manga_info_collapse">Менше</string>
     <string name="manga_info_expand">Більше</string>
-    <string name="information_webview_required">WebView необхідний для Tachiyomi</string>
     <string name="licenses">Ліцензії з відкритим кодом</string>
     <string name="website">Сторінка</string>
     <string name="pref_confirm_exit">Підтвердити вихід</string>
@@ -488,7 +464,6 @@
     <string name="label_network">Мережа</string>
     <string name="updated_version">Оновлено до v%1$s</string>
     <string name="whats_new">Що новенького</string>
-    <string name="download_insufficient_space">Не вдалося завантажити через нестачу місця для зберігання</string>
     <string name="action_global_search_query">Шукати для \"%1$s\" глобально</string>
     <string name="pref_category_reading_mode">Режим читання</string>
     <string name="pref_category_theme">Тема</string>
@@ -505,8 +480,6 @@
     <string name="channel_progress">Поступ</string>
     <string name="download_notifier_download_finish">Завантаження завершено</string>
     <string name="backup_restore_missing_trackers">Трекери не авторизовано:</string>
-    <string name="pref_remove_bookmarked_chapters">Дозволити видалення розділів/епізодів з закладок</string>
-    <string name="pref_category_delete_chapters">Видалити розділи/епізоди</string>
     <string name="ext_nsfw_warning">Джерела з цього розширення можуть містити контент NSFW (18+)</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Це не заважає неофіційним або потенційно невірним розширенням розміщувати вміст NSFW (18+) у додатку.</string>
@@ -520,13 +493,10 @@
     <string name="chapter_settings_updated">Оновлено налаштування глави за замовчуванням</string>
     <string name="share_page_info">%1$s: %2$s, сторінка %3$d</string>
     <string name="set_chapter_settings_as_default">За замовчуванням</string>
-    <string name="also_set_chapter_settings_for_library">Також застосувати для усієї манґи в моїй бібліотеці</string>
     <string name="confirm_set_chapter_settings">Ви впевнені, що бажаєте зберегти ці налаштування за замовчуванням\?</string>
     <string name="chapter_settings">Налаштування глави</string>
     <string name="downloaded_chapters">Завантажені глави</string>
-    <string name="manga_from_library">Манґа з бібліотеки</string>
     <string name="action_search_settings">Налаштування пошуку</string>
-    <string name="pref_incognito_mode_summary">Призупиняє історію читання</string>
     <string name="pref_incognito_mode">Режим інкогніто</string>
     <string name="pref_clear_history">Очистити історію</string>
     <string name="clear_history_confirmation">Ви впевнені\? Всю історію буде втрачено.</string>
@@ -573,7 +543,6 @@
     <string name="exclude">Виключати: %s</string>
     <string name="include">Включати: %s</string>
     <string name="none">Ніхто</string>
-    <string name="pref_library_update_categories_details">Манґу в виключених категоріях не буде оновлено, навіть якщо вона також знаходиться у включених категоріях.</string>
     <string name="action_sort_chapter_fetch_date">Дата отримання глави</string>
     <string name="action_show_errors">Тицьніть для перегляду подробиць</string>
     <string name="update_check_eol">Ця версія Android більше не підтримується</string>
@@ -606,7 +575,6 @@
     <string name="pref_library_update_refresh_trackers_summary">Оновлювати відстежуване при оновлені бібліотеки</string>
     <string name="pref_library_update_refresh_trackers">Автоматично оновлювати відстежуване</string>
     <string name="restrictions">Обмеження %s</string>
-    <string name="action_display_local_badge">Локальна манґа</string>
     <string name="information_empty_category_dialog">У вашій бібліотеці ще немає категорій.</string>
     <string name="notification_updating">Оновлення бібліотеки... (%1$d/%2$d)</string>
     <string name="tracker_komga_warning">Цей трекер сумісний тільки з джерелом Komga.</string>
@@ -653,7 +621,6 @@
     <string name="help_translate">Допомогти з перекладом</string>
     <string name="ext_installer_pref">Встановлювач</string>
     <string name="ext_installer_shizuku_stopped">Shizuku не запущений</string>
-    <string name="pref_remove_exclude_categories">Виключені категорії</string>
     <string name="action_sort_count">За кількістю манги</string>
     <string name="ext_install_service_notif">Встановлюю розширення…</string>
     <string name="ext_app_info">Про додаток</string>
@@ -663,8 +630,6 @@
     <string name="pref_verbose_logging_summary">Записувати докладні журнали до системного журналу (знижує продуктивність додатку)</string>
     <string name="notification_size_warning">Попередження: великі оновлення можуть призвести до сповільнення джерел або збільшити використання батареї. Тицьніть задля подробиць.</string>
     <string name="channel_app_updates">Оновлення додатку</string>
-    <string name="download_queue_size_warning">Попередження: великий об\'єм завантажень може призвести до сповільнення роботи джерел та/або блокуванню Tachiyomi.</string>
-    <string name="pref_library_update_show_tab_badge">Показувати кількість непрочитаних на значку оновлення</string>
     <string name="ext_update_all">Оновити все</string>
     <string name="backup_info">Ви повинні зберігати декілька резервних копій в інших місцях.</string>
     <string name="label_warning">Попередження</string>
@@ -672,18 +637,15 @@
     <string name="update_72hour">Що 3 дні</string>
     <string name="connected_to_wifi">Тільки через Wi-Fi</string>
     <string name="extension_api_error">Не вдалося отримати список розширень</string>
-    <string name="pref_auto_clear_chapter_cache">Очищати кеш розділів при закритті застосунку</string>
     <string name="clear_database_source_item_count">%1$d небібліотечний комікс у базі даних</string>
     <string name="database_clean">Немає чого очищувати</string>
     <string name="privacy_policy">Політика конфіденційності</string>
     <string name="pref_library_update_manga_restriction">Пропускати оновлення</string>
-    <string name="pref_update_only_completely_read">Є непрочитані розділи</string>
     <string name="save_chapter_as_cbz">Зберегти архів як CBZ</string>
     <string name="library_errors_help">Для допомоги в виправленні помилок оновлення бібліотеки, дивіться %1$s</string>
     <string name="publishing_finished">Публікація завершена</string>
     <string name="cancelled">Відмінено</string>
     <string name="on_hiatus">На хіатусі</string>
-    <string name="action_show_manga">Показати серію</string>
     <string name="action_filter_started">Розпочато</string>
     <string name="action_display_cover_only_grid">Сітка тільки з обкладинками</string>
     <string name="pref_update_only_started">Серія не почата</string>
@@ -712,7 +674,6 @@
     <string name="complete_list">Прочитано</string>
     <string name="on_hold_list">Відкладено</string>
     <string name="unfinished_list">Не закінчено</string>
-    <string name="action_sort_last_manga_update">Останні оновлення манґи</string>
     <string name="action_sort_unread_count">Кількість непрочитаного</string>
     <string name="pref_reset_viewer_flags_summary">Скидує режим читання та орієнтацію всіх серій</string>
     <string name="theme_lavender">Лаванда</string>
@@ -790,6 +751,4 @@
     <string name="unknown_title">Невідомий тайтл</string>
     <string name="updates_last_update_info_just_now">Тільки що</string>
     <string name="error_user_agent_string_invalid">Невірне значення user agent</string>
-    <string name="also_set_episode_settings_for_library">Також застосувати до всіх аніме в моїй бібліотеці</string>
-    <string name="pref_external_downloader_selection">Налаштування застосунку для завантаження</string>
-</resources>
+    </resources>

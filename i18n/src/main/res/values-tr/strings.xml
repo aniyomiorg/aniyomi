@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Ad</string>
-    <string name="categories">Kategoriler</string>
     <string name="manga">Manga</string>
     <string name="chapters">Bölümler</string>
     <string name="track">İzleme</string>
     <string name="history">Geçmiş</string>
     <string name="label_settings">Ayarlar</string>
-    <string name="label_download_queue">İndirme kuyruğu</string>
     <string name="label_library">Kitaplık</string>
     <string name="label_recent_manga">Geçmiş</string>
     <string name="label_recent_updates">Güncellemeler</string>
@@ -86,8 +84,6 @@
     <string name="pref_library_update_restriction">Otomatik güncellemeler aygıt kısıtlamaları</string>
     <string name="charging">Şarj olurken</string>
     <string name="pref_update_only_non_completed">\"Tamamlanan\" durumda olan</string>
-    <string name="pref_auto_update_manga_sync">Okuyunca ilerlemeyi güncelle</string>
-    <string name="default_category">Varsayılan kategori</string>
     <string name="default_category_summary">Her zaman sor</string>
     <string name="ext_update">Güncelle</string>
     <string name="ext_install">Kur</string>
@@ -99,11 +95,6 @@
     <string name="ext_untrusted">Güvenilmeyen</string>
     <string name="ext_uninstall">Kaldır</string>
     <string name="untrusted_extension">Güvenilmeyen uzantı</string>
-    <string name="untrusted_extension_message">Bu uzantı güvenilmeyen bir sertifika ile imzalanmış ve etkinleştirilmedi.
-\n
-\nKötü niyetli bir uzantı, Tachiyomi\'de saklanan her giriş kimlik bilgisini okuyabilir veya rastgele kod yürütebilir.
-\n
-\nBu sertifikaya güvenerek bu riskleri kabul etmiş oluyorsunuz.</string>
     <string name="pref_fullscreen">Tam Ekran</string>
     <string name="pref_page_transitions">Sayfa geçişlerini canladır</string>
     <string name="pref_double_tap_anim_speed">Çift dokunma animasyon hızı</string>
@@ -148,8 +139,6 @@
     <string name="color_filter_b_value">M</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">İndirme konumu</string>
-    <string name="pref_remove_after_marked_as_read">Elle okundu olarak işaretlenince</string>
-    <string name="pref_remove_after_read">Okunduktan sonra otomatik olarak sil</string>
     <string name="custom_dir">Özel konum</string>
     <string name="disabled">Devre dışı</string>
     <string name="last_read_chapter">Son okunan bölüm</string>
@@ -172,18 +161,13 @@
     <string name="backup_choice">Neyi yedeklemek istiyorsunuz?</string>
     <string name="restoring_backup">Yedek geri yükleniyor</string>
     <string name="creating_backup">Yedek oluşturuluyor</string>
-    <string name="pref_clear_chapter_cache">Bölüm önbelleğini temizle</string>
     <string name="used_cache">Kullanılan: %1$s</string>
     <string name="cache_deleted">Önbellek temizlendi. %1$d dosya silindi</string>
     <string name="cache_delete_error">Temizlenirken hata oluştu</string>
     <string name="pref_clear_cookies">Çerezleri temizle</string>
     <string name="cookies_cleared">Çerezler temizlendi</string>
-    <string name="pref_clear_database">Veritabanını temizle</string>
-    <string name="pref_clear_database_summary">Kitaplığınıza kaydedilmeyen girdilerin geçmiş bilgisini sil</string>
-    <string name="clear_database_confirmation">Emin misiniz\? Kitaplıkta olmayan girdilerin okunan bölümleri ve ilerlemesi kaybolacak</string>
     <string name="clear_database_completed">Girdileri silindi</string>
     <string name="pref_refresh_library_tracking">İzlemeyi yenile</string>
-    <string name="pref_refresh_library_tracking_summary">İzleme hizmetlerinden durumu, puanı ve son okunan bölümü günceller</string>
     <string name="version">Sürüm</string>
     <string name="pref_enable_acra">Çökme bildirimi gönder</string>
     <string name="pref_acra_summary">Hataların düzeltilmesine yardımcı olur. Hiçbir hassas veri gönderilmez</string>
@@ -213,8 +197,6 @@
     <string name="source_not_installed">Kaynak kurulmadı: %1$s</string>
     <string name="display_mode_chapter">Bölüm %1$s</string>
     <string name="chapter_downloading_progress">(%1$d/%2$d) indiriliyor</string>
-    <string name="download_error">Hata</string>
-    <string name="download_paused">Duraklatıldı</string>
     <string name="show_title">Kaynak başlığı</string>
     <string name="show_chapter_number">Bölüm numarası</string>
     <string name="sort_by_source">Kaynağa göre</string>
@@ -244,8 +226,6 @@
     <string name="error_category_exists">Bu adla bir kategori zaten var!</string>
     <string name="snack_categories_deleted">Kategoriler silindi</string>
     <string name="dialog_with_checkbox_remove_description">Bu, bu bölümün okunma tarihini kaldıracak. Emin misiniz?</string>
-    <string name="dialog_with_checkbox_reset">Bu girdi için tüm bölümleri sıfırla</string>
-    <string name="snack_add_to_library">Kitaplığa eklensin mi\?</string>
     <string name="picture_saved">Resim kaydedildi</string>
     <string name="custom_filter">Özel filtre</string>
     <string name="set_as_cover">Kapak olarak ayarla</string>
@@ -280,7 +260,6 @@
     <string name="download_notifier_unknown_error">Bölüm, beklenmeyen hata sonucu indirilemedi</string>
     <string name="download_notifier_text_only_wifi">Wi-Fi bağlantısı yok</string>
     <string name="download_notifier_no_network">Ağ bağlantısı yok</string>
-    <string name="download_notifier_download_paused_chapters">İndirme duraklatıldı</string>
     <string name="channel_common">Genel</string>
     <string name="transition_finished">Biten:</string>
     <string name="transition_current">Şu anki:</string>
@@ -338,8 +317,6 @@
     <string name="pref_cutout_short">İçeriği kesme alanında göster</string>
     <string name="information_cloudflare_bypass_failure">Cloudflare bypass edilemedi</string>
     <string name="information_webview_outdated">Daha iyi uyumluluk için lütfen WebView\'i güncelleyin</string>
-    <string name="channel_new_chapters_episodes">Bölüm güncellemeleri</string>
-    <string name="unlock_app">Aniyomi\'yi Aç</string>
     <string name="secure_screen_summary">Güvenli ekran, uygulamalar arasında geçiş yaparken uygulama içeriğini gizler ve ekran görüntüsü alınmasını engeller</string>
     <string name="pref_category_display">Ekran</string>
     <plurals name="notification_chapters_generic">
@@ -398,7 +375,6 @@
     <string name="manga_info_collapse">Daha az</string>
     <string name="manga_info_expand">Daha fazla</string>
     <string name="website">Web sitesi</string>
-    <string name="information_webview_required">WebView, Tachiyomi için gereklidir</string>
     <string name="licenses">Açık kaynak lisansları</string>
     <string name="pref_confirm_exit">Çıkışı doğrula</string>
     <string name="confirm_exit">Çıkmak için tekrar geriye basın</string>
@@ -472,7 +448,6 @@
     <string name="unknown_author">Bilinmeyen yazar</string>
     <string name="updated_version">v%1$s sürümüne güncellendi</string>
     <string name="whats_new">Yenilikler</string>
-    <string name="download_insufficient_space">Saklama alanı az olduğundan bölümler indirilemedi</string>
     <string name="action_sort_date_added">Eklendiği tarih</string>
     <string name="action_global_search_query">\"%1$s\" için genel arama</string>
     <string name="pref_category_reading_mode">Okuma kipi</string>
@@ -487,8 +462,6 @@
     <string name="download_notifier_download_finish">İndirme tamamlandı</string>
     <string name="channel_errors">Hatalar</string>
     <string name="backup_restore_missing_trackers">İzleyiciler giriş yapmadı:</string>
-    <string name="pref_remove_bookmarked_chapters">İşaretli bölümleri silmeye izin ver</string>
-    <string name="pref_category_delete_chapters">Bölümleri sil</string>
     <string name="ext_nsfw_warning">Bu uzantıdaki kaynaklar yetişkin (18+) içerik içerebilir</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Bu, resmi olmayan veya yanlış işaretlenmiş uzantıların, uygulama içinde yetişkin (18+) içeriği göstermesini engellemez.</string>
@@ -499,14 +472,11 @@
     <string name="no_chapters_error">Bölüm bulunamadı</string>
     <string name="chapter_settings_updated">Öntanımlı bölüm ayarları güncellendi</string>
     <string name="set_chapter_settings_as_default">Öntanımlı olarak ayarla</string>
-    <string name="also_set_chapter_settings_for_library">Kitaplığımdaki tüm girdilere de uygula</string>
     <string name="confirm_set_chapter_settings">Bu ayarları öntanımlı olarak kaydetmek istediğinizden emin misiniz\?</string>
     <string name="chapter_settings">Bölüm ayarları</string>
     <string name="share_page_info">%1$s: %2$s, sayfa %3$d</string>
     <string name="action_search_settings">Arama ayarları</string>
     <string name="downloaded_chapters">İndirilen bölümler</string>
-    <string name="manga_from_library">Kitaplıktan</string>
-    <string name="pref_incognito_mode_summary">Okuma geçmişini duraklatır</string>
     <string name="pref_incognito_mode">Gizli kip</string>
     <string name="pref_clear_history">Geçmişi temizle</string>
     <string name="clear_history_confirmation">Emin misiniz\? Tüm geçmiş kaybolacak.</string>
@@ -554,7 +524,6 @@
     <string name="action_sort_chapter_fetch_date">Bölümün alındığı tarih</string>
     <string name="pref_download_new_categories_details">Hariç tutulan kategorilerdeki girdiler, dahil edilen kategorilerde olsa bile indirilmeyecektir.</string>
     <string name="pref_category_auto_download">Otomatik indir</string>
-    <string name="pref_library_update_categories_details">Hariç tutulan kategorilerdeki girdiler, dahil edilen kategorilerde olsa bile güncellenmeyecektir.</string>
     <string name="action_show_errors">Ayrıntıları görmek için dokun</string>
     <string name="update_check_eol">Bu Android sürümü artık desteklenmiyor</string>
     <string name="clipboard_copy_error">Panoya kopyalanamadı</string>
@@ -578,7 +547,6 @@
     <string name="pref_library_update_refresh_trackers_summary">Kitaplığı güncellerken izleyicileri güncelle</string>
     <string name="pref_library_update_refresh_trackers">İzleyicileri otomatik olarak yenile</string>
     <string name="restrictions">Kısıtlamalar: %s</string>
-    <string name="action_display_local_badge">Yerel kaynak</string>
     <string name="on">Açık</string>
     <string name="off">Kapalı</string>
     <string name="error_sharing_cover">Kapak paylaşılamadı</string>
@@ -628,7 +596,6 @@
     <string name="action_track">İzle</string>
     <string name="getting_started_guide">Başlangıç kılavuzu</string>
     <string name="pref_tablet_ui_mode">Tablet arayüzü</string>
-    <string name="pref_remove_exclude_categories">İstenmeyen kategoriler</string>
     <string name="help_translate">Çeviriye yardım edin</string>
     <string name="ext_app_info">Uygulama bilgisi</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Uzantı kurucusu olarak kullanmak için Shizuku\'yu kurun ve başlatın.</string>
@@ -644,12 +611,9 @@
     <string name="pref_verbose_logging">Ayrıntılı günlük kaydı</string>
     <string name="pref_verbose_logging_summary">Ayrıntılı günlükleri sistem günlüğüne yaz (uygulama performansını düşürür)</string>
     <string name="connected_to_wifi">Yalnızca Wi-Fi\'de</string>
-    <string name="download_queue_size_warning">Uyarı: büyük toplu indirmeler kaynakların yavaşlamasına ve/veya Tachiyomi\'yi engellemesine neden olabilir. Daha fazlasını öğrenmek için dokunun.</string>
     <string name="update_72hour">Her 3 günde</string>
-    <string name="pref_library_update_show_tab_badge">Güncellemeler simgesinde okunmayan sayısını göster</string>
     <string name="ext_update_all">Tümünü güncelle</string>
     <string name="channel_app_updates">Uygulama güncellemeleri</string>
-    <string name="pref_auto_clear_chapter_cache">Uygulama kapatıldığında bölüm önbelleğini temizle</string>
     <string name="clear_database_source_item_count">Veri tabanında %1$d kitaplık dışı girdi</string>
     <string name="database_clean">Temizlenecek bir şey yok</string>
     <string name="extension_api_error">Uzantı listesi alınamadı</string>
@@ -662,13 +626,11 @@
     <string name="confirm_manga_add_duplicate">Kitaplığınızda aynı ada sahip ama farklı bir kaynaktan olan bir öge var (%1$s).
 \n
 \nHâlâ devam etmek istiyor musunuz\?</string>
-    <string name="action_show_manga">Girdiyi göster</string>
     <string name="webtoon_side_padding_5">%5</string>
     <string name="library_errors_help">Kitaplık güncelleme hatalarının nasıl düzeltileceği konusunda yardım için bkz. %1$s</string>
     <string name="action_filter_started">Başlanılan</string>
     <string name="action_display_cover_only_grid">Sadece-kapak ızgara</string>
     <string name="action_faq_and_guides">SSS ve Kılavuzlar</string>
-    <string name="pref_update_only_completely_read">Okunmayan bölüm(ler)i olan</string>
     <string name="pref_update_only_started">Bu başlamadı</string>
     <string name="skipped_reason_completed">Manga tamamlandığı için atlandı</string>
     <string name="skipped_reason_not_caught_up">Okunmamış bölümler olduğu için atlandı</string>
@@ -694,7 +656,6 @@
     <string name="battery_not_low">Pil düşük olmadığında</string>
     <string name="source_filter_empty_screen">Kurulu kaynak bulunamadı</string>
     <string name="source_empty_screen">Kaynak bulunamadı</string>
-    <string name="action_sort_last_manga_update">Son güncelleme denetimi</string>
     <string name="action_sort_unread_count">Okunmayan sayısı</string>
     <string name="split_tall_images">Uzun görselleri böl</string>
     <string name="split_tall_images_summary">Okuyucu performansını iyileştirir</string>
@@ -772,90 +733,4 @@
     <string name="information_no_entries_found">Bu kategoride girdi bulunamadı</string>
     <string name="fdroid_warning">F-Droid derlemeleri resmi olarak desteklenmemektedir.
 \nDaha fazla bilgi edinmek için dokunun.</string>
-    <string name="chapters_episodes">Manga ve Anime bölümleri</string>
-    <string name="label_anime_download_queue">Anime İndirme Kuyruğu</string>
-    <string name="anime_categories">Anime Kategorileri</string>
-    <string name="backup_settings_warning">Uyarı: Yedekleme ayarları, izleme şifrelerinizi de saklayacaktır, bu yedekleme dosyasını paylaşmayın!</string>
-    <string name="label_animelib">Anime</string>
-    <string name="general_categories">Kategoriler</string>
-    <string name="manga_anime">Kütüphane girdileri</string>
-    <string name="label_mangalibrary">Manga</string>
-    <string name="episodes">Anime Bölümleri</string>
-    <string name="label_manga">Manga</string>
-    <string name="action_download_unseen">Okunmamış Anime Bölümlerini İndir</string>
-    <string name="action_filter_unseen">İzlenmemiş</string>
-    <string name="action_sort_total_episodes">Toplam Anime Bölüm Sayısı</string>
-    <string name="action_sort_last_seen">Son Görülen</string>
-    <string name="action_sort_last_checked">Son Kontrol Edilen</string>
-    <string name="action_mark_previous_as_seen">Öncekini Görülmüş Olarak İşaretle</string>
-    <string name="action_mark_as_unseen">İzlenmemiş Olarak İşaretle</string>
-    <string name="action_download_unread">Okunmamış Manga Bölümleri İndir</string>
-    <string name="label_mangasources">Manga Kaynakları</string>
-    <string name="action_sort_latest_episode">En Sonuncu Anime Bölümü</string>
-    <string name="action_play_externally">Harici olarak oynat</string>
-    <string name="pref_bottom_nav_no_manga">Manga\'yı Daha Fazla Sekmesine Taşı</string>
-    <string name="label_animesources">Anime Kaynakları</string>
-    <string name="action_sort_episode_fetch_date">Anime Bölümü Çıkış Tarihi</string>
-    <string name="pref_bottom_nav_no_updates">Güncellemeler\'i Daha Fazla Sekmesine Taşı</string>
-    <string name="pref_bottom_nav_no_history">Geçmiş\'i Daha Fazla Sekmesine Taşı</string>
-    <string name="action_sort_last_anime_update">En Sonuncu Anime Güncellemesi</string>
-    <string name="action_sort_unseen_count">İzlenmemiş Sayısı</string>
-    <string name="action_mark_as_seen">İzlenmiş Olarak İşaretle</string>
-    <string name="action_play_internally">Dahili Olarak Oynat</string>
-    <string name="action_previous_episode">Bir Önceki Bölüm</string>
-    <string name="action_screen_fit">Ekrana Sığdırma Modu</string>
-    <string name="action_player_pip">Resim İçinde Resim Modu</string>
-    <string name="action_start_download_internally">Dahili İndirme Yöneticisi Kullan</string>
-    <string name="default_anime_category">Varsayılan anime kategorisi</string>
-    <string name="pref_player_summary">İlerleme kontrolü, dahili oynatıcı, harici oynatıcı</string>
-    <string name="pref_default_intro_length">Giriş kısmı için varsayılan atlama uzunluğu</string>
-    <string name="pref_category_progress">İlerleyiş</string>
-    <string name="pref_intro_length">Giriş uzunluğunu atla</string>
-    <string name="pref_pip_on_exit">Oynatıcıdan Çıkarken Otomatik Olarak Resim İçinde Resim Moduna Geç</string>
-    <string name="pref_player_smooth_seek_summary">Etkinleştirildiğinde, arama ana karelere odaklanmaz, bu da daha yavaş ancak hassas arama sağlar</string>
-    <string name="pref_mpv_conf">Daha fazla oynatıcı ayarı için MPV yapılandırma dosyasını düzenleyin</string>
-    <string name="pref_category_external_player">Harici Oynatıcı</string>
-    <string name="pref_always_use_external_player">Her Zaman Harici Oynatıcıyı Kullan</string>
-    <string name="playertitle">%1$s - %2$s</string>
-    <plurals name="next_unseen_episodes">
-        <item quantity="one">Bir Sonraki İzlenmemiş Bölüm</item>
-        <item quantity="other">Sonraki İzlenmemiş %d Bölüm</item>
-    </plurals>
-    <string name="pref_download_new_episodes">Yeni Anime Bölümlerini İndir</string>
-    <string name="download_ahead_info_anime">Yalnızca kitaplıktaki girişlerde ve mevcut bölüm ile bir sonraki bölüm zaten indirilmişse çalışır</string>
-    <string name="pref_bottom_nav_style">Alt Gezinme Çubuğu Stili</string>
-    <string name="pref_external_player_preference">Harici Oynatıcı Tercihi</string>
-    <string name="pref_player_fullscreen">İçeriği ekran kesitinde göster</string>
-    <string name="pref_preserve_watching_position">İzlenen bölümlerde izleme konumunu koru</string>
-    <string name="pref_use_external_downloader">Anime İçin Her Zaman Harici İndirme Yöneticisi Kullan</string>
-    <string name="pref_category_player">Oynatıcı</string>
-    <string name="action_edit_anime_categories">Anime Kategorilerini Düzenle</string>
-    <string name="action_display_show_continue_reading_button">İzlemeye/okumaya devam et düğmesini göster</string>
-    <string name="action_remove_bookmark_episode">Bölümün Yer İmi İşaretini Kaldır</string>
-    <string name="pref_category_internal_player">Dahili Oynatıcı</string>
-    <string name="pref_skip_length">Uzunluğu geçmek için çift bas</string>
-    <string name="pref_category_player_orientation">Yönlendirme</string>
-    <string name="pref_skip_disable">Devre Dışı</string>
-    <string name="episode_download_progress">%1$d%%</string>
-    <string name="action_show_anime">Anime Göster</string>
-    <string name="unofficial_extension_message_aniyomi">Bu uzantı, resmi Aniyomi uzantıları listesinden değildir.</string>
-    <string name="pref_default_player_orientation">Varsayılan yönlendirme</string>
-    <string name="pref_remove_exclude_categories_prefix">Manga:</string>
-    <string name="pref_external_downloader_selection">İndirme Yöneticisi Uygulama Tercihi</string>
-    <string name="action_next_episode">Bir Sonraki Bölüm</string>
-    <string name="action_edit_manga_categories">Manga Kategorilerini Düzenle</string>
-    <string name="pref_adjust_orientation_video_dimensions">Bir videonun boyutlarına göre yönlendirmeyi ayarlayın</string>
-    <string name="pref_category_external_downloader">Harici İndirme Yöneticisi</string>
-    <string name="action_start_download_externally">Harici İndirme Yöneticisi Kullan</string>
-    <string name="action_bookmark_episode">Bölümü Yer İmi Olarak İşaretle</string>
-    <string name="pref_remove_exclude_categories_anime">Hariç Tutulan Anime Kategorileri</string>
-    <string name="pref_remove_exclude_categories_anime_prefix">Anime:</string>
-    <string name="auto_download_while_watching">İzlerken Otomatik Olarak İndir</string>
-    <string name="action_view_episodes">Anime Bölümlerini Görüntüle</string>
-    <string name="action_display_download_badge_anime">İndirilmiş Anime Bölümleri</string>
-    <string name="pref_animelib_update_categories_details">Hariç tutulan kategorilerdeki animeler, dahil edilen kategorilerde de olsalar dahi güncellenmeyecektir.</string>
-    <string name="action_play">Oynat</string>
-    <string name="action_display_unseen_badge">İzlenmemiş Anime Bölümleri</string>
-    <string name="action_order_by_episode_number">Bölüm Numarasına Göre</string>
-    <string name="pref_player_hide_controls">Oynatıcıyı Açarken Oynatıcı Kontrollerini Gizle</string>
-</resources>
+    </resources>

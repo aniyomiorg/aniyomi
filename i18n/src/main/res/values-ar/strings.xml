@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">الاسم</string>
-    <string name="categories">الفئات</string>
     <string name="manga">مانجا</string>
     <string name="chapters">الفصول</string>
     <string name="track">التعقب</string>
     <string name="history">السجل</string>
     <string name="label_settings">اﻹعدادات</string>
-    <string name="label_download_queue">قائمة التنزيلات</string>
     <string name="label_library">المكتبة</string>
     <string name="label_recent_manga">السجل</string>
     <string name="label_recent_updates">التحديثات</string>
@@ -81,8 +79,6 @@
     <string name="pref_library_update_restriction">تقييد التحديث التلقائي للجهاز</string>
     <string name="charging">عند الشحن</string>
     <string name="pref_update_only_non_completed">مع حالة \"مكتمل\"</string>
-    <string name="pref_auto_update_manga_sync">تحديث تقدّم الفصول بعد القراءة</string>
-    <string name="default_category">الفئة الافتراضية</string>
     <string name="default_category_summary">السؤال دائماً</string>
     <string name="pref_fullscreen">وضع الشاشة الكاملة</string>
     <string name="pref_page_transitions">مؤثرات الانتقال بين الصفحات</string>
@@ -119,8 +115,6 @@
     <string name="rotation_force_portrait">الوضع الرأسي اﻹجباري</string>
     <string name="rotation_force_landscape">الوضع الأفقي الإجباري</string>
     <string name="pref_download_directory">موقع التنزيل</string>
-    <string name="pref_remove_after_marked_as_read">بعد وضع علامة \"مقروءة\" يدوياً</string>
-    <string name="pref_remove_after_read">الحذف تلقائيا بعد القراءة</string>
     <string name="custom_dir">مجلد مخصص</string>
     <string name="disabled">معطل</string>
     <string name="last_read_chapter">آخر فصل مقروء</string>
@@ -148,18 +142,13 @@
     <string name="color_filter_g_value">G</string>
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
-    <string name="pref_clear_chapter_cache">مسح الذاكرة المؤقتة للفصول</string>
     <string name="used_cache">المستخدمة: %1$s</string>
     <string name="cache_deleted">تم محو الذاكرة المؤقتة. %1$d ملف تم محوه</string>
     <string name="cache_delete_error">حدث خطأ أثناء محو ذاكرة التخزين المؤقت</string>
     <string name="pref_clear_cookies">محو ملفات تعريف الارتباط</string>
     <string name="cookies_cleared">تم محو ملفات تعريف الارتباط</string>
-    <string name="pref_clear_database">محو قاعدة البيانات</string>
-    <string name="pref_clear_database_summary">مسح سجلّ المانجا التي ليست محفوظة في مكتبتك</string>
-    <string name="clear_database_confirmation">هل أنت متأكد؟ الفصول المقروءة ومستوى التقدم للمانجا الغير الموجودة في مكتبتك سيتم فقده</string>
     <string name="clear_database_completed">تم حذف المدخلات</string>
     <string name="pref_refresh_library_tracking">تحديث بيانات التتبع</string>
-    <string name="pref_refresh_library_tracking_summary">تحديث الحالة، والتقييم، وآخر فصل: عن طريق خدمات التتبع</string>
     <string name="version">اﻹصدار</string>
     <string name="pref_enable_acra">إرسال تقارير الأعطال</string>
     <string name="pref_acra_summary">هذا يساعد فى حل أي مشاكل. لن يتم إرسال أيّة بيانات حساسة</string>
@@ -183,8 +172,6 @@
     <string name="delete_downloads_for_manga">حذف الفصول المنزلة؟</string>
     <string name="display_mode_chapter">الفصل %1$s</string>
     <string name="chapter_downloading_progress">جاري التنزيل (%1$d/%2$d)</string>
-    <string name="download_error">خطأ</string>
-    <string name="download_paused">متوقّف</string>
     <string name="show_title">عنوان المصدر</string>
     <string name="show_chapter_number">رقم الفصل</string>
     <string name="sort_by_source">حسب المصدر</string>
@@ -208,8 +195,6 @@
     <string name="error_category_exists">توجد بالفعل فئة بهذا الاسم!</string>
     <string name="snack_categories_deleted">تم حذف الفئات</string>
     <string name="dialog_with_checkbox_remove_description">سيؤدي هذا إلى إزالة تاريخ قراءة هذا الفصل. هل أنت متأكد؟</string>
-    <string name="dialog_with_checkbox_reset">إعادة تعيين جميع الفصول لهذه المانجا</string>
-    <string name="snack_add_to_library">إضافة المانجا إلى المكتبة؟</string>
     <string name="picture_saved">تم حفظ الصورة</string>
     <string name="custom_filter">مُرشح مخصص</string>
     <string name="set_as_cover">تعيين كغلاف</string>
@@ -240,7 +225,6 @@
     <string name="download_notifier_unknown_error">فشل تنزيل الفصل بسبب حدوث خطأ غير متوقع</string>
     <string name="download_notifier_text_only_wifi">لا يتوفر اتصال واي فاي</string>
     <string name="download_notifier_no_network">لا يتوفر اتصال بالشبكة</string>
-    <string name="download_notifier_download_paused_chapters">تم إيقاف التنزيل مؤقتاً</string>
     <string name="channel_common">عامٌّ</string>
     <string name="label_migration">نقل</string>
     <string name="label_extensions">الإضافات</string>
@@ -256,11 +240,6 @@
     <string name="ext_untrusted">غير موثوق فيه</string>
     <string name="ext_uninstall">إلغاء التثبيت</string>
     <string name="untrusted_extension">إضافة غير موثوق بها</string>
-    <string name="untrusted_extension_message">هذه اﻹضافة موقعة بشهادة غير موثوق بها ولم يتم تفعيلها.
-\n
-\nيمكن لأي إضافة خبيثة قراءة بيانات اعتماد تسجيل الدخول المخزنة في Tachiyomi أو تنفيذ تعليمات برمجية عشوائية.
-\n
-\nبالثقة في هذه الشهادة تقبل هذه المخاطر.</string>
     <string name="pref_double_tap_anim_speed">سرعة مؤثر النقر المزدوج</string>
     <string name="pager_viewer">عارض الصفحات</string>
     <string name="double_tap_anim_speed_0">لا مؤثرات</string>
@@ -308,7 +287,6 @@
     <string name="action_webview_refresh">تحديث</string>
     <string name="pref_category_library">المكتبة</string>
     <string name="label_more">المزيد</string>
-    <string name="unlock_app">افتح Aniyomi</string>
     <string name="action_move_to_top">نقل إلى الأعلى</string>
     <string name="action_oldest">الأقدم</string>
     <string name="action_newest">الأَحدثْ</string>
@@ -367,9 +345,7 @@
     <string name="action_select_inverse">عكس التحديد</string>
     <string name="confirm_exit">اضغط رجوع مرة أخرى للخروج</string>
     <string name="channel_ext_updates">تحديثات اﻹضافات</string>
-    <string name="channel_new_chapters_episodes">تحديثات الفصول</string>
     <string name="information_webview_outdated">يرجى تحديث تطبيق WebView لتوافق أفضل</string>
-    <string name="information_webview_required">يتطلب Tachiyomi وجود WebView</string>
     <string name="information_cloudflare_bypass_failure">فشل في تجاوز Cloudflare</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="zero">لايوجد تحديث للإضافة</item>
@@ -494,8 +470,6 @@
     <string name="requires_app_restart">يتطلب إعادة تشغيل التطبيق ليتم تفعيله</string>
     <string name="label_network">شبكة الاتصال</string>
     <string name="backup_restore_missing_trackers">أجهزة التتبع التي لم يتم تسجيل الدخول إليها:</string>
-    <string name="pref_remove_bookmarked_chapters">حذف الفصول ذات العلامة المرجعية</string>
-    <string name="pref_category_delete_chapters">حذف الفصول</string>
     <string name="pref_category_reading_mode">وضع القراءة</string>
     <string name="ext_nsfw_warning">بعض المصادر من هذا الامتداد قد تحتوى على محتوى للبالغين (+18)</string>
     <string name="ext_nsfw_short">محتوى غير لائق</string>
@@ -509,7 +483,6 @@
     <string name="channel_complete">مُكتمل</string>
     <string name="channel_progress">التقدّم</string>
     <string name="download_notifier_download_finish">إكتمل التنزيل</string>
-    <string name="download_insufficient_space">تعذّر تنزيل الفصول بسبب انخفاض مساحة التخزين</string>
     <string name="loader_not_implemented_error">لم يتم العثور على المصدر</string>
     <plurals name="num_trackers">
         <item quantity="zero">لا متتبّع</item>
@@ -544,15 +517,12 @@
     <string name="share_page_info">%1$s: %2$s, صفحة %3$d</string>
     <string name="chapter_settings_updated">إعدادات الفصل الإفتراضية المُحدثة</string>
     <string name="set_chapter_settings_as_default">تعيين كافتراضي</string>
-    <string name="also_set_chapter_settings_for_library">تطبيق أيضًا على جميع المانجا في المكتبة</string>
     <string name="confirm_set_chapter_settings">هل أنت متأكد أنك تريد حفظ هذه الإعدادات كافتراضي؟</string>
     <string name="chapter_settings">إعدادات الفصل</string>
     <string name="action_search_settings">إعدادات البحث</string>
     <string name="downloaded_chapters">الفصول المنزّلة</string>
-    <string name="manga_from_library">مانغا من المكتبة</string>
     <string name="clear_history_confirmation">هل أنت متأكد؟ سيتم حذف السجل.</string>
     <string name="clear_history_completed">تم حذف السجل</string>
-    <string name="pref_incognito_mode_summary">إيقاف سجل القراءة</string>
     <string name="pref_incognito_mode">الوضع المخفي</string>
     <string name="pref_clear_history">مسح السجل</string>
     <string name="spen_next_page">الصفحة التالية</string>
@@ -604,7 +574,6 @@
     <string name="exclude">إستثناء: %s</string>
     <string name="include">تضمين: %s</string>
     <string name="none">لا شيء</string>
-    <string name="pref_library_update_categories_details">المانجا في الفئات المستبعدة لن يتم تحديثها حتى و ان كانت أيضا في الفئات المضمنة.</string>
     <string name="action_show_errors">اضغط لإظهار التفاصيل</string>
     <string name="pref_category_auto_download">التنزيل التلقائي</string>
     <string name="pref_download_new_categories_details">المانجا في الفئات المستبعدة لن يتم تنزيلها حتى و ان كانت أيضا في الفئات المضمنة.</string>
@@ -630,7 +599,6 @@
     <string name="pref_library_update_refresh_trackers_summary">تحديث المتعقبات عند تحديث المكتبة</string>
     <string name="pref_library_update_refresh_trackers">تحديث المتعقبات تلقائياً</string>
     <string name="cancel_all_for_series">إلغاء الكل لهذه السلسلة</string>
-    <string name="action_display_local_badge">المانجا المحلية</string>
     <string name="information_empty_category_dialog">ليس لديك اي قوائم بعد.</string>
     <string name="action_start_downloading_now">ابدأ التحميل الآن</string>
     <string name="theme_strawberrydaiquiri">أحمر</string>
@@ -677,7 +645,6 @@
     <string name="getting_started_guide">دليل البدء</string>
     <string name="help_translate">ساعد بالترجمة</string>
     <string name="pref_tablet_ui_mode">واجهة مستخدم الجهاز اللوحي</string>
-    <string name="pref_remove_exclude_categories">فئات المستثناة</string>
     <string name="ext_installer_pref">المثبت</string>
     <string name="action_sort_count">مجموع المانجا</string>
     <string name="label_warning">تحذير</string>
@@ -689,7 +656,6 @@
     <string name="ext_install_service_notif">جارٍ تثبيت الإضافة …</string>
     <string name="pref_verbose_logging_summary">طباعة السجلات المطولة في سجل النظام (يقلل من أداء التطبيق)</string>
     <string name="channel_app_updates">تحديثات التطبيق</string>
-    <string name="pref_library_update_show_tab_badge">إظهار عدد الفصول الغير مقروء على أيقونة التحديثات</string>
     <string name="ext_update_all">تحديث الكل</string>
     <string name="update_72hour">كل ثلاثة ايام</string>
     <string name="connected_to_wifi">فقط على شبكة WI-FI</string>
@@ -701,17 +667,13 @@
     <string name="save_chapter_as_cbz">احفظ كأرشيف CBZ</string>
     <string name="privacy_policy">سياسة الخصوصية</string>
     <string name="pref_library_update_manga_restriction">تخطي تحديث العناوين</string>
-    <string name="pref_update_only_completely_read">مع فصل (فصول) غير مقروءة</string>
     <string name="ext_installer_legacy">قياسي</string>
-    <string name="pref_auto_clear_chapter_cache">امسح ملفات التخزين المؤقت عند إغلاق التطبيق</string>
     <string name="database_clean">لا شئ للتنظيف</string>
     <string name="clear_database_source_item_count">عدد المانغا غير المتواجدة بقاعدة بيانات المكتبه%1$d</string>
     <string name="extension_api_error">فشل الحصول على قائمة الملحقات</string>
     <string name="ext_installer_shizuku_unavailable_dialog">قم بتثبيت \"Shizuku\" لاستخدامه كمثبت ملحق.</string>
-    <string name="download_queue_size_warning">تحذير: التحميلات كبيرة الحجم والعدد يمكن أن تؤدي إلى تباطؤ المصادر و/أو ان تقوم المصادر بحظر Tachiyomi۔ اضغط لمعرفة المزيد۔</string>
     <string name="action_faq_and_guides">الاسئله الشائعه والأدلة</string>
     <string name="webtoon_side_padding_5">5%</string>
-    <string name="action_show_manga">أظهر المانجا</string>
     <string name="action_filter_started">بدأت</string>
     <string name="action_display_cover_only_grid">شبكة بالاغلفة</string>
     <string name="skipped_reason_not_started">تم التخطي لعدم وجود فصول مقروءه</string>
@@ -743,7 +705,6 @@
     <string name="source_filter_empty_screen">لا يوجد مصادر مثبته</string>
     <string name="source_empty_screen">لا يوجد مصدر</string>
     <string name="action_sort_unread_count">المانجا الغير مقروءة</string>
-    <string name="action_sort_last_manga_update">آخر تحديث للمانجا</string>
     <string name="split_tall_images_summary">يحسن أداء القارئ</string>
     <string name="split_tall_images">تقسيم للصور الطويلة</string>
     <string name="download_notifier_split_page_not_found">لم يتم العثور على الصفحة %d أثناء التقسيم</string>

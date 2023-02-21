@@ -76,7 +76,6 @@
     <string name="update_6hour">ପ୍ରତି ୬ ଘଣ୍ଟାରେ</string>
     <string name="update_12hour">ପ୍ରତି ୧୨ ଘଣ୍ଟାରେ</string>
     <string name="update_72hour">ପ୍ରତି ୩ ଦିନରେ</string>
-    <string name="action_show_manga">ମାଙ୍ଗା ଦେଖାଅ</string>
     <string name="action_open_in_web_view">WebViewରେ ଖୋଲନ୍ତୁ</string>
     <string name="tapping_inverted_both">ଉଭୟ</string>
     <string name="kindlish_nav">Kindle ଭଳିଆ</string>
@@ -104,7 +103,6 @@
     <string name="unread">ପଢ଼ି ନାହାଁନ୍ତି</string>
     <string name="reading">ପଢ଼ୁଛନ୍ତି</string>
     <string name="completed">ସାରିଛନ୍ତି</string>
-    <string name="information_webview_required">Tachiyomi ପାଇଁ WebView ଆବଶ୍ୟକ ଅଟେ</string>
     <string name="information_empty_library">ଆପଣଙ୍କ ଲାଇବ୍ରେରୀ ଖାଲି ଅଛି</string>
     <string name="update_check_notification_download_in_progress">ଡାଉନଲୋଡ୍ ହେଉଛି…</string>
     <string name="update_check_notification_update_available">ନୂଆ ସଂସ୍କରଣ ଉପଲବ୍ଧ!</string>
@@ -144,6 +142,5 @@
     <string name="action_rename_category">ବର୍ଗର ନାମ ବଦଳାନ୍ତୁ</string>
     <string name="sort_by_upload_date">ଅପଲୋଡ୍ ତାରିଖ ଅନୁଯାୟୀ</string>
     <string name="action_undo">ପୂର୍ବବତ୍</string>
-    <string name="default_category">ଡିଫଲ୍ଟ ବର୍ଗ</string>
     <string name="action_show_errors">ବିବରଣୀ ଦେଖିବା ପାଇଁ ଟ୍ୟାପ୍ କରନ୍ତୁ</string>
 </resources>

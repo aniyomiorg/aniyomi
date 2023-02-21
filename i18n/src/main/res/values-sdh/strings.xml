@@ -5,9 +5,7 @@
     <string name="name">ناو</string>
     <string name="label_more">زیاتر</string>
     <string name="label_settings">سازکارییەکان</string>
-    <string name="label_download_queue">لیستی داونلۆد</string>
     <string name="history">تۆماری ڕابردوو</string>
-    <string name="unlock_app">بکەرەوەTachiyomi</string>
     <string name="confirm_lock_change">دڵنیابوونەوە تا گۆڕانکاری بکرێت</string>
     <string name="action_mark_previous_as_read">ئاماژەکردنی پێشوو وەک خوێندراو</string>
     <string name="action_bookmark">نیشانکردنی چاپتەر</string>
@@ -27,7 +25,6 @@
     <string name="manga">مانگا</string>
     <string name="chapters">چاپتەرەکان</string>
     <string name="track">بەدواداچوون</string>
-    <string name="categories">کاتیگۆرییەکان</string>
     <string name="action_settings">سازکارییەکان</string>
     <string name="action_menu">لیست</string>
     <string name="action_filter_downloaded">داونلۆد کراو</string>
@@ -103,7 +100,6 @@
     <string name="action_retry">دووبارەکردنەوە</string>
     <string name="action_display">پیشاندان</string>
     <string name="action_display_list">لیست</string>
-    <string name="action_display_local_badge">مانگای ناوخۆیی</string>
     <string name="action_display_language_badge">زمان</string>
     <string name="action_display_show_tabs">پیشاندانی خشتەبەندی کاتیگۆرییەکان</string>
     <string name="action_order_by_chapter_number">بە پێی ژمارەی چاپتەر</string>
@@ -214,7 +210,6 @@
     <string name="add_to_library">کردنە ناو کۆکراوەکان</string>
     <string name="notification_first_add_to_library">تکایە مانگا بۆ کۆکراوەکان زیاد بکە پێش کردنی ئەمە</string>
     <string name="webtoon_side_padding_20">20%</string>
-    <string name="snack_add_to_library">زیادکردنی مانگا بۆ کۆکراوەکان؟</string>
     <string name="pref_download_directory">شوێنی داونلۆد</string>
     <string name="ext_downloading">داونلۆدکردن</string>
     <string name="label_downloaded_only">تەنها داونلۆدکراوەکان</string>
@@ -257,8 +252,6 @@
     <string name="pref_always_show_chapter_transition">هەمیشە تێپەڕینی چاپتەر پیشان بدە</string>
     <string name="off">کوژاوە</string>
     <string name="on">پێکراو</string>
-    <string name="action_show_manga">نیشاندانی مانگا</string>
-    <string name="action_sort_last_manga_update">کۆتانوێکردنەوەی مانگا</string>
     <string name="action_sort_unread_count">ژمارەی نەخوێندراوە</string>
     <string name="delete_category">ڕەشکردنەوەی بەش</string>
     <string name="action_filter_started">دەستپێکراو</string>

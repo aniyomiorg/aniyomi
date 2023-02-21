@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="categories">Categories</string>
+    <string name="label_download_queue">Cua de baixades</string>
+    <string name="unlock_app">Desbloca Aniyomi</string>
+    <string name="action_sort_last_manga_update">Darrera comprovació d\'actualitzacions</string>
+    <string name="action_show_manga">Mostra l\'element</string>
+    <string name="action_display_local_badge">Font local</string>
+    <string name="pref_update_only_completely_read">Amb capítols no llegits</string>
+    <string name="pref_library_update_show_tab_badge">Mostra el comptador de no llegits a la icona d\'actualitzacions</string>
+    <string name="default_category">Categoria per defecte</string>
+    <string name="pref_library_update_categories_details">Els elements de les categories excloses no s\'actualitzaran encara que també siguin a les categories incloses.</string>
+    <string name="untrusted_extension_message">Aquesta extensió s\'ha signat amb un certificat que no és de confiança i no s\'ha activat.
+\n
+\nUna extensió maliciosa podria llegir qualsevol credencial desada al Tachiyomi o executar codi arbitrari.
+\n
+\nSi confieu en aquest certificat, accepteu aquests riscos.</string>
+    <string name="pref_category_delete_chapters">Suprimeix capítols</string>
+    <string name="pref_remove_after_marked_as_read">Després de marcar com a llegit de manera manual</string>
+    <string name="pref_remove_after_read">Suprimeix automàticament després de llegir</string>
+    <string name="pref_remove_bookmarked_chapters">Permet la supressió dels capítols marcats</string>
+    <string name="pref_remove_exclude_categories">Categories excloses</string>
+    <string name="pref_auto_update_manga_sync">Actualitza el progrés després de llegir</string>
+    <string name="pref_clear_chapter_cache">Buida la memòria cau de capítols</string>
+    <string name="pref_auto_clear_chapter_cache">Buida la memòria cau de capítols en tancar l\'aplicació</string>
+    <string name="pref_clear_database">Buida la base de dades</string>
+    <string name="pref_clear_database_summary">Suprimeix l\'historial dels elements que no siguin a la biblioteca</string>
+    <string name="clear_database_confirmation">N\'esteu segur\? Es perdrà el progrés i els capítols llegits dels elements que no siguin a la biblioteca</string>
+    <string name="pref_refresh_library_tracking_summary">Actualitza l\'estat, la puntuació i el darrer capítol llegit dels serveis de seguiment</string>
+    <string name="pref_incognito_mode_summary">Pausa l\'historial de lectura</string>
+    <string name="manga_from_library">De la biblioteca</string>
+    <string name="snack_add_to_library">Voleu afegir-lo a la biblioteca\?</string>
+    <string name="download_error">Error</string>
+    <string name="download_paused">Pausat</string>
+    <string name="also_set_chapter_settings_for_library">Aplica-ho també a tots els elements de la biblioteca</string>
+    <string name="dialog_with_checkbox_reset">Reinicia tots els capítols d\'aquest element</string>
+    <string name="download_insufficient_space">No s\'han pogut baixar els capítols perquè hi ha poc espai d\'emmagatzematge</string>
+    <string name="download_queue_size_warning">Advertència: Les baixades massa grosses poden fer que les fonts es tornin més lentes i/o bloquin el Tachiyomi. Premeu per a obtenir-ne més informació.</string>
+    <string name="information_webview_required">El Tachiyomi requereix el WebView</string>
+    <string name="download_notifier_download_paused_chapters">Baixada pausada</string>
+    <string name="channel_new_chapters_episodes">Novetats de capítols</string>
+    </resources>

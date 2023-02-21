@@ -79,12 +79,10 @@
     <string name="action_menu">မီနူး</string>
     <string name="action_settings">ဆက်တင်များ</string>
     <string name="confirm_exit">ထွက်ရန်နောက်တစ်ကြိမ်ထပ်နှိပ်ပါ</string>
-    <string name="unlock_app">Aniyomi ကိုဖွင့်ပါ</string>
     <string name="history">မှတ်တမ်း</string>
     <string name="track">ခြေရာခံမှု</string>
     <string name="chapters">အပိုင်းများ</string>
     <string name="manga">Manga</string>
-    <string name="categories">အမျိုးအစားများ</string>
     <string name="information_empty_category">အမျိုးအစားများမရှိသေးပါ။သင့်စာအုပ်စင်ကို အမျိုးအစားခွဲခြားမှုပြုလုပ်ရန် အပေါင်းခလုပ်ကိုနှိပ်ပါ။</string>
     <string name="information_empty_library">စာအုပ်စင်မှာဘာမှမရှိပါ။ရှာဖွေခြင်းသို့သွားကာ စာစဉ်များထည့်လိုက်ပါ။</string>
     <string name="information_no_recent_manga">လတ်တလောဖတ်ထားသည်များမရှိပါ</string>
@@ -99,7 +97,6 @@
     <string name="label_recent_manga">မှတ်တမ်း</string>
     <string name="label_recent_updates">အပ်ဒိတ်များ</string>
     <string name="label_library">စာအုပ်စင်</string>
-    <string name="label_download_queue">ဒေါင်းလုဒ်အစဉ်</string>
     <string name="label_settings">ဆက်တင်များ</string>
     <string name="label_more">နောက်ထပ်</string>
     <string name="name">အမည်</string>
@@ -116,7 +113,6 @@
     <string name="action_webview_forward">ရှေ့သို့</string>
     <string name="action_webview_back">နောက်သို့</string>
     <string name="updating_library">Library ကိုအပ်ဒိတ်လုပ်နေပါတယ်</string>
-    <string name="default_category">ပုံသေအမျိုးအစား</string>
     <string name="no_chapters_error">မည်သည့်အပိုင်းမျှမရှိပါ</string>
     <string name="lock_when_idle">အသုံးမပြုချိန်တွင်သော့ခတ်မည်</string>
     <string name="completed">ထုတ်ဝေမှုပြီးစီး</string>

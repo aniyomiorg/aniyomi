@@ -17,15 +17,12 @@
     <string name="label_migration">ቅብብል</string>
     <string name="label_backup">መሐለውታን መመለሲን</string>
     <string name="label_sources">ፍልፍላት</string>
-    <string name="categories">ምድባት</string>
     <string name="history">መዝገብ</string>
     <string name="label_recent_manga">መዝገብ</string>
     <string name="label_recent_updates">ምምሕያሽ</string>
     <string name="label_library">ቤተ ንባብ</string>
-    <string name="label_download_queue">ምውራድ ሰልፊ</string>
     <string name="label_settings">ስንድኦት</string>
     <string name="label_more">ተወሳኺ</string>
-    <string name="unlock_app">ታቺዮሚ ን ይክፈቱ</string>
     <string name="track">ምክትታል</string>
     <string name="chapters">ምዕራፋት</string>
     <string name="manga">ማንጋ</string>

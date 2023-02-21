@@ -5,12 +5,10 @@
     <string name="action_menu">Meniu</string>
     <string name="action_settings">Nustatymai</string>
     <string name="confirm_exit">Paspauskite atgal, kad išeitumėte</string>
-    <string name="unlock_app">Atrakinkite Anijomi</string>
     <string name="history">Istorija</string>
     <string name="track">Sekimas</string>
     <string name="chapters">Skyriai</string>
     <string name="manga">Manga</string>
-    <string name="categories">Kategorijos</string>
     <string name="information_empty_category">Neturite jokių kategorijų. Paspauskite pliuso simbolį, kad sukurtumėte kategoriją jūsų bibliotekos organizavimui.</string>
     <string name="information_empty_library">Jūsų biblioteka tuščia</string>
     <string name="information_no_recent_manga">Nėra neseniai skaitytų</string>
@@ -25,12 +23,10 @@
     <string name="label_recent_manga">Istorija</string>
     <string name="label_recent_updates">Naujiniai</string>
     <string name="label_library">Biblioteka</string>
-    <string name="label_download_queue">Atsisiuntimų sąrašas</string>
     <string name="label_settings">Nustatymai</string>
     <string name="label_more">Daugiau</string>
     <string name="name">Vardas</string>
     <string name="default_category_summary">Visada klausti</string>
-    <string name="default_category">Numatyta kategorija</string>
     <string name="pref_library_update_refresh_trackers_summary">Naujinti seklius kai biblioteka naujinama</string>
     <string name="pref_library_update_refresh_trackers">Automatiškai naujinti seklius</string>
     <string name="pref_library_update_refresh_metadata_summary">Tikrinti naujus viršelius ir informaciją kai biblioteka naujinama</string>
@@ -136,7 +132,6 @@
     <string name="action_disable">Išjungti</string>
     <string name="action_display_show_number_of_items">Rodyti įrašų skaičių</string>
     <string name="action_display_show_tabs">Rodyti kategorijų korteles</string>
-    <string name="action_display_local_badge">Vietinis šaltinis</string>
     <string name="action_display_unread_badge">Neperskaityti skyriai</string>
     <string name="action_display_download_badge">Atsisiųsti skyriai</string>
     <string name="action_display_list">Sąrašas</string>
@@ -212,11 +207,6 @@
     <string name="ext_nsfw_short">18+</string>
     <string name="unofficial_extension_message">Šis plėtinys nėra iš oficialaus Tachiyomi sąrašo.</string>
     <string name="obsolete_extension_message">Šis plėtinys nebėra prieinamas. Plėtinys gali veikti netinkamai arba sukelti problemas programėlėje. Rekomenduojama išdiegti plėtinį.</string>
-    <string name="untrusted_extension_message">Šis plėtinys buvo pasirašytas nepatikimu sertifikatu ir nebuvo aktyvuotas.
-\n
-\nPlėtinys, su negeranoriškais ketinimais, gali perskaityti prisijungimo duomenys patalpintus Tachiyomi arba gali paleisti kenkėjišką kodą.
-\n
-\nJūs priimate šias rizikas pasitikėdami sertifikatu.</string>
     <string name="untrusted_extension">Nepatikimas plėtinys</string>
     <string name="ext_app_info">Aplikacijos informacija</string>
     <string name="ext_uninstall">Šalinti</string>
@@ -234,7 +224,6 @@
     <string name="include">Įtraukti: %s</string>
     <string name="none">Nėra</string>
     <string name="all">Visi</string>
-    <string name="pref_library_update_categories_details">Įrašai, kurie yra įtraukti į neįtraukiamas kategorijas, nebus atnaujinami, net jei yra įtraukti į įtrauktąsias kategorijas.</string>
     <plurals name="num_categories">
         <item quantity="one">%d kategorija</item>
         <item quantity="few">%d kategorijos</item>
@@ -246,11 +235,9 @@
     <string name="white_background">Balta</string>
     <string name="nav_zone_right">Dešinė</string>
     <string name="left_to_right_viewer">Iš kairės į dešinę</string>
-    <string name="pref_library_update_show_tab_badge">Rodyti neperskaitytų skyrių skaičių prie \"Naujiniai\" ikonos</string>
     <string name="vertical_viewer">Vertikalus</string>
     <string name="webtoon_viewer">Webtoon</string>
     <string name="ext_installer_pref">Diegimo programa</string>
-    <string name="pref_update_only_completely_read">Kai yra neskaitytų skyrių</string>
     <string name="pref_update_only_started">Kai dar neprasidėjo</string>
     <string name="ext_install_service_notif">Instaliuojamas papildinys…</string>
     <string name="pref_keep_screen_on">Palikti ekraną įjungta</string>
@@ -296,7 +283,6 @@
     <string name="filter_mode_lighten">Pašviesinti</string>
     <string name="l_nav">L formos</string>
     <string name="kindlish_nav">Taip pat kaip Kindle</string>
-    <string name="action_show_manga">Rodyti įrašą</string>
     <string name="pref_custom_color_filter">Pasirinktinas spalvų filtras</string>
     <string name="filter_mode_multiply">Multiplikuoti</string>
     <string name="filter_mode_screen">Ekranas</string>
@@ -344,7 +330,6 @@
     <string name="pref_low">Žemas</string>
     <string name="pref_download_new">Atsisiųsti naujus skyrius</string>
     <string name="save_chapter_as_cbz">Išsaugoti kaip CBZ archyvą</string>
-    <string name="pref_auto_update_manga_sync">Po perskaitymo atnaujinti statusą</string>
     <string name="pref_search_pinned_sources_only">Įtraukti tik prisegtus šaltinius</string>
     <string name="backup_restore_missing_sources">Trūksta šaltinių:</string>
     <string name="webtoon_side_padding_5">5%</string>
@@ -352,7 +337,6 @@
     <string name="services">Paslaugos</string>
     <string name="second_to_last">Priešpaskutinis perskaitytas skyrius</string>
     <string name="fourth_to_last">Ketvirtas skyrius nuo paskutinio skaityto</string>
-    <string name="pref_remove_bookmarked_chapters">Leisti naikinti žymėtus skyrius</string>
     <string name="fifth_to_last">Penktas nuo paskutinio skaityto</string>
     <string name="pref_category_auto_download">Automatinis atsisiuntimas</string>
     <string name="pref_backup_service_category">Automatinės atsarginės kopijos</string>
@@ -360,10 +344,7 @@
     <string name="backup_created">Sukurta atsarginė kopija</string>
     <string name="pref_high">aukštas</string>
     <string name="pref_download_directory">Atsisiuntimo vieta</string>
-    <string name="pref_category_delete_chapters">Naikinti skyrius</string>
     <string name="pref_lowest">Mažiausias</string>
-    <string name="pref_remove_after_marked_as_read">Rankinių būdu pažymėtas, kaip skaitytas</string>
-    <string name="pref_remove_after_read">Perskaičius automatiškai naikinti</string>
     <string name="webtoon_side_padding_0">Ne vienas</string>
     <string name="enhanced_services">Patobulintos paslaugos</string>
     <string name="pref_restore_backup_summ">Atkurti biblioteką iš atsarginės failo kopijos</string>
@@ -376,7 +357,6 @@
     <string name="pref_create_backup">Kurti atsarginę kopiją</string>
     <string name="pref_restore_backup">Atkurti atsarginę kopiją</string>
     <string name="webtoon_side_padding_10">10%</string>
-    <string name="pref_remove_exclude_categories">Neįtrauktos kategorijos</string>
     <string name="custom_dir">Pasirinktina vieta</string>
     <string name="last_read_chapter">Paskiausiai skaitytas skyrius</string>
     <string name="pref_download_new_categories_details">Įrašai neįtrauktose kategorijose nebus atsisiųsti, net jei jie taip pat yra įtraukti į kategorijas.</string>
@@ -414,11 +394,9 @@
     <string name="notification_first_add_to_library">Prieš atlikdami šį veiksmą, pridėkite įrašą į savo biblioteką</string>
     <string name="skipped_reason_not_started">Praleista, nes nėra perskaitytų skyrių</string>
     <string name="information_cloudflare_bypass_failure">Nepavyko apeiti \"Cloudflare\"</string>
-    <string name="information_webview_required">\"WebView\" reikalingas \"Tachiyomi\"</string>
     <string name="loader_not_implemented_error">Šaltinis nerastas</string>
     <string name="migration_selection_prompt">Pasirinkite šaltinį, iš kurio norite perkelti</string>
     <string name="migrate">Perkelti</string>
-    <string name="download_insufficient_space">Nepavyko atsisiųsti skyrių dėl mažos vietos saugykloje</string>
     <string name="library_errors_help">Jei reikia pagalbos, kaip ištaisyti bibliotekos naujinimo klaidas, žr. %1$s</string>
     <string name="transition_pages_error">Nepavyko įkelti puslapių: %1$s</string>
     <string name="transition_previous">Ankstesnis:</string>
@@ -442,17 +420,13 @@
     <string name="notification_chapters_multiple">Skyriai %1$s</string>
     <string name="notification_cover_update_failed">Nepavyko atnaujinti viršelio</string>
     <string name="error_no_match">Nerasta atitikmenų</string>
-    <string name="dialog_with_checkbox_reset">Iš naujo nustatyti visus šio įrašo skyrius</string>
     <string name="cover_updated">Atnaujintas viršelis</string>
     <string name="logout_success">Dabar esate atsijungęs</string>
     <string name="set_as_cover">Nustatyti kaip viršelį</string>
-    <string name="download_paused">Pristabdyta</string>
     <string name="source_not_installed">Šaltinis neįdiegtas: %1$s</string>
-    <string name="snack_add_to_library">Pridėti į biblioteką\?</string>
     <string name="track_type">Тipas</string>
     <string name="track_started_reading_date">Pradžios data</string>
     <string name="display_mode_chapter">Skyrius %1$s</string>
-    <string name="download_error">Klaida</string>
     <string name="login_success">Prisijungęs</string>
     <string name="unknown_error">Nežinoma klaida</string>
     <string name="downloaded_chapters">Atsisiųsti skyriai</string>
@@ -464,7 +438,6 @@
     <string name="track_finished_reading_date">Baigimo data</string>
     <string name="show_title">Šaltinio pavadinimas</string>
     <string name="local_source_badge">Vietinis</string>
-    <string name="manga_from_library">Iš bibliotekos</string>
     <string name="myanimelist_relogin">Prašome dar kartą prisijungti prie MAL</string>
     <string name="dialog_with_checkbox_remove_description">Tai pašalins šio skyriaus skaitymo datą. Ar tu tuo tikras\?</string>
     <string name="logout_title">Atsijungti nuo %1$s\?</string>
@@ -472,7 +445,6 @@
     <string name="logout">Atsijungti</string>
     <string name="delete_category">Ištrinti kategoriją</string>
     <string name="action_sort_unread_count">Neskaitytų skaičius</string>
-    <string name="action_sort_last_manga_update">Paskutinis atnaujinimo patikrinimas</string>
     <string name="delete_category_confirmation">Ar tikrai norite ištrinti kategoriją \"%s\"\?</string>
     <string name="theme_lavender">Levandos</string>
     <string name="action_close">Uždaryti</string>
@@ -501,7 +473,6 @@
     <string name="pref_create_backup_summ">Galima naudoti dabartinei bibliotekai atkurti</string>
     <string name="pref_webtoon_side_padding">Šoninis spaudinėjimas</string>
     <string name="empty_backup_error">Nėra bibliotekos įrašų, kurių atsargines kopijas būtų galima sukurti</string>
-    <string name="clear_database_confirmation">Ar tikrai\? Perskaityti skyriai ir nebibliotekinių įrašų progresas bus prarastas</string>
     <string name="pref_dump_crash_logs_summary">Įrašyti strigčių žurnalus į failą, kad būtų galima juos bendrinti su kūrėjais</string>
     <string name="creating_backup">Atsarginės kopijos kūrimas</string>
     <string name="pref_dns_over_https">DNS per HTTPS (DoH)</string>
@@ -515,7 +486,6 @@
     </plurals>
     <string name="appwidget_updates_description">Peržiūrėkite neseniai atnaujintus bibliotekos įrašus</string>
     <string name="cache_deleted">Talpykla išvalyta. %1$d failai buvo ištrinti</string>
-    <string name="pref_clear_database">Išvalyti duomenų bazę</string>
     <string name="file_picker_error">Nerandama failų rinkiklio programos</string>
     <string name="update_check_open">Atidaryti „GitHub“ svetainėje</string>
     <string name="channel_app_updates">Programėlių atnaujinimai</string>
@@ -533,7 +503,6 @@
     <string name="label_network">Tinklas</string>
     <string name="backup_choice">Ką norite įtraukti į atsarginę kopiją\?</string>
     <string name="clear_database_completed">Ištrinti įrašai</string>
-    <string name="pref_clear_chapter_cache">Išvalyti skyriaus talpyklą</string>
     <string name="used_cache">Naudota: %1$s</string>
     <string name="battery_optimization_setting_activity_not_found">Nepavyko atidaryti įrenginio nustatymų</string>
     <string name="empty_screen">Na, tai nepatogu</string>
@@ -544,7 +513,6 @@
     <string name="restore_in_progress">Atkūrimas jau vyksta</string>
     <string name="restoring_backup">Atkuriama atsarginė kopija</string>
     <string name="requires_app_restart">Kad įsigaliotų, reikia iš naujo paleisti programą</string>
-    <string name="pref_refresh_library_tracking_summary">Atnaujina būseną, įvertinimą ir paskutinį perskaitytą skyrių iš sekimo paslaugų</string>
     <string name="pref_reset_viewer_flags">Iš naujo nustatyti kiekvienos serijos skaitytuvo nustatymus</string>
     <string name="pref_dump_crash_logs">Išmeskite strigčių žurnalus</string>
     <string name="download_queue_error">Nepavyko atsisiųsti skyrių. Galite pabandyti dar kartą atsisiųsti</string>
@@ -567,7 +535,6 @@
     <string name="download_notifier_text_only_wifi">Nėra „Wi-Fi“ ryšio</string>
     <string name="channel_progress">Progresas</string>
     <string name="backup_in_progress">Atsarginė jau kopija kuriama</string>
-    <string name="download_queue_size_warning">Įspėjimas: dėl didelių masinių atsisiuntimų šaltiniai gali tapti lėtesni ir (arba) jie blokuoti \"Tachiyomi\". Bakstelėkite , jei norite sužinoti daugiau.</string>
     <string name="update_check_fdroid_migration_info">Nauja versija pasiekiama oficialiuose leidiniuose. Bakstelėkite , kad sužinotumėte, kaip pereiti iš neoficialių \"F-Droid\" leidinių.</string>
     <string name="pref_disable_battery_optimization">Išjungti akumuliatoriaus optimizavimą</string>
     <string name="restore_completed">Atkūrimas baigtas</string>
@@ -584,8 +551,6 @@
     <string name="channel_new_chapters">Skyriaus atnaujinimai</string>
     <string name="spen_next_page">Kitas puslapis</string>
     <string name="pref_clear_cookies">Išvalyti slapukus</string>
-    <string name="pref_auto_clear_chapter_cache">Išvalyti skyriaus talpyklą uždarius programą</string>
-    <string name="pref_clear_database_summary">Ištrinkite įrašų istoriją, kurie nėra išsaugoti jūsų bibliotekoje</string>
     <string name="backup_restore_content_full">Atsarginės failo kopijos duomenys bus atkurti.
 \n
 \nNorėdami jais naudotis, turėsite įdiegti trūkstamus plėtinius ir po to prisijungti prie stebėjimo paslaugų.</string>
@@ -679,12 +644,10 @@
     <string name="on_hiatus">Publikavimas pristabdytas</string>
     <string name="sort_by_number">Pagal skyriaus numerį</string>
     <string name="manga_info_expand">Daugiau</string>
-    <string name="also_set_chapter_settings_for_library">Taip pat taikyti visiems mano bibliotekoje esantiems įrašams</string>
     <string name="set_chapter_settings_as_default">Nustatyti kaip numatytąjį</string>
     <string name="manga_tracking_tab">Sekimas</string>
     <string name="licenses">Atvirojo kodo licencijos</string>
     <string name="label_downloaded_only">Rodyti tik atsisiųstus</string>
-    <string name="pref_incognito_mode_summary">Pristabdo skaitymo istoriją</string>
     <string name="notification_incognito_text">Išjungti inkognito režimą</string>
     <string name="downloaded_only_summary">Filtruoja visus įrašus jūsų bibliotekoje</string>
     <string name="username">Vartotojo vardas</string>

@@ -10,7 +10,6 @@
     <string name="label_recent_manga">చరిత్ర</string>
     <string name="label_recent_updates">నవీకరణలు</string>
     <string name="label_library">గ్రంథాలయము</string>
-    <string name="label_download_queue">దిగుమతి వరుస</string>
     <string name="label_settings">అమరికలు</string>
     <string name="label_more">మరింత</string>
     <string name="name">పేరు</string>
@@ -47,12 +46,10 @@
     <string name="action_menu">వివరాలపట్టిక</string>
     <string name="action_settings">అమరికలు</string>
     <string name="confirm_exit">నిష్క్రమించడానికి బ్యాక్ చిహ్నాన్ని మళ్ళీ నొక్కండి</string>
-    <string name="unlock_app">టచియోమిని తెరవండి</string>
     <string name="history">చరిత్ర</string>
     <string name="track">కంట కనిపెట్టుట</string>
     <string name="chapters">అధ్యాయాలు</string>
     <string name="manga">మాంగా</string>
-    <string name="categories">విభాగములు</string>
     <string name="information_empty_category">మీ దగ్గర ఏ విభాగములు లేవు। మీ గ్రంథాలయాన్ని సరికూర్చుకోడానికి ప్లస్ చిహ్నాన్ని నొక్కి కొత్త దాన్ని సృష్టించుకోండి॥</string>
     <string name="information_empty_library">మీ గ్రంథాలయము ఖాళీగా ఉన్నది</string>
     <string name="information_no_recent_manga">ఈ మధ్య మీరు ఏమి చదవలేదు</string>
@@ -83,7 +80,6 @@
     <string name="action_migrate">వలస</string>
     <string name="action_display_mode">ప్రదర్శన ప్రణాలికము</string>
     <string name="action_display_unread_badge">చదవని అధ్యాయములు</string>
-    <string name="action_display_local_badge">స్థానిక మాంగా</string>
     <string name="action_start">మొదలు పెట్టుము</string>
     <string name="action_resume">పునఃప్రారంభించుము</string>
     <string name="action_open_in_web_view">\"వెబ్ వ్యూ\" లో తెరుము</string>

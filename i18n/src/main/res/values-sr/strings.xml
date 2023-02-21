@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Име</string>
-    <string name="categories">Kategorije</string>
     <string name="manga">Manga</string>
     <string name="chapters">Poglavlja</string>
     <string name="track">Праћење</string>
     <string name="history">Историја</string>
     <string name="label_settings">Подешавања</string>
-    <string name="label_download_queue">Редослед преузимања</string>
     <string name="label_library">Колекција</string>
     <string name="label_recent_manga">Историја</string>
     <string name="label_recent_updates">Ново</string>
@@ -86,8 +84,6 @@
     <string name="pref_library_update_restriction">Ограничења уређаја за аутоматска ажурирања</string>
     <string name="charging">Пуњење</string>
     <string name="pref_update_only_non_completed">Sa završenim \"Statusom\"</string>
-    <string name="pref_auto_update_manga_sync">Ажурирај пратиоца након читања</string>
-    <string name="default_category">Podrazumevana kategorija</string>
     <string name="default_category_summary">Увек питај</string>
     <string name="ext_update">Ажурирај</string>
     <string name="ext_install">Инсталирај</string>
@@ -99,11 +95,6 @@
     <string name="ext_untrusted">Неповерљиво</string>
     <string name="ext_uninstall">Обриши</string>
     <string name="untrusted_extension">Непоуздан додатак</string>
-    <string name="untrusted_extension_message">Овај додатак је потписан неповерљивим сертификатом и због тога није активиран.
-\n
-\nЗлонамерни додаци могу читати податке о пријави које чува Tachiyomi или извршити произвољни ко̂д.
-\n
-\nВерујући овом сертификату прихватате наведене ризике.</string>
     <string name="pref_fullscreen">Цео екран</string>
     <string name="pref_page_transitions">Анимације при промени странице</string>
     <string name="pref_double_tap_anim_speed">Брзина анимације двоклика</string>
@@ -148,8 +139,6 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">Локација преузимања</string>
-    <string name="pref_remove_after_marked_as_read">Када су означена као прочитана</string>
-    <string name="pref_remove_after_read">Аутоматски обриши након читања</string>
     <string name="custom_dir">Друга локација</string>
     <string name="disabled">Онемогућено</string>
     <string name="last_read_chapter">Последње прочитано поглавље</string>
@@ -172,18 +161,13 @@
     <string name="backup_choice">Шта све желите да буде у резервној копији\?</string>
     <string name="restoring_backup">Враћа се на резервну копију</string>
     <string name="creating_backup">Прави се резервна копија</string>
-    <string name="pref_clear_chapter_cache">Испразни кеш меморију поглавља</string>
     <string name="used_cache">Искоришћено: %1$s</string>
     <string name="cache_deleted">Кеш је испражњен. Уклоњених фајлова: %1$d</string>
     <string name="cache_delete_error">Došlo je do greške prilikom brisanja</string>
     <string name="pref_clear_cookies">Избриши колачиће</string>
     <string name="cookies_cleared">Колачићи су избрисани</string>
-    <string name="pref_clear_database">Избриши базу података</string>
-    <string name="pref_clear_database_summary">Избриши историју манги које нису сачуване у колекцији</string>
-    <string name="clear_database_confirmation">Да ли сте сигурни\? Изгубићете прочитана поглавља и статус манги које нису у колекцији</string>
     <string name="clear_database_completed">Unosi izbrisani</string>
     <string name="pref_refresh_library_tracking">Osveži praćenje</string>
-    <string name="pref_refresh_library_tracking_summary">Ažuriraj status, ocenu i poslednje pročitano poglavlje iz servisa za praćenje</string>
     <string name="version">Verzija</string>
     <string name="pref_enable_acra">Pošalji izveštaje grešaka</string>
     <string name="pref_acra_summary">Pomozi u popravljanju bugova. Nijedan sensitivan podatak neće biti poslat</string>
@@ -213,8 +197,6 @@
     <string name="source_not_installed">Izvor nije instaliran: %1$s</string>
     <string name="display_mode_chapter">Poglavlje %1$s</string>
     <string name="chapter_downloading_progress">Preuzimam (%1$d/%2$d)</string>
-    <string name="download_error">Greška</string>
-    <string name="download_paused">Pauzirano</string>
     <string name="show_title">Naslov izvora</string>
     <string name="show_chapter_number">Broj poglavlja</string>
     <string name="pref_read_with_long_tap">Прикажи при дугом додиру</string>
@@ -266,7 +248,6 @@
     </plurals>
     <string name="secure_screen">Безбедносни екран</string>
     <string name="ext_updates_pending">Ажурирања на чекању</string>
-    <string name="unlock_app">Откључај Aniyomi</string>
     <string name="pref_category_display">Prikaži</string>
     <string name="hide_notification_content">Сакриј обавештења</string>
     <string name="pref_disable_battery_optimization">Isključi optimizaciju korišćenja baterije</string>
@@ -330,7 +311,6 @@
     <string name="chapter_progress">Страница: %1$d</string>
     <string name="custom_filter">Подесиви филтер</string>
     <string name="picture_saved">Слика је сачувана</string>
-    <string name="dialog_with_checkbox_reset">Ресетујте сва поглавља ове манге</string>
     <string name="dialog_with_checkbox_remove_description">Ово ће уклонити датум читања овог поглавља. Да ли сте сигурни да то желите\?</string>
     <string name="snack_categories_deleted">Категорије обрисане</string>
     <string name="error_category_exists">Категорија са овим именом већ постоји!</string>
@@ -349,7 +329,6 @@
     <string name="reading">Читање</string>
     <string name="add_tracking">Додај пратиоца</string>
     <string name="manga_tracking_tab">Праћење</string>
-    <string name="snack_add_to_library">Додај мангу у колекцију\?</string>
     <string name="manga_info_collapse">Manje</string>
     <string name="manga_info_expand">Više</string>
     <string name="in_library">U kolekciji</string>
@@ -383,7 +362,6 @@
     <string name="download_notifier_title_error">Грешка</string>
     <string name="download_notifier_downloader_title">Преузимања</string>
     <string name="information_webview_outdated">Ажурирајте WebView за бољу компатибилност</string>
-    <string name="information_webview_required">За Tachiyomi је потребан WebView</string>
     <string name="information_cloudflare_bypass_failure">Неуспешно заобилажење Cloudflare-а</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">Доступно је %d ново ажурирање додатака</item>
@@ -433,7 +411,6 @@
     <string name="confirm_lock_change">Оверите да бисте потврдили промене</string>
     <string name="action_sort_count">Ukupno mangi</string>
     <string name="action_sort_chapter_fetch_date">Datum preuzimanja</string>
-    <string name="action_display_local_badge">Lokalne mange</string>
     <string name="action_order_by_upload_date">Po datumu postavljanja</string>
     <string name="action_display_language_badge">Jezik</string>
     <string name="action_order_by_chapter_number">Po broju poglavlja</string>
@@ -494,7 +471,6 @@
     <string name="nav_zone_right">Десно</string>
     <string name="nav_zone_next">След.</string>
     <string name="pref_verbose_logging">Detaljno izveštavanje</string>
-    <string name="pref_incognito_mode_summary">Zaustavlja praćenje istorije čitanja</string>
     <string name="tabs_header">Kartice</string>
     <string name="unknown_status">Nepoznat status</string>
     <string name="local_filter_order_by">Poređaj po</string>
@@ -520,7 +496,6 @@
     <string name="pref_refresh_library_covers">Osveži omote u kolekciji</string>
     <string name="whats_new">Šta je novo</string>
     <string name="notification_incognito_text">Deaktiviraj inkognito mod</string>
-    <string name="manga_from_library">Манга из колекције</string>
     <string name="downloaded_chapters">Preuzeta poglavlja</string>
     <string name="action_global_search_query">Traži „%1$s” globalno</string>
     <string name="no_pinned_sources">Nemate označenih izvora</string>
@@ -539,7 +514,6 @@
     <string name="error_sharing_cover">Greška pri deljenju omota</string>
     <string name="set_chapter_settings_as_default">Постави као подразумевано</string>
     <string name="confirm_set_chapter_settings">Да ли сте сигурни да желите да сачувате ова подешавања као подразумевана\?</string>
-    <string name="also_set_chapter_settings_for_library">Такође примени на све манге у колекцији</string>
     <string name="no_chapters_error">Nije pronadjeni nijedno poglavlje</string>
     <string name="track_started_reading_date">Датум почетка</string>
     <string name="myanimelist_relogin">Морате поново да се пријавите на MAL</string>
@@ -547,8 +521,6 @@
     <string name="unread">Nepročitano</string>
     <string name="channel_progress">Напредак</string>
     <string name="channel_complete">Завршено</string>
-    <string name="channel_new_chapters_episodes">Ажурирања поглавља</string>
-    <string name="download_insufficient_space">Неуспешно преузимање поглавља због недовољне меморије</string>
     <string name="getting_started_guide">Почетни водич</string>
     <string name="update_check_eol">Ова Android верзија више није подржана</string>
     <string name="chapter_settings_updated">Ажурирана су подразумевана подешаваља поглавља</string>
@@ -556,7 +528,6 @@
     <string name="download_notifier_text_only_wifi">Нема доступне Wi-Fi везе</string>
     <string name="channel_common">Опште</string>
     <string name="download_notifier_no_network">Нема доступне интернет везе</string>
-    <string name="download_notifier_download_paused_chapters">Преузимање заустављено</string>
     <string name="download_notifier_download_finish">Преузимање је завршено</string>
     <string name="channel_ext_updates">Ажурирања додатака</string>
     <string name="channel_crash_logs">Логови крешовања</string>
@@ -607,7 +578,6 @@
     <string name="connected_to_wifi">Само преко Wi-Fi-а</string>
     <string name="restrictions">Ограничења: %s</string>
     <string name="categorized_display_settings">Поставке за приказ и сортирање одвојено за сваку категорију</string>
-    <string name="pref_library_update_categories_details">Манге у искљученим категоријама се неће ажурирати иако су такође у укљученим категоријама.</string>
     <string name="include">Укључи: %s</string>
     <string name="exclude">Искључи: %s</string>
     <string name="ext_install_service_notif">Додатак се инсталира…</string>
@@ -637,9 +607,6 @@
     <string name="pref_high">Висока</string>
     <string name="pref_low">Ниска</string>
     <string name="pref_lowest">Најнижа</string>
-    <string name="pref_category_delete_chapters">Избриши поглавља</string>
-    <string name="pref_remove_bookmarked_chapters">Дозволи брисање забележених поглавља</string>
-    <string name="pref_remove_exclude_categories">Искључене категорије</string>
     <string name="pref_download_new_categories_details">Манге у искљученим категоријама се неће преузети иако су такође у укљученим категоријама.</string>
     <string name="tracking_info">Једносмерна синхронизација за ажурирање броја прочитаних поглавља у пратиоцима. Пратиоц за појединачни серијал се може подесити путем дугмића за пратиоце у том серијалу.</string>
     <string name="label_data">Подаци</string>
@@ -655,23 +622,18 @@
     <string name="clear_history_completed">Историја је избрисана</string>
     <string name="clear_history_confirmation">Да ли сте сигурни\? Цела историја ће бити изгубљена.</string>
     <string name="migration_help_guide">Водич за миграцију извора</string>
-    <string name="download_queue_size_warning">Упозорење: велики број преузимања може довести до успоравања извора и/или блокирања Tachiyomi-ја</string>
     <string name="notification_updating">Ажурирање колекције... (%1$d/%2$d)</string>
     <string name="notification_size_warning">Velika ažuriranja štete izvorima i mogu dovesti do sporijeg ažuriranja i povećane potrošnje baterije</string>
-    <string name="pref_library_update_show_tab_badge">Прикажи број непрочитаних на икони \"Ново\"</string>
     <string name="ext_update_all">Ажурирај све</string>
     <string name="channel_app_updates">Ажурирања апликације</string>
     <string name="clear_database_source_item_count">Број манги у бази података које нису у колекцији: %1$d</string>
     <string name="extension_api_error">Преузимање листе додатака није успело</string>
-    <string name="pref_auto_clear_chapter_cache">Испразни кеш меморију при изласку из апликације</string>
     <string name="database_clean">Čišćenje baze podataka</string>
     <string name="pref_library_update_manga_restriction">Preskočite ažuriranje naslova</string>
-    <string name="pref_update_only_completely_read">Sa neporcitanim poglavljem(ima)</string>
     <string name="privacy_policy">Политика приватности</string>
     <string name="cancelled">Otkazano</string>
     <string name="on_hiatus">Na pauzi</string>
     <string name="pref_update_only_started">To nije započeto</string>
-    <string name="action_show_manga">Prikaži mange</string>
     <string name="webtoon_side_padding_5">5%</string>
     <string name="action_filter_started">Započeto</string>
     <string name="action_move_to_top_all_for_series">Pomakni serijal na vrh</string>
