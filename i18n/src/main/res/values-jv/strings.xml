@@ -9,6 +9,7 @@
     <string name="manga_download">Donlot</string>
     <string name="display_mode_chapter">bab %1$s</string>
     <string name="other_source">Liyane</string>
+    <string name="local_source_badge">Lokal</string>
     <string name="password">Sandhi</string>
     <string name="username">Jeneng pangguna</string>
     <string name="version">Versi</string>
@@ -80,11 +81,10 @@
     <string name="action_sort_total">Total bab</string>
     <string name="action_sort_alpha">Miturut abjad</string>
     <string name="action_filter_unread">Durung kewoco</string>
+    <string name="action_filter_downloaded">Kedonlot</string>
     <string name="action_filter">Saringan</string>
     <string name="action_settings">Pengaturan</string>
-    <string name="unlock_app">Mbukak Aniyomi</string>
     <string name="history">Sejarah</string>
-    <string name="categories">Kategori</string>
     <string name="information_no_recent">Ora ono updetan anyar</string>
     <string name="information_no_downloads">Ora ono donlotan</string>
     <string name="label_help">Nulungi</string>
@@ -96,13 +96,12 @@
     <string name="label_recent_manga">Sejarah</string>
     <string name="label_recent_updates">Nganyari</string>
     <string name="label_library">Perpustakaan</string>
-    <string name="label_download_queue">Antrian Donlot</string>
     <string name="label_settings">Setelan</string>
     <string name="label_more">Liyane</string>
     <string name="name">Jeneng</string>
     <string name="action_stop">Mandheg</string>
     <string name="manga">Manga</string>
-    <string name="download_notifier_download_paused_chapters">Donlotan mandheg</string>
+    <string name="download_notifier_download_finish">Donlotan rampung</string>
     <string name="download_notifier_downloader_title">Donloder</string>
     <string name="channel_complete">Komplit</string>
     <string name="information_no_recent_manga">durung maca apa apa</string>
@@ -158,7 +157,6 @@
     <string name="action_pin">Pin</string>
     <string name="action_display_show_number_of_items">Tampilaken jumlah item</string>
     <string name="action_display_show_tabs">Tampilaken tab kategori</string>
-    <string name="action_display_local_badge">Lokal manga</string>
     <string name="action_display_unread_badge">Bab durung diwaca</string>
     <string name="action_display_download_badge">Chapter downloadan</string>
     <string name="action_display_comfortable_grid">Kothak penak</string>
@@ -172,7 +170,7 @@
     <string name="action_sort_count">Total manga</string>
     <string name="confirm_lock_change">Otentikasi kanggo konfirmasi perubahan</string>
     <string name="label_default">Default</string>
-    <string name="action_show_manga">Nampilno manga</string>
+    <string name="action_filter_started">Mulai</string>
     <string name="label_warning">Awas</string>
     <string name="action_display_language_badge">basa</string>
     <string name="action_close">Tutup</string>
@@ -203,7 +201,6 @@
     <string name="lock_always">Tansah</string>
     <string name="pref_category_nsfw_content">Sumber NSFW (18+)</string>
     <string name="pref_show_nsfw_source">Tampilaken ing sumber lan dhaptar ekstensi</string>
-    <string name="pref_update_only_completely_read">Karo bab durung diwaca</string>
     <plurals name="lock_after_mins">
         <item quantity="other">Sawise %1$s menit</item>
     </plurals>
@@ -228,7 +225,6 @@
     <string name="ext_untrusted">Ora kapracaya</string>
     <string name="pref_update_only_started">Iku durung diwiwiti</string>
     <string name="pref_library_update_refresh_metadata_summary">periksa sampul lan rinci anyar wektu memerbarui pustaka</string>
-    <string name="default_category">kategori gawan</string>
     <string name="include">Kalebu: %s</string>
     <string name="exclude">Kajaba: %s</string>
     <string name="ext_updates_pending">Nganyari tertunda</string>
@@ -266,7 +262,6 @@
     <string name="pref_skip_read_chapters">Lewati bab dithandani kawaca</string>
     <string name="pref_read_with_volume_keys">Tombol volume</string>
     <string name="l_nav">Wangun L</string>
-    <string name="action_sort_last_manga_update">Nganyari manga pungkasan</string>
     <string name="action_sort_unread_count">Total gak diwoco</string>
     <string name="pref_relative_format">Stempel wektu sing relatif</string>
     <string name="pref_category_library_update">Updatean umum</string>
@@ -277,15 +272,9 @@
     <string name="pref_library_update_manga_restriction">Lewati updatean judul</string>
     <string name="battery_not_low">Pas baterai ora titik</string>
     <string name="pref_app_language">Bohoso aplikasi</string>
-    <string name="untrusted_extension_message">Ekstensi iki ditandatangani nganggo sertifikat sing ora dipercaya lan ora diaktifake.
-\n
-\n Ekstensi angkoro bisa maca kredensial login sing disimpen ing Tachiyomi utawa nglakokake kode sewenang-wenang.
-\n
-\n Kanthi percaya karo sertifikat iki, sampeyan nampa risiko kasebut.</string>
     <string name="unofficial_extension_message">Ekstensi iki ora saka dhaptar ekstensi Tachiyomi resmi.</string>
     <string name="ext_downloading">Ndownload</string>
     <string name="pref_show_navigation_mode">Tampilake overlay zona tutul</string>
-    <string name="pref_library_update_categories_details">Manga ing kategori sing ora kalebu ora bakal dianyari sanajan uga ana ing kategori sing kalebu.</string>
     <string name="none">Ora ono</string>
     <string name="ext_pending">Ketunda</string>
     <string name="ext_info_version">Versine</string>

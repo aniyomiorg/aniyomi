@@ -37,12 +37,10 @@
     <string name="action_menu">Menyu</string>
     <string name="action_settings">Sozlamalar</string>
     <string name="confirm_exit">Chiqish uchun orqaga tugmasini bosing</string>
-    <string name="unlock_app">Aniyomini ochish</string>
     <string name="history">Tarix</string>
     <string name="track">Kuzatish</string>
     <string name="chapters">Bõlimlar</string>
     <string name="manga">Manga</string>
-    <string name="categories">Kategoriyalar</string>
     <string name="information_empty_library">Sizning bibliotekangiz bõsh, bibliotekangizga qidirish orqali seriya qõshing</string>
     <string name="information_no_recent_manga">Yaqin vaqtda hech narsa õqilmagan</string>
     <string name="information_no_recent">Yangiliklar yõq</string>
@@ -56,7 +54,6 @@
     <string name="label_recent_manga">Tarix</string>
     <string name="label_recent_updates">Yangilanishlar</string>
     <string name="label_library">Biblioteka</string>
-    <string name="label_download_queue">Yuklash navbati</string>
     <string name="label_settings">Sozlamalar</string>
     <string name="label_more">Kõproq</string>
     <string name="name">Name</string>

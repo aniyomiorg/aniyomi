@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">名称</string>
-    <string name="categories">分类</string>
-    <string name="manga">书架中的作品</string>
+    <string name="manga">漫画</string>
     <string name="chapters">章节</string>
     <string name="history">历史</string>
     <string name="label_settings">设置</string>
-    <string name="label_download_queue">下载队列</string>
     <string name="label_library">书架</string>
     <string name="label_recent_manga">历史</string>
     <string name="label_recent_updates">更新</string>
@@ -15,6 +13,7 @@
     <string name="label_extension_info">插件信息</string>
     <string name="action_settings">设置</string>
     <string name="action_filter">筛选</string>
+    <string name="action_filter_downloaded">已下载</string>
     <string name="action_filter_bookmarked">已添加书签</string>
     <string name="action_filter_unread">未读</string>
     <string name="action_filter_empty">取消筛选</string>
@@ -85,8 +84,6 @@
     <string name="pref_library_update_restriction">设备自动更新限制</string>
     <string name="charging">充电时</string>
     <string name="pref_update_only_non_completed">已完结</string>
-    <string name="pref_auto_update_manga_sync">阅读后更新进度</string>
-    <string name="default_category">默认分类</string>
     <string name="default_category_summary">始终询问</string>
     <string name="ext_update">更新</string>
     <string name="ext_install">安装</string>
@@ -98,11 +95,6 @@
     <string name="ext_untrusted">不可信</string>
     <string name="ext_uninstall">卸载</string>
     <string name="untrusted_extension">不可信的插件</string>
-    <string name="untrusted_extension_message">此插件的证书并不可信，且尚未被启用。
-\n
-\n恶意的插件可能会读取储存在 Tachiyomi 中的任何登录凭据或执行任意代码。
-\n
-\n信任这个证书，即代表你愿意承担上述风险。</string>
     <string name="pref_fullscreen">全屏</string>
     <string name="pref_page_transitions">页面过渡动画</string>
     <string name="pref_double_tap_anim_speed">双击动画速度</string>
@@ -147,8 +139,6 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">下载路径</string>
-    <string name="pref_remove_after_marked_as_read">手动标记为已读后</string>
-    <string name="pref_remove_after_read">阅毕自动删除</string>
     <string name="custom_dir">自定义路径</string>
     <string name="disabled">关闭</string>
     <string name="last_read_chapter">最后阅读的章节</string>
@@ -171,18 +161,13 @@
     <string name="backup_choice">需要备份什么？</string>
     <string name="restoring_backup">正在还原备份</string>
     <string name="creating_backup">正在创建备份</string>
-    <string name="pref_clear_chapter_cache">清除章节缓存</string>
     <string name="used_cache">已使用空间：%1$s</string>
     <string name="cache_deleted">缓存已清除。%1$d 个文件已被删除</string>
     <string name="cache_delete_error">清除时出现错误</string>
     <string name="pref_clear_cookies">清除 Cookies</string>
     <string name="cookies_cleared">Cookies 已清除</string>
-    <string name="pref_clear_database">清理数据库</string>
-    <string name="pref_clear_database_summary">删除未添加到书架的作品记录</string>
-    <string name="clear_database_confirmation">你确定吗？不在书架中的作品的已读章节和进度将会丢失</string>
     <string name="clear_database_completed">数据已删除</string>
     <string name="pref_refresh_library_tracking">更新进度记录</string>
-    <string name="pref_refresh_library_tracking_summary">从记录平台更新阅读状态、评分和进度</string>
     <string name="version">版本</string>
     <string name="pref_enable_acra">发送错误报告</string>
     <string name="pref_acra_summary">协助我们修复错误，发送的错误报告不包含个人敏感信息</string>
@@ -193,6 +178,7 @@
     <string name="login_success">已登录</string>
     <string name="unknown_error">未知错误</string>
     <string name="updating_category">正在更新分类</string>
+    <string name="local_source_badge">本地</string>
     <string name="no_more_results">没有更多结果</string>
     <string name="local_source">本地图源</string>
     <string name="other_source">其他</string>
@@ -211,8 +197,6 @@
     <string name="source_not_installed">未安装图源：%1$s</string>
     <string name="display_mode_chapter">第 %1$s 章</string>
     <string name="chapter_downloading_progress">正在下载（%1$d/%2$d）</string>
-    <string name="download_error">错误</string>
-    <string name="download_paused">搁置中</string>
     <string name="show_title">图源标题</string>
     <string name="show_chapter_number">章节编号</string>
     <string name="sort_by_source">按图源</string>
@@ -237,12 +221,11 @@
     <string name="title">标题</string>
     <string name="status">状态</string>
     <string name="track_status">状态</string>
+    <string name="track_start_date">连载开始</string>
     <string name="track_type">类型</string>
     <string name="error_category_exists">已存在同名分类！</string>
     <string name="snack_categories_deleted">分类已删除</string>
     <string name="dialog_with_checkbox_remove_description">此章节的阅读日期将被清除，你确定吗？</string>
-    <string name="dialog_with_checkbox_reset">重置此作品的所有章节</string>
-    <string name="snack_add_to_library">要添加到书架吗？</string>
     <string name="picture_saved">图片已保存</string>
     <string name="custom_filter">滤镜</string>
     <string name="set_as_cover">设为封面</string>
@@ -262,10 +245,10 @@
     <string name="migration_dialog_what_to_include">选择需要迁移的数据</string>
     <string name="migrate">迁移</string>
     <string name="copy">共存</string>
-    <string name="download_queue_error">无法下载该章节。您可以点下载按钮重试</string>
+    <string name="download_queue_error">无法下载该章节。请重试</string>
     <string name="notification_new_chapters">发现新章节</string>
     <string name="notification_cover_update_failed">封面更新失败</string>
-    <string name="notification_first_add_to_library">请先将作品添加到书架</string>
+    <string name="notification_first_add_to_library">请先将漫画添加到书架</string>
     <string name="file_select_cover">选择封面图片</string>
     <string name="file_select_backup">选择备份文件</string>
     <string name="update_check_confirm">下载</string>
@@ -285,7 +268,6 @@
     <string name="download_notifier_unknown_error">下载时发生不可预期的错误</string>
     <string name="download_notifier_text_only_wifi">无可用 Wi-Fi 连接</string>
     <string name="download_notifier_no_network">无网络连接</string>
-    <string name="download_notifier_download_paused_chapters">下载已暂停</string>
     <string name="channel_common">一般</string>
     <string name="pref_read_with_long_tap">长按显示操作菜单</string>
     <string name="action_open_in_web_view">在 WebView 中打开</string>
@@ -313,7 +295,7 @@
     <string name="logout_success">你已登出</string>
     <string name="paused">已暂停</string>
     <string name="label_more">更多</string>
-    <string name="action_sort_latest_chapter">作品更新时间</string>
+    <string name="action_sort_latest_chapter">最新章节</string>
     <string name="action_view_chapters">查看章节</string>
     <string name="action_cancel_all">全部取消</string>
     <string name="pref_theme_mode">深色模式</string>
@@ -332,10 +314,8 @@
     <string name="ext_updates_pending">待更新</string>
     <string name="information_cloudflare_bypass_failure">无法绕过 Cloudflare</string>
     <string name="information_webview_outdated">请更新 WebView 应用以获得更好的兼容性</string>
-    <string name="unlock_app">解锁 Aniyomi</string>
     <string name="secure_screen_summary">阻止截屏，并在切换后台时隐藏预览图</string>
     <string name="pref_category_display">显示</string>
-    <string name="channel_new_chapters_episodes">章节更新</string>
     <string name="hide_notification_content">隐藏通知内容</string>
     <string name="lock_with_biometrics">应用锁</string>
     <string name="pref_cutout_short">在刘海屏区域显示内容</string>
@@ -349,13 +329,13 @@
         <item quantity="other">第 %1$s 章及另外 %2$d 章</item>
     </plurals>
     <string name="notification_check_updates">正在检查新章节</string>
-    <string name="pref_disable_battery_optimization">关闭电池优化</string>
+    <string name="pref_disable_battery_optimization">禁用电池优化</string>
     <string name="pref_disable_battery_optimization_summary">有助于后台更新书架和备份</string>
-    <string name="battery_optimization_disabled">电池优化已被关闭</string>
+    <string name="battery_optimization_disabled">电池优化已被禁用</string>
     <string name="email">电子邮件地址</string>
     <string name="pref_always_show_chapter_transition">始终显示章节间的过渡页面</string>
     <plurals name="notification_new_chapters_summary">
-        <item quantity="other">共 %d 部作品</item>
+        <item quantity="other">%d 本漫画</item>
     </plurals>
     <string name="action_menu">菜单</string>
     <string name="action_reorganize_by">重新排序</string>
@@ -385,7 +365,6 @@
     <string name="vertical_plus_viewer">从上到下（连续）</string>
     <string name="action_select_inverse">反选</string>
     <string name="add_tracking">添加进度记录</string>
-    <string name="information_webview_required">Tachiyomi 依赖于 WebView</string>
     <string name="manga_info_collapse">收起</string>
     <string name="manga_info_expand">展开</string>
     <string name="licenses">开源许可证</string>
@@ -406,7 +385,7 @@
     <plurals name="download_queue_summary">
         <item quantity="other">剩余 %1$s 本</item>
     </plurals>
-    <string name="downloaded_only_summary">筛选书架里的全部作品</string>
+    <string name="downloaded_only_summary">筛选书架里的全部漫画</string>
     <string name="check_for_updates">检查更新</string>
     <string name="restore_duration">%02d 分，%02d 秒</string>
     <string name="pref_search_pinned_sources_only">仅在置顶图源中搜索</string>
@@ -423,13 +402,13 @@
     <string name="pref_true_color_summary">减少色带，但可能会影响性能</string>
     <string name="action_display_unread_badge">未读章节</string>
     <string name="pref_refresh_library_covers">刷新书架封面</string>
-    <string name="tracking_info">将阅读进度上传到进度记录平台。在作品页面点击“进度记录”按钮即可设置。</string>
+    <string name="tracking_info">将阅读进度上传到进度记录平台。在漫画页点击“进度记录”按钮即可设置。</string>
     <string name="unofficial_extension_message">此插件不是 Tachiyomi 官方插件</string>
     <string name="ext_unofficial">非官方</string>
     <string name="sort_by_upload_date">按上传日期</string>
     <string name="label_data">数据</string>
     <string name="backup_restore_missing_sources">缺少图源：</string>
-    <string name="invalid_backup_file_missing_manga">备份不包含任何作品。</string>
+    <string name="invalid_backup_file_missing_manga">备份不包含任何漫画。</string>
     <string name="invalid_backup_file">无效的备份文件</string>
     <string name="pref_library_update_refresh_metadata_summary">更新书架时一并检查封面和简介是否有变动</string>
     <string name="pref_library_update_refresh_metadata">自动刷新元数据</string>
@@ -439,13 +418,13 @@
     <string name="badges_header">标记</string>
     <string name="action_display_show_tabs">显示分类标签</string>
     <string name="page_list_empty_error">没有找到页面</string>
-    <string name="action_disable_all">全部关闭</string>
+    <string name="action_disable_all">全部禁用</string>
     <string name="action_enable_all">全部启用</string>
     <string name="pref_show_reading_mode_summary">开始阅读时，短暂显示当前阅读模式</string>
     <string name="pref_show_reading_mode">阅读模式提示</string>
     <string name="action_start">开始阅读</string>
     <string name="loader_not_implemented_error">未找到图源</string>
-    <string name="action_disable">关闭</string>
+    <string name="action_disable">禁用</string>
     <plurals name="manga_num_chapters">
         <item quantity="other">共 %1$s 章</item>
     </plurals>
@@ -459,11 +438,10 @@
     <string name="unknown_author">未知作者</string>
     <string name="updated_version">已更新至 v%1$s</string>
     <string name="whats_new">更新日志</string>
-    <string name="download_insufficient_space">存储空间不足，无法下载章节</string>
     <string name="action_global_search_query">全局搜索“%1$s”</string>
     <string name="pref_category_reading_mode">阅读模式</string>
     <string name="pref_category_theme">主题</string>
-    <string name="action_sort_date_added">收藏日期</string>
+    <string name="action_sort_date_added">添加日期</string>
     <plurals name="num_trackers">
         <item quantity="other">%d 个记录平台</item>
     </plurals>
@@ -471,10 +449,9 @@
     <string name="no_pinned_sources">你尚未置顶任意图源</string>
     <string name="channel_complete">完成</string>
     <string name="channel_progress">进度</string>
+    <string name="download_notifier_download_finish">下载完毕</string>
     <string name="channel_errors">错误</string>
     <string name="backup_restore_missing_trackers">尚未登录进度记录平台：</string>
-    <string name="pref_remove_bookmarked_chapters">允许删除已添加书签的章节</string>
-    <string name="pref_category_delete_chapters">删除章节</string>
     <string name="ext_nsfw_warning">来自此插件的图源可能包含 NSFW (18+) 内容</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">这并不能防止非官方或可能被错误标记的插件在应用中显示 NSFW (18+) 内容。</string>
@@ -484,14 +461,11 @@
     <string name="no_chapters_error">未找到章节</string>
     <string name="chapter_settings_updated">已更新默认章节设置</string>
     <string name="set_chapter_settings_as_default">设为默认</string>
-    <string name="also_set_chapter_settings_for_library">同时应用至书架里的所有作品</string>
     <string name="confirm_set_chapter_settings">你确定要将当前设置保存为默认吗？</string>
     <string name="chapter_settings">章节设置</string>
     <string name="share_page_info">%1$s：%2$s，第 %3$d 页</string>
     <string name="action_search_settings">搜索设置</string>
     <string name="downloaded_chapters">已下载的章节</string>
-    <string name="manga_from_library">书架中的作品</string>
-    <string name="pref_incognito_mode_summary">暂停记录阅读历史</string>
     <string name="pref_incognito_mode">无痕模式</string>
     <string name="pref_clear_history">清除历史</string>
     <string name="clear_history_confirmation">你确定吗？所有的历史都将丢失。</string>
@@ -536,21 +510,20 @@
     <string name="none">无</string>
     <string name="exclude">排除：%s</string>
     <string name="include">包含：%s</string>
-    <string name="action_sort_chapter_fetch_date">章节获取时间</string>
-    <string name="pref_library_update_categories_details">应用不会更新位于排除分类的作品，即使它们同样位于包含分类。</string>
-    <string name="pref_download_new_categories_details">应用不会下载位于排除分类的作品，即使它们同样位于包含分类。</string>
+    <string name="action_sort_chapter_fetch_date">章节获取日期</string>
+    <string name="pref_download_new_categories_details">应用不会下载位于排除分类的漫画，即使它们同样位于包含分类。</string>
     <string name="pref_category_auto_download">自动下载</string>
     <string name="action_show_errors">点击查看详情</string>
     <string name="update_check_eol">应用不再支持此 Android 版本</string>
     <string name="clipboard_copy_error">无法复制到剪贴板</string>
     <string name="rotation_landscape">横屏</string>
     <string name="rotation_portrait">竖屏</string>
-    <string name="pref_create_folder_per_manga_summary">根据作品标题创建文件夹</string>
+    <string name="pref_create_folder_per_manga_summary">根据漫画标题创建文件夹</string>
     <string name="pref_create_folder_per_manga">将图片保存到单独文件夹</string>
     <string name="pref_reader_actions">操作菜单</string>
     <string name="rotation_type">屏幕方向</string>
     <string name="pref_grayscale">灰度</string>
-    <string name="notification_incognito_text">关闭无痕模式</string>
+    <string name="notification_incognito_text">禁用无痕模式</string>
     <string name="automatic_background">自动</string>
     <string name="cancel_all_for_series">取消此作品</string>
     <string name="error_no_match">未找到匹配项</string>
@@ -563,7 +536,6 @@
     <string name="pref_library_update_refresh_trackers_summary">更新书架时一并更新进度记录平台</string>
     <string name="pref_library_update_refresh_trackers">自动更新进度记录</string>
     <string name="restrictions">限制：%s</string>
-    <string name="action_display_local_badge">本地图源</string>
     <string name="off">关闭</string>
     <string name="on">开启</string>
     <string name="error_sharing_cover">分享封面时出错</string>
@@ -574,9 +546,9 @@
     <string name="tracking_guide">进度记录指南</string>
     <string name="information_empty_category_dialog">你还没有任何分类。</string>
     <string name="action_start_downloading_now">立即开始下载</string>
-    <string name="notification_updating">正在更新书架… (%1$d/%2$d)</string>
+    <string name="notification_updating">正在更新书架…（%1$d/%2$d）</string>
     <string name="about_dont_kill_my_app">部分制造商会设置额外的应用限制来杀死后台服务。此网站提供了更多有关修复此问题的信息。</string>
-    <string name="restore_miui_warning">如果 MIUI 优化被关闭，备份/还原可能无法正常工作。</string>
+    <string name="restore_miui_warning">如果 MIUI 优化被禁用，备份/还原可能无法正常工作。</string>
     <string name="pref_dark_theme_pure_black">纯黑深色模式</string>
     <string name="theme_yotsuba">四叶草</string>
     <string name="theme_yinyang">阴阳</string>
@@ -585,7 +557,8 @@
     <string name="theme_midnightdusk">午夜幽暗</string>
     <string name="theme_greenapple">青苹果</string>
     <string name="pref_app_theme">应用主题</string>
-    <string name="enhanced_tracking_info">为特定图源提供增强功能。作品在添加到书架时会自动同步进度。</string>
+    <string name="tracker_komga_warning">此平台只有 Komga 图源才能使用。</string>
+    <string name="enhanced_tracking_info">为特定图源提供增强功能。漫画在添加到书架时会自动同步进度。</string>
     <string name="enhanced_services">增强服务</string>
     <string name="theme_monet">动态</string>
     <string name="label_background_activity">后台活动</string>
@@ -594,11 +567,11 @@
     <string name="pref_high">高</string>
     <string name="pref_highest">最高</string>
     <string name="pref_hide_threshold">滑动时隐藏菜单的灵敏度</string>
-    <string name="pref_inverted_colors">反色</string>
-    <string name="pref_relative_time_long">较长 (今天、昨天、几天前)</string>
+    <string name="pref_inverted_colors">反转</string>
+    <string name="pref_relative_time_long">长期 (今天、昨天、几天前)</string>
     <string name="relative_time_today">今天</string>
-    <string name="pref_relative_time_short">较短 (今天、昨天)</string>
-    <string name="pref_relative_format">相对时间戳显示范围</string>
+    <string name="pref_relative_time_short">短期 (今天、昨天)</string>
+    <string name="pref_relative_format">相对时间戳</string>
     <plurals name="relative_time">
         <item quantity="other">%1$d 天前</item>
     </plurals>
@@ -611,7 +584,6 @@
     <string name="action_track">记录进度</string>
     <string name="getting_started_guide">入门指南</string>
     <string name="pref_tablet_ui_mode">平板界面</string>
-    <string name="pref_remove_exclude_categories">排除的分类</string>
     <string name="help_translate">协助翻译</string>
     <string name="ext_app_info">应用信息</string>
     <string name="ext_installer_legacy">旧式安装程序</string>
@@ -628,15 +600,12 @@
     <string name="notification_size_warning">大量更新会损害图源，并可能导致更新变慢、耗电增加。点击了解详情。</string>
     <string name="connected_to_wifi">仅连接至 Wi-Fi 时</string>
     <string name="update_72hour">每 3 天</string>
-    <string name="download_queue_size_warning">警告：批量下载可能导致图源变慢，甚至会使得它们屏蔽 Tachiyomi。点击了解详情。</string>
     <string name="ext_update_all">全部更新</string>
     <string name="channel_app_updates">应用更新</string>
-    <string name="pref_auto_clear_chapter_cache">关闭应用时清除章节缓存</string>
     <string name="database_clean">无需清理</string>
-    <string name="clear_database_source_item_count">数据库中有 %1$d 部作品未添加到书架</string>
+    <string name="clear_database_source_item_count">数据库中有 %1$d 本漫画未添加到书架</string>
     <string name="extension_api_error">无法获取插件列表</string>
     <string name="privacy_policy">隐私政策</string>
-    <string name="pref_update_only_completely_read">有未读章节</string>
     <string name="pref_library_update_manga_restriction">跳过更新以下作品</string>
     <string name="library_errors_help">关于书架更新出错的解决方法，请参阅 %1$s</string>
     <string name="save_chapter_as_cbz">保存为 CBZ 压缩包</string>
@@ -645,13 +614,13 @@
     <string name="on_hiatus">休刊中</string>
     <string name="action_faq_and_guides">常见问题和指南</string>
     <string name="webtoon_side_padding_5">5%</string>
-    <string name="action_show_manga">显示作品</string>
     <string name="action_display_cover_only_grid">封面网格</string>
     <string name="pref_landscape_zoom">放大横向图片</string>
     <string name="pref_navigate_pan">图片放大时先平移再翻页</string>
     <string name="confirm_manga_add_duplicate">库中有一个名称相同但图源不同（%1$s）的条目。
 \n
 \n你仍希望继续吗？</string>
+    <string name="action_filter_started">已开始</string>
     <string name="pref_update_only_started">尚未开始阅读</string>
     <string name="skipped_reason_completed">已跳过，因为作品已完结</string>
     <string name="skipped_reason_not_caught_up">已跳过，因为有未读章节</string>
@@ -660,7 +629,7 @@
     <string name="notification_update_error">%1$d 个更新失败了</string>
     <string name="notification_update_skipped">已跳过 %1$d 个更新</string>
     <string name="channel_skipped">已跳过</string>
-    <string name="rotation_reverse_portrait">反向竖屏</string>
+    <string name="rotation_reverse_portrait">反转竖屏</string>
     <string name="action_move_to_top_all_for_series">将连载置顶</string>
     <string name="disabled_nav">关闭</string>
     <string name="error_saving_picture">保存图片出错</string>
@@ -670,11 +639,12 @@
     <string name="webview_data_deleted">已清除 WebView 数据</string>
     <string name="pref_clear_webview_data">清除 WebView 数据</string>
     <string name="battery_not_low">非低电量时</string>
+    <string name="pref_duplicate_pinned_sources_summary">在各自的语言组中重复固定图源</string>
+    <string name="pref_duplicate_pinned_sources">显示重复的固定图源</string>
     <string name="action_close">关闭</string>
     <string name="source_filter_empty_screen">未找到已安装的图源</string>
     <string name="source_empty_screen">未找到图源</string>
-    <string name="action_sort_last_manga_update">检查更新时间</string>
-    <string name="action_sort_unread_count">未读章数</string>
+    <string name="action_sort_unread_count">未读数</string>
     <string name="split_tall_images">分割长图</string>
     <string name="split_tall_images_summary">可以改善阅读器的性能</string>
     <string name="download_notifier_split_page_not_found">拆分时未找到页 %d</string>
@@ -708,7 +678,7 @@
     <string name="action_remove_everything">全部删除</string>
     <string name="loader_rar5_error">不支持 RARv5 格式</string>
     <string name="appwidget_unavailable_locked">应用锁开启时，小部件不能使用</string>
-    <string name="appwidget_updates_description">查看最近更新的作品</string>
+    <string name="appwidget_updates_description">查看最近更新的漫画</string>
     <string name="update_already_running">有其他更新尚未完成</string>
     <string name="error_user_agent_string_blank">User Agent 字符串不能为空</string>
     <string name="theme_tidalwave">浪潮</string>
@@ -727,7 +697,7 @@
     <string name="missing_storage_permission">未授予存储权限</string>
     <string name="skipped_reason_not_always_update">已跳过，因为作品无需更新</string>
     <string name="action_search_hint">搜索…</string>
-    <string name="crash_screen_title">哦豁</string>
+    <string name="crash_screen_title">发生了意外错误</string>
     <string name="crash_screen_description">%s 发生了意外错误。建议你将此信息截图，导出崩溃日志，并在 Discord #support 频道或者 GitHub 上反馈。</string>
     <string name="crash_screen_restart_application">重启应用</string>
     <string name="pref_appearance_summary">主题 • 日期格式</string>
@@ -744,44 +714,8 @@
     <string name="invalid_location">无效位置：%s</string>
     <string name="error_user_agent_string_invalid">User Agent 字符串无效</string>
     <string name="updates_last_update_info_just_now">刚才</string>
-    <string name="channel_downloader_cache">下载索引</string>
+    <string name="channel_downloader_cache">下载缓存</string>
     <string name="download_notifier_cache_renewal">正在建立下载索引</string>
     <string name="action_open_random_manga">随机打开作品</string>
     <string name="information_no_entries_found">此分类没有作品</string>
-    <string name="fdroid_warning">F-Droid 渠道不受官方支持。
-\n点按了解更多。</string>
-    <string name="action_display_show_continue_reading_button">显示继续阅读按钮</string>
-    <string name="other_header">其他</string>
-    <string name="pref_invalidate_download_cache">清除下载索引</string>
-    <string name="track_remove_date_conf_title">要删除日期吗？</string>
-    <string name="track_remove_start_date_conf_text">将会删除之前在 %s 中标记的开始日期</string>
-    <string name="track_remove_finish_date_conf_text">将会删除之前在 %s 中标记的结束日期</string>
-    <string name="enhanced_tracking_warning">此平台只有 %1$s 图源才能使用。</string>
-    <string name="pref_invalidate_download_cache_summary">强制重新扫描已下载的章节</string>
-    <string name="label_stats">统计</string>
-    <string name="label_local">本地</string>
-    <string name="label_downloaded">已下载</string>
-    <string name="label_overview_section">总览</string>
-    <string name="label_read_duration">阅读时长</string>
-    <string name="label_titles_section">作品</string>
-    <string name="label_completed_titles">读完的作品数</string>
-    <string name="label_total_chapters">总数</string>
-    <string name="label_titles_in_global_update">在全局更新范围</string>
-    <string name="label_tracker_section">进度记录</string>
-    <string name="label_tracked_titles">记录的作品数</string>
-    <string name="label_read_chapters">已读</string>
-    <string name="label_mean_score">平均评分</string>
-    <string name="label_started">阅读过</string>
-    <string name="action_not_now">以后再说</string>
-    <string name="label_used">平台数</string>
-    <string name="not_applicable">无</string>
-    <string name="minute_short">%d 分</string>
-    <string name="seconds_short">%d 秒</string>
-    <string name="day_short">%d 天</string>
-    <string name="hour_short">%d 时</string>
-    <string name="pref_library_update_show_tab_badge">在“更新”图标上显示未读章数</string>
-    <string name="information_no_manga_category">分类为空</string>
-    <string name="pref_worker_info">Worker 信息</string>
-    <string name="copied_to_clipboard_plain">已复制到剪贴板</string>
-    <string name="ext_miui_warning">MIUI 优化启用时可能无法正常安装插件，请到官网下载安装</string>
-</resources>
+    </resources>

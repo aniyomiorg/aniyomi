@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="categories">دسته بندی مانگا ها</string>
+    <string name="general_categories">دسته بندی ها</string>
+    <string name="anime_categories">دسته بندی انیمه ها</string>
+<string name="label_download_queue">صف دانلود</string>
+    <string name="unlock_app">بازکردن تاچی یومی</string>
+    <string name="action_sort_last_manga_update">آخرین به‌روزرسانی مانگا</string>
+    <string name="action_show_manga">نمایش مانگا</string>
+    <string name="action_display_local_badge">مانگای محلی</string>
+    <string name="pref_update_only_completely_read">با قسمت‌(های) خوانده‌نشده</string>
+    <string name="pref_library_update_show_tab_badge">تعداد خوانده‌نشده را بر روی آیکون به‌روزرسانی نشان بده</string>
+    <string name="default_category">دسته بندی پیشفرض</string>
+    <string name="pref_library_update_categories_details">مانگاهایی که در دسته‌بندی های حذف‌شده هستند، حتی اگر هم‌زمان در دسته‌بندی های مشمول باشند به‌روزرسانی نمی‌شوند.</string>
+    <string name="untrusted_extension_message">این افزونه با یک گواهی نامطمئن امضا شده است و فعال نشده است.
+\n
+\nیک افزونه مخرب می تواند هر گونه طلاعات ورود به سیستم ذخیره شده تاچیومی را بخواند یا کدهای دلخواه(احتمالا خطرناک) را اجرا کند.
+\n
+\nبا اعتماد به این گواهی شما این خطرات را می‌پذیرید.</string>
+    <string name="pref_category_delete_chapters">حذف قسمت ها</string>
+    <string name="pref_remove_after_marked_as_read">بعد از آن‌هایی که به صورت دستی به عنوان خوانده‌شده علامت‌گذاری شده‌اند</string>
+    <string name="pref_remove_after_read">بعد از خواندن به‌صورت خودکار پاک کن</string>
+    <string name="pref_remove_bookmarked_chapters">اجازه‌ی پاک‌کردن قسمت‌های نشانک‌گذاری شده را بده</string>
+    <string name="pref_remove_exclude_categories">دسته‌بندی‌های محذوف</string>
+    <string name="pref_auto_update_manga_sync">بعد از خوانده‌شدن، وضعیت قسمت بروزرسانی شود</string>
+    <string name="pref_clear_chapter_cache">پاک کردن حافظه پنهان قسمت‌ها</string>
+    <string name="pref_clear_database">پاک کردن پایگاه داده</string>
+    <string name="pref_clear_database_summary">حذف سابقه برای مانگاهایی که در کتابخانه ذخیره نشده اند</string>
+    <string name="clear_database_confirmation">آیا مطمئن هستید؟ اطلاعات قسمت های خوانده شده برای مانگاهایی که در کتابخانه اضافه نشده از دست خواهد رفت</string>
+    <string name="pref_refresh_library_tracking_summary">وضعیت خواندن، امتیاز و آخرین قسمت خوانده شده را از سایت خدمات ردیابی آپدیت می‌کند</string>
+    <string name="pref_incognito_mode_summary">متوقف کردن تاریخچه خواندن</string>
+    <string name="manga_from_library">مانگاهای کتابخانه</string>
+    <string name="snack_add_to_library">مانگا به کتابخانه اضافه شود؟</string>
+    <string name="download_error">خطا</string>
+    <string name="download_paused">متوقف</string>
+    <string name="also_set_chapter_settings_for_library">همچنین برای تمام مانگاهای موجود در کتابخانه من اعمال شود</string>
+    <string name="dialog_with_checkbox_reset">ریست اطلاعات همه قسمت های این مانگا</string>
+    <string name="download_insufficient_space">به دلیل فضای کم دیسک امکان دانلود قسمت ها وجود ندارد</string>
+    <string name="information_webview_required">وب نما برای تاچیومی مورد نیاز است</string>
+    <string name="download_notifier_download_paused_chapters">دانلود متوقف شد</string>
+    <string name="channel_new_chapters_episodes">به روزرسانی قسمت‌ها</string>
+    </resources>

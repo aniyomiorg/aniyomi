@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">নাম</string>
-    <string name="categories">বিভাগসমূহ</string>
     <string name="manga">মাঙ্গা</string>
     <string name="chapters">অধ্যায়সমূহ</string>
     <string name="track">ট্র্যাকিং</string>
     <string name="history">ইতিহাস</string>
     <string name="label_settings">সেটিংস</string>
-    <string name="label_download_queue">ডাউনলোড সারি</string>
     <string name="label_library">লাইব্রেরি</string>
     <string name="label_recent_manga">ইতিহাস</string>
     <string name="label_recent_updates">হালনাগাদসমূহ</string>
     <string name="label_backup">ব্যাকআপ এবং পুনরুদ্ধার</string>
     <string name="action_settings">সেটিংস</string>
     <string name="action_filter">বিশোধন</string>
+    <string name="action_filter_downloaded">ডাউনলোড হয়েছে</string>
     <string name="action_filter_bookmarked">বুকমার্ককৃত</string>
     <string name="action_filter_unread">অপঠিত</string>
     <string name="action_filter_empty">ফিল্টার সরান</string>
@@ -82,8 +81,6 @@
     <string name="pref_library_update_restriction">নিজেথেকে আপডেটের সীমাবদ্ধতা</string>
     <string name="charging">চার্জ হচ্ছে</string>
     <string name="pref_update_only_non_completed">\"সম্পূর্ন\" শর্তসহিত</string>
-    <string name="pref_auto_update_manga_sync">পড়ার পরে অগ্রগতি আপডেট করুন</string>
-    <string name="default_category">সাধারণ বিভাগ</string>
     <string name="default_category_summary">সর্বদা জিজ্ঞাসা করুন</string>
     <string name="pref_fullscreen">সম্পূর্ণ পর্দা</string>
     <string name="pref_page_transitions">পৃষ্ঠা পালটানো এনিমেট করুন</string>
@@ -124,8 +121,6 @@
     <string name="color_filter_b_value">নী</string>
     <string name="color_filter_a_value">আ</string>
     <string name="pref_download_directory">ডাউনলোডের স্থান</string>
-    <string name="pref_remove_after_marked_as_read">পঠিত হিসেবে চিহ্নিত করার পর</string>
-    <string name="pref_remove_after_read">পড়ার পর স্বয়ংক্রিয়ভাবে</string>
     <string name="custom_dir">স্বনির্ধারিত নির্দেশক</string>
     <string name="disabled">নিষ্ক্রিয়</string>
     <string name="last_read_chapter">শেষ পঠিত অধ্যায়</string>
@@ -148,18 +143,13 @@
     <string name="backup_choice">আপনি কি ব্যাকআপ করতে ইচ্ছুক?</string>
     <string name="restoring_backup">ব্যাকআপ পুনরুদ্ধার হচ্ছে</string>
     <string name="creating_backup">ব্যাকআপ তৈরী হচ্ছে</string>
-    <string name="pref_clear_chapter_cache">অধ্যায়ের ক্যাচি পরিষ্কার করুন</string>
     <string name="used_cache">ব্যাবহৃত হয়েছে: %1$s</string>
     <string name="cache_deleted">ক্যাচি পরিষ্কার হয়েছে. %1$d ফাইল মুছে ফেলা হয়েছে</string>
     <string name="cache_delete_error">ক্যাচ পরিষ্কারের সময় একটি ত্রুটি দেখা দিয়েছে</string>
     <string name="pref_clear_cookies">কুকিস পরিষ্কার করুন</string>
     <string name="cookies_cleared">কুকিস পরিষ্কার হয়েছে</string>
-    <string name="pref_clear_database">ডাটাবেজ পরিষ্কার করুন</string>
-    <string name="pref_clear_database_summary">আপনার সংগ্রহশালাতে যেসব মাংগা সংরক্ষিত নেই সেগুলোর ইতিহাস মুছে ফেলুন</string>
-    <string name="clear_database_confirmation">আপনি কি নিশ্চিত\? পঠিত অধ্যায় এবং সংগ্রহশালাতে অনুপস্থিত মাংগার অগ্রগতি মুছে যাবে</string>
     <string name="clear_database_completed">এন্ট্রিগুলো মুছে ফেলা হয়েছে</string>
     <string name="pref_refresh_library_tracking">ট্র্যাকিং হালনাগাদ করুন</string>
-    <string name="pref_refresh_library_tracking_summary">ট্র্যাকিং পরিষেবাগুলি অবস্থা, স্কোর এবং শেষ পড়া অধ্যায় হালনাগাদ করে</string>
     <string name="version">সংস্করণ</string>
     <string name="pref_enable_acra">ক্র‍্যাশের প্রতিবেদন পাঠান</string>
     <string name="pref_acra_summary">বাগ ঠিক করার জন্য সাহায্য করুন। কোন সংবেদনশীল তথ্য পাঠানো হবে না</string>
@@ -170,6 +160,7 @@
     <string name="login_success">প্রবেশ হয়েছে</string>
     <string name="unknown_error">অজানা ত্রুটি</string>
     <string name="updating_category">বিভাগের হালনাগাদ হচ্ছে</string>
+    <string name="local_source_badge">স্থানীয়</string>
     <string name="no_more_results">আর কোনও ফলাফল নেই</string>
     <string name="local_source">স্থানীয় উৎস</string>
     <string name="other_source">অন্যান্য</string>
@@ -183,8 +174,6 @@
     <string name="delete_downloads_for_manga">ডাউনলোডকৃত অধ্যায়গুলো মুছে ফেলতে চান?</string>
     <string name="display_mode_chapter">অধ্যায় %1$s</string>
     <string name="chapter_downloading_progress">ডাউনলোড হচ্ছে (%1$d/%2$d)</string>
-    <string name="download_error">ত্রুটি</string>
-    <string name="download_paused">থেমে আছে</string>
     <string name="show_title">উৎস শিরোনাম</string>
     <string name="show_chapter_number">অধ্যায় নাম্বার</string>
     <string name="sort_by_source">উৎস অনুযায়ী</string>
@@ -208,8 +197,6 @@
     <string name="error_category_exists">এই নামের একটি বিভাগ ইতিমধ্যে বিদ্যমান!</string>
     <string name="snack_categories_deleted">বিভাগগুলি মোছা হয়েছে</string>
     <string name="dialog_with_checkbox_remove_description">এটা এই অধ্যায়ের পড়ার সময়কাল সরিয়ে ফেলবে। আপনি নিশ্চিত?</string>
-    <string name="dialog_with_checkbox_reset">এই মাংগার জন্য সব অধ্যায় পুনঃবিন্যাস করুন</string>
-    <string name="snack_add_to_library">সংগ্রহশালায় মাঙ্গা যোগ করবেন\?</string>
     <string name="picture_saved">ছবি সংরক্ষিত হয়েছে</string>
     <string name="custom_filter">স্বনির্ধারিত ফিল্টার</string>
     <string name="set_as_cover">প্রচ্ছদ হিসাবে সংরক্ষণ করুন</string>
@@ -241,7 +228,6 @@
     <string name="download_notifier_unknown_error">অপ্রত্যাশিত ত্রুটির কারণে অধ্যায় ডাউনলোড করা যায়নি</string>
     <string name="download_notifier_text_only_wifi">কোন ওয়াই-ফাই সংযোগ খুঁজে পাওয়া যায়নি</string>
     <string name="download_notifier_no_network">কোন নেটওয়ার্ক সংযোগ খুঁজে পাওয়া যায়নি</string>
-    <string name="download_notifier_download_paused_chapters">ডাউনলোড বিরতি</string>
     <string name="channel_common">সাধারণ</string>
     <string name="label_migration">স্থানান্তর করুন</string>
     <string name="label_extensions">এক্সটেনশন গুলো</string>
@@ -256,11 +242,6 @@
     <string name="ext_untrusted">অনির্ভরযোগ্য</string>
     <string name="ext_uninstall">আন ইন্সটল</string>
     <string name="untrusted_extension">অনির্ভর‍যোগ্য এক্সটেনশন</string>
-    <string name="untrusted_extension_message">এই এক্সটেনশনটি একটি অবিশ্বস্ত সার্টিফিকেট দিয়ে স্বাক্ষরিত হয়েছিল এবং সক্রিয় করা হয়নি।
-\n
-\nএকটি দূষিত এক্সটেনশন টাচিওমিতে সংরক্ষিত যেকোন লগইন শংসাপত্র পড়তে পারে বা নির্বিচারে কোড চালাতে পারে।
-\n
-\nএই শংসাপত্রটি বিশ্বাস করে আপনি এই ঝুঁকিগুলি গ্রহণ করেন।</string>
     <string name="pref_double_tap_anim_speed">দুই টোকার এনিমেশনের গতি</string>
     <string name="double_tap_anim_speed_0">এনিমেশন নেই</string>
     <string name="double_tap_anim_speed_normal">সাধারণ</string>
@@ -278,6 +259,7 @@
     <string name="source_not_installed">উৎস ইন্সটল করা নেই: %1$s</string>
     <string name="repeating">পুনরায় পড়া</string>
     <string name="track_status">স্থিতি</string>
+    <string name="track_start_date">শুরু হয়েছে</string>
     <string name="track_type">ধরণ</string>
     <string name="transition_finished">শেষ:</string>
     <string name="transition_current">বর্তমান:</string>
@@ -316,7 +298,6 @@
     <string name="action_sort_latest_chapter">সর্বশেষ অধ্যায়</string>
     <string name="action_menu">তালিকা</string>
     <string name="confirm_exit">প্রস্থান করতে আবার ব্যাক চাপুন</string>
-    <string name="unlock_app">তাচিওমি খুলুন</string>
     <string name="label_sources">উৎস সমূহ</string>
     <string name="label_more">আরও</string>
     <string name="pref_category_display">প্রদর্শন</string>
@@ -374,8 +355,6 @@
     <string name="invalid_backup_file">ব্যাকআপ ফাইল গ্রহণযোগ্য নয়</string>
     <string name="pref_search_pinned_sources_only">শুধু আটকানো উৎস যোগ করুন</string>
     <string name="pref_enable_automatic_extension_updates">এক্সটেনশনের হালনাগাদ সমূহ</string>
-    <string name="pref_remove_bookmarked_chapters">বুকমার্ক করা অধ্যায়গুলি মুছে ফেলার অনুমতি দিন</string>
-    <string name="pref_category_delete_chapters">অধ্যায় মুছুন</string>
     <string name="webtoon_side_padding_25">২৫%</string>
     <string name="webtoon_side_padding_20">২০%</string>
     <string name="webtoon_side_padding_15">১৫%</string>
@@ -422,12 +401,11 @@
     <string name="tapping_inverted_none">কিছুই না</string>
     <string name="pref_read_with_tapping_inverted">উল্টানো ট্যাপিং</string>
     <string name="channel_ext_updates">এক্সটেনশনের হালনাগাদগুলো</string>
-    <string name="channel_new_chapters_episodes">অধ্যায়ের হালনাগাদগুলো</string>
     <string name="channel_errors">ত্রুটিসমূহ</string>
     <string name="channel_complete">সম্পূর্ণ</string>
     <string name="channel_progress">অগ্রগতি</string>
+    <string name="download_notifier_download_finish">ডাউনলোড সম্পন্ন হয়েছে</string>
     <string name="information_webview_outdated">অনুগ্রহ করে উন্নততর সামঞ্জস্যতার জন্য ওয়েবভিউ অ্যাপটি হালনাগাদ করুন</string>
-    <string name="information_webview_required">টাচিয়ামির জন্য ওয়েবভিউ প্রয়োজন</string>
     <string name="information_cloudflare_bypass_failure">ক্লাউডফ্লেয়ার বাইপাস করতে ব্যর্থ</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">এক্সটেনশন হালনাগাদ উপলব্ধ</item>
@@ -445,7 +423,6 @@
         <item quantity="other">%dটি শিরোনামের জন্য</item>
     </plurals>
     <string name="notification_check_updates">নতুন অধ্যায়ের জন্য অনুসন্ধান করা হচ্ছে</string>
-    <string name="download_insufficient_space">কম সঞ্চয়স্থানের কারণে অধ্যায়গুলি ডাউনলোড করা যায়নি</string>
     <string name="recent_manga_time">অঃ %1$s - %2$s</string>
     <string name="updating_library">সংগ্রহশালার হালনাগাদ হচ্ছে</string>
     <plurals name="missing_chapters_warning">
@@ -464,7 +441,6 @@
         <item quantity="other">%dটি ট্র্যাকার</item>
     </plurals>
     <string name="no_chapters_error">কোনও অধ্যায় পাওয়া যায় নি</string>
-    <string name="also_set_chapter_settings_for_library">এছাড়াও আমার সংগ্রহশালার মাঙ্গাতে প্রয়োগ করুন</string>
     <string name="chapter_settings">অধ্যায় সেটিংস</string>
     <string name="sort_by_upload_date">আপলোডের তারিখ অনুযায়ী</string>
     <string name="pref_refresh_library_covers">সংগ্রহশালার মাঙ্গার মোড়ক হালনাগাদ করুন</string>
@@ -482,7 +458,6 @@
     <string name="tabs_header">ট্যাব গুলি</string>
     <string name="badges_header">প্রতীক গুলি</string>
     <string name="downloaded_chapters">ডাউনলোড করা অধ্যায়</string>
-    <string name="manga_from_library">লাইব্রেরীর মাঙ্গা</string>
     <string name="logout_success">আপনি এখন প্রস্থান করেছেন</string>
     <string name="logout">প্রস্থান</string>
     <string name="logout_title">প্রস্থান করবেন %1$s থেকে\?</string>
@@ -491,7 +466,6 @@
         <item quantity="other">%1$sটি বাকি আছে</item>
     </plurals>
     <string name="downloaded_only_summary">আপনার লাইব্রেরীর সব মাঙ্গা ফিলটার করে</string>
-    <string name="pref_incognito_mode_summary">পড়ার ইতিহাসে বিরতি দেয়</string>
     <string name="pref_incognito_mode">ছদ্মবেশী মোড</string>
     <string name="label_downloaded_only">কেবল ডাউনলোড হয়েছে এমন</string>
     <string name="updated_version">হালনাগাদ করা হয়েছে v%1$s তে</string>
@@ -533,6 +507,7 @@
     <string name="error_no_match">পাওয়া যায়নি</string>
     <string name="source_unsupported">উৎস সমর্থিত নয়</string>
     <string name="unread">অপঠিত</string>
+    <string name="tracker_komga_warning">এই ট্র্যাকারটি কেবল কমগা উৎসের সাথে সামঞ্জস্যপূর্ণ।</string>
     <string name="error_sharing_cover">কভার শেয়ার করার সময় ত্রুটি</string>
     <string name="error_saving_cover">কভার সংরক্ষণে ত্রুটি</string>
     <string name="cover_saved">কভার সংরক্ষিত</string>
@@ -585,7 +560,6 @@
     <string name="exclude">বাদ দিন: %s</string>
     <string name="include">অন্তর্ভুক্ত করুন: %s</string>
     <string name="none">শূন্য</string>
-    <string name="pref_library_update_categories_details">বাদ দেওয়া ক্যাটাগরিতে মঙ্গা আপডেট করা হবে না যদিও সেগুলি অন্তর্ভুক্ত ক্যাটাগরিতেও থাকে।</string>
     <string name="categorized_display_settings">সাজানোর এবং প্রদর্শনের জন্য প্রতি শ্রেণীর সেটিংস</string>
     <string name="pref_library_update_refresh_trackers_summary">লাইব্রেরি আপডেট করার সময় ট্র্যাকার আপডেট করুন</string>
     <string name="pref_library_update_refresh_trackers">স্বয়ংক্রিয়ভাবে রিফ্রেশ ট্র্যাকার</string>
@@ -614,13 +588,11 @@
     <string name="action_start_downloading_now">এখনই ডাউনলোড শুরু করুন</string>
     <string name="action_show_errors">সকল ত্রুটি দেখুন</string>
     <string name="cancel_all_for_series">এই সিরিজের সব বাতিল করুন</string>
-    <string name="action_display_local_badge">স্থানীয় মাঙ্গা</string>
     <string name="information_empty_category_dialog">আপনার এখনও কোন বিভাগ নেই |</string>
     <string name="update_check_eol">এই অ্যান্ড্রয়েড সংস্করণটি আর সমর্থিত নয়</string>
     <string name="confirm_lock_change">পরিবর্তন নিশ্চিত করতে প্রমাণীকরণ করুন</string>
     <string name="action_sort_chapter_fetch_date">প্রাপ্তির তারিখ</string>
     <string name="label_default">সাধারণ</string>
-    <string name="pref_remove_exclude_categories">বর্জিত বিভাগ গুলি</string>
     <string name="ext_app_info">অ্যাপের তথ্য</string>
     <string name="ext_update_all">শব উপদাতে কর</string>
     <string name="backup_info">স্বয়ংক্রিয় ব্যাকআপ অত্যন্ত সুপারিশময়. আপনি অন্যান্য জায়গায়ও কপি রাখা উচিত।</string>
@@ -642,8 +614,6 @@
     <string name="connected_to_wifi">সুধু মাত্র ওয়িফি তে</string>
     <string name="notification_size_warning">সতর্কতা: বড় আপডেটগুলি উত্সের ক্ষতি করে এবং ধীরগতির আপডেটের দিকে নিয়ে যেতে পারে এবং ব্যাটারি ব্যবহারও বাড়িয়ে দিতে পারে</string>
     <string name="notification_updating">লাইব্রেরি আপডেট করা হচ্ছে... (%1$d/%2$d)</string>
-    <string name="download_queue_size_warning">সতর্কতা: বড় আকারের ডাউনলোডের ফলে উৎসগুলি মন্থর হয়ে যেতে পারে এবং/অথবা তাচিওমি ব্লক হয়ে যেতে পারে। আরও জানতে এখানে ট্যাপ করুন।</string>
-    <string name="pref_auto_clear_chapter_cache">অ্যাপ বন্দ্ধ করার সময় অধ্যায়ের ক্যাশে পরিষ্কার করুন</string>
     <string name="database_clean">তথ্যশালা পরিষ্কার</string>
     <string name="clear_database_source_item_count">তথ্যশালায় %1$d টি মাঙ্গা যেগুলি লাইব্রেরীতে নেই</string>
     <string name="privacy_policy">গোপনীয়তা নীতি</string>
@@ -654,7 +624,7 @@
     <string name="on_hiatus">বিরতিতে রয়েছে</string>
     <string name="notification_update_error">%1$d আপডেট(গুলি) ব্যর্থ হয়েছে</string>
     <string name="publishing_finished">সম্পূর্ণ প্রকাশিত</string>
-    <string name="action_sort_last_manga_update">সর্বশেষ হালনাগাদ চেক</string>
+    <string name="action_filter_started">শুরু করা হয়েছে</string>
     <string name="delete_category_confirmation">আপনি কি \"%s\" বিভাগটি মুছে ফেলতে চান\?</string>
     <string name="appwidget_updates_description">সম্প্রতি আপনার হালনাগাদকৃত মাঙ্গা দেখুন</string>
     <string name="are_you_sure">আপনি কি নিশ্চিত\?</string>
@@ -664,7 +634,6 @@
     </plurals>
     <string name="action_sort_unread_count">অপঠিত সংখ্যা</string>
     <string name="action_remove_everything">সবকিছু মুছুন</string>
-    <string name="action_show_manga">মাঙ্গা দেখান</string>
     <string name="delete_category">বিভাগ মুছুন</string>
     <string name="theme_lavender">ল্যাভেণ্ডার</string>
     <string name="action_search_hint">খুঁজুন…</string>
@@ -675,7 +644,6 @@
     <string name="unfinished_list">অসম্পূর্ণ তালিকা</string>
     <string name="on_hold_list">স্থগিত তালিকা</string>
     <string name="auto_download_while_reading">পড়ার সময় সয়ংক্রিয়ভাবে ডাউনলোড</string>
-    <string name="pref_update_only_completely_read">অপঠিত অধ্যায়সহ</string>
     <string name="pref_library_update_manga_restriction">শিরোনামসমুহ হালনাগাদ এড়িয়ে যান</string>
     <string name="download_notifier_split_failed">ডাউনলোড করা চিত্র বিভক্ত করা যায়নি</string>
     <string name="channel_skipped">এড়িয়ে যাওয়া</string>
@@ -693,6 +661,4 @@
     <string name="pref_reader_summary">পঠনের ধরন, ডিসপ্লে,নেভিগেশন</string>
     <string name="pref_backup_summary">ম্যানুয়াল ও সয়ংক্রিয় ব্যাকআপ</string>
     <string name="pref_security_summary">অ্যাপ লক,নিরাপদ পর্দা</string>
-    <string name="loader_rar5_error">RARv5 ধরন সমর্থিত নয়</string>
-    <string name="skipped_reason_not_caught_up">অপঠিত অধ্যায় থাকায় এড়িয়ে যাওয়া হয়েছে</string>
 </resources>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="categories">Kategorya</string>
+    <string name="label_download_queue">Mga Dina-download</string>
+    <string name="unlock_app">Buksan ang Aniyomi</string>
+    <string name="action_sort_last_manga_update">Huling update ng pag-tsek</string>
+    <string name="action_show_manga">Ipakita ang mga entry</string>
+    <string name="action_display_local_badge">Lokal na pinanggagalingan</string>
+    <string name="pref_update_only_completely_read">May di pa nababasang kabanata</string>
+    <string name="pref_library_update_show_tab_badge">Ipakita ang bilang ng di pa nabasa sa Bago</string>
+    <string name="default_category">Panimulang lagayan</string>
+    <string name="pref_library_update_categories_details">Ang mga entry sa mga ibinukod na kategorya ay hindi maa-update kahit na sila ay kasama rin sa mga kategoryang kasama.</string>
+    <string name="untrusted_extension_message">Pinirmahan ang extension na ito gamit ang isang kaduda-dudang certificate at hindi muna pinagana.
+\n
+\nMaaaring mabasa ng isang kaduda-dudang extension ang kahit anong credentials sa pag-login na nakatago sa Tachiyomi o di kaya nama\'y magsimula ng delikadong code.
+\n
+\nTinatanggap mo ang mga bantang ito sa pagtiwala sa certificate na ito.</string>
+    <string name="pref_category_delete_chapters">Magbura ng kabanata</string>
+    <string name="pref_remove_after_marked_as_read">Pagkamarkahang nabasa na</string>
+    <string name="pref_remove_after_read">Pagkatapos basahin, kusang burahin</string>
+    <string name="pref_remove_bookmarked_chapters">Burahin din ang may pananda</string>
+    <string name="pref_remove_exclude_categories">Kategoryang di-kasama</string>
+    <string name="pref_auto_update_manga_sync">I-update ang progress pagkabasa</string>
+    <string name="pref_clear_chapter_cache">Linisin ang cache ng kabanata</string>
+    <string name="pref_auto_clear_chapter_cache">Linisin ang cache ng kabanata pagkasara</string>
+    <string name="pref_clear_database">Linisin ang database</string>
+    <string name="pref_clear_database_summary">Burahin ang history para sa mga entry na hindi naka-save sa iyong library</string>
+    <string name="clear_database_confirmation">Sigurado ka ba\? Mga basa na chapters at mga progress sa mga entry ng non-library ay mawawala</string>
+    <string name="pref_refresh_library_tracking_summary">Inia-update ang estado, iskor, at huling nabasang kabanata mula sa mga tracker</string>
+    <string name="pref_incognito_mode_summary">Hinihinto ang pagtala sa nakaraan</string>
+    <string name="manga_from_library">Galing sa library</string>
+    <string name="snack_add_to_library">Idagdag sa library\?</string>
+    <string name="download_error">Nagka-error</string>
+    <string name="download_paused">Nakahinto</string>
+    <string name="also_set_chapter_settings_for_library">Gawin din sa lahat ng mga entry sa aking library</string>
+    <string name="dialog_with_checkbox_reset">I-reset ang lahat ng chapters sa entry na ito</string>
+    <string name="download_insufficient_space">Di ma-download ang mga kabanata dahil sa mababang espasyo</string>
+    <string name="download_queue_size_warning">Babala: maaari pong humantong sa pagbagal at/o pagharang ng mga source sa Tachiyomi ang mga malalaking maramihang pag-download. Pakipindot po ito para matuto pa.</string>
+    <string name="information_webview_required">Kailangan ng Tachiyomi ang WebView</string>
+    <string name="download_notifier_download_paused_chapters">Nakahinto ang pag-download</string>
+    <string name="channel_new_chapters_episodes">Mga update sa kabanata</string>
+    </resources>

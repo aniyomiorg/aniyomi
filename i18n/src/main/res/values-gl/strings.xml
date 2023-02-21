@@ -7,14 +7,9 @@
     <string name="label_recent_manga">Historial</string>
     <string name="label_recent_updates">Actualizacións</string>
     <string name="label_library">Biblioteca</string>
-    <string name="label_download_queue">Cola de descargas</string>
     <string name="last_read_chapter">Último capítulo lido</string>
     <string name="disabled">Deshabilitado</string>
     <string name="custom_dir">Ubicación personalizada</string>
-    <string name="pref_remove_bookmarked_chapters">Eliminar capítulos marcados</string>
-    <string name="pref_remove_after_read">Despois de ler</string>
-    <string name="pref_remove_after_marked_as_read">Despois de marcar manualmente como lido</string>
-    <string name="pref_category_delete_chapters">Eliminar capítulos</string>
     <string name="pref_download_directory">Ubicación de descargas</string>
     <string name="webtoon_side_padding_25">25%</string>
     <string name="webtoon_side_padding_20">20%</string>
@@ -88,11 +83,6 @@
     <string name="ext_nsfw_short">+18</string>
     <string name="unofficial_extension_message">Esta extensión non é da lista de extensións oficiais de Tachiyomi.</string>
     <string name="obsolete_extension_message">Esta extensión xa non está dispoñible.</string>
-    <string name="untrusted_extension_message">Esta extensión foi firmada non un certificado non confiable e non foi activada
-\n
-\nUnha extensión maliciosa podería ler calquera credencial de inicio de sesión gardado en Tachiyomi ou executar código arbitrario.
-\n
-\nConfiando neste certificado aceptas estes riscos.</string>
     <string name="untrusted_extension">Extensión non confiable</string>
     <string name="ext_untrusted">Non confiable</string>
     <string name="ext_uninstall">Desinstalar</string>
@@ -112,7 +102,6 @@
         <item quantity="other">%d categorías</item>
     </plurals>
     <string name="default_category_summary">Preguntar sempre</string>
-    <string name="default_category">Categoría por defecto</string>
     <string name="pref_library_update_refresh_metadata_summary">Comprobar novas portadas e detalles cando se actualiza a biblioteca</string>
     <string name="pref_library_update_refresh_metadata">Refrescar metadatos automáticamente</string>
     <string name="pref_update_only_non_completed">Actualiza só manga en curso</string>
@@ -240,11 +229,9 @@
     <string name="action_menu">Menú</string>
     <string name="action_settings">Axustes</string>
     <string name="confirm_exit">Pulsa atrás de novo para saír</string>
-    <string name="unlock_app">Desbloquea Aniyomi</string>
     <string name="history">Historial</string>
     <string name="track">Seguimento</string>
     <string name="chapters">Capítulos</string>
-    <string name="categories">Categorías</string>
     <string name="information_empty_category">Non tes categorías. Toca o botón cun máis para crear unha e organizar a túa biblioteca.</string>
     <string name="information_empty_library">A túa biblioteca está vacía. Engade series desde Explorar.</string>
     <string name="browse">Explorar</string>

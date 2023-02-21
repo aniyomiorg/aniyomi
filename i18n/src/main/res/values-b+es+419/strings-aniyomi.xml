@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="categories">Categorías</string>
+    <string name="label_download_queue">Lista de descargas</string>
+    <string name="unlock_app">Desbloquear Aniyomi</string>
+    <string name="action_sort_last_manga_update">Última actualización de manga</string>
+    <string name="action_show_manga">Mostrar manga</string>
+    <string name="action_display_local_badge">Mangas locales</string>
+    <string name="pref_update_only_completely_read">Con capitulo(s) sin leer</string>
+    <string name="pref_library_update_show_tab_badge">Mostrar número de no leidos en el icono de actualización</string>
+    <string name="default_category">Categoría por defecto</string>
+    <string name="pref_library_update_categories_details">Los manga en las categorías excluidas no se actualizarán aún cuando estén en las categorías incluidas.</string>
+    <string name="untrusted_extension_message">Esta extensión fue firmada por una fuente no certificada y no fue activada.
+\n
+\nUna extensión maliciosa puede leer cualquier credencial de inicio guardada en Tachiyomi o ejecutar código arbitrario.
+\n
+\nAl confiar en este certificado aceptas estos riesgos.</string>
+    <string name="pref_category_delete_chapters">Eliminar capítulos</string>
+    <string name="pref_remove_after_marked_as_read">Después de marcar como leído manualmente</string>
+    <string name="pref_remove_after_read">Borrar automáticamente después de leer</string>
+    <string name="pref_remove_bookmarked_chapters">Permitir el borrado de capítulos en favoritos</string>
+    <string name="pref_remove_exclude_categories">Categorías excluidas</string>
+    <string name="pref_auto_update_manga_sync">Actualizar el progreso después de leer</string>
+    <string name="pref_clear_chapter_cache">Borrar caché de los capítulos</string>
+    <string name="pref_auto_clear_chapter_cache">Borrar la caché de capítulos al cerrar la aplicación</string>
+    <string name="pref_clear_database">Borrar base de datos</string>
+    <string name="pref_clear_database_summary">Borrar el historial de mangas que no están guardados en la biblioteca</string>
+    <string name="clear_database_confirmation">¿Estas seguro\? Los capítulos leídos y el progreso de los mangas que no estén en la biblioteca se perderán</string>
+    <string name="pref_refresh_library_tracking_summary">Actualizar estado, puntuación y último capítulo leído en los servicios de seguimiento</string>
+    <string name="pref_incognito_mode_summary">Pausar historial de lectura</string>
+    <string name="manga_from_library">Manga de la biblioteca</string>
+    <string name="snack_add_to_library">¿Añadir manga a la biblioteca\?</string>
+    <string name="download_error">Error</string>
+    <string name="download_paused">Pausado</string>
+    <string name="also_set_chapter_settings_for_library">Aplicar también a todos los mangas en mi biblioteca</string>
+    <string name="dialog_with_checkbox_reset">Reiniciar todos los capítulos de este manga</string>
+    <string name="download_insufficient_space">No se pudieron descargar los capítulos debido al poco espacio de almacenamiento</string>
+    <string name="download_queue_size_warning">Advertencia: las descargas en masa pueden causar lentitud en las fuentes y/o bloquear Tachiyomi. Toca para conocer más.</string>
+    <string name="information_webview_required">Se requiere WebView para Tachiyomi</string>
+    <string name="download_notifier_download_paused_chapters">Descarga pausada</string>
+    <string name="channel_new_chapters_episodes">Actualizaciones de capítulos</string>
+    </resources>

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Név</string>
-    <string name="categories">Kategóriák</string>
-    <string name="manga">Könyvtár bejegyzések</string>
+    <string name="manga">Manga</string>
     <string name="chapters">Fejezetek</string>
     <string name="track">Követés</string>
     <string name="history">Előzmények</string>
@@ -41,7 +40,6 @@
     <string name="pref_library_update_restriction">Frissítések korlátozása</string>
     <string name="charging">Töltés közben</string>
     <string name="pref_update_only_non_completed">Csak a jelenleg is folyamatban lévőket frissítse</string>
-    <string name="default_category">Alapértelmezett kategória</string>
     <string name="default_category_summary">Mindig kérdezzen rá</string>
     <string name="pref_fullscreen">Teljes képernyő</string>
     <string name="pref_show_page_number">Oldalszám megjelenítése</string>
@@ -62,10 +60,10 @@
     <string name="chapter_progress">%1$d oldal</string>
     <string name="no_next_chapter">Nem található a következő fejezet</string>
     <string name="download_notifier_no_network">A hálózat nem érhető el</string>
-    <string name="label_download_queue">Letöltési sor</string>
     <string name="label_library">Könyvtár</string>
     <string name="label_recent_updates">Frissítések</string>
     <string name="action_filter">Szűrők</string>
+    <string name="action_filter_downloaded">Letöltve</string>
     <string name="action_filter_bookmarked">Könyvjelzőzve</string>
     <string name="action_filter_unread">Olvasatlan</string>
     <string name="action_filter_empty">Szűrők eltávolítása</string>
@@ -102,7 +100,6 @@
     <string name="action_open_log">Napló megnyitása</string>
     <string name="action_restore">Visszaállítás</string>
     <string name="app_not_available">Az app nem elérhető</string>
-    <string name="pref_auto_update_manga_sync">Olvasás után a fejezetek haladásának frissítése</string>
     <string name="pref_page_transitions">Áttűnés lapozáskor</string>
     <string name="pref_crop_borders">Szegélyek vágása</string>
     <string name="pref_custom_brightness">Egyéni fényerő</string>
@@ -150,14 +147,11 @@
     <string name="action_select_inverse">Kiválasztás megfordítása</string>
     <string name="action_menu">Menü</string>
     <string name="confirm_exit">A befejezéshez nyomd meg újfent a Vissza gombot</string>
-    <string name="unlock_app">Aniyomi feloldása</string>
     <string name="information_empty_library">A könyvtárad üres</string>
     <string name="information_no_recent">Nincs új frissítés</string>
     <string name="information_no_downloads">Nincs letöltés folyamatban</string>
     <string name="channel_ext_updates">Bővítményfrissítések</string>
-    <string name="channel_new_chapters_episodes">Fejezetfrissítések</string>
     <string name="channel_common">Gyakori</string>
-    <string name="download_notifier_download_paused_chapters">Letöltés szüneteltetve</string>
     <string name="download_notifier_text_only_wifi">Nincs Wi-Fi kapcsolat</string>
     <string name="download_notifier_unknown_error">Egy váratlan hiba miatt nem sikerült letölteni a fejezetet</string>
     <string name="download_notifier_title_error">Hiba</string>
@@ -238,13 +232,11 @@
         <item quantity="other">%1$s fejezet</item>
     </plurals>
     <string name="spen_previous_page">Előző oldal</string>
-    <string name="download_error">Hiba</string>
     <string name="website">Weboldal</string>
     <string name="check_for_updates">Frissítések keresése</string>
     <string name="licenses">Nyílt forráskódú licenc</string>
     <string name="tabs_header">Lapok</string>
     <string name="badges_header">Jelvények</string>
-    <string name="manga_from_library">Manga a könyvtárból</string>
     <string name="nav_zone_prev">Előző</string>
     <string name="notification_chapters_single">%1$s. fejezet</string>
     <plurals name="notification_chapters_generic">
@@ -275,7 +267,6 @@
     <string name="migrate">Áttelepítés</string>
     <string name="display_mode_chapter">%1$s. fejezet</string>
     <string name="channel_crash_logs">Összeomlási naplók</string>
-    <string name="information_webview_required">A Tachiyomi működéséhez WebView szükséges</string>
     <string name="notification_chapters_multiple">%1$s. fejezetek</string>
     <string name="notification_chapters_single_and_more">A(z) %1$s. fejezet és %2$d egyéb fejezetek</string>
     <string name="share_page_info">%1$s:%2$s, %3$d. oldal</string>
@@ -287,8 +278,6 @@
     <string name="download_10">Következő 10 fejezet</string>
     <string name="download_5">Következő 5 fejezet</string>
     <string name="download_1">Következő fejezet</string>
-    <string name="download_paused">Szünetel</string>
-    <string name="snack_add_to_library">Manga könyvtárhoz adása\?</string>
     <string name="source_not_installed">Forrás nincs telepítve: %1$s</string>
     <string name="ongoing">Folyamatban van</string>
     <string name="last_used_source">Utoljára használt</string>
@@ -306,17 +295,11 @@
     <string name="updating_library">Könyvtár frissítése</string>
     <string name="no_chapters_error">Nem található fejezet</string>
     <string name="licensed">Licenszelt</string>
-    <string name="untrusted_extension_message">Ezt a kiterjesztést nem megbízható tanúsítvánnyal írták alá, és nem lett aktiválva.
-\n
-\nEgy rosszindulatú kiterjesztés elolvashatja a Tachiyomiban tárolt bejelentkezési adatokat, vagy tetszőleges kódot futtathat.
-\n
-\nAz ebben a tanúsítványban való megbízással, elfogadja ezeket a kockázatokat.</string>
     <string name="ext_trust">Bizalom</string>
     <string name="exclude">Tiltott: %s</string>
     <string name="include">Kedvelt: %s</string>
     <string name="none">Semmi</string>
     <string name="pref_download_new_categories_details">Mangák a tiltott kategóriákban nem lesznek letöltve, még akkor se, ha a kedvelt kategóriában is vannak.</string>
-    <string name="pref_library_update_categories_details">Mangák a tiltott kategóriákban nem lesznek frissítve, még akkor se, ha a kedvelt kategóriákban is vannak.</string>
     <string name="secure_screen">Biztonságos képernyő</string>
     <string name="lock_when_idle">Zárás tétlen állapotban</string>
     <string name="lock_with_biometrics">Biometrikus zár</string>
@@ -371,7 +354,6 @@
     <string name="pref_app_theme">Alkalmazás témája</string>
     <string name="pref_category_appearance">Kinézet</string>
     <string name="action_start_downloading_now">Letöltés elkezdése most</string>
-    <string name="action_display_local_badge">Helyi forrás</string>
     <string name="action_filter_tracked">Követve</string>
     <string name="confirm_lock_change">Hitelesítsd magad a változtatás elfogadásához</string>
     <string name="label_default">Alapértelmezett</string>
@@ -385,11 +367,6 @@
     <string name="second_to_last">Utolsó előtti befejezett fejezet</string>
     <string name="disabled">Kikapcsolva</string>
     <string name="custom_dir">Egyedi hely</string>
-    <string name="pref_remove_exclude_categories">Tiltott kategóriák</string>
-    <string name="pref_remove_bookmarked_chapters">Könyvjelzőzött fejezetek törlésének engedélyezése</string>
-    <string name="pref_remove_after_read">Automatikus törlés olvasás után</string>
-    <string name="pref_remove_after_marked_as_read">Olvasottnak jelölés után</string>
-    <string name="pref_category_delete_chapters">Fejezetek törlése</string>
     <string name="pref_lowest">Legalacsonyabb</string>
     <string name="pref_low">Alacsony</string>
     <string name="pref_high">Magas</string>
@@ -453,7 +430,7 @@
     <string name="pref_double_tap_anim_speed">Dupla koppintás animációjának sebessége</string>
     <string name="ext_installer_pref">Telepítő</string>
     <string name="ext_install_service_notif">Bővítmény telepítése…</string>
-    <string name="action_sort_count">Összes bejegyzés</string>
+    <string name="action_sort_count">Összes manga</string>
     <string name="ext_update_all">Az összes frissítése</string>
     <string name="action_display_language_badge">Nyelv</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Telepítsd és indítsd el a Shizukut, hogy kiegészítő telepítőként használd.</string>
@@ -488,8 +465,8 @@
     <string name="no_results_found">Nincs találat</string>
     <string name="action_global_search_hint">Globális keresés…</string>
     <string name="sort_by_upload_date">Feltöltési dátum szerint</string>
+    <string name="tracker_komga_warning">Ez a tracker csak a Komga forrással kompatibilis.</string>
     <string name="dialog_with_checkbox_remove_description">Ez eltávolítja a fejezet olvasási dátumát. Biztos benne\?</string>
-    <string name="pref_update_only_completely_read">Csak a befejezett fejezeteket()</string>
     <string name="delete_category_confirmation">Törölni akarja a %s kategóriát \?</string>
     <string name="internal_error">InternalError: Nézze meg a hibaüzenetet további információért</string>
     <string name="network_not_metered">Csak nem-lemért hálózatokon</string>
@@ -498,15 +475,11 @@
     <string name="restore_miui_warning">Biztonsági mentés/helyreállítás nem biztos,hogy működik ha a MIUI Optimalizáció ki van kapcsolva.</string>
     <string name="restore_in_progress">Helyreállítás folyamatban van</string>
     <string name="used_cache">Felhasznált gyorsítótár: %1$s</string>
-    <string name="pref_clear_database">Adatbázis törlése</string>
-    <string name="pref_clear_database_summary">Nem könyvtári elemek előzményeinek törlése</string>
     <string name="clear_database_source_item_count">%1$d nem könyvtári manga az adatbázisban</string>
-    <string name="pref_auto_clear_chapter_cache">Fejezet gyorsítótár törlése kilépéskor</string>
     <string name="local_invalid_format">Helytelen fejezet formátum</string>
     <string name="label_network">Hálózat</string>
     <string name="download_queue_error">Nem lehetett a fejezeteket letölteni. Próbálja újra a letöltések menüpontban</string>
     <string name="migration_selection_prompt">Válaszon ki egy forrást, ahonnan importálni szeretne</string>
-    <string name="download_insufficient_space">Nem lehetett letölteni kevés tárhely miatt</string>
     <string name="pref_backup_directory">Biztonsági mentés helye</string>
     <string name="pref_backup_slots">Maximális biztonsági mentések száma</string>
     <string name="creating_backup">Biztonsági mentés létrehozása</string>
@@ -514,7 +487,6 @@
     <string name="pref_clear_cookies">Sütik törlése</string>
     <string name="cache_deleted">Gyorsítótár törölve: %1$d fájl lett törölve</string>
     <string name="cache_delete_error">Hiba történt törlés közben</string>
-    <string name="clear_database_confirmation">Biztos benne\? Nem könyvtári elemek olvasott fejezetei elvesznek</string>
     <string name="notification_updating">Könyvtár frissítése...(%1$d/%2$d)</string>
     <plurals name="notification_new_chapters_summary">
         <item quantity="one">%d-nak/nek</item>
@@ -531,10 +503,8 @@
 \nEzek után telepíteni kell a hiányzó bővítményeket és be kell jelentkezni a tracking szolgáltatásokba, hogy újra használhassa őket.</string>
     <string name="pref_refresh_library_covers">Könyvtár fedők frissítése</string>
     <string name="pref_dump_crash_logs">Hibaüzenetetek törlése</string>
-    <string name="pref_refresh_library_tracking_summary">Frissíti az állapotot, értékelést és az utolsó olvasott fejezetet a tracking szolgáltatás által</string>
     <string name="pref_reset_viewer_flags">Sorozat beállításainak visszaállítása</string>
     <string name="about_dont_kill_my_app">Néhány gyártónak extra korlátozása van arra, hogy kikapcsolja a háttér folyamatokat. Ezen a web oldalon több információt találsz, hogy hogyan oldható meg.</string>
-    <string name="pref_incognito_mode_summary">Olvasási előzmények megállítása</string>
     <string name="manga_cover">Fedlap</string>
     <string name="on_hold">Tartva</string>
     <string name="snack_categories_deleted">Kategóriák törölve</string>
@@ -554,9 +524,7 @@
         <item quantity="one">%d fejezet kihagyása, hiányzik a forrás, vagy ki lett szűrve</item>
         <item quantity="other">%d fejezet kihagyása, hiányoznak a források, vagy ki lettek szűrve</item>
     </plurals>
-    <string name="action_sort_last_manga_update">Utolsó frissítés megtekintése</string>
     <string name="action_sort_unread_count">Olvasatlanok száma</string>
-    <string name="action_show_manga">Bejegyzés mutatása</string>
     <string name="action_display_cover_only_grid">Kizárólag fedlapok mutatása</string>
     <string name="backup_restore_missing_sources">Hiányzó források:</string>
     <string name="pref_dns_over_https">DNS a HTTPS mellett (DoH)</string>
@@ -571,19 +539,18 @@
     <string name="chapter_settings">Fejezet beállítások</string>
     <string name="confirm_set_chapter_settings">Biztos, hogy ezeket a beállításokat alapértelmezettként akarod elmenteni\?</string>
     <string name="error_saving_cover">Hiba fedlap mentése közben</string>
-    <string name="also_set_chapter_settings_for_library">Könyvtárban lévő tartalmakra is</string>
     <string name="pref_clear_history">Előzmények törlése</string>
     <string name="clear_history_completed">Előzmények törölve</string>
     <string name="source_empty_screen">Nincs forrás</string>
     <string name="page_list_empty_error">Nem található oldal</string>
     <string name="recent_manga_time">Fej. %1$s - %2$s</string>
     <string name="getting_started_guide">Kezdési útmutató</string>
+    <string name="action_filter_started">Elkezdett</string>
     <string name="database_clean">Adatbázis törlése</string>
     <string name="pref_update_only_started">Még nem lett elindítva</string>
     <string name="notification_new_chapters">Új fejezet</string>
     <string name="backup_in_progress">Biztonsági mentés már folyamatban van</string>
     <string name="not_installed">Nincs telepítve</string>
-    <string name="download_queue_size_warning">Figyelmeztetés: a tömeges letöltések a források lelassulásához és/vagy a Tachiyomi leállásához vezethetnek. Koppintson további információért.</string>
     <string name="notification_check_updates">Új fejezetek keresése</string>
     <string name="notification_update_skipped">%1$d frissítés kihagyva</string>
     <string name="learn_more">Koppintson további információért</string>
@@ -611,6 +578,7 @@
     </plurals>
     <string name="manga_download">Letöltés</string>
     <string name="custom_download">Megadott mennyiség letöltése</string>
+    <string name="local_source_badge">Helyi</string>
     <string name="publishing_finished">Befejezett</string>
     <string name="description_placeholder">Nincs leírás</string>
     <string name="chapter_downloading_progress">Letöltés (%1$d/%2$d)</string>
@@ -639,6 +607,7 @@
     <string name="downloaded_only_summary">Szűri a könyvtár összes tartalmát</string>
     <string name="error_sharing_cover">Hiba a fedlap megosztása közben</string>
     <string name="action_close">Bezár</string>
+    <string name="pref_duplicate_pinned_sources">Többször megjelenő források megjelenítése</string>
     <string name="battery_not_low">Ha nem alacsony az akkumulátor tözöttség</string>
     <string name="rotation_reverse_portrait">Fordított álló</string>
     <string name="paused">Megállítva</string>
@@ -647,19 +616,19 @@
     <string name="complete_list">Teljes lista</string>
     <string name="unfinished_list">Befejezetlen lista</string>
     <string name="track_status">Állapot</string>
+    <string name="track_start_date">Elkezdett</string>
     <string name="track_started_reading_date">Kezdés dátuma</string>
     <string name="track_finished_reading_date">Befejezés dátuma</string>
     <string name="myanimelist_relogin">Kérjük, jelentkezzen be MAL-ba újra</string>
     <string name="source_unsupported">A forrás nem támogatott</string>
     <string name="error_no_match">Nincs egyezés</string>
     <string name="error_category_exists">Ilyen nevű kategória már létezik!</string>
-    <string name="dialog_with_checkbox_reset">Mangában lévő összes fejezet visszaállítása</string>
     <string name="error_saving_picture">Hiba a kép mentése közben</string>
     <string name="on_hold_list">Tartva lista</string>
     <string name="custom_cover">Egyéni fedlap</string>
     <string name="transition_next">Következő:</string>
     <string name="transition_previous">Előző:</string>
-    <string name="transition_no_next">Nincs több fejezet</string>
+    <string name="transition_no_next">Nincs többe fejezet</string>
     <string name="transition_no_previous">Nincs előző fejezet</string>
     <string name="transition_pages_error">%1$s oldalt nem lehetett betölteni</string>
     <string name="transition_pages_loading">Oldalak betöltése…</string>
@@ -668,6 +637,7 @@
     <string name="disabled_nav">Kikapcsolva</string>
     <string name="webtoon_side_padding_5">5%</string>
     <string name="enhanced_tracking_info">Szolgáltatások, melyek fejlett funkciókat kínálnak. A manga automatikusan könyvtárhoz lesz adva és frissítve lesz.</string>
+    <string name="pref_duplicate_pinned_sources_summary">Ismételje meg a rögzített forrásokat a megfelelő nyelvi csoportokban</string>
     <string name="pref_search_pinned_sources_only">Csak kitűzött forrásokból</string>
     <string name="pref_create_backup">Biztonsági mentés készítése</string>
     <string name="pref_create_backup_summ">Felhasználható az aktuális könyvtár visszaállítására</string>
@@ -682,7 +652,6 @@
     <string name="restoring_backup">Biztonsági mentés helyreállítása</string>
     <string name="restoring_backup_error">Nem sikerült a biztonsági mentés helyreállítása</string>
     <string name="clear_database_completed">Elemek törölve</string>
-    <string name="pref_clear_chapter_cache">Fejezet gyorsítótárának törlése</string>
     <string name="webview_data_deleted">WebView adatok törölve</string>
     <string name="pref_reset_viewer_flags_summary">Helyreállítja az olvasó módot és orientációt minden elemnél</string>
     <string name="pref_reset_viewer_flags_error">Nem lehetett visszaállítani az olvasói beállításokat</string>
@@ -706,6 +675,7 @@
     <string name="sort_by_number">Fejezetek száma szerint</string>
     <string name="library_errors_help">Könyvtárfrissítési hibák kijavításához sgítségért, tekintese meg %1$s</string>
     <string name="skipped_reason_completed">Átugorva, mivel a sorozat befejeződött</string>
+    <string name="download_notifier_download_finish">Letöltés befejeződött</string>
     <string name="download_notifier_split_page_not_found">%d oldal nem található felosztás közben</string>
     <string name="download_notifier_split_page_path_not_found">Nem található az útvonal a %d-ik oldalhoz</string>
     <string name="download_notifier_split_failed">Nem sikerült a letöltött képet felosztani</string>
@@ -724,39 +694,4 @@
     <string name="pref_general_summary">Alkalmazás nyelve, értesítések</string>
     <string name="pref_appearance_summary">Téma, dátum és idő formátuma</string>
     <string name="action_search_hint">Keresés…</string>
-    <string name="pref_invalidate_download_cache_summary">Kényszerítse az alkalmazást a letöltött fejezetek újbóli ellenőrzésére</string>
-    <string name="auto_download_while_reading">Automatikus letöltés olvasás közben</string>
-    <string name="label_started">Elkezdett</string>
-    <string name="label_downloaded">Letöltött</string>
-    <string name="label_local">Helyi</string>
-    <string name="label_stats">Statisztika</string>
-    <string name="unknown_title">Ismeretlen cím</string>
-    <string name="label_overview_section">Áttekintés</string>
-    <string name="label_total_chapters">Összes</string>
-    <string name="label_read_chapters">Olvasott</string>
-    <string name="label_mean_score">Átlagos értékelés</string>
-    <string name="action_open_random_manga">Véletlenszerű manga megnyitása</string>
-    <string name="updates_last_update_info">Könyvtár utoljára frissítve: %s</string>
-    <string name="label_tracker_section">Követők</string>
-    <string name="pref_library_update_show_tab_badge">Az olvasatlanok számának megjelenítése a Frissítések ikonon</string>
-    <string name="action_display_show_continue_reading_button">Olvasás folytatása gomb megjelenítése</string>
-    <string name="pref_library_summary">Kategóriák, globális frissítés</string>
-    <string name="pref_security_summary">Alkalmazás zárolás, képernyő zár</string>
-    <string name="pref_advanced_summary">Összeomlás naplók kiírása, akkumulátor optimalizálások</string>
-    <string name="invalid_location">Hibás hely: %s</string>
-    <string name="download_ahead_info">Csak a könyvtár bejegyzéseinél működik, és ha az aktuális és a következő fejezet már letöltött</string>
-    <string name="pref_long_strip_split">Magas képek felosztása (BÉTA)</string>
-    <string name="download_ahead">Letöltés előre</string>
-    <string name="pref_reader_summary">Olvasó mód, kijelző, navigáció</string>
-    <string name="theme_tidalwave">Szökőár</string>
-    <string name="action_not_now">Ne most</string>
-    <string name="pref_downloads_summary">Automatikus letöltés, letöltés előre</string>
-    <string name="pref_tracking_summary">Egyirányú haladás szinkronizálás, fejlesztett szinkronizálás</string>
-    <string name="pref_backup_summary">Manuális és automatikus biztonsági mentés</string>
-    <string name="multi_lang">Több</string>
-    <plurals name="next_unread_chapters">
-        <item quantity="one">Következő olvasatlan fejezet</item>
-        <item quantity="other">Következő %d olvasatlan fejezet</item>
-    </plurals>
-    <string name="pref_browse_summary">Források, bővítmények, globális keresés</string>
 </resources>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="label_download_queue">ഡൗൺലോഡ് ക്യൂ</string>
     <string name="information_no_downloads">ഡൗൺലോഡുകളൊന്നുമില്ല</string>
     <string name="information_no_recent">സമീപകാല അപ്‌ഡേറ്റുകളൊന്നുമില്ല</string>
     <string name="track">ട്രാക്കിംഗ്</string>
@@ -12,7 +11,6 @@
     <string name="label_default">സ്ഥിരസ്ഥിതി</string>
     <string name="action_filter">ഫിൽട്ടർ ചെയ്യുക</string>
     <string name="label_warning">മുന്നറിയിപ്പ്</string>
-    <string name="unlock_app">ടാച്ചിയോമി അൺലോക്ക് ചെയ്യുക</string>
     <string name="name">പേര്</string>
     <string name="label_more">കൂടുതൽ</string>
     <string name="label_library">പുസ്തകശാല</string>
@@ -23,7 +21,6 @@
     <string name="label_extensions">വിപുലീകരണങ്ങൾ</string>
     <string name="label_extension_info">വിപുലീകരണ വിവരം</string>
     <string name="label_help">സഹായിക്കൂ</string>
-    <string name="categories">വിഭാഗങ്ങൾ</string>
     <string name="manga">മാംഗ</string>
     <string name="chapters">അധ്യായങ്ങൾ</string>
     <string name="confirm_lock_change">മാറ്റം സ്ഥിരീകരിക്കാൻ പ്രാമാണീകരിക്കുക</string>

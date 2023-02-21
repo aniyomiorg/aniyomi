@@ -5,19 +5,18 @@
     <string name="label_settings">Innstillingar</string>
     <string name="label_recent_updates">Oppdateringar</string>
     <string name="label_help">Hjelp</string>
-    <string name="categories">Kategoriar</string>
     <string name="manga">Manga</string>
     <string name="chapters">Kapittel</string>
     <string name="track">Sporing</string>
     <string name="history">Historikk</string>
     <string name="label_default">Standard</string>
     <string name="label_warning">Åtvaring</string>
-    <string name="unlock_app">Lås opp Tachiyomi</string>
     <string name="confirm_lock_change">Autentiser for å stadfesta endring</string>
     <string name="action_filter">Filter</string>
     <string name="action_filter_bookmarked">Bokmerket</string>
     <string name="action_filter_tracked">Sporet</string>
     <string name="action_filter_unread">Ulesen</string>
+    <string name="action_filter_started">Starta</string>
     <string name="action_filter_empty">Fjern filter</string>
     <string name="action_sort_alpha">Alfabetisk</string>
     <string name="action_sort_latest_chapter">Siste kapittel</string>
@@ -45,14 +44,12 @@
     <string name="action_remove">Fjern</string>
     <string name="action_start">Start</string>
     <string name="action_open_in_browser">Opne i nettlesar</string>
-    <string name="action_show_manga">Vis manga</string>
     <string name="action_open_in_web_view">Opne i WebView</string>
     <string name="action_migrate">Migrer</string>
     <string name="action_display_mode">Visningsmodus</string>
     <string name="action_display">Vis</string>
     <string name="action_display_grid">Kompakt rutenett</string>
     <string name="action_display_comfortable_grid">Komfortabelt rutenett</string>
-    <string name="action_display_local_badge">Lokal manga</string>
     <string name="action_display_language_badge">Språk</string>
     <string name="action_display_show_tabs">Vis kategorifaner</string>
     <string name="action_display_show_number_of_items">Vis talet på gjenstandar</string>
@@ -128,13 +125,11 @@
     <string name="connected_to_wifi">Berre på Wi-Fi</string>
     <string name="restrictions">Avgrensingar: %s</string>
     <string name="pref_library_update_refresh_metadata_summary">Sjå etter nye omslag og detaljar ved oppdatering av bibliotek</string>
-    <string name="default_category">Standard kategori</string>
     <string name="default_category_summary">Alltid spør</string>
     <plurals name="num_categories">
         <item quantity="one">%d kategori</item>
         <item quantity="other">%d kategoriar</item>
     </plurals>
-    <string name="pref_library_update_categories_details">Manga i utelatne kategoriar vil ikkje bli oppdatert sjølv om dei òg er i inkluderte kategoriar.</string>
     <string name="all">Alle</string>
     <string name="none">Ingen</string>
     <string name="include">Inkluder: %s</string>
@@ -207,7 +202,6 @@
     <string name="pref_high">Høg</string>
     <string name="pref_low">Låg</string>
     <string name="pref_lowest">Lågaste</string>
-    <string name="pref_remove_exclude_categories">Utelatne kategoriar</string>
     <string name="save_chapter_as_cbz">Lagra som CBZ-arkiv</string>
     <string name="services">Tenester</string>
     <string name="enhanced_services">Forbetra tenester</string>
@@ -246,7 +240,7 @@
     <string name="password">Passord</string>
     <string name="unknown_error">Ukjend feil</string>
     <string name="updating_category">Oppdaterer kategori</string>
-    <string name="manga_from_library">Manga frå biblioteket</string>
+    <string name="local_source_badge">Lokal</string>
     <string name="tabs_header">Faner</string>
     <string name="local_source">Lokal kjelde</string>
     <string name="other_source">Andre</string>
@@ -272,7 +266,6 @@
     <string name="ext_unofficial">Uoffisiell</string>
     <string name="obsolete_extension_message">Denne utvidinga er ikkje lengre tilgjengeleg.</string>
     <string name="ext_nsfw_warning">Kan innehalda NSFW (18+) innhald</string>
-    <string name="pref_category_delete_chapters">Slett kapittel</string>
     <string name="webtoon_side_padding_25">25%</string>
     <string name="pref_download_new_categories_details">Manga i utelatne kategoriar vil ikkje bli nedlasta sjølv om dei òg er i inkluderte kategoriar.</string>
     <string name="pref_backup_service_category">Automatisk reservekopiar</string>
@@ -296,12 +289,10 @@
     <string name="whats_new">Kva er nytt</string>
     <string name="remove_from_library">Fjern frå bibliotek</string>
     <string name="manga_info_expand">Meir</string>
-    <string name="snack_add_to_library">Legg manga til i bibliotek\?</string>
     <string name="manga_info_collapse">Mindre</string>
     <string name="clipboard_copy_error">Kunne ikkje kopiera til utklippstavla</string>
     <string name="source_not_installed">Kjelde ikkje installert: %1$s</string>
     <string name="in_library">I biblioteket</string>
-    <string name="download_error">Feil</string>
     <string name="sort_by_source">Etter kjelde</string>
     <string name="custom_download">Last ned eigendefinert mengd</string>
     <string name="download_1">Neste kapittel</string>

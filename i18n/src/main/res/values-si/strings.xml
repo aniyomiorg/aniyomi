@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">විවිධ වර්ග</string>
     <string name="manga">මංගා (Manga)</string>
     <string name="label_settings">සැකසුම්</string>
-    <string name="label_download_queue">බාගත පෝලිම</string>
     <string name="label_library">පුස්තකාලය</string>
     <string name="label_recent_updates">යාවත්කාලීන කිරීම්</string>
     <string name="label_recent_manga">ඉතිහාසය</string>
@@ -16,7 +14,6 @@
     <string name="label_help">උදව්</string>
     <string name="label_default">පෙරනිමිය</string>
     <string name="label_warning">අවවාදයයි</string>
-    <string name="unlock_app">Tachiyomi විවෘත කරන්න</string>
     <string name="confirm_exit">පිටවීමට එකවර දෙවරක් ඔබන්න</string>
     <string name="action_settings">සැකසුම්</string>
     <string name="action_menu">මෙනු (Menu)</string>

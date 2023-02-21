@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">نام</string>
-    <string name="categories">زمرہ جات</string>
     <string name="manga">مانگا</string>
     <string name="chapters">ابواب</string>
     <string name="track">ٹریکنگ</string>
     <string name="history">ہسٹری</string>
     <string name="label_more">مزید</string>
     <string name="label_settings">ترتیبات</string>
-    <string name="label_download_queue">قطارِ ڈاؤنلوڈ</string>
     <string name="label_library">لائبریری</string>
     <string name="label_recent_updates">اپڈیٹس</string>
     <string name="label_recent_manga">ہسٹری</string>
@@ -17,7 +15,6 @@
     <string name="label_extensions">ایکسٹینشنز</string>
     <string name="label_extension_info">توسیع کی معلومات</string>
     <string name="label_help">مدد</string>
-    <string name="unlock_app">انلاک تاچییومی</string>
     <string name="action_settings">ترتیبات</string>
     <string name="action_filter">فلٹر</string>
     <string name="action_filter_bookmarked">بُک مارک شدہ</string>

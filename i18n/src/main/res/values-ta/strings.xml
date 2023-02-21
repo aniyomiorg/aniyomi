@@ -5,7 +5,6 @@
     <string name="label_migration">இடம்பெயர்ப்பு</string>
     <string name="information_no_downloads">பதிவிறக்கங்கள் இல்லை</string>
     <string name="label_more">மேலும்</string>
-    <string name="label_download_queue">பதிவிறக்க வரிசை</string>
     <string name="label_library">நூலகம்</string>
     <string name="label_recent_updates">மேம்படுத்தல்கள்</string>
     <string name="label_recent_manga">வரலாறு</string>
@@ -18,7 +17,6 @@
     <string name="label_extension_info">இதர மூலங்களின் விவரம்</string>
     <string name="label_help">உதவி</string>
     <string name="information_empty_library">உங்கள் நூலகம் காலியாக உள்ளது</string>
-    <string name="categories">பிரிவுகள்</string>
     <string name="manga">மாங்கா புத்தகங்கள்</string>
     <string name="chapters">அலகுகள்</string>
     <string name="label_default">இயல்புநிலை</string>
@@ -38,7 +36,6 @@
     <string name="action_rename_category">பிரிவின் பெயரை மாற்றவும்</string>
     <string name="action_view_chapters">அலகுகளை பார்க்கவும்</string>
     <string name="action_edit_cover">முகப்பு மாற்றவும்</string>
-    <string name="unlock_app">\"டக்கியோமியை\" திறக்கவும்</string>
     <string name="confirm_lock_change">மாற்றத்தை உறுதிப்படுத்த அங்கீகரிக்கவும்</string>
     <string name="action_filter_tracked">கண்காணிக்கப் பட்டவை</string>
     <string name="confirm_exit">வெளியேற \"எக்ஸிட்\" பட்டனை மீண்டும் அழுத்தவும்</string>

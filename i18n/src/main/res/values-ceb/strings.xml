@@ -2,7 +2,6 @@
 <resources>
     <string name="history">Kasaysayan</string>
     <string name="label_recent_updates">Mga update</string>
-    <string name="unlock_app">I-unlock ang Tachiyomi</string>
     <string name="confirm_lock_change">Panghimatuod aron makumpirma ang pagbag-o</string>
     <string name="confirm_exit">Pindota balik pag-usab aron makagawas</string>
     <string name="action_settings">Mga setting</string>
@@ -32,11 +31,9 @@
     <string name="label_settings">Mga setting</string>
     <string name="label_sources">Tinubdan</string>
     <string name="label_default">Default</string>
-    <string name="label_download_queue">Pag-download sa Pila</string>
     <string name="manga">Manga</string>
     <string name="track">Pagsubay</string>
     <string name="label_library">Librarya</string>
-    <string name="categories">Mga Kategoriya</string>
     <string name="label_migration">Molalin</string>
     <string name="label_extensions">Pagpadako</string>
     <string name="label_extension_info">Impormasyon sa Extension</string>
@@ -47,7 +44,6 @@
     <string name="label_warning">Pasidaan</string>
     <string name="action_sort_latest_chapter">Pinakabag-o nga kapitulo</string>
     <string name="action_filter_empty">Kuhaa ang filter</string>
-    <string name="action_sort_last_manga_update">Katapusan nga update sa manga</string>
     <plurals name="num_categories">
         <item quantity="one">%d Kategoriya</item>
         <item quantity="other">%d Mga kategoriya</item>
@@ -76,7 +72,6 @@
     <string name="action_next_chapter">Sunod nga kapitulo</string>
     <string name="action_retry">Sulayi pag-usab</string>
     <string name="action_resume">Ipadayon</string>
-    <string name="action_show_manga">Ipakita ang manga</string>
     <string name="action_migrate">Paglalin</string>
     <string name="action_display">Pagpakita</string>
     <string name="action_display_cover_only_grid">Cover-only grid</string>
@@ -94,7 +89,6 @@
     <string name="action_move_category">Ibutang ang mga kategorya</string>
     <string name="action_pause">Paghunong</string>
     <string name="action_open_in_browser">Ablihi sa browser</string>
-    <string name="action_display_local_badge">Lokal nga manga</string>
     <string name="action_open_in_web_view">Ablihi sa WebView</string>
     <string name="action_display_comfortable_grid">Komportable nga grid</string>
     <string name="action_display_mode">Display mode</string>
@@ -157,7 +151,6 @@
     <string name="battery_not_low">Dili ubos ang baterya</string>
     <string name="restrictions">Mga pagdili: %s</string>
     <string name="pref_library_update_manga_restriction">Laktawan ang pag-update sa mga titulo</string>
-    <string name="pref_update_only_completely_read">Uban sa wala pa mabasa nga (mga) kapitulo</string>
     <string name="pref_update_only_started">Wala pa kana nagsugod</string>
     <string name="pref_library_update_refresh_metadata">Awtomatikong i-refresh ang metadata</string>
     <string name="default_category_summary">Pangutana kanunay</string>
@@ -206,7 +199,6 @@
     <string name="pref_update_only_non_completed">Uban sa \"Nakumpleto\" nga kahimtang</string>
     <string name="pref_library_update_refresh_trackers_summary">Pag-update sa mga tracker kung nag-update sa librarya</string>
     <string name="pref_library_update_refresh_trackers">Awtomatikong i-refresh ang mga tracker</string>
-    <string name="default_category">Default nga kategorya</string>
     <string name="update_72hour">Kada 3 ka adlaw</string>
     <string name="pref_library_update_refresh_metadata_summary">Susiha ang bag-ong hapin ug mga detalye kung mag-update sa librarya</string>
     <string name="include">Apil ang: %s</string>
@@ -275,15 +267,9 @@
     <string name="exclude">Dili iapil: %s</string>
     <string name="ext_install">Pag-instalar</string>
     <string name="ext_downloading">Nag-download</string>
-    <string name="pref_library_update_categories_details">Ang manga sa wala iapil nga mga kategorya dili ma-update bisan kung naa usab sila sa mga gilakip nga kategorya.</string>
     <string name="none">Wala</string>
     <string name="ext_pending">Naghulat</string>
     <string name="ext_app_info">Impormasyon sa app</string>
-    <string name="untrusted_extension_message">Kini nga extension gipirmahan gamit ang dili kasaligan nga sertipiko ug wala gi-aktibo.
-\n
-\nAng usa ka malisyoso nga extension mahimong makabasa sa bisan unsang mga kredensyal sa pag-login nga gitipigan sa Tachiyomi o ipatuman ang arbitraryong code.
-\n
-\nPinaagi sa pagsalig niini nga sertipiko gidawat nimo kini nga mga risgo.</string>
     <string name="pref_cutout_short">Ipakita ang sulod sa ginunting nga lugar</string>
     <string name="pref_page_transitions">I-animate ang mga transisyon sa panid</string>
     <string name="pref_custom_brightness">Custom nga kahayag</string>
@@ -329,11 +315,6 @@
     <string name="pref_high">Taas</string>
     <string name="pref_low">Ubos</string>
     <string name="pref_download_directory">Lokasyon sa pag-download</string>
-    <string name="pref_category_delete_chapters">Pagtangtang sa mga kapitulo</string>
-    <string name="pref_remove_after_marked_as_read">Human gimarkahan sa mano-mano ingon nabasa na</string>
-    <string name="pref_remove_after_read">Human sa pagbasa awtomatikong tangtangon</string>
-    <string name="pref_remove_bookmarked_chapters">Tugoti ang pagtangtang sa gimarkahan nga mga kapitulo</string>
-    <string name="pref_remove_exclude_categories">Wala iapil nga mga kategorya</string>
     <string name="custom_dir">Pasadya nga lokasyon</string>
     <string name="disabled">Nabaldado</string>
     <string name="fifth_to_last">Ikalima hangtod sa kataposang pagbasa sa kapitulo</string>
@@ -374,7 +355,6 @@
     <string name="enhanced_tracking_info">Mga serbisyo nga naghatag dugang nga mga bahin alang sa piho nga mga gigikanan. Awtomatikong gisubay ang Manga kon idugang sa imong librarya.</string>
     <string name="tracking_info">Usa ka paagi nga pag-sync aron ma-update ang pag-uswag sa kapitulo sa mga serbisyo sa pagsubay. I-set up ang tracking para sa indibidwal nga manga entries gikan sa ilang tracking button.</string>
     <string name="enhanced_services">Gipalambo nga mga serbisyo</string>
-    <string name="pref_auto_update_manga_sync">Ang pag-uswag sa pag-update pagkahuman sa pagbasa</string>
     <string name="split_tall_images">Awtomatikong gibahin ang taas nga mga imahe</string>
     <string name="split_tall_images_summary">Nagpauswag sa pasundayag sa magbabasa pinaagi sa pagbahin sa taas nga na-download nga mga imahe.</string>
     <string name="services">Mga serbisyo</string>
@@ -419,7 +399,6 @@
     <string name="restoring_backup">Pag-uli sa backup</string>
     <string name="cookies_cleared">Gilimpyohan ang mga cookies</string>
     <string name="label_data">Data</string>
-    <string name="pref_clear_chapter_cache">Hawani ang cache sa kapitulo</string>
     <string name="creating_backup_error">Napakyas ang pag-backup</string>
     <string name="delete_category_confirmation">Gusto ba nimong papason ang kategoryang \"%s\"\?</string>
     <string name="delete_category">Pagtangtang sa kategorya</string>
@@ -431,16 +410,11 @@
     <string name="used_cache">Gigamit: %1$s</string>
     <string name="database_clean">Limpyo ang database</string>
     <string name="pref_refresh_library_covers">I-refresh ang mga hapin sa librarya</string>
-    <string name="pref_refresh_library_tracking_summary">Mga update sa status, score ug katapusang kapitulo nga gibasa gikan sa mga serbisyo sa pagsubay</string>
     <string name="pref_dump_crash_logs">Dump crash logs</string>
     <string name="pref_verbose_logging_summary">I-print ang verbose logs ngadto sa system log (gipamenos ang performance sa app)</string>
     <string name="about_dont_kill_my_app">Ang ubang mga tiggama adunay dugang nga mga pagdili sa app nga nagpatay sa mga serbisyo sa background. Kini nga website adunay dugang nga impormasyon kon unsaon kini pag-ayo.</string>
-    <string name="pref_auto_clear_chapter_cache">Hawani ang cache sa kapitulo sa pagsira sa app</string>
-    <string name="pref_clear_database">Klaro nga database</string>
     <string name="clear_database_source_item_count">%1$d non-library manga sa database</string>
-    <string name="clear_database_confirmation">Sigurado ka\? Basaha ang mga kapitulo ug ang pag-uswag sa dili librarya nga manga mawala</string>
     <string name="pref_dump_crash_logs_summary">Gitipigan ang mga log sa sayup sa usa ka file aron ipaambit sa mga nag-develop</string>
-    <string name="pref_clear_database_summary">I-delete ang history para sa manga nga wala ma-save sa imong library</string>
     <string name="pref_disable_battery_optimization">I-disable ang pag-optimize sa baterya</string>
     <string name="pref_tablet_ui_mode">Tablet UI</string>
     <string name="pref_landscape_zoom">I-zoom ang hulagway sa talan-awon</string>
@@ -469,7 +443,6 @@
     <string name="pref_acra_summary">Nakatabang sa pag-ayo sa bisan unsang mga bug. Walay sensitibo nga datos nga ipadala</string>
     <string name="licenses">Mga lisensya sa open source</string>
     <string name="label_downloaded_only">Na-download lang</string>
-    <string name="pref_incognito_mode_summary">Paghunong sa pagbasa sa kasaysayan</string>
     <string name="notification_incognito_text">I-disable ang incognito mode</string>
     <string name="pref_incognito_mode">Incognito mode</string>
     <string name="version">Bersyon</string>

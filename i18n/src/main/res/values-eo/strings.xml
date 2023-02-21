@@ -4,7 +4,6 @@
     <string name="label_recent_manga">Historio</string>
     <string name="label_recent_updates">Ĝisdatigoj</string>
     <string name="label_library">Biblioteko</string>
-    <string name="label_download_queue">Elŝutvico</string>
     <string name="label_settings">Agordoj</string>
     <string name="label_more">Pli</string>
     <string name="name">Nomo</string>
@@ -48,11 +47,9 @@
     <string name="action_filter">Filtrilo</string>
     <string name="action_menu">Menuo</string>
     <string name="action_settings">Agordoj</string>
-    <string name="unlock_app">Malŝlosi Aniyomi-n</string>
     <string name="history">Historio</string>
     <string name="chapters">Ĉapitroj</string>
     <string name="manga">Mangao</string>
-    <string name="categories">Kategorioj</string>
     <string name="information_empty_library">Via biblioteko malplenas</string>
     <string name="information_no_recent_manga">Neniu legita laste</string>
     <string name="hide_notification_content">Kaŝi enhavon de sciigoj</string>
@@ -114,7 +111,6 @@
         <item quantity="other">%d kategorioj</item>
     </plurals>
     <string name="default_category_summary">Ĉiam demandi</string>
-    <string name="default_category">Defaŭlta kategorio</string>
     <string name="update_weekly">Ĉiusemajne</string>
     <string name="update_24hour">Ĉiutage</string>
     <string name="invalid_backup_file">Nevalida savkopia dosiero</string>
@@ -123,7 +119,6 @@
     <string name="pref_create_backup">Krei savkopion</string>
     <string name="pref_download_new">Elŝuti novajn ĉapitrojn</string>
     <string name="disabled">Malŝaltita</string>
-    <string name="pref_category_delete_chapters">Forigi ĉapitrojn</string>
     <string name="pref_download_directory">Elŝutejo</string>
     <string name="double_tap_anim_speed_0">Sen animacioj</string>
     <string name="scale_type_original_size">Originala grando</string>
@@ -148,7 +143,6 @@
     <string name="manga_added_library">Aldonita al biblioteko</string>
     <string name="add_to_library">Aldoni al biblioteko</string>
     <string name="custom_dir">Propra dosierujo</string>
-    <string name="pref_remove_after_read">Aŭtomate post legado</string>
     <string name="webtoon_side_padding_25">25%</string>
     <string name="webtoon_side_padding_20">20%</string>
     <string name="webtoon_side_padding_15">15%</string>
@@ -229,7 +223,6 @@
     <string name="action_sort_latest_chapter">Lasta ĉapitro</string>
     <string name="spen_next_page">Sekva paĝo</string>
     <string name="spen_previous_page">Antaŭa paĝo</string>
-    <string name="channel_new_chapters_episodes">Ĉapitraj ĝisdatigoj</string>
     <string name="channel_errors">Eraroj</string>
     <string name="channel_complete">Finitaj</string>
     <string name="channel_progress">Progreso</string>
@@ -316,11 +309,8 @@
     <string name="sort_by_source">Laŭ fonto</string>
     <string name="show_chapter_number">Ĉapitra numero</string>
     <string name="show_title">Fonta titolo</string>
-    <string name="download_paused">Paŭzigita</string>
-    <string name="download_error">Eraro</string>
     <string name="chapter_downloading_progress">Elŝutas (%1$d/%2$d)</string>
     <string name="display_mode_chapter">Ĉapitro %1$s</string>
-    <string name="snack_add_to_library">Ĉu aldoni mangaon al biblioteko\?</string>
     <string name="source_not_installed">Fonto ne instalita: %1$s</string>
     <string name="clipboard_copy_error">Kopiado al tondejo malsukcesis</string>
     <string name="copied_to_clipboard">Kopita al tondejo:
@@ -345,7 +335,6 @@
     <string name="no_more_results">Ne pli rezultoj</string>
     <string name="tabs_header">Langetoj</string>
     <string name="badges_header">Ŝildoj</string>
-    <string name="manga_from_library">Mangao de biblioteko</string>
     <string name="unknown_error">Nekonata eraro</string>
     <string name="logout_success">Vi nun estas elsalutita</string>
     <string name="logout">Elsaluti</string>
@@ -364,11 +353,9 @@
     <string name="version">Versio</string>
     <string name="battery_optimization_setting_activity_not_found">Ne povis malfermi agordojn de la aparato</string>
     <string name="clear_database_completed">Eroj forigitaj</string>
-    <string name="pref_clear_database">Viŝi datumbazon</string>
     <string name="cache_delete_error">Eraro okazis dum viŝado de kaŝmemoro</string>
     <string name="cache_deleted">Kaŝmemoro viŝita. Forigis %1$d dosierojn</string>
     <string name="used_cache">Uzata: %1$s</string>
-    <string name="pref_clear_chapter_cache">Viŝi kaŝmemoron de ĉapitroj</string>
     <string name="label_data">Datumo</string>
     <string name="cookies_cleared">Kuketoj viŝitis</string>
     <string name="pref_clear_cookies">Viŝi kuketojn</string>
@@ -426,7 +413,6 @@
     <string name="label_default">Defaŭlte</string>
     <string name="information_empty_category">Vi havas neniun kategorion. Tuŝeti la butonon kun plus por krei unu por organizi vian bibliotekon.</string>
     <string name="channel_ext_updates">Kromaĵaj ĝisdatigoj</string>
-    <string name="download_notifier_download_paused_chapters">Elŝutito paŭzigita</string>
     <string name="download_notifier_downloader_title">Elŝutilo</string>
     <string name="notification_updating">Ĝisdatigas bibliotekon... (%1$d/%2$d)</string>
     <string name="notification_check_updates">Kontrolas por trovi novajn ĉapitrojn</string>
@@ -438,7 +424,6 @@
     <string name="paused">Paŭzita</string>
     <string name="on_hold">Haltetita</string>
     <string name="unread">Nelegita</string>
-    <string name="also_set_chapter_settings_for_library">Ankaŭ apliki al ĉiuj mangaoj en mia biblioteko</string>
     <string name="confirm_set_chapter_settings">Ĉu vi certe volas konservi ĉi-agordoj kiel defaŭltaj\?</string>
     <string name="date">Dato</string>
     <string name="local_filter_order_by">Ordigi laŭ</string>
@@ -498,7 +483,6 @@
     <string name="theme_strawberrydaiquiri">Fraga Dajkŭiri</string>
     <string name="theme_monet">Dinamika</string>
     <string name="pref_category_tracking">Ŝanĝspurado</string>
-    <string name="action_display_local_badge">Lokaj ŝildoj</string>
     <string name="action_sort_chapter_fetch_date">Dato venigita</string>
     <string name="track">Ŝanĝspurado</string>
     <string name="pref_cutout_short">Montri enhavon en fortondareo</string>

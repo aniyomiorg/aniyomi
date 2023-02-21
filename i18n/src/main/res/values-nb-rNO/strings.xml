@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="name">Navn</string>
-    <string name="categories">Kategorier</string>
-    <string name="manga">Bibliotekoppføringer</string>
+    <string name="manga">Manga</string>
     <string name="chapters">Kapittel</string>
     <string name="history">Historikk</string>
     <string name="label_settings">Innstillinger</string>
-    <string name="label_download_queue">Nedlastingskø</string>
     <string name="label_library">Bibliotek</string>
     <string name="label_recent_manga">Historikk</string>
     <string name="label_recent_updates">Oppdateringer</string>
@@ -16,6 +14,7 @@
     <string name="label_extension_info">Utvidelsesinfo</string>
     <string name="action_settings">Innstillinger</string>
     <string name="action_filter">Filter</string>
+    <string name="action_filter_downloaded">Nedlastet</string>
     <string name="action_filter_bookmarked">Bokmerket</string>
     <string name="action_filter_unread">Ulest</string>
     <string name="action_filter_empty">Fjern filter</string>
@@ -75,7 +74,6 @@
     <string name="update_weekly">Ukentlig</string>
     <string name="all">Alle</string>
     <string name="charging">Lading</string>
-    <string name="default_category">Standard kategori</string>
     <string name="default_category_summary">Alltid spør</string>
     <string name="ext_update">Oppdater</string>
     <string name="ext_install">Installer</string>
@@ -101,7 +99,6 @@
     <string name="pref_library_update_interval">Automatiske oppdateringer</string>
     <string name="pref_library_update_restriction">Enhetsbegrensninger for automatiske oppdateringer</string>
     <string name="pref_update_only_non_completed">Med \"Fullført\" status</string>
-    <string name="pref_auto_update_manga_sync">Oppdater fremdrift etter lesing</string>
     <string name="pref_true_color">32-biters fargerom</string>
     <string name="pref_crop_borders">Beskjær kanter</string>
     <string name="pref_custom_brightness">Egendefinert lysstyrke</string>
@@ -142,8 +139,6 @@
     <string name="color_filter_b_value">B</string>
     <string name="color_filter_a_value">A</string>
     <string name="pref_download_directory">Nedlastingsmappe</string>
-    <string name="pref_remove_after_marked_as_read">Etter manuelt markert som lest</string>
-    <string name="pref_remove_after_read">Slett automatisk etter lesing</string>
     <string name="custom_dir">Egendefinert mappe</string>
     <string name="disabled">Avskrudd</string>
     <string name="last_read_chapter">Sist leste kapittel</string>
@@ -166,18 +161,13 @@
     <string name="backup_choice">Hva ønsker du å sikkerhetskopiere\?</string>
     <string name="restoring_backup">Gjenoppretter sikkerhetskopi</string>
     <string name="creating_backup">Oppretter sikkerhetskopi</string>
-    <string name="pref_clear_chapter_cache">Tøm kapittelhurtigbuffer</string>
     <string name="used_cache">Brukt: %1$s</string>
     <string name="cache_deleted">Hurtigbuffer tømt. %1$d filer har blitt slettet</string>
     <string name="cache_delete_error">Feil oppstod under opprensing</string>
     <string name="pref_clear_cookies">Tøm informasjonskapsler</string>
     <string name="cookies_cleared">Informasjonskapsler slettet</string>
-    <string name="pref_clear_database">Tøm database</string>
-    <string name="pref_clear_database_summary">Slett historikk for oppføringer som ikke er lagret i biblioteket ditt</string>
-    <string name="clear_database_confirmation">Er du sikker\? Leste kapitler og framdrift for oppføringer som ikke er i biblioteket vil gå tapt</string>
     <string name="clear_database_completed">Oppføringer slettet</string>
     <string name="pref_refresh_library_tracking">Oppdater sporing</string>
-    <string name="pref_refresh_library_tracking_summary">Oppdaterer status, poengsum og sist leste kapittel fra sporingstjenestene</string>
     <string name="version">Versjon</string>
     <string name="pref_enable_acra">Send krasjrapporter</string>
     <string name="pref_acra_summary">Hjelper til med fiksing av feil. Ingen sensitiv data vil bli sendt</string>
@@ -188,6 +178,7 @@
     <string name="login_success">Innlogget</string>
     <string name="unknown_error">Ukjent feil</string>
     <string name="updating_category">Oppdaterer kategori</string>
+    <string name="local_source_badge">Lokal</string>
     <string name="no_more_results">Ingen flere resultater</string>
     <string name="local_source">Lokal kilde</string>
     <string name="other_source">Andre</string>
@@ -206,8 +197,6 @@
     <string name="source_not_installed">Kilde ikke installert: %1$s</string>
     <string name="display_mode_chapter">Kapittel %1$s</string>
     <string name="chapter_downloading_progress">Laster ned (%1$d/%2$d)</string>
-    <string name="download_error">Feil</string>
-    <string name="download_paused">Pauset</string>
     <string name="show_title">Kildetittel</string>
     <string name="show_chapter_number">Kapittelnummer</string>
     <string name="sort_by_source">Etter kilde</string>
@@ -232,12 +221,11 @@
     <string name="title">Tittel</string>
     <string name="status">Status</string>
     <string name="track_status">Status</string>
+    <string name="track_start_date">Startet</string>
     <string name="track_type">Type</string>
     <string name="error_category_exists">En kategori ved dette navnet finnes allerede!</string>
     <string name="snack_categories_deleted">Kategorier slettet</string>
     <string name="dialog_with_checkbox_remove_description">Lesningsdato for dette kapittelet vil bli fjernet. Er du sikker\?</string>
-    <string name="dialog_with_checkbox_reset">Tilbakestill alle kapittel for denne oppføringen</string>
-    <string name="snack_add_to_library">Legg til i bibliotek\?</string>
     <string name="picture_saved">Bilde lagret</string>
     <string name="custom_filter">Egendefinert filter</string>
     <string name="set_as_cover">Sett som omslag</string>
@@ -264,11 +252,6 @@
     <string name="label_help">Hjelp</string>
     <string name="action_display_download_badge">Last ned kapitler</string>
     <string name="pref_library_columns">Elementer per rad</string>
-    <string name="untrusted_extension_message">Denne utvidelsen ble signert med et usikkert sertifikat, og ble dermed ikke aktivert
-\n
-\nEn skadelig utvidelse kan lese innloggingsdetaljer lagret i Tachiyomi, eller kjøre ukjent kode.
-\n
-\nVed å godta dette sertifikatet aksepterer du overstående risikoer.</string>
     <string name="pref_double_tap_anim_speed">Animasjonshastighet ved dobbelklikk</string>
     <string name="pager_viewer">Sider</string>
     <string name="confirm_set_image_as_cover">Bruk dette bildet som omslag\?</string>
@@ -292,7 +275,6 @@
     <string name="download_notifier_unknown_error">Kunne ikke laste ned kapittel grunnet uventet feil</string>
     <string name="download_notifier_text_only_wifi">Ingen trådløstilkobling tilgjengelig</string>
     <string name="download_notifier_no_network">Ingen nettverkstilkobling tilgjengelig</string>
-    <string name="download_notifier_download_paused_chapters">Nedlastinger pauset</string>
     <string name="pref_color_filter_mode">Blandingsmodus for fargefilter</string>
     <string name="filter_mode_overlay">Overlegg</string>
     <string name="filter_mode_multiply">Multiplisere</string>
@@ -330,8 +312,6 @@
         <item quantity="other">Etter %1$s minutter</item>
     </plurals>
     <string name="secure_screen">Sikker skjerm</string>
-    <string name="channel_new_chapters_episodes">Kapitteloppdateringer</string>
-    <string name="unlock_app">Lås opp Aniyomi</string>
     <string name="notification_chapters_single">Kapittel %1$s</string>
     <string name="email">E-postadresse</string>
     <string name="in_library">I biblioteket</string>
@@ -350,7 +330,6 @@
     <string name="action_menu">Meny</string>
     <string name="label_sources">Kilder</string>
     <string name="channel_ext_updates">Utvidelsesoppdateringer</string>
-    <string name="information_webview_required">Tachiyomi krever WebView</string>
     <string name="add_tracking">Legg til sporing</string>
     <string name="manga_info_collapse">Mindre</string>
     <string name="manga_info_expand">Mer</string>
@@ -456,8 +435,7 @@
     <string name="notification_chapters_single_and_more">Kapittel %1$s og %2$d til</string>
     <string name="no_pinned_sources">Du har ingen festede kilder</string>
     <string name="channel_progress">Framdrift</string>
-    <string name="pref_remove_bookmarked_chapters">Tillat sletting av bokmerkede kapitler</string>
-    <string name="pref_category_delete_chapters">Slett kapittel</string>
+    <string name="download_notifier_download_finish">Nedlastet</string>
     <string name="ext_nsfw_warning">Kan inneholde innhold for 18+</string>
     <string name="ext_nsfw_short">18+</string>
     <string name="parental_controls_info">Dette forhindrer ikke uoffisielle eller potensielt feilaktig kategoriserte tillegg fra å vise innhold for 18+ i appen.</string>
@@ -487,8 +465,6 @@
         <item quantity="other">Kapitler %1$s og %2$d til</item>
     </plurals>
     <string name="notification_chapters_multiple">Kapitler %1$s</string>
-    <string name="download_insufficient_space">Ikke nok lagringsplass til å laste ned kapitler</string>
-    <string name="also_set_chapter_settings_for_library">Anvend også for allle oppføringer i biblioteket</string>
     <string name="action_global_search_query">Søk etter \"%1$s\" globalt</string>
     <string name="updated_version">Oppdatert til v%1$s</string>
     <string name="licenses">Friprog-lisenser</string>
@@ -512,8 +488,6 @@
     <string name="track_finished_reading_date">Sluttdato</string>
     <string name="track_started_reading_date">Startdato</string>
     <string name="downloaded_chapters">Nedlastede kapitler</string>
-    <string name="manga_from_library">Fra biblioteket</string>
-    <string name="pref_incognito_mode_summary">Setter lesehistorikken på pause</string>
     <string name="pref_incognito_mode">Inkognitomodus</string>
     <string name="crash_log_saved">Feillogger lagret</string>
     <string name="pref_dump_crash_logs">Dump feillogg</string>
@@ -550,7 +524,6 @@
     <string name="action_sort_chapter_fetch_date">Dato hentet</string>
     <string name="pref_download_new_categories_details">Oppføringer i utelukkede kategorier vil ikke bli nedlastet selv om de også er i inkluderte kategorier.</string>
     <string name="pref_category_auto_download">Last ned automatisk</string>
-    <string name="pref_library_update_categories_details">Oppførninger i utelukkede kategorier vil ikke bli oppdatert selv om de også er i inkluderte kategorier.</string>
     <string name="action_show_errors">Trykk for å se detaljer</string>
     <string name="clipboard_copy_error">Kunne ikke kopiere til utklippstavlen</string>
     <string name="update_check_eol">Denne Android-versjonen støttes ikke lenger</string>
@@ -583,7 +556,6 @@
     <string name="action_track">Spor</string>
     <string name="enhanced_services">Forbedrede tjenester</string>
     <string name="tracking_guide">Sporingsveiledning</string>
-    <string name="pref_remove_exclude_categories">Utelukkede kategorier</string>
     <string name="pref_lowest">Laveste</string>
     <string name="pref_low">Lav</string>
     <string name="pref_high">Høy</string>
@@ -619,8 +591,8 @@
     <string name="theme_strawberrydaiquiri">Jordbær-Daiquiri</string>
     <string name="theme_midnightdusk">Midnattsskumring</string>
     <string name="theme_greenapple">Grønt eple</string>
-    <string name="action_display_local_badge">Lokal kilde</string>
     <string name="error_no_match">Ingen treff funnet</string>
+    <string name="tracker_komga_warning">Denne trackeren er kun kompatibel med Komga-kilder.</string>
     <string name="notification_incognito_text">Skru av inkognito-modus</string>
     <string name="help_translate">Bistå oversettelsen</string>
     <string name="pref_library_update_refresh_trackers_summary">Oppdater trackere ved oppdatering av bibliotek</string>
@@ -641,11 +613,9 @@
     <string name="channel_app_updates">Appoppdateringer</string>
     <string name="update_72hour">Hver 3. dag</string>
     <string name="connected_to_wifi">Bare på Wi-Fi</string>
-    <string name="action_show_manga">Vis oppføring</string>
     <string name="privacy_policy">Personvernerklæring</string>
     <string name="publishing_finished">Ferdig publisert</string>
     <string name="webtoon_side_padding_5">5%</string>
-    <string name="pref_update_only_completely_read">Med uleste kapitler</string>
     <string name="cancelled">Kansellert</string>
     <string name="on_hiatus">På pause</string>
     <string name="save_chapter_as_cbz">Lagre som CBZ-arkiv</string>
@@ -658,8 +628,8 @@
     <string name="confirm_manga_add_duplicate">Du har en oppføring i biblioteket ditt med samme navn, men fra en annen kilde (%1$s).
 \n
 \nVil du fortsette allikevel\?</string>
-    <string name="download_queue_size_warning">Advarsel: store bulknedlastinger kan føre til at kilder blir tregere og/eller blokkerer Tachiyomi. Trykk for å lære mer.</string>
     <string name="library_errors_help">For hjelp til å fikse bibliotekoppdateringsfeil, se %1$s</string>
+    <string name="action_filter_started">Startet</string>
     <string name="action_display_cover_only_grid">Kun omslags-rutenett</string>
     <string name="pref_update_only_started">Som ikke er påbegynt</string>
     <string name="pref_landscape_zoom">Zoom landskapsbilde</string>
@@ -668,7 +638,6 @@
     <string name="action_move_to_top_all_for_series">Flytt serien til toppen</string>
     <string name="extension_api_error">Kunne ikke hente utvidelseslisten</string>
     <string name="rotation_reverse_portrait">Omvendt portrett</string>
-    <string name="pref_auto_clear_chapter_cache">Tøm kapittel hurtigbufferen ved lukking av appen</string>
     <string name="notification_update_error">%1$d oppdatering(er) mislyktes</string>
     <string name="notification_update_skipped">%1$d oppdatering(er) hoppet over</string>
     <string name="learn_more">Trykk for å finne ut mer</string>
@@ -680,6 +649,8 @@
     <string name="error_saving_picture">Feil ved lagring av bilde</string>
     <string name="update_check_open">Åpne på GitHub</string>
     <string name="action_close">Lukk</string>
+    <string name="pref_duplicate_pinned_sources">Vis dupliserte festede kilder</string>
+    <string name="pref_duplicate_pinned_sources_summary">Gjenta festede kilder i sine respektive språkgrupper</string>
     <string name="pref_clear_webview_data">Slett WebView data</string>
     <string name="webview_data_deleted">WebView data slettet</string>
     <string name="battery_not_low">Batteri er ikke lavt</string>
@@ -717,7 +688,6 @@
     <string name="download_ahead">Last ned i forkant</string>
     <string name="pref_reset_user_agent_string">Tilbakestill standard streng for brukeragent</string>
     <string name="reading_list">Leseliste</string>
-    <string name="action_sort_last_manga_update">Siste oppdateringssjekk</string>
     <string name="pref_reset_viewer_flags_error">Kunne ikke tilbakestille leserinnstillingene</string>
     <string name="multi_lang">Multi</string>
     <string name="auto_download_while_reading">Last ned automatisk mens du leser</string>
@@ -731,7 +701,7 @@
     <string name="delete_category_confirmation">Ønsker du å slette kategorien \"%s\"\?</string>
     <string name="delete_category">Slett kategori</string>
     <string name="internal_error">InternalError: Sjekk krasjlogger for mer informasjon</string>
-    <string name="crash_screen_title">Oops!</string>
+    <string name="crash_screen_title">En uventet feil oppstod</string>
     <string name="crash_screen_description">%s fikk en uventet feil. Vi foreslår at du tar et skjermbilde av denne meldingen, dumper krasjloggene og derette deler dette i vår støttekanal på Discord.</string>
     <string name="download_notifier_split_failed">Kunne ikke dele det nedlastede bildet</string>
     <string name="pref_app_language">Appspråk</string>
@@ -758,43 +728,9 @@
     <string name="not_installed">Ikke installert</string>
     <string name="updates_last_update_info_just_now">Akkurat nå</string>
     <string name="download_notifier_cache_renewal">Indeksering av nedlastinger</string>
-    <string name="channel_downloader_cache">Indeksering</string>
+    <string name="channel_downloader_cache">Nedlastnings hurtigbuffer</string>
     <string name="fdroid_warning">F-Droid-bygg er ikke offisielt støttet.
 \nTrykk for å finne ut mer.</string>
     <string name="information_no_entries_found">Fant ingen oppføringer i denne kategorien</string>
     <string name="action_open_random_manga">Åpne tilfeldig oppføring</string>
-    <string name="action_display_show_continue_reading_button">Vis fortsett å lese-knappen</string>
-    <string name="other_header">Annet</string>
-    <string name="track_remove_date_conf_title">Fjerne dato\?</string>
-    <string name="track_remove_start_date_conf_text">Dette vil fjerne den tidligere valgte startdatoen fra %s</string>
-    <string name="track_remove_finish_date_conf_text">Dette vil fjerne den tidligere valgte sluttdatoen fra %s</string>
-    <string name="pref_invalidate_download_cache">Rydd ut nedlastingsindeksen</string>
-    <string name="enhanced_tracking_warning">Denne trackeren er kun kompatibel med %1$s-kilden.</string>
-    <string name="pref_invalidate_download_cache_summary">Tving appen til å sjekke nedlastede kapitler på nytt</string>
-    <string name="label_started">Startet</string>
-    <string name="label_completed_titles">Fullførte oppføringer</string>
-    <string name="label_titles_section">Oppføringer</string>
-    <string name="label_used">Brukt</string>
-    <string name="day_short">%dd</string>
-    <string name="hour_short">%dt</string>
-    <string name="minute_short">%dm</string>
-    <string name="seconds_short">%ds</string>
-    <string name="label_stats">Statistikk</string>
-    <string name="label_total_chapters">Totalt</string>
-    <string name="label_downloaded">Nedlastet</string>
-    <string name="label_overview_section">Oversikt</string>
-    <string name="label_read_duration">Tid brukt</string>
-    <string name="label_titles_in_global_update">Globalt oppdaterte</string>
-    <string name="label_read_chapters">Lest</string>
-    <string name="label_tracked_titles">Tracket oppføringer</string>
-    <string name="label_mean_score">Snitt poengsum</string>
-    <string name="not_applicable">I/A</string>
-    <string name="label_local">Lokale</string>
-    <string name="label_tracker_section">Trackere</string>
-    <string name="action_not_now">Ikke nå</string>
-    <string name="information_no_manga_category">Kategorien er tom</string>
-    <string name="pref_library_update_show_tab_badge">Vis antall uleste på oppdateringsikonet</string>
-    <string name="pref_worker_info">Arbeider info</string>
-    <string name="copied_to_clipboard_plain">Kopiert til utklippstavlen</string>
-    <string name="ext_miui_warning">Hvis MIUI-optimalisering er aktivert, kan det hende at installasjon av utvidelser ikke fungerer. Prøv å deaktivere MIUI-optimalisering eller installer fra nettstedet i stedet.</string>
 </resources>

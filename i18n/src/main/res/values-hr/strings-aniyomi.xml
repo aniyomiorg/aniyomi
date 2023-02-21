@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="categories">Kategorije</string>
+    <string name="label_download_queue">Popis preuzimanja</string>
+    <string name="unlock_app">Otključaj Aniyomi</string>
+    <string name="action_sort_last_manga_update">Zadnje aktualiziranje mange</string>
+    <string name="action_show_manga">Prikaži manga</string>
+    <string name="action_display_local_badge">Lokalne mange</string>
+    <string name="pref_update_only_completely_read">S nepročitanim poglavljima</string>
+    <string name="pref_library_update_show_tab_badge">Prikaži broj nepročitanih na ikoni „Aktualiziranja”</string>
+    <string name="default_category">Standardna kategorija</string>
+    <string name="pref_library_update_categories_details">Manga u isključenim kategorijama neće se aktualizirati čak niti ako se također nalaze u uključenim kategorijama.</string>
+    <string name="untrusted_extension_message">Ovo proširenje potpisano je nepovjerljivim certifikatom i nije aktivirano.
+\n
+\nZlonamjerno proširenje može pročitati sve podatke za prijavu koji su spremljeni u programu Tachiyomi ili izvršiti proizvoljni kod.
+\n
+\nVjerujući ovom certifikatu, prihvaćaš te rizike.</string>
+    <string name="pref_category_delete_chapters">Izbriši poglavlja</string>
+    <string name="pref_remove_after_marked_as_read">Nakon ručnog označivanja kao pročitano</string>
+    <string name="pref_remove_after_read">Automatski izbriši nakon čitanja</string>
+    <string name="pref_remove_bookmarked_chapters">Dozvoli brisanje označenih poglavlja</string>
+    <string name="pref_remove_exclude_categories">Isključene kategorije</string>
+    <string name="pref_auto_update_manga_sync">Ažuriraj napredak nakon čitanja</string>
+    <string name="pref_clear_chapter_cache">Isprazni predmemoriju poglavlja</string>
+    <string name="pref_auto_clear_chapter_cache">Izbriši predmemoriju poglavlja tijekom zatvaranja aplikacije</string>
+    <string name="pref_clear_database">Isprazni bazu podataka</string>
+    <string name="pref_clear_database_summary">Izbriši povijest manga koje se ne nalaze u tvojoj biblioteci</string>
+    <string name="clear_database_confirmation">Sigurno\? Izgubit ćeš pročitana poglavlja i napredak manga koji nisu u biblioteci</string>
+    <string name="pref_refresh_library_tracking_summary">Aktualizira stanje, ocjenu i zadnje pročitano poglavlje iz usluga za praćenje</string>
+    <string name="pref_incognito_mode_summary">Zaustavlja čitanje povijesti</string>
+    <string name="manga_from_library">Manga iz biblioteke</string>
+    <string name="snack_add_to_library">Dodati manga u biblioteku\?</string>
+    <string name="download_error">Greška</string>
+    <string name="download_paused">Zaustavljeno</string>
+    <string name="also_set_chapter_settings_for_library">Također primijeni na sve mange u mojoj biblioteci</string>
+    <string name="dialog_with_checkbox_reset">Obnovi sva poglavlja za ovaj manga</string>
+    <string name="download_insufficient_space">Neuspjelo preuzimanje poglavlja zbog nedovoljne memorije</string>
+    <string name="download_queue_size_warning">Upozorenje: velika skupna preuzimanja mogu dovesti do usporavanja izvora i/ili blokiranja Tachiyomija. Za daljnje informacije dodirni.</string>
+    <string name="information_webview_required">Za Tachiyomi je potreban WebView</string>
+    <string name="download_notifier_download_paused_chapters">Preuzimanje zaustavljeno</string>
+    <string name="channel_new_chapters_episodes">Ažuriranja poglavlja</string>
+    </resources>
