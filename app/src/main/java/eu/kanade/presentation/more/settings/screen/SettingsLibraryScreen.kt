@@ -86,18 +86,36 @@ object SettingsLibraryScreen : SearchableSettings {
     @Composable
     private fun getDisplayGroup(libraryPreferences: LibraryPreferences): Preference.PreferenceGroup {
         val scope = rememberCoroutineScope()
-        val portraitColumns by libraryPreferences.portraitColumns().stateIn(scope).collectAsState()
-        val landscapeColumns by libraryPreferences.landscapeColumns().stateIn(scope).collectAsState()
 
+        val animePortraitColumns by libraryPreferences.animePortraitColumns().stateIn(scope).collectAsState()
+        val mangaPortraitColumns by libraryPreferences.mangaPortraitColumns().stateIn(scope).collectAsState()
+        val animeLandscapeColumns by libraryPreferences.animeLandscapeColumns().stateIn(scope).collectAsState()
+        val mangaLandscapeColumns by libraryPreferences.mangaLandscapeColumns().stateIn(scope).collectAsState()
+
+        var showAnimeDialog by rememberSaveable { mutableStateOf(false) }
         var showDialog by rememberSaveable { mutableStateOf(false) }
+
+        if (showAnimeDialog) {
+            LibraryColumnsDialog(
+                initialPortrait = animePortraitColumns,
+                initialLandscape = animeLandscapeColumns,
+                onDismissRequest = { showAnimeDialog = false },
+                onValueChanged = { portrait, landscape ->
+                    libraryPreferences.animePortraitColumns().set(portrait)
+                    libraryPreferences.animeLandscapeColumns().set(landscape)
+                    showAnimeDialog = false
+                },
+            )
+        }
+
         if (showDialog) {
             LibraryColumnsDialog(
-                initialPortrait = portraitColumns,
-                initialLandscape = landscapeColumns,
+                initialPortrait = mangaPortraitColumns,
+                initialLandscape = mangaLandscapeColumns,
                 onDismissRequest = { showDialog = false },
                 onValueChanged = { portrait, landscape ->
-                    libraryPreferences.portraitColumns().set(portrait)
-                    libraryPreferences.landscapeColumns().set(landscape)
+                    libraryPreferences.mangaPortraitColumns().set(portrait)
+                    libraryPreferences.mangaLandscapeColumns().set(landscape)
                     showDialog = false
                 },
             )
@@ -107,9 +125,15 @@ object SettingsLibraryScreen : SearchableSettings {
             title = stringResource(R.string.pref_category_display),
             preferenceItems = listOf(
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_library_columns),
-                    subtitle = "${stringResource(R.string.portrait)}: ${getColumnValue(portraitColumns)}, " +
-                        "${stringResource(R.string.landscape)}: ${getColumnValue(landscapeColumns)}",
+                    title = stringResource(R.string.pref_library_anime_columns),
+                    subtitle = "${stringResource(R.string.portrait)}: ${getColumnValue(animePortraitColumns)}, " +
+                        "${stringResource(R.string.landscape)}: ${getColumnValue(animeLandscapeColumns)}",
+                    onClick = { showAnimeDialog = true },
+                ),
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(R.string.pref_library_manga_columns),
+                    subtitle = "${stringResource(R.string.portrait)}: ${getColumnValue(mangaPortraitColumns)}, " +
+                        "${stringResource(R.string.landscape)}: ${getColumnValue(mangaLandscapeColumns)}",
                     onClick = { showDialog = true },
                 ),
             ),
