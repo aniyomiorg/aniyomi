@@ -342,13 +342,24 @@ class PlayerActivity :
         }
 
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        fineVolume = if (playerPreferences.playerVolumeValue().get() == -1.0F) audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()else playerPreferences.playerVolumeValue().get()
+        val useDeviceVolume = playerPreferences.playerVolumeValue().get() == -1.0F || !playerPreferences.rememberPlayerVolume().get()
+        fineVolume = if (useDeviceVolume) {
+            audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
+        } else {
+            playerPreferences.playerVolumeValue().get()
+        }
         verticalScrollRight(0F)
+
         maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
         playerControls.binding.volumeBar.max = maxVolume
         playerControls.binding.volumeBar.secondaryProgress = maxVolume
 
-        brightness = if (playerPreferences.playerBrightnessValue().get() == -1.0F) Utils.getScreenBrightness(this) ?: 0.5F else playerPreferences.playerBrightnessValue().get()
+        val useDeviceBrightness = playerPreferences.playerBrightnessValue().get() == -1.0F || !playerPreferences.rememberPlayerBrightness().get()
+        brightness = if (useDeviceBrightness) {
+            Utils.getScreenBrightness(this) ?: 0.5F
+        } else {
+            playerPreferences.playerBrightnessValue().get()
+        }
         verticalScrollLeft(0F)
 
         volumeControlStream = AudioManager.STREAM_MUSIC
