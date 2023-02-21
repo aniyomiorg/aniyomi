@@ -271,4 +271,6 @@
     <string name="label_watched_duration">Duración de la reproducción</string>
     <string name="label_watched_episodes">Visto</string>
     <string name="pref_invalidate_download_cache_summary">Forzar a la aplicación a volver a comprobar los capítulos y episodios descargados</string>
+    <string name="pref_remember_brightness">Recordar y cambiar al último brillo utilizado</string>
+    <string name="pref_remember_volume">Recordar y cambiar al último volumen utilizado</string>
 </resources>
