@@ -46,16 +46,11 @@ object SettingsBrowseScreen : SearchableSettings {
                 title = stringResource(R.string.action_global_search),
                 preferenceItems = listOf(
                     Preference.PreferenceItem.SwitchPreference(
-                        pref = sourcePreferences.searchPinnedSourcesOnly(),
-                        title = stringResource(R.string.pref_search_pinned_sources_only),
-                    ),
-                ),
-            ),
-            Preference.PreferenceGroup(
-                title = stringResource(R.string.action_global_search),
-                preferenceItems = listOf(
-                    Preference.PreferenceItem.SwitchPreference(
                         pref = sourcePreferences.searchPinnedAnimeSourcesOnly(),
+                        title = stringResource(R.string.pref_search_pinned_anime_sources_only),
+                    ),
+                    Preference.PreferenceItem.SwitchPreference(
+                        pref = sourcePreferences.searchPinnedSourcesOnly(),
                         title = stringResource(R.string.pref_search_pinned_sources_only),
                     ),
                 ),
