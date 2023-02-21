@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Kategori Manga</string>
+<resources>
+    <string name="categories">Kategori Manga</string>
     <string name="general_categories">Kategori</string>
     <string name="anime_categories">Kategori Anime</string>
     <string name="manga_anime">Entri pustaka</string>
@@ -240,7 +241,7 @@
     <string name="player_aniskip_skip">%s lewati</string>
     <string name="player_hwdec_dialog_title">Pengaturan standar mode decoding hardware</string>
     <string name="notification_episodes_single">episode %1$s</string>
-<string name="notification_episodes_single_and_more">Episode %1$s dan %2$d lainnya</string>
+    <string name="notification_episodes_single_and_more">Episode %1$s dan %2$d lainnya</string>
     <string name="notification_episodes_multiple">episode %1$s</string>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="other">Episode %1$s dan %2$d lainnya</item>
@@ -252,4 +253,10 @@
     <string name="label_migration_manga">Migrasi Manga</string>
     <string name="label_migration_anime">Migrasi Anime</string>
     <string name="settings">Pengaturan</string>
-    </resources>
+    <string name="pref_invalidate_download_cache_summary">Tutup aplikasi dan cek kembali episode dan chapter yang sudah didownload</string>
+    <string name="pref_library_anime_columns">Anime perbaris</string>
+    <string name="pref_library_manga_columns">Manga perbaris</string>
+    <string name="label_anime">Anime</string>
+    <string name="label_watched_duration">Durasi telah ditonton</string>
+    <string name="label_watched_episodes">Ditonton</string>
+</resources>
