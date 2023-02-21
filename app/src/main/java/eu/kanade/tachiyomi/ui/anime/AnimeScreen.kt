@@ -4,7 +4,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -17,6 +21,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.net.toUri
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
@@ -37,7 +42,6 @@ import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.DuplicateAnimeDialog
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.NavigatorAdaptiveSheet
-import eu.kanade.presentation.manga.BaseSelector
 import eu.kanade.presentation.manga.EditCoverAction
 import eu.kanade.presentation.manga.components.DownloadCustomAmountDialog
 import eu.kanade.presentation.util.AssistContentScreen
@@ -141,7 +145,7 @@ class AnimeScreen(
             onDownloadActionClicked = screenModel::runDownloadAction.takeIf { !successState.source.isLocalOrStub() },
             onEditCategoryClicked = screenModel::promptChangeCategories.takeIf { successState.anime.favorite },
             onMigrateClicked = { navigator.push(MigrateAnimeSearchScreen(successState.anime.id)) }.takeIf { successState.anime.favorite },
-            changeAnimeSkipIntro = { screenModel::showAnimeSkipIntroDialog.takeIf { successState.anime.favorite } },
+            changeAnimeSkipIntro = screenModel::showAnimeSkipIntroDialog.takeIf { successState.anime.favorite },
             onMultiBookmarkClicked = screenModel::bookmarkEpisodes,
             onMultiMarkAsSeenClicked = screenModel::markEpisodesSeen,
             onMarkPreviousAsSeenClicked = screenModel::markPreviousEpisodeSeen,
@@ -238,7 +242,6 @@ class AnimeScreen(
                     LoadingScreen(Modifier.systemBarsPadding())
                 }
             }
-
             AnimeInfoScreenModel.Dialog.ChangeAnimeSkipIntro -> {
                 ChangeIntroLength(
                     anime = successState.anime,
@@ -368,26 +371,43 @@ fun ChangeIntroLength(
     val setAnimeViewerFlags: SetAnimeViewerFlags by injectLazy()
     val titleText = R.string.action_change_intro_length
     var newLength = 0
-    BaseSelector(
-        title = stringResource(titleText),
-        content = {
-            WheelTextPicker(
-                modifier = Modifier.align(Alignment.Center),
-                texts = remember { 1..255 }.map { "$it" },
-                onScrollFinished = {
-                    newLength = it
-                    null
-                },
-                startIndex = anime.viewerFlags.toInt(),
-            )
-        },
-        onConfirm = {
-            scope.launchIO {
-                setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, newLength.toLong())
-                onDismissRequest()
-            }
-            Unit
-        },
+    AlertDialog(
         onDismissRequest = onDismissRequest,
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            decorFitsSystemWindows = false, // Doesn't work https://issuetracker.google.com/issues/246909281
+        ),
+        title = { Text(text = stringResource(titleText)) },
+        text = {
+            Box {
+                WheelTextPicker(
+                    modifier = Modifier.align(Alignment.Center),
+                    texts = remember { 1..255 }.map { "$it" },
+                    onScrollFinished = {
+                        newLength = it + 1
+                        null
+                    },
+                    startIndex = anime.viewerFlags.toInt() - 1,
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    scope.launchIO {
+                        setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, newLength.toLong())
+                        onDismissRequest()
+                    }
+                    Unit
+                },
+            ) {
+                Text(text = stringResource(android.R.string.ok))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text(text = stringResource(android.R.string.cancel))
+            }
+        },
     )
 }
