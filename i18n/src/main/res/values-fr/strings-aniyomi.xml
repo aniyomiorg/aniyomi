@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Catégories</string>
+<resources>
+    <string name="categories">Catégories Manga</string>
     <string name="general_categories">Catégories</string>
-    <string name="anime_categories">Catégories des animés</string>
+    <string name="anime_categories">Catégories animés</string>
     <string name="manga_anime">Entrées de la bibliothèque</string>
     <string name="chapters_episodes">Chapitres et épisodes</string>
     <string name="episodes">Épisodes</string>
@@ -16,7 +17,7 @@
     <string name="pref_bottom_nav_no_history">Déplacer l\'historique vers l\'onglet Plus</string>
     <string name="pref_bottom_nav_no_updates">Déplacer les mises à jour vers l\'onglet Plus</string>
     <string name="pref_bottom_nav_no_manga">Déplacer le Manga vers l\'onglet Plus</string>
-    <string name="unlock_app">Débloquer Aniyomi</string>
+    <string name="unlock_app">Déverrouiller Aniyomi</string>
     <string name="action_filter_unseen">Non vus</string>
     <string name="action_sort_total_episodes">Nombre d\'épisodes</string>
     <string name="action_sort_last_seen">Dernier vu</string>
@@ -45,7 +46,7 @@
     <string name="action_show_manga">Afficher l\'entrée</string>
     <string name="action_show_anime">Afficher l\'animé</string>
     <string name="action_display_download_badge_anime">Épisodes téléchargés</string>
-<string name="action_display_unseen_badge">Épisodes non vus</string>
+    <string name="action_display_unseen_badge">Épisodes non vus</string>
     <string name="action_display_local_badge">Source locale</string>
     <string name="action_display_local_badge_anime">Animé local</string>
     <string name="action_display_show_continue_reading_button">Afficher le bouton Continuer à regarder/lire</string>
@@ -104,7 +105,6 @@
     </plurals>
     <string name="download_ahead_info_anime">Ne fonctionne que sur les entrées de la bibliothèque et si l\'épisode actuel et le suivant sont déjà téléchargés</string>
     <string name="pref_auto_update_manga_sync">Synchroniser la progression après lecture</string>
-    
     <string name="pref_clear_chapter_cache">Effacer le cache des chapitres</string>
     <string name="used_cache_both">Utilisé par les animé : %1$s, utilisé par les mangas : %2$s</string>
     <string name="pref_auto_clear_chapter_cache">Effacer le cache du chapitre à la fermeture de l\'application</string>
@@ -130,7 +130,6 @@
     </plurals>
     <string name="delete_downloads_for_anime">Supprimer les épisodes téléchargés \?</string>
     <string name="snack_add_to_library">Ajouter à la bibliothèque \?</string>
-    
     <string name="snack_add_to_animelib">Ajouter un animé à la bibliothèque \?</string>
     <string name="display_mode_episode">Épisode %1$s</string>
     <string name="episode_downloading_progress">Téléchargement (%d% %)</string>
@@ -157,7 +156,6 @@
     <string name="dialog_with_checkbox_remove_description_anime">Ceci supprimera la date de visionnage de cet épisode. Êtes-vous sûr·e \?</string>
     <string name="dialog_with_checkbox_reset_anime">Réinitialiser tous les épisodes de cet animé</string>
     <string name="dialog_with_checkbox_reset">Réinitialiser tous les chapitres de cette entrée</string>
-    
     <string name="share_screenshot_info">%1$s : %2$s, %3$s</string>
     <string name="episode_progress">Progression : %1$s/%2$s</string>
     <string name="episode_progress_no_total">Progression : %1$s</string>
@@ -219,4 +217,48 @@
     <string name="player_aniskip_op">Sauter l\'ouverture</string>
     <string name="player_aniskip_ed">Sauter la fin</string>
     <string name="settings">Paramètres</string>
-    </resources>
+    <string name="pref_invalidate_download_cache_summary">Forcer l\'application à revérifier les chapitres et épisodes télécharger</string>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one">Épisodes %1$s et 1 autre</item>
+        <item quantity="many">Épisodes %1$s et %2$d autres</item>
+        <item quantity="other">Épisodes %1$s et %2$d autres</item>
+    </plurals>
+    <string name="pref_waiting_time_aniskip_9">9 secondes</string>
+    <string name="pref_waiting_time_aniskip_10">10 secondes</string>
+    <string name="player_aniskip_dontskip">Ne pas passer</string>
+    <string name="player_aniskip_dontskip_toast">Passer dans %d secondes</string>
+    <string name="player_aniskip_skip">%s passer</string>
+    <string name="pref_pip_on_exit">Passer automatiquement en mode PiP en quittant le lecteur</string>
+    <string name="pref_library_manga_columns">Nombre de mangas par lignes</string>
+    <string name="pref_library_anime_columns">Nombre d\'animés par lignes</string>
+    <string name="pref_backup_flags_summ">Quelle information inclure dans le fichier de sauvegarde</string>
+    <string name="pref_waiting_time_aniskip_8">8 secondes</string>
+    <string name="pref_enable_aniskip">Activer AniSkip</string>
+    <string name="pref_waiting_time_aniskip_7">7 secondes</string>
+    <string name="pref_enable_netflix_style_aniskip">Activer le mode Netflix</string>
+    <string name="notification_episodes_single">Épisode %1$s</string>
+    <string name="notification_episodes_single_and_more">Épisode %1$s et %2$d autres</string>
+    <string name="player_aniskip_recap">Passer le récap</string>
+    <string name="notification_episodes_multiple">Épisodes %1$s</string>
+    <string name="episode_settings">Paramètres des épisodes</string>
+    <string name="toggle_stats">Activer les statistiques</string>
+    <string name="stats_page">Pages des statistiques</string>
+    <string name="download_notifier_download_paused_episodes">Téléchargement d\'épisodes en pause</string>
+    <string name="pref_category_player_aniskip">Paramètres AniSkip</string>
+    <string name="label_animeextensions">Extensions d\'animés</string>
+    <string name="label_migration_manga">Migrer les mangas</string>
+    <string name="label_mangaextensions">Extensions des mangas</string>
+    <string name="label_migration_anime">Migrer les animés</string>
+    <string name="action_play_externally">Lire avec le lecteur externe</string>
+    <string name="pref_player_hide_controls">Cacher les contrôles à l\'ouverture du lecteur</string>
+    <string name="pref_waiting_time_aniskip_5">5 secondes</string>
+    <string name="pref_waiting_time_aniskip_6">6 secondes</string>
+    <string name="pref_backup_flags">Options de sauvegarde</string>
+    <string name="label_anime">Animé</string>
+    <string name="label_watched_duration">Durée de visionnage</string>
+    <string name="label_watched_episodes">Visionné</string>
+    <string name="pref_external_downloader_selection">App de téléchargements préférés</string>
+    <string name="pref_download_new_episodes">Télécharger les nouveaux épisodes</string>
+    <string name="auto_download_while_watching">Télécharger automatiquement pendant le visionnage</string>
+    <string name="pref_waiting_time_aniskip">Délai d\'expiration du bouton</string>
+</resources>
