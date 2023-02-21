@@ -1202,6 +1202,7 @@ class PlayerActivity :
         super.onDestroy()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (deviceSupportsPip) {
             if (player.paused == false && playerPreferences.pipOnExit().get()) {
@@ -1239,6 +1240,7 @@ class PlayerActivity :
         if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
     }
 
+    @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
         isInPipMode = isInPictureInPictureMode
@@ -1369,7 +1371,7 @@ class PlayerActivity :
      * Called from the presenter if the initial load couldn't load the videos of the episode. In
      * this case the activity is closed and a toast is shown to the user.
      */
-    fun setInitialEpisodeError(error: Throwable) {
+    private fun setInitialEpisodeError(error: Throwable) {
         launchUI { toast(error.message) }
         logcat(LogPriority.ERROR, error)
         finish()
@@ -1416,7 +1418,7 @@ class PlayerActivity :
                 ParcelFileDescriptor.adoptFd(fd).close() // we don't need that anymore
                 return path
             }
-        } catch (e: Exception) { }
+        } catch (_: Exception) {}
         // Else, pass the fd to mpv
         return "fdclose://$fd"
     }
@@ -1554,30 +1556,29 @@ class PlayerActivity :
 
     var skipType: SkipType? = null
 
-    private fun aniSkipStuff(value: Long) {
-        if (aniSkipEnable) {
-            // if it doesn't find any interval it will show the +85 button
-            if (aniSkipInterval == null) return
+    private fun aniSkipStuff(position: Long) {
+        if (!aniSkipEnable) return
+        // if it doesn't find any interval it will show the +85 button
+        if (aniSkipInterval == null) return
 
-            skipType = aniSkipInterval?.firstOrNull { it.interval.startTime <= value && it.interval.endTime > value }?.skipType
-            skipType?.let { skipType ->
-                val aniSkipPlayerUtils = AniSkipApi.PlayerUtils(binding, aniSkipInterval!!)
-                if (netflixStyle) {
-                    // show a toast with the seconds before the skip
-                    if (waitingAniSkip == playerPreferences.waitingTimeAniSkip().get()) {
-                        toast("AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}")
-                    }
-                    aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)
-                    waitingAniSkip--
-                } else if (autoSkipAniSkip) {
-                    skipType.let { MPVLib.command(arrayOf("seek", "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}", "absolute")) }
-                } else {
-                    aniSkipPlayerUtils.showSkipButton(skipType)
+        skipType = aniSkipInterval?.firstOrNull { it.interval.startTime <= position && it.interval.endTime > position }?.skipType
+        skipType?.let { skipType ->
+            val aniSkipPlayerUtils = AniSkipApi.PlayerUtils(binding, aniSkipInterval!!)
+            if (netflixStyle) {
+                // show a toast with the seconds before the skip
+                if (waitingAniSkip == playerPreferences.waitingTimeAniSkip().get()) {
+                    toast("AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}")
                 }
-            } ?: run {
-                launchUI {
-                    playerControls.binding.controlsSkipIntroBtn.text = getString(R.string.player_controls_skip_intro_text, this@run.viewModel.getAnimeSkipIntroLength())
-                }
+                aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)
+                waitingAniSkip--
+            } else if (autoSkipAniSkip) {
+                skipType.let { MPVLib.command(arrayOf("seek", "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}", "absolute")) }
+            } else {
+                aniSkipPlayerUtils.showSkipButton(skipType)
+            }
+        } ?: run {
+            launchUI {
+                playerControls.binding.controlsSkipIntroBtn.text = getString(R.string.player_controls_skip_intro_text, this@run.viewModel.getAnimeSkipIntroLength())
             }
         }
     }

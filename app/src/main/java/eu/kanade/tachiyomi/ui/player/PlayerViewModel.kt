@@ -106,7 +106,7 @@ class PlayerViewModel(
     /**
      * The anime loaded in the player. It can be null when instantiated for a short time.
      */
-    var anime: Anime? = null
+    val anime: Anime?
         get() = state.value.anime
 
     /**
@@ -124,7 +124,7 @@ class PlayerViewModel(
 
     var currentEpisode: Episode? = null
 
-    var currentVideoList: List<Video>? = null
+    private var currentVideoList: List<Video>? = null
 
     var requestedSecond: Long = 0L
 
@@ -179,14 +179,6 @@ class PlayerViewModel(
                 downloadManager.addDownloadsToStartOfQueue(listOf(it))
             }
         }
-    }
-
-    /**
-     * Called when the user pressed the back button and is going to leave the player. Used to
-     * trigger deletion of the downloaded episodes.
-     */
-    fun onActivityFinish() {
-        deletePendingEpisodes()
     }
 
     /**
@@ -305,15 +297,12 @@ class PlayerViewModel(
     }
 
     /**
-     * Called every time a second is reached in the player. Used to mark the flag of chapters being
-     * read, update tracking services, enqueue downloaded episode deletion, and updating the active episode if this
-     * [page]'s chapter is different from the currently active.
+     * Called every time a second is reached in the player. Used to mark the flag of episode being
+     * seen, update tracking services, enqueue downloaded episode deletion and download next episode.
      */
     fun onSecondReached(position: Int, duration: Int) {
-        val anime = anime ?: return
         val currentEpisode = currentEpisode ?: return
         if (episodeId == -1L) return
-        val episodes = runBlocking { getEpisodeByAnimeId.await(anime.id) }
 
         val seconds = position * 1000L
         val totalSeconds = duration * 1000L
@@ -359,16 +348,6 @@ class PlayerViewModel(
                 anime,
                 episodesToDownload,
             )
-        }
-    }
-
-    /**
-     * Removes [currentEpisode] from download queue
-     * if setting is enabled and [currentEpisode] is queued for download
-     */
-    private fun cancelQueuedDownloads(): AnimeDownload? {
-        return downloadManager.getQueuedDownloadOrNull(currentEpisode!!.id!!.toLong())?.also {
-            downloadManager.cancelQueuedDownloads(listOf(it))
         }
     }
 
@@ -436,7 +415,7 @@ class PlayerViewModel(
     }
 
     /**
-     * Bookmarks the currently active chapter.
+     * Bookmarks the currently active episode.
      */
     fun bookmarkCurrentEpisode(bookmarked: Boolean) {
         val episode = currentEpisode ?: return
