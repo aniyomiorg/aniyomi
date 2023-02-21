@@ -104,11 +104,6 @@ class PlayerViewModel(
     val eventFlow = eventChannel.receiveAsFlow()
 
     /**
-     * The ID of the anime loaded in the player.
-     */
-    var animeId: Long = -1L
-
-    /**
      * The anime loaded in the player. It can be null when instantiated for a short time.
      */
     var anime: Anime? = null
@@ -241,6 +236,7 @@ class PlayerViewModel(
 
                     checkTrackers(anime)
                     val source = sourceManager.getOrStub(anime.source)
+                    this@PlayerViewModel.source = source
 
                     episodeList = initEpisodeList()
                     currentEpisode = episodeList.first { initialEpisodeId == it.id }
@@ -668,8 +664,8 @@ class PlayerViewModel(
      * Returns the response of the AniSkipApi for this episode.
      * just works if tracking is enabled.
      */
-
     suspend fun aniSkipResponse(playerDuration: Int?): List<Stamp>? {
+        val animeId = anime?.id ?: return null
         val trackManager = Injekt.get<TrackManager>()
         var malId: Long?
         val episodeNumber = getCurrentEpisodeIndex() + 1

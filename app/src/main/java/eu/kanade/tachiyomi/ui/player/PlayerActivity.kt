@@ -1426,10 +1426,10 @@ class PlayerActivity :
         val source = viewModel.source as AnimeHttpSource
 
         val headers = video.headers?.toMultimap()
-            ?.mapValues { it.value.getOrNull(0) ?: "" }
+            ?.mapValues { it.value.firstOrNull() ?: "" }
             ?.toMutableMap()
             ?: source.headers.toMultimap()
-                .mapValues { it.value.getOrNull(0) ?: "" }
+                .mapValues { it.value.firstOrNull() ?: "" }
                 .toMutableMap()
 
         val httpHeaderString = headers.map {
