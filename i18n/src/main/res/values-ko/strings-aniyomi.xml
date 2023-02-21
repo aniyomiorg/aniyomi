@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">카테고리</string>
+<resources>
+    <string name="categories">카테고리</string>
     <string name="general_categories">카테고리</string>
     <string name="anime_categories">애니메이션 카테고리</string>
     <string name="manga_anime">서재 항목</string>
@@ -80,9 +81,9 @@
     <string name="pref_default_portrait_orientation">기본 세로</string>
     <string name="pref_default_landscape_orientation">기본 가로</string>
     <string name="pref_category_internal_player">내부 플레이어</string>
-    <string name="pref_default_intro_length">기본 인트로 길이 건너뛰기</string>
-    <string name="pref_intro_length">인트로 길이 건너뛰기</string>
-    <string name="pref_skip_length">두 번 탭하여 길이 건너뛰기</string>
+    <string name="pref_default_intro_length">기본 건너뛸 인트로 길이</string>
+    <string name="pref_intro_length">건너뛸 인트로 길이</string>
+    <string name="pref_skip_length">두 번 탭하여 건너뛸 길이</string>
     <string name="pref_skip_disable">끄기</string>
     <string name="pref_player_smooth_seek">정확한 검색 사용</string>
     <string name="pref_player_smooth_seek_summary">활성화되면 검색이 키프레임에 초점을 맞추지 않아 느리지만 정확한 검색이 가능함</string>
@@ -172,7 +173,7 @@
     <string name="screenshot_show_subs">스크린 샷에 자막 표시</string>
     <string name="toggle_volume_brightness_gestures">볼륨 및 밝기 제스처 활성화</string>
     <string name="toggle_horizontal_seek_gesture">가로 탐색 제스처 활성화</string>
-<string name="stats_header">통계 표시</string>
+    <string name="stats_header">통계 표시</string>
     <string name="toggle_stats">통계 활성화</string>
     <string name="stats_page">통계 페이지</string>
     <string name="stats_page_1">페이지 1</string>
@@ -252,4 +253,10 @@
     <string name="label_migration_manga">만화 데이터 이전</string>
     <string name="label_migration_anime">애니메이션 데이터 이전</string>
     <string name="settings">설정</string>
-    </resources>
+    <string name="pref_invalidate_download_cache_summary">앱이 다운로드한 회차를 다시 확인하도록 강제</string>
+    <string name="pref_library_anime_columns">애니메이션 정렬</string>
+    <string name="pref_library_manga_columns">만화 정렬</string>
+    <string name="label_anime">애니메이션</string>
+    <string name="label_watched_duration">시청 시간</string>
+    <string name="label_watched_episodes">시청함</string>
+</resources>
