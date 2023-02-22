@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Categorías de los mangas</string>
+<resources>
+    <string name="categories">Categorías de los mangas</string>
     <string name="general_categories">Categorías</string>
     <string name="anime_categories">Categorías de Anime</string>
     <string name="manga_anime">Entradas de la biblioteca</string>
@@ -116,7 +117,6 @@
     </plurals>
     <string name="download_ahead_info_anime">Solo funciona en entradas en biblioteca y si el episodio actual junto al siguiente ya se encuentran descargados</string>
     <string name="pref_auto_update_manga_sync">Actualizar progreso al terminar de leer/ver</string>
-    
     <string name="pref_track_on_add_library">Abrir menú de rastreador al añadir a biblioteca</string>
     <string name="pref_backup_flags_summ">Que información incluir en el archivo de respaldo</string>
     <string name="pref_clear_chapter_cache">Vaciar la caché de capítulos y episodios</string>
@@ -170,7 +170,6 @@
     <string name="dialog_with_checkbox_remove_description_anime">Esto eliminará la fecha de visualización de este episodio. ¿Seguro\?</string>
     <string name="dialog_with_checkbox_reset_anime">Restablecer todos los episodios de este anime</string>
     <string name="dialog_with_checkbox_reset">Reiniciar todos los capítulos de este manga</string>
-    
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress">Progreso: %1$s/%2$s</string>
     <string name="episode_progress_no_total">Progreso: %1$s</string>
@@ -265,5 +264,13 @@
     <string name="label_animeextensions">Extensiones del anime</string>
     <string name="label_migration_manga">Migrar el manga</string>
     <string name="label_migration_anime">Migrar el anime</string>
-<string name="settings">Ajustes</string>
-    </resources>
+    <string name="settings">Ajustes</string>
+    <string name="pref_library_manga_columns">Manga por fila</string>
+    <string name="pref_library_anime_columns">Elementos del anime por fila</string>
+    <string name="label_anime">Anime</string>
+    <string name="label_watched_duration">Duración de la reproducción</string>
+    <string name="label_watched_episodes">Visto</string>
+    <string name="pref_invalidate_download_cache_summary">Forzar a la aplicación a volver a comprobar los capítulos y episodios descargados</string>
+    <string name="pref_remember_brightness">Recordar y cambiar al último brillo utilizado</string>
+    <string name="pref_remember_volume">Recordar y cambiar al último volumen utilizado</string>
+</resources>

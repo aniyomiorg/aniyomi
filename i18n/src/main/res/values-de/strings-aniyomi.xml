@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Manga-Kategorien</string>
+<resources>
+    <string name="categories">Manga-Kategorien</string>
     <string name="general_categories">Kategorien</string>
     <string name="anime_categories">Anime-Kategorien</string>
     <string name="manga_anime">Bibliothekseinträge</string>
@@ -180,7 +181,7 @@
     <string name="stats_page_1">Seite 1</string>
     <string name="stats_page_2">Seite 2</string>
     <string name="stats_page_3">Seite 3</string>
-<string name="recent_anime_time">Flg. %1$s - %2$s</string>
+    <string name="recent_anime_time">Flg. %1$s - %2$s</string>
     <string name="download_insufficient_space">Herunterladen von Kapiteln aufgrund von zu wenig Speicherplatz nicht möglich</string>
     <string name="download_queue_size_warning">Achtung: Große Downloads könnten dazu führen, dass Quellen langsamer werden und/oder Tachiyomi blockieren. Tippe, um mehr zu erfahren.</string>
     <string name="video_list_empty_error">Kein Video gefunden</string>
@@ -258,4 +259,12 @@
     <string name="label_migration_manga">Manga migrieren</string>
     <string name="label_migration_anime">Anime migrieren</string>
     <string name="settings">Einstellungen</string>
-    </resources>
+    <string name="pref_remember_brightness">Die zuletzt eingestellte Helligkeit merken</string>
+    <string name="pref_remember_volume">Die zuletzt eingestellte Lautstärke merken</string>
+    <string name="pref_library_manga_columns">Mangaeinträge pro Zeile</string>
+    <string name="pref_library_anime_columns">Animeeinträge pro Zeile</string>
+    <string name="label_anime">Anime</string>
+    <string name="label_watched_episodes">Gesehen</string>
+    <string name="pref_invalidate_download_cache_summary">Die App zwingen, heruntergeladene Folgen und Kapitel zu überprüfen</string>
+    <string name="label_watched_duration">Gesehene Dauer</string>
+</resources>
