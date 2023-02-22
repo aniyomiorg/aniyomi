@@ -276,4 +276,9 @@
     <string name="pref_category_volume_brightness"></string>
     <string name="label_mangaextensions"></string>
     <string name="pref_waiting_time_aniskip_7"></string>
+    <string name="pref_library_manga_columns"></string>
+    <string name="pref_remember_brightness"></string>
+    <string name="label_watched_duration"></string>
+    <string name="label_watched_episodes"></string>
+    <string name="pref_library_anime_columns"></string>
 </resources>
