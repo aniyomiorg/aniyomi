@@ -318,4 +318,6 @@
     <string name="theme_cottoncandy"></string>
     <string name="player_hwdec_dialog_title"></string>
     <string name="pref_skip_5" translatable="false"></string>
+    <string name="pref_remember_brightness"></string>
+    <string name="label_watched_episodes"></string>
 </resources>
