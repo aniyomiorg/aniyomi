@@ -270,4 +270,6 @@
     <string name="pref_clear_anime_database_summary">Elimina la cronologia degli anime che non sono presenti nella libreria</string>
     <string name="currently_watching">Attualmente visti</string>
     <string name="episode_progress">Progresso: %1$s/%2$s</string>
+    <string name="action_sort_total_episodes">Episodi</string>
+    <string name="action_filter_unseen">Non visti</string>
 </resources>
