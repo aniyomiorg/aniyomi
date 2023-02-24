@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">الفئات</string>
+    <string name="categories">فئات المانغا</string>
     <string name="label_download_queue">قائمة التنزيلات</string>
     <string name="unlock_app">افتح Aniyomi</string>
     <string name="action_sort_last_manga_update">آخر تحديث للمانجا</string>
-    <string name="action_show_manga">أظهر المانجا</string>
+    <string name="action_show_manga">عرض المانجا</string>
     <string name="action_display_local_badge">المانجا المحلية</string>
     <string name="pref_update_only_completely_read">مع فصل (فصول) غير مقروءة / حلقة (حلقات) غير مشاهدة</string>
     <string name="pref_library_update_show_tab_badge">إظهار عدد الغير مقروء/ الغير مشاهد على أيقونة التحديثات</string>
-    <string name="default_category">الفئة الافتراضية</string>
-    <string name="pref_library_update_categories_details">المانجا في الفئات المستبعدة لن يتم تحديثها حتى و ان كانت أيضا في الفئات المضمنة.</string>
+    <string name="default_category">فئة المانغا الإفتراضية</string>
+    <string name="pref_library_update_categories_details">المانجا في الفئات المستبعدة لن يتم تحديثها حتى وإن كانت أيضا في الفئات المضمنة.</string>
     <string name="untrusted_extension_message">هذه اﻹضافة موقعة بشهادة غير موثوق بها ولم يتم تفعيلها.
 \n
-\nيمكن لأي إضافة خبيثة قراءة بيانات اعتماد تسجيل الدخول المخزنة في Tachiyomi أو تنفيذ تعليمات برمجية عشوائية.
+\nيمكن لأي إضافة خبيثة قراءة بيانات اعتماد تسجيل الدخول المخزنة في \"Ainyomi\" أو تنفيذ تعليمات برمجية عشوائية.
 \n
 \nبالثقة في هذه الشهادة تقبل هذه المخاطر.</string>
     <string name="pref_category_delete_chapters">حذف الفصول</string>
@@ -22,9 +22,9 @@
     <string name="pref_remove_exclude_categories">فئات المستثناة</string>
     <string name="pref_auto_update_manga_sync">تحديث تقدّم الفصول بعد القراءة</string>
     <string name="pref_clear_chapter_cache">مسح الذاكرة المؤقتة للفصول</string>
-    <string name="pref_auto_clear_chapter_cache">امسح ملفات التخزين المؤقت عند إغلاق التطبيق</string>
-    <string name="pref_clear_database">محو قاعدة البيانات</string>
-    <string name="pref_clear_database_summary">مسح سجلّ المانجا التي ليست محفوظة في مكتبتك</string>
+    <string name="pref_auto_clear_chapter_cache">تنظيف ملفات التخزين المؤقت عند إغلاق التطبيق</string>
+    <string name="pref_clear_database">تنظيف قاعدة البيانات</string>
+    <string name="pref_clear_database_summary">حذف سجل المانجا التي لم يتم حفظها في مكتبتك</string>
     <string name="clear_database_confirmation">هل أنت متأكد؟ الفصول المقروءة ومستوى التقدم للمانجا الغير الموجودة في مكتبتك سيتم فقده</string>
     <string name="pref_refresh_library_tracking_summary">تحديث الحالة، والتقييم، وآخر فصل: عن طريق خدمات التتبع</string>
     <string name="pref_incognito_mode_summary">إيقاف سجل القراءة</string>
@@ -40,7 +40,7 @@
     <string name="download_notifier_download_paused_chapters">تم إيقاف التنزيل مؤقتاً</string>
     <string name="channel_new_chapters_episodes">تحديثات الفصول</string>
     <string name="default_anime_category">تصنيف الأنمي الإفتراضي</string>
-    <string name="pref_animelib_update_categories_details">لن يتم تحديث الأنمي في الفئات المستبعدة حتى لو كانت أيضًا في الفئات المضمنة.</string>
+    <string name="pref_animelib_update_categories_details">الأنمي في الفئات المستبعدة لن يتم تحديثها حتى وإن كانت أيضا في الفئات المضمنة</string>
     <string name="action_order_by_episode_number">حسب رقم الحلقة</string>
     <string name="action_display_unseen_badge">الحلقات الغير المشاهدة</string>
     <string name="label_history">مانغا</string>
@@ -72,14 +72,14 @@
     <string name="pref_backup_flags_summ">ما هي المعلومات المراد تضمينها في ملف النسخ الاحتياطي</string>
     <string name="episode_not_found">الحلقة غير موجودة</string>
     <string name="local_invalid_episode_format">تنسيق الحلقة غير صالح</string>
-    <string name="pref_clear_anime_database">مسح قاعدة بيانات الأنمي</string>
+    <string name="pref_clear_anime_database">تنظيف قاعدة بيانات الأنمي</string>
     <string name="disable_auto_play">التشغيل التلقائي متوقف</string>
     <string name="episode_downloading_progress">تحميل (%d%%)</string>
     <string name="player_aniskip_ed">تخطي النهاية</string>
     <string name="action_play">تشغيل</string>
     <string name="playertitle">%1$s - %2$s</string>
     <string name="playback_options_quality">جودة الفيديو</string>
-    <string name="action_screen_fit">وضع ملاءمة الشاشة</string>
+    <string name="action_screen_fit">وضع \"ملاءمة الشاشة\"</string>
     <string name="pref_category_external_downloader">برنامج التحميل الخارجي</string>
     <string name="pref_bottom_nav_style">نمط شريط التنقل السفلي</string>
     <string name="pref_category_player_aniskip">إعدادات AniSkip</string>
@@ -94,7 +94,7 @@
     <string name="action_next_episode">الحلقة التالية</string>
     <string name="audio_dialog_header">تغيير مسار الصوت:</string>
     <string name="action_start_download_externally">استخدام أداة التحميل الخارجية</string>
-    <string name="pref_intro_length">طول مدة تخطي المقدمة (بالثواني)</string>
+    <string name="pref_intro_length">طول مدة تخطي المقدمة</string>
     <string name="label_updates">مانغا</string>
     <string name="unknown_studio">استوديو غير معروف</string>
     <string name="episode_progress">التقدم: %1$s/%2$s</string>
@@ -139,7 +139,7 @@
     <string name="player_aniskip_recap">تخطي الملخص</string>
     <string name="action_sort_unseen_count">عدد الغير المشاهد</string>
     <string name="display_mode_episode">الحلقة %1$s</string>
-    <string name="action_display_local_badge_anime">انمي محلي</string>
+    <string name="action_display_local_badge_anime">الأنمي المحلي</string>
     <string name="want_to_watch">تريد المشاهدة</string>
     <string name="label_animehistory">أنمي</string>
     <string name="download_5_episodes">الحلقات الـ 5 التالية</string>
@@ -171,7 +171,7 @@
     <string name="rotation_reverse_landscape">الوضع الأفقي العكسي</string>
     <string name="action_mark_as_unseen">وضع علامة كـ\"غير مشاهد\"</string>
     <string name="repeating_anime">إعادة المشاهدة</string>
-    <string name="pref_clear_anime_database_summary">حذف محفوظات الأنمي التي لم يتم حفظها في مكتبتك</string>
+    <string name="pref_clear_anime_database_summary">حذف سجل الأنمي التي لم يتم حفظها في مكتبتك</string>
     <string name="stats_page">صفحة الإحصائيات</string>
     <string name="action_display_download_badge_anime">الحلقات المحملة</string>
     <string name="screenshot_show_subs">إظهار الترجمة في لقطة الشاشة</string>
@@ -181,14 +181,14 @@
     <string name="label_mangalibrary">مانغا</string>
     <string name="label_animelib">أنمي</string>
     <string name="episodes">حلقات</string>
-    <string name="action_mark_previous_as_seen">وضع علامة كـ\"غير مرئي\"</string>
+    <string name="action_mark_previous_as_seen">وضع علامة على السابق كـ\"غير مشاهد\"</string>
     <string name="action_play_externally">تشغيل خارجيا</string>
-    <string name="action_player_pip">وضع الصورة في الصورة</string>
+    <string name="action_player_pip">وضع \"الصورة في الصورة\"</string>
     <string name="pref_adjust_orientation_video_dimensions">اضبط الاتجاه بناءً على أبعاد الفيديو</string>
     <string name="pref_player_hide_controls">إخفاء عناصر تحكم عند فتح مشغل الوسائط</string>
     <string name="pref_category_external_player">مشغل الوسائط الخارجي</string>
     <string name="pref_external_downloader_selection">تفضيل تطبيق التحميل</string>
-    <string name="pref_default_intro_length">المدة الإفتراضية لتخطي المقدمة (بالثواني)</string>
+    <string name="pref_default_intro_length">المدة الإفتراضية لتخطي المقدمة</string>
     <string name="pref_player_fullscreen">إظهار المحتوى في شاشة العرض المنبثقة</string>
     <string name="chapters_episodes">الفصول والحلقات</string>
     <string name="label_anime">أنمي</string>
@@ -201,7 +201,7 @@
     <string name="action_sort_last_seen">اخر ظهور</string>
     <string name="action_sort_last_checked">اخر فحص</string>
     <string name="action_sort_last_anime_update">أحدث تحديث للأنمي</string>
-    <string name="action_mark_as_seen">وضع علامة كـ\"مشاهدة\"</string>
+    <string name="action_mark_as_seen">وضع علامة كـ\"مشاهد\"</string>
     <string name="stats_page_2">الصفحة 2</string>
     <string name="pref_remove_exclude_categories_anime_prefix">أنمي:</string>
     <string name="notification_new_episodes">تم العثور على حلقات جديدة</string>
