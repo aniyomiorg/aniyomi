@@ -259,4 +259,6 @@
     <string name="label_anime">애니메이션</string>
     <string name="label_watched_duration">시청 시간</string>
     <string name="label_watched_episodes">시청함</string>
+    <string name="pref_remember_volume">마지막으로 사용한 볼륨을 기억하고 전환</string>
+    <string name="pref_remember_brightness">마지막으로 사용한 밝기를 기억하고 전환</string>
 </resources>
