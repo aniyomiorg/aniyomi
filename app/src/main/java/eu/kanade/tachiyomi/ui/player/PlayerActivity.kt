@@ -1237,7 +1237,7 @@ class PlayerActivity :
     override fun onResume() {
         super.onResume()
         setVisibilities()
-        if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
+        if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) player.paused?.let { updatePictureInPictureActions(!it) }
     }
 
     @Deprecated("Deprecated in Java")
