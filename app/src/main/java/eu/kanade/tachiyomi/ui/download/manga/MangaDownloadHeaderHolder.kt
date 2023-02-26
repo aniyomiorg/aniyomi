@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.viewholders.ExpandableViewHolder
 import eu.kanade.tachiyomi.databinding.DownloadHeaderBinding
-import eu.kanade.tachiyomi.ui.download.anime.AnimeDownloadAdapter
 
 class MangaDownloadHeaderHolder(view: View, adapter: FlexibleAdapter<*>) : ExpandableViewHolder(view, adapter) {
 
@@ -30,6 +29,6 @@ class MangaDownloadHeaderHolder(view: View, adapter: FlexibleAdapter<*>) : Expan
         super.onItemReleased(position)
         binding.container.isDragged = false
         mAdapter.expandAll()
-        (mAdapter as AnimeDownloadAdapter).downloadItemListener.onItemReleased(position)
+        (mAdapter as MangaDownloadAdapter).downloadItemListener.onItemReleased(position)
     }
 }
