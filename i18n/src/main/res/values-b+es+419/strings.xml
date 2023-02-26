@@ -695,5 +695,5 @@
     </plurals>
     <string name="auto_download_while_reading">Descargar automáticamente mientras se lee</string>
     <string name="action_search_hint">Buscar…</string>
-<string name="label_download_queue">Lista de descargas</string>
+<string name="label_download_queue">Cola de descargas</string>
     </resources>

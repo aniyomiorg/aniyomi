@@ -746,5 +746,5 @@
     <string name="information_no_entries_found">Nenhum item encontrado nesta categoria</string>
     <string name="fdroid_warning">Compilações do F-Droid não são suportadas oficialmente.
 \nToque para saber mais.</string>
-    <string name="label_download_queue">Fila de download de mangá</string>
+    <string name="label_download_queue">Fila de downloads</string>
     </resources>

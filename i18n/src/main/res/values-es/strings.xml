@@ -774,5 +774,5 @@
     <string name="action_open_random_manga">Abrir manga al azar</string>
     <string name="information_no_entries_found">No se ha encontrado ningún manga en esta categoría</string>
     <string name="fdroid_warning">No damos soporte oficial a las versiones de F-Droid. Toca para más información.</string>
-    <string name="label_download_queue">Cola de descargas de Manga</string>
+    <string name="label_download_queue">Cola de descargas</string>
     </resources>

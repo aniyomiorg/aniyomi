@@ -733,5 +733,5 @@
     <string name="action_open_random_manga">Buksan ang random na entry</string>
     <string name="fdroid_warning">Ang mga build ng F-Droid ay hindi opisyal na sinusuportahan.
 \nI-tap para matuto pa.</string>
-<string name="label_download_queue">Mga Dina-download</string>
+<string name="label_download_queue">Dina-download</string>
     </resources>

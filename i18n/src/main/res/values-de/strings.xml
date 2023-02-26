@@ -733,5 +733,5 @@
     <string name="information_no_entries_found">Keine Einträge in dieser Kategorie gefunden</string>
     <string name="fdroid_warning">F-Droid-Builds werden nicht offiziell unterstützt.
 \nTippe, um mehr zu erfahren.</string>
-    <string name="label_download_queue">Manga-Downloadwarteschlange</string>
+    <string name="label_download_queue">Download-Warteschlange</string>
     </resources>
