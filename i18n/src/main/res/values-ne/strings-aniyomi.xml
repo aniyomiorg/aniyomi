@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">वर्गहरू</string>
-    <string name="label_download_queue">डाउनलोड कतार</string>
+<resources>
+    <string name="categories">वर्गहरू</string>
     <string name="unlock_app">अनलक ताचियोमी</string>
     <string name="action_sort_last_manga_update">पछिल्लो माङ्गा अपडेट</string>
     <string name="action_show_manga">माङ्गा देखाउनुहोस्</string>
@@ -38,4 +38,4 @@
     <string name="information_webview_required">ताचियोमी को लागि WebView आवश्यक छ</string>
     <string name="download_notifier_download_paused_chapters">डाउनलोड रोकियो</string>
     <string name="channel_new_chapters_episodes">अध्याय अपडेटहरू</string>
-    </resources>
+</resources>

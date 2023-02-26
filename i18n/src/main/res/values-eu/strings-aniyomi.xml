@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Kategoriak</string>
-    <string name="label_download_queue">Deskarga-ilara</string>
+<resources>
+    <string name="categories">Kategoriak</string>
     <string name="unlock_app">Desblokeatu Tachiyomi</string>
     <string name="action_show_manga">Manga erakutsi</string>
     <string name="action_display_local_badge">Manga lokala</string>
@@ -37,4 +37,4 @@
     <string name="information_webview_required">WebView beharrezkoa da Tachiyomi-rentzat</string>
     <string name="download_notifier_download_paused_chapters">Deskarga pausatu da</string>
     <string name="channel_new_chapters_episodes">Kapituluaren eguneraketak</string>
-    </resources>
+</resources>

@@ -6,7 +6,6 @@
     <string name="chapters_episodes">Capitoli ed episodi</string>
     <string name="episodes">Episodi</string>
     <string name="backup_settings_warning">Avviso: Il file backup contiene anche password dei servizi tracking, non condividere questo file!</string>
-    <string name="label_download_queue">Coda download</string>
     <string name="label_mangalibrary">Manga</string>
     <string name="label_animelib">Anime</string>
     <string name="label_manga">Manga</string>

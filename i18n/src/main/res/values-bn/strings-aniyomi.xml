@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">বিভাগসমূহ</string>
-    <string name="label_download_queue">ডাউনলোড সারি</string>
+<resources>
+    <string name="categories">বিভাগসমূহ</string>
     <string name="unlock_app">তাচিওমি খুলুন</string>
     <string name="action_sort_last_manga_update">সর্বশেষ হালনাগাদ চেক</string>
     <string name="action_show_manga">মাঙ্গা দেখান</string>
@@ -38,4 +38,4 @@
     <string name="information_webview_required">টাচিয়ামির জন্য ওয়েবভিউ প্রয়োজন</string>
     <string name="download_notifier_download_paused_chapters">ডাউনলোড বিরতি</string>
     <string name="channel_new_chapters_episodes">অধ্যায়ের হালনাগাদগুলো</string>
-    </resources>
+</resources>

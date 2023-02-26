@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Kategorioj</string>
-    <string name="label_download_queue">Elŝutvico</string>
+<resources>
+    <string name="categories">Kategorioj</string>
     <string name="unlock_app">Malŝlosi Aniyomi-n</string>
     <string name="action_display_local_badge">Lokaj ŝildoj</string>
     <string name="default_category">Defaŭlta kategorio</string>
@@ -15,4 +15,4 @@
     <string name="also_set_chapter_settings_for_library">Ankaŭ apliki al ĉiuj mangaoj en mia biblioteko</string>
     <string name="download_notifier_download_paused_chapters">Elŝutito paŭzigita</string>
     <string name="channel_new_chapters_episodes">Ĉapitraj ĝisdatigoj</string>
-    </resources>
+</resources>

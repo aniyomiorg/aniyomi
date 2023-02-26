@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Kategoriat</string>
-    <string name="label_download_queue">Latausjono</string>
+<resources>
+    <string name="categories">Kategoriat</string>
     <string name="unlock_app">Avaa Aniyomi</string>
     <string name="action_sort_last_manga_update">Viimeisin manga päivitys</string>
     <string name="action_show_manga">Näytä manga</string>
@@ -37,4 +37,4 @@
     <string name="information_webview_required">WebView on pakollinen Tachiyomissa</string>
     <string name="download_notifier_download_paused_chapters">Lataus pysäytetty</string>
     <string name="channel_new_chapters_episodes">Lukujen päivitykset</string>
-    </resources>
+</resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Категории</string>
-    <string name="label_download_queue">Очередь загрузки</string>
+<resources>
+    <string name="categories">Категории</string>
     <string name="unlock_app">Разблокировать Aniyomi</string>
     <string name="action_sort_last_manga_update">Последняя проверка обновления</string>
     <string name="action_show_manga">Показать запись</string>
@@ -38,4 +38,4 @@
     <string name="information_webview_required">Для Tachiyomi необходим WebView</string>
     <string name="download_notifier_download_paused_chapters">Загрузка приостановлена</string>
     <string name="channel_new_chapters_episodes">Обновления глав</string>
-    </resources>
+</resources>

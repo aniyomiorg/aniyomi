@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">பிரிவுகள்</string>
-    <string name="label_download_queue">பதிவிறக்க வரிசை</string>
+<resources>
+    <string name="categories">பிரிவுகள்</string>
     <string name="unlock_app">\"டக்கியோமியை\" திறக்கவும்</string>
-    </resources>
+</resources>
