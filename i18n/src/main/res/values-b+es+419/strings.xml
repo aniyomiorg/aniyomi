@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_cancel">Cancelar</string>
     <string name="action_select_inverse">Invertir selección</string>

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">آپدیت برای یک افرونه موجود است</item>
