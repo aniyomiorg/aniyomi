@@ -107,7 +107,7 @@
     <string name="player_aniskip_op">Salta l\'opening</string>
     <string name="player_aniskip_mixedOp">Skip MixedOp</string>
     <string name="playback_options_title">Opzioni di riproduzione</string>
-    <string name="action_change_intro_length">Cambia la lunghezza dell\'intro</string>
+    <string name="action_change_intro_length">Imposta la lunghezza dell\'intro</string>
     <string name="player_aniskip_ed">Salta l\'ending</string>
     <string name="label_animeextensions">Estensioni Anime</string>
     <plurals name="notification_episodes_multiple_and_more">
@@ -149,7 +149,7 @@
     <string name="subtitle_dialog_header">Cambia sottotitoli:</string>
     <string name="pref_preserve_watching_position">Mantieni la posizione di visualizzazione sugli episodi visti</string>
     <string name="player_aniskip_dontskip">Non saltare</string>
-    <string name="video_crop_screen">Ritaglia sullo schermo</string>
+    <string name="video_crop_screen">Zoom</string>
     <string name="playback_speed_dialog_reset">Reset</string>
     <string name="toggle_stats">Attiva statistiche</string>
     <string name="player_hwdec_dialog_title">Imposta la modalità di decodifica hardware predefinita</string>
@@ -194,7 +194,7 @@
     <string name="action_display_local_badge_anime">Anime locali</string>
     <string name="pref_player_summary">Controllo dei progressi, player interno, player esterno</string>
     <string name="unofficial_extension_message_aniyomi">Questa estensione non proviene dalla lista di estensioni ufficiali Aniyomi.</string>
-    <string name="rotation_reverse_landscape">Landscape inverso</string>
+    <string name="rotation_reverse_landscape">Orizzontale inverso</string>
     <string name="pref_category_progress">Progresso</string>
     <string name="action_mark_as_unseen">Segna come non visto</string>
     <string name="action_mark_previous_as_seen">Segna i precedenti come visti</string>
@@ -244,7 +244,7 @@
     <string name="enable_auto_play">Auto-play è attivo</string>
     <string name="disable_auto_play">Auto-play è disattivato</string>
     <string name="video_fit_screen">Adatta allo schermo</string>
-    <string name="video_stretch_screen">Allunga sullo schermo</string>
+    <string name="video_stretch_screen">Allunga</string>
     <string name="playback_speed_dialog_title">Cambia la velocità di riproduzione:</string>
     <string name="quality_dialog_header">Cambia la qualità video:</string>
     <string name="audio_dialog_header">Cambia traccia audio:</string>
