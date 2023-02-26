@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Име</string>
     <string name="manga">Manga</string>
@@ -666,4 +666,5 @@
     <string name="pref_clear_webview_data">Obrišite podatke WebView-a</string>
     <string name="webview_data_deleted">Podaci WebView-a su obrisani</string>
     <string name="pref_duplicate_pinned_sources">Prikaži duplirane zakačene izvore</string>
-</resources>
+<string name="label_download_queue">Редослед преузимања</string>
+    </resources>

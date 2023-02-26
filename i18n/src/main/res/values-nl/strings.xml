@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Naam</string>
     <string name="manga">Manga</string>
@@ -682,4 +682,5 @@
     </plurals>
     <string name="action_search_hint">Zoek…</string>
     <string name="missing_storage_permission">Opslag bevoegdheden niet verleent</string>
-</resources>
+<string name="label_download_queue">Downloadwachtrij</string>
+    </resources>

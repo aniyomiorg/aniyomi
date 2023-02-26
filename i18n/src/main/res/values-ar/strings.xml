@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">الاسم</string>
     <string name="manga">مانجا</string>
@@ -775,4 +775,5 @@
     <string name="pref_backup_summary">النسخ الاحتياطي اليدوي والآلي</string>
     <string name="pref_security_summary">قفل التطبيق، شاشة آمنة</string>
     <string name="pref_advanced_summary">تفريغ سجلات الأعطال وتحسينات البطارية</string>
-</resources>
+<string name="label_download_queue">قائمة التنزيلات</string>
+    </resources>

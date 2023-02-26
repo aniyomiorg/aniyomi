@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Nome</string>
     
@@ -751,4 +751,5 @@
     <string name="skipped_reason_not_always_update">Ignorado porque a série não requer atualizações</string>
     <string name="action_search_hint">Pesquisar…</string>
     <string name="missing_storage_permission">Permissões de armazenamento não concedidas</string>
+    <string name="label_download_queue">Fila de Transferências</string>
     </resources>

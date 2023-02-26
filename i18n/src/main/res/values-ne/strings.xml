@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="theme_dark">अन</string>
     <string name="theme_light">अफ</string>
@@ -651,4 +651,5 @@
     <string name="delete_category">वर्ग हटाउनुहोस्</string>
     <string name="action_search_hint">खोज्नु…</string>
     <string name="action_remove_everything">सबै हटाउनुहोस्</string>
-</resources>
+<string name="label_download_queue">डाउनलोड कतार</string>
+    </resources>

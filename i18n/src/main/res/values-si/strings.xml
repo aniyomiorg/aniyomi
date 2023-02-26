@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="manga">මංගා (Manga)</string>
     <string name="label_settings">සැකසුම්</string>
@@ -69,4 +69,5 @@
     <string name="action_next_chapter">ඊළඟ පරිච්ඡේදය</string>
     <string name="action_pause">දැනට නවත්වන්න</string>
     <string name="action_retry">නැවත උත්සාහ කරන්න</string>
-</resources>
+<string name="label_download_queue">බාගත පෝලිම</string>
+    </resources>

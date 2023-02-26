@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Nom</string>
     <string name="manga">Mangues</string>
@@ -733,4 +733,5 @@
     <string name="fdroid_warning">Les compilacions de F-Droid no tenen assistència oficial.
 \nPremeu per a obtenir-ne més informació.</string>
     <string name="information_no_entries_found">No s\'ha trobat cap element en aquesta categoria</string>
-</resources>
+<string name="label_download_queue">Cua de baixades</string>
+    </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Nome</string>
     
@@ -778,4 +778,5 @@
     <string name="information_no_entries_found">Nessuna voce trovata in questa categoria</string>
     <string name="fdroid_warning">Le versioni F-Droid non sono ufficialmente supportate.
 \nToccare per saperne di più.</string>
+    <string name="label_download_queue">Coda download</string>
     </resources>

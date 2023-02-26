@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Nosaukums</string>
     <string name="chapters">Nodaļas</string>
@@ -688,4 +688,5 @@
     <string name="download_queue_error">Nevarēja lejupielādēt nodaļas. Varat mēģināt vēlreiz lejupielādes sadaļā</string>
     <string name="getting_started_guide">Darba sākšanas rokasgrāmata</string>
     <string name="information_empty_category_dialog">Jums vēl nav nevienas kategorijas.</string>
-</resources>
+<string name="label_download_queue">Lejupieladēšanas rinda</string>
+    </resources>

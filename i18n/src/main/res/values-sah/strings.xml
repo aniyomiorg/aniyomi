@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="action_add">Киллэр</string>
     <string name="action_edit">Уларыт</string>
@@ -439,4 +439,5 @@
     <string name="action_display_show_number_of_items">Мал төһө элбэҕин көрдөр</string>
     <string name="action_sort_chapter_fetch_date">Кэлэр күнэ</string>
     <string name="action_filter_tracked">Суолун көрө сылдьабыт</string>
-</resources>
+<string name="label_download_queue">Хачаайдааһын уочарата</string>
+    </resources>

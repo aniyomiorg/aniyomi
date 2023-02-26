@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="action_move_to_top">Перайсці да пачатку</string>
     <string name="action_desc">Сыходны</string>
@@ -366,4 +366,5 @@
     <string name="action_remove_everything">Выдаліць усё</string>
     <string name="update_72hour">Кожныя 3 дні</string>
     <string name="connected_to_wifi">Толькі па Wi-Fi</string>
+    <string name="label_download_queue">Чарга загрузак</string>
     </resources>

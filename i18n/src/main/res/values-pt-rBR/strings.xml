@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Nome</string>
     <string name="manga">Mangás</string>
@@ -746,4 +746,5 @@
     <string name="information_no_entries_found">Nenhum item encontrado nesta categoria</string>
     <string name="fdroid_warning">Compilações do F-Droid não são suportadas oficialmente.
 \nToque para saber mais.</string>
+    <string name="label_download_queue">Fila de download de mangá</string>
     </resources>

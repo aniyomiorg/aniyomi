@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">नाम</string>
     <string name="manga">मांगा</string>
@@ -707,4 +707,5 @@
     <string name="cant_open_last_read_chapter">अंतिम पढ़ा गया अध्याय खोलने में असमर्थ</string>
     <string name="pref_reset_user_agent_string">यूजर एजेंट स्ट्रिंग(User agent string) डिफॉल्ट रिसेट करें</string>
     <string name="on_hold_list">होल्ड लिस्ट में</string>
-</resources>
+<string name="label_download_queue">डाउनलोड कतार</string>
+    </resources>

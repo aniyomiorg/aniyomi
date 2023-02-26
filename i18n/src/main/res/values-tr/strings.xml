@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Ad</string>
     <string name="manga">Manga</string>
@@ -733,4 +733,5 @@
     <string name="information_no_entries_found">Bu kategoride girdi bulunamadı</string>
     <string name="fdroid_warning">F-Droid derlemeleri resmi olarak desteklenmemektedir.
 \nDaha fazla bilgi edinmek için dokunun.</string>
+    <string name="label_download_queue">İndirme kuyruğu</string>
     </resources>

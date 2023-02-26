@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="manga">Manga</string>
     <string name="chapters">Bab</string>
@@ -714,4 +714,5 @@
     <string name="unknown_title">Judul tidak diketahui</string>
     <string name="error_user_agent_string_invalid">String agen pengguna tidak valid</string>
     <string name="updates_last_update_info_just_now">Baru saja</string>
+    <string name="label_download_queue">Antrian unduhan</string>
     </resources>

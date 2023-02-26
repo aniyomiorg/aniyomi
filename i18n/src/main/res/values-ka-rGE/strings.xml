@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">სახელი</string>
     <string name="manga">მანგა</string>
@@ -466,4 +466,5 @@
     <string name="pref_category_appearance">გარეგნობა</string>
     <string name="label_default">ნაგულისხმევი</string>
     <string name="action_show_errors">დააჭირე დეტალების სანახავად</string>
-</resources>
+<string name="label_download_queue">გადმოწერის რიგი</string>
+    </resources>

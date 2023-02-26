@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="label_recent_updates">Opdateringer</string>
     <string name="label_recent_manga">Historik</string>
@@ -222,4 +222,5 @@
     <string name="in_library">I Biblioteket</string>
     <string name="remove_from_library">Fjern fra biblioteket</string>
     <string name="logout">Log af</string>
-</resources>
+<string name="label_download_queue">Download kø</string>
+    </resources>

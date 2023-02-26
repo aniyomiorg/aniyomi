@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="action_add">Добавить</string>
     <string name="action_add_category">Добавить категорию</string>
@@ -759,4 +759,5 @@
     <string name="action_open_random_manga">Открыть случайную запись</string>
     <string name="fdroid_warning">Сборки F-Droid официально не поддерживаются.
 \nНажмите, чтобы узнать больше.</string>
-</resources>
+<string name="label_download_queue">Очередь загрузки</string>
+    </resources>

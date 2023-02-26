@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Nom</string>
     
@@ -771,4 +771,5 @@
     <string name="error_user_agent_string_invalid">Chaîne d\'agent utilisateur invalide</string>
     <string name="unknown_title">Titre inconnu</string>
     <string name="updates_last_update_info_just_now">À l\'instant</string>
+    <string name="label_download_queue">File de téléchargement de mangas</string>
     </resources>

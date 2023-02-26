@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">이름</string>
     <string name="manga">만화</string>
@@ -720,4 +720,5 @@
     <string name="information_no_entries_found">이 카테고리에 항목이 없습니다</string>
     <string name="fdroid_warning">F-Droid 빌드는 공식적으로 지원되지 않습니다.
 \n자세히 알아보려면 탭하세요.</string>
+    <string name="label_download_queue">다운로드 대기열</string>
     </resources>

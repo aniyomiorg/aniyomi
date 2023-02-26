@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="action_stop">Tõxatish</string>
     <string name="action_view_chapters">Bõlimlarni kõrish</string>
@@ -57,4 +57,5 @@
     <string name="label_settings">Sozlamalar</string>
     <string name="label_more">Kõproq</string>
     <string name="name">Name</string>
-</resources>
+<string name="label_download_queue">Yuklash navbati</string>
+    </resources>

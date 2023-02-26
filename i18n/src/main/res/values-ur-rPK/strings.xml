@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">نام</string>
     <string name="manga">مانگا</string>
@@ -44,4 +44,5 @@
     <string name="in_library">لائبریری میں</string>
     <string name="transition_previous">پچھلا:</string>
     <string name="transition_next">اگلا:</string>
-</resources>
+<string name="label_download_queue">قطارِ ڈاؤنلوڈ</string>
+    </resources>

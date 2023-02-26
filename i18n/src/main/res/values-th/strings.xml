@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">ชื่อ</string>
     <string name="manga">มังงะ</string>
@@ -714,4 +714,5 @@
     <string name="crash_screen_restart_application">เริ่มแอปพลิเคชันใหม่</string>
     <string name="updates_last_update_info_just_now">เมื่อสักครู่</string>
     <string name="error_user_agent_string_invalid">สตริงตัวแทนผู้ใช้ไม่ถูกต้อง</string>
-</resources>
+<string name="label_download_queue">คิวดาวน์โหลด</string>
+    </resources>

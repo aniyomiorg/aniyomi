@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">آپدیت برای یک افرونه موجود است</item>
@@ -607,4 +607,5 @@
     <string name="publishing_finished">انتشار به پایان رسید</string>
     <string name="local_invalid_format">قالب فصل نامعتبر است</string>
     <string name="cancelled">لغو شد</string>
+    <string name="label_download_queue">صف دانلود</string>
     </resources>

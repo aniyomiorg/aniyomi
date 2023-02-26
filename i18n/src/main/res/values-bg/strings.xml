@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Име</string>
     
@@ -759,4 +759,5 @@
     <string name="publishing_finished">Приключено издаване</string>
     <string name="update_check_fdroid_migration_info">Достъпна е нова версия от официалните източници. Научете как да мигрирате от неофициалните версии на F-Droid.</string>
     <string name="download_notifier_split_page_not_found">Страница %d не беше намерена при разделяне</string>
-</resources>
+<string name="label_download_queue">Изтегляния</string>
+    </resources>

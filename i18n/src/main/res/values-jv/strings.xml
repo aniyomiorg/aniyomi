@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="update_check_notification_download_in_progress">Ndonlot…</string>
     <string name="update_check_confirm">Donlot</string>
@@ -325,4 +325,5 @@
     <string name="pref_reader_actions">Aksi</string>
     <string name="pref_read_with_long_tap">Tampilake ing tunyuk dawa</string>
     <string name="pref_create_folder_per_manga">Simpen kaca menyang folder sing kapisah</string>
-</resources>
+<string name="label_download_queue">Antrian Donlot</string>
+    </resources>

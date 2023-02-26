@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="action_search_settings">ស្វែងរកក្នុងការកំណត់</string>
     <string name="chapters">ភាគ</string>
@@ -186,4 +186,5 @@
     <string name="updating_library">កំពុងតែធ្វើបច្ចុប្បន្នភាពបណ្ណាល័យ</string>
     <string name="licensed">មានឡាយសិន</string>
     <string name="loader_rar5_error">ទម្រង់RARv5មិនត្រូវបានទទួលយកទេ</string>
-</resources>
+<string name="label_download_queue">កំពុងទាញយក</string>
+    </resources>

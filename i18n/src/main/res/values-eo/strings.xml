@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="label_sources">Fontoj</string>
     <string name="label_recent_manga">Historio</string>
@@ -522,4 +522,5 @@
     <string name="secure_screen_summary">Kaŝi aplikaĵan enhavon kiam ŝaltumas aplikaĵojn kaj malebligi ekrankopion</string>
     <string name="label_stats">Statistiko</string>
     <string name="label_warning">Averto</string>
-</resources>
+<string name="label_download_queue">Elŝutvico</string>
+    </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="no_chapters_error">Ez dira kapitulurik aurkitu</string>
     <string name="picture_saved">Irudia gorde da</string>
@@ -642,4 +642,5 @@
     <string name="battery_not_low">Bateria baxu ez dagoenean</string>
     <string name="ext_info_language">Hizkuntza</string>
     <string name="action_search_hint">Bilatu…</string>
-</resources>
+<string name="label_download_queue">Deskarga-ilara</string>
+    </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Nume</string>
     <string name="manga">Manga</string>
@@ -740,4 +740,5 @@
     <string name="crash_screen_title">A avut loc o eroare neașteptată</string>
     <string name="crash_screen_restart_application">Reporniți aplicația</string>
     <string name="pref_navigate_pan">Panoramare a imaginii la scară largă la atingere</string>
-</resources>
+<string name="label_download_queue">Descărcări în așteptare</string>
+    </resources>

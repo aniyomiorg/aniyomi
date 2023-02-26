@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Όνομα</string>
     <string name="manga">Manga</string>
@@ -733,4 +733,5 @@
 \nΠατήστε για να μάθετε περισσότερα.</string>
     <string name="action_open_random_manga">Άνοιγμα τυχαίας καταχώρησης</string>
     <string name="information_no_entries_found">Δε βρέθηκαν καταχωρήσεις σε αυτή την κατηγορία</string>
-</resources>
+<string name="label_download_queue">Ουρά λήψεων</string>
+    </resources>

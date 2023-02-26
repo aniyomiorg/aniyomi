@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="action_cancel">Cancelar</string>
     <string name="action_select_inverse">Invertir selección</string>
@@ -695,4 +695,5 @@
     </plurals>
     <string name="auto_download_while_reading">Descargar automáticamente mientras se lee</string>
     <string name="action_search_hint">Buscar…</string>
-</resources>
+<string name="label_download_queue">Lista de descargas</string>
+    </resources>

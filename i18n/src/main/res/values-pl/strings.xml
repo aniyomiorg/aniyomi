@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="chapters">Rozdziały</string>
     <string name="name">Nazwa</string>
@@ -733,4 +733,5 @@
     <string name="popular">Popularne</string>
     <string name="updates_last_update_info">Biblioteka ostatnio aktualizowana: %1$s</string>
     <string name="remove_manga">Zamierzasz usunąć tę mangę ze swojej biblioteki</string>
-</resources>
+<string name="label_download_queue">Kolejka pobierania</string>
+    </resources>

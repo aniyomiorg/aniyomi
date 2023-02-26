@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Ім\'я</string>
     <string name="manga">Манґа</string>
@@ -751,4 +751,5 @@
     <string name="unknown_title">Невідомий тайтл</string>
     <string name="updates_last_update_info_just_now">Тільки що</string>
     <string name="error_user_agent_string_invalid">Невірне значення user agent</string>
+    <string name="label_download_queue">Черга завантаження</string>
     </resources>

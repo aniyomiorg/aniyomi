@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="action_restore">ပြန်ရယူသည်</string>
     <string name="action_open_log">Log ဖွင့်သည်</string>
@@ -119,4 +119,5 @@
     <string name="unknown">မသိရှိပါ</string>
     <string name="ongoing">Ongoing</string>
     <string name="title">နာမည်</string>
-</resources>
+<string name="label_download_queue">ဒေါင်းလုဒ်အစဉ်</string>
+    </resources>

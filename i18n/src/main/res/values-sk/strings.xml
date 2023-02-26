@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Názov</string>
     <string name="manga">Manga</string>
@@ -724,4 +724,5 @@
     <string name="skipped_reason_not_caught_up">Preskočené, pretože obsahuje neprečítané kapitoly</string>
     <string name="skipped_reason_not_started">Preskočené, pretože neboli prečítané žiadne kapitoly</string>
     <string name="loader_rar5_error">Formát RARv5 nie je podporovaný</string>
-</resources>
+<string name="label_download_queue">Sťahujúce sa</string>
+    </resources>

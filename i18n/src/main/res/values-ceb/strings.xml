@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="history">Kasaysayan</string>
     <string name="label_recent_updates">Mga update</string>
@@ -466,4 +466,5 @@
     <string name="action_display_show_continue_reading_button">Ipakita ang buton sa pagpadayon sa pagbasa</string>
     <string name="action_search_hint">Pangitaa…</string>
     <string name="action_open_random_manga">Bukas nga random entry</string>
-</resources>
+<string name="label_download_queue">Pag-download sa Pila</string>
+    </resources>

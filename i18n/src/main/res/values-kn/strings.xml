@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="landscape">ಅಡ್ಡವಾದ ಪುಟ</string>
     <string name="portrait">ಉದ್ದವಾದ ಪುಟ</string>
@@ -553,4 +553,5 @@
     <string name="pref_library_update_refresh_trackers">ಟ್ರ್ಯಾಕರ್‌ಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಿಫ್ರೆಶ್ ಮಾಡಿ</string>
     <string name="restrictions">ನಿರ್ಬಂಧಗಳು: %s</string>
     <string name="action_start_downloading_now">ಈಗಲೇ ಡೌನ್‌ಲೋಡ್ ಪ್ರಾರಂಭಿಸಿ</string>
-</resources>
+<string name="label_download_queue">ಡೌನ್‌ಲೋಡ್ ಸಾಲು</string>
+    </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Nimi</string>
     <string name="manga">Manga</string>
@@ -691,4 +691,5 @@
     <string name="backup_info">Varmuuskopioita kannattaa säilyttää myös muissa paikoissa.</string>
     <string name="wish_list">Toivelista</string>
     <string name="cant_open_last_read_chapter">Viimeksi luettua lukua ei voitu avata</string>
-</resources>
+<string name="label_download_queue">Latausjono</string>
+    </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <plurals name="lock_after_mins">
         <item quantity="one">Nakon %1$s minute</item>
@@ -695,4 +695,5 @@
     <string name="multi_lang">Višejezičnost</string>
     <string name="missing_storage_permission">Nedostaje dozvola za spremanje</string>
     <string name="theme_tidalwave">Tsunami</string>
-</resources>
+<string name="label_download_queue">Popis preuzimanja</string>
+    </resources>

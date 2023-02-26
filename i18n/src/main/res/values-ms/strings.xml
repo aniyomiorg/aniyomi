@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Nama</string>
     <string name="manga">Manga</string>
@@ -720,4 +720,5 @@
     <string name="channel_downloader_cache">Muat turun cache</string>
     <string name="fdroid_warning">Binaan F-Droid tidak disokong secara rasmi.
 \nKetik untuk mengetahui lebih lanjut.</string>
-</resources>
+<string name="label_download_queue">Giliran muat turun</string>
+    </resources>

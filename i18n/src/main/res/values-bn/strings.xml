@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">নাম</string>
     <string name="manga">মাঙ্গা</string>
@@ -661,4 +661,5 @@
     <string name="pref_reader_summary">পঠনের ধরন, ডিসপ্লে,নেভিগেশন</string>
     <string name="pref_backup_summary">ম্যানুয়াল ও সয়ংক্রিয় ব্যাকআপ</string>
     <string name="pref_security_summary">অ্যাপ লক,নিরাপদ পর্দা</string>
-</resources>
+<string name="label_download_queue">ডাউনলোড সারি</string>
+    </resources>

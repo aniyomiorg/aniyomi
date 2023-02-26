@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Navn</string>
     <string name="manga">Manga</string>
@@ -733,4 +733,5 @@
 \nTrykk for å finne ut mer.</string>
     <string name="information_no_entries_found">Fant ingen oppføringer i denne kategorien</string>
     <string name="action_open_random_manga">Åpne tilfeldig oppføring</string>
-</resources>
+<string name="label_download_queue">Nedlastingskø</string>
+    </resources>

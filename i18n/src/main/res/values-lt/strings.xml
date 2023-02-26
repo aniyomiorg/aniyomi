@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="action_filter_downloaded">Atsiųsta</string>
     <string name="action_filter">Filtras</string>
@@ -748,4 +748,5 @@
 \nBakstelėkite, kad sužinotumėte daugiau.</string>
     <string name="information_no_entries_found">Šioje kategorijoje įrašų nerasta</string>
     <string name="action_open_random_manga">Atverti atsitiktinį įrašą</string>
-</resources>
+<string name="label_download_queue">Atsisiuntimų sąrašas</string>
+    </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="manga">Manga</string>
     <string name="chapters">Kapitoly</string>
@@ -746,4 +746,5 @@
     <string name="action_open_random_manga">Otevřít náhodnou položku</string>
     <string name="fdroid_warning">F-Droid sestavení nejsou oficiálně podporovány.
 \nKlepnutím zobrazíte další informace.</string>
-</resources>
+<string name="label_download_queue">Stahovací fronta</string>
+    </resources>

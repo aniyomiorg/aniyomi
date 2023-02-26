@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="name">Nùmene</string>
     <string name="manga">Manga</string>
@@ -731,4 +731,5 @@
     <string name="channel_downloader_cache">Memòria temporànea de iscarrigamentu</string>
     <string name="action_open_random_manga">Aberi un\'elementu a casu</string>
     <string name="information_no_entries_found">Perunu elementu atzapadu in custa categoria</string>
-</resources>
+<string name="label_download_queue">Fila de sos iscarrigamentos</string>
+    </resources>

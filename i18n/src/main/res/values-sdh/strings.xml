@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="label_default">بنەڕەتی</string>
     <string name="label_warning">ئاگاداری</string>
@@ -256,4 +256,5 @@
     <string name="action_remove_everything">لادانی هەمووشتێك</string>
     <string name="action_search_hint">گەڕان…</string>
     <string name="delete_category_confirmation">\?ڕەشبکەیتەوە \"%s\"ئایا ئەتەوێ کە بەشی</string>
-</resources>
+<string name="label_download_queue">لیستی داونلۆد</string>
+    </resources>

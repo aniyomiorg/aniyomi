@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="unofficial_extension_message">ይህ ቅጥያ ከኦፊሴላዊው የታቺዮሚ ቅጥያዎች ዝርዝር አይደለም ፡፡</string>
     <string name="obsolete_extension_message">ይህ ቅጥያ ከእንግዲህ አይገኝም።</string>
@@ -295,4 +295,5 @@
     <string name="backup_restore_missing_trackers">መከታተያዎች አልገቡም:</string>
     <string name="backup_restore_missing_sources">የጠፋ ምንጮች:</string>
     <string name="invalid_backup_file_missing_manga">ምትኬ ማንኛውንም ማንጋ አልያዘም ፡፡</string>
-</resources>
+<string name="label_download_queue">የሚወርድ ወረፋ</string>
+    </resources>

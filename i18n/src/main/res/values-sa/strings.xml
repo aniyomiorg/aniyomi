@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="label_recent_updates">नवीकरणानि</string>
     <string name="name">नाम</string>
@@ -634,4 +634,5 @@
     <string name="notification_update_skipped">%1$d नवीकरणानि लङ्घितानि</string>
     <string name="action_move_to_top_all_for_series">धारावाहिकम् अग्रस्थानं चालयतु</string>
     <string name="rotation_reverse_portrait">विपरीतं लम्बदर्शनम्</string>
-</resources>
+<string name="label_download_queue">अवारोपणश्रेणिः</string>
+    </resources>

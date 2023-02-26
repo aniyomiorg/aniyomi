@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="information_no_downloads">దిగుమతులు ఏమి లేవు</string>
     <string name="label_help">సహాయము</string>
@@ -158,4 +158,5 @@
     <string name="pref_relative_time_long">దీర్ఘము (సంక్షిప్త+, మరియు n రోజుల క్రితము)</string>
     <string name="pref_date_format">తారీఖు స్వరూపము</string>
     <string name="pref_manage_notifications">సూచనలను నిర్వహించుము</string>
-</resources>
+<string name="label_download_queue">దిగుమతి వరుస</string>
+    </resources>
