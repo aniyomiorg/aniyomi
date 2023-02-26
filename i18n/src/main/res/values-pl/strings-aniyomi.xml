@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Kategorie</string>
-    <string name="label_download_queue">Kolejka pobierania</string>
+<resources>
+    <string name="categories">Kategorie</string>
     <string name="unlock_app">Odblokuj Aniyomi</string>
     <string name="action_sort_last_manga_update">Ostatnia aktualizacja mangi</string>
     <string name="action_show_manga">Pokaż mangę</string>
@@ -38,4 +38,14 @@
     <string name="information_webview_required">Widok w przeglądarce jest wymagany dla Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Pobieranie wstrzymane</string>
     <string name="channel_new_chapters_episodes">Aktualizacje rozdziałów</string>
-    </resources>
+    <string name="backup_settings_warning">Ostrzeżenie: Tworzenie kopii zapasowej ustawień spowoduje zapisanie również haseł do ścieżek, nie udostępniaj tego pliku nikomu!</string>
+    <string name="label_animelib">Anime</string>
+    <string name="anime_categories">Kategorie anime</string>
+    <string name="general_categories">Kategorie</string>
+    <string name="episodes">Odcinki</string>
+    <string name="manga_anime">Pozycje w bibliotece</string>
+    <string name="chapters_episodes">Rozdziały i odcinki</string>
+    <string name="label_mangalibrary">Manga</string>
+    <string name="label_manga">Manga</string>
+    <string name="label_anime">Anime</string>
+</resources>

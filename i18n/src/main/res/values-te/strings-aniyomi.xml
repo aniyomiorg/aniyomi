@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">విభాగములు</string>
-    <string name="label_download_queue">దిగుమతి వరుస</string>
+<resources>
+    <string name="categories">విభాగములు</string>
     <string name="unlock_app">టచియోమిని తెరవండి</string>
     <string name="action_display_local_badge">స్థానిక మాంగా</string>
-    </resources>
+</resources>

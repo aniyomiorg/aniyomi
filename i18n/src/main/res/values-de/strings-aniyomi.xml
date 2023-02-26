@@ -7,8 +7,6 @@
     <string name="chapters_episodes">Kapitel und Folgen</string>
     <string name="episodes">Folgen</string>
     <string name="backup_settings_warning">Warnung: Die Einstellungen zu sichern, führt dazu, dass die Passwörter zu deinen Trackingdiensten gespeichert werden. Teile deine Sicherungsdatei mit niemandem!</string>
-    <string name="label_download_queue">Manga-Downloadwarteschlange</string>
-    <string name="label_anime_download_queue">Anime-Downloadwarteschlange</string>
     <string name="label_mangalibrary">Manga</string>
     <string name="label_animelib">Anime</string>
     <string name="label_manga">Manga</string>

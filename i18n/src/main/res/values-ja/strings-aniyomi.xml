@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">カテゴリー</string>
-    <string name="label_download_queue">ダウンロードキュー</string>
+<resources>
+    <string name="categories">漫画のカテゴリー</string>
     <string name="unlock_app">Aniyomiのロックを解除する</string>
     <string name="action_sort_last_manga_update">前回の更新確認</string>
     <string name="action_show_manga">項目を表示</string>
@@ -38,4 +38,28 @@
     <string name="information_webview_required">TachiyomiはWebViewを必要としています</string>
     <string name="download_notifier_download_paused_chapters">ダウンロード一時停止済み</string>
     <string name="channel_new_chapters_episodes">章の更新</string>
-    </resources>
+    <string name="pref_library_manga_columns">行あたりの漫画</string>
+    <string name="pref_library_anime_columns">行あたりのアニメ</string>
+    <string name="label_mangaextensions">漫画の拡張機能</string>
+    <string name="label_migration_manga">漫画を移行</string>
+    <string name="episode_settings">話の設定</string>
+    <string name="label_animeextensions">アニメの拡張機能</string>
+    <string name="label_migration_anime">アニメを移行</string>
+    <string name="pref_waiting_time_aniskip_9">9秒</string>
+    <string name="general_categories">カテゴリー</string>
+    <string name="anime_categories">アニメのカテゴリー</string>
+    <string name="episodes">話</string>
+    <string name="label_mangalibrary">漫画</string>
+    <string name="label_manga">漫画</string>
+    <string name="label_mangasources">漫画のソース</string>
+    <string name="label_anime">アニメ</string>
+    <string name="label_animelib">アニメ</string>
+    <string name="label_animesources">アニメのソース</string>
+    <string name="pref_waiting_time_aniskip_5">5秒</string>
+    <string name="pref_waiting_time_aniskip_6">6秒</string>
+    <string name="pref_waiting_time_aniskip_8">8秒</string>
+    <string name="notification_episodes_single">第%1$s話</string>
+    <string name="notification_episodes_multiple">第%1$s話</string>
+    <string name="pref_waiting_time_aniskip_10">10秒</string>
+    <string name="pref_waiting_time_aniskip_7">7秒</string>
+</resources>

@@ -7,8 +7,6 @@
     <string name="chapters_episodes">Capítulos y episodios</string>
     <string name="episodes">Episodios</string>
     <string name="backup_settings_warning">Advertencia: Respaldar las configuraciones guardara tus contraseñas de seguimiento también, ¡no compartas este archivo de respaldo!</string>
-    <string name="label_download_queue">Cola de descargas de Manga</string>
-    <string name="label_anime_download_queue">Cola de descargas de Anime</string>
     <string name="label_mangalibrary">Manga</string>
     <string name="label_animelib">Anime</string>
     <string name="label_manga">Manga</string>

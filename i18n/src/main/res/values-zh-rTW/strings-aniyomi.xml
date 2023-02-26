@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">類別</string>
-    <string name="label_download_queue">下載佇列</string>
+<resources>
+    <string name="categories">類別</string>
     <string name="unlock_app">解除鎖定 Aniyomi</string>
     <string name="action_sort_last_manga_update">上次檢查更新日期</string>
     <string name="action_show_manga">顯示作品</string>
@@ -38,4 +38,4 @@
     <string name="information_webview_required">WebView 為 Tachiyomi 的必要元件</string>
     <string name="download_notifier_download_paused_chapters">下載已暫停</string>
     <string name="channel_new_chapters_episodes">新刊發行</string>
-    </resources>
+</resources>

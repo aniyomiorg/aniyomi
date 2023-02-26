@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Категории</string>
-    <string name="label_download_queue">Изтегляния</string>
+<resources>
+    <string name="categories">Категории</string>
     <string name="unlock_app">Отключете Тачийоми</string>
     <string name="action_sort_last_manga_update">Последно обновяване</string>
     <string name="action_show_manga">Покажи манга</string>
@@ -20,7 +20,6 @@
     <string name="pref_remove_bookmarked_chapters">Позволи изтриване на отметнати глави</string>
     <string name="pref_remove_exclude_categories">Изключени категории</string>
     <string name="pref_auto_update_manga_sync">Обнови прогреса след прочитане</string>
-    
     <string name="pref_clear_chapter_cache">Изчисти кеша на главите</string>
     <string name="pref_auto_clear_chapter_cache">Изчистване на кеша на главата при затваряне на приложението</string>
     <string name="pref_clear_database">Изчисти базата данни</string>
@@ -30,15 +29,13 @@
     <string name="pref_incognito_mode_summary">Не записва история, докато трае режимът</string>
     <string name="manga_from_library">Манга от библиотеката</string>
     <string name="snack_add_to_library">Добавяне на мангата към библиотеката\?</string>
-    
     <string name="download_error">Грешка</string>
     <string name="download_paused">На пауза</string>
     <string name="also_set_chapter_settings_for_library">Също приложи към всяка манга в библиотеката ми</string>
     <string name="dialog_with_checkbox_reset">Изчисти всички дати за тази манга</string>
-    
     <string name="download_insufficient_space">Главите не можаха да бъдат изтеглени поради недостатъчно място</string>
     <string name="download_queue_size_warning">Предупреждение: големите масови изтегляния могат да доведат до забавяне на източниците и/или блокиране на Tachiyomi. Натиснете тук, за да научите повече.</string>
     <string name="information_webview_required">WebView е необходим за Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Изтеглянето спряно</string>
     <string name="channel_new_chapters_episodes">Нови глави</string>
-    </resources>
+</resources>

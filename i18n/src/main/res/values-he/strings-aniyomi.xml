@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">קטגוריות</string>
-    <string name="label_download_queue">תור ההורדות</string>
+<resources>
+    <string name="categories">קטגוריות</string>
     <string name="unlock_app">שחרר את Aniyomi</string>
     <string name="action_sort_last_manga_update">עדכון אחרון</string>
     <string name="action_show_manga">הראה פריט</string>
@@ -37,4 +37,4 @@
     <string name="information_webview_required">WebView נצרך ל-Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">ההורדה מושהית</string>
     <string name="channel_new_chapters_episodes">עדכונים לפרק</string>
-    </resources>
+</resources>

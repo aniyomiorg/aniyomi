@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Categorias</string>
+<resources>
+    <string name="categories">Categorias</string>
     <string name="general_categories">Categorias</string>
     <string name="anime_categories">Categorias de Anime</string>
     <string name="chapters_episodes">Capítulos e episódios</string>
     <string name="episodes">Episódios</string>
     <string name="backup_settings_warning">Aviso: o backup das configurações também armazenará as suas palavras-passe de rasteamento, então não compartilhe este ficheiro de backup!</string>
-    <string name="label_download_queue">Fila de Transferências</string>
-    <string name="label_anime_download_queue">Fila de download de anime</string>
     <string name="label_mangalibrary">Mangá</string>
     <string name="label_animelib">Anime</string>
     <string name="label_manga">Mangá</string>
@@ -75,7 +74,6 @@
     <string name="pref_download_new_episodes">Descarregar novos episódios</string>
     <string name="auto_download_while_watching">Descarregar automaticamente enquanto assiste</string>
     <string name="pref_auto_update_manga_sync">Atualizar progresso após a leitura</string>
-    
     <string name="pref_backup_flags_summ">Quais informações incluir no ficheiro de backup</string>
     <string name="pref_clear_chapter_cache">Limpar a cache dos capítulos</string>
     <string name="used_cache_both">Usado por anime: %1$s, usado por mangá: %2$s</string>
@@ -121,7 +119,6 @@
     <string name="dialog_with_checkbox_remove_description_anime">Isso removerá a data de exibição deste episódio. Tem certeza\?</string>
     <string name="dialog_with_checkbox_reset_anime">Redefinir todos os episódios deste anime</string>
     <string name="dialog_with_checkbox_reset">Reiniciar todos os capítulos desta mangá</string>
-    
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress">Progresso: %1$s/%2$s</string>
     <string name="episode_progress_no_total">Progresso: %1$s</string>
@@ -172,7 +169,7 @@
     <string name="notification_episodes_single">Episódio %1$s</string>
     <string name="notification_episodes_single_and_more">Episódio %1$s e %2$d mais</string>
     <string name="notification_episodes_multiple">Episódios %1$s</string>
-<plurals name="notification_episodes_multiple_and_more">
+    <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one">Episódios %1$s e mais 1</item>
         <item quantity="many">Episódios %1$s e %2$d mais</item>
         <item quantity="other">Episódios %1$s e %2$d mais</item>
@@ -183,4 +180,4 @@
     <string name="label_migration_manga">Migrar Mangás</string>
     <string name="label_migration_anime">Migrar Animes</string>
     <string name="settings">Configurações</string>
-    </resources>
+</resources>

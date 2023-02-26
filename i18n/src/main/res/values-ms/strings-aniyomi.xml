@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Kategori</string>
-    <string name="label_download_queue">Giliran muat turun</string>
+<resources>
+    <string name="categories">Kategori</string>
     <string name="unlock_app">Buka kunci Aniyomi</string>
     <string name="action_sort_last_manga_update">Semakan kemas kini terakhir</string>
     <string name="action_show_manga">Tunjuk entri</string>
@@ -38,4 +38,4 @@
     <string name="information_webview_required">WebView diperlukan untuk Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Muat turun dihentikan sebentar</string>
     <string name="channel_new_chapters_episodes">Pengemaskinian bab</string>
-    </resources>
+</resources>

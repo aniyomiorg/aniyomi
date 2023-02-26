@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">分类</string>
+<resources>
+    <string name="categories">分类</string>
     <string name="general_categories">分类</string>
     <string name="anime_categories">动画分类</string>
     <string name="manga_anime">内容库中的条目</string>
     <string name="chapters_episodes">章节与选集</string>
     <string name="episodes">选集</string>
     <string name="backup_settings_warning">警告：备份设置的同时会存储您的跟踪码，因此不要与他人分享此备份文件！</string>
-    <string name="label_download_queue">下载队列</string>
-    <string name="label_anime_download_queue">动画下载队列</string>
     <string name="label_mangalibrary">漫画</string>
     <string name="label_animelib">动画</string>
     <string name="label_manga">漫画</string>
@@ -191,7 +190,7 @@
     <string name="no_previous_episode">未找到上一集！</string>
     <string name="label_history">漫画</string>
     <string name="label_animehistory">动画</string>
-<string name="label_updates">漫画</string>
+    <string name="label_updates">漫画</string>
     <string name="label_animeupdates">动画</string>
     <string name="player_overlay_back">后退</string>
     <string name="enable_auto_play">自动播放已启用</string>
@@ -207,4 +206,4 @@
     <string name="playback_options_speed">播放速度</string>
     <string name="playback_options_quality">画质</string>
     <string name="playback_options_title">播放选项</string>
-    </resources>
+</resources>

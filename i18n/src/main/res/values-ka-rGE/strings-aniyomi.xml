@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">კატეგორიები</string>
-    <string name="label_download_queue">გადმოწერის რიგი</string>
+<resources>
+    <string name="categories">კატეგორიები</string>
     <string name="unlock_app">Aniyomi-ს განბლოკვა</string>
     <string name="default_category">ნაგულისხმევი კატეგორია</string>
     <string name="untrusted_extension_message">ეს დამატება ხელმოწერილია უცნობი სერთიფიკატის მიერ და არ არის აქტივირებული.
@@ -26,4 +26,4 @@
     <string name="information_webview_required">WebView არის აუცილებელი Tachiyomi-ს სამუშაოდ</string>
     <string name="download_notifier_download_paused_chapters">გადმოწერა დაპაუზებულია</string>
     <string name="channel_new_chapters_episodes">თავების განახლებები</string>
-    </resources>
+</resources>

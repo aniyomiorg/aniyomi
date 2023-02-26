@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Kategorijos</string>
-    <string name="label_download_queue">Atsisiuntimų sąrašas</string>
+<resources>
+    <string name="categories">Kategorijos</string>
     <string name="unlock_app">Atrakinkite Anijomi</string>
     <string name="action_sort_last_manga_update">Paskutinis atnaujinimo patikrinimas</string>
     <string name="action_show_manga">Rodyti įrašą</string>
@@ -36,4 +36,4 @@
     <string name="download_insufficient_space">Nepavyko atsisiųsti skyrių dėl mažos vietos saugykloje</string>
     <string name="download_queue_size_warning">Įspėjimas: dėl didelių masinių atsisiuntimų šaltiniai gali tapti lėtesni ir (arba) jie blokuoti \"Tachiyomi\". Bakstelėkite , jei norite sužinoti daugiau.</string>
     <string name="information_webview_required">\"WebView\" reikalingas \"Tachiyomi\"</string>
-    </resources>
+</resources>

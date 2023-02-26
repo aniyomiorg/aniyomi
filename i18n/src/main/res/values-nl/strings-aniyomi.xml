@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Categorieën</string>
-    <string name="label_download_queue">Downloadwachtrij</string>
+<resources>
+    <string name="categories">Categorieën</string>
     <string name="unlock_app">Ontgrendel Aniyomi</string>
     <string name="action_sort_last_manga_update">Laatst bijgewerkte manga</string>
     <string name="action_show_manga">Laat manga zien</string>
@@ -38,4 +38,4 @@
     <string name="information_webview_required">WebView is vereist voor Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Download gepauzeerd</string>
     <string name="channel_new_chapters_episodes">Hoofdstukupdates</string>
-    </resources>
+</resources>

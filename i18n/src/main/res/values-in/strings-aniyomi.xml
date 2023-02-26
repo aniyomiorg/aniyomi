@@ -7,8 +7,6 @@
     <string name="chapters_episodes">chapter dan episode</string>
     <string name="episodes">Episode</string>
     <string name="backup_settings_warning">Peringatan: Backup-an ini akan menyimpan kata sandi anda, jangan bagikan file backup ini!</string>
-    <string name="label_download_queue">Antrian unduhan</string>
-    <string name="label_anime_download_queue">Antrian Download Anime</string>
     <string name="label_mangalibrary">Manga</string>
     <string name="label_animelib">Anime</string>
     <string name="label_manga">Manga</string>
@@ -259,4 +257,6 @@
     <string name="label_anime">Anime</string>
     <string name="label_watched_duration">Durasi telah ditonton</string>
     <string name="label_watched_episodes">Ditonton</string>
+    <string name="pref_remember_brightness">Ingat dan beralih ke kecerahan terakhir yang digunakan</string>
+    <string name="pref_remember_volume">Ingat dan beralih ke volume terakhir yang digunakan</string>
 </resources>

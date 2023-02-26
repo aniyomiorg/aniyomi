@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Categorias de Mangá</string>
+<resources>
+    <string name="categories">Categorias de Mangá</string>
     <string name="general_categories">Categorias</string>
     <string name="anime_categories">Categorias de Anime</string>
     <string name="chapters_episodes">Capítulos e episódios</string>
     <string name="episodes">Episódios</string>
     <string name="backup_settings_warning">Aviso: o backup das configurações também armazenará suas senhas de rastreamento, então não compartilhe este arquivo de backup!</string>
-    <string name="label_download_queue">Fila de download de mangá</string>
-    <string name="label_anime_download_queue">Fila de download de anime</string>
     <string name="label_mangalibrary">Mangá</string>
     <string name="label_animelib">Anime</string>
     <string name="label_manga">Mangá</string>
@@ -104,7 +103,7 @@
     <plurals name="anime_num_episodes">
         <item quantity="one">1 episódio</item>
         <item quantity="many">%1$s episódios</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="delete_downloads_for_anime">Excluir episódios baixados\?</string>
     <string name="snack_add_to_library">Adicionar mangá à biblioteca\?</string>
@@ -131,7 +130,7 @@
     <string name="repeating_anime">Reassistir</string>
     <string name="dialog_with_checkbox_remove_description_anime">Isso removerá a data de exibição deste episódio. Você tem certeza\?</string>
     <string name="dialog_with_checkbox_reset_anime">Redefinir todos os episódios deste anime</string>
-<string name="dialog_with_checkbox_reset">Redefinir todos os capítulos deste mangá</string>
+    <string name="dialog_with_checkbox_reset">Redefinir todos os capítulos deste mangá</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress">Progresso: %1$s/%2$s</string>
     <string name="episode_progress_no_total">Progresso: %1$s</string>
@@ -149,7 +148,7 @@
     <plurals name="notification_episodes_generic">
         <item quantity="one">1 novo episódio</item>
         <item quantity="many">%1$d novos episódios</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="information_no_recent_anime">Nada assistido recentemente</string>
     <string name="information_webview_required">A WebView é necessária para Aniyomi</string>
@@ -159,7 +158,7 @@
     <plurals name="seconds">
         <item quantity="one">%d segundo</item>
         <item quantity="many">%d segundos</item>
-        <item quantity="other" />
+        <item quantity="other"/>
     </plurals>
     <string name="no_next_episode">Próximo episódio não encontrado!</string>
     <string name="no_previous_episode">Episódio anterior não encontrado!</string>
@@ -205,4 +204,4 @@
     <string name="label_migration_manga">Migrar Mangás</string>
     <string name="label_migration_anime">Migrar Animes</string>
     <string name="settings">Configurações</string>
-    </resources>
+</resources>

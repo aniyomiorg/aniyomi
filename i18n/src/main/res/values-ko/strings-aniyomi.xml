@@ -7,8 +7,6 @@
     <string name="chapters_episodes">회차</string>
     <string name="episodes">회차</string>
     <string name="backup_settings_warning">경고: 설정을 백업하면 동기화 암호도 저장되므로 이 백업 파일을 공유하지 마십시오!</string>
-    <string name="label_download_queue">다운로드 대기열</string>
-    <string name="label_anime_download_queue">애니메이션 다운로드 대기열</string>
     <string name="label_mangalibrary">만화</string>
     <string name="label_animelib">애니메이션</string>
     <string name="label_manga">만화</string>
@@ -259,4 +257,6 @@
     <string name="label_anime">애니메이션</string>
     <string name="label_watched_duration">시청 시간</string>
     <string name="label_watched_episodes">시청함</string>
+    <string name="pref_remember_volume">마지막으로 사용한 볼륨을 기억하고 전환</string>
+    <string name="pref_remember_brightness">마지막으로 사용한 밝기를 기억하고 전환</string>
 </resources>

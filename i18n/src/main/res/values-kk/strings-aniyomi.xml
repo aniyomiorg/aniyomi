@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Санаттар</string>
-    <string name="label_download_queue">Жүктеулер кезегі</string>
+<resources>
+    <string name="categories">Санаттар</string>
     <string name="unlock_app">Tachiyomi-ді бұғаттан босату</string>
     <string name="action_sort_last_manga_update">Соңғы жаңартуды тексеру</string>
     <string name="action_show_manga">Жазбаны көрсету</string>
@@ -34,4 +34,4 @@
     <string name="download_insufficient_space">Жадыда орын аз болғандықтан тараулар жүктелмеді</string>
     <string name="download_queue_size_warning">Ескерту: Көп жүктеулер саны дереккөздер жұмысын баяулата алады және/немесе Tachiyomi бұғатталына алады. Толығырақ оқу үшін басыңыз.</string>
     <string name="information_webview_required">Tachiyomi-ны қолдану үшін WebView керек</string>
-    </resources>
+</resources>

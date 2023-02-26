@@ -7,8 +7,6 @@
     <string name="chapters_episodes">Chapitres et épisodes</string>
     <string name="episodes">Épisodes</string>
     <string name="backup_settings_warning">Avertissement : La sauvegarde des paramètres stocke également les mots de passe de vos pistes, ne partagez pas ce fichier de sauvegarde !</string>
-    <string name="label_download_queue">File de téléchargement de mangas</string>
-    <string name="label_anime_download_queue">File de téléchargement d\'animés</string>
     <string name="label_mangalibrary">Manga</string>
     <string name="label_animelib">Animé</string>
     <string name="label_manga">Manga</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">वर्गाः</string>
-    <string name="label_download_queue">अवारोपणश्रेणिः</string>
+<resources>
+    <string name="categories">वर्गाः</string>
     <string name="unlock_app">ताचियोमिम् उद्घाटयतु</string>
     <string name="action_show_manga">माङ्गां दर्शयतु</string>
     <string name="action_display_local_badge">स्थानीयाः माङ्गाः</string>
@@ -32,4 +32,4 @@
     <string name="information_webview_required">टाचीयोमेः कृते वेब्-व्यू-तन्त्रांशः अपेक्षितः</string>
     <string name="download_notifier_download_paused_chapters">अवारोपणं विरमितम्</string>
     <string name="channel_new_chapters_episodes">अध्यायनवीकरणानि</string>
-    </resources>
+</resources>

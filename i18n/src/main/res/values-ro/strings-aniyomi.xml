@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Categorii</string>
-    <string name="label_download_queue">Descărcări în așteptare</string>
+<resources>
+    <string name="categories">Categorii</string>
     <string name="unlock_app">Deblochează Aniyomi</string>
     <string name="action_sort_last_manga_update">Ultima actualizare manga</string>
     <string name="action_show_manga">Afișați manga</string>
@@ -38,4 +38,4 @@
     <string name="information_webview_required">WebView este necesar pentru Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Descărcare întreruptă</string>
     <string name="channel_new_chapters_episodes">Actualizări de capitole</string>
-    </resources>
+</resources>
