@@ -1131,7 +1131,7 @@ class PlayerActivity :
     fun skipIntro(view: View) {
         if (skipType != null) {
             // this stop the counter
-            if (waitingAniSkip > 0) {
+            if (waitingAniSkip > 0 && netflixStyle) {
                 waitingAniSkip = -1
                 return
             }
