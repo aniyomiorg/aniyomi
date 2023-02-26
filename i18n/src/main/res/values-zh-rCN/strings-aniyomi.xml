@@ -7,7 +7,6 @@
     <string name="chapters_episodes">章节与选集</string>
     <string name="episodes">选集</string>
     <string name="backup_settings_warning">警告：备份设置的同时会存储您的跟踪码，因此不要与他人分享此备份文件！</string>
-    <string name="label_anime_download_queue">动画下载队列</string>
     <string name="label_mangalibrary">漫画</string>
     <string name="label_animelib">动画</string>
     <string name="label_manga">漫画</string>
