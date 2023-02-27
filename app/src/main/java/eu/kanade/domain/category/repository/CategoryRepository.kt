@@ -6,23 +6,23 @@ import kotlinx.coroutines.flow.Flow
 
 interface CategoryRepository {
 
-    suspend fun get(id: Long): Category?
+    suspend fun getMangaCategory(id: Long): Category?
 
-    suspend fun getAll(): List<Category>
+    suspend fun getAllMangaCategories(): List<Category>
 
-    fun getAllAsFlow(): Flow<List<Category>>
+    fun getAllMangaCategoriesAsFlow(): Flow<List<Category>>
 
     suspend fun getCategoriesByMangaId(mangaId: Long): List<Category>
 
     fun getCategoriesByMangaIdAsFlow(mangaId: Long): Flow<List<Category>>
 
-    suspend fun insert(category: Category)
+    suspend fun insertMangaCategory(category: Category)
 
-    suspend fun updatePartial(update: CategoryUpdate)
+    suspend fun updatePartialMangaCategory(update: CategoryUpdate)
 
-    suspend fun updatePartial(updates: List<CategoryUpdate>)
+    suspend fun updatePartialMangaCategories(updates: List<CategoryUpdate>)
 
-    suspend fun updateAllFlags(flags: Long?)
+    suspend fun updateAllMangaCategoryFlags(flags: Long?)
 
-    suspend fun delete(categoryId: Long)
+    suspend fun deleteMangaCategory(categoryId: Long)
 }

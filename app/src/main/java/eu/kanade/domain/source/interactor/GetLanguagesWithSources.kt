@@ -16,7 +16,7 @@ class GetLanguagesWithSources(
         return combine(
             preferences.enabledLanguages().changes(),
             preferences.disabledSources().changes(),
-            repository.getOnlineSources(),
+            repository.getOnlineMangaSources(),
         ) { enabledLanguage, disabledSource, onlineSources ->
             val sortedSources = onlineSources.sortedWith(
                 compareBy<Source> { it.id.toString() in disabledSource }

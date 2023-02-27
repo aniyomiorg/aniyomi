@@ -11,7 +11,7 @@ class UpdateEpisode(
 
     suspend fun await(episodeUpdate: EpisodeUpdate) {
         try {
-            episodeRepository.update(episodeUpdate)
+            episodeRepository.updateEpisode(episodeUpdate)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
         }
@@ -19,7 +19,7 @@ class UpdateEpisode(
 
     suspend fun awaitAll(episodeUpdates: List<EpisodeUpdate>) {
         try {
-            episodeRepository.updateAll(episodeUpdates)
+            episodeRepository.updateAllEpisodes(episodeUpdates)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
         }

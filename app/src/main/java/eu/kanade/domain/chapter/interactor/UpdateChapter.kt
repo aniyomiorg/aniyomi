@@ -11,7 +11,7 @@ class UpdateChapter(
 
     suspend fun await(chapterUpdate: ChapterUpdate) {
         try {
-            chapterRepository.update(chapterUpdate)
+            chapterRepository.updateChapter(chapterUpdate)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
         }
@@ -19,7 +19,7 @@ class UpdateChapter(
 
     suspend fun awaitAll(chapterUpdates: List<ChapterUpdate>) {
         try {
-            chapterRepository.updateAll(chapterUpdates)
+            chapterRepository.updateAllChapters(chapterUpdates)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
         }

@@ -10,7 +10,7 @@ class DeleteAnimeTrack(
 
     suspend fun await(animeId: Long, syncId: Long) {
         try {
-            trackRepository.delete(animeId, syncId)
+            trackRepository.deleteAnime(animeId, syncId)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
         }

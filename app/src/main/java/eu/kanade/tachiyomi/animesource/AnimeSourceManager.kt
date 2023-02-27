@@ -54,7 +54,7 @@ class AnimeSourceManager(
         }
 
         scope.launch {
-            sourceRepository.subscribeAll()
+            sourceRepository.subscribeAllAnime()
                 .collectLatest { sources ->
                     val mutableMap = stubSourcesMap.toMutableMap()
                     sources.forEach {
@@ -86,9 +86,9 @@ class AnimeSourceManager(
     private fun registerStubSource(sourceData: AnimeSourceData) {
         scope.launch {
             val (id, lang, name) = sourceData
-            val dbSourceData = sourceRepository.getSourceData(id)
+            val dbSourceData = sourceRepository.getAnimeSourceData(id)
             if (dbSourceData == sourceData) return@launch
-            sourceRepository.upsertSourceData(id, lang, name)
+            sourceRepository.upsertAnimeSourceData(id, lang, name)
             if (dbSourceData != null) {
                 downloadManager.renameSource(
                     StubAnimeSource(dbSourceData),
@@ -99,7 +99,7 @@ class AnimeSourceManager(
     }
 
     private suspend fun createStubSource(id: Long): StubAnimeSource {
-        sourceRepository.getSourceData(id)?.let {
+        sourceRepository.getAnimeSourceData(id)?.let {
             return StubAnimeSource(it)
         }
         return StubAnimeSource(AnimeSourceData(id, "", ""))

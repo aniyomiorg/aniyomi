@@ -43,7 +43,7 @@ import coil.request.ImageRequest
 import coil.size.Precision
 import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
-import eu.kanade.data.DatabaseHandler
+import eu.kanade.data.handlers.manga.MangaDatabaseHandler
 import eu.kanade.domain.manga.model.MangaCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
@@ -200,7 +200,7 @@ class UpdatesGridGlanceWidget : GlanceAppWidget() {
             if (ids.isEmpty()) return@launchIO
 
             val processList = list
-                ?: Injekt.get<DatabaseHandler>()
+                ?: Injekt.get<MangaDatabaseHandler>()
                     .awaitList { updatesViewQueries.updates(after = DateLimit.timeInMillis) }
             val (rowCount, columnCount) = ids
                 .flatMap { manager.getAppWidgetSizes(it) }

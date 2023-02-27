@@ -24,8 +24,8 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.disk.DiskCache
 import coil.util.DebugLogger
-import eu.kanade.data.AnimeDatabaseHandler
-import eu.kanade.data.DatabaseHandler
+import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
+import eu.kanade.data.handlers.manga.MangaDatabaseHandler
 import eu.kanade.domain.DomainModule
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.ui.UiPreferences
@@ -129,7 +129,7 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         setAppCompatDelegateThemeMode(Injekt.get<UiPreferences>().themeMode().get())
 
         // Updates widget update
-        Injekt.get<DatabaseHandler>()
+        Injekt.get<MangaDatabaseHandler>()
             .subscribeToList { updatesViewQueries.updates(after = UpdatesGridGlanceWidget.DateLimit.timeInMillis) }
             .drop(1)
             .distinctUntilChanged()

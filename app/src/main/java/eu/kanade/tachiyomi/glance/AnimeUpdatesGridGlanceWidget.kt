@@ -43,7 +43,7 @@ import coil.request.ImageRequest
 import coil.size.Precision
 import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
-import eu.kanade.data.AnimeDatabaseHandler
+import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
 import eu.kanade.domain.anime.model.AnimeCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.security.SecurityPreferences

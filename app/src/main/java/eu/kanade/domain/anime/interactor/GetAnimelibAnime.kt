@@ -9,10 +9,10 @@ class GetAnimelibAnime(
 ) {
 
     suspend fun await(): List<AnimelibAnime> {
-        return animeRepository.getAnimelibAnime()
+        return animeRepository.getLibraryAnime()
     }
 
     fun subscribe(): Flow<List<AnimelibAnime>> {
-        return animeRepository.getAnimelibAnimeAsFlow()
+        return animeRepository.getLibraryAnimeAsFlow()
     }
 }

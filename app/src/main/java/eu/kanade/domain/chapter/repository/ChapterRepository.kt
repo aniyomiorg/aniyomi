@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface ChapterRepository {
 
-    suspend fun addAll(chapters: List<Chapter>): List<Chapter>
+    suspend fun addAllChapters(chapters: List<Chapter>): List<Chapter>
 
-    suspend fun update(chapterUpdate: ChapterUpdate)
+    suspend fun updateChapter(chapterUpdate: ChapterUpdate)
 
-    suspend fun updateAll(chapterUpdates: List<ChapterUpdate>)
+    suspend fun updateAllChapters(chapterUpdates: List<ChapterUpdate>)
 
     suspend fun removeChaptersWithIds(chapterIds: List<Long>)
 

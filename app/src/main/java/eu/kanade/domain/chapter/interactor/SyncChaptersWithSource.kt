@@ -1,7 +1,7 @@
 package eu.kanade.domain.chapter.interactor
 
-import eu.kanade.data.chapter.CleanupChapterName
-import eu.kanade.data.chapter.NoChaptersException
+import eu.kanade.data.entries.chapter.CleanupChapterName
+import eu.kanade.data.entries.chapter.NoChaptersException
 import eu.kanade.domain.chapter.model.Chapter
 import eu.kanade.domain.chapter.model.toChapterUpdate
 import eu.kanade.domain.chapter.repository.ChapterRepository
@@ -52,7 +52,7 @@ class SyncChaptersWithSource(
             .mapIndexed { i, sChapter ->
                 Chapter.create()
                     .copyFromSChapter(sChapter)
-                    .copy(name = CleanupChapterName.await(sChapter.name, manga.title))
+                    .copy(name = CleanupChapterName.awaitChapterName(sChapter.name, manga.title))
                     .copy(mangaId = manga.id, sourceOrder = i.toLong())
             }
 
@@ -175,7 +175,7 @@ class SyncChaptersWithSource(
         }
 
         if (updatedToAdd.isNotEmpty()) {
-            updatedToAdd = chapterRepository.addAll(updatedToAdd)
+            updatedToAdd = chapterRepository.addAllChapters(updatedToAdd)
         }
 
         if (toChange.isNotEmpty()) {

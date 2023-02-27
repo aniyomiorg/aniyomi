@@ -1,21 +1,21 @@
 package eu.kanade.domain
 
-import eu.kanade.data.anime.AnimeRepositoryImpl
-import eu.kanade.data.animehistory.AnimeHistoryRepositoryImpl
-import eu.kanade.data.animesource.AnimeSourceDataRepositoryImpl
-import eu.kanade.data.animesource.AnimeSourceRepositoryImpl
-import eu.kanade.data.animetrack.AnimeTrackRepositoryImpl
-import eu.kanade.data.animeupdates.AnimeUpdatesRepositoryImpl
-import eu.kanade.data.category.CategoryRepositoryImpl
-import eu.kanade.data.category.CategoryRepositoryImplAnime
-import eu.kanade.data.chapter.ChapterRepositoryImpl
-import eu.kanade.data.episode.EpisodeRepositoryImpl
-import eu.kanade.data.history.HistoryRepositoryImpl
-import eu.kanade.data.manga.MangaRepositoryImpl
-import eu.kanade.data.source.SourceDataRepositoryImpl
-import eu.kanade.data.source.SourceRepositoryImpl
-import eu.kanade.data.track.TrackRepositoryImpl
-import eu.kanade.data.updates.UpdatesRepositoryImpl
+import eu.kanade.data.category.anime.AnimeCategoryRepositoryImpl
+import eu.kanade.data.category.manga.MangaCategoryRepositoryImpl
+import eu.kanade.data.entries.chapter.ChapterRepositoryImpl
+import eu.kanade.data.entries.episode.EpisodeRepositoryImpl
+import eu.kanade.data.history.anime.AnimeHistoryRepositoryImpl
+import eu.kanade.data.history.manga.MangaHistoryRepositoryImpl
+import eu.kanade.data.items.anime.AnimeRepositoryImpl
+import eu.kanade.data.items.manga.MangaRepositoryImpl
+import eu.kanade.data.source.anime.AnimeSourceDataRepositoryImpl
+import eu.kanade.data.source.anime.AnimeSourceRepositoryImpl
+import eu.kanade.data.source.manga.MangaSourceDataRepositoryImpl
+import eu.kanade.data.source.manga.MangaSourceRepositoryImpl
+import eu.kanade.data.track.anime.AnimeTrackRepositoryImpl
+import eu.kanade.data.track.manga.MangaTrackRepositoryImpl
+import eu.kanade.data.updates.anime.AnimeUpdatesRepositoryImpl
+import eu.kanade.data.updates.manga.MangaUpdatesRepositoryImpl
 import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.interactor.GetAnimeWithEpisodes
 import eu.kanade.domain.anime.interactor.GetAnimelibAnime
@@ -140,7 +140,7 @@ import eu.kanade.domain.anime.interactor.ResetViewerFlags as ResetViewerFlagsAni
 class DomainModule : InjektModule {
 
     override fun InjektRegistrar.registerInjectables() {
-        addSingletonFactory<CategoryRepositoryAnime> { CategoryRepositoryImplAnime(get()) }
+        addSingletonFactory<CategoryRepositoryAnime> { AnimeCategoryRepositoryImpl(get()) }
         addFactory { GetAnimeCategories(get()) }
         addFactory { ResetAnimeCategoryFlags(get(), get()) }
         addFactory { SetDisplayModeForAnimeCategory(get(), get()) }
@@ -151,7 +151,7 @@ class DomainModule : InjektModule {
         addFactory { UpdateAnimeCategory(get()) }
         addFactory { DeleteAnimeCategory(get()) }
 
-        addSingletonFactory<CategoryRepository> { CategoryRepositoryImpl(get()) }
+        addSingletonFactory<CategoryRepository> { MangaCategoryRepositoryImpl(get()) }
         addFactory { GetCategories(get()) }
         addFactory { ResetCategoryFlags(get(), get()) }
         addFactory { SetDisplayModeForCategory(get(), get()) }
@@ -198,7 +198,7 @@ class DomainModule : InjektModule {
         addFactory { GetAnimeTracks(get()) }
         addFactory { InsertAnimeTrack(get()) }
 
-        addSingletonFactory<TrackRepository> { TrackRepositoryImpl(get()) }
+        addSingletonFactory<TrackRepository> { MangaTrackRepositoryImpl(get()) }
         addFactory { DeleteTrack(get()) }
         addFactory { GetTracksPerManga(get()) }
         addFactory { GetTracks(get()) }
@@ -233,7 +233,7 @@ class DomainModule : InjektModule {
         addFactory { GetAnimeExtensionSources(get()) }
         addFactory { GetAnimeExtensionLanguages(get(), get()) }
 
-        addSingletonFactory<HistoryRepository> { HistoryRepositoryImpl(get()) }
+        addSingletonFactory<HistoryRepository> { MangaHistoryRepositoryImpl(get()) }
         addFactory { GetHistory(get()) }
         addFactory { UpsertHistory(get()) }
         addFactory { RemoveHistory(get()) }
@@ -248,7 +248,7 @@ class DomainModule : InjektModule {
         addSingletonFactory<AnimeUpdatesRepository> { AnimeUpdatesRepositoryImpl(get()) }
         addFactory { GetAnimeUpdates(get()) }
 
-        addSingletonFactory<UpdatesRepository> { UpdatesRepositoryImpl(get()) }
+        addSingletonFactory<UpdatesRepository> { MangaUpdatesRepositoryImpl(get()) }
         addFactory { GetUpdates(get()) }
 
         addSingletonFactory<AnimeSourceRepository> { AnimeSourceRepositoryImpl(get(), get()) }
@@ -261,8 +261,8 @@ class DomainModule : InjektModule {
         addFactory { ToggleAnimeSource(get()) }
         addFactory { ToggleAnimeSourcePin(get()) }
 
-        addSingletonFactory<SourceRepository> { SourceRepositoryImpl(get(), get()) }
-        addSingletonFactory<SourceDataRepository> { SourceDataRepositoryImpl(get()) }
+        addSingletonFactory<SourceRepository> { MangaSourceRepositoryImpl(get(), get()) }
+        addSingletonFactory<SourceDataRepository> { MangaSourceDataRepositoryImpl(get()) }
         addFactory { GetEnabledSources(get(), get()) }
         addFactory { GetLanguagesWithSources(get(), get()) }
         addFactory { GetRemoteManga(get()) }

@@ -9,7 +9,7 @@ class SetMangaChapterFlags(
 ) {
 
     suspend fun awaitSetDownloadedFilter(manga: Manga, flag: Long): Boolean {
-        return mangaRepository.update(
+        return mangaRepository.updateManga(
             MangaUpdate(
                 id = manga.id,
                 chapterFlags = manga.chapterFlags.setFlag(flag, Manga.CHAPTER_DOWNLOADED_MASK),
@@ -18,7 +18,7 @@ class SetMangaChapterFlags(
     }
 
     suspend fun awaitSetUnreadFilter(manga: Manga, flag: Long): Boolean {
-        return mangaRepository.update(
+        return mangaRepository.updateManga(
             MangaUpdate(
                 id = manga.id,
                 chapterFlags = manga.chapterFlags.setFlag(flag, Manga.CHAPTER_UNREAD_MASK),
@@ -27,7 +27,7 @@ class SetMangaChapterFlags(
     }
 
     suspend fun awaitSetBookmarkFilter(manga: Manga, flag: Long): Boolean {
-        return mangaRepository.update(
+        return mangaRepository.updateManga(
             MangaUpdate(
                 id = manga.id,
                 chapterFlags = manga.chapterFlags.setFlag(flag, Manga.CHAPTER_BOOKMARKED_MASK),
@@ -36,7 +36,7 @@ class SetMangaChapterFlags(
     }
 
     suspend fun awaitSetDisplayMode(manga: Manga, flag: Long): Boolean {
-        return mangaRepository.update(
+        return mangaRepository.updateManga(
             MangaUpdate(
                 id = manga.id,
                 chapterFlags = manga.chapterFlags.setFlag(flag, Manga.CHAPTER_DISPLAY_MASK),
@@ -61,7 +61,7 @@ class SetMangaChapterFlags(
                     .setFlag(Manga.CHAPTER_SORT_ASC, Manga.CHAPTER_SORT_DIR_MASK)
             }
         }
-        return mangaRepository.update(
+        return mangaRepository.updateManga(
             MangaUpdate(
                 id = manga.id,
                 chapterFlags = newFlags,
@@ -78,7 +78,7 @@ class SetMangaChapterFlags(
         sortingDirection: Long,
         displayMode: Long,
     ): Boolean {
-        return mangaRepository.update(
+        return mangaRepository.updateManga(
             MangaUpdate(
                 id = mangaId,
                 chapterFlags = 0L.setFlag(unreadFilter, Manga.CHAPTER_UNREAD_MASK)

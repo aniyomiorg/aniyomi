@@ -8,17 +8,17 @@ import kotlinx.coroutines.flow.Flow
 
 interface AnimeSourceRepository {
 
-    fun getSources(): Flow<List<AnimeSource>>
+    fun getAnimeSources(): Flow<List<AnimeSource>>
 
-    fun getOnlineSources(): Flow<List<AnimeSource>>
+    fun getOnlineAnimeSources(): Flow<List<AnimeSource>>
 
-    fun getSourcesWithFavoriteCount(): Flow<List<Pair<AnimeSource, Long>>>
+    fun getAnimeSourcesWithFavoriteCount(): Flow<List<Pair<AnimeSource, Long>>>
 
     fun getSourcesWithNonLibraryAnime(): Flow<List<AnimeSourceWithCount>>
 
-    fun search(sourceId: Long, query: String, filterList: AnimeFilterList): AnimeSourcePagingSourceType
+    fun searchAnime(sourceId: Long, query: String, filterList: AnimeFilterList): AnimeSourcePagingSourceType
 
-    fun getPopular(sourceId: Long): AnimeSourcePagingSourceType
+    fun getPopularAnime(sourceId: Long): AnimeSourcePagingSourceType
 
-    fun getLatest(sourceId: Long): AnimeSourcePagingSourceType
+    fun getLatestAnime(sourceId: Long): AnimeSourcePagingSourceType
 }

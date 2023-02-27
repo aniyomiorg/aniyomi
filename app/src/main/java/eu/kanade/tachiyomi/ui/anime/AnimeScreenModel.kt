@@ -9,7 +9,7 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.prefs.CheckboxState
 import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.core.util.addOrRemove
-import eu.kanade.data.episode.NoEpisodesException
+import eu.kanade.data.entries.episode.NoEpisodesException
 import eu.kanade.domain.anime.interactor.GetAnimeWithEpisodes
 import eu.kanade.domain.anime.interactor.GetDuplicateAnimelibAnime
 import eu.kanade.domain.anime.interactor.SetAnimeEpisodeFlags

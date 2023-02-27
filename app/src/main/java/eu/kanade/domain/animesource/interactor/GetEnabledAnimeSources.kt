@@ -21,7 +21,7 @@ class GetEnabledAnimeSources(
             preferences.enabledLanguages().changes(),
             preferences.disabledAnimeSources().changes(),
             preferences.lastUsedAnimeSource().changes(),
-            repository.getSources(),
+            repository.getAnimeSources(),
         ) { pinnedSourceIds, enabledLanguages, disabledSources, lastUsedSource, sources ->
             sources
                 .filter { it.lang in enabledLanguages || it.id == LocalAnimeSource.ID }

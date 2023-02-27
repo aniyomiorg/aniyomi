@@ -13,9 +13,9 @@ interface AnimeTrackRepository {
 
     fun getTracksByAnimeIdAsFlow(animeId: Long): Flow<List<AnimeTrack>>
 
-    suspend fun delete(animeId: Long, syncId: Long)
+    suspend fun deleteAnime(animeId: Long, syncId: Long)
 
-    suspend fun insert(track: AnimeTrack)
+    suspend fun insertAnime(track: AnimeTrack)
 
-    suspend fun insertAll(tracks: List<AnimeTrack>)
+    suspend fun insertAllAnime(tracks: List<AnimeTrack>)
 }

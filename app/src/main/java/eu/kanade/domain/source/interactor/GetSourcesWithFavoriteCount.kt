@@ -18,7 +18,7 @@ class GetSourcesWithFavoriteCount(
         return combine(
             preferences.migrationSortingDirection().changes(),
             preferences.migrationSortingMode().changes(),
-            repository.getSourcesWithFavoriteCount(),
+            repository.getMangaSourcesWithFavoriteCount(),
         ) { direction, mode, list ->
             list.sortedWith(sortFn(direction, mode))
         }

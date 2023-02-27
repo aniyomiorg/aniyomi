@@ -30,6 +30,6 @@ class NetworkToLocalManga(
     }
 
     private suspend fun insertManga(manga: Manga): Long? {
-        return mangaRepository.insert(manga)
+        return mangaRepository.insertManga(manga)
     }
 }

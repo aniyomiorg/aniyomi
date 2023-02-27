@@ -9,7 +9,7 @@ class SetAnimeEpisodeFlags(
 ) {
 
     suspend fun awaitSetDownloadedFilter(anime: Anime, flag: Long): Boolean {
-        return animeRepository.update(
+        return animeRepository.updateAnime(
             AnimeUpdate(
                 id = anime.id,
                 episodeFlags = anime.episodeFlags.setFlag(flag, Anime.EPISODE_DOWNLOADED_MASK),
@@ -18,7 +18,7 @@ class SetAnimeEpisodeFlags(
     }
 
     suspend fun awaitSetUnseenFilter(anime: Anime, flag: Long): Boolean {
-        return animeRepository.update(
+        return animeRepository.updateAnime(
             AnimeUpdate(
                 id = anime.id,
                 episodeFlags = anime.episodeFlags.setFlag(flag, Anime.EPISODE_UNSEEN_MASK),
@@ -27,7 +27,7 @@ class SetAnimeEpisodeFlags(
     }
 
     suspend fun awaitSetBookmarkFilter(anime: Anime, flag: Long): Boolean {
-        return animeRepository.update(
+        return animeRepository.updateAnime(
             AnimeUpdate(
                 id = anime.id,
                 episodeFlags = anime.episodeFlags.setFlag(flag, Anime.EPISODE_BOOKMARKED_MASK),
@@ -36,7 +36,7 @@ class SetAnimeEpisodeFlags(
     }
 
     suspend fun awaitSetDisplayMode(anime: Anime, flag: Long): Boolean {
-        return animeRepository.update(
+        return animeRepository.updateAnime(
             AnimeUpdate(
                 id = anime.id,
                 episodeFlags = anime.episodeFlags.setFlag(flag, Anime.EPISODE_DISPLAY_MASK),
@@ -61,7 +61,7 @@ class SetAnimeEpisodeFlags(
                     .setFlag(Anime.EPISODE_SORT_ASC, Anime.EPISODE_SORT_DIR_MASK)
             }
         }
-        return animeRepository.update(
+        return animeRepository.updateAnime(
             AnimeUpdate(
                 id = anime.id,
                 episodeFlags = newFlags,
@@ -78,7 +78,7 @@ class SetAnimeEpisodeFlags(
         sortingDirection: Long,
         displayMode: Long,
     ): Boolean {
-        return animeRepository.update(
+        return animeRepository.updateAnime(
             AnimeUpdate(
                 id = animeId,
                 episodeFlags = 0L.setFlag(unseenFilter, Anime.EPISODE_UNSEEN_MASK)

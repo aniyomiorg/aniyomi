@@ -8,17 +8,17 @@ import kotlinx.coroutines.flow.Flow
 
 interface SourceRepository {
 
-    fun getSources(): Flow<List<Source>>
+    fun getMangaSources(): Flow<List<Source>>
 
-    fun getOnlineSources(): Flow<List<Source>>
+    fun getOnlineMangaSources(): Flow<List<Source>>
 
-    fun getSourcesWithFavoriteCount(): Flow<List<Pair<Source, Long>>>
+    fun getMangaSourcesWithFavoriteCount(): Flow<List<Pair<Source, Long>>>
 
-    fun getSourcesWithNonLibraryManga(): Flow<List<SourceWithCount>>
+    fun getMangaSourcesWithNonLibraryManga(): Flow<List<SourceWithCount>>
 
-    fun search(sourceId: Long, query: String, filterList: FilterList): SourcePagingSourceType
+    fun searchManga(sourceId: Long, query: String, filterList: FilterList): SourcePagingSourceType
 
-    fun getPopular(sourceId: Long): SourcePagingSourceType
+    fun getPopularManga(sourceId: Long): SourcePagingSourceType
 
-    fun getLatest(sourceId: Long): SourcePagingSourceType
+    fun getLatestManga(sourceId: Long): SourcePagingSourceType
 }

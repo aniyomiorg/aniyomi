@@ -11,7 +11,7 @@ class SetMangaViewerFlags(
 
     suspend fun awaitSetMangaReadingMode(id: Long, flag: Long) {
         val manga = mangaRepository.getMangaById(id)
-        mangaRepository.update(
+        mangaRepository.updateManga(
             MangaUpdate(
                 id = id,
                 viewerFlags = manga.viewerFlags.setFlag(flag, ReadingModeType.MASK.toLong()),
@@ -21,7 +21,7 @@ class SetMangaViewerFlags(
 
     suspend fun awaitSetOrientationType(id: Long, flag: Long) {
         val manga = mangaRepository.getMangaById(id)
-        mangaRepository.update(
+        mangaRepository.updateManga(
             MangaUpdate(
                 id = id,
                 viewerFlags = manga.viewerFlags.setFlag(flag, OrientationType.MASK.toLong()),

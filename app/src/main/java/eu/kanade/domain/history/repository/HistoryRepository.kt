@@ -6,17 +6,17 @@ import kotlinx.coroutines.flow.Flow
 
 interface HistoryRepository {
 
-    fun getHistory(query: String): Flow<List<HistoryWithRelations>>
+    fun getMangaHistory(query: String): Flow<List<HistoryWithRelations>>
 
-    suspend fun getLastHistory(): HistoryWithRelations?
+    suspend fun getLastMangaHistory(): HistoryWithRelations?
 
     suspend fun getTotalReadDuration(): Long
 
-    suspend fun resetHistory(historyId: Long)
+    suspend fun resetMangaHistory(historyId: Long)
 
     suspend fun resetHistoryByMangaId(mangaId: Long)
 
-    suspend fun deleteAllHistory(): Boolean
+    suspend fun deleteAllMangaHistory(): Boolean
 
-    suspend fun upsertHistory(historyUpdate: HistoryUpdate)
+    suspend fun upsertMangaHistory(historyUpdate: HistoryUpdate)
 }

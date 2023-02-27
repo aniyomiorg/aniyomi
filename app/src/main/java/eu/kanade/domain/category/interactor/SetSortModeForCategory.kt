@@ -13,10 +13,10 @@ class SetSortModeForCategory(
 ) {
 
     suspend fun await(categoryId: Long, type: LibrarySort.Type, direction: LibrarySort.Direction) {
-        val category = categoryRepository.get(categoryId) ?: return
+        val category = categoryRepository.getMangaCategory(categoryId) ?: return
         val flags = category.flags + type + direction
         if (preferences.categorizedDisplaySettings().get()) {
-            categoryRepository.updatePartial(
+            categoryRepository.updatePartialMangaCategory(
                 CategoryUpdate(
                     id = category.id,
                     flags = flags,
@@ -24,7 +24,7 @@ class SetSortModeForCategory(
             )
         } else {
             preferences.librarySortingMode().set(LibrarySort(type, direction))
-            categoryRepository.updateAllFlags(flags)
+            categoryRepository.updateAllMangaCategoryFlags(flags)
         }
     }
 

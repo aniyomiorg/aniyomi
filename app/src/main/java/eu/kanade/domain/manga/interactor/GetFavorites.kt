@@ -9,10 +9,10 @@ class GetFavorites(
 ) {
 
     suspend fun await(): List<Manga> {
-        return mangaRepository.getFavorites()
+        return mangaRepository.getMangaFavorites()
     }
 
     fun subscribe(sourceId: Long): Flow<List<Manga>> {
-        return mangaRepository.getFavoritesBySourceId(sourceId)
+        return mangaRepository.getMangaFavoritesBySourceId(sourceId)
     }
 }

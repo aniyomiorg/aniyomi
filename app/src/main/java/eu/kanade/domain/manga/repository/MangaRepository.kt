@@ -15,23 +15,23 @@ interface MangaRepository {
 
     fun getMangaByUrlAndSourceIdAsFlow(url: String, sourceId: Long): Flow<Manga?>
 
-    suspend fun getFavorites(): List<Manga>
+    suspend fun getMangaFavorites(): List<Manga>
 
     suspend fun getLibraryManga(): List<LibraryManga>
 
     fun getLibraryMangaAsFlow(): Flow<List<LibraryManga>>
 
-    fun getFavoritesBySourceId(sourceId: Long): Flow<List<Manga>>
+    fun getMangaFavoritesBySourceId(sourceId: Long): Flow<List<Manga>>
 
     suspend fun getDuplicateLibraryManga(title: String, sourceId: Long): Manga?
 
-    suspend fun resetViewerFlags(): Boolean
+    suspend fun resetMangaViewerFlags(): Boolean
 
     suspend fun setMangaCategories(mangaId: Long, categoryIds: List<Long>)
 
-    suspend fun insert(manga: Manga): Long?
+    suspend fun insertManga(manga: Manga): Long?
 
-    suspend fun update(update: MangaUpdate): Boolean
+    suspend fun updateManga(update: MangaUpdate): Boolean
 
-    suspend fun updateAll(mangaUpdates: List<MangaUpdate>): Boolean
+    suspend fun updateAllManga(mangaUpdates: List<MangaUpdate>): Boolean
 }

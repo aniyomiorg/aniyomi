@@ -5,17 +5,17 @@ import kotlinx.coroutines.flow.Flow
 
 interface TrackRepository {
 
-    suspend fun getTrackById(id: Long): Track?
+    suspend fun getTrackByMangaId(id: Long): Track?
 
     suspend fun getTracksByMangaId(mangaId: Long): List<Track>
 
-    fun getTracksAsFlow(): Flow<List<Track>>
+    fun getMangaTracksAsFlow(): Flow<List<Track>>
 
     fun getTracksByMangaIdAsFlow(mangaId: Long): Flow<List<Track>>
 
-    suspend fun delete(mangaId: Long, syncId: Long)
+    suspend fun deleteManga(mangaId: Long, syncId: Long)
 
-    suspend fun insert(track: Track)
+    suspend fun insertManga(track: Track)
 
-    suspend fun insertAll(tracks: List<Track>)
+    suspend fun insertAllManga(tracks: List<Track>)
 }

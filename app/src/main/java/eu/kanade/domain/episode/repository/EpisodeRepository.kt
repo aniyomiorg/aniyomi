@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface EpisodeRepository {
 
-    suspend fun addAll(episodes: List<Episode>): List<Episode>
+    suspend fun addAllEpisodes(episodes: List<Episode>): List<Episode>
 
-    suspend fun update(episodeUpdate: EpisodeUpdate)
+    suspend fun updateEpisode(episodeUpdate: EpisodeUpdate)
 
-    suspend fun updateAll(episodeUpdates: List<EpisodeUpdate>)
+    suspend fun updateAllEpisodes(episodeUpdates: List<EpisodeUpdate>)
 
     suspend fun removeEpisodesWithIds(episodeIds: List<Long>)
 

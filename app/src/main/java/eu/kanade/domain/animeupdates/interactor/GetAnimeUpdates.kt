@@ -12,6 +12,6 @@ class GetAnimeUpdates(
     fun subscribe(calendar: Calendar): Flow<List<AnimeUpdatesWithRelations>> = subscribe(calendar.time.time)
 
     fun subscribe(after: Long): Flow<List<AnimeUpdatesWithRelations>> {
-        return repository.subscribeAll(after)
+        return repository.subscribeAllAnimeUpdates(after)
     }
 }

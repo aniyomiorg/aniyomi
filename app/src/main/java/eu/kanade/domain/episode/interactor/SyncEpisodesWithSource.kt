@@ -1,7 +1,7 @@
 package eu.kanade.domain.episode.interactor
 
-import eu.kanade.data.episode.CleanupEpisodeName
-import eu.kanade.data.episode.NoEpisodesException
+import eu.kanade.data.entries.episode.CleanupEpisodeName
+import eu.kanade.data.entries.episode.NoEpisodesException
 import eu.kanade.domain.anime.interactor.UpdateAnime
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.episode.model.Episode
@@ -52,7 +52,7 @@ class SyncEpisodesWithSource(
             .mapIndexed { i, sEpisode ->
                 Episode.create()
                     .copyFromSEpisode(sEpisode)
-                    .copy(name = CleanupEpisodeName.await(sEpisode.name, anime.title))
+                    .copy(name = CleanupEpisodeName.awaitEpisodeName(sEpisode.name, anime.title))
                     .copy(animeId = anime.id, sourceOrder = i.toLong())
             }
 
@@ -175,7 +175,7 @@ class SyncEpisodesWithSource(
         }
 
         if (updatedToAdd.isNotEmpty()) {
-            updatedToAdd = episodeRepository.addAll(updatedToAdd)
+            updatedToAdd = episodeRepository.addAllEpisodes(updatedToAdd)
         }
 
         if (toChange.isNotEmpty()) {

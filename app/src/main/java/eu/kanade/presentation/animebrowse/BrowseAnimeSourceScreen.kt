@@ -14,7 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import eu.kanade.data.episode.NoEpisodesException
+import eu.kanade.data.entries.episode.NoEpisodesException
 import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.presentation.animebrowse.components.BrowseAnimeSourceComfortableGrid

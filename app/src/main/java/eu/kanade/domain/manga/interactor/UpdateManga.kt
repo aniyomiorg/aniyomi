@@ -16,11 +16,11 @@ class UpdateManga(
 ) {
 
     suspend fun await(mangaUpdate: MangaUpdate): Boolean {
-        return mangaRepository.update(mangaUpdate)
+        return mangaRepository.updateManga(mangaUpdate)
     }
 
     suspend fun awaitAll(mangaUpdates: List<MangaUpdate>): Boolean {
-        return mangaRepository.updateAll(mangaUpdates)
+        return mangaRepository.updateAllManga(mangaUpdates)
     }
 
     suspend fun awaitUpdateFromSource(
@@ -56,7 +56,7 @@ class UpdateManga(
 
         val thumbnailUrl = remoteManga.thumbnail_url?.takeIf { it.isNotEmpty() }
 
-        return mangaRepository.update(
+        return mangaRepository.updateManga(
             MangaUpdate(
                 id = localManga.id,
                 title = title,
@@ -74,11 +74,11 @@ class UpdateManga(
     }
 
     suspend fun awaitUpdateLastUpdate(mangaId: Long): Boolean {
-        return mangaRepository.update(MangaUpdate(id = mangaId, lastUpdate = Date().time))
+        return mangaRepository.updateManga(MangaUpdate(id = mangaId, lastUpdate = Date().time))
     }
 
     suspend fun awaitUpdateCoverLastModified(mangaId: Long): Boolean {
-        return mangaRepository.update(MangaUpdate(id = mangaId, coverLastModified = Date().time))
+        return mangaRepository.updateManga(MangaUpdate(id = mangaId, coverLastModified = Date().time))
     }
 
     suspend fun awaitUpdateFavorite(mangaId: Long, favorite: Boolean): Boolean {
@@ -86,7 +86,7 @@ class UpdateManga(
             true -> Date().time
             false -> 0
         }
-        return mangaRepository.update(
+        return mangaRepository.updateManga(
             MangaUpdate(id = mangaId, favorite = favorite, dateAdded = dateAdded),
         )
     }

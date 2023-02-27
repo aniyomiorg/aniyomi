@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
-import eu.kanade.data.chapter.NoChaptersException
+import eu.kanade.data.entries.chapter.NoChaptersException
 import eu.kanade.domain.category.interactor.GetCategories
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.chapter.interactor.GetChapterByMangaId

@@ -16,11 +16,11 @@ class UpdateAnime(
 ) {
 
     suspend fun await(animeUpdate: AnimeUpdate): Boolean {
-        return animeRepository.update(animeUpdate)
+        return animeRepository.updateAnime(animeUpdate)
     }
 
     suspend fun awaitAll(animeUpdates: List<AnimeUpdate>): Boolean {
-        return animeRepository.updateAll(animeUpdates)
+        return animeRepository.updateAllAnime(animeUpdates)
     }
 
     suspend fun awaitUpdateFromSource(
@@ -56,7 +56,7 @@ class UpdateAnime(
 
         val thumbnailUrl = remoteAnime.thumbnail_url?.takeIf { it.isNotEmpty() }
 
-        return animeRepository.update(
+        return animeRepository.updateAnime(
             AnimeUpdate(
                 id = localAnime.id,
                 title = title,
@@ -74,11 +74,11 @@ class UpdateAnime(
     }
 
     suspend fun awaitUpdateLastUpdate(animeId: Long): Boolean {
-        return animeRepository.update(AnimeUpdate(id = animeId, lastUpdate = Date().time))
+        return animeRepository.updateAnime(AnimeUpdate(id = animeId, lastUpdate = Date().time))
     }
 
     suspend fun awaitUpdateCoverLastModified(mangaId: Long): Boolean {
-        return animeRepository.update(AnimeUpdate(id = mangaId, coverLastModified = Date().time))
+        return animeRepository.updateAnime(AnimeUpdate(id = mangaId, coverLastModified = Date().time))
     }
 
     suspend fun awaitUpdateFavorite(animeId: Long, favorite: Boolean): Boolean {
@@ -86,7 +86,7 @@ class UpdateAnime(
             true -> Date().time
             false -> 0
         }
-        return animeRepository.update(
+        return animeRepository.updateAnime(
             AnimeUpdate(id = animeId, favorite = favorite, dateAdded = dateAdded),
         )
     }

@@ -10,9 +10,9 @@ class GetRemoteAnime(
 
     fun subscribe(sourceId: Long, query: String, filterList: AnimeFilterList): AnimeSourcePagingSourceType {
         return when (query) {
-            QUERY_POPULAR -> repository.getPopular(sourceId)
-            QUERY_LATEST -> repository.getLatest(sourceId)
-            else -> repository.search(sourceId, query, filterList)
+            QUERY_POPULAR -> repository.getPopularAnime(sourceId)
+            QUERY_LATEST -> repository.getLatestAnime(sourceId)
+            else -> repository.searchAnime(sourceId, query, filterList)
         }
     }
 

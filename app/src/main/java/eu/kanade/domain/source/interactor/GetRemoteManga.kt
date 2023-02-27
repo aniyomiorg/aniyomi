@@ -10,9 +10,9 @@ class GetRemoteManga(
 
     fun subscribe(sourceId: Long, query: String, filterList: FilterList): SourcePagingSourceType {
         return when (query) {
-            QUERY_POPULAR -> repository.getPopular(sourceId)
-            QUERY_LATEST -> repository.getLatest(sourceId)
-            else -> repository.search(sourceId, query, filterList)
+            QUERY_POPULAR -> repository.getPopularManga(sourceId)
+            QUERY_LATEST -> repository.getLatestManga(sourceId)
+            else -> repository.searchManga(sourceId, query, filterList)
         }
     }
 

@@ -10,8 +10,8 @@ import data.Manga_sync
 import data.Mangas
 import dataanime.Anime_sync
 import dataanime.Animes
-import eu.kanade.data.AnimeDatabaseHandler
-import eu.kanade.data.DatabaseHandler
+import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
+import eu.kanade.data.handlers.manga.MangaDatabaseHandler
 import eu.kanade.data.updateStrategyAdapter
 import eu.kanade.domain.anime.interactor.GetAnimeFavorites
 import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
@@ -84,7 +84,7 @@ class BackupManager(
     private val context: Context,
 ) {
 
-    private val handler: DatabaseHandler = Injekt.get()
+    private val handler: MangaDatabaseHandler = Injekt.get()
     private val animehandler: AnimeDatabaseHandler = Injekt.get()
     private val sourceManager: SourceManager = Injekt.get()
     private val animeSourceManager: AnimeSourceManager = Injekt.get()

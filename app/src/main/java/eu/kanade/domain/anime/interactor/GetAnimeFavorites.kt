@@ -9,10 +9,10 @@ class GetAnimeFavorites(
 ) {
 
     suspend fun await(): List<Anime> {
-        return animeRepository.getFavorites()
+        return animeRepository.getAnimeFavorites()
     }
 
     fun subscribe(sourceId: Long): Flow<List<Anime>> {
-        return animeRepository.getFavoritesBySourceId(sourceId)
+        return animeRepository.getAnimeFavoritesBySourceId(sourceId)
     }
 }

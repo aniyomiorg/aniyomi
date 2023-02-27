@@ -6,15 +6,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface AnimeHistoryRepository {
 
-    fun getHistory(query: String): Flow<List<AnimeHistoryWithRelations>>
+    fun getAnimeHistory(query: String): Flow<List<AnimeHistoryWithRelations>>
 
-    suspend fun getLastHistory(): AnimeHistoryWithRelations?
+    suspend fun getLastAnimeHistory(): AnimeHistoryWithRelations?
 
-    suspend fun resetHistory(historyId: Long)
+    suspend fun resetAnimeHistory(historyId: Long)
 
     suspend fun resetHistoryByAnimeId(animeId: Long)
 
-    suspend fun deleteAllHistory(): Boolean
+    suspend fun deleteAllAnimeHistory(): Boolean
 
-    suspend fun upsertHistory(historyUpdate: AnimeHistoryUpdate)
+    suspend fun upsertAnimeHistory(historyUpdate: AnimeHistoryUpdate)
 }

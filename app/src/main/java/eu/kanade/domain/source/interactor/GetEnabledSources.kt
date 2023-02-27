@@ -21,7 +21,7 @@ class GetEnabledSources(
             preferences.enabledLanguages().changes(),
             preferences.disabledSources().changes(),
             preferences.lastUsedSource().changes(),
-            repository.getSources(),
+            repository.getMangaSources(),
         ) { pinnedSourceIds, enabledLanguages, disabledSources, lastUsedSource, sources ->
             sources
                 .filter { it.lang in enabledLanguages || it.id == LocalSource.ID }

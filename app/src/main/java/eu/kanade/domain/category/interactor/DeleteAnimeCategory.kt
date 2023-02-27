@@ -12,13 +12,13 @@ class DeleteAnimeCategory(
 
     suspend fun await(categoryId: Long) = withNonCancellableContext {
         try {
-            categoryRepository.delete(categoryId)
+            categoryRepository.deleteAnimeCategory(categoryId)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
             return@withNonCancellableContext Result.InternalError(e)
         }
 
-        val categories = categoryRepository.getAll()
+        val categories = categoryRepository.getAllAnimeCategories()
         val updates = categories.mapIndexed { index, category ->
             CategoryUpdate(
                 id = category.id,
@@ -27,7 +27,7 @@ class DeleteAnimeCategory(
         }
 
         try {
-            categoryRepository.updatePartial(updates)
+            categoryRepository.updatePartialAnimeCategories(updates)
             Result.Success
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)

@@ -9,7 +9,7 @@ class GetTracksPerManga(
 ) {
 
     fun subscribe(): Flow<Map<Long, List<Long>>> {
-        return trackRepository.getTracksAsFlow().map { tracks ->
+        return trackRepository.getMangaTracksAsFlow().map { tracks ->
             tracks
                 .groupBy { it.mangaId }
                 .mapValues { entry ->

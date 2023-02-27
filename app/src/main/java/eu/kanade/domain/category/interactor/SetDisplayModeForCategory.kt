@@ -13,10 +13,10 @@ class SetDisplayModeForCategory(
 ) {
 
     suspend fun await(categoryId: Long, display: LibraryDisplayMode) {
-        val category = categoryRepository.get(categoryId) ?: return
+        val category = categoryRepository.getMangaCategory(categoryId) ?: return
         val flags = category.flags + display
         if (preferences.categorizedDisplaySettings().get()) {
-            categoryRepository.updatePartial(
+            categoryRepository.updatePartialMangaCategory(
                 CategoryUpdate(
                     id = category.id,
                     flags = flags,
@@ -24,7 +24,7 @@ class SetDisplayModeForCategory(
             )
         } else {
             preferences.libraryDisplayMode().set(display)
-            categoryRepository.updateAllFlags(flags)
+            categoryRepository.updateAllMangaCategoryFlags(flags)
         }
     }
 

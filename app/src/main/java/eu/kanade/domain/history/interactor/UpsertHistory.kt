@@ -8,6 +8,6 @@ class UpsertHistory(
 ) {
 
     suspend fun await(historyUpdate: HistoryUpdate) {
-        historyRepository.upsertHistory(historyUpdate)
+        historyRepository.upsertMangaHistory(historyUpdate)
     }
 }

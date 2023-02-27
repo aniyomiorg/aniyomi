@@ -8,11 +8,11 @@ class RemoveHistory(
 ) {
 
     suspend fun awaitAll(): Boolean {
-        return repository.deleteAllHistory()
+        return repository.deleteAllMangaHistory()
     }
 
     suspend fun await(history: HistoryWithRelations) {
-        repository.resetHistory(history.id)
+        repository.resetMangaHistory(history.id)
     }
 
     suspend fun await(mangaId: Long) {

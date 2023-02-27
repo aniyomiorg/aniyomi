@@ -8,6 +8,6 @@ class UpsertAnimeHistory(
 ) {
 
     suspend fun await(historyUpdate: AnimeHistoryUpdate) {
-        animehistoryRepository.upsertHistory(historyUpdate)
+        animehistoryRepository.upsertAnimeHistory(historyUpdate)
     }
 }

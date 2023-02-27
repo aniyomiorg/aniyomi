@@ -9,6 +9,6 @@ class GetHistory(
 ) {
 
     fun subscribe(query: String): Flow<List<HistoryWithRelations>> {
-        return repository.getHistory(query)
+        return repository.getMangaHistory(query)
     }
 }

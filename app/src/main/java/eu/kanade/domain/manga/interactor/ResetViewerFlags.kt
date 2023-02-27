@@ -7,6 +7,6 @@ class ResetViewerFlags(
 ) {
 
     suspend fun await(): Boolean {
-        return mangaRepository.resetViewerFlags()
+        return mangaRepository.resetMangaViewerFlags()
     }
 }

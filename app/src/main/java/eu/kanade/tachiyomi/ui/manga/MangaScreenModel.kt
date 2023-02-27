@@ -9,7 +9,7 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.prefs.CheckboxState
 import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.core.util.addOrRemove
-import eu.kanade.data.chapter.NoChaptersException
+import eu.kanade.data.entries.chapter.NoChaptersException
 import eu.kanade.domain.category.interactor.GetCategories
 import eu.kanade.domain.category.interactor.SetMangaCategories
 import eu.kanade.domain.category.model.Category

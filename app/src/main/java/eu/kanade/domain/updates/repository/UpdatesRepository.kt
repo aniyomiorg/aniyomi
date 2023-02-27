@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface UpdatesRepository {
 
-    fun subscribeAll(after: Long): Flow<List<UpdatesWithRelations>>
+    fun subscribeAllMangaUpdates(after: Long): Flow<List<UpdatesWithRelations>>
 }

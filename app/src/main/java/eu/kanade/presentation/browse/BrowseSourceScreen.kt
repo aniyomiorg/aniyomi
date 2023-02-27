@@ -14,7 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import eu.kanade.data.chapter.NoChaptersException
+import eu.kanade.data.entries.chapter.NoChaptersException
 import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.domain.manga.model.Manga
 import eu.kanade.presentation.browse.components.BrowseSourceComfortableGrid

@@ -38,7 +38,7 @@ class SetReadStatus(
         }
 
         try {
-            chapterRepository.updateAll(
+            chapterRepository.updateAllChapters(
                 chaptersToUpdate.map { mapper(it, read) },
             )
         } catch (e: Exception) {

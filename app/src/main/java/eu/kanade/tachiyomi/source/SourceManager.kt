@@ -55,7 +55,7 @@ class SourceManager(
         }
 
         scope.launch {
-            sourceRepository.subscribeAll()
+            sourceRepository.subscribeAllManga()
                 .collectLatest { sources ->
                     val mutableMap = stubSourcesMap.toMutableMap()
                     sources.forEach {
@@ -87,9 +87,9 @@ class SourceManager(
     private fun registerStubSource(sourceData: SourceData) {
         scope.launch {
             val (id, lang, name) = sourceData
-            val dbSourceData = sourceRepository.getSourceData(id)
+            val dbSourceData = sourceRepository.getMangaSourceData(id)
             if (dbSourceData == sourceData) return@launch
-            sourceRepository.upsertSourceData(id, lang, name)
+            sourceRepository.upsertMangaSourceData(id, lang, name)
             if (dbSourceData != null) {
                 downloadManager.renameSource(StubSource(dbSourceData), StubSource(sourceData))
             }
@@ -97,7 +97,7 @@ class SourceManager(
     }
 
     private suspend fun createStubSource(id: Long): StubSource {
-        sourceRepository.getSourceData(id)?.let {
+        sourceRepository.getMangaSourceData(id)?.let {
             return StubSource(it)
         }
         extensionManager.getSourceData(id)?.let {

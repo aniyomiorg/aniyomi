@@ -22,7 +22,7 @@ class CreateCategoryWithName(
         }
 
     suspend fun await(name: String): Result = withNonCancellableContext {
-        val categories = categoryRepository.getAll()
+        val categories = categoryRepository.getAllMangaCategories()
         if (categories.anyWithName(name)) {
             return@withNonCancellableContext Result.NameAlreadyExistsError
         }
@@ -36,7 +36,7 @@ class CreateCategoryWithName(
         )
 
         try {
-            categoryRepository.insert(newCategory)
+            categoryRepository.insertMangaCategory(newCategory)
             Result.Success
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)

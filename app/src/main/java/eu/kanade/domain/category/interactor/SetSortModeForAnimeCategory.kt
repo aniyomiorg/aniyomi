@@ -13,10 +13,10 @@ class SetSortModeForAnimeCategory(
 ) {
 
     suspend fun await(categoryId: Long, type: LibrarySort.Type, direction: LibrarySort.Direction) {
-        val category = categoryRepository.get(categoryId) ?: return
+        val category = categoryRepository.getAnimeCategory(categoryId) ?: return
         val flags = category.flags + type + direction
         if (preferences.categorizedDisplaySettings().get()) {
-            categoryRepository.updatePartial(
+            categoryRepository.updatePartialAnimeCategory(
                 CategoryUpdate(
                     id = category.id,
                     flags = flags,
@@ -24,7 +24,7 @@ class SetSortModeForAnimeCategory(
             )
         } else {
             preferences.librarySortingMode().set(LibrarySort(type, direction))
-            categoryRepository.updateAllFlags(flags)
+            categoryRepository.updateAllAnimeCategoryFlags(flags)
         }
     }
 

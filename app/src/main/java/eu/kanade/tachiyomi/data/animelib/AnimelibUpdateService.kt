@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
-import eu.kanade.data.episode.NoEpisodesException
+import eu.kanade.data.entries.episode.NoEpisodesException
 import eu.kanade.domain.anime.interactor.GetAnime
 import eu.kanade.domain.anime.interactor.GetAnimelibAnime
 import eu.kanade.domain.anime.interactor.UpdateAnime

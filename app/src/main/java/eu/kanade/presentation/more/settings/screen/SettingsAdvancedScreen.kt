@@ -336,7 +336,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                     subtitle = stringResource(R.string.pref_reset_viewer_flags_summary),
                     onClick = {
                         scope.launchNonCancellable {
-                            val success = Injekt.get<MangaRepository>().resetViewerFlags()
+                            val success = Injekt.get<MangaRepository>().resetMangaViewerFlags()
                             withUIContext {
                                 val message = if (success) {
                                     R.string.pref_reset_viewer_flags_success

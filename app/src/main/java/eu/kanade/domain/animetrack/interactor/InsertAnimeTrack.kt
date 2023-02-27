@@ -11,7 +11,7 @@ class InsertAnimeTrack(
 
     suspend fun await(track: AnimeTrack) {
         try {
-            animetrackRepository.insert(track)
+            animetrackRepository.insertAnime(track)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
         }
@@ -19,7 +19,7 @@ class InsertAnimeTrack(
 
     suspend fun awaitAll(tracks: List<AnimeTrack>) {
         try {
-            animetrackRepository.insertAll(tracks)
+            animetrackRepository.insertAllAnime(tracks)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
         }

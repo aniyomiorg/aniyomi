@@ -4,9 +4,9 @@ import eu.kanade.domain.source.model.SourceData
 import kotlinx.coroutines.flow.Flow
 
 interface SourceDataRepository {
-    fun subscribeAll(): Flow<List<SourceData>>
+    fun subscribeAllManga(): Flow<List<SourceData>>
 
-    suspend fun getSourceData(id: Long): SourceData?
+    suspend fun getMangaSourceData(id: Long): SourceData?
 
-    suspend fun upsertSourceData(id: Long, lang: String, name: String)
+    suspend fun upsertMangaSourceData(id: Long, lang: String, name: String)
 }

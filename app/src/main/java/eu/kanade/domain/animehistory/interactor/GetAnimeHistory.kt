@@ -9,6 +9,6 @@ class GetAnimeHistory(
 ) {
 
     fun subscribe(query: String): Flow<List<AnimeHistoryWithRelations>> {
-        return repository.getHistory(query)
+        return repository.getAnimeHistory(query)
     }
 }

@@ -12,7 +12,7 @@ class GetTracks(
 
     suspend fun awaitOne(id: Long): Track? {
         return try {
-            trackRepository.getTrackById(id)
+            trackRepository.getTrackByMangaId(id)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
             null

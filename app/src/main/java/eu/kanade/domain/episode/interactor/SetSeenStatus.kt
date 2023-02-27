@@ -38,7 +38,7 @@ class SetSeenStatus(
         }
 
         try {
-            episodeRepository.updateAll(
+            episodeRepository.updateAllEpisodes(
                 episodesToUpdate.map { mapper(it, seen) },
             )
         } catch (e: Exception) {

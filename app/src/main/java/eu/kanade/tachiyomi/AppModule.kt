@@ -10,11 +10,11 @@ import data.History
 import data.Mangas
 import dataanime.Animehistory
 import dataanime.Animes
-import eu.kanade.data.AndroidAnimeDatabaseHandler
-import eu.kanade.data.AndroidDatabaseHandler
-import eu.kanade.data.AnimeDatabaseHandler
-import eu.kanade.data.DatabaseHandler
 import eu.kanade.data.dateAdapter
+import eu.kanade.data.handlers.anime.AndroidAnimeDatabaseHandler
+import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
+import eu.kanade.data.handlers.manga.AndroidMangaDatabaseHandler
+import eu.kanade.data.handlers.manga.MangaDatabaseHandler
 import eu.kanade.data.listOfStringsAdapter
 import eu.kanade.data.updateStrategyAdapter
 import eu.kanade.domain.backup.service.BackupPreferences
@@ -147,7 +147,7 @@ class AppModule(val app: Application) : InjektModule {
             )
         }
 
-        addSingletonFactory<DatabaseHandler> { AndroidDatabaseHandler(get(), sqlDriverManga) }
+        addSingletonFactory<MangaDatabaseHandler> { AndroidMangaDatabaseHandler(get(), sqlDriverManga) }
 
         addSingletonFactory<AnimeDatabaseHandler> { AndroidAnimeDatabaseHandler(get(), sqlDriverAnime) }
 
