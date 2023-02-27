@@ -126,7 +126,7 @@ class PlayerViewModel(
 
     private var currentVideoList: List<Video>? = null
 
-    var requestedSecond: Long = 0L
+    private var requestedSecond: Long = 0L
 
     /**
      * Episode list for the active anime. It's retrieved lazily and should be accessed for the first
@@ -301,6 +301,7 @@ class PlayerViewModel(
      * seen, update tracking services, enqueue downloaded episode deletion and download next episode.
      */
     fun onSecondReached(position: Int, duration: Int) {
+        if (state.value.isLoadingAdjacentEpisode) return
         val currentEpisode = currentEpisode ?: return
         if (episodeId == -1L) return
 
@@ -457,10 +458,8 @@ class PlayerViewModel(
                         location = Location.Pictures.create(relativePath),
                     ),
                 )
-                launchUI {
-                    notifier.onComplete(uri)
-                    eventChannel.send(Event.SavedImage(SaveImageResult.Success(uri)))
-                }
+                notifier.onComplete(uri)
+                eventChannel.send(Event.SavedImage(SaveImageResult.Success(uri)))
             } catch (e: Throwable) {
                 notifier.onError(e.message)
                 eventChannel.send(Event.SavedImage(SaveImageResult.Error(e)))
@@ -618,11 +617,16 @@ class PlayerViewModel(
      */
     fun setAnimeSkipIntroLength(skipIntroLength: Int) {
         val anime = anime ?: return
-        runBlocking {
+        viewModelScope.launchIO {
             setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, skipIntroLength.toLong())
+            logcat(LogPriority.INFO) { "New Skip Intro Length is ${anime.skipIntroLength}" }
+            mutableState.update {
+                it.copy(
+                    anime = getAnime.await(anime.id),
+                )
+            }
+            eventChannel.send(Event.SetAnimeSkipIntro(getAnimeSkipIntroLength()))
         }
-
-        logcat(LogPriority.INFO) { "Skip Intro Length is ${anime.skipIntroLength}" }
     }
 
     /**
