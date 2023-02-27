@@ -30,10 +30,10 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.commandiron.wheel_picker_compose.WheelTextPicker
-import eu.kanade.domain.anime.interactor.SetAnimeViewerFlags
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.hasCustomCover
-import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.entries.episode.model.Episode
+import eu.kanade.domain.items.anime.interactor.SetAnimeViewerFlags
+import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.items.anime.model.hasCustomCover
 import eu.kanade.presentation.anime.AnimeScreen
 import eu.kanade.presentation.anime.EpisodeSettingsDialog
 import eu.kanade.presentation.anime.components.AnimeCoverDialog

@@ -22,8 +22,8 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.domain.track.store.DelayedTrackingStore
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -191,7 +191,7 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { AnimeDownloadCache(app) }
 
         addSingletonFactory { TrackManager(app) }
-        addSingletonFactory { DelayedTrackingStore(app) }
+        addSingletonFactory { DelayedAnimeTrackingStore(app) }
 
         addSingletonFactory { ImageSaver(app) }
 

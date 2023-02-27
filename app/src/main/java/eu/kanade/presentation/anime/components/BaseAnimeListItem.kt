@@ -14,8 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.presentation.components.MangaCover
+import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.presentation.components.ItemCover
 import eu.kanade.presentation.util.padding
 
 @Composable
@@ -42,7 +42,7 @@ fun BaseAnimeListItem(
 }
 
 private val defaultCover: @Composable RowScope.(Anime, () -> Unit) -> Unit = { anime, onClick ->
-    MangaCover.Square(
+    ItemCover.Square(
         modifier = Modifier
             .padding(vertical = MaterialTheme.padding.small)
             .fillMaxHeight(),

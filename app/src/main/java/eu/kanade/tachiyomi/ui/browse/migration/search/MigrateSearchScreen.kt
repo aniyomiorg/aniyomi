@@ -27,18 +27,18 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.category.interactor.GetCategories
-import eu.kanade.domain.category.interactor.SetMangaCategories
-import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
-import eu.kanade.domain.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.domain.chapter.interactor.UpdateChapter
-import eu.kanade.domain.chapter.model.toChapterUpdate
-import eu.kanade.domain.manga.interactor.UpdateManga
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.MangaUpdate
-import eu.kanade.domain.manga.model.hasCustomCover
-import eu.kanade.domain.track.interactor.GetTracks
-import eu.kanade.domain.track.interactor.InsertTrack
+import eu.kanade.domain.category.manga.interactor.GetMangaCategories
+import eu.kanade.domain.category.manga.interactor.SetMangaCategories
+import eu.kanade.domain.entries.chapter.interactor.GetChapterByMangaId
+import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithSource
+import eu.kanade.domain.entries.chapter.interactor.UpdateChapter
+import eu.kanade.domain.entries.chapter.model.toChapterUpdate
+import eu.kanade.domain.items.manga.interactor.UpdateManga
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.items.manga.model.MangaUpdate
+import eu.kanade.domain.items.manga.model.hasCustomCover
+import eu.kanade.domain.track.manga.interactor.GetMangaTracks
+import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
 import eu.kanade.presentation.browse.MigrateSearchScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.preference.Preference
@@ -198,10 +198,10 @@ class MigrateDialogScreenModel(
     private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
     private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get(),
     private val updateChapter: UpdateChapter = Injekt.get(),
-    private val getCategories: GetCategories = Injekt.get(),
+    private val getCategories: GetMangaCategories = Injekt.get(),
     private val setMangaCategories: SetMangaCategories = Injekt.get(),
-    private val getTracks: GetTracks = Injekt.get(),
-    private val insertTrack: InsertTrack = Injekt.get(),
+    private val getTracks: GetMangaTracks = Injekt.get(),
+    private val insertTrack: InsertMangaTrack = Injekt.get(),
     private val coverCache: CoverCache = Injekt.get(),
     private val preferenceStore: PreferenceStore = Injekt.get(),
 ) : ScreenModel {

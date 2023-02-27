@@ -4,11 +4,11 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.source.interactor.GetEnabledSources
-import eu.kanade.domain.source.interactor.ToggleSource
-import eu.kanade.domain.source.interactor.ToggleSourcePin
-import eu.kanade.domain.source.model.Pin
-import eu.kanade.domain.source.model.Source
+import eu.kanade.domain.source.manga.interactor.GetEnabledMangaSources
+import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
+import eu.kanade.domain.source.manga.interactor.ToggleMangaSourcePin
+import eu.kanade.domain.source.manga.model.Pin
+import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.browse.SourceUiModel
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -26,9 +26,9 @@ import java.util.TreeMap
 class SourcesScreenModel(
     private val preferences: BasePreferences = Injekt.get(),
     private val sourcePreferences: SourcePreferences = Injekt.get(),
-    private val getEnabledSources: GetEnabledSources = Injekt.get(),
-    private val toggleSource: ToggleSource = Injekt.get(),
-    private val toggleSourcePin: ToggleSourcePin = Injekt.get(),
+    private val getEnabledSources: GetEnabledMangaSources = Injekt.get(),
+    private val toggleSource: ToggleMangaSource = Injekt.get(),
+    private val toggleSourcePin: ToggleMangaSourcePin = Injekt.get(),
 ) : StateScreenModel<SourcesState>(SourcesState()) {
 
     private val _events = Channel<Event>(Int.MAX_VALUE)
@@ -83,7 +83,7 @@ class SourcesScreenModel(
 
     fun onOpenSource(source: Source) {
         if (!preferences.incognitoMode().get()) {
-            sourcePreferences.lastUsedSource().set(source.id)
+            sourcePreferences.lastUsedMangaSource().set(source.id)
         }
     }
 

@@ -2,7 +2,7 @@ package eu.kanade.data.source.anime
 
 import androidx.paging.PagingState
 import eu.kanade.data.entries.episode.NoEpisodesException
-import eu.kanade.domain.animesource.model.AnimeSourcePagingSourceType
+import eu.kanade.domain.source.anime.model.AnimeSourcePagingSourceType
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage

@@ -3,12 +3,12 @@ package eu.kanade.tachiyomi.data.download
 import android.content.Context
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.PublishRelay
-import eu.kanade.domain.chapter.model.Chapter
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.manga.model.COMIC_INFO_FILE
-import eu.kanade.domain.manga.model.ComicInfo
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.getComicInfo
+import eu.kanade.domain.entries.chapter.model.Chapter
+import eu.kanade.domain.items.manga.model.COMIC_INFO_FILE
+import eu.kanade.domain.items.manga.model.ComicInfo
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.items.manga.model.getComicInfo
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.download.model.Download

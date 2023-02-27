@@ -11,7 +11,7 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.view.isVisible
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.items.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.databinding.ReaderTransitionViewBinding

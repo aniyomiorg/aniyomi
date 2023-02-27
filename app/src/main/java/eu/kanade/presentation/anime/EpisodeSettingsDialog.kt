@@ -23,8 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.manga.model.TriStateFilter
+import eu.kanade.domain.items.TriStateFilter
+import eu.kanade.domain.items.anime.model.Anime
 import eu.kanade.presentation.components.RadioItem
 import eu.kanade.presentation.components.SortItem
 import eu.kanade.presentation.components.TabbedDialog

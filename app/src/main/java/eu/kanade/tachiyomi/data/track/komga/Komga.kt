@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.data.track.komga
 import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.items.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.source.Source
 import okhttp3.Dns
 import okhttp3.OkHttpClient
-import eu.kanade.domain.track.model.Track as DomainTrack
+import eu.kanade.domain.track.manga.model.MangaTrack as DomainTrack
 
 class Komga(private val context: Context, id: Long) : TrackService(id), EnhancedMangaTrackService, NoLoginTrackService, MangaTrackService {
 

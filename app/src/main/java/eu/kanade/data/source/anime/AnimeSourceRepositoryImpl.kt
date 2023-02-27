@@ -1,10 +1,10 @@
 package eu.kanade.data.source.anime
 
 import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
-import eu.kanade.domain.animesource.model.AnimeSource
-import eu.kanade.domain.animesource.model.AnimeSourcePagingSourceType
-import eu.kanade.domain.animesource.model.AnimeSourceWithCount
-import eu.kanade.domain.animesource.repository.AnimeSourceRepository
+import eu.kanade.domain.source.anime.model.AnimeSource
+import eu.kanade.domain.source.anime.model.AnimeSourcePagingSourceType
+import eu.kanade.domain.source.anime.model.AnimeSourceWithCount
+import eu.kanade.domain.source.anime.repository.AnimeSourceRepository
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource

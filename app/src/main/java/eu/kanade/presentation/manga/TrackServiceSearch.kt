@@ -58,8 +58,8 @@ import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.EmptyScreen
+import eu.kanade.presentation.components.ItemCover
 import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.MangaCover
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.components.ScrollbarLazyColumn
 import eu.kanade.presentation.util.plus
@@ -243,7 +243,7 @@ fun SearchResultItem(
         }
         Column {
             Row {
-                MangaCover.Book(
+                ItemCover.Book(
                     data = coverUrl,
                     modifier = Modifier.height(96.dp),
                 )

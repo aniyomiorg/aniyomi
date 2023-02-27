@@ -41,7 +41,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.animeextension.interactor.AnimeExtensionSourceItem
+import eu.kanade.domain.extension.anime.interactor.AnimeExtensionSourceItem
 import eu.kanade.presentation.animebrowse.components.AnimeExtensionIcon
 import eu.kanade.presentation.browse.NsfwWarningDialog
 import eu.kanade.presentation.components.AppBar

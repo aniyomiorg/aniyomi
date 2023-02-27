@@ -2,9 +2,9 @@ package eu.kanade.tachiyomi.ui.browse.animeextension
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.animeextension.interactor.GetAnimeExtensionLanguages
-import eu.kanade.domain.source.interactor.ToggleLanguage
+import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionLanguages
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.source.service.ToggleLanguage
 import eu.kanade.tachiyomi.ui.browse.extension.ExtensionFilterEvent
 import eu.kanade.tachiyomi.ui.browse.extension.ExtensionFilterState
 import eu.kanade.tachiyomi.util.system.logcat

@@ -18,7 +18,7 @@ class GlobalSearchScreenModel(
 ) : SearchScreenModel<GlobalSearchState>(GlobalSearchState(searchQuery = initialQuery)) {
 
     val incognitoMode = preferences.incognitoMode()
-    val lastUsedSourceId = sourcePreferences.lastUsedSource()
+    val lastUsedSourceId = sourcePreferences.lastUsedMangaSource()
 
     init {
         extensionFilter = initialExtensionFilter
@@ -29,8 +29,8 @@ class GlobalSearchScreenModel(
 
     override fun getEnabledSources(): List<CatalogueSource> {
         val enabledLanguages = sourcePreferences.enabledLanguages().get()
-        val disabledSources = sourcePreferences.disabledSources().get()
-        val pinnedSources = sourcePreferences.pinnedSources().get()
+        val disabledSources = sourcePreferences.disabledMangaSources().get()
+        val pinnedSources = sourcePreferences.pinnedMangaSources().get()
 
         return sourceManager.getCatalogueSources()
             .filter { it.lang in enabledLanguages }

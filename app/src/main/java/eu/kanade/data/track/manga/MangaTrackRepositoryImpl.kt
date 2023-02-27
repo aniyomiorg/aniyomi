@@ -1,31 +1,31 @@
 package eu.kanade.data.track.manga
 
 import eu.kanade.data.handlers.manga.MangaDatabaseHandler
-import eu.kanade.domain.track.model.Track
-import eu.kanade.domain.track.repository.TrackRepository
+import eu.kanade.domain.track.manga.model.MangaTrack
+import eu.kanade.domain.track.manga.repository.MangaTrackRepository
 import kotlinx.coroutines.flow.Flow
 
 class MangaTrackRepositoryImpl(
     private val handler: MangaDatabaseHandler,
-) : TrackRepository {
+) : MangaTrackRepository {
 
-    override suspend fun getTrackByMangaId(id: Long): Track? {
+    override suspend fun getTrackByMangaId(id: Long): MangaTrack? {
         return handler.awaitOneOrNull { manga_syncQueries.getTrackById(id, mangaTrackMapper) }
     }
 
-    override suspend fun getTracksByMangaId(mangaId: Long): List<Track> {
+    override suspend fun getTracksByMangaId(mangaId: Long): List<MangaTrack> {
         return handler.awaitList {
             manga_syncQueries.getTracksByMangaId(mangaId, mangaTrackMapper)
         }
     }
 
-    override fun getMangaTracksAsFlow(): Flow<List<Track>> {
+    override fun getMangaTracksAsFlow(): Flow<List<MangaTrack>> {
         return handler.subscribeToList {
             manga_syncQueries.getTracks(mangaTrackMapper)
         }
     }
 
-    override fun getTracksByMangaIdAsFlow(mangaId: Long): Flow<List<Track>> {
+    override fun getTracksByMangaIdAsFlow(mangaId: Long): Flow<List<MangaTrack>> {
         return handler.subscribeToList {
             manga_syncQueries.getTracksByMangaId(mangaId, mangaTrackMapper)
         }
@@ -40,15 +40,15 @@ class MangaTrackRepositoryImpl(
         }
     }
 
-    override suspend fun insertManga(track: Track) {
+    override suspend fun insertManga(track: MangaTrack) {
         insertValues(track)
     }
 
-    override suspend fun insertAllManga(tracks: List<Track>) {
+    override suspend fun insertAllManga(tracks: List<MangaTrack>) {
         insertValues(*tracks.toTypedArray())
     }
 
-    private suspend fun insertValues(vararg tracks: Track) {
+    private suspend fun insertValues(vararg tracks: MangaTrack) {
         handler.await(inTransaction = true) {
             tracks.forEach { mangaTrack ->
                 manga_syncQueries.insert(

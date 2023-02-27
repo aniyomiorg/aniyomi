@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.animeextension.model
 
 import android.graphics.drawable.Drawable
-import eu.kanade.domain.animesource.model.AnimeSourceData
+import eu.kanade.domain.source.anime.model.AnimeSourceData
 import eu.kanade.tachiyomi.animesource.AnimeSource
 
 sealed class AnimeExtension {

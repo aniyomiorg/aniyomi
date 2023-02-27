@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.ui.browse.migration
 
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.hasCustomCover
-import eu.kanade.domain.track.interactor.GetTracks
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.items.manga.model.hasCustomCover
+import eu.kanade.domain.track.manga.interactor.GetMangaTracks
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import kotlinx.coroutines.runBlocking
@@ -18,7 +18,7 @@ object MigrationFlags {
     private const val CUSTOM_COVER = 0b1000
 
     private val coverCache: CoverCache by injectLazy()
-    private val getTracks: GetTracks = Injekt.get()
+    private val getTracks: GetMangaTracks = Injekt.get()
 
     val flags get() = arrayOf(CHAPTERS, CATEGORIES, TRACK, CUSTOM_COVER)
 

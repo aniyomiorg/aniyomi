@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.extension
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import eu.kanade.domain.source.model.SourceData
+import eu.kanade.domain.source.manga.model.MangaSourceData
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.api.ExtensionGithubApi
@@ -73,7 +73,7 @@ class ExtensionManager(
     private val _availableExtensionsFlow = MutableStateFlow(emptyList<Extension.Available>())
     val availableExtensionsFlow = _availableExtensionsFlow.asStateFlow()
 
-    private var availableExtensionsSourcesData: Map<Long, SourceData> = emptyMap()
+    private var availableExtensionsSourcesData: Map<Long, MangaSourceData> = emptyMap()
 
     private fun setupAvailableExtensionsSourcesDataMap(extensions: List<Extension.Available>) {
         if (extensions.isEmpty()) return
@@ -165,7 +165,7 @@ class ExtensionManager(
      */
     private fun updatedInstalledExtensionsStatuses(availableExtensions: List<Extension.Available>) {
         if (availableExtensions.isEmpty()) {
-            preferences.extensionUpdatesCount().set(0)
+            preferences.mangaExtensionUpdatesCount().set(0)
             return
         }
 
@@ -361,6 +361,6 @@ class ExtensionManager(
     }
 
     private fun updatePendingUpdatesCount() {
-        preferences.extensionUpdatesCount().set(_installedExtensionsFlow.value.count { it.hasUpdate })
+        preferences.mangaExtensionUpdatesCount().set(_installedExtensionsFlow.value.count { it.hasUpdate })
     }
 }

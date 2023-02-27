@@ -1,11 +1,11 @@
 package eu.kanade.data.updates.manga
 
-import eu.kanade.domain.manga.model.MangaCover
-import eu.kanade.domain.updates.model.UpdatesWithRelations
+import eu.kanade.domain.items.manga.model.MangaCover
+import eu.kanade.domain.updates.manga.model.MangaUpdatesWithRelations
 
-val mangaUpdateWithRelationMapper: (Long, String, Long, String, String?, Boolean, Boolean, Long, Boolean, String?, Long, Long, Long) -> UpdatesWithRelations = {
+val mangaUpdateWithRelationMapper: (Long, String, Long, String, String?, Boolean, Boolean, Long, Boolean, String?, Long, Long, Long) -> MangaUpdatesWithRelations = {
         mangaId, mangaTitle, chapterId, chapterName, scanlator, read, bookmark, sourceId, favorite, thumbnailUrl, coverLastModified, _, dateFetch ->
-    UpdatesWithRelations(
+    MangaUpdatesWithRelations(
         mangaId = mangaId,
         mangaTitle = mangaTitle,
         chapterId = chapterId,

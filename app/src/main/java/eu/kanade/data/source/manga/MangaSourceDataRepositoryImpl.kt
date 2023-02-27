@@ -1,19 +1,19 @@
 package eu.kanade.data.source.manga
 
 import eu.kanade.data.handlers.manga.MangaDatabaseHandler
-import eu.kanade.domain.source.model.SourceData
-import eu.kanade.domain.source.repository.SourceDataRepository
+import eu.kanade.domain.source.manga.model.MangaSourceData
+import eu.kanade.domain.source.manga.repository.MangaSourceDataRepository
 import kotlinx.coroutines.flow.Flow
 
 class MangaSourceDataRepositoryImpl(
     private val handler: MangaDatabaseHandler,
-) : SourceDataRepository {
+) : MangaSourceDataRepository {
 
-    override fun subscribeAllManga(): Flow<List<SourceData>> {
+    override fun subscribeAllManga(): Flow<List<MangaSourceData>> {
         return handler.subscribeToList { sourcesQueries.findAll(mangaSourceDataMapper) }
     }
 
-    override suspend fun getMangaSourceData(id: Long): SourceData? {
+    override suspend fun getMangaSourceData(id: Long): MangaSourceData? {
         return handler.awaitOneOrNull { sourcesQueries.findOne(id, mangaSourceDataMapper) }
     }
 

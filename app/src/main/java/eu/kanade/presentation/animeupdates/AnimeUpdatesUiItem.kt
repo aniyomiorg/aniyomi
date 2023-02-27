@@ -33,11 +33,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.animeupdates.model.AnimeUpdatesWithRelations
+import eu.kanade.domain.updates.anime.model.AnimeUpdatesWithRelations
 import eu.kanade.presentation.components.EpisodeDownloadAction
 import eu.kanade.presentation.components.EpisodeDownloadIndicator
+import eu.kanade.presentation.components.ItemCover
 import eu.kanade.presentation.components.ListGroupHeader
-import eu.kanade.presentation.components.MangaCover
 import eu.kanade.presentation.util.ReadItemAlpha
 import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.selectedBackground
@@ -162,7 +162,7 @@ fun AnimeUpdatesUiItem(
             .padding(horizontal = MaterialTheme.padding.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        MangaCover.Square(
+        ItemCover.Square(
             modifier = Modifier
                 .padding(vertical = 6.dp)
                 .fillMaxHeight(),

@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.ui.browse.migration.manga
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.manga.interactor.GetFavorites
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.items.manga.interactor.GetMangaFavorites
+import eu.kanade.domain.items.manga.model.Manga
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.util.system.logcat
@@ -23,7 +23,7 @@ import uy.kohesive.injekt.api.get
 class MigrationMangaScreenModel(
     private val sourceId: Long,
     private val sourceManager: SourceManager = Injekt.get(),
-    private val getFavorites: GetFavorites = Injekt.get(),
+    private val getFavorites: GetMangaFavorites = Injekt.get(),
 ) : StateScreenModel<MigrateMangaState>(MigrateMangaState()) {
 
     private val _events: Channel<MigrationMangaEvent> = Channel()

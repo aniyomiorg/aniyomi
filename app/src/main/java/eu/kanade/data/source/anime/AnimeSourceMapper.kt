@@ -1,7 +1,7 @@
 package eu.kanade.data.source.anime
 
-import eu.kanade.domain.animesource.model.AnimeSource
-import eu.kanade.domain.animesource.model.AnimeSourceData
+import eu.kanade.domain.source.anime.model.AnimeSource
+import eu.kanade.domain.source.anime.model.AnimeSourceData
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 

@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.track
 
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.track.model.Track
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.track.manga.model.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.source.Source
 
@@ -30,10 +30,10 @@ interface EnhancedMangaTrackService {
     /**
      * Checks whether the provided source/track/manga triplet is from this TrackService
      */
-    fun isTrackFrom(track: Track, manga: Manga, source: Source?): Boolean
+    fun isTrackFrom(track: MangaTrack, manga: Manga, source: Source?): Boolean
 
     /**
      * Migrates the given track for the manga to the newSource, if possible
      */
-    fun migrateTrack(track: Track, manga: Manga, newSource: Source): Track?
+    fun migrateTrack(track: MangaTrack, manga: Manga, newSource: Source): MangaTrack?
 }

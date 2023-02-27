@@ -4,11 +4,11 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.util.insertSeparators
-import eu.kanade.domain.animehistory.interactor.GetAnimeHistory
-import eu.kanade.domain.animehistory.interactor.GetNextEpisodes
-import eu.kanade.domain.animehistory.interactor.RemoveAnimeHistory
-import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
-import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.entries.episode.model.Episode
+import eu.kanade.domain.history.anime.interactor.GetAnimeHistory
+import eu.kanade.domain.history.anime.interactor.GetNextEpisodes
+import eu.kanade.domain.history.anime.interactor.RemoveAnimeHistory
+import eu.kanade.domain.history.anime.model.AnimeHistoryWithRelations
 import eu.kanade.presentation.animehistory.AnimeHistoryUiModel
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.toDateKey

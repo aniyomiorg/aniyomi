@@ -1,8 +1,8 @@
 package eu.kanade.data.source.anime
 
 import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
-import eu.kanade.domain.animesource.model.AnimeSourceData
-import eu.kanade.domain.animesource.repository.AnimeSourceDataRepository
+import eu.kanade.domain.source.anime.model.AnimeSourceData
+import eu.kanade.domain.source.anime.repository.AnimeSourceDataRepository
 import kotlinx.coroutines.flow.Flow
 
 class AnimeSourceDataRepositoryImpl(

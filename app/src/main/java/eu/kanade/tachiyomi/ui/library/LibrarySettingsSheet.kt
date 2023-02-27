@@ -5,8 +5,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.category.interactor.SetDisplayModeForCategory
-import eu.kanade.domain.category.interactor.SetSortModeForCategory
+import eu.kanade.domain.category.manga.interactor.SetDisplayModeForMangaCategory
+import eu.kanade.domain.category.manga.interactor.SetSortModeForMangaCategory
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.domain.library.model.LibrarySort
@@ -31,8 +31,8 @@ import uy.kohesive.injekt.injectLazy
 class LibrarySettingsSheet(
     activity: Activity,
     private val trackManager: TrackManager = Injekt.get(),
-    private val setDisplayModeForCategory: SetDisplayModeForCategory = Injekt.get(),
-    private val setSortModeForCategory: SetSortModeForCategory = Injekt.get(),
+    private val setDisplayModeForCategory: SetDisplayModeForMangaCategory = Injekt.get(),
+    private val setSortModeForCategory: SetSortModeForMangaCategory = Injekt.get(),
 ) : TabbedBottomSheetDialog(activity) {
 
     val filters: Filter
@@ -126,15 +126,15 @@ class LibrarySettingsSheet(
                     downloaded.state = State.INCLUDE.value
                     downloaded.enabled = false
                 } else {
-                    downloaded.state = libraryPreferences.filterDownloaded().get()
+                    downloaded.state = libraryPreferences.filterDownloadedManga().get()
                 }
                 unread.state = libraryPreferences.filterUnread().get()
-                started.state = libraryPreferences.filterStarted().get()
-                bookmarked.state = libraryPreferences.filterBookmarked().get()
-                completed.state = libraryPreferences.filterCompleted().get()
+                started.state = libraryPreferences.filterStartedManga().get()
+                bookmarked.state = libraryPreferences.filterBookmarkedManga().get()
+                completed.state = libraryPreferences.filterCompletedManga().get()
 
                 trackFilters.forEach { trackFilter ->
-                    trackFilter.value.state = libraryPreferences.filterTracking(trackFilter.key.toInt()).get()
+                    trackFilter.value.state = libraryPreferences.filterTrackedManga(trackFilter.key.toInt()).get()
                 }
             }
 
@@ -148,15 +148,15 @@ class LibrarySettingsSheet(
                 }
                 item.state = newState
                 when (item) {
-                    downloaded -> libraryPreferences.filterDownloaded().set(newState)
+                    downloaded -> libraryPreferences.filterDownloadedManga().set(newState)
                     unread -> libraryPreferences.filterUnread().set(newState)
-                    started -> libraryPreferences.filterStarted().set(newState)
-                    bookmarked -> libraryPreferences.filterBookmarked().set(newState)
-                    completed -> libraryPreferences.filterCompleted().set(newState)
+                    started -> libraryPreferences.filterStartedManga().set(newState)
+                    bookmarked -> libraryPreferences.filterBookmarkedManga().set(newState)
+                    completed -> libraryPreferences.filterCompletedManga().set(newState)
                     else -> {
                         trackFilters.forEach { trackFilter ->
                             if (trackFilter.value == item) {
-                                libraryPreferences.filterTracking(trackFilter.key.toInt()).set(newState)
+                                libraryPreferences.filterTrackedManga(trackFilter.key.toInt()).set(newState)
                             }
                         }
                     }
@@ -362,7 +362,7 @@ class LibrarySettingsSheet(
 
             override fun initModels() {
                 downloadBadge.checked = libraryPreferences.downloadBadge().get()
-                unreadBadge.checked = libraryPreferences.unreadBadge().get()
+                unreadBadge.checked = libraryPreferences.unViewedBadge().get()
                 localBadge.checked = libraryPreferences.localBadge().get()
                 languageBadge.checked = libraryPreferences.languageBadge().get()
             }
@@ -372,7 +372,7 @@ class LibrarySettingsSheet(
                 item.checked = !item.checked
                 when (item) {
                     downloadBadge -> libraryPreferences.downloadBadge().set((item.checked))
-                    unreadBadge -> libraryPreferences.unreadBadge().set((item.checked))
+                    unreadBadge -> libraryPreferences.unViewedBadge().set((item.checked))
                     localBadge -> libraryPreferences.localBadge().set((item.checked))
                     languageBadge -> libraryPreferences.languageBadge().set((item.checked))
                     else -> {}
@@ -414,14 +414,14 @@ class LibrarySettingsSheet(
             override val footer = null
 
             override fun initModels() {
-                showContinueReadingButton.checked = libraryPreferences.showContinueReadingButton().get()
+                showContinueReadingButton.checked = libraryPreferences.showContinueViewingButton().get()
             }
 
             override fun onItemClicked(item: Item) {
                 item as Item.CheckboxGroup
                 item.checked = !item.checked
                 when (item) {
-                    showContinueReadingButton -> libraryPreferences.showContinueReadingButton().set(item.checked)
+                    showContinueReadingButton -> libraryPreferences.showContinueViewingButton().set(item.checked)
                     else -> {}
                 }
                 adapter.notifyItemChanged(item)

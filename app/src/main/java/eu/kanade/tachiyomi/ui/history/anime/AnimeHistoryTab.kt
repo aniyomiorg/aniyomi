@@ -13,7 +13,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.entries.episode.model.Episode
 import eu.kanade.presentation.animehistory.AnimeHistoryScreen
 import eu.kanade.presentation.animehistory.components.AnimeHistoryDeleteDialog
 import eu.kanade.presentation.components.AppBar

@@ -23,8 +23,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.animesource.model.AnimeSource
-import eu.kanade.domain.source.interactor.SetMigrateSorting
+import eu.kanade.domain.source.anime.model.AnimeSource
+import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.presentation.animebrowse.components.AnimeSourceIcon
 import eu.kanade.presentation.animebrowse.components.BaseAnimeSourceItem
 import eu.kanade.presentation.components.Badge

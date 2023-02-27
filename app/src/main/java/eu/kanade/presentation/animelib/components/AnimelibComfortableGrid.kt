@@ -6,8 +6,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastAny
-import eu.kanade.domain.anime.model.AnimeCover
-import eu.kanade.domain.animelib.model.AnimelibAnime
+import eu.kanade.domain.items.anime.model.AnimeCover
+import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.presentation.components.MangaComfortableGridItem
 import eu.kanade.presentation.library.components.DownloadsBadge
 import eu.kanade.presentation.library.components.LanguageBadge
@@ -21,10 +21,10 @@ fun AnimelibComfortableGrid(
     items: List<AnimelibItem>,
     columns: Int,
     contentPadding: PaddingValues,
-    selection: List<AnimelibAnime>,
-    onClick: (AnimelibAnime) -> Unit,
-    onLongClick: (AnimelibAnime) -> Unit,
-    onClickContinueWatching: ((AnimelibAnime) -> Unit)?,
+    selection: List<LibraryAnime>,
+    onClick: (LibraryAnime) -> Unit,
+    onLongClick: (LibraryAnime) -> Unit,
+    onClickContinueWatching: ((LibraryAnime) -> Unit)?,
     searchQuery: String?,
     onGlobalSearchClicked: () -> Unit,
 ) {

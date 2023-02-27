@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import eu.kanade.domain.animesource.model.AnimeSource
+import eu.kanade.domain.source.anime.model.AnimeSource
 import eu.kanade.presentation.animebrowse.components.BaseAnimeSourceItem
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.EmptyScreen

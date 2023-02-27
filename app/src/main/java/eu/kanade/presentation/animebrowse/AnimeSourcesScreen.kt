@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.animesource.model.AnimeSource
-import eu.kanade.domain.animesource.model.Pin
+import eu.kanade.domain.source.anime.model.AnimeSource
+import eu.kanade.domain.source.anime.model.Pin
 import eu.kanade.presentation.animebrowse.components.BaseAnimeSourceItem
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LoadingScreen

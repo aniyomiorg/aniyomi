@@ -13,8 +13,8 @@ import androidx.core.app.NotificationManagerCompat
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
-import eu.kanade.domain.chapter.model.Chapter
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.entries.chapter.model.Chapter
+import eu.kanade.domain.items.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.data.download.Downloader
@@ -230,7 +230,7 @@ class LibraryUpdateNotifier(private val context: Context) {
             addAction(
                 R.drawable.ic_glasses_24dp,
                 context.getString(R.string.action_mark_as_read),
-                NotificationReceiver.markAsReadPendingBroadcast(
+                NotificationReceiver.markAsViewedPendingBroadcast(
                     context,
                     manga,
                     chapters,

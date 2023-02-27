@@ -3,9 +3,9 @@ package eu.kanade.tachiyomi.source
 import android.content.Context
 import com.github.junrar.Archive
 import com.hippo.unifile.UniFile
-import eu.kanade.domain.manga.model.COMIC_INFO_FILE
-import eu.kanade.domain.manga.model.ComicInfo
-import eu.kanade.domain.manga.model.copyFromComicInfo
+import eu.kanade.domain.items.manga.model.COMIC_INFO_FILE
+import eu.kanade.domain.items.manga.model.ComicInfo
+import eu.kanade.domain.items.manga.model.copyFromComicInfo
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.model.Filter
 import eu.kanade.tachiyomi.source.model.FilterList

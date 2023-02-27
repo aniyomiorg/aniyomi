@@ -5,7 +5,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
+import eu.kanade.domain.history.anime.model.AnimeHistoryWithRelations
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.animehistory.AnimeHistoryUiModel
 import eu.kanade.presentation.components.FastScrollLazyColumn

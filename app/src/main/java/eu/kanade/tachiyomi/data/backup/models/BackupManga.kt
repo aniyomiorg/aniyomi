@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.items.manga.model.Manga
 import eu.kanade.tachiyomi.data.database.models.ChapterImpl
 import eu.kanade.tachiyomi.data.database.models.MangaImpl
 import eu.kanade.tachiyomi.data.database.models.TrackImpl

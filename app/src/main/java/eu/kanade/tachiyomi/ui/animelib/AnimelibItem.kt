@@ -1,13 +1,13 @@
 package eu.kanade.tachiyomi.ui.animelib
 
-import eu.kanade.domain.animelib.model.AnimelibAnime
+import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.getNameForAnimeInfo
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class AnimelibItem(
-    val animelibAnime: AnimelibAnime,
+    val animelibAnime: LibraryAnime,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
 ) {
 

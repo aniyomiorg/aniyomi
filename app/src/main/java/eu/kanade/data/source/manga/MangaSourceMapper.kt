@@ -1,7 +1,7 @@
 package eu.kanade.data.source.manga
 
-import eu.kanade.domain.source.model.Source
-import eu.kanade.domain.source.model.SourceData
+import eu.kanade.domain.source.manga.model.MangaSourceData
+import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.SourceManager
 
@@ -19,6 +19,6 @@ val catalogueMangaSourceMapper: (CatalogueSource) -> Source = { source ->
     mangaSourceMapper(source).copy(supportsLatest = source.supportsLatest)
 }
 
-val mangaSourceDataMapper: (Long, String, String) -> SourceData = { id, lang, name ->
-    SourceData(id, lang, name)
+val mangaSourceDataMapper: (Long, String, String) -> MangaSourceData = { id, lang, name ->
+    MangaSourceData(id, lang, name)
 }

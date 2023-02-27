@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.data.download.model
 
 import eu.kanade.core.util.asFlow
-import eu.kanade.domain.chapter.model.Chapter
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.entries.chapter.model.Chapter
+import eu.kanade.domain.items.manga.model.Manga
 import eu.kanade.tachiyomi.data.download.DownloadStore
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.util.lang.launchNonCancellable

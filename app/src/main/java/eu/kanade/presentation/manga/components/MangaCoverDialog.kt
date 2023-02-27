@@ -42,7 +42,7 @@ import androidx.core.view.updatePadding
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.size.Size
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.items.manga.model.Manga
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.manga.EditCoverAction

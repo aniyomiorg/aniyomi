@@ -2,15 +2,15 @@ package eu.kanade.data.category.anime
 
 import eu.kanade.data.category.categoryMapper
 import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
+import eu.kanade.domain.category.anime.repository.AnimeCategoryRepository
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.category.model.CategoryUpdate
-import eu.kanade.domain.category.repository.CategoryRepositoryAnime
 import eu.kanade.tachiyomi.mi.AnimeDatabase
 import kotlinx.coroutines.flow.Flow
 
 class AnimeCategoryRepositoryImpl(
     private val handler: AnimeDatabaseHandler,
-) : CategoryRepositoryAnime {
+) : AnimeCategoryRepository {
 
     override suspend fun getAnimeCategory(id: Long): Category? {
         return handler.awaitOneOrNull { categoriesQueries.getCategory(id, categoryMapper) }

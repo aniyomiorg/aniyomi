@@ -22,9 +22,9 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.chapter.model.Chapter
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.hasCustomCover
+import eu.kanade.domain.entries.chapter.model.Chapter
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.items.manga.model.hasCustomCover
 import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.DuplicateMangaDialog
 import eu.kanade.presentation.components.LoadingScreen

@@ -16,23 +16,23 @@ import eu.kanade.core.util.fastFilterNot
 import eu.kanade.core.util.fastMapNotNull
 import eu.kanade.core.util.fastPartition
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.category.interactor.GetCategories
-import eu.kanade.domain.category.interactor.SetMangaCategories
+import eu.kanade.domain.category.manga.interactor.GetMangaCategories
+import eu.kanade.domain.category.manga.interactor.SetMangaCategories
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
-import eu.kanade.domain.chapter.interactor.SetReadStatus
-import eu.kanade.domain.chapter.model.Chapter
-import eu.kanade.domain.history.interactor.GetNextChapters
-import eu.kanade.domain.library.model.LibraryManga
+import eu.kanade.domain.entries.chapter.interactor.GetChapterByMangaId
+import eu.kanade.domain.entries.chapter.interactor.SetReadStatus
+import eu.kanade.domain.entries.chapter.model.Chapter
+import eu.kanade.domain.history.manga.interactor.GetNextChapters
+import eu.kanade.domain.items.manga.interactor.GetLibraryManga
+import eu.kanade.domain.items.manga.interactor.UpdateManga
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.items.manga.model.MangaUpdate
+import eu.kanade.domain.items.manga.model.isLocal
+import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.domain.library.model.LibrarySort
 import eu.kanade.domain.library.model.sort
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.manga.interactor.GetLibraryManga
-import eu.kanade.domain.manga.interactor.UpdateManga
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.MangaUpdate
-import eu.kanade.domain.manga.model.isLocal
-import eu.kanade.domain.track.interactor.GetTracksPerManga
+import eu.kanade.domain.track.manga.interactor.GetTracksPerManga
 import eu.kanade.presentation.library.components.LibraryToolbarTitle
 import eu.kanade.presentation.manga.DownloadAction
 import eu.kanade.tachiyomi.data.cache.CoverCache
@@ -72,7 +72,7 @@ typealias LibraryMap = Map<Category, List<LibraryItem>>
 
 class LibraryScreenModel(
     private val getLibraryManga: GetLibraryManga = Injekt.get(),
-    private val getCategories: GetCategories = Injekt.get(),
+    private val getCategories: GetMangaCategories = Injekt.get(),
     private val getTracksPerManga: GetTracksPerManga = Injekt.get(),
     private val getNextChapters: GetNextChapters = Injekt.get(),
     private val getChaptersByMangaId: GetChapterByMangaId = Injekt.get(),
@@ -88,7 +88,7 @@ class LibraryScreenModel(
     private val trackManager: TrackManager = Injekt.get(),
 ) : StateScreenModel<LibraryScreenModel.State>(State()) {
 
-    var activeCategoryIndex: Int by libraryPreferences.lastUsedCategory().asState(coroutineScope)
+    var activeCategoryIndex: Int by libraryPreferences.lastUsedMangaCategory().asState(coroutineScope)
 
     init {
         coroutineScope.launchIO {
@@ -125,7 +125,7 @@ class LibraryScreenModel(
         combine(
             libraryPreferences.categoryTabs().changes(),
             libraryPreferences.categoryNumberOfItems().changes(),
-            libraryPreferences.showContinueReadingButton().changes(),
+            libraryPreferences.showContinueViewingButton().changes(),
         ) { a, b, c -> arrayOf(a, b, c) }
             .onEach { (showCategoryTabs, showMangaCount, showMangaContinueButton) ->
                 mutableState.update { state ->
@@ -333,16 +333,16 @@ class LibraryScreenModel(
     private fun getLibraryItemPreferencesFlow(): Flow<ItemPreferences> {
         return combine(
             libraryPreferences.downloadBadge().changes(),
-            libraryPreferences.unreadBadge().changes(),
+            libraryPreferences.unViewedBadge().changes(),
             libraryPreferences.localBadge().changes(),
             libraryPreferences.languageBadge().changes(),
 
             preferences.downloadedOnly().changes(),
-            libraryPreferences.filterDownloaded().changes(),
+            libraryPreferences.filterDownloadedManga().changes(),
             libraryPreferences.filterUnread().changes(),
-            libraryPreferences.filterStarted().changes(),
-            libraryPreferences.filterBookmarked().changes(),
-            libraryPreferences.filterCompleted().changes(),
+            libraryPreferences.filterStartedManga().changes(),
+            libraryPreferences.filterBookmarkedManga().changes(),
+            libraryPreferences.filterCompletedManga().changes(),
             transform = {
                 ItemPreferences(
                     downloadBadge = it[0] as Boolean,
@@ -410,7 +410,7 @@ class LibraryScreenModel(
         val loggedServices = trackManager.services.filter { it.isLogged && it is MangaTrackService }
         return if (loggedServices.isNotEmpty()) {
             val prefFlows = loggedServices
-                .map { libraryPreferences.filterTracking(it.id.toInt()).changes() }
+                .map { libraryPreferences.filterTrackedManga(it.id.toInt()).changes() }
                 .toTypedArray()
             combine(*prefFlows) {
                 loggedServices

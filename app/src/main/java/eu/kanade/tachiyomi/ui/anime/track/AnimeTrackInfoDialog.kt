@@ -37,14 +37,12 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.anime.interactor.GetAnime
-import eu.kanade.domain.anime.interactor.GetAnimeWithEpisodes
-import eu.kanade.domain.animetrack.interactor.DeleteAnimeTrack
-import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
-import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
-import eu.kanade.domain.animetrack.model.toDbTrack
-import eu.kanade.domain.animetrack.model.toDomainTrack
-import eu.kanade.domain.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.entries.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.track.anime.interactor.DeleteAnimeTrack
+import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
+import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
+import eu.kanade.domain.track.anime.model.toDbTrack
+import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.anime.AnimeTrackInfoDialogHome
 import eu.kanade.presentation.anime.AnimeTrackServiceSearch
@@ -179,7 +177,7 @@ data class AnimeTrackInfoDialogHomeScreen(
                 try {
                     val trackItems = getTracks.await(animeId).mapToTrackItem()
                     val insertTrack = Injekt.get<InsertAnimeTrack>()
-                    val getAnimeWithEpisodes = Injekt.get<GetAnimeWithEpisodes>()
+                    val getAnimeWithEpisodes = Injekt.get<eu.kanade.domain.items.anime.interactor.GetAnimeWithEpisodes>()
                     val syncTwoWayService = Injekt.get<SyncEpisodesWithTrackServiceTwoWay>()
                     trackItems.forEach {
                         val track = it.track ?: return@forEach
@@ -209,7 +207,7 @@ data class AnimeTrackInfoDialogHomeScreen(
         fun registerEnhancedTracking(item: TrackItem) {
             item.service as EnhancedAnimeTrackService
             coroutineScope.launchNonCancellable {
-                val anime = Injekt.get<GetAnime>().await(animeId) ?: return@launchNonCancellable
+                val anime = Injekt.get<eu.kanade.domain.items.anime.interactor.GetAnime>().await(animeId) ?: return@launchNonCancellable
                 try {
                     val matchResult = item.service.match(anime) ?: throw Exception()
                     item.service.animeService.registerTracking(matchResult, animeId)
@@ -223,7 +221,7 @@ data class AnimeTrackInfoDialogHomeScreen(
             coroutineScope.launchNonCancellable { deleteTrack.await(animeId, serviceId) }
         }
 
-        private fun List<eu.kanade.domain.animetrack.model.AnimeTrack>.mapToTrackItem(): List<TrackItem> {
+        private fun List<eu.kanade.domain.track.anime.model.AnimeTrack>.mapToTrackItem(): List<TrackItem> {
             val dbTracks = map { it.toDbTrack() }
             val loggedServices = Injekt.get<TrackManager>().services.filter { it.isLogged }
             val source = Injekt.get<AnimeSourceManager>().getOrStub(sourceId)

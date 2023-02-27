@@ -43,7 +43,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.extension.interactor.ExtensionSourceItem
+import eu.kanade.domain.extension.manga.interactor.MangaExtensionSourceItem
 import eu.kanade.presentation.browse.components.ExtensionIcon
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
@@ -145,7 +145,7 @@ fun ExtensionDetailsScreen(
 private fun ExtensionDetails(
     contentPadding: PaddingValues,
     extension: Extension.Installed,
-    sources: List<ExtensionSourceItem>,
+    sources: List<MangaExtensionSourceItem>,
     onClickSourcePreferences: (sourceId: Long) -> Unit,
     onClickUninstall: () -> Unit,
     onClickSource: (sourceId: Long) -> Unit,
@@ -367,7 +367,7 @@ private fun InfoDivider() {
 @Composable
 private fun SourceSwitchPreference(
     modifier: Modifier = Modifier,
-    source: ExtensionSourceItem,
+    source: MangaExtensionSourceItem,
     onClickSourcePreferences: (sourceId: Long) -> Unit,
     onClickSource: (sourceId: Long) -> Unit,
 ) {

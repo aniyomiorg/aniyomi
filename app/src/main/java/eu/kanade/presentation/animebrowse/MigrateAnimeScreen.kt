@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.items.anime.model.Anime
 import eu.kanade.presentation.anime.components.BaseAnimeListItem
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.EmptyScreen

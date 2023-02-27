@@ -1,10 +1,10 @@
 package eu.kanade.tachiyomi.data.download
 
 import android.content.Context
-import eu.kanade.domain.category.interactor.GetCategories
-import eu.kanade.domain.chapter.model.Chapter
+import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.entries.chapter.model.Chapter
+import eu.kanade.domain.items.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.download.model.DownloadQueue
@@ -28,7 +28,7 @@ class DownloadManager(
     private val context: Context,
     private val provider: DownloadProvider = Injekt.get(),
     private val cache: DownloadCache = Injekt.get(),
-    private val getCategories: GetCategories = Injekt.get(),
+    private val getCategories: GetMangaCategories = Injekt.get(),
     private val sourceManager: SourceManager = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
 ) {

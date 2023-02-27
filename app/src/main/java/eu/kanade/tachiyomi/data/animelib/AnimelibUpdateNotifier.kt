@@ -13,8 +13,8 @@ import androidx.core.app.NotificationManagerCompat
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.entries.episode.model.Episode
+import eu.kanade.domain.items.anime.model.Anime
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloader
@@ -230,7 +230,7 @@ class AnimelibUpdateNotifier(private val context: Context) {
             addAction(
                 R.drawable.ic_glasses_24dp,
                 context.getString(R.string.action_mark_as_seen),
-                NotificationReceiver.markAsReadPendingBroadcast(
+                NotificationReceiver.markAsViewedPendingBroadcast(
                     context,
                     anime,
                     episodes,

@@ -20,9 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
-import eu.kanade.domain.history.model.HistoryWithRelations
-import eu.kanade.presentation.components.MangaCover
+import eu.kanade.domain.history.anime.model.AnimeHistoryWithRelations
+import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
+import eu.kanade.presentation.components.ItemCover
 import eu.kanade.presentation.util.padding
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.lang.toTimestampString
@@ -34,7 +34,7 @@ private val HISTORY_ITEM_HEIGHT = 96.dp
 @Composable
 fun HistoryItem(
     modifier: Modifier = Modifier,
-    history: HistoryWithRelations,
+    history: MangaHistoryWithRelations,
     onClickCover: () -> Unit,
     onClickResume: () -> Unit,
     onClickDelete: () -> Unit,
@@ -46,7 +46,7 @@ fun HistoryItem(
             .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        MangaCover.Book(
+        ItemCover.Book(
             modifier = Modifier.fillMaxHeight(),
             data = history.coverData,
             onClick = onClickCover,
@@ -105,7 +105,7 @@ fun AnimeHistoryItem(
             .padding(horizontal = MaterialTheme.padding.medium, vertical = MaterialTheme.padding.small),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        MangaCover.Book(
+        ItemCover.Book(
             modifier = Modifier.fillMaxHeight(),
             data = history.coverData,
             onClick = onClickCover,

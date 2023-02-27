@@ -3,10 +3,10 @@ package eu.kanade.data.items.anime
 import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
 import eu.kanade.data.listOfStringsAdapter
 import eu.kanade.data.updateStrategyAdapter
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.AnimeUpdate
-import eu.kanade.domain.anime.repository.AnimeRepository
-import eu.kanade.domain.animelib.model.AnimelibAnime
+import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.items.anime.model.AnimeUpdate
+import eu.kanade.domain.items.anime.repository.AnimeRepository
+import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toLong
 import kotlinx.coroutines.flow.Flow
@@ -36,11 +36,11 @@ class AnimeRepositoryImpl(
         return handler.awaitList { animesQueries.getFavorites(animeMapper) }
     }
 
-    override suspend fun getLibraryAnime(): List<AnimelibAnime> {
+    override suspend fun getLibraryAnime(): List<LibraryAnime> {
         return handler.awaitList { animelibViewQueries.animelib(libraryAnime) }
     }
 
-    override fun getLibraryAnimeAsFlow(): Flow<List<AnimelibAnime>> {
+    override fun getLibraryAnimeAsFlow(): Flow<List<LibraryAnime>> {
         return handler.subscribeToList { animelibViewQueries.animelib(libraryAnime) }
     }
 

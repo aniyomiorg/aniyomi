@@ -2,9 +2,9 @@ package eu.kanade.tachiyomi.data.animedownload
 
 import android.content.Context
 import androidx.core.content.edit
-import eu.kanade.domain.anime.interactor.GetAnime
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.episode.interactor.GetEpisode
+import eu.kanade.domain.entries.episode.interactor.GetEpisode
+import eu.kanade.domain.items.anime.interactor.GetAnime
+import eu.kanade.domain.items.anime.model.Anime
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload

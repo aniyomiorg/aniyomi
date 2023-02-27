@@ -2,9 +2,9 @@ package eu.kanade.tachiyomi.ui.browse.migration.search
 
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.anime.interactor.GetAnime
-import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.items.anime.interactor.GetAnime
+import eu.kanade.domain.items.anime.model.Anime
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager

@@ -11,8 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.MangaCover
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.items.manga.model.MangaCover
 import eu.kanade.presentation.browse.InLibraryBadge
 import eu.kanade.presentation.components.CommonMangaItemDefaults
 import eu.kanade.presentation.components.MangaComfortableGridItem

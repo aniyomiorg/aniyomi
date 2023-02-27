@@ -29,11 +29,11 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.isLocal
-import eu.kanade.domain.animelib.model.AnimelibAnime
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.entries.episode.model.Episode
+import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.items.anime.model.isLocal
+import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.domain.library.model.display
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.animelib.components.AnimelibContent
@@ -205,7 +205,7 @@ object AnimelibTab : Tab {
                         showPageTabs = state.showCategoryTabs || !state.searchQuery.isNullOrEmpty(),
                         onChangeCurrentPage = { screenModel.activeCategoryIndex = it },
                         onAnimeClicked = { navigator.push(AnimeScreen(it)) },
-                        onContinueWatchingClicked = { it: AnimelibAnime ->
+                        onContinueWatchingClicked = { it: LibraryAnime ->
                             scope.launchIO {
                                 val episode = screenModel.getNextUnseenEpisode(it.anime)
                                 if (episode != null) openEpisode(episode)

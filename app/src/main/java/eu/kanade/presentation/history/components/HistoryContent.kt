@@ -5,7 +5,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import eu.kanade.domain.history.model.HistoryWithRelations
+import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.RelativeDateHeader
@@ -18,9 +18,9 @@ import java.text.DateFormat
 fun HistoryContent(
     history: List<HistoryUiModel>,
     contentPadding: PaddingValues,
-    onClickCover: (HistoryWithRelations) -> Unit,
-    onClickResume: (HistoryWithRelations) -> Unit,
-    onClickDelete: (HistoryWithRelations) -> Unit,
+    onClickCover: (MangaHistoryWithRelations) -> Unit,
+    onClickResume: (MangaHistoryWithRelations) -> Unit,
+    onClickDelete: (MangaHistoryWithRelations) -> Unit,
     preferences: UiPreferences = Injekt.get(),
 ) {
     val relativeTime: Int = remember { preferences.relativeTime().get() }

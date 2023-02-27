@@ -2,9 +2,9 @@ package eu.kanade.tachiyomi.data.download
 
 import android.content.Context
 import androidx.core.content.edit
-import eu.kanade.domain.chapter.interactor.GetChapter
-import eu.kanade.domain.manga.interactor.GetManga
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.entries.chapter.interactor.GetChapter
+import eu.kanade.domain.items.manga.interactor.GetManga
+import eu.kanade.domain.items.manga.model.Manga
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource

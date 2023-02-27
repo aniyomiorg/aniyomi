@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.animeextension
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import eu.kanade.domain.animesource.model.AnimeSourceData
+import eu.kanade.domain.source.anime.model.AnimeSourceData
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animeextension.api.AnimeExtensionGithubApi
@@ -165,7 +165,7 @@ class AnimeExtensionManager(
      */
     private fun updatedInstalledAnimeExtensionsStatuses(availableAnimeExtensions: List<AnimeExtension.Available>) {
         if (availableAnimeExtensions.isEmpty()) {
-            preferences.animeextensionUpdatesCount().set(0)
+            preferences.animeExtensionUpdatesCount().set(0)
             return
         }
 
@@ -361,6 +361,6 @@ class AnimeExtensionManager(
     }
 
     private fun updatePendingUpdatesCount() {
-        preferences.animeextensionUpdatesCount().set(_installedAnimeExtensionsFlow.value.count { it.hasUpdate })
+        preferences.animeExtensionUpdatesCount().set(_installedAnimeExtensionsFlow.value.count { it.hasUpdate })
     }
 }

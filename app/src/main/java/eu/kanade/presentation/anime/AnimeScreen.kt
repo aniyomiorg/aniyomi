@@ -46,7 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
-import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.entries.episode.model.Episode
 import eu.kanade.presentation.anime.components.AnimeActionRow
 import eu.kanade.presentation.anime.components.AnimeEpisodeListItem
 import eu.kanade.presentation.anime.components.AnimeInfoBox

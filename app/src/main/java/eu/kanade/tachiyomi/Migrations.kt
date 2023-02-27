@@ -141,13 +141,13 @@ object Migrations {
                     }
                 }
                 prefs.edit {
-                    putInt(libraryPreferences.filterDownloaded().key(), convertBooleanPrefToTriState("pref_filter_downloaded_key"))
+                    putInt(libraryPreferences.filterDownloadedManga().key(), convertBooleanPrefToTriState("pref_filter_downloaded_key"))
                     remove("pref_filter_downloaded_key")
 
                     putInt(libraryPreferences.filterUnread().key(), convertBooleanPrefToTriState("pref_filter_unread_key"))
                     remove("pref_filter_unread_key")
 
-                    putInt(libraryPreferences.filterCompleted().key(), convertBooleanPrefToTriState("pref_filter_completed_key"))
+                    putInt(libraryPreferences.filterCompletedManga().key(), convertBooleanPrefToTriState("pref_filter_completed_key"))
                     remove("pref_filter_completed_key")
                 }
             }
@@ -281,7 +281,7 @@ object Migrations {
             if (oldVersion < 72) {
                 val oldUpdateOngoingOnly = prefs.getBoolean("pref_update_only_non_completed_key", true)
                 if (!oldUpdateOngoingOnly) {
-                    libraryPreferences.libraryUpdateMangaRestriction() -= MANGA_NON_COMPLETED
+                    libraryPreferences.libraryUpdateItemRestriction() -= MANGA_NON_COMPLETED
                 }
             }
             if (oldVersion < 75) {

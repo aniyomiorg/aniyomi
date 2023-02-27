@@ -7,24 +7,24 @@ import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
 import eu.kanade.data.entries.episode.NoEpisodesException
-import eu.kanade.domain.anime.interactor.GetAnime
-import eu.kanade.domain.anime.interactor.GetAnimelibAnime
-import eu.kanade.domain.anime.interactor.UpdateAnime
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.toAnimeUpdate
-import eu.kanade.domain.animelib.model.AnimelibAnime
-import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
-import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
-import eu.kanade.domain.animetrack.model.toDbTrack
-import eu.kanade.domain.animetrack.model.toDomainTrack
-import eu.kanade.domain.category.interactor.GetAnimeCategories
+import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
-import eu.kanade.domain.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
-import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.entries.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.entries.episode.interactor.SyncEpisodesWithSource
+import eu.kanade.domain.entries.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.entries.episode.model.Episode
+import eu.kanade.domain.items.anime.interactor.GetAnime
+import eu.kanade.domain.items.anime.interactor.GetLibraryAnime
+import eu.kanade.domain.items.anime.interactor.UpdateAnime
+import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.items.anime.model.toAnimeUpdate
+import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.domain.library.service.LibraryPreferences
+import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
+import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
+import eu.kanade.domain.track.anime.model.toDbTrack
+import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -89,7 +89,7 @@ class AnimelibUpdateService(
     val downloadManager: AnimeDownloadManager = Injekt.get(),
     val trackManager: TrackManager = Injekt.get(),
     val coverCache: AnimeCoverCache = Injekt.get(),
-    private val getAnimelibAnime: GetAnimelibAnime = Injekt.get(),
+    private val getAnimelibAnime: GetLibraryAnime = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
     private val updateAnime: UpdateAnime = Injekt.get(),
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
@@ -104,7 +104,7 @@ class AnimelibUpdateService(
     private lateinit var notifier: AnimelibUpdateNotifier
     private var scope: CoroutineScope? = null
 
-    private var animeToUpdate: List<AnimelibAnime> = mutableListOf()
+    private var animeToUpdate: List<LibraryAnime> = mutableListOf()
     private var updateJob: Job? = null
 
     /**
@@ -264,14 +264,14 @@ class AnimelibUpdateService(
         val listToUpdate = if (categoryId != -1L) {
             animelibAnime.filter { it.category == categoryId }
         } else {
-            val categoriesToUpdate = libraryPreferences.animelibUpdateCategories().get().map { it.toLong() }
+            val categoriesToUpdate = libraryPreferences.animeLibraryUpdateCategories().get().map { it.toLong() }
             val includedAnime = if (categoriesToUpdate.isNotEmpty()) {
                 animelibAnime.filter { it.category in categoriesToUpdate }
             } else {
                 animelibAnime
             }
 
-            val categoriesToExclude = libraryPreferences.animelibUpdateCategoriesExclude().get().map { it.toLong() }
+            val categoriesToExclude = libraryPreferences.animeLibraryUpdateCategoriesExclude().get().map { it.toLong() }
             val excludedAnimeIds = if (categoriesToExclude.isNotEmpty()) {
                 animelibAnime.filter { it.category in categoriesToExclude }.map { it.anime.id }
             } else {
@@ -314,7 +314,7 @@ class AnimelibUpdateService(
         val failedUpdates = CopyOnWriteArrayList<Pair<Anime, String?>>()
         val hasDownloads = AtomicBoolean(false)
         val loggedServices by lazy { trackManager.services.filter { it.isLogged && it is AnimeTrackService } }
-        val restrictions = libraryPreferences.libraryUpdateMangaRestriction().get()
+        val restrictions = libraryPreferences.libraryUpdateItemRestriction().get()
 
         withIOContext {
             animeToUpdate.groupBy { it.anime.source }.values

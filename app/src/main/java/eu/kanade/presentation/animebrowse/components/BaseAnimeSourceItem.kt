@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
-import eu.kanade.domain.animesource.model.AnimeSource
+import eu.kanade.domain.source.anime.model.AnimeSource
 import eu.kanade.presentation.browse.components.BaseBrowseItem
 import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.secondaryItemAlpha

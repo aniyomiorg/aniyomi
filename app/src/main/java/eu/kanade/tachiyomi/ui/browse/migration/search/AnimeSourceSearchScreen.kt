@@ -22,7 +22,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.items.anime.model.Anime
 import eu.kanade.presentation.animebrowse.BrowseAnimeSourceContent
 import eu.kanade.presentation.components.ExtendedFloatingActionButton
 import eu.kanade.presentation.components.Scaffold

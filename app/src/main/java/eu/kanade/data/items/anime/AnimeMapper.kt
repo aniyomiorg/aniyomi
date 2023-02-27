@@ -1,7 +1,7 @@
 package eu.kanade.data.items.anime
 
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.animelib.model.AnimelibAnime
+import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 
 val animeMapper: (Long, Long, String, String?, String?, String?, List<String>?, String, Long, String?, Boolean, Long?, Long?, Boolean, Long, Long, Long, Long, UpdateStrategy) -> Anime =
@@ -28,9 +28,9 @@ val animeMapper: (Long, Long, String, String?, String?, String?, List<String>?, 
         )
     }
 
-val libraryAnime: (Long, Long, String, String?, String?, String?, List<String>?, String, Long, String?, Boolean, Long?, Long?, Boolean, Long, Long, Long, Long, UpdateStrategy, Long, Long, Long, Long, Long, Long, Long) -> AnimelibAnime =
+val libraryAnime: (Long, Long, String, String?, String?, String?, List<String>?, String, Long, String?, Boolean, Long?, Long?, Boolean, Long, Long, Long, Long, UpdateStrategy, Long, Long, Long, Long, Long, Long, Long) -> LibraryAnime =
     { id, source, url, artist, author, description, genre, title, status, thumbnailUrl, favorite, lastUpdate, nextUpdate, initialized, viewerFlags, episodeFlags, coverLastModified, dateAdded, updateStrategy, totalCount, seenCount, latestUpload, episodeFetchedAt, lastSeen, bookmarkCount, category ->
-        AnimelibAnime(
+        LibraryAnime(
             anime = animeMapper(
                 id,
                 source,

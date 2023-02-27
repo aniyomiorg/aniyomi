@@ -1,8 +1,8 @@
 package eu.kanade.data.track.anime
 
 import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
-import eu.kanade.domain.animetrack.model.AnimeTrack
-import eu.kanade.domain.animetrack.repository.AnimeTrackRepository
+import eu.kanade.domain.track.anime.model.AnimeTrack
+import eu.kanade.domain.track.anime.repository.AnimeTrackRepository
 import kotlinx.coroutines.flow.Flow
 
 class AnimeTrackRepositoryImpl(

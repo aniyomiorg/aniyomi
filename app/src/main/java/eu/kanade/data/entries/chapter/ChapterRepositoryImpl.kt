@@ -1,9 +1,9 @@
 package eu.kanade.data.entries.chapter
 
 import eu.kanade.data.handlers.manga.MangaDatabaseHandler
-import eu.kanade.domain.chapter.model.Chapter
-import eu.kanade.domain.chapter.model.ChapterUpdate
-import eu.kanade.domain.chapter.repository.ChapterRepository
+import eu.kanade.domain.entries.chapter.model.Chapter
+import eu.kanade.domain.entries.chapter.model.ChapterUpdate
+import eu.kanade.domain.entries.chapter.repository.ChapterRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toLong
 import kotlinx.coroutines.flow.Flow

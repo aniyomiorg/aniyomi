@@ -5,8 +5,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.category.interactor.SetDisplayModeForAnimeCategory
-import eu.kanade.domain.category.interactor.SetSortModeForAnimeCategory
+import eu.kanade.domain.category.anime.interactor.SetDisplayModeForAnimeCategory
+import eu.kanade.domain.category.anime.interactor.SetSortModeForAnimeCategory
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.domain.library.model.LibrarySort
@@ -134,7 +134,7 @@ class AnimelibSettingsSheet(
                 completed.state = libraryPreferences.filterCompletedAnime().get()
 
                 trackFilters.forEach { trackFilter ->
-                    trackFilter.value.state = libraryPreferences.filterTrackingAnime(trackFilter.key.toInt()).get()
+                    trackFilter.value.state = libraryPreferences.filterTrackedAnime(trackFilter.key.toInt()).get()
                 }
             }
 
@@ -156,7 +156,7 @@ class AnimelibSettingsSheet(
                     else -> {
                         trackFilters.forEach { trackFilter ->
                             if (trackFilter.value == item) {
-                                libraryPreferences.filterTrackingAnime(trackFilter.key.toInt()).set(newState)
+                                libraryPreferences.filterTrackedAnime(trackFilter.key.toInt()).set(newState)
                             }
                         }
                     }
@@ -362,7 +362,7 @@ class AnimelibSettingsSheet(
 
             override fun initModels() {
                 downloadBadge.checked = libraryPreferences.downloadBadge().get()
-                unseenBadge.checked = libraryPreferences.unreadBadge().get()
+                unseenBadge.checked = libraryPreferences.unViewedBadge().get()
                 localBadge.checked = libraryPreferences.localBadge().get()
                 languageBadge.checked = libraryPreferences.languageBadge().get()
             }
@@ -372,7 +372,7 @@ class AnimelibSettingsSheet(
                 item.checked = !item.checked
                 when (item) {
                     downloadBadge -> libraryPreferences.downloadBadge().set((item.checked))
-                    unseenBadge -> libraryPreferences.unreadBadge().set((item.checked))
+                    unseenBadge -> libraryPreferences.unViewedBadge().set((item.checked))
                     localBadge -> libraryPreferences.localBadge().set((item.checked))
                     languageBadge -> libraryPreferences.languageBadge().set((item.checked))
                     else -> {}
@@ -414,14 +414,14 @@ class AnimelibSettingsSheet(
             override val footer = null
 
             override fun initModels() {
-                showContinueWatchingButton.checked = libraryPreferences.showContinueReadingButton().get()
+                showContinueWatchingButton.checked = libraryPreferences.showContinueViewingButton().get()
             }
 
             override fun onItemClicked(item: Item) {
                 item as Item.CheckboxGroup
                 item.checked = !item.checked
                 when (item) {
-                    showContinueWatchingButton -> libraryPreferences.showContinueReadingButton().set(item.checked)
+                    showContinueWatchingButton -> libraryPreferences.showContinueViewingButton().set(item.checked)
                     else -> {}
                 }
                 adapter.notifyItemChanged(item)

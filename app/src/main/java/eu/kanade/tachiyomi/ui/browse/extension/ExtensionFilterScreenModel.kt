@@ -3,9 +3,9 @@ package eu.kanade.tachiyomi.ui.browse.extension
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.extension.interactor.GetExtensionLanguages
-import eu.kanade.domain.source.interactor.ToggleLanguage
+import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionLanguages
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.source.service.ToggleLanguage
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +21,7 @@ import uy.kohesive.injekt.api.get
 
 class ExtensionFilterScreenModel(
     private val preferences: SourcePreferences = Injekt.get(),
-    private val getExtensionLanguages: GetExtensionLanguages = Injekt.get(),
+    private val getExtensionLanguages: GetMangaExtensionLanguages = Injekt.get(),
     private val toggleLanguage: ToggleLanguage = Injekt.get(),
 ) : StateScreenModel<ExtensionFilterState>(ExtensionFilterState.Loading) {
 

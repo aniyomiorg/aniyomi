@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.source
 
 import android.graphics.drawable.Drawable
-import eu.kanade.domain.source.model.SourceData
+import eu.kanade.domain.source.manga.model.MangaSourceData
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.ExtensionManager
 import uy.kohesive.injekt.Injekt
@@ -11,7 +11,7 @@ fun Source.icon(): Drawable? = Injekt.get<ExtensionManager>().getAppIconForSourc
 
 fun Source.getPreferenceKey(): String = "source_$id"
 
-fun Source.toSourceData(): SourceData = SourceData(id = id, lang = lang, name = name)
+fun Source.toSourceData(): MangaSourceData = MangaSourceData(id = id, lang = lang, name = name)
 
 fun Source.getNameForMangaInfo(): String {
     val preferences = Injekt.get<SourcePreferences>()

@@ -8,8 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.asAnimeCover
+import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.items.anime.model.asAnimeCover
 import eu.kanade.presentation.util.padding
 
 @Composable

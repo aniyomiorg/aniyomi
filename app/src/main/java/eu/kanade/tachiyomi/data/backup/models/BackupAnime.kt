@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.items.anime.model.Anime
 import eu.kanade.tachiyomi.data.database.models.AnimeImpl
 import eu.kanade.tachiyomi.data.database.models.AnimeTrackImpl
 import eu.kanade.tachiyomi.data.database.models.EpisodeImpl

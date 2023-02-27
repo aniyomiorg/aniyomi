@@ -1,10 +1,10 @@
 package eu.kanade.data.track.manga
 
-import eu.kanade.domain.track.model.Track
+import eu.kanade.domain.track.manga.model.MangaTrack
 
-val mangaTrackMapper: (Long, Long, Long, Long, Long?, String, Double, Long, Long, Float, String, Long, Long) -> Track =
+val mangaTrackMapper: (Long, Long, Long, Long, Long?, String, Double, Long, Long, Float, String, Long, Long) -> MangaTrack =
     { id, mangaId, syncId, remoteId, libraryId, title, lastChapterRead, totalChapters, status, score, remoteUrl, startDate, finishDate ->
-        Track(
+        MangaTrack(
             id = id,
             mangaId = mangaId,
             syncId = syncId,

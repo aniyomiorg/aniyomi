@@ -27,7 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import coil.compose.AsyncImage
-import eu.kanade.domain.animesource.model.AnimeSource
+import eu.kanade.domain.source.anime.model.AnimeSource
 import eu.kanade.presentation.util.rememberResourceBitmapPainter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animeextension.model.AnimeExtension

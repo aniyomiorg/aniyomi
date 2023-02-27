@@ -10,26 +10,26 @@ import eu.kanade.core.prefs.CheckboxState
 import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.data.entries.chapter.NoChaptersException
-import eu.kanade.domain.category.interactor.GetCategories
-import eu.kanade.domain.category.interactor.SetMangaCategories
+import eu.kanade.domain.category.manga.interactor.GetMangaCategories
+import eu.kanade.domain.category.manga.interactor.SetMangaCategories
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.chapter.interactor.SetMangaDefaultChapterFlags
-import eu.kanade.domain.chapter.interactor.SetReadStatus
-import eu.kanade.domain.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.domain.chapter.interactor.UpdateChapter
-import eu.kanade.domain.chapter.model.Chapter
-import eu.kanade.domain.chapter.model.ChapterUpdate
 import eu.kanade.domain.download.service.DownloadPreferences
+import eu.kanade.domain.entries.chapter.interactor.SetMangaDefaultChapterFlags
+import eu.kanade.domain.entries.chapter.interactor.SetReadStatus
+import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithSource
+import eu.kanade.domain.entries.chapter.interactor.UpdateChapter
+import eu.kanade.domain.entries.chapter.model.Chapter
+import eu.kanade.domain.entries.chapter.model.ChapterUpdate
+import eu.kanade.domain.items.TriStateFilter
+import eu.kanade.domain.items.manga.interactor.GetDuplicateLibraryManga
+import eu.kanade.domain.items.manga.interactor.GetMangaWithChapters
+import eu.kanade.domain.items.manga.interactor.SetMangaChapterFlags
+import eu.kanade.domain.items.manga.interactor.UpdateManga
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.items.manga.model.isLocal
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.manga.interactor.GetDuplicateLibraryManga
-import eu.kanade.domain.manga.interactor.GetMangaWithChapters
-import eu.kanade.domain.manga.interactor.SetMangaChapterFlags
-import eu.kanade.domain.manga.interactor.UpdateManga
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.TriStateFilter
-import eu.kanade.domain.manga.model.isLocal
-import eu.kanade.domain.track.interactor.GetTracks
-import eu.kanade.domain.track.model.toDbTrack
+import eu.kanade.domain.track.manga.interactor.GetMangaTracks
+import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.manga.DownloadAction
@@ -94,8 +94,8 @@ class MangaInfoScreenModel(
     private val updateChapter: UpdateChapter = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
     private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get(),
-    private val getCategories: GetCategories = Injekt.get(),
-    private val getTracks: GetTracks = Injekt.get(),
+    private val getCategories: GetMangaCategories = Injekt.get(),
+    private val getTracks: GetMangaTracks = Injekt.get(),
     private val setMangaCategories: SetMangaCategories = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
 ) : StateScreenModel<MangaScreenState>(MangaScreenState.Loading) {
@@ -288,7 +288,7 @@ class MangaInfoScreenModel(
 
                 // Now check if user previously set categories, when available
                 val categories = getCategories()
-                val defaultCategoryId = libraryPreferences.defaultCategory().get().toLong()
+                val defaultCategoryId = libraryPreferences.defaultMangaCategory().get().toLong()
                 val defaultCategory = categories.find { it.id == defaultCategoryId }
                 when {
                     // Default category set

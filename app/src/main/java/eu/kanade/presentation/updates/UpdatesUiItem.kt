@@ -33,11 +33,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.updates.model.UpdatesWithRelations
+import eu.kanade.domain.updates.manga.model.MangaUpdatesWithRelations
 import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.components.ChapterDownloadIndicator
+import eu.kanade.presentation.components.ItemCover
 import eu.kanade.presentation.components.ListGroupHeader
-import eu.kanade.presentation.components.MangaCover
 import eu.kanade.presentation.util.ReadItemAlpha
 import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.selectedBackground
@@ -137,7 +137,7 @@ fun LazyListScope.updatesUiItems(
 @Composable
 fun UpdatesUiItem(
     modifier: Modifier,
-    update: UpdatesWithRelations,
+    update: MangaUpdatesWithRelations,
     selected: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
@@ -162,7 +162,7 @@ fun UpdatesUiItem(
             .padding(horizontal = MaterialTheme.padding.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        MangaCover.Square(
+        ItemCover.Square(
             modifier = Modifier
                 .padding(vertical = 6.dp)
                 .fillMaxHeight(),

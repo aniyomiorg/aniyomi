@@ -2,11 +2,11 @@ package eu.kanade.tachiyomi.ui.browse.source
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.source.interactor.GetLanguagesWithSources
-import eu.kanade.domain.source.interactor.ToggleLanguage
-import eu.kanade.domain.source.interactor.ToggleSource
-import eu.kanade.domain.source.model.Source
+import eu.kanade.domain.source.manga.interactor.GetLanguagesWithMangaSources
+import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
+import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.source.service.ToggleLanguage
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -17,8 +17,8 @@ import uy.kohesive.injekt.api.get
 
 class SourcesFilterScreenModel(
     private val preferences: SourcePreferences = Injekt.get(),
-    private val getLanguagesWithSources: GetLanguagesWithSources = Injekt.get(),
-    private val toggleSource: ToggleSource = Injekt.get(),
+    private val getLanguagesWithSources: GetLanguagesWithMangaSources = Injekt.get(),
+    private val toggleSource: ToggleMangaSource = Injekt.get(),
     private val toggleLanguage: ToggleLanguage = Injekt.get(),
 ) : StateScreenModel<SourcesFilterState>(SourcesFilterState.Loading) {
 
@@ -27,7 +27,7 @@ class SourcesFilterScreenModel(
             combine(
                 getLanguagesWithSources.subscribe(),
                 preferences.enabledLanguages().changes(),
-                preferences.disabledSources().changes(),
+                preferences.disabledMangaSources().changes(),
             ) { a, b, c -> Triple(a, b, c) }
                 .catch { throwable ->
                     mutableState.update {

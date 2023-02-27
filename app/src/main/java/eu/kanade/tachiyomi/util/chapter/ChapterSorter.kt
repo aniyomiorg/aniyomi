@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.util.chapter
 
-import eu.kanade.domain.chapter.model.Chapter
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.entries.chapter.model.Chapter
+import eu.kanade.domain.items.manga.model.Manga
 
 fun getChapterSort(manga: Manga, sortDescending: Boolean = manga.sortDescending()): (Chapter, Chapter) -> Int {
     return when (manga.sorting) {

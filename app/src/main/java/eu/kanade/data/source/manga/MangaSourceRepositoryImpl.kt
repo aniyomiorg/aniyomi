@@ -1,10 +1,10 @@
 package eu.kanade.data.source.manga
 
 import eu.kanade.data.handlers.manga.MangaDatabaseHandler
-import eu.kanade.domain.source.model.Source
-import eu.kanade.domain.source.model.SourcePagingSourceType
-import eu.kanade.domain.source.model.SourceWithCount
-import eu.kanade.domain.source.repository.SourceRepository
+import eu.kanade.domain.source.manga.model.MangaSourceWithCount
+import eu.kanade.domain.source.manga.model.Source
+import eu.kanade.domain.source.manga.model.SourcePagingSourceType
+import eu.kanade.domain.source.manga.repository.MangaSourceRepository
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.SourceManager
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.map
 class MangaSourceRepositoryImpl(
     private val sourceManager: SourceManager,
     private val handler: MangaDatabaseHandler,
-) : SourceRepository {
+) : MangaSourceRepository {
 
     override fun getMangaSources(): Flow<List<Source>> {
         return sourceManager.catalogueSources.map { sources ->
@@ -43,12 +43,12 @@ class MangaSourceRepositoryImpl(
         }
     }
 
-    override fun getMangaSourcesWithNonLibraryManga(): Flow<List<SourceWithCount>> {
+    override fun getMangaSourcesWithNonLibraryManga(): Flow<List<MangaSourceWithCount>> {
         val sourceIdWithNonLibraryManga = handler.subscribeToList { mangasQueries.getSourceIdsWithNonLibraryManga() }
         return sourceIdWithNonLibraryManga.map { sourceId ->
             sourceId.map { (sourceId, count) ->
                 val source = sourceManager.getOrStub(sourceId)
-                SourceWithCount(mangaSourceMapper(source), count)
+                MangaSourceWithCount(mangaSourceMapper(source), count)
             }
         }
     }

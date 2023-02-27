@@ -1,24 +1,24 @@
 package eu.kanade.data.history.manga
 
 import eu.kanade.data.handlers.manga.MangaDatabaseHandler
-import eu.kanade.domain.history.model.HistoryUpdate
-import eu.kanade.domain.history.model.HistoryWithRelations
-import eu.kanade.domain.history.repository.HistoryRepository
+import eu.kanade.domain.history.manga.model.MangaHistoryUpdate
+import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
+import eu.kanade.domain.history.manga.repository.MangaHistoryRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 
 class MangaHistoryRepositoryImpl(
     private val handler: MangaDatabaseHandler,
-) : HistoryRepository {
+) : MangaHistoryRepository {
 
-    override fun getMangaHistory(query: String): Flow<List<HistoryWithRelations>> {
+    override fun getMangaHistory(query: String): Flow<List<MangaHistoryWithRelations>> {
         return handler.subscribeToList {
             historyViewQueries.history(query, mangaHistoryWithRelationsMapper)
         }
     }
 
-    override suspend fun getLastMangaHistory(): HistoryWithRelations? {
+    override suspend fun getLastMangaHistory(): MangaHistoryWithRelations? {
         return handler.awaitOneOrNull {
             historyViewQueries.getLatestHistory(mangaHistoryWithRelationsMapper)
         }
@@ -54,7 +54,7 @@ class MangaHistoryRepositoryImpl(
         }
     }
 
-    override suspend fun upsertMangaHistory(historyUpdate: HistoryUpdate) {
+    override suspend fun upsertMangaHistory(historyUpdate: MangaHistoryUpdate) {
         try {
             handler.await {
                 historyQueries.upsert(

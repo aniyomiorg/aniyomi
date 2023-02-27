@@ -13,15 +13,15 @@ import dataanime.Animes
 import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
 import eu.kanade.data.handlers.manga.MangaDatabaseHandler
 import eu.kanade.data.updateStrategyAdapter
-import eu.kanade.domain.anime.interactor.GetAnimeFavorites
-import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
 import eu.kanade.domain.backup.service.BackupPreferences
-import eu.kanade.domain.category.interactor.GetAnimeCategories
-import eu.kanade.domain.category.interactor.GetCategories
+import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
+import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.history.model.HistoryUpdate
+import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
+import eu.kanade.domain.history.manga.model.MangaHistoryUpdate
+import eu.kanade.domain.items.anime.interactor.GetAnimeFavorites
+import eu.kanade.domain.items.manga.interactor.GetMangaFavorites
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.manga.interactor.GetFavorites
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.copyFrom
@@ -77,8 +77,8 @@ import uy.kohesive.injekt.api.get
 import java.io.FileOutputStream
 import java.util.Date
 import kotlin.math.max
-import eu.kanade.domain.anime.model.Anime as DomainAnime
-import eu.kanade.domain.manga.model.Manga as DomainManga
+import eu.kanade.domain.items.anime.model.Anime as DomainAnime
+import eu.kanade.domain.items.manga.model.Manga as DomainManga
 
 class BackupManager(
     private val context: Context,
@@ -90,9 +90,9 @@ class BackupManager(
     private val animeSourceManager: AnimeSourceManager = Injekt.get()
     private val backupPreferences: BackupPreferences = Injekt.get()
     private val libraryPreferences: LibraryPreferences = Injekt.get()
-    private val getCategories: GetCategories = Injekt.get()
+    private val getCategories: GetMangaCategories = Injekt.get()
     private val getAnimeCategories: GetAnimeCategories = Injekt.get()
-    private val getFavorites: GetFavorites = Injekt.get()
+    private val getFavorites: GetMangaFavorites = Injekt.get()
     private val getAnimeFavorites: GetAnimeFavorites = Injekt.get()
 
     internal val parser = ProtoBuf
@@ -574,7 +574,7 @@ class BackupManager(
      */
     internal suspend fun restoreHistory(history: List<BackupHistory>) {
         // List containing history to be updated
-        val toUpdate = mutableListOf<HistoryUpdate>()
+        val toUpdate = mutableListOf<MangaHistoryUpdate>()
         for ((url, lastRead, readDuration) in history) {
             var dbHistory = handler.awaitOneOrNull { historyQueries.getHistoryByChapterUrl(url) }
             // Check if history already in database and update
@@ -584,7 +584,7 @@ class BackupManager(
                     time_read = max(readDuration, dbHistory.time_read) - dbHistory.time_read,
                 )
                 toUpdate.add(
-                    HistoryUpdate(
+                    MangaHistoryUpdate(
                         chapterId = dbHistory.chapter_id,
                         readAt = dbHistory.last_read!!,
                         sessionReadDuration = dbHistory.time_read,
@@ -596,7 +596,7 @@ class BackupManager(
                     .awaitOneOrNull { chaptersQueries.getChapterByUrl(url) }
                     ?.let {
                         toUpdate.add(
-                            HistoryUpdate(
+                            MangaHistoryUpdate(
                                 chapterId = it._id,
                                 readAt = Date(lastRead),
                                 sessionReadDuration = readDuration,

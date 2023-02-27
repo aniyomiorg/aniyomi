@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import eu.kanade.core.prefs.PreferenceMutableState
 import eu.kanade.domain.category.model.Category
+import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.domain.library.model.LibraryDisplayMode
-import eu.kanade.domain.library.model.LibraryManga
 import eu.kanade.presentation.components.PullRefresh
 import eu.kanade.presentation.components.rememberPagerState
 import eu.kanade.tachiyomi.ui.library.LibraryItem

@@ -11,12 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import eu.kanade.core.prefs.PreferenceMutableState
-import eu.kanade.domain.animelib.model.AnimelibAnime
+import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.presentation.components.HorizontalPager
 import eu.kanade.presentation.components.PagerState
 import eu.kanade.presentation.library.components.LibraryPagerEmptyScreen
-import eu.kanade.presentation.util.plus
 import eu.kanade.tachiyomi.ui.animelib.AnimelibItem
 
 @Composable
@@ -25,15 +24,15 @@ fun AnimelibPager(
     contentPadding: PaddingValues,
     pageCount: Int,
     hasActiveFilters: Boolean,
-    selectedAnime: List<AnimelibAnime>,
+    selectedAnime: List<LibraryAnime>,
     searchQuery: String?,
     onGlobalSearchClicked: () -> Unit,
     getDisplayModeForPage: @Composable (Int) -> LibraryDisplayMode,
     getColumnsForOrientation: (Boolean) -> PreferenceMutableState<Int>,
     getAnimelibForPage: (Int) -> List<AnimelibItem>,
-    onClickAnime: (AnimelibAnime) -> Unit,
-    onLongClickAnime: (AnimelibAnime) -> Unit,
-    onClickContinueWatching: ((AnimelibAnime) -> Unit)?,
+    onClickAnime: (LibraryAnime) -> Unit,
+    onLongClickAnime: (LibraryAnime) -> Unit,
+    onClickContinueWatching: ((LibraryAnime) -> Unit)?,
 ) {
     HorizontalPager(
         count = pageCount,

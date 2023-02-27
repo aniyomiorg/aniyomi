@@ -3,7 +3,7 @@ package eu.kanade.presentation.animebrowse
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.items.anime.model.Anime
 import eu.kanade.presentation.animebrowse.components.GlobalAnimeSearchCardRow
 import eu.kanade.presentation.browse.components.GlobalSearchEmptyResultItem
 import eu.kanade.presentation.browse.components.GlobalSearchErrorResultItem

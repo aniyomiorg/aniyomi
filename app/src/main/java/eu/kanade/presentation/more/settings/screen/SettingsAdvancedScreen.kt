@@ -25,8 +25,8 @@ import androidx.core.net.toUri
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.items.manga.repository.MangaRepository
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.manga.repository.MangaRepository
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
@@ -193,7 +193,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = libraryPreferences.autoClearChapterCache(),
+                    pref = libraryPreferences.autoClearItemCache(),
                     title = stringResource(R.string.pref_auto_clear_chapter_cache),
                 ),
                 Preference.PreferenceItem.TextPreference(

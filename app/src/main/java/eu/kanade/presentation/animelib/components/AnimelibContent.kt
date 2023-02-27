@@ -15,8 +15,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import eu.kanade.core.prefs.PreferenceMutableState
-import eu.kanade.domain.animelib.model.AnimelibAnime
 import eu.kanade.domain.category.model.Category
+import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.presentation.components.PullRefresh
 import eu.kanade.presentation.components.rememberPagerState
@@ -30,16 +30,16 @@ import kotlin.time.Duration.Companion.seconds
 fun AnimelibContent(
     categories: List<Category>,
     searchQuery: String?,
-    selection: List<AnimelibAnime>,
+    selection: List<LibraryAnime>,
     contentPadding: PaddingValues,
     currentPage: () -> Int,
     hasActiveFilters: Boolean,
     showPageTabs: Boolean,
     onChangeCurrentPage: (Int) -> Unit,
     onAnimeClicked: (Long) -> Unit,
-    onContinueWatchingClicked: ((AnimelibAnime) -> Unit)?,
-    onToggleSelection: (AnimelibAnime) -> Unit,
-    onToggleRangeSelection: (AnimelibAnime) -> Unit,
+    onContinueWatchingClicked: ((LibraryAnime) -> Unit)?,
+    onToggleSelection: (LibraryAnime) -> Unit,
+    onToggleRangeSelection: (LibraryAnime) -> Unit,
     onRefresh: (Category?) -> Boolean,
     onGlobalSearchClicked: () -> Unit,
     getNumberOfAnimeForCategory: (Category) -> Int?,
@@ -69,7 +69,7 @@ fun AnimelibContent(
         }
 
         val notSelectionMode = selection.isEmpty()
-        val onClickAnime = { anime: AnimelibAnime ->
+        val onClickAnime = { anime: LibraryAnime ->
             if (notSelectionMode) {
                 onAnimeClicked(anime.anime.id)
             } else {

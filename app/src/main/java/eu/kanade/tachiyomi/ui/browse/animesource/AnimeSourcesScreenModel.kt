@@ -3,12 +3,12 @@ package eu.kanade.tachiyomi.ui.browse.animesource
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.animesource.interactor.GetEnabledAnimeSources
-import eu.kanade.domain.animesource.interactor.ToggleAnimeSource
-import eu.kanade.domain.animesource.interactor.ToggleAnimeSourcePin
-import eu.kanade.domain.animesource.model.AnimeSource
-import eu.kanade.domain.animesource.model.Pin
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.source.anime.interactor.GetEnabledAnimeSources
+import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
+import eu.kanade.domain.source.anime.interactor.ToggleAnimeSourcePin
+import eu.kanade.domain.source.anime.model.AnimeSource
+import eu.kanade.domain.source.anime.model.Pin
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.animebrowse.AnimeSourceUiModel
 import eu.kanade.tachiyomi.util.lang.launchIO

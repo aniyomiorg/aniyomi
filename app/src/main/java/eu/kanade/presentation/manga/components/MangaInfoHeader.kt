@@ -72,8 +72,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowRow
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.presentation.components.MangaCover
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.presentation.components.ItemCover
 import eu.kanade.presentation.components.TextButton
 import eu.kanade.presentation.util.clickableNoIndication
 import eu.kanade.presentation.util.secondaryItemAlpha
@@ -290,7 +290,7 @@ private fun MangaAndSourceTitlesLarge(
             .padding(start = 16.dp, top = appBarPadding + 16.dp, end = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        MangaCover.Book(
+        ItemCover.Book(
             modifier = Modifier.fillMaxWidth(0.65f),
             data = coverDataProvider(),
             contentDescription = stringResource(R.string.manga_cover),
@@ -416,7 +416,7 @@ private fun MangaAndSourceTitlesSmall(
             .padding(start = 16.dp, top = appBarPadding + 16.dp, end = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        MangaCover.Book(
+        ItemCover.Book(
             modifier = Modifier
                 .sizeIn(maxWidth = 100.dp)
                 .align(Alignment.Top),

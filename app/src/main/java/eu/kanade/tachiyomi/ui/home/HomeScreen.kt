@@ -290,8 +290,8 @@ object HomeScreen : Screen {
                         val count by produceState(initialValue = 0) {
                             val pref = Injekt.get<SourcePreferences>()
                             combine(
-                                pref.extensionUpdatesCount().changes(),
-                                pref.animeextensionUpdatesCount().changes(),
+                                pref.mangaExtensionUpdatesCount().changes(),
+                                pref.animeExtensionUpdatesCount().changes(),
                             ) { extCount, animeExtCount -> extCount + animeExtCount }
                                 .collectLatest { value = it }
                         }

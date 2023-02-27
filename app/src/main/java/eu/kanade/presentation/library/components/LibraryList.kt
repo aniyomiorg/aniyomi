@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
-import eu.kanade.domain.library.model.LibraryManga
-import eu.kanade.domain.manga.model.MangaCover
+import eu.kanade.domain.items.manga.model.MangaCover
+import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.MangaListItem
 import eu.kanade.presentation.util.plus

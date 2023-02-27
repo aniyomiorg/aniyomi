@@ -5,12 +5,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.manga.interactor.GetManga
-import eu.kanade.domain.manga.interactor.NetworkToLocalManga
-import eu.kanade.domain.manga.interactor.UpdateManga
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.toDomainManga
-import eu.kanade.domain.manga.model.toMangaUpdate
+import eu.kanade.domain.items.manga.interactor.GetManga
+import eu.kanade.domain.items.manga.interactor.NetworkToLocalManga
+import eu.kanade.domain.items.manga.interactor.UpdateManga
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.items.manga.model.toDomainManga
+import eu.kanade.domain.items.manga.model.toMangaUpdate
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.ExtensionManager
 import eu.kanade.tachiyomi.source.CatalogueSource
@@ -42,7 +42,7 @@ abstract class SearchScreenModel<T>(
     protected lateinit var extensionFilter: String
 
     private val sources by lazy { getSelectedSources() }
-    private val pinnedSources by lazy { sourcePreferences.pinnedSources().get() }
+    private val pinnedSources by lazy { sourcePreferences.pinnedMangaSources().get() }
 
     private val sortComparator = { map: Map<CatalogueSource, SearchItemResult> ->
         compareBy<CatalogueSource>(
@@ -95,8 +95,8 @@ abstract class SearchScreenModel<T>(
         val enabledSources = getEnabledSources()
 
         if (filter.isEmpty()) {
-            val shouldSearchPinnedOnly = sourcePreferences.searchPinnedSourcesOnly().get()
-            val pinnedSources = sourcePreferences.pinnedSources().get()
+            val shouldSearchPinnedOnly = sourcePreferences.searchPinnedMangaSourcesOnly().get()
+            val pinnedSources = sourcePreferences.pinnedMangaSources().get()
 
             return enabledSources.filter {
                 if (shouldSearchPinnedOnly) {

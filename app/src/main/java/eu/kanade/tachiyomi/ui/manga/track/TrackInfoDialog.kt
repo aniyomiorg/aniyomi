@@ -37,14 +37,15 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.manga.interactor.GetManga
-import eu.kanade.domain.manga.interactor.GetMangaWithChapters
-import eu.kanade.domain.track.interactor.DeleteTrack
-import eu.kanade.domain.track.interactor.GetTracks
-import eu.kanade.domain.track.interactor.InsertTrack
-import eu.kanade.domain.track.model.toDbTrack
-import eu.kanade.domain.track.model.toDomainTrack
+import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.items.manga.interactor.GetManga
+import eu.kanade.domain.items.manga.interactor.GetMangaWithChapters
+import eu.kanade.domain.track.manga.interactor.DeleteMangaTrack
+import eu.kanade.domain.track.manga.interactor.GetMangaTracks
+import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
+import eu.kanade.domain.track.manga.model.MangaTrack
+import eu.kanade.domain.track.manga.model.toDbTrack
+import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.AlertDialogContent
 import eu.kanade.presentation.manga.TrackChapterSelector
@@ -169,8 +170,8 @@ data class TrackInfoDialogHomeScreen(
     private class Model(
         private val mangaId: Long,
         private val sourceId: Long,
-        private val getTracks: GetTracks = Injekt.get(),
-        private val deleteTrack: DeleteTrack = Injekt.get(),
+        private val getTracks: GetMangaTracks = Injekt.get(),
+        private val deleteTrack: DeleteMangaTrack = Injekt.get(),
     ) : StateScreenModel<Model.State>(State()) {
 
         init {
@@ -178,7 +179,7 @@ data class TrackInfoDialogHomeScreen(
             coroutineScope.launch {
                 try {
                     val trackItems = getTracks.await(mangaId).mapToTrackItem()
-                    val insertTrack = Injekt.get<InsertTrack>()
+                    val insertTrack = Injekt.get<InsertMangaTrack>()
                     val getMangaWithChapters = Injekt.get<GetMangaWithChapters>()
                     val syncTwoWayService = Injekt.get<SyncChaptersWithTrackServiceTwoWay>()
                     trackItems.forEach {
@@ -223,7 +224,7 @@ data class TrackInfoDialogHomeScreen(
             coroutineScope.launchNonCancellable { deleteTrack.await(mangaId, serviceId) }
         }
 
-        private fun List<eu.kanade.domain.track.model.Track>.mapToTrackItem(): List<TrackItem> {
+        private fun List<MangaTrack>.mapToTrackItem(): List<TrackItem> {
             val dbTracks = map { it.toDbTrack() }
             val loggedServices = Injekt.get<TrackManager>().services.filter { it.isLogged }
             val source = Injekt.get<SourceManager>().getOrStub(sourceId)

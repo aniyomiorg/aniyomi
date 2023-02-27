@@ -1,9 +1,9 @@
 package eu.kanade.data.entries.episode
 
 import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
-import eu.kanade.domain.episode.model.Episode
-import eu.kanade.domain.episode.model.EpisodeUpdate
-import eu.kanade.domain.episode.repository.EpisodeRepository
+import eu.kanade.domain.entries.episode.model.Episode
+import eu.kanade.domain.entries.episode.model.EpisodeUpdate
+import eu.kanade.domain.entries.episode.repository.EpisodeRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toLong
 import kotlinx.coroutines.flow.Flow
@@ -91,7 +91,7 @@ class EpisodeRepositoryImpl(
         return handler.awaitOneOrNull { episodesQueries.getEpisodeById(id, episodeMapper) }
     }
 
-    override fun getEpisodeByAnimeIdAsFlow(animeId: Long): Flow<List<Episode>> {
+    override suspend fun getEpisodeByAnimeIdAsFlow(animeId: Long): Flow<List<Episode>> {
         return handler.subscribeToList { episodesQueries.getEpisodesByAnimeId(animeId, episodeMapper) }
     }
 

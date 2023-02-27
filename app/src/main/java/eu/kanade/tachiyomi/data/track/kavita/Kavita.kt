@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.annotation.StringRes
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.items.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.source.Source
 import java.security.MessageDigest
-import eu.kanade.domain.track.model.Track as DomainTrack
+import eu.kanade.domain.track.manga.model.MangaTrack as DomainTrack
 
 class Kavita(private val context: Context, id: Long) : TrackService(id), EnhancedMangaTrackService, NoLoginTrackService, MangaTrackService {
 

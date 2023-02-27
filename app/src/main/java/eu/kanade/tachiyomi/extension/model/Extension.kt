@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.extension.model
 
 import android.graphics.drawable.Drawable
-import eu.kanade.domain.source.model.SourceData
+import eu.kanade.domain.source.manga.model.MangaSourceData
 import eu.kanade.tachiyomi.source.Source
 
 sealed class Extension {
@@ -69,8 +69,8 @@ data class AvailableSources(
     val name: String,
     val baseUrl: String,
 ) {
-    fun toSourceData(): SourceData {
-        return SourceData(
+    fun toSourceData(): MangaSourceData {
+        return MangaSourceData(
             id = this.id,
             lang = this.lang,
             name = this.name,

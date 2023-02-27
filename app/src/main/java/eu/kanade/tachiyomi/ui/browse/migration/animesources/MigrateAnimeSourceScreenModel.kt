@@ -2,9 +2,9 @@ package eu.kanade.tachiyomi.ui.browse.migration.animesources
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.animesource.interactor.GetAnimeSourcesWithFavoriteCount
-import eu.kanade.domain.animesource.model.AnimeSource
-import eu.kanade.domain.source.interactor.SetMigrateSorting
+import eu.kanade.domain.source.anime.interactor.GetAnimeSourcesWithFavoriteCount
+import eu.kanade.domain.source.anime.model.AnimeSource
+import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.logcat

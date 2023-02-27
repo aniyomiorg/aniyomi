@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.source
 
 import android.content.Context
-import eu.kanade.domain.source.model.SourceData
-import eu.kanade.domain.source.repository.SourceDataRepository
+import eu.kanade.domain.source.manga.model.MangaSourceData
+import eu.kanade.domain.source.manga.repository.MangaSourceDataRepository
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.extension.ExtensionManager
@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap
 class SourceManager(
     private val context: Context,
     private val extensionManager: ExtensionManager,
-    private val sourceRepository: SourceDataRepository,
+    private val sourceRepository: MangaSourceDataRepository,
 ) {
     private val downloadManager: DownloadManager by injectLazy()
 
@@ -84,7 +84,7 @@ class SourceManager(
         return stubSourcesMap.values.filterNot { it.id in onlineSourceIds }
     }
 
-    private fun registerStubSource(sourceData: SourceData) {
+    private fun registerStubSource(sourceData: MangaSourceData) {
         scope.launch {
             val (id, lang, name) = sourceData
             val dbSourceData = sourceRepository.getMangaSourceData(id)
@@ -104,11 +104,11 @@ class SourceManager(
             registerStubSource(it)
             return StubSource(it)
         }
-        return StubSource(SourceData(id, "", ""))
+        return StubSource(MangaSourceData(id, "", ""))
     }
 
     @Suppress("OverridingDeprecatedMember")
-    open inner class StubSource(private val sourceData: SourceData) : Source {
+    open inner class StubSource(private val sourceData: MangaSourceData) : Source {
 
         override val id: Long = sourceData.id
 

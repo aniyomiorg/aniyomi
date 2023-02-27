@@ -11,23 +11,23 @@ import android.os.Build
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import eu.kanade.core.util.asFlow
-import eu.kanade.domain.anime.interactor.GetAnime
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.animehistory.interactor.UpsertAnimeHistory
-import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
-import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
-import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
-import eu.kanade.domain.animetrack.model.toDbTrack
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.episode.interactor.UpdateEpisode
-import eu.kanade.domain.episode.model.Episode
-import eu.kanade.domain.episode.model.EpisodeUpdate
-import eu.kanade.domain.episode.model.toDbEpisode
-import eu.kanade.domain.track.service.DelayedTrackingUpdateJob
+import eu.kanade.domain.entries.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.entries.episode.interactor.UpdateEpisode
+import eu.kanade.domain.entries.episode.model.Episode
+import eu.kanade.domain.entries.episode.model.EpisodeUpdate
+import eu.kanade.domain.entries.episode.model.toDbEpisode
+import eu.kanade.domain.history.anime.interactor.UpsertAnimeHistory
+import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
+import eu.kanade.domain.items.anime.interactor.GetAnime
+import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
+import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
+import eu.kanade.domain.track.anime.model.toDbTrack
+import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
+import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.domain.track.store.DelayedTrackingStore
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.LocalAnimeSource
@@ -267,7 +267,7 @@ class ExternalIntents {
     private val getTracks: GetAnimeTracks = Injekt.get()
     private val insertTrack: InsertAnimeTrack = Injekt.get()
     private val downloadManager: AnimeDownloadManager by injectLazy()
-    private val delayedTrackingStore: DelayedTrackingStore = Injekt.get()
+    private val delayedTrackingStore: DelayedAnimeTrackingStore = Injekt.get()
     private val playerPreferences: PlayerPreferences = Injekt.get()
     private val downloadPreferences: DownloadPreferences = Injekt.get()
     private val trackPreferences: TrackPreferences = Injekt.get()
@@ -354,7 +354,7 @@ class ExternalIntents {
                                     insertTrack.await(updatedTrack)
                                 } else {
                                     delayedTrackingStore.addAnimeItem(updatedTrack)
-                                    DelayedTrackingUpdateJob.setupTask(context)
+                                    DelayedAnimeTrackingUpdateJob.setupTask(context)
                                 }
                             }
                         }

@@ -6,7 +6,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import eu.kanade.domain.history.model.HistoryWithRelations
+import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.Scaffold
@@ -56,5 +56,5 @@ fun HistoryScreen(
 
 sealed class HistoryUiModel {
     data class Header(val date: Date) : HistoryUiModel()
-    data class Item(val item: HistoryWithRelations) : HistoryUiModel()
+    data class Item(val item: MangaHistoryWithRelations) : HistoryUiModel()
 }

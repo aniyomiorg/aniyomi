@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.annotation.StringRes
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.extension.interactor.GetExtensionsByType
+import eu.kanade.domain.extension.manga.interactor.GetMangaExtensionsByType
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.ExtensionManager
@@ -30,7 +30,7 @@ import kotlin.time.Duration.Companion.seconds
 class ExtensionsScreenModel(
     preferences: SourcePreferences = Injekt.get(),
     private val extensionManager: ExtensionManager = Injekt.get(),
-    private val getExtensions: GetExtensionsByType = Injekt.get(),
+    private val getExtensions: GetMangaExtensionsByType = Injekt.get(),
 ) : StateScreenModel<ExtensionsState>(ExtensionsState()) {
 
     private val _query: MutableStateFlow<String?> = MutableStateFlow(null)
@@ -125,7 +125,7 @@ class ExtensionsScreenModel(
 
         coroutineScope.launchIO { findAvailableExtensions() }
 
-        preferences.extensionUpdatesCount().changes()
+        preferences.mangaExtensionUpdatesCount().changes()
             .onEach { mutableState.update { state -> state.copy(updates = it) } }
             .launchIn(coroutineScope)
     }

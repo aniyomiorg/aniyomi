@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.anime.model.AnimeCover
+import eu.kanade.domain.items.anime.model.AnimeCover
 import eu.kanade.presentation.browse.InLibraryBadge
 import eu.kanade.presentation.components.CommonMangaItemDefaults
 import eu.kanade.presentation.components.MangaComfortableGridItem

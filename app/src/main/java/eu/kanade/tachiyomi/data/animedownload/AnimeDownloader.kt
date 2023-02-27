@@ -14,9 +14,9 @@ import com.arthenica.ffmpegkit.SessionState
 import com.arthenica.ffmpegkit.StatisticsCallback
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.PublishRelay
-import eu.kanade.domain.anime.model.Anime
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.entries.episode.model.Episode
+import eu.kanade.domain.items.anime.model.Anime
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video

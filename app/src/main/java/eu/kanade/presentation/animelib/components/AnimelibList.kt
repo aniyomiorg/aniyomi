@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
-import eu.kanade.domain.anime.model.AnimeCover
-import eu.kanade.domain.animelib.model.AnimelibAnime
+import eu.kanade.domain.items.anime.model.AnimeCover
+import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.MangaListItem
 import eu.kanade.presentation.library.components.DownloadsBadge
@@ -23,10 +23,10 @@ import eu.kanade.tachiyomi.ui.animelib.AnimelibItem
 fun AnimelibList(
     items: List<AnimelibItem>,
     contentPadding: PaddingValues,
-    selection: List<AnimelibAnime>,
-    onClick: (AnimelibAnime) -> Unit,
-    onLongClick: (AnimelibAnime) -> Unit,
-    onClickContinueWatching: ((AnimelibAnime) -> Unit)?,
+    selection: List<LibraryAnime>,
+    onClick: (LibraryAnime) -> Unit,
+    onLongClick: (LibraryAnime) -> Unit,
+    onClickContinueWatching: ((LibraryAnime) -> Unit)?,
     searchQuery: String?,
     onGlobalSearchClicked: () -> Unit,
 ) {

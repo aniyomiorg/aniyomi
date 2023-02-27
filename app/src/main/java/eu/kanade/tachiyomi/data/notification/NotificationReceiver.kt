@@ -8,19 +8,19 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import eu.kanade.domain.anime.interactor.GetAnime
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.chapter.interactor.GetChapter
-import eu.kanade.domain.chapter.interactor.UpdateChapter
-import eu.kanade.domain.chapter.model.Chapter
-import eu.kanade.domain.chapter.model.toChapterUpdate
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.episode.interactor.GetEpisode
-import eu.kanade.domain.episode.interactor.UpdateEpisode
-import eu.kanade.domain.episode.model.Episode
-import eu.kanade.domain.episode.model.toEpisodeUpdate
-import eu.kanade.domain.manga.interactor.GetManga
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.entries.chapter.interactor.GetChapter
+import eu.kanade.domain.entries.chapter.interactor.UpdateChapter
+import eu.kanade.domain.entries.chapter.model.Chapter
+import eu.kanade.domain.entries.chapter.model.toChapterUpdate
+import eu.kanade.domain.entries.episode.interactor.GetEpisode
+import eu.kanade.domain.entries.episode.interactor.UpdateEpisode
+import eu.kanade.domain.entries.episode.model.Episode
+import eu.kanade.domain.entries.episode.model.toEpisodeUpdate
+import eu.kanade.domain.items.anime.interactor.GetAnime
+import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.items.manga.interactor.GetManga
+import eu.kanade.domain.items.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
@@ -647,7 +647,7 @@ class NotificationReceiver : BroadcastReceiver() {
          * @param context context of application
          * @param anime anime of episode
          */
-        internal fun markAsReadPendingBroadcast(
+        internal fun markAsViewedPendingBroadcast(
             context: Context,
             anime: Anime,
             episodes: Array<Episode>,
@@ -697,7 +697,7 @@ class NotificationReceiver : BroadcastReceiver() {
          * @param context context of application
          * @param manga manga of chapter
          */
-        internal fun markAsReadPendingBroadcast(
+        internal fun markAsViewedPendingBroadcast(
             context: Context,
             manga: Manga,
             chapters: Array<Chapter>,

@@ -17,24 +17,24 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.core.prefs.CheckboxState
 import eu.kanade.core.prefs.asState
 import eu.kanade.core.prefs.mapAsCheckboxState
-import eu.kanade.domain.category.interactor.GetCategories
-import eu.kanade.domain.category.interactor.SetMangaCategories
+import eu.kanade.domain.category.manga.interactor.GetMangaCategories
+import eu.kanade.domain.category.manga.interactor.SetMangaCategories
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
-import eu.kanade.domain.chapter.interactor.SetMangaDefaultChapterFlags
-import eu.kanade.domain.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.entries.chapter.interactor.GetChapterByMangaId
+import eu.kanade.domain.entries.chapter.interactor.SetMangaDefaultChapterFlags
+import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.items.manga.interactor.GetDuplicateLibraryManga
+import eu.kanade.domain.items.manga.interactor.GetManga
+import eu.kanade.domain.items.manga.interactor.NetworkToLocalManga
+import eu.kanade.domain.items.manga.interactor.UpdateManga
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.items.manga.model.toDomainManga
+import eu.kanade.domain.items.manga.model.toMangaUpdate
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.manga.interactor.GetDuplicateLibraryManga
-import eu.kanade.domain.manga.interactor.GetManga
-import eu.kanade.domain.manga.interactor.NetworkToLocalManga
-import eu.kanade.domain.manga.interactor.UpdateManga
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.toDomainManga
-import eu.kanade.domain.manga.model.toMangaUpdate
-import eu.kanade.domain.source.interactor.GetRemoteManga
+import eu.kanade.domain.source.manga.interactor.GetRemoteManga
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.domain.track.interactor.InsertTrack
-import eu.kanade.domain.track.model.toDomainTrack
+import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
+import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -87,13 +87,13 @@ class BrowseSourceScreenModel(
     private val getRemoteManga: GetRemoteManga = Injekt.get(),
     private val getManga: GetManga = Injekt.get(),
     private val getDuplicateLibraryManga: GetDuplicateLibraryManga = Injekt.get(),
-    private val getCategories: GetCategories = Injekt.get(),
+    private val getCategories: GetMangaCategories = Injekt.get(),
     private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
     private val setMangaCategories: SetMangaCategories = Injekt.get(),
     private val setMangaDefaultChapterFlags: SetMangaDefaultChapterFlags = Injekt.get(),
     private val networkToLocalManga: NetworkToLocalManga = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
-    private val insertTrack: InsertTrack = Injekt.get(),
+    private val insertTrack: InsertMangaTrack = Injekt.get(),
     private val syncChaptersWithTrackServiceTwoWay: SyncChaptersWithTrackServiceTwoWay = Injekt.get(),
 ) : StateScreenModel<BrowseSourceScreenModel.State>(State(Listing.valueOf(listingQuery))) {
 
@@ -280,7 +280,7 @@ class BrowseSourceScreenModel(
     fun addFavorite(manga: Manga) {
         coroutineScope.launch {
             val categories = getCategories()
-            val defaultCategoryId = libraryPreferences.defaultCategory().get()
+            val defaultCategoryId = libraryPreferences.defaultMangaCategory().get()
             val defaultCategory = categories.find { it.id == defaultCategoryId.toLong() }
 
             when {

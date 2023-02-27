@@ -1,12 +1,12 @@
 package eu.kanade.data.history.manga
 
-import eu.kanade.domain.history.model.History
-import eu.kanade.domain.history.model.HistoryWithRelations
-import eu.kanade.domain.manga.model.MangaCover
+import eu.kanade.domain.history.manga.model.MangaHistory
+import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
+import eu.kanade.domain.items.manga.model.MangaCover
 import java.util.Date
 
-val mangaHistoryMapper: (Long, Long, Date?, Long) -> History = { id, chapterId, readAt, readDuration ->
-    History(
+val mangaHistoryMapper: (Long, Long, Date?, Long) -> MangaHistory = { id, chapterId, readAt, readDuration ->
+    MangaHistory(
         id = id,
         chapterId = chapterId,
         readAt = readAt,
@@ -14,9 +14,9 @@ val mangaHistoryMapper: (Long, Long, Date?, Long) -> History = { id, chapterId, 
     )
 }
 
-val mangaHistoryWithRelationsMapper: (Long, Long, Long, String, String?, Long, Boolean, Long, Float, Date?, Long) -> HistoryWithRelations = {
+val mangaHistoryWithRelationsMapper: (Long, Long, Long, String, String?, Long, Boolean, Long, Float, Date?, Long) -> MangaHistoryWithRelations = {
         historyId, mangaId, chapterId, title, thumbnailUrl, sourceId, isFavorite, coverLastModified, chapterNumber, readAt, readDuration ->
-    HistoryWithRelations(
+    MangaHistoryWithRelations(
         id = historyId,
         chapterId = chapterId,
         mangaId = mangaId,

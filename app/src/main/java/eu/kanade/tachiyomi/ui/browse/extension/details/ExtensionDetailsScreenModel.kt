@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.extension.interactor.ExtensionSourceItem
-import eu.kanade.domain.extension.interactor.GetExtensionSources
-import eu.kanade.domain.source.interactor.ToggleSource
+import eu.kanade.domain.extension.manga.interactor.GetExtensionSources
+import eu.kanade.domain.extension.manga.interactor.MangaExtensionSourceItem
+import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
 import eu.kanade.tachiyomi.extension.ExtensionManager
 import eu.kanade.tachiyomi.extension.model.Extension
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -37,7 +37,7 @@ class ExtensionDetailsScreenModel(
     private val network: NetworkHelper = Injekt.get(),
     private val extensionManager: ExtensionManager = Injekt.get(),
     private val getExtensionSources: GetExtensionSources = Injekt.get(),
-    private val toggleSource: ToggleSource = Injekt.get(),
+    private val toggleSource: ToggleMangaSource = Injekt.get(),
 ) : StateScreenModel<ExtensionDetailsState>(ExtensionDetailsState()) {
 
     private val _events: Channel<ExtensionDetailsEvent> = Channel()
@@ -169,10 +169,10 @@ sealed class ExtensionDetailsEvent {
 @Immutable
 data class ExtensionDetailsState(
     val extension: Extension.Installed? = null,
-    private val _sources: List<ExtensionSourceItem>? = null,
+    private val _sources: List<MangaExtensionSourceItem>? = null,
 ) {
 
-    val sources: List<ExtensionSourceItem>
+    val sources: List<MangaExtensionSourceItem>
         get() = _sources ?: emptyList()
 
     val isLoading: Boolean

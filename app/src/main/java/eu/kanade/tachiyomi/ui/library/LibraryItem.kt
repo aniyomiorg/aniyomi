@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.ui.library
 
-import eu.kanade.domain.library.model.LibraryManga
+import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.getNameForMangaInfo
 import uy.kohesive.injekt.Injekt

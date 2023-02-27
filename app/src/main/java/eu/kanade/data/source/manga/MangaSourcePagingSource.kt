@@ -2,7 +2,7 @@ package eu.kanade.data.source.manga
 
 import androidx.paging.PagingState
 import eu.kanade.data.entries.chapter.NoChaptersException
-import eu.kanade.domain.source.model.SourcePagingSourceType
+import eu.kanade.domain.source.manga.model.SourcePagingSourceType
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.MangasPage

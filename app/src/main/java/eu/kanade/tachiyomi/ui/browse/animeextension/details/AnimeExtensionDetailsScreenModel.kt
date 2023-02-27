@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.animeextension.interactor.AnimeExtensionSourceItem
-import eu.kanade.domain.animeextension.interactor.GetAnimeExtensionSources
-import eu.kanade.domain.animesource.interactor.ToggleAnimeSource
+import eu.kanade.domain.extension.anime.interactor.AnimeExtensionSourceItem
+import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionSources
+import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
 import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
 import eu.kanade.tachiyomi.animeextension.model.AnimeExtension
 import eu.kanade.tachiyomi.network.NetworkHelper

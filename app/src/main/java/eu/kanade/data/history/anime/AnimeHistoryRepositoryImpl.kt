@@ -1,9 +1,9 @@
 package eu.kanade.data.history.anime
 
 import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
-import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
-import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
-import eu.kanade.domain.animehistory.repository.AnimeHistoryRepository
+import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
+import eu.kanade.domain.history.anime.model.AnimeHistoryWithRelations
+import eu.kanade.domain.history.anime.repository.AnimeHistoryRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority

@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.animesource
 
 import android.graphics.drawable.Drawable
-import eu.kanade.domain.animesource.model.AnimeSourceData
+import eu.kanade.domain.source.anime.model.AnimeSourceData
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
 import uy.kohesive.injekt.Injekt

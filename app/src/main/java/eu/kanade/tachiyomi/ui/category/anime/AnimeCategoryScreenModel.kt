@@ -4,11 +4,11 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.category.interactor.CreateAnimeCategoryWithName
-import eu.kanade.domain.category.interactor.DeleteAnimeCategory
-import eu.kanade.domain.category.interactor.GetAnimeCategories
-import eu.kanade.domain.category.interactor.RenameAnimeCategory
-import eu.kanade.domain.category.interactor.ReorderAnimeCategory
+import eu.kanade.domain.category.anime.interactor.CreateAnimeCategoryWithName
+import eu.kanade.domain.category.anime.interactor.DeleteAnimeCategory
+import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
+import eu.kanade.domain.category.anime.interactor.RenameAnimeCategory
+import eu.kanade.domain.category.anime.interactor.ReorderAnimeCategory
 import eu.kanade.domain.category.model.Category
 import eu.kanade.tachiyomi.R
 import kotlinx.coroutines.channels.Channel

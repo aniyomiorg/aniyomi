@@ -10,26 +10,26 @@ import eu.kanade.core.prefs.CheckboxState
 import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.data.entries.episode.NoEpisodesException
-import eu.kanade.domain.anime.interactor.GetAnimeWithEpisodes
-import eu.kanade.domain.anime.interactor.GetDuplicateAnimelibAnime
-import eu.kanade.domain.anime.interactor.SetAnimeEpisodeFlags
-import eu.kanade.domain.anime.interactor.UpdateAnime
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.isLocal
-import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
-import eu.kanade.domain.animetrack.model.toDbTrack
-import eu.kanade.domain.category.interactor.GetAnimeCategories
-import eu.kanade.domain.category.interactor.SetAnimeCategories
+import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
+import eu.kanade.domain.category.anime.interactor.SetAnimeCategories
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.episode.interactor.SetAnimeDefaultEpisodeFlags
-import eu.kanade.domain.episode.interactor.SetSeenStatus
-import eu.kanade.domain.episode.interactor.SyncEpisodesWithSource
-import eu.kanade.domain.episode.interactor.UpdateEpisode
-import eu.kanade.domain.episode.model.Episode
-import eu.kanade.domain.episode.model.EpisodeUpdate
+import eu.kanade.domain.entries.episode.interactor.SetAnimeDefaultEpisodeFlags
+import eu.kanade.domain.entries.episode.interactor.SetSeenStatus
+import eu.kanade.domain.entries.episode.interactor.SyncEpisodesWithSource
+import eu.kanade.domain.entries.episode.interactor.UpdateEpisode
+import eu.kanade.domain.entries.episode.model.Episode
+import eu.kanade.domain.entries.episode.model.EpisodeUpdate
+import eu.kanade.domain.items.TriStateFilter
+import eu.kanade.domain.items.anime.interactor.GetAnimeWithEpisodes
+import eu.kanade.domain.items.anime.interactor.GetDuplicateLibraryAnime
+import eu.kanade.domain.items.anime.interactor.SetAnimeEpisodeFlags
+import eu.kanade.domain.items.anime.interactor.UpdateAnime
+import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.items.anime.model.isLocal
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.manga.model.TriStateFilter
+import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
+import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.EpisodeDownloadAction
@@ -90,7 +90,7 @@ class AnimeInfoScreenModel(
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val downloadCache: AnimeDownloadCache = Injekt.get(),
     private val getAnimeAndEpisodes: GetAnimeWithEpisodes = Injekt.get(),
-    private val getDuplicateLibraryAnime: GetDuplicateAnimelibAnime = Injekt.get(),
+    private val getDuplicateLibraryAnime: GetDuplicateLibraryAnime = Injekt.get(),
     private val setAnimeEpisodeFlags: SetAnimeEpisodeFlags = Injekt.get(),
     private val setAnimeDefaultEpisodeFlags: SetAnimeDefaultEpisodeFlags = Injekt.get(),
     private val setSeenStatus: SetSeenStatus = Injekt.get(),

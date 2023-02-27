@@ -509,7 +509,7 @@ class MainActivity : BaseActivity() {
     override fun onBackPressed() {
         if (navigator.size == 1 &&
             !onBackPressedDispatcher.hasEnabledCallbacks() &&
-            libraryPreferences.autoClearChapterCache().get()
+            libraryPreferences.autoClearItemCache().get()
         ) {
             chapterCache.clear()
             episodeCache.clear()

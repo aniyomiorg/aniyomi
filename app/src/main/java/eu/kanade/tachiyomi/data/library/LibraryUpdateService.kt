@@ -7,24 +7,24 @@ import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
 import eu.kanade.data.entries.chapter.NoChaptersException
-import eu.kanade.domain.category.interactor.GetCategories
+import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
-import eu.kanade.domain.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.domain.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.chapter.model.Chapter
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.library.model.LibraryManga
+import eu.kanade.domain.entries.chapter.interactor.GetChapterByMangaId
+import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithSource
+import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.entries.chapter.model.Chapter
+import eu.kanade.domain.items.manga.interactor.GetLibraryManga
+import eu.kanade.domain.items.manga.interactor.GetManga
+import eu.kanade.domain.items.manga.interactor.UpdateManga
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.items.manga.model.toMangaUpdate
+import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.manga.interactor.GetLibraryManga
-import eu.kanade.domain.manga.interactor.GetManga
-import eu.kanade.domain.manga.interactor.UpdateManga
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.toMangaUpdate
-import eu.kanade.domain.track.interactor.GetTracks
-import eu.kanade.domain.track.interactor.InsertTrack
-import eu.kanade.domain.track.model.toDbTrack
-import eu.kanade.domain.track.model.toDomainTrack
+import eu.kanade.domain.track.manga.interactor.GetMangaTracks
+import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
+import eu.kanade.domain.track.manga.model.toDbTrack
+import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.preference.getAndSet
 import eu.kanade.tachiyomi.data.cache.CoverCache
@@ -93,10 +93,10 @@ class LibraryUpdateService(
     private val getManga: GetManga = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
     private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
-    private val getCategories: GetCategories = Injekt.get(),
+    private val getCategories: GetMangaCategories = Injekt.get(),
     private val syncChaptersWithSource: SyncChaptersWithSource = Injekt.get(),
-    private val getTracks: GetTracks = Injekt.get(),
-    private val insertTrack: InsertTrack = Injekt.get(),
+    private val getTracks: GetMangaTracks = Injekt.get(),
+    private val insertTrack: InsertMangaTrack = Injekt.get(),
     private val syncChaptersWithTrackServiceTwoWay: SyncChaptersWithTrackServiceTwoWay = Injekt.get(),
 ) : Service() {
 
@@ -265,14 +265,14 @@ class LibraryUpdateService(
         val listToUpdate = if (categoryId != -1L) {
             libraryManga.filter { it.category == categoryId }
         } else {
-            val categoriesToUpdate = libraryPreferences.libraryUpdateCategories().get().map { it.toLong() }
+            val categoriesToUpdate = libraryPreferences.mangaLibraryUpdateCategories().get().map { it.toLong() }
             val includedManga = if (categoriesToUpdate.isNotEmpty()) {
                 libraryManga.filter { it.category in categoriesToUpdate }
             } else {
                 libraryManga
             }
 
-            val categoriesToExclude = libraryPreferences.libraryUpdateCategoriesExclude().get().map { it.toLong() }
+            val categoriesToExclude = libraryPreferences.mangaLibraryUpdateCategoriesExclude().get().map { it.toLong() }
             val excludedMangaIds = if (categoriesToExclude.isNotEmpty()) {
                 libraryManga.filter { it.category in categoriesToExclude }.map { it.manga.id }
             } else {
@@ -314,7 +314,7 @@ class LibraryUpdateService(
         val failedUpdates = CopyOnWriteArrayList<Pair<Manga, String?>>()
         val hasDownloads = AtomicBoolean(false)
         val loggedServices by lazy { trackManager.services.filter { it.isLogged && it is MangaTrackService } }
-        val restrictions = libraryPreferences.libraryUpdateMangaRestriction().get()
+        val restrictions = libraryPreferences.libraryUpdateItemRestriction().get()
 
         withIOContext {
             mangaToUpdate.groupBy { it.manga.source }.values

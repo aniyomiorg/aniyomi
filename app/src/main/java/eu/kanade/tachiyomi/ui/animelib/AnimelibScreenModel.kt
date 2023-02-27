@@ -15,24 +15,24 @@ import eu.kanade.core.util.fastFilter
 import eu.kanade.core.util.fastFilterNot
 import eu.kanade.core.util.fastMapNotNull
 import eu.kanade.core.util.fastPartition
-import eu.kanade.domain.anime.interactor.GetAnimelibAnime
-import eu.kanade.domain.anime.interactor.UpdateAnime
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.AnimeUpdate
-import eu.kanade.domain.anime.model.isLocal
-import eu.kanade.domain.animehistory.interactor.GetNextEpisodes
-import eu.kanade.domain.animelib.model.AnimelibAnime
-import eu.kanade.domain.animetrack.interactor.GetTracksPerAnime
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.category.interactor.GetAnimeCategories
-import eu.kanade.domain.category.interactor.SetAnimeCategories
+import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
+import eu.kanade.domain.category.anime.interactor.SetAnimeCategories
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.episode.interactor.SetSeenStatus
-import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.entries.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.entries.episode.interactor.SetSeenStatus
+import eu.kanade.domain.entries.episode.model.Episode
+import eu.kanade.domain.history.anime.interactor.GetNextEpisodes
+import eu.kanade.domain.items.anime.interactor.GetLibraryAnime
+import eu.kanade.domain.items.anime.interactor.UpdateAnime
+import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.items.anime.model.AnimeUpdate
+import eu.kanade.domain.items.anime.model.isLocal
+import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.domain.library.model.LibrarySort
 import eu.kanade.domain.library.model.sort
 import eu.kanade.domain.library.service.LibraryPreferences
+import eu.kanade.domain.track.anime.interactor.GetTracksPerAnime
 import eu.kanade.presentation.library.components.LibraryToolbarTitle
 import eu.kanade.presentation.manga.DownloadAction
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -71,7 +71,7 @@ import java.util.Locale
 typealias AnimelibMap = Map<Category, List<AnimelibItem>>
 
 class AnimelibScreenModel(
-    private val getAnimelibAnime: GetAnimelibAnime = Injekt.get(),
+    private val getAnimelibAnime: GetLibraryAnime = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
     private val getTracksPerAnime: GetTracksPerAnime = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
@@ -125,7 +125,7 @@ class AnimelibScreenModel(
         combine(
             libraryPreferences.categoryTabs().changes(),
             libraryPreferences.categoryNumberOfItems().changes(),
-            libraryPreferences.showContinueReadingButton().changes(),
+            libraryPreferences.showContinueViewingButton().changes(),
         ) { a, b, c -> arrayOf(a, b, c) }
             .onEach { (showCategoryTabs, showAnimeCount, showAnimeContinueButton) ->
                 mutableState.update { state ->
@@ -333,7 +333,7 @@ class AnimelibScreenModel(
     private fun getAnimelibItemPreferencesFlow(): Flow<ItemPreferences> {
         return combine(
             libraryPreferences.downloadBadge().changes(),
-            libraryPreferences.unreadBadge().changes(),
+            libraryPreferences.unViewedBadge().changes(),
             libraryPreferences.localBadge().changes(),
             libraryPreferences.languageBadge().changes(),
 
@@ -410,7 +410,7 @@ class AnimelibScreenModel(
         val loggedServices = trackManager.services.filter { it.isLogged && it is AnimeTrackService }
         return if (loggedServices.isNotEmpty()) {
             val prefFlows = loggedServices
-                .map { libraryPreferences.filterTrackingAnime(it.id.toInt()).changes() }
+                .map { libraryPreferences.filterTrackedAnime(it.id.toInt()).changes() }
                 .toTypedArray()
             combine(*prefFlows) {
                 loggedServices
@@ -586,7 +586,7 @@ class AnimelibScreenModel(
         mutableState.update { it.copy(selection = emptyList()) }
     }
 
-    fun toggleSelection(anime: AnimelibAnime) {
+    fun toggleSelection(anime: LibraryAnime) {
         mutableState.update { state ->
             val newSelection = state.selection.toMutableList().apply {
                 if (fastAny { it.id == anime.id }) {
@@ -603,7 +603,7 @@ class AnimelibScreenModel(
      * Selects all nimes between and including the given anime and the last pressed anime from the
      * same category as the given anime
      */
-    fun toggleRangeSelection(anime: AnimelibAnime) {
+    fun toggleRangeSelection(anime: LibraryAnime) {
         mutableState.update { state ->
             val newSelection = state.selection.toMutableList().apply {
                 val lastSelected = lastOrNull()
@@ -725,7 +725,7 @@ class AnimelibScreenModel(
         val isLoading: Boolean = true,
         val library: AnimelibMap = emptyMap(),
         val searchQuery: String? = null,
-        val selection: List<AnimelibAnime> = emptyList(),
+        val selection: List<LibraryAnime> = emptyList(),
         val hasActiveFilters: Boolean = false,
         val showCategoryTabs: Boolean = false,
         val showAnimeCount: Boolean = false,

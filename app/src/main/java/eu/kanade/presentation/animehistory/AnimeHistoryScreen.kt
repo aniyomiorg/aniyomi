@@ -6,7 +6,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import eu.kanade.domain.animehistory.model.AnimeHistoryWithRelations
+import eu.kanade.domain.history.anime.model.AnimeHistoryWithRelations
 import eu.kanade.presentation.animehistory.components.AnimeHistoryContent
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LoadingScreen

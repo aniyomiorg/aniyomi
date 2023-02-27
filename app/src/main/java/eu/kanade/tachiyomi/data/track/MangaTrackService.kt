@@ -1,11 +1,10 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
-import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
-import eu.kanade.domain.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.track.interactor.InsertTrack
-import eu.kanade.domain.track.model.toDbTrack
-import eu.kanade.domain.track.model.toDomainTrack
+import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
+import eu.kanade.domain.track.manga.model.toDbTrack
+import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.util.lang.withIOContext
@@ -15,7 +14,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import eu.kanade.domain.track.model.Track as DomainTrack
+import eu.kanade.domain.track.manga.model.MangaTrack as DomainTrack
 
 interface MangaTrackService {
 
@@ -54,13 +53,13 @@ interface MangaTrackService {
         item.manga_id = mangaId
         try {
             withIOContext {
-                val allChapters = Injekt.get<GetChapterByMangaId>().await(mangaId)
+                val allChapters = Injekt.get<eu.kanade.domain.entries.chapter.interactor.GetChapterByMangaId>().await(mangaId)
                 val hasReadChapters = allChapters.any { it.read }
                 bind(item, hasReadChapters)
 
                 val track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
 
-                Injekt.get<InsertTrack>().await(track)
+                Injekt.get<InsertMangaTrack>().await(track)
 
                 // Update chapter progress if newer chapters marked read locally
                 if (hasReadChapters) {
@@ -126,7 +125,7 @@ interface MangaTrackService {
             try {
                 update(track)
                 track.toDomainTrack(idRequired = false)?.let {
-                    Injekt.get<InsertTrack>().await(it)
+                    Injekt.get<InsertMangaTrack>().await(it)
                 }
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { "Failed to update remote track data id=${track.id}" }

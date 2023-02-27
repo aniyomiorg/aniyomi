@@ -17,24 +17,24 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.kanade.core.prefs.CheckboxState
 import eu.kanade.core.prefs.asState
 import eu.kanade.core.prefs.mapAsCheckboxState
-import eu.kanade.domain.anime.interactor.GetAnime
-import eu.kanade.domain.anime.interactor.GetDuplicateAnimelibAnime
-import eu.kanade.domain.anime.interactor.NetworkToLocalAnime
-import eu.kanade.domain.anime.interactor.UpdateAnime
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.anime.model.toAnimeUpdate
-import eu.kanade.domain.anime.model.toDomainAnime
-import eu.kanade.domain.animesource.interactor.GetRemoteAnime
-import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
-import eu.kanade.domain.animetrack.model.toDomainTrack
-import eu.kanade.domain.category.interactor.GetAnimeCategories
-import eu.kanade.domain.category.interactor.SetAnimeCategories
+import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
+import eu.kanade.domain.category.anime.interactor.SetAnimeCategories
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.episode.interactor.SetAnimeDefaultEpisodeFlags
-import eu.kanade.domain.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.entries.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.entries.episode.interactor.SetAnimeDefaultEpisodeFlags
+import eu.kanade.domain.entries.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.items.anime.interactor.GetAnime
+import eu.kanade.domain.items.anime.interactor.GetDuplicateLibraryAnime
+import eu.kanade.domain.items.anime.interactor.NetworkToLocalAnime
+import eu.kanade.domain.items.anime.interactor.UpdateAnime
+import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.items.anime.model.toAnimeUpdate
+import eu.kanade.domain.items.anime.model.toDomainAnime
 import eu.kanade.domain.library.service.LibraryPreferences
+import eu.kanade.domain.source.anime.interactor.GetRemoteAnime
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
+import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -86,7 +86,7 @@ class BrowseAnimeSourceScreenModel(
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val getRemoteAnime: GetRemoteAnime = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
-    private val getDuplicateAnimelibAnime: GetDuplicateAnimelibAnime = Injekt.get(),
+    private val getDuplicateAnimelibAnime: GetDuplicateLibraryAnime = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
     private val setAnimeCategories: SetAnimeCategories = Injekt.get(),

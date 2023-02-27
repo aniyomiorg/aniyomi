@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.animesource
 
 import android.content.Context
-import eu.kanade.domain.animesource.model.AnimeSourceData
-import eu.kanade.domain.animesource.repository.AnimeSourceDataRepository
+import eu.kanade.domain.source.anime.model.AnimeSourceData
+import eu.kanade.domain.source.anime.repository.AnimeSourceDataRepository
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
 import eu.kanade.tachiyomi.animesource.model.SAnime

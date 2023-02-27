@@ -8,24 +8,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.kanade.core.util.asFlow
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
-import eu.kanade.domain.chapter.interactor.UpdateChapter
-import eu.kanade.domain.chapter.model.ChapterUpdate
-import eu.kanade.domain.chapter.model.toDbChapter
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.history.interactor.GetNextChapters
-import eu.kanade.domain.history.interactor.UpsertHistory
-import eu.kanade.domain.history.model.HistoryUpdate
-import eu.kanade.domain.manga.interactor.GetManga
-import eu.kanade.domain.manga.interactor.SetMangaViewerFlags
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.isLocal
-import eu.kanade.domain.track.interactor.GetTracks
-import eu.kanade.domain.track.interactor.InsertTrack
-import eu.kanade.domain.track.model.toDbTrack
-import eu.kanade.domain.track.service.DelayedTrackingUpdateJob
+import eu.kanade.domain.entries.chapter.interactor.GetChapterByMangaId
+import eu.kanade.domain.entries.chapter.interactor.UpdateChapter
+import eu.kanade.domain.entries.chapter.model.ChapterUpdate
+import eu.kanade.domain.entries.chapter.model.toDbChapter
+import eu.kanade.domain.history.manga.interactor.GetNextChapters
+import eu.kanade.domain.history.manga.interactor.UpsertMangaHistory
+import eu.kanade.domain.history.manga.model.MangaHistoryUpdate
+import eu.kanade.domain.items.manga.interactor.GetManga
+import eu.kanade.domain.items.manga.interactor.SetMangaViewerFlags
+import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.items.manga.model.isLocal
+import eu.kanade.domain.track.manga.interactor.GetMangaTracks
+import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
+import eu.kanade.domain.track.manga.model.toDbTrack
+import eu.kanade.domain.track.manga.service.DelayedMangaTrackingUpdateJob
+import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.domain.track.store.DelayedTrackingStore
 import eu.kanade.tachiyomi.data.database.models.toDomainChapter
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadProvider
@@ -98,13 +98,13 @@ class ReaderViewModel(
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val readerPreferences: ReaderPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
-    private val delayedTrackingStore: DelayedTrackingStore = Injekt.get(),
+    private val delayedTrackingStore: DelayedMangaTrackingStore = Injekt.get(),
     private val getManga: GetManga = Injekt.get(),
     private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
     private val getNextChapters: GetNextChapters = Injekt.get(),
-    private val getTracks: GetTracks = Injekt.get(),
-    private val insertTrack: InsertTrack = Injekt.get(),
-    private val upsertHistory: UpsertHistory = Injekt.get(),
+    private val getTracks: GetMangaTracks = Injekt.get(),
+    private val insertTrack: InsertMangaTrack = Injekt.get(),
+    private val upsertHistory: UpsertMangaHistory = Injekt.get(),
     private val updateChapter: UpdateChapter = Injekt.get(),
     private val setMangaViewerFlags: SetMangaViewerFlags = Injekt.get(),
 ) : ViewModel() {
@@ -527,7 +527,7 @@ class ReaderViewModel(
             val sessionReadDuration = chapterReadStartTime?.let { readAt.time - it } ?: 0
 
             upsertHistory.await(
-                HistoryUpdate(chapterId, readAt, sessionReadDuration),
+                MangaHistoryUpdate(chapterId, readAt, sessionReadDuration),
             ).also {
                 chapterReadStartTime = null
             }
@@ -819,7 +819,7 @@ class ReaderViewModel(
                                     insertTrack.await(updatedTrack)
                                 } catch (e: Exception) {
                                     delayedTrackingStore.addMangaItem(updatedTrack)
-                                    DelayedTrackingUpdateJob.setupTask(context)
+                                    DelayedMangaTrackingUpdateJob.setupTask(context)
                                     throw e
                                 }
                             }

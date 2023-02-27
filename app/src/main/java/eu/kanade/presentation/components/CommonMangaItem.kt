@@ -39,6 +39,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import eu.kanade.domain.items.CommonCover
 import eu.kanade.presentation.util.selectedBackground
 
 object CommonMangaItemDefaults {
@@ -62,7 +63,7 @@ private const val GridSelectedCoverAlpha = 0.76f
 fun MangaCompactGridItem(
     isSelected: Boolean = false,
     title: String? = null,
-    coverData: eu.kanade.domain.manga.model.CommonCover,
+    coverData: CommonCover,
     coverAlpha: Float = 1f,
     coverBadgeStart: @Composable (RowScope.() -> Unit)? = null,
     coverBadgeEnd: @Composable (RowScope.() -> Unit)? = null,
@@ -77,7 +78,7 @@ fun MangaCompactGridItem(
     ) {
         MangaGridCover(
             cover = {
-                MangaCover.Book(
+                ItemCover.Book(
                     modifier = Modifier
                         .fillMaxWidth()
                         .alpha(if (isSelected) GridSelectedCoverAlpha else coverAlpha),
@@ -162,7 +163,7 @@ private fun BoxScope.CoverTextOverlay(
 fun MangaComfortableGridItem(
     isSelected: Boolean = false,
     title: String,
-    coverData: eu.kanade.domain.manga.model.CommonCover,
+    coverData: CommonCover,
     coverAlpha: Float = 1f,
     coverBadgeStart: (@Composable RowScope.() -> Unit)? = null,
     coverBadgeEnd: (@Composable RowScope.() -> Unit)? = null,
@@ -178,7 +179,7 @@ fun MangaComfortableGridItem(
         Column {
             MangaGridCover(
                 cover = {
-                    MangaCover.Book(
+                    ItemCover.Book(
                         modifier = Modifier
                             .fillMaxWidth()
                             .alpha(if (isSelected) GridSelectedCoverAlpha else coverAlpha),
@@ -221,7 +222,7 @@ private fun MangaGridCover(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(MangaCover.Book.ratio),
+            .aspectRatio(ItemCover.Book.ratio),
     ) {
         cover()
         content?.invoke(this)
@@ -330,7 +331,7 @@ private fun Modifier.selectedOutline(
 fun MangaListItem(
     isSelected: Boolean = false,
     title: String,
-    coverData: eu.kanade.domain.manga.model.CommonCover,
+    coverData: CommonCover,
     coverAlpha: Float = 1f,
     badge: @Composable (RowScope.() -> Unit),
     onLongClick: () -> Unit,
@@ -348,7 +349,7 @@ fun MangaListItem(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        MangaCover.Square(
+        ItemCover.Square(
             modifier = Modifier
                 .fillMaxHeight()
                 .alpha(coverAlpha),
