@@ -182,7 +182,7 @@
     <string name="episodes">حلقات</string>
     <string name="action_mark_previous_as_seen">وضع علامة على السابق كـ\"غير مشاهد\"</string>
     <string name="action_play_externally">تشغيل خارجيا</string>
-    <string name="action_player_pip">وضع \"الصورة في الصورة\"</string>
+    <string name="action_player_pip">وضع \"نافذة منبثقة\"</string>
     <string name="pref_adjust_orientation_video_dimensions">اضبط الاتجاه بناءً على أبعاد الفيديو</string>
     <string name="pref_player_hide_controls">إخفاء عناصر تحكم عند فتح مشغل الوسائط</string>
     <string name="pref_category_external_player">مشغل الوسائط الخارجي</string>
@@ -212,7 +212,7 @@
     <string name="toggle_stats">تبديل الإحصائيات</string>
     <string name="stats_header">عرض الإحصائيات</string>
     <string name="toggle_horizontal_seek_gesture">تبديل إيماءة البحث الأفقية</string>
-    <string name="toggle_volume_brightness_gestures">تبديل إيماءات الصوت والسطوع</string>
+    <string name="toggle_volume_brightness_gestures">تفعيل إيماءات الصوت والسطوع</string>
     <string name="screenshot_header">خد لقطة للشاشة</string>
     <string name="episode_progress_no_total">التقدم: %1$s</string>
     <string name="dialog_with_checkbox_remove_description_anime">سيؤدي ذلك إلى إزالة تاريخ مشاهدة هذه الحلقة. هل أنت متأكد؟</string>
