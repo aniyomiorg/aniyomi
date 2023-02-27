@@ -40,6 +40,7 @@ class PlayerTracksSheet(
                 clearSelection()
                 (it as? TextView)?.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_24dp, 0)
                 changeTrackMethod(i)
+                this.dismiss()
             }
             binding.linearLayout.addView(trackView)
         }
