@@ -86,7 +86,7 @@ class PlayerViewModel(
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val playerPreferences: PlayerPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
-    private val delayedTrackingStore: DelayedAnimeTrackingStore = Injekt.get(),
+    private val delayedTrackingStore: DelayedTrackingStore = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
     private val getNextEpisodes: GetNextEpisodes = Injekt.get(),
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
@@ -562,7 +562,7 @@ class PlayerViewModel(
                                     insertTrack.await(updatedTrack)
                                 } else {
                                     delayedTrackingStore.addAnimeItem(updatedTrack)
-                                    DelayedAnimeTrackingUpdateJob.setupTask(context)
+                                    DelayedTrackingUpdateJob.setupTask(context)
                                 }
                             }
                         }
