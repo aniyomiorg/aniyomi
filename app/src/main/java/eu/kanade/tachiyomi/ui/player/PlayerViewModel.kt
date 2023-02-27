@@ -647,7 +647,7 @@ class PlayerViewModel(
         val animeId = anime?.id ?: return null
         val trackManager = Injekt.get<TrackManager>()
         var malId: Long?
-        val episodeNumber = getCurrentEpisodeIndex() + 1
+        val episodeNumber = currentEpisode?.episode_number?.toInt() ?: return null
         if (getTracks.await(animeId).isEmpty()) {
             logcat { "AniSkip: No tracks found for anime $animeId" }
             return null

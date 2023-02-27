@@ -46,12 +46,17 @@ class AniSkipApi {
                 Media(id:$id){idMal}
                 }
         """.trimMargin()
-        val response = client.newCall(
-            POST(
-                "https://graphql.anilist.co",
-                body = buildJsonObject { put("query", query) }.toString().toRequestBody(jsonMime),
-            ),
-        ).execute()
+        val response = try {
+            client.newCall(
+                POST(
+                    "https://graphql.anilist.co",
+                    body = buildJsonObject { put("query", query) }.toString()
+                        .toRequestBody(jsonMime),
+                ),
+            ).execute()
+        } catch (e: Exception) {
+            return 0
+        }
         return response.body.string().substringAfter("idMal\":").substringBefore("}")
             .toLongOrNull() ?: 0
     }
