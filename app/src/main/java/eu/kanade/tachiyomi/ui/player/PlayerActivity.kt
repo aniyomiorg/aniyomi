@@ -44,6 +44,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
@@ -69,6 +70,8 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -110,7 +113,7 @@ class PlayerActivity :
         viewModel.saveCurrentEpisodeWatchingProgress()
 
         viewModel.mutableState.update { it.copy(anime = null) }
-        launchIO {
+        viewModel.viewModelScope.launchIO {
             viewModel.init(anime, episode).first?.let { setVideoList(it) }
         }
         super.onNewIntent(intent)
@@ -336,7 +339,7 @@ class PlayerActivity :
         player.addObserver(this)
 
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
-            launchUI { toast(throwable.message) }
+            toast(throwable.message)
             logcat(LogPriority.ERROR, throwable)
             finish()
         }
@@ -394,6 +397,25 @@ class PlayerActivity :
             switchOrientation(true)
         }
 
+        viewModel.eventFlow
+            .onEach { event ->
+                when (event) {
+                    is PlayerViewModel.Event.SavedImage -> {
+                        onSaveImageResult(event.result)
+                    }
+                    is PlayerViewModel.Event.ShareImage -> {
+                        onShareImageResult(event.uri, event.seconds)
+                    }
+                    is PlayerViewModel.Event.SetCoverResult -> {
+                        onSetAsCoverResult(event.result)
+                    }
+                    is PlayerViewModel.Event.SetAnimeSkipIntro -> {
+                        updateEpisodeText()
+                    }
+                }
+            }
+            .launchIn(lifecycleScope)
+
         playerIsDestroyed = false
     }
 
@@ -442,7 +464,7 @@ class PlayerActivity :
      */
 
     private fun switchOrientation(isLandscape: Boolean) {
-        launchUI {
+        viewModel.viewModelScope.launchUI {
             setVisibilities()
             if (isLandscape) {
                 if (width <= height) {
@@ -524,7 +546,13 @@ class PlayerActivity :
      * to the next episode if [previous] is false
      */
     internal fun switchEpisode(previous: Boolean, autoPlay: Boolean = false) {
+        player.paused = true
+        showLoadingIndicator(true)
+
         lifecycleScope.launch {
+            viewModel.mutableState.update {
+                it.copy(isLoadingAdjacentEpisode = true)
+            }
             val switchMethod =
                 if (previous && !autoPlay) {
                     viewModel.previousEpisode()
@@ -533,9 +561,6 @@ class PlayerActivity :
                 }
 
             val errorRes = if (previous) R.string.no_previous_episode else R.string.no_next_episode
-
-            player.paused = true
-            showLoadingIndicator(true)
 
             when (switchMethod) {
                 null -> {
@@ -595,8 +620,10 @@ class PlayerActivity :
     fun toggleControls() = playerControls.toggleControls()
 
     private fun showLoadingIndicator(visible: Boolean) {
-        playerControls.binding.playBtn.isVisible = !visible
-        binding.loadingIndicator.isVisible = visible
+        viewModel.viewModelScope.launchUI {
+            playerControls.binding.playBtn.isVisible = !visible
+            binding.loadingIndicator.isVisible = visible
+        }
     }
 
     private fun isSeeking(seeking: Boolean) {
@@ -1049,7 +1076,7 @@ class PlayerActivity :
      * Called from the presenter when a screenshot is saved or fails. It shows a message
      * or logs the event depending on the [result].
      */
-    fun onSaveImageResult(result: PlayerViewModel.SaveImageResult) {
+    private fun onSaveImageResult(result: PlayerViewModel.SaveImageResult) {
         when (result) {
             is PlayerViewModel.SaveImageResult.Success -> {
                 toast(R.string.picture_saved)
@@ -1072,7 +1099,7 @@ class PlayerActivity :
      * Called from the presenter when a screenshot is set as cover or fails.
      * It shows a different message depending on the [result].
      */
-    fun onSetAsCoverResult(result: PlayerViewModel.SetAsCoverResult) {
+    private fun onSetAsCoverResult(result: PlayerViewModel.SetAsCoverResult) {
         toast(
             when (result) {
                 PlayerViewModel.SetAsCoverResult.Success -> R.string.cover_updated
@@ -1085,6 +1112,7 @@ class PlayerActivity :
     private fun changeQuality(quality: Int) {
         if (playerIsDestroyed) return
         if (currentQuality == quality) return
+        showLoadingIndicator(true)
         logcat(LogPriority.INFO) { "changing quality" }
         currentVideoList?.getOrNull(quality)?.let {
             currentQuality = quality
@@ -1096,7 +1124,7 @@ class PlayerActivity :
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
             MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
         }
-        launchUI { refreshUi() }
+        viewModel.viewModelScope.launchUI { refreshUi() }
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -1202,6 +1230,7 @@ class PlayerActivity :
         super.onDestroy()
     }
 
+    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (deviceSupportsPip) {
@@ -1240,6 +1269,7 @@ class PlayerActivity :
         if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) player.paused?.let { updatePictureInPictureActions(!it) }
     }
 
+    @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
@@ -1372,7 +1402,7 @@ class PlayerActivity :
      * this case the activity is closed and a toast is shown to the user.
      */
     private fun setInitialEpisodeError(error: Throwable) {
-        launchUI { toast(error.message) }
+        toast(error.message)
         logcat(LogPriority.ERROR, error)
         finish()
     }
@@ -1391,7 +1421,7 @@ class PlayerActivity :
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
             MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
         }
-        launchUI { refreshUi() }
+        viewModel.viewModelScope.launchUI { refreshUi() }
     }
 
     private fun parseVideoUrl(videoUrl: String?): String? {
@@ -1528,8 +1558,7 @@ class PlayerActivity :
             }
         }
 
-        launchUI {
-            showLoadingIndicator(false)
+        viewModel.viewModelScope.launchUI {
             if (playerPreferences.adjustOrientationVideoDimensions().get()) {
                 if ((player.videoW ?: 1) / (player.videoH ?: 1) >= 1) {
                     this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationLandscape().get()
@@ -1538,6 +1567,10 @@ class PlayerActivity :
                     this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationPortrait().get()
                     switchOrientation(false)
                 }
+            }
+
+            viewModel.mutableState.update {
+                it.copy(isLoadingAdjacentEpisode = false)
             }
         }
         // aniSkip stuff
@@ -1554,7 +1587,7 @@ class PlayerActivity :
     private var aniSkipInterval: List<Stamp>? = null
     private var waitingAniSkip = playerPreferences.waitingTimeAniSkip().get()
 
-    var skipType: SkipType? = null
+    private var skipType: SkipType? = null
 
     private fun aniSkipStuff(position: Long) {
         if (!aniSkipEnable) return
@@ -1577,9 +1610,7 @@ class PlayerActivity :
                 aniSkipPlayerUtils.showSkipButton(skipType)
             }
         } ?: run {
-            launchUI {
-                playerControls.binding.controlsSkipIntroBtn.text = getString(R.string.player_controls_skip_intro_text, this@run.viewModel.getAnimeSkipIntroLength())
-            }
+            updateEpisodeText()
         }
     }
 
@@ -1635,7 +1666,12 @@ class PlayerActivity :
     override fun event(eventId: Int) {
         when (eventId) {
             MPVLib.mpvEventId.MPV_EVENT_FILE_LOADED -> fileLoaded()
-            MPVLib.mpvEventId.MPV_EVENT_START_FILE -> launchUI { refreshUi() }
+            MPVLib.mpvEventId.MPV_EVENT_START_FILE -> viewModel.viewModelScope.launchUI {
+                player.paused = false
+                refreshUi()
+                // Fixes a minor Ui bug but I have no idea why
+                if (viewModel.isEpisodeOnline() != true) showLoadingIndicator(false)
+            }
         }
     }
 
