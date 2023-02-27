@@ -699,9 +699,9 @@ class PlayerActivity :
     fun setVisibilities() {
         binding.root.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_LOW_PROFILE
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_LOW_PROFILE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -875,29 +875,29 @@ class PlayerActivity :
             }
             // Not entirely sure how to handle these KeyCodes yet, need to learn some more
             /**
-            KeyEvent.KEYCODE_MEDIA_NEXT -> {
-            switchEpisode(false)
-            return true
-            }
+             KeyEvent.KEYCODE_MEDIA_NEXT -> {
+             switchEpisode(false)
+             return true
+             }
 
-            KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
-            switchEpisode(true)
-            return true
-            }
-            KeyEvent.KEYCODE_MEDIA_PLAY -> {
-            player.paused = true
-            doubleTapPlayPause()
-            return true
-            }
-            KeyEvent.KEYCODE_MEDIA_PAUSE -> {
-            player.paused = false
-            doubleTapPlayPause()
-            return true
-            }
-            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
-            doubleTapPlayPause()
-            return true
-            }
+             KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
+             switchEpisode(true)
+             return true
+             }
+             KeyEvent.KEYCODE_MEDIA_PLAY -> {
+             player.paused = true
+             doubleTapPlayPause()
+             return true
+             }
+             KeyEvent.KEYCODE_MEDIA_PAUSE -> {
+             player.paused = false
+             doubleTapPlayPause()
+             return true
+             }
+             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
+             doubleTapPlayPause()
+             return true
+             }
              */
             else -> {}
         }
@@ -1389,7 +1389,7 @@ class PlayerActivity :
                         REQUEST_NEXT,
                     ),
 
-                    ),
+                ),
             )
             .setAspectRatio(aspect?.let { Rational(it, 10000) })
             .build()
