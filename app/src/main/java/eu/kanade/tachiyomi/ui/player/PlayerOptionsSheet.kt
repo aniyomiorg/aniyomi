@@ -24,9 +24,9 @@ class PlayerOptionsSheet(
         activity.player.paused = true
         binding = PlayerOptionsSheetBinding.inflate(activity.layoutInflater, null, false)
 
-        binding.setAsCover.setOnClickListener { setAsCover() }
-        binding.share.setOnClickListener { share() }
-        binding.save.setOnClickListener { save() }
+        binding.setAsCover.setOnClickListener { setAsCover(); this.dismiss() }
+        binding.share.setOnClickListener { share(); this.dismiss() }
+        binding.save.setOnClickListener { save(); this.dismiss() }
         binding.toggleSubs.isChecked = activity.screenshotSubs
         binding.toggleSubs.setOnCheckedChangeListener { _, newValue -> activity.screenshotSubs = newValue }
         binding.toggleVolumeBrightnessGestures.isChecked = activity.gestureVolumeBrightness
