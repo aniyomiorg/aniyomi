@@ -220,4 +220,7 @@
     <string name="label_watched_duration">Duração assistida</string>
     <string name="pref_category_external_downloader">Downloader externo</string>
     <string name="pref_use_external_downloader">Sempre usar downloader externo para anime</string>
+    <string name="not_interesting">Desinteressante</string>
+    <string name="pref_external_downloader_selection">App de download preferido</string>
+    <string name="player_aniskip_dontskip">Não pular</string>
 </resources>
