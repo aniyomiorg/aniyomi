@@ -35,7 +35,7 @@ class CustomSeekBar : AppCompatSeekBar {
         paint.color = context.getResourceColor(R.attr.colorTertiaryContainer)
         paint.alpha = 255
         // Use the thumb height for consistency
-        paint.strokeWidth = thumb.intrinsicHeight / 8F
+        paint.strokeWidth = (thumb?.intrinsicHeight ?: thumb?.intrinsicWidth)?.div(8F) ?: 2.2F
     }
 
     fun setStamps(newStamps: List<Stamp>?) {
