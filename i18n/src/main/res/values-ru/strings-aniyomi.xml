@@ -38,4 +38,23 @@
     <string name="information_webview_required">Для Tachiyomi необходим WebView</string>
     <string name="download_notifier_download_paused_chapters">Загрузка приостановлена</string>
     <string name="channel_new_chapters_episodes">Обновления глав</string>
+    <string name="pref_library_manga_columns">Манги в строке</string>
+    <string name="pref_library_anime_columns">Аниме в строке</string>
+    <string name="pref_bottom_nav_no_manga">Переместите Мангу на вкладку Дополнительно</string>
+    <string name="action_sort_total_episodes">Всего эпизодов</string>
+    <string name="label_manga">Манга</string>
+    <string name="label_mangasources">Источники манги</string>
+    <string name="backup_settings_warning">Предупреждение: При резервном копировании настроек также будут сохранены ваши пароли от треков, не предоставляйте общий доступ к этому файлу резервной копии!</string>
+    <string name="pref_bottom_nav_no_updates">Переместить Обновления на вкладку Дополнительно</string>
+    <string name="general_categories">Категории</string>
+    <string name="anime_categories">Категории аниме</string>
+    <string name="chapters_episodes">Главы и эпизоды</string>
+    <string name="episodes">Эпизоды</string>
+    <string name="manga_anime">Записи в библиотеке</string>
+    <string name="label_animesources">Источники аниме</string>
+    <string name="label_watched_episodes">Просмотрено</string>
+    <string name="label_anime">Аниме</string>
+    <string name="pref_bottom_nav_no_history">Переместить историю на вкладку Дополнительно</string>
+    <string name="label_animelib">Аниме</string>
+    <string name="label_mangalibrary">Манга</string>
 </resources>

@@ -204,4 +204,23 @@
     <string name="label_migration_manga">Migrar Mangás</string>
     <string name="label_migration_anime">Migrar Animes</string>
     <string name="settings">Configurações</string>
+    <string name="pref_category_internal_player">Player interno</string>
+    <string name="manga_anime">Entradas da biblioteca</string>
+    <string name="stats_page">Página de status</string>
+    <string name="download_notifier_download_paused_episodes">Download de episódio pausado</string>
+    <string name="action_play_externally">Reproduzir externamente</string>
+    <string name="action_play_internally">Reproduzir internamente</string>
+    <string name="action_player_pip">Modo PiP</string>
+    <string name="action_display_unseen_badge">Episódios não vistos</string>
+    <string name="pref_category_player">Reprodutor</string>
+    <string name="action_start_download_externally">Usar downloader externo</string>
+    <string name="action_start_download_internally">Usar downloader interno</string>
+    <string name="label_anime">Anime</string>
+    <string name="label_watched_episodes">Assistido</string>
+    <string name="label_watched_duration">Duração assistida</string>
+    <string name="pref_category_external_downloader">Downloader externo</string>
+    <string name="pref_use_external_downloader">Sempre usar downloader externo para anime</string>
+    <string name="not_interesting">Desinteressante</string>
+    <string name="pref_external_downloader_selection">App de download preferido</string>
+    <string name="player_aniskip_dontskip">Não pular</string>
 </resources>

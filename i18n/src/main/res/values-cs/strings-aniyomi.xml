@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Kategorie</string>
+    <string name="categories">Manga Kategorie</string>
     <string name="unlock_app">Odemknout Aniyomi</string>
     <string name="action_sort_last_manga_update">Poslední kontrola aktualizace</string>
     <string name="action_show_manga">Zobrazit položku</string>
     <string name="action_display_local_badge">Lokální zdroj</string>
     <string name="pref_update_only_completely_read">S nepřečtenými kapitolami</string>
     <string name="pref_library_update_show_tab_badge">Zobrazit počet nepřečtených kapitol na ikoně Aktualizace</string>
-    <string name="default_category">Výchozí kategorie</string>
+    <string name="default_category">Výchozí kategorie mangy</string>
     <string name="pref_library_update_categories_details">Položky ve vynechaných kategoriích nebudou aktualizovány, i kdyby byly také v zahrnutých kategoriích.</string>
     <string name="untrusted_extension_message">Toto rozšíření bylo podepsané nedůvěryhodným certifikátem a nebylo aktivované.
 \n
-\nŠkodlivé rozšíření může přečíst přihlašovací údaje uložené v Tachiyomi nebo spustit libovolný kód.
+\nŠkodlivé rozšíření může přečíst přihlašovací údaje uložené v Aniyomi nebo spustit libovolný kód.
 \n
 \nDůvěřováním tomuto certifikátu přijímáte tato rizika.</string>
     <string name="pref_category_delete_chapters">Smazat kapitoly</string>
     <string name="pref_remove_after_marked_as_read">Po ručním označení jako přečtené</string>
     <string name="pref_remove_after_read">Po přečtení automaticky smazat</string>
     <string name="pref_remove_bookmarked_chapters">Povolení mazání kapitol se záložkami</string>
-    <string name="pref_remove_exclude_categories">Vyloučené kategorie</string>
+    <string name="pref_remove_exclude_categories">Vyloučené manga kategorie</string>
     <string name="pref_auto_update_manga_sync">Aktualizovat počet kapitol po přečtení</string>
     <string name="pref_clear_chapter_cache">Vymazat mezipaměť kapitol</string>
     <string name="pref_auto_clear_chapter_cache">Vymazat mezipaměť kapitol při zavření aplikace</string>
-    <string name="pref_clear_database">Vyčistit databázi</string>
+    <string name="pref_clear_database">Vyčistit manga databázi</string>
     <string name="pref_clear_database_summary">Smazat historii položek, které nejsou uloženy ve vaší knihovně</string>
-    <string name="clear_database_confirmation">Jste si jistí\? Přečtené kapitoly a postup v položkách mimo knihovnu bude ztracen</string>
+    <string name="clear_database_confirmation">Jste si jistí\? Přečtené kapitoly a postup v položkách mimo knihovnu budou ztraceny</string>
     <string name="pref_refresh_library_tracking_summary">Aktualizuje status, skóre a poslední přečtenou kapitolu ze sledovacích služeb</string>
     <string name="pref_incognito_mode_summary">Pozastaví historii čtení</string>
-    <string name="manga_from_library">Z knihovny</string>
+    <string name="manga_from_library">Manga z knihovny</string>
     <string name="snack_add_to_library">Přidat do knihovny\?</string>
     <string name="download_error">Chyba</string>
     <string name="download_paused">Pozastaveno</string>
     <string name="also_set_chapter_settings_for_library">Také nastavit pro všechny položky v mé knihovně</string>
     <string name="dialog_with_checkbox_reset">Obnovit všechny kapitoly pro tento záznam</string>
-    <string name="download_insufficient_space">Nelze stáhnout kapitoly kvůli nedostatku místa</string>
-    <string name="download_queue_size_warning">Varování: hromadné stahování může vést k tomu, že zdroje zpomalí a/nebo zablokují Tachiyomi. Klepnutím se dozvíte více.</string>
+    <string name="download_insufficient_space">Nelze stáhnout kvůli nedostatku místa</string>
+    <string name="download_queue_size_warning">Varování: hromadné stahování může vést k tomu, že zdroje zpomalí a/nebo zablokují Aniyomi. Klepnutím se dozvíte více.</string>
     <string name="information_webview_required">Je nutné mít nainstalovanou aplikaci WebView</string>
-    <string name="download_notifier_download_paused_chapters">Stahování pozastaveno</string>
-    <string name="channel_new_chapters_episodes">Aktualizace kapitol</string>
+    <string name="download_notifier_download_paused_chapters">Stahování kapitoly pozastaveno</string>
+    <string name="channel_new_chapters_episodes">Aktualizace kapitol/epizod</string>
     <string name="pref_bottom_nav_style">Styl spodní navigace</string>
     <string name="pref_animelib_update_categories_details">Anime odebrané z kategorií nebudou aktualizována, ani když jsou zároveň v zahrnutých kategoriích.</string>
     <string name="action_start_download_internally">Použít stahovač uvnitř aplikace</string>
@@ -52,7 +52,7 @@
     <string name="action_mark_as_seen">Označit jako zhlédnuté</string>
     <string name="action_download_unseen">Stáhnout nezhlédnuté epizody</string>
     <string name="action_order_by_episode_number">Podle čísla epizody</string>
-    <string name="rotation_reverse_landscape">Obrácená krajina</string>
+    <string name="rotation_reverse_landscape">Obrácená rotace na šířku</string>
     <string name="pref_player_fullscreen">Zobrazit obsah v oblasti výřezu displeje</string>
     <string name="pref_player_hide_controls">Skrýt ovládání přehrávače při jeho otevření</string>
     <string name="pref_category_external_player">Externí přehrávač</string>
@@ -81,7 +81,7 @@
     <string name="pref_default_portrait_orientation">Předvolený režim výšky</string>
     <string name="manga_anime">Položky knihovny</string>
     <string name="backup_settings_warning">Varování: Zálohování nastavení uloží také vaše stopovací hesla, neposkytujte tento záložní soubor ostatním!</string>
-    <string name="label_mangasources">Zdroj mangy</string>
+    <string name="label_mangasources">Zdroje mangy</string>
     <string name="anime_categories">Anime kategorie</string>
     <string name="pref_category_progress">Postup</string>
     <string name="label_watched_episodes">Zhlédnuto</string>
@@ -122,7 +122,7 @@
     <string name="action_start_download_externally">Použít stahovač mimo aplikaci</string>
     <string name="pref_bottom_nav_no_manga">Přesunout Mangy do záložky Více</string>
     <string name="action_filter_unseen">Nezhlédnuto</string>
-    <string name="pref_remember_brightness">Zapamatovat si a přepnout na poslední použitou úroveň jasu</string>
+    <string name="pref_remember_brightness">Zapamatovat si naposledy použitou úroveň jasu a automaticky na ni přepnout</string>
     <string name="pref_mpv_conf">Upravit konfigurační soubor MPV pro další nastavení přehrávače</string>
     <string name="pref_external_player_preference">Preference externího přehrávače</string>
     <string name="episode_download_progress">%1$d%%</string>
@@ -130,7 +130,7 @@
     <string name="pref_use_external_downloader">Vždy používat externí stahovač pro anime</string>
     <string name="pref_external_downloader_selection">Preference aplikace pro stahování</string>
     <string name="pref_download_new_episodes">Stáhnout nové epizody</string>
-    <string name="pref_track_on_add_library">Otevřít nabídku skladeb při přidávání do knihovny</string>
+    <string name="pref_track_on_add_library">Otevřít nabídku stopování při přidávání do knihovny</string>
     <string name="pref_backup_flags_summ">Které informace zahrnout v zálohovací složce</string>
     <string name="used_cache_both">Použito pro anime: %1$s, použito pro mangu: %2$s</string>
     <string name="delete_downloads_for_anime">Smazat stažené epizody\?</string>
@@ -140,7 +140,7 @@
     <string name="local_anime_source">Lokální zdroj anime</string>
     <plurals name="anime_num_episodes">
         <item quantity="one">1 epizoda</item>
-        <item quantity="few">(n&gt;=2 &amp;&amp; n&lt;=4) \? 1 : %1$s epizody</item>
+        <item quantity="few">%1$s epizody</item>
         <item quantity="other">%1$s epizod</item>
     </plurals>
     <string name="sort_by_episode_number">Podle čísla epizody</string>
@@ -160,7 +160,7 @@
     <string name="pref_player_smooth_seek">Povolit přesné vyhledávání</string>
     <string name="pref_player_smooth_seek_summary">Pokud je zapnuté, vyhledávání nebude zaměřeno na klíčové snímky, což způsobuje pomalejší, ale přesnější vyhledávání</string>
     <string name="episode_not_found">Epizoda nenalezena</string>
-    <string name="pref_remember_volume">Zapamatovat si a přepnout na poslední použitou hlasitost</string>
+    <string name="pref_remember_volume">Zapamatovat si naposledy použitou hlasitost a automaticky na ni přepnout</string>
     <string name="pref_remove_exclude_categories_prefix">Manga:</string>
     <string name="pref_category_external_downloader">Externí stahovač</string>
     <string name="download_ahead_info_anime">Funguje pouze u záznamů v knihovně a pokud je již stažena aktuální a následující epizoda</string>
@@ -185,7 +185,7 @@
     <string name="repeating_anime">Sleduji znovu</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
     <string name="plan_to_watch">Plánuji sledovat</string>
-    <string name="not_interesting">Není zajímavé</string>
+    <string name="not_interesting">Nezajímá mě</string>
     <string name="want_to_read">Chci přečíst</string>
     <string name="want_to_watch">Chci sledovat</string>
     <string name="dialog_with_checkbox_reset_anime">Resetuje všechny epizody pro toto anime</string>
@@ -216,7 +216,7 @@
     <string name="playback_options_quality">Kvalita videa</string>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one">Pro 1 titul</item>
-        <item quantity="few">(n &gt;=2 &amp;&amp; n &lt;=4) Pro %d tituly</item>
+        <item quantity="few">Pro %d tituly</item>
         <item quantity="other">Pro %d titulů</item>
     </plurals>
     <plurals name="notification_episodes_generic">
@@ -229,4 +229,46 @@
     <string name="label_animeupdates">Anime</string>
     <string name="disable_auto_play">Automatické přerávání je vypnuté</string>
     <string name="playback_options_title">Možnosti přehrávání</string>
+    <string name="label_mangaextensions">Manga rozšíření</string>
+    <string name="notification_episodes_single">Epizoda %1$s</string>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one">Epizody %1$s a 1 další</item>
+        <item quantity="few">Epizody %1$s a další %2$d</item>
+        <item quantity="other">Epizody %1$s a dalších %2$d</item>
+    </plurals>
+    <string name="label_migration_anime">Přenést anime</string>
+    <string name="action_play_externally">Hrát mimio aplikaci</string>
+    <string name="rotation_sensor_portrait">Snímek na výšku</string>
+    <string name="pref_pip_episode_toasts">Zobrazovat ukázky epizody při přepínání v režimu obrazu v obrazu</string>
+    <string name="action_bookmark_episode">Přidat záložku</string>
+    <string name="pref_default_landscape_orientation">Předvolený režim šířky</string>
+    <string name="pref_enable_auto_skip_ani_skip">Zapnout automatické přeskakování</string>
+    <string name="player_aniskip_dontskip_toast">Přeskočení za %d sekund</string>
+    <string name="rotation_sensor_landscape">Snímek na šířku</string>
+    <string name="episode_progress">Postup: %1$s/%2$s</string>
+    <string name="episode_progress_no_total">Postup: %1$s</string>
+    <string name="player_aniskip_op">Přeskočit úvod</string>
+    <string name="player_aniskip_ed">Přeskočit konec</string>
+    <string name="player_aniskip_mixedOp">Přeskočit smíšené úvodníky</string>
+    <string name="player_aniskip_recap">Přeskočit rekapitulaci</string>
+    <string name="pref_category_player_aniskip">Nastavení AniSkip</string>
+    <string name="pref_enable_aniskip">Zapnout AniSkip</string>
+    <string name="pref_waiting_time_aniskip">Časový limit tlačítka</string>
+    <string name="pref_waiting_time_aniskip_5">5 sekund</string>
+    <string name="pref_waiting_time_aniskip_6">6 sekund</string>
+    <string name="pref_waiting_time_aniskip_7">7 sekund</string>
+    <string name="pref_waiting_time_aniskip_8">8 sekund</string>
+    <string name="pref_waiting_time_aniskip_9">9 sekund</string>
+    <string name="pref_waiting_time_aniskip_10">10 sekund</string>
+    <string name="pref_enable_netflix_style_aniskip">Zapnout styl Netflixu</string>
+    <string name="player_aniskip_dontskip">Nepřeskakovat</string>
+    <string name="player_aniskip_skip">Přeskočeno %s</string>
+    <string name="player_hwdec_dialog_title">Nastavit výchozí hardwarový dekódovací režim</string>
+    <string name="notification_episodes_single_and_more">Epizoda %1$s a dalších %2$d</string>
+    <string name="notification_episodes_multiple">Epizody %1$s</string>
+    <string name="episode_settings">Nastavení epizody</string>
+    <string name="pref_backup_flags">Možnosti zálohování</string>
+    <string name="label_animeextensions">Anime rozšíření</string>
+    <string name="label_migration_manga">Přenést manga</string>
+    <string name="settings">Nastavení</string>
 </resources>
