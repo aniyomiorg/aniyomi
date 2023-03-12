@@ -63,4 +63,14 @@
     <string name="action_sort_total_episodes">মোট পর্ব</string>
     <string name="action_sort_last_checked">শেষ চেক করা হয়েছে</string>
     <string name="action_sort_latest_episode">সর্বশেষ পর্ব</string>
+    <string name="action_download_unseen">অদেখা পর্ব ডাউনলোড করুন</string>
+    <string name="action_bookmark_episode">বুকমার্ক পর্ব</string>
+    <string name="action_play_externally">বাহ্যিকভাবে খেলুন</string>
+    <string name="action_mark_previous_as_seen">আগের দেখা হিসাবে চিহ্নিত করুন</string>
+    <string name="action_sort_unseen_count">অদেখা গণনা</string>
+    <string name="action_play_internally">অভ্যন্তরীণভাবে খেলুন</string>
+    <string name="action_sort_episode_fetch_date">পর্ব আনার তারিখ</string>
+    <string name="action_mark_as_seen">দেখা হয়েছে হিসাবে চিহ্নিত করুন</string>
+    <string name="action_mark_as_unseen">অদেখা হিসেবে চিহ্নিত করুন</string>
+    <string name="action_download_unread">অপঠিত অধ্যায় ডাউনলোড করুন</string>
 </resources>
