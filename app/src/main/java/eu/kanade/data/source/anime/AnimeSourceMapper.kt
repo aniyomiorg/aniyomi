@@ -2,8 +2,8 @@ package eu.kanade.data.source.anime
 
 import eu.kanade.domain.source.anime.model.AnimeSource
 import eu.kanade.domain.source.anime.model.AnimeSourceData
-import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
+import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 
 val animeSourceMapper: (eu.kanade.tachiyomi.animesource.AnimeSource) -> AnimeSource = { source ->
     AnimeSource(

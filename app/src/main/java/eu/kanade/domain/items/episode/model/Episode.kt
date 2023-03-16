@@ -1,8 +1,8 @@
 package eu.kanade.domain.items.episode.model
 
 import eu.kanade.tachiyomi.animesource.model.SEpisode
-import eu.kanade.tachiyomi.data.database.models.EpisodeImpl
-import eu.kanade.tachiyomi.data.database.models.Episode as DbEpisode
+import eu.kanade.tachiyomi.data.database.models.anime.EpisodeImpl
+import eu.kanade.tachiyomi.data.database.models.anime.Episode as DbEpisode
 
 data class Episode(
     val id: Long,

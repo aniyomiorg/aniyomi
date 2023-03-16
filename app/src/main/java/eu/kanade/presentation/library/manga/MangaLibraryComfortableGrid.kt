@@ -14,7 +14,7 @@ import eu.kanade.presentation.animelib.components.UnviewedBadge
 import eu.kanade.presentation.components.EntryComfortableGridItem
 import eu.kanade.presentation.library.LazyLibraryGrid
 import eu.kanade.presentation.library.globalSearchItem
-import eu.kanade.tachiyomi.ui.library.MangaLibraryItem
+import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryItem
 
 @Composable
 fun MangaLibraryComfortableGrid(

@@ -5,10 +5,10 @@ import eu.kanade.domain.source.anime.model.AnimeSource
 import eu.kanade.domain.source.anime.model.AnimeSourcePagingSourceType
 import eu.kanade.domain.source.anime.model.AnimeSourceWithCount
 import eu.kanade.domain.source.anime.repository.AnimeSourceRepository
-import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
-import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
+import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
+import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

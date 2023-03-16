@@ -25,7 +25,7 @@ import eu.kanade.presentation.components.EmptyScreenAction
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
-import eu.kanade.tachiyomi.animesource.LocalAnimeSource
+import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable

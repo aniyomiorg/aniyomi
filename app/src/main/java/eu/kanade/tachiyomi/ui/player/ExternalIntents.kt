@@ -29,14 +29,14 @@ import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.animesource.AnimeSourceManager
-import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
-import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
+import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.data.database.models.anime.toDomainEpisode
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
+import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.Constants.REQUEST_EXTERNAL
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -53,7 +53,7 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.util.Date
-import eu.kanade.tachiyomi.data.database.models.Episode as DbEpisode
+import eu.kanade.tachiyomi.data.database.models.anime.Episode as DbEpisode
 
 class ExternalIntents {
 
@@ -115,7 +115,7 @@ class ExternalIntents {
                 putExtra("position", lastSecondSeen.toInt())
                 putExtra("return_result", true)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
+                val headers = video.headers ?: (source as? HttpAnimeSource)?.headers
                 if (headers != null) {
                     var headersArray = arrayOf<String>()
                     for (header in headers) {
@@ -176,7 +176,7 @@ class ExternalIntents {
             if (enabledSubUrl != null) putExtra("subtitles_location", enabledSubUrl)*/
 
             // headers
-            val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
+            val headers = video.headers ?: (source as? HttpAnimeSource)?.headers
             if (headers != null) {
                 var headersArray = arrayOf<String>()
                 for (header in headers) {

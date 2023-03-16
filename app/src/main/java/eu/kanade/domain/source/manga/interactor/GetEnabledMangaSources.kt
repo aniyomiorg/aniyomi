@@ -5,7 +5,7 @@ import eu.kanade.domain.source.manga.model.Pins
 import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.domain.source.manga.repository.MangaSourceRepository
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.source.LocalSource
+import eu.kanade.tachiyomi.source.manga.LocalMangaSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -24,7 +24,7 @@ class GetEnabledMangaSources(
             repository.getMangaSources(),
         ) { pinnedSourceIds, enabledLanguages, disabledSources, lastUsedSource, sources ->
             sources
-                .filter { it.lang in enabledLanguages || it.id == LocalSource.ID }
+                .filter { it.lang in enabledLanguages || it.id == LocalMangaSource.ID }
                 .filterNot { it.id.toString() in disabledSources }
                 .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
                 .flatMap {

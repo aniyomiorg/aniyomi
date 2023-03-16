@@ -16,7 +16,7 @@ import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.more.settings.widget.SwitchPreferenceWidget
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.source.MangaSourcesFilterState
+import eu.kanade.tachiyomi.ui.browse.manga.source.MangaSourcesFilterState
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 @Composable

@@ -3,15 +3,15 @@
     <string name="categories">카테고리</string>
     <string name="general_categories">카테고리</string>
     <string name="anime_categories">애니메이션 카테고리</string>
-    <string name="manga_anime">서재 항목</string>
+    <string name="entries">서재 항목</string>
     <string name="chapters_episodes">회차</string>
     <string name="episodes">회차</string>
     <string name="backup_settings_warning">경고: 설정을 백업하면 동기화 암호도 저장되므로 이 백업 파일을 공유하지 마십시오!</string>
-    <string name="label_mangalibrary">만화</string>
-    <string name="label_animelib">애니메이션</string>
+    <string name="label_manga_library">만화</string>
+    <string name="label_anime_library">애니메이션</string>
     <string name="label_manga">만화</string>
-    <string name="label_mangasources">만화 소스</string>
-    <string name="label_animesources">애니메이션 소스</string>
+    <string name="label_manga_sources">만화 소스</string>
+    <string name="label_anime_sources">애니메이션 소스</string>
     <string name="pref_bottom_nav_no_history">더보기 탭으로 기록 이동</string>
     <string name="pref_bottom_nav_no_updates">더 보기 탭으로 업데이트 이동</string>
     <string name="pref_bottom_nav_no_manga">더 보기 탭으로 만화 이동</string>
@@ -58,8 +58,8 @@
     <string name="pref_library_update_show_tab_badge">업데이트 아이콘에 읽지 않은 횟수 표시</string>
     <string name="default_category">기본 카테고리</string>
     <string name="default_anime_category">기본 애니메이션 카테고리</string>
-    <string name="pref_library_update_categories_details">카테고리가 업데이트에서 제외된 경우 다른 카테고리에 포함되어 있어도 업데이트 되지 않습니다.</string>
-    <string name="pref_animelib_update_categories_details">제외된 카테고리의 애니메이션은 포함된 카테고리에 있어도 업데이트되지 않습니다.</string>
+    <string name="pref_manga_library_update_categories_details">카테고리가 업데이트에서 제외된 경우 다른 카테고리에 포함되어 있어도 업데이트 되지 않습니다.</string>
+    <string name="pref_anime_library_update_categories_details">제외된 카테고리의 애니메이션은 포함된 카테고리에 있어도 업데이트되지 않습니다.</string>
     <string name="untrusted_extension_message">이 확장기능은 신뢰할 수 없는 인증서로 서명되어 활성화되지 않았습니다.
 \n
 \n일부 악의적인 확장기능은 Tachiyomi에 저장된 로그인 정보를 읽거나 임의의 코드를 실행할 수도 있습니다.
@@ -137,8 +137,8 @@
         <item quantity="other">%1$s화</item>
     </plurals>
     <string name="delete_downloads_for_anime">다운로드한 회차를 삭제하시겠습니까\?</string>
-    <string name="snack_add_to_library">서재에 추가합니까\?</string>
-    <string name="snack_add_to_animelib">서재에 애니메이션을 추가하시겠습니까\?</string>
+    <string name="snack_add_to_manga_library">서재에 추가합니까\?</string>
+    <string name="snack_add_to_anime_library">서재에 애니메이션을 추가하시겠습니까\?</string>
     <string name="display_mode_episode">%1$s화</string>
     <string name="episode_downloading_progress">다운로드 중 (%d%%)</string>
     <string name="download_error">오류</string>

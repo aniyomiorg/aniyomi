@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">مع فصل (فصول) غير مقروءة / حلقة (حلقات) غير مشاهدة</string>
     <string name="pref_library_update_show_tab_badge">إظهار عدد الغير مقروء/ الغير مشاهد على أيقونة التحديثات</string>
     <string name="default_category">فئة المانغا الإفتراضية</string>
-    <string name="pref_library_update_categories_details">المانجا في الفئات المستبعدة لن يتم تحديثها حتى وإن كانت أيضا في الفئات المضمنة.</string>
+    <string name="pref_manga_library_update_categories_details">المانجا في الفئات المستبعدة لن يتم تحديثها حتى وإن كانت أيضا في الفئات المضمنة.</string>
     <string name="untrusted_extension_message">هذه اﻹضافة موقعة بشهادة غير موثوق بها ولم يتم تفعيلها.
 \n
 \nيمكن لأي إضافة خبيثة قراءة بيانات اعتماد تسجيل الدخول المخزنة في \"Ainyomi\" أو تنفيذ تعليمات برمجية عشوائية.
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">تحديث الحالة، والتقييم، وآخر فصل: عن طريق خدمات التتبع</string>
     <string name="pref_incognito_mode_summary">إيقاف سجل القراءة</string>
     <string name="manga_from_library">مانغا من المكتبة</string>
-    <string name="snack_add_to_library">إضافة المانجا إلى المكتبة؟</string>
+    <string name="snack_add_to_manga_library">إضافة المانجا إلى المكتبة؟</string>
     <string name="download_error">خطأ</string>
     <string name="download_paused">متوقّف</string>
     <string name="also_set_chapter_settings_for_library">تطبيق أيضًا على جميع المانجا في المكتبة</string>
@@ -39,7 +39,7 @@
     <string name="download_notifier_download_paused_chapters">تم إيقاف التنزيل مؤقتاً</string>
     <string name="channel_new_chapters_episodes">تحديثات الفصول</string>
     <string name="default_anime_category">تصنيف الأنمي الإفتراضي</string>
-    <string name="pref_animelib_update_categories_details">الأنمي في الفئات المستبعدة لن يتم تحديثها حتى وإن كانت أيضا في الفئات المضمنة</string>
+    <string name="pref_anime_library_update_categories_details">الأنمي في الفئات المستبعدة لن يتم تحديثها حتى وإن كانت أيضا في الفئات المضمنة</string>
     <string name="action_order_by_episode_number">حسب رقم الحلقة</string>
     <string name="action_display_unseen_badge">الحلقات الغير المشاهدة</string>
     <string name="label_history">مانغا</string>
@@ -115,7 +115,7 @@
         <item quantity="many">%1$d حلقة جديدة</item>
         <item quantity="other">%1$d حلقات جديدة</item>
     </plurals>
-    <string name="snack_add_to_animelib">إضافة الأنمي إلى المكتبة؟</string>
+    <string name="snack_add_to_anime_library">إضافة الأنمي إلى المكتبة؟</string>
     <string name="pref_preserve_watching_position">الحفاظ على موضع المشاهدة على الحلقات التي تمت مشاهدتها</string>
     <string name="delete_downloads_for_anime">حذف الحلقات المحملة؟</string>
     <string name="action_play_internally">تشغيل داخليا</string>
@@ -166,7 +166,7 @@
     <string name="pref_category_player">المشغل</string>
     <string name="dialog_with_checkbox_reset_anime">أعد تعيين جميع الحلقات لهذا الأنمي</string>
     <string name="currently_reading">يقرأ حاليا</string>
-    <string name="manga_anime">مداخل المكتبة</string>
+    <string name="entries">مداخل المكتبة</string>
     <string name="rotation_reverse_landscape">الوضع الأفقي العكسي</string>
     <string name="action_mark_as_unseen">وضع علامة كـ\"غير مشاهد\"</string>
     <string name="repeating_anime">إعادة المشاهدة</string>
@@ -177,8 +177,8 @@
     <string name="pref_pip_on_exit">التبديل تلقائيا إلى وضع \"الصورة في الصورة\" عند الخروج من المشغل</string>
     <string name="general_categories">فئات</string>
     <string name="backup_settings_warning">تحذير: ستعمل إعدادات النسخ الاحتياطي على تخزين كلمات مرور المسار أيضًا، لا تشارك ملف النسخ الاحتياطي هذا!</string>
-    <string name="label_mangalibrary">مانغا</string>
-    <string name="label_animelib">أنمي</string>
+    <string name="label_manga_library">مانغا</string>
+    <string name="label_anime_library">أنمي</string>
     <string name="episodes">حلقات</string>
     <string name="action_mark_previous_as_seen">وضع علامة على السابق كـ\"غير مشاهد\"</string>
     <string name="action_play_externally">تشغيل خارجيا</string>
@@ -191,8 +191,8 @@
     <string name="pref_player_fullscreen">إظهار المحتوى في شاشة العرض المنبثقة</string>
     <string name="chapters_episodes">الفصول والحلقات</string>
     <string name="label_anime">أنمي</string>
-    <string name="label_mangasources">مصادر المانغا</string>
-    <string name="label_animesources">مصادر الأنمي</string>
+    <string name="label_manga_sources">مصادر المانغا</string>
+    <string name="label_anime_sources">مصادر الأنمي</string>
     <string name="label_watched_duration">مدة المشاهدة</string>
     <string name="pref_bottom_nav_no_updates">انقل \"التحديثات\" إلى علامة التبويب \"المزيد\"</string>
     <string name="action_filter_unseen">غير مشاهد</string>

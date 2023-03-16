@@ -22,12 +22,12 @@ import eu.kanade.domain.updates.manga.interactor.GetMangaUpdates
 import eu.kanade.domain.updates.manga.model.MangaUpdatesWithRelations
 import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.updates.manga.MangaUpdatesUiModel
-import eu.kanade.tachiyomi.data.download.DownloadCache
-import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.download.DownloadService
-import eu.kanade.tachiyomi.data.download.model.Download
-import eu.kanade.tachiyomi.data.library.LibraryUpdateService
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
+import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateService
+import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.toDateKey
@@ -51,9 +51,9 @@ import java.util.Calendar
 import java.util.Date
 
 class MangaUpdatesScreenModel(
-    private val sourceManager: SourceManager = Injekt.get(),
-    private val downloadManager: DownloadManager = Injekt.get(),
-    private val downloadCache: DownloadCache = Injekt.get(),
+    private val sourceManager: MangaSourceManager = Injekt.get(),
+    private val downloadManager: MangaDownloadManager = Injekt.get(),
+    private val downloadCache: MangaDownloadCache = Injekt.get(),
     private val updateChapter: UpdateChapter = Injekt.get(),
     private val setReadStatus: SetReadStatus = Injekt.get(),
     private val getUpdates: GetMangaUpdates = Injekt.get(),
@@ -120,8 +120,8 @@ class MangaUpdatesScreenModel(
             )
             val downloadState = when {
                 activeDownload != null -> activeDownload.status
-                downloaded -> Download.State.DOWNLOADED
-                else -> Download.State.NOT_DOWNLOADED
+                downloaded -> MangaDownload.State.DOWNLOADED
+                else -> MangaDownload.State.NOT_DOWNLOADED
             }
             MangaUpdatesItem(
                 update = it,
@@ -133,7 +133,7 @@ class MangaUpdatesScreenModel(
     }
 
     fun updateLibrary(): Boolean {
-        val started = LibraryUpdateService.start(Injekt.get<Application>())
+        val started = MangaLibraryUpdateService.start(Injekt.get<Application>())
         coroutineScope.launch {
             _events.send(Event.LibraryUpdateTriggered(started))
         }
@@ -145,7 +145,7 @@ class MangaUpdatesScreenModel(
      *
      * @param download download object containing progress.
      */
-    private fun updateDownloadState(download: Download) {
+    private fun updateDownloadState(download: MangaDownload) {
         mutableState.update { state ->
             val newItems = state.items.toMutableList().apply {
                 val modifiedIndex = indexOfFirst { it.update.chapterId == download.chapter.id }
@@ -170,8 +170,8 @@ class MangaUpdatesScreenModel(
             when (action) {
                 ChapterDownloadAction.START -> {
                     downloadChapters(items)
-                    if (items.any { it.downloadStateProvider() == Download.State.ERROR }) {
-                        DownloadService.start(Injekt.get<Application>())
+                    if (items.any { it.downloadStateProvider() == MangaDownload.State.ERROR }) {
+                        MangaDownloadService.start(Injekt.get<Application>())
                     }
                 }
                 ChapterDownloadAction.START_NOW -> {
@@ -197,7 +197,7 @@ class MangaUpdatesScreenModel(
     private fun cancelDownload(chapterId: Long) {
         val activeDownload = downloadManager.getQueuedDownloadOrNull(chapterId) ?: return
         downloadManager.cancelQueuedDownloads(listOf(activeDownload))
-        updateDownloadState(activeDownload.apply { status = Download.State.NOT_DOWNLOADED })
+        updateDownloadState(activeDownload.apply { status = MangaDownload.State.NOT_DOWNLOADED })
     }
 
     /**
@@ -415,7 +415,7 @@ data class UpdatesState(
 @Immutable
 data class MangaUpdatesItem(
     val update: MangaUpdatesWithRelations,
-    val downloadStateProvider: () -> Download.State,
+    val downloadStateProvider: () -> MangaDownload.State,
     val downloadProgressProvider: () -> Int,
     val selected: Boolean = false,
 )

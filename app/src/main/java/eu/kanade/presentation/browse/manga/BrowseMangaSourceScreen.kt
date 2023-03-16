@@ -25,7 +25,7 @@ import eu.kanade.presentation.components.EmptyScreenAction
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.CatalogueMangaSource
-import eu.kanade.tachiyomi.source.LocalSource
+import eu.kanade.tachiyomi.source.manga.LocalMangaSource
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
@@ -73,7 +73,7 @@ fun BrowseSourceContent(
     if (mangaList.itemCount <= 0 && errorState != null && errorState is LoadState.Error) {
         EmptyScreen(
             message = getErrorMessage(errorState),
-            actions = if (source is LocalSource) {
+            actions = if (source is LocalMangaSource) {
                 listOf(
                     EmptyScreenAction(
                         stringResId = R.string.local_source_help_guide,

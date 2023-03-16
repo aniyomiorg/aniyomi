@@ -17,7 +17,7 @@ import eu.kanade.presentation.animelib.components.UnviewedBadge
 import eu.kanade.presentation.components.EntryListItem
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.util.plus
-import eu.kanade.tachiyomi.ui.library.MangaLibraryItem
+import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryItem
 
 @Composable
 fun MangaLibraryList(

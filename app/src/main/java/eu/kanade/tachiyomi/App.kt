@@ -42,8 +42,8 @@ import eu.kanade.tachiyomi.data.coil.MangaCoverKeyer
 import eu.kanade.tachiyomi.data.coil.MangaKeyer
 import eu.kanade.tachiyomi.data.coil.TachiyomiImageDecoder
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.glance.AnimeUpdatesGridGlanceWidget
-import eu.kanade.tachiyomi.glance.UpdatesGridGlanceWidget
+import eu.kanade.tachiyomi.glance.anime.AnimeUpdatesGridGlanceWidget
+import eu.kanade.tachiyomi.glance.manga.MangaUpdatesGridGlanceWidget
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
@@ -130,13 +130,13 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
 
         // Updates widget update
         Injekt.get<MangaDatabaseHandler>()
-            .subscribeToList { updatesViewQueries.updates(after = UpdatesGridGlanceWidget.DateLimit.timeInMillis) }
+            .subscribeToList { updatesViewQueries.updates(after = MangaUpdatesGridGlanceWidget.DateLimit.timeInMillis) }
             .drop(1)
             .distinctUntilChanged()
             .onEach {
                 val manager = GlanceAppWidgetManager(this)
-                if (manager.getGlanceIds(UpdatesGridGlanceWidget::class.java).isNotEmpty()) {
-                    UpdatesGridGlanceWidget().loadData(it)
+                if (manager.getGlanceIds(MangaUpdatesGridGlanceWidget::class.java).isNotEmpty()) {
+                    MangaUpdatesGridGlanceWidget().loadData(it)
                 }
             }
             .launchIn(ProcessLifecycleOwner.get().lifecycleScope)

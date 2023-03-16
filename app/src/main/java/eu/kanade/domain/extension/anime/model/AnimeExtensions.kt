@@ -1,6 +1,6 @@
 package eu.kanade.domain.extension.anime.model
 
-import eu.kanade.tachiyomi.animeextension.model.AnimeExtension
+import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 
 data class AnimeExtensions(
     val updates: List<AnimeExtension.Installed>,

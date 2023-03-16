@@ -11,7 +11,7 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.extension.ExtensionUpdateJob
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionUpdateJob
 import eu.kanade.tachiyomi.util.system.AuthenticatorUtil.authenticate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -36,7 +36,7 @@ object SettingsBrowseScreen : SearchableSettings {
                         pref = preferences.automaticExtUpdates(),
                         title = stringResource(R.string.pref_enable_automatic_extension_updates),
                         onValueChanged = {
-                            ExtensionUpdateJob.setupTask(context, it)
+                            MangaExtensionUpdateJob.setupTask(context, it)
                             true
                         },
                     ),

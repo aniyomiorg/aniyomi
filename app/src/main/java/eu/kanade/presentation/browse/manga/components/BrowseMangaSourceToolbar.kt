@@ -22,7 +22,7 @@ import eu.kanade.presentation.components.RadioMenuItem
 import eu.kanade.presentation.components.SearchToolbar
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.CatalogueMangaSource
-import eu.kanade.tachiyomi.source.LocalSource
+import eu.kanade.tachiyomi.source.manga.LocalMangaSource
 
 @Composable
 fun BrowseMangaSourceToolbar(
@@ -39,7 +39,7 @@ fun BrowseMangaSourceToolbar(
 ) {
     // Avoid capturing unstable source in actions lambda
     val title = source?.name
-    val isLocalSource = source is LocalSource
+    val isLocalSource = source is LocalMangaSource
 
     SearchToolbar(
         navigateUp = navigateUp,

@@ -24,7 +24,7 @@ import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.PullRefresh
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.download.model.Download
+import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
 import eu.kanade.tachiyomi.ui.updates.manga.UpdatesState
 import kotlinx.coroutines.delay
@@ -138,11 +138,11 @@ private fun MangaUpdatesBottomBar(
         onDownloadClicked = {
             onDownloadChapter(selected, ChapterDownloadAction.START)
         }.takeIf {
-            selected.fastAny { it.downloadStateProvider() != Download.State.DOWNLOADED }
+            selected.fastAny { it.downloadStateProvider() != MangaDownload.State.DOWNLOADED }
         },
         onDeleteClicked = {
             onMultiDeleteClicked(selected)
-        }.takeIf { selected.fastAny { it.downloadStateProvider() == Download.State.DOWNLOADED } },
+        }.takeIf { selected.fastAny { it.downloadStateProvider() == MangaDownload.State.DOWNLOADED } },
         isManga = true,
     )
 }

@@ -7,10 +7,10 @@ import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.domain.items.chapter.model.toChapterUpdate
 import eu.kanade.domain.items.chapter.repository.ChapterRepository
-import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.download.DownloadProvider
-import eu.kanade.tachiyomi.source.Source
-import eu.kanade.tachiyomi.source.isLocal
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadProvider
+import eu.kanade.tachiyomi.source.MangaSource
+import eu.kanade.tachiyomi.source.manga.isLocal
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.chapter.ChapterRecognition
@@ -21,8 +21,8 @@ import java.util.Date
 import java.util.TreeSet
 
 class SyncChaptersWithSource(
-    private val downloadManager: DownloadManager = Injekt.get(),
-    private val downloadProvider: DownloadProvider = Injekt.get(),
+    private val downloadManager: MangaDownloadManager = Injekt.get(),
+    private val downloadProvider: MangaDownloadProvider = Injekt.get(),
     private val chapterRepository: ChapterRepository = Injekt.get(),
     private val shouldUpdateDbChapter: ShouldUpdateDbChapter = Injekt.get(),
     private val updateManga: UpdateManga = Injekt.get(),
@@ -41,7 +41,7 @@ class SyncChaptersWithSource(
     suspend fun await(
         rawSourceChapters: List<SChapter>,
         manga: Manga,
-        source: Source,
+        source: MangaSource,
     ): List<Chapter> {
         if (rawSourceChapters.isEmpty() && !source.isLocal()) {
             throw NoChaptersException()

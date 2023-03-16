@@ -2,8 +2,8 @@ package eu.kanade.domain.entries.manga.model
 
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.TriStateFilter
-import eu.kanade.tachiyomi.data.cache.CoverCache
-import eu.kanade.tachiyomi.source.LocalSource
+import eu.kanade.tachiyomi.data.cache.MangaCoverCache
+import eu.kanade.tachiyomi.source.manga.LocalMangaSource
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
@@ -217,8 +217,8 @@ fun SManga.toDomainManga(sourceId: Long): Manga {
     )
 }
 
-fun Manga.isLocal(): Boolean = source == LocalSource.ID
+fun Manga.isLocal(): Boolean = source == LocalMangaSource.ID
 
-fun Manga.hasCustomCover(coverCache: CoverCache = Injekt.get()): Boolean {
+fun Manga.hasCustomCover(coverCache: MangaCoverCache = Injekt.get()): Boolean {
     return coverCache.getCustomCoverFile(id).exists()
 }

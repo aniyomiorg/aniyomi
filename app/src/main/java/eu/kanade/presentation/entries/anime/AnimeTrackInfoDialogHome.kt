@@ -37,7 +37,7 @@ import eu.kanade.presentation.entries.manga.TrackDetailsItem
 import eu.kanade.presentation.entries.manga.TrackInfoItemMenu
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.ui.anime.track.AnimeTrackItem
+import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import java.text.DateFormat
 

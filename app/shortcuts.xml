@@ -5,8 +5,8 @@
         android:icon="@drawable/sc_collections_bookmark_48dp"
         android:shortcutDisabledMessage="@string/app_not_available"
         android:shortcutId="show_library"
-        android:shortcutLongLabel="@string/label_manga"
-        android:shortcutShortLabel="@string/label_manga">
+        android:shortcutLongLabel="@string/label_manga_library"
+        android:shortcutShortLabel="@string/label_manga_library">
         <intent
             android:action="eu.kanade.tachiyomi.SHOW_LIBRARY"
             android:targetClass="eu.kanade.tachiyomi.ui.main.MainActivity" />
@@ -16,8 +16,8 @@
         android:icon="@drawable/sc_collections_baseline_48dp"
         android:shortcutDisabledMessage="@string/app_not_available"
         android:shortcutId="show_animelib"
-        android:shortcutLongLabel="@string/label_animelib"
-        android:shortcutShortLabel="@string/label_animelib">
+        android:shortcutLongLabel="@string/label_anime_library"
+        android:shortcutShortLabel="@string/label_anime_library">
         <intent
             android:action="eu.kanade.tachiyomi.SHOW_ANIMELIB"
             android:targetClass="eu.kanade.tachiyomi.ui.main.MainActivity" />

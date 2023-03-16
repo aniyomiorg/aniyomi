@@ -30,7 +30,7 @@ import coil.compose.AsyncImage
 import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.presentation.util.rememberResourceBitmapPainter
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.extension.model.Extension
+import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.util.lang.withIOContext
 
 private val defaultModifier = Modifier
@@ -72,12 +72,12 @@ fun MangaSourceIcon(
 
 @Composable
 fun MangaExtensionIcon(
-    extension: Extension,
+    extension: MangaExtension,
     modifier: Modifier = Modifier,
     density: Int = DisplayMetrics.DENSITY_DEFAULT,
 ) {
     when (extension) {
-        is Extension.Available -> {
+        is MangaExtension.Available -> {
             AsyncImage(
                 model = extension.iconUrl,
                 contentDescription = null,
@@ -87,7 +87,7 @@ fun MangaExtensionIcon(
                     .clip(MaterialTheme.shapes.extraSmall),
             )
         }
-        is Extension.Installed -> {
+        is MangaExtension.Installed -> {
             val icon by extension.getIcon(density)
             when (icon) {
                 Result.Error -> Image(
@@ -103,7 +103,7 @@ fun MangaExtensionIcon(
                 )
             }
         }
-        is Extension.Untrusted -> Image(
+        is MangaExtension.Untrusted -> Image(
             imageVector = Icons.Filled.Dangerous,
             contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.error),
@@ -113,7 +113,7 @@ fun MangaExtensionIcon(
 }
 
 @Composable
-private fun Extension.getIcon(density: Int = DisplayMetrics.DENSITY_DEFAULT): State<Result<ImageBitmap>> {
+private fun MangaExtension.getIcon(density: Int = DisplayMetrics.DENSITY_DEFAULT): State<Result<ImageBitmap>> {
     val context = LocalContext.current
     return produceState<Result<ImageBitmap>>(initialValue = Result.Loading, this) {
         withIOContext {

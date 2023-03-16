@@ -66,11 +66,11 @@ import eu.kanade.presentation.entries.manga.components.MangaInfoBox
 import eu.kanade.presentation.util.isScrolledToEnd
 import eu.kanade.presentation.util.isScrollingUp
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.download.model.Download
-import eu.kanade.tachiyomi.source.SourceManager
-import eu.kanade.tachiyomi.source.getNameForMangaInfo
-import eu.kanade.tachiyomi.ui.manga.ChapterItem
-import eu.kanade.tachiyomi.ui.manga.MangaScreenState
+import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
+import eu.kanade.tachiyomi.source.manga.MangaSourceManager
+import eu.kanade.tachiyomi.source.manga.getNameForMangaInfo
+import eu.kanade.tachiyomi.ui.entries.manga.ChapterItem
+import eu.kanade.tachiyomi.ui.entries.manga.MangaScreenState
 
 @Composable
 fun MangaScreen(
@@ -321,7 +321,7 @@ private fun MangaScreenSmallImpl(
                             author = state.manga.author,
                             artist = state.manga.artist,
                             sourceName = remember { state.source.getNameForMangaInfo() },
-                            isStubSource = remember { state.source is SourceManager.StubSource },
+                            isStubSource = remember { state.source is MangaSourceManager.StubMangaSource },
                             coverDataProvider = { state.manga },
                             status = state.manga.status,
                             onCoverClick = onCoverClicked,
@@ -523,7 +523,7 @@ fun MangaScreenLargeImpl(
                             author = state.manga.author,
                             artist = state.manga.artist,
                             sourceName = remember { state.source.getNameForMangaInfo() },
-                            isStubSource = remember { state.source is SourceManager.StubSource },
+                            isStubSource = remember { state.source is MangaSourceManager.StubMangaSource },
                             coverDataProvider = { state.manga },
                             status = state.manga.status,
                             onCoverClick = onCoverClicked,
@@ -617,12 +617,12 @@ private fun SharedMangaBottomActionMenu(
         onDownloadClicked = {
             onDownloadChapter!!(selected.toList(), ChapterDownloadAction.START)
         }.takeIf {
-            onDownloadChapter != null && selected.fastAny { it.downloadState != Download.State.DOWNLOADED }
+            onDownloadChapter != null && selected.fastAny { it.downloadState != MangaDownload.State.DOWNLOADED }
         },
         onDeleteClicked = {
             onMultiDeleteClicked(selected.fastMap { it.chapter })
         }.takeIf {
-            onDownloadChapter != null && selected.fastAny { it.downloadState == Download.State.DOWNLOADED }
+            onDownloadChapter != null && selected.fastAny { it.downloadState == MangaDownload.State.DOWNLOADED }
         },
         isManga = true,
     )

@@ -25,7 +25,7 @@ import eu.kanade.presentation.components.HorizontalPager
 import eu.kanade.presentation.components.PagerState
 import eu.kanade.presentation.util.plus
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.library.MangaLibraryItem
+import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryItem
 
 @Composable
 fun MangaLibraryPager(

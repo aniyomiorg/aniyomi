@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">Оқылмаған тарау(лар)мен</string>
     <string name="pref_library_update_show_tab_badge">Жаңартулар белгішесінде оқылмағандар санын көрсету</string>
     <string name="default_category">Әдепкі санат</string>
-    <string name="pref_library_update_categories_details">Шығарылған санаттардағы жазбалар енгізілген санаттарда болса да жаңартылмайды.</string>
+    <string name="pref_manga_library_update_categories_details">Шығарылған санаттардағы жазбалар енгізілген санаттарда болса да жаңартылмайды.</string>
     <string name="untrusted_extension_message">Бұл кеңейту сенімсіз сертификатпен қол қойылған және іске қосылмаған.
 \n
 \nЗиянды кеңейту Tachiyomi-де сақталған кез келген кіру тіркелгі деректерін оқуы немесе еркін кодты орындауы мүмкін.
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">Бақылау қызметтері үшін күйді, рейтингті және соңғы оқылған тарауды жаңартады</string>
     <string name="pref_incognito_mode_summary">Оқу тарихын тоқтатады</string>
     <string name="manga_from_library">Кітапханадан</string>
-    <string name="snack_add_to_library">Кітапханаға қосайық па\?</string>
+    <string name="snack_add_to_manga_library">Кітапханаға қосайық па\?</string>
     <string name="also_set_chapter_settings_for_library">Сонымен қоса кітапханадағы жазбаларға қолдану</string>
     <string name="dialog_with_checkbox_reset">Бұл жазба үшін түгел тарауларды қалпына келтіру</string>
     <string name="download_insufficient_space">Жадыда орын аз болғандықтан тараулар жүктелмеді</string>

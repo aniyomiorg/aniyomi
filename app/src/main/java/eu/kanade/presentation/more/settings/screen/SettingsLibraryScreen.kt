@@ -46,7 +46,7 @@ import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.library.LibraryUpdateJob
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.preference.DEVICE_BATTERY_NOT_LOW
 import eu.kanade.tachiyomi.data.preference.DEVICE_CHARGING
 import eu.kanade.tachiyomi.data.preference.DEVICE_NETWORK_NOT_METERED
@@ -239,7 +239,7 @@ object SettingsLibraryScreen : SearchableSettings {
         if (showAnimeDialog) {
             TriStateListDialog(
                 title = stringResource(R.string.anime_categories),
-                message = stringResource(R.string.pref_animelib_update_categories_details),
+                message = stringResource(R.string.pref_anime_library_update_categories_details),
                 items = allAnimeCategories,
                 initialChecked = includedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
                 initialInversed = excludedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
@@ -262,7 +262,7 @@ object SettingsLibraryScreen : SearchableSettings {
         if (showMangaDialog) {
             TriStateListDialog(
                 title = stringResource(R.string.categories),
-                message = stringResource(R.string.pref_library_update_categories_details),
+                message = stringResource(R.string.pref_manga_library_update_categories_details),
                 items = allMangaCategories,
                 initialChecked = includedManga.mapNotNull { id -> allMangaCategories.find { it.id.toString() == id } },
                 initialInversed = excludedManga.mapNotNull { id -> allMangaCategories.find { it.id.toString() == id } },
@@ -290,7 +290,7 @@ object SettingsLibraryScreen : SearchableSettings {
                         168 to stringResource(R.string.update_weekly),
                     ),
                     onValueChanged = {
-                        LibraryUpdateJob.setupTask(context, it)
+                        MangaLibraryUpdateJob.setupTask(context, it)
                         true
                     },
                 ),
@@ -307,7 +307,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                     onValueChanged = {
                         // Post to event looper to allow the preference to be updated.
-                        ContextCompat.getMainExecutor(context).execute { LibraryUpdateJob.setupTask(context) }
+                        ContextCompat.getMainExecutor(context).execute { MangaLibraryUpdateJob.setupTask(context) }
                         true
                     },
                 ),

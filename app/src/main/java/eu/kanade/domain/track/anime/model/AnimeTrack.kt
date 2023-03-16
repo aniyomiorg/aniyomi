@@ -1,6 +1,6 @@
 package eu.kanade.domain.track.anime.model
 
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack as DbAnimeTrack
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack as DbAnimeTrack
 
 data class AnimeTrack(
     val id: Long,
@@ -28,7 +28,7 @@ data class AnimeTrack(
     }
 }
 
-fun AnimeTrack.toDbTrack(): DbAnimeTrack = DbAnimeTrack.create(syncId).also {
+fun AnimeTrack.toDbTrack(): DbAnimeTrack = eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack.create(syncId).also {
     it.id = id
     it.anime_id = animeId
     it.media_id = remoteId

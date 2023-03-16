@@ -2,14 +2,14 @@ package eu.kanade.domain.extension.manga.interactor
 
 import eu.kanade.domain.extension.manga.model.MangaExtensions
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.extension.ExtensionManager
-import eu.kanade.tachiyomi.extension.model.Extension
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
+import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
 class GetMangaExtensionsByType(
     private val preferences: SourcePreferences,
-    private val extensionManager: ExtensionManager,
+    private val extensionManager: MangaExtensionManager,
 ) {
 
     fun subscribe(): Flow<MangaExtensions> {
@@ -24,7 +24,7 @@ class GetMangaExtensionsByType(
             val (updates, installed) = _installed
                 .filter { (showNsfwSources || it.isNsfw.not()) }
                 .sortedWith(
-                    compareBy<Extension.Installed> { it.isObsolete.not() }
+                    compareBy<MangaExtension.Installed> { it.isObsolete.not() }
                         .thenBy(String.CASE_INSENSITIVE_ORDER) { it.name },
                 )
                 .partition { it.hasUpdate }

@@ -3,15 +3,15 @@
     <string name="categories">分类</string>
     <string name="general_categories">分类</string>
     <string name="anime_categories">动画分类</string>
-    <string name="manga_anime">内容库中的条目</string>
+    <string name="entries">内容库中的条目</string>
     <string name="chapters_episodes">章节与选集</string>
     <string name="episodes">选集</string>
     <string name="backup_settings_warning">警告：备份设置的同时会存储您的跟踪码，因此不要与他人分享此备份文件！</string>
-    <string name="label_mangalibrary">漫画</string>
-    <string name="label_animelib">动画</string>
+    <string name="label_manga_library">漫画</string>
+    <string name="label_anime_library">动画</string>
     <string name="label_manga">漫画</string>
-    <string name="label_mangasources">漫画源</string>
-    <string name="label_animesources">动画源</string>
+    <string name="label_manga_sources">漫画源</string>
+    <string name="label_anime_sources">动画源</string>
     <string name="pref_bottom_nav_no_history">将历史记录移至“更多”选项</string>
     <string name="pref_bottom_nav_no_updates">将更新移至“更多”选项</string>
     <string name="pref_bottom_nav_no_manga">将漫画移至“更多”选项</string>
@@ -58,8 +58,8 @@
     <string name="pref_library_update_show_tab_badge">在“更新”图标上显示未读章数</string>
     <string name="default_category">默认漫画分类</string>
     <string name="default_anime_category">默认动画分类</string>
-    <string name="pref_library_update_categories_details">同时存在于“包含”分类以及“排除”分类的漫画将不会被自动更新。</string>
-    <string name="pref_animelib_update_categories_details">同时存在于“包含”分类以及“排除”分类的动画将不会被自动更新。</string>
+    <string name="pref_manga_library_update_categories_details">同时存在于“包含”分类以及“排除”分类的漫画将不会被自动更新。</string>
+    <string name="pref_anime_library_update_categories_details">同时存在于“包含”分类以及“排除”分类的动画将不会被自动更新。</string>
     <string name="untrusted_extension_message">此插件的签名证书并不可信，因此未被启用。
 \n
 \n恶意的插件可能会读取储存在 Tachiyomi 中的任何登录凭据或执行任意代码。
@@ -134,8 +134,8 @@
         <item quantity="other">%1$s个剧集</item>
     </plurals>
     <string name="delete_downloads_for_anime">要删除已下载的剧集吗？</string>
-    <string name="snack_add_to_library">要将漫画添加到书架吗？</string>
-    <string name="snack_add_to_animelib">要将动画添加至内容库？</string>
+    <string name="snack_add_to_manga_library">要将漫画添加到书架吗？</string>
+    <string name="snack_add_to_anime_library">要将动画添加至内容库？</string>
     <string name="display_mode_episode">第%1$s集</string>
     <string name="episode_downloading_progress">下载中（%d%%）</string>
     <string name="download_error">错误</string>

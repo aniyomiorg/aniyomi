@@ -5,8 +5,8 @@ import coil.request.Options
 import eu.kanade.domain.entries.anime.model.AnimeCover
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.toDomainAnime
+import eu.kanade.tachiyomi.data.database.models.anime.Anime
+import eu.kanade.tachiyomi.data.database.models.anime.toDomainAnime
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import eu.kanade.domain.entries.anime.model.Anime as DomainAnime

@@ -22,7 +22,7 @@ import eu.kanade.presentation.components.RadioMenuItem
 import eu.kanade.presentation.components.SearchToolbar
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
-import eu.kanade.tachiyomi.animesource.LocalAnimeSource
+import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 
 @Composable
 fun BrowseAnimeSourceToolbar(

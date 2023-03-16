@@ -32,9 +32,9 @@ import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.plus
 import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.LocalAnimeSource
-import eu.kanade.tachiyomi.ui.browse.animesource.AnimeSourcesState
-import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceScreenModel.Listing
+import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
+import eu.kanade.tachiyomi.ui.browse.anime.source.AnimeSourcesState
+import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 @Composable

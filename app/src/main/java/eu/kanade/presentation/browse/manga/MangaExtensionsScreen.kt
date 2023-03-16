@@ -51,10 +51,10 @@ import eu.kanade.presentation.util.plus
 import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.extension.model.Extension
-import eu.kanade.tachiyomi.extension.model.InstallStep
-import eu.kanade.tachiyomi.ui.browse.extension.MangaExtensionUiModel
-import eu.kanade.tachiyomi.ui.browse.extension.MangaExtensionsState
+import eu.kanade.tachiyomi.extension.InstallStep
+import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
+import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionUiModel
+import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionsState
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
@@ -63,13 +63,13 @@ fun MangaExtensionScreen(
     state: MangaExtensionsState,
     contentPadding: PaddingValues,
     searchQuery: String? = null,
-    onLongClickItem: (Extension) -> Unit,
-    onClickItemCancel: (Extension) -> Unit,
-    onInstallExtension: (Extension.Available) -> Unit,
-    onUninstallExtension: (Extension) -> Unit,
-    onUpdateExtension: (Extension.Installed) -> Unit,
-    onTrustExtension: (Extension.Untrusted) -> Unit,
-    onOpenExtension: (Extension.Installed) -> Unit,
+    onLongClickItem: (MangaExtension) -> Unit,
+    onClickItemCancel: (MangaExtension) -> Unit,
+    onInstallExtension: (MangaExtension.Available) -> Unit,
+    onUninstallExtension: (MangaExtension) -> Unit,
+    onUpdateExtension: (MangaExtension.Installed) -> Unit,
+    onTrustExtension: (MangaExtension.Untrusted) -> Unit,
+    onOpenExtension: (MangaExtension.Installed) -> Unit,
     onClickUpdateAll: () -> Unit,
     onRefresh: () -> Unit,
 ) {
@@ -113,16 +113,16 @@ fun MangaExtensionScreen(
 private fun ExtensionContent(
     state: MangaExtensionsState,
     contentPadding: PaddingValues,
-    onLongClickItem: (Extension) -> Unit,
-    onClickItemCancel: (Extension) -> Unit,
-    onInstallExtension: (Extension.Available) -> Unit,
-    onUninstallExtension: (Extension) -> Unit,
-    onUpdateExtension: (Extension.Installed) -> Unit,
-    onTrustExtension: (Extension.Untrusted) -> Unit,
-    onOpenExtension: (Extension.Installed) -> Unit,
+    onLongClickItem: (MangaExtension) -> Unit,
+    onClickItemCancel: (MangaExtension) -> Unit,
+    onInstallExtension: (MangaExtension.Available) -> Unit,
+    onUninstallExtension: (MangaExtension) -> Unit,
+    onUpdateExtension: (MangaExtension.Installed) -> Unit,
+    onTrustExtension: (MangaExtension.Untrusted) -> Unit,
+    onOpenExtension: (MangaExtension.Installed) -> Unit,
     onClickUpdateAll: () -> Unit,
 ) {
-    var trustState by remember { mutableStateOf<Extension.Untrusted?>(null) }
+    var trustState by remember { mutableStateOf<MangaExtension.Untrusted?>(null) }
     val showMiuiWarning = DeviceUtil.isMiui && !DeviceUtil.isMiuiOptimizationDisabled()
     val uriHandler = LocalUriHandler.current
 
@@ -196,24 +196,24 @@ private fun ExtensionContent(
                         item = item,
                         onClickItem = {
                             when (it) {
-                                is Extension.Available -> onInstallExtension(it)
-                                is Extension.Installed -> onOpenExtension(it)
-                                is Extension.Untrusted -> { trustState = it }
+                                is MangaExtension.Available -> onInstallExtension(it)
+                                is MangaExtension.Installed -> onOpenExtension(it)
+                                is MangaExtension.Untrusted -> { trustState = it }
                             }
                         },
                         onLongClickItem = onLongClickItem,
                         onClickItemCancel = onClickItemCancel,
                         onClickItemAction = {
                             when (it) {
-                                is Extension.Available -> onInstallExtension(it)
-                                is Extension.Installed -> {
+                                is MangaExtension.Available -> onInstallExtension(it)
+                                is MangaExtension.Installed -> {
                                     if (it.hasUpdate) {
                                         onUpdateExtension(it)
                                     } else {
                                         onOpenExtension(it)
                                     }
                                 }
-                                is Extension.Untrusted -> { trustState = it }
+                                is MangaExtension.Untrusted -> { trustState = it }
                             }
                         },
                     )
@@ -242,10 +242,10 @@ private fun ExtensionContent(
 private fun ExtensionItem(
     modifier: Modifier = Modifier,
     item: MangaExtensionUiModel.Item,
-    onClickItem: (Extension) -> Unit,
-    onLongClickItem: (Extension) -> Unit,
-    onClickItemCancel: (Extension) -> Unit,
-    onClickItemAction: (Extension) -> Unit,
+    onClickItem: (MangaExtension) -> Unit,
+    onLongClickItem: (MangaExtension) -> Unit,
+    onClickItemCancel: (MangaExtension) -> Unit,
+    onClickItemAction: (MangaExtension) -> Unit,
 ) {
     val (extension, installStep) = item
     BaseBrowseItem(
@@ -298,7 +298,7 @@ private fun ExtensionItem(
 
 @Composable
 private fun ExtensionItemContent(
-    extension: Extension,
+    extension: MangaExtension,
     installStep: InstallStep,
     modifier: Modifier = Modifier,
 ) {
@@ -317,7 +317,7 @@ private fun ExtensionItemContent(
             mainAxisSpacing = 4.dp,
         ) {
             ProvideTextStyle(value = MaterialTheme.typography.bodySmall) {
-                if (extension is Extension.Installed && extension.lang.isNotEmpty()) {
+                if (extension is MangaExtension.Installed && extension.lang.isNotEmpty()) {
                     Text(
                         text = LocaleHelper.getSourceDisplayName(extension.lang, LocalContext.current),
                     )
@@ -330,9 +330,9 @@ private fun ExtensionItemContent(
                 }
 
                 val warning = when {
-                    extension is Extension.Untrusted -> R.string.ext_untrusted
-                    extension is Extension.Installed && extension.isUnofficial -> R.string.ext_unofficial
-                    extension is Extension.Installed && extension.isObsolete -> R.string.ext_obsolete
+                    extension is MangaExtension.Untrusted -> R.string.ext_untrusted
+                    extension is MangaExtension.Installed && extension.isUnofficial -> R.string.ext_unofficial
+                    extension is MangaExtension.Installed && extension.isObsolete -> R.string.ext_obsolete
                     extension.isNsfw -> R.string.ext_nsfw_short
                     else -> null
                 }
@@ -363,11 +363,11 @@ private fun ExtensionItemContent(
 
 @Composable
 private fun ExtensionItemActions(
-    extension: Extension,
+    extension: MangaExtension,
     installStep: InstallStep,
     modifier: Modifier = Modifier,
-    onClickItemCancel: (Extension) -> Unit = {},
-    onClickItemAction: (Extension) -> Unit = {},
+    onClickItemCancel: (MangaExtension) -> Unit = {},
+    onClickItemAction: (MangaExtension) -> Unit = {},
 ) {
     val isIdle = installStep.isCompleted()
     Row(modifier = modifier) {
@@ -381,15 +381,15 @@ private fun ExtensionItemActions(
                         InstallStep.Error -> stringResource(R.string.action_retry)
                         InstallStep.Idle -> {
                             when (extension) {
-                                is Extension.Installed -> {
+                                is MangaExtension.Installed -> {
                                     if (extension.hasUpdate) {
                                         stringResource(R.string.ext_update)
                                     } else {
                                         stringResource(R.string.action_settings)
                                     }
                                 }
-                                is Extension.Untrusted -> stringResource(R.string.ext_trust)
-                                is Extension.Available -> stringResource(R.string.ext_install)
+                                is MangaExtension.Untrusted -> stringResource(R.string.ext_trust)
+                                is MangaExtension.Available -> stringResource(R.string.ext_install)
                             }
                         }
                         else -> error("Must not show install process text")

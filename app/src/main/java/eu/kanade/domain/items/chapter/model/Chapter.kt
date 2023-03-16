@@ -1,8 +1,8 @@
 package eu.kanade.domain.items.chapter.model
 
-import eu.kanade.tachiyomi.data.database.models.ChapterImpl
+import eu.kanade.tachiyomi.data.database.models.manga.ChapterImpl
 import eu.kanade.tachiyomi.source.model.SChapter
-import eu.kanade.tachiyomi.data.database.models.Chapter as DbChapter
+import eu.kanade.tachiyomi.data.database.models.manga.Chapter as DbChapter
 
 data class Chapter(
     val id: Long,

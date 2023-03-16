@@ -66,16 +66,16 @@ import eu.kanade.presentation.util.plus
 import eu.kanade.presentation.util.runOnEnterKeyPressed
 import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 
 @Composable
 fun MangaTrackServiceSearch(
     query: TextFieldValue,
     onQueryChange: (TextFieldValue) -> Unit,
     onDispatchQuery: () -> Unit,
-    queryResult: Result<List<TrackSearch>>?,
-    selected: TrackSearch?,
-    onSelectedChange: (TrackSearch) -> Unit,
+    queryResult: Result<List<MangaTrackSearch>>?,
+    selected: MangaTrackSearch?,
+    onSelectedChange: (MangaTrackSearch) -> Unit,
     onConfirmSelection: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {

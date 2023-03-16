@@ -3,15 +3,15 @@ package eu.kanade.data.source.manga
 import eu.kanade.domain.source.manga.model.MangaSourceData
 import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.tachiyomi.source.CatalogueMangaSource
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 
-val mangaSourceMapper: (eu.kanade.tachiyomi.source.Source) -> Source = { source ->
+val mangaSourceMapper: (eu.kanade.tachiyomi.source.MangaSource) -> Source = { source ->
     Source(
         source.id,
         source.lang,
         source.name,
         supportsLatest = false,
-        isStub = source is SourceManager.StubSource,
+        isStub = source is MangaSourceManager.StubMangaSource,
     )
 }
 

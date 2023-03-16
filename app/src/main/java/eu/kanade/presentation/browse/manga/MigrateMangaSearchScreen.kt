@@ -13,8 +13,8 @@ import eu.kanade.presentation.browse.manga.components.GlobalMangaSearchCardRow
 import eu.kanade.presentation.components.LazyColumn
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.source.CatalogueMangaSource
-import eu.kanade.tachiyomi.ui.browse.migration.search.MigrateMangaSearchState
-import eu.kanade.tachiyomi.ui.browse.source.globalsearch.SearchItemResult
+import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateMangaSearchState
+import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchItemResult
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 @Composable
@@ -56,7 +56,7 @@ fun MigrateMangaSearchScreen(
 @Composable
 fun MigrateMangaSearchContent(
     sourceId: Long,
-    items: Map<CatalogueMangaSource, SearchItemResult>,
+    items: Map<CatalogueMangaSource, MangaSearchItemResult>,
     contentPadding: PaddingValues,
     getManga: @Composable (CatalogueMangaSource, Manga) -> State<Manga>,
     onClickSource: (CatalogueMangaSource) -> Unit,
@@ -74,13 +74,13 @@ fun MigrateMangaSearchContent(
                     onClick = { onClickSource(source) },
                 ) {
                     when (result) {
-                        is SearchItemResult.Error -> {
+                        is MangaSearchItemResult.Error -> {
                             GlobalSearchErrorResultItem(message = result.throwable.message)
                         }
-                        SearchItemResult.Loading -> {
+                        MangaSearchItemResult.Loading -> {
                             GlobalSearchLoadingResultItem()
                         }
-                        is SearchItemResult.Success -> {
+                        is MangaSearchItemResult.Success -> {
                             if (result.isEmpty) {
                                 GlobalSearchEmptyResultItem()
                                 return@GlobalSearchResultItem

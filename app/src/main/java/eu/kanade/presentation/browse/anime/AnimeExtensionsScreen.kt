@@ -50,10 +50,10 @@ import eu.kanade.presentation.util.plus
 import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animeextension.model.AnimeExtension
-import eu.kanade.tachiyomi.extension.model.InstallStep
-import eu.kanade.tachiyomi.ui.browse.animeextension.AnimeExtensionUiModel
-import eu.kanade.tachiyomi.ui.browse.animeextension.AnimeExtensionsState
+import eu.kanade.tachiyomi.extension.InstallStep
+import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
+import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionUiModel
+import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsState
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 

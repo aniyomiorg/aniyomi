@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.track.kavita
 
-import eu.kanade.tachiyomi.data.database.models.Track
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
+import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.await
@@ -125,7 +125,7 @@ class KavitaApi(private val client: OkHttpClient, interceptor: KavitaInterceptor
         return 0F
     }
 
-    suspend fun getTrackSearch(url: String): TrackSearch = withIOContext {
+    suspend fun getTrackSearch(url: String): MangaTrackSearch = withIOContext {
         try {
             val serieDto: SeriesDto = authClient.newCall(GET(url))
                 .await()
@@ -151,7 +151,7 @@ class KavitaApi(private val client: OkHttpClient, interceptor: KavitaInterceptor
         }
     }
 
-    suspend fun updateProgress(track: Track): Track {
+    suspend fun updateProgress(track: MangaTrack): MangaTrack {
         val requestUrl = "${getApiFromUrl(track.tracking_url)}/Tachiyomi/mark-chapter-until-as-read?seriesId=${getIdFromUrl(track.tracking_url)}&chapterNumber=${track.last_chapter_read}"
         authClient.newCall(POST(requestUrl, body = "{}".toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())))
             .await()

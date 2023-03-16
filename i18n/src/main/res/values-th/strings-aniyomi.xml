@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">มีตอนที่ยังไม่ได้อ่าน</string>
     <string name="pref_library_update_show_tab_badge">แสดงไอคอนจำนวนตอนที่ยังไม่ได้อ่าน</string>
     <string name="default_category">หมวดหมู่เริ่มต้น</string>
-    <string name="pref_library_update_categories_details">มังงะในหมวดหมู่ที่ยกเว้นจะไม่ได้รับการอัปเดตแม้ว่าจะอยู่ในหมวดหมู่ที่รวมอยู่ด้วยก็ตาม</string>
+    <string name="pref_manga_library_update_categories_details">มังงะในหมวดหมู่ที่ยกเว้นจะไม่ได้รับการอัปเดตแม้ว่าจะอยู่ในหมวดหมู่ที่รวมอยู่ด้วยก็ตาม</string>
     <string name="untrusted_extension_message">ส่วนขยายนี้ลงนามด้วยใบรับรองที่ไม่น่าเชื่อถือและจะไม่ถูกเปิดใช้งาน
 \n
 \nส่วนขยายที่เป็นอันตรายสามารถอ่านข้อมูลการเข้าสู่ระบบที่จัดเก็บไว้ใน Tachiyomi หรือเรียกใช้โค้ดโดยอำเภอใจ
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">อัปเดตสถานะคะแนนและตอนสุดท้ายที่อ่านจากบริการติดตาม</string>
     <string name="pref_incognito_mode_summary">หยุดประวัติการอ่านชั่วคราว</string>
     <string name="manga_from_library">มังงะจากคลัง</string>
-    <string name="snack_add_to_library">เพิ่มมังงะไปยังคลัง\?</string>
+    <string name="snack_add_to_manga_library">เพิ่มมังงะไปยังคลัง\?</string>
     <string name="download_error">เกิดข้อผิดพลาด</string>
     <string name="download_paused">หยุดชั่วคราว</string>
     <string name="also_set_chapter_settings_for_library">นําไปใช้กับมังงะทั้งหมดในคลังด้วย</string>

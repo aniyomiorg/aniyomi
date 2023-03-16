@@ -21,7 +21,7 @@ import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.presentation.components.PullRefresh
 import eu.kanade.presentation.components.rememberPagerState
 import eu.kanade.presentation.library.LibraryTabs
-import eu.kanade.tachiyomi.ui.animelib.AnimeLibraryItem
+import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds

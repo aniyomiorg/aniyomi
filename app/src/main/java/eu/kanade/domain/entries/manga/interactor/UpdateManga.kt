@@ -5,7 +5,7 @@ import eu.kanade.domain.entries.manga.model.MangaUpdate
 import eu.kanade.domain.entries.manga.model.hasCustomCover
 import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.entries.manga.repository.MangaRepository
-import eu.kanade.tachiyomi.data.cache.CoverCache
+import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.source.model.SManga
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -27,7 +27,7 @@ class UpdateManga(
         localManga: Manga,
         remoteManga: SManga,
         manualFetch: Boolean,
-        coverCache: CoverCache = Injekt.get(),
+        coverCache: MangaCoverCache = Injekt.get(),
     ): Boolean {
         val remoteTitle = try {
             remoteManga.title

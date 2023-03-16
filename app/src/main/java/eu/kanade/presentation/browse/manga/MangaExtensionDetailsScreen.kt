@@ -57,9 +57,9 @@ import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.presentation.more.settings.widget.TrailingWidgetBuffer
 import eu.kanade.presentation.util.padding
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.extension.model.Extension
+import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.source.ConfigurableSource
-import eu.kanade.tachiyomi.ui.browse.extension.details.MangaExtensionDetailsState
+import eu.kanade.tachiyomi.ui.browse.manga.extension.details.MangaExtensionDetailsState
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 @Composable
@@ -144,7 +144,7 @@ fun ExtensionDetailsScreen(
 @Composable
 private fun ExtensionDetails(
     contentPadding: PaddingValues,
-    extension: Extension.Installed,
+    extension: MangaExtension.Installed,
     sources: List<MangaExtensionSourceItem>,
     onClickSourcePreferences: (sourceId: Long) -> Unit,
     onClickUninstall: () -> Unit,
@@ -206,7 +206,7 @@ private fun ExtensionDetails(
 
 @Composable
 private fun DetailsHeader(
-    extension: Extension,
+    extension: MangaExtension,
     onClickAgeRating: () -> Unit,
     onClickUninstall: () -> Unit,
     onClickAppInfo: () -> Unit,

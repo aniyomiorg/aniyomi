@@ -39,7 +39,7 @@ import eu.kanade.presentation.util.plus
 import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.migration.sources.MigrateMangaSourceState
+import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.MigrateMangaSourceState
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 
 @Composable

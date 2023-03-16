@@ -15,14 +15,14 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.animeextension.AnimeExtensionsScreenModel
-import eu.kanade.tachiyomi.ui.browse.animeextension.animeExtensionsTab
-import eu.kanade.tachiyomi.ui.browse.animesource.animeSourcesTab
-import eu.kanade.tachiyomi.ui.browse.extension.ExtensionsScreenModel
-import eu.kanade.tachiyomi.ui.browse.extension.extensionsTab
-import eu.kanade.tachiyomi.ui.browse.migration.animesources.migrateAnimeSourceTab
-import eu.kanade.tachiyomi.ui.browse.migration.sources.migrateSourceTab
-import eu.kanade.tachiyomi.ui.browse.source.sourcesTab
+import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsScreenModel
+import eu.kanade.tachiyomi.ui.browse.anime.extension.animeExtensionsTab
+import eu.kanade.tachiyomi.ui.browse.anime.migration.sources.migrateAnimeSourceTab
+import eu.kanade.tachiyomi.ui.browse.anime.source.animeSourcesTab
+import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionsScreenModel
+import eu.kanade.tachiyomi.ui.browse.manga.extension.mangaExtensionsTab
+import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.migrateMangaSourceTab
+import eu.kanade.tachiyomi.ui.browse.manga.source.mangaSourcesTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 
@@ -47,8 +47,8 @@ data class BrowseTab(
         val context = LocalContext.current
 
         // Hoisted for extensions tab's search bar
-        val extensionsScreenModel = rememberScreenModel { ExtensionsScreenModel() }
-        val extensionsQuery by extensionsScreenModel.query.collectAsState()
+        val mangaExtensionsScreenModel = rememberScreenModel { MangaExtensionsScreenModel() }
+        val mangaExtensionsQuery by mangaExtensionsScreenModel.query.collectAsState()
 
         val animeExtensionsScreenModel = rememberScreenModel { AnimeExtensionsScreenModel() }
         val animeExtensionsQuery by animeExtensionsScreenModel.query.collectAsState()
@@ -57,15 +57,15 @@ data class BrowseTab(
             titleRes = R.string.browse,
             tabs = listOf(
                 animeSourcesTab(),
-                sourcesTab(),
+                mangaSourcesTab(),
                 animeExtensionsTab(animeExtensionsScreenModel),
-                extensionsTab(extensionsScreenModel),
+                mangaExtensionsTab(mangaExtensionsScreenModel),
                 migrateAnimeSourceTab(),
-                migrateSourceTab(),
+                migrateMangaSourceTab(),
             ),
             startIndex = 2.takeIf { toExtensions },
-            searchQuery = extensionsQuery,
-            onChangeSearchQuery = extensionsScreenModel::search,
+            searchQuery = mangaExtensionsQuery,
+            onChangeSearchQuery = mangaExtensionsScreenModel::search,
             searchQueryAnime = animeExtensionsQuery,
             onChangeSearchQueryAnime = animeExtensionsScreenModel::search,
             scrollable = true,

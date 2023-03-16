@@ -1,11 +1,11 @@
 package eu.kanade.tachiyomi.data.track.kitsu
 
 import androidx.annotation.CallSuper
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
@@ -37,7 +37,7 @@ class KitsuSearchManga(obj: JsonObject) {
     private val endDate = obj["endDate"]?.jsonPrimitive?.contentOrNull
 
     @CallSuper
-    fun toTrack() = TrackSearch.create(TrackManager.KITSU).apply {
+    fun toTrack() = MangaTrackSearch.create(TrackManager.KITSU).apply {
         media_id = this@KitsuSearchManga.id
         title = canonicalTitle
         total_chapters = chapterCount ?: 0
@@ -105,7 +105,7 @@ class KitsuLibManga(obj: JsonObject, manga: JsonObject) {
     private val ratingTwenty = obj["attributes"]!!.jsonObject["ratingTwenty"]?.jsonPrimitive?.contentOrNull
     val progress = obj["attributes"]!!.jsonObject["progress"]!!.jsonPrimitive.int
 
-    fun toTrack() = TrackSearch.create(TrackManager.KITSU).apply {
+    fun toTrack() = MangaTrackSearch.create(TrackManager.KITSU).apply {
         media_id = libraryId
         title = canonicalTitle
         total_chapters = chapterCount ?: 0
@@ -185,7 +185,7 @@ data class OAuth(
 
 fun OAuth.isExpired() = (System.currentTimeMillis() / 1000) > (created_at + expires_in - 3600)
 
-fun Track.toKitsuStatus() = when (status) {
+fun MangaTrack.toKitsuStatus() = when (status) {
     Kitsu.READING -> "current"
     Kitsu.COMPLETED -> "completed"
     Kitsu.ON_HOLD -> "on_hold"
@@ -194,7 +194,7 @@ fun Track.toKitsuStatus() = when (status) {
     else -> throw Exception("Unknown status")
 }
 
-fun Track.toKitsuScore(): String? {
+fun MangaTrack.toKitsuScore(): String? {
     return if (score > 0) (score * 2).toInt().toString() else null
 }
 

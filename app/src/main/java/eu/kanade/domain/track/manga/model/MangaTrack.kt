@@ -1,6 +1,6 @@
 package eu.kanade.domain.track.manga.model
 
-import eu.kanade.tachiyomi.data.database.models.Track as DbTrack
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack as DbMangaTrack
 
 data class MangaTrack(
     val id: Long,
@@ -28,7 +28,7 @@ data class MangaTrack(
     }
 }
 
-fun MangaTrack.toDbTrack(): DbTrack = DbTrack.create(syncId).also {
+fun MangaTrack.toDbTrack(): DbMangaTrack = eu.kanade.tachiyomi.data.database.models.manga.MangaTrack.create(syncId).also {
     it.id = id
     it.manga_id = mangaId
     it.media_id = remoteId
@@ -43,7 +43,7 @@ fun MangaTrack.toDbTrack(): DbTrack = DbTrack.create(syncId).also {
     it.finished_reading_date = finishDate
 }
 
-fun DbTrack.toDomainTrack(idRequired: Boolean = true): MangaTrack? {
+fun DbMangaTrack.toDomainTrack(idRequired: Boolean = true): MangaTrack? {
     val trackId = id ?: if (idRequired.not()) -1 else return null
     return MangaTrack(
         id = trackId,

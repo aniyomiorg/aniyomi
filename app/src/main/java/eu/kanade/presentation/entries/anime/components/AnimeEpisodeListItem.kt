@@ -34,7 +34,7 @@ import eu.kanade.presentation.util.ReadItemAlpha
 import eu.kanade.presentation.util.SecondaryItemAlpha
 import eu.kanade.presentation.util.selectedBackground
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
+import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 
 @Composable
 fun AnimeEpisodeListItem(

@@ -3,16 +3,16 @@ package eu.kanade.domain.items.chapter.model
 import eu.kanade.domain.entries.TriStateFilter
 import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.entries.manga.model.isLocal
-import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.download.model.Download
-import eu.kanade.tachiyomi.ui.manga.ChapterItem
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
+import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
+import eu.kanade.tachiyomi.ui.entries.manga.ChapterItem
 import eu.kanade.tachiyomi.util.chapter.getChapterSort
 
 /**
  * Applies the view filters to the list of chapters obtained from the database.
  * @return an observable of the list of chapters filtered and sorted.
  */
-fun List<Chapter>.applyFilters(manga: Manga, downloadManager: DownloadManager): List<Chapter> {
+fun List<Chapter>.applyFilters(manga: Manga, downloadManager: MangaDownloadManager): List<Chapter> {
     val isLocalManga = manga.isLocal()
     val unreadFilter = manga.unreadFilter
     val downloadedFilter = manga.downloadedFilter
@@ -35,13 +35,13 @@ fun List<Chapter>.applyFilters(manga: Manga, downloadManager: DownloadManager): 
         .filter { chapter ->
             val downloaded = downloadManager.isChapterDownloaded(chapter.name, chapter.scanlator, manga.title, manga.source)
             val downloadState = when {
-                downloaded -> Download.State.DOWNLOADED
-                else -> Download.State.NOT_DOWNLOADED
+                downloaded -> MangaDownload.State.DOWNLOADED
+                else -> MangaDownload.State.NOT_DOWNLOADED
             }
             when (downloadedFilter) {
                 TriStateFilter.DISABLED -> true
-                TriStateFilter.ENABLED_IS -> downloadState == Download.State.DOWNLOADED || isLocalManga
-                TriStateFilter.ENABLED_NOT -> downloadState != Download.State.DOWNLOADED && !isLocalManga
+                TriStateFilter.ENABLED_IS -> downloadState == MangaDownload.State.DOWNLOADED || isLocalManga
+                TriStateFilter.ENABLED_NOT -> downloadState != MangaDownload.State.DOWNLOADED && !isLocalManga
             }
         }
         .sortedWith(getChapterSort(manga))

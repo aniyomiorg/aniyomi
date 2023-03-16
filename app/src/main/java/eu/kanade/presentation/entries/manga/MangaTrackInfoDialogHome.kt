@@ -48,7 +48,7 @@ import eu.kanade.presentation.components.TrackLogoIcon
 import eu.kanade.presentation.components.VerticalDivider
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.ui.manga.track.MangaTrackItem
+import eu.kanade.tachiyomi.ui.entries.manga.track.MangaTrackItem
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import java.text.DateFormat
 

@@ -52,7 +52,7 @@ import eu.kanade.tachiyomi.data.track.bangumi.BangumiApi
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeListApi
 import eu.kanade.tachiyomi.data.track.shikimori.ShikimoriApi
 import eu.kanade.tachiyomi.data.track.simkl.SimklApi
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.openInBrowser
@@ -167,7 +167,7 @@ object SettingsTrackingScreen : SearchableSettings {
                         title = stringResource(trackManager.komga.nameRes()),
                         service = trackManager.komga,
                         login = {
-                            val sourceManager = Injekt.get<SourceManager>()
+                            val sourceManager = Injekt.get<MangaSourceManager>()
                             val acceptedSources = trackManager.komga.getAcceptedSources()
                             val hasValidSourceInstalled = sourceManager.getCatalogueSources()
                                 .any { it::class.qualifiedName in acceptedSources }
@@ -184,7 +184,7 @@ object SettingsTrackingScreen : SearchableSettings {
                         title = stringResource(trackManager.kavita.nameRes()),
                         service = trackManager.kavita,
                         login = {
-                            val sourceManager = Injekt.get<SourceManager>()
+                            val sourceManager = Injekt.get<MangaSourceManager>()
                             val acceptedSources = trackManager.kavita.getAcceptedSources()
                             val hasValidSourceInstalled = sourceManager.getCatalogueSources()
                                 .any { it::class.qualifiedName in acceptedSources }

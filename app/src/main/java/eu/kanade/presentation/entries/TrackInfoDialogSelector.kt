@@ -91,7 +91,7 @@ fun TrackStatusSelector(
 }
 
 @Composable
-fun TrackChapterSelector(
+fun TrackItemSelector(
     selection: Int,
     onSelectionChange: (Int) -> Unit,
     range: Iterable<Int>,

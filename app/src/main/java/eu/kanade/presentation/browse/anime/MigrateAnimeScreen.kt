@@ -12,7 +12,7 @@ import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.entries.anime.components.BaseAnimeListItem
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.migration.anime.MigrateAnimeState
+import eu.kanade.tachiyomi.ui.browse.anime.migration.anime.MigrateAnimeState
 
 @Composable
 fun MigrateAnimeScreen(

@@ -3,7 +3,7 @@ package eu.kanade.domain.source.manga.model
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.graphics.drawable.toBitmap
-import eu.kanade.tachiyomi.extension.ExtensionManager
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -25,7 +25,7 @@ data class Source(
 
     val icon: ImageBitmap?
         get() {
-            return Injekt.get<ExtensionManager>().getAppIconForSource(id)
+            return Injekt.get<MangaExtensionManager>().getAppIconForSource(id)
                 ?.toBitmap()
                 ?.asImageBitmap()
         }

@@ -42,7 +42,7 @@ import eu.kanade.presentation.util.ReadItemAlpha
 import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.selectedBackground
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.download.model.Download
+import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
 import java.util.Date
 import kotlin.time.Duration.Companion.minutes
@@ -144,7 +144,7 @@ fun MangaUpdatesUiItem(
     onClickCover: (() -> Unit)?,
     onDownloadChapter: ((ChapterDownloadAction) -> Unit)?,
     // Download Indicator
-    downloadStateProvider: () -> Download.State,
+    downloadStateProvider: () -> MangaDownload.State,
     downloadProgressProvider: () -> Int,
 ) {
     val haptic = LocalHapticFeedback.current

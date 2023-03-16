@@ -5,9 +5,9 @@ import android.view.MenuItem
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.download.DownloadService
-import eu.kanade.tachiyomi.data.download.model.Download
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
+import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.util.system.logcat
@@ -26,7 +26,7 @@ import uy.kohesive.injekt.api.get
 import java.util.concurrent.TimeUnit
 
 class MangaDownloadQueueScreenModel(
-    private val downloadManager: DownloadManager = Injekt.get(),
+    private val downloadManager: MangaDownloadManager = Injekt.get(),
 ) : ScreenModel {
 
     private val _state = MutableStateFlow(emptyList<MangaDownloadHeaderItem>())
@@ -42,7 +42,7 @@ class MangaDownloadQueueScreenModel(
     /**
      * Map of subscriptions for active downloads.
      */
-    val progressSubscriptions by lazy { mutableMapOf<Download, Subscription>() }
+    val progressSubscriptions by lazy { mutableMapOf<MangaDownload, Subscription>() }
 
     val listener = object : MangaDownloadAdapter.DownloadItemListener {
         /**
@@ -72,7 +72,7 @@ class MangaDownloadQueueScreenModel(
                 when (menuItem.itemId) {
                     R.id.move_to_top, R.id.move_to_bottom -> {
                         val headerItems = adapter?.headerItems ?: return
-                        val newDownloads = mutableListOf<Download>()
+                        val newDownloads = mutableListOf<MangaDownload>()
                         headerItems.forEach { headerItem ->
                             headerItem as MangaDownloadHeaderItem
                             if (headerItem == item.header) {
@@ -145,21 +145,21 @@ class MangaDownloadQueueScreenModel(
     }
 
     fun clearQueue(context: Context) {
-        DownloadService.stop(context)
+        MangaDownloadService.stop(context)
         downloadManager.clearQueue()
     }
 
-    fun reorder(downloads: List<Download>) {
+    fun reorder(downloads: List<MangaDownload>) {
         downloadManager.reorderQueue(downloads)
     }
 
-    fun cancel(downloads: List<Download>) {
+    fun cancel(downloads: List<MangaDownload>) {
         downloadManager.cancelQueuedDownloads(downloads)
     }
 
     fun <R : Comparable<R>> reorderQueue(selector: (MangaDownloadItem) -> R, reverse: Boolean = false) {
         val adapter = adapter ?: return
-        val newDownloads = mutableListOf<Download>()
+        val newDownloads = mutableListOf<MangaDownload>()
         adapter.headerItems.forEach { headerItem ->
             headerItem as MangaDownloadHeaderItem
             headerItem.subItems = headerItem.subItems.sortedBy(selector).toMutableList().apply {
@@ -177,19 +177,19 @@ class MangaDownloadQueueScreenModel(
      *
      * @param download the download whose status has changed.
      */
-    fun onStatusChange(download: Download) {
+    fun onStatusChange(download: MangaDownload) {
         when (download.status) {
-            Download.State.DOWNLOADING -> {
+            MangaDownload.State.DOWNLOADING -> {
                 observeProgress(download)
                 // Initial update of the downloaded pages
                 onUpdateDownloadedPages(download)
             }
-            Download.State.DOWNLOADED -> {
+            MangaDownload.State.DOWNLOADED -> {
                 unsubscribeProgress(download)
                 onUpdateProgress(download)
                 onUpdateDownloadedPages(download)
             }
-            Download.State.ERROR -> unsubscribeProgress(download)
+            MangaDownload.State.ERROR -> unsubscribeProgress(download)
             else -> {
                 /* unused */
             }
@@ -201,7 +201,7 @@ class MangaDownloadQueueScreenModel(
      *
      * @param download the download to observe its progress.
      */
-    private fun observeProgress(download: Download) {
+    private fun observeProgress(download: MangaDownload) {
         val subscription = Observable.interval(50, TimeUnit.MILLISECONDS)
             // Get the sum of percentages for all the pages.
             .flatMap {
@@ -231,7 +231,7 @@ class MangaDownloadQueueScreenModel(
      *
      * @param download the download to unsubscribe.
      */
-    private fun unsubscribeProgress(download: Download) {
+    private fun unsubscribeProgress(download: MangaDownload) {
         progressSubscriptions.remove(download)?.unsubscribe()
     }
 
@@ -240,7 +240,7 @@ class MangaDownloadQueueScreenModel(
      *
      * @param download the download whose progress has changed.
      */
-    private fun onUpdateProgress(download: Download) {
+    private fun onUpdateProgress(download: MangaDownload) {
         getHolder(download)?.notifyProgress()
     }
 
@@ -249,7 +249,7 @@ class MangaDownloadQueueScreenModel(
      *
      * @param download the download whose page has been downloaded.
      */
-    fun onUpdateDownloadedPages(download: Download) {
+    fun onUpdateDownloadedPages(download: MangaDownload) {
         getHolder(download)?.notifyDownloadedPages()
     }
 
@@ -259,7 +259,7 @@ class MangaDownloadQueueScreenModel(
      * @param download the download to find.
      * @return the holder of the download or null if it's not bound.
      */
-    private fun getHolder(download: Download): MangaDownloadHolder? {
+    private fun getHolder(download: MangaDownload): MangaDownloadHolder? {
         return controllerBinding.recycler.findViewHolderForItemId(download.chapter.id) as? MangaDownloadHolder
     }
 }

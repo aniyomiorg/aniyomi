@@ -34,7 +34,7 @@ import eu.kanade.presentation.util.ReadItemAlpha
 import eu.kanade.presentation.util.SecondaryItemAlpha
 import eu.kanade.presentation.util.selectedBackground
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.download.model.Download
+import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 
 @Composable
 fun MangaChapterListItem(
@@ -47,7 +47,7 @@ fun MangaChapterListItem(
     bookmark: Boolean,
     selected: Boolean,
     downloadIndicatorEnabled: Boolean,
-    downloadStateProvider: () -> Download.State,
+    downloadStateProvider: () -> MangaDownload.State,
     downloadProgressProvider: () -> Int,
     onLongClick: () -> Unit,
     onClick: () -> Unit,

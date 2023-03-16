@@ -2,8 +2,8 @@ package eu.kanade.domain.extension.anime.interactor
 
 import eu.kanade.domain.extension.anime.model.AnimeExtensions
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
-import eu.kanade.tachiyomi.animeextension.model.AnimeExtension
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 

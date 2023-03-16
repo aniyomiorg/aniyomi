@@ -13,8 +13,8 @@ import eu.kanade.presentation.browse.anime.components.GlobalAnimeSearchCardRow
 import eu.kanade.presentation.components.LazyColumn
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
-import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.AnimeSearchItemResult
-import eu.kanade.tachiyomi.ui.browse.migration.search.MigrateAnimeSearchState
+import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeSearchState
+import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSearchItemResult
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 @Composable
@@ -41,7 +41,7 @@ fun MigrateAnimeSearchScreen(
             )
         },
     ) { paddingValues ->
-        MigrateSearchContent(
+        MigrateAnimeSearchContent(
             sourceId = state.anime?.source ?: -1,
             items = state.items,
             contentPadding = paddingValues,
@@ -54,7 +54,7 @@ fun MigrateAnimeSearchScreen(
 }
 
 @Composable
-fun MigrateSearchContent(
+fun MigrateAnimeSearchContent(
     sourceId: Long,
     items: Map<CatalogueAnimeSource, AnimeSearchItemResult>,
     contentPadding: PaddingValues,
