@@ -375,7 +375,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
-            <SeekBar
+            <eu.kanade.tachiyomi.ui.player.CustomSeekBar
                 android:id="@+id/playbackSeekbar"
                 android:layout_width="0dp"
                 android:layout_height="48dp"

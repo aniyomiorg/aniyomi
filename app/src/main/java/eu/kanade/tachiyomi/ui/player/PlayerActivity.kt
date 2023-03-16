@@ -1577,6 +1577,7 @@ class PlayerActivity :
         waitingAniSkip = playerPreferences.waitingTimeAniSkip().get()
         runBlocking {
             aniSkipInterval = viewModel.aniSkipResponse(player.duration)
+            playerControls.binding.playbackSeekbar.setStamps(aniSkipInterval)
         }
     }
 

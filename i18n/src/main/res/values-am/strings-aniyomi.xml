@@ -5,9 +5,9 @@
     <string name="default_category">ነባሪ ምድብ</string>
     <string name="untrusted_extension_message">ይህ ቅጥያ ባልታመነ የእውቅና ማረጋገጫ ተፈርሟል እና አልነቃም።
 \n
-\nተንኮል አዘል ቅጥያ በታቺሚሚ ውስጥ የተከማቸውን ማንኛውንም የመግቢያ ማስረጃዎችን በማንበብ ወይም የዘፈቀደ ኮድን ሊፈጽም ይችላል ፡፡
+\nተንኮል አዘል ቅጥያ በአኒዮሚ ውስጥ የተከማቸውን ማንኛውንም የሚስጥር ማስረጃዎችን በማንበብ ወይም ያልተፈለገ ስራ ሊፈጽም ይችላል ፡፡
 \n
-\nበዚህ የምስክር ወረቀት በመተማመን እነዚህን አደጋዎች ይቀበላሉ ፡፡</string>
+\nይህን የምስክር ወረቀት በመተማመን እነዚህን አደጋዎች ይቀበላሉ ፡፡</string>
     <string name="pref_category_delete_chapters">ምዕራፎችን ሰርዝ</string>
     <string name="pref_remove_after_marked_as_read">በእጅ እንደተነበበ ምልክት ከተደረገ በኋላ</string>
     <string name="pref_remove_after_read">ካነበብኩ በኋላ</string>
