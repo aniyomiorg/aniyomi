@@ -30,20 +30,20 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.commandiron.wheel_picker_compose.WheelTextPicker
-import eu.kanade.domain.entries.episode.model.Episode
-import eu.kanade.domain.items.anime.interactor.SetAnimeViewerFlags
-import eu.kanade.domain.items.anime.model.Anime
-import eu.kanade.domain.items.anime.model.hasCustomCover
-import eu.kanade.presentation.anime.AnimeScreen
-import eu.kanade.presentation.anime.EpisodeSettingsDialog
-import eu.kanade.presentation.anime.components.AnimeCoverDialog
-import eu.kanade.presentation.anime.components.DeleteEpisodesDialog
+import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.entries.anime.model.hasCustomCover
+import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.DuplicateAnimeDialog
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.NavigatorAdaptiveSheet
-import eu.kanade.presentation.manga.EditCoverAction
-import eu.kanade.presentation.manga.components.DownloadCustomAmountDialog
+import eu.kanade.presentation.entries.DeleteItemsDialog
+import eu.kanade.presentation.entries.DownloadCustomAmountDialog
+import eu.kanade.presentation.entries.EditCoverAction
+import eu.kanade.presentation.entries.anime.AnimeScreen
+import eu.kanade.presentation.entries.anime.EpisodeSettingsDialog
+import eu.kanade.presentation.entries.anime.components.AnimeCoverDialog
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.R
@@ -169,12 +169,13 @@ class AnimeScreen(
                 )
             }
             is AnimeInfoScreenModel.Dialog.DeleteEpisodes -> {
-                DeleteEpisodesDialog(
+                DeleteItemsDialog(
                     onDismissRequest = onDismissRequest,
                     onConfirm = {
                         screenModel.toggleAllSelection(false)
                         screenModel.deleteEpisodes(dialog.episodes)
                     },
+                    isManga = false,
                 )
             }
             is AnimeInfoScreenModel.Dialog.DownloadCustomAmount -> {

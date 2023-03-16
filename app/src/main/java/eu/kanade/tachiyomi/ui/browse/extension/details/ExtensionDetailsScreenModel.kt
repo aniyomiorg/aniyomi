@@ -38,7 +38,7 @@ class ExtensionDetailsScreenModel(
     private val extensionManager: ExtensionManager = Injekt.get(),
     private val getExtensionSources: GetExtensionSources = Injekt.get(),
     private val toggleSource: ToggleMangaSource = Injekt.get(),
-) : StateScreenModel<ExtensionDetailsState>(ExtensionDetailsState()) {
+) : StateScreenModel<MangaExtensionDetailsState>(MangaExtensionDetailsState()) {
 
     private val _events: Channel<ExtensionDetailsEvent> = Channel()
     val events: Flow<ExtensionDetailsEvent> = _events.receiveAsFlow()
@@ -167,7 +167,7 @@ sealed class ExtensionDetailsEvent {
 }
 
 @Immutable
-data class ExtensionDetailsState(
+data class MangaExtensionDetailsState(
     val extension: Extension.Installed? = null,
     private val _sources: List<MangaExtensionSourceItem>? = null,
 ) {

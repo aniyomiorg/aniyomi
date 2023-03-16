@@ -1,6 +1,6 @@
 package eu.kanade.domain.category.anime.interactor
 
-import eu.kanade.domain.items.anime.repository.AnimeRepository
+import eu.kanade.domain.entries.anime.repository.AnimeRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
 

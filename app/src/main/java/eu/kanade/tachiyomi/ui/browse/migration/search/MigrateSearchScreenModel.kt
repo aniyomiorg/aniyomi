@@ -3,10 +3,10 @@ package eu.kanade.tachiyomi.ui.browse.migration.search
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.items.manga.interactor.GetManga
-import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.entries.manga.interactor.GetManga
+import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.source.CatalogueSource
+import eu.kanade.tachiyomi.source.CatalogueMangaSource
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.SearchItemResult
 import eu.kanade.tachiyomi.ui.browse.source.globalsearch.SearchScreenModel
@@ -22,7 +22,7 @@ class MigrateSearchScreenModel(
     private val sourcePreferences: SourcePreferences = Injekt.get(),
     private val sourceManager: SourceManager = Injekt.get(),
     private val getManga: GetManga = Injekt.get(),
-) : SearchScreenModel<MigrateSearchState>(MigrateSearchState()) {
+) : SearchScreenModel<MigrateMangaSearchState>(MigrateMangaSearchState()) {
 
     init {
         extensionFilter = initialExtensionFilter
@@ -40,7 +40,7 @@ class MigrateSearchScreenModel(
     val incognitoMode = preferences.incognitoMode()
     val lastUsedSourceId = sourcePreferences.lastUsedMangaSource()
 
-    override fun getEnabledSources(): List<CatalogueSource> {
+    override fun getEnabledSources(): List<CatalogueMangaSource> {
         val enabledLanguages = sourcePreferences.enabledLanguages().get()
         val disabledSources = sourcePreferences.disabledMangaSources().get()
         val pinnedSources = sourcePreferences.pinnedMangaSources().get()
@@ -58,13 +58,13 @@ class MigrateSearchScreenModel(
         }
     }
 
-    override fun updateItems(items: Map<CatalogueSource, SearchItemResult>) {
+    override fun updateItems(items: Map<CatalogueMangaSource, SearchItemResult>) {
         mutableState.update {
             it.copy(items = items)
         }
     }
 
-    override fun getItems(): Map<CatalogueSource, SearchItemResult> {
+    override fun getItems(): Map<CatalogueMangaSource, SearchItemResult> {
         return mutableState.value.items
     }
 
@@ -80,10 +80,10 @@ sealed class MigrateSearchDialog {
 }
 
 @Immutable
-data class MigrateSearchState(
+data class MigrateMangaSearchState(
     val manga: Manga? = null,
     val searchQuery: String? = null,
-    val items: Map<CatalogueSource, SearchItemResult> = emptyMap(),
+    val items: Map<CatalogueMangaSource, SearchItemResult> = emptyMap(),
     val dialog: MigrateSearchDialog? = null,
 ) {
 

@@ -3,11 +3,11 @@ package eu.kanade.tachiyomi.ui.browse.migration.search
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.items.anime.interactor.GetAnime
-import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.entries.anime.interactor.GetAnime
+import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.AnimeSearchItemResult
 import eu.kanade.tachiyomi.ui.browse.animesource.globalsearch.AnimeSearchScreenModel
 import kotlinx.coroutines.flow.update
@@ -40,7 +40,7 @@ class MigrateAnimeSearchScreenModel(
     val incognitoMode = preferences.incognitoMode()
     val lastUsedSourceId = sourcePreferences.lastUsedAnimeSource()
 
-    override fun getEnabledSources(): List<AnimeCatalogueSource> {
+    override fun getEnabledSources(): List<CatalogueAnimeSource> {
         val enabledLanguages = sourcePreferences.enabledLanguages().get()
         val disabledSources = sourcePreferences.disabledAnimeSources().get()
         val pinnedSources = sourcePreferences.pinnedAnimeSources().get()
@@ -58,13 +58,13 @@ class MigrateAnimeSearchScreenModel(
         }
     }
 
-    override fun updateItems(items: Map<AnimeCatalogueSource, AnimeSearchItemResult>) {
+    override fun updateItems(items: Map<CatalogueAnimeSource, AnimeSearchItemResult>) {
         mutableState.update {
             it.copy(items = items)
         }
     }
 
-    override fun getItems(): Map<AnimeCatalogueSource, AnimeSearchItemResult> {
+    override fun getItems(): Map<CatalogueAnimeSource, AnimeSearchItemResult> {
         return mutableState.value.items
     }
 
@@ -83,7 +83,7 @@ sealed class MigrateAnimeSearchDialog {
 data class MigrateAnimeSearchState(
     val anime: Anime? = null,
     val searchQuery: String? = null,
-    val items: Map<AnimeCatalogueSource, AnimeSearchItemResult> = emptyMap(),
+    val items: Map<CatalogueAnimeSource, AnimeSearchItemResult> = emptyMap(),
     val dialog: MigrateAnimeSearchDialog? = null,
 ) {
 

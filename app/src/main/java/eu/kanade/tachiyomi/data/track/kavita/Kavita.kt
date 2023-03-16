@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.annotation.StringRes
-import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService

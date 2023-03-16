@@ -136,8 +136,7 @@
     <string name="local_invalid_episode_format">Formato de episodio no válido</string>
     <string name="unknown_studio">Estudio desconocido</string>
     <plurals name="anime_num_episodes">
-        <item quantity="one">1 episodio</item>
-        <item quantity="many">%1$s episodios</item>
+        <item quantity="one">%1$s episodio</item>
         <item quantity="other">%1$s episodios</item>
     </plurals>
     <string name="delete_downloads_for_anime">¿Borrar episodios descargados\?</string>

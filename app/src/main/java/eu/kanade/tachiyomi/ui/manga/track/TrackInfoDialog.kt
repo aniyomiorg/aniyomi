@@ -37,9 +37,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.items.manga.interactor.GetManga
-import eu.kanade.domain.items.manga.interactor.GetMangaWithChapters
+import eu.kanade.domain.entries.manga.interactor.GetManga
+import eu.kanade.domain.entries.manga.interactor.GetMangaWithChapters
+import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
 import eu.kanade.domain.track.manga.interactor.DeleteMangaTrack
 import eu.kanade.domain.track.manga.interactor.GetMangaTracks
 import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
@@ -48,12 +48,12 @@ import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.AlertDialogContent
-import eu.kanade.presentation.manga.TrackChapterSelector
-import eu.kanade.presentation.manga.TrackDateSelector
-import eu.kanade.presentation.manga.TrackInfoDialogHome
-import eu.kanade.presentation.manga.TrackScoreSelector
-import eu.kanade.presentation.manga.TrackServiceSearch
-import eu.kanade.presentation.manga.TrackStatusSelector
+import eu.kanade.presentation.entries.TrackChapterSelector
+import eu.kanade.presentation.entries.TrackDateSelector
+import eu.kanade.presentation.entries.TrackScoreSelector
+import eu.kanade.presentation.entries.TrackStatusSelector
+import eu.kanade.presentation.entries.manga.MangaTrackInfoDialogHome
+import eu.kanade.presentation.entries.manga.MangaTrackServiceSearch
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.Track
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
@@ -94,7 +94,7 @@ data class TrackInfoDialogHomeScreen(
         val dateFormat = remember { UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()) }
         val state by sm.state.collectAsState()
 
-        TrackInfoDialogHome(
+        MangaTrackInfoDialogHome(
             trackItems = state.trackItems,
             dateFormat = dateFormat,
             onStatusClick = {
@@ -160,7 +160,7 @@ data class TrackInfoDialogHomeScreen(
     /**
      * Opens registered tracker url in browser
      */
-    private fun openTrackerInBrowser(context: Context, trackItem: TrackItem) {
+    private fun openTrackerInBrowser(context: Context, trackItem: MangaTrackItem) {
         val url = trackItem.track?.tracking_url ?: return
         if (url.isNotBlank()) {
             context.openInBrowser(url)
@@ -207,7 +207,7 @@ data class TrackInfoDialogHomeScreen(
             }
         }
 
-        fun registerEnhancedTracking(item: TrackItem) {
+        fun registerEnhancedTracking(item: MangaTrackItem) {
             item.service as EnhancedMangaTrackService
             coroutineScope.launchNonCancellable {
                 val manga = Injekt.get<GetManga>().await(mangaId) ?: return@launchNonCancellable
@@ -224,19 +224,19 @@ data class TrackInfoDialogHomeScreen(
             coroutineScope.launchNonCancellable { deleteTrack.await(mangaId, serviceId) }
         }
 
-        private fun List<MangaTrack>.mapToTrackItem(): List<TrackItem> {
+        private fun List<MangaTrack>.mapToTrackItem(): List<MangaTrackItem> {
             val dbTracks = map { it.toDbTrack() }
             val loggedServices = Injekt.get<TrackManager>().services.filter { it.isLogged }
             val source = Injekt.get<SourceManager>().getOrStub(sourceId)
             return loggedServices
                 // Map to TrackItem
-                .map { service -> TrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
+                .map { service -> MangaTrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
                 // Show only if the service supports this manga's source
                 .filter { (it.service as? EnhancedMangaTrackService)?.accept(source) ?: true }
         }
 
         data class State(
-            val trackItems: List<TrackItem> = emptyList(),
+            val trackItems: List<MangaTrackItem> = emptyList(),
         )
     }
 }
@@ -581,7 +581,7 @@ data class TrackServiceSearchScreen(
         val state by sm.state.collectAsState()
 
         var textFieldValue by remember { mutableStateOf(TextFieldValue(initialQuery)) }
-        TrackServiceSearch(
+        MangaTrackServiceSearch(
             query = textFieldValue,
             onQueryChange = { textFieldValue = it },
             onDispatchQuery = { sm.trackingSearch(textFieldValue.text) },

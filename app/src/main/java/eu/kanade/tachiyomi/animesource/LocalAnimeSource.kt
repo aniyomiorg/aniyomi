@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit
 
 class LocalAnimeSource(
     private val context: Context,
-) : AnimeCatalogueSource, UnmeteredSource {
+) : CatalogueAnimeSource, UnmeteredSource {
 
     private val json: Json by injectLazy()
 

@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.data.animedownload.model
 
 import eu.kanade.core.util.asFlow
-import eu.kanade.domain.entries.episode.model.Episode
-import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadStore
 import eu.kanade.tachiyomi.util.lang.launchNonCancellable

@@ -10,7 +10,7 @@ import eu.kanade.domain.source.manga.interactor.ToggleMangaSourcePin
 import eu.kanade.domain.source.manga.model.Pin
 import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.presentation.browse.SourceUiModel
+import eu.kanade.presentation.browse.manga.MangaSourceUiModel
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.channels.Channel
@@ -29,7 +29,7 @@ class SourcesScreenModel(
     private val getEnabledSources: GetEnabledMangaSources = Injekt.get(),
     private val toggleSource: ToggleMangaSource = Injekt.get(),
     private val toggleSourcePin: ToggleMangaSourcePin = Injekt.get(),
-) : StateScreenModel<SourcesState>(SourcesState()) {
+) : StateScreenModel<MangaSourcesState>(MangaSourcesState()) {
 
     private val _events = Channel<Event>(Int.MAX_VALUE)
     val events = _events.receiveAsFlow()
@@ -71,9 +71,9 @@ class SourcesScreenModel(
                 isLoading = false,
                 items = byLang.flatMap {
                     listOf(
-                        SourceUiModel.Header(it.key),
+                        MangaSourceUiModel.Header(it.key),
                         *it.value.map { source ->
-                            SourceUiModel.Item(source)
+                            MangaSourceUiModel.Item(source)
                         }.toTypedArray(),
                     )
                 },
@@ -116,10 +116,10 @@ class SourcesScreenModel(
 }
 
 @Immutable
-data class SourcesState(
+data class MangaSourcesState(
     val dialog: SourcesScreenModel.Dialog? = null,
     val isLoading: Boolean = true,
-    val items: List<SourceUiModel> = emptyList(),
+    val items: List<MangaSourceUiModel> = emptyList(),
 ) {
     val isEmpty = items.isEmpty()
 }

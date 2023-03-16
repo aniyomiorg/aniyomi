@@ -1,6 +1,6 @@
 package eu.kanade.data.updates.manga
 
-import eu.kanade.domain.items.manga.model.MangaCover
+import eu.kanade.domain.entries.manga.model.MangaCover
 import eu.kanade.domain.updates.manga.model.MangaUpdatesWithRelations
 
 val mangaUpdateWithRelationMapper: (Long, String, Long, String, String?, Boolean, Boolean, Long, Boolean, String?, Long, Long, Long) -> MangaUpdatesWithRelations = {

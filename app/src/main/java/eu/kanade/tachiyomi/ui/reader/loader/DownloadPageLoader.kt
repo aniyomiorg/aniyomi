@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.ui.reader.loader
 import android.app.Application
 import android.net.Uri
 import com.hippo.unifile.UniFile
-import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.tachiyomi.data.database.models.toDomainChapter
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadProvider

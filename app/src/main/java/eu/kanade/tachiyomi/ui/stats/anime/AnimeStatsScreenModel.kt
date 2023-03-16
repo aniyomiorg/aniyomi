@@ -7,9 +7,9 @@ import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.core.util.fastFilter
 import eu.kanade.core.util.fastFilterNot
 import eu.kanade.core.util.fastMapNotNull
-import eu.kanade.domain.entries.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.items.anime.interactor.GetLibraryAnime
-import eu.kanade.domain.items.anime.model.isLocal
+import eu.kanade.domain.entries.anime.interactor.GetLibraryAnime
+import eu.kanade.domain.entries.anime.model.isLocal
+import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.anime.interactor.GetAnimeTracks

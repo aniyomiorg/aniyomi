@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
-import eu.kanade.domain.entries.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.entries.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
 import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack

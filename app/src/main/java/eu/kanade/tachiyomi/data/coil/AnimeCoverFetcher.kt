@@ -10,7 +10,7 @@ import coil.fetch.SourceResult
 import coil.network.HttpException
 import coil.request.Options
 import coil.request.Parameters
-import eu.kanade.domain.items.anime.model.AnimeCover
+import eu.kanade.domain.entries.anime.model.AnimeCover
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
@@ -30,7 +30,7 @@ import okio.buffer
 import okio.sink
 import uy.kohesive.injekt.injectLazy
 import java.io.File
-import eu.kanade.domain.items.anime.model.Anime as DomainAnime
+import eu.kanade.domain.entries.anime.model.Anime as DomainAnime
 
 /**
  * A [Fetcher] that fetches cover image for [Anime] object.

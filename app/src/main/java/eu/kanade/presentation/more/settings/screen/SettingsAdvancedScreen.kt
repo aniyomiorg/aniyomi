@@ -25,7 +25,7 @@ import androidx.core.net.toUri
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.items.manga.repository.MangaRepository
+import eu.kanade.domain.entries.manga.repository.MangaRepository
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.util.collectAsState

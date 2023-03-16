@@ -10,7 +10,7 @@ import dalvik.system.PathClassLoader
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.model.Extension
 import eu.kanade.tachiyomi.extension.model.LoadResult
-import eu.kanade.tachiyomi.source.CatalogueSource
+import eu.kanade.tachiyomi.source.CatalogueMangaSource
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceFactory
 import eu.kanade.tachiyomi.util.lang.Hash
@@ -180,7 +180,7 @@ internal object ExtensionLoader {
                 }
             }
 
-        val langs = sources.filterIsInstance<CatalogueSource>()
+        val langs = sources.filterIsInstance<CatalogueMangaSource>()
             .map { it.lang }
             .toSet()
         val lang = when (langs.size) {

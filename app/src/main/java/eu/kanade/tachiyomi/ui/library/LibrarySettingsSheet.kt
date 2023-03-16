@@ -362,7 +362,7 @@ class LibrarySettingsSheet(
 
             override fun initModels() {
                 downloadBadge.checked = libraryPreferences.downloadBadge().get()
-                unreadBadge.checked = libraryPreferences.unViewedBadge().get()
+                unreadBadge.checked = libraryPreferences.unviewedBadge().get()
                 localBadge.checked = libraryPreferences.localBadge().get()
                 languageBadge.checked = libraryPreferences.languageBadge().get()
             }
@@ -372,7 +372,7 @@ class LibrarySettingsSheet(
                 item.checked = !item.checked
                 when (item) {
                     downloadBadge -> libraryPreferences.downloadBadge().set((item.checked))
-                    unreadBadge -> libraryPreferences.unViewedBadge().set((item.checked))
+                    unreadBadge -> libraryPreferences.unviewedBadge().set((item.checked))
                     localBadge -> libraryPreferences.localBadge().set((item.checked))
                     languageBadge -> libraryPreferences.languageBadge().set((item.checked))
                     else -> {}

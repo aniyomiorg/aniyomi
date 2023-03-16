@@ -155,7 +155,7 @@
     <string name="local_invalid_episode_format">Invalid episode format</string>
     <string name="unknown_studio">Unknown studio</string>
     <plurals name="anime_num_episodes">
-        <item quantity="one">1 episode</item>
+        <item quantity="one">%1$s episode</item>
         <item quantity="other">%1$s episodes</item>
     </plurals>
     <string name="delete_downloads_for_anime">Delete downloaded episodes?</string>

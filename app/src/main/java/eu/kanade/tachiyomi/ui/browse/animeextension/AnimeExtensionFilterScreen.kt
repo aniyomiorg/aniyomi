@@ -9,11 +9,11 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.browse.ExtensionFilterScreen
+import eu.kanade.presentation.browse.manga.MangaExtensionFilterScreen
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.browse.extension.ExtensionFilterEvent
-import eu.kanade.tachiyomi.ui.browse.extension.ExtensionFilterState
+import eu.kanade.tachiyomi.ui.browse.extension.MangaExtensionFilterEvent
+import eu.kanade.tachiyomi.ui.browse.extension.MangaExtensionFilterState
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.collectLatest
 
@@ -26,14 +26,14 @@ class AnimeExtensionFilterScreen : Screen {
         val screenModel = rememberScreenModel { AnimeExtensionFilterScreenModel() }
         val state by screenModel.state.collectAsState()
 
-        if (state is ExtensionFilterState.Loading) {
+        if (state is MangaExtensionFilterState.Loading) {
             LoadingScreen()
             return
         }
 
-        val successState = state as ExtensionFilterState.Success
+        val successState = state as MangaExtensionFilterState.Success
 
-        ExtensionFilterScreen(
+        MangaExtensionFilterScreen(
             navigateUp = navigator::pop,
             state = successState,
             onClickToggle = { screenModel.toggle(it) },
@@ -42,7 +42,7 @@ class AnimeExtensionFilterScreen : Screen {
         LaunchedEffect(Unit) {
             screenModel.events.collectLatest {
                 when (it) {
-                    ExtensionFilterEvent.FailedFetchingLanguages -> {
+                    MangaExtensionFilterEvent.FailedFetchingLanguages -> {
                         context.toast(R.string.internal_error)
                     }
                 }

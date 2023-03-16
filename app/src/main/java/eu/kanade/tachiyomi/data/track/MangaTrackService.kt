@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
-import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
 import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.model.toDomainTrack
@@ -53,7 +53,7 @@ interface MangaTrackService {
         item.manga_id = mangaId
         try {
             withIOContext {
-                val allChapters = Injekt.get<eu.kanade.domain.entries.chapter.interactor.GetChapterByMangaId>().await(mangaId)
+                val allChapters = Injekt.get<eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId>().await(mangaId)
                 val hasReadChapters = allChapters.any { it.read }
                 bind(item, hasReadChapters)
 

@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.util.episode
 
-import eu.kanade.domain.entries.episode.model.Episode
-import eu.kanade.domain.entries.episode.model.applyFilters
-import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.items.episode.model.Episode
+import eu.kanade.domain.items.episode.model.applyFilters
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
 import eu.kanade.tachiyomi.ui.anime.EpisodeItem
 

@@ -36,7 +36,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.source.manga.interactor.GetMangaSourcesWithNonLibraryManga
 import eu.kanade.domain.source.manga.model.MangaSourceWithCount
 import eu.kanade.domain.source.manga.model.Source
-import eu.kanade.presentation.browse.components.SourceIcon
+import eu.kanade.presentation.browse.manga.components.MangaSourceIcon
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.Divider
@@ -184,7 +184,7 @@ class ClearDatabaseScreen : Screen {
                 .height(56.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            SourceIcon(source = source)
+            MangaSourceIcon(source = source)
             Column(
                 modifier = Modifier
                     .padding(start = 8.dp)

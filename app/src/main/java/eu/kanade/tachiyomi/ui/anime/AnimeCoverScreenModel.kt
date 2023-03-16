@@ -9,9 +9,9 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.size.Size
-import eu.kanade.domain.items.anime.interactor.GetAnime
-import eu.kanade.domain.items.anime.interactor.UpdateAnime
-import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.entries.anime.interactor.GetAnime
+import eu.kanade.domain.entries.anime.interactor.UpdateAnime
+import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.saver.Image

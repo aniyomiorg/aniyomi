@@ -29,21 +29,21 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.items.manga.model.Manga
-import eu.kanade.domain.items.manga.model.isLocal
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.domain.library.model.display
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.components.ChangeCategoryDialog
-import eu.kanade.presentation.components.DeleteLibraryMangaDialog
+import eu.kanade.presentation.components.DeleteLibraryEntryDialog
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.EmptyScreenAction
 import eu.kanade.presentation.components.LibraryBottomActionMenu
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.library.components.LibraryContent
-import eu.kanade.presentation.library.components.LibraryToolbar
-import eu.kanade.presentation.manga.components.DownloadCustomAmountDialog
+import eu.kanade.presentation.entries.DownloadCustomAmountDialog
+import eu.kanade.presentation.library.LibraryToolbar
+import eu.kanade.presentation.library.manga.MangaLibraryContent
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.library.LibraryUpdateService
@@ -132,7 +132,7 @@ object LibraryTab : Tab {
                     onClickInvertSelection = { screenModel.invertSelection(screenModel.activeCategoryIndex) },
                     onClickFilter = onClickFilter,
                     onClickRefresh = { onClickRefresh(null) },
-                    onClickOpenRandomManga = {
+                    onClickOpenRandomEntry = {
                         scope.launch {
                             val randomItem = screenModel.getRandomLibraryItemForCurrentCategory()
                             if (randomItem != null) {
@@ -152,11 +152,12 @@ object LibraryTab : Tab {
                 LibraryBottomActionMenu(
                     visible = state.selectionMode,
                     onChangeCategoryClicked = screenModel::openChangeCategoryDialog,
-                    onMarkAsReadClicked = { screenModel.markReadSelection(true) },
-                    onMarkAsUnreadClicked = { screenModel.markReadSelection(false) },
+                    onMarkAsViewedClicked = { screenModel.markReadSelection(true) },
+                    onMarkAsUnviewedClicked = { screenModel.markReadSelection(false) },
                     onDownloadClicked = screenModel::runDownloadActionSelection
                         .takeIf { state.selection.fastAll { !it.manga.isLocal() } },
                     onDeleteClicked = screenModel::openDeleteMangaDialog,
+                    isManga = true,
                 )
             },
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -178,7 +179,7 @@ object LibraryTab : Tab {
                     )
                 }
                 else -> {
-                    LibraryContent(
+                    MangaLibraryContent(
                         categories = state.categories,
                         searchQuery = state.searchQuery,
                         selection = state.selection,
@@ -233,13 +234,14 @@ object LibraryTab : Tab {
                 )
             }
             is LibraryScreenModel.Dialog.DeleteManga -> {
-                DeleteLibraryMangaDialog(
-                    containsLocalManga = dialog.manga.any(Manga::isLocal),
+                DeleteLibraryEntryDialog(
+                    containsLocalEntry = dialog.manga.any(Manga::isLocal),
                     onDismissRequest = onDismissRequest,
                     onConfirm = { deleteManga, deleteChapter ->
                         screenModel.removeMangas(dialog.manga, deleteManga, deleteChapter)
                         screenModel.clearSelection()
                     },
+                    isManga = true,
                 )
             }
             is LibraryScreenModel.Dialog.DownloadCustomAmount -> {

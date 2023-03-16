@@ -12,8 +12,8 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.animebrowse.AnimeSourceOptionsDialog
-import eu.kanade.presentation.animebrowse.AnimeSourcesScreen
+import eu.kanade.presentation.browse.anime.AnimeSourceOptionsDialog
+import eu.kanade.presentation.browse.anime.AnimeSourcesScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R

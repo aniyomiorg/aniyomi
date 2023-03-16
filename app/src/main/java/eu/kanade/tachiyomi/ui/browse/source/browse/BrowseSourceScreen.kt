@@ -39,9 +39,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.browse.BrowseSourceContent
-import eu.kanade.presentation.browse.components.BrowseSourceToolbar
-import eu.kanade.presentation.browse.components.RemoveMangaDialog
+import eu.kanade.presentation.browse.anime.components.RemoveEntryDialog
+import eu.kanade.presentation.browse.manga.BrowseSourceContent
+import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceToolbar
 import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.DuplicateMangaDialog
@@ -106,7 +106,7 @@ data class BrowseSourceScreen(
         Scaffold(
             topBar = {
                 Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
-                    BrowseSourceToolbar(
+                    BrowseMangaSourceToolbar(
                         searchQuery = state.toolbarQuery,
                         onSearchQueryChange = screenModel::setToolbarQuery,
                         source = screenModel.source,
@@ -230,12 +230,12 @@ data class BrowseSourceScreen(
                 )
             }
             is BrowseSourceScreenModel.Dialog.RemoveManga -> {
-                RemoveMangaDialog(
+                RemoveEntryDialog(
                     onDismissRequest = onDismissRequest,
                     onConfirm = {
                         screenModel.changeMangaFavorite(dialog.manga)
                     },
-                    mangaToRemove = dialog.manga,
+                    entryToRemove = dialog.manga.title,
                 )
             }
             is BrowseSourceScreenModel.Dialog.ChangeMangaCategory -> {

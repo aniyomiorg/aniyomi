@@ -5,8 +5,8 @@ import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
 import eu.kanade.core.util.mapNotNullKeys
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.episode.model.Episode
-import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager

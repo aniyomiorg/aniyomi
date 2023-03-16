@@ -22,19 +22,19 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.entries.chapter.model.Chapter
-import eu.kanade.domain.items.manga.model.Manga
-import eu.kanade.domain.items.manga.model.hasCustomCover
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.hasCustomCover
+import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.DuplicateMangaDialog
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.NavigatorAdaptiveSheet
-import eu.kanade.presentation.manga.ChapterSettingsDialog
-import eu.kanade.presentation.manga.EditCoverAction
-import eu.kanade.presentation.manga.MangaScreen
-import eu.kanade.presentation.manga.components.DeleteChaptersDialog
-import eu.kanade.presentation.manga.components.DownloadCustomAmountDialog
-import eu.kanade.presentation.manga.components.MangaCoverDialog
+import eu.kanade.presentation.entries.DeleteItemsDialog
+import eu.kanade.presentation.entries.DownloadCustomAmountDialog
+import eu.kanade.presentation.entries.EditCoverAction
+import eu.kanade.presentation.entries.manga.ChapterSettingsDialog
+import eu.kanade.presentation.entries.manga.MangaScreen
+import eu.kanade.presentation.entries.manga.components.MangaCoverDialog
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.R
@@ -145,12 +145,13 @@ class MangaScreen(
                 )
             }
             is MangaInfoScreenModel.Dialog.DeleteChapters -> {
-                DeleteChaptersDialog(
+                DeleteItemsDialog(
                     onDismissRequest = onDismissRequest,
                     onConfirm = {
                         screenModel.toggleAllSelection(false)
                         screenModel.deleteChapters(dialog.chapters)
                     },
+                    isManga = true,
                 )
             }
             is MangaInfoScreenModel.Dialog.DownloadCustomAmount -> {

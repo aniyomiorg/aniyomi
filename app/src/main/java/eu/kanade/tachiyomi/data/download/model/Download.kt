@@ -1,9 +1,9 @@
 package eu.kanade.tachiyomi.data.download.model
 
-import eu.kanade.domain.entries.chapter.interactor.GetChapter
-import eu.kanade.domain.entries.chapter.model.Chapter
-import eu.kanade.domain.items.manga.interactor.GetManga
-import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.entries.manga.interactor.GetManga
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.items.chapter.interactor.GetChapter
+import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource

@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.chapter.model.Chapter
-import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.util.storage.DiskUtil

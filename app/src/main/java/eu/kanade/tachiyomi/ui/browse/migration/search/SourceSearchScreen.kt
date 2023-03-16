@@ -22,8 +22,8 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.items.manga.model.Manga
-import eu.kanade.presentation.browse.BrowseSourceContent
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.presentation.browse.manga.BrowseSourceContent
 import eu.kanade.presentation.components.ExtendedFloatingActionButton
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.components.SearchToolbar

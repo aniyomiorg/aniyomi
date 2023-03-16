@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.browse.migration
 
-import eu.kanade.domain.items.manga.model.Manga
-import eu.kanade.domain.items.manga.model.hasCustomCover
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.hasCustomCover
 import eu.kanade.domain.track.manga.interactor.GetMangaTracks
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.CoverCache

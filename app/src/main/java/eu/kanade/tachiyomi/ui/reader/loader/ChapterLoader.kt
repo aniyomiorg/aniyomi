@@ -2,7 +2,7 @@ package eu.kanade.tachiyomi.ui.reader.loader
 
 import android.content.Context
 import com.github.junrar.exception.UnsupportedRarV5Exception
-import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.data.download.DownloadProvider

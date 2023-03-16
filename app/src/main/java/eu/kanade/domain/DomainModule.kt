@@ -2,12 +2,12 @@ package eu.kanade.domain
 
 import eu.kanade.data.category.anime.AnimeCategoryRepositoryImpl
 import eu.kanade.data.category.manga.MangaCategoryRepositoryImpl
-import eu.kanade.data.entries.chapter.ChapterRepositoryImpl
-import eu.kanade.data.entries.episode.EpisodeRepositoryImpl
+import eu.kanade.data.entries.anime.AnimeRepositoryImpl
+import eu.kanade.data.entries.manga.MangaRepositoryImpl
 import eu.kanade.data.history.anime.AnimeHistoryRepositoryImpl
 import eu.kanade.data.history.manga.MangaHistoryRepositoryImpl
-import eu.kanade.data.items.anime.AnimeRepositoryImpl
-import eu.kanade.data.items.manga.MangaRepositoryImpl
+import eu.kanade.data.items.chapter.ChapterRepositoryImpl
+import eu.kanade.data.items.episode.EpisodeRepositoryImpl
 import eu.kanade.data.source.anime.AnimeSourceDataRepositoryImpl
 import eu.kanade.data.source.anime.AnimeSourceRepositoryImpl
 import eu.kanade.data.source.manga.MangaSourceDataRepositoryImpl
@@ -40,21 +40,28 @@ import eu.kanade.domain.category.manga.interactor.UpdateMangaCategory
 import eu.kanade.domain.category.manga.repository.MangaCategoryRepository
 import eu.kanade.domain.download.anime.interactor.DeleteAnimeDownload
 import eu.kanade.domain.download.manga.interactor.DeleteChapterDownload
-import eu.kanade.domain.entries.chapter.interactor.SetReadStatus
-import eu.kanade.domain.entries.chapter.interactor.ShouldUpdateDbChapter
-import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.entries.chapter.interactor.UpdateChapter
-import eu.kanade.domain.entries.chapter.repository.ChapterRepository
-import eu.kanade.domain.entries.episode.interactor.GetEpisode
-import eu.kanade.domain.entries.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.entries.episode.interactor.SetAnimeDefaultEpisodeFlags
-import eu.kanade.domain.entries.episode.interactor.SetSeenStatus
-import eu.kanade.domain.entries.episode.interactor.ShouldUpdateDbEpisode
-import eu.kanade.domain.entries.episode.interactor.SyncEpisodesWithSource
-import eu.kanade.domain.entries.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
-import eu.kanade.domain.entries.episode.interactor.UpdateEpisode
-import eu.kanade.domain.entries.episode.repository.EpisodeRepository
+import eu.kanade.domain.entries.anime.interactor.GetAnime
+import eu.kanade.domain.entries.anime.interactor.GetAnimeFavorites
+import eu.kanade.domain.entries.anime.interactor.GetAnimeWithEpisodes
+import eu.kanade.domain.entries.anime.interactor.GetDuplicateLibraryAnime
+import eu.kanade.domain.entries.anime.interactor.GetLibraryAnime
+import eu.kanade.domain.entries.anime.interactor.NetworkToLocalAnime
+import eu.kanade.domain.entries.anime.interactor.ResetAnimeViewerFlags
+import eu.kanade.domain.entries.anime.interactor.SetAnimeEpisodeFlags
+import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
+import eu.kanade.domain.entries.anime.interactor.UpdateAnime
+import eu.kanade.domain.entries.anime.repository.AnimeRepository
+import eu.kanade.domain.entries.manga.interactor.GetDuplicateLibraryManga
+import eu.kanade.domain.entries.manga.interactor.GetLibraryManga
+import eu.kanade.domain.entries.manga.interactor.GetManga
+import eu.kanade.domain.entries.manga.interactor.GetMangaFavorites
+import eu.kanade.domain.entries.manga.interactor.GetMangaWithChapters
+import eu.kanade.domain.entries.manga.interactor.NetworkToLocalManga
+import eu.kanade.domain.entries.manga.interactor.ResetMangaViewerFlags
+import eu.kanade.domain.entries.manga.interactor.SetMangaChapterFlags
+import eu.kanade.domain.entries.manga.interactor.SetMangaViewerFlags
+import eu.kanade.domain.entries.manga.interactor.UpdateManga
+import eu.kanade.domain.entries.manga.repository.MangaRepository
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionLanguages
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionSources
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionsByType
@@ -72,28 +79,21 @@ import eu.kanade.domain.history.manga.interactor.GetTotalReadDuration
 import eu.kanade.domain.history.manga.interactor.RemoveMangaHistory
 import eu.kanade.domain.history.manga.interactor.UpsertMangaHistory
 import eu.kanade.domain.history.manga.repository.MangaHistoryRepository
-import eu.kanade.domain.items.anime.interactor.GetAnime
-import eu.kanade.domain.items.anime.interactor.GetAnimeFavorites
-import eu.kanade.domain.items.anime.interactor.GetAnimeWithEpisodes
-import eu.kanade.domain.items.anime.interactor.GetDuplicateLibraryAnime
-import eu.kanade.domain.items.anime.interactor.GetLibraryAnime
-import eu.kanade.domain.items.anime.interactor.NetworkToLocalAnime
-import eu.kanade.domain.items.anime.interactor.ResetAnimeViewerFlags
-import eu.kanade.domain.items.anime.interactor.SetAnimeEpisodeFlags
-import eu.kanade.domain.items.anime.interactor.SetAnimeViewerFlags
-import eu.kanade.domain.items.anime.interactor.UpdateAnime
-import eu.kanade.domain.items.anime.repository.AnimeRepository
-import eu.kanade.domain.items.manga.interactor.GetDuplicateLibraryManga
-import eu.kanade.domain.items.manga.interactor.GetLibraryManga
-import eu.kanade.domain.items.manga.interactor.GetManga
-import eu.kanade.domain.items.manga.interactor.GetMangaFavorites
-import eu.kanade.domain.items.manga.interactor.GetMangaWithChapters
-import eu.kanade.domain.items.manga.interactor.NetworkToLocalManga
-import eu.kanade.domain.items.manga.interactor.ResetMangaViewerFlags
-import eu.kanade.domain.items.manga.interactor.SetMangaChapterFlags
-import eu.kanade.domain.items.manga.interactor.SetMangaViewerFlags
-import eu.kanade.domain.items.manga.interactor.UpdateManga
-import eu.kanade.domain.items.manga.repository.MangaRepository
+import eu.kanade.domain.items.chapter.interactor.SetReadStatus
+import eu.kanade.domain.items.chapter.interactor.ShouldUpdateDbChapter
+import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
+import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.items.chapter.interactor.UpdateChapter
+import eu.kanade.domain.items.chapter.repository.ChapterRepository
+import eu.kanade.domain.items.episode.interactor.GetEpisode
+import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
+import eu.kanade.domain.items.episode.interactor.SetSeenStatus
+import eu.kanade.domain.items.episode.interactor.ShouldUpdateDbEpisode
+import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
+import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.items.episode.interactor.UpdateEpisode
+import eu.kanade.domain.items.episode.repository.EpisodeRepository
 import eu.kanade.domain.source.anime.interactor.GetAnimeSourcesWithFavoriteCount
 import eu.kanade.domain.source.anime.interactor.GetAnimeSourcesWithNonLibraryAnime
 import eu.kanade.domain.source.anime.interactor.GetEnabledAnimeSources
@@ -184,7 +184,7 @@ class DomainModule : InjektModule {
         addFactory { ResetMangaViewerFlags(get()) }
         addFactory { SetMangaChapterFlags(get()) }
         addFactory {
-            eu.kanade.domain.entries.chapter.interactor.SetMangaDefaultChapterFlags(
+            eu.kanade.domain.items.chapter.interactor.SetMangaDefaultChapterFlags(
                 get(),
                 get(),
                 get(),
@@ -217,8 +217,8 @@ class DomainModule : InjektModule {
         addFactory { SyncEpisodesWithTrackServiceTwoWay(get(), get()) }
 
         addSingletonFactory<ChapterRepository> { ChapterRepositoryImpl(get()) }
-        addFactory { eu.kanade.domain.entries.chapter.interactor.GetChapter(get()) }
-        addFactory { eu.kanade.domain.entries.chapter.interactor.GetChapterByMangaId(get()) }
+        addFactory { eu.kanade.domain.items.chapter.interactor.GetChapter(get()) }
+        addFactory { eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId(get()) }
         addFactory { UpdateChapter(get()) }
         addFactory { SetReadStatus(get(), get(), get(), get()) }
         addFactory { ShouldUpdateDbChapter() }

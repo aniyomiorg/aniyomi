@@ -1,7 +1,7 @@
 package eu.kanade.domain.library.service
 
-import eu.kanade.domain.items.anime.model.Anime
-import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.domain.library.model.LibrarySort
 import eu.kanade.tachiyomi.core.preference.PreferenceStore
@@ -51,7 +51,7 @@ class LibraryPreferences(
 
     fun localBadge() = preferenceStore.getBoolean("display_local_badge", true)
 
-    fun unViewedBadge() = preferenceStore.getBoolean("display_unread_badge", true)
+    fun unviewedBadge() = preferenceStore.getBoolean("display_unread_badge", true)
 
     fun languageBadge() = preferenceStore.getBoolean("display_language_badge", false)
 

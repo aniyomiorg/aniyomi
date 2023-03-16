@@ -13,8 +13,8 @@ import androidx.core.app.NotificationManagerCompat
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
-import eu.kanade.domain.entries.episode.model.Episode
-import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.data.animedownload.AnimeDownloader

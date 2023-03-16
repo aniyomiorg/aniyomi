@@ -10,7 +10,7 @@ import eu.kanade.domain.source.anime.interactor.ToggleAnimeSourcePin
 import eu.kanade.domain.source.anime.model.AnimeSource
 import eu.kanade.domain.source.anime.model.Pin
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.presentation.animebrowse.AnimeSourceUiModel
+import eu.kanade.presentation.browse.anime.AnimeSourceUiModel
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.channels.Channel

@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.util.chapter
 
-import eu.kanade.domain.entries.chapter.model.Chapter
-import eu.kanade.domain.entries.chapter.model.applyFilters
-import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.items.chapter.model.Chapter
+import eu.kanade.domain.items.chapter.model.applyFilters
 import eu.kanade.tachiyomi.data.download.DownloadManager
 import eu.kanade.tachiyomi.ui.manga.ChapterItem
 

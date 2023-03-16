@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.database.models
 
 import eu.kanade.tachiyomi.animesource.model.SAnime
-import eu.kanade.domain.items.anime.model.Anime as DomainAnime
+import eu.kanade.domain.entries.anime.model.Anime as DomainAnime
 
 interface Anime : SAnime {
 

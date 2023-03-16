@@ -20,24 +20,24 @@ import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
 import eu.kanade.domain.category.anime.interactor.SetAnimeCategories
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.entries.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.entries.episode.interactor.SetAnimeDefaultEpisodeFlags
-import eu.kanade.domain.entries.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
-import eu.kanade.domain.items.anime.interactor.GetAnime
-import eu.kanade.domain.items.anime.interactor.GetDuplicateLibraryAnime
-import eu.kanade.domain.items.anime.interactor.NetworkToLocalAnime
-import eu.kanade.domain.items.anime.interactor.UpdateAnime
-import eu.kanade.domain.items.anime.model.Anime
-import eu.kanade.domain.items.anime.model.toAnimeUpdate
-import eu.kanade.domain.items.anime.model.toDomainAnime
+import eu.kanade.domain.entries.anime.interactor.GetAnime
+import eu.kanade.domain.entries.anime.interactor.GetDuplicateLibraryAnime
+import eu.kanade.domain.entries.anime.interactor.NetworkToLocalAnime
+import eu.kanade.domain.entries.anime.interactor.UpdateAnime
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.entries.anime.model.toAnimeUpdate
+import eu.kanade.domain.entries.anime.model.toDomainAnime
+import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
+import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.source.anime.interactor.GetRemoteAnime
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
@@ -101,7 +101,7 @@ class BrowseAnimeSourceScreenModel(
 
     var displayMode by sourcePreferences.sourceDisplayMode().asState(coroutineScope)
 
-    val source = sourceManager.get(sourceId) as AnimeCatalogueSource
+    val source = sourceManager.get(sourceId) as CatalogueAnimeSource
 
     init {
         mutableState.update {

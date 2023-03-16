@@ -8,7 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.browse.ExtensionScreen
+import eu.kanade.presentation.browse.manga.MangaExtensionScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
@@ -35,7 +35,7 @@ fun extensionsTab(
             ),
         ),
         content = { contentPadding, _ ->
-            ExtensionScreen(
+            MangaExtensionScreen(
                 state = state,
                 contentPadding = contentPadding,
                 searchQuery = searchQuery,

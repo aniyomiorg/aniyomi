@@ -5,7 +5,7 @@ import eu.kanade.domain.source.manga.model.MangaSourceWithCount
 import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.domain.source.manga.model.SourcePagingSourceType
 import eu.kanade.domain.source.manga.repository.MangaSourceRepository
-import eu.kanade.tachiyomi.source.CatalogueSource
+import eu.kanade.tachiyomi.source.CatalogueMangaSource
 import eu.kanade.tachiyomi.source.LocalSource
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.FilterList
@@ -58,17 +58,17 @@ class MangaSourceRepositoryImpl(
         query: String,
         filterList: FilterList,
     ): SourcePagingSourceType {
-        val source = sourceManager.get(sourceId) as CatalogueSource
+        val source = sourceManager.get(sourceId) as CatalogueMangaSource
         return SourceSearchPagingSource(source, query, filterList)
     }
 
     override fun getPopularManga(sourceId: Long): SourcePagingSourceType {
-        val source = sourceManager.get(sourceId) as CatalogueSource
+        val source = sourceManager.get(sourceId) as CatalogueMangaSource
         return SourcePopularPagingSource(source)
     }
 
     override fun getLatestManga(sourceId: Long): SourcePagingSourceType {
-        val source = sourceManager.get(sourceId) as CatalogueSource
+        val source = sourceManager.get(sourceId) as CatalogueMangaSource
         return SourceLatestPagingSource(source)
     }
 }

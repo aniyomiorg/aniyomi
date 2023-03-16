@@ -5,8 +5,8 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionLanguages
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.source.service.ToggleLanguage
-import eu.kanade.tachiyomi.ui.browse.extension.ExtensionFilterEvent
-import eu.kanade.tachiyomi.ui.browse.extension.ExtensionFilterState
+import eu.kanade.tachiyomi.ui.browse.extension.MangaExtensionFilterEvent
+import eu.kanade.tachiyomi.ui.browse.extension.MangaExtensionFilterState
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -24,10 +24,10 @@ class AnimeExtensionFilterScreenModel(
     private val preferences: SourcePreferences = Injekt.get(),
     private val getExtensionLanguages: GetAnimeExtensionLanguages = Injekt.get(),
     private val toggleLanguage: ToggleLanguage = Injekt.get(),
-) : StateScreenModel<ExtensionFilterState>(ExtensionFilterState.Loading) {
+) : StateScreenModel<MangaExtensionFilterState>(MangaExtensionFilterState.Loading) {
 
-    private val _events: Channel<ExtensionFilterEvent> = Channel()
-    val events: Flow<ExtensionFilterEvent> = _events.receiveAsFlow()
+    private val _events: Channel<MangaExtensionFilterEvent> = Channel()
+    val events: Flow<MangaExtensionFilterEvent> = _events.receiveAsFlow()
 
     init {
         coroutineScope.launch {
@@ -37,11 +37,11 @@ class AnimeExtensionFilterScreenModel(
             ) { a, b -> a to b }
                 .catch { throwable ->
                     logcat(LogPriority.ERROR, throwable)
-                    _events.send(ExtensionFilterEvent.FailedFetchingLanguages)
+                    _events.send(MangaExtensionFilterEvent.FailedFetchingLanguages)
                 }
                 .collectLatest { (extensionLanguages, enabledLanguages) ->
                     mutableState.update {
-                        ExtensionFilterState.Success(
+                        MangaExtensionFilterState.Success(
                             languages = extensionLanguages,
                             enabledLanguages = enabledLanguages,
                         )

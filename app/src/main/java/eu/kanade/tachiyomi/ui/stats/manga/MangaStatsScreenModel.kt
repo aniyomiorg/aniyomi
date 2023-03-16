@@ -7,9 +7,9 @@ import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.core.util.fastFilter
 import eu.kanade.core.util.fastFilterNot
 import eu.kanade.core.util.fastMapNotNull
+import eu.kanade.domain.entries.manga.interactor.GetLibraryManga
+import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.history.manga.interactor.GetTotalReadDuration
-import eu.kanade.domain.items.manga.interactor.GetLibraryManga
-import eu.kanade.domain.items.manga.model.isLocal
 import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.manga.interactor.GetMangaTracks

@@ -8,7 +8,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.animebrowse.GlobalAnimeSearchScreen
+import eu.kanade.presentation.browse.anime.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.browse.animesource.browse.BrowseAnimeSourceScreen
 

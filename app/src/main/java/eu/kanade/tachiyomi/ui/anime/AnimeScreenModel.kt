@@ -9,31 +9,31 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.prefs.CheckboxState
 import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.core.util.addOrRemove
-import eu.kanade.data.entries.episode.NoEpisodesException
+import eu.kanade.data.items.episode.NoEpisodesException
 import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
 import eu.kanade.domain.category.anime.interactor.SetAnimeCategories
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.episode.interactor.SetAnimeDefaultEpisodeFlags
-import eu.kanade.domain.entries.episode.interactor.SetSeenStatus
-import eu.kanade.domain.entries.episode.interactor.SyncEpisodesWithSource
-import eu.kanade.domain.entries.episode.interactor.UpdateEpisode
-import eu.kanade.domain.entries.episode.model.Episode
-import eu.kanade.domain.entries.episode.model.EpisodeUpdate
-import eu.kanade.domain.items.TriStateFilter
-import eu.kanade.domain.items.anime.interactor.GetAnimeWithEpisodes
-import eu.kanade.domain.items.anime.interactor.GetDuplicateLibraryAnime
-import eu.kanade.domain.items.anime.interactor.SetAnimeEpisodeFlags
-import eu.kanade.domain.items.anime.interactor.UpdateAnime
-import eu.kanade.domain.items.anime.model.Anime
-import eu.kanade.domain.items.anime.model.isLocal
+import eu.kanade.domain.entries.TriStateFilter
+import eu.kanade.domain.entries.anime.interactor.GetAnimeWithEpisodes
+import eu.kanade.domain.entries.anime.interactor.GetDuplicateLibraryAnime
+import eu.kanade.domain.entries.anime.interactor.SetAnimeEpisodeFlags
+import eu.kanade.domain.entries.anime.interactor.UpdateAnime
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.entries.anime.model.isLocal
+import eu.kanade.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
+import eu.kanade.domain.items.episode.interactor.SetSeenStatus
+import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
+import eu.kanade.domain.items.episode.interactor.UpdateEpisode
+import eu.kanade.domain.items.episode.model.Episode
+import eu.kanade.domain.items.episode.model.EpisodeUpdate
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.EpisodeDownloadAction
-import eu.kanade.presentation.manga.DownloadAction
+import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -46,7 +46,7 @@ import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.network.HttpException
-import eu.kanade.tachiyomi.ui.anime.track.TrackItem
+import eu.kanade.tachiyomi.ui.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.util.episode.getEpisodeSort
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -637,15 +637,15 @@ class AnimeInfoScreenModel(
 
     fun runDownloadAction(action: DownloadAction) {
         val episodesToDownload = when (action) {
-            DownloadAction.NEXT_1_CHAPTER -> getUnseenEpisodesSorted().take(1)
-            DownloadAction.NEXT_5_CHAPTERS -> getUnseenEpisodesSorted().take(5)
-            DownloadAction.NEXT_10_CHAPTERS -> getUnseenEpisodesSorted().take(10)
+            DownloadAction.NEXT_1_ITEM -> getUnseenEpisodesSorted().take(1)
+            DownloadAction.NEXT_5_ITEMS -> getUnseenEpisodesSorted().take(5)
+            DownloadAction.NEXT_10_ITEMS -> getUnseenEpisodesSorted().take(10)
             DownloadAction.CUSTOM -> {
                 showDownloadCustomDialog()
                 return
             }
-            DownloadAction.UNREAD_CHAPTERS -> getUnseenEpisodes()
-            DownloadAction.ALL_CHAPTERS -> successState?.episodes?.map { it.episode }
+            DownloadAction.UNVIEWED_ITEMS -> getUnseenEpisodes()
+            DownloadAction.ALL_ITEMS -> successState?.episodes?.map { it.episode }
         }
         if (!episodesToDownload.isNullOrEmpty()) {
             startDownload(episodesToDownload, false)
@@ -929,7 +929,7 @@ class AnimeInfoScreenModel(
                     val dbTracks = tracks.map { it.toDbTrack() }
                     loggedServices
                         // Map to TrackItem
-                        .map { service -> TrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
+                        .map { service -> AnimeTrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
                         // Show only if the service supports this manga's source
                         .filter { (it.service as? EnhancedAnimeTrackService)?.accept(source!!) ?: true }
                 }
@@ -1031,7 +1031,7 @@ sealed class AnimeScreenState {
         val source: AnimeSource,
         val isFromSource: Boolean,
         val episodes: List<EpisodeItem>,
-        val trackItems: List<TrackItem> = emptyList(),
+        val trackItems: List<AnimeTrackItem> = emptyList(),
         val isRefreshingData: Boolean = false,
         val dialog: AnimeInfoScreenModel.Dialog? = null,
     ) : AnimeScreenState() {

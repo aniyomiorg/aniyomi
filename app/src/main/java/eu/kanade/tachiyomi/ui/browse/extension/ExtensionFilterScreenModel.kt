@@ -23,10 +23,10 @@ class ExtensionFilterScreenModel(
     private val preferences: SourcePreferences = Injekt.get(),
     private val getExtensionLanguages: GetMangaExtensionLanguages = Injekt.get(),
     private val toggleLanguage: ToggleLanguage = Injekt.get(),
-) : StateScreenModel<ExtensionFilterState>(ExtensionFilterState.Loading) {
+) : StateScreenModel<MangaExtensionFilterState>(MangaExtensionFilterState.Loading) {
 
-    private val _events: Channel<ExtensionFilterEvent> = Channel()
-    val events: Flow<ExtensionFilterEvent> = _events.receiveAsFlow()
+    private val _events: Channel<MangaExtensionFilterEvent> = Channel()
+    val events: Flow<MangaExtensionFilterEvent> = _events.receiveAsFlow()
 
     init {
         coroutineScope.launch {
@@ -36,11 +36,11 @@ class ExtensionFilterScreenModel(
             ) { a, b -> a to b }
                 .catch { throwable ->
                     logcat(LogPriority.ERROR, throwable)
-                    _events.send(ExtensionFilterEvent.FailedFetchingLanguages)
+                    _events.send(MangaExtensionFilterEvent.FailedFetchingLanguages)
                 }
                 .collectLatest { (extensionLanguages, enabledLanguages) ->
                     mutableState.update {
-                        ExtensionFilterState.Success(
+                        MangaExtensionFilterState.Success(
                             languages = extensionLanguages,
                             enabledLanguages = enabledLanguages,
                         )
@@ -54,20 +54,20 @@ class ExtensionFilterScreenModel(
     }
 }
 
-sealed class ExtensionFilterEvent {
-    object FailedFetchingLanguages : ExtensionFilterEvent()
+sealed class MangaExtensionFilterEvent {
+    object FailedFetchingLanguages : MangaExtensionFilterEvent()
 }
 
-sealed class ExtensionFilterState {
+sealed class MangaExtensionFilterState {
 
     @Immutable
-    object Loading : ExtensionFilterState()
+    object Loading : MangaExtensionFilterState()
 
     @Immutable
     data class Success(
         val languages: List<String>,
         val enabledLanguages: Set<String> = emptySet(),
-    ) : ExtensionFilterState() {
+    ) : MangaExtensionFilterState() {
 
         val isEmpty: Boolean
             get() = languages.isEmpty()

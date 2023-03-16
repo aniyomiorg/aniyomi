@@ -1,6 +1,6 @@
 package eu.kanade.domain.history.manga.model
 
-import eu.kanade.domain.items.manga.model.MangaCover
+import eu.kanade.domain.entries.manga.model.MangaCover
 import java.util.Date
 
 data class MangaHistoryWithRelations(

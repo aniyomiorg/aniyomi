@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.data.download
 import android.content.Context
 import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.chapter.model.Chapter
-import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.model.Download
 import eu.kanade.tachiyomi.data.download.model.DownloadQueue

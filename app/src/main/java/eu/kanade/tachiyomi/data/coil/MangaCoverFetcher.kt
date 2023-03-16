@@ -10,7 +10,7 @@ import coil.fetch.SourceResult
 import coil.network.HttpException
 import coil.request.Options
 import coil.request.Parameters
-import eu.kanade.domain.items.manga.model.MangaCover
+import eu.kanade.domain.entries.manga.model.MangaCover
 import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.coil.MangaCoverFetcher.Companion.USE_CUSTOM_COVER
 import eu.kanade.tachiyomi.data.database.models.Manga
@@ -30,7 +30,7 @@ import okio.buffer
 import okio.sink
 import uy.kohesive.injekt.injectLazy
 import java.io.File
-import eu.kanade.domain.items.manga.model.Manga as DomainManga
+import eu.kanade.domain.entries.manga.model.Manga as DomainManga
 
 /**
  * A [Fetcher] that fetches cover image for [Manga] object.

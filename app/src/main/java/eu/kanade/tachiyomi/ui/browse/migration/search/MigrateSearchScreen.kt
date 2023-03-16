@@ -29,17 +29,17 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.category.manga.interactor.SetMangaCategories
-import eu.kanade.domain.entries.chapter.interactor.GetChapterByMangaId
-import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.domain.entries.chapter.interactor.UpdateChapter
-import eu.kanade.domain.entries.chapter.model.toChapterUpdate
-import eu.kanade.domain.items.manga.interactor.UpdateManga
-import eu.kanade.domain.items.manga.model.Manga
-import eu.kanade.domain.items.manga.model.MangaUpdate
-import eu.kanade.domain.items.manga.model.hasCustomCover
+import eu.kanade.domain.entries.manga.interactor.UpdateManga
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.MangaUpdate
+import eu.kanade.domain.entries.manga.model.hasCustomCover
+import eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId
+import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
+import eu.kanade.domain.items.chapter.interactor.UpdateChapter
+import eu.kanade.domain.items.chapter.model.toChapterUpdate
 import eu.kanade.domain.track.manga.interactor.GetMangaTracks
 import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
-import eu.kanade.presentation.browse.MigrateSearchScreen
+import eu.kanade.presentation.browse.manga.MigrateMangaSearchScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.preference.Preference
 import eu.kanade.tachiyomi.core.preference.PreferenceStore
@@ -65,7 +65,7 @@ class MigrateSearchScreen(private val mangaId: Long) : Screen {
         val screenModel = rememberScreenModel { MigrateSearchScreenModel(mangaId = mangaId) }
         val state by screenModel.state.collectAsState()
 
-        MigrateSearchScreen(
+        MigrateMangaSearchScreen(
             navigateUp = navigator::pop,
             state = state,
             getManga = { source, manga ->

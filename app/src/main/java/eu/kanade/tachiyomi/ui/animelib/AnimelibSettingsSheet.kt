@@ -362,7 +362,7 @@ class AnimelibSettingsSheet(
 
             override fun initModels() {
                 downloadBadge.checked = libraryPreferences.downloadBadge().get()
-                unseenBadge.checked = libraryPreferences.unViewedBadge().get()
+                unseenBadge.checked = libraryPreferences.unviewedBadge().get()
                 localBadge.checked = libraryPreferences.localBadge().get()
                 languageBadge.checked = libraryPreferences.languageBadge().get()
             }
@@ -372,7 +372,7 @@ class AnimelibSettingsSheet(
                 item.checked = !item.checked
                 when (item) {
                     downloadBadge -> libraryPreferences.downloadBadge().set((item.checked))
-                    unseenBadge -> libraryPreferences.unViewedBadge().set((item.checked))
+                    unseenBadge -> libraryPreferences.unviewedBadge().set((item.checked))
                     localBadge -> libraryPreferences.localBadge().set((item.checked))
                     languageBadge -> libraryPreferences.languageBadge().set((item.checked))
                     else -> {}

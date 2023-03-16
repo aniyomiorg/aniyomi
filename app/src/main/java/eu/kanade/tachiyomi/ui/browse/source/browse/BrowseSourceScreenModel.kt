@@ -20,16 +20,16 @@ import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.category.manga.interactor.SetMangaCategories
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.entries.chapter.interactor.GetChapterByMangaId
-import eu.kanade.domain.entries.chapter.interactor.SetMangaDefaultChapterFlags
-import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.items.manga.interactor.GetDuplicateLibraryManga
-import eu.kanade.domain.items.manga.interactor.GetManga
-import eu.kanade.domain.items.manga.interactor.NetworkToLocalManga
-import eu.kanade.domain.items.manga.interactor.UpdateManga
-import eu.kanade.domain.items.manga.model.Manga
-import eu.kanade.domain.items.manga.model.toDomainManga
-import eu.kanade.domain.items.manga.model.toMangaUpdate
+import eu.kanade.domain.entries.manga.interactor.GetDuplicateLibraryManga
+import eu.kanade.domain.entries.manga.interactor.GetManga
+import eu.kanade.domain.entries.manga.interactor.NetworkToLocalManga
+import eu.kanade.domain.entries.manga.interactor.UpdateManga
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.toDomainManga
+import eu.kanade.domain.entries.manga.model.toMangaUpdate
+import eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId
+import eu.kanade.domain.items.chapter.interactor.SetMangaDefaultChapterFlags
+import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.source.manga.interactor.GetRemoteManga
 import eu.kanade.domain.source.service.SourcePreferences
@@ -39,7 +39,7 @@ import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.source.CatalogueSource
+import eu.kanade.tachiyomi.source.CatalogueMangaSource
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.source.model.FilterList
@@ -101,7 +101,7 @@ class BrowseSourceScreenModel(
 
     var displayMode by sourcePreferences.sourceDisplayMode().asState(coroutineScope)
 
-    val source = sourceManager.get(sourceId) as CatalogueSource
+    val source = sourceManager.get(sourceId) as CatalogueMangaSource
 
     init {
         mutableState.update {

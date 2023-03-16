@@ -1,6 +1,6 @@
 package eu.kanade.domain.updates.manga.model
 
-import eu.kanade.domain.items.manga.model.MangaCover
+import eu.kanade.domain.entries.manga.model.MangaCover
 
 data class MangaUpdatesWithRelations(
     val mangaId: Long,

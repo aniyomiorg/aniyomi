@@ -12,8 +12,8 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.browse.SourceOptionsDialog
-import eu.kanade.presentation.browse.SourcesScreen
+import eu.kanade.presentation.browse.manga.MangaSourceOptionsDialog
+import eu.kanade.presentation.browse.manga.MangaSourcesScreen
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
@@ -43,7 +43,7 @@ fun Screen.sourcesTab(): TabContent {
             ),
         ),
         content = { contentPadding, snackbarHostState ->
-            SourcesScreen(
+            MangaSourcesScreen(
                 state = state,
                 contentPadding = contentPadding,
                 onClickItem = { source, listing ->
@@ -56,7 +56,7 @@ fun Screen.sourcesTab(): TabContent {
 
             state.dialog?.let { dialog ->
                 val source = dialog.source
-                SourceOptionsDialog(
+                MangaSourceOptionsDialog(
                     source = source,
                     onClickPin = {
                         screenModel.togglePin(source)

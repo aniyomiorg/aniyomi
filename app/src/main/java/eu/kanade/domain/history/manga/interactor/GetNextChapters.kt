@@ -1,9 +1,9 @@
 package eu.kanade.domain.history.manga.interactor
 
-import eu.kanade.domain.entries.chapter.interactor.GetChapterByMangaId
-import eu.kanade.domain.entries.chapter.model.Chapter
+import eu.kanade.domain.entries.manga.interactor.GetManga
 import eu.kanade.domain.history.manga.repository.MangaHistoryRepository
-import eu.kanade.domain.items.manga.interactor.GetManga
+import eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId
+import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.tachiyomi.util.chapter.getChapterSort
 import kotlin.math.max
 

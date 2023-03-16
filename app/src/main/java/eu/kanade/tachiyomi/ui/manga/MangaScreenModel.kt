@@ -9,30 +9,30 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.prefs.CheckboxState
 import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.core.util.addOrRemove
-import eu.kanade.data.entries.chapter.NoChaptersException
+import eu.kanade.data.items.chapter.NoChaptersException
 import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.category.manga.interactor.SetMangaCategories
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.chapter.interactor.SetMangaDefaultChapterFlags
-import eu.kanade.domain.entries.chapter.interactor.SetReadStatus
-import eu.kanade.domain.entries.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.domain.entries.chapter.interactor.UpdateChapter
-import eu.kanade.domain.entries.chapter.model.Chapter
-import eu.kanade.domain.entries.chapter.model.ChapterUpdate
-import eu.kanade.domain.items.TriStateFilter
-import eu.kanade.domain.items.manga.interactor.GetDuplicateLibraryManga
-import eu.kanade.domain.items.manga.interactor.GetMangaWithChapters
-import eu.kanade.domain.items.manga.interactor.SetMangaChapterFlags
-import eu.kanade.domain.items.manga.interactor.UpdateManga
-import eu.kanade.domain.items.manga.model.Manga
-import eu.kanade.domain.items.manga.model.isLocal
+import eu.kanade.domain.entries.TriStateFilter
+import eu.kanade.domain.entries.manga.interactor.GetDuplicateLibraryManga
+import eu.kanade.domain.entries.manga.interactor.GetMangaWithChapters
+import eu.kanade.domain.entries.manga.interactor.SetMangaChapterFlags
+import eu.kanade.domain.entries.manga.interactor.UpdateManga
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.isLocal
+import eu.kanade.domain.items.chapter.interactor.SetMangaDefaultChapterFlags
+import eu.kanade.domain.items.chapter.interactor.SetReadStatus
+import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
+import eu.kanade.domain.items.chapter.interactor.UpdateChapter
+import eu.kanade.domain.items.chapter.model.Chapter
+import eu.kanade.domain.items.chapter.model.ChapterUpdate
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.manga.interactor.GetMangaTracks
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.ChapterDownloadAction
-import eu.kanade.presentation.manga.DownloadAction
+import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.DownloadCache
 import eu.kanade.tachiyomi.data.download.DownloadManager
@@ -45,7 +45,7 @@ import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
-import eu.kanade.tachiyomi.ui.manga.track.TrackItem
+import eu.kanade.tachiyomi.ui.manga.track.MangaTrackItem
 import eu.kanade.tachiyomi.util.chapter.getChapterSort
 import eu.kanade.tachiyomi.util.chapter.getNextUnread
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -626,15 +626,15 @@ class MangaInfoScreenModel(
 
     fun runDownloadAction(action: DownloadAction) {
         val chaptersToDownload = when (action) {
-            DownloadAction.NEXT_1_CHAPTER -> getUnreadChaptersSorted().take(1)
-            DownloadAction.NEXT_5_CHAPTERS -> getUnreadChaptersSorted().take(5)
-            DownloadAction.NEXT_10_CHAPTERS -> getUnreadChaptersSorted().take(10)
+            DownloadAction.NEXT_1_ITEM -> getUnreadChaptersSorted().take(1)
+            DownloadAction.NEXT_5_ITEMS -> getUnreadChaptersSorted().take(5)
+            DownloadAction.NEXT_10_ITEMS -> getUnreadChaptersSorted().take(10)
             DownloadAction.CUSTOM -> {
                 showDownloadCustomDialog()
                 return
             }
-            DownloadAction.UNREAD_CHAPTERS -> getUnreadChapters()
-            DownloadAction.ALL_CHAPTERS -> successState?.chapters?.map { it.chapter }
+            DownloadAction.UNVIEWED_ITEMS -> getUnreadChapters()
+            DownloadAction.ALL_ITEMS -> successState?.chapters?.map { it.chapter }
         }
         if (!chaptersToDownload.isNullOrEmpty()) {
             startDownload(chaptersToDownload, false)
@@ -914,7 +914,7 @@ class MangaInfoScreenModel(
                     val dbTracks = tracks.map { it.toDbTrack() }
                     loggedServices
                         // Map to TrackItem
-                        .map { service -> TrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
+                        .map { service -> MangaTrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
                         // Show only if the service supports this manga's source
                         .filter { (it.service as? EnhancedMangaTrackService)?.accept(source!!) ?: true }
                 }
@@ -1011,7 +1011,7 @@ sealed class MangaScreenState {
         val source: Source,
         val isFromSource: Boolean,
         val chapters: List<ChapterItem>,
-        val trackItems: List<TrackItem> = emptyList(),
+        val trackItems: List<MangaTrackItem> = emptyList(),
         val isRefreshingData: Boolean = false,
         val dialog: MangaInfoScreenModel.Dialog? = null,
     ) : MangaScreenState() {

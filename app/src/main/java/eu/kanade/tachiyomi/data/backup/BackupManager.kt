@@ -17,10 +17,10 @@ import eu.kanade.domain.backup.service.BackupPreferences
 import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
 import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.category.model.Category
+import eu.kanade.domain.entries.anime.interactor.GetAnimeFavorites
+import eu.kanade.domain.entries.manga.interactor.GetMangaFavorites
 import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
 import eu.kanade.domain.history.manga.model.MangaHistoryUpdate
-import eu.kanade.domain.items.anime.interactor.GetAnimeFavorites
-import eu.kanade.domain.items.manga.interactor.GetMangaFavorites
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
@@ -77,8 +77,8 @@ import uy.kohesive.injekt.api.get
 import java.io.FileOutputStream
 import java.util.Date
 import kotlin.math.max
-import eu.kanade.domain.items.anime.model.Anime as DomainAnime
-import eu.kanade.domain.items.manga.model.Manga as DomainManga
+import eu.kanade.domain.entries.anime.model.Anime as DomainAnime
+import eu.kanade.domain.entries.manga.model.Manga as DomainManga
 
 class BackupManager(
     private val context: Context,

@@ -1,6 +1,6 @@
 package eu.kanade.domain.updates.anime.model
 
-import eu.kanade.domain.items.anime.model.AnimeCover
+import eu.kanade.domain.entries.anime.model.AnimeCover
 
 data class AnimeUpdatesWithRelations(
     val animeId: Long,

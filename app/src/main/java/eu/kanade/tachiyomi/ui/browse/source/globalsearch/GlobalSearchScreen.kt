@@ -8,7 +8,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.browse.GlobalSearchScreen
+import eu.kanade.presentation.browse.manga.GlobalMangaSearchScreen
 import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceScreen
 import eu.kanade.tachiyomi.ui.manga.MangaScreen
 
@@ -31,7 +31,7 @@ class GlobalSearchScreen(
         }
         val state by screenModel.state.collectAsState()
 
-        GlobalSearchScreen(
+        GlobalMangaSearchScreen(
             state = state,
             navigateUp = navigator::pop,
             onChangeSearchQuery = screenModel::updateSearchQuery,

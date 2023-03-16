@@ -20,7 +20,7 @@ class SourcesFilterScreenModel(
     private val getLanguagesWithSources: GetLanguagesWithMangaSources = Injekt.get(),
     private val toggleSource: ToggleMangaSource = Injekt.get(),
     private val toggleLanguage: ToggleLanguage = Injekt.get(),
-) : StateScreenModel<SourcesFilterState>(SourcesFilterState.Loading) {
+) : StateScreenModel<MangaSourcesFilterState>(MangaSourcesFilterState.Loading) {
 
     init {
         coroutineScope.launch {
@@ -31,14 +31,14 @@ class SourcesFilterScreenModel(
             ) { a, b, c -> Triple(a, b, c) }
                 .catch { throwable ->
                     mutableState.update {
-                        SourcesFilterState.Error(
+                        MangaSourcesFilterState.Error(
                             throwable = throwable,
                         )
                     }
                 }
                 .collectLatest { (languagesWithSources, enabledLanguages, disabledSources) ->
                     mutableState.update {
-                        SourcesFilterState.Success(
+                        MangaSourcesFilterState.Success(
                             items = languagesWithSources,
                             enabledLanguages = enabledLanguages,
                             disabledSources = disabledSources,
@@ -57,19 +57,19 @@ class SourcesFilterScreenModel(
     }
 }
 
-sealed class SourcesFilterState {
+sealed class MangaSourcesFilterState {
 
-    object Loading : SourcesFilterState()
+    object Loading : MangaSourcesFilterState()
 
     data class Error(
         val throwable: Throwable,
-    ) : SourcesFilterState()
+    ) : MangaSourcesFilterState()
 
     data class Success(
         val items: Map<String, List<Source>>,
         val enabledLanguages: Set<String>,
         val disabledSources: Set<String>,
-    ) : SourcesFilterState() {
+    ) : MangaSourcesFilterState() {
 
         val isEmpty: Boolean
             get() = items.isEmpty()

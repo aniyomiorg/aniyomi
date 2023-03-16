@@ -9,7 +9,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.browse.SourcesFilterScreen
+import eu.kanade.presentation.browse.manga.MangaSourcesFilterScreen
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.toast
@@ -22,12 +22,12 @@ class SourcesFilterScreen : Screen {
         val screenModel = rememberScreenModel { SourcesFilterScreenModel() }
         val state by screenModel.state.collectAsState()
 
-        if (state is SourcesFilterState.Loading) {
+        if (state is MangaSourcesFilterState.Loading) {
             LoadingScreen()
             return
         }
 
-        if (state is SourcesFilterState.Error) {
+        if (state is MangaSourcesFilterState.Error) {
             val context = LocalContext.current
             LaunchedEffect(Unit) {
                 context.toast(R.string.internal_error)
@@ -36,9 +36,9 @@ class SourcesFilterScreen : Screen {
             return
         }
 
-        val successState = state as SourcesFilterState.Success
+        val successState = state as MangaSourcesFilterState.Success
 
-        SourcesFilterScreen(
+        MangaSourcesFilterScreen(
             navigateUp = navigator::pop,
             state = successState,
             onClickLanguage = screenModel::toggleLanguage,

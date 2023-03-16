@@ -39,9 +39,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.animebrowse.BrowseAnimeSourceContent
-import eu.kanade.presentation.animebrowse.components.BrowseAnimeSourceToolbar
-import eu.kanade.presentation.animebrowse.components.RemoveAnimeDialog
+import eu.kanade.presentation.browse.anime.BrowseAnimeSourceContent
+import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceToolbar
+import eu.kanade.presentation.browse.anime.components.RemoveEntryDialog
 import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.DuplicateAnimeDialog
@@ -230,12 +230,12 @@ data class BrowseAnimeSourceScreen(
                 )
             }
             is BrowseAnimeSourceScreenModel.Dialog.RemoveAnime -> {
-                RemoveAnimeDialog(
+                RemoveEntryDialog(
                     onDismissRequest = onDismissRequest,
                     onConfirm = {
                         screenModel.changeAnimeFavorite(dialog.anime)
                     },
-                    animeToRemove = dialog.anime,
+                    entryToRemove = dialog.anime.title,
                 )
             }
             is BrowseAnimeSourceScreenModel.Dialog.ChangeAnimeCategory -> {

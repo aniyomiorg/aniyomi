@@ -44,7 +44,7 @@ import coil.size.Precision
 import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
 import eu.kanade.data.handlers.manga.MangaDatabaseHandler
-import eu.kanade.domain.items.manga.model.MangaCover
+import eu.kanade.domain.entries.manga.model.MangaCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.ui.main.MainActivity

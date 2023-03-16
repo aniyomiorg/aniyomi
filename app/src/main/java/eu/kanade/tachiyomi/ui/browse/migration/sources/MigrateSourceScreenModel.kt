@@ -23,7 +23,7 @@ class MigrateSourceScreenModel(
     preferences: SourcePreferences = Injekt.get(),
     private val getSourcesWithFavoriteCount: GetMangaSourcesWithFavoriteCount = Injekt.get(),
     private val setMigrateSorting: SetMigrateSorting = Injekt.get(),
-) : StateScreenModel<MigrateSourceState>(MigrateSourceState()) {
+) : StateScreenModel<MigrateMangaSourceState>(MigrateMangaSourceState()) {
 
     private val _channel = Channel<Event>(Int.MAX_VALUE)
     val channel = _channel.receiveAsFlow()
@@ -81,7 +81,7 @@ class MigrateSourceScreenModel(
     }
 }
 
-data class MigrateSourceState(
+data class MigrateMangaSourceState(
     val isLoading: Boolean = true,
     val items: List<Pair<Source, Long>> = emptyList(),
     val sortingMode: SetMigrateSorting.Mode = SetMigrateSorting.Mode.ALPHABETICAL,

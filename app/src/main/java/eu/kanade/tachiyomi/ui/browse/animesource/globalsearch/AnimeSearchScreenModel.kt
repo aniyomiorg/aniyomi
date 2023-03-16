@@ -5,15 +5,15 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.items.anime.interactor.GetAnime
-import eu.kanade.domain.items.anime.interactor.NetworkToLocalAnime
-import eu.kanade.domain.items.anime.interactor.UpdateAnime
-import eu.kanade.domain.items.anime.model.Anime
-import eu.kanade.domain.items.anime.model.toAnimeUpdate
-import eu.kanade.domain.items.anime.model.toDomainAnime
+import eu.kanade.domain.entries.anime.interactor.GetAnime
+import eu.kanade.domain.entries.anime.interactor.NetworkToLocalAnime
+import eu.kanade.domain.entries.anime.interactor.UpdateAnime
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.entries.anime.model.toAnimeUpdate
+import eu.kanade.domain.entries.anime.model.toDomainAnime
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
@@ -44,8 +44,8 @@ abstract class AnimeSearchScreenModel<T>(
     private val sources by lazy { getSelectedSources() }
     private val pinnedSources by lazy { sourcePreferences.pinnedAnimeSources().get() }
 
-    private val sortComparator = { map: Map<AnimeCatalogueSource, AnimeSearchItemResult> ->
-        compareBy<AnimeCatalogueSource>(
+    private val sortComparator = { map: Map<CatalogueAnimeSource, AnimeSearchItemResult> ->
+        compareBy<CatalogueAnimeSource>(
             { (map[it] as? AnimeSearchItemResult.Success)?.isEmpty ?: true },
             { "${it.id}" !in pinnedSources },
             { "${it.name.lowercase()} (${it.lang})" },
@@ -53,7 +53,7 @@ abstract class AnimeSearchScreenModel<T>(
     }
 
     @Composable
-    fun getAnime(source: AnimeCatalogueSource, initialAnime: Anime): State<Anime> {
+    fun getAnime(source: CatalogueAnimeSource, initialAnime: Anime): State<Anime> {
         return produceState(initialValue = initialAnime) {
             getAnime.subscribe(initialAnime.url, initialAnime.source)
                 .collectLatest { anime ->
@@ -72,7 +72,7 @@ abstract class AnimeSearchScreenModel<T>(
      * @param source to interact with
      * @param anime to initialize.
      */
-    private suspend fun initializeAnime(source: AnimeCatalogueSource, anime: Anime) {
+    private suspend fun initializeAnime(source: CatalogueAnimeSource, anime: Anime) {
         if (anime.thumbnailUrl != null || anime.initialized) return
         withNonCancellableContext {
             try {
@@ -87,9 +87,9 @@ abstract class AnimeSearchScreenModel<T>(
         }
     }
 
-    abstract fun getEnabledSources(): List<AnimeCatalogueSource>
+    abstract fun getEnabledSources(): List<CatalogueAnimeSource>
 
-    fun getSelectedSources(): List<AnimeCatalogueSource> {
+    fun getSelectedSources(): List<CatalogueAnimeSource> {
         val filter = extensionFilter
 
         val enabledSources = getEnabledSources()
@@ -111,16 +111,16 @@ abstract class AnimeSearchScreenModel<T>(
             .filter { it.pkgName == filter }
             .flatMap { it.sources }
             .filter { it in enabledSources }
-            .filterIsInstance<AnimeCatalogueSource>()
+            .filterIsInstance<CatalogueAnimeSource>()
     }
 
     abstract fun updateSearchQuery(query: String?)
 
-    abstract fun updateItems(items: Map<AnimeCatalogueSource, AnimeSearchItemResult>)
+    abstract fun updateItems(items: Map<CatalogueAnimeSource, AnimeSearchItemResult>)
 
-    abstract fun getItems(): Map<AnimeCatalogueSource, AnimeSearchItemResult>
+    abstract fun getItems(): Map<CatalogueAnimeSource, AnimeSearchItemResult>
 
-    fun getAndUpdateItems(function: (Map<AnimeCatalogueSource, AnimeSearchItemResult>) -> Map<AnimeCatalogueSource, AnimeSearchItemResult>) {
+    fun getAndUpdateItems(function: (Map<CatalogueAnimeSource, AnimeSearchItemResult>) -> Map<CatalogueAnimeSource, AnimeSearchItemResult>) {
         updateItems(function(getItems()))
     }
 

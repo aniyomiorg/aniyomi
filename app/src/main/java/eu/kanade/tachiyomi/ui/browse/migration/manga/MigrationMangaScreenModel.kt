@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.ui.browse.migration.manga
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.items.manga.interactor.GetMangaFavorites
-import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.entries.manga.interactor.GetMangaFavorites
+import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.tachiyomi.source.Source
 import eu.kanade.tachiyomi.source.SourceManager
 import eu.kanade.tachiyomi.util.system.logcat

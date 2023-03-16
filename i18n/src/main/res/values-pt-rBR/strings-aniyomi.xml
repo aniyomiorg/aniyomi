@@ -101,9 +101,8 @@
     <string name="local_invalid_episode_format">Formato de episódio inválido</string>
     <string name="unknown_studio">Estúdio desconhecido</string>
     <plurals name="anime_num_episodes">
-        <item quantity="one">1 episódio</item>
-        <item quantity="many">%1$s episódios</item>
-        <item quantity="other"/>
+        <item quantity="one">%1$s episódio</item>
+        <item quantity="other">%1$s episódios</item>
     </plurals>
     <string name="delete_downloads_for_anime">Excluir episódios baixados\?</string>
     <string name="snack_add_to_library">Adicionar mangá à biblioteca\?</string>

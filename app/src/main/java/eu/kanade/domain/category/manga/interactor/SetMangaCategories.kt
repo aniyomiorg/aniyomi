@@ -1,6 +1,6 @@
 package eu.kanade.domain.category.manga.interactor
 
-import eu.kanade.domain.items.manga.repository.MangaRepository
+import eu.kanade.domain.entries.manga.repository.MangaRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
 

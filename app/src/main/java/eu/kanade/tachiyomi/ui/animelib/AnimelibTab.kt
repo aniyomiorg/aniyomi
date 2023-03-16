@@ -30,22 +30,22 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.entries.episode.model.Episode
-import eu.kanade.domain.items.anime.model.Anime
-import eu.kanade.domain.items.anime.model.isLocal
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.entries.anime.model.isLocal
+import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.domain.library.model.display
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.presentation.animelib.components.AnimelibContent
-import eu.kanade.presentation.components.AnimelibBottomActionMenu
 import eu.kanade.presentation.components.ChangeCategoryDialog
-import eu.kanade.presentation.components.DeleteAnimelibAnimeDialog
+import eu.kanade.presentation.components.DeleteLibraryEntryDialog
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.EmptyScreenAction
+import eu.kanade.presentation.components.LibraryBottomActionMenu
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.library.components.LibraryToolbar
-import eu.kanade.presentation.manga.components.DownloadCustomAmountDialog
+import eu.kanade.presentation.entries.DownloadCustomAmountDialog
+import eu.kanade.presentation.library.LibraryToolbar
+import eu.kanade.presentation.library.anime.AnimeLibraryContent
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
@@ -150,11 +150,11 @@ object AnimelibTab : Tab {
                     onClickInvertSelection = { screenModel.invertSelection(screenModel.activeCategoryIndex) },
                     onClickFilter = onClickFilter,
                     onClickRefresh = { onClickRefresh(null) },
-                    onClickOpenRandomManga = {
+                    onClickOpenRandomEntry = {
                         scope.launch {
                             val randomItem = screenModel.getRandomAnimelibItemForCurrentCategory()
                             if (randomItem != null) {
-                                navigator.push(AnimeScreen(randomItem.animelibAnime.anime.id))
+                                navigator.push(AnimeScreen(randomItem.libraryAnime.anime.id))
                             } else {
                                 snackbarHostState.showSnackbar(context.getString(R.string.information_no_entries_found))
                             }
@@ -166,14 +166,15 @@ object AnimelibTab : Tab {
                 )
             },
             bottomBar = {
-                AnimelibBottomActionMenu(
+                LibraryBottomActionMenu(
                     visible = state.selectionMode,
                     onChangeCategoryClicked = screenModel::openChangeCategoryDialog,
-                    onMarkAsSeenClicked = { screenModel.markSeenSelection(true) },
-                    onMarkAsUnseenClicked = { screenModel.markSeenSelection(false) },
+                    onMarkAsViewedClicked = { screenModel.markSeenSelection(true) },
+                    onMarkAsUnviewedClicked = { screenModel.markSeenSelection(false) },
                     onDownloadClicked = screenModel::runDownloadActionSelection
                         .takeIf { state.selection.fastAll { !it.anime.isLocal() } },
                     onDeleteClicked = screenModel::openDeleteAnimeDialog,
+                    isManga = false,
                 )
             },
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -195,7 +196,7 @@ object AnimelibTab : Tab {
                     )
                 }
                 else -> {
-                    AnimelibContent(
+                    AnimeLibraryContent(
                         categories = state.categories,
                         searchQuery = state.searchQuery,
                         selection = state.selection,
@@ -246,13 +247,14 @@ object AnimelibTab : Tab {
                 )
             }
             is AnimelibScreenModel.Dialog.DeleteAnime -> {
-                DeleteAnimelibAnimeDialog(
-                    containsLocalAnime = dialog.anime.any(Anime::isLocal),
+                DeleteLibraryEntryDialog(
+                    containsLocalEntry = dialog.anime.any(Anime::isLocal),
                     onDismissRequest = onDismissRequest,
-                    onConfirm = { deleteAnime, deleteChapter ->
-                        screenModel.removeAnimes(dialog.anime, deleteAnime, deleteChapter)
+                    onConfirm = { deleteAnime, deleteEpisode ->
+                        screenModel.removeAnimes(dialog.anime, deleteAnime, deleteEpisode)
                         screenModel.clearSelection()
                     },
+                    isManga = false,
                 )
             }
             is AnimelibScreenModel.Dialog.DownloadCustomAmount -> {

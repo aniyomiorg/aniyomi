@@ -3,8 +3,8 @@ package eu.kanade.tachiyomi.ui.browse.animesource.globalsearch
 import androidx.compose.runtime.Immutable
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
 import kotlinx.coroutines.flow.update
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -27,7 +27,7 @@ class GlobalAnimeSearchScreenModel(
         }
     }
 
-    override fun getEnabledSources(): List<AnimeCatalogueSource> {
+    override fun getEnabledSources(): List<CatalogueAnimeSource> {
         val enabledLanguages = sourcePreferences.enabledLanguages().get()
         val disabledSources = sourcePreferences.disabledAnimeSources().get()
         val pinnedSources = sourcePreferences.pinnedAnimeSources().get()
@@ -44,13 +44,13 @@ class GlobalAnimeSearchScreenModel(
         }
     }
 
-    override fun updateItems(items: Map<AnimeCatalogueSource, AnimeSearchItemResult>) {
+    override fun updateItems(items: Map<CatalogueAnimeSource, AnimeSearchItemResult>) {
         mutableState.update {
             it.copy(items = items)
         }
     }
 
-    override fun getItems(): Map<AnimeCatalogueSource, AnimeSearchItemResult> {
+    override fun getItems(): Map<CatalogueAnimeSource, AnimeSearchItemResult> {
         return mutableState.value.items
     }
 }
@@ -58,7 +58,7 @@ class GlobalAnimeSearchScreenModel(
 @Immutable
 data class GlobalAnimeSearchState(
     val searchQuery: String? = null,
-    val items: Map<AnimeCatalogueSource, AnimeSearchItemResult> = emptyMap(),
+    val items: Map<CatalogueAnimeSource, AnimeSearchItemResult> = emptyMap(),
 ) {
 
     val progress: Int = items.count { it.value !is AnimeSearchItemResult.Loading }

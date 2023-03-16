@@ -4,12 +4,12 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.util.insertSeparators
-import eu.kanade.domain.entries.chapter.model.Chapter
 import eu.kanade.domain.history.manga.interactor.GetMangaHistory
 import eu.kanade.domain.history.manga.interactor.GetNextChapters
 import eu.kanade.domain.history.manga.interactor.RemoveMangaHistory
 import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
-import eu.kanade.presentation.history.HistoryUiModel
+import eu.kanade.domain.items.chapter.model.Chapter
+import eu.kanade.presentation.history.manga.MangaHistoryUiModel
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.toDateKey
 import eu.kanade.tachiyomi.util.lang.withIOContext
@@ -57,13 +57,13 @@ class MangaHistoryScreenModel(
         }
     }
 
-    private fun List<MangaHistoryWithRelations>.toHistoryUiModels(): List<HistoryUiModel> {
-        return map { HistoryUiModel.Item(it) }
+    private fun List<MangaHistoryWithRelations>.toHistoryUiModels(): List<MangaHistoryUiModel> {
+        return map { MangaHistoryUiModel.Item(it) }
             .insertSeparators { before, after ->
                 val beforeDate = before?.item?.readAt?.time?.toDateKey() ?: Date(0)
                 val afterDate = after?.item?.readAt?.time?.toDateKey() ?: Date(0)
                 when {
-                    beforeDate.time != afterDate.time && afterDate.time != 0L -> HistoryUiModel.Header(afterDate)
+                    beforeDate.time != afterDate.time && afterDate.time != 0L -> MangaHistoryUiModel.Header(afterDate)
                     // Return null to avoid adding a separator between two items.
                     else -> null
                 }
@@ -130,6 +130,6 @@ class MangaHistoryScreenModel(
 @Immutable
 data class HistoryState(
     val searchQuery: String? = null,
-    val list: List<HistoryUiModel>? = null,
+    val list: List<MangaHistoryUiModel>? = null,
     val dialog: MangaHistoryScreenModel.Dialog? = null,
 )

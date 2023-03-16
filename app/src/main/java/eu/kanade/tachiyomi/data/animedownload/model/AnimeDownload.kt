@@ -1,9 +1,9 @@
 package eu.kanade.tachiyomi.data.animedownload.model
 
-import eu.kanade.domain.entries.episode.interactor.GetEpisode
-import eu.kanade.domain.entries.episode.model.Episode
-import eu.kanade.domain.items.anime.interactor.GetAnime
-import eu.kanade.domain.items.anime.model.Anime
+import eu.kanade.domain.entries.anime.interactor.GetAnime
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.items.episode.interactor.GetEpisode
+import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource

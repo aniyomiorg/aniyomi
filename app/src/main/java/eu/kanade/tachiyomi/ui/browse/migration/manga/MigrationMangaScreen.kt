@@ -9,7 +9,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.browse.MigrateMangaScreen
+import eu.kanade.presentation.browse.manga.MigrateMangaScreen
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.migration.search.MigrateSearchScreen

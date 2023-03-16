@@ -37,20 +37,20 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.entries.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
 import eu.kanade.domain.track.anime.interactor.DeleteAnimeTrack
 import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
 import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.presentation.anime.AnimeTrackInfoDialogHome
-import eu.kanade.presentation.anime.AnimeTrackServiceSearch
 import eu.kanade.presentation.components.AlertDialogContent
-import eu.kanade.presentation.manga.TrackChapterSelector
-import eu.kanade.presentation.manga.TrackDateSelector
-import eu.kanade.presentation.manga.TrackScoreSelector
-import eu.kanade.presentation.manga.TrackStatusSelector
+import eu.kanade.presentation.entries.TrackChapterSelector
+import eu.kanade.presentation.entries.TrackDateSelector
+import eu.kanade.presentation.entries.TrackScoreSelector
+import eu.kanade.presentation.entries.TrackStatusSelector
+import eu.kanade.presentation.entries.anime.AnimeTrackInfoDialogHome
+import eu.kanade.presentation.entries.anime.AnimeTrackServiceSearch
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.database.models.AnimeTrack
@@ -157,7 +157,7 @@ data class AnimeTrackInfoDialogHomeScreen(
     /**
      * Opens registered tracker url in browser
      */
-    private fun openTrackerInBrowser(context: Context, trackItem: TrackItem) {
+    private fun openTrackerInBrowser(context: Context, trackItem: AnimeTrackItem) {
         val url = trackItem.track?.tracking_url ?: return
         if (url.isNotBlank()) {
             context.openInBrowser(url)
@@ -177,7 +177,7 @@ data class AnimeTrackInfoDialogHomeScreen(
                 try {
                     val trackItems = getTracks.await(animeId).mapToTrackItem()
                     val insertTrack = Injekt.get<InsertAnimeTrack>()
-                    val getAnimeWithEpisodes = Injekt.get<eu.kanade.domain.items.anime.interactor.GetAnimeWithEpisodes>()
+                    val getAnimeWithEpisodes = Injekt.get<eu.kanade.domain.entries.anime.interactor.GetAnimeWithEpisodes>()
                     val syncTwoWayService = Injekt.get<SyncEpisodesWithTrackServiceTwoWay>()
                     trackItems.forEach {
                         val track = it.track ?: return@forEach
@@ -204,10 +204,10 @@ data class AnimeTrackInfoDialogHomeScreen(
             }
         }
 
-        fun registerEnhancedTracking(item: TrackItem) {
+        fun registerEnhancedTracking(item: AnimeTrackItem) {
             item.service as EnhancedAnimeTrackService
             coroutineScope.launchNonCancellable {
-                val anime = Injekt.get<eu.kanade.domain.items.anime.interactor.GetAnime>().await(animeId) ?: return@launchNonCancellable
+                val anime = Injekt.get<eu.kanade.domain.entries.anime.interactor.GetAnime>().await(animeId) ?: return@launchNonCancellable
                 try {
                     val matchResult = item.service.match(anime) ?: throw Exception()
                     item.service.animeService.registerTracking(matchResult, animeId)
@@ -221,19 +221,19 @@ data class AnimeTrackInfoDialogHomeScreen(
             coroutineScope.launchNonCancellable { deleteTrack.await(animeId, serviceId) }
         }
 
-        private fun List<eu.kanade.domain.track.anime.model.AnimeTrack>.mapToTrackItem(): List<TrackItem> {
+        private fun List<eu.kanade.domain.track.anime.model.AnimeTrack>.mapToTrackItem(): List<AnimeTrackItem> {
             val dbTracks = map { it.toDbTrack() }
             val loggedServices = Injekt.get<TrackManager>().services.filter { it.isLogged }
             val source = Injekt.get<AnimeSourceManager>().getOrStub(sourceId)
             return loggedServices
                 // Map to TrackItem
-                .map { service -> TrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
+                .map { service -> AnimeTrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
                 // Show only if the service supports this anime's source
                 .filter { (it.service as? EnhancedAnimeTrackService)?.accept(source) ?: true }
         }
 
         data class State(
-            val trackItems: List<TrackItem> = emptyList(),
+            val trackItems: List<AnimeTrackItem> = emptyList(),
         )
     }
 }

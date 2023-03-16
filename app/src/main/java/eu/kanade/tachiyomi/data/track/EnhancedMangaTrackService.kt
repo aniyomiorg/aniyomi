@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.track
 
-import eu.kanade.domain.items.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.track.manga.model.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.TrackSearch
 import eu.kanade.tachiyomi.source.Source

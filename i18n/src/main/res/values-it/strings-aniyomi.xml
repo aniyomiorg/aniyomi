@@ -57,13 +57,11 @@
     <string name="pref_bottom_nav_no_updates">Sposta Aggiornamenti nella scheda Altro</string>
     <plurals name="next_unseen_episodes">
         <item quantity="one">Prossima puntata non vista</item>
-        <item quantity="many">Prossime %d puntate non viste</item>
         <item quantity="other">Prossime %d puntate non viste</item>
     </plurals>
     <string name="pref_invalidate_download_cache_summary">Forza l\'app a ricontrollare i capitoli e gli episodi scaricati</string>
     <plurals name="anime_num_episodes">
         <item quantity="one">1 episodio</item>
-        <item quantity="many">%1$s episodi</item>
         <item quantity="other">%1$s episodi</item>
     </plurals>
     <string name="action_start_download_externally">Usa un downloader esterno</string>

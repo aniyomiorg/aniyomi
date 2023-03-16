@@ -31,7 +31,7 @@ class ExtensionsScreenModel(
     preferences: SourcePreferences = Injekt.get(),
     private val extensionManager: ExtensionManager = Injekt.get(),
     private val getExtensions: GetMangaExtensionsByType = Injekt.get(),
-) : StateScreenModel<ExtensionsState>(ExtensionsState()) {
+) : StateScreenModel<MangaExtensionsState>(MangaExtensionsState()) {
 
     private val _query: MutableStateFlow<String?> = MutableStateFlow(null)
     val query: StateFlow<String?> = _query.asStateFlow()
@@ -40,9 +40,9 @@ class ExtensionsScreenModel(
 
     init {
         val context = Injekt.get<Application>()
-        val extensionMapper: (Map<String, InstallStep>) -> ((Extension) -> ExtensionUiModel) = { map ->
+        val extensionMapper: (Map<String, InstallStep>) -> ((Extension) -> MangaExtensionUiModel) = { map ->
             {
-                ExtensionUiModel.Item(it, map[it.pkgName] ?: InstallStep.Idle)
+                MangaExtensionUiModel.Item(it, map[it.pkgName] ?: InstallStep.Idle)
             }
         }
         val queryFilter: (String) -> ((Extension) -> Boolean) = { query ->
@@ -86,23 +86,23 @@ class ExtensionsScreenModel(
                     .toSortedMap(LocaleHelper.comparator)
                     .flatMap { (lang, exts) ->
                         listOf(
-                            ExtensionUiModel.Header.Text(LocaleHelper.getSourceDisplayName(lang, context)),
+                            MangaExtensionUiModel.Header.Text(LocaleHelper.getSourceDisplayName(lang, context)),
                             *exts.map(extensionMapper(downloads)).toTypedArray(),
                         )
                     }
 
-                val items = mutableListOf<ExtensionUiModel>()
+                val items = mutableListOf<MangaExtensionUiModel>()
 
                 val updates = _updates.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 if (updates.isNotEmpty()) {
-                    items.add(ExtensionUiModel.Header.Resource(R.string.ext_updates_pending))
+                    items.add(MangaExtensionUiModel.Header.Resource(R.string.ext_updates_pending))
                     items.addAll(updates)
                 }
 
                 val installed = _installed.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 val untrusted = _untrusted.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 if (installed.isNotEmpty() || untrusted.isNotEmpty()) {
-                    items.add(ExtensionUiModel.Header.Resource(R.string.ext_installed))
+                    items.add(MangaExtensionUiModel.Header.Resource(R.string.ext_installed))
                     items.addAll(installed)
                     items.addAll(untrusted)
                 }
@@ -143,7 +143,7 @@ class ExtensionsScreenModel(
                 items
                     .mapNotNull {
                         when {
-                            it !is ExtensionUiModel.Item -> null
+                            it !is MangaExtensionUiModel.Item -> null
                             it.extension !is Extension.Installed -> null
                             !it.extension.hasUpdate -> null
                             else -> it.extension
@@ -213,17 +213,17 @@ class ExtensionsScreenModel(
     }
 }
 
-data class ExtensionsState(
+data class MangaExtensionsState(
     val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
-    val items: List<ExtensionUiModel> = emptyList(),
+    val items: List<MangaExtensionUiModel> = emptyList(),
     val updates: Int = 0,
 ) {
     val isEmpty = items.isEmpty()
 }
 
-sealed interface ExtensionUiModel {
-    sealed interface Header : ExtensionUiModel {
+sealed interface MangaExtensionUiModel {
+    sealed interface Header : MangaExtensionUiModel {
         data class Resource(@StringRes val textRes: Int) : Header
         data class Text(val text: String) : Header
     }
@@ -231,5 +231,5 @@ sealed interface ExtensionUiModel {
     data class Item(
         val extension: Extension,
         val installStep: InstallStep,
-    ) : ExtensionUiModel
+    ) : MangaExtensionUiModel
 }

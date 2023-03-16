@@ -5,15 +5,15 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.items.manga.interactor.GetManga
-import eu.kanade.domain.items.manga.interactor.NetworkToLocalManga
-import eu.kanade.domain.items.manga.interactor.UpdateManga
-import eu.kanade.domain.items.manga.model.Manga
-import eu.kanade.domain.items.manga.model.toDomainManga
-import eu.kanade.domain.items.manga.model.toMangaUpdate
+import eu.kanade.domain.entries.manga.interactor.GetManga
+import eu.kanade.domain.entries.manga.interactor.NetworkToLocalManga
+import eu.kanade.domain.entries.manga.interactor.UpdateManga
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.toDomainManga
+import eu.kanade.domain.entries.manga.model.toMangaUpdate
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.ExtensionManager
-import eu.kanade.tachiyomi.source.CatalogueSource
+import eu.kanade.tachiyomi.source.CatalogueMangaSource
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
@@ -44,8 +44,8 @@ abstract class SearchScreenModel<T>(
     private val sources by lazy { getSelectedSources() }
     private val pinnedSources by lazy { sourcePreferences.pinnedMangaSources().get() }
 
-    private val sortComparator = { map: Map<CatalogueSource, SearchItemResult> ->
-        compareBy<CatalogueSource>(
+    private val sortComparator = { map: Map<CatalogueMangaSource, SearchItemResult> ->
+        compareBy<CatalogueMangaSource>(
             { (map[it] as? SearchItemResult.Success)?.isEmpty ?: true },
             { "${it.id}" !in pinnedSources },
             { "${it.name.lowercase()} (${it.lang})" },
@@ -53,7 +53,7 @@ abstract class SearchScreenModel<T>(
     }
 
     @Composable
-    fun getManga(source: CatalogueSource, initialManga: Manga): State<Manga> {
+    fun getManga(source: CatalogueMangaSource, initialManga: Manga): State<Manga> {
         return produceState(initialValue = initialManga) {
             getManga.subscribe(initialManga.url, initialManga.source)
                 .collectLatest { manga ->
@@ -72,7 +72,7 @@ abstract class SearchScreenModel<T>(
      * @param source to interact with
      * @param manga to initialize.
      */
-    private suspend fun initializeManga(source: CatalogueSource, manga: Manga) {
+    private suspend fun initializeManga(source: CatalogueMangaSource, manga: Manga) {
         if (manga.thumbnailUrl != null || manga.initialized) return
         withNonCancellableContext {
             try {
@@ -87,9 +87,9 @@ abstract class SearchScreenModel<T>(
         }
     }
 
-    abstract fun getEnabledSources(): List<CatalogueSource>
+    abstract fun getEnabledSources(): List<CatalogueMangaSource>
 
-    fun getSelectedSources(): List<CatalogueSource> {
+    fun getSelectedSources(): List<CatalogueMangaSource> {
         val filter = extensionFilter
 
         val enabledSources = getEnabledSources()
@@ -111,16 +111,16 @@ abstract class SearchScreenModel<T>(
             .filter { it.pkgName == filter }
             .flatMap { it.sources }
             .filter { it in enabledSources }
-            .filterIsInstance<CatalogueSource>()
+            .filterIsInstance<CatalogueMangaSource>()
     }
 
     abstract fun updateSearchQuery(query: String?)
 
-    abstract fun updateItems(items: Map<CatalogueSource, SearchItemResult>)
+    abstract fun updateItems(items: Map<CatalogueMangaSource, SearchItemResult>)
 
-    abstract fun getItems(): Map<CatalogueSource, SearchItemResult>
+    abstract fun getItems(): Map<CatalogueMangaSource, SearchItemResult>
 
-    fun getAndUpdateItems(function: (Map<CatalogueSource, SearchItemResult>) -> Map<CatalogueSource, SearchItemResult>) {
+    fun getAndUpdateItems(function: (Map<CatalogueMangaSource, SearchItemResult>) -> Map<CatalogueMangaSource, SearchItemResult>) {
         updateItems(function(getItems()))
     }
 

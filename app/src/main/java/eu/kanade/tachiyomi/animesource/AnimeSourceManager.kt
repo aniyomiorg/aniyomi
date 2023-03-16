@@ -35,7 +35,7 @@ class AnimeSourceManager(
 
     private val stubSourcesMap = ConcurrentHashMap<Long, StubAnimeSource>()
 
-    val catalogueSources: Flow<List<AnimeCatalogueSource>> = sourcesMapFlow.map { it.values.filterIsInstance<AnimeCatalogueSource>() }
+    val catalogueSources: Flow<List<CatalogueAnimeSource>> = sourcesMapFlow.map { it.values.filterIsInstance<CatalogueAnimeSource>() }
     val onlineSources: Flow<List<AnimeHttpSource>> = catalogueSources.map { sources -> sources.filterIsInstance<AnimeHttpSource>() }
 
     init {
@@ -76,7 +76,7 @@ class AnimeSourceManager(
 
     fun getOnlineSources() = sourcesMapFlow.value.values.filterIsInstance<AnimeHttpSource>()
 
-    fun getCatalogueSources() = sourcesMapFlow.value.values.filterIsInstance<AnimeCatalogueSource>()
+    fun getCatalogueSources() = sourcesMapFlow.value.values.filterIsInstance<CatalogueAnimeSource>()
 
     fun getStubSources(): List<StubAnimeSource> {
         val onlineSourceIds = getOnlineSources().map { it.id }
