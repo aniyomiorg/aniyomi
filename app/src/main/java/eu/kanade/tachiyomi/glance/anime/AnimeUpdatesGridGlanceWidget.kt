@@ -8,11 +8,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
-import androidx.glance.*
+import androidx.glance.GlanceModifier
+import androidx.glance.Image
+import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
+import androidx.glance.LocalSize
 import androidx.glance.action.clickable
-import androidx.glance.appwidget.*
+import androidx.glance.appwidget.CircularProgressIndicator
+import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionStartActivity
-import androidx.glance.layout.*
+import androidx.glance.appwidget.updateAll
+import androidx.glance.layout.Alignment
+import androidx.glance.layout.Box
+import androidx.glance.layout.Column
+import androidx.glance.layout.ContentScale
+import androidx.glance.layout.Row
+import androidx.glance.layout.fillMaxSize
+import androidx.glance.layout.fillMaxWidth
+import androidx.glance.layout.padding
+import androidx.glance.layout.size
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
@@ -28,7 +44,12 @@ import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
 import eu.kanade.domain.entries.anime.model.AnimeCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
-import eu.kanade.tachiyomi.glance.*
+import eu.kanade.tachiyomi.glance.ContainerModifier
+import eu.kanade.tachiyomi.glance.CoverHeight
+import eu.kanade.tachiyomi.glance.CoverWidth
+import eu.kanade.tachiyomi.glance.appWidgetInnerRadius
+import eu.kanade.tachiyomi.glance.calculateRowAndColumnCount
+import eu.kanade.tachiyomi.glance.stringResource
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.util.Constants
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -38,7 +59,8 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import view.AnimeupdatesView
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 
 class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
     private val app: Application by injectLazy()
@@ -103,7 +125,7 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
                     }
                     if (coverRow.isNotEmpty()) {
                         Row(
-                            modifier = androidx.glance.GlanceModifier
+                            modifier = GlanceModifier
                                 .padding(vertical = 4.dp)
                                 .fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -111,7 +133,7 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
                         ) {
                             coverRow.forEach { (animeId, cover) ->
                                 Box(
-                                    modifier = androidx.glance.GlanceModifier
+                                    modifier = GlanceModifier
                                         .padding(horizontal = 3.dp),
                                     contentAlignment = Alignment.Center,
                                 ) {
