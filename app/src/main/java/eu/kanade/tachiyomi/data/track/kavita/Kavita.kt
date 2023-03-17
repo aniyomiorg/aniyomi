@@ -4,17 +4,17 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.annotation.StringRes
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.NoLoginTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
-import eu.kanade.tachiyomi.source.Source
+import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
+import eu.kanade.tachiyomi.source.MangaSource
 import java.security.MessageDigest
-import eu.kanade.domain.track.model.Track as DomainTrack
+import eu.kanade.domain.track.manga.model.MangaTrack as DomainTrack
 
 class Kavita(private val context: Context, id: Long) : TrackService(id), EnhancedMangaTrackService, NoLoginTrackService, MangaTrackService {
 
@@ -36,7 +36,7 @@ class Kavita(private val context: Context, id: Long) : TrackService(id), Enhance
 
     override fun getLogoColor() = Color.rgb(74, 198, 148)
 
-    override fun getStatusList() = listOf(UNREAD, READING, COMPLETED)
+    override fun getStatusListManga() = listOf(UNREAD, READING, COMPLETED)
 
     override fun getStatus(status: Int): String = with(context) {
         when (status) {
@@ -55,9 +55,9 @@ class Kavita(private val context: Context, id: Long) : TrackService(id), Enhance
 
     override fun getScoreList(): List<String> = emptyList()
 
-    override fun displayScore(track: Track): String = ""
+    override fun displayScore(track: MangaTrack): String = ""
 
-    override suspend fun update(track: Track, didReadChapter: Boolean): Track {
+    override suspend fun update(track: MangaTrack, didReadChapter: Boolean): MangaTrack {
         if (track.status != COMPLETED) {
             if (didReadChapter) {
                 if (track.last_chapter_read.toInt() == track.total_chapters && track.total_chapters > 0) {
@@ -70,15 +70,15 @@ class Kavita(private val context: Context, id: Long) : TrackService(id), Enhance
         return api.updateProgress(track)
     }
 
-    override suspend fun bind(track: Track, hasReadChapters: Boolean): Track {
+    override suspend fun bind(track: MangaTrack, hasReadChapters: Boolean): MangaTrack {
         return track
     }
 
-    override suspend fun search(query: String): List<TrackSearch> {
+    override suspend fun searchManga(query: String): List<MangaTrackSearch> {
         TODO("Not yet implemented: search")
     }
 
-    override suspend fun refresh(track: Track): Track {
+    override suspend fun refresh(track: MangaTrack): MangaTrack {
         val remoteTrack = api.getTrackSearch(track.tracking_url)
         track.copyPersonalFrom(remoteTrack)
         track.total_chapters = remoteTrack.total_chapters
@@ -97,17 +97,17 @@ class Kavita(private val context: Context, id: Long) : TrackService(id), Enhance
 
     override fun getAcceptedSources() = listOf("eu.kanade.tachiyomi.extension.all.kavita.Kavita")
 
-    override suspend fun match(manga: Manga): TrackSearch? =
+    override suspend fun match(manga: Manga): MangaTrackSearch? =
         try {
             api.getTrackSearch(manga.url)
         } catch (e: Exception) {
             null
         }
 
-    override fun isTrackFrom(track: DomainTrack, manga: Manga, source: Source?): Boolean =
+    override fun isTrackFrom(track: DomainTrack, manga: Manga, source: MangaSource?): Boolean =
         track.remoteUrl == manga.url && source?.let { accept(it) } == true
 
-    override fun migrateTrack(track: DomainTrack, manga: Manga, newSource: Source): DomainTrack? =
+    override fun migrateTrack(track: DomainTrack, manga: Manga, newSource: MangaSource): DomainTrack? =
         if (accept(newSource)) {
             track.copy(remoteUrl = manga.url)
         } else {

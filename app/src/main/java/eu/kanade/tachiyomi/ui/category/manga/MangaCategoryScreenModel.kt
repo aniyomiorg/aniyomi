@@ -4,11 +4,11 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.category.interactor.CreateCategoryWithName
-import eu.kanade.domain.category.interactor.DeleteCategory
-import eu.kanade.domain.category.interactor.GetCategories
-import eu.kanade.domain.category.interactor.RenameCategory
-import eu.kanade.domain.category.interactor.ReorderCategory
+import eu.kanade.domain.category.manga.interactor.CreateMangaCategoryWithName
+import eu.kanade.domain.category.manga.interactor.DeleteMangaCategory
+import eu.kanade.domain.category.manga.interactor.GetMangaCategories
+import eu.kanade.domain.category.manga.interactor.RenameMangaCategory
+import eu.kanade.domain.category.manga.interactor.ReorderMangaCategory
 import eu.kanade.domain.category.model.Category
 import eu.kanade.tachiyomi.R
 import kotlinx.coroutines.channels.Channel
@@ -20,11 +20,11 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class MangaCategoryScreenModel(
-    private val getCategories: GetCategories = Injekt.get(),
-    private val createCategoryWithName: CreateCategoryWithName = Injekt.get(),
-    private val deleteCategory: DeleteCategory = Injekt.get(),
-    private val reorderCategory: ReorderCategory = Injekt.get(),
-    private val renameCategory: RenameCategory = Injekt.get(),
+    private val getCategories: GetMangaCategories = Injekt.get(),
+    private val createCategoryWithName: CreateMangaCategoryWithName = Injekt.get(),
+    private val deleteCategory: DeleteMangaCategory = Injekt.get(),
+    private val reorderCategory: ReorderMangaCategory = Injekt.get(),
+    private val renameCategory: RenameMangaCategory = Injekt.get(),
 ) : StateScreenModel<CategoryScreenState>(CategoryScreenState.Loading) {
 
     private val _events: Channel<CategoryEvent> = Channel()
@@ -46,8 +46,8 @@ class MangaCategoryScreenModel(
     fun createCategory(name: String) {
         coroutineScope.launch {
             when (createCategoryWithName.await(name)) {
-                is CreateCategoryWithName.Result.InternalError -> _events.send(CategoryEvent.InternalError)
-                CreateCategoryWithName.Result.NameAlreadyExistsError -> _events.send(CategoryEvent.CategoryWithNameAlreadyExists)
+                is CreateMangaCategoryWithName.Result.InternalError -> _events.send(CategoryEvent.InternalError)
+                CreateMangaCategoryWithName.Result.NameAlreadyExistsError -> _events.send(CategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }
@@ -56,7 +56,7 @@ class MangaCategoryScreenModel(
     fun deleteCategory(categoryId: Long) {
         coroutineScope.launch {
             when (deleteCategory.await(categoryId = categoryId)) {
-                is DeleteCategory.Result.InternalError -> _events.send(CategoryEvent.InternalError)
+                is DeleteMangaCategory.Result.InternalError -> _events.send(CategoryEvent.InternalError)
                 else -> {}
             }
         }
@@ -65,7 +65,7 @@ class MangaCategoryScreenModel(
     fun moveUp(category: Category) {
         coroutineScope.launch {
             when (reorderCategory.moveUp(category)) {
-                is ReorderCategory.Result.InternalError -> _events.send(CategoryEvent.InternalError)
+                is ReorderMangaCategory.Result.InternalError -> _events.send(CategoryEvent.InternalError)
                 else -> {}
             }
         }
@@ -74,7 +74,7 @@ class MangaCategoryScreenModel(
     fun moveDown(category: Category) {
         coroutineScope.launch {
             when (reorderCategory.moveDown(category)) {
-                is ReorderCategory.Result.InternalError -> _events.send(CategoryEvent.InternalError)
+                is ReorderMangaCategory.Result.InternalError -> _events.send(CategoryEvent.InternalError)
                 else -> {}
             }
         }
@@ -83,8 +83,8 @@ class MangaCategoryScreenModel(
     fun renameCategory(category: Category, name: String) {
         coroutineScope.launch {
             when (renameCategory.await(category, name)) {
-                is RenameCategory.Result.InternalError -> _events.send(CategoryEvent.InternalError)
-                RenameCategory.Result.NameAlreadyExistsError -> _events.send(CategoryEvent.CategoryWithNameAlreadyExists)
+                is RenameMangaCategory.Result.InternalError -> _events.send(CategoryEvent.InternalError)
+                RenameMangaCategory.Result.NameAlreadyExistsError -> _events.send(CategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }

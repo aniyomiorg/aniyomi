@@ -66,23 +66,25 @@ import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
-import eu.kanade.tachiyomi.data.download.DownloadCache
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
 import eu.kanade.tachiyomi.data.updater.AppUpdateResult
 import eu.kanade.tachiyomi.data.updater.RELEASE_URL
-import eu.kanade.tachiyomi.ui.animelib.AnimelibSettingsSheet
-import eu.kanade.tachiyomi.ui.animelib.AnimelibTab
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
-import eu.kanade.tachiyomi.ui.browse.source.browse.BrowseSourceScreen
-import eu.kanade.tachiyomi.ui.browse.source.globalsearch.GlobalSearchScreen
+import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
+import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreen
+import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchScreen
+import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
+import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
-import eu.kanade.tachiyomi.ui.library.LibrarySettingsSheet
-import eu.kanade.tachiyomi.ui.library.LibraryTab
-import eu.kanade.tachiyomi.ui.manga.MangaScreen
+import eu.kanade.tachiyomi.ui.library.anime.AnimeLibrarySettingsSheet
+import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
+import eu.kanade.tachiyomi.ui.library.manga.MangaLibrarySettingsSheet
+import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
 import eu.kanade.tachiyomi.ui.more.NewUpdateScreen
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.util.Constants
@@ -117,7 +119,7 @@ class MainActivity : BaseActivity() {
     private val chapterCache: ChapterCache by injectLazy()
 
     private val animeDownloadCache: AnimeDownloadCache by injectLazy()
-    private val downloadCache: DownloadCache by injectLazy()
+    private val downloadCache: MangaDownloadCache by injectLazy()
 
     private val externalIntents: ExternalIntents by injectLazy()
 
@@ -127,8 +129,8 @@ class MainActivity : BaseActivity() {
     /**
      * Sheet containing filter/sort/display items.
      */
-    private var animeSettingsSheet: AnimelibSettingsSheet? = null
-    private var mangaSettingsSheet: LibrarySettingsSheet? = null
+    private var animeSettingsSheet: AnimeLibrarySettingsSheet? = null
+    private var mangaSettingsSheet: MangaLibrarySettingsSheet? = null
 
     private var isHandlingShortcut: Boolean = false
     private lateinit var navigator: Navigator
@@ -166,13 +168,13 @@ class MainActivity : BaseActivity() {
         // Draw edge-to-edge
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        animeSettingsSheet = AnimelibSettingsSheet(this)
-        AnimelibTab.openSettingsSheetEvent
+        animeSettingsSheet = AnimeLibrarySettingsSheet(this)
+        AnimeLibraryTab.openSettingsSheetEvent
             .onEach(::showAnimeSettingsSheet)
             .launchIn(lifecycleScope)
 
-        mangaSettingsSheet = LibrarySettingsSheet(this)
-        LibraryTab.openSettingsSheetEvent
+        mangaSettingsSheet = MangaLibrarySettingsSheet(this)
+        MangaLibraryTab.openSettingsSheetEvent
             .onEach(::showMangaSettingsSheet)
             .launchIn(lifecycleScope)
 
@@ -265,8 +267,14 @@ class MainActivity : BaseActivity() {
                         .onEach {
                             if (!it) {
                                 val currentScreen = navigator.lastItem
-                                if (currentScreen is BrowseSourceScreen ||
-                                    (currentScreen is MangaScreen && currentScreen.fromSource)
+                                if ((
+                                    currentScreen is BrowseMangaSourceScreen ||
+                                        (currentScreen is MangaScreen && currentScreen.fromSource)
+                                    ) ||
+                                    (
+                                        currentScreen is BrowseAnimeSourceScreen ||
+                                            (currentScreen is AnimeScreen && currentScreen.fromSource)
+                                        )
                                 ) {
                                     navigator.popUntilRoot()
                                 }
@@ -319,7 +327,7 @@ class MainActivity : BaseActivity() {
             animeSettingsSheet?.show(category)
         } else {
             lifecycleScope.launch {
-                AnimelibTab.requestOpenSettingsSheet()
+                AnimeLibraryTab.requestOpenSettingsSheet()
             }
         }
     }
@@ -329,7 +337,7 @@ class MainActivity : BaseActivity() {
             mangaSettingsSheet?.show(category)
         } else {
             lifecycleScope.launch {
-                LibraryTab.requestOpenSettingsSheet()
+                MangaLibraryTab.requestOpenSettingsSheet()
             }
         }
     }
@@ -468,7 +476,7 @@ class MainActivity : BaseActivity() {
                 val query = intent.getStringExtra(SearchManager.QUERY) ?: intent.getStringExtra(Intent.EXTRA_TEXT)
                 if (query != null && query.isNotEmpty()) {
                     navigator.popUntilRoot()
-                    navigator.push(GlobalSearchScreen(query))
+                    navigator.push(GlobalMangaSearchScreen(query))
                 }
             }
             INTENT_SEARCH -> {
@@ -476,7 +484,7 @@ class MainActivity : BaseActivity() {
                 if (query != null && query.isNotEmpty()) {
                     val filter = intent.getStringExtra(INTENT_SEARCH_FILTER) ?: ""
                     navigator.popUntilRoot()
-                    navigator.push(GlobalSearchScreen(query, filter))
+                    navigator.push(GlobalMangaSearchScreen(query, filter))
                 }
             }
             INTENT_ANIMESEARCH -> {
@@ -484,7 +492,7 @@ class MainActivity : BaseActivity() {
                 if (query != null && query.isNotEmpty()) {
                     val filter = intent.getStringExtra(INTENT_SEARCH_FILTER) ?: ""
                     navigator.popUntilRoot()
-                    navigator.push(GlobalSearchScreen(query, filter))
+                    navigator.push(GlobalMangaSearchScreen(query, filter))
                 }
             }
             else -> {
@@ -509,7 +517,7 @@ class MainActivity : BaseActivity() {
     override fun onBackPressed() {
         if (navigator.size == 1 &&
             !onBackPressedDispatcher.hasEnabledCallbacks() &&
-            libraryPreferences.autoClearChapterCache().get()
+            libraryPreferences.autoClearItemCache().get()
         ) {
             chapterCache.clear()
             episodeCache.clear()

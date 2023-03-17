@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.tachiyomi.data.database.models.ChapterImpl
+import eu.kanade.tachiyomi.data.database.models.manga.ChapterImpl
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 

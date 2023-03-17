@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.util.episode
 
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.episode.model.Episode
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.items.episode.model.Episode
 
 fun getEpisodeSort(anime: Anime, sortDescending: Boolean = anime.sortDescending()): (Episode, Episode) -> Int {
     return when (anime.sorting) {

@@ -8,33 +8,33 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.kanade.core.util.asFlow
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
-import eu.kanade.domain.chapter.interactor.UpdateChapter
-import eu.kanade.domain.chapter.model.ChapterUpdate
-import eu.kanade.domain.chapter.model.toDbChapter
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.history.interactor.GetNextChapters
-import eu.kanade.domain.history.interactor.UpsertHistory
-import eu.kanade.domain.history.model.HistoryUpdate
-import eu.kanade.domain.manga.interactor.GetManga
-import eu.kanade.domain.manga.interactor.SetMangaViewerFlags
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.isLocal
-import eu.kanade.domain.track.interactor.GetTracks
-import eu.kanade.domain.track.interactor.InsertTrack
-import eu.kanade.domain.track.model.toDbTrack
-import eu.kanade.domain.track.service.DelayedTrackingUpdateJob
+import eu.kanade.domain.entries.manga.interactor.GetManga
+import eu.kanade.domain.entries.manga.interactor.SetMangaViewerFlags
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.isLocal
+import eu.kanade.domain.history.manga.interactor.GetNextChapters
+import eu.kanade.domain.history.manga.interactor.UpsertMangaHistory
+import eu.kanade.domain.history.manga.model.MangaHistoryUpdate
+import eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId
+import eu.kanade.domain.items.chapter.interactor.UpdateChapter
+import eu.kanade.domain.items.chapter.model.ChapterUpdate
+import eu.kanade.domain.items.chapter.model.toDbChapter
+import eu.kanade.domain.track.manga.interactor.GetMangaTracks
+import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
+import eu.kanade.domain.track.manga.model.toDbTrack
+import eu.kanade.domain.track.manga.service.DelayedMangaTrackingUpdateJob
+import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.domain.track.store.DelayedTrackingStore
-import eu.kanade.tachiyomi.data.database.models.toDomainChapter
-import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.download.DownloadProvider
-import eu.kanade.tachiyomi.data.download.model.Download
+import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadProvider
+import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.reader.loader.ChapterLoader
@@ -90,21 +90,21 @@ import java.util.Date
  */
 class ReaderViewModel(
     private val savedState: SavedStateHandle = SavedStateHandle(),
-    private val sourceManager: SourceManager = Injekt.get(),
-    private val downloadManager: DownloadManager = Injekt.get(),
-    private val downloadProvider: DownloadProvider = Injekt.get(),
+    private val sourceManager: MangaSourceManager = Injekt.get(),
+    private val downloadManager: MangaDownloadManager = Injekt.get(),
+    private val downloadProvider: MangaDownloadProvider = Injekt.get(),
     private val imageSaver: ImageSaver = Injekt.get(),
     preferences: BasePreferences = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val readerPreferences: ReaderPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
-    private val delayedTrackingStore: DelayedTrackingStore = Injekt.get(),
+    private val delayedTrackingStore: DelayedMangaTrackingStore = Injekt.get(),
     private val getManga: GetManga = Injekt.get(),
     private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
     private val getNextChapters: GetNextChapters = Injekt.get(),
-    private val getTracks: GetTracks = Injekt.get(),
-    private val insertTrack: InsertTrack = Injekt.get(),
-    private val upsertHistory: UpsertHistory = Injekt.get(),
+    private val getTracks: GetMangaTracks = Injekt.get(),
+    private val insertTrack: InsertMangaTrack = Injekt.get(),
+    private val upsertHistory: UpsertMangaHistory = Injekt.get(),
     private val updateChapter: UpdateChapter = Injekt.get(),
     private val setMangaViewerFlags: SetMangaViewerFlags = Injekt.get(),
 ) : ViewModel() {
@@ -145,7 +145,7 @@ class ReaderViewModel(
      */
     private var activeChapterSubscription: Subscription? = null
 
-    private var chapterToDownload: Download? = null
+    private var chapterToDownload: MangaDownload? = null
 
     /**
      * Chapter list for the active manga. It's retrieved lazily and should be accessed for the first
@@ -459,7 +459,7 @@ class ReaderViewModel(
      * Removes [currentChapter] from download queue
      * if setting is enabled and [currentChapter] is queued for download
      */
-    private fun cancelQueuedDownloads(currentChapter: ReaderChapter): Download? {
+    private fun cancelQueuedDownloads(currentChapter: ReaderChapter): MangaDownload? {
         return downloadManager.getQueuedDownloadOrNull(currentChapter.chapter.id!!.toLong())?.also {
             downloadManager.cancelQueuedDownloads(listOf(it))
         }
@@ -527,7 +527,7 @@ class ReaderViewModel(
             val sessionReadDuration = chapterReadStartTime?.let { readAt.time - it } ?: 0
 
             upsertHistory.await(
-                HistoryUpdate(chapterId, readAt, sessionReadDuration),
+                MangaHistoryUpdate(chapterId, readAt, sessionReadDuration),
             ).also {
                 chapterReadStartTime = null
             }
@@ -819,7 +819,7 @@ class ReaderViewModel(
                                     insertTrack.await(updatedTrack)
                                 } catch (e: Exception) {
                                     delayedTrackingStore.addMangaItem(updatedTrack)
-                                    DelayedTrackingUpdateJob.setupTask(context)
+                                    DelayedMangaTrackingUpdateJob.setupTask(context)
                                     throw e
                                 }
                             }

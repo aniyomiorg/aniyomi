@@ -45,7 +45,7 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import dev.chrisbanes.insetter.applyInsetter
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications

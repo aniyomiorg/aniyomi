@@ -13,14 +13,14 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.episode.model.Episode
-import eu.kanade.presentation.animehistory.AnimeHistoryScreen
-import eu.kanade.presentation.animehistory.components.AnimeHistoryDeleteDialog
+import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
-import eu.kanade.presentation.history.components.HistoryDeleteAllDialog
+import eu.kanade.presentation.history.HistoryDeleteAllDialog
+import eu.kanade.presentation.history.HistoryDeleteDialog
+import eu.kanade.presentation.history.anime.AnimeHistoryScreen
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.anime.AnimeScreen
+import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
@@ -76,7 +76,7 @@ fun Screen.animeHistoryTab(
             val onDismissRequest = { screenModel.setDialog(null) }
             when (val dialog = state.dialog) {
                 is AnimeHistoryScreenModel.Dialog.Delete -> {
-                    AnimeHistoryDeleteDialog(
+                    HistoryDeleteDialog(
                         onDismissRequest = onDismissRequest,
                         onDelete = { all ->
                             if (all) {
@@ -85,6 +85,7 @@ fun Screen.animeHistoryTab(
                                 screenModel.removeFromHistory(dialog.history)
                             }
                         },
+                        isManga = false,
                     )
                 }
                 is AnimeHistoryScreenModel.Dialog.DeleteAll -> {

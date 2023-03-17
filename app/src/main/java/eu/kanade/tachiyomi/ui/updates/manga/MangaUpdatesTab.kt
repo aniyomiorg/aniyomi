@@ -17,12 +17,12 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
-import eu.kanade.presentation.updates.UpdateScreen
 import eu.kanade.presentation.updates.UpdatesDeleteConfirmationDialog
+import eu.kanade.presentation.updates.manga.MangaUpdateScreen
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import kotlinx.coroutines.flow.collectLatest
 
@@ -41,7 +41,7 @@ fun Screen.mangaUpdatesTab(
         titleRes = R.string.label_updates,
         searchEnabled = false,
         content = { contentPadding, _ ->
-            UpdateScreen(
+            MangaUpdateScreen(
                 state = state,
                 snackbarHostState = screenModel.snackbarHostState,
                 contentPadding = contentPadding,
@@ -69,6 +69,7 @@ fun Screen.mangaUpdatesTab(
                     UpdatesDeleteConfirmationDialog(
                         onDismissRequest = onDismissDialog,
                         onConfirm = { screenModel.deleteChapters(dialog.toDelete) },
+                        isManga = true,
                     )
                 }
                 null -> {}

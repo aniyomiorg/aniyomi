@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">S nepřečtenými kapitolami</string>
     <string name="pref_library_update_show_tab_badge">Zobrazit počet nepřečtených kapitol na ikoně Aktualizace</string>
     <string name="default_category">Výchozí kategorie mangy</string>
-    <string name="pref_library_update_categories_details">Položky ve vynechaných kategoriích nebudou aktualizovány, i kdyby byly také v zahrnutých kategoriích.</string>
+    <string name="pref_manga_library_update_categories_details">Položky ve vynechaných kategoriích nebudou aktualizovány, i kdyby byly také v zahrnutých kategoriích.</string>
     <string name="untrusted_extension_message">Toto rozšíření bylo podepsané nedůvěryhodným certifikátem a nebylo aktivované.
 \n
 \nŠkodlivé rozšíření může přečíst přihlašovací údaje uložené v Aniyomi nebo spustit libovolný kód.
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">Aktualizuje status, skóre a poslední přečtenou kapitolu ze sledovacích služeb</string>
     <string name="pref_incognito_mode_summary">Pozastaví historii čtení</string>
     <string name="manga_from_library">Manga z knihovny</string>
-    <string name="snack_add_to_library">Přidat do knihovny\?</string>
+    <string name="snack_add_to_manga_library">Přidat do knihovny\?</string>
     <string name="download_error">Chyba</string>
     <string name="download_paused">Pozastaveno</string>
     <string name="also_set_chapter_settings_for_library">Také nastavit pro všechny položky v mé knihovně</string>
@@ -39,7 +39,7 @@
     <string name="download_notifier_download_paused_chapters">Stahování kapitoly pozastaveno</string>
     <string name="channel_new_chapters_episodes">Aktualizace kapitol/epizod</string>
     <string name="pref_bottom_nav_style">Styl spodní navigace</string>
-    <string name="pref_animelib_update_categories_details">Anime odebrané z kategorií nebudou aktualizována, ani když jsou zároveň v zahrnutých kategoriích.</string>
+    <string name="pref_anime_library_update_categories_details">Anime odebrané z kategorií nebudou aktualizována, ani když jsou zároveň v zahrnutých kategoriích.</string>
     <string name="action_start_download_internally">Použít stahovač uvnitř aplikace</string>
     <string name="pref_player_summary">Ovládání průběhu, interní přehrávač, externí přehrávač</string>
     <string name="unofficial_extension_message_aniyomi">Toto rozšíření není z oficiálního seznamu Aniyomi rozšíření.</string>
@@ -63,7 +63,7 @@
     </plurals>
     <string name="auto_download_while_watching">Automaticky stahovat při sledování</string>
     <string name="episode_downloading_progress">Stahování (%d%%)</string>
-    <string name="snack_add_to_animelib">Přidat anime do knihovny\?</string>
+    <string name="snack_add_to_anime_library">Přidat anime do knihovny\?</string>
     <string name="display_mode_episode">Epizoda %1$s</string>
     <string name="show_episode_number">Číslo epizody</string>
     <string name="download_5_episodes">Dalších 5 epizod</string>
@@ -77,11 +77,11 @@
     <string name="episodes">Epizody</string>
     <string name="general_categories">Kategorie</string>
     <string name="chapters_episodes">Kapitoly a epizody</string>
-    <string name="label_animesources">Zdroje anime</string>
+    <string name="label_anime_sources">Zdroje anime</string>
     <string name="pref_default_portrait_orientation">Předvolený režim výšky</string>
-    <string name="manga_anime">Položky knihovny</string>
+    <string name="entries">Položky knihovny</string>
     <string name="backup_settings_warning">Varování: Zálohování nastavení uloží také vaše stopovací hesla, neposkytujte tento záložní soubor ostatním!</string>
-    <string name="label_mangasources">Zdroje mangy</string>
+    <string name="label_manga_sources">Zdroje mangy</string>
     <string name="anime_categories">Anime kategorie</string>
     <string name="pref_category_progress">Postup</string>
     <string name="label_watched_episodes">Zhlédnuto</string>
@@ -102,7 +102,7 @@
     <string name="action_next_episode">Následující epizoda</string>
     <string name="action_show_anime">Zobrazit anime</string>
     <string name="pref_skip_length">Délka přeskočení při dvojkliku</string>
-    <string name="label_animelib">Anime</string>
+    <string name="label_anime_library">Anime</string>
     <string name="label_anime">Anime</string>
     <string name="pref_bottom_nav_no_history">Přesunout historii do záložky Více</string>
     <string name="action_sort_total_episodes">Celkem epizod</string>
@@ -112,7 +112,7 @@
     <string name="action_edit_manga_categories">Upravit kategorie mangy</string>
     <string name="action_screen_fit">Režim přizpůsobení obrazovky</string>
     <string name="action_display_unseen_badge">Nezhlédnuté epizody</string>
-    <string name="label_mangalibrary">Manga</string>
+    <string name="label_manga_library">Manga</string>
     <string name="action_sort_unseen_count">Počet nezhlédnutých epizod</string>
     <string name="action_sort_episode_fetch_date">Datum načtení epizody</string>
     <string name="action_mark_as_unseen">Označit jako nezhlédnuté</string>

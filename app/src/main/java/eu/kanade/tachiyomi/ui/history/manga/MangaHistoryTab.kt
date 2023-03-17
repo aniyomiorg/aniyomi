@@ -13,15 +13,15 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.chapter.model.Chapter
+import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
-import eu.kanade.presentation.history.HistoryScreen
-import eu.kanade.presentation.history.components.HistoryDeleteAllDialog
-import eu.kanade.presentation.history.components.HistoryDeleteDialog
+import eu.kanade.presentation.history.HistoryDeleteAllDialog
+import eu.kanade.presentation.history.HistoryDeleteDialog
+import eu.kanade.presentation.history.manga.MangaHistoryScreen
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.ui.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -55,7 +55,7 @@ fun Screen.mangaHistoryTab(
         titleRes = R.string.label_history,
         searchEnabled = true,
         content = { contentPadding, _ ->
-            HistoryScreen(
+            MangaHistoryScreen(
                 state = state,
                 contentPadding = contentPadding,
                 snackbarHostState = snackbarHostState,
@@ -76,6 +76,7 @@ fun Screen.mangaHistoryTab(
                                 screenModel.removeFromHistory(dialog.history)
                             }
                         },
+                        isManga = true,
                     )
                 }
                 is MangaHistoryScreenModel.Dialog.DeleteAll -> {

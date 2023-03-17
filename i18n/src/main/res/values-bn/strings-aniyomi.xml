@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">অপঠিত অধ্যায়সহ</string>
     <string name="pref_library_update_show_tab_badge">অপঠিত গণনা আপডেট আইকন এ দেখাও</string>
     <string name="default_category">সাধারণ বিভাগ</string>
-    <string name="pref_library_update_categories_details">বাদ দেওয়া ক্যাটাগরিতে মঙ্গা আপডেট করা হবে না যদিও সেগুলি অন্তর্ভুক্ত ক্যাটাগরিতেও থাকে।</string>
+    <string name="pref_manga_library_update_categories_details">বাদ দেওয়া ক্যাটাগরিতে মঙ্গা আপডেট করা হবে না যদিও সেগুলি অন্তর্ভুক্ত ক্যাটাগরিতেও থাকে।</string>
     <string name="untrusted_extension_message">এই এক্সটেনশনটি একটি অবিশ্বস্ত সার্টিফিকেট দিয়ে স্বাক্ষরিত হয়েছিল এবং সক্রিয় করা হয়নি।
 \n
 \nএকটি দূষিত এক্সটেনশন টাচিওমিতে সংরক্ষিত যেকোন লগইন শংসাপত্র পড়তে পারে বা নির্বিচারে কোড চালাতে পারে।
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">ট্র্যাকিং পরিষেবাগুলি অবস্থা, স্কোর এবং শেষ পড়া অধ্যায় হালনাগাদ করে</string>
     <string name="pref_incognito_mode_summary">পড়ার ইতিহাসে বিরতি দেয়</string>
     <string name="manga_from_library">লাইব্রেরীর মাঙ্গা</string>
-    <string name="snack_add_to_library">সংগ্রহশালায় মাঙ্গা যোগ করবেন\?</string>
+    <string name="snack_add_to_manga_library">সংগ্রহশালায় মাঙ্গা যোগ করবেন\?</string>
     <string name="download_error">ত্রুটি</string>
     <string name="download_paused">থেমে আছে</string>
     <string name="also_set_chapter_settings_for_library">এছাড়াও আমার সংগ্রহশালার মাঙ্গাতে প্রয়োগ করুন</string>

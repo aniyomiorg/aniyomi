@@ -20,8 +20,8 @@ import androidx.compose.ui.util.fastMap
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.category.interactor.GetAnimeCategories
-import eu.kanade.domain.category.interactor.GetCategories
+import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
+import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.presentation.category.visualName
@@ -43,7 +43,7 @@ object SettingsDownloadScreen : SearchableSettings {
 
     @Composable
     override fun getPreferences(): List<Preference> {
-        val getCategories = remember { Injekt.get<GetCategories>() }
+        val getCategories = remember { Injekt.get<GetMangaCategories>() }
         val allCategories by getCategories.subscribe().collectAsState(initial = runBlocking { getCategories.await() })
         val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
         val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(initial = runBlocking { getAnimeCategories.await() })

@@ -41,7 +41,7 @@ import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.ExtendedFloatingActionButton
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.download.DownloadService
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
 import eu.kanade.tachiyomi.util.lang.launchUI
 import kotlinx.coroutines.CoroutineScope
@@ -86,7 +86,7 @@ fun DownloadQueueScreen(
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
-                val isRunning by DownloadService.isRunning.collectAsState()
+                val isRunning by MangaDownloadService.isRunning.collectAsState()
                 ExtendedFloatingActionButton(
                     text = {
                         val id = if (isRunning) {
@@ -106,10 +106,10 @@ fun DownloadQueueScreen(
                     },
                     onClick = {
                         if (isRunning) {
-                            DownloadService.stop(context)
+                            MangaDownloadService.stop(context)
                             screenModel.pauseDownloads()
                         } else {
-                            DownloadService.start(context)
+                            MangaDownloadService.start(context)
                         }
                     },
                     expanded = fabExpanded,

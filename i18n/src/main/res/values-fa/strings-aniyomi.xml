@@ -10,7 +10,7 @@
     <string name="pref_update_only_completely_read">با قسمت‌(های) خوانده‌نشده</string>
     <string name="pref_library_update_show_tab_badge">تعداد خوانده‌نشده را بر روی آیکون به‌روزرسانی نشان بده</string>
     <string name="default_category">دسته بندی پیشفرض</string>
-    <string name="pref_library_update_categories_details">مانگاهایی که در دسته‌بندی های حذف‌شده هستند، حتی اگر هم‌زمان در دسته‌بندی های مشمول باشند به‌روزرسانی نمی‌شوند.</string>
+    <string name="pref_manga_library_update_categories_details">مانگاهایی که در دسته‌بندی های حذف‌شده هستند، حتی اگر هم‌زمان در دسته‌بندی های مشمول باشند به‌روزرسانی نمی‌شوند.</string>
     <string name="untrusted_extension_message">این افزونه با یک گواهی نامطمئن امضا شده است و فعال نشده است.
 \n
 \nیک افزونه مخرب می تواند هر گونه طلاعات ورود به سیستم ذخیره شده تاچیومی را بخواند یا کدهای دلخواه(احتمالا خطرناک) را اجرا کند.
@@ -29,7 +29,7 @@
     <string name="pref_refresh_library_tracking_summary">وضعیت خواندن، امتیاز و آخرین قسمت خوانده شده را از سایت خدمات ردیابی آپدیت می‌کند</string>
     <string name="pref_incognito_mode_summary">متوقف کردن تاریخچه خواندن</string>
     <string name="manga_from_library">مانگاهای کتابخانه</string>
-    <string name="snack_add_to_library">مانگا به کتابخانه اضافه شود؟</string>
+    <string name="snack_add_to_manga_library">مانگا به کتابخانه اضافه شود؟</string>
     <string name="download_error">خطا</string>
     <string name="download_paused">متوقف</string>
     <string name="also_set_chapter_settings_for_library">همچنین برای تمام مانگاهای موجود در کتابخانه من اعمال شود</string>

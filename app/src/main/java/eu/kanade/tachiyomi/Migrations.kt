@@ -9,17 +9,17 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.tachiyomi.animeextension.AnimeExtensionUpdateJob
 import eu.kanade.tachiyomi.core.preference.PreferenceStore
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
-import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateJob
 import eu.kanade.tachiyomi.data.backup.BackupCreatorJob
-import eu.kanade.tachiyomi.data.library.LibraryUpdateJob
+import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.updater.AppUpdateJob
-import eu.kanade.tachiyomi.extension.ExtensionUpdateJob
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionUpdateJob
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionUpdateJob
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -63,10 +63,10 @@ object Migrations {
             if (BuildConfig.INCLUDE_UPDATER) {
                 AppUpdateJob.setupTask(context)
             }
-            ExtensionUpdateJob.setupTask(context)
+            MangaExtensionUpdateJob.setupTask(context)
             AnimeExtensionUpdateJob.setupTask(context)
-            LibraryUpdateJob.setupTask(context)
-            AnimelibUpdateJob.setupTask(context)
+            MangaLibraryUpdateJob.setupTask(context)
+            AnimeLibraryUpdateJob.setupTask(context)
             BackupCreatorJob.setupTask(context)
 
             // Fresh install
@@ -81,7 +81,7 @@ object Migrations {
                 if (BuildConfig.INCLUDE_UPDATER) {
                     AppUpdateJob.setupTask(context)
                 }
-                LibraryUpdateJob.setupTask(context)
+                MangaLibraryUpdateJob.setupTask(context)
             }
             if (oldVersion < 15) {
                 // Delete internal chapter cache dir.
@@ -114,11 +114,11 @@ object Migrations {
                 if (BuildConfig.INCLUDE_UPDATER) {
                     AppUpdateJob.setupTask(context)
                 }
-                LibraryUpdateJob.setupTask(context)
+                MangaLibraryUpdateJob.setupTask(context)
                 BackupCreatorJob.setupTask(context)
 
                 // New extension update check job
-                ExtensionUpdateJob.setupTask(context)
+                MangaExtensionUpdateJob.setupTask(context)
             }
             if (oldVersion < 44) {
                 // Reset sorting preference if using removed sort by source
@@ -141,13 +141,13 @@ object Migrations {
                     }
                 }
                 prefs.edit {
-                    putInt(libraryPreferences.filterDownloaded().key(), convertBooleanPrefToTriState("pref_filter_downloaded_key"))
+                    putInt(libraryPreferences.filterDownloadedManga().key(), convertBooleanPrefToTriState("pref_filter_downloaded_key"))
                     remove("pref_filter_downloaded_key")
 
                     putInt(libraryPreferences.filterUnread().key(), convertBooleanPrefToTriState("pref_filter_unread_key"))
                     remove("pref_filter_unread_key")
 
-                    putInt(libraryPreferences.filterCompleted().key(), convertBooleanPrefToTriState("pref_filter_completed_key"))
+                    putInt(libraryPreferences.filterCompletedManga().key(), convertBooleanPrefToTriState("pref_filter_completed_key"))
                     remove("pref_filter_completed_key")
                 }
             }
@@ -215,12 +215,12 @@ object Migrations {
                 val updateInterval = libraryPreferences.libraryUpdateInterval().get()
                 if (updateInterval == 1 || updateInterval == 2) {
                     libraryPreferences.libraryUpdateInterval().set(3)
-                    LibraryUpdateJob.setupTask(context, 3)
+                    MangaLibraryUpdateJob.setupTask(context, 3)
                 }
                 val animeupdateInterval = libraryPreferences.libraryUpdateInterval().get()
                 if (animeupdateInterval == 1 || animeupdateInterval == 2) {
                     libraryPreferences.libraryUpdateInterval().set(3)
-                    AnimelibUpdateJob.setupTask(context, 3)
+                    AnimeLibraryUpdateJob.setupTask(context, 3)
                 }
             }
             if (oldVersion < 64) {
@@ -228,10 +228,10 @@ object Migrations {
                 if (BuildConfig.INCLUDE_UPDATER) {
                     AppUpdateJob.setupTask(context)
                 }
-                ExtensionUpdateJob.setupTask(context)
+                MangaExtensionUpdateJob.setupTask(context)
                 AnimeExtensionUpdateJob.setupTask(context)
-                LibraryUpdateJob.setupTask(context)
-                AnimelibUpdateJob.setupTask(context)
+                MangaLibraryUpdateJob.setupTask(context)
+                AnimeLibraryUpdateJob.setupTask(context)
             }
             if (oldVersion < 64) {
                 val oldSortingMode = prefs.getInt(libraryPreferences.librarySortingMode().key(), 0)
@@ -274,14 +274,14 @@ object Migrations {
                 val updateInterval = libraryPreferences.libraryUpdateInterval().get()
                 if (updateInterval in listOf(3, 4, 6, 8)) {
                     libraryPreferences.libraryUpdateInterval().set(12)
-                    LibraryUpdateJob.setupTask(context, 12)
-                    AnimelibUpdateJob.setupTask(context, 12)
+                    MangaLibraryUpdateJob.setupTask(context, 12)
+                    AnimeLibraryUpdateJob.setupTask(context, 12)
                 }
             }
             if (oldVersion < 72) {
                 val oldUpdateOngoingOnly = prefs.getBoolean("pref_update_only_non_completed_key", true)
                 if (!oldUpdateOngoingOnly) {
-                    libraryPreferences.libraryUpdateMangaRestriction() -= MANGA_NON_COMPLETED
+                    libraryPreferences.libraryUpdateItemRestriction() -= MANGA_NON_COMPLETED
                 }
             }
             if (oldVersion < 75) {

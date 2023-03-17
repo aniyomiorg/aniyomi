@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">Karo bab durung diwaca</string>
     <string name="pref_library_update_show_tab_badge">Tampilake itungan kang durung diwaca ing ikon nganyari</string>
     <string name="default_category">kategori gawan</string>
-    <string name="pref_library_update_categories_details">Manga ing kategori sing ora kalebu ora bakal dianyari sanajan uga ana ing kategori sing kalebu.</string>
+    <string name="pref_manga_library_update_categories_details">Manga ing kategori sing ora kalebu ora bakal dianyari sanajan uga ana ing kategori sing kalebu.</string>
     <string name="untrusted_extension_message">Ekstensi iki ditandatangani nganggo sertifikat sing ora dipercaya lan ora diaktifake.
 \n
 \n Ekstensi angkoro bisa maca kredensial login sing disimpen ing Tachiyomi utawa nglakokake kode sewenang-wenang.

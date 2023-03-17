@@ -2,10 +2,10 @@ package eu.kanade.tachiyomi.data.track.anilist
 
 import android.net.Uri
 import androidx.core.net.toUri
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.await
 import eu.kanade.tachiyomi.network.interceptor.rateLimit
@@ -36,7 +36,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         .rateLimit(permits = 85, period = 1, unit = TimeUnit.MINUTES)
         .build()
 
-    suspend fun addLibManga(track: Track): Track {
+    suspend fun addLibManga(track: MangaTrack): MangaTrack {
         return withIOContext {
             val query = """
             |mutation AddManga(${'$'}mangaId: Int, ${'$'}progress: Int, ${'$'}status: MediaListStatus) {
@@ -71,7 +71,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         }
     }
 
-    suspend fun updateLibManga(track: Track): Track {
+    suspend fun updateLibManga(track: MangaTrack): MangaTrack {
         return withIOContext {
             val query = """
             |mutation UpdateManga(
@@ -176,7 +176,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         }
     }
 
-    suspend fun search(search: String): List<TrackSearch> {
+    suspend fun search(search: String): List<MangaTrackSearch> {
         return withIOContext {
             val query = """
             |query Search(${'$'}query: String) {
@@ -278,7 +278,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         }
     }
 
-    suspend fun findLibManga(track: Track, userid: Int): Track? {
+    suspend fun findLibManga(track: MangaTrack, userid: Int): MangaTrack? {
         return withIOContext {
             val query = """
             |query (${'$'}id: Int!, ${'$'}manga_id: Int!) {
@@ -414,7 +414,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
         }
     }
 
-    suspend fun getLibManga(track: Track, userid: Int): Track {
+    suspend fun getLibManga(track: MangaTrack, userid: Int): MangaTrack {
         return findLibManga(track, userid) ?: throw Exception("Could not find manga")
     }
 

@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">Sarjalla on lukemattomia kappaleita</string>
     <string name="pref_library_update_show_tab_badge">Näytä lukemattomien määrä päivitys ikoneissa</string>
     <string name="default_category">Oletus kategoria</string>
-    <string name="pref_library_update_categories_details">Poissuljettuihin kategorioihin sisältyvää mangaa ei päivitetä, vaikka ne olisivat myös sisällytetyissä kategorioissa.</string>
+    <string name="pref_manga_library_update_categories_details">Poissuljettuihin kategorioihin sisältyvää mangaa ei päivitetä, vaikka ne olisivat myös sisällytetyissä kategorioissa.</string>
     <string name="untrusted_extension_message">Tämä laajennus on allekirjoitettu luottamattomalla sertifikaatilla ja sitä ei ole aktivoitu.
 \n
 \nHaitallinen laajennus voisi lukea mahdolliset kirjautumistiedot Tachiyomista tai suorittaa luvatonta koodia.
@@ -27,7 +27,7 @@
     <string name="pref_refresh_library_tracking_summary">Päivittää tilan, arvosanan ja viimeksi luetun luvun seurantapalveluista</string>
     <string name="pref_incognito_mode_summary">Keskeyttää lukuhistorian</string>
     <string name="manga_from_library">Manga kirjastosta</string>
-    <string name="snack_add_to_library">Lisää sarja kirjastoon\?</string>
+    <string name="snack_add_to_manga_library">Lisää sarja kirjastoon\?</string>
     <string name="download_error">Virhe</string>
     <string name="download_paused">Pysäytetty</string>
     <string name="also_set_chapter_settings_for_library">Koskee myös kaikkia kirjastoni mangoja</string>

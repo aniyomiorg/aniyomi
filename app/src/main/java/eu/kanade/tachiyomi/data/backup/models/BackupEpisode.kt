@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.tachiyomi.data.database.models.EpisodeImpl
+import eu.kanade.tachiyomi.data.database.models.anime.EpisodeImpl
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 

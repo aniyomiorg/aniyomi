@@ -6,11 +6,11 @@
     <string name="chapters_episodes">Capitoli ed episodi</string>
     <string name="episodes">Episodi</string>
     <string name="backup_settings_warning">Avviso: Il file backup contiene anche password dei servizi tracking, non condividere questo file!</string>
-    <string name="label_mangalibrary">Manga</string>
-    <string name="label_animelib">Anime</string>
+    <string name="label_manga_library">Manga</string>
+    <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
-    <string name="label_mangasources">Fonti Manga</string>
-    <string name="label_animesources">Fonti Anime</string>
+    <string name="label_manga_sources">Fonti Manga</string>
+    <string name="label_anime_sources">Fonti Anime</string>
     <string name="pref_bottom_nav_no_history">Sposta Cronologia nella scheda Altro</string>
     <string name="unlock_app">Sblocca Aniyomi</string>
     <string name="action_sort_last_manga_update">Ultimo aggiornamento manga</string>
@@ -19,7 +19,7 @@
     <string name="pref_update_only_completely_read">Con capitoli non letti</string>
     <string name="pref_library_update_show_tab_badge">Mostra numero di elementi non letti/visti nell\'icona degli aggiornamenti</string>
     <string name="default_category">Categoria manga predefinita</string>
-    <string name="pref_library_update_categories_details">I manga nelle categorie escluse non verranno aggiornati anche se sono anche nelle categorie incluse.</string>
+    <string name="pref_manga_library_update_categories_details">I manga nelle categorie escluse non verranno aggiornati anche se sono anche nelle categorie incluse.</string>
     <string name="untrusted_extension_message">Questa estensione è stata firmata con un certificato non attendibile e non è stata attivata.
 \n
 \nUn\'estensione maliziosa potrebbe leggere credenziali di accesso all\'interno di Aniyomi, o eseguire codice dannoso.
@@ -39,7 +39,7 @@
     <string name="pref_refresh_library_tracking_summary">Aggiorna stato, voto e progressione dal servizio di tracking</string>
     <string name="pref_incognito_mode_summary">Sospendi cronologia</string>
     <string name="manga_from_library">Manga dalla libreria</string>
-    <string name="snack_add_to_library">Aggiungere manga alla libreria\?</string>
+    <string name="snack_add_to_manga_library">Aggiungere manga alla libreria\?</string>
     <string name="download_error">Errore</string>
     <string name="download_paused">In pausa</string>
     <string name="also_set_chapter_settings_for_library">Applica anche a tutti i manga nella mia libreria</string>
@@ -50,20 +50,18 @@
     <string name="channel_new_chapters_episodes">Aggiornamenti capitoli/episodi</string>
     <string name="pref_library_manga_columns">Manga per riga</string>
     <string name="pref_library_anime_columns">Anime per riga</string>
-    <string name="manga_anime">Elementi della libreria</string>
+    <string name="entries">Elementi della libreria</string>
     <string name="label_watched_episodes">Visto</string>
     <string name="label_anime">Anime</string>
     <string name="label_watched_duration">Tempo di visione</string>
     <string name="pref_bottom_nav_no_updates">Sposta Aggiornamenti nella scheda Altro</string>
     <plurals name="next_unseen_episodes">
         <item quantity="one">Prossima puntata non vista</item>
-        <item quantity="many">Prossime %d puntate non viste</item>
         <item quantity="other">Prossime %d puntate non viste</item>
     </plurals>
     <string name="pref_invalidate_download_cache_summary">Forza l\'app a ricontrollare i capitoli e gli episodi scaricati</string>
     <plurals name="anime_num_episodes">
         <item quantity="one">1 episodio</item>
-        <item quantity="many">%1$s episodi</item>
         <item quantity="other">%1$s episodi</item>
     </plurals>
     <string name="action_start_download_externally">Usa un downloader esterno</string>
@@ -177,7 +175,7 @@
     <string name="action_download_unread">Scarica i capitoli non letti</string>
     <string name="action_edit_anime_categories">Modifica categorie anime</string>
     <string name="pref_bottom_nav_style">Stile barra di navigazione</string>
-    <string name="pref_animelib_update_categories_details">Gli anime nelle categorie escluse non verranno aggiornati anche se sono anche nelle categorie incluse.</string>
+    <string name="pref_anime_library_update_categories_details">Gli anime nelle categorie escluse non verranno aggiornati anche se sono anche nelle categorie incluse.</string>
     <string name="action_sort_last_seen">Ultimi visti</string>
     <string name="action_previous_episode">Episodio precedente</string>
     <string name="action_next_episode">Prossimo episodio</string>
@@ -216,7 +214,7 @@
     <string name="local_manga_source">Manga locali</string>
     <string name="local_anime_source">Anime locali</string>
     <string name="episode_not_found">Episodio non trovato</string>
-    <string name="snack_add_to_animelib">Aggiungere anime alla libreria\?</string>
+    <string name="snack_add_to_anime_library">Aggiungere anime alla libreria\?</string>
     <string name="watching">Seguiti</string>
     <string name="plan_to_watch">Da vedere</string>
     <string name="want_to_watch">Da vedere</string>

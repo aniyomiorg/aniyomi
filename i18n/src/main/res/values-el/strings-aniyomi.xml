@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">Με αδιάβαστο(α) κεφάλαιο(α)</string>
     <string name="pref_library_update_show_tab_badge">Εμφάνιση του αριθμού των μη αναγνωσμένων στο εικονίδιο Ενημερώσεις</string>
     <string name="default_category">Προεπιλεγμένη κατηγορία</string>
-    <string name="pref_library_update_categories_details">Οι καταχωρίσεις σε εξαιρούμενες κατηγορίες δε θα ενημερώνονται ακόμη και αν περιλαμβάνονται επίσης σε κατηγορίες που περιλαμβάνονται.</string>
+    <string name="pref_manga_library_update_categories_details">Οι καταχωρίσεις σε εξαιρούμενες κατηγορίες δε θα ενημερώνονται ακόμη και αν περιλαμβάνονται επίσης σε κατηγορίες που περιλαμβάνονται.</string>
     <string name="untrusted_extension_message">Αυτή η επέκταση υπογράφηκε με μη αξιόπιστο πιστοποιητικό και δεν ενεργοποιήθηκε.
 \n
 \nΜια κακόβουλη επέκταση θα μπορούσε να διαβάσει τα διαπιστευτήρια σύνδεσης που είναι αποθηκευμένα στο Tachiyomi ή να εκτελέσει αυθαίρετο κώδικα.
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">Ενημερώνει κατάσταση, βαθμολογία και τελευταίο αναγνωσμένο κεφάλαιο από τις υπηρεσίες παρακολούθησης</string>
     <string name="pref_incognito_mode_summary">Παύει το ιστορικό ανάγνωσης</string>
     <string name="manga_from_library">Από βιβλιοθήκη</string>
-    <string name="snack_add_to_library">Προσθήκη στη βιβλιοθήκη;</string>
+    <string name="snack_add_to_manga_library">Προσθήκη στη βιβλιοθήκη;</string>
     <string name="download_error">Σφάλμα</string>
     <string name="download_paused">Παύση</string>
     <string name="also_set_chapter_settings_for_library">Εφαρμογή επίσης για όλες τις καταχωρήσεις στη βιβλιοθήκη μου</string>

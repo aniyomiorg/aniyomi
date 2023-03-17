@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">有未讀的章節</string>
     <string name="pref_library_update_show_tab_badge">在「新刊」導覽圖示上標記未讀章數</string>
     <string name="default_category">預設類別</string>
-    <string name="pref_library_update_categories_details">類別同時屬於「排除」及「包含」的作品，將不會自動更新。</string>
+    <string name="pref_manga_library_update_categories_details">類別同時屬於「排除」及「包含」的作品，將不會自動更新。</string>
     <string name="untrusted_extension_message">這個擴充套件的憑證並不可靠，且尚未被啟用。
 \n
 \n惡意的擴充套件可能存取任何儲存於 Tachiyomi 中的登錄憑證，或執行任意的程式碼。
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">與歷程平台同步處理閱讀狀態、評分以及進度</string>
     <string name="pref_incognito_mode_summary">暫停閱讀記錄</string>
     <string name="manga_from_library">書櫃上的作品</string>
-    <string name="snack_add_to_library">將作品收藏至書櫃？</string>
+    <string name="snack_add_to_manga_library">將作品收藏至書櫃？</string>
     <string name="download_error">錯誤</string>
     <string name="download_paused">已暫停</string>
     <string name="also_set_chapter_settings_for_library">同時套用至其餘在書櫃中的作品</string>

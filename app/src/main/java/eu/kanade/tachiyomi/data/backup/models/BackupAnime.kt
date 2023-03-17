@@ -1,9 +1,9 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.tachiyomi.data.database.models.AnimeImpl
-import eu.kanade.tachiyomi.data.database.models.AnimeTrackImpl
-import eu.kanade.tachiyomi.data.database.models.EpisodeImpl
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeImpl
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrackImpl
+import eu.kanade.tachiyomi.data.database.models.anime.EpisodeImpl
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber

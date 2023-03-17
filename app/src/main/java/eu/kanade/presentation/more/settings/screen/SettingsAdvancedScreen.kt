@@ -25,16 +25,16 @@ import androidx.core.net.toUri
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.entries.manga.repository.MangaRepository
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.manga.repository.MangaRepository
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
-import eu.kanade.tachiyomi.data.download.DownloadCache
-import eu.kanade.tachiyomi.data.library.LibraryUpdateService
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateService
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -193,14 +193,14 @@ object SettingsAdvancedScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.SwitchPreference(
-                    pref = libraryPreferences.autoClearChapterCache(),
+                    pref = libraryPreferences.autoClearItemCache(),
                     title = stringResource(R.string.pref_auto_clear_chapter_cache),
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_invalidate_download_cache),
                     subtitle = stringResource(R.string.pref_invalidate_download_cache_summary),
                     onClick = {
-                        Injekt.get<DownloadCache>().invalidateCache()
+                        Injekt.get<MangaDownloadCache>().invalidateCache()
                         Injekt.get<AnimeDownloadCache>().invalidateCache()
                     },
                 ),
@@ -323,20 +323,20 @@ object SettingsAdvancedScreen : SearchableSettings {
             preferenceItems = listOf(
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_refresh_library_covers),
-                    onClick = { LibraryUpdateService.start(context, target = LibraryUpdateService.Target.COVERS) },
+                    onClick = { MangaLibraryUpdateService.start(context, target = MangaLibraryUpdateService.Target.COVERS) },
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_refresh_library_tracking),
                     subtitle = stringResource(R.string.pref_refresh_library_tracking_summary),
                     enabled = trackManager.hasLoggedServices(),
-                    onClick = { LibraryUpdateService.start(context, target = LibraryUpdateService.Target.TRACKING) },
+                    onClick = { MangaLibraryUpdateService.start(context, target = MangaLibraryUpdateService.Target.TRACKING) },
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_reset_viewer_flags),
                     subtitle = stringResource(R.string.pref_reset_viewer_flags_summary),
                     onClick = {
                         scope.launchNonCancellable {
-                            val success = Injekt.get<MangaRepository>().resetViewerFlags()
+                            val success = Injekt.get<MangaRepository>().resetMangaViewerFlags()
                             withUIContext {
                                 val message = if (success) {
                                     R.string.pref_reset_viewer_flags_success

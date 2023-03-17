@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">Есть непрочитанные главы</string>
     <string name="pref_library_update_show_tab_badge">Непрочитанные главы на иконке «Обновления»</string>
     <string name="default_category">Основная категория</string>
-    <string name="pref_library_update_categories_details">Записи в исключённых категориях не будут обновляться, даже если находятся во включённых категориях.</string>
+    <string name="pref_manga_library_update_categories_details">Записи в исключённых категориях не будут обновляться, даже если находятся во включённых категориях.</string>
     <string name="untrusted_extension_message">Это расширение было подписано ненадёжным сертификатом и не было активировано.
 \n
 \nВредоносное расширение может считывать любые учетные данные для входа, хранящиеся в Tachiyomi, или выполнять произвольный код.
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">Обновляет статус, оценку и последнюю прочитанную главу для сервисов отслеживания</string>
     <string name="pref_incognito_mode_summary">Приостанавливает историю чтения</string>
     <string name="manga_from_library">Из библиотеки</string>
-    <string name="snack_add_to_library">Добавить в библиотеку\?</string>
+    <string name="snack_add_to_manga_library">Добавить в библиотеку\?</string>
     <string name="download_error">Ошибка</string>
     <string name="download_paused">Пауза</string>
     <string name="also_set_chapter_settings_for_library">Также применить ко всем записям в моей библиотеке</string>

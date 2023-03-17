@@ -33,10 +33,10 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.source.interactor.GetSourcesWithNonLibraryManga
-import eu.kanade.domain.source.model.Source
-import eu.kanade.domain.source.model.SourceWithCount
-import eu.kanade.presentation.browse.components.SourceIcon
+import eu.kanade.domain.source.manga.interactor.GetMangaSourcesWithNonLibraryManga
+import eu.kanade.domain.source.manga.model.MangaSourceWithCount
+import eu.kanade.domain.source.manga.model.Source
+import eu.kanade.presentation.browse.manga.components.MangaSourceIcon
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.Divider
@@ -184,7 +184,7 @@ class ClearDatabaseScreen : Screen {
                 .height(56.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            SourceIcon(source = source)
+            MangaSourceIcon(source = source)
             Column(
                 modifier = Modifier
                     .padding(start = 8.dp)
@@ -205,7 +205,7 @@ class ClearDatabaseScreen : Screen {
 }
 
 private class ClearDatabaseScreenModel : StateScreenModel<ClearDatabaseScreenModel.State>(State.Loading) {
-    private val getSourcesWithNonLibraryManga: GetSourcesWithNonLibraryManga = Injekt.get()
+    private val getSourcesWithNonLibraryManga: GetMangaSourcesWithNonLibraryManga = Injekt.get()
     private val database: Database = Injekt.get()
 
     init {
@@ -272,7 +272,7 @@ private class ClearDatabaseScreenModel : StateScreenModel<ClearDatabaseScreenMod
     sealed class State {
         object Loading : State()
         data class Ready(
-            val items: List<SourceWithCount>,
+            val items: List<MangaSourceWithCount>,
             val selection: List<Long> = emptyList(),
             val showConfirmation: Boolean = false,
         ) : State()

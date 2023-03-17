@@ -19,12 +19,12 @@ import eu.kanade.tachiyomi.data.backup.models.IntPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.LongPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.StringPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.StringSetPreferenceValue
-import eu.kanade.tachiyomi.data.database.models.Anime
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Chapter
-import eu.kanade.tachiyomi.data.database.models.Episode
-import eu.kanade.tachiyomi.data.database.models.Manga
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.anime.Anime
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.anime.Episode
+import eu.kanade.tachiyomi.data.database.models.manga.Chapter
+import eu.kanade.tachiyomi.data.database.models.manga.Manga
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import kotlinx.coroutines.Job
 import okio.buffer
@@ -196,7 +196,7 @@ class BackupRestorer(
         chapters: List<Chapter>,
         categories: List<Int>,
         history: List<BackupHistory>,
-        tracks: List<Track>,
+        tracks: List<MangaTrack>,
         backupCategories: List<BackupCategory>,
     ) {
         val fetchedManga = backupManager.restoreNewManga(manga)
@@ -211,14 +211,14 @@ class BackupRestorer(
         chapters: List<Chapter>,
         categories: List<Int>,
         history: List<BackupHistory>,
-        tracks: List<Track>,
+        tracks: List<MangaTrack>,
         backupCategories: List<BackupCategory>,
     ) {
         backupManager.restoreChapters(backupManga, chapters)
         restoreExtras(backupManga, categories, history, tracks, backupCategories)
     }
 
-    private suspend fun restoreExtras(manga: Manga, categories: List<Int>, history: List<BackupHistory>, tracks: List<Track>, backupCategories: List<BackupCategory>) {
+    private suspend fun restoreExtras(manga: Manga, categories: List<Int>, history: List<BackupHistory>, tracks: List<MangaTrack>, backupCategories: List<BackupCategory>) {
         backupManager.restoreCategories(manga, categories, backupCategories)
         backupManager.restoreHistory(history)
         backupManager.restoreTracking(manga, tracks)

@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.cache
 
 import android.content.Context
-import eu.kanade.domain.anime.model.Anime
+import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import java.io.File
 import java.io.IOException

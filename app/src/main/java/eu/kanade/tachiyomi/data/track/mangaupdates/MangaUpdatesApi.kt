@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.track.mangaupdates
 
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.mangaupdates.MangaUpdates.Companion.READING_LIST
 import eu.kanade.tachiyomi.data.track.mangaupdates.MangaUpdates.Companion.WISH_LIST
 import eu.kanade.tachiyomi.data.track.mangaupdates.dto.Context
@@ -46,7 +46,7 @@ class MangaUpdatesApi(
             .build()
     }
 
-    suspend fun getSeriesListItem(track: Track): Pair<ListItem, Rating?> {
+    suspend fun getSeriesListItem(track: MangaTrack): Pair<ListItem, Rating?> {
         val listItem =
             authClient.newCall(
                 GET(
@@ -61,7 +61,7 @@ class MangaUpdatesApi(
         return listItem to rating
     }
 
-    suspend fun addSeriesToList(track: Track, hasReadChapters: Boolean) {
+    suspend fun addSeriesToList(track: MangaTrack, hasReadChapters: Boolean) {
         val status = if (hasReadChapters) READING_LIST else WISH_LIST
         val body = buildJsonArray {
             addJsonObject {
@@ -86,7 +86,7 @@ class MangaUpdatesApi(
             }
     }
 
-    suspend fun updateSeriesListItem(track: Track) {
+    suspend fun updateSeriesListItem(track: MangaTrack) {
         val body = buildJsonArray {
             addJsonObject {
                 putJsonObject("series") {
@@ -109,7 +109,7 @@ class MangaUpdatesApi(
         updateSeriesRating(track)
     }
 
-    suspend fun getSeriesRating(track: Track): Rating? {
+    suspend fun getSeriesRating(track: MangaTrack): Rating? {
         return try {
             authClient.newCall(
                 GET(
@@ -123,7 +123,7 @@ class MangaUpdatesApi(
         }
     }
 
-    suspend fun updateSeriesRating(track: Track) {
+    suspend fun updateSeriesRating(track: MangaTrack) {
         if (track.score != 0f) {
             val body = buildJsonObject {
                 put("rating", track.score)

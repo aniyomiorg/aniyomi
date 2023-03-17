@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">С непрочетени глави</string>
     <string name="pref_library_update_show_tab_badge">Покажи броя на непрочетените в иконата за ъпдейти</string>
     <string name="default_category">Категория по подразбиране</string>
-    <string name="pref_library_update_categories_details">Манга в изключените категории няма да бъде обновявана дори ако се намира във включените категории.</string>
+    <string name="pref_manga_library_update_categories_details">Манга в изключените категории няма да бъде обновявана дори ако се намира във включените категории.</string>
     <string name="untrusted_extension_message">Следното разширение имаше непотвърден сертификат и не беше активирано.
 \n
 \nЗлонамереното разширение може да види всичката информация за вход в системата на Tachiyomi или да компилира неблагонадежден код.
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">Обновява статус, оценка и последно прочетена глава от услугите за проследяване</string>
     <string name="pref_incognito_mode_summary">Не записва история, докато трае режимът</string>
     <string name="manga_from_library">Манга от библиотеката</string>
-    <string name="snack_add_to_library">Добавяне на мангата към библиотеката\?</string>
+    <string name="snack_add_to_manga_library">Добавяне на мангата към библиотеката\?</string>
     <string name="download_error">Грешка</string>
     <string name="download_paused">На пауза</string>
     <string name="also_set_chapter_settings_for_library">Също приложи към всяка манга в библиотеката ми</string>

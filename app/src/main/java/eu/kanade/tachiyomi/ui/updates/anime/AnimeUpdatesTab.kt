@@ -16,12 +16,12 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.animeupdates.AnimeUpdateScreen
-import eu.kanade.presentation.animeupdates.AnimeUpdatesDeleteConfirmationDialog
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
+import eu.kanade.presentation.updates.UpdatesDeleteConfirmationDialog
+import eu.kanade.presentation.updates.anime.AnimeUpdateScreen
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.anime.AnimeScreen
+import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
@@ -91,9 +91,10 @@ fun Screen.animeUpdatesTab(
             val onDismissDialog = { screenModel.setDialog(null) }
             when (val dialog = state.dialog) {
                 is AnimeUpdatesScreenModel.Dialog.DeleteConfirmation -> {
-                    AnimeUpdatesDeleteConfirmationDialog(
+                    UpdatesDeleteConfirmationDialog(
                         onDismissRequest = onDismissDialog,
                         onConfirm = { screenModel.deleteEpisodes(dialog.toDelete) },
+                        isManga = false,
                     )
                 }
                 null -> {}

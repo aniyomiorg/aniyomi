@@ -3,11 +3,11 @@ package eu.kanade.tachiyomi.ui.reader.loader
 import android.app.Application
 import android.net.Uri
 import com.hippo.unifile.UniFile
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.tachiyomi.data.database.models.toDomainChapter
-import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.download.DownloadProvider
-import eu.kanade.tachiyomi.source.Source
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadProvider
+import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
@@ -21,9 +21,9 @@ import java.io.File
 class DownloadPageLoader(
     private val chapter: ReaderChapter,
     private val manga: Manga,
-    private val source: Source,
-    private val downloadManager: DownloadManager,
-    private val downloadProvider: DownloadProvider,
+    private val source: MangaSource,
+    private val downloadManager: MangaDownloadManager,
+    private val downloadProvider: MangaDownloadProvider,
 ) : PageLoader() {
 
     // Needed to open input streams

@@ -5,9 +5,9 @@ import android.view.MenuItem
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadService
-import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
+import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.flow.MutableStateFlow

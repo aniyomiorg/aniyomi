@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">Dengan bab yang belum dibaca</string>
     <string name="pref_library_update_show_tab_badge">Tunjuk bilangan belum dibaca pada ikon Kemas kini</string>
     <string name="default_category">Kategori lalai</string>
-    <string name="pref_library_update_categories_details">Entri di dalam kategori berkecuali tidak akan dikemas kini walaupun ianya ada di dalam kategori hanya.</string>
+    <string name="pref_manga_library_update_categories_details">Entri di dalam kategori berkecuali tidak akan dikemas kini walaupun ianya ada di dalam kategori hanya.</string>
     <string name="untrusted_extension_message">Sambungan ini telah ditandatangani dengan sijil tidak dipercayai dan ia tidak diaktifkan.
 \n
 \nSambungan yang berniat jahat kemungkinan membaca sebarang kelayakan log masuk yang di simpan dalam Tachiyomi atau melaksanakan kod sesuka hati.
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">Kemas kini status, skor dan bab terakhir dibaca dari perkhidmatan penjejakan</string>
     <string name="pref_incognito_mode_summary">Menjeda sejarah membaca</string>
     <string name="manga_from_library">Dari pustaka</string>
-    <string name="snack_add_to_library">Tambah ke pustaka\?</string>
+    <string name="snack_add_to_manga_library">Tambah ke pustaka\?</string>
     <string name="download_error">Ralat</string>
     <string name="download_paused">Ditangguh</string>
     <string name="also_set_chapter_settings_for_library">Gunakan juga untuk semua entri dalam pustaka</string>

@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.track.shikimori
 
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -16,7 +16,7 @@ data class OAuth(
 // Access token lives 1 day
 fun OAuth.isExpired() = (System.currentTimeMillis() / 1000) > (created_at + expires_in - 3600)
 
-fun Track.toShikimoriStatus() = when (status) {
+fun MangaTrack.toShikimoriStatus() = when (status) {
     Shikimori.READING -> "watching"
     Shikimori.COMPLETED -> "completed"
     Shikimori.ON_HOLD -> "on_hold"

@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.reader.viewer
 
-import eu.kanade.domain.chapter.model.Chapter
-import eu.kanade.tachiyomi.data.database.models.toDomainChapter
+import eu.kanade.domain.items.chapter.model.Chapter
+import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
 import kotlin.math.floor
 

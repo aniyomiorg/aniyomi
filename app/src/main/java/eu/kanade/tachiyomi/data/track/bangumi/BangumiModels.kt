@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.data.track.bangumi
 
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -55,7 +55,7 @@ data class OAuth(
 // Access token refresh before expired
 fun OAuth.isExpired() = (System.currentTimeMillis() / 1000) > (created_at + expires_in - 3600)
 
-fun Track.toBangumiStatus() = when (status) {
+fun MangaTrack.toBangumiStatus() = when (status) {
     Bangumi.READING -> "do"
     Bangumi.COMPLETED -> "collect"
     Bangumi.ON_HOLD -> "on_hold"

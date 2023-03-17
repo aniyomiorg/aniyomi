@@ -1,11 +1,11 @@
 package eu.kanade.tachiyomi.data.track.shikimori
 
 import androidx.core.net.toUri
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.await
@@ -31,7 +31,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
 
     private val authClient = client.newBuilder().addInterceptor(interceptor).build()
 
-    suspend fun addLibManga(track: Track, user_id: String): Track {
+    suspend fun addLibManga(track: MangaTrack, user_id: String): MangaTrack {
         return withIOContext {
             val payload = buildJsonObject {
                 putJsonObject("user_rate") {
@@ -75,11 +75,11 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
         }
     }
 
-    suspend fun updateLibManga(track: Track, user_id: String): Track = addLibManga(track, user_id)
+    suspend fun updateLibManga(track: MangaTrack, user_id: String): MangaTrack = addLibManga(track, user_id)
 
     suspend fun updateLibAnime(track: AnimeTrack, user_id: String): AnimeTrack = addLibAnime(track, user_id)
 
-    suspend fun search(search: String): List<TrackSearch> {
+    suspend fun search(search: String): List<MangaTrackSearch> {
         return withIOContext {
             val url = "$apiUrl/mangas".toUri().buildUpon()
                 .appendQueryParameter("order", "popularity")
@@ -115,8 +115,8 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
         }
     }
 
-    private fun jsonToSearch(obj: JsonObject): TrackSearch {
-        return TrackSearch.create(TrackManager.SHIKIMORI).apply {
+    private fun jsonToSearch(obj: JsonObject): MangaTrackSearch {
+        return MangaTrackSearch.create(TrackManager.SHIKIMORI).apply {
             media_id = obj["id"]!!.jsonPrimitive.long
             title = obj["name"]!!.jsonPrimitive.content
             total_chapters = obj["chapters"]!!.jsonPrimitive.int
@@ -143,8 +143,8 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
         }
     }
 
-    private fun jsonToTrack(obj: JsonObject, mangas: JsonObject): Track {
-        return Track.create(TrackManager.SHIKIMORI).apply {
+    private fun jsonToTrack(obj: JsonObject, mangas: JsonObject): MangaTrack {
+        return MangaTrack.create(TrackManager.SHIKIMORI).apply {
             title = mangas["name"]!!.jsonPrimitive.content
             media_id = obj["id"]!!.jsonPrimitive.long
             total_chapters = mangas["chapters"]!!.jsonPrimitive.int
@@ -167,7 +167,7 @@ class ShikimoriApi(private val client: OkHttpClient, interceptor: ShikimoriInter
         }
     }
 
-    suspend fun findLibManga(track: Track, user_id: String): Track? {
+    suspend fun findLibManga(track: MangaTrack, user_id: String): MangaTrack? {
         return withIOContext {
             val urlMangas = "$apiUrl/mangas".toUri().buildUpon()
                 .appendPath(track.media_id.toString())
