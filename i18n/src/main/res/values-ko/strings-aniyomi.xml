@@ -12,9 +12,9 @@
     <string name="label_manga">만화</string>
     <string name="label_manga_sources">만화 소스</string>
     <string name="label_anime_sources">애니메이션 소스</string>
-    <string name="pref_bottom_nav_no_history">더보기 탭으로 기록 이동</string>
-    <string name="pref_bottom_nav_no_updates">더 보기 탭으로 업데이트 이동</string>
-    <string name="pref_bottom_nav_no_manga">더 보기 탭으로 만화 이동</string>
+    <string name="pref_bottom_nav_no_history">기록을 더 보기 탭으로 이동</string>
+    <string name="pref_bottom_nav_no_updates">업데이트를 더 보기 탭으로 이동</string>
+    <string name="pref_bottom_nav_no_manga">만화를 더 보기 탭으로 이동</string>
     <string name="unlock_app">Aniyomi 해제하기</string>
     <string name="action_filter_unseen">보기 전</string>
     <string name="action_sort_total_episodes">전체 회차</string>
