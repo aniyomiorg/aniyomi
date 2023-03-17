@@ -1,9 +1,9 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.tachiyomi.data.database.models.ChapterImpl
-import eu.kanade.tachiyomi.data.database.models.MangaImpl
-import eu.kanade.tachiyomi.data.database.models.TrackImpl
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.tachiyomi.data.database.models.manga.ChapterImpl
+import eu.kanade.tachiyomi.data.database.models.manga.MangaImpl
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrackImpl
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import kotlinx.serialization.Serializable
@@ -66,7 +66,7 @@ data class BackupManga(
         }
     }
 
-    fun getTrackingImpl(): List<TrackImpl> {
+    fun getTrackingImpl(): List<MangaTrackImpl> {
         return tracking.map {
             it.getTrackingImpl()
         }

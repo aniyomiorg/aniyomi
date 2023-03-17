@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">Kai yra neskaitytų skyrių</string>
     <string name="pref_library_update_show_tab_badge">Rodyti neperskaitytų skyrių skaičių prie \"Naujiniai\" ikonos</string>
     <string name="default_category">Numatyta kategorija</string>
-    <string name="pref_library_update_categories_details">Įrašai, kurie yra įtraukti į neįtraukiamas kategorijas, nebus atnaujinami, net jei yra įtraukti į įtrauktąsias kategorijas.</string>
+    <string name="pref_manga_library_update_categories_details">Įrašai, kurie yra įtraukti į neįtraukiamas kategorijas, nebus atnaujinami, net jei yra įtraukti į įtrauktąsias kategorijas.</string>
     <string name="untrusted_extension_message">Šis plėtinys buvo pasirašytas nepatikimu sertifikatu ir nebuvo aktyvuotas.
 \n
 \nPlėtinys, su negeranoriškais ketinimais, gali perskaityti prisijungimo duomenys patalpintus Tachiyomi arba gali paleisti kenkėjišką kodą.
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">Atnaujina būseną, įvertinimą ir paskutinį perskaitytą skyrių iš sekimo paslaugų</string>
     <string name="pref_incognito_mode_summary">Pristabdo skaitymo istoriją</string>
     <string name="manga_from_library">Iš bibliotekos</string>
-    <string name="snack_add_to_library">Pridėti į biblioteką\?</string>
+    <string name="snack_add_to_manga_library">Pridėti į biblioteką\?</string>
     <string name="download_error">Klaida</string>
     <string name="download_paused">Pristabdyta</string>
     <string name="also_set_chapter_settings_for_library">Taip pat taikyti visiems mano bibliotekoje esantiems įrašams</string>

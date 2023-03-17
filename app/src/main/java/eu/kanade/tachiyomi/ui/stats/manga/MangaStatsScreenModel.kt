@@ -7,16 +7,16 @@ import eu.kanade.core.util.fastDistinctBy
 import eu.kanade.core.util.fastFilter
 import eu.kanade.core.util.fastFilterNot
 import eu.kanade.core.util.fastMapNotNull
-import eu.kanade.domain.history.interactor.GetTotalReadDuration
-import eu.kanade.domain.library.model.LibraryManga
+import eu.kanade.domain.entries.manga.interactor.GetLibraryManga
+import eu.kanade.domain.entries.manga.model.isLocal
+import eu.kanade.domain.history.manga.interactor.GetTotalReadDuration
+import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.manga.interactor.GetLibraryManga
-import eu.kanade.domain.manga.model.isLocal
-import eu.kanade.domain.track.interactor.GetTracks
-import eu.kanade.domain.track.model.Track
+import eu.kanade.domain.track.manga.interactor.GetMangaTracks
+import eu.kanade.domain.track.manga.model.MangaTrack
 import eu.kanade.presentation.more.stats.StatsScreenState
 import eu.kanade.presentation.more.stats.data.StatsData
-import eu.kanade.tachiyomi.data.download.DownloadManager
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
@@ -29,10 +29,10 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class MangaStatsScreenModel(
-    private val downloadManager: DownloadManager = Injekt.get(),
+    private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val getLibraryManga: GetLibraryManga = Injekt.get(),
     private val getTotalReadDuration: GetTotalReadDuration = Injekt.get(),
-    private val getTracks: GetTracks = Injekt.get(),
+    private val getTracks: GetMangaTracks = Injekt.get(),
     private val preferences: LibraryPreferences = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
 ) : StateScreenModel<StatsScreenState>(StatsScreenState.Loading) {
@@ -88,14 +88,14 @@ class MangaStatsScreenModel(
     }
 
     private fun getGlobalUpdateItemCount(libraryManga: List<LibraryManga>): Int {
-        val includedCategories = preferences.libraryUpdateCategories().get().map { it.toLong() }
+        val includedCategories = preferences.mangaLibraryUpdateCategories().get().map { it.toLong() }
         val includedManga = if (includedCategories.isNotEmpty()) {
             libraryManga.filter { it.category in includedCategories }
         } else {
             libraryManga
         }
 
-        val excludedCategories = preferences.libraryUpdateCategoriesExclude().get().map { it.toLong() }
+        val excludedCategories = preferences.mangaLibraryUpdateCategoriesExclude().get().map { it.toLong() }
         val excludedMangaIds = if (excludedCategories.isNotEmpty()) {
             libraryManga.fastMapNotNull { manga ->
                 manga.id.takeIf { manga.category in excludedCategories }
@@ -104,7 +104,7 @@ class MangaStatsScreenModel(
             emptyList()
         }
 
-        val updateRestrictions = preferences.libraryUpdateMangaRestriction().get()
+        val updateRestrictions = preferences.libraryUpdateItemRestriction().get()
         return includedManga
             .fastFilterNot { it.manga.id in excludedMangaIds }
             .fastDistinctBy { it.manga.id }
@@ -115,7 +115,7 @@ class MangaStatsScreenModel(
             }
     }
 
-    private suspend fun getMangaTrackMap(libraryManga: List<LibraryManga>): Map<Long, List<Track>> {
+    private suspend fun getMangaTrackMap(libraryManga: List<LibraryManga>): Map<Long, List<MangaTrack>> {
         val loggedServicesIds = loggedServices.map { it.id }.toHashSet()
         return libraryManga.associate { manga ->
             val tracks = getTracks.await(manga.id)
@@ -125,7 +125,7 @@ class MangaStatsScreenModel(
         }
     }
 
-    private fun getScoredMangaTrackMap(mangaTrackMap: Map<Long, List<Track>>): Map<Long, List<Track>> {
+    private fun getScoredMangaTrackMap(mangaTrackMap: Map<Long, List<MangaTrack>>): Map<Long, List<MangaTrack>> {
         return mangaTrackMap.mapNotNull { (mangaId, tracks) ->
             val trackList = tracks.mapNotNull { track ->
                 track.takeIf { it.score > 0.0 }
@@ -135,7 +135,7 @@ class MangaStatsScreenModel(
         }.toMap()
     }
 
-    private fun getTrackMeanScore(scoredMangaTrackMap: Map<Long, List<Track>>): Double {
+    private fun getTrackMeanScore(scoredMangaTrackMap: Map<Long, List<MangaTrack>>): Double {
         return scoredMangaTrackMap
             .map { (_, tracks) ->
                 tracks.map {
@@ -146,7 +146,7 @@ class MangaStatsScreenModel(
             .average()
     }
 
-    private fun get10PointScore(track: Track): Float {
+    private fun get10PointScore(track: MangaTrack): Float {
         val service = trackManager.getService(track.syncId)!!
         return service.mangaService.get10PointScore(track)
     }

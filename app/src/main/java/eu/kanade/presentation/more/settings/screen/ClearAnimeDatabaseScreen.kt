@@ -33,10 +33,10 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.animesource.interactor.GetAnimeSourcesWithNonLibraryAnime
-import eu.kanade.domain.animesource.model.AnimeSource
-import eu.kanade.domain.animesource.model.AnimeSourceWithCount
-import eu.kanade.presentation.animebrowse.components.AnimeSourceIcon
+import eu.kanade.domain.source.anime.interactor.GetAnimeSourcesWithNonLibraryAnime
+import eu.kanade.domain.source.anime.model.AnimeSource
+import eu.kanade.domain.source.anime.model.AnimeSourceWithCount
+import eu.kanade.presentation.browse.anime.components.AnimeSourceIcon
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.Divider

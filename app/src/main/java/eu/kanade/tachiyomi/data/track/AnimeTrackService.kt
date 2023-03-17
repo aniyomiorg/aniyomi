@@ -1,12 +1,12 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
-import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
-import eu.kanade.domain.animetrack.model.toDbTrack
-import eu.kanade.domain.animetrack.model.toDomainTrack
-import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
+import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
+import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
+import eu.kanade.domain.track.anime.model.toDbTrack
+import eu.kanade.domain.track.anime.model.toDomainTrack
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.lang.withUIContext
@@ -15,7 +15,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import eu.kanade.domain.animetrack.model.AnimeTrack as DomainAnimeTrack
+import eu.kanade.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 
 interface AnimeTrackService {
 

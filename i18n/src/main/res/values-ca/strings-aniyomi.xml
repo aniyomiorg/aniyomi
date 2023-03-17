@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">Amb capítols no llegits</string>
     <string name="pref_library_update_show_tab_badge">Mostra el comptador de no llegits a la icona d\'actualitzacions</string>
     <string name="default_category">Categoria per defecte</string>
-    <string name="pref_library_update_categories_details">Els elements de les categories excloses no s\'actualitzaran encara que també siguin a les categories incloses.</string>
+    <string name="pref_manga_library_update_categories_details">Els elements de les categories excloses no s\'actualitzaran encara que també siguin a les categories incloses.</string>
     <string name="untrusted_extension_message">Aquesta extensió s\'ha signat amb un certificat que no és de confiança i no s\'ha activat.
 \n
 \nUna extensió maliciosa podria llegir qualsevol credencial desada al Tachiyomi o executar codi arbitrari.
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">Actualitza l\'estat, la puntuació i el darrer capítol llegit dels serveis de seguiment</string>
     <string name="pref_incognito_mode_summary">Pausa l\'historial de lectura</string>
     <string name="manga_from_library">De la biblioteca</string>
-    <string name="snack_add_to_library">Voleu afegir-lo a la biblioteca\?</string>
+    <string name="snack_add_to_manga_library">Voleu afegir-lo a la biblioteca\?</string>
     <string name="download_error">Error</string>
     <string name="download_paused">Pausat</string>
     <string name="also_set_chapter_settings_for_library">Aplica-ho també a tots els elements de la biblioteca</string>

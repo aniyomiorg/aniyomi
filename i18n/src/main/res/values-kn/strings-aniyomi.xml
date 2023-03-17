@@ -4,7 +4,7 @@
     <string name="unlock_app">ತಚಿಯೋಮಿಯನ್ನು ಅನ್ಲಾಕ್ ಮಾಡಿ</string>
     <string name="action_display_local_badge">ಸ್ಥಳೀಯ ಬ್ಯಾಡ್ಜ್ ಗಳು</string>
     <string name="default_category">ಡೀಫಾಲ್ಟ್ ವರ್ಗ</string>
-    <string name="pref_library_update_categories_details">ಹೊರಗಿಡಲಾದ ವರ್ಗಗಳಲ್ಲಿನ ಮಾಂಗಾ ಸೇರಿಸಿದ ವಿಭಾಗಗಳಲ್ಲಿದ್ದರೂ ನವೀಕರಿಸಲಾಗುವುದಿಲ್ಲ.</string>
+    <string name="pref_manga_library_update_categories_details">ಹೊರಗಿಡಲಾದ ವರ್ಗಗಳಲ್ಲಿನ ಮಾಂಗಾ ಸೇರಿಸಿದ ವಿಭಾಗಗಳಲ್ಲಿದ್ದರೂ ನವೀಕರಿಸಲಾಗುವುದಿಲ್ಲ.</string>
     <string name="untrusted_extension_message">ಈ ವಿಸ್ತರಣೆಯನ್ನು ವಿಶ್ವಾಸಾರ್ಹವಲ್ಲದ ಪ್ರಮಾಣಪತ್ರದೊಂದಿಗೆ ಸಹಿ ಮಾಡಲಾಗಿದೆ ಮತ್ತು ಅದನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿಲ್ಲ.
 \n
 \nದುರುದ್ದೇಶಪೂರಿತ ವಿಸ್ತರಣೆಯು ತಚಿಯೋಮಿಯಲ್ಲಿ ಸಂಗ್ರಹವಾಗಿರುವ ಯಾವುದೇ ಲಾಗಿನ್ ರುಜುವಾತುಗಳನ್ನು ಓದಬಹುದು ಅಥವಾ ಅನಿಯಂತ್ರಿತ ಕೋಡ್ ಅನ್ನು ಕಾರ್ಯಗತಗೊಳಿಸಬಹುದು.
@@ -22,7 +22,7 @@
     <string name="pref_refresh_library_tracking_summary">ಟ್ರ್ಯಾಕಿಂಗ್ ಸೇವೆಗಳಿಂದ ಓದಿದ ಸ್ಥಿತಿ, ಸ್ಕೋರ್ ಮತ್ತು ಕೊನೆಯ ಅಧ್ಯಾಯವನ್ನು ನವೀಕರಿಸಿ</string>
     <string name="pref_incognito_mode_summary">ಓದುವ ಇತಿಹಾಸವನ್ನು ವಿರಾಮಗೊಳಿಸುತ್ತದೆ</string>
     <string name="manga_from_library">ಗ್ರಂಥಾಲಯದಿಂದ ಮಾಂಗಾ</string>
-    <string name="snack_add_to_library">ಮಾಂಗಾವನ್ನು ಗ್ರಂಥಾಲಯಕ್ಕೆ ಸೇರಿಸುವುದೇ\?</string>
+    <string name="snack_add_to_manga_library">ಮಾಂಗಾವನ್ನು ಗ್ರಂಥಾಲಯಕ್ಕೆ ಸೇರಿಸುವುದೇ\?</string>
     <string name="download_error">ದೋಷ</string>
     <string name="download_paused">ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</string>
     <string name="also_set_chapter_settings_for_library">ನನ್ನ ಗ್ರಂಥಾಲಯದಲ್ಲಿರುವ ಎಲ್ಲಾ ಮಾಂಗಾಗಳಿಗೂ ಅನ್ವಯಿಸಿ</string>

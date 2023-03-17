@@ -8,5 +8,5 @@ interface SourceFactory {
      * Create a new copy of the sources
      * @return The created sources
      */
-    fun createSources(): List<Source>
+    fun createSources(): List<MangaSource>
 }

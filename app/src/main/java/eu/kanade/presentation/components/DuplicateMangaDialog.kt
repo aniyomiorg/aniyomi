@@ -9,14 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.Source
+import eu.kanade.tachiyomi.source.MangaSource
 
 @Composable
 fun DuplicateMangaDialog(
     onDismissRequest: () -> Unit,
     onConfirm: () -> Unit,
     onOpenManga: () -> Unit,
-    duplicateFrom: Source,
+    duplicateFrom: MangaSource,
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,

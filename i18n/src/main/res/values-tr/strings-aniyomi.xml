@@ -3,15 +3,15 @@
     <string name="categories">Kategoriler</string>
     <string name="general_categories">Kategoriler</string>
     <string name="anime_categories">Anime Kategorileri</string>
-    <string name="manga_anime">Kütüphane girdileri</string>
+    <string name="entries">Kütüphane girdileri</string>
     <string name="chapters_episodes">Manga ve Anime bölümleri</string>
     <string name="episodes">Anime Bölümleri</string>
     <string name="backup_settings_warning">Uyarı: Yedekleme ayarları, izleme şifrelerinizi de saklayacaktır, bu yedekleme dosyasını paylaşmayın!</string>
-    <string name="label_mangalibrary">Manga</string>
-    <string name="label_animelib">Anime</string>
+    <string name="label_manga_library">Manga</string>
+    <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
-    <string name="label_mangasources">Manga Kaynakları</string>
-    <string name="label_animesources">Anime Kaynakları</string>
+    <string name="label_manga_sources">Manga Kaynakları</string>
+    <string name="label_anime_sources">Anime Kaynakları</string>
     <string name="pref_bottom_nav_no_history">Geçmiş\'i Daha Fazla Sekmesine Taşı</string>
     <string name="pref_bottom_nav_no_updates">Güncellemeler\'i Daha Fazla Sekmesine Taşı</string>
     <string name="pref_bottom_nav_no_manga">Manga\'yı Daha Fazla Sekmesine Taşı</string>
@@ -57,8 +57,8 @@
     <string name="pref_library_update_show_tab_badge">Güncellemeler simgesinde okunmayan sayısını göster</string>
     <string name="default_category">Varsayılan kategori</string>
     <string name="default_anime_category">Varsayılan anime kategorisi</string>
-    <string name="pref_library_update_categories_details">Hariç tutulan kategorilerdeki girdiler, dahil edilen kategorilerde olsa bile güncellenmeyecektir.</string>
-    <string name="pref_animelib_update_categories_details">Hariç tutulan kategorilerdeki animeler, dahil edilen kategorilerde de olsalar dahi güncellenmeyecektir.</string>
+    <string name="pref_manga_library_update_categories_details">Hariç tutulan kategorilerdeki girdiler, dahil edilen kategorilerde olsa bile güncellenmeyecektir.</string>
+    <string name="pref_anime_library_update_categories_details">Hariç tutulan kategorilerdeki animeler, dahil edilen kategorilerde de olsalar dahi güncellenmeyecektir.</string>
     <string name="untrusted_extension_message">Bu uzantı güvenilmeyen bir sertifika ile imzalanmış ve etkinleştirilmedi.
 \n
 \nKötü niyetli bir uzantı, Tachiyomi\'de saklanan her giriş kimlik bilgisini okuyabilir veya rastgele kod yürütebilir.
@@ -113,7 +113,7 @@
     <string name="pref_refresh_library_tracking_summary">İzleme hizmetlerinden durumu, puanı ve son okunan bölümü günceller</string>
     <string name="pref_incognito_mode_summary">Okuma geçmişini duraklatır</string>
     <string name="manga_from_library">Kitaplıktan</string>
-    <string name="snack_add_to_library">Kitaplığa eklensin mi\?</string>
+    <string name="snack_add_to_manga_library">Kitaplığa eklensin mi\?</string>
     <string name="download_error">Hata</string>
     <string name="download_paused">Duraklatıldı</string>
     <string name="also_set_chapter_settings_for_library">Kitaplığımdaki tüm girdilere de uygula</string>

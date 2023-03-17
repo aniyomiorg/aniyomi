@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">S neprečítanými kapitolami</string>
     <string name="pref_library_update_show_tab_badge">Zobraziť počet neprečítaných kapitol na ikone Aktualizácie</string>
     <string name="default_category">Predvolená kategória</string>
-    <string name="pref_library_update_categories_details">Mangy vo vylúčených kategóriách nebudú aktualizované, aj keď sú tiež v zahrnutých kategóriách.</string>
+    <string name="pref_manga_library_update_categories_details">Mangy vo vylúčených kategóriách nebudú aktualizované, aj keď sú tiež v zahrnutých kategóriách.</string>
     <string name="untrusted_extension_message">Toto rozšírenie bolo podpísané nedôveryhodným certifikátom a nebolo aktivované.
 \n
 \nŠkodlivé rozšírenie môže čítať všetky prihlasovacie údaje uložené v Tachiyomi alebo spúšťať ľubovoľný kód.
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">Aktualizuje stav, skóre a poslednú čítanú kapitolu zo sledovacích služieb</string>
     <string name="pref_incognito_mode_summary">Pozastaví históriu čítania</string>
     <string name="manga_from_library">Manga z knižnice</string>
-    <string name="snack_add_to_library">Pridať mangu do knižnice\?</string>
+    <string name="snack_add_to_manga_library">Pridať mangu do knižnice\?</string>
     <string name="also_set_chapter_settings_for_library">Taktiež nastaviť pre všetky mangy v mojej knižnici</string>
     <string name="dialog_with_checkbox_reset">Resetovať všetky kapitoly mangy</string>
     <string name="download_insufficient_space">Nepodarilo sa stiahnuť kapitoly z dôvodu nedostatku úložného priestoru</string>

@@ -40,7 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import eu.kanade.domain.ui.model.AppTheme
 import eu.kanade.presentation.components.DIVIDER_ALPHA
-import eu.kanade.presentation.components.MangaCover
+import eu.kanade.presentation.components.ItemCover
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.util.ThemePreviews
 import eu.kanade.presentation.util.secondaryItemAlpha
@@ -185,7 +185,7 @@ fun AppThemePreviewItem(
                     shape = MaterialTheme.shapes.small,
                 )
                 .fillMaxWidth(0.5f)
-                .aspectRatio(MangaCover.Book.ratio),
+                .aspectRatio(ItemCover.Book.ratio),
         ) {
             Row(
                 modifier = Modifier

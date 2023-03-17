@@ -1,13 +1,12 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
-import eu.kanade.domain.chapter.interactor.GetChapterByMangaId
-import eu.kanade.domain.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.track.interactor.InsertTrack
-import eu.kanade.domain.track.model.toDbTrack
-import eu.kanade.domain.track.model.toDomainTrack
-import eu.kanade.tachiyomi.data.database.models.Track
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
+import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
+import eu.kanade.domain.track.manga.model.toDbTrack
+import eu.kanade.domain.track.manga.model.toDomainTrack
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
+import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.system.logcat
@@ -15,7 +14,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import eu.kanade.domain.track.model.Track as DomainTrack
+import eu.kanade.domain.track.manga.model.MangaTrack as DomainTrack
 
 interface MangaTrackService {
 
@@ -28,8 +27,8 @@ interface MangaTrackService {
         return index.toFloat()
     }
 
-    // Anime specific functions
-    fun getStatusList(): List<Int>
+    // Manga specific functions
+    fun getStatusListManga(): List<Int>
 
     fun getReadingStatus(): Int
 
@@ -40,27 +39,27 @@ interface MangaTrackService {
         return track.score
     }
 
-    fun displayScore(track: Track): String
+    fun displayScore(track: MangaTrack): String
 
-    suspend fun update(track: Track, didReadChapter: Boolean = false): Track
+    suspend fun update(track: MangaTrack, didReadChapter: Boolean = false): MangaTrack
 
-    suspend fun bind(track: Track, hasReadChapters: Boolean = false): Track
+    suspend fun bind(track: MangaTrack, hasReadChapters: Boolean = false): MangaTrack
 
-    suspend fun search(query: String): List<TrackSearch>
+    suspend fun searchManga(query: String): List<MangaTrackSearch>
 
-    suspend fun refresh(track: Track): Track
+    suspend fun refresh(track: MangaTrack): MangaTrack
 
-    suspend fun registerTracking(item: Track, mangaId: Long) {
+    suspend fun registerTracking(item: MangaTrack, mangaId: Long) {
         item.manga_id = mangaId
         try {
             withIOContext {
-                val allChapters = Injekt.get<GetChapterByMangaId>().await(mangaId)
+                val allChapters = Injekt.get<eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId>().await(mangaId)
                 val hasReadChapters = allChapters.any { it.read }
                 bind(item, hasReadChapters)
 
                 val track = item.toDomainTrack(idRequired = false) ?: return@withIOContext
 
-                Injekt.get<InsertTrack>().await(track)
+                Injekt.get<InsertMangaTrack>().await(track)
 
                 // Update chapter progress if newer chapters marked read locally
                 if (hasReadChapters) {
@@ -87,7 +86,7 @@ interface MangaTrackService {
         }
     }
 
-    suspend fun setRemoteStatus(track: Track, status: Int) {
+    suspend fun setRemoteMangaStatus(track: MangaTrack, status: Int) {
         track.status = status
         if (track.status == getCompletionStatus() && track.total_chapters != 0) {
             track.last_chapter_read = track.total_chapters.toFloat()
@@ -95,7 +94,7 @@ interface MangaTrackService {
         withIOContext { updateRemote(track) }
     }
 
-    suspend fun setRemoteLastChapterRead(track: Track, chapterNumber: Int) {
+    suspend fun setRemoteLastChapterRead(track: MangaTrack, chapterNumber: Int) {
         if (track.last_chapter_read == 0F && track.last_chapter_read < chapterNumber && track.status != getRereadingStatus()) {
             track.status = getReadingStatus()
         }
@@ -106,27 +105,27 @@ interface MangaTrackService {
         withIOContext { updateRemote(track) }
     }
 
-    suspend fun setRemoteScore(track: Track, scoreString: String) {
+    suspend fun setRemoteScore(track: MangaTrack, scoreString: String) {
         track.score = indexToScore(getScoreList().indexOf(scoreString))
         withIOContext { updateRemote(track) }
     }
 
-    suspend fun setRemoteStartDate(track: Track, epochMillis: Long) {
+    suspend fun setRemoteStartDate(track: MangaTrack, epochMillis: Long) {
         track.started_reading_date = epochMillis
         withIOContext { updateRemote(track) }
     }
 
-    suspend fun setRemoteFinishDate(track: Track, epochMillis: Long) {
+    suspend fun setRemoteFinishDate(track: MangaTrack, epochMillis: Long) {
         track.finished_reading_date = epochMillis
         withIOContext { updateRemote(track) }
     }
 
-    private suspend fun updateRemote(track: Track) {
+    private suspend fun updateRemote(track: MangaTrack) {
         withIOContext {
             try {
                 update(track)
                 track.toDomainTrack(idRequired = false)?.let {
-                    Injekt.get<InsertTrack>().await(it)
+                    Injekt.get<InsertMangaTrack>().await(it)
                 }
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR, e) { "Failed to update remote track data id=${track.id}" }

@@ -23,7 +23,8 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.READ_APP_SPECIFIC_LOCALES" />
+    <uses-permission android:name="android.permission.READ_APP_SPECIFIC_LOCALES"
+        tools:ignore="ProtectedPermissions" />
 
     <!-- Remove permission from Firebase dependency -->
     <uses-permission android:name="com.google.android.gms.permission.AD_ID"
@@ -137,12 +138,12 @@
             android:exported="false" />
 
         <activity
-            android:name=".extension.util.ExtensionInstallActivity"
+            android:name=".extension.manga.util.MangaExtensionInstallActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="false" />
 
         <activity
-            android:name=".animeextension.util.AnimeExtensionInstallActivity"
+            android:name=".extension.anime.util.AnimeExtensionInstallActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="false" />
 
@@ -227,7 +228,7 @@
             android:exported="false" />
 
         <receiver
-            android:name=".glance.UpdatesGridGlanceReceiver"
+            android:name=".glance.manga.MangaUpdatesGridGlanceReceiver"
             android:enabled="@bool/glance_appwidget_available"
             android:exported="false"
             android:label="@string/label_recent_updates">
@@ -241,19 +242,19 @@
         </receiver>
 
         <service
-            android:name=".data.library.LibraryUpdateService"
+            android:name=".data.library.manga.MangaLibraryUpdateService"
             android:exported="false" />
 
         <service
-            android:name=".data.animelib.AnimelibUpdateService"
+            android:name=".data.library.anime.AnimeLibraryUpdateService"
             android:exported="false" />
 
         <service
-            android:name=".data.download.DownloadService"
+            android:name=".data.download.manga.MangaDownloadService"
             android:exported="false" />
 
         <service
-            android:name=".data.animedownload.AnimeDownloadService"
+            android:name=".data.download.anime.AnimeDownloadService"
             android:exported="false" />
 
         <service
@@ -264,10 +265,10 @@
             android:name=".data.backup.BackupRestoreService"
             android:exported="false" />
 
-        <service android:name=".extension.util.ExtensionInstallService"
+        <service android:name=".extension.manga.util.MangaExtensionInstallService"
             android:exported="false" />
 
-        <service android:name=".animeextension.util.AnimeExtensionInstallService"
+        <service android:name=".extension.anime.util.AnimeExtensionInstallService"
             android:exported="false" />
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"

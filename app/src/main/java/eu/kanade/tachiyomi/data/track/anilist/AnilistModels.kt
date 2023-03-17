@@ -1,11 +1,11 @@
 package eu.kanade.tachiyomi.data.track.anilist
 
 import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import kotlinx.serialization.Serializable
 import uy.kohesive.injekt.injectLazy
 import java.text.SimpleDateFormat
@@ -22,7 +22,7 @@ data class ALManga(
     val total_chapters: Int,
 ) {
 
-    fun toTrack() = TrackSearch.create(TrackManager.ANILIST).apply {
+    fun toTrack() = MangaTrackSearch.create(TrackManager.ANILIST).apply {
         media_id = this@ALManga.media_id
         title = title_user_pref
         total_chapters = this@ALManga.total_chapters
@@ -83,7 +83,7 @@ data class ALUserManga(
     val manga: ALManga,
 ) {
 
-    fun toTrack() = Track.create(TrackManager.ANILIST).apply {
+    fun toTrack() = MangaTrack.create(TrackManager.ANILIST).apply {
         media_id = manga.media_id
         title = manga.title_user_pref
         status = toTrackStatus()
@@ -149,7 +149,7 @@ data class OAuth(
 
 fun OAuth.isExpired() = System.currentTimeMillis() > expires
 
-fun Track.toAnilistStatus() = when (status) {
+fun MangaTrack.toAnilistStatus() = when (status) {
     Anilist.READING -> "CURRENT"
     Anilist.COMPLETED -> "COMPLETED"
     Anilist.PAUSED -> "PAUSED"
@@ -171,7 +171,7 @@ fun AnimeTrack.toAnilistStatus() = when (status) {
 
 private val preferences: TrackPreferences by injectLazy()
 
-fun Track.toAnilistScore(): String = when (preferences.anilistScoreType().get()) {
+fun MangaTrack.toAnilistScore(): String = when (preferences.anilistScoreType().get()) {
 // 10 point
     "POINT_10" -> (score.toInt() / 10).toString()
 // 100 point

@@ -8,30 +8,30 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import eu.kanade.domain.anime.interactor.GetAnime
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.chapter.interactor.GetChapter
-import eu.kanade.domain.chapter.interactor.UpdateChapter
-import eu.kanade.domain.chapter.model.Chapter
-import eu.kanade.domain.chapter.model.toChapterUpdate
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.episode.interactor.GetEpisode
-import eu.kanade.domain.episode.interactor.UpdateEpisode
-import eu.kanade.domain.episode.model.Episode
-import eu.kanade.domain.episode.model.toEpisodeUpdate
-import eu.kanade.domain.manga.interactor.GetManga
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.entries.anime.interactor.GetAnime
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.entries.manga.interactor.GetManga
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.items.chapter.interactor.GetChapter
+import eu.kanade.domain.items.chapter.interactor.UpdateChapter
+import eu.kanade.domain.items.chapter.model.Chapter
+import eu.kanade.domain.items.chapter.model.toChapterUpdate
+import eu.kanade.domain.items.episode.interactor.GetEpisode
+import eu.kanade.domain.items.episode.interactor.UpdateEpisode
+import eu.kanade.domain.items.episode.model.Episode
+import eu.kanade.domain.items.episode.model.toEpisodeUpdate
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.AnimeSourceManager
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadService
-import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
 import eu.kanade.tachiyomi.data.backup.BackupRestoreService
-import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.download.DownloadService
-import eu.kanade.tachiyomi.data.library.LibraryUpdateService
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
+import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateService
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateService
 import eu.kanade.tachiyomi.data.updater.AppUpdateService
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
+import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
@@ -63,30 +63,30 @@ class NotificationReceiver : BroadcastReceiver() {
     private val getEpisode: GetEpisode by injectLazy()
     private val updateChapter: UpdateChapter by injectLazy()
     private val updateEpisode: UpdateEpisode by injectLazy()
-    private val downloadManager: DownloadManager by injectLazy()
-    private val animedownloadManager: AnimeDownloadManager by injectLazy()
+    private val mangaDownloadManager: MangaDownloadManager by injectLazy()
+    private val animeDownloadManager: AnimeDownloadManager by injectLazy()
 
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             // Dismiss notification
             ACTION_DISMISS_NOTIFICATION -> dismissNotification(context, intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1))
             // Resume the download service
-            ACTION_RESUME_DOWNLOADS -> DownloadService.start(context)
+            ACTION_RESUME_DOWNLOADS -> MangaDownloadService.start(context)
             // Pause the download service
             ACTION_PAUSE_DOWNLOADS -> {
-                DownloadService.stop(context)
-                downloadManager.pauseDownloads()
+                MangaDownloadService.stop(context)
+                mangaDownloadManager.pauseDownloads()
             }
             // Clear the download queue
-            ACTION_CLEAR_DOWNLOADS -> downloadManager.clearQueue(true)
+            ACTION_CLEAR_DOWNLOADS -> mangaDownloadManager.clearQueue(true)
             ACTION_RESUME_ANIME_DOWNLOADS -> AnimeDownloadService.start(context)
             // Pause the download service
             ACTION_PAUSE_ANIME_DOWNLOADS -> {
                 AnimeDownloadService.stop(context)
-                animedownloadManager.pauseDownloads()
+                animeDownloadManager.pauseDownloads()
             }
             // Clear the download queue
-            ACTION_CLEAR_ANIME_DOWNLOADS -> animedownloadManager.clearQueue(true)
+            ACTION_CLEAR_ANIME_DOWNLOADS -> animeDownloadManager.clearQueue(true)
             // Launch share activity and dismiss notification
             ACTION_SHARE_IMAGE ->
                 shareImage(
@@ -301,7 +301,7 @@ class NotificationReceiver : BroadcastReceiver() {
      * @param notificationId id of notification
      */
     private fun cancelLibraryUpdate(context: Context, notificationId: Int) {
-        LibraryUpdateService.stop(context)
+        MangaLibraryUpdateService.stop(context)
         ContextCompat.getMainExecutor(context).execute { dismissNotification(context, notificationId) }
     }
 
@@ -316,7 +316,7 @@ class NotificationReceiver : BroadcastReceiver() {
      * @param notificationId id of notification
      */
     private fun cancelAnimelibUpdate(context: Context, notificationId: Int) {
-        AnimelibUpdateService.stop(context)
+        AnimeLibraryUpdateService.stop(context)
         ContextCompat.getMainExecutor(context).execute { dismissNotification(context, notificationId) }
     }
 
@@ -328,7 +328,7 @@ class NotificationReceiver : BroadcastReceiver() {
      */
     private fun markAsRead(chapterUrls: Array<String>, mangaId: Long) {
         val downloadPreferences: DownloadPreferences = Injekt.get()
-        val sourceManager: SourceManager = Injekt.get()
+        val sourceManager: MangaSourceManager = Injekt.get()
 
         launchIO {
             val toUpdate = chapterUrls.mapNotNull { getChapter.await(it, mangaId) }
@@ -339,7 +339,7 @@ class NotificationReceiver : BroadcastReceiver() {
                         if (manga != null) {
                             val source = sourceManager.get(manga.source)
                             if (source != null) {
-                                downloadManager.deleteChapters(listOf(it), manga, source)
+                                mangaDownloadManager.deleteChapters(listOf(it), manga, source)
                             }
                         }
                     }
@@ -368,7 +368,7 @@ class NotificationReceiver : BroadcastReceiver() {
                         if (anime != null) {
                             val source = sourceManager.get(anime.source)
                             if (source != null) {
-                                animedownloadManager.deleteEpisodes(listOf(it), anime, source)
+                                animeDownloadManager.deleteEpisodes(listOf(it), anime, source)
                             }
                         }
                     }
@@ -388,7 +388,7 @@ class NotificationReceiver : BroadcastReceiver() {
         launchIO {
             val manga = getManga.await(mangaId) ?: return@launchIO
             val chapters = chapterUrls.mapNotNull { getChapter.await(it, mangaId) }
-            downloadManager.downloadChapters(manga, chapters)
+            mangaDownloadManager.downloadChapters(manga, chapters)
         }
     }
 
@@ -402,7 +402,7 @@ class NotificationReceiver : BroadcastReceiver() {
         launchIO {
             val anime = getAnime.await(animeId) ?: return@launchIO
             val episodes = episodeUrls.mapNotNull { getEpisode.await(it, animeId) }
-            animedownloadManager.downloadEpisodes(anime, episodes)
+            animeDownloadManager.downloadEpisodes(anime, episodes)
         }
     }
 
@@ -647,7 +647,7 @@ class NotificationReceiver : BroadcastReceiver() {
          * @param context context of application
          * @param anime anime of episode
          */
-        internal fun markAsReadPendingBroadcast(
+        internal fun markAsViewedPendingBroadcast(
             context: Context,
             anime: Anime,
             episodes: Array<Episode>,
@@ -697,7 +697,7 @@ class NotificationReceiver : BroadcastReceiver() {
          * @param context context of application
          * @param manga manga of chapter
          */
-        internal fun markAsReadPendingBroadcast(
+        internal fun markAsViewedPendingBroadcast(
             context: Context,
             manga: Manga,
             chapters: Array<Chapter>,

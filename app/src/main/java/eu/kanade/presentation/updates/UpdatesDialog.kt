@@ -11,10 +11,12 @@ import eu.kanade.tachiyomi.R
 fun UpdatesDeleteConfirmationDialog(
     onDismissRequest: () -> Unit,
     onConfirm: () -> Unit,
+    isManga: Boolean,
 ) {
+    val title = if (isManga) R.string.confirm_delete_chapters else R.string.confirm_delete_episodes
     AlertDialog(
         text = {
-            Text(text = stringResource(R.string.confirm_delete_chapters))
+            Text(text = stringResource(title))
         },
         onDismissRequest = onDismissRequest,
         confirmButton = {

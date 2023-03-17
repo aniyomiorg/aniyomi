@@ -1,10 +1,10 @@
 package eu.kanade.tachiyomi.data.track.kitsu
 
 import androidx.core.net.toUri
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.await
@@ -33,7 +33,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
 
     private val authClient = client.newBuilder().addInterceptor(interceptor).build()
 
-    suspend fun addLibManga(track: Track, userId: String): Track {
+    suspend fun addLibManga(track: MangaTrack, userId: String): MangaTrack {
         return withIOContext {
             val data = buildJsonObject {
                 putJsonObject("data") {
@@ -123,7 +123,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
         }
     }
 
-    suspend fun updateLibManga(track: Track): Track {
+    suspend fun updateLibManga(track: MangaTrack): MangaTrack {
         return withIOContext {
             val data = buildJsonObject {
                 putJsonObject("data") {
@@ -195,7 +195,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
         }
     }
 
-    suspend fun search(query: String): List<TrackSearch> {
+    suspend fun search(query: String): List<MangaTrackSearch> {
         return withIOContext {
             authClient.newCall(GET(algoliaKeyUrl))
                 .await()
@@ -219,7 +219,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
         }
     }
 
-    private suspend fun algoliaSearch(key: String, query: String): List<TrackSearch> {
+    private suspend fun algoliaSearch(key: String, query: String): List<MangaTrackSearch> {
         return withIOContext {
             val jsonObject = buildJsonObject {
                 put("params", "query=${URLEncoder.encode(query, StandardCharsets.UTF_8.name())}$algoliaFilter")
@@ -277,7 +277,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
         }
     }
 
-    suspend fun findLibManga(track: Track, userId: String): Track? {
+    suspend fun findLibManga(track: MangaTrack, userId: String): MangaTrack? {
         return withIOContext {
             val url = "${baseUrl}library-entries".toUri().buildUpon()
                 .encodedQuery("filter[manga_id]=${track.media_id}&filter[user_id]=$userId")
@@ -319,7 +319,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
         }
     }
 
-    suspend fun getLibManga(track: Track): Track {
+    suspend fun getLibManga(track: MangaTrack): MangaTrack {
         return withIOContext {
             val url = "${baseUrl}library-entries".toUri().buildUpon()
                 .encodedQuery("filter[id]=${track.media_id}")

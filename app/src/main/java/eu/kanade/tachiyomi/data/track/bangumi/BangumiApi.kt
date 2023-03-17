@@ -2,11 +2,11 @@ package eu.kanade.tachiyomi.data.track.bangumi
 
 import android.net.Uri
 import androidx.core.net.toUri
-import eu.kanade.tachiyomi.data.database.models.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.Track
+import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
-import eu.kanade.tachiyomi.data.track.model.TrackSearch
+import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.network.await
@@ -35,7 +35,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
 
     private val authClient = client.newBuilder().addInterceptor(interceptor).build()
 
-    suspend fun addLibManga(track: Track): Track {
+    suspend fun addLibManga(track: MangaTrack): MangaTrack {
         return withIOContext {
             val body = FormBody.Builder()
                 .add("rating", track.score.toInt().toString())
@@ -59,7 +59,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         }
     }
 
-    suspend fun updateLibManga(track: Track): Track {
+    suspend fun updateLibManga(track: MangaTrack): MangaTrack {
         return withIOContext {
             // read status update
             val sbody = FormBody.Builder()
@@ -109,7 +109,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         }
     }
 
-    suspend fun search(search: String): List<TrackSearch> {
+    suspend fun search(search: String): List<MangaTrackSearch> {
         return withIOContext {
             val url = "$apiUrl/search/subject/${URLEncoder.encode(search, StandardCharsets.UTF_8.name())}"
                 .toUri()
@@ -157,7 +157,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         }
     }
 
-    private fun jsonToSearch(obj: JsonObject): TrackSearch {
+    private fun jsonToSearch(obj: JsonObject): MangaTrackSearch {
         val coverUrl = if (obj["images"] is JsonObject) {
             obj["images"]?.jsonObject?.get("common")?.jsonPrimitive?.contentOrNull ?: ""
         } else {
@@ -169,7 +169,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         } else {
             0
         }
-        return TrackSearch.create(TrackManager.BANGUMI).apply {
+        return MangaTrackSearch.create(TrackManager.BANGUMI).apply {
             media_id = obj["id"]!!.jsonPrimitive.long
             title = obj["name_cn"]!!.jsonPrimitive.content
             cover_url = coverUrl
@@ -201,7 +201,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         }
     }
 
-    suspend fun findLibManga(track: Track): Track? {
+    suspend fun findLibManga(track: MangaTrack): MangaTrack? {
         return withIOContext {
             authClient.newCall(GET("$apiUrl/subject/${track.media_id}"))
                 .await()
@@ -219,7 +219,7 @@ class BangumiApi(private val client: OkHttpClient, interceptor: BangumiIntercept
         }
     }
 
-    suspend fun statusLibManga(track: Track): Track? {
+    suspend fun statusLibManga(track: MangaTrack): MangaTrack? {
         return withIOContext {
             val urlUserRead = "$apiUrl/collection/${track.media_id}"
             val requestUserRead = Request.Builder()

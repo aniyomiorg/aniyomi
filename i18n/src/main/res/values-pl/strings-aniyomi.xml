@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">Posiada nieprzeczytane rozdziały</string>
     <string name="pref_library_update_show_tab_badge">Pokaż wskaźnik nieprzeczytanych na ikonie Aktualizacje</string>
     <string name="default_category">Domyślna kategoria</string>
-    <string name="pref_library_update_categories_details">Tytuły w wykluczonych kategoriach nie będą aktualizowane, nawet jeśli są również w uwzględnionych kategoriach.</string>
+    <string name="pref_manga_library_update_categories_details">Tytuły w wykluczonych kategoriach nie będą aktualizowane, nawet jeśli są również w uwzględnionych kategoriach.</string>
     <string name="untrusted_extension_message">To rozszerzenie było podpisane niezaufanym certyfikatem i nie zostało aktywowane.
 \n
 \nZłośliwe rozszerzenie może odczytać dane logowania przechowywane w Tachiyomi albo uruchomić złośliwy kod.
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">Aktualizuje status, ocenę i ostatnio czytany rozdział na podstawie usług śledzenia</string>
     <string name="pref_incognito_mode_summary">Wstrzymuje zapisywanie do historii czytania</string>
     <string name="manga_from_library">Manga z biblioteki</string>
-    <string name="snack_add_to_library">Dodać mangę do biblioteki?</string>
+    <string name="snack_add_to_manga_library">Dodać mangę do biblioteki?</string>
     <string name="download_error">Błąd</string>
     <string name="download_paused">Wstrzymane</string>
     <string name="also_set_chapter_settings_for_library">Dodatkowo zastosuj do wszystkich tytułów w mojej bibliotece</string>
@@ -39,13 +39,13 @@
     <string name="download_notifier_download_paused_chapters">Pobieranie wstrzymane</string>
     <string name="channel_new_chapters_episodes">Aktualizacje rozdziałów</string>
     <string name="backup_settings_warning">Ostrzeżenie: Tworzenie kopii zapasowej ustawień spowoduje zapisanie również haseł do ścieżek, nie udostępniaj tego pliku nikomu!</string>
-    <string name="label_animelib">Anime</string>
+    <string name="label_anime_library">Anime</string>
     <string name="anime_categories">Kategorie anime</string>
     <string name="general_categories">Kategorie</string>
     <string name="episodes">Odcinki</string>
-    <string name="manga_anime">Pozycje w bibliotece</string>
+    <string name="entries">Pozycje w bibliotece</string>
     <string name="chapters_episodes">Rozdziały i odcinki</string>
-    <string name="label_mangalibrary">Manga</string>
+    <string name="label_manga_library">Manga</string>
     <string name="label_manga">Manga</string>
     <string name="label_anime">Anime</string>
 </resources>

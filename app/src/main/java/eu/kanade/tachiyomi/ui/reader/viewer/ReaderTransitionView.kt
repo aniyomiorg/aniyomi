@@ -11,9 +11,9 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.view.isVisible
-import eu.kanade.domain.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.download.DownloadManager
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.databinding.ReaderTransitionViewBinding
 import eu.kanade.tachiyomi.ui.reader.loader.DownloadPageLoader
 import eu.kanade.tachiyomi.ui.reader.model.ChapterTransition
@@ -30,7 +30,7 @@ class ReaderTransitionView @JvmOverloads constructor(context: Context, attrs: At
         layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
     }
 
-    fun bind(transition: ChapterTransition, downloadManager: DownloadManager, manga: Manga?) {
+    fun bind(transition: ChapterTransition, downloadManager: MangaDownloadManager, manga: Manga?) {
         manga ?: return
         when (transition) {
             is ChapterTransition.Prev -> bindPrevChapterTransition(transition, downloadManager, manga)
@@ -44,7 +44,7 @@ class ReaderTransitionView @JvmOverloads constructor(context: Context, attrs: At
      */
     private fun bindPrevChapterTransition(
         transition: ChapterTransition,
-        downloadManager: DownloadManager,
+        downloadManager: MangaDownloadManager,
         manga: Manga,
     ) {
         val prevChapter = transition.to?.chapter
@@ -81,7 +81,7 @@ class ReaderTransitionView @JvmOverloads constructor(context: Context, attrs: At
      */
     private fun bindNextChapterTransition(
         transition: ChapterTransition,
-        downloadManager: DownloadManager,
+        downloadManager: MangaDownloadManager,
         manga: Manga,
     ) {
         val nextChapter = transition.to?.chapter

@@ -24,8 +24,8 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.disk.DiskCache
 import coil.util.DebugLogger
-import eu.kanade.data.AnimeDatabaseHandler
-import eu.kanade.data.DatabaseHandler
+import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
+import eu.kanade.data.handlers.manga.MangaDatabaseHandler
 import eu.kanade.domain.DomainModule
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.ui.UiPreferences
@@ -42,8 +42,8 @@ import eu.kanade.tachiyomi.data.coil.MangaCoverKeyer
 import eu.kanade.tachiyomi.data.coil.MangaKeyer
 import eu.kanade.tachiyomi.data.coil.TachiyomiImageDecoder
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.glance.AnimeUpdatesGridGlanceWidget
-import eu.kanade.tachiyomi.glance.UpdatesGridGlanceWidget
+import eu.kanade.tachiyomi.glance.anime.AnimeUpdatesGridGlanceWidget
+import eu.kanade.tachiyomi.glance.manga.MangaUpdatesGridGlanceWidget
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
@@ -129,14 +129,14 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         setAppCompatDelegateThemeMode(Injekt.get<UiPreferences>().themeMode().get())
 
         // Updates widget update
-        Injekt.get<DatabaseHandler>()
-            .subscribeToList { updatesViewQueries.updates(after = UpdatesGridGlanceWidget.DateLimit.timeInMillis) }
+        Injekt.get<MangaDatabaseHandler>()
+            .subscribeToList { updatesViewQueries.updates(after = MangaUpdatesGridGlanceWidget.DateLimit.timeInMillis) }
             .drop(1)
             .distinctUntilChanged()
             .onEach {
                 val manager = GlanceAppWidgetManager(this)
-                if (manager.getGlanceIds(UpdatesGridGlanceWidget::class.java).isNotEmpty()) {
-                    UpdatesGridGlanceWidget().loadData(it)
+                if (manager.getGlanceIds(MangaUpdatesGridGlanceWidget::class.java).isNotEmpty()) {
+                    MangaUpdatesGridGlanceWidget().loadData(it)
                 }
             }
             .launchIn(ProcessLifecycleOwner.get().lifecycleScope)

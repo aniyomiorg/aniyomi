@@ -11,24 +11,23 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.prefs.asState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.core.util.insertSeparators
-import eu.kanade.domain.anime.interactor.GetAnime
-import eu.kanade.domain.animeupdates.interactor.GetAnimeUpdates
-import eu.kanade.domain.animeupdates.model.AnimeUpdatesWithRelations
-import eu.kanade.domain.episode.interactor.GetEpisode
-import eu.kanade.domain.episode.interactor.SetSeenStatus
-import eu.kanade.domain.episode.interactor.UpdateEpisode
-import eu.kanade.domain.episode.model.EpisodeUpdate
+import eu.kanade.domain.entries.anime.interactor.GetAnime
+import eu.kanade.domain.items.episode.interactor.GetEpisode
+import eu.kanade.domain.items.episode.interactor.SetSeenStatus
+import eu.kanade.domain.items.episode.interactor.UpdateEpisode
+import eu.kanade.domain.items.episode.model.EpisodeUpdate
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.presentation.animeupdates.AnimeUpdatesUiModel
+import eu.kanade.domain.updates.anime.interactor.GetAnimeUpdates
+import eu.kanade.domain.updates.anime.model.AnimeUpdatesWithRelations
 import eu.kanade.presentation.components.EpisodeDownloadAction
-import eu.kanade.tachiyomi.animesource.AnimeSourceManager
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadCache
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadService
-import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
-import eu.kanade.tachiyomi.data.animelib.AnimelibUpdateService
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.presentation.updates.anime.AnimeUpdatesUiModel
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
+import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
+import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateService
+import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.toDateKey
@@ -63,13 +62,10 @@ class AnimeUpdatesScreenModel(
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
     uiPreferences: UiPreferences = Injekt.get(),
-    playerPreferences: PlayerPreferences = Injekt.get(),
 ) : StateScreenModel<AnimeUpdatesState>(AnimeUpdatesState()) {
 
     private val _events: Channel<Event> = Channel(Int.MAX_VALUE)
     val events: Flow<Event> = _events.receiveAsFlow()
-
-    private val useExternalPlayer: Boolean by playerPreferences.alwaysUseExternalPlayer().asState(coroutineScope)
 
     val lastUpdated by libraryPreferences.libraryUpdateLastTimestamp().asState(coroutineScope)
 
@@ -137,7 +133,7 @@ class AnimeUpdatesScreenModel(
     }
 
     fun updateLibrary(): Boolean {
-        val started = AnimelibUpdateService.start(Injekt.get<Application>())
+        val started = AnimeLibraryUpdateService.start(Injekt.get<Application>())
         coroutineScope.launch {
             _events.send(Event.LibraryUpdateTriggered(started))
         }

@@ -3,15 +3,15 @@
     <string name="categories">Manga-Kategorien</string>
     <string name="general_categories">Kategorien</string>
     <string name="anime_categories">Anime-Kategorien</string>
-    <string name="manga_anime">Bibliothekseinträge</string>
+    <string name="entries">Bibliothekseinträge</string>
     <string name="chapters_episodes">Kapitel und Folgen</string>
     <string name="episodes">Folgen</string>
     <string name="backup_settings_warning">Warnung: Die Einstellungen zu sichern, führt dazu, dass die Passwörter zu deinen Trackingdiensten gespeichert werden. Teile deine Sicherungsdatei mit niemandem!</string>
-    <string name="label_mangalibrary">Manga</string>
-    <string name="label_animelib">Anime</string>
+    <string name="label_manga_library">Manga</string>
+    <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
-    <string name="label_mangasources">Manga-Quellen</string>
-    <string name="label_animesources">Anime-Quellen</string>
+    <string name="label_manga_sources">Manga-Quellen</string>
+    <string name="label_anime_sources">Anime-Quellen</string>
     <string name="pref_bottom_nav_no_history">Verschiebe Verlauf in den Mehr-Tab</string>
     <string name="pref_bottom_nav_no_updates">Verschiebe Neues in den Mehr-Tab</string>
     <string name="pref_bottom_nav_no_manga">Verschiebe Manga in den Mehr-Tab</string>
@@ -58,8 +58,8 @@
     <string name="pref_library_update_show_tab_badge">Anzahl von Ungelesenem auf dem „Neues“-Symbol anzeigen</string>
     <string name="default_category">Standardkategorie</string>
     <string name="default_anime_category">Standard-Animekategorie</string>
-    <string name="pref_library_update_categories_details">Einträge in ausgeschlossenen Kategorien werden nicht aktualisiert, auch wenn sie in eingeschlossenen Kategorien vorhanden sind.</string>
-    <string name="pref_animelib_update_categories_details">Anime in ausgeschlossenen Kategorien werden nicht aktualisiert, auch wenn sie in eingeschlossenen Kategorien vorhanden sind.</string>
+    <string name="pref_manga_library_update_categories_details">Einträge in ausgeschlossenen Kategorien werden nicht aktualisiert, auch wenn sie in eingeschlossenen Kategorien vorhanden sind.</string>
+    <string name="pref_anime_library_update_categories_details">Anime in ausgeschlossenen Kategorien werden nicht aktualisiert, auch wenn sie in eingeschlossenen Kategorien vorhanden sind.</string>
     <string name="untrusted_extension_message">Diese Erweiterung ist mit einem nicht vertrauenswürdigen Zertifikat unterschrieben und wurde nicht aktiviert.
 \n
 \nEine bösartige Erweiterung könnte in Tachiyomi gespeicherte Anmeldedaten auslesen oder einen schädlichen Code ausführen.
@@ -139,8 +139,8 @@
         <item quantity="other">%1$s Folgen</item>
     </plurals>
     <string name="delete_downloads_for_anime">Heruntergeladene Folgen löschen\?</string>
-    <string name="snack_add_to_library">Zur Bibliothek hinzufügen\?</string>
-    <string name="snack_add_to_animelib">Anime zur Bibliothek hinzufügen\?</string>
+    <string name="snack_add_to_manga_library">Zur Bibliothek hinzufügen\?</string>
+    <string name="snack_add_to_anime_library">Anime zur Bibliothek hinzufügen\?</string>
     <string name="display_mode_episode">Folge %1$s</string>
     <string name="episode_downloading_progress">Lädt herunter (%d%%)</string>
     <string name="download_error">Fehler</string>

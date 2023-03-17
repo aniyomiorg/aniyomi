@@ -10,11 +10,11 @@ import data.History
 import data.Mangas
 import dataanime.Animehistory
 import dataanime.Animes
-import eu.kanade.data.AndroidAnimeDatabaseHandler
-import eu.kanade.data.AndroidDatabaseHandler
-import eu.kanade.data.AnimeDatabaseHandler
-import eu.kanade.data.DatabaseHandler
 import eu.kanade.data.dateAdapter
+import eu.kanade.data.handlers.anime.AndroidAnimeDatabaseHandler
+import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
+import eu.kanade.data.handlers.manga.AndroidMangaDatabaseHandler
+import eu.kanade.data.handlers.manga.MangaDatabaseHandler
 import eu.kanade.data.listOfStringsAdapter
 import eu.kanade.data.updateStrategyAdapter
 import eu.kanade.domain.backup.service.BackupPreferences
@@ -22,34 +22,35 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
+import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.domain.track.store.DelayedTrackingStore
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.tachiyomi.animeextension.AnimeExtensionManager
-import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.core.preference.AndroidPreferenceStore
 import eu.kanade.tachiyomi.core.preference.PreferenceStore
 import eu.kanade.tachiyomi.core.provider.AndroidBackupFolderProvider
 import eu.kanade.tachiyomi.core.provider.AndroidDownloadFolderProvider
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadCache
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadProvider
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.cache.ChapterCache
-import eu.kanade.tachiyomi.data.cache.CoverCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
-import eu.kanade.tachiyomi.data.download.DownloadCache
-import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.download.DownloadProvider
+import eu.kanade.tachiyomi.data.cache.MangaCoverCache
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadProvider
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadProvider
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.extension.ExtensionManager
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.mi.AnimeDatabase
 import eu.kanade.tachiyomi.network.JavaScriptEngine
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
+import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
@@ -147,7 +148,7 @@ class AppModule(val app: Application) : InjektModule {
             )
         }
 
-        addSingletonFactory<DatabaseHandler> { AndroidDatabaseHandler(get(), sqlDriverManga) }
+        addSingletonFactory<MangaDatabaseHandler> { AndroidMangaDatabaseHandler(get(), sqlDriverManga) }
 
         addSingletonFactory<AnimeDatabaseHandler> { AndroidAnimeDatabaseHandler(get(), sqlDriverAnime) }
 
@@ -170,28 +171,29 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { ChapterCache(app) }
         addSingletonFactory { EpisodeCache(app) }
 
-        addSingletonFactory { CoverCache(app) }
+        addSingletonFactory { MangaCoverCache(app) }
         addSingletonFactory { AnimeCoverCache(app) }
 
         addSingletonFactory { NetworkHelper(app) }
         addSingletonFactory { JavaScriptEngine(app) }
 
-        addSingletonFactory { SourceManager(app, get(), get()) }
+        addSingletonFactory { MangaSourceManager(app, get(), get()) }
         addSingletonFactory { AnimeSourceManager(app, get(), get()) }
 
-        addSingletonFactory { ExtensionManager(app) }
+        addSingletonFactory { MangaExtensionManager(app) }
         addSingletonFactory { AnimeExtensionManager(app) }
 
-        addSingletonFactory { DownloadProvider(app) }
-        addSingletonFactory { DownloadManager(app) }
-        addSingletonFactory { DownloadCache(app) }
+        addSingletonFactory { MangaDownloadProvider(app) }
+        addSingletonFactory { MangaDownloadManager(app) }
+        addSingletonFactory { MangaDownloadCache(app) }
 
         addSingletonFactory { AnimeDownloadProvider(app) }
         addSingletonFactory { AnimeDownloadManager(app) }
         addSingletonFactory { AnimeDownloadCache(app) }
 
         addSingletonFactory { TrackManager(app) }
-        addSingletonFactory { DelayedTrackingStore(app) }
+        addSingletonFactory { DelayedAnimeTrackingStore(app) }
+        addSingletonFactory { DelayedMangaTrackingStore(app) }
 
         addSingletonFactory { ImageSaver(app) }
 
@@ -201,13 +203,13 @@ class AppModule(val app: Application) : InjektModule {
         ContextCompat.getMainExecutor(app).execute {
             get<NetworkHelper>()
 
-            get<SourceManager>()
+            get<MangaSourceManager>()
             get<AnimeSourceManager>()
 
             get<Database>()
             get<AnimeDatabase>()
 
-            get<DownloadManager>()
+            get<MangaDownloadManager>()
             get<AnimeDownloadManager>()
         }
     }

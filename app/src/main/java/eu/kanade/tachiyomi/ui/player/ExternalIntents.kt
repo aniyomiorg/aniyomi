@@ -11,32 +11,32 @@ import android.os.Build
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import eu.kanade.core.util.asFlow
-import eu.kanade.domain.anime.interactor.GetAnime
-import eu.kanade.domain.anime.model.Anime
-import eu.kanade.domain.animehistory.interactor.UpsertAnimeHistory
-import eu.kanade.domain.animehistory.model.AnimeHistoryUpdate
-import eu.kanade.domain.animetrack.interactor.GetAnimeTracks
-import eu.kanade.domain.animetrack.interactor.InsertAnimeTrack
-import eu.kanade.domain.animetrack.model.toDbTrack
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.episode.interactor.UpdateEpisode
-import eu.kanade.domain.episode.model.Episode
-import eu.kanade.domain.episode.model.EpisodeUpdate
-import eu.kanade.domain.episode.model.toDbEpisode
-import eu.kanade.domain.track.service.DelayedTrackingUpdateJob
+import eu.kanade.domain.entries.anime.interactor.GetAnime
+import eu.kanade.domain.entries.anime.model.Anime
+import eu.kanade.domain.history.anime.interactor.UpsertAnimeHistory
+import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
+import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.items.episode.interactor.UpdateEpisode
+import eu.kanade.domain.items.episode.model.Episode
+import eu.kanade.domain.items.episode.model.EpisodeUpdate
+import eu.kanade.domain.items.episode.model.toDbEpisode
+import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
+import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
+import eu.kanade.domain.track.anime.model.toDbTrack
+import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
+import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
-import eu.kanade.domain.track.store.DelayedTrackingStore
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.animesource.AnimeSourceManager
-import eu.kanade.tachiyomi.animesource.LocalAnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
-import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.database.models.toDomainEpisode
+import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.data.database.models.anime.toDomainEpisode
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
+import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
+import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.Constants.REQUEST_EXTERNAL
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -53,7 +53,7 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.util.Date
-import eu.kanade.tachiyomi.data.database.models.Episode as DbEpisode
+import eu.kanade.tachiyomi.data.database.models.anime.Episode as DbEpisode
 
 class ExternalIntents {
 
@@ -115,7 +115,7 @@ class ExternalIntents {
                 putExtra("position", lastSecondSeen.toInt())
                 putExtra("return_result", true)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
+                val headers = video.headers ?: (source as? HttpAnimeSource)?.headers
                 if (headers != null) {
                     var headersArray = arrayOf<String>()
                     for (header in headers) {
@@ -176,7 +176,7 @@ class ExternalIntents {
             if (enabledSubUrl != null) putExtra("subtitles_location", enabledSubUrl)*/
 
             // headers
-            val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
+            val headers = video.headers ?: (source as? HttpAnimeSource)?.headers
             if (headers != null) {
                 var headersArray = arrayOf<String>()
                 for (header in headers) {
@@ -267,7 +267,7 @@ class ExternalIntents {
     private val getTracks: GetAnimeTracks = Injekt.get()
     private val insertTrack: InsertAnimeTrack = Injekt.get()
     private val downloadManager: AnimeDownloadManager by injectLazy()
-    private val delayedTrackingStore: DelayedTrackingStore = Injekt.get()
+    private val delayedTrackingStore: DelayedAnimeTrackingStore = Injekt.get()
     private val playerPreferences: PlayerPreferences = Injekt.get()
     private val downloadPreferences: DownloadPreferences = Injekt.get()
     private val trackPreferences: TrackPreferences = Injekt.get()
@@ -354,7 +354,7 @@ class ExternalIntents {
                                     insertTrack.await(updatedTrack)
                                 } else {
                                     delayedTrackingStore.addAnimeItem(updatedTrack)
-                                    DelayedTrackingUpdateJob.setupTask(context)
+                                    DelayedAnimeTrackingUpdateJob.setupTask(context)
                                 }
                             }
                         }

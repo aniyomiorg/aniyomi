@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.tachiyomi.data.database.models.TrackImpl
+import eu.kanade.tachiyomi.data.database.models.manga.MangaTrackImpl
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
 
@@ -29,8 +29,8 @@ data class BackupTracking(
     @ProtoNumber(100) var mediaId: Long = 0,
 ) {
 
-    fun getTrackingImpl(): TrackImpl {
-        return TrackImpl().apply {
+    fun getTrackingImpl(): MangaTrackImpl {
+        return MangaTrackImpl().apply {
             sync_id = this@BackupTracking.syncId
             @Suppress("DEPRECATION")
             media_id = if (this@BackupTracking.mediaIdInt != 0) {

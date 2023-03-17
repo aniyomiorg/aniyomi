@@ -3,15 +3,15 @@
     <string name="categories">Kategori Manga</string>
     <string name="general_categories">Kategori</string>
     <string name="anime_categories">Kategori Anime</string>
-    <string name="manga_anime">Entri pustaka</string>
+    <string name="entries">Entri pustaka</string>
     <string name="chapters_episodes">chapter dan episode</string>
     <string name="episodes">Episode</string>
     <string name="backup_settings_warning">Peringatan: Backup-an ini akan menyimpan kata sandi anda, jangan bagikan file backup ini!</string>
-    <string name="label_mangalibrary">Manga</string>
-    <string name="label_animelib">Anime</string>
+    <string name="label_manga_library">Manga</string>
+    <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
-    <string name="label_mangasources">Sumber Manga</string>
-    <string name="label_animesources">Sumber Anime</string>
+    <string name="label_manga_sources">Sumber Manga</string>
+    <string name="label_anime_sources">Sumber Anime</string>
     <string name="pref_bottom_nav_no_history">Pindahkan Histori ke banyak tab</string>
     <string name="pref_bottom_nav_no_updates">Pindahkan Update ke banyak tab</string>
     <string name="pref_bottom_nav_no_manga">Pindahkan Manga ke banyak tab</string>
@@ -58,8 +58,8 @@
     <string name="pref_library_update_show_tab_badge">Tampilkan jumlah yang belum dibaca pada ikon Pembaruan</string>
     <string name="default_category">Kategori bawaan</string>
     <string name="default_anime_category">Kategori anime standar default</string>
-    <string name="pref_library_update_categories_details">Manga dalam kategori yang dikecualikan tidak akan diperbarui meskipun masuk dalam kategori yang disertakan.</string>
-    <string name="pref_animelib_update_categories_details">Anime dalam kategori dikecualikan tidak akan diperbarui bahkan jika mereka juga termasuk dalam kategori.</string>
+    <string name="pref_manga_library_update_categories_details">Manga dalam kategori yang dikecualikan tidak akan diperbarui meskipun masuk dalam kategori yang disertakan.</string>
+    <string name="pref_anime_library_update_categories_details">Anime dalam kategori dikecualikan tidak akan diperbarui bahkan jika mereka juga termasuk dalam kategori.</string>
     <string name="untrusted_extension_message">Ekstensi ini ditanda tangani dengan sertifikat yang tidak terpercaya dan belum diaktifkan.
 \n
 \nSebuah ekstensi berbahaya dapat membaca kredensial login Anda yang tersimpan pada Tachiyomi atau mengeksekusi kode berbahaya.
@@ -137,8 +137,8 @@
         <item quantity="other">%1$s episode</item>
     </plurals>
     <string name="delete_downloads_for_anime">hapus episode yang diunduh\?</string>
-    <string name="snack_add_to_library">Tambahkan manga ke pustaka\?</string>
-    <string name="snack_add_to_animelib">Tambahkan anime ke perpustakaan\?</string>
+    <string name="snack_add_to_manga_library">Tambahkan manga ke pustaka\?</string>
+    <string name="snack_add_to_anime_library">Tambahkan anime ke perpustakaan\?</string>
     <string name="display_mode_episode">Episode %1$s</string>
     <string name="episode_downloading_progress">Sedang mengunduh (%d%%)</string>
     <string name="download_error">Kesalahan</string>

@@ -8,7 +8,7 @@
     <string name="pref_update_only_completely_read">S nepročitanim poglavljima</string>
     <string name="pref_library_update_show_tab_badge">Prikaži broj nepročitanih na ikoni „Aktualiziranja”</string>
     <string name="default_category">Standardna kategorija</string>
-    <string name="pref_library_update_categories_details">Manga u isključenim kategorijama neće se aktualizirati čak niti ako se također nalaze u uključenim kategorijama.</string>
+    <string name="pref_manga_library_update_categories_details">Manga u isključenim kategorijama neće se aktualizirati čak niti ako se također nalaze u uključenim kategorijama.</string>
     <string name="untrusted_extension_message">Ovo proširenje potpisano je nepovjerljivim certifikatom i nije aktivirano.
 \n
 \nZlonamjerno proširenje može pročitati sve podatke za prijavu koji su spremljeni u programu Tachiyomi ili izvršiti proizvoljni kod.
@@ -28,7 +28,7 @@
     <string name="pref_refresh_library_tracking_summary">Aktualizira stanje, ocjenu i zadnje pročitano poglavlje iz usluga za praćenje</string>
     <string name="pref_incognito_mode_summary">Zaustavlja čitanje povijesti</string>
     <string name="manga_from_library">Manga iz biblioteke</string>
-    <string name="snack_add_to_library">Dodati manga u biblioteku\?</string>
+    <string name="snack_add_to_manga_library">Dodati manga u biblioteku\?</string>
     <string name="download_error">Greška</string>
     <string name="download_paused">Zaustavljeno</string>
     <string name="also_set_chapter_settings_for_library">Također primijeni na sve mange u mojoj biblioteci</string>

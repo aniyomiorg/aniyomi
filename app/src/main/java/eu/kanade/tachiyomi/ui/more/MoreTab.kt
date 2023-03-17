@@ -23,14 +23,14 @@ import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.more.MoreScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.animedownload.AnimeDownloadService
-import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.download.DownloadService
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
+import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.download.DownloadsTab
 import eu.kanade.tachiyomi.ui.history.HistoriesTab
-import eu.kanade.tachiyomi.ui.library.LibraryTab
+import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
 import eu.kanade.tachiyomi.ui.setting.SettingsScreen
 import eu.kanade.tachiyomi.ui.stats.StatsTab
 import eu.kanade.tachiyomi.ui.updates.UpdatesTab
@@ -92,11 +92,11 @@ private val libraryPreferences: LibraryPreferences by injectLazy()
 private val altOpen = when (libraryPreferences.bottomNavStyle().get()) {
     0 -> HistoriesTab(true)
     1 -> UpdatesTab(fromMore = true, inMiddle = false)
-    else -> LibraryTab
+    else -> MangaLibraryTab
 }
 
 private class MoreScreenModel(
-    private val downloadManager: DownloadManager = Injekt.get(),
+    private val downloadManager: MangaDownloadManager = Injekt.get(),
     private val animeDownloadManager: AnimeDownloadManager = Injekt.get(),
     preferences: BasePreferences = Injekt.get(),
 ) : ScreenModel {
@@ -111,7 +111,7 @@ private class MoreScreenModel(
         // Handle running/paused status change and queue progress updating
         coroutineScope.launchIO {
             combine(
-                DownloadService.isRunning,
+                MangaDownloadService.isRunning,
                 downloadManager.queue.updates,
             ) { isRunningManga, mangaDownloadQueue -> Pair(isRunningManga, mangaDownloadQueue.size) }
                 .collectLatest { (isDownloadingManga, mangaDownloadQueueSize) ->

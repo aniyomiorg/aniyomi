@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.animedownload.model.AnimeDownload
+import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import uy.kohesive.injekt.injectLazy
 
 enum class EpisodeDownloadAction {

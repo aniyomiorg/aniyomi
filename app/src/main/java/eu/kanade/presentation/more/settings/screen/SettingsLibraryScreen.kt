@@ -36,9 +36,9 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.commandiron.wheel_picker_compose.WheelPicker
-import eu.kanade.domain.category.interactor.GetAnimeCategories
-import eu.kanade.domain.category.interactor.GetCategories
-import eu.kanade.domain.category.interactor.ResetCategoryFlags
+import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
+import eu.kanade.domain.category.manga.interactor.GetMangaCategories
+import eu.kanade.domain.category.manga.interactor.ResetMangaCategoryFlags
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.category.visualName
@@ -46,7 +46,7 @@ import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.library.LibraryUpdateJob
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.preference.DEVICE_BATTERY_NOT_LOW
 import eu.kanade.tachiyomi.data.preference.DEVICE_CHARGING
 import eu.kanade.tachiyomi.data.preference.DEVICE_NETWORK_NOT_METERED
@@ -70,7 +70,7 @@ object SettingsLibraryScreen : SearchableSettings {
 
     @Composable
     override fun getPreferences(): List<Preference> {
-        val getCategories = remember { Injekt.get<GetCategories>() }
+        val getCategories = remember { Injekt.get<GetMangaCategories>() }
         val allCategories by getCategories.subscribe().collectAsState(initial = runBlocking { getCategories.await() })
         val getAnimeCategories = remember { Injekt.get<GetAnimeCategories>() }
         val allAnimeCategories by getAnimeCategories.subscribe().collectAsState(initial = runBlocking { getAnimeCategories.await() })
@@ -152,13 +152,13 @@ object SettingsLibraryScreen : SearchableSettings {
         val userCategoriesCount = allCategories.filterNot(Category::isSystemCategory).size
         val userAnimeCategoriesCount = allAnimeCategories.filterNot(Category::isSystemCategory).size
 
-        val defaultCategory by libraryPreferences.defaultCategory().collectAsState()
+        val defaultCategory by libraryPreferences.defaultMangaCategory().collectAsState()
         val selectedCategory = allCategories.find { it.id == defaultCategory.toLong() }
         val defaultAnimeCategory by libraryPreferences.defaultAnimeCategory().collectAsState()
         val selectedAnimeCategory = allAnimeCategories.find { it.id == defaultAnimeCategory.toLong() }
 
         // For default category
-        val mangaIds = listOf(libraryPreferences.defaultCategory().defaultValue()) +
+        val mangaIds = listOf(libraryPreferences.defaultMangaCategory().defaultValue()) +
             allCategories.fastMap { it.id.toInt() }
         val animeIds = listOf(libraryPreferences.defaultAnimeCategory().defaultValue()) +
             allAnimeCategories.fastMap { it.id.toInt() }
@@ -196,7 +196,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     onClick = { navigator.push(CategoriesTab(true)) },
                 ),
                 Preference.PreferenceItem.ListPreference(
-                    pref = libraryPreferences.defaultCategory(),
+                    pref = libraryPreferences.defaultMangaCategory(),
                     title = stringResource(R.string.default_category),
                     subtitle = selectedCategory?.visualName ?: stringResource(R.string.default_category_summary),
                     entries = mangaIds.zip(mangaLabels).toMap(),
@@ -207,7 +207,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     onValueChanged = {
                         if (!it) {
                             scope.launch {
-                                Injekt.get<ResetCategoryFlags>().await()
+                                Injekt.get<ResetMangaCategoryFlags>().await()
                             }
                         }
                         true
@@ -228,10 +228,10 @@ object SettingsLibraryScreen : SearchableSettings {
         val libraryUpdateIntervalPref = libraryPreferences.libraryUpdateInterval()
         val libraryUpdateInterval by libraryUpdateIntervalPref.collectAsState()
         val libraryUpdateDeviceRestrictionPref = libraryPreferences.libraryUpdateDeviceRestriction()
-        val libraryUpdateMangaRestrictionPref = libraryPreferences.libraryUpdateMangaRestriction()
+        val libraryUpdateMangaRestrictionPref = libraryPreferences.libraryUpdateItemRestriction()
 
-        val animelibUpdateCategoriesPref = libraryPreferences.animelibUpdateCategories()
-        val animelibUpdateCategoriesExcludePref = libraryPreferences.animelibUpdateCategoriesExclude()
+        val animelibUpdateCategoriesPref = libraryPreferences.animeLibraryUpdateCategories()
+        val animelibUpdateCategoriesExcludePref = libraryPreferences.animeLibraryUpdateCategoriesExclude()
 
         val includedAnime by animelibUpdateCategoriesPref.collectAsState()
         val excludedAnime by animelibUpdateCategoriesExcludePref.collectAsState()
@@ -239,7 +239,7 @@ object SettingsLibraryScreen : SearchableSettings {
         if (showAnimeDialog) {
             TriStateListDialog(
                 title = stringResource(R.string.anime_categories),
-                message = stringResource(R.string.pref_animelib_update_categories_details),
+                message = stringResource(R.string.pref_anime_library_update_categories_details),
                 items = allAnimeCategories,
                 initialChecked = includedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
                 initialInversed = excludedAnime.mapNotNull { id -> allAnimeCategories.find { it.id.toString() == id } },
@@ -253,8 +253,8 @@ object SettingsLibraryScreen : SearchableSettings {
             )
         }
 
-        val libraryUpdateCategoriesPref = libraryPreferences.libraryUpdateCategories()
-        val libraryUpdateCategoriesExcludePref = libraryPreferences.libraryUpdateCategoriesExclude()
+        val libraryUpdateCategoriesPref = libraryPreferences.mangaLibraryUpdateCategories()
+        val libraryUpdateCategoriesExcludePref = libraryPreferences.mangaLibraryUpdateCategoriesExclude()
 
         val includedManga by libraryUpdateCategoriesPref.collectAsState()
         val excludedManga by libraryUpdateCategoriesExcludePref.collectAsState()
@@ -262,7 +262,7 @@ object SettingsLibraryScreen : SearchableSettings {
         if (showMangaDialog) {
             TriStateListDialog(
                 title = stringResource(R.string.categories),
-                message = stringResource(R.string.pref_library_update_categories_details),
+                message = stringResource(R.string.pref_manga_library_update_categories_details),
                 items = allMangaCategories,
                 initialChecked = includedManga.mapNotNull { id -> allMangaCategories.find { it.id.toString() == id } },
                 initialInversed = excludedManga.mapNotNull { id -> allMangaCategories.find { it.id.toString() == id } },
@@ -290,7 +290,7 @@ object SettingsLibraryScreen : SearchableSettings {
                         168 to stringResource(R.string.update_weekly),
                     ),
                     onValueChanged = {
-                        LibraryUpdateJob.setupTask(context, it)
+                        MangaLibraryUpdateJob.setupTask(context, it)
                         true
                     },
                 ),
@@ -307,7 +307,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     ),
                     onValueChanged = {
                         // Post to event looper to allow the preference to be updated.
-                        ContextCompat.getMainExecutor(context).execute { LibraryUpdateJob.setupTask(context) }
+                        ContextCompat.getMainExecutor(context).execute { MangaLibraryUpdateJob.setupTask(context) }
                         true
                     },
                 ),

@@ -3,10 +3,10 @@ package eu.kanade.tachiyomi.data.backup
 import android.content.Context
 import android.net.Uri
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.AnimeSourceManager
 import eu.kanade.tachiyomi.data.backup.models.BackupSerializer
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
+import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import okio.buffer
 import okio.gzip
 import okio.source
@@ -14,8 +14,8 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 class BackupFileValidator(
-    private val sourceManager: SourceManager = Injekt.get(),
-    private val animesourceManager: AnimeSourceManager = Injekt.get(),
+    private val mangaSourceManager: MangaSourceManager = Injekt.get(),
+    private val animeSourceManager: AnimeSourceManager = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
 ) {
 
@@ -44,25 +44,25 @@ class BackupFileValidator(
         val sources = backup.backupSources.associate { it.sourceId to it.name }
         val animesources = backup.backupAnimeSources.associate { it.sourceId to it.name }
         val missingSources = sources
-            .filter { sourceManager.get(it.key) == null }
+            .filter { mangaSourceManager.get(it.key) == null }
             .values.map {
                 val id = it.toLongOrNull()
                 if (id == null) {
                     it
                 } else {
-                    sourceManager.getOrStub(id).toString()
+                    mangaSourceManager.getOrStub(id).toString()
                 }
             }
             .distinct()
             .sorted() +
             animesources
-                .filter { animesourceManager.get(it.key) == null }
+                .filter { animeSourceManager.get(it.key) == null }
                 .values.map {
                     val id = it.toLongOrNull()
                     if (id == null) {
                         it
                     } else {
-                        animesourceManager.getOrStub(id).toString()
+                        animeSourceManager.getOrStub(id).toString()
                     }
                 }
                 .distinct()

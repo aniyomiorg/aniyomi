@@ -75,7 +75,7 @@
         <item quantity="one">%d kategori</item>
         <item quantity="other">%d kategoritë</item>
     </plurals>
-    <string name="pref_library_update_categories_details">Regjistrimet në kategoritë e përjashtuara nuk do të përditësohen edhe nëse janë gjithashtu në kategoritë e përfshira.</string>
+    <string name="pref_manga_library_update_categories_details">Regjistrimet në kategoritë e përjashtuara nuk do të përditësohen edhe nëse janë gjithashtu në kategoritë e përfshira.</string>
     <string name="all">Të gjitha</string>
     <string name="none">Asnje</string>
     <string name="include">Përfshi: %s</string>
@@ -637,7 +637,7 @@
     <string name="in_library">Në bibliotekë</string>
     <string name="copied_to_clipboard">Kopjuar në kujtesën e fragmenteve:
 \n %1$s</string>
-    <string name="snack_add_to_library">Të shtohet në bibliotekë\?</string>
+    <string name="snack_add_to_manga_library">Të shtohet në bibliotekë\?</string>
     <string name="display_mode_chapter">Kapitulli %1$s</string>
     <string name="chapter_downloading_progress">Po shkarkohet (%1$d/%2$d)</string>
     <string name="chapter_error">Gabim</string>

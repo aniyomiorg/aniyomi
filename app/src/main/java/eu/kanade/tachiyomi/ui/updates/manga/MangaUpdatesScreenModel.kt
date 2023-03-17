@@ -11,23 +11,23 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.prefs.asState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.core.util.insertSeparators
-import eu.kanade.domain.chapter.interactor.GetChapter
-import eu.kanade.domain.chapter.interactor.SetReadStatus
-import eu.kanade.domain.chapter.interactor.UpdateChapter
-import eu.kanade.domain.chapter.model.ChapterUpdate
+import eu.kanade.domain.entries.manga.interactor.GetManga
+import eu.kanade.domain.items.chapter.interactor.GetChapter
+import eu.kanade.domain.items.chapter.interactor.SetReadStatus
+import eu.kanade.domain.items.chapter.interactor.UpdateChapter
+import eu.kanade.domain.items.chapter.model.ChapterUpdate
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.manga.interactor.GetManga
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.domain.updates.interactor.GetUpdates
-import eu.kanade.domain.updates.model.UpdatesWithRelations
+import eu.kanade.domain.updates.manga.interactor.GetMangaUpdates
+import eu.kanade.domain.updates.manga.model.MangaUpdatesWithRelations
 import eu.kanade.presentation.components.ChapterDownloadAction
-import eu.kanade.presentation.updates.UpdatesUiModel
-import eu.kanade.tachiyomi.data.download.DownloadCache
-import eu.kanade.tachiyomi.data.download.DownloadManager
-import eu.kanade.tachiyomi.data.download.DownloadService
-import eu.kanade.tachiyomi.data.download.model.Download
-import eu.kanade.tachiyomi.data.library.LibraryUpdateService
-import eu.kanade.tachiyomi.source.SourceManager
+import eu.kanade.presentation.updates.manga.MangaUpdatesUiModel
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
+import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateService
+import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.toDateKey
@@ -51,12 +51,12 @@ import java.util.Calendar
 import java.util.Date
 
 class MangaUpdatesScreenModel(
-    private val sourceManager: SourceManager = Injekt.get(),
-    private val downloadManager: DownloadManager = Injekt.get(),
-    private val downloadCache: DownloadCache = Injekt.get(),
+    private val sourceManager: MangaSourceManager = Injekt.get(),
+    private val downloadManager: MangaDownloadManager = Injekt.get(),
+    private val downloadCache: MangaDownloadCache = Injekt.get(),
     private val updateChapter: UpdateChapter = Injekt.get(),
     private val setReadStatus: SetReadStatus = Injekt.get(),
-    private val getUpdates: GetUpdates = Injekt.get(),
+    private val getUpdates: GetMangaUpdates = Injekt.get(),
     private val getManga: GetManga = Injekt.get(),
     private val getChapter: GetChapter = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
@@ -109,7 +109,7 @@ class MangaUpdatesScreenModel(
         }
     }
 
-    private fun List<UpdatesWithRelations>.toUpdateItems(): List<UpdatesItem> {
+    private fun List<MangaUpdatesWithRelations>.toUpdateItems(): List<MangaUpdatesItem> {
         return this.map {
             val activeDownload = downloadManager.getQueuedDownloadOrNull(it.chapterId)
             val downloaded = downloadManager.isChapterDownloaded(
@@ -120,10 +120,10 @@ class MangaUpdatesScreenModel(
             )
             val downloadState = when {
                 activeDownload != null -> activeDownload.status
-                downloaded -> Download.State.DOWNLOADED
-                else -> Download.State.NOT_DOWNLOADED
+                downloaded -> MangaDownload.State.DOWNLOADED
+                else -> MangaDownload.State.NOT_DOWNLOADED
             }
-            UpdatesItem(
+            MangaUpdatesItem(
                 update = it,
                 downloadStateProvider = { downloadState },
                 downloadProgressProvider = { activeDownload?.progress ?: 0 },
@@ -133,7 +133,7 @@ class MangaUpdatesScreenModel(
     }
 
     fun updateLibrary(): Boolean {
-        val started = LibraryUpdateService.start(Injekt.get<Application>())
+        val started = MangaLibraryUpdateService.start(Injekt.get<Application>())
         coroutineScope.launch {
             _events.send(Event.LibraryUpdateTriggered(started))
         }
@@ -145,7 +145,7 @@ class MangaUpdatesScreenModel(
      *
      * @param download download object containing progress.
      */
-    private fun updateDownloadState(download: Download) {
+    private fun updateDownloadState(download: MangaDownload) {
         mutableState.update { state ->
             val newItems = state.items.toMutableList().apply {
                 val modifiedIndex = indexOfFirst { it.update.chapterId == download.chapter.id }
@@ -164,14 +164,14 @@ class MangaUpdatesScreenModel(
         }
     }
 
-    fun downloadChapters(items: List<UpdatesItem>, action: ChapterDownloadAction) {
+    fun downloadChapters(items: List<MangaUpdatesItem>, action: ChapterDownloadAction) {
         if (items.isEmpty()) return
         coroutineScope.launch {
             when (action) {
                 ChapterDownloadAction.START -> {
                     downloadChapters(items)
-                    if (items.any { it.downloadStateProvider() == Download.State.ERROR }) {
-                        DownloadService.start(Injekt.get<Application>())
+                    if (items.any { it.downloadStateProvider() == MangaDownload.State.ERROR }) {
+                        MangaDownloadService.start(Injekt.get<Application>())
                     }
                 }
                 ChapterDownloadAction.START_NOW -> {
@@ -197,7 +197,7 @@ class MangaUpdatesScreenModel(
     private fun cancelDownload(chapterId: Long) {
         val activeDownload = downloadManager.getQueuedDownloadOrNull(chapterId) ?: return
         downloadManager.cancelQueuedDownloads(listOf(activeDownload))
-        updateDownloadState(activeDownload.apply { status = Download.State.NOT_DOWNLOADED })
+        updateDownloadState(activeDownload.apply { status = MangaDownload.State.NOT_DOWNLOADED })
     }
 
     /**
@@ -205,7 +205,7 @@ class MangaUpdatesScreenModel(
      * @param updates the list of selected updates.
      * @param read whether to mark chapters as read or unread.
      */
-    fun markUpdatesRead(updates: List<UpdatesItem>, read: Boolean) {
+    fun markUpdatesRead(updates: List<MangaUpdatesItem>, read: Boolean) {
         coroutineScope.launchIO {
             setReadStatus.await(
                 read = read,
@@ -221,7 +221,7 @@ class MangaUpdatesScreenModel(
      * Bookmarks the given list of chapters.
      * @param updates the list of chapters to bookmark.
      */
-    fun bookmarkUpdates(updates: List<UpdatesItem>, bookmark: Boolean) {
+    fun bookmarkUpdates(updates: List<MangaUpdatesItem>, bookmark: Boolean) {
         coroutineScope.launchIO {
             updates
                 .filterNot { it.update.bookmark == bookmark }
@@ -235,7 +235,7 @@ class MangaUpdatesScreenModel(
      * Downloads the given list of chapters with the manager.
      * @param updatesItem the list of chapters to download.
      */
-    private fun downloadChapters(updatesItem: List<UpdatesItem>) {
+    private fun downloadChapters(updatesItem: List<MangaUpdatesItem>) {
         coroutineScope.launchNonCancellable {
             val groupedUpdates = updatesItem.groupBy { it.update.mangaId }.values
             for (updates in groupedUpdates) {
@@ -254,7 +254,7 @@ class MangaUpdatesScreenModel(
      *
      * @param updatesItem list of chapters
      */
-    fun deleteChapters(updatesItem: List<UpdatesItem>) {
+    fun deleteChapters(updatesItem: List<MangaUpdatesItem>) {
         coroutineScope.launchNonCancellable {
             updatesItem
                 .groupBy { it.update.mangaId }
@@ -269,12 +269,12 @@ class MangaUpdatesScreenModel(
         toggleAllSelection(false)
     }
 
-    fun showConfirmDeleteChapters(updatesItem: List<UpdatesItem>) {
+    fun showConfirmDeleteChapters(updatesItem: List<MangaUpdatesItem>) {
         setDialog(Dialog.DeleteConfirmation(updatesItem))
     }
 
     fun toggleSelection(
-        item: UpdatesItem,
+        item: MangaUpdatesItem,
         selected: Boolean,
         userSelected: Boolean = false,
         fromLongPress: Boolean = false,
@@ -371,7 +371,7 @@ class MangaUpdatesScreenModel(
     }
 
     sealed class Dialog {
-        data class DeleteConfirmation(val toDelete: List<UpdatesItem>) : Dialog()
+        data class DeleteConfirmation(val toDelete: List<MangaUpdatesItem>) : Dialog()
     }
 
     sealed class Event {
@@ -383,16 +383,16 @@ class MangaUpdatesScreenModel(
 @Immutable
 data class UpdatesState(
     val isLoading: Boolean = true,
-    val items: List<UpdatesItem> = emptyList(),
+    val items: List<MangaUpdatesItem> = emptyList(),
     val dialog: MangaUpdatesScreenModel.Dialog? = null,
 ) {
     val selected = items.filter { it.selected }
     val selectionMode = selected.isNotEmpty()
 
-    fun getUiModel(context: Context, relativeTime: Int): List<UpdatesUiModel> {
+    fun getUiModel(context: Context, relativeTime: Int): List<MangaUpdatesUiModel> {
         val dateFormat = UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get())
         return items
-            .map { UpdatesUiModel.Item(it) }
+            .map { MangaUpdatesUiModel.Item(it) }
             .insertSeparators { before, after ->
                 val beforeDate = before?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
                 val afterDate = after?.item?.update?.dateFetch?.toDateKey() ?: Date(0)
@@ -403,7 +403,7 @@ data class UpdatesState(
                             range = relativeTime,
                             dateFormat = dateFormat,
                         )
-                        UpdatesUiModel.Header(text)
+                        MangaUpdatesUiModel.Header(text)
                     }
                     // Return null to avoid adding a separator between two items.
                     else -> null
@@ -413,9 +413,9 @@ data class UpdatesState(
 }
 
 @Immutable
-data class UpdatesItem(
-    val update: UpdatesWithRelations,
-    val downloadStateProvider: () -> Download.State,
+data class MangaUpdatesItem(
+    val update: MangaUpdatesWithRelations,
+    val downloadStateProvider: () -> MangaDownload.State,
     val downloadProgressProvider: () -> Int,
     val selected: Boolean = false,
 )

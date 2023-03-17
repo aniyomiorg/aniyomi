@@ -6,11 +6,11 @@
     <string name="chapters_episodes">Capítulos e episódios</string>
     <string name="episodes">Episódios</string>
     <string name="backup_settings_warning">Aviso: o backup das configurações também armazenará suas senhas de rastreamento, então não compartilhe este arquivo de backup!</string>
-    <string name="label_mangalibrary">Mangá</string>
-    <string name="label_animelib">Anime</string>
+    <string name="label_manga_library">Mangá</string>
+    <string name="label_anime_library">Anime</string>
     <string name="label_manga">Mangá</string>
-    <string name="label_mangasources">Fontes de Mangá</string>
-    <string name="label_animesources">Fontes de Anime</string>
+    <string name="label_manga_sources">Fontes de Mangá</string>
+    <string name="label_anime_sources">Fontes de Anime</string>
     <string name="pref_bottom_nav_no_history">Mover Histórico para a guia Mais</string>
     <string name="pref_bottom_nav_no_updates">Mover Atualizações para a guia Mais</string>
     <string name="pref_bottom_nav_no_manga">Mover Mangá para a guia Mais</string>
@@ -47,8 +47,8 @@
     <string name="pref_library_update_show_tab_badge">Mostrar a contagem de não vistos/lidos no ícone de Atualizações</string>
     <string name="default_category">Categoria de mangá padrão</string>
     <string name="default_anime_category">Categoria de anime padrão</string>
-    <string name="pref_library_update_categories_details">Os mangás nas categorias excluídas não serão atualizados, mesmo que também estejam nas categorias incluídas.</string>
-    <string name="pref_animelib_update_categories_details">Os animes nas categorias excluídas não serão atualizados, mesmo que também estejam nas categorias incluídas.</string>
+    <string name="pref_manga_library_update_categories_details">Os mangás nas categorias excluídas não serão atualizados, mesmo que também estejam nas categorias incluídas.</string>
+    <string name="pref_anime_library_update_categories_details">Os animes nas categorias excluídas não serão atualizados, mesmo que também estejam nas categorias incluídas.</string>
     <string name="untrusted_extension_message">Esta extensão foi assinada com um certificado não confiável e não foi ativada.
 \n
 \nUma extensão maliciosa pode ler qualquer credencial de login armazenada no Aniyomi ou executar código arbitrário.
@@ -101,13 +101,12 @@
     <string name="local_invalid_episode_format">Formato de episódio inválido</string>
     <string name="unknown_studio">Estúdio desconhecido</string>
     <plurals name="anime_num_episodes">
-        <item quantity="one">1 episódio</item>
-        <item quantity="many">%1$s episódios</item>
-        <item quantity="other"/>
+        <item quantity="one">%1$s episódio</item>
+        <item quantity="other">%1$s episódios</item>
     </plurals>
     <string name="delete_downloads_for_anime">Excluir episódios baixados\?</string>
-    <string name="snack_add_to_library">Adicionar mangá à biblioteca\?</string>
-    <string name="snack_add_to_animelib">Adicionar anime à biblioteca\?</string>
+    <string name="snack_add_to_manga_library">Adicionar mangá à biblioteca\?</string>
+    <string name="snack_add_to_anime_library">Adicionar anime à biblioteca\?</string>
     <string name="display_mode_episode">Episódio %1$s</string>
     <string name="episode_downloading_progress">Baixando (%d%%)</string>
     <string name="download_error">Erro</string>

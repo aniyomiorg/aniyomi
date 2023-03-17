@@ -2,12 +2,12 @@ package eu.kanade.tachiyomi.util
 
 import android.content.Context
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.manga.interactor.UpdateManga
-import eu.kanade.domain.manga.model.Manga
-import eu.kanade.domain.manga.model.hasCustomCover
-import eu.kanade.domain.manga.model.isLocal
-import eu.kanade.tachiyomi.data.cache.CoverCache
-import eu.kanade.tachiyomi.source.LocalSource
+import eu.kanade.domain.entries.manga.interactor.UpdateManga
+import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.hasCustomCover
+import eu.kanade.domain.entries.manga.model.isLocal
+import eu.kanade.tachiyomi.data.cache.MangaCoverCache
+import eu.kanade.tachiyomi.source.manga.LocalMangaSource
 import eu.kanade.tachiyomi.source.model.SManga
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -17,7 +17,7 @@ import java.util.Date
 /**
  * Call before updating [Manga.thumbnail_url] to ensure old cover can be cleared from cache
  */
-fun Manga.prepUpdateCover(coverCache: CoverCache, remoteManga: SManga, refreshSameUrl: Boolean): Manga {
+fun Manga.prepUpdateCover(coverCache: MangaCoverCache, remoteManga: SManga, refreshSameUrl: Boolean): Manga {
     // Never refresh covers if the new url is null, as the current url has possibly become invalid
     val newUrl = remoteManga.thumbnail_url ?: return this
 
@@ -41,7 +41,7 @@ fun Manga.prepUpdateCover(coverCache: CoverCache, remoteManga: SManga, refreshSa
     }
 }
 
-fun Manga.removeCovers(coverCache: CoverCache = Injekt.get()): Manga {
+fun Manga.removeCovers(coverCache: MangaCoverCache = Injekt.get()): Manga {
     if (isLocal()) return this
     return if (coverCache.deleteFromCache(this, true) > 0) {
         return copy(coverLastModified = Date().time)
@@ -79,10 +79,10 @@ suspend fun Manga.editCover(
     context: Context,
     stream: InputStream,
     updateManga: UpdateManga = Injekt.get(),
-    coverCache: CoverCache = Injekt.get(),
+    coverCache: MangaCoverCache = Injekt.get(),
 ) {
     if (isLocal()) {
-        LocalSource.updateCover(context, toSManga(), stream)
+        LocalMangaSource.updateCover(context, toSManga(), stream)
         updateManga.awaitUpdateCoverLastModified(id)
     } else if (favorite) {
         coverCache.setCustomCoverToCache(this, stream)
