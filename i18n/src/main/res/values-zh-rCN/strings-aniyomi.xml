@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">分类</string>
+    <string name="manga_categories">分类</string>
     <string name="general_categories">分类</string>
     <string name="anime_categories">动画分类</string>
     <string name="entries">内容库中的条目</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Hạng mục</string>
+    <string name="manga_categories">Hạng mục</string>
     <string name="unlock_app">Mở Khoá Aniyomi</string>
     <string name="action_sort_last_manga_update">Cập nhật truyện lần trước</string>
     <string name="action_show_manga">Hiện truyện manga</string>

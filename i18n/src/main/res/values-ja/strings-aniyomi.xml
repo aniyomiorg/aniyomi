@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">漫画のカテゴリー</string>
+    <string name="manga_categories">漫画のカテゴリー</string>
     <string name="unlock_app">Aniyomiのロックを解除する</string>
     <string name="action_sort_last_manga_update">前回の更新確認</string>
     <string name="action_show_manga">項目を表示</string>
@@ -46,7 +46,6 @@
     <string name="label_animeextensions">アニメの拡張機能</string>
     <string name="label_migration_anime">アニメを移行</string>
     <string name="pref_waiting_time_aniskip_9">9秒</string>
-    <string name="manga_categories">漫画のカテゴリー</string>
     <string name="general_categories">カテゴリー</string>
     <string name="anime_categories">アニメのカテゴリー</string>
     <string name="episodes">話</string>

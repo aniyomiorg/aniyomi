@@ -261,7 +261,7 @@ object SettingsLibraryScreen : SearchableSettings {
         var showMangaDialog by rememberSaveable { mutableStateOf(false) }
         if (showMangaDialog) {
             TriStateListDialog(
-                title = stringResource(R.string.categories),
+                title = stringResource(R.string.manga_categories),
                 message = stringResource(R.string.pref_manga_library_update_categories_details),
                 items = allMangaCategories,
                 initialChecked = includedManga.mapNotNull { id -> allMangaCategories.find { it.id.toString() == id } },
@@ -330,7 +330,7 @@ object SettingsLibraryScreen : SearchableSettings {
                     onClick = { showAnimeDialog = true },
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.categories),
+                    title = stringResource(R.string.manga_categories),
                     subtitle = getCategoriesLabel(
                         allCategories = allMangaCategories,
                         included = includedManga,

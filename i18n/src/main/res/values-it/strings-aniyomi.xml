@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Categorie Manga</string>
+    <string name="manga_categories">Categorie Manga</string>
     <string name="general_categories">Categorie</string>
     <string name="anime_categories">Categorie Anime</string>
     <string name="chapters_episodes">Capitoli ed episodi</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">카테고리</string>
+    <string name="manga_categories">카테고리</string>
     <string name="general_categories">카테고리</string>
     <string name="anime_categories">애니메이션 카테고리</string>
     <string name="entries">서재 항목</string>

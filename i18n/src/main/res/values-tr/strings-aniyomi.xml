@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Kategoriler</string>
+    <string name="manga_categories">Kategoriler</string>
     <string name="general_categories">Kategoriler</string>
     <string name="anime_categories">Anime Kategorileri</string>
     <string name="entries">Kütüphane girdileri</string>

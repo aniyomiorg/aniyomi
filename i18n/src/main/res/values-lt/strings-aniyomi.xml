@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Kategorijos</string>
+    <string name="manga_categories">Kategorijos</string>
     <string name="unlock_app">Atrakinkite Anijomi</string>
     <string name="action_sort_last_manga_update">Paskutinis atnaujinimo patikrinimas</string>
     <string name="action_show_manga">Rodyti įrašą</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Категории</string>
+    <string name="manga_categories">Категории</string>
     <string name="unlock_app">Разблокировать Aniyomi</string>
     <string name="action_sort_last_manga_update">Последняя проверка обновления</string>
     <string name="action_show_manga">Показать запись</string>
@@ -43,18 +43,18 @@
     <string name="pref_bottom_nav_no_manga">Переместите Мангу на вкладку Дополнительно</string>
     <string name="action_sort_total_episodes">Всего эпизодов</string>
     <string name="label_manga">Манга</string>
-    <string name="label_mangasources">Источники манги</string>
+    <string name="label_manga_sources">Источники манги</string>
     <string name="backup_settings_warning">Предупреждение: При резервном копировании настроек также будут сохранены ваши пароли от треков, не предоставляйте общий доступ к этому файлу резервной копии!</string>
     <string name="pref_bottom_nav_no_updates">Переместить Обновления на вкладку Дополнительно</string>
     <string name="general_categories">Категории</string>
     <string name="anime_categories">Категории аниме</string>
     <string name="chapters_episodes">Главы и эпизоды</string>
     <string name="episodes">Эпизоды</string>
-    <string name="manga_anime">Записи в библиотеке</string>
-    <string name="label_animesources">Источники аниме</string>
+    <string name="entries">Записи в библиотеке</string>
+    <string name="label_anime_sources">Источники аниме</string>
     <string name="label_watched_episodes">Просмотрено</string>
     <string name="label_anime">Аниме</string>
     <string name="pref_bottom_nav_no_history">Переместить историю на вкладку Дополнительно</string>
-    <string name="label_animelib">Аниме</string>
-    <string name="label_mangalibrary">Манга</string>
+    <string name="label_anime_library">Аниме</string>
+    <string name="label_manga_library">Манга</string>
 </resources>

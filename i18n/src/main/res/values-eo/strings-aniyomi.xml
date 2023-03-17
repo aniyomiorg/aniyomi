@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Kategorioj</string>
+    <string name="manga_categories">Kategorioj</string>
     <string name="unlock_app">Malŝlosi Aniyomi-n</string>
     <string name="action_display_local_badge">Lokaj ŝildoj</string>
     <string name="default_category">Defaŭlta kategorio</string>

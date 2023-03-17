@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Kategorier</string>
+    <string name="manga_categories">Kategorier</string>
     <string name="unlock_app">Lås upp Aniyomi</string>
     <string name="action_sort_last_manga_update">Sista manga-uppdateringen</string>
     <string name="action_show_manga">Visa manga</string>

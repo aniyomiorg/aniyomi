@@ -47,7 +47,7 @@ object MangaMigrationFlags {
     }
 
     fun titles(manga: Manga?): Array<Int> {
-        val titles = arrayOf(R.string.chapters, R.string.categories).toMutableList()
+        val titles = arrayOf(R.string.chapters, R.string.manga_categories).toMutableList()
         if (manga != null) {
             if (runBlocking { getTracks.await(manga.id) }.isNotEmpty()) {
                 titles.add(R.string.track)

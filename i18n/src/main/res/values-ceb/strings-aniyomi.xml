@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Mga Kategoriya</string>
+    <string name="manga_categories">Mga Kategoriya</string>
     <string name="unlock_app">I-unlock ang Tachiyomi</string>
     <string name="action_sort_last_manga_update">Katapusan nga update sa manga</string>
     <string name="action_show_manga">Ipakita ang manga</string>

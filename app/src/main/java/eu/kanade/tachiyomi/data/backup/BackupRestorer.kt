@@ -145,7 +145,7 @@ class BackupRestorer(
         backupManager.restoreCategories(backupCategories)
 
         restoreProgress += 1
-        showRestoreProgress(restoreProgress, restoreAmount, context.getString(R.string.categories))
+        showRestoreProgress(restoreProgress, restoreAmount, context.getString(R.string.manga_categories))
     }
 
     private suspend fun restoreAnimeCategories(backupCategories: List<BackupCategory>) {

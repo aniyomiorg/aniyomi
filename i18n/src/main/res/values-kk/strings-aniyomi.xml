@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Санаттар</string>
+    <string name="manga_categories">Санаттар</string>
     <string name="unlock_app">Tachiyomi-ді бұғаттан босату</string>
     <string name="action_sort_last_manga_update">Соңғы жаңартуды тексеру</string>
     <string name="action_show_manga">Жазбаны көрсету</string>

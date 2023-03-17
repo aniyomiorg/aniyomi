@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">श्रेणियाँ</string>
+    <string name="manga_categories">श्रेणियाँ</string>
     <string name="unlock_app">अनलॉक Aniyomi</string>
     <string name="action_sort_last_manga_update">आखिरी किताब अद्यतन</string>
     <string name="action_show_manga">मंगा दिखाएँ</string>

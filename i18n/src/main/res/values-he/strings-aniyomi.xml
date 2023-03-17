@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">קטגוריות</string>
+    <string name="manga_categories">קטגוריות</string>
     <string name="unlock_app">שחרר את Aniyomi</string>
     <string name="action_sort_last_manga_update">עדכון אחרון</string>
     <string name="action_show_manga">הראה פריט</string>

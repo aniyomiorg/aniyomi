@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Kategorijas</string>
+    <string name="manga_categories">Kategorijas</string>
     <string name="unlock_app">Atslēgt Anijomi</string>
     <string name="action_sort_last_manga_update">Pēdējais manga atjauninājums</string>
     <string name="action_show_manga">Rādīt manga</string>

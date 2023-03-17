@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">کاتیگۆرییەکان</string>
+    <string name="manga_categories">کاتیگۆرییەکان</string>
     <string name="unlock_app">بکەرەوەTachiyomi</string>
     <string name="action_sort_last_manga_update">کۆتانوێکردنەوەی مانگا</string>
     <string name="action_show_manga">نیشاندانی مانگا</string>

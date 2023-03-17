@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">वर्गाः</string>
+    <string name="manga_categories">वर्गाः</string>
     <string name="unlock_app">ताचियोमिम् उद्घाटयतु</string>
     <string name="action_show_manga">माङ्गां दर्शयतु</string>
     <string name="action_display_local_badge">स्थानीयाः माङ्गाः</string>

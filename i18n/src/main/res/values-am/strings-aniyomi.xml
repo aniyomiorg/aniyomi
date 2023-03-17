@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">የማንጋ ምድቦች</string>
+    <string name="manga_categories">የማንጋ ምድቦች</string>
     <string name="unlock_app">ታቺዮሚን ይክፈቱ</string>
     <string name="default_category">ነባሪ ምድብ</string>
     <string name="untrusted_extension_message">ይህ ቅጥያ ባልታመነ የእውቅና ማረጋገጫ ተፈርሟል እና አልነቃም።

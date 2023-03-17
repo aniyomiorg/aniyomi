@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="categories">Kategoriar</string>
+<resources><string name="manga_categories">Kategoriar</string>
     <string name="unlock_app">Lås opp Tachiyomi</string>
     <string name="action_show_manga">Vis manga</string>
     <string name="action_display_local_badge">Lokal manga</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">ವರ್ಗಗಳು</string>
+    <string name="manga_categories">ವರ್ಗಗಳು</string>
     <string name="unlock_app">ತಚಿಯೋಮಿಯನ್ನು ಅನ್ಲಾಕ್ ಮಾಡಿ</string>
     <string name="action_display_local_badge">ಸ್ಥಳೀಯ ಬ್ಯಾಡ್ಜ್ ಗಳು</string>
     <string name="default_category">ಡೀಫಾಲ್ಟ್ ವರ್ಗ</string>

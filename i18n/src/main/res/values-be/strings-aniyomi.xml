@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Катэгорыі</string>
+    <string name="manga_categories">Катэгорыі</string>
     <string name="unlock_app">Разблакіраваць Aniyomi</string>
     <string name="action_sort_last_manga_update">Апошняе абнаўленне мангі</string>
     <string name="action_show_manga">Паказаць мангу</string>

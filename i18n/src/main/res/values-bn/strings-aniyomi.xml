@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">বিভাগসমূহ</string>
+    <string name="manga_categories">বিভাগসমূহ</string>
     <string name="unlock_app">তাচিওমি খুলুন</string>
     <string name="action_sort_last_manga_update">সর্বশেষ হালনাগাদ চেক</string>
     <string name="action_show_manga">মাঙ্গা দেখান</string>
@@ -42,20 +42,20 @@
     <string name="pref_library_anime_columns">প্রতি সারি এনিমে আইটেম</string>
     <string name="general_categories">ক্যাটাগরি</string>
     <string name="anime_categories">এনিমে বিভাগ</string>
-    <string name="manga_anime">লাইব্রেরি এন্ট্রি</string>
+    <string name="entries">লাইব্রেরি এন্ট্রি</string>
     <string name="chapters_episodes">অধ্যায় এবং পর্ব</string>
     <string name="episodes">পর্বগুলি</string>
     <string name="backup_settings_warning">সতর্কতা: ব্যাক আপ সেটিংস আপনার ট্র্যাক পাসওয়ার্ডগুলিও সংরক্ষণ করবে, এই ব্যাকআপ ফাইলটি শেয়ার করবেন না!</string>
-    <string name="label_mangalibrary">মাঙ্গা</string>
+    <string name="label_manga_library">মাঙ্গা</string>
     <string name="pref_bottom_nav_no_manga">মাঙ্গাকে আরও ট্যাবে সরান</string>
     <string name="action_sort_last_anime_update">শেষ অ্যানিমে আপডেট</string>
     <string name="pref_bottom_nav_no_history">আরও ট্যাবে ইতিহাস সরান</string>
     <string name="label_watched_episodes">দেখেছে</string>
     <string name="label_anime">এনিমে</string>
-    <string name="label_mangasources">মাঙ্গা সূত্র</string>
-    <string name="label_animesources">Anime Sources</string>
+    <string name="label_manga_sources">মাঙ্গা সূত্র</string>
+    <string name="label_anime_sources">Anime Sources</string>
     <string name="action_filter_unseen">অদেখা</string>
-    <string name="label_animelib">এনিমে</string>
+    <string name="label_anime_library">এনিমে</string>
     <string name="label_manga">মাঙ্গা</string>
     <string name="action_sort_last_seen">শেষ দেখা</string>
     <string name="label_watched_duration">দেখার সময়কাল</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Kategoriak</string>
+    <string name="manga_categories">Kategoriak</string>
     <string name="unlock_app">Desblokeatu Tachiyomi</string>
     <string name="action_show_manga">Manga erakutsi</string>
     <string name="action_display_local_badge">Manga lokala</string>

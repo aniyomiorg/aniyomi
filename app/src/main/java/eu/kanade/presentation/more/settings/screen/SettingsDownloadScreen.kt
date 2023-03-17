@@ -248,7 +248,7 @@ object SettingsDownloadScreen : SearchableSettings {
         var showDialog by rememberSaveable { mutableStateOf(false) }
         if (showDialog) {
             TriStateListDialog(
-                title = stringResource(R.string.categories),
+                title = stringResource(R.string.manga_categories),
                 message = stringResource(R.string.pref_download_new_categories_details),
                 items = allCategories,
                 initialChecked = included.mapNotNull { id -> allCategories.find { it.id.toString() == id } },
@@ -285,7 +285,7 @@ object SettingsDownloadScreen : SearchableSettings {
                     title = stringResource(R.string.pref_download_new),
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.categories),
+                    title = stringResource(R.string.manga_categories),
                     subtitle = getCategoriesLabel(
                         allCategories = allCategories,
                         included = included,

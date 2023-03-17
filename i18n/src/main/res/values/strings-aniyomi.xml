@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="categories">Manga Categories</string>
+    <string name="manga_categories">Manga Categories</string>
     <string name="general_categories">Categories</string>
     <string name="anime_categories">Anime Categories</string>
     <string name="entries">Library entries</string>

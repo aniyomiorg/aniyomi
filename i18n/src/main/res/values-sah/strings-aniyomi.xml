@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Бөлөхтөр</string>
+    <string name="manga_categories">Бөлөхтөр</string>
     <string name="unlock_app">Aniyomi арыйыыта</string>
     <string name="default_category">Куолутунан бөлөх</string>
     <string name="pref_manga_library_update_categories_details">Сотуллубут категориялар маангалара саҥардыллыа суоҕа, холбоммут категорияларга баарын үрдүнэн.</string>

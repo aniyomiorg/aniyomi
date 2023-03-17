@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">فئات المانغا</string>
+    <string name="manga_categories">فئات المانغا</string>
     <string name="unlock_app">افتح Aniyomi</string>
     <string name="action_sort_last_manga_update">آخر تحديث للمانجا</string>
     <string name="action_show_manga">عرض المانجا</string>

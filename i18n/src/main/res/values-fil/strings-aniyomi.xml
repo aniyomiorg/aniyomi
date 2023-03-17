@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Kategorya</string>
+    <string name="manga_categories">Kategorya</string>
     <string name="unlock_app">Buksan ang Aniyomi</string>
     <string name="action_sort_last_manga_update">Huling update ng pag-tsek</string>
     <string name="action_show_manga">Ipakita ang mga entry</string>

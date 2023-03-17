@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Manga Kategorie</string>
+    <string name="manga_categories">Manga Kategorie</string>
     <string name="unlock_app">Odemknout Aniyomi</string>
     <string name="action_sort_last_manga_update">Poslední kontrola aktualizace</string>
     <string name="action_show_manga">Zobrazit položku</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Kategoriat</string>
+    <string name="manga_categories">Kategoriat</string>
     <string name="unlock_app">Avaa Aniyomi</string>
     <string name="action_sort_last_manga_update">Viimeisin manga päivitys</string>
     <string name="action_show_manga">Näytä manga</string>

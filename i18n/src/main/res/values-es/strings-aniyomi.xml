@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Categorías de los mangas</string>
+    <string name="manga_categories">Categorías de los mangas</string>
     <string name="general_categories">Categorías</string>
     <string name="anime_categories">Categorías de Anime</string>
     <string name="entries">Entradas de la biblioteca</string>

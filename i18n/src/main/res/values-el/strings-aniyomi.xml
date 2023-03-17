@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Κατηγορίες</string>
+    <string name="manga_categories">Κατηγορίες</string>
     <string name="unlock_app">Ξεκλειδώστε το Aniyomi</string>
     <string name="action_sort_last_manga_update">Τελευταίος έλεγχος ενημέρωσης</string>
     <string name="action_show_manga">Εμφάνιση καταχώρισης</string>

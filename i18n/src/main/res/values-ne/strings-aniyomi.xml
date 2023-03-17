@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">वर्गहरू</string>
+    <string name="manga_categories">वर्गहरू</string>
     <string name="unlock_app">अनलक ताचियोमी</string>
     <string name="action_sort_last_manga_update">पछिल्लो माङ्गा अपडेट</string>
     <string name="action_show_manga">माङ्गा देखाउनुहोस्</string>

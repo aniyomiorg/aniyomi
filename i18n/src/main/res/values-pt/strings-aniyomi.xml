@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Categorias</string>
+    <string name="manga_categories">Categorias</string>
     <string name="general_categories">Categorias</string>
     <string name="anime_categories">Categorias de Anime</string>
     <string name="chapters_episodes">Capítulos e episódios</string>
@@ -183,7 +183,7 @@
     <string name="pref_player_smooth_seek_summary">Quando ativado, a busca não se concentrará nos quadros-chave, a levar a uma busca mais lenta mas mais precisa</string>
     <string name="pref_external_player_preference">Preferência do player externo</string>
     <string name="pref_backup_flags">Opções de backup</string>
-    <string name="manga_anime">Entradas da biblioteca</string>
+    <string name="entries">Entradas da biblioteca</string>
     <string name="action_play_internally">Reproduzir internamente</string>
     <string name="action_player_pip">Modo PiP</string>
     <string name="action_display_unseen_badge">Episódios não vistos</string>

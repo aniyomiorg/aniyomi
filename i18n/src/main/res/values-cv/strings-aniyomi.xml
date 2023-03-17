@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Пухмӑшсем</string>
+    <string name="manga_categories">Пухмӑшсем</string>
     <string name="unlock_app">Aniyomi уҫ</string>
     <string name="action_sort_last_manga_update">Юлашки ҫӗнетӗве тӗрӗслени</string>
     <string name="action_show_manga">Ҫырава кӑтарт</string>

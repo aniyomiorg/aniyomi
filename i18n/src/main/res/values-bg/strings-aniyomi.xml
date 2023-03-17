@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Категории</string>
+    <string name="manga_categories">Категории</string>
     <string name="unlock_app">Отключете Тачийоми</string>
     <string name="action_sort_last_manga_update">Последно обновяване</string>
     <string name="action_show_manga">Покажи манга</string>

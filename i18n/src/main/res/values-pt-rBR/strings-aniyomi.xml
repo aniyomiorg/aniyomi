@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Categorias de Mangá</string>
+    <string name="manga_categories">Categorias de Mangá</string>
     <string name="general_categories">Categorias</string>
     <string name="anime_categories">Categorias de Anime</string>
     <string name="chapters_episodes">Capítulos e episódios</string>
@@ -204,7 +204,7 @@
     <string name="label_migration_anime">Migrar Animes</string>
     <string name="settings">Configurações</string>
     <string name="pref_category_internal_player">Player interno</string>
-    <string name="manga_anime">Entradas da biblioteca</string>
+    <string name="entries">Entradas da biblioteca</string>
     <string name="stats_page">Página de status</string>
     <string name="download_notifier_download_paused_episodes">Download de episódio pausado</string>
     <string name="action_play_externally">Reproduzir externamente</string>

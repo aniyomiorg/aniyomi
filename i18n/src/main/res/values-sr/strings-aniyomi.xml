@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Kategorije</string>
+    <string name="manga_categories">Kategorije</string>
     <string name="unlock_app">Откључај Aniyomi</string>
     <string name="action_show_manga">Prikaži mange</string>
     <string name="action_display_local_badge">Lokalne mange</string>

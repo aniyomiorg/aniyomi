@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Kategorie</string>
+    <string name="manga_categories">Kategorie</string>
     <string name="unlock_app">Odblokuj Aniyomi</string>
     <string name="action_sort_last_manga_update">Ostatnia aktualizacja mangi</string>
     <string name="action_show_manga">Pokaż mangę</string>
@@ -59,10 +59,10 @@
     <string name="label_watched_episodes">Obejrzane</string>
     <string name="action_sort_last_checked">Ostatnio sprawdzony</string>
     <string name="action_next_episode">Następny odcinek</string>
-    <string name="label_mangasources">Źródła Mangi</string>
+    <string name="label_manga_sources">Źródła Mangi</string>
     <string name="action_show_anime">Pokaż anime</string>
     <string name="action_display_download_badge_anime">Pobrane odcinki</string>
-    <string name="label_animesources">Źródła Anime</string>
+    <string name="label_anime_sources">Źródła Anime</string>
     <string name="action_sort_last_seen">Ostatnio widziany</string>
     <string name="action_sort_episode_fetch_date">Data pobrania odcinka</string>
     <string name="action_mark_as_unseen">Oznacz jako nieobejrzane</string>

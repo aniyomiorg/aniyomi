@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="categories">Kategori Manga</string>
+    <string name="manga_categories">Kategori Manga</string>
     <string name="general_categories">Kategori</string>
     <string name="anime_categories">Kategori Anime</string>
     <string name="entries">Entri pustaka</string>
