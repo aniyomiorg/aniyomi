@@ -1469,8 +1469,6 @@ class PlayerActivity :
         }.joinToString(",")
 
         MPVLib.setOptionString("http-header-fields", httpHeaderString)
-        headers["user-agent"]?.let { MPVLib.setOptionString("user-agent", it) }
-        headers["referer"]?.let { MPVLib.setOptionString("referrer", it) }
 
         // need to fix the cache
         // MPVLib.setOptionString("cache-on-disk", "yes")
