@@ -32,37 +32,37 @@ fun Screen.mangaCategoryTab(): TabContent {
         searchEnabled = false,
         content = { contentPadding, _ ->
 
-            if (state is CategoryScreenState.Loading) {
+            if (state is MangaCategoryScreenState.Loading) {
                 LoadingScreen()
             } else {
-                val successState = state as CategoryScreenState.Success
+                val successState = state as MangaCategoryScreenState.Success
 
                 MangaCategoryScreen(
                     state = successState,
                     contentPadding = contentPadding,
-                    onClickCreate = { screenModel.showDialog(CategoryDialog.Create) },
-                    onClickRename = { screenModel.showDialog(CategoryDialog.Rename(it)) },
-                    onClickDelete = { screenModel.showDialog(CategoryDialog.Delete(it)) },
+                    onClickCreate = { screenModel.showDialog(MangaCategoryDialog.Create) },
+                    onClickRename = { screenModel.showDialog(MangaCategoryDialog.Rename(it)) },
+                    onClickDelete = { screenModel.showDialog(MangaCategoryDialog.Delete(it)) },
                     onClickMoveUp = screenModel::moveUp,
                     onClickMoveDown = screenModel::moveDown,
                 )
 
                 when (val dialog = successState.dialog) {
                     null -> {}
-                    CategoryDialog.Create -> {
+                    MangaCategoryDialog.Create -> {
                         CategoryCreateDialog(
                             onDismissRequest = screenModel::dismissDialog,
                             onCreate = { screenModel.createCategory(it) },
                         )
                     }
-                    is CategoryDialog.Rename -> {
+                    is MangaCategoryDialog.Rename -> {
                         CategoryRenameDialog(
                             onDismissRequest = screenModel::dismissDialog,
                             onRename = { screenModel.renameCategory(dialog.category, it) },
                             category = dialog.category,
                         )
                     }
-                    is CategoryDialog.Delete -> {
+                    is MangaCategoryDialog.Delete -> {
                         CategoryDeleteDialog(
                             onDismissRequest = screenModel::dismissDialog,
                             onDelete = { screenModel.deleteCategory(dialog.category.id) },
@@ -73,7 +73,7 @@ fun Screen.mangaCategoryTab(): TabContent {
 
                 LaunchedEffect(Unit) {
                     screenModel.events.collectLatest { event ->
-                        if (event is CategoryEvent.LocalizedMessage) {
+                        if (event is MangaCategoryEvent.LocalizedMessage) {
                             context.toast(event.stringRes)
                         }
                     }

@@ -25,9 +25,9 @@ class MangaCategoryScreenModel(
     private val deleteCategory: DeleteMangaCategory = Injekt.get(),
     private val reorderCategory: ReorderMangaCategory = Injekt.get(),
     private val renameCategory: RenameMangaCategory = Injekt.get(),
-) : StateScreenModel<CategoryScreenState>(CategoryScreenState.Loading) {
+) : StateScreenModel<MangaCategoryScreenState>(MangaCategoryScreenState.Loading) {
 
-    private val _events: Channel<CategoryEvent> = Channel()
+    private val _events: Channel<MangaCategoryEvent> = Channel()
     val events = _events.consumeAsFlow()
 
     init {
@@ -35,7 +35,7 @@ class MangaCategoryScreenModel(
             getCategories.subscribe()
                 .collectLatest { categories ->
                     mutableState.update {
-                        CategoryScreenState.Success(
+                        MangaCategoryScreenState.Success(
                             categories = categories.filterNot(Category::isSystemCategory),
                         )
                     }
@@ -46,8 +46,8 @@ class MangaCategoryScreenModel(
     fun createCategory(name: String) {
         coroutineScope.launch {
             when (createCategoryWithName.await(name)) {
-                is CreateMangaCategoryWithName.Result.InternalError -> _events.send(CategoryEvent.InternalError)
-                CreateMangaCategoryWithName.Result.NameAlreadyExistsError -> _events.send(CategoryEvent.CategoryWithNameAlreadyExists)
+                is CreateMangaCategoryWithName.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
+                CreateMangaCategoryWithName.Result.NameAlreadyExistsError -> _events.send(MangaCategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }
@@ -56,7 +56,7 @@ class MangaCategoryScreenModel(
     fun deleteCategory(categoryId: Long) {
         coroutineScope.launch {
             when (deleteCategory.await(categoryId = categoryId)) {
-                is DeleteMangaCategory.Result.InternalError -> _events.send(CategoryEvent.InternalError)
+                is DeleteMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
                 else -> {}
             }
         }
@@ -65,7 +65,7 @@ class MangaCategoryScreenModel(
     fun moveUp(category: Category) {
         coroutineScope.launch {
             when (reorderCategory.moveUp(category)) {
-                is ReorderMangaCategory.Result.InternalError -> _events.send(CategoryEvent.InternalError)
+                is ReorderMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
                 else -> {}
             }
         }
@@ -74,7 +74,7 @@ class MangaCategoryScreenModel(
     fun moveDown(category: Category) {
         coroutineScope.launch {
             when (reorderCategory.moveDown(category)) {
-                is ReorderMangaCategory.Result.InternalError -> _events.send(CategoryEvent.InternalError)
+                is ReorderMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
                 else -> {}
             }
         }
@@ -83,18 +83,18 @@ class MangaCategoryScreenModel(
     fun renameCategory(category: Category, name: String) {
         coroutineScope.launch {
             when (renameCategory.await(category, name)) {
-                is RenameMangaCategory.Result.InternalError -> _events.send(CategoryEvent.InternalError)
-                RenameMangaCategory.Result.NameAlreadyExistsError -> _events.send(CategoryEvent.CategoryWithNameAlreadyExists)
+                is RenameMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
+                RenameMangaCategory.Result.NameAlreadyExistsError -> _events.send(MangaCategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }
     }
 
-    fun showDialog(dialog: CategoryDialog) {
+    fun showDialog(dialog: MangaCategoryDialog) {
         mutableState.update {
             when (it) {
-                CategoryScreenState.Loading -> it
-                is CategoryScreenState.Success -> it.copy(dialog = dialog)
+                MangaCategoryScreenState.Loading -> it
+                is MangaCategoryScreenState.Success -> it.copy(dialog = dialog)
             }
         }
     }
@@ -102,35 +102,35 @@ class MangaCategoryScreenModel(
     fun dismissDialog() {
         mutableState.update {
             when (it) {
-                CategoryScreenState.Loading -> it
-                is CategoryScreenState.Success -> it.copy(dialog = null)
+                MangaCategoryScreenState.Loading -> it
+                is MangaCategoryScreenState.Success -> it.copy(dialog = null)
             }
         }
     }
 }
 
-sealed class CategoryDialog {
-    object Create : CategoryDialog()
-    data class Rename(val category: Category) : CategoryDialog()
-    data class Delete(val category: Category) : CategoryDialog()
+sealed class MangaCategoryDialog {
+    object Create : MangaCategoryDialog()
+    data class Rename(val category: Category) : MangaCategoryDialog()
+    data class Delete(val category: Category) : MangaCategoryDialog()
 }
 
-sealed class CategoryEvent {
-    sealed class LocalizedMessage(@StringRes val stringRes: Int) : CategoryEvent()
+sealed class MangaCategoryEvent {
+    sealed class LocalizedMessage(@StringRes val stringRes: Int) : MangaCategoryEvent()
     object CategoryWithNameAlreadyExists : LocalizedMessage(R.string.error_category_exists)
     object InternalError : LocalizedMessage(R.string.internal_error)
 }
 
-sealed class CategoryScreenState {
+sealed class MangaCategoryScreenState {
 
     @Immutable
-    object Loading : CategoryScreenState()
+    object Loading : MangaCategoryScreenState()
 
     @Immutable
     data class Success(
         val categories: List<Category>,
-        val dialog: CategoryDialog? = null,
-    ) : CategoryScreenState() {
+        val dialog: MangaCategoryDialog? = null,
+    ) : MangaCategoryScreenState() {
 
         val isEmpty: Boolean
             get() = categories.isEmpty()

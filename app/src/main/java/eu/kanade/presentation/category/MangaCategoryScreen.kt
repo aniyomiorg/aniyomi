@@ -15,11 +15,11 @@ import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.plus
 import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.category.manga.CategoryScreenState
+import eu.kanade.tachiyomi.ui.category.manga.MangaCategoryScreenState
 
 @Composable
 fun MangaCategoryScreen(
-    state: CategoryScreenState.Success,
+    state: MangaCategoryScreenState.Success,
     contentPadding: PaddingValues,
     onClickCreate: () -> Unit,
     onClickRename: (Category) -> Unit,

@@ -7,14 +7,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.category.anime.AnimeCategoryEvent
+import eu.kanade.tachiyomi.ui.category.anime.AnimeCategoryScreenModel
 import eu.kanade.tachiyomi.ui.category.anime.animeCategoryTab
+import eu.kanade.tachiyomi.ui.category.manga.MangaCategoryEvent
+import eu.kanade.tachiyomi.ui.category.manga.MangaCategoryScreenModel
 import eu.kanade.tachiyomi.ui.category.manga.mangaCategoryTab
 import eu.kanade.tachiyomi.ui.main.MainActivity
+import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.coroutines.flow.collectLatest
 
 data class CategoriesTab(
     private val isManga: Boolean = false,
@@ -36,6 +43,9 @@ data class CategoriesTab(
     override fun Content() {
         val context = LocalContext.current
 
+        val animeCategoryScreenModel = rememberScreenModel { AnimeCategoryScreenModel() }
+        val mangaCategoryScreenModel = rememberScreenModel { MangaCategoryScreenModel() }
+
         TabbedScreen(
             titleRes = R.string.general_categories,
             tabs = listOf(
@@ -47,6 +57,19 @@ data class CategoriesTab(
 
         LaunchedEffect(Unit) {
             (context as? MainActivity)?.ready = true
+        }
+
+        LaunchedEffect(Unit) {
+            mangaCategoryScreenModel.events.collectLatest { event ->
+                if (event is MangaCategoryEvent.LocalizedMessage) {
+                    context.toast(event.stringRes)
+                }
+            }
+            animeCategoryScreenModel.events.collectLatest { event ->
+                if (event is AnimeCategoryEvent.LocalizedMessage) {
+                    context.toast(event.stringRes)
+                }
+            }
         }
     }
 }
