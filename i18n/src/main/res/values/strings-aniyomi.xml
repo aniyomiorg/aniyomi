@@ -60,6 +60,7 @@
     <string name="action_start_download_internally">Use internal downloader</string>
     <string name="pref_player_summary">Progress control, internal player, external player</string>
     <string name="pref_bottom_nav_style">Bottom navigation style</string>
+    <string name="pref_default_home_tab_library">Set start screen to Manga Tab</string>
     <string name="pref_update_only_completely_read">With unseen episode(s)/unread chapter(s)</string>
     <string name="pref_library_update_show_tab_badge">Show unseen/unread count on Updates icon</string>
     <string name="default_category">Default manga category</string>

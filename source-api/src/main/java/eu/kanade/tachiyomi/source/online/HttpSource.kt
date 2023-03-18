@@ -4,7 +4,7 @@ import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.asObservableSuccess
 import eu.kanade.tachiyomi.network.newCachelessCallWithProgress
-import eu.kanade.tachiyomi.source.CatalogueMangaSource
+import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.MangasPage
 import eu.kanade.tachiyomi.source.model.Page
@@ -23,7 +23,7 @@ import java.security.MessageDigest
 /**
  * A simple implementation for sources from a website.
  */
-abstract class HttpSource : CatalogueMangaSource {
+abstract class HttpSource : CatalogueSource {
 
     /**
      * Network service.

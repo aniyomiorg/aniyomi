@@ -4,12 +4,12 @@ import android.content.Context
 import eu.kanade.domain.source.anime.model.AnimeSourceData
 import eu.kanade.domain.source.anime.repository.AnimeSourceDataRepository
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import kotlinx.coroutines.CoroutineScope
@@ -37,8 +37,8 @@ class AnimeSourceManager(
 
     private val stubSourcesMap = ConcurrentHashMap<Long, StubAnimeSource>()
 
-    val catalogueSources: Flow<List<CatalogueAnimeSource>> = sourcesMapFlow.map { it.values.filterIsInstance<CatalogueAnimeSource>() }
-    val onlineSources: Flow<List<HttpAnimeSource>> = catalogueSources.map { sources -> sources.filterIsInstance<HttpAnimeSource>() }
+    val catalogueSources: Flow<List<AnimeCatalogueSource>> = sourcesMapFlow.map { it.values.filterIsInstance<AnimeCatalogueSource>() }
+    val onlineSources: Flow<List<AnimeHttpSource>> = catalogueSources.map { sources -> sources.filterIsInstance<AnimeHttpSource>() }
 
     init {
         scope.launch {
@@ -76,9 +76,9 @@ class AnimeSourceManager(
         }
     }
 
-    fun getOnlineSources() = sourcesMapFlow.value.values.filterIsInstance<HttpAnimeSource>()
+    fun getOnlineSources() = sourcesMapFlow.value.values.filterIsInstance<AnimeHttpSource>()
 
-    fun getCatalogueSources() = sourcesMapFlow.value.values.filterIsInstance<CatalogueAnimeSource>()
+    fun getCatalogueSources() = sourcesMapFlow.value.values.filterIsInstance<AnimeCatalogueSource>()
 
     fun getStubSources(): List<StubAnimeSource> {
         val onlineSourceIds = getOnlineSources().map { it.id }

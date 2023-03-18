@@ -7,7 +7,7 @@ import eu.kanade.domain.entries.manga.model.COMIC_INFO_FILE
 import eu.kanade.domain.entries.manga.model.ComicInfo
 import eu.kanade.domain.entries.manga.model.copyFromComicInfo
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.CatalogueMangaSource
+import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.Filter
 import eu.kanade.tachiyomi.source.model.FilterList
@@ -39,7 +39,7 @@ import java.util.zip.ZipFile
 
 class LocalMangaSource(
     private val context: Context,
-) : CatalogueMangaSource, UnmeteredSource {
+) : CatalogueSource, UnmeteredSource {
 
     private val json: Json by injectLazy()
     private val xml: XML by injectLazy()

@@ -5,14 +5,14 @@ import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.items.episode.interactor.GetEpisode
 import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.animesource.model.Video
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import rx.subjects.PublishSubject
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 data class AnimeDownload(
-    val source: HttpAnimeSource,
+    val source: AnimeHttpSource,
     val anime: Anime,
     val episode: Episode,
     val changeDownloader: Boolean = false,
@@ -76,7 +76,7 @@ data class AnimeDownload(
         ): AnimeDownload? {
             val episode = getEpisode.await(chapterId) ?: return null
             val anime = getAnimeById.await(episode.animeId) ?: return null
-            val source = sourceManager.get(anime.source) as? HttpAnimeSource ?: return null
+            val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: return null
 
             return AnimeDownload(source, anime, episode)
         }

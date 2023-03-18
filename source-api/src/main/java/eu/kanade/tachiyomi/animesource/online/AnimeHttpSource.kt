@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.animesource.online
 
-import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 /**
  * A simple implementation for sources from a website.
  */
-abstract class HttpAnimeSource : CatalogueAnimeSource {
+abstract class AnimeHttpSource : AnimeCatalogueSource {
 
     /**
      * Network service.

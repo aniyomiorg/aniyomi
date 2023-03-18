@@ -6,7 +6,7 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.anime.interactor.GetAnime
 import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSearchItemResult
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.AnimeSearchScreenModel
@@ -40,7 +40,7 @@ class MigrateAnimeSearchScreenModel(
     val incognitoMode = preferences.incognitoMode()
     val lastUsedSourceId = sourcePreferences.lastUsedAnimeSource()
 
-    override fun getEnabledSources(): List<CatalogueAnimeSource> {
+    override fun getEnabledSources(): List<AnimeCatalogueSource> {
         val enabledLanguages = sourcePreferences.enabledLanguages().get()
         val disabledSources = sourcePreferences.disabledAnimeSources().get()
         val pinnedSources = sourcePreferences.pinnedAnimeSources().get()
@@ -58,13 +58,13 @@ class MigrateAnimeSearchScreenModel(
         }
     }
 
-    override fun updateItems(items: Map<CatalogueAnimeSource, AnimeSearchItemResult>) {
+    override fun updateItems(items: Map<AnimeCatalogueSource, AnimeSearchItemResult>) {
         mutableState.update {
             it.copy(items = items)
         }
     }
 
-    override fun getItems(): Map<CatalogueAnimeSource, AnimeSearchItemResult> {
+    override fun getItems(): Map<AnimeCatalogueSource, AnimeSearchItemResult> {
         return mutableState.value.items
     }
 
@@ -83,7 +83,7 @@ sealed class MigrateAnimeSearchDialog {
 data class MigrateAnimeSearchState(
     val anime: Anime? = null,
     val searchQuery: String? = null,
-    val items: Map<CatalogueAnimeSource, AnimeSearchItemResult> = emptyMap(),
+    val items: Map<AnimeCatalogueSource, AnimeSearchItemResult> = emptyMap(),
     val dialog: MigrateAnimeSearchDialog? = null,
 ) {
 

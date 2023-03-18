@@ -43,10 +43,10 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.episode.getEpisodeSort
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -85,6 +85,7 @@ class AnimeInfoScreenModel(
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val uiPreferences: UiPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
+    internal val playerPreferences: PlayerPreferences = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
@@ -122,6 +123,11 @@ class AnimeInfoScreenModel(
 
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedEpisodeIds: HashSet<Long> = HashSet()
+
+    internal var isFromChangeCategory: Boolean = false
+
+    internal val autoOpenTrack: Boolean
+        get() = successState?.trackingAvailable == true && trackPreferences.trackOnAddingToLibrary().get()
 
     /**
      * Helper function to update the UI state only if it's currently in success state
@@ -248,11 +254,6 @@ class AnimeInfoScreenModel(
                     }
                 }
             },
-            onAdded = {
-                if (trackPreferences.trackOnAddingToLibrary().get() && loggedServices.isNotEmpty()) {
-                    showTrackDialog()
-                }
-            },
         )
     }
 
@@ -261,7 +262,6 @@ class AnimeInfoScreenModel(
      */
     fun toggleFavorite(
         onRemoved: () -> Unit,
-        onAdded: () -> Unit,
         checkDuplicate: Boolean = true,
     ) {
         val state = successState ?: return
@@ -308,7 +308,6 @@ class AnimeInfoScreenModel(
                         val result = updateAnime.awaitUpdateFavorite(anime.id, true)
                         if (!result) return@launchIO
                         moveAnimeToCategory(defaultCategory)
-                        withUIContext { onAdded() }
                     }
 
                     // Automatic 'Default' or no categories
@@ -316,11 +315,13 @@ class AnimeInfoScreenModel(
                         val result = updateAnime.awaitUpdateFavorite(anime.id, true)
                         if (!result) return@launchIO
                         moveAnimeToCategory(null)
-                        withUIContext { onAdded() }
                     }
 
                     // Choose a category
-                    else -> promptChangeCategories()
+                    else -> {
+                        isFromChangeCategory = true
+                        promptChangeCategories()
+                    }
                 }
 
                 // Finally match with enhanced tracking when available
@@ -333,7 +334,7 @@ class AnimeInfoScreenModel(
                         launchIO {
                             try {
                                 service.match(anime)?.let { track ->
-                                    (service as TrackService).animeService.registerTracking(track, animeId)
+                                    (service as AnimeTrackService).registerTracking(track, animeId)
                                 }
                             } catch (e: Exception) {
                                 logcat(LogPriority.WARN, e) {
@@ -342,6 +343,9 @@ class AnimeInfoScreenModel(
                             }
                         }
                     }
+                if (autoOpenTrack) {
+                    showTrackDialog()
+                }
             }
         }
     }
@@ -658,7 +662,7 @@ class AnimeInfoScreenModel(
     }
 
     fun cancelDownload(episodeId: Long) {
-        val activeDownload = downloadManager.getQueuedDownloadOrNull(animeId) ?: return
+        val activeDownload = downloadManager.getQueuedDownloadOrNull(episodeId) ?: return
         downloadManager.cancelQueuedDownloads(listOf(activeDownload))
         updateDownloadState(activeDownload.apply { status = AnimeDownload.State.NOT_DOWNLOADED })
     }

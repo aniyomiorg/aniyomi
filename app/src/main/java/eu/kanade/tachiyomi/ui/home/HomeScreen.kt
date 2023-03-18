@@ -104,8 +104,15 @@ object HomeScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val defaultTab = if (libraryPreferences.isDefaultHomeTabLibraryManga().get() &&
+            libraryPreferences.bottomNavStyle().get() != 2
+        ) {
+            MangaLibraryTab
+        } else {
+            AnimeLibraryTab
+        }
         TabNavigator(
-            tab = AnimeLibraryTab,
+            tab = defaultTab,
         ) { tabNavigator ->
             // Provide usable navigator to content screen
             CompositionLocalProvider(LocalNavigator provides navigator) {

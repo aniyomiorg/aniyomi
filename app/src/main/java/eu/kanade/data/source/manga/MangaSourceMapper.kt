@@ -2,7 +2,7 @@ package eu.kanade.data.source.manga
 
 import eu.kanade.domain.source.manga.model.MangaSourceData
 import eu.kanade.domain.source.manga.model.Source
-import eu.kanade.tachiyomi.source.CatalogueMangaSource
+import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 
 val mangaSourceMapper: (eu.kanade.tachiyomi.source.MangaSource) -> Source = { source ->
@@ -15,7 +15,7 @@ val mangaSourceMapper: (eu.kanade.tachiyomi.source.MangaSource) -> Source = { so
     )
 }
 
-val catalogueMangaSourceMapper: (CatalogueMangaSource) -> Source = { source ->
+val catalogueMangaSourceMapper: (CatalogueSource) -> Source = { source ->
     mangaSourceMapper(source).copy(supportsLatest = source.supportsLatest)
 }
 

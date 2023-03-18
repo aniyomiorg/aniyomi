@@ -5,7 +5,7 @@ import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.FFprobeKit
 import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit
 
 class LocalAnimeSource(
     private val context: Context,
-) : CatalogueAnimeSource, UnmeteredSource {
+) : AnimeCatalogueSource, UnmeteredSource {
 
     private val json: Json by injectLazy()
 

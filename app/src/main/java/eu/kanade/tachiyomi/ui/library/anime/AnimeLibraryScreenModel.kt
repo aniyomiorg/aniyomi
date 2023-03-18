@@ -36,7 +36,7 @@ import eu.kanade.domain.track.anime.interactor.GetTracksPerAnime
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.library.LibraryToolbarTitle
 import eu.kanade.tachiyomi.animesource.model.SAnime
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
@@ -540,7 +540,7 @@ class AnimeLibraryScreenModel(
 
             if (deleteEpisodes) {
                 animeToDelete.forEach { anime ->
-                    val source = sourceManager.get(anime.source) as? HttpAnimeSource
+                    val source = sourceManager.get(anime.source) as? AnimeHttpSource
                     if (source != null) {
                         downloadManager.deleteAnime(anime, source)
                     }

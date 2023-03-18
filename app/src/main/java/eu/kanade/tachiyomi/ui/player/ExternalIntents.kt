@@ -30,7 +30,7 @@ import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.anime.toDomainEpisode
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
@@ -115,7 +115,7 @@ class ExternalIntents {
                 putExtra("position", lastSecondSeen.toInt())
                 putExtra("return_result", true)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val headers = video.headers ?: (source as? HttpAnimeSource)?.headers
+                val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
                 if (headers != null) {
                     var headersArray = arrayOf<String>()
                     for (header in headers) {
@@ -176,7 +176,7 @@ class ExternalIntents {
             if (enabledSubUrl != null) putExtra("subtitles_location", enabledSubUrl)*/
 
             // headers
-            val headers = video.headers ?: (source as? HttpAnimeSource)?.headers
+            val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
             if (headers != null) {
                 var headersArray = arrayOf<String>()
                 for (header in headers) {

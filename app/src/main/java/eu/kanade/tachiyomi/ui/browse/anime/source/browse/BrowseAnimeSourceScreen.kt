@@ -48,7 +48,7 @@ import eu.kanade.presentation.components.DuplicateAnimeDialog
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
@@ -94,13 +94,13 @@ data class BrowseAnimeSourceScreen(
         val onHelpClick = { uriHandler.openUri(LocalAnimeSource.HELP_URL) }
 
         val onWebViewClick = f@{
-            val source = screenModel.source as? HttpAnimeSource ?: return@f
+            val source = screenModel.source as? AnimeHttpSource ?: return@f
             val intent = WebViewActivity.newIntent(context, source.baseUrl, source.id, source.name)
             context.startActivity(intent)
         }
 
         LaunchedEffect(screenModel.source) {
-            assistUrl = (screenModel.source as? HttpAnimeSource)?.baseUrl
+            assistUrl = (screenModel.source as? AnimeHttpSource)?.baseUrl
         }
 
         Scaffold(

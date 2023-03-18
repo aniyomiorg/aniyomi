@@ -19,7 +19,7 @@ import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
@@ -272,7 +272,7 @@ class AnimeDownloader(
             return@launchIO
         }
 
-        val source = sourceManager.get(anime.source) as? HttpAnimeSource ?: return@launchIO
+        val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: return@launchIO
         val wasEmpty = queue.isEmpty()
         // Called in background thread, the operation can be slow with SAF.
         val episodesWithoutDir = async {
@@ -630,7 +630,7 @@ class AnimeDownloader(
      * @param tmpDir the temporary directory of the download.
      * @param filename the filename of the video.
      */
-    private fun downloadVideoExternal(video: Video, source: HttpAnimeSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
+    private fun downloadVideoExternal(video: Video, source: AnimeHttpSource, tmpDir: UniFile, filename: String): Observable<UniFile> {
         video.status = Video.State.DOWNLOAD_IMAGE
         video.progress = 0
         return Observable.just(tmpDir.createFile("$filename.mp4")).map {

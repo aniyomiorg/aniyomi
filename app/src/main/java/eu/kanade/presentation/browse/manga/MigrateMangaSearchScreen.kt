@@ -12,7 +12,7 @@ import eu.kanade.presentation.browse.GlobalSearchToolbar
 import eu.kanade.presentation.browse.manga.components.GlobalMangaSearchCardRow
 import eu.kanade.presentation.components.LazyColumn
 import eu.kanade.presentation.components.Scaffold
-import eu.kanade.tachiyomi.source.CatalogueMangaSource
+import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateMangaSearchState
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchItemResult
 import eu.kanade.tachiyomi.util.system.LocaleHelper
@@ -21,10 +21,10 @@ import eu.kanade.tachiyomi.util.system.LocaleHelper
 fun MigrateMangaSearchScreen(
     navigateUp: () -> Unit,
     state: MigrateMangaSearchState,
-    getManga: @Composable (CatalogueMangaSource, Manga) -> State<Manga>,
+    getManga: @Composable (CatalogueSource, Manga) -> State<Manga>,
     onChangeSearchQuery: (String?) -> Unit,
     onSearch: (String) -> Unit,
-    onClickSource: (CatalogueMangaSource) -> Unit,
+    onClickSource: (CatalogueSource) -> Unit,
     onClickItem: (Manga) -> Unit,
     onLongClickItem: (Manga) -> Unit,
 ) {
@@ -56,10 +56,10 @@ fun MigrateMangaSearchScreen(
 @Composable
 fun MigrateMangaSearchContent(
     sourceId: Long,
-    items: Map<CatalogueMangaSource, MangaSearchItemResult>,
+    items: Map<CatalogueSource, MangaSearchItemResult>,
     contentPadding: PaddingValues,
-    getManga: @Composable (CatalogueMangaSource, Manga) -> State<Manga>,
-    onClickSource: (CatalogueMangaSource) -> Unit,
+    getManga: @Composable (CatalogueSource, Manga) -> State<Manga>,
+    onClickSource: (CatalogueSource) -> Unit,
     onClickItem: (Manga) -> Unit,
     onLongClickItem: (Manga) -> Unit,
 ) {

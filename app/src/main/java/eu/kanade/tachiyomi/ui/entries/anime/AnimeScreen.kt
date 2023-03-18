@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -48,7 +49,7 @@ import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.anime.isLocalOrStub
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
@@ -56,9 +57,9 @@ import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearch
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackInfoDialogHomeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
+import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withIOContext
@@ -68,7 +69,8 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.launch
 import logcat.LogPriority
-import uy.kohesive.injekt.injectLazy
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 class AnimeScreen(
     private val animeId: Long,
@@ -97,7 +99,7 @@ class AnimeScreen(
         }
 
         val successState = state as AnimeScreenState.Success
-        val isAnimeHttpSource = remember { successState.source is HttpAnimeSource }
+        val isAnimeHttpSource = remember { successState.source is AnimeHttpSource }
 
         LaunchedEffect(successState.anime, screenModel.source) {
             if (isAnimeHttpSource) {
@@ -118,9 +120,9 @@ class AnimeScreen(
             onBackClicked = navigator::pop,
             onEpisodeClicked = { episode, alt ->
                 scope.launchIO {
-                    openEpisode(context, episode, alt)
+                    val extPlayer = screenModel.playerPreferences.alwaysUseExternalPlayer().get() != alt
+                    openEpisode(context, episode, extPlayer)
                 }
-                Unit
             },
             onDownloadEpisode = screenModel::runEpisodeDownloadActions.takeIf { !successState.source.isLocalOrStub() },
             onAddToLibraryClicked = {
@@ -135,9 +137,9 @@ class AnimeScreen(
             onRefresh = screenModel::fetchAllFromSource,
             onContinueWatching = {
                 scope.launchIO {
-                    continueWatching(context, screenModel.getNextUnseenEpisode())
+                    val extPlayer = screenModel.playerPreferences.alwaysUseExternalPlayer().get()
+                    continueWatching(context, screenModel.getNextUnseenEpisode(), extPlayer)
                 }
-                Unit
             },
             onSearch = { query, global -> scope.launch { performSearch(navigator, query, global) } },
             onCoverClicked = screenModel::showCoverDialog,
@@ -155,7 +157,13 @@ class AnimeScreen(
             onInvertSelection = screenModel::invertSelection,
         )
 
-        val onDismissRequest = { screenModel.dismissDialog() }
+        val onDismissRequest = {
+            screenModel.dismissDialog()
+            if (screenModel.autoOpenTrack && screenModel.isFromChangeCategory) {
+                screenModel.isFromChangeCategory = false
+                screenModel.showTrackDialog()
+            }
+        }
         when (val dialog = (state as? AnimeScreenState.Success)?.dialog) {
             null -> {}
             is AnimeInfoScreenModel.Dialog.ChangeCategory -> {
@@ -192,7 +200,7 @@ class AnimeScreen(
             }
             is AnimeInfoScreenModel.Dialog.DuplicateAnime -> DuplicateAnimeDialog(
                 onDismissRequest = onDismissRequest,
-                onConfirm = { screenModel.toggleFavorite(onRemoved = {}, onAdded = {}, checkDuplicate = false) },
+                onConfirm = { screenModel.toggleFavorite(onRemoved = {}, checkDuplicate = false) },
                 onOpenAnime = { navigator.push(AnimeScreen(dialog.duplicate.id)) },
                 duplicateFrom = screenModel.getSourceOrStub(dialog.duplicate),
             )
@@ -247,34 +255,27 @@ class AnimeScreen(
                 ChangeIntroLength(
                     anime = successState.anime,
                     onDismissRequest = onDismissRequest,
+                    defaultIntroLength = screenModel.playerPreferences.defaultIntroLength().get(),
                 )
             }
         }
     }
 
-    private suspend fun continueWatching(context: Context, unseenEpisode: Episode?) {
-        if (unseenEpisode != null) openEpisode(context, unseenEpisode)
-    }
-    private fun openEpisodeInternal(context: Context, animeId: Long, episodeId: Long) {
-        context.startActivity(PlayerActivity.newIntent(context, animeId, episodeId))
+    private suspend fun continueWatching(context: Context, unseenEpisode: Episode?, useExternalPlayer: Boolean) {
+        if (unseenEpisode != null) openEpisode(context, unseenEpisode, useExternalPlayer)
     }
 
-    private suspend fun openEpisodeExternal(context: Context, animeId: Long, episodeId: Long) {
-        context.startActivity(ExternalIntents.newIntent(context, animeId, episodeId))
-    }
-
-    private suspend fun openEpisode(context: Context, episode: Episode, altPlayer: Boolean = false) {
-        val playerPreferences: PlayerPreferences by injectLazy()
-        if (playerPreferences.alwaysUseExternalPlayer().get() != altPlayer) {
-            openEpisodeExternal(context, episode.animeId, episode.id)
+    private suspend fun openEpisode(context: Context, episode: Episode, useExternalPlayer: Boolean) {
+        if (useExternalPlayer) {
+            context.startActivity(ExternalIntents.newIntent(context, episode.animeId, episode.id))
         } else {
-            openEpisodeInternal(context, episode.animeId, episode.id)
+            context.startActivity(PlayerActivity.newIntent(context, episode.animeId, episode.id))
         }
     }
 
     private fun getAnimeUrl(anime_: Anime?, source_: AnimeSource?): String? {
         val anime = anime_ ?: return null
-        val source = source_ as? HttpAnimeSource ?: return null
+        val source = source_ as? AnimeHttpSource ?: return null
 
         return try {
             source.getAnimeUrl(anime.toSAnime())
@@ -324,7 +325,7 @@ class AnimeScreen(
         when (val previousController = navigator.items[navigator.size - 2]) {
             is HomeScreen -> {
                 navigator.pop()
-                previousController.search(query)
+                AnimeLibraryTab.search(query)
             }
             is BrowseAnimeSourceScreen -> {
                 navigator.pop()
@@ -344,7 +345,7 @@ class AnimeScreen(
         }
 
         val previousController = navigator.items[navigator.size - 2]
-        if (previousController is BrowseAnimeSourceScreen && source is HttpAnimeSource) {
+        if (previousController is BrowseAnimeSourceScreen && source is AnimeHttpSource) {
             navigator.pop()
             previousController.searchGenre(genreName)
         } else {
@@ -357,7 +358,7 @@ class AnimeScreen(
      */
     private fun copyAnimeUrl(context: Context, anime_: Anime?, source_: AnimeSource?) {
         val anime = anime_ ?: return
-        val source = source_ as? HttpAnimeSource ?: return
+        val source = source_ as? AnimeHttpSource ?: return
         val url = source.getAnimeUrl(anime.toSAnime())
         context.copyToClipboard(url, url)
     }
@@ -367,9 +368,10 @@ class AnimeScreen(
 fun ChangeIntroLength(
     anime: Anime,
     onDismissRequest: () -> Unit,
+    defaultIntroLength: Int,
 ) {
     val scope = rememberCoroutineScope()
-    val setAnimeViewerFlags: SetAnimeViewerFlags by injectLazy()
+    val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get()
     val titleText = R.string.action_change_intro_length
     var newLength = 0
     AlertDialog(
@@ -380,21 +382,29 @@ fun ChangeIntroLength(
         ),
         title = { Text(text = stringResource(titleText)) },
         text = {
-            Box {
-                WheelTextPicker(
-                    modifier = Modifier.align(Alignment.Center),
-                    texts = remember { 1..255 }.map { "$it s" },
-                    onScrollFinished = {
-                        newLength = it + 1
-                        null
-                    },
-                    startIndex = if (anime.viewerFlags > 0) {
-                        anime.viewerFlags.toInt() - 1
-                    } else {
-                        84
-                    },
-                )
-            }
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                content = {
+                    WheelTextPicker(
+                        modifier = Modifier.align(Alignment.Center),
+                        texts = remember { 1..255 }.map {
+                            stringResource(
+                                R.string.seconds_short,
+                                it,
+                            )
+                        },
+                        onScrollFinished = {
+                            newLength = it + 1
+                            null
+                        },
+                        startIndex = if (anime.viewerFlags > 0) {
+                            anime.viewerFlags.toInt() - 1
+                        } else {
+                            defaultIntroLength
+                        },
+                    )
+                },
+            )
         },
         confirmButton = {
             TextButton(
