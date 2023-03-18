@@ -1,10 +1,8 @@
 package eu.kanade.tachiyomi.ui.category.manga
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -16,12 +14,9 @@ import eu.kanade.presentation.category.components.CategoryRenameDialog
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.util.system.toast
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun Screen.mangaCategoryTab(): TabContent {
-    val context = LocalContext.current
     val navigator = LocalNavigator.currentOrThrow
     val screenModel = rememberScreenModel { MangaCategoryScreenModel() }
 
@@ -68,14 +63,6 @@ fun Screen.mangaCategoryTab(): TabContent {
                             onDelete = { screenModel.deleteCategory(dialog.category.id) },
                             category = dialog.category,
                         )
-                    }
-                }
-
-                LaunchedEffect(Unit) {
-                    screenModel.events.collectLatest { event ->
-                        if (event is MangaCategoryEvent.LocalizedMessage) {
-                            context.toast(event.stringRes)
-                        }
                     }
                 }
             }
