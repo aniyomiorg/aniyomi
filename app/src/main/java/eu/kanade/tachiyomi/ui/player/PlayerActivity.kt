@@ -49,7 +49,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
@@ -1455,7 +1455,7 @@ class PlayerActivity :
 
     private fun setHttpOptions(video: Video) {
         if (viewModel.isEpisodeOnline() != true) return
-        val source = viewModel.source as HttpAnimeSource
+        val source = viewModel.source as AnimeHttpSource
 
         val headers = video.headers?.toMultimap()
             ?.mapValues { it.value.firstOrNull() ?: "" }

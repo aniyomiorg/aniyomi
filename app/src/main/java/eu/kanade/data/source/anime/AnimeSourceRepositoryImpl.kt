@@ -5,7 +5,7 @@ import eu.kanade.domain.source.anime.model.AnimeSource
 import eu.kanade.domain.source.anime.model.AnimeSourcePagingSourceType
 import eu.kanade.domain.source.anime.model.AnimeSourceWithCount
 import eu.kanade.domain.source.anime.repository.AnimeSourceRepository
-import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
@@ -58,17 +58,17 @@ class AnimeSourceRepositoryImpl(
         query: String,
         filterList: AnimeFilterList,
     ): AnimeSourcePagingSourceType {
-        val source = sourceManager.get(sourceId) as CatalogueAnimeSource
+        val source = sourceManager.get(sourceId) as AnimeCatalogueSource
         return AnimeSourceSearchPagingSource(source, query, filterList)
     }
 
     override fun getPopularAnime(sourceId: Long): AnimeSourcePagingSourceType {
-        val source = sourceManager.get(sourceId) as CatalogueAnimeSource
+        val source = sourceManager.get(sourceId) as AnimeCatalogueSource
         return AnimeSourcePopularPagingSource(source)
     }
 
     override fun getLatestAnime(sourceId: Long): AnimeSourcePagingSourceType {
-        val source = sourceManager.get(sourceId) as CatalogueAnimeSource
+        val source = sourceManager.get(sourceId) as AnimeCatalogueSource
         return AnimeSourceLatestPagingSource(source)
     }
 }

@@ -4,7 +4,7 @@ import android.net.Uri
 import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
 import eu.kanade.tachiyomi.data.database.models.anime.toDomainEpisode
@@ -25,7 +25,7 @@ class EpisodeLoader {
             val isDownloaded = downloadManager.isEpisodeDownloaded(episode.name, episode.scanlator, anime.title, anime.source)
             return when {
                 isDownloaded -> isDownloaded(episode, anime, source, downloadManager)
-                source is HttpAnimeSource -> isHttp(episode, source)
+                source is AnimeHttpSource -> isHttp(episode, source)
                 source is LocalAnimeSource -> isLocal(episode)
                 else -> error("source not supported")
             }
@@ -43,7 +43,7 @@ class EpisodeLoader {
                 isDownloaded -> isDownloaded(episode, anime, source, downloadManager).map {
                     it.firstOrNull()
                 }
-                source is HttpAnimeSource -> isHttp(episode, source).map {
+                source is AnimeHttpSource -> isHttp(episode, source).map {
                     it.firstOrNull()
                 }
                 source is LocalAnimeSource -> isLocal(episode).map {
@@ -53,7 +53,7 @@ class EpisodeLoader {
             }
         }
 
-        private fun isHttp(episode: Episode, source: HttpAnimeSource): Observable<List<Video>> {
+        private fun isHttp(episode: Episode, source: AnimeHttpSource): Observable<List<Video>> {
             return source.fetchVideoList(episode)
                 .flatMapIterable { it }
                 .flatMap {

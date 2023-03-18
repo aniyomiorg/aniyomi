@@ -24,13 +24,13 @@ import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.EmptyScreenAction
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun BrowseAnimeSourceContent(
-    source: CatalogueAnimeSource?,
+    source: AnimeCatalogueSource?,
     animeList: LazyPagingItems<StateFlow<Anime>>,
     columns: GridCells,
     displayMode: LibraryDisplayMode,

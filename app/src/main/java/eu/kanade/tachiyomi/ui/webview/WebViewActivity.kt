@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import eu.kanade.presentation.webview.WebViewScreen
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
@@ -48,7 +48,7 @@ class WebViewActivity : BaseActivity() {
         val url = intent.extras!!.getString(URL_KEY) ?: return
         var headers = mutableMapOf<String, String>()
         val source = sourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? HttpSource
-        val animeSource = animeSourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? HttpAnimeSource
+        val animeSource = animeSourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? AnimeHttpSource
         if (source != null) {
             headers = source.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }.toMutableMap()
         } else if (animeSource != null) {

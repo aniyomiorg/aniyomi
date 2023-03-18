@@ -28,7 +28,7 @@ import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
 import eu.kanade.tachiyomi.data.database.models.anime.toDomainEpisode
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
@@ -251,7 +251,7 @@ class PlayerViewModel(
     fun isEpisodeOnline(): Boolean? {
         val anime = anime ?: return null
         val episode = currentEpisode ?: return null
-        return source is HttpAnimeSource && !EpisodeLoader.isDownloaded(episode, anime)
+        return source is AnimeHttpSource && !EpisodeLoader.isDownloaded(episode, anime)
     }
 
     suspend fun nextEpisode(): Pair<List<Video>?, String?>? {

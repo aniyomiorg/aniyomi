@@ -13,7 +13,7 @@ import eu.kanade.domain.entries.manga.model.toDomainManga
 import eu.kanade.domain.entries.manga.model.toMangaUpdate
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
-import eu.kanade.tachiyomi.source.CatalogueMangaSource
+import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
@@ -44,8 +44,8 @@ abstract class MangaSearchScreenModel<T>(
     private val sources by lazy { getSelectedSources() }
     private val pinnedSources by lazy { sourcePreferences.pinnedMangaSources().get() }
 
-    private val sortComparator = { map: Map<CatalogueMangaSource, MangaSearchItemResult> ->
-        compareBy<CatalogueMangaSource>(
+    private val sortComparator = { map: Map<CatalogueSource, MangaSearchItemResult> ->
+        compareBy<CatalogueSource>(
             { (map[it] as? MangaSearchItemResult.Success)?.isEmpty ?: true },
             { "${it.id}" !in pinnedSources },
             { "${it.name.lowercase()} (${it.lang})" },
@@ -53,7 +53,7 @@ abstract class MangaSearchScreenModel<T>(
     }
 
     @Composable
-    fun getManga(source: CatalogueMangaSource, initialManga: Manga): State<Manga> {
+    fun getManga(source: CatalogueSource, initialManga: Manga): State<Manga> {
         return produceState(initialValue = initialManga) {
             getManga.subscribe(initialManga.url, initialManga.source)
                 .collectLatest { manga ->
@@ -72,7 +72,7 @@ abstract class MangaSearchScreenModel<T>(
      * @param source to interact with
      * @param manga to initialize.
      */
-    private suspend fun initializeManga(source: CatalogueMangaSource, manga: Manga) {
+    private suspend fun initializeManga(source: CatalogueSource, manga: Manga) {
         if (manga.thumbnailUrl != null || manga.initialized) return
         withNonCancellableContext {
             try {
@@ -87,9 +87,9 @@ abstract class MangaSearchScreenModel<T>(
         }
     }
 
-    abstract fun getEnabledSources(): List<CatalogueMangaSource>
+    abstract fun getEnabledSources(): List<CatalogueSource>
 
-    fun getSelectedSources(): List<CatalogueMangaSource> {
+    fun getSelectedSources(): List<CatalogueSource> {
         val filter = extensionFilter
 
         val enabledSources = getEnabledSources()
@@ -111,16 +111,16 @@ abstract class MangaSearchScreenModel<T>(
             .filter { it.pkgName == filter }
             .flatMap { it.sources }
             .filter { it in enabledSources }
-            .filterIsInstance<CatalogueMangaSource>()
+            .filterIsInstance<CatalogueSource>()
     }
 
     abstract fun updateSearchQuery(query: String?)
 
-    abstract fun updateItems(items: Map<CatalogueMangaSource, MangaSearchItemResult>)
+    abstract fun updateItems(items: Map<CatalogueSource, MangaSearchItemResult>)
 
-    abstract fun getItems(): Map<CatalogueMangaSource, MangaSearchItemResult>
+    abstract fun getItems(): Map<CatalogueSource, MangaSearchItemResult>
 
-    fun getAndUpdateItems(function: (Map<CatalogueMangaSource, MangaSearchItemResult>) -> Map<CatalogueMangaSource, MangaSearchItemResult>) {
+    fun getAndUpdateItems(function: (Map<CatalogueSource, MangaSearchItemResult>) -> Map<CatalogueSource, MangaSearchItemResult>) {
         updateItems(function(getItems()))
     }
 

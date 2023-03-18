@@ -11,7 +11,7 @@ import coil.network.HttpException
 import coil.request.Options
 import coil.request.Parameters
 import eu.kanade.domain.entries.anime.model.AnimeCover
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher.Companion.USE_CUSTOM_COVER
 import eu.kanade.tachiyomi.data.database.models.anime.Anime
@@ -49,7 +49,7 @@ class AnimeCoverFetcher(
     private val coverFileLazy: Lazy<File?>,
     private val customCoverFileLazy: Lazy<File>,
     private val diskCacheKeyLazy: Lazy<String>,
-    private val sourceLazy: Lazy<HttpAnimeSource?>,
+    private val sourceLazy: Lazy<AnimeHttpSource?>,
     private val callFactoryLazy: Lazy<Call.Factory>,
     private val diskCacheLazy: Lazy<DiskCache>,
 ) : Fetcher {
@@ -277,7 +277,7 @@ class AnimeCoverFetcher(
                 coverFileLazy = lazy { coverCache.getCoverFile(data.thumbnail_url) },
                 customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.id) },
                 diskCacheKeyLazy = lazy { AnimeKeyer().key(data, options) },
-                sourceLazy = lazy { sourceManager.get(data.source) as? HttpAnimeSource },
+                sourceLazy = lazy { sourceManager.get(data.source) as? AnimeHttpSource },
                 callFactoryLazy = callFactoryLazy,
                 diskCacheLazy = diskCacheLazy,
             )
@@ -300,7 +300,7 @@ class AnimeCoverFetcher(
                 coverFileLazy = lazy { coverCache.getCoverFile(data.thumbnailUrl) },
                 customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.id) },
                 diskCacheKeyLazy = lazy { DomainAnimeKeyer().key(data, options) },
-                sourceLazy = lazy { sourceManager.get(data.source) as? HttpAnimeSource },
+                sourceLazy = lazy { sourceManager.get(data.source) as? AnimeHttpSource },
                 callFactoryLazy = callFactoryLazy,
                 diskCacheLazy = diskCacheLazy,
             )
@@ -323,7 +323,7 @@ class AnimeCoverFetcher(
                 coverFileLazy = lazy { coverCache.getCoverFile(data.url) },
                 customCoverFileLazy = lazy { coverCache.getCustomCoverFile(data.animeId) },
                 diskCacheKeyLazy = lazy { AnimeCoverKeyer().key(data, options) },
-                sourceLazy = lazy { sourceManager.get(data.sourceId) as? HttpAnimeSource },
+                sourceLazy = lazy { sourceManager.get(data.sourceId) as? AnimeHttpSource },
                 callFactoryLazy = callFactoryLazy,
                 diskCacheLazy = diskCacheLazy,
             )

@@ -35,8 +35,8 @@ import eu.kanade.domain.source.anime.interactor.GetRemoteAnime
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
@@ -101,7 +101,7 @@ class BrowseAnimeSourceScreenModel(
 
     var displayMode by sourcePreferences.sourceDisplayMode().asState(coroutineScope)
 
-    val source = sourceManager.get(sourceId) as CatalogueAnimeSource
+    val source = sourceManager.get(sourceId) as AnimeCatalogueSource
 
     init {
         mutableState.update {

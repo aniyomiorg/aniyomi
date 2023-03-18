@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch
 import androidx.compose.runtime.Immutable
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.source.CatalogueMangaSource
+import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import kotlinx.coroutines.flow.update
 import uy.kohesive.injekt.Injekt
@@ -27,7 +27,7 @@ class GlobalMangaSearchScreenModel(
         }
     }
 
-    override fun getEnabledSources(): List<CatalogueMangaSource> {
+    override fun getEnabledSources(): List<CatalogueSource> {
         val enabledLanguages = sourcePreferences.enabledLanguages().get()
         val disabledSources = sourcePreferences.disabledMangaSources().get()
         val pinnedSources = sourcePreferences.pinnedMangaSources().get()
@@ -44,13 +44,13 @@ class GlobalMangaSearchScreenModel(
         }
     }
 
-    override fun updateItems(items: Map<CatalogueMangaSource, MangaSearchItemResult>) {
+    override fun updateItems(items: Map<CatalogueSource, MangaSearchItemResult>) {
         mutableState.update {
             it.copy(items = items)
         }
     }
 
-    override fun getItems(): Map<CatalogueMangaSource, MangaSearchItemResult> {
+    override fun getItems(): Map<CatalogueSource, MangaSearchItemResult> {
         return mutableState.value.items
     }
 }
@@ -58,7 +58,7 @@ class GlobalMangaSearchScreenModel(
 @Immutable
 data class GlobalMangaSearchState(
     val searchQuery: String? = null,
-    val items: Map<CatalogueMangaSource, MangaSearchItemResult> = emptyMap(),
+    val items: Map<CatalogueSource, MangaSearchItemResult> = emptyMap(),
 ) {
 
     val progress: Int = items.count { it.value !is MangaSearchItemResult.Loading }

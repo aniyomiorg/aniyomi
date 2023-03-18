@@ -8,9 +8,9 @@ import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import dalvik.system.PathClassLoader
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.AnimeSourceFactory
-import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
 import eu.kanade.tachiyomi.util.lang.Hash
@@ -180,7 +180,7 @@ internal object AnimeExtensionLoader {
                 }
             }
 
-        val langs = sources.filterIsInstance<CatalogueAnimeSource>()
+        val langs = sources.filterIsInstance<AnimeCatalogueSource>()
             .map { it.lang }
             .toSet()
         val lang = when (langs.size) {

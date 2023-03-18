@@ -48,7 +48,7 @@ import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.anime.isLocalOrStub
 import eu.kanade.tachiyomi.ui.browse.anime.migration.search.MigrateAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
@@ -97,7 +97,7 @@ class AnimeScreen(
         }
 
         val successState = state as AnimeScreenState.Success
-        val isAnimeHttpSource = remember { successState.source is HttpAnimeSource }
+        val isAnimeHttpSource = remember { successState.source is AnimeHttpSource }
 
         LaunchedEffect(successState.anime, screenModel.source) {
             if (isAnimeHttpSource) {
@@ -274,7 +274,7 @@ class AnimeScreen(
 
     private fun getAnimeUrl(anime_: Anime?, source_: AnimeSource?): String? {
         val anime = anime_ ?: return null
-        val source = source_ as? HttpAnimeSource ?: return null
+        val source = source_ as? AnimeHttpSource ?: return null
 
         return try {
             source.getAnimeUrl(anime.toSAnime())
@@ -344,7 +344,7 @@ class AnimeScreen(
         }
 
         val previousController = navigator.items[navigator.size - 2]
-        if (previousController is BrowseAnimeSourceScreen && source is HttpAnimeSource) {
+        if (previousController is BrowseAnimeSourceScreen && source is AnimeHttpSource) {
             navigator.pop()
             previousController.searchGenre(genreName)
         } else {
@@ -357,7 +357,7 @@ class AnimeScreen(
      */
     private fun copyAnimeUrl(context: Context, anime_: Anime?, source_: AnimeSource?) {
         val anime = anime_ ?: return
-        val source = source_ as? HttpAnimeSource ?: return
+        val source = source_ as? AnimeHttpSource ?: return
         val url = source.getAnimeUrl(anime.toSAnime())
         context.copyToClipboard(url, url)
     }

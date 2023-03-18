@@ -6,7 +6,7 @@ import eu.kanade.domain.source.manga.repository.MangaSourceDataRepository
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
-import eu.kanade.tachiyomi.source.CatalogueMangaSource
+import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SChapter
@@ -38,7 +38,7 @@ class MangaSourceManager(
 
     private val stubSourcesMap = ConcurrentHashMap<Long, StubMangaSource>()
 
-    val catalogueSources: Flow<List<CatalogueMangaSource>> = sourcesMapFlow.map { it.values.filterIsInstance<CatalogueMangaSource>() }
+    val catalogueSources: Flow<List<CatalogueSource>> = sourcesMapFlow.map { it.values.filterIsInstance<CatalogueSource>() }
     val onlineSources: Flow<List<HttpSource>> = catalogueSources.map { sources -> sources.filterIsInstance<HttpSource>() }
 
     init {
@@ -79,7 +79,7 @@ class MangaSourceManager(
 
     fun getOnlineSources() = sourcesMapFlow.value.values.filterIsInstance<HttpSource>()
 
-    fun getCatalogueSources() = sourcesMapFlow.value.values.filterIsInstance<CatalogueMangaSource>()
+    fun getCatalogueSources() = sourcesMapFlow.value.values.filterIsInstance<CatalogueSource>()
 
     fun getStubSources(): List<StubMangaSource> {
         val onlineSourceIds = getOnlineSources().map { it.id }

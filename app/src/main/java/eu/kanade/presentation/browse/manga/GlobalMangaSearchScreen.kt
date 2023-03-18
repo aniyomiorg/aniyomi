@@ -18,7 +18,7 @@ import eu.kanade.presentation.components.LazyColumn
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.util.padding
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.CatalogueMangaSource
+import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchState
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchItemResult
 import eu.kanade.tachiyomi.util.system.LocaleHelper
@@ -29,8 +29,8 @@ fun GlobalMangaSearchScreen(
     navigateUp: () -> Unit,
     onChangeSearchQuery: (String?) -> Unit,
     onSearch: (String) -> Unit,
-    getManga: @Composable (CatalogueMangaSource, Manga) -> State<Manga>,
-    onClickSource: (CatalogueMangaSource) -> Unit,
+    getManga: @Composable (CatalogueSource, Manga) -> State<Manga>,
+    onClickSource: (CatalogueSource) -> Unit,
     onClickItem: (Manga) -> Unit,
     onLongClickItem: (Manga) -> Unit,
 ) {
@@ -60,10 +60,10 @@ fun GlobalMangaSearchScreen(
 
 @Composable
 fun GlobalSearchContent(
-    items: Map<CatalogueMangaSource, MangaSearchItemResult>,
+    items: Map<CatalogueSource, MangaSearchItemResult>,
     contentPadding: PaddingValues,
-    getManga: @Composable (CatalogueMangaSource, Manga) -> State<Manga>,
-    onClickSource: (CatalogueMangaSource) -> Unit,
+    getManga: @Composable (CatalogueSource, Manga) -> State<Manga>,
+    onClickSource: (CatalogueSource) -> Unit,
     onClickItem: (Manga) -> Unit,
     onLongClickItem: (Manga) -> Unit,
 ) {

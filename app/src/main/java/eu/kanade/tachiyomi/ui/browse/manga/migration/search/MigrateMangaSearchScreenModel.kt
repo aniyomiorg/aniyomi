@@ -6,7 +6,7 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.manga.interactor.GetManga
 import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.source.CatalogueMangaSource
+import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchItemResult
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchScreenModel
@@ -40,7 +40,7 @@ class MigrateSearchScreenModel(
     val incognitoMode = preferences.incognitoMode()
     val lastUsedSourceId = sourcePreferences.lastUsedMangaSource()
 
-    override fun getEnabledSources(): List<CatalogueMangaSource> {
+    override fun getEnabledSources(): List<CatalogueSource> {
         val enabledLanguages = sourcePreferences.enabledLanguages().get()
         val disabledSources = sourcePreferences.disabledMangaSources().get()
         val pinnedSources = sourcePreferences.pinnedMangaSources().get()
@@ -58,13 +58,13 @@ class MigrateSearchScreenModel(
         }
     }
 
-    override fun updateItems(items: Map<CatalogueMangaSource, MangaSearchItemResult>) {
+    override fun updateItems(items: Map<CatalogueSource, MangaSearchItemResult>) {
         mutableState.update {
             it.copy(items = items)
         }
     }
 
-    override fun getItems(): Map<CatalogueMangaSource, MangaSearchItemResult> {
+    override fun getItems(): Map<CatalogueSource, MangaSearchItemResult> {
         return mutableState.value.items
     }
 
@@ -83,7 +83,7 @@ sealed class MigrateMangaSearchDialog {
 data class MigrateMangaSearchState(
     val manga: Manga? = null,
     val searchQuery: String? = null,
-    val items: Map<CatalogueMangaSource, MangaSearchItemResult> = emptyMap(),
+    val items: Map<CatalogueSource, MangaSearchItemResult> = emptyMap(),
     val dialog: MigrateMangaSearchDialog? = null,
 ) {
 

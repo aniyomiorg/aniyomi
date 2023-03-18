@@ -7,7 +7,7 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.extension.anime.interactor.GetAnimeExtensionsByType
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -63,7 +63,7 @@ class AnimeExtensionsScreenModel(
                             extension.sources.any {
                                 it.name.contains(input, ignoreCase = true) ||
                                     it.id == input.toLongOrNull() ||
-                                    if (it is HttpAnimeSource) { it.baseUrl.contains(input, ignoreCase = true) } else false
+                                    if (it is AnimeHttpSource) { it.baseUrl.contains(input, ignoreCase = true) } else false
                             } || extension.name.contains(input, ignoreCase = true)
                         }
                         is AnimeExtension.Untrusted -> extension.name.contains(input, ignoreCase = true)

@@ -28,7 +28,7 @@ import eu.kanade.presentation.components.ExtendedFloatingActionButton
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.components.SearchToolbar
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.online.HttpAnimeSource
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
@@ -88,7 +88,7 @@ data class AnimeSourceSearchScreen(
                 snackbarHostState = snackbarHostState,
                 contentPadding = paddingValues,
                 onWebViewClick = {
-                    val source = screenModel.source as? HttpAnimeSource ?: return@BrowseAnimeSourceContent
+                    val source = screenModel.source as? AnimeHttpSource ?: return@BrowseAnimeSourceContent
                     val intent = WebViewActivity.newIntent(context, source.baseUrl, source.id, source.name)
                     context.startActivity(intent)
                 },

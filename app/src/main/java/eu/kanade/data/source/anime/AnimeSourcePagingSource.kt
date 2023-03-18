@@ -3,7 +3,7 @@ package eu.kanade.data.source.anime
 import androidx.paging.PagingState
 import eu.kanade.data.items.episode.NoEpisodesException
 import eu.kanade.domain.source.anime.model.AnimeSourcePagingSourceType
-import eu.kanade.tachiyomi.animesource.CatalogueAnimeSource
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -11,7 +11,7 @@ import eu.kanade.tachiyomi.util.lang.awaitSingle
 import eu.kanade.tachiyomi.util.lang.withIOContext
 
 abstract class AnimeSourcePagingSource(
-    protected val source: CatalogueAnimeSource,
+    protected val source: AnimeCatalogueSource,
 ) : AnimeSourcePagingSourceType() {
 
     abstract suspend fun requestNextPage(currentPage: Int): AnimesPage
@@ -44,19 +44,19 @@ abstract class AnimeSourcePagingSource(
     }
 }
 
-class AnimeSourceSearchPagingSource(source: CatalogueAnimeSource, val query: String, val filters: AnimeFilterList) : AnimeSourcePagingSource(source) {
+class AnimeSourceSearchPagingSource(source: AnimeCatalogueSource, val query: String, val filters: AnimeFilterList) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
         return source.fetchSearchAnime(currentPage, query, filters).awaitSingle()
     }
 }
 
-class AnimeSourcePopularPagingSource(source: CatalogueAnimeSource) : AnimeSourcePagingSource(source) {
+class AnimeSourcePopularPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
         return source.fetchPopularAnime(currentPage).awaitSingle()
     }
 }
 
-class AnimeSourceLatestPagingSource(source: CatalogueAnimeSource) : AnimeSourcePagingSource(source) {
+class AnimeSourceLatestPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
     override suspend fun requestNextPage(currentPage: Int): AnimesPage {
         return source.fetchLatestUpdates(currentPage).awaitSingle()
     }
