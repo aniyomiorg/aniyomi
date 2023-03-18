@@ -4,7 +4,7 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.TriStateFilter
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import eu.kanade.tachiyomi.source.manga.LocalMangaSource
+import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -212,7 +212,7 @@ fun SAnime.toDomainAnime(sourceId: Long): Anime {
     )
 }
 
-fun Anime.isLocal(): Boolean = source == LocalMangaSource.ID
+fun Anime.isLocal(): Boolean = source == LocalAnimeSource.ID
 
 fun Anime.hasCustomCover(coverCache: AnimeCoverCache = Injekt.get()): Boolean {
     return coverCache.getCustomCoverFile(id).exists()

@@ -4,8 +4,8 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -308,21 +308,25 @@ object SettingsPlayerScreen : SearchableSettings {
             onDismissRequest = onDismissRequest,
             title = { Text(text = stringResource(R.string.pref_intro_length)) },
             text = {
-                Row {
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    content = {
                         WheelTextPicker(
-                            texts = remember { 1..255 }.map { "$it" },
+                            modifier = Modifier.align(Alignment.Center),
+                            texts = remember { 1..255 }.map {
+                                stringResource(
+                                    R.string.seconds_short,
+                                    it,
+                                )
+                            },
                             onScrollFinished = {
                                 newLength = it
                                 null
                             },
                             startIndex = skipIntroLengthValue,
                         )
-                    }
-                }
+                    },
+                )
             },
             dismissButton = {
                 TextButton(onClick = onDismissRequest) {

@@ -70,7 +70,6 @@ import kotlinx.coroutines.launch
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import uy.kohesive.injekt.injectLazy
 import java.text.DateFormat
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -83,6 +82,7 @@ class MangaInfoScreenModel(
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val uiPreferences: UiPreferences = Injekt.get(),
+    private val trackPreferences: TrackPreferences = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
     private val sourceManager: MangaSourceManager = Injekt.get(),
     private val downloadManager: MangaDownloadManager = Injekt.get(),
@@ -122,6 +122,9 @@ class MangaInfoScreenModel(
     private val selectedChapterIds: HashSet<Long> = HashSet()
 
     internal var isFromChangeCategory: Boolean = false
+
+    internal val autoOpenTrack: Boolean
+        get() = successState?.trackingAvailable == true && trackPreferences.trackOnAddingToLibrary().get()
 
     /**
      * Helper function to update the UI state only if it's currently in success state
@@ -339,7 +342,7 @@ class MangaInfoScreenModel(
                             }
                         }
                     }
-                if (state.autoOpenTrack) {
+                if (autoOpenTrack) {
                     showTrackDialog()
                 }
             }
@@ -1038,10 +1041,6 @@ sealed class MangaScreenState {
 
         val trackingCount: Int
             get() = trackItems.count { it.track != null }
-
-        private val trackPreferences: TrackPreferences by injectLazy()
-        val autoOpenTrack: Boolean
-            get() = trackingAvailable && trackPreferences.trackOnAddingToLibrary().get()
 
         /**
          * Applies the view filters to the list of chapters obtained from the database.

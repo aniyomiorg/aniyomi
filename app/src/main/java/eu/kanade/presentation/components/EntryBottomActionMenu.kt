@@ -55,10 +55,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -82,6 +85,7 @@ fun EntryBottomActionMenu(
         exit = shrinkVertically(shrinkTowards = Alignment.Bottom),
     ) {
         val scope = rememberCoroutineScope()
+        val playerPreferences: PlayerPreferences = Injekt.get()
         Surface(
             modifier = modifier,
             shape = MaterialTheme.shapes.large.copy(bottomEnd = ZeroCornerSize, bottomStart = ZeroCornerSize),
@@ -176,7 +180,7 @@ fun EntryBottomActionMenu(
                         onClick = onDeleteClicked,
                     )
                 }
-                if (!isManga && onExternalClicked != null) {
+                if (!isManga && onExternalClicked != null && !playerPreferences.alwaysUseExternalPlayer().get()) {
                     Button(
                         title = stringResource(R.string.action_play_externally),
                         icon = Icons.Outlined.OpenInNew,
@@ -185,7 +189,7 @@ fun EntryBottomActionMenu(
                         onClick = onExternalClicked,
                     )
                 }
-                if (!isManga && onInternalClicked != null) {
+                if (!isManga && onInternalClicked != null && playerPreferences.alwaysUseExternalPlayer().get()) {
                     Button(
                         title = stringResource(R.string.action_play_internally),
                         icon = Icons.Outlined.Input,
