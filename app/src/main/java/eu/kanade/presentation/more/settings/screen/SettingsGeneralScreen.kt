@@ -72,6 +72,13 @@ object SettingsGeneralScreen : SearchableSettings {
             )
             add(
                 Preference.PreferenceItem.SwitchPreference(
+                    pref = libraryPrefs.isDefaultHomeTabLibraryManga(),
+                    title = stringResource(R.string.pref_default_home_tab_library),
+                    enabled = libraryPrefs.bottomNavStyle().get() != 2,
+                ),
+            )
+            add(
+                Preference.PreferenceItem.SwitchPreference(
                     pref = libraryPrefs.newShowUpdatesCount(),
                     title = stringResource(R.string.pref_library_update_show_tab_badge),
                 ),

@@ -19,6 +19,8 @@ class LibraryPreferences(
 
     fun bottomNavStyle() = preferenceStore.getInt("bottom_nav_style", 0)
 
+    fun isDefaultHomeTabLibraryManga() = preferenceStore.getBoolean("default_home_tab_library", false)
+
     fun libraryDisplayMode() = preferenceStore.getObject("pref_display_mode_library", LibraryDisplayMode.default, LibraryDisplayMode.Serializer::serialize, LibraryDisplayMode.Serializer::deserialize)
 
     fun librarySortingMode() = preferenceStore.getObject("library_sorting_mode", LibrarySort.default, LibrarySort.Serializer::serialize, LibrarySort.Serializer::deserialize)
