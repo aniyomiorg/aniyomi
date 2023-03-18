@@ -88,11 +88,11 @@ fun EntryBottomActionMenu(
             tonalElevation = 3.dp,
         ) {
             val haptic = LocalHapticFeedback.current
-            val confirm = remember { mutableStateListOf(false, false, false, false, false, false, false) }
+            val confirm = remember { mutableStateListOf(false, false, false, false, false, false, false, false, false) }
             var resetJob: Job? = remember { null }
             val onLongClickItem: (Int) -> Unit = { toConfirmIndex ->
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                (0 until 7).forEach { i -> confirm[i] = i == toConfirmIndex }
+                (0 until 9).forEach { i -> confirm[i] = i == toConfirmIndex }
                 resetJob?.cancel()
                 resetJob = scope.launch {
                     delay(1.seconds)
