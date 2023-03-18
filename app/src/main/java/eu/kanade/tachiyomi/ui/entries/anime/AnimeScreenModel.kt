@@ -43,7 +43,6 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
@@ -71,6 +70,7 @@ import kotlinx.coroutines.launch
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 import java.text.DateFormat
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -84,7 +84,6 @@ class AnimeInfoScreenModel(
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val uiPreferences: UiPreferences = Injekt.get(),
-    private val trackPreferences: TrackPreferences = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
@@ -122,6 +121,8 @@ class AnimeInfoScreenModel(
 
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedEpisodeIds: HashSet<Long> = HashSet()
+
+    internal var isFromChangeCategory: Boolean = false
 
     /**
      * Helper function to update the UI state only if it's currently in success state
@@ -248,11 +249,6 @@ class AnimeInfoScreenModel(
                     }
                 }
             },
-            onAdded = {
-                if (trackPreferences.trackOnAddingToLibrary().get() && loggedServices.isNotEmpty()) {
-                    showTrackDialog()
-                }
-            },
         )
     }
 
@@ -261,7 +257,6 @@ class AnimeInfoScreenModel(
      */
     fun toggleFavorite(
         onRemoved: () -> Unit,
-        onAdded: () -> Unit,
         checkDuplicate: Boolean = true,
     ) {
         val state = successState ?: return
@@ -308,7 +303,6 @@ class AnimeInfoScreenModel(
                         val result = updateAnime.awaitUpdateFavorite(anime.id, true)
                         if (!result) return@launchIO
                         moveAnimeToCategory(defaultCategory)
-                        withUIContext { onAdded() }
                     }
 
                     // Automatic 'Default' or no categories
@@ -316,11 +310,13 @@ class AnimeInfoScreenModel(
                         val result = updateAnime.awaitUpdateFavorite(anime.id, true)
                         if (!result) return@launchIO
                         moveAnimeToCategory(null)
-                        withUIContext { onAdded() }
                     }
 
                     // Choose a category
-                    else -> promptChangeCategories()
+                    else -> {
+                        isFromChangeCategory = true
+                        promptChangeCategories()
+                    }
                 }
 
                 // Finally match with enhanced tracking when available
@@ -333,7 +329,7 @@ class AnimeInfoScreenModel(
                         launchIO {
                             try {
                                 service.match(anime)?.let { track ->
-                                    (service as TrackService).animeService.registerTracking(track, animeId)
+                                    (service as AnimeTrackService).registerTracking(track, animeId)
                                 }
                             } catch (e: Exception) {
                                 logcat(LogPriority.WARN, e) {
@@ -342,6 +338,9 @@ class AnimeInfoScreenModel(
                             }
                         }
                     }
+                if (state.autoOpenTrack) {
+                    showTrackDialog()
+                }
             }
         }
     }
@@ -1049,6 +1048,10 @@ sealed class AnimeScreenState {
 
         val trackingCount: Int
             get() = trackItems.count { it.track != null }
+
+        private val trackPreferences: TrackPreferences by injectLazy()
+        val autoOpenTrack: Boolean
+            get() = trackingAvailable && trackPreferences.trackOnAddingToLibrary().get()
 
         /**
          * Applies the view filters to the list of chapters obtained from the database.

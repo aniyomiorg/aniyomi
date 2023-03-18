@@ -132,7 +132,13 @@ class MangaScreen(
             onInvertSelection = screenModel::invertSelection,
         )
 
-        val onDismissRequest = { screenModel.dismissDialog() }
+        val onDismissRequest = {
+            screenModel.dismissDialog()
+            if (successState.autoOpenTrack && screenModel.isFromChangeCategory) {
+                screenModel.isFromChangeCategory = false
+                screenModel.showTrackDialog()
+            }
+        }
         when (val dialog = (state as? MangaScreenState.Success)?.dialog) {
             null -> {}
             is MangaInfoScreenModel.Dialog.ChangeCategory -> {

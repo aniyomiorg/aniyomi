@@ -156,7 +156,13 @@ class AnimeScreen(
             onInvertSelection = screenModel::invertSelection,
         )
 
-        val onDismissRequest = { screenModel.dismissDialog() }
+        val onDismissRequest = {
+            screenModel.dismissDialog()
+            if (successState.autoOpenTrack && screenModel.isFromChangeCategory) {
+                screenModel.isFromChangeCategory = false
+                screenModel.showTrackDialog()
+            }
+        }
         when (val dialog = (state as? AnimeScreenState.Success)?.dialog) {
             null -> {}
             is AnimeInfoScreenModel.Dialog.ChangeCategory -> {
@@ -193,7 +199,7 @@ class AnimeScreen(
             }
             is AnimeInfoScreenModel.Dialog.DuplicateAnime -> DuplicateAnimeDialog(
                 onDismissRequest = onDismissRequest,
-                onConfirm = { screenModel.toggleFavorite(onRemoved = {}, onAdded = {}, checkDuplicate = false) },
+                onConfirm = { screenModel.toggleFavorite(onRemoved = {}, checkDuplicate = false) },
                 onOpenAnime = { navigator.push(AnimeScreen(dialog.duplicate.id)) },
                 duplicateFrom = screenModel.getSourceOrStub(dialog.duplicate),
             )

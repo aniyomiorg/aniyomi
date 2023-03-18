@@ -30,6 +30,7 @@ import eu.kanade.domain.items.chapter.model.ChapterUpdate
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.manga.interactor.GetMangaTracks
 import eu.kanade.domain.track.manga.model.toDbTrack
+import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.entries.DownloadAction
@@ -41,7 +42,6 @@ import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
@@ -70,6 +70,7 @@ import kotlinx.coroutines.launch
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 import java.text.DateFormat
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -119,6 +120,8 @@ class MangaInfoScreenModel(
 
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedChapterIds: HashSet<Long> = HashSet()
+
+    internal var isFromChangeCategory: Boolean = false
 
     /**
      * Helper function to update the UI state only if it's currently in success state
@@ -311,7 +314,10 @@ class MangaInfoScreenModel(
                     }
 
                     // Choose a category
-                    else -> promptChangeCategories()
+                    else -> {
+                        isFromChangeCategory = true
+                        promptChangeCategories()
+                    }
                 }
 
                 // Finally match with enhanced tracking when available
@@ -324,7 +330,7 @@ class MangaInfoScreenModel(
                         launchIO {
                             try {
                                 service.match(manga)?.let { track ->
-                                    (service as TrackService).mangaService.registerTracking(track, mangaId)
+                                    (service as MangaTrackService).registerTracking(track, mangaId)
                                 }
                             } catch (e: Exception) {
                                 logcat(LogPriority.WARN, e) {
@@ -333,6 +339,9 @@ class MangaInfoScreenModel(
                             }
                         }
                     }
+                if (state.autoOpenTrack) {
+                    showTrackDialog()
+                }
             }
         }
     }
@@ -1029,6 +1038,10 @@ sealed class MangaScreenState {
 
         val trackingCount: Int
             get() = trackItems.count { it.track != null }
+
+        private val trackPreferences: TrackPreferences by injectLazy()
+        val autoOpenTrack: Boolean
+            get() = trackingAvailable && trackPreferences.trackOnAddingToLibrary().get()
 
         /**
          * Applies the view filters to the list of chapters obtained from the database.
