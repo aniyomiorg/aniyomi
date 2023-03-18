@@ -47,6 +47,7 @@ import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearch
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.manga.track.MangaTrackInfoDialogHomeScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
+import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
 import eu.kanade.tachiyomi.util.lang.withIOContext
@@ -282,7 +283,7 @@ class MangaScreen(
         when (val previousController = navigator.items[navigator.size - 2]) {
             is HomeScreen -> {
                 navigator.pop()
-                previousController.search(query)
+                MangaLibraryTab.search(query)
             }
             is BrowseMangaSourceScreen -> {
                 navigator.pop()
