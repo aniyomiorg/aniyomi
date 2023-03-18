@@ -658,7 +658,7 @@ class AnimeInfoScreenModel(
     }
 
     fun cancelDownload(episodeId: Long) {
-        val activeDownload = downloadManager.getQueuedDownloadOrNull(animeId) ?: return
+        val activeDownload = downloadManager.getQueuedDownloadOrNull(episodeId) ?: return
         downloadManager.cancelQueuedDownloads(listOf(activeDownload))
         updateDownloadState(activeDownload.apply { status = AnimeDownload.State.NOT_DOWNLOADED })
     }
