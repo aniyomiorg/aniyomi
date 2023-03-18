@@ -13,7 +13,6 @@ class AndroidDownloadFolderProvider(
     override fun directory(): File {
         return File(
             Environment.getExternalStorageDirectory().absolutePath + File.separator +
-                Environment.DIRECTORY_DOWNLOADS + File.separator +
                 context.getString(R.string.app_name),
             "downloads",
         )
