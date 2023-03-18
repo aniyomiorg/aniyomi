@@ -312,7 +312,7 @@ private data class TrackChapterSelectorScreen(
             range = remember { sm.getRange() },
             onConfirm = { sm.setChapter(); navigator.pop() },
             onDismissRequest = navigator::pop,
-            isAnime = false,
+            isManga = true,
         )
     }
 

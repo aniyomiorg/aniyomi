@@ -312,7 +312,7 @@ private data class TrackEpisodeSelectorScreen(
             range = remember { sm.getRange() },
             onConfirm = { sm.setEpisode(); navigator.pop() },
             onDismissRequest = navigator::pop,
-            isAnime = false,
+            isManga = false,
         )
     }
 
