@@ -257,4 +257,5 @@
     <string name="label_watched_episodes">Ditonton</string>
     <string name="pref_remember_brightness">Ingat dan beralih ke kecerahan terakhir yang digunakan</string>
     <string name="pref_remember_volume">Ingat dan beralih ke volume terakhir yang digunakan</string>
+    <string name="pref_default_home_tab_library">Atur layar awal ke Tab Manga</string>
 </resources>
