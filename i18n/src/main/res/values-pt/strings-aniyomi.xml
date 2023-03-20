@@ -207,4 +207,8 @@
     <string name="stats_page">Página de status</string>
     <string name="playback_speed_dialog_reset">Redefinir</string>
     <string name="player_aniskip_dontskip">Não pular</string>
+    <string name="pref_library_manga_columns">Mangás por fileira</string>
+    <string name="pref_library_anime_columns">Anime por fileira</string>
+    <string name="action_sort_unseen_count">Itens não vistos</string>
+    <string name="action_sort_episode_fetch_date">Data de episódios</string>
 </resources>
