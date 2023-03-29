@@ -112,4 +112,29 @@
     <string name="label_anime_library">Аніме</string>
     <string name="label_manga_sources">Джерела манги</string>
     <string name="label_anime_sources">Джерела аніме</string>
+    <string name="pref_remove_exclude_categories_anime_prefix">Аніме:</string>
+    <string name="auto_download_while_watching">Автоматичне завантаження під час перегляду</string>
+    <string name="pref_pip_episode_toasts">Показувати сповіщення епізоду під час переходу на інший епізод у режимі PiP</string>
+    <string name="pref_player_hide_controls">Приховувати елементи керування плеєром під час відкриття плеєра</string>
+    <string name="pref_track_on_add_library">Відкрити меню доріжки при додаванні до бібліотеки</string>
+    <string name="action_bookmark_episode">Додати в закладки епізод</string>
+    <string name="action_remove_bookmark_episode">Видалити закладку з епізоду</string>
+    <string name="pref_remove_exclude_categories_prefix">Манґа:</string>
+    <string name="pref_category_external_downloader">Зовнішній завантажувач</string>
+    <string name="pref_use_external_downloader">Завжди використовувати зовнішній завантажувач для аніме</string>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one">Наступна небачена серія</item>
+        <item quantity="few">Наступні %d небачених епізодів</item>
+        <item quantity="many">Наступні небачені епізоди</item>
+        <item quantity="other">Наступні небачені епізоди</item>
+    </plurals>
+    <string name="pref_external_player_preference">Налаштування зовнішнього плеєра</string>
+    <string name="pref_category_external_player">Зовнішній плеєр</string>
+    <string name="pref_always_use_external_player">Завжди використовувати зовнішній плеєр</string>
+    <string name="playertitle">%1$s - %2$s</string>
+    <string name="episode_download_progress">%1$d%%</string>
+    <string name="pref_remove_exclude_categories_anime">Виключені категорії аніме</string>
+    <string name="pref_download_new_episodes">Завантажити нові епізоди</string>
+    <string name="download_ahead_info_anime">Працює лише для епізодів у бібліотеці та якщо поточний і наступний епізоди вже завантажено</string>
+    <string name="pref_backup_flags_summ">Яку інформацію включити у файл резервної копії</string>
 </resources>
