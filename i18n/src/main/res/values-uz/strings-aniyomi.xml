@@ -284,4 +284,5 @@
     <string name="dialog_with_checkbox_reset_anime"></string>
     <string name="unofficial_extension_message_aniyomi"></string>
     <string name="pref_enable_netflix_style_aniskip"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
