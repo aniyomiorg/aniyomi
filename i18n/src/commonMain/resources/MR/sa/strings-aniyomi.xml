@@ -320,4 +320,5 @@
     <string name="video_custom_screen"></string>
     <string name="label_manga_sources"></string>
     <string name="plan_to_watch"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
