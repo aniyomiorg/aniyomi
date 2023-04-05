@@ -288,4 +288,5 @@
     <string name="anime_from_library"></string>
     <string name="copied_video_link_to_clipboard"></string>
     <string name="episode_progress"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
