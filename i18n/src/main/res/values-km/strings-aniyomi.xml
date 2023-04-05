@@ -277,4 +277,5 @@
     <string name="pref_enable_auto_skip_ani_skip"></string>
     <string name="pref_hide_in_manga_library_items"></string>
     <string name="download_insufficient_space"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
