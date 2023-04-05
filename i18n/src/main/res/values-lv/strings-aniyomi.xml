@@ -295,4 +295,5 @@
     <string name="action_display_show_continue_reading_button"></string>
     <string name="video_fit_screen"></string>
     <string name="unofficial_extension_message_aniyomi"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
