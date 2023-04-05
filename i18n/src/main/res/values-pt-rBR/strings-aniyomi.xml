@@ -275,4 +275,5 @@
         <item quantity="many">Para %d títulos</item>
         <item quantity="other">Para %d títulos</item>
     </plurals>
+    <string name="extension_settings"></string>
 </resources>
