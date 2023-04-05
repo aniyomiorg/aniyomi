@@ -284,4 +284,5 @@
     <string name="playertitle"></string>
     <string name="notification_episodes_multiple"></string>
     <string name="label_anime_library"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
