@@ -295,4 +295,5 @@
     <string name="label_migration_anime"></string>
     <string name="pref_category_external_player"></string>
     <string name="rotation_reverse_landscape"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
