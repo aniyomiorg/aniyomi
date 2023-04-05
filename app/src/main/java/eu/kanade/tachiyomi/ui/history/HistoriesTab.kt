@@ -5,6 +5,8 @@ import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.model.rememberScreenModel
@@ -47,9 +49,11 @@ data class HistoriesTab(
     override fun Content() {
         val context = LocalContext.current
         // Hoisted for history tab's search bar
-        val historyScreenModel = rememberScreenModel { MangaHistoryScreenModel() }
+        val mangaHistoryScreenModel = rememberScreenModel { MangaHistoryScreenModel() }
+        val mangaSearchQuery by mangaHistoryScreenModel.query.collectAsState()
 
         val animeHistoryScreenModel = rememberScreenModel { AnimeHistoryScreenModel() }
+        val animeSearchQuery by animeHistoryScreenModel.query.collectAsState()
 
         TabbedScreen(
             titleRes = R.string.label_recent_manga,
@@ -57,10 +61,10 @@ data class HistoriesTab(
                 animeHistoryTab(context, fromMore),
                 mangaHistoryTab(context, fromMore),
             ),
-            searchQuery = historyScreenModel.getSearchQuery,
-            onChangeSearchQuery = historyScreenModel::updateSearchQuery,
-            searchQueryAnime = animeHistoryScreenModel.getSearchQuery,
-            onChangeSearchQueryAnime = animeHistoryScreenModel::updateSearchQuery,
+            mangaSearchQuery = mangaSearchQuery,
+            onChangeMangaSearchQuery = mangaHistoryScreenModel::search,
+            animeSearchQuery = animeSearchQuery,
+            onChangeAnimeSearchQuery = animeHistoryScreenModel::search,
         )
 
         LaunchedEffect(Unit) {

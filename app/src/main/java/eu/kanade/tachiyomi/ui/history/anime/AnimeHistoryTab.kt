@@ -42,6 +42,7 @@ fun Screen.animeHistoryTab(
     val navigator = LocalNavigator.currentOrThrow
     val screenModel = rememberScreenModel { AnimeHistoryScreenModel() }
     val state by screenModel.state.collectAsState()
+    val searchQuery by screenModel.query.collectAsState()
 
     suspend fun openEpisode(context: Context, episode: Episode?) {
         val playerPreferences: PlayerPreferences by injectLazy()
@@ -67,6 +68,7 @@ fun Screen.animeHistoryTab(
             AnimeHistoryScreen(
                 state = state,
                 contentPadding = contentPadding,
+                searchQuery = searchQuery,
                 snackbarHostState = snackbarHostState,
                 onClickCover = { navigator.push(AnimeScreen(it)) },
                 onClickResume = screenModel::getNextEpisodeForAnime,

@@ -19,6 +19,7 @@ import java.util.Date
 fun MangaHistoryScreen(
     state: HistoryState,
     contentPadding: PaddingValues,
+    searchQuery: String? = null,
     snackbarHostState: SnackbarHostState,
     onClickCover: (mangaId: Long) -> Unit,
     onClickResume: (mangaId: Long, chapterId: Long) -> Unit,
@@ -31,7 +32,7 @@ fun MangaHistoryScreen(
             if (it == null) {
                 LoadingScreen(modifier = Modifier.padding(contentPadding))
             } else if (it.isEmpty()) {
-                val msg = if (!state.searchQuery.isNullOrEmpty()) {
+                val msg = if (!searchQuery.isNullOrEmpty()) {
                     R.string.no_results_found
                 } else {
                     R.string.information_no_recent_manga

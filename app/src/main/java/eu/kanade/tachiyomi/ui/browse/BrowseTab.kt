@@ -64,10 +64,10 @@ data class BrowseTab(
                 migrateMangaSourceTab(),
             ),
             startIndex = 2.takeIf { toExtensions },
-            searchQuery = mangaExtensionsQuery,
-            onChangeSearchQuery = mangaExtensionsScreenModel::search,
-            searchQueryAnime = animeExtensionsQuery,
-            onChangeSearchQueryAnime = animeExtensionsScreenModel::search,
+            mangaSearchQuery = mangaExtensionsQuery,
+            onChangeMangaSearchQuery = mangaExtensionsScreenModel::search,
+            animeSearchQuery = animeExtensionsQuery,
+            onChangeAnimeSearchQuery = animeExtensionsScreenModel::search,
             scrollable = true,
         )
 
