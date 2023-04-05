@@ -101,9 +101,23 @@ class AnimeDownloadCache(
         episodeScanlator: String?,
         animeTitle: String,
         sourceId: Long,
+        skipCache: Boolean,
     ): Boolean {
-        val source = sourceManager.getOrStub(sourceId)
-        return provider.findEpisodeDir(episodeName, episodeScanlator, animeTitle, source) != null
+        if (skipCache) {
+            val source = sourceManager.getOrStub(sourceId)
+            return provider.findEpisodeDir(episodeName, episodeScanlator, animeTitle, source) != null
+        }
+
+        renewCache()
+
+        val sourceDir = rootDownloadsDir.sourceDirs[sourceId]
+        if (sourceDir != null) {
+            val animeDir = sourceDir.animeDirs[provider.getAnimeDirName(animeTitle)]
+            if (animeDir != null) {
+                return provider.getValidEpisodeDirNames(episodeName, episodeScanlator).any { it in animeDir.episodeDirs }
+            }
+        }
+        return false
     }
 
     /**

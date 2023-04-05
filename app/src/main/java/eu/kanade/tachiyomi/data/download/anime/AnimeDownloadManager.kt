@@ -202,14 +202,16 @@ class AnimeDownloadManager(
      * @param episodeScanlator scanlator of the episode to query
      * @param animeTitle the title of the anime to query.
      * @param sourceId the id of the source of the episode.
+     * @param skipCache whether to skip the directory cache and check in the filesystem.
      */
     fun isEpisodeDownloaded(
         episodeName: String,
         episodeScanlator: String?,
         animeTitle: String,
         sourceId: Long,
+        skipCache: Boolean = false,
     ): Boolean {
-        return cache.isEpisodeDownloaded(episodeName, episodeScanlator, animeTitle, sourceId)
+        return cache.isEpisodeDownloaded(episodeName, episodeScanlator, animeTitle, sourceId, skipCache)
     }
 
     /**
