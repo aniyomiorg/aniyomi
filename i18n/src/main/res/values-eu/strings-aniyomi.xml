@@ -288,4 +288,5 @@
     <string name="stats_header"></string>
     <string name="dialog_with_checkbox_reset_anime"></string>
     <string name="pref_category_player_aniskip_info"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
