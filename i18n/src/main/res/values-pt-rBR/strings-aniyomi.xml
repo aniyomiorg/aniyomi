@@ -220,4 +220,13 @@
     <string name="not_interesting">Desinteressante</string>
     <string name="pref_external_downloader_selection">App de download preferido</string>
     <string name="player_aniskip_dontskip">Não pular</string>
+    <string name="action_global_anime_search">Pesquisa Global de Animes</string>
+    <string name="pref_search_pinned_anime_sources_only">Incluir apenas fontes de anime fixadas</string>
+    <string name="pref_search_pinned_manga_sources_only">Incluir apenas fontes de mangá fixadas</string>
+    <string name="action_global_manga_search">Pesquisa Global de Mangás</string>
+    <string name="pref_library_manga_columns">Mangás por linha</string>
+    <string name="pref_library_anime_columns">Animes por linha</string>
+    <string name="action_sort_episode_fetch_date">Data de busca do episódio</string>
+    <string name="action_sort_unseen_count">Contagem de não vistos</string>
+    <string name="action_filter_unseen">Não visto</string>
 </resources>
