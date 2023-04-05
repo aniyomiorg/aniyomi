@@ -223,7 +223,7 @@
     <string name="player_aniskip_ed">엔딩 건너뛰기</string>
     <string name="player_aniskip_mixedOp">MixedOp 건너뛰기</string>
     <string name="player_aniskip_recap">요약 건너뛰기</string>
-    <string name="pref_category_player_aniskip">AniSkip 설정</string>
+    <string name="pref_category_player_aniskip_info">AniSkip 설정</string>
     <string name="pref_enable_aniskip">AniSkip 사용</string>
     <string name="pref_enable_auto_skip_ani_skip">자동 건너뛰기 사용</string>
     <string name="pref_waiting_time_aniskip">버튼 시간 초과</string>

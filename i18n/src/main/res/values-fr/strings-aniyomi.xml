@@ -242,7 +242,7 @@
     <string name="toggle_stats">Activer les statistiques</string>
     <string name="stats_page">Pages des statistiques</string>
     <string name="download_notifier_download_paused_episodes">Téléchargement d\'épisodes en pause</string>
-    <string name="pref_category_player_aniskip">Paramètres AniSkip</string>
+    <string name="pref_category_player_aniskip_info">Paramètres AniSkip</string>
     <string name="label_animeextensions">Extensions d\'animés</string>
     <string name="label_migration_manga">Migrer les mangas</string>
     <string name="label_mangaextensions">Extensions des mangas</string>

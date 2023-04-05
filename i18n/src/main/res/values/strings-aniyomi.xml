@@ -103,6 +103,8 @@
     <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
     <string name="pref_player_fullscreen">Show content in display cutout</string>
     <string name="pref_player_hide_controls">Hide player controls when opening the player</string>
+    <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
+    <string name="pref_enable_pip">Enable the use of PiP mode</string>
     <string name="pref_pip_episode_toasts">Show episode toasts when switching episodes in PiP mode</string>
     <string name="pref_pip_on_exit">Automatically switch to PiP mode on exiting the player</string>
     <!-- Needs better English -->
@@ -256,7 +258,7 @@
     <string name="player_aniskip_ed">Skip Ending</string>
     <string name="player_aniskip_mixedOp">Skip MixedOp</string>
     <string name="player_aniskip_recap">Skip Recap</string>
-    <string name="pref_category_player_aniskip">AniSkip Settings</string>
+    <string name="pref_category_player_aniskip_info">AniSkip requires the anime to be tracked with MAL or Anilist to work</string>
     <string name="pref_enable_aniskip">Enable AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Enable auto skip</string>
     <string name="pref_waiting_time_aniskip">Button timeout</string>

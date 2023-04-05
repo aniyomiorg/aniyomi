@@ -248,7 +248,7 @@
     <string name="audio_dialog_header">Cambia traccia audio:</string>
     <string name="playback_options_speed">Velocità di riproduzione</string>
     <string name="playback_options_quality">Qualità video</string>
-    <string name="pref_category_player_aniskip">Impostazioni AniSkip</string>
+    <string name="pref_category_player_aniskip_info">Impostazioni AniSkip</string>
     <string name="pref_enable_aniskip">Attiva AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Attiva auto skip</string>
     <string name="pref_waiting_time_aniskip">Pulsante timeout</string>

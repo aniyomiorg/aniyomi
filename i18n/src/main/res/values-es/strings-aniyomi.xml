@@ -232,7 +232,7 @@
     <string name="player_aniskip_ed">Omitir el final</string>
     <string name="player_aniskip_mixedOp">Saltar introducción mixta</string>
     <string name="player_aniskip_recap">Saltar resumen</string>
-    <string name="pref_category_player_aniskip">Ajustes de AniSkip</string>
+    <string name="pref_category_player_aniskip_info">Ajustes de AniSkip</string>
     <string name="pref_enable_aniskip">Activar AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Activar el salto automático</string>
     <string name="pref_waiting_time_aniskip">Tiempo de espera del botón</string>

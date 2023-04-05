@@ -1,6 +1,8 @@
 package eu.kanade.domain.base
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import eu.kanade.tachiyomi.core.preference.PreferenceStore
 import eu.kanade.tachiyomi.core.preference.getEnum
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
@@ -26,4 +28,6 @@ class BasePreferences(
 
     // acra is disabled
     fun acraEnabled() = preferenceStore.getBoolean("acra.enable", false)
+
+    fun deviceHasPip() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && context.packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
 }

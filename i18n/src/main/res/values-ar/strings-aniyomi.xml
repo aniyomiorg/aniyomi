@@ -81,7 +81,7 @@
     <string name="action_screen_fit">وضع \"ملاءمة الشاشة\"</string>
     <string name="pref_category_external_downloader">برنامج التحميل الخارجي</string>
     <string name="pref_bottom_nav_style">نمط شريط التنقل السفلي</string>
-    <string name="pref_category_player_aniskip">إعدادات AniSkip</string>
+    <string name="pref_category_player_aniskip_info">إعدادات AniSkip</string>
     <string name="local_anime_source">مصادر الأنمي المحلية</string>
     <string name="pref_external_player_preference">تفضيل مشغل الوسائط الخارجي</string>
     <string name="used_cache_both">مستخدم بواسطة الأنمي: %1$s، مستخدم بواسطة المانغا: %2$s</string>
