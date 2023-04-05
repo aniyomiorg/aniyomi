@@ -288,4 +288,5 @@
     <string name="repeating_anime"></string>
     <string name="pref_player_fullscreen"></string>
     <string name="audio_dialog_header"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
