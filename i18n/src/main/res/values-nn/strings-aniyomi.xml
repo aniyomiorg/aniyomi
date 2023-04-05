@@ -284,4 +284,5 @@
     <string name="player_aniskip_recap"></string>
     <string name="rotation_sensor_portrait"></string>
     <string name="pref_default_player_orientation"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
