@@ -288,4 +288,5 @@
     <string name="action_play"></string>
     <string name="action_remove_bookmark_episode"></string>
     <string name="pref_bottom_nav_no_updates"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
