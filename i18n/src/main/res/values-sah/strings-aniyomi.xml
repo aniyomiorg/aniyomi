@@ -281,4 +281,5 @@
     <string name="notification_new_episodes"></string>
     <string name="anime_from_library"></string>
     <string name="episode_downloading_progress"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
