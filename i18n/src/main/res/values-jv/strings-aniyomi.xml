@@ -281,4 +281,5 @@
     <string name="notification_episodes_single_and_more"></string>
     <string name="label_animehistory"></string>
     <string name="label_anime_sources"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
