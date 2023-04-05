@@ -284,4 +284,5 @@
     <string name="pref_backup_flags"></string>
     <string name="pref_default_intro_length"></string>
     <string name="pref_skip_30" translatable="false"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
