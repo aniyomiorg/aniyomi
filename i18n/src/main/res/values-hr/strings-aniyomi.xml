@@ -295,4 +295,5 @@
     <string name="anime_from_library"></string>
     <string name="pref_remember_brightness"></string>
     <string name="pref_skip_20" translatable="false"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
