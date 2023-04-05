@@ -158,7 +158,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.pipBtn.setOnClickListener { activity.startPiP() }
 
-        binding.pipBtn.isVisible = !playerPreferences.pipOnExit().get() && activity.deviceSupportsPip
+        binding.pipBtn.isVisible = !playerPreferences.pipOnExit().get() && activity.isPipSupportedAndEnabled
 
         binding.controlsSkipIntroBtn.setOnLongClickListener { skipIntroLengthDialog(); true }
 

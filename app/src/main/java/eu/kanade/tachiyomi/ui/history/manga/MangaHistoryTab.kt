@@ -39,6 +39,7 @@ fun Screen.mangaHistoryTab(
     val navigator = LocalNavigator.currentOrThrow
     val screenModel = rememberScreenModel { MangaHistoryScreenModel() }
     val state by screenModel.state.collectAsState()
+    val searchQuery by screenModel.query.collectAsState()
 
     suspend fun openChapter(context: Context, chapter: Chapter?) {
         if (chapter != null) {
@@ -58,6 +59,7 @@ fun Screen.mangaHistoryTab(
             MangaHistoryScreen(
                 state = state,
                 contentPadding = contentPadding,
+                searchQuery = searchQuery,
                 snackbarHostState = snackbarHostState,
                 onClickCover = { navigator.push(MangaScreen(it)) },
                 onClickResume = screenModel::getNextChapterForManga,

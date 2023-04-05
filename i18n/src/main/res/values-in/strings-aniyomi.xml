@@ -46,7 +46,7 @@
     <string name="action_show_anime">Tampilkan anime</string>
     <string name="action_display_download_badge_anime">Episode diunduh</string>
     <string name="action_display_unseen_badge">Episode belum dilihat</string>
-    <string name="action_display_local_badge">Lokal manga</string>
+    <string name="action_display_local_badge_manga">Lokal manga</string>
     <string name="action_display_local_badge_anime">Lokal anime</string>
     <string name="action_display_show_continue_reading_button">Tampilkan tombol lanjutkan menonton/membaca</string>
     <string name="action_order_by_episode_number">Dengan jumlah episode</string>
@@ -56,7 +56,7 @@
     <string name="pref_bottom_nav_style">Gaya tombol navigasi</string>
     <string name="pref_update_only_completely_read">Dengan episode belum dilihat (s)/chapter belul dibaca(s)</string>
     <string name="pref_library_update_show_tab_badge">Tampilkan jumlah yang belum dibaca pada ikon Pembaruan</string>
-    <string name="default_category">Kategori bawaan</string>
+    <string name="default_manga_category">Kategori bawaan</string>
     <string name="default_anime_category">Kategori anime standar default</string>
     <string name="pref_manga_library_update_categories_details">Manga dalam kategori yang dikecualikan tidak akan diperbarui meskipun masuk dalam kategori yang disertakan.</string>
     <string name="pref_anime_library_update_categories_details">Anime dalam kategori dikecualikan tidak akan diperbarui bahkan jika mereka juga termasuk dalam kategori.</string>
@@ -99,10 +99,8 @@
     <string name="pref_remove_after_marked_as_read">Setelah secara manual ditandai telah dibaca</string>
     <string name="pref_remove_after_read">Otomatis hapus setelah dibaca</string>
     <string name="pref_remove_bookmarked_chapters">Hapus tanda pada chapter/episode</string>
-    <string name="pref_remove_exclude_categories">Kategori yang dikecualikan</string>
+    <string name="pref_remove_exclude_categories_manga">Kategori yang dikecualikan</string>
     <string name="pref_remove_exclude_categories_anime">Kategori anime yang dikecualikan</string>
-    <string name="pref_remove_exclude_categories_anime_prefix">Anime:</string>
-    <string name="pref_remove_exclude_categories_prefix">Manga:</string>
     <string name="pref_category_external_downloader">Pengunduhan eksternal</string>
     <string name="pref_use_external_downloader">Selalu gunakan pengunduhan eksternal pada anime</string>
     <string name="pref_external_downloader_selection">Pemilihan app pengunduhan yang digunakan</string>
@@ -118,9 +116,9 @@
     <string name="pref_clear_chapter_cache">Hapus cache chapter dan episode</string>
     <string name="used_cache_both">Digunakan oleh anime: %1$s, digunakan oleh manga: %2$s</string>
     <string name="pref_auto_clear_chapter_cache">Bersihkan cache saat aplikasi tertutup</string>
-    <string name="pref_clear_database">Hapus database</string>
+    <string name="pref_clear_manga_database">Hapus database</string>
     <string name="pref_clear_anime_database">Bersihkan database Anime</string>
-    <string name="pref_clear_database_summary">Hapus riwayat manga yang tidak disimpan di pustaka Anda</string>
+    <string name="pref_clear_manga_database_summary">Hapus riwayat manga yang tidak disimpan di pustaka Anda</string>
     <string name="pref_clear_anime_database_summary">Hapus histori dari anime yang tidak disimpan di perpustakaan kamu</string>
     <string name="clear_database_confirmation">Apakah Anda yakin\? episode/chapter yang sudah dilihat dan juga daftar dalam pustaka semua akan hilang</string>
     <string name="pref_refresh_library_tracking_summary">Perbarui status, nilai dan proses terakhir yang dibaca dari layanan pelacakan</string>
@@ -169,8 +167,8 @@
     <string name="episode_progress_no_total">Proses: %1$s</string>
     <string name="screenshot_header">Tangkap layar</string>
     <string name="screenshot_show_subs">Tampilkan subtitel di tangkap layar</string>
-    <string name="toggle_volume_brightness_gestures">Ubah volume dan gestur kecerahan</string>
-    <string name="toggle_horizontal_seek_gesture">ubah gestur gerakan horisontal</string>
+    <string name="enable_volume_brightness_gestures">Ubah volume dan gestur kecerahan</string>
+    <string name="enable_horizontal_seek_gesture">ubah gestur gerakan horisontal</string>
     <string name="stats_header">Tampilkan statistik</string>
     <string name="toggle_stats">Ubah status</string>
     <string name="stats_page">Halaman status</string>
@@ -223,7 +221,7 @@
     <string name="player_aniskip_ed">Lewati Ending</string>
     <string name="player_aniskip_mixedOp">Lewati MixedOp</string>
     <string name="player_aniskip_recap">Lewati Recap</string>
-    <string name="pref_category_player_aniskip">Pengaturan AniSkip</string>
+    <string name="pref_category_player_aniskip_info">Pengaturan AniSkip</string>
     <string name="pref_enable_aniskip">Aktifkan AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Aktifkan otomatis skip</string>
     <string name="pref_waiting_time_aniskip">Tombol waktu habis</string>

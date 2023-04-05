@@ -1,7 +1,6 @@
 package eu.kanade.presentation.more.settings.screen
 
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
@@ -42,8 +41,9 @@ object SettingsPlayerScreen : SearchableSettings {
     override fun getPreferences(): List<Preference> {
         val playerPreferences = remember { Injekt.get<PlayerPreferences>() }
         val basePreferences = remember { Injekt.get<BasePreferences>() }
+        val deviceSupportsPip = basePreferences.deviceHasPip()
 
-        return listOf(
+        return listOfNotNull(
             Preference.PreferenceItem.ListPreference(
                 pref = playerPreferences.progressPreference(),
                 title = stringResource(R.string.pref_progress_mark_as_seen),
@@ -61,10 +61,71 @@ object SettingsPlayerScreen : SearchableSettings {
                 pref = playerPreferences.preserveWatchingPosition(),
                 title = stringResource(R.string.pref_preserve_watching_position),
             ),
+            getInternalPlayerGroup(playerPreferences = playerPreferences),
+            getVolumeAndBrightnessGroup(playerPreferences = playerPreferences),
             getOrientationGroup(playerPreferences = playerPreferences),
-            getInternalPlayerGroup(playerPreferences = playerPreferences, basePreferences = basePreferences),
-            getAniskipGroup(playerPreferences = playerPreferences),
+            getSeekingGroup(playerPreferences = playerPreferences),
+            if (deviceSupportsPip) getPipGroup(playerPreferences = playerPreferences) else null,
             getExternalPlayerGroup(playerPreferences = playerPreferences, basePreferences = basePreferences),
+        )
+    }
+
+    @Composable
+    private fun getInternalPlayerGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
+        val scope = rememberCoroutineScope()
+        val playerFullscreen = playerPreferences.playerFullscreen()
+        val playerHideControls = playerPreferences.hideControls()
+        val mpvConf = playerPreferences.mpvConf()
+
+        return Preference.PreferenceGroup(
+            title = stringResource(R.string.pref_category_internal_player),
+            preferenceItems = listOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = playerFullscreen,
+                    title = stringResource(R.string.pref_player_fullscreen),
+                    enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P,
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = playerHideControls,
+                    title = stringResource(R.string.pref_player_hide_controls),
+                ),
+                Preference.PreferenceItem.MultiLineEditTextPreference(
+                    pref = mpvConf,
+                    title = stringResource(R.string.pref_mpv_conf),
+                    subtitle = mpvConf.asState(scope).value
+                        .lines().take(2)
+                        .joinToString(
+                            separator = "\n",
+                            postfix = if (mpvConf.asState(scope).value.lines().size > 2) "\n..." else "",
+                        ),
+
+                ),
+            ),
+        )
+    }
+
+    @Composable
+    private fun getVolumeAndBrightnessGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
+        val enableVolumeBrightnessGestures = playerPreferences.gestureVolumeBrightness()
+        val rememberPlayerBrightness = playerPreferences.rememberPlayerBrightness()
+        val rememberPlayerVolume = playerPreferences.rememberPlayerVolume()
+
+        return Preference.PreferenceGroup(
+            title = stringResource(R.string.pref_category_volume_brightness),
+            preferenceItems = listOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableVolumeBrightnessGestures,
+                    title = stringResource(R.string.enable_volume_brightness_gestures),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = rememberPlayerBrightness,
+                    title = stringResource(R.string.pref_remember_brightness),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = rememberPlayerVolume,
+                    title = stringResource(R.string.pref_remember_volume),
+                ),
+            ),
         )
     }
 
@@ -118,21 +179,12 @@ object SettingsPlayerScreen : SearchableSettings {
     }
 
     @Composable
-    private fun getInternalPlayerGroup(playerPreferences: PlayerPreferences, basePreferences: BasePreferences): Preference.PreferenceGroup {
+    private fun getSeekingGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
         val scope = rememberCoroutineScope()
+        val enableHorizontalSeekGesture = playerPreferences.gestureHorizontalSeek()
         val defaultSkipIntroLength by playerPreferences.defaultIntroLength().stateIn(scope).collectAsState()
         val skipLengthPreference = playerPreferences.skipLengthPreference()
         val playerSmoothSeek = playerPreferences.playerSmoothSeek()
-        val playerFullscreen = playerPreferences.playerFullscreen()
-        val playerHideControls = playerPreferences.hideControls()
-        val pipEpisodeToasts = playerPreferences.pipEpisodeToasts()
-        val pipOnExit = playerPreferences.pipOnExit()
-        val rememberPlayerBrightness = playerPreferences.rememberPlayerBrightness()
-        val rememberPlayerVolume = playerPreferences.rememberPlayerVolume()
-        val mpvConf = playerPreferences.mpvConf()
-
-        val deviceHasPip = basePreferences.context.packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) &&
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
         var showDialog by rememberSaveable { mutableStateOf(false) }
         if (showDialog) {
@@ -146,9 +198,21 @@ object SettingsPlayerScreen : SearchableSettings {
             )
         }
 
+        // Aniskip
+        val enableAniSkip = playerPreferences.aniSkipEnabled()
+        val enableAutoAniSkip = playerPreferences.autoSkipAniSkip()
+        val enableNetflixAniSkip = playerPreferences.enableNetflixStyleAniSkip()
+        val waitingTimeAniSkip = playerPreferences.waitingTimeAniSkip()
+
+        val isAniSkipEnabled by enableAniSkip.collectAsState()
+
         return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_internal_player),
+            title = stringResource(R.string.pref_category_player_seeking),
             preferenceItems = listOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enableHorizontalSeekGesture,
+                    title = stringResource(R.string.enable_horizontal_seek_gesture),
+                ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_default_intro_length),
                     subtitle = "${defaultSkipIntroLength}s",
@@ -170,60 +234,9 @@ object SettingsPlayerScreen : SearchableSettings {
                     title = stringResource(R.string.pref_player_smooth_seek),
                     subtitle = stringResource(R.string.pref_player_smooth_seek_summary),
                 ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = playerFullscreen,
-                    title = stringResource(R.string.pref_player_fullscreen),
-                    enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P,
+                Preference.PreferenceItem.InfoPreference(
+                    title = stringResource(R.string.pref_category_player_aniskip_info),
                 ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = playerHideControls,
-                    title = stringResource(R.string.pref_player_hide_controls),
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = pipEpisodeToasts,
-                    title = stringResource(R.string.pref_pip_episode_toasts),
-                    enabled = deviceHasPip,
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = pipOnExit,
-                    title = stringResource(R.string.pref_pip_on_exit),
-                    enabled = deviceHasPip,
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = rememberPlayerBrightness,
-                    title = stringResource(R.string.pref_remember_brightness),
-                ),
-                Preference.PreferenceItem.SwitchPreference(
-                    pref = rememberPlayerVolume,
-                    title = stringResource(R.string.pref_remember_volume),
-                ),
-                Preference.PreferenceItem.MultiLineEditTextPreference(
-                    pref = mpvConf,
-                    title = stringResource(R.string.pref_mpv_conf),
-                    subtitle = mpvConf.asState(scope).value
-                        .lines().take(2)
-                        .joinToString(
-                            separator = "\n",
-                            postfix = if (mpvConf.asState(scope).value.lines().size > 2) "\n..." else "",
-                        ),
-
-                ),
-            ),
-        )
-    }
-
-    @Composable
-    private fun getAniskipGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
-        val enableAniSkip = playerPreferences.aniSkipEnabled()
-        val enableAutoAniSkip = playerPreferences.autoSkipAniSkip()
-        val enableNetflixAniSkip = playerPreferences.enableNetflixStyleAniSkip()
-        val waitingTimeAniSkip = playerPreferences.waitingTimeAniSkip()
-
-        val isAniSkipEnabled by enableAniSkip.collectAsState()
-
-        return Preference.PreferenceGroup(
-            title = stringResource(R.string.pref_category_player_aniskip),
-            preferenceItems = listOf(
                 Preference.PreferenceItem.SwitchPreference(
                     pref = enableAniSkip,
                     title = stringResource(R.string.pref_enable_aniskip),
@@ -249,6 +262,36 @@ object SettingsPlayerScreen : SearchableSettings {
                         9 to stringResource(R.string.pref_waiting_time_aniskip_9),
                         10 to stringResource(R.string.pref_waiting_time_aniskip_10),
                     ),
+                    enabled = isAniSkipEnabled,
+                ),
+            ),
+        )
+    }
+
+    @Composable
+    private fun getPipGroup(playerPreferences: PlayerPreferences): Preference.PreferenceGroup {
+        val enablePip = playerPreferences.enablePip()
+        val pipEpisodeToasts = playerPreferences.pipEpisodeToasts()
+        val pipOnExit = playerPreferences.pipOnExit()
+
+        val isPipEnabled by enablePip.collectAsState()
+
+        return Preference.PreferenceGroup(
+            title = stringResource(R.string.pref_category_pip),
+            preferenceItems = listOf(
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = enablePip,
+                    title = stringResource(R.string.pref_enable_pip),
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = pipEpisodeToasts,
+                    title = stringResource(R.string.pref_pip_episode_toasts),
+                    enabled = isPipEnabled,
+                ),
+                Preference.PreferenceItem.SwitchPreference(
+                    pref = pipOnExit,
+                    title = stringResource(R.string.pref_pip_on_exit),
+                    enabled = isPipEnabled,
                 ),
             ),
         )

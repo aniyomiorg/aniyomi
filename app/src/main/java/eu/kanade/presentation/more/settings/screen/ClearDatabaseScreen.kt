@@ -100,7 +100,7 @@ class ClearDatabaseScreen : Screen {
                 Scaffold(
                     topBar = { scrollBehavior ->
                         AppBar(
-                            title = stringResource(R.string.pref_clear_database),
+                            title = stringResource(R.string.pref_clear_manga_database),
                             navigateUp = navigator::pop,
                             actions = {
                                 if (s.items.isNotEmpty()) {

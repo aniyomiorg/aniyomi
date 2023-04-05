@@ -17,9 +17,12 @@ import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -39,21 +42,28 @@ class MangaHistoryScreenModel(
     private val _events: Channel<Event> = Channel(Channel.UNLIMITED)
     val events: Flow<Event> = _events.receiveAsFlow()
 
+    private val _query: MutableStateFlow<String?> = MutableStateFlow(null)
+    val query: StateFlow<String?> = _query.asStateFlow()
+
     init {
         coroutineScope.launch {
-            state.map { it.searchQuery }
-                .distinctUntilChanged()
-                .flatMapLatest { query ->
-                    getHistory.subscribe(query ?: "")
-                        .distinctUntilChanged()
-                        .catch { error ->
-                            logcat(LogPriority.ERROR, error)
-                            _events.send(Event.InternalError)
-                        }
-                        .map { it.toHistoryUiModels() }
-                        .flowOn(Dispatchers.IO)
-                }
-                .collect { newList -> mutableState.update { it.copy(list = newList) } }
+            _query.collectLatest { query ->
+                getHistory.subscribe(query ?: "")
+                    .distinctUntilChanged()
+                    .catch { error ->
+                        logcat(LogPriority.ERROR, error)
+                        _events.send(Event.InternalError)
+                    }
+                    .map { it.toHistoryUiModels() }
+                    .flowOn(Dispatchers.IO)
+                    .collect { newList -> mutableState.update { it.copy(list = newList) } }
+            }
+        }
+    }
+
+    fun search(query: String?) {
+        coroutineScope.launchIO {
+            _query.emit(query)
         }
     }
 
@@ -105,12 +115,6 @@ class MangaHistoryScreenModel(
         }
     }
 
-    val getSearchQuery = mutableState.value.searchQuery
-
-    fun updateSearchQuery(query: String?) {
-        mutableState.update { it.copy(searchQuery = query) }
-    }
-
     fun setDialog(dialog: Dialog?) {
         mutableState.update { it.copy(dialog = dialog) }
     }
@@ -129,7 +133,6 @@ class MangaHistoryScreenModel(
 
 @Immutable
 data class HistoryState(
-    val searchQuery: String? = null,
     val list: List<MangaHistoryUiModel>? = null,
     val dialog: MangaHistoryScreenModel.Dialog? = null,
 )

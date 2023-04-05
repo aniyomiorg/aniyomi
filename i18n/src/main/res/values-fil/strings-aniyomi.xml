@@ -4,10 +4,10 @@
     <string name="unlock_app">Buksan ang Aniyomi</string>
     <string name="action_sort_last_manga_update">Huling update ng pag-tsek</string>
     <string name="action_show_manga">Ipakita ang mga entry</string>
-    <string name="action_display_local_badge">Lokal na pinanggagalingan</string>
+    <string name="action_display_local_badge_manga">Lokal na pinanggagalingan</string>
     <string name="pref_update_only_completely_read">May di pa nababasang kabanata</string>
     <string name="pref_library_update_show_tab_badge">Ipakita ang bilang ng di pa nabasa sa Bago</string>
-    <string name="default_category">Panimulang lagayan</string>
+    <string name="default_manga_category">Panimulang lagayan</string>
     <string name="pref_manga_library_update_categories_details">Ang mga entry sa mga ibinukod na kategorya ay hindi maa-update kahit na sila ay kasama rin sa mga kategoryang kasama.</string>
     <string name="untrusted_extension_message">Pinirmahan ang extension na ito gamit ang isang kaduda-dudang certificate at hindi muna pinagana.
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">Pagkamarkahang nabasa na</string>
     <string name="pref_remove_after_read">Pagkatapos basahin, kusang burahin</string>
     <string name="pref_remove_bookmarked_chapters">Burahin din ang may pananda</string>
-    <string name="pref_remove_exclude_categories">Kategoryang di-kasama</string>
+    <string name="pref_remove_exclude_categories_manga">Kategoryang di-kasama</string>
     <string name="pref_auto_update_manga_sync">I-update ang progress pagkabasa</string>
     <string name="pref_clear_chapter_cache">Linisin ang cache ng kabanata</string>
     <string name="pref_auto_clear_chapter_cache">Linisin ang cache ng kabanata pagkasara</string>
-    <string name="pref_clear_database">Linisin ang database</string>
-    <string name="pref_clear_database_summary">Burahin ang history para sa mga entry na hindi naka-save sa iyong library</string>
+    <string name="pref_clear_manga_database">Linisin ang database</string>
+    <string name="pref_clear_manga_database_summary">Burahin ang history para sa mga entry na hindi naka-save sa iyong library</string>
     <string name="clear_database_confirmation">Sigurado ka ba\? Mga basa na chapters at mga progress sa mga entry ng non-library ay mawawala</string>
     <string name="pref_refresh_library_tracking_summary">Inia-update ang estado, iskor, at huling nabasang kabanata mula sa mga tracker</string>
     <string name="pref_incognito_mode_summary">Hinihinto ang pagtala sa nakaraan</string>

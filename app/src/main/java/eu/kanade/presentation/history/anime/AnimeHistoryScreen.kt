@@ -20,6 +20,7 @@ import java.util.Date
 fun AnimeHistoryScreen(
     state: AnimeHistoryState,
     contentPadding: PaddingValues,
+    searchQuery: String? = null,
     snackbarHostState: SnackbarHostState,
     onClickCover: (animeId: Long) -> Unit,
     onClickResume: (animeId: Long, episodeId: Long) -> Unit,
@@ -32,7 +33,7 @@ fun AnimeHistoryScreen(
             if (it == null) {
                 LoadingScreen(modifier = Modifier.padding(contentPadding))
             } else if (it.isEmpty()) {
-                val msg = if (!state.searchQuery.isNullOrEmpty()) {
+                val msg = if (!searchQuery.isNullOrEmpty()) {
                     R.string.no_results_found
                 } else {
                     R.string.information_no_recent_anime

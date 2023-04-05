@@ -30,12 +30,12 @@ fun TabbedScreen(
     @StringRes titleRes: Int?,
     tabs: List<TabContent>,
     startIndex: Int? = null,
-    searchQuery: String? = null,
-    onChangeSearchQuery: (String?) -> Unit = {},
+    mangaSearchQuery: String? = null,
+    onChangeMangaSearchQuery: (String?) -> Unit = {},
     state: PagerState = rememberPagerState(),
     scrollable: Boolean = false,
-    searchQueryAnime: String? = null,
-    onChangeSearchQueryAnime: (String?) -> Unit = {},
+    animeSearchQuery: String? = null,
+    onChangeAnimeSearchQuery: (String?) -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -53,13 +53,13 @@ fun TabbedScreen(
                 val searchEnabled = tab.searchEnabled
 
                 val actualQuery = when (state.currentPage % 2) {
-                    1 -> searchQuery // History and Browse
-                    else -> searchQueryAnime
+                    1 -> mangaSearchQuery // History and Browse
+                    else -> animeSearchQuery
                 }
 
                 val actualOnChange = when (state.currentPage % 2) {
-                    1 -> onChangeSearchQuery // History and Browse
-                    else -> onChangeSearchQueryAnime
+                    1 -> onChangeMangaSearchQuery // History and Browse
+                    else -> onChangeAnimeSearchQuery
                 }
 
                 SearchToolbar(

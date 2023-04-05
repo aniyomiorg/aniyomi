@@ -2,7 +2,7 @@
 <resources>
     <string name="manga_categories">श्रेण्या</string>
     <string name="unlock_app">तचीयोमी उघडा</string>
-    <string name="default_category">मूलभूत श्रेणी</string>
+    <string name="default_manga_category">मूलभूत श्रेणी</string>
     <string name="untrusted_extension_message">हे एक्सटेन्शन एका अविश्वासू प्रमानपत्रासहित आले आहे म्हणून हे स्थापित होऊ शकले नाही. 
 \n
 \nअसे अविश्वासू एक्सटेन्शन आपले लॉगिन बाबत माहिती चोरू शकते.

@@ -4,10 +4,10 @@
     <string name="unlock_app">Isbloca Aniyomi</string>
     <string name="action_sort_last_manga_update">Ùrtimu agiornamentu</string>
     <string name="action_show_manga">Ammustra s\'elementu</string>
-    <string name="action_display_local_badge">Fontes locales</string>
+    <string name="action_display_local_badge_manga">Fontes locales</string>
     <string name="pref_update_only_completely_read">Cun capìtulos non lèghidos</string>
     <string name="pref_library_update_show_tab_badge">Ammustra su nùmeru de capìtulos non lèghidos in s\'icona de sos agiornamentos</string>
-    <string name="default_category">Categoria predefinida</string>
+    <string name="default_manga_category">Categoria predefinida</string>
     <string name="pref_manga_library_update_categories_details">Sos elementos in sas categorias esclùdidas non s\'ant a agiornare nemmancu si sunt fintzas in categorias inclùdidas.</string>
     <string name="untrusted_extension_message">Custa estensione est istada firmada cun unu tzertificadu chi no est afidàbile e no est istada ativada.
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">A pustis de l\'àere marcadu manualmente comente lèghidu</string>
     <string name="pref_remove_after_read">Iscantzella in automàticu a pustis de sa leghidura</string>
     <string name="pref_remove_bookmarked_chapters">Permite s\'iscantzelladura de sos capìtulos cun sinnalibros</string>
-    <string name="pref_remove_exclude_categories">Categorias esclùdidas</string>
+    <string name="pref_remove_exclude_categories_manga">Categorias esclùdidas</string>
     <string name="pref_auto_update_manga_sync">Agiorna su progressu a pustis de sa leghidura</string>
     <string name="pref_clear_chapter_cache">Isbòida sa memòria temporànea de sos capìtulos</string>
     <string name="pref_auto_clear_chapter_cache">Isbòida sa memòria temporànea de sos capìtulos cando serras s\'aplicatzione</string>
-    <string name="pref_clear_database">Isbòida sa base de datos</string>
-    <string name="pref_clear_database_summary">Iscantzella sa cronologia pro sos elementos chi non sunt sarvados in sa biblioteca tua</string>
+    <string name="pref_clear_manga_database">Isbòida sa base de datos</string>
+    <string name="pref_clear_manga_database_summary">Iscantzella sa cronologia pro sos elementos chi non sunt sarvados in sa biblioteca tua</string>
     <string name="clear_database_confirmation">Seguru ses\? Sos capìtulos lèghidos e su progressu de sos elementos chi non sunt in sa biblioteca s\'ant a pèrdere</string>
     <string name="pref_refresh_library_tracking_summary">Agiornat s\'istadu, su votu e s\'ùrtimu capìtulu lèghidu dae sos servìtzios de arrastamentu</string>
     <string name="pref_incognito_mode_summary">Ponet in pàusa sa registratzione de sa cronologia de leghidura</string>

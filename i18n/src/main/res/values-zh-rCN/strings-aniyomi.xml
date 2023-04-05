@@ -46,7 +46,7 @@
     <string name="action_show_anime">显示动画</string>
     <string name="action_display_download_badge_anime">已下载剧集</string>
     <string name="action_display_unseen_badge">未观看剧集</string>
-    <string name="action_display_local_badge">本地漫画</string>
+    <string name="action_display_local_badge_manga">本地漫画</string>
     <string name="action_display_local_badge_anime">本地动画</string>
     <string name="action_display_show_continue_reading_button">显示“继续观看/阅读”按键</string>
     <string name="action_order_by_episode_number">根据剧集序号</string>
@@ -56,7 +56,7 @@
     <string name="pref_bottom_nav_style">底部导航样式</string>
     <string name="pref_update_only_completely_read">有未读章节</string>
     <string name="pref_library_update_show_tab_badge">在“更新”图标上显示未读章数</string>
-    <string name="default_category">默认漫画分类</string>
+    <string name="default_manga_category">默认漫画分类</string>
     <string name="default_anime_category">默认动画分类</string>
     <string name="pref_manga_library_update_categories_details">同时存在于“包含”分类以及“排除”分类的漫画将不会被自动更新。</string>
     <string name="pref_anime_library_update_categories_details">同时存在于“包含”分类以及“排除”分类的动画将不会被自动更新。</string>
@@ -99,10 +99,8 @@
     <string name="pref_remove_after_marked_as_read">手动标记为已读后</string>
     <string name="pref_remove_after_read">阅毕自动删除</string>
     <string name="pref_remove_bookmarked_chapters">允许删除已添加书签的章节</string>
-    <string name="pref_remove_exclude_categories">排除的分类</string>
+    <string name="pref_remove_exclude_categories_manga">排除的分类</string>
     <string name="pref_remove_exclude_categories_anime">已屏蔽的动画分类</string>
-    <string name="pref_remove_exclude_categories_anime_prefix">动画：</string>
-    <string name="pref_remove_exclude_categories_prefix">漫画：</string>
     <string name="pref_category_external_downloader">外置下载器</string>
     <string name="pref_use_external_downloader">总是在下载动画时使用外置下载器</string>
     <string name="pref_external_downloader_selection">下载器应用偏好</string>
@@ -115,9 +113,9 @@
     <string name="pref_clear_chapter_cache">清除章节缓存</string>
     <string name="used_cache_both">被动画占用：%1$s，被漫画占用：%2$s</string>
     <string name="pref_auto_clear_chapter_cache">关闭应用时清除章节缓存</string>
-    <string name="pref_clear_database">清除漫画数据库</string>
+    <string name="pref_clear_manga_database">清除漫画数据库</string>
     <string name="pref_clear_anime_database">清除动画数据库</string>
-    <string name="pref_clear_database_summary">删除未添加到书架的漫画记录</string>
+    <string name="pref_clear_manga_database_summary">删除未添加到书架的漫画记录</string>
     <string name="pref_clear_anime_database_summary">将未保存在内容库中的动画历史记录清除</string>
     <string name="clear_database_confirmation">你确定吗？不在书架中的漫画的已读章节和进度将会丢失</string>
     <string name="pref_refresh_library_tracking_summary">从记录平台更新阅读状态、评分和进度</string>
@@ -161,8 +159,8 @@
     <string name="dialog_with_checkbox_reset">重置此漫画所有章节</string>
     <string name="screenshot_header">截取屏幕</string>
     <string name="screenshot_show_subs">在截屏中显示字幕</string>
-    <string name="toggle_volume_brightness_gestures">启用音量和亮度手势</string>
-    <string name="toggle_horizontal_seek_gesture">启用水平定位手势</string>
+    <string name="enable_volume_brightness_gestures">启用音量和亮度手势</string>
+    <string name="enable_horizontal_seek_gesture">启用水平定位手势</string>
     <string name="stats_header">显示统计数据</string>
     <string name="toggle_stats">启用数据统计</string>
     <string name="stats_page">数据统计页</string>

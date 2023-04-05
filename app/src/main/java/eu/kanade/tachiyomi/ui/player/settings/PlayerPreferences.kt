@@ -8,6 +8,8 @@ class PlayerPreferences(
 ) {
     fun preserveWatchingPosition() = preferenceStore.getBoolean("pref_preserve_watching_position", false)
 
+    fun enablePip() = preferenceStore.getBoolean("pref_enable_pip", true)
+
     fun pipEpisodeToasts() = preferenceStore.getBoolean("pref_pip_episode_toasts", true)
 
     fun pipOnExit() = preferenceStore.getBoolean("pref_pip_on_exit", false)

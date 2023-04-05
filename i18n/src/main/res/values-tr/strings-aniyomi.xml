@@ -46,7 +46,7 @@
     <string name="action_show_anime">Anime Göster</string>
     <string name="action_display_download_badge_anime">İndirilmiş Anime Bölümleri</string>
     <string name="action_display_unseen_badge">İzlenmemiş Anime Bölümleri</string>
-    <string name="action_display_local_badge">Yerel kaynak</string>
+    <string name="action_display_local_badge_manga">Yerel kaynak</string>
     <string name="action_display_show_continue_reading_button">İzlemeye/okumaya devam et düğmesini göster</string>
     <string name="action_order_by_episode_number">Bölüm Numarasına Göre</string>
     <string name="action_start_download_externally">Harici İndirme Yöneticisi Kullan</string>
@@ -55,7 +55,7 @@
     <string name="pref_bottom_nav_style">Alt Gezinme Çubuğu Stili</string>
     <string name="pref_update_only_completely_read">Okunmayan bölüm(ler)i olan</string>
     <string name="pref_library_update_show_tab_badge">Güncellemeler simgesinde okunmayan sayısını göster</string>
-    <string name="default_category">Varsayılan kategori</string>
+    <string name="default_manga_category">Varsayılan kategori</string>
     <string name="default_anime_category">Varsayılan anime kategorisi</string>
     <string name="pref_manga_library_update_categories_details">Hariç tutulan kategorilerdeki girdiler, dahil edilen kategorilerde olsa bile güncellenmeyecektir.</string>
     <string name="pref_anime_library_update_categories_details">Hariç tutulan kategorilerdeki animeler, dahil edilen kategorilerde de olsalar dahi güncellenmeyecektir.</string>
@@ -90,10 +90,8 @@
     <string name="pref_remove_after_marked_as_read">Elle okundu olarak işaretlenince</string>
     <string name="pref_remove_after_read">Okunduktan sonra otomatik olarak sil</string>
     <string name="pref_remove_bookmarked_chapters">İşaretli bölümleri silmeye izin ver</string>
-    <string name="pref_remove_exclude_categories">İstenmeyen kategoriler</string>
+    <string name="pref_remove_exclude_categories_manga">İstenmeyen kategoriler</string>
     <string name="pref_remove_exclude_categories_anime">Hariç Tutulan Anime Kategorileri</string>
-    <string name="pref_remove_exclude_categories_anime_prefix">Anime:</string>
-    <string name="pref_remove_exclude_categories_prefix">Manga:</string>
     <string name="pref_category_external_downloader">Harici İndirme Yöneticisi</string>
     <string name="pref_use_external_downloader">Anime İçin Her Zaman Harici İndirme Yöneticisi Kullan</string>
     <string name="pref_external_downloader_selection">İndirme Yöneticisi Uygulama Tercihi</string>
@@ -107,8 +105,8 @@
     <string name="pref_auto_update_manga_sync">Okuyunca ilerlemeyi güncelle</string>
     <string name="pref_clear_chapter_cache">Bölüm önbelleğini temizle</string>
     <string name="pref_auto_clear_chapter_cache">Uygulama kapatıldığında bölüm önbelleğini temizle</string>
-    <string name="pref_clear_database">Veritabanını temizle</string>
-    <string name="pref_clear_database_summary">Kitaplığınıza kaydedilmeyen girdilerin geçmiş bilgisini sil</string>
+    <string name="pref_clear_manga_database">Veritabanını temizle</string>
+    <string name="pref_clear_manga_database_summary">Kitaplığınıza kaydedilmeyen girdilerin geçmiş bilgisini sil</string>
     <string name="clear_database_confirmation">Emin misiniz\? Kitaplıkta olmayan girdilerin okunan bölümleri ve ilerlemesi kaybolacak</string>
     <string name="pref_refresh_library_tracking_summary">İzleme hizmetlerinden durumu, puanı ve son okunan bölümü günceller</string>
     <string name="pref_incognito_mode_summary">Okuma geçmişini duraklatır</string>

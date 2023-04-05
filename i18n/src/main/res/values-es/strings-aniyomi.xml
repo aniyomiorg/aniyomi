@@ -46,7 +46,7 @@
     <string name="action_show_anime">Mostrar anime</string>
     <string name="action_display_download_badge_anime">Episodios descargados</string>
     <string name="action_display_unseen_badge">Episodios sin ver</string>
-    <string name="action_display_local_badge">Manga local</string>
+    <string name="action_display_local_badge_manga">Manga local</string>
     <string name="action_display_local_badge_anime">Anime local</string>
     <string name="action_display_show_continue_reading_button">Mostrar botón de continuar viendo/leyendo</string>
     <string name="action_order_by_episode_number">Por número de episodio</string>
@@ -56,7 +56,7 @@
     <string name="pref_bottom_nav_style">Estilo inferior de navegación</string>
     <string name="pref_update_only_completely_read">Con episodio(s) sin ver/capítulo(s) sin leer</string>
     <string name="pref_library_update_show_tab_badge">Mostrar capítulos no leídos en la pestaña actualizaciones</string>
-    <string name="default_category">Categoría predeterminada de manga</string>
+    <string name="default_manga_category">Categoría predeterminada de manga</string>
     <string name="default_anime_category">Categoría predeterminada de anime</string>
     <string name="pref_manga_library_update_categories_details">El manga de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
     <string name="pref_anime_library_update_categories_details">El anime de las categorías excluidas no se actualizará, ni siquiera si pertenece a alguna de las categorías que sí estén incluidas.</string>
@@ -99,10 +99,8 @@
     <string name="pref_remove_after_marked_as_read">Tras marcarlos como leídos/vistos de forma manual</string>
     <string name="pref_remove_after_read">Después de leer/ver borrar automáticamente</string>
     <string name="pref_remove_bookmarked_chapters">Permitir el borrado de capítulos/episodios marcados como favoritos</string>
-    <string name="pref_remove_exclude_categories">Categorías excluidas de manga</string>
+    <string name="pref_remove_exclude_categories_manga">Categorías excluidas de manga</string>
     <string name="pref_remove_exclude_categories_anime">Categorías excluidas de anime</string>
-    <string name="pref_remove_exclude_categories_anime_prefix">Anime:</string>
-    <string name="pref_remove_exclude_categories_prefix">Manga:</string>
     <string name="pref_category_external_downloader">Descargador externo</string>
     <string name="pref_use_external_downloader">Siempre usar descargador externo para anime</string>
     <string name="pref_external_downloader_selection">Preferencia de app de descarga</string>
@@ -120,9 +118,9 @@
     <string name="pref_clear_chapter_cache">Vaciar la caché de capítulos y episodios</string>
     <string name="used_cache_both">Usado por anime: %1$s, usado por manga: %2$s</string>
     <string name="pref_auto_clear_chapter_cache">Borrar la caché de episodios/capítulos al cerrar la aplicación</string>
-    <string name="pref_clear_database">Borrar la base de datos de manga</string>
+    <string name="pref_clear_manga_database">Borrar la base de datos de manga</string>
     <string name="pref_clear_anime_database">Borrar la base de datos de anime</string>
-    <string name="pref_clear_database_summary">Borrar el historial del manga que no esté guardado en tu biblioteca</string>
+    <string name="pref_clear_manga_database_summary">Borrar el historial del manga que no esté guardado en tu biblioteca</string>
     <string name="pref_clear_anime_database_summary">Borrar el historial del anime que no esté guardado en tu biblioteca</string>
     <string name="clear_database_confirmation">¿Estás seguro\? Episodios y capítulos completados y progreso que no esté en la biblioteca se perderá</string>
     <string name="pref_refresh_library_tracking_summary">Actualiza estados, puntuaciones y últimos capítulos leídos desde tus servicios de seguimiento</string>
@@ -172,8 +170,8 @@
     <string name="episode_progress_no_total">Progreso: %1$s</string>
     <string name="screenshot_header">Hacer una captura de pantalla</string>
     <string name="screenshot_show_subs">Mostrar subtítulos en captura de pantalla</string>
-    <string name="toggle_volume_brightness_gestures">Gestos para cambiar el volumen y el brillo</string>
-    <string name="toggle_horizontal_seek_gesture">Alternar con el gesto de la búsqueda horizontal</string>
+    <string name="enable_volume_brightness_gestures">Gestos para cambiar el volumen y el brillo</string>
+    <string name="enable_horizontal_seek_gesture">Alternar con el gesto de la búsqueda horizontal</string>
     <string name="stats_header">Mostrar las estadísticas</string>
     <string name="toggle_stats">Alternar estadísticas</string>
     <string name="stats_page">Página de las estadísticas</string>
@@ -232,7 +230,7 @@
     <string name="player_aniskip_ed">Omitir el final</string>
     <string name="player_aniskip_mixedOp">Saltar introducción mixta</string>
     <string name="player_aniskip_recap">Saltar resumen</string>
-    <string name="pref_category_player_aniskip">Ajustes de AniSkip</string>
+    <string name="pref_category_player_aniskip_info">Ajustes de AniSkip</string>
     <string name="pref_enable_aniskip">Activar AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Activar el salto automático</string>
     <string name="pref_waiting_time_aniskip">Tiempo de espera del botón</string>

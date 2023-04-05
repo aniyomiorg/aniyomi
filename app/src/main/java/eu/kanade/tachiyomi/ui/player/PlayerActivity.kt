@@ -9,7 +9,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
@@ -46,6 +45,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -76,7 +76,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import uy.kohesive.injekt.injectLazy
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.File
 import java.io.InputStream
 import kotlin.math.abs
@@ -97,9 +98,9 @@ class PlayerActivity :
         }
     }
 
-    private val playerPreferences: PlayerPreferences by injectLazy()
+    private val playerPreferences: PlayerPreferences = Injekt.get()
 
-    private val networkPreferences: NetworkPreferences by injectLazy()
+    private val networkPreferences: NetworkPreferences = Injekt.get()
 
     val viewModel by viewModels<PlayerViewModel>()
 
@@ -121,7 +122,8 @@ class PlayerActivity :
 
     private var isInPipMode: Boolean = false
     private var isPipStarted: Boolean = false
-    internal var deviceSupportsPip: Boolean = false
+    internal val isPipSupportedAndEnabled: Boolean
+        get() = Injekt.get<BasePreferences>().deviceHasPip() && playerPreferences.enablePip().get()
 
     internal var isDoubleTapSeeking: Boolean = false
 
@@ -307,8 +309,6 @@ class PlayerActivity :
         registerSecureActivity(this)
         Utils.copyAssets(this)
         super.onCreate(savedInstanceState)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) deviceSupportsPip = packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
 
         binding = PlayerActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -511,7 +511,7 @@ class PlayerActivity :
             }
             setupGestures()
             setViewMode()
-            if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) player.paused?.let { updatePictureInPictureActions(!it) }
+            if (isPipSupportedAndEnabled) player.paused?.let { updatePictureInPictureActions(!it) }
         }
     }
 
@@ -1205,7 +1205,7 @@ class PlayerActivity :
     }
 
     private fun updatePlaybackStatus(paused: Boolean) {
-        if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) updatePictureInPictureActions(!paused)
+        if (isPipSupportedAndEnabled && isInPipMode) updatePictureInPictureActions(!paused)
         val r = if (paused) R.drawable.ic_play_arrow_72dp else R.drawable.ic_pause_72dp
         playerControls.binding.playBtn.setImageResource(r)
 
@@ -1233,7 +1233,7 @@ class PlayerActivity :
     @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (deviceSupportsPip) {
+        if (isPipSupportedAndEnabled) {
             if (player.paused == false && playerPreferences.pipOnExit().get()) {
                 startPiP()
             } else {
@@ -1256,7 +1256,7 @@ class PlayerActivity :
         if (!playerIsDestroyed) {
             player.paused = true
         }
-        if (deviceSupportsPip && isInPipMode && powerManager.isInteractive) {
+        if (isPipSupportedAndEnabled && isInPipMode && powerManager.isInteractive) {
             finishAndRemoveTask()
         }
 
@@ -1266,7 +1266,7 @@ class PlayerActivity :
     override fun onResume() {
         super.onResume()
         setVisibilities()
-        if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isInPipMode) player.paused?.let { updatePictureInPictureActions(!it) }
+        if (isPipSupportedAndEnabled && isInPipMode) player.paused?.let { updatePictureInPictureActions(!it) }
     }
 
     @Suppress("DEPRECATION")
@@ -1317,7 +1317,7 @@ class PlayerActivity :
     @Suppress("DEPRECATION")
     fun startPiP() {
         if (isInPipMode) return
-        if (deviceSupportsPip && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (isPipSupportedAndEnabled) {
             isPipStarted = true
             playerControls.hideControls(true)
             player.paused?.let { updatePictureInPictureActions(!it) }

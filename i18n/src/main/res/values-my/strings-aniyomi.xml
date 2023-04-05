@@ -2,5 +2,5 @@
 <resources>
     <string name="manga_categories">အမျိုးအစားများ</string>
     <string name="unlock_app">Aniyomi ကိုဖွင့်ပါ</string>
-    <string name="default_category">ပုံသေအမျိုးအစား</string>
+    <string name="default_manga_category">ပုံသေအမျိုးအစား</string>
 </resources>

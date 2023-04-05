@@ -4,10 +4,10 @@
     <string name="unlock_app">अनलॉक Aniyomi</string>
     <string name="action_sort_last_manga_update">आखिरी किताब अद्यतन</string>
     <string name="action_show_manga">मंगा दिखाएँ</string>
-    <string name="action_display_local_badge">स्थानीय पुस्तक</string>
+    <string name="action_display_local_badge_manga">स्थानीय पुस्तक</string>
     <string name="pref_update_only_completely_read">अपठित अध्याय हैं</string>
     <string name="pref_library_update_show_tab_badge">अपडेट आइकन पर अपठित संख्या दिखाएं</string>
-    <string name="default_category">डिफ़ॉल्ट श्रेणी</string>
+    <string name="default_manga_category">डिफ़ॉल्ट श्रेणी</string>
     <string name="pref_manga_library_update_categories_details">बहिष्कृत श्रेणियों की पुस्तकें अपडेट नहीं की जाएंगी, भले ही वे भी शामिल श्रेणियों में हों।</string>
     <string name="untrusted_extension_message">यह एक्सटेंशन एक अविश्वस्त प्रमाणपत्र के साथ हस्ताक्षरित हुआ था और सक्रिय नहीं हुआ था।
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">\'पढ़ें\' के रूप में खुद से चिह्नित करने के बाद</string>
     <string name="pref_remove_after_read">पढ़ने के बाद स्वचालित रूप से हटाएं</string>
     <string name="pref_remove_bookmarked_chapters">बुकमार्क किए गए अध्यायों को हटाने की अनुमति दें</string>
-    <string name="pref_remove_exclude_categories">बहिष्कृत श्रेणियां</string>
+    <string name="pref_remove_exclude_categories_manga">बहिष्कृत श्रेणियां</string>
     <string name="pref_auto_update_manga_sync">पढ़ने के बाद प्रगति अपडेट करें</string>
     <string name="pref_clear_chapter_cache">अध्याय कैश साफ़ करें</string>
     <string name="pref_auto_clear_chapter_cache">ऐप बंद करते समय चैप्टर कैशे साफ़ करें</string>
-    <string name="pref_clear_database">डेटाबेस साफ़ करें</string>
-    <string name="pref_clear_database_summary">मैंगा जो आपकी लाइब्रेरी में सहेजे नहीं हैं उनका इतिहास हटाएं</string>
+    <string name="pref_clear_manga_database">डेटाबेस साफ़ करें</string>
+    <string name="pref_clear_manga_database_summary">मैंगा जो आपकी लाइब्रेरी में सहेजे नहीं हैं उनका इतिहास हटाएं</string>
     <string name="clear_database_confirmation">क्या आपको यकीन है? अध्यायों और गैर-पुस्तकालय मंगा की प्रगति को खो दिया जाएगा</string>
     <string name="pref_refresh_library_tracking_summary">अपडेट की स्थिति, स्कोर और अंतिम अध्याय ट्रैकिंग सेवाओं से पढ़ें</string>
     <string name="pref_incognito_mode_summary">इतिहास पढ़ने से रोक देता है</string>

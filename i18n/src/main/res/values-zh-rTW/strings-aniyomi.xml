@@ -4,10 +4,10 @@
     <string name="unlock_app">解除鎖定 Aniyomi</string>
     <string name="action_sort_last_manga_update">上次檢查更新日期</string>
     <string name="action_show_manga">顯示作品</string>
-    <string name="action_display_local_badge">本機來源</string>
+    <string name="action_display_local_badge_manga">本機來源</string>
     <string name="pref_update_only_completely_read">有未讀的章節</string>
     <string name="pref_library_update_show_tab_badge">在「新刊」導覽圖示上標記未讀章數</string>
-    <string name="default_category">預設類別</string>
+    <string name="default_manga_category">預設類別</string>
     <string name="pref_manga_library_update_categories_details">類別同時屬於「排除」及「包含」的作品，將不會自動更新。</string>
     <string name="untrusted_extension_message">這個擴充套件的憑證並不可靠，且尚未被啟用。
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">手動標示為已讀後</string>
     <string name="pref_remove_after_read">翻閱過後自動刪除</string>
     <string name="pref_remove_bookmarked_chapters">允許刪除有書籤的章節</string>
-    <string name="pref_remove_exclude_categories">排除的類別</string>
+    <string name="pref_remove_exclude_categories_manga">排除的類別</string>
     <string name="pref_auto_update_manga_sync">閱後自動更新章節進度</string>
     <string name="pref_clear_chapter_cache">清除章節快取</string>
     <string name="pref_auto_clear_chapter_cache">結束應用程式時清除章節快取</string>
-    <string name="pref_clear_database">清除資料庫</string>
-    <string name="pref_clear_database_summary">將未收藏於書櫃的作品記錄刪除</string>
+    <string name="pref_clear_manga_database">清除資料庫</string>
+    <string name="pref_clear_manga_database_summary">將未收藏於書櫃的作品記錄刪除</string>
     <string name="clear_database_confirmation">不在書櫃中的作品閱讀進度將被清除，你確定嗎？</string>
     <string name="pref_refresh_library_tracking_summary">與歷程平台同步處理閱讀狀態、評分以及進度</string>
     <string name="pref_incognito_mode_summary">暫停閱讀記錄</string>

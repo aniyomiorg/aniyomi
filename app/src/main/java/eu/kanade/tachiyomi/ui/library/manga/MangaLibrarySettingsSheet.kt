@@ -353,7 +353,7 @@ class MangaLibrarySettingsSheet(
         inner class BadgeGroup : Group {
             private val downloadBadge = Item.CheckboxGroup(R.string.action_display_download_badge, this)
             private val unreadBadge = Item.CheckboxGroup(R.string.action_display_unread_badge, this)
-            private val localBadge = Item.CheckboxGroup(R.string.action_display_local_badge, this)
+            private val localBadge = Item.CheckboxGroup(R.string.action_display_local_badge_manga, this)
             private val languageBadge = Item.CheckboxGroup(R.string.action_display_language_badge, this)
 
             override val header = Item.Header(R.string.badges_header)

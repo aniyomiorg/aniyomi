@@ -2,7 +2,7 @@
 <resources>
     <string name="manga_categories">Бөлөхтөр</string>
     <string name="unlock_app">Aniyomi арыйыыта</string>
-    <string name="default_category">Куолутунан бөлөх</string>
+    <string name="default_manga_category">Куолутунан бөлөх</string>
     <string name="pref_manga_library_update_categories_details">Сотуллубут категориялар маангалара саҥардыллыа суоҕа, холбоммут категорияларга баарын үрдүнэн.</string>
     <string name="untrusted_extension_message">Бу кэҥэтии эрэлэ суох туоһу суругунан бэлиэтэммит уонна холбоммотох.
 \n
@@ -15,8 +15,8 @@
     <string name="pref_remove_bookmarked_chapters">Кыбытыылах түһүмэхтэри соттор</string>
     <string name="pref_auto_update_manga_sync">Түһүмэх туругун ааҕы кэннэ саҥарт</string>
     <string name="pref_clear_chapter_cache">Түһүмэх кээһин ыраастааһын</string>
-    <string name="pref_clear_database">Билим олоҕо ыраастааһына</string>
-    <string name="pref_clear_database_summary">Эн бэбэлэтиэкэҕэр суох маанга остуоруйатын сотторуу</string>
+    <string name="pref_clear_manga_database">Билим олоҕо ыраастааһына</string>
+    <string name="pref_clear_manga_database_summary">Эн бэбэлэтиэкэҕэр суох маанга остуоруйатын сотторуу</string>
     <string name="clear_database_confirmation">Эрэллэххин дуо\? Ааҕыллыбыт түһүмэхтэр уонна бэбэлэтиэкэҕэ суох маанга туруга сүтүө</string>
     <string name="pref_refresh_library_tracking_summary">Туругу, ахсааны уонна бүтэһик ааҕыллыбыт түһүмэҕи кэтээн көрөр өҥөлөртөн саҥардыы</string>
     <string name="pref_incognito_mode_summary">Ааҕы остуоруйатын тохтотор</string>

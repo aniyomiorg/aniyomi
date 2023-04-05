@@ -4,10 +4,10 @@
     <string name="unlock_app">שחרר את Aniyomi</string>
     <string name="action_sort_last_manga_update">עדכון אחרון</string>
     <string name="action_show_manga">הראה פריט</string>
-    <string name="action_display_local_badge">מקור מקומי</string>
+    <string name="action_display_local_badge_manga">מקור מקומי</string>
     <string name="pref_update_only_completely_read">עם פרק(ים) שלא נקרא(ו)</string>
     <string name="pref_library_update_show_tab_badge">הראה מספור של פרקים שלא נקראו באייקון העדכונים</string>
-    <string name="default_category">קטגוריית ברירת המחדל</string>
+    <string name="default_manga_category">קטגוריית ברירת המחדל</string>
     <string name="pref_manga_library_update_categories_details">מנגה הנמצאת בקטגוריית מנועי העדכונים לא תעודכן גם אם היא נכללת בקטגורייה אחרת שכן מתעדכנת.</string>
     <string name="untrusted_extension_message">תוסף זה נחתם עם אישור לא מהימן ולא הופעל.
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">אחרי שמסומן ידנית כנקרא</string>
     <string name="pref_remove_after_read">אוטומטי לאחר סיום הקריאה</string>
     <string name="pref_remove_bookmarked_chapters">אפשר מחיקת פרקים שסומנו</string>
-    <string name="pref_remove_exclude_categories">קטגוריות מוחרגות</string>
+    <string name="pref_remove_exclude_categories_manga">קטגוריות מוחרגות</string>
     <string name="pref_auto_update_manga_sync">עדכן התקדמות לאחר הקריאה</string>
     <string name="pref_clear_chapter_cache">נקה את זיכרון המטמון של הפרקים</string>
     <string name="pref_auto_clear_chapter_cache">נקה את זיכרון המטמון של הפרקים כשהאפליקציה נסגרת</string>
-    <string name="pref_clear_database">נקה את מסד הנתונים</string>
-    <string name="pref_clear_database_summary">מחק את היסטוריית המנגה שאינם שמורים בספריה שלך</string>
+    <string name="pref_clear_manga_database">נקה את מסד הנתונים</string>
+    <string name="pref_clear_manga_database_summary">מחק את היסטוריית המנגה שאינם שמורים בספריה שלך</string>
     <string name="clear_database_confirmation">האם אתה בטוח\? פרקים שנקראו וההתקדמות של מנגה שאינה בספרייה יאבדו</string>
     <string name="pref_refresh_library_tracking_summary">עדכן סטטוס, ציון ופרק אחרון שנקרא משירותי המעקב</string>
     <string name="pref_incognito_mode_summary">עוצר את קריאת ההיסטוריה</string>

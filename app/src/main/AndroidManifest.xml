@@ -69,11 +69,39 @@
             android:name=".crash.CrashActivity"
             android:exported="false" />
 
+
         <activity
-            android:name=".ui.main.DeepLinkActivity"
+            android:name=".ui.main.DeepLinkAnimeActivity"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.NoDisplay"
-            android:label="@string/action_global_search"
+            android:label="@string/action_global_anime_search"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="com.google.android.gms.actions.SEARCH_ACTION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="eu.kanade.tachiyomi.ANIMESEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <activity
+            android:name=".ui.main.DeepLinkMangaActivity"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:label="@string/action_global_manga_search"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

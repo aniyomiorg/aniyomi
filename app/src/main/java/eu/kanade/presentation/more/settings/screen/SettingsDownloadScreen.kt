@@ -200,7 +200,7 @@ object SettingsDownloadScreen : SearchableSettings {
     ): Preference.PreferenceItem.MultiSelectListPreference {
         return Preference.PreferenceItem.MultiSelectListPreference(
             pref = downloadPreferences.removeExcludeCategories(),
-            title = stringResource(R.string.pref_remove_exclude_categories),
+            title = stringResource(R.string.pref_remove_exclude_categories_manga),
             entries = categories().associate { it.id.toString() to it.visualName },
         )
     }

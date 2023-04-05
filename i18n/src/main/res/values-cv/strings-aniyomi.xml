@@ -4,8 +4,8 @@
     <string name="unlock_app">Aniyomi уҫ</string>
     <string name="action_sort_last_manga_update">Юлашки ҫӗнетӗве тӗрӗслени</string>
     <string name="action_show_manga">Ҫырава кӑтарт</string>
-    <string name="action_display_local_badge">Вырӑнти ҫӑл куҫ</string>
-    <string name="default_category">Яланхилле пухмӑш</string>
+    <string name="action_display_local_badge_manga">Вырӑнти ҫӑл куҫ</string>
+    <string name="default_manga_category">Яланхилле пухмӑш</string>
     <string name="untrusted_extension_message">Ку хушмана шанчӑклӑ мар сертификатпа алӑ пуснӑ тата ӑна активламан.
 \n
 \nСиенлӗ хушма Tachiyomi-ри упранакан кирек мӗнле шут пӗлӗмсене шута илме е хӑй ирӗклӗ юма пурнӑҫлама пултарать.
@@ -17,8 +17,8 @@
     <string name="pref_remove_bookmarked_chapters">Картнӑ сыпӑксене катерт</string>
     <string name="pref_auto_update_manga_sync">Вуланӑ хыҫҫӑн сыпӑксен ӳсӗме ҫӗнет</string>
     <string name="pref_clear_chapter_cache">Сыпӑксен кешне тасат</string>
-    <string name="pref_clear_database">Пӗлӗмсен кӗлете тасат</string>
-    <string name="pref_clear_database_summary">Санӑн вулавӑшра упранман манкӑн вуланӑ кун-ҫулне катерт</string>
+    <string name="pref_clear_manga_database">Пӗлӗмсен кӗлете тасат</string>
+    <string name="pref_clear_manga_database_summary">Санӑн вулавӑшра упранман манкӑн вуланӑ кун-ҫулне катерт</string>
     <string name="clear_database_confirmation">Чӑнах катертесшӗн-и\? Вулавӑшри мар манкӑн вуланӑ сыпӑкӗсем тата вулав ӳсӗмӗ ҫухалӗ</string>
     <string name="pref_refresh_library_tracking_summary">Сӑнану сервиссенчен халне, шутне тата юлашки вуланӑ сыпӑка илсе ҫӗнет</string>
     <string name="pref_incognito_mode_summary">Вулани кун-ҫула чарса лартать</string>

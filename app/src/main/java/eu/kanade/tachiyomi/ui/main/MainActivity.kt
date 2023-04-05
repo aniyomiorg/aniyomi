@@ -76,6 +76,7 @@ import eu.kanade.tachiyomi.data.updater.AppUpdateResult
 import eu.kanade.tachiyomi.data.updater.RELEASE_URL
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
+import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchScreen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
@@ -492,7 +493,7 @@ class MainActivity : BaseActivity() {
                 if (query != null && query.isNotEmpty()) {
                     val filter = intent.getStringExtra(INTENT_SEARCH_FILTER) ?: ""
                     navigator.popUntilRoot()
-                    navigator.push(GlobalMangaSearchScreen(query, filter))
+                    navigator.push(GlobalAnimeSearchScreen(query, filter))
                 }
             }
             else -> {

@@ -4,10 +4,10 @@
     <string name="unlock_app">Aniyomi feloldása</string>
     <string name="action_sort_last_manga_update">Utolsó manga frissítés</string>
     <string name="action_show_manga">Manga mutatása</string>
-    <string name="action_display_local_badge">Helyi manga</string>
+    <string name="action_display_local_badge_manga">Helyi manga</string>
     <string name="pref_update_only_completely_read">Csak a befejezett fejezeteket()</string>
     <string name="pref_library_update_show_tab_badge">Az olvasatlanok számának megjelnítése a Frissítések ikonon</string>
-    <string name="default_category">Alapértelmezett kategória</string>
+    <string name="default_manga_category">Alapértelmezett kategória</string>
     <string name="pref_manga_library_update_categories_details">Mangák a tiltott kategóriákban nem lesznek frissítve, még akkor se, ha a kedvelt kategóriákban is vannak.</string>
     <string name="untrusted_extension_message">Ezt a kiterjesztést nem megbízható tanúsítvánnyal írták alá, és nem lett aktiválva.
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">Olvasottnak jelölés után</string>
     <string name="pref_remove_after_read">Automatikus törlés olvasás után</string>
     <string name="pref_remove_bookmarked_chapters">Könyvjelzőzött fejezetek törlésének engedélyezése</string>
-    <string name="pref_remove_exclude_categories">Tiltott kategóriák</string>
+    <string name="pref_remove_exclude_categories_manga">Tiltott kategóriák</string>
     <string name="pref_auto_update_manga_sync">Olvasás után a fejezetek haladásának frissítése</string>
     <string name="pref_clear_chapter_cache">Fejezet gyorsítótárának törlése</string>
     <string name="pref_auto_clear_chapter_cache">Fejezet gyorsítótár törlése kilépéskor</string>
-    <string name="pref_clear_database">Adatbázis törlése</string>
-    <string name="pref_clear_database_summary">Nem könyvtári elemek előzményeinek törlése</string>
+    <string name="pref_clear_manga_database">Adatbázis törlése</string>
+    <string name="pref_clear_manga_database_summary">Nem könyvtári elemek előzményeinek törlése</string>
     <string name="clear_database_confirmation">Biztos benne\? Nem könyvtári elemek olvasott fejezetei elvesznek</string>
     <string name="pref_refresh_library_tracking_summary">Frissíti az állapotot, értékelést és az utolsó olvasott fejezetet a tracking szolgáltatás által</string>
     <string name="pref_incognito_mode_summary">Olvasási előzmények megállítása</string>

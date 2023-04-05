@@ -4,10 +4,10 @@
     <string name="unlock_app">Lås upp Aniyomi</string>
     <string name="action_sort_last_manga_update">Sista manga-uppdateringen</string>
     <string name="action_show_manga">Visa manga</string>
-    <string name="action_display_local_badge">Lokal manga</string>
+    <string name="action_display_local_badge_manga">Lokal manga</string>
     <string name="pref_update_only_completely_read">Med olästa kapitel</string>
     <string name="pref_library_update_show_tab_badge">Visa antalet olästa på ikonen Uppdateringar</string>
-    <string name="default_category">Standardkategori</string>
+    <string name="default_manga_category">Standardkategori</string>
     <string name="pref_manga_library_update_categories_details">Manga i uteslutna kategorier uppdateras inte även om de också ingår i inkluderade kategorier.</string>
     <string name="untrusted_extension_message">Detta tillägg tecknades med ett otillförlitligt certifikat och var inte aktiverat.
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">Efter manuellt markerad som läst</string>
     <string name="pref_remove_after_read">Ta bort automatiskt efter läsning</string>
     <string name="pref_remove_bookmarked_chapters">Tillåt att radera bokmärkta kapitel</string>
-    <string name="pref_remove_exclude_categories">Uteslutna kategorier</string>
+    <string name="pref_remove_exclude_categories_manga">Uteslutna kategorier</string>
     <string name="pref_auto_update_manga_sync">Uppdatera förlopp efter läsning</string>
     <string name="pref_clear_chapter_cache">Rensa kapitelcache</string>
     <string name="pref_auto_clear_chapter_cache">Rensa kapitelcache när appen stängs</string>
-    <string name="pref_clear_database">Rensa databas</string>
-    <string name="pref_clear_database_summary">Ta bort historik för manga som inte finns i ditt bibliotek</string>
+    <string name="pref_clear_manga_database">Rensa databas</string>
+    <string name="pref_clear_manga_database_summary">Ta bort historik för manga som inte finns i ditt bibliotek</string>
     <string name="clear_database_confirmation">Är du säker\? Lästa kapitel och framsteg av icke-bibliotek manga kommer att gå förlorade</string>
     <string name="pref_refresh_library_tracking_summary">Uppdaterar status, betyg och senaste kapitel läst från spårningstjänsterna</string>
     <string name="pref_incognito_mode_summary">Pausar läshistoriken</string>

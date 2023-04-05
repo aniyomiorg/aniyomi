@@ -51,7 +51,7 @@ object SettingsBrowseScreen : SearchableSettings {
                     ),
                     Preference.PreferenceItem.SwitchPreference(
                         pref = sourcePreferences.searchPinnedMangaSourcesOnly(),
-                        title = stringResource(R.string.pref_search_pinned_sources_only),
+                        title = stringResource(R.string.pref_search_pinned_manga_sources_only),
                     ),
                 ),
             ),
