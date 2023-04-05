@@ -60,14 +60,23 @@ class AnimeDownloadHolder(private val view: View, val adapter: AnimeDownloadAdap
         if (binding.downloadProgress.max == 1) {
             binding.downloadProgress.max = 100
         }
-        binding.downloadProgress.setProgressCompat(download.totalProgress, true)
+        if (download.totalProgress == 0) {
+            binding.downloadProgress.isIndeterminate = true
+        } else {
+            binding.downloadProgress.isIndeterminate = false
+            binding.downloadProgress.setProgressCompat(download.totalProgress, true)
+        }
     }
 
     /**
      * Updates the text field of the number of downloaded pages.
      */
     fun notifyDownloadedPages() {
-        binding.downloadProgressText.text = view.context.getString(R.string.episode_download_progress, download.progress)
+        binding.downloadProgressText.text = if (download.totalProgress == 0) {
+            view.context.getString(R.string.update_check_notification_download_in_progress)
+        } else {
+            view.context.getString(R.string.episode_download_progress, download.progress)
+        }
     }
 
     override fun onItemReleased(position: Int) {

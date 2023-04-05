@@ -92,10 +92,11 @@ internal class AnimeDownloadNotifier(private val context: Context) {
                 )
             }
 
-            val downloadingProgressText = context.getString(
-                R.string.episode_downloading_progress,
-                download.progress,
-            )
+            val downloadingProgressText = if (download.totalProgress == 0) {
+                context.getString(R.string.update_check_notification_download_in_progress)
+            } else {
+                context.getString(R.string.episode_downloading_progress, download.progress)
+            }
 
             if (preferences.hideNotificationContent().get()) {
                 setContentTitle(downloadingProgressText)
@@ -103,12 +104,15 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             } else {
                 val title = download.anime.title.chop(15)
                 val quotedTitle = Pattern.quote(title)
-                val chapter = download.episode.name.replaceFirst("$quotedTitle[\\s]*[-]*[\\s]*".toRegex(RegexOption.IGNORE_CASE), "")
-                setContentTitle("$title - $chapter".chop(30))
+                val episode = download.episode.name.replaceFirst("$quotedTitle[\\s]*[-]*[\\s]*".toRegex(RegexOption.IGNORE_CASE), "")
+                setContentTitle("$title - $episode".chop(30))
                 setContentText(downloadingProgressText)
             }
-
-            setProgress(100, download.progress, false)
+            if (download.totalProgress == 0) {
+                setProgress(100, download.progress, true)
+            } else {
+                setProgress(100, download.progress, false)
+            }
             setOngoing(true)
 
             show(Notifications.ID_DOWNLOAD_EPISODE_PROGRESS)
