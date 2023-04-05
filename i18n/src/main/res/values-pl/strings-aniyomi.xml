@@ -302,4 +302,5 @@
     <string name="choose_video_quality"></string>
     <string name="video_stretch_screen"></string>
     <string name="display_mode_episode"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
