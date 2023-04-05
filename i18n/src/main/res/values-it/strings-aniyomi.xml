@@ -203,7 +203,6 @@
     <string name="action_sort_episode_fetch_date">Data episodio</string>
     <string name="pref_always_use_external_player">Usa sempre un player esterno</string>
     <string name="pref_remove_exclude_categories_anime">Categorie anime escluse</string>
-    <string name="pref_remove_exclude_categories_anime_prefix">Anime:</string>
     <string name="pref_external_downloader_selection">Downloader app scelto</string>
     <string name="pref_download_new_episodes">Scarica i nuovi episodi</string>
     <string name="download_ahead_info_anime">Funziona solo sugli elementi della libreria e se l\'episodio corrente più il prossimo sono già stati scaricati</string>

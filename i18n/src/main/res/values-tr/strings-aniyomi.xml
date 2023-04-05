@@ -215,7 +215,6 @@
     <string name="player_aniskip_op">Açılışı atla</string>
     <string name="pref_enable_netflix_style_aniskip">Netflix tarzını etkinleştir</string>
     <string name="player_aniskip_ed">Kapanışı atla</string>
-    <string name="pref_category_player_aniskip">AniSkip Ayarları</string>
     <string name="pref_enable_aniskip">Aniskip\'i etkinleştir</string>
     <string name="pref_enable_auto_skip_ani_skip">otomatik atlamayı etkinleştir</string>
     <string name="notification_episodes_single_and_more">Bölüm %1$s ve %2$d daha fazlası</string>

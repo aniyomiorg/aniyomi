@@ -112,14 +112,12 @@
     <string name="label_anime_library">Аніме</string>
     <string name="label_manga_sources">Джерела манги</string>
     <string name="label_anime_sources">Джерела аніме</string>
-    <string name="pref_remove_exclude_categories_anime_prefix">Аніме:</string>
     <string name="auto_download_while_watching">Автоматичне завантаження під час перегляду</string>
     <string name="pref_pip_episode_toasts">Показувати сповіщення епізоду під час переходу на інший епізод у режимі PiP</string>
     <string name="pref_player_hide_controls">Приховувати елементи керування плеєром під час відкриття плеєра</string>
     <string name="pref_track_on_add_library">Відкрити меню доріжки при додаванні до бібліотеки</string>
     <string name="action_bookmark_episode">Додати в закладки епізод</string>
     <string name="action_remove_bookmark_episode">Видалити закладку з епізоду</string>
-    <string name="pref_remove_exclude_categories_prefix">Манґа:</string>
     <string name="pref_category_external_downloader">Зовнішній завантажувач</string>
     <string name="pref_use_external_downloader">Завжди використовувати зовнішній завантажувач для аніме</string>
     <plurals name="next_unseen_episodes">
