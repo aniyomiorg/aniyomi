@@ -161,8 +161,8 @@
     <string name="dialog_with_checkbox_reset">重置此漫画所有章节</string>
     <string name="screenshot_header">截取屏幕</string>
     <string name="screenshot_show_subs">在截屏中显示字幕</string>
-    <string name="toggle_volume_brightness_gestures">启用音量和亮度手势</string>
-    <string name="toggle_horizontal_seek_gesture">启用水平定位手势</string>
+    <string name="enable_volume_brightness_gestures">启用音量和亮度手势</string>
+    <string name="enable_horizontal_seek_gesture">启用水平定位手势</string>
     <string name="stats_header">显示统计数据</string>
     <string name="toggle_stats">启用数据统计</string>
     <string name="stats_page">数据统计页</string>

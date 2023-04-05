@@ -93,8 +93,8 @@
     <string name="sort_by_episode_number">Per numero episodio</string>
     <string name="download_1_episode">Prossimo episodio</string>
     <string name="screenshot_show_subs">Mostra i sottotitoli negli screenshot</string>
-    <string name="toggle_volume_brightness_gestures">Attiva regolazione Volume e Retroilluminazione attraverso le Gestures</string>
-    <string name="toggle_horizontal_seek_gesture">Attiva movimento di ricerca orizzontale attraverso le Gestures</string>
+    <string name="enable_volume_brightness_gestures">Attiva regolazione Volume e Retroilluminazione attraverso le Gestures</string>
+    <string name="enable_horizontal_seek_gesture">Attiva movimento di ricerca orizzontale attraverso le Gestures</string>
     <string name="stats_header">Mostra statistiche</string>
     <string name="information_no_recent_anime">Nulla è stato guardato di recente</string>
     <plurals name="notification_episodes_generic">
