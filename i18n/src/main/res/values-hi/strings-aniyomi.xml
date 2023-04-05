@@ -288,4 +288,5 @@
     <string name="dialog_with_checkbox_remove_description_anime"></string>
     <string name="pref_waiting_time_aniskip_6"></string>
     <string name="pref_external_player_preference"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
