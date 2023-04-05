@@ -302,4 +302,5 @@
     <string name="episode_progress_no_total"></string>
     <string name="currently_reading"></string>
     <string name="dialog_with_checkbox_reset_anime"></string>
+    <string name="pref_search_pinned_manga_sources_only"></string>
 </resources>
