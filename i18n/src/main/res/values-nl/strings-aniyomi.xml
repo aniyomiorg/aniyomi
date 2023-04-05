@@ -4,10 +4,10 @@
     <string name="unlock_app">Ontgrendel Aniyomi</string>
     <string name="action_sort_last_manga_update">Laatst bijgewerkte manga</string>
     <string name="action_show_manga">Laat manga zien</string>
-    <string name="action_display_local_badge">Lokale manga</string>
+    <string name="action_display_local_badge_manga">Lokale manga</string>
     <string name="pref_update_only_completely_read">Heeft ongelezen hoofdstukken</string>
     <string name="pref_library_update_show_tab_badge">Geef ongelezen aantal weer op het Update icoon</string>
-    <string name="default_category">Standaard categorie</string>
+    <string name="default_manga_category">Standaard categorie</string>
     <string name="pref_manga_library_update_categories_details">Manga in uitgesloten categorieën worden niet bijgewerkt, zelfs niet als ze onder opgenomen categorieën vallen.</string>
     <string name="untrusted_extension_message">Deze extensie is door een niet vertrouwd certificaat ondertekend en is niet geactiveerd.
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">Nadat ze handmatig gemarkeerd zijn als gelezen</string>
     <string name="pref_remove_after_read">Automatisch verwijderen na het lezen</string>
     <string name="pref_remove_bookmarked_chapters">Verwijderen van hoofdstukken met bladwijzers toestaan</string>
-    <string name="pref_remove_exclude_categories">Uitgesloten categoriën</string>
+    <string name="pref_remove_exclude_categories_manga">Uitgesloten categoriën</string>
     <string name="pref_auto_update_manga_sync">Voortgang bijwerken na lezen</string>
     <string name="pref_clear_chapter_cache">Leeg hoofdstukkencache</string>
     <string name="pref_auto_clear_chapter_cache">Hoofdstuk cache leegmaken na het sluiten van de app</string>
-    <string name="pref_clear_database">Database leegmaken</string>
-    <string name="pref_clear_database_summary">Verwijder geschiedenis voor manga die niet in je bibliotheek zijn opgeslagen</string>
+    <string name="pref_clear_manga_database">Database leegmaken</string>
+    <string name="pref_clear_manga_database_summary">Verwijder geschiedenis voor manga die niet in je bibliotheek zijn opgeslagen</string>
     <string name="clear_database_confirmation">Weet je het zeker\? Gelezen hoofdstukken en voortgang voor manga die niet in de bibliotheek zitten zullen verloren gaan</string>
     <string name="pref_refresh_library_tracking_summary">Update status, score en laatst gelezen hoofdstuk van de trackingdiensten</string>
     <string name="pref_incognito_mode_summary">Pauzeert leesgeschiedenis</string>

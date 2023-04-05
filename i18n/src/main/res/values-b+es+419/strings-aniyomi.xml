@@ -4,10 +4,10 @@
     <string name="unlock_app">Desbloquear Aniyomi</string>
     <string name="action_sort_last_manga_update">Última actualización de manga</string>
     <string name="action_show_manga">Mostrar manga</string>
-    <string name="action_display_local_badge">Mangas locales</string>
+    <string name="action_display_local_badge_manga">Mangas locales</string>
     <string name="pref_update_only_completely_read">Con capitulo(s) sin leer</string>
     <string name="pref_library_update_show_tab_badge">Mostrar número de no leidos en el icono de actualización</string>
-    <string name="default_category">Categoría por defecto</string>
+    <string name="default_manga_category">Categoría por defecto</string>
     <string name="pref_manga_library_update_categories_details">Los manga en las categorías excluidas no se actualizarán aún cuando estén en las categorías incluidas.</string>
     <string name="untrusted_extension_message">Esta extensión fue firmada por una fuente no certificada y no fue activada.
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">Después de marcar como leído manualmente</string>
     <string name="pref_remove_after_read">Borrar automáticamente después de leer</string>
     <string name="pref_remove_bookmarked_chapters">Permitir el borrado de capítulos en favoritos</string>
-    <string name="pref_remove_exclude_categories">Categorías excluidas</string>
+    <string name="pref_remove_exclude_categories_manga">Categorías excluidas</string>
     <string name="pref_auto_update_manga_sync">Actualizar el progreso después de leer</string>
     <string name="pref_clear_chapter_cache">Borrar caché de los capítulos</string>
     <string name="pref_auto_clear_chapter_cache">Borrar la caché de capítulos al cerrar la aplicación</string>
-    <string name="pref_clear_database">Borrar base de datos</string>
-    <string name="pref_clear_database_summary">Borrar el historial de mangas que no están guardados en la biblioteca</string>
+    <string name="pref_clear_manga_database">Borrar base de datos</string>
+    <string name="pref_clear_manga_database_summary">Borrar el historial de mangas que no están guardados en la biblioteca</string>
     <string name="clear_database_confirmation">¿Estas seguro\? Los capítulos leídos y el progreso de los mangas que no estén en la biblioteca se perderán</string>
     <string name="pref_refresh_library_tracking_summary">Actualizar estado, puntuación y último capítulo leído en los servicios de seguimiento</string>
     <string name="pref_incognito_mode_summary">Pausar historial de lectura</string>

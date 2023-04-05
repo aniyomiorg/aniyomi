@@ -158,7 +158,7 @@ private fun AnimeExtensionDetails(
         when {
             extension.isUnofficial ->
                 item {
-                    WarningBanner(R.string.unofficial_extension_message)
+                    WarningBanner(R.string.unofficial_anime_extension_message)
                 }
             extension.isObsolete ->
                 item {

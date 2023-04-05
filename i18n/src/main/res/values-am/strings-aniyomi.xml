@@ -2,7 +2,7 @@
 <resources>
     <string name="manga_categories">የማንጋ ምድቦች</string>
     <string name="unlock_app">ታቺዮሚን ይክፈቱ</string>
-    <string name="default_category">ነባሪ ምድብ</string>
+    <string name="default_manga_category">ነባሪ ምድብ</string>
     <string name="untrusted_extension_message">ይህ ቅጥያ ባልታመነ የእውቅና ማረጋገጫ ተፈርሟል እና አልነቃም።
 \n
 \nተንኮል አዘል ቅጥያ በአኒዮሚ ውስጥ የተከማቸውን ማንኛውንም የሚስጥር ማስረጃዎችን በማንበብ ወይም ያልተፈለገ ስራ ሊፈጽም ይችላል ፡፡

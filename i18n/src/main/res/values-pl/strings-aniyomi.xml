@@ -4,10 +4,10 @@
     <string name="unlock_app">Odblokuj Aniyomi</string>
     <string name="action_sort_last_manga_update">Ostatnia aktualizacja mangi</string>
     <string name="action_show_manga">Pokaż mangę</string>
-    <string name="action_display_local_badge">Lokalne mangi</string>
+    <string name="action_display_local_badge_manga">Lokalne mangi</string>
     <string name="pref_update_only_completely_read">Posiada nieprzeczytane rozdziały</string>
     <string name="pref_library_update_show_tab_badge">Pokaż wskaźnik nieprzeczytanych na ikonie Aktualizacje</string>
-    <string name="default_category">Domyślna kategoria</string>
+    <string name="default_manga_category">Domyślna kategoria</string>
     <string name="pref_manga_library_update_categories_details">Tytuły w wykluczonych kategoriach nie będą aktualizowane, nawet jeśli są również w uwzględnionych kategoriach.</string>
     <string name="untrusted_extension_message">To rozszerzenie było podpisane niezaufanym certyfikatem i nie zostało aktywowane.
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">Po ręcznym oznaczeniu jako przeczytane</string>
     <string name="pref_remove_after_read">Usuwaj rozdziały automatycznie po przeczytaniu</string>
     <string name="pref_remove_bookmarked_chapters">Usuwaj rozdziały dodane do zakładek</string>
-    <string name="pref_remove_exclude_categories">Wykluczone kategorie</string>
+    <string name="pref_remove_exclude_categories_manga">Wykluczone kategorie</string>
     <string name="pref_auto_update_manga_sync">Aktualizuj postęp po przeczytaniu rozdziału</string>
     <string name="pref_clear_chapter_cache">Wyczyść cache rozdziałów</string>
     <string name="pref_auto_clear_chapter_cache">Wyczyść cache rozdziałów przy wychodzeniu z aplikacji</string>
-    <string name="pref_clear_database">Wyczyść bazę danych</string>
-    <string name="pref_clear_database_summary">Usuń historię mang, których nie ma w twojej bibliotece</string>
+    <string name="pref_clear_manga_database">Wyczyść bazę danych</string>
+    <string name="pref_clear_manga_database_summary">Usuń historię mang, których nie ma w twojej bibliotece</string>
     <string name="clear_database_confirmation">Na pewno? Przeczytane rozdziały i postęp w mangach spoza biblioteki zostaną utracone</string>
     <string name="pref_refresh_library_tracking_summary">Aktualizuje status, ocenę i ostatnio czytany rozdział na podstawie usług śledzenia</string>
     <string name="pref_incognito_mode_summary">Wstrzymuje zapisywanie do historii czytania</string>

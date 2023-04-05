@@ -4,10 +4,10 @@
     <string name="unlock_app">अनलक ताचियोमी</string>
     <string name="action_sort_last_manga_update">पछिल्लो माङ्गा अपडेट</string>
     <string name="action_show_manga">माङ्गा देखाउनुहोस्</string>
-    <string name="action_display_local_badge">लोकल माङ्गा</string>
+    <string name="action_display_local_badge_manga">लोकल माङ्गा</string>
     <string name="pref_update_only_completely_read">नपढेका अध्यायहरू छन्</string>
     <string name="pref_library_update_show_tab_badge">अपडेट आइकनमा नपढिएको संख्या देखाउनुहोस्</string>
-    <string name="default_category">पूर्वनिर्धारित वर्ग</string>
+    <string name="default_manga_category">पूर्वनिर्धारित वर्ग</string>
     <string name="pref_manga_library_update_categories_details">\"बहिष्कृत\" वर्गहरूमा रहेका माङ्गा \"समावेश गरिएका\" वर्गहरूमा भए पनि अपडेट हुने छैनन्।</string>
     <string name="untrusted_extension_message">यो एक्सटेनशन एक अविश्वसनीय प्रमाणपत्र संग हस्ताक्षर गरिएको थियो र सक्रिय गरिएको थिएन।
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">आफै पढिएको रूपमा चिन्ह लगाइएपछि</string>
     <string name="pref_remove_after_read">पढिसकेपछि स्वचालित रूपमा हटाउनुहोस्</string>
     <string name="pref_remove_bookmarked_chapters">बुकमार्क गरिएका अध्यायहरू हटाउन अनुमति दिनुहोस्</string>
-    <string name="pref_remove_exclude_categories">बहिष्कृत वर्गहरू</string>
+    <string name="pref_remove_exclude_categories_manga">बहिष्कृत वर्गहरू</string>
     <string name="pref_auto_update_manga_sync">पढिसकेपछि प्रगति अपडेट गर्नुहोस्</string>
     <string name="pref_clear_chapter_cache">अध्याय क्यास खाली गर्नुहोस्</string>
     <string name="pref_auto_clear_chapter_cache">एप बन्दमा अध्याय क्यास खाली गर्नुहोस्</string>
-    <string name="pref_clear_database">डाटाबेस खाली गर्नुहोस्</string>
-    <string name="pref_clear_database_summary">पुस्तकालयमा नभएका माङ्गाको इतिहास हटाउनुहोस्</string>
+    <string name="pref_clear_manga_database">डाटाबेस खाली गर्नुहोस्</string>
+    <string name="pref_clear_manga_database_summary">पुस्तकालयमा नभएका माङ्गाको इतिहास हटाउनुहोस्</string>
     <string name="clear_database_confirmation">साच्चै हो\? पढेका अध्यायहरू र गैर-पुस्तकालय माङ्गाको प्रगति हराउनेछ</string>
     <string name="pref_refresh_library_tracking_summary">ट्र्याकिङ सेवाहरूबाट स्थिति, स्कोर र अन्तिम पढिएको अध्याय अपडेट गर्दछ</string>
     <string name="pref_incognito_mode_summary">पढिएको इतिहास रोक्नु</string>

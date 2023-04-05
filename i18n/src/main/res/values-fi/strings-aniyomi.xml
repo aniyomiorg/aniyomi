@@ -4,10 +4,10 @@
     <string name="unlock_app">Avaa Aniyomi</string>
     <string name="action_sort_last_manga_update">Viimeisin manga päivitys</string>
     <string name="action_show_manga">Näytä manga</string>
-    <string name="action_display_local_badge">Laitteelle tallennettu manga</string>
+    <string name="action_display_local_badge_manga">Laitteelle tallennettu manga</string>
     <string name="pref_update_only_completely_read">Sarjalla on lukemattomia kappaleita</string>
     <string name="pref_library_update_show_tab_badge">Näytä lukemattomien määrä päivitys ikoneissa</string>
-    <string name="default_category">Oletus kategoria</string>
+    <string name="default_manga_category">Oletus kategoria</string>
     <string name="pref_manga_library_update_categories_details">Poissuljettuihin kategorioihin sisältyvää mangaa ei päivitetä, vaikka ne olisivat myös sisällytetyissä kategorioissa.</string>
     <string name="untrusted_extension_message">Tämä laajennus on allekirjoitettu luottamattomalla sertifikaatilla ja sitä ei ole aktivoitu.
 \n
@@ -18,11 +18,11 @@
     <string name="pref_remove_after_marked_as_read">Manuaalisesti luetuksi merkitsemisen jälkeen</string>
     <string name="pref_remove_after_read">Lukemisen jälkeen</string>
     <string name="pref_remove_bookmarked_chapters">Poista kirjanmerkityt luvut</string>
-    <string name="pref_remove_exclude_categories">Poissuljetut kategoriat</string>
+    <string name="pref_remove_exclude_categories_manga">Poissuljetut kategoriat</string>
     <string name="pref_auto_update_manga_sync">Päivitä luvun edistyminen lukemisen jälkeen</string>
     <string name="pref_clear_chapter_cache">Tyhjennä lukujen välimuisti</string>
-    <string name="pref_clear_database">Tyhjennä tietokanta</string>
-    <string name="pref_clear_database_summary">Poista mangan historia, jota ei ole tallennettu kirjastoosi</string>
+    <string name="pref_clear_manga_database">Tyhjennä tietokanta</string>
+    <string name="pref_clear_manga_database_summary">Poista mangan historia, jota ei ole tallennettu kirjastoosi</string>
     <string name="clear_database_confirmation">Oletko varma\? Luetut luvut ja eteneminen poistetaan muista kun kirjastossa olevista sarjoista</string>
     <string name="pref_refresh_library_tracking_summary">Päivittää tilan, arvosanan ja viimeksi luetun luvun seurantapalveluista</string>
     <string name="pref_incognito_mode_summary">Keskeyttää lukuhistorian</string>

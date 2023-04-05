@@ -4,10 +4,10 @@
     <string name="unlock_app">Atrakinkite Anijomi</string>
     <string name="action_sort_last_manga_update">Paskutinis atnaujinimo patikrinimas</string>
     <string name="action_show_manga">Rodyti įrašą</string>
-    <string name="action_display_local_badge">Vietinis šaltinis</string>
+    <string name="action_display_local_badge_manga">Vietinis šaltinis</string>
     <string name="pref_update_only_completely_read">Kai yra neskaitytų skyrių</string>
     <string name="pref_library_update_show_tab_badge">Rodyti neperskaitytų skyrių skaičių prie \"Naujiniai\" ikonos</string>
-    <string name="default_category">Numatyta kategorija</string>
+    <string name="default_manga_category">Numatyta kategorija</string>
     <string name="pref_manga_library_update_categories_details">Įrašai, kurie yra įtraukti į neįtraukiamas kategorijas, nebus atnaujinami, net jei yra įtraukti į įtrauktąsias kategorijas.</string>
     <string name="untrusted_extension_message">Šis plėtinys buvo pasirašytas nepatikimu sertifikatu ir nebuvo aktyvuotas.
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">Rankinių būdu pažymėtas, kaip skaitytas</string>
     <string name="pref_remove_after_read">Perskaičius automatiškai naikinti</string>
     <string name="pref_remove_bookmarked_chapters">Leisti naikinti žymėtus skyrius</string>
-    <string name="pref_remove_exclude_categories">Neįtrauktos kategorijos</string>
+    <string name="pref_remove_exclude_categories_manga">Neįtrauktos kategorijos</string>
     <string name="pref_auto_update_manga_sync">Po perskaitymo atnaujinti statusą</string>
     <string name="pref_clear_chapter_cache">Išvalyti skyriaus talpyklą</string>
     <string name="pref_auto_clear_chapter_cache">Išvalyti skyriaus talpyklą uždarius programą</string>
-    <string name="pref_clear_database">Išvalyti duomenų bazę</string>
-    <string name="pref_clear_database_summary">Ištrinkite įrašų istoriją, kurie nėra išsaugoti jūsų bibliotekoje</string>
+    <string name="pref_clear_manga_database">Išvalyti duomenų bazę</string>
+    <string name="pref_clear_manga_database_summary">Ištrinkite įrašų istoriją, kurie nėra išsaugoti jūsų bibliotekoje</string>
     <string name="clear_database_confirmation">Ar tikrai\? Perskaityti skyriai ir nebibliotekinių įrašų progresas bus prarastas</string>
     <string name="pref_refresh_library_tracking_summary">Atnaujina būseną, įvertinimą ir paskutinį perskaitytą skyrių iš sekimo paslaugų</string>
     <string name="pref_incognito_mode_summary">Pristabdo skaitymo istoriją</string>

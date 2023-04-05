@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources><string name="action_show_manga">ମାଙ୍ଗା ଦେଖାଅ</string>
-    <string name="default_category">ଡିଫଲ୍ଟ ବର୍ଗ</string>
+    <string name="default_manga_category">ଡିଫଲ୍ଟ ବର୍ଗ</string>
     <string name="information_webview_required">Tachiyomi ପାଇଁ WebView ଆବଶ୍ୟକ ଅଟେ</string>
     </resources>

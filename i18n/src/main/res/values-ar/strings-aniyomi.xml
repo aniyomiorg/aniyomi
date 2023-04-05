@@ -4,10 +4,10 @@
     <string name="unlock_app">افتح Aniyomi</string>
     <string name="action_sort_last_manga_update">آخر تحديث للمانجا</string>
     <string name="action_show_manga">عرض المانجا</string>
-    <string name="action_display_local_badge">المانجا المحلية</string>
+    <string name="action_display_local_badge_manga">المانجا المحلية</string>
     <string name="pref_update_only_completely_read">مع فصل (فصول) غير مقروءة / حلقة (حلقات) غير مشاهدة</string>
     <string name="pref_library_update_show_tab_badge">إظهار عدد الغير مقروء/ الغير مشاهد على أيقونة التحديثات</string>
-    <string name="default_category">فئة المانغا الإفتراضية</string>
+    <string name="default_manga_category">فئة المانغا الإفتراضية</string>
     <string name="pref_manga_library_update_categories_details">المانجا في الفئات المستبعدة لن يتم تحديثها حتى وإن كانت أيضا في الفئات المضمنة.</string>
     <string name="untrusted_extension_message">هذه اﻹضافة موقعة بشهادة غير موثوق بها ولم يتم تفعيلها.
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">بعد وضع علامة \"مقروءة\" يدوياً</string>
     <string name="pref_remove_after_read">الحذف تلقائيا بعد القراءة</string>
     <string name="pref_remove_bookmarked_chapters">حذف الفصول ذات العلامة المرجعية</string>
-    <string name="pref_remove_exclude_categories">فئات المستثناة</string>
+    <string name="pref_remove_exclude_categories_manga">فئات المستثناة</string>
     <string name="pref_auto_update_manga_sync">تحديث تقدّم الفصول بعد القراءة</string>
     <string name="pref_clear_chapter_cache">مسح الذاكرة المؤقتة للفصول</string>
     <string name="pref_auto_clear_chapter_cache">تنظيف ملفات التخزين المؤقت عند إغلاق التطبيق</string>
-    <string name="pref_clear_database">تنظيف قاعدة البيانات</string>
-    <string name="pref_clear_database_summary">حذف سجل المانجا التي لم يتم حفظها في مكتبتك</string>
+    <string name="pref_clear_manga_database">تنظيف قاعدة البيانات</string>
+    <string name="pref_clear_manga_database_summary">حذف سجل المانجا التي لم يتم حفظها في مكتبتك</string>
     <string name="clear_database_confirmation">هل أنت متأكد؟ الفصول المقروءة ومستوى التقدم للمانجا الغير الموجودة في مكتبتك سيتم فقده</string>
     <string name="pref_refresh_library_tracking_summary">تحديث الحالة، والتقييم، وآخر فصل: عن طريق خدمات التتبع</string>
     <string name="pref_incognito_mode_summary">إيقاف سجل القراءة</string>
@@ -120,7 +120,6 @@
     <string name="delete_downloads_for_anime">حذف الحلقات المحملة؟</string>
     <string name="action_play_internally">تشغيل داخليا</string>
     <string name="action_sort_latest_episode">أحدث حلقة</string>
-    <string name="pref_remove_exclude_categories_prefix">مانغا:</string>
     <string name="no_next_episode">الحلقة التالية غير موجودة!</string>
     <string name="rotation_sensor_portrait">المستشعر الرأسي</string>
     <string name="share_screenshot_info">%1$s: %2$s، %3$s</string>

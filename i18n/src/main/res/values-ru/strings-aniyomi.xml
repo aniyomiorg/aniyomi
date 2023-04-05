@@ -4,10 +4,10 @@
     <string name="unlock_app">Разблокировать Aniyomi</string>
     <string name="action_sort_last_manga_update">Последняя проверка обновления</string>
     <string name="action_show_manga">Показать запись</string>
-    <string name="action_display_local_badge">Персональный источник</string>
+    <string name="action_display_local_badge_manga">Персональный источник</string>
     <string name="pref_update_only_completely_read">Есть непрочитанные главы</string>
     <string name="pref_library_update_show_tab_badge">Непрочитанные главы на иконке «Обновления»</string>
-    <string name="default_category">Основная категория</string>
+    <string name="default_manga_category">Основная категория</string>
     <string name="pref_manga_library_update_categories_details">Записи в исключённых категориях не будут обновляться, даже если находятся во включённых категориях.</string>
     <string name="untrusted_extension_message">Это расширение было подписано ненадёжным сертификатом и не было активировано.
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">Удалять помеченое как «Прочитано»</string>
     <string name="pref_remove_after_read">Удалять после прочтения</string>
     <string name="pref_remove_bookmarked_chapters">Удалять главы с закладками</string>
-    <string name="pref_remove_exclude_categories">Исключённые категории</string>
+    <string name="pref_remove_exclude_categories_manga">Исключённые категории</string>
     <string name="pref_auto_update_manga_sync">Обновлять прогресс после прочтения</string>
     <string name="pref_clear_chapter_cache">Очистить кэш глав</string>
     <string name="pref_auto_clear_chapter_cache">Очищать кэш глав при закрытии приложения</string>
-    <string name="pref_clear_database">Очистить базу данных</string>
-    <string name="pref_clear_database_summary">Удалить историю для записей, которые не находятся в библиотеке</string>
+    <string name="pref_clear_manga_database">Очистить базу данных</string>
+    <string name="pref_clear_manga_database_summary">Удалить историю для записей, которые не находятся в библиотеке</string>
     <string name="clear_database_confirmation">Вы уверены\? Прочитанные главы и прогресс не библиотечных записей будет потерян</string>
     <string name="pref_refresh_library_tracking_summary">Обновляет статус, оценку и последнюю прочитанную главу для сервисов отслеживания</string>
     <string name="pref_incognito_mode_summary">Приостанавливает историю чтения</string>

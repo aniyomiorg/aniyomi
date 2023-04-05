@@ -4,10 +4,10 @@
     <string name="unlock_app">Відчинити Aniyomi</string>
     <string name="action_sort_last_manga_update">Останні оновлення манґи</string>
     <string name="action_show_manga">Показати серію</string>
-    <string name="action_display_local_badge">Локальна манґа</string>
+    <string name="action_display_local_badge_manga">Локальна манґа</string>
     <string name="pref_update_only_completely_read">Є непрочитані розділи</string>
     <string name="pref_library_update_show_tab_badge">Показувати кількість непрочитаних на значку оновлення</string>
-    <string name="default_category">Категорія за замовчуванням</string>
+    <string name="default_manga_category">Категорія за замовчуванням</string>
     <string name="pref_manga_library_update_categories_details">Манґу в виключених категоріях не буде оновлено, навіть якщо вона також знаходиться у включених категоріях.</string>
     <string name="untrusted_extension_message">Це розширення було підписано ненадійним сертифікатом та не було активовано.
 \n
@@ -18,13 +18,13 @@
     <string name="pref_remove_after_marked_as_read">Після того, як було відмічено прочитаним вручну</string>
     <string name="pref_remove_after_read">Автоматично видаляти після прочитання</string>
     <string name="pref_remove_bookmarked_chapters">Дозволити видалення розділів/епізодів з закладок</string>
-    <string name="pref_remove_exclude_categories">Виключені категорії</string>
+    <string name="pref_remove_exclude_categories_manga">Виключені категорії</string>
     <string name="pref_external_downloader_selection">Налаштування застосунку для завантаження</string>
     <string name="pref_auto_update_manga_sync">Оновлювати прогрес після прочитання</string>
     <string name="pref_clear_chapter_cache">Очистити кеш розділів та епізодів</string>
     <string name="pref_auto_clear_chapter_cache">Очищати кеш розділів при закритті застосунку</string>
-    <string name="pref_clear_database">Очистити базу даних</string>
-    <string name="pref_clear_database_summary">Видалити історію для манґи, котра не знаходиться в вашій бібліотеці</string>
+    <string name="pref_clear_manga_database">Очистити базу даних</string>
+    <string name="pref_clear_manga_database_summary">Видалити історію для манґи, котра не знаходиться в вашій бібліотеці</string>
     <string name="clear_database_confirmation">Ви впевнені\? Прочитані розділи і прогрес не бібліотечної манґи будуть втрачені</string>
     <string name="pref_refresh_library_tracking_summary">Оновлює статус, оцінку та прогрес із служб відстеження</string>
     <string name="pref_incognito_mode_summary">Призупиняє історію читання</string>

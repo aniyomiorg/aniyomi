@@ -205,8 +205,8 @@ object SettingsAdvancedScreen : SearchableSettings {
                     },
                 ),
                 Preference.PreferenceItem.TextPreference(
-                    title = stringResource(R.string.pref_clear_database),
-                    subtitle = stringResource(R.string.pref_clear_database_summary),
+                    title = stringResource(R.string.pref_clear_manga_database),
+                    subtitle = stringResource(R.string.pref_clear_manga_database_summary),
                     onClick = { navigator.push(ClearDatabaseScreen()) },
                 ),
                 Preference.PreferenceItem.TextPreference(

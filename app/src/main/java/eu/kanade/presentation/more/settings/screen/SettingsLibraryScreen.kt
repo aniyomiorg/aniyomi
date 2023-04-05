@@ -197,7 +197,7 @@ object SettingsLibraryScreen : SearchableSettings {
                 ),
                 Preference.PreferenceItem.ListPreference(
                     pref = libraryPreferences.defaultMangaCategory(),
-                    title = stringResource(R.string.default_category),
+                    title = stringResource(R.string.default_manga_category),
                     subtitle = selectedCategory?.visualName ?: stringResource(R.string.default_category_summary),
                     entries = mangaIds.zip(mangaLabels).toMap(),
                 ),

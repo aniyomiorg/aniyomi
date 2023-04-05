@@ -4,10 +4,10 @@
     <string name="unlock_app">Odomknúť Tachiyomi</string>
     <string name="action_sort_last_manga_update">Posledná aktualizácia mangy</string>
     <string name="action_show_manga">Zobraziť mangu</string>
-    <string name="action_display_local_badge">Lokálna manga</string>
+    <string name="action_display_local_badge_manga">Lokálna manga</string>
     <string name="pref_update_only_completely_read">S neprečítanými kapitolami</string>
     <string name="pref_library_update_show_tab_badge">Zobraziť počet neprečítaných kapitol na ikone Aktualizácie</string>
-    <string name="default_category">Predvolená kategória</string>
+    <string name="default_manga_category">Predvolená kategória</string>
     <string name="pref_manga_library_update_categories_details">Mangy vo vylúčených kategóriách nebudú aktualizované, aj keď sú tiež v zahrnutých kategóriách.</string>
     <string name="untrusted_extension_message">Toto rozšírenie bolo podpísané nedôveryhodným certifikátom a nebolo aktivované.
 \n
@@ -18,12 +18,12 @@
     <string name="pref_remove_after_marked_as_read">Po manuálnom označení ako prečítané</string>
     <string name="pref_remove_after_read">Po prečítaní automaticky odstrániť</string>
     <string name="pref_remove_bookmarked_chapters">Povoliť odstraňovanie kapitol so záložkami</string>
-    <string name="pref_remove_exclude_categories">Vylúčené kategórie</string>
+    <string name="pref_remove_exclude_categories_manga">Vylúčené kategórie</string>
     <string name="pref_auto_update_manga_sync">Aktualizácia priebehu po prečítaní</string>
     <string name="pref_clear_chapter_cache">Vymazať vyrovnávaciu pamäť kapitol</string>
     <string name="pref_auto_clear_chapter_cache">Vymazanie vyrovnávacej pamäte kapitoly pri zatvorení aplikácie</string>
-    <string name="pref_clear_database">Vymazať databázu</string>
-    <string name="pref_clear_database_summary">Odstránenie histórie mangy, ktorá nie je uložená vo vašej knižnici</string>
+    <string name="pref_clear_manga_database">Vymazať databázu</string>
+    <string name="pref_clear_manga_database_summary">Odstránenie histórie mangy, ktorá nie je uložená vo vašej knižnici</string>
     <string name="clear_database_confirmation">Ste si istý\? Čítanie kapitol a pokrok v mangách mimo vašu knižnicu sa stratí</string>
     <string name="pref_refresh_library_tracking_summary">Aktualizuje stav, skóre a poslednú čítanú kapitolu zo sledovacích služieb</string>
     <string name="pref_incognito_mode_summary">Pozastaví históriu čítania</string>
