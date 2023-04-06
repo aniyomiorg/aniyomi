@@ -272,7 +272,7 @@
     <string name="pref_default_home_tab_library">Configure la pantalla de inicio en la pestaña Manga</string>
     <string name="action_global_anime_search">Búsqueda global del anime</string>
     <string name="pref_category_player_seeking">Buscando</string>
-    <string name="pref_search_pinned_manga_sources_only">Solo incluye fuentes de anime fijas</string>
+    <string name="pref_search_pinned_manga_sources_only">Solo incluye fuentes de manga ancladas</string>
     <string name="action_global_manga_search">Búsqueda global del manga</string>
     <string name="pref_search_pinned_anime_sources_only">Solo incluye fuentes de anime fijas</string>
     <string name="unofficial_anime_extension_message">Esta extensión no pertenece a la lista oficial de extensiones de Aniyomi.</string>
