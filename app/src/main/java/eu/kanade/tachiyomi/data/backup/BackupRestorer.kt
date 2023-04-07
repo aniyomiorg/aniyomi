@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.preference.PreferenceManager
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.data.backup.models.Backup
 import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeSource
@@ -27,6 +28,7 @@ import eu.kanade.tachiyomi.data.database.models.manga.Manga
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import kotlinx.coroutines.Job
+import kotlinx.serialization.SerializationException
 import okio.buffer
 import okio.gzip
 import okio.source
@@ -34,6 +36,13 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import eu.kanade.tachiyomi.data.backup.full.models.BackupSerializer as FullBackupSerializer
+import eu.kanade.tachiyomi.data.backup.full.models.BooleanPreferenceValue as FullBooleanPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.FloatPreferenceValue as FullFloatPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.IntPreferenceValue as FullIntPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.LongPreferenceValue as FullLongPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.StringPreferenceValue as FullStringPreferenceValue
+import eu.kanade.tachiyomi.data.backup.full.models.StringSetPreferenceValue as FullStringSetPreferenceValue
 
 class BackupRestorer(
     private val context: Context,
@@ -95,7 +104,35 @@ class BackupRestorer(
     @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun performRestore(uri: Uri): Boolean {
         val backupString = context.contentResolver.openInputStream(uri)!!.source().gzip().buffer().use { it.readByteArray() }
-        val backup = backupManager.parser.decodeFromByteArray(BackupSerializer, backupString)
+
+        // Sadly, this is necessary because of old "full" backups.
+        val backup = try {
+            backupManager.parser.decodeFromByteArray(BackupSerializer, backupString)
+        } catch (e: SerializationException) {
+            val fullBackup = backupManager.parser.decodeFromByteArray(FullBackupSerializer, backupString)
+            val backupPreferences = fullBackup.backupPreferences.map {
+                val value = when (it.value) {
+                    is FullIntPreferenceValue -> IntPreferenceValue(it.value.value)
+                    is FullLongPreferenceValue -> LongPreferenceValue(it.value.value)
+                    is FullFloatPreferenceValue -> FloatPreferenceValue(it.value.value)
+                    is FullBooleanPreferenceValue -> BooleanPreferenceValue(it.value.value)
+                    is FullStringPreferenceValue -> StringPreferenceValue(it.value.value)
+                    is FullStringSetPreferenceValue -> StringSetPreferenceValue(it.value.value)
+                }
+                BackupPreference(it.key, value)
+            }
+            Backup(
+                fullBackup.backupManga,
+                fullBackup.backupCategories,
+                fullBackup.backupAnime,
+                fullBackup.backupAnimeCategories,
+                fullBackup.backupBrokenSources,
+                fullBackup.backupSources,
+                fullBackup.backupBrokenAnimeSources,
+                fullBackup.backupAnimeSources,
+                backupPreferences,
+            )
+        }
 
         restoreAmount = backup.backupManga.size + backup.backupAnime.size + 2 // +2 for categories
 
