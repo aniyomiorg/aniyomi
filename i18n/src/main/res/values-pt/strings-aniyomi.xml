@@ -207,4 +207,76 @@
     <string name="stats_page">Página de status</string>
     <string name="playback_speed_dialog_reset">Redefinir</string>
     <string name="player_aniskip_dontskip">Não pular</string>
+    <string name="pref_library_manga_columns">Mangás por fileira</string>
+    <string name="pref_library_anime_columns">Anime por fileira</string>
+    <string name="action_sort_unseen_count">Itens não vistos</string>
+    <string name="action_sort_episode_fetch_date">Data de episódios</string>
+    <string name="pref_search_pinned_anime_sources_only">Incluir apenas fontes de anime fixadas</string>
+    <string name="pref_default_home_tab_library">Defina o ecã inicial para a guia Mangá</string>
+    <string name="pref_intro_length">Tamanho do pulo de abertura</string>
+    <string name="download_ahead_info_anime">Funciona apenas em entradas na biblioteca e se o episódio atual e o próximo já estiverem descarregados</string>
+    <string name="pref_track_on_add_library">Abra o menu de rastreadores ao adicionar à biblioteca</string>
+    <string name="download_unseen">Não visto</string>
+    <string name="action_global_manga_search">Pesquisa Global de Mangás</string>
+    <string name="action_global_anime_search">Pesquisa Global de Animes</string>
+    <string name="pref_search_pinned_manga_sources_only">Incluir apenas fontes de mangá fixadas</string>
+    <string name="pref_bottom_nav_style">Estilo de navegação inferior</string>
+    <string name="rotation_reverse_landscape">Paisagem reversa</string>
+    <string name="rotation_sensor_portrait">Retrato (Sensor)</string>
+    <string name="unofficial_anime_extension_message">Esta extensão não está na lista oficial de extensões do Aniyomi.</string>
+    <string name="pref_default_landscape_orientation">Paisagem padrão</string>
+    <string name="pref_category_volume_brightness">Volume e Brilho</string>
+    <string name="pref_category_player_seeking">Buscando</string>
+    <string name="pref_default_intro_length">Duração padrão do pulo de abertura</string>
+    <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
+    <string name="pref_enable_pip">Ativar o uso do modo PiP</string>
+    <string name="pref_pip_episode_toasts">Mostrar toasts de episódios ao alternar episódios no modo PiP</string>
+    <string name="enable_horizontal_seek_gesture">Ativar Gesto de Busca Horizontal</string>
+    <string name="pref_pip_on_exit">Mude automaticamente para o modo PiP ao sair do reprodutor</string>
+    <string name="pref_remember_brightness">Lembrar e mudar ao último brilho usado</string>
+    <string name="pref_mpv_conf">Editar o ficheiro de configuração do MPV para obter mais configurações do reprodutor</string>
+    <string name="enable_volume_brightness_gestures">Ativar Gestos de Volume e Brilho</string>
+    <string name="toggle_stats">Alternar estatísticas</string>
+    <string name="video_stretch_screen">Esticado para o ecrã</string>
+    <string name="action_change_intro_length">Alterar a duração da abertura</string>
+    <string name="player_aniskip_skip">%s pulou</string>
+    <string name="player_hwdec_dialog_title">Definir o modo de decodificação de hardware padrão</string>
+    <plurals name="seconds">
+        <item quantity="one">%d segundo</item>
+        <item quantity="many">%d segundos</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one">%1$s episódio</item>
+        <item quantity="many">%1$s episódios</item>
+        <item quantity="other">%1$s episódios</item>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one">1 novo episódio</item>
+        <item quantity="many">%1$d novos episódios</item>
+        <item quantity="other">%1$d novos episódios</item>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one">Para 1 título</item>
+        <item quantity="many">Para %d títulos</item>
+        <item quantity="other">Para %d títulos</item>
+    </plurals>
+    <string name="pref_player_fullscreen">Mostrar conteúdo no recorte de exibição</string>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one">Próximos episódios não vistos</item>
+        <item quantity="many">Próximos %d episódios não vistos</item>
+        <item quantity="other">Próximos %d episódios não vistos</item>
+    </plurals>
+    <string name="pref_waiting_time_aniskip">Tempo limite do botão</string>
+    <string name="rotation_sensor_landscape">Paisagem (Sensor)</string>
+    <string name="pref_default_portrait_orientation">Retrato padrão</string>
+    <string name="pref_skip_length">Tamanho do toque duas vezes para pular</string>
+    <string name="pref_remember_volume">Lembrar e mudar ao último volume usado</string>
+    <string name="episode_settings_updated">Configurações de episódio padrão atualizadas</string>
+    <string name="pref_invalidate_download_cache_summary">Forçar a app a verificar novamente os capítulos e episódios descarregados</string>
+    <string name="video_crop_screen">Cortado para o ecrã</string>
+    <string name="playback_speed_dialog_title">Alterar a velocidade de reprodução:</string>
+    <string name="player_aniskip_recap">Pular recapitulação</string>
+    <string name="player_aniskip_mixedOp">Pular MixedOp</string>
+    <string name="pref_enable_auto_skip_ani_skip">Ativar pulo automático</string>
 </resources>

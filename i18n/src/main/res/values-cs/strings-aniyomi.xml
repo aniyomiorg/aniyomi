@@ -73,7 +73,6 @@
     <string name="pref_pip_on_exit">Automatické přepnutí do režimu obraazu v obrazu po opuštění přehrávače</string>
     <string name="local_invalid_episode_format">Neplatný formát epizody</string>
     <string name="unknown_studio">Neznámé studio</string>
-    <string name="pref_remove_exclude_categories_anime_prefix">Anime:</string>
     <string name="episodes">Epizody</string>
     <string name="general_categories">Kategorie</string>
     <string name="chapters_episodes">Kapitoly a epizody</string>

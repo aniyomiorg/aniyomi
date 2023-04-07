@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="manga_categories">Manga Categories</string>
     <string name="general_categories">Categories</string>
     <string name="anime_categories">Anime Categories</string>
@@ -56,7 +55,7 @@
     <string name="action_display_unseen_badge">Unseen episodes</string>
     <string name="action_display_local_badge_manga">Local manga</string>
     <string name="action_display_local_badge_anime">Local anime</string>
-    <string name="pref_search_pinned_manga_sources_only">Only include pinned anime sources</string>
+    <string name="pref_search_pinned_manga_sources_only">Only include pinned manga sources</string>
     <string name="pref_search_pinned_anime_sources_only">Only include pinned anime sources</string>
     <string name="action_display_show_continue_reading_button">Show continue watching/reading button</string>
     <string name="action_order_by_episode_number">By episode number</string>
@@ -77,7 +76,6 @@
     <string name="rotation_sensor_portrait">Sensor portrait</string>
     <string name="rotation_sensor_landscape">Sensor landscape</string>
     <string name="unofficial_anime_extension_message">This extension is not from the official Aniyomi extensions list.</string>
-
     <!-- Player section -->
     <string name="pref_category_player">Player</string>
     <string name="pref_category_progress">Progress</string>
@@ -123,7 +121,6 @@
     <string name="pref_always_use_external_player">Always use external player</string>
     <string name="pref_external_player_preference">External player preference</string>
     <string name="playertitle">%1$s - %2$s</string>
-
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Delete chapters/episodes</string>
     <string name="pref_remove_after_marked_as_read">After manually marked as read/watched</string>
@@ -228,14 +225,11 @@
     <string name="download_notifier_download_paused_episodes">Episode download paused</string>
     <string name="channel_new_chapters_episodes">Chapter/Episode updates</string>
     <string name="pref_invalidate_download_cache_summary">Force app to recheck downloaded chapters and episodes</string>
-
     <string name="player_controls_skip_intro_text">+%1$d s</string>
-
     <plurals name="seconds">
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
     </plurals>
-
     <string name="no_next_episode">Next Episode not found!</string>
     <string name="no_previous_episode">Previous Episode not found!</string>
     <string name="label_history">Manga</string>
@@ -248,7 +242,6 @@
     <string name="video_fit_screen">"Fit to screen"</string>
     <string name="video_crop_screen">"Cropped to screen"</string>
     <string name="video_stretch_screen">"Stretched to screen"</string>
-
     <!-- Aniyomi stuff -->
     <string name="playback_speed_dialog_title">Change playback speed:</string>
     <string name="playback_speed_dialog_reset">Reset</string>

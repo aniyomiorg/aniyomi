@@ -57,11 +57,13 @@
     <string name="pref_bottom_nav_no_updates">Sposta Aggiornamenti nella scheda Altro</string>
     <plurals name="next_unseen_episodes">
         <item quantity="one">Prossima puntata non vista</item>
+        <item quantity="many">Prossime %d puntate non viste</item>
         <item quantity="other">Prossime %d puntate non viste</item>
     </plurals>
     <string name="pref_invalidate_download_cache_summary">Forza l\'app a ricontrollare i capitoli e gli episodi scaricati</string>
     <plurals name="anime_num_episodes">
         <item quantity="one">1 episodio</item>
+        <item quantity="many">%1$s episodi</item>
         <item quantity="other">%1$s episodi</item>
     </plurals>
     <string name="action_start_download_externally">Usa un downloader esterno</string>
@@ -201,7 +203,6 @@
     <string name="action_sort_episode_fetch_date">Data episodio</string>
     <string name="pref_always_use_external_player">Usa sempre un player esterno</string>
     <string name="pref_remove_exclude_categories_anime">Categorie anime escluse</string>
-    <string name="pref_remove_exclude_categories_anime_prefix">Anime:</string>
     <string name="pref_external_downloader_selection">Downloader app scelto</string>
     <string name="pref_download_new_episodes">Scarica i nuovi episodi</string>
     <string name="download_ahead_info_anime">Funziona solo sugli elementi della libreria e se l\'episodio corrente più il prossimo sono già stati scaricati</string>
@@ -228,7 +229,7 @@
     <string name="stats_page_2">Pagina 2</string>
     <string name="stats_page_3">Pagina 3</string>
     <string name="recent_anime_time">Ep. %1$s - %2$s</string>
-    <string name="notification_new_episodes">Nuovi episodi non trovati</string>
+    <string name="notification_new_episodes">Nuovi episodi trovati</string>
     <string name="episode_settings_updated">Aggiornate le impostazioni di default per gli episodi</string>
     <string name="download_notifier_download_paused_chapters">Scaricamento capitolo in pausa</string>
     <string name="download_notifier_download_paused_episodes">Scaricamento episodio in pausa</string>

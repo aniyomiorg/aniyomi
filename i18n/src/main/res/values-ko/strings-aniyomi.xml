@@ -257,4 +257,5 @@
     <string name="label_watched_episodes">시청함</string>
     <string name="pref_remember_volume">마지막으로 사용한 볼륨을 기억하고 전환</string>
     <string name="pref_remember_brightness">마지막으로 사용한 밝기를 기억하고 전환</string>
+    <string name="pref_default_home_tab_library">만화 탭을 시작화면으로 설정</string>
 </resources>

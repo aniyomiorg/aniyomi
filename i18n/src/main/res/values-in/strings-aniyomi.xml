@@ -257,4 +257,14 @@
     <string name="label_watched_episodes">Ditonton</string>
     <string name="pref_remember_brightness">Ingat dan beralih ke kecerahan terakhir yang digunakan</string>
     <string name="pref_remember_volume">Ingat dan beralih ke volume terakhir yang digunakan</string>
+    <string name="pref_default_home_tab_library">Atur layar awal ke Tab Manga</string>
+    <string name="pref_search_pinned_anime_sources_only">Hanya sertakan sumber anime yang disematkan</string>
+    <string name="pref_category_player_seeking">Pencarian</string>
+    <string name="pref_search_pinned_manga_sources_only">Hanya sertakan sumber manga yang disematkan</string>
+    <string name="action_global_manga_search">Pencarian Manga Global</string>
+    <string name="action_global_anime_search">Pencarian Anime Global</string>
+    <string name="unofficial_anime_extension_message">Ekstensi ini bukan dari daftar ekstensi resmi Aniyomi.</string>
+    <string name="pref_enable_pip">Aktifkan penggunaan mode PiP</string>
+    <string name="pref_category_volume_brightness">Volume dan Kecerahan</string>
+    <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
 </resources>

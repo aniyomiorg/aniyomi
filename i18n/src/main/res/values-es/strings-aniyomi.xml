@@ -135,6 +135,7 @@
     <string name="unknown_studio">Estudio desconocido</string>
     <plurals name="anime_num_episodes">
         <item quantity="one">%1$s episodio</item>
+        <item quantity="many">%1$s episodios</item>
         <item quantity="other">%1$s episodios</item>
     </plurals>
     <string name="delete_downloads_for_anime">¿Borrar episodios descargados\?</string>
@@ -268,4 +269,14 @@
     <string name="pref_invalidate_download_cache_summary">Forzar a la aplicación a volver a comprobar los capítulos y episodios descargados</string>
     <string name="pref_remember_brightness">Recordar y cambiar al último brillo utilizado</string>
     <string name="pref_remember_volume">Recordar y cambiar al último volumen utilizado</string>
+    <string name="pref_default_home_tab_library">Configure la pantalla de inicio en la pestaña Manga</string>
+    <string name="action_global_anime_search">Búsqueda global del anime</string>
+    <string name="pref_category_player_seeking">Buscando</string>
+    <string name="pref_search_pinned_manga_sources_only">Solo incluye fuentes de manga ancladas</string>
+    <string name="action_global_manga_search">Búsqueda global del manga</string>
+    <string name="pref_search_pinned_anime_sources_only">Solo incluye fuentes de anime fijas</string>
+    <string name="unofficial_anime_extension_message">Esta extensión no pertenece a la lista oficial de extensiones de Aniyomi.</string>
+    <string name="pref_category_volume_brightness">Volumen y Brillo</string>
+    <string name="pref_category_pip">Imagen en imagen (PiP)</string>
+    <string name="pref_enable_pip">Habilitar el uso del modo PiP</string>
 </resources>

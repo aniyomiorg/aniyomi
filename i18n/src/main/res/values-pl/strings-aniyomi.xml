@@ -79,4 +79,6 @@
     <string name="pref_bottom_nav_no_manga">Przenieś Manga do zakładki Więcej</string>
     <string name="action_mark_previous_as_seen">Oznacz jako widziane wcześniej</string>
     <string name="action_edit_anime_categories">Edytuj kategorie anime</string>
+    <string name="action_sort_unseen_count">Liczba nie obejrzanych</string>
+    <string name="action_filter_unseen">Nie obejrzane</string>
 </resources>
