@@ -85,7 +85,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toRightOf="@id/mid_bg" />
 
-        <eu.kanade.tachiyomi.ui.player.PlayerControlsView
+        <eu.kanade.tachiyomi.ui.player.viewer.PlayerControlsView
             android:id="@+id/player_controls"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -158,7 +158,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <eu.kanade.tachiyomi.ui.player.DoubleTapSecondsView
+        <eu.kanade.tachiyomi.ui.player.viewer.DoubleTapSecondsView
             android:id="@+id/seconds_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

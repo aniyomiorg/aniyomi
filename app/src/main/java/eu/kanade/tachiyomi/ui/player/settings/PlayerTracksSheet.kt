@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player
+package eu.kanade.tachiyomi.ui.player.settings
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +9,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.databinding.PlayerTracksItemBinding
 import eu.kanade.tachiyomi.databinding.PlayerTracksSheetBinding
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.widget.sheet.PlayerBottomSheetDialog
 
 /**

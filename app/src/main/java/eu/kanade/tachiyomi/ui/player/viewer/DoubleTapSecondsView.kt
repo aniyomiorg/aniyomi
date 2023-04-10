@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player
+package eu.kanade.tachiyomi.ui.player.viewer
 
 import android.animation.Animator
 import android.animation.ValueAnimator
