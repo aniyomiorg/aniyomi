@@ -948,6 +948,7 @@ class PlayerActivity :
             ::setAudio,
             audioTracks,
             selectedAudio,
+            null,
         ).show()
     }
 
@@ -962,6 +963,7 @@ class PlayerActivity :
             ::setSub,
             subTracks,
             selectedSub,
+            null,
         ).show()
     }
 
@@ -980,6 +982,7 @@ class PlayerActivity :
             ::changeQuality,
             videoTracks,
             currentQuality,
+            null,
         ).show()
     }
 
