@@ -269,4 +269,8 @@
     <string name="label_animeextensions">Anime rozšíření</string>
     <string name="label_migration_manga">Přenést manga</string>
     <string name="settings">Nastavení</string>
+    <string name="pref_category_volume_brightness">Hlasitost a jas</string>
+    <string name="pref_category_pip">Miniokno</string>
+    <string name="action_global_manga_search">Globální vyhledávání mangy</string>
+    <string name="action_global_anime_search">Globální vyhledávání anime</string>
 </resources>
