@@ -258,4 +258,13 @@
     <string name="pref_remember_volume">마지막으로 사용한 볼륨을 기억하고 전환</string>
     <string name="pref_remember_brightness">마지막으로 사용한 밝기를 기억하고 전환</string>
     <string name="pref_default_home_tab_library">만화 탭을 시작화면으로 설정</string>
+    <string name="action_global_manga_search">전체 만화 검색</string>
+    <string name="action_global_anime_search">전체 애니메이션 검색</string>
+    <string name="pref_search_pinned_manga_sources_only">핀 설정된 만화 소스만 포함</string>
+    <string name="pref_search_pinned_anime_sources_only">핀 설정된 애니메이션 소스만 포함</string>
+    <string name="unofficial_anime_extension_message">이 확장기능은 Aniyomi의 공식 확장기능이 아닙니다.</string>
+    <string name="pref_category_volume_brightness">볼륨 및 밝기</string>
+    <string name="pref_category_player_seeking">찾기</string>
+    <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
+    <string name="pref_enable_pip">PiP 모드 사용 활성화</string>
 </resources>
