@@ -12,7 +12,6 @@
     <string name="label_manga_sources">Fonti Manga</string>
     <string name="label_anime_sources">Fonti Anime</string>
     <string name="pref_bottom_nav_no_history">Sposta Cronologia nella scheda Altro</string>
-    <string name="unlock_app">Sblocca Aniyomi</string>
     <string name="action_sort_last_manga_update">Ultimo aggiornamento manga</string>
     <string name="action_show_manga">Mostra manga</string>
     <string name="action_display_local_badge_manga">Manga locali</string>
@@ -36,7 +35,6 @@
     <string name="pref_clear_manga_database">Pulisci database manga</string>
     <string name="pref_clear_manga_database_summary">Elimina la cronologia dei manga che non sono presenti nella libreria</string>
     <string name="clear_database_confirmation">Sei sicuro\? I progressi di lettura/visione dei contenuti fuori dalla libreria verranno persi</string>
-    <string name="pref_refresh_library_tracking_summary">Aggiorna stato, voto e progressione dal servizio di tracking</string>
     <string name="pref_incognito_mode_summary">Sospendi cronologia</string>
     <string name="manga_from_library">Manga dalla libreria</string>
     <string name="snack_add_to_manga_library">Aggiungere manga alla libreria\?</string>
@@ -242,7 +240,6 @@
     <string name="pref_enable_pip">Abilita l\'uso della modalità PiP</string>
     <string name="pref_category_volume_brightness">Volume e Luminosità</string>
     <string name="pref_category_pip">Picture in Picture (PiP)</string>
-    <string name="stats_header">Mostra statistiche</string>
     <string name="pref_debanding_cpu">CPU</string>
     <string name="pref_hide_in_manga_library_items">Nascondi manga già in libreria</string>
     <string name="chapter_dialog_header">Ricerca il capitolo</string>
