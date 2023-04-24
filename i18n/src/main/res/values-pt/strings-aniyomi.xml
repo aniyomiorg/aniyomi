@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="manga_categories">Categorias</string>
+    <string name="manga_categories">Categorias de Manga</string>
     <string name="general_categories">Categorias</string>
     <string name="anime_categories">Categorias de Anime</string>
     <string name="chapters_episodes">Capítulos e episódios</string>
@@ -60,7 +60,7 @@
     <string name="pref_adjust_orientation_video_dimensions">Ajuste a orientação com base nas dimensões do vídeo</string>
     <string name="pref_skip_disable">Desativar</string>
     <string name="pref_player_smooth_seek">Ativar busca precisa</string>
-    <string name="pref_player_hide_controls">Ocultar os controles de reprodução ao abrir o player</string>
+    <string name="pref_player_hide_controls">Ocultar os controlos de reprodução ao abrir o reprodutor</string>
     <string name="playertitle">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Eliminar capítulos</string>
@@ -132,7 +132,7 @@
     <string name="video_list_empty_error">Nenhum vídeo encontrado</string>
     <string name="notification_new_episodes">Novos episódios encontrados</string>
     <string name="information_no_recent_anime">Nada assistido recentemente</string>
-    <string name="information_webview_required">WebView é necessária para Tachiyomi</string>
+    <string name="information_webview_required">WebView é necessário para Aniyomi</string>
     <string name="download_notifier_download_paused_chapters">Transferência pausada</string>
     <string name="channel_new_chapters_episodes">Atualizações de capítulos</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
@@ -152,8 +152,8 @@
     <string name="playback_options_speed">Velocidade de reprodução</string>
     <string name="playback_options_quality">Qualidade de vídeo</string>
     <string name="playback_options_title">Opções de reprodução</string>
-    <string name="player_aniskip_op">Pular Abertura</string>
-    <string name="player_aniskip_ed">Pular Final</string>
+    <string name="player_aniskip_op">Saltar Abertura</string>
+    <string name="player_aniskip_ed">Saltar Final</string>
     <string name="pref_category_player_aniskip_info">Configurações do AniSkip</string>
     <string name="pref_enable_aniskip">Ativar o AniSkip</string>
     <string name="pref_waiting_time_aniskip_5">5 segundos</string>
@@ -187,7 +187,7 @@
     <string name="action_display_unseen_badge">Episódios não vistos</string>
     <string name="action_start_download_internally">Usar downloader interno</string>
     <string name="pref_category_player">Reprodutor</string>
-    <string name="pref_category_internal_player">Player interno</string>
+    <string name="pref_category_internal_player">Reprodutor interno</string>
     <string name="download_notifier_download_paused_episodes">Download de episódio pausado</string>
     <string name="label_anime">Anime</string>
     <string name="label_watched_duration">Duração assistida</string>
@@ -199,7 +199,7 @@
     <string name="action_bookmark_episode">Marcar episódio</string>
     <string name="action_remove_bookmark_episode">Desmarcar episódio</string>
     <string name="action_start_download_externally">Usar downloader externo</string>
-    <string name="pref_category_external_player">Player externo</string>
+    <string name="pref_category_external_player">Reprodutor externo</string>
     <string name="pref_always_use_external_player">Sempre usar player externo</string>
     <string name="pref_category_external_downloader">Downloader externo</string>
     <string name="pref_use_external_downloader">Sempre usar downloader externo para anime</string>
@@ -212,7 +212,7 @@
     <string name="action_sort_unseen_count">Itens não vistos</string>
     <string name="action_sort_episode_fetch_date">Data de episódios</string>
     <string name="pref_search_pinned_anime_sources_only">Incluir apenas fontes de anime fixadas</string>
-    <string name="pref_default_home_tab_library">Defina o ecã inicial para a guia Mangá</string>
+    <string name="pref_default_home_tab_library">Defina o ecrã inicial para a guia Mangá</string>
     <string name="pref_intro_length">Tamanho do pulo de abertura</string>
     <string name="download_ahead_info_anime">Funciona apenas em entradas na biblioteca e se o episódio atual e o próximo já estiverem descarregados</string>
     <string name="pref_track_on_add_library">Abra o menu de rastreadores ao adicionar à biblioteca</string>
@@ -276,7 +276,7 @@
     <string name="pref_invalidate_download_cache_summary">Forçar a app a verificar novamente os capítulos e episódios descarregados</string>
     <string name="video_crop_screen">Cortado para o ecrã</string>
     <string name="playback_speed_dialog_title">Alterar a velocidade de reprodução:</string>
-    <string name="player_aniskip_recap">Pular recapitulação</string>
-    <string name="player_aniskip_mixedOp">Pular MixedOp</string>
+    <string name="player_aniskip_recap">Saltar recapitulação</string>
+    <string name="player_aniskip_mixedOp">Saltar MixedOp</string>
     <string name="pref_enable_auto_skip_ani_skip">Ativar pulo automático</string>
 </resources>
