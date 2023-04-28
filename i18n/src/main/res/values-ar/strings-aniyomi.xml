@@ -148,7 +148,7 @@
     <plurals name="anime_num_episodes">
         <item quantity="zero">حلقة</item>
         <item quantity="one">أول حلقة</item>
-        <item quantity="two">ثاني حلقتين</item>
+        <item quantity="two">حلقتان</item>
         <item quantity="few">%1$s حلقات</item>
         <item quantity="many">%1$s حلقة</item>
         <item quantity="other">%1$s حلقة</item>
@@ -287,4 +287,13 @@
     <string name="pref_backup_flags">خيارات النسخ الاحتياطي</string>
     <string name="label_mangaextensions">ملحقات المانغا</string>
     <string name="label_animeextensions">ملحقات الأنمي</string>
+    <string name="action_global_anime_search">بحث الانمي العالمي</string>
+    <string name="pref_category_volume_brightness">الحجم والسطوع</string>
+    <string name="pref_enable_pip">تفعيل وضع الصورة في صورة</string>
+    <string name="action_global_manga_search">بحث في المانغا العالمية</string>
+    <string name="pref_search_pinned_manga_sources_only">تضمين مصادر المانغا المثبتة فقط</string>
+    <string name="pref_search_pinned_anime_sources_only">تضمين مصادر الانمي المثبتة فقط</string>
+    <string name="pref_default_home_tab_library">ضبط شاشة البداية إلى تبويب المانغا</string>
+    <string name="unofficial_anime_extension_message">هذا الملحق ليس من قائمة ملحقات انيومي الرسمية.</string>
+    <string name="pref_category_pip">صورة في صورة</string>
 </resources>

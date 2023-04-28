@@ -257,4 +257,5 @@
     <string name="pref_download_new_episodes">Télécharger les nouveaux épisodes</string>
     <string name="auto_download_while_watching">Télécharger automatiquement pendant le visionnage</string>
     <string name="pref_waiting_time_aniskip">Délai d\'expiration du bouton</string>
+    <string name="action_global_manga_search">Recherche de Manga Globale</string>
 </resources>
