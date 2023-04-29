@@ -293,7 +293,8 @@
     <string name="action_global_manga_search">بحث في المانغا العالمية</string>
     <string name="pref_search_pinned_manga_sources_only">تضمين مصادر المانغا المثبتة فقط</string>
     <string name="pref_search_pinned_anime_sources_only">تضمين مصادر الانمي المثبتة فقط</string>
-    <string name="pref_default_home_tab_library">ضبط شاشة البداية إلى تبويب المانغا</string>
+    <string name="pref_default_home_tab_library">ضبط شاشة البداية إلى تبويب المانغاتعيين شاشة البدء إلى علامة تبويب المانغا</string>
     <string name="unofficial_anime_extension_message">هذا الملحق ليس من قائمة ملحقات انيومي الرسمية.</string>
     <string name="pref_category_pip">صورة في صورة</string>
+    <string name="pref_category_player_seeking">البحث عن</string>
 </resources>
