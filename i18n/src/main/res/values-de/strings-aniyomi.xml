@@ -271,4 +271,5 @@
     <string name="pref_search_pinned_manga_sources_only">Nur angeheftete Manga Quellen nutzen</string>
     <string name="unofficial_anime_extension_message">Diese Erweiterung kommt nicht von der offiziellen Aniyomi Erweiterungs Liste.</string>
     <string name="pref_enable_pip">Aktiviere Nutzung des Bild-im-Bild (PiP) Modus</string>
+    <string name="pref_category_pip">Bild-im-Bild (PiP)</string>
 </resources>
