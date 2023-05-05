@@ -15,7 +15,12 @@ class GlobalAnimeSearchScreenModel(
     preferences: BasePreferences = Injekt.get(),
     private val sourcePreferences: SourcePreferences = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
-) : AnimeSearchScreenModel<GlobalAnimeSearchState>(GlobalAnimeSearchState(searchQuery = initialQuery)) {
+) : AnimeSearchScreenModel<GlobalAnimeSearchState>(
+    GlobalAnimeSearchState(
+        searchQuery = initialQuery,
+        isPinnedOnly = sourcePreferences.searchPinnedAnimeSourcesOnly().get(),
+    ),
+) {
 
     val incognitoMode = preferences.incognitoMode()
     val lastUsedSourceId = sourcePreferences.lastUsedAnimeSource()
@@ -59,6 +64,7 @@ class GlobalAnimeSearchScreenModel(
 data class GlobalAnimeSearchState(
     val searchQuery: String? = null,
     val items: Map<AnimeCatalogueSource, AnimeSearchItemResult> = emptyMap(),
+    val isPinnedOnly: Boolean,
 ) {
 
     val progress: Int = items.count { it.value !is AnimeSearchItemResult.Loading }

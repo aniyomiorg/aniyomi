@@ -14,6 +14,7 @@ import eu.kanade.presentation.browse.GlobalSearchLoadingResultItem
 import eu.kanade.presentation.browse.GlobalSearchResultItem
 import eu.kanade.presentation.browse.GlobalSearchToolbar
 import eu.kanade.presentation.browse.anime.components.GlobalAnimeSearchCardRow
+import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LazyColumn
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.util.padding
@@ -49,6 +50,7 @@ fun GlobalAnimeSearchScreen(
     ) { paddingValues ->
         GlobalAnimeSearchContent(
             items = state.items,
+            isPinnedOnly = state.isPinnedOnly,
             contentPadding = paddingValues,
             getAnime = getAnime,
             onClickSource = onClickSource,
@@ -61,12 +63,20 @@ fun GlobalAnimeSearchScreen(
 @Composable
 fun GlobalAnimeSearchContent(
     items: Map<AnimeCatalogueSource, AnimeSearchItemResult>,
+    isPinnedOnly: Boolean,
     contentPadding: PaddingValues,
     getAnime: @Composable (AnimeCatalogueSource, Anime) -> State<Anime>,
     onClickSource: (AnimeCatalogueSource) -> Unit,
     onClickItem: (Anime) -> Unit,
     onLongClickItem: (Anime) -> Unit,
 ) {
+    if (items.isEmpty() && isPinnedOnly) {
+        EmptyScreen(
+            message = stringResource(R.string.no_pinned_sources),
+        )
+        return
+    }
+
     LazyColumn(
         contentPadding = contentPadding,
     ) {

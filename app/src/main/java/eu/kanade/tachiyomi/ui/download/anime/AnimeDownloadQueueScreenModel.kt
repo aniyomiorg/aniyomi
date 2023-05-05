@@ -10,6 +10,7 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
 import eu.kanade.tachiyomi.util.system.logcat
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -17,7 +18,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
-import rx.Subscription
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -36,9 +36,9 @@ class AnimeDownloadQueueScreenModel(
     var adapter: AnimeDownloadAdapter? = null
 
     /**
-     * Map of subscriptions for active downloads.
+     * Map of jobs for active downloads.
      */
-    val progressSubscriptions by lazy { mutableMapOf<AnimeDownload, Subscription>() }
+    private val progressJobs = mutableMapOf<AnimeDownload, Job>()
 
     val listener = object : AnimeDownloadAdapter.DownloadItemListener {
         /**
@@ -126,10 +126,10 @@ class AnimeDownloadQueueScreenModel(
     }
 
     override fun onDispose() {
-        for (subscription in progressSubscriptions.values) {
-            subscription.unsubscribe()
+        for (job in progressJobs.values) {
+            job.cancel()
         }
-        progressSubscriptions.clear()
+        progressJobs.clear()
         adapter = null
     }
 
@@ -181,11 +181,11 @@ class AnimeDownloadQueueScreenModel(
                 onUpdateDownloadedPages(download)
             }
             AnimeDownload.State.DOWNLOADED -> {
-                unsubscribeProgress(download)
+                cancelProgressJob(download)
                 onUpdateProgress(download)
                 onUpdateDownloadedPages(download)
             }
-            AnimeDownload.State.ERROR -> unsubscribeProgress(download)
+            AnimeDownload.State.ERROR -> cancelProgressJob(download)
             else -> {
                 /* unused */
             }
@@ -197,8 +197,8 @@ class AnimeDownloadQueueScreenModel(
      *
      * @param download the download to unsubscribe.
      */
-    private fun unsubscribeProgress(download: AnimeDownload) {
-        progressSubscriptions.remove(download)?.unsubscribe()
+    private fun cancelProgressJob(download: AnimeDownload) {
+        progressJobs.remove(download)?.cancel()
     }
 
     /**

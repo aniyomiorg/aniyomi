@@ -25,7 +25,7 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 
 val resumeLastChapterReadEvent = Channel<Unit>()
 
@@ -109,7 +109,7 @@ fun Screen.mangaHistoryTab(
             }
 
             LaunchedEffect(Unit) {
-                resumeLastChapterReadEvent.consumeAsFlow().collectLatest {
+                resumeLastChapterReadEvent.receiveAsFlow().collectLatest {
                     openChapter(context, screenModel.getNextChapter())
                 }
             }

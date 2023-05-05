@@ -40,7 +40,7 @@ class MangaExtensionsScreenModel(
 
     init {
         val context = Injekt.get<Application>()
-        val extensionMapper: (Map<String, InstallStep>) -> ((MangaExtension) -> MangaExtensionUiModel) = { map ->
+        val extensionMapper: (Map<String, InstallStep>) -> ((MangaExtension) -> MangaExtensionUiModel.Item) = { map ->
             {
                 MangaExtensionUiModel.Item(it, map[it.pkgName] ?: InstallStep.Idle)
             }
@@ -80,38 +80,32 @@ class MangaExtensionsScreenModel(
             ) { query, downloads, (_updates, _installed, _available, _untrusted) ->
                 val searchQuery = query ?: ""
 
-                val languagesWithExtensions = _available
-                    .filter(queryFilter(searchQuery))
-                    .groupBy { it.lang }
-                    .toSortedMap(LocaleHelper.comparator)
-                    .flatMap { (lang, exts) ->
-                        listOf(
-                            MangaExtensionUiModel.Header.Text(LocaleHelper.getSourceDisplayName(lang, context)),
-                            *exts.map(extensionMapper(downloads)).toTypedArray(),
-                        )
-                    }
-
-                val items = mutableListOf<MangaExtensionUiModel>()
+                val itemsGroups: ItemGroups = mutableMapOf()
 
                 val updates = _updates.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 if (updates.isNotEmpty()) {
-                    items.add(MangaExtensionUiModel.Header.Resource(R.string.ext_updates_pending))
-                    items.addAll(updates)
+                    itemsGroups[MangaExtensionUiModel.Header.Resource(R.string.ext_updates_pending)] = updates
                 }
 
                 val installed = _installed.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 val untrusted = _untrusted.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 if (installed.isNotEmpty() || untrusted.isNotEmpty()) {
-                    items.add(MangaExtensionUiModel.Header.Resource(R.string.ext_installed))
-                    items.addAll(installed)
-                    items.addAll(untrusted)
+                    itemsGroups[MangaExtensionUiModel.Header.Resource(R.string.ext_installed)] = installed + untrusted
                 }
+
+                val languagesWithExtensions = _available
+                    .filter(queryFilter(searchQuery))
+                    .groupBy { it.lang }
+                    .toSortedMap(LocaleHelper.comparator)
+                    .map { (lang, exts) ->
+                        MangaExtensionUiModel.Header.Text(LocaleHelper.getSourceDisplayName(lang, context)) to exts.map(extensionMapper(downloads))
+                    }
 
                 if (languagesWithExtensions.isNotEmpty()) {
-                    items.addAll(languagesWithExtensions)
+                    itemsGroups.putAll(languagesWithExtensions)
                 }
 
-                items
+                itemsGroups
             }
                 .collectLatest {
                     mutableState.update { state ->
@@ -141,6 +135,8 @@ class MangaExtensionsScreenModel(
             with(state.value) {
                 if (isEmpty) return@launchIO
                 items
+                items.values
+                    .flatten()
                     .mapNotNull {
                         when {
                             it !is MangaExtensionUiModel.Item -> null
@@ -216,14 +212,16 @@ class MangaExtensionsScreenModel(
 data class MangaExtensionsState(
     val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
-    val items: List<MangaExtensionUiModel> = emptyList(),
+    val items: ItemGroups = mutableMapOf(),
     val updates: Int = 0,
 ) {
     val isEmpty = items.isEmpty()
 }
 
-sealed interface MangaExtensionUiModel {
-    sealed interface Header : MangaExtensionUiModel {
+typealias ItemGroups = MutableMap<MangaExtensionUiModel.Header, List<MangaExtensionUiModel.Item>>
+
+object MangaExtensionUiModel {
+    sealed interface Header {
         data class Resource(@StringRes val textRes: Int) : Header
         data class Text(val text: String) : Header
     }
@@ -231,5 +229,5 @@ sealed interface MangaExtensionUiModel {
     data class Item(
         val extension: MangaExtension,
         val installStep: InstallStep,
-    ) : MangaExtensionUiModel
+    )
 }

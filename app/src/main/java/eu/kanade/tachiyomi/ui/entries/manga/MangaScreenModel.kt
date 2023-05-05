@@ -111,7 +111,7 @@ class MangaInfoScreenModel(
     val source: MangaSource?
         get() = successState?.source
 
-    private val isFavoritedManga: Boolean
+    private val isFavorited: Boolean
         get() = manga?.favorite ?: false
 
     private val processedChapters: Sequence<ChapterItem>?
@@ -231,7 +231,8 @@ class MangaInfoScreenModel(
 
             logcat(LogPriority.ERROR, e)
             coroutineScope.launch {
-                snackbarHostState.showSnackbar(message = e.toString())
+                val errorMessage = e.message.orEmpty().ifEmpty { e.toString() }
+                snackbarHostState.showSnackbar(message = errorMessage)
             }
         }
     }
@@ -265,7 +266,7 @@ class MangaInfoScreenModel(
         coroutineScope.launchIO {
             val manga = state.manga
 
-            if (isFavoritedManga) {
+            if (isFavorited) {
                 // Remove from library
                 if (updateManga.awaitUpdateFavorite(manga.id, false)) {
                     // Remove covers and update last modified in db
@@ -406,10 +407,10 @@ class MangaInfoScreenModel(
 
     fun moveMangaToCategoriesAndAddToLibrary(manga: Manga, categories: List<Long>) {
         moveMangaToCategory(categories)
-        if (!manga.favorite) {
-            coroutineScope.launchIO {
-                updateManga.awaitUpdateFavorite(manga.id, true)
-            }
+        if (manga.favorite) return
+
+        coroutineScope.launchIO {
+            updateManga.awaitUpdateFavorite(manga.id, true)
         }
     }
 
@@ -560,7 +561,7 @@ class MangaInfoScreenModel(
                 context.getString(R.string.no_chapters_error)
             } else {
                 logcat(LogPriority.ERROR, e)
-                e.toString()
+                e.message.orEmpty().ifEmpty { e.toString() }
             }
 
             coroutineScope.launch {
@@ -595,21 +596,26 @@ class MangaInfoScreenModel(
         chapters: List<Chapter>,
         startNow: Boolean,
     ) {
+        val successState = successState ?: return
+
         if (startNow) {
             val chapterId = chapters.singleOrNull()?.id ?: return
             downloadManager.startDownloadNow(chapterId)
         } else {
             downloadChapters(chapters)
         }
-        if (!isFavoritedManga) {
+        if (!isFavorited && !successState.hasPromptedToAddBefore) {
             coroutineScope.launch {
                 val result = snackbarHostState.showSnackbar(
                     message = context.getString(R.string.snack_add_to_manga_library),
                     actionLabel = context.getString(R.string.action_add),
                     withDismissAction = true,
                 )
-                if (result == SnackbarResult.ActionPerformed && !isFavoritedManga) {
+                if (result == SnackbarResult.ActionPerformed && !isFavorited) {
                     toggleFavorite()
+                }
+                updateSuccessState { successState ->
+                    successState.copy(hasPromptedToAddBefore = true)
                 }
             }
         }
@@ -1026,6 +1032,7 @@ sealed class MangaScreenState {
         val trackItems: List<MangaTrackItem> = emptyList(),
         val isRefreshingData: Boolean = false,
         val dialog: MangaInfoScreenModel.Dialog? = null,
+        val hasPromptedToAddBefore: Boolean = false,
     ) : MangaScreenState() {
 
         val processedChapters: Sequence<ChapterItem>

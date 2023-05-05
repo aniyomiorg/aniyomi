@@ -15,7 +15,12 @@ class GlobalMangaSearchScreenModel(
     preferences: BasePreferences = Injekt.get(),
     private val sourcePreferences: SourcePreferences = Injekt.get(),
     private val sourceManager: MangaSourceManager = Injekt.get(),
-) : MangaSearchScreenModel<GlobalMangaSearchState>(GlobalMangaSearchState(searchQuery = initialQuery)) {
+) : MangaSearchScreenModel<GlobalMangaSearchState>(
+    GlobalMangaSearchState(
+        searchQuery = initialQuery,
+        isPinnedOnly = sourcePreferences.searchPinnedMangaSourcesOnly().get(),
+    ),
+) {
 
     val incognitoMode = preferences.incognitoMode()
     val lastUsedSourceId = sourcePreferences.lastUsedMangaSource()
@@ -59,6 +64,7 @@ class GlobalMangaSearchScreenModel(
 data class GlobalMangaSearchState(
     val searchQuery: String? = null,
     val items: Map<CatalogueSource, MangaSearchItemResult> = emptyMap(),
+    val isPinnedOnly: Boolean,
 ) {
 
     val progress: Int = items.count { it.value !is MangaSearchItemResult.Loading }

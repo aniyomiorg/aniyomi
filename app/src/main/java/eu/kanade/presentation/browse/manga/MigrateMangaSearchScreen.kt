@@ -3,6 +3,7 @@ package eu.kanade.presentation.browse.manga
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.ui.res.stringResource
 import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.presentation.browse.GlobalSearchEmptyResultItem
 import eu.kanade.presentation.browse.GlobalSearchErrorResultItem
@@ -10,8 +11,10 @@ import eu.kanade.presentation.browse.GlobalSearchLoadingResultItem
 import eu.kanade.presentation.browse.GlobalSearchResultItem
 import eu.kanade.presentation.browse.GlobalSearchToolbar
 import eu.kanade.presentation.browse.manga.components.GlobalMangaSearchCardRow
+import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LazyColumn
 import eu.kanade.presentation.components.Scaffold
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateMangaSearchState
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchItemResult
@@ -44,6 +47,7 @@ fun MigrateMangaSearchScreen(
         MigrateMangaSearchContent(
             sourceId = state.manga?.source ?: -1,
             items = state.items,
+            isPinnedOnly = state.isPinnedOnly,
             contentPadding = paddingValues,
             getManga = getManga,
             onClickSource = onClickSource,
@@ -57,12 +61,20 @@ fun MigrateMangaSearchScreen(
 fun MigrateMangaSearchContent(
     sourceId: Long,
     items: Map<CatalogueSource, MangaSearchItemResult>,
+    isPinnedOnly: Boolean,
     contentPadding: PaddingValues,
     getManga: @Composable (CatalogueSource, Manga) -> State<Manga>,
     onClickSource: (CatalogueSource) -> Unit,
     onClickItem: (Manga) -> Unit,
     onLongClickItem: (Manga) -> Unit,
 ) {
+    if (items.isEmpty() && isPinnedOnly) {
+        EmptyScreen(
+            message = stringResource(R.string.no_pinned_sources),
+        )
+        return
+    }
+
     LazyColumn(
         contentPadding = contentPadding,
     ) {

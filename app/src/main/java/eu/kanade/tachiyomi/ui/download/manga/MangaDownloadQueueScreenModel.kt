@@ -11,19 +11,21 @@ import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.util.system.logcat
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
-import rx.Observable
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.concurrent.TimeUnit
 
 class MangaDownloadQueueScreenModel(
     private val downloadManager: MangaDownloadManager = Injekt.get(),
@@ -40,9 +42,9 @@ class MangaDownloadQueueScreenModel(
     var adapter: MangaDownloadAdapter? = null
 
     /**
-     * Map of subscriptions for active downloads.
+     * Map of jobs for active downloads.
      */
-    val progressSubscriptions by lazy { mutableMapOf<MangaDownload, Subscription>() }
+    private val progressJobs = mutableMapOf<MangaDownload, Job>()
 
     val listener = object : MangaDownloadAdapter.DownloadItemListener {
         /**
@@ -130,10 +132,10 @@ class MangaDownloadQueueScreenModel(
     }
 
     override fun onDispose() {
-        for (subscription in progressSubscriptions.values) {
-            subscription.unsubscribe()
+        for (job in progressJobs.values) {
+            job.cancel()
         }
-        progressSubscriptions.clear()
+        progressJobs.clear()
         adapter = null
     }
 
@@ -180,16 +182,16 @@ class MangaDownloadQueueScreenModel(
     fun onStatusChange(download: MangaDownload) {
         when (download.status) {
             MangaDownload.State.DOWNLOADING -> {
-                observeProgress(download)
+                launchProgressJob(download)
                 // Initial update of the downloaded pages
                 onUpdateDownloadedPages(download)
             }
             MangaDownload.State.DOWNLOADED -> {
-                unsubscribeProgress(download)
+                cancelProgressJob(download)
                 onUpdateProgress(download)
                 onUpdateDownloadedPages(download)
             }
-            MangaDownload.State.ERROR -> unsubscribeProgress(download)
+            MangaDownload.State.ERROR -> cancelProgressJob(download)
             else -> {
                 /* unused */
             }
@@ -201,29 +203,25 @@ class MangaDownloadQueueScreenModel(
      *
      * @param download the download to observe its progress.
      */
-    private fun observeProgress(download: MangaDownload) {
-        val subscription = Observable.interval(50, TimeUnit.MILLISECONDS)
-            // Get the sum of percentages for all the pages.
-            .flatMap {
-                Observable.from(download.pages)
-                    .map(Page::progress)
-                    .reduce { x, y -> x + y }
+    private fun launchProgressJob(download: MangaDownload) {
+        val job = coroutineScope.launch {
+            while (download.pages == null) {
+                delay(50)
             }
-            // Keep only the latest emission to avoid backpressure.
-            .onBackpressureLatest()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { progress ->
-                // Update the view only if the progress has changed.
-                if (download.totalProgress != progress) {
-                    download.totalProgress = progress
+
+            val progressFlows = download.pages!!.map(Page::progressFlow)
+            combine(progressFlows, Array<Int>::sum)
+                .distinctUntilChanged()
+                .debounce(50)
+                .collectLatest {
                     onUpdateProgress(download)
                 }
-            }
+        }
 
-        // Avoid leaking subscriptions
-        progressSubscriptions.remove(download)?.unsubscribe()
+        // Avoid leaking jobs
+        progressJobs.remove(download)?.cancel()
 
-        progressSubscriptions[download] = subscription
+        progressJobs[download] = job
     }
 
     /**
@@ -231,8 +229,8 @@ class MangaDownloadQueueScreenModel(
      *
      * @param download the download to unsubscribe.
      */
-    private fun unsubscribeProgress(download: MangaDownload) {
-        progressSubscriptions.remove(download)?.unsubscribe()
+    private fun cancelProgressJob(download: MangaDownload) {
+        progressJobs.remove(download)?.cancel()
     }
 
     /**

@@ -175,27 +175,8 @@ data class MangaTrackInfoDialogHomeScreen(
     ) : StateScreenModel<Model.State>(State()) {
 
         init {
-            // Refresh data
             coroutineScope.launch {
-                try {
-                    val trackItems = getTracks.await(mangaId).mapToTrackItem()
-                    val insertTrack = Injekt.get<InsertMangaTrack>()
-                    val getMangaWithChapters = Injekt.get<GetMangaWithChapters>()
-                    val syncTwoWayService = Injekt.get<SyncChaptersWithTrackServiceTwoWay>()
-                    trackItems.forEach {
-                        val track = it.track ?: return@forEach
-                        val domainTrack = it.service.mangaService.refresh(track).toDomainTrack() ?: return@forEach
-                        insertTrack.await(domainTrack)
-
-                        if (it.service is EnhancedMangaTrackService) {
-                            val allChapters = getMangaWithChapters.awaitChapters(mangaId)
-                            syncTwoWayService.await(allChapters, domainTrack, it.service.mangaService)
-                        }
-                    }
-                } catch (e: Exception) {
-                    logcat(LogPriority.ERROR, e) { "Failed to refresh track data mangaId=$mangaId" }
-                    withUIContext { Injekt.get<Application>().toast(e.message) }
-                }
+                refreshTrackers()
             }
 
             coroutineScope.launch {
@@ -222,6 +203,46 @@ data class MangaTrackInfoDialogHomeScreen(
 
         fun unregisterTracking(serviceId: Long) {
             coroutineScope.launchNonCancellable { deleteTrack.await(mangaId, serviceId) }
+        }
+
+        private suspend fun refreshTrackers() {
+            val insertTrack = Injekt.get<InsertMangaTrack>()
+            val getMangaWithChapters = Injekt.get<GetMangaWithChapters>()
+            val syncTwoWayService = Injekt.get<SyncChaptersWithTrackServiceTwoWay>()
+            val context = Injekt.get<Application>()
+
+            try {
+                val trackItems = getTracks.await(mangaId).mapToTrackItem()
+                for (trackItem in trackItems) {
+                    try {
+                        val track = trackItem.track ?: continue
+                        val domainMangaTrack = trackItem.service.mangaService.refresh(track).toDomainTrack() ?: continue
+                        insertTrack.await(domainMangaTrack)
+
+                        if (trackItem.service is EnhancedMangaTrackService) {
+                            val allChapters = getMangaWithChapters.awaitChapters(mangaId)
+                            syncTwoWayService.await(allChapters, domainMangaTrack, trackItem.service.mangaService)
+                        }
+                    } catch (e: Exception) {
+                        logcat(
+                            LogPriority.ERROR,
+                            e,
+                        ) { "Failed to refresh track data mangaId=$mangaId for service ${trackItem.service.id}" }
+                        withUIContext {
+                            context.toast(
+                                context.getString(
+                                    R.string.track_error,
+                                    context.getString(trackItem.service.nameRes()),
+                                    e.message,
+                                ),
+                            )
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e) { "Failed to refresh track data mangaId=$mangaId" }
+                withUIContext { context.toast(e.message) }
+            }
         }
 
         private fun List<MangaTrack>.mapToTrackItem(): List<MangaTrackItem> {

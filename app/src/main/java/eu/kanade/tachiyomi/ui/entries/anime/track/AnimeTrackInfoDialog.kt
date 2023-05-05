@@ -175,27 +175,8 @@ data class AnimeTrackInfoDialogHomeScreen(
     ) : StateScreenModel<Model.State>(State()) {
 
         init {
-            // Refresh data
             coroutineScope.launch {
-                try {
-                    val trackItems = getTracks.await(animeId).mapToTrackItem()
-                    val insertTrack = Injekt.get<InsertAnimeTrack>()
-                    val getAnimeWithEpisodes = Injekt.get<GetAnimeWithEpisodes>()
-                    val syncTwoWayService = Injekt.get<SyncEpisodesWithTrackServiceTwoWay>()
-                    trackItems.forEach {
-                        val track = it.track ?: return@forEach
-                        val domainTrack = it.service.animeService.refresh(track).toDomainTrack() ?: return@forEach
-                        insertTrack.await(domainTrack)
-
-                        if (it.service is EnhancedAnimeTrackService) {
-                            val allEpisodes = getAnimeWithEpisodes.awaitEpisodes(animeId)
-                            syncTwoWayService.await(allEpisodes, domainTrack, it.service.animeService)
-                        }
-                    }
-                } catch (e: Exception) {
-                    logcat(LogPriority.ERROR, e) { "Failed to refresh track data animeId=$animeId" }
-                    withUIContext { Injekt.get<Application>().toast(e.message) }
-                }
+                refreshTrackers()
             }
 
             coroutineScope.launch {
@@ -222,6 +203,46 @@ data class AnimeTrackInfoDialogHomeScreen(
 
         fun unregisterTracking(serviceId: Long) {
             coroutineScope.launchNonCancellable { deleteTrack.await(animeId, serviceId) }
+        }
+
+        private suspend fun refreshTrackers() {
+            val insertAnimeTrack = Injekt.get<InsertAnimeTrack>()
+            val getAnimeWithEpisodes = Injekt.get<GetAnimeWithEpisodes>()
+            val syncTwoWayService = Injekt.get<SyncEpisodesWithTrackServiceTwoWay>()
+            val context = Injekt.get<Application>()
+
+            try {
+                val trackItems = getTracks.await(animeId).mapToTrackItem()
+                for (trackItem in trackItems) {
+                    try {
+                        val track = trackItem.track ?: continue
+                        val domainAnimeTrack = trackItem.service.animeService.refresh(track).toDomainTrack() ?: continue
+                        insertAnimeTrack.await(domainAnimeTrack)
+
+                        if (trackItem.service is EnhancedAnimeTrackService) {
+                            val allEpisodes = getAnimeWithEpisodes.awaitEpisodes(animeId)
+                            syncTwoWayService.await(allEpisodes, domainAnimeTrack, trackItem.service.animeService)
+                        }
+                    } catch (e: Exception) {
+                        logcat(
+                            LogPriority.ERROR,
+                            e,
+                        ) { "Failed to refresh track data mangaId=$animeId for service ${trackItem.service.id}" }
+                        withUIContext {
+                            context.toast(
+                                context.getString(
+                                    R.string.track_error,
+                                    context.getString(trackItem.service.nameRes()),
+                                    e.message,
+                                ),
+                            )
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e) { "Failed to refresh track data mangaId=$animeId" }
+                withUIContext { context.toast(e.message) }
+            }
         }
 
         private fun List<AnimeTrack>.mapToTrackItem(): List<AnimeTrackItem> {

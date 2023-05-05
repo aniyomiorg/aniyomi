@@ -27,7 +27,7 @@ import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import uy.kohesive.injekt.injectLazy
 
 val resumeLastEpisodeSeenEvent = Channel<Unit>()
@@ -118,7 +118,7 @@ fun Screen.animeHistoryTab(
             }
 
             LaunchedEffect(Unit) {
-                resumeLastEpisodeSeenEvent.consumeAsFlow().collectLatest {
+                resumeLastEpisodeSeenEvent.receiveAsFlow().collectLatest {
                     openEpisode(context, screenModel.getNextEpisode())
                 }
             }

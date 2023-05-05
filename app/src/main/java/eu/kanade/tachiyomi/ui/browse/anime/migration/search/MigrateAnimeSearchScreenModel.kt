@@ -22,7 +22,11 @@ class MigrateAnimeSearchScreenModel(
     private val sourcePreferences: SourcePreferences = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
-) : AnimeSearchScreenModel<MigrateAnimeSearchState>(MigrateAnimeSearchState()) {
+) : AnimeSearchScreenModel<MigrateAnimeSearchState>(
+    MigrateAnimeSearchState(
+        isPinnedOnly = sourcePreferences.searchPinnedAnimeSourcesOnly().get(),
+    ),
+) {
 
     init {
         extensionFilter = initialExtensionFilter
@@ -84,6 +88,7 @@ data class MigrateAnimeSearchState(
     val anime: Anime? = null,
     val searchQuery: String? = null,
     val items: Map<AnimeCatalogueSource, AnimeSearchItemResult> = emptyMap(),
+    val isPinnedOnly: Boolean,
     val dialog: MigrateAnimeSearchDialog? = null,
 ) {
 

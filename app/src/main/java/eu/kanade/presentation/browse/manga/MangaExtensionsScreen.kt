@@ -146,78 +146,77 @@ private fun ExtensionContent(
             }
         }
 
-        items(
-            items = state.items,
-            contentType = {
-                when (it) {
-                    is MangaExtensionUiModel.Header -> "header"
-                    is MangaExtensionUiModel.Item -> "item"
-                }
-            },
-            key = {
-                when (it) {
-                    is MangaExtensionUiModel.Header -> "extensionHeader-${it.hashCode()}"
-                    is MangaExtensionUiModel.Item -> "extension-${it.hashCode()}"
-                }
-            },
-        ) { item ->
-            when (item) {
-                is MangaExtensionUiModel.Header.Resource -> {
-                    val action: @Composable RowScope.() -> Unit =
-                        if (item.textRes == R.string.ext_updates_pending) {
-                            {
-                                Button(onClick = { onClickUpdateAll() }) {
-                                    Text(
-                                        text = stringResource(R.string.ext_update_all),
-                                        style = LocalTextStyle.current.copy(
-                                            color = MaterialTheme.colorScheme.onPrimary,
-                                        ),
-                                    )
-                                }
-                            }
-                        } else {
-                            {}
-                        }
-                    ExtensionHeader(
-                        textRes = item.textRes,
-                        modifier = Modifier.animateItemPlacement(),
-                        action = action,
-                    )
-                }
-                is MangaExtensionUiModel.Header.Text -> {
-                    ExtensionHeader(
-                        text = item.text,
-                        modifier = Modifier.animateItemPlacement(),
-                    )
-                }
-                is MangaExtensionUiModel.Item -> {
-                    ExtensionItem(
-                        modifier = Modifier.animateItemPlacement(),
-                        item = item,
-                        onClickItem = {
-                            when (it) {
-                                is MangaExtension.Available -> onInstallExtension(it)
-                                is MangaExtension.Installed -> onOpenExtension(it)
-                                is MangaExtension.Untrusted -> { trustState = it }
-                            }
-                        },
-                        onLongClickItem = onLongClickItem,
-                        onClickItemCancel = onClickItemCancel,
-                        onClickItemAction = {
-                            when (it) {
-                                is MangaExtension.Available -> onInstallExtension(it)
-                                is MangaExtension.Installed -> {
-                                    if (it.hasUpdate) {
-                                        onUpdateExtension(it)
-                                    } else {
-                                        onOpenExtension(it)
+        state.items.forEach { (header, items) ->
+            item(
+                contentType = "header",
+                key = "extensionHeader-${header.hashCode()}",
+            ) {
+                when (header) {
+                    is MangaExtensionUiModel.Header.Resource -> {
+                        val action: @Composable RowScope.() -> Unit =
+                            if (header.textRes == R.string.ext_updates_pending) {
+                                {
+                                    Button(onClick = { onClickUpdateAll() }) {
+                                        Text(
+                                            text = stringResource(R.string.ext_update_all),
+                                            style = LocalTextStyle.current.copy(
+                                                color = MaterialTheme.colorScheme.onPrimary,
+                                            ),
+                                        )
                                     }
                                 }
-                                is MangaExtension.Untrusted -> { trustState = it }
+                            } else {
+                                {}
                             }
-                        },
-                    )
+                        ExtensionHeader(
+                            textRes = header.textRes,
+                            modifier = Modifier.animateItemPlacement(),
+                            action = action,
+                        )
+                    }
+                    is MangaExtensionUiModel.Header.Text -> {
+                        ExtensionHeader(
+                            text = header.text,
+                            modifier = Modifier.animateItemPlacement(),
+                        )
+                    }
                 }
+            }
+
+            items(
+                items = items,
+                contentType = { "item" },
+                key = { "extension-${it.hashCode()}" },
+            ) { item ->
+                ExtensionItem(
+                    modifier = Modifier.animateItemPlacement(),
+                    item = item,
+                    onClickItem = {
+                        when (it) {
+                            is MangaExtension.Available -> onInstallExtension(it)
+                            is MangaExtension.Installed -> onOpenExtension(it)
+                            is MangaExtension.Untrusted -> { trustState = it }
+                        }
+                    },
+                    onLongClickItem = onLongClickItem,
+                    onClickItemCancel = onClickItemCancel,
+                    onClickItemAction = {
+                        when (it) {
+                            is MangaExtension.Available -> onInstallExtension(it)
+                            is MangaExtension.Installed -> {
+                                if (it.hasUpdate) {
+                                    onUpdateExtension(it)
+                                } else {
+                                    onOpenExtension(it)
+                                }
+                            }
+
+                            is MangaExtension.Untrusted -> {
+                                trustState = it
+                            }
+                        }
+                    },
+                )
             }
         }
     }

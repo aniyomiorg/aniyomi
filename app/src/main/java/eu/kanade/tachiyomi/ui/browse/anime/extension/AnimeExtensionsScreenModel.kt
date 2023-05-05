@@ -40,7 +40,7 @@ class AnimeExtensionsScreenModel(
 
     init {
         val context = Injekt.get<Application>()
-        val extensionMapper: (Map<String, InstallStep>) -> ((AnimeExtension) -> AnimeExtensionUiModel) = { map ->
+        val extensionMapper: (Map<String, InstallStep>) -> ((AnimeExtension) -> AnimeExtensionUiModel.Item) = { map ->
             {
                 AnimeExtensionUiModel.Item(it, map[it.pkgName] ?: InstallStep.Idle)
             }
@@ -80,38 +80,32 @@ class AnimeExtensionsScreenModel(
             ) { query, downloads, (_updates, _installed, _available, _untrusted) ->
                 val searchQuery = query ?: ""
 
-                val languagesWithExtensions = _available
-                    .filter(queryFilter(searchQuery))
-                    .groupBy { it.lang }
-                    .toSortedMap(LocaleHelper.comparator)
-                    .flatMap { (lang, exts) ->
-                        listOf(
-                            AnimeExtensionUiModel.Header.Text(LocaleHelper.getSourceDisplayName(lang, context)),
-                            *exts.map(extensionMapper(downloads)).toTypedArray(),
-                        )
-                    }
-
-                val items = mutableListOf<AnimeExtensionUiModel>()
+                val itemsGroups: ItemGroups = mutableMapOf()
 
                 val updates = _updates.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 if (updates.isNotEmpty()) {
-                    items.add(AnimeExtensionUiModel.Header.Resource(R.string.ext_updates_pending))
-                    items.addAll(updates)
+                    itemsGroups[AnimeExtensionUiModel.Header.Resource(R.string.ext_updates_pending)] = updates
                 }
 
                 val installed = _installed.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 val untrusted = _untrusted.filter(queryFilter(searchQuery)).map(extensionMapper(downloads))
                 if (installed.isNotEmpty() || untrusted.isNotEmpty()) {
-                    items.add(AnimeExtensionUiModel.Header.Resource(R.string.ext_installed))
-                    items.addAll(installed)
-                    items.addAll(untrusted)
+                    itemsGroups[AnimeExtensionUiModel.Header.Resource(R.string.ext_installed)] = installed + untrusted
                 }
+
+                val languagesWithExtensions = _available
+                    .filter(queryFilter(searchQuery))
+                    .groupBy { it.lang }
+                    .toSortedMap(LocaleHelper.comparator)
+                    .map { (lang, exts) ->
+                        AnimeExtensionUiModel.Header.Text(LocaleHelper.getSourceDisplayName(lang, context)) to exts.map(extensionMapper(downloads))
+                    }
 
                 if (languagesWithExtensions.isNotEmpty()) {
-                    items.addAll(languagesWithExtensions)
+                    itemsGroups.putAll(languagesWithExtensions)
                 }
 
-                items
+                itemsGroups
             }
                 .collectLatest {
                     mutableState.update { state ->
@@ -139,7 +133,8 @@ class AnimeExtensionsScreenModel(
         coroutineScope.launchIO {
             with(state.value) {
                 if (isEmpty) return@launchIO
-                items
+                items.values
+                    .flatten()
                     .mapNotNull {
                         when {
                             it !is AnimeExtensionUiModel.Item -> null
@@ -214,19 +209,21 @@ class AnimeExtensionsScreenModel(
 data class AnimeExtensionsState(
     val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
-    val items: List<AnimeExtensionUiModel> = emptyList(),
+    val items: ItemGroups = mutableMapOf(),
     val updates: Int = 0,
 ) {
     val isEmpty = items.isEmpty()
 }
 
-sealed interface AnimeExtensionUiModel {
-    sealed interface Header : AnimeExtensionUiModel {
+typealias ItemGroups = MutableMap<AnimeExtensionUiModel.Header, List<AnimeExtensionUiModel.Item>>
+
+object AnimeExtensionUiModel {
+    sealed interface Header {
         data class Resource(@StringRes val textRes: Int) : Header
         data class Text(val text: String) : Header
     }
     data class Item(
         val extension: AnimeExtension,
         val installStep: InstallStep,
-    ) : AnimeExtensionUiModel
+    )
 }

@@ -52,10 +52,14 @@ class AnimeLibrarySettingsSheet(
      * @param currentCategory ID of currently shown category
      */
     fun show(currentCategory: Category) {
+        filters.adjustFilterSelection()
+
         sort.currentCategory = currentCategory
         sort.adjustDisplaySelection()
+
         display.currentCategory = currentCategory
         display.adjustDisplaySelection()
+
         super.show()
     }
 
@@ -81,6 +85,12 @@ class AnimeLibrarySettingsSheet(
 
         init {
             setGroups(listOf(filterGroup))
+        }
+
+        // Refreshes Filter Setting selections
+        fun adjustFilterSelection() {
+            filterGroup.initModels()
+            filterGroup.items.forEach { adapter.notifyItemChanged(it) }
         }
 
         /**
@@ -127,6 +137,7 @@ class AnimeLibrarySettingsSheet(
                     downloaded.enabled = false
                 } else {
                     downloaded.state = libraryPreferences.filterDownloadedAnime().get()
+                    downloaded.enabled = true
                 }
                 unseen.state = libraryPreferences.filterUnseen().get()
                 started.state = libraryPreferences.filterStartedAnime().get()

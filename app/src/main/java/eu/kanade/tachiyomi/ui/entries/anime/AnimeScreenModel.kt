@@ -114,7 +114,7 @@ class AnimeInfoScreenModel(
     val source: AnimeSource?
         get() = successState?.source
 
-    private val isFavoritedAnime: Boolean
+    private val isFavorited: Boolean
         get() = anime?.favorite ?: false
 
     private val processedEpisodes: Sequence<EpisodeItem>?
@@ -233,7 +233,8 @@ class AnimeInfoScreenModel(
 
             logcat(LogPriority.ERROR, e)
             coroutineScope.launch {
-                snackbarHostState.showSnackbar(message = e.toString())
+                val errorMessage = e.message.orEmpty().ifEmpty { e.toString() }
+                snackbarHostState.showSnackbar(message = errorMessage)
             }
         }
     }
@@ -267,7 +268,7 @@ class AnimeInfoScreenModel(
         coroutineScope.launchIO {
             val anime = state.anime
 
-            if (isFavoritedAnime) {
+            if (isFavorited) {
                 // Remove from library
                 if (updateAnime.awaitUpdateFavorite(anime.id, false)) {
                     // Remove covers and update last modified in db
@@ -407,10 +408,10 @@ class AnimeInfoScreenModel(
 
     fun moveAnimeToCategoriesAndAddToLibrary(anime: Anime, categories: List<Long>) {
         moveAnimeToCategory(categories)
-        if (!anime.favorite) {
-            coroutineScope.launchIO {
-                updateAnime.awaitUpdateFavorite(anime.id, true)
-            }
+        if (anime.favorite) return
+
+        coroutineScope.launchIO {
+            updateAnime.awaitUpdateFavorite(anime.id, true)
         }
     }
 
@@ -562,7 +563,7 @@ class AnimeInfoScreenModel(
                 context.getString(R.string.no_episodes_error)
             } else {
                 logcat(LogPriority.ERROR, e)
-                e.toString()
+                e.message.orEmpty().ifEmpty { e.toString() }
             }
 
             coroutineScope.launch {
@@ -597,21 +598,26 @@ class AnimeInfoScreenModel(
         episodes: List<Episode>,
         startNow: Boolean,
     ) {
+        val successState = successState ?: return
+
         if (startNow) {
             val episodeId = episodes.singleOrNull()?.id ?: return
             downloadManager.startDownloadNow(episodeId)
         } else {
             downloadEpisodes(episodes)
         }
-        if (!isFavoritedAnime) {
+        if (!isFavorited && !successState.hasPromptedToAddBefore) {
             coroutineScope.launch {
                 val result = snackbarHostState.showSnackbar(
                     message = context.getString(R.string.snack_add_to_anime_library),
                     actionLabel = context.getString(R.string.action_add),
                     withDismissAction = true,
                 )
-                if (result == SnackbarResult.ActionPerformed && !isFavoritedAnime) {
+                if (result == SnackbarResult.ActionPerformed && !isFavorited) {
                     toggleFavorite()
+                }
+                updateSuccessState { successState ->
+                    successState.copy(hasPromptedToAddBefore = true)
                 }
             }
         }
@@ -1038,6 +1044,7 @@ sealed class AnimeScreenState {
         val trackItems: List<AnimeTrackItem> = emptyList(),
         val isRefreshingData: Boolean = false,
         val dialog: AnimeInfoScreenModel.Dialog? = null,
+        val hasPromptedToAddBefore: Boolean = false,
     ) : AnimeScreenState() {
 
         val processedEpisodes: Sequence<EpisodeItem>
