@@ -17,7 +17,7 @@ fun GlobalSearchCard(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
 ) {
-    Box(modifier = Modifier.width(128.dp)) {
+    Box(modifier = Modifier.width(96.dp)) {
         EntryComfortableGridItem(
             title = title,
             coverData = cover,

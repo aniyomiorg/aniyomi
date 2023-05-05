@@ -43,6 +43,7 @@ import eu.kanade.presentation.components.DIVIDER_ALPHA
 import eu.kanade.presentation.components.ItemCover
 import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.util.ThemePreviews
+import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.DeviceUtil
@@ -80,9 +81,9 @@ private fun AppThemesList(
     LazyRow(
         modifier = Modifier
             .animateContentSize()
-            .padding(vertical = 8.dp),
+            .padding(vertical = MaterialTheme.padding.small),
         contentPadding = PaddingValues(horizontal = PrefsHorizontalPadding),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
         items(
             items = appThemes,
@@ -109,7 +110,6 @@ private fun AppThemesList(
                         .fillMaxWidth()
                         .padding(top = 8.dp)
                         .secondaryItemAlpha(),
-                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
                     maxLines = 2,
                     style = MaterialTheme.typography.bodyMedium,

@@ -176,14 +176,7 @@ fun MangaUpdatesUiItem(
         ) {
             val bookmark = remember(update.bookmark) { update.bookmark }
             val read = remember(update.read) { update.read }
-
             val textAlpha = remember(read) { if (read) ReadItemAlpha else 1f }
-
-            val secondaryTextColor = if (bookmark && !read) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.onSurface
-            }
 
             Text(
                 text = update.mangaTitle,
@@ -207,7 +200,6 @@ fun MangaUpdatesUiItem(
                 Text(
                     text = update.chapterName,
                     maxLines = 1,
-                    color = secondaryTextColor,
                     style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     onTextLayout = { textHeight = it.size.height },

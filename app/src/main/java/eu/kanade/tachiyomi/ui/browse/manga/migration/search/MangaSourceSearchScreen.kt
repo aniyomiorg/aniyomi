@@ -33,7 +33,7 @@ import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
-import eu.kanade.tachiyomi.ui.webview.WebViewActivity
+import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import eu.kanade.tachiyomi.util.Constants
 import kotlinx.coroutines.launch
 
@@ -89,8 +89,13 @@ data class MangaSourceSearchScreen(
                 contentPadding = paddingValues,
                 onWebViewClick = {
                     val source = screenModel.source as? HttpSource ?: return@BrowseSourceContent
-                    val intent = WebViewActivity.newIntent(context, source.baseUrl, source.id, source.name)
-                    context.startActivity(intent)
+                    navigator.push(
+                        WebViewScreen(
+                            url = source.baseUrl,
+                            initialTitle = source.name,
+                            sourceId = source.id,
+                        ),
+                    )
                 },
                 onHelpClick = { uriHandler.openUri(Constants.URL_HELP) },
                 onLocalSourceHelpClick = { uriHandler.openUri(LocalMangaSource.HELP_URL) },

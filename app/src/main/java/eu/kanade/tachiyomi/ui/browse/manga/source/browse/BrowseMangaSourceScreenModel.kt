@@ -40,7 +40,6 @@ import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.ui.browse.manga.source.filter.CheckboxItem
@@ -80,7 +79,7 @@ import eu.kanade.tachiyomi.source.model.Filter as SourceModelFilter
 class BrowseMangaSourceScreenModel(
     private val sourceId: Long,
     listingQuery: String?,
-    private val sourceManager: MangaSourceManager = Injekt.get(),
+    sourceManager: MangaSourceManager = Injekt.get(),
     sourcePreferences: SourcePreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: MangaCoverCache = Injekt.get(),
@@ -273,10 +272,6 @@ class BrowseMangaSourceScreenModel(
         }
     }
 
-    fun getSourceOrStub(manga: Manga): MangaSource {
-        return sourceManager.getOrStub(manga.source)
-    }
-
     fun addFavorite(manga: Manga) {
         coroutineScope.launch {
             val categories = getCategories()
@@ -340,7 +335,7 @@ class BrowseMangaSourceScreenModel(
     }
 
     suspend fun getDuplicateLibraryManga(manga: Manga): Manga? {
-        return getDuplicateLibraryManga.await(manga.title, manga.source)
+        return getDuplicateLibraryManga.await(manga.title)
     }
 
     fun moveMangaToCategories(manga: Manga, vararg categories: Category) {

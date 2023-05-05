@@ -352,17 +352,15 @@ class AnimeLibrarySettingsSheet(
 
         inner class BadgeGroup : Group {
             private val downloadBadge = Item.CheckboxGroup(R.string.action_display_download_badge_anime, this)
-            private val unseenBadge = Item.CheckboxGroup(R.string.action_display_unseen_badge, this)
             private val localBadge = Item.CheckboxGroup(R.string.action_display_local_badge_anime, this)
             private val languageBadge = Item.CheckboxGroup(R.string.action_display_language_badge, this)
 
             override val header = Item.Header(R.string.badges_header)
-            override val items = listOf(downloadBadge, unseenBadge, localBadge, languageBadge)
+            override val items = listOf(downloadBadge, localBadge, languageBadge)
             override val footer = null
 
             override fun initModels() {
                 downloadBadge.checked = libraryPreferences.downloadBadge().get()
-                unseenBadge.checked = libraryPreferences.unviewedBadge().get()
                 localBadge.checked = libraryPreferences.localBadge().get()
                 languageBadge.checked = libraryPreferences.languageBadge().get()
             }
@@ -372,7 +370,6 @@ class AnimeLibrarySettingsSheet(
                 item.checked = !item.checked
                 when (item) {
                     downloadBadge -> libraryPreferences.downloadBadge().set((item.checked))
-                    unseenBadge -> libraryPreferences.unviewedBadge().set((item.checked))
                     localBadge -> libraryPreferences.localBadge().set((item.checked))
                     languageBadge -> libraryPreferences.languageBadge().set((item.checked))
                     else -> {}

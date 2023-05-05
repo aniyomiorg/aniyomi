@@ -60,7 +60,7 @@ import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.webview.WebViewActivity
+import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.system.copyToClipboard
@@ -129,7 +129,7 @@ class AnimeScreen(
                 screenModel.toggleFavorite()
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             },
-            onWebViewClicked = { openAnimeInWebView(context, screenModel.anime, screenModel.source) }.takeIf { isAnimeHttpSource },
+            onWebViewClicked = { openAnimeInWebView(navigator, screenModel.anime, screenModel.source) }.takeIf { isAnimeHttpSource },
             onWebViewLongClicked = { copyAnimeUrl(context, screenModel.anime, screenModel.source) }.takeIf { isAnimeHttpSource },
             onTrackingClicked = screenModel::showTrackDialog.takeIf { successState.trackingAvailable },
             onTagClicked = { scope.launch { performGenreSearch(navigator, it, screenModel.source!!) } },
@@ -202,7 +202,6 @@ class AnimeScreen(
                 onDismissRequest = onDismissRequest,
                 onConfirm = { screenModel.toggleFavorite(onRemoved = {}, checkDuplicate = false) },
                 onOpenAnime = { navigator.push(AnimeScreen(dialog.duplicate.id)) },
-                duplicateFrom = screenModel.getSourceOrStub(dialog.duplicate),
             )
             AnimeInfoScreenModel.Dialog.SettingsSheet -> EpisodeSettingsDialog(
                 onDismissRequest = onDismissRequest,
@@ -284,10 +283,15 @@ class AnimeScreen(
         }
     }
 
-    private fun openAnimeInWebView(context: Context, anime_: Anime?, source_: AnimeSource?) {
+    private fun openAnimeInWebView(navigator: Navigator, anime_: Anime?, source_: AnimeSource?) {
         getAnimeUrl(anime_, source_)?.let { url ->
-            val intent = WebViewActivity.newIntent(context, url, source_?.id, anime_?.title)
-            context.startActivity(intent)
+            navigator.push(
+                WebViewScreen(
+                    url = url,
+                    initialTitle = anime_?.title,
+                    sourceId = source_?.id,
+                ),
+            )
         }
     }
 

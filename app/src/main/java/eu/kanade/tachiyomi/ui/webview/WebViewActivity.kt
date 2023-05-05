@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.net.toUri
-import eu.kanade.presentation.webview.WebViewScreen
+import eu.kanade.presentation.webview.WebViewScreenContent
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -45,18 +45,18 @@ class WebViewActivity : BaseActivity() {
             return
         }
 
-        val url = intent.extras!!.getString(URL_KEY) ?: return
-        var headers = mutableMapOf<String, String>()
-        val source = sourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? HttpSource
-        val animeSource = animeSourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? AnimeHttpSource
-        if (source != null) {
-            headers = source.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }.toMutableMap()
-        } else if (animeSource != null) {
-            headers = animeSource.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }.toMutableMap()
+        val url = intent.extras?.getString(URL_KEY) ?: return
+        assistUrl = url
+        var headers = emptyMap<String, String>()
+        (sourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? HttpSource)?.let { source ->
+            headers = source.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }
+        }
+        (animeSourceManager.get(intent.extras!!.getLong(SOURCE_KEY)) as? AnimeHttpSource)?.let { animeSource ->
+            headers = animeSource.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }
         }
 
         setComposeContent {
-            WebViewScreen(
+            WebViewScreenContent(
                 onNavigateUp = { finish() },
                 initialTitle = intent.extras?.getString(TITLE_KEY),
                 url = url,

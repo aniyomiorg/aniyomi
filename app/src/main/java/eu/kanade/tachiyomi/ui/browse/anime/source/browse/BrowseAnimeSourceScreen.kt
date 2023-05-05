@@ -32,7 +32,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
@@ -47,13 +46,14 @@ import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.DuplicateAnimeDialog
 import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.util.AssistContentScreen
+import eu.kanade.presentation.util.padding
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
-import eu.kanade.tachiyomi.ui.webview.WebViewActivity
+import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import eu.kanade.tachiyomi.util.Constants
 import eu.kanade.tachiyomi.util.lang.launchIO
 import kotlinx.coroutines.channels.Channel
@@ -95,8 +95,13 @@ data class BrowseAnimeSourceScreen(
 
         val onWebViewClick = f@{
             val source = screenModel.source as? AnimeHttpSource ?: return@f
-            val intent = WebViewActivity.newIntent(context, source.baseUrl, source.id, source.name)
-            context.startActivity(intent)
+            navigator.push(
+                WebViewScreen(
+                    url = source.baseUrl,
+                    initialTitle = source.name,
+                    sourceId = source.id,
+                ),
+            )
         }
 
         LaunchedEffect(screenModel.source) {
@@ -121,8 +126,8 @@ data class BrowseAnimeSourceScreen(
                     Row(
                         modifier = Modifier
                             .horizontalScroll(rememberScrollState())
-                            .padding(horizontal = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            .padding(horizontal = MaterialTheme.padding.small),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
                     ) {
                         FilterChip(
                             selected = state.listing == Listing.Popular,
@@ -226,7 +231,6 @@ data class BrowseAnimeSourceScreen(
                     onDismissRequest = onDismissRequest,
                     onConfirm = { screenModel.addFavorite(dialog.anime) },
                     onOpenAnime = { navigator.push(AnimeScreen(dialog.duplicate.id)) },
-                    duplicateFrom = screenModel.getSourceOrStub(dialog.duplicate),
                 )
             }
             is BrowseAnimeSourceScreenModel.Dialog.RemoveAnime -> {

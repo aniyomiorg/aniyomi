@@ -9,14 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.AnimeSource
 
 @Composable
 fun DuplicateAnimeDialog(
     onDismissRequest: () -> Unit,
     onConfirm: () -> Unit,
     onOpenAnime: () -> Unit,
-    duplicateFrom: AnimeSource,
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -46,12 +44,7 @@ fun DuplicateAnimeDialog(
             Text(text = stringResource(R.string.are_you_sure))
         },
         text = {
-            Text(
-                text = stringResource(
-                    id = R.string.confirm_manga_add_duplicate,
-                    duplicateFrom.name,
-                ),
-            )
+            Text(text = stringResource(R.string.confirm_add_duplicate_manga))
         },
     )
 }

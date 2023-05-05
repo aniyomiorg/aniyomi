@@ -77,6 +77,7 @@ import eu.kanade.presentation.components.ItemCover
 import eu.kanade.presentation.components.TextButton
 import eu.kanade.presentation.entries.DotSeparatorText
 import eu.kanade.presentation.util.clickableNoIndication
+import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.model.SManga
@@ -255,8 +256,8 @@ fun ExpandableMangaDescription(
                     }
                 } else {
                     LazyRow(
-                        contentPadding = PaddingValues(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        contentPadding = PaddingValues(horizontal = MaterialTheme.padding.medium),
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny),
                     ) {
                         items(items = tags) {
                             TagsChip(

@@ -36,7 +36,6 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
@@ -80,7 +79,7 @@ import eu.kanade.tachiyomi.animesource.model.AnimeFilter as AnimeSourceModelFilt
 class BrowseAnimeSourceScreenModel(
     private val sourceId: Long,
     listingQuery: String?,
-    private val sourceManager: AnimeSourceManager = Injekt.get(),
+    sourceManager: AnimeSourceManager = Injekt.get(),
     sourcePreferences: SourcePreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
@@ -272,10 +271,6 @@ class BrowseAnimeSourceScreenModel(
         }
     }
 
-    fun getSourceOrStub(anime: Anime): AnimeSource {
-        return sourceManager.getOrStub(anime.source)
-    }
-
     fun addFavorite(anime: Anime) {
         coroutineScope.launch {
             val categories = getCategories()
@@ -346,7 +341,7 @@ class BrowseAnimeSourceScreenModel(
     }
 
     suspend fun getDuplicateAnimelibAnime(anime: Anime): Anime? {
-        return getDuplicateAnimelibAnime.await(anime.title, anime.source)
+        return getDuplicateAnimelibAnime.await(anime.title)
     }
 
     fun moveAnimeToCategories(anime: Anime, vararg categories: Category) {

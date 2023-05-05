@@ -122,7 +122,7 @@ private fun AnimeExtensionContent(
     onClickUpdateAll: () -> Unit,
 ) {
     var trustState by remember { mutableStateOf<AnimeExtension.Untrusted?>(null) }
-    val showMiuiWarning = DeviceUtil.isMiui && !DeviceUtil.isMiuiOptimizationDisabled()
+    val showMiuiWarning = DeviceUtil.isMiui && DeviceUtil.miuiMajorVersion >= 13 && !DeviceUtil.isMiuiOptimizationDisabled()
     val uriHandler = LocalUriHandler.current
 
     FastScrollLazyColumn(

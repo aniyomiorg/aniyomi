@@ -87,7 +87,6 @@ class AnimeInfoScreenModel(
     private val trackPreferences: TrackPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
-    private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val downloadCache: AnimeDownloadCache = Injekt.get(),
     private val getAnimeAndEpisodes: GetAnimeWithEpisodes = Injekt.get(),
@@ -281,7 +280,7 @@ class AnimeInfoScreenModel(
                 // Add to library
                 // First, check if duplicate exists if callback is provided
                 if (checkDuplicate) {
-                    val duplicate = getDuplicateLibraryAnime.await(anime.title, anime.source)
+                    val duplicate = getDuplicateLibraryAnime.await(anime.title)
                     if (duplicate != null) {
                         mutableState.update { state ->
                             when (state) {
@@ -950,10 +949,6 @@ class AnimeInfoScreenModel(
     }
 
     // Track sheet - end
-
-    fun getSourceOrStub(anime: Anime): AnimeSource {
-        return sourceManager.getOrStub(anime.source)
-    }
 
     sealed class Dialog {
         data class ChangeCategory(val anime: Anime, val initialSelection: List<CheckboxState<Category>>) : Dialog()

@@ -176,14 +176,7 @@ fun AnimeUpdatesUiItem(
         ) {
             val bookmark = remember(update.bookmark) { update.bookmark }
             val seen = remember(update.seen) { update.seen }
-
             val textAlpha = remember(seen) { if (seen) ReadItemAlpha else 1f }
-
-            val secondaryTextColor = if (bookmark && !seen) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.onSurface
-            }
 
             Text(
                 text = update.animeTitle,
@@ -207,7 +200,6 @@ fun AnimeUpdatesUiItem(
                 Text(
                     text = update.episodeName,
                     maxLines = 1,
-                    color = secondaryTextColor,
                     style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     onTextLayout = { textHeight = it.size.height },

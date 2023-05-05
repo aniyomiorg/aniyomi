@@ -333,7 +333,6 @@ class AnimeLibraryScreenModel(
     private fun getAnimelibItemPreferencesFlow(): Flow<ItemPreferences> {
         return combine(
             libraryPreferences.downloadBadge().changes(),
-            libraryPreferences.unviewedBadge().changes(),
             libraryPreferences.localBadge().changes(),
             libraryPreferences.languageBadge().changes(),
 
@@ -346,15 +345,14 @@ class AnimeLibraryScreenModel(
             transform = {
                 ItemPreferences(
                     downloadBadge = it[0] as Boolean,
-                    unseenBadge = it[1] as Boolean,
-                    localBadge = it[2] as Boolean,
-                    languageBadge = it[3] as Boolean,
-                    globalFilterDownloaded = it[4] as Boolean,
-                    filterDownloaded = it[5] as Int,
-                    filterUnread = it[6] as Int,
-                    filterStarted = it[7] as Int,
-                    filterBookmarked = it[8] as Int,
-                    filterCompleted = it[9] as Int,
+                    localBadge = it[1] as Boolean,
+                    languageBadge = it[2] as Boolean,
+                    globalFilterDownloaded = it[3] as Boolean,
+                    filterDownloaded = it[4] as Int,
+                    filterUnread = it[5] as Int,
+                    filterStarted = it[6] as Int,
+                    filterBookmarked = it[7] as Int,
+                    filterCompleted = it[8] as Int,
                 )
             },
         )
@@ -378,7 +376,7 @@ class AnimeLibraryScreenModel(
                         } else {
                             0
                         }
-                        unseenCount = if (prefs.unseenBadge) animelibAnime.unseenCount else 0
+                        unseenCount = animelibAnime.unseenCount
                         isLocal = if (prefs.localBadge) animelibAnime.anime.isLocal() else false
                         sourceLanguage = if (prefs.languageBadge) {
                             sourceManager.getOrStub(animelibAnime.anime.source).lang
@@ -708,7 +706,6 @@ class AnimeLibraryScreenModel(
     @Immutable
     private data class ItemPreferences(
         val downloadBadge: Boolean,
-        val unseenBadge: Boolean,
         val localBadge: Boolean,
         val languageBadge: Boolean,
 

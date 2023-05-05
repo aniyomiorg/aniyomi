@@ -105,7 +105,6 @@
     <string name="action_display_cover_only_grid">Cover-only grid</string>
     <string name="action_display_download_badge">Downloaded chapters</string>
     <string name="action_display_local_badge">Local source</string>
-    <string name="action_display_unread_badge">Unread chapters</string>
     <string name="action_display_language_badge">Language</string>
     <string name="action_display_show_tabs">Show category tabs</string>
     <string name="action_display_show_number_of_items">Show number of items</string>
@@ -298,7 +297,7 @@
     <string name="ext_installer_shizuku" translatable="false">Shizuku</string>
     <string name="ext_installer_shizuku_stopped">Shizuku is not running</string>
     <string name="ext_installer_shizuku_unavailable_dialog">Install and start Shizuku to use Shizuku as extension installer.</string>
-    <string name="ext_miui_warning">Installing extensions may not work if MIUI Optimization is enabled. Try disabling it or installing from the website instead.</string>
+    <string name="ext_miui_warning">If installing extensions isn\'t working, try disabling MIUI Optimization or tap here to download from the website instead.</string>
 
       <!-- Reader section -->
     <string name="pref_fullscreen">Fullscreen</string>
@@ -330,6 +329,7 @@
     <string name="pref_keep_screen_on">Keep screen on</string>
     <string name="pref_skip_read_chapters">Skip chapters marked read</string>
     <string name="pref_skip_filtered_chapters">Skip filtered chapters</string>
+    <string name="pref_skip_dupe_chapters">Skip duplicate chapters</string>
     <string name="pref_preserve_reading_position">Preserve reading position on read chapters</string>
     <string name="pref_reader_navigation">Navigation</string>
     <string name="pref_read_with_volume_keys">Volume keys</string>
@@ -440,8 +440,8 @@
     <string name="services">Services</string>
     <string name="tracking_info">One-way sync to update the chapter progress in tracking services. Set up tracking for individual entries from their tracking button.</string>
     <string name="enhanced_services">Enhanced services</string>
+    <string name="enhanced_services_not_installed">Available but source not installed: %s</string>
     <string name="enhanced_tracking_info">Services that provide enhanced features for specific sources. Entries are automatically tracked when added to your library.</string>
-    <string name="enhanced_tracking_warning">This tracker is only compatible with the %1$s source.</string>
     <string name="action_track">Track</string>
 
       <!-- Browse section -->
@@ -607,7 +607,7 @@
     <!-- missing confirm menu after Compose rewrite #7901 -->
     <string name="remove_from_library">Remove from library</string>
     <string name="unknown_title">Unknown title</string>
-    <string name="confirm_manga_add_duplicate">You have an entry in your library with the same name but from a different source (%1$s).\n\nDo you still wish to continue?</string>
+    <string name="confirm_add_duplicate_manga">You have an entry in your library with the same name.\n\nDo you still wish to continue?</string>
     <string name="manga_added_library">Added to library</string>
     <string name="manga_removed_library">Removed from library</string>
     <string name="manga_info_expand">More</string>
@@ -661,6 +661,7 @@
     <string name="tracker_simkl" translatable="false">Simkl</string>
     <string name="tracker_manga_updates" translatable="false">MangaUpdates</string>
     <string name="tracker_kavita" translatable="false">Kavita</string>
+    <string name="tracker_suwayomi" translatable="false">Suwayomi</string>
     <string name="manga_tracking_tab">Tracking</string>
     <plurals name="num_trackers">
         <item quantity="one">%d tracker</item>
