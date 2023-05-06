@@ -2,7 +2,6 @@ package eu.kanade.domain.category.manga.interactor
 
 import eu.kanade.domain.category.manga.repository.MangaCategoryRepository
 import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.category.model.anyWithName
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
 import eu.kanade.tachiyomi.util.system.logcat
@@ -23,10 +22,6 @@ class CreateMangaCategoryWithName(
 
     suspend fun await(name: String): Result = withNonCancellableContext {
         val categories = categoryRepository.getAllMangaCategories()
-        if (categories.anyWithName(name)) {
-            return@withNonCancellableContext Result.NameAlreadyExistsError
-        }
-
         val nextOrder = categories.maxOfOrNull { it.order }?.plus(1) ?: 0
         val newCategory = Category(
             id = 0,
@@ -46,7 +41,6 @@ class CreateMangaCategoryWithName(
 
     sealed class Result {
         object Success : Result()
-        object NameAlreadyExistsError : Result()
         data class InternalError(val error: Throwable) : Result()
     }
 }

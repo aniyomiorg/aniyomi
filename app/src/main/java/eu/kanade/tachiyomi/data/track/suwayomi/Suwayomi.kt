@@ -89,7 +89,12 @@ class Suwayomi(private val context: Context, id: Long) : TrackService(id), Enhan
 
     override fun getAcceptedSources(): List<String> = listOf("eu.kanade.tachiyomi.extension.all.tachidesk.Tachidesk")
 
-    override suspend fun match(manga: DomainManga): MangaTrackSearch = api.getTrackSearch(manga.url)
+    override suspend fun match(manga: DomainManga): MangaTrackSearch? =
+        try {
+            api.getTrackSearch(manga.url)
+        } catch (e: Exception) {
+            null
+        }
 
     override fun isTrackFrom(track: DomainTrack, manga: DomainManga, source: MangaSource?): Boolean = source?.let { accept(it) } == true
 

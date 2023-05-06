@@ -13,11 +13,6 @@ class RenameMangaCategory(
 ) {
 
     suspend fun await(categoryId: Long, name: String) = withNonCancellableContext {
-        val categories = categoryRepository.getAllMangaCategories()
-        if (categories.anyWithName(name)) {
-            return@withNonCancellableContext Result.NameAlreadyExistsError
-        }
-
         val update = CategoryUpdate(
             id = categoryId,
             name = name,
@@ -36,7 +31,6 @@ class RenameMangaCategory(
 
     sealed class Result {
         object Success : Result()
-        object NameAlreadyExistsError : Result()
         data class InternalError(val error: Throwable) : Result()
     }
 }

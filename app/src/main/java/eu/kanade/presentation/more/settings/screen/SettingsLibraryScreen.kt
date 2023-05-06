@@ -399,7 +399,10 @@ object SettingsLibraryScreen : SearchableSettings {
                 }
             },
             confirmButton = {
-                TextButton(onClick = { onValueChanged(portraitValue, landscapeValue) }) {
+                TextButton(
+                    enabled = portraitValue != initialPortrait || landscapeValue != initialLandscape,
+                    onClick = { onValueChanged(portraitValue, landscapeValue) },
+                ) {
                     Text(text = stringResource(android.R.string.ok))
                 }
             },

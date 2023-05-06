@@ -47,6 +47,7 @@ fun DeleteLibraryEntryDialog(
         },
         confirmButton = {
             TextButton(
+                enabled = list.any { it.isChecked },
                 onClick = {
                     onDismissRequest()
                     onConfirm(

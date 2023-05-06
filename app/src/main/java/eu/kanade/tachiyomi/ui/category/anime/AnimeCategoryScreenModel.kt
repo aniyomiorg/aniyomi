@@ -47,7 +47,6 @@ class AnimeCategoryScreenModel(
         coroutineScope.launch {
             when (createCategoryWithName.await(name)) {
                 is CreateAnimeCategoryWithName.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
-                CreateAnimeCategoryWithName.Result.NameAlreadyExistsError -> _events.send(AnimeCategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }
@@ -84,7 +83,6 @@ class AnimeCategoryScreenModel(
         coroutineScope.launch {
             when (renameCategory.await(category, name)) {
                 is RenameAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
-                RenameAnimeCategory.Result.NameAlreadyExistsError -> _events.send(AnimeCategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }
@@ -117,7 +115,6 @@ sealed class AnimeCategoryDialog {
 
 sealed class AnimeCategoryEvent {
     sealed class LocalizedMessage(@StringRes val stringRes: Int) : AnimeCategoryEvent()
-    object CategoryWithNameAlreadyExists : LocalizedMessage(R.string.error_category_exists)
     object InternalError : LocalizedMessage(R.string.internal_error)
 }
 

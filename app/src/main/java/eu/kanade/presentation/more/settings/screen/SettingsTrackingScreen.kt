@@ -234,7 +234,7 @@ object SettingsTrackingScreen : SearchableSettings {
                         label = { Text(text = stringResource(uNameStringRes)) },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         singleLine = true,
-                        isError = inputError && username.text.isEmpty(),
+                        isError = inputError && !processing,
                     )
 
                     var hidePassword by remember { mutableStateOf(true) }
@@ -265,21 +265,16 @@ object SettingsTrackingScreen : SearchableSettings {
                             imeAction = ImeAction.Done,
                         ),
                         singleLine = true,
-                        isError = inputError && password.text.isEmpty(),
+                        isError = inputError && !processing,
                     )
                 }
             },
             confirmButton = {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = !processing,
+                    enabled = !processing && username.text.isNotBlank() && password.text.isNotBlank(),
                     onClick = {
-                        if (username.text.isEmpty() || password.text.isEmpty()) {
-                            inputError = true
-                            return@Button
-                        }
                         scope.launchIO {
-                            inputError = false
                             processing = true
                             val result = checkLogin(
                                 context = context,
@@ -287,6 +282,7 @@ object SettingsTrackingScreen : SearchableSettings {
                                 username = username.text,
                                 password = password.text,
                             )
+                            inputError = !result
                             if (result) onDismissRequest()
                             processing = false
                         }

@@ -56,7 +56,7 @@ class TachideskApi {
         MangaTrackSearch.create(TrackManager.SUWAYOMI).apply {
             title = manga.title
             cover_url = "$url/thumbnail"
-            summary = manga.description
+            summary = manga.description.orEmpty()
             tracking_url = url
             total_chapters = manga.chapterCount.toInt()
             publishing_status = manga.status

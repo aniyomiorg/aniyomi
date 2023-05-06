@@ -46,13 +46,15 @@ fun Screen.animeCategoryTab(): TabContent {
                     AnimeCategoryDialog.Create -> {
                         CategoryCreateDialog(
                             onDismissRequest = screenModel::dismissDialog,
-                            onCreate = { screenModel.createCategory(it) },
+                            onCreate = screenModel::createCategory,
+                            categories = successState.categories,
                         )
                     }
                     is AnimeCategoryDialog.Rename -> {
                         CategoryRenameDialog(
                             onDismissRequest = screenModel::dismissDialog,
                             onRename = { screenModel.renameCategory(dialog.category, it) },
+                            categories = successState.categories,
                             category = dialog.category,
                         )
                     }

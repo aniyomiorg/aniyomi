@@ -47,7 +47,6 @@ class MangaCategoryScreenModel(
         coroutineScope.launch {
             when (createCategoryWithName.await(name)) {
                 is CreateMangaCategoryWithName.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
-                CreateMangaCategoryWithName.Result.NameAlreadyExistsError -> _events.send(MangaCategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }
@@ -84,7 +83,6 @@ class MangaCategoryScreenModel(
         coroutineScope.launch {
             when (renameCategory.await(category, name)) {
                 is RenameMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
-                RenameMangaCategory.Result.NameAlreadyExistsError -> _events.send(MangaCategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }
@@ -117,7 +115,6 @@ sealed class MangaCategoryDialog {
 
 sealed class MangaCategoryEvent {
     sealed class LocalizedMessage(@StringRes val stringRes: Int) : MangaCategoryEvent()
-    object CategoryWithNameAlreadyExists : LocalizedMessage(R.string.error_category_exists)
     object InternalError : LocalizedMessage(R.string.internal_error)
 }
 
