@@ -277,4 +277,6 @@
     <string name="unofficial_anime_extension_message">Cette extension ne fait pas partie de la liste officielle des extensions Aniyomi.</string>
     <string name="pref_enable_pip">Permettre l\'utilisation du mode PiP</string>
     <string name="pref_player_smooth_seek_summary">Si activé, la recherche ne va pas se concentrer sur les images-clés, permettant de faire une recherche plus précise mais plus lente</string>
+    <string name="pref_use_external_downloader">Toujours utiliser un outil de téléchargement externe pour les animés</string>
+    <string name="pref_enable_auto_skip_ani_skip">Activer le passage d\'intro automatique</string>
 </resources>
