@@ -81,16 +81,13 @@ fun GlobalAnimeSearchContent(
         contentPadding = contentPadding,
     ) {
         items.forEach { (source, result) ->
-            item {
+            item(key = source.id) {
                 GlobalSearchResultItem(
                     title = source.name,
                     subtitle = LocaleHelper.getDisplayName(source.lang),
                     onClick = { onClickSource(source) },
                 ) {
                     when (result) {
-                        is AnimeSearchItemResult.Error -> {
-                            GlobalSearchErrorResultItem(message = result.throwable.message)
-                        }
                         AnimeSearchItemResult.Loading -> {
                             GlobalSearchLoadingResultItem()
                         }
@@ -113,6 +110,9 @@ fun GlobalAnimeSearchContent(
                                 onClick = onClickItem,
                                 onLongClick = onLongClickItem,
                             )
+                        }
+                        is AnimeSearchItemResult.Error -> {
+                            GlobalSearchErrorResultItem(message = result.throwable.message)
                         }
                     }
                 }

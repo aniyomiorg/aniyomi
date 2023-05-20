@@ -46,7 +46,6 @@ import kotlinx.coroutines.launch
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.text.DateFormat
 import java.util.Calendar
 import java.util.Date
 
@@ -68,9 +67,7 @@ class AnimeUpdatesScreenModel(
     val events: Flow<Event> = _events.receiveAsFlow()
 
     val lastUpdated by libraryPreferences.libraryUpdateLastTimestamp().asState(coroutineScope)
-
-    val relativeTime: Int by uiPreferences.relativeTime().asState(coroutineScope)
-    val dateFormat: DateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
+    val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
 
     // First and last selected index in list
     private val selectedPositions: Array<Int> = arrayOf(-1, -1)
@@ -110,13 +107,13 @@ class AnimeUpdatesScreenModel(
     }
 
     private fun List<AnimeUpdatesWithRelations>.toUpdateItems(): List<AnimeUpdatesItem> {
-        return this.map {
-            val activeDownload = downloadManager.getQueuedDownloadOrNull(it.episodeId)
+        return this.map { update ->
+            val activeDownload = downloadManager.getQueuedDownloadOrNull(update.episodeId)
             val downloaded = downloadManager.isEpisodeDownloaded(
-                it.episodeName,
-                it.scanlator,
-                it.animeTitle,
-                it.sourceId,
+                update.episodeName,
+                update.scanlator,
+                update.animeTitle,
+                update.sourceId,
             )
             val downloadState = when {
                 activeDownload != null -> activeDownload.status
@@ -124,10 +121,10 @@ class AnimeUpdatesScreenModel(
                 else -> AnimeDownload.State.NOT_DOWNLOADED
             }
             AnimeUpdatesItem(
-                update = it,
+                update = update,
                 downloadStateProvider = { downloadState },
                 downloadProgressProvider = { activeDownload?.progress ?: 0 },
-                selected = it.episodeId in selectedEpisodeIds,
+                selected = update.episodeId in selectedEpisodeIds,
             )
         }
     }
@@ -396,7 +393,8 @@ data class AnimeUpdatesState(
     val selectionMode = selected.isNotEmpty()
 
     fun getUiModel(context: Context, relativeTime: Int): List<AnimeUpdatesUiModel> {
-        val dateFormat = UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get())
+        val dateFormat by mutableStateOf(UiPreferences.dateFormat(Injekt.get<UiPreferences>().dateFormat().get()))
+
         return items
             .map { AnimeUpdatesUiModel.Item(it) }
             .insertSeparators { before, after ->

@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -46,6 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
+import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.presentation.components.EntryBottomActionMenu
 import eu.kanade.presentation.components.EpisodeDownloadAction
@@ -71,14 +73,21 @@ import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenState
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
+import eu.kanade.tachiyomi.ui.entries.manga.chapterDecimalFormat
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.util.lang.toRelativeString
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.text.DateFormat
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun AnimeScreen(
     state: AnimeScreenState.Success,
     snackbarHostState: SnackbarHostState,
+    dateRelativeTime: Int,
+    dateFormat: DateFormat,
     isTabletUi: Boolean,
     onBackClicked: () -> Unit,
     onEpisodeClicked: (episode: Episode, alt: Boolean) -> Unit,
@@ -118,6 +127,8 @@ fun AnimeScreen(
         AnimeScreenSmallImpl(
             state = state,
             snackbarHostState = snackbarHostState,
+            dateRelativeTime = dateRelativeTime,
+            dateFormat = dateFormat,
             onBackClicked = onBackClicked,
             onEpisodeClicked = onEpisodeClicked,
             onDownloadEpisode = onDownloadEpisode,
@@ -148,6 +159,8 @@ fun AnimeScreen(
         AnimeScreenLargeImpl(
             state = state,
             snackbarHostState = snackbarHostState,
+            dateRelativeTime = dateRelativeTime,
+            dateFormat = dateFormat,
             onBackClicked = onBackClicked,
             onEpisodeClicked = onEpisodeClicked,
             onDownloadEpisode = onDownloadEpisode,
@@ -181,6 +194,8 @@ fun AnimeScreen(
 private fun AnimeScreenSmallImpl(
     state: AnimeScreenState.Success,
     snackbarHostState: SnackbarHostState,
+    dateRelativeTime: Int,
+    dateFormat: DateFormat,
     onBackClicked: () -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
@@ -381,7 +396,10 @@ private fun AnimeScreenSmallImpl(
                     }
 
                     sharedEpisodeItems(
+                        anime = state.anime,
                         episodes = episodes,
+                        dateRelativeTime = dateRelativeTime,
+                        dateFormat = dateFormat,
                         onEpisodeClicked = onEpisodeClicked,
                         onDownloadEpisode = onDownloadEpisode,
                         onEpisodeSelected = onEpisodeSelected,
@@ -396,6 +414,8 @@ private fun AnimeScreenSmallImpl(
 fun AnimeScreenLargeImpl(
     state: AnimeScreenState.Success,
     snackbarHostState: SnackbarHostState,
+    dateRelativeTime: Int,
+    dateFormat: DateFormat,
     onBackClicked: () -> Unit,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
@@ -587,7 +607,10 @@ fun AnimeScreenLargeImpl(
                             }
 
                             sharedEpisodeItems(
+                                anime = state.anime,
                                 episodes = episodes,
+                                dateRelativeTime = dateRelativeTime,
+                                dateFormat = dateFormat,
                                 onEpisodeClicked = onEpisodeClicked,
                                 onDownloadEpisode = onDownloadEpisode,
                                 onEpisodeSelected = onEpisodeSelected,
@@ -652,7 +675,10 @@ private fun SharedAnimeBottomActionMenu(
 }
 
 private fun LazyListScope.sharedEpisodeItems(
+    anime: Anime,
     episodes: List<EpisodeItem>,
+    dateRelativeTime: Int,
+    dateFormat: DateFormat,
     onEpisodeClicked: (Episode, Boolean) -> Unit,
     onDownloadEpisode: ((List<EpisodeItem>, EpisodeDownloadAction) -> Unit)?,
     onEpisodeSelected: (EpisodeItem, Boolean, Boolean, Boolean) -> Unit,
@@ -663,11 +689,35 @@ private fun LazyListScope.sharedEpisodeItems(
         contentType = { EntryScreenItem.ITEM },
     ) { episodeItem ->
         val haptic = LocalHapticFeedback.current
+        val context = LocalContext.current
 
         AnimeEpisodeListItem(
-            title = episodeItem.episodeTitleString,
-            date = episodeItem.dateUploadString,
-            watchProgress = episodeItem.seenProgressString,
+            title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
+                stringResource(
+                    R.string.display_mode_chapter,
+                    chapterDecimalFormat.format(episodeItem.episode.episodeNumber.toDouble()),
+                )
+            } else {
+                episodeItem.episode.name
+            },
+            date = episodeItem.episode.dateUpload
+                .takeIf { it > 0L }
+                ?.let {
+                    Date(it).toRelativeString(
+                        context,
+                        dateRelativeTime,
+                        dateFormat,
+                    )
+                },
+            watchProgress = episodeItem.episode.lastSecondSeen
+                .takeIf { !episodeItem.episode.seen && it > 0L }
+                ?.let {
+                    stringResource(
+                        R.string.episode_progress,
+                        formatProgress(it),
+                        formatProgress(episodeItem.episode.totalSeconds),
+                    )
+                },
             scanlator = episodeItem.episode.scanlator.takeIf { !it.isNullOrBlank() },
             seen = episodeItem.episode.seen,
             bookmark = episodeItem.episode.bookmark,
@@ -706,5 +756,25 @@ private fun onEpisodeItemClick(
         episodeItem.selected -> onToggleSelection(false)
         episodes.fastAny { it.selected } -> onToggleSelection(true)
         else -> onEpisodeClicked(episodeItem.episode, false)
+    }
+}
+
+private fun formatProgress(milliseconds: Long): String {
+    return if (milliseconds > 3600000L) {
+        String.format(
+            "%d:%02d:%02d",
+            TimeUnit.MILLISECONDS.toHours(milliseconds),
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
+        )
+    } else {
+        String.format(
+            "%d:%02d",
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
+        )
     }
 }

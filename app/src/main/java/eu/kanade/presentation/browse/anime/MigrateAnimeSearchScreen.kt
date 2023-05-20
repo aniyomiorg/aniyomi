@@ -79,16 +79,13 @@ fun MigrateAnimeSearchContent(
         contentPadding = contentPadding,
     ) {
         items.forEach { (source, result) ->
-            item {
+            item(key = source.id) {
                 GlobalSearchResultItem(
                     title = if (source.id == sourceId) "▶ ${source.name}" else source.name,
                     subtitle = LocaleHelper.getDisplayName(source.lang),
                     onClick = { onClickSource(source) },
                 ) {
                     when (result) {
-                        is AnimeSearchItemResult.Error -> {
-                            GlobalSearchErrorResultItem(message = result.throwable.message)
-                        }
                         AnimeSearchItemResult.Loading -> {
                             GlobalSearchLoadingResultItem()
                         }
@@ -104,6 +101,9 @@ fun MigrateAnimeSearchContent(
                                 onClick = onClickItem,
                                 onLongClick = onLongClickItem,
                             )
+                        }
+                        is AnimeSearchItemResult.Error -> {
+                            GlobalSearchErrorResultItem(message = result.throwable.message)
                         }
                     }
                 }

@@ -116,6 +116,8 @@ class AnimeScreen(
         AnimeScreen(
             state = successState,
             snackbarHostState = screenModel.snackbarHostState,
+            dateRelativeTime = screenModel.relativeTime,
+            dateFormat = screenModel.dateFormat,
             isTabletUi = isTabletUi(),
             onBackClicked = navigator::pop,
             onEpisodeClicked = { episode, alt ->

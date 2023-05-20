@@ -38,6 +38,7 @@ import eu.kanade.presentation.components.EpisodeDownloadAction
 import eu.kanade.presentation.components.EpisodeDownloadIndicator
 import eu.kanade.presentation.components.ItemCover
 import eu.kanade.presentation.components.ListGroupHeader
+import eu.kanade.presentation.entries.DotSeparatorText
 import eu.kanade.presentation.util.ReadItemAlpha
 import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.selectedBackground
@@ -45,6 +46,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
 import java.util.Date
+import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.minutes
 
 fun LazyListScope.animeUpdatesLastUpdatedItem(
@@ -113,6 +115,15 @@ fun LazyListScope.animeUpdatesUiItems(
                     modifier = Modifier.animateItemPlacement(),
                     update = updatesItem.update,
                     selected = updatesItem.selected,
+                    watchProgress = updatesItem.update.lastSecondSeen
+                        .takeIf { !updatesItem.update.seen && it > 0L }
+                        ?.let {
+                            stringResource(
+                                R.string.episode_progress,
+                                formatProgress(it),
+                                formatProgress(updatesItem.update.totalSeconds),
+                            )
+                        },
                     onLongClick = {
                         onUpdateSelected(updatesItem, !updatesItem.selected, true, true)
                     },
@@ -139,6 +150,7 @@ fun AnimeUpdatesUiItem(
     modifier: Modifier,
     update: AnimeUpdatesWithRelations,
     selected: Boolean,
+    watchProgress: String?,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onClickCover: (() -> Unit)?,
@@ -203,8 +215,19 @@ fun AnimeUpdatesUiItem(
                     style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     onTextLayout = { textHeight = it.size.height },
-                    modifier = Modifier.alpha(textAlpha),
+                    modifier = Modifier
+                        .weight(weight = 1f, fill = false)
+                        .alpha(textAlpha),
                 )
+                if (watchProgress != null) {
+                    DotSeparatorText()
+                    Text(
+                        text = watchProgress,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.alpha(ReadItemAlpha),
+                    )
+                }
             }
         }
         EpisodeDownloadIndicator(
@@ -213,6 +236,26 @@ fun AnimeUpdatesUiItem(
             downloadStateProvider = downloadStateProvider,
             downloadProgressProvider = downloadProgressProvider,
             onClick = { onDownloadEpisode?.invoke(it) },
+        )
+    }
+}
+
+private fun formatProgress(milliseconds: Long): String {
+    return if (milliseconds > 3600000L) {
+        String.format(
+            "%d:%02d:%02d",
+            TimeUnit.MILLISECONDS.toHours(milliseconds),
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
+        )
+    } else {
+        String.format(
+            "%d:%02d",
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
         )
     }
 }

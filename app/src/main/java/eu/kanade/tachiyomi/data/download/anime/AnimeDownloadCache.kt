@@ -21,9 +21,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -31,7 +31,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.withTimeout
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
@@ -72,10 +71,9 @@ class AnimeDownloadCache(
      */
     private var lastRenew = 0L
     private var renewalJob: Job? = null
-    val isRenewing = changes
-        .map { renewalJob?.isActive ?: false }
-        .distinctUntilChanged()
-        .take(2) // We only care about initial renewal
+
+    private val _isInitializing = MutableStateFlow(false)
+    val isInitializing = _isInitializing
         .debounce(1000L) // Don't notify if it finishes quickly enough
         .stateIn(scope, SharingStarted.WhileSubscribed(), false)
 
@@ -267,6 +265,10 @@ class AnimeDownloadCache(
         }
 
         renewalJob = scope.launchIO {
+            if (lastRenew == 0L) {
+                _isInitializing.emit(true)
+            }
+
             var sources = getSources()
 
             // Try to wait until extensions and sources have loaded
@@ -323,6 +325,8 @@ class AnimeDownloadCache(
                     }
                 }
                 .awaitAll()
+
+            _isInitializing.emit(false)
         }.also {
             it.invokeOnCompletion(onCancelling = true) { exception ->
                 if (exception != null && exception !is CancellationException) {

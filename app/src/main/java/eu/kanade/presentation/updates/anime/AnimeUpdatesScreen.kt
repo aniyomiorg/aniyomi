@@ -139,7 +139,7 @@ private fun AnimeUpdatesBottomBar(
         }.takeIf { selected.fastAny { !it.update.seen } },
         onMarkAsUnviewedClicked = {
             onMultiMarkAsSeenClicked(selected, false)
-        }.takeIf { selected.fastAny { it.update.seen } },
+        }.takeIf { selected.fastAny { it.update.seen || it.update.lastSecondSeen > 0L } },
         onDownloadClicked = {
             onDownloadEpisode(selected, EpisodeDownloadAction.START)
         }.takeIf {

@@ -3,8 +3,8 @@ package eu.kanade.data.updates.manga
 import eu.kanade.domain.entries.manga.model.MangaCover
 import eu.kanade.domain.updates.manga.model.MangaUpdatesWithRelations
 
-val mangaUpdateWithRelationMapper: (Long, String, Long, String, String?, Boolean, Boolean, Long, Boolean, String?, Long, Long, Long) -> MangaUpdatesWithRelations = {
-        mangaId, mangaTitle, chapterId, chapterName, scanlator, read, bookmark, sourceId, favorite, thumbnailUrl, coverLastModified, _, dateFetch ->
+val mangaUpdateWithRelationMapper: (Long, String, Long, String, String?, Boolean, Boolean, Long, Long, Boolean, String?, Long, Long, Long) -> MangaUpdatesWithRelations = {
+        mangaId, mangaTitle, chapterId, chapterName, scanlator, read, bookmark, lastPageRead, sourceId, favorite, thumbnailUrl, coverLastModified, _, dateFetch ->
     MangaUpdatesWithRelations(
         mangaId = mangaId,
         mangaTitle = mangaTitle,
@@ -13,6 +13,7 @@ val mangaUpdateWithRelationMapper: (Long, String, Long, String, String?, Boolean
         scanlator = scanlator,
         read = read,
         bookmark = bookmark,
+        lastPageRead = lastPageRead,
         sourceId = sourceId,
         dateFetch = dateFetch,
         coverData = MangaCover(

@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.prefs.CheckboxState
+import eu.kanade.core.prefs.asState
 import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.data.items.episode.NoEpisodesException
@@ -51,7 +54,6 @@ import eu.kanade.tachiyomi.util.episode.getEpisodeSort
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.launchNonCancellable
-import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.removeCovers
@@ -71,10 +73,8 @@ import kotlinx.coroutines.launch
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.text.DateFormat
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.util.Date
 import java.util.concurrent.TimeUnit
 
 class AnimeInfoScreenModel(
@@ -120,6 +120,9 @@ class AnimeInfoScreenModel(
     private val processedEpisodes: Sequence<EpisodeItem>?
         get() = successState?.processedEpisodes
 
+    val relativeTime by uiPreferences.relativeTime().asState(coroutineScope)
+    val dateFormat by mutableStateOf(UiPreferences.dateFormat(uiPreferences.dateFormat().get()))
+
     private val selectedPositions: Array<Int> = arrayOf(-1, -1) // first and last selected index in list
     private val selectedEpisodeIds: HashSet<Long> = HashSet()
 
@@ -136,26 +139,16 @@ class AnimeInfoScreenModel(
     }
 
     init {
-        val toEpisodeItemsParams: List<Episode>.(anime: Anime) -> List<EpisodeItem> = { anime ->
-            toEpisodeItems(
-                context = context,
-                anime = anime,
-                dateRelativeTime = uiPreferences.relativeTime().get(),
-                dateFormat = UiPreferences.dateFormat(uiPreferences.dateFormat().get()),
-            )
-        }
-
         coroutineScope.launchIO {
             combine(
                 getAnimeAndEpisodes.subscribe(animeId).distinctUntilChanged(),
                 downloadCache.changes,
             ) { animeAndEpisodes, _ -> animeAndEpisodes }
                 .collectLatest { (anime, episodes) ->
-                    val episodeItems = episodes.toEpisodeItemsParams(anime)
                     updateSuccessState {
                         it.copy(
                             anime = anime,
-                            episodes = episodeItems,
+                            episodes = episodes.toEpisodeItems(anime),
                         )
                     }
                 }
@@ -166,7 +159,7 @@ class AnimeInfoScreenModel(
         coroutineScope.launchIO {
             val anime = getAnimeAndEpisodes.awaitAnime(animeId)
             val episodes = getAnimeAndEpisodes.awaitEpisodes(animeId)
-                .toEpisodeItemsParams(anime)
+                .toEpisodeItems(anime)
 
             if (!anime.favorite) {
                 setAnimeDefaultEpisodeFlags.await(anime)
@@ -482,12 +475,7 @@ class AnimeInfoScreenModel(
         }
     }
 
-    private fun List<Episode>.toEpisodeItems(
-        context: Context,
-        anime: Anime,
-        dateRelativeTime: Int,
-        dateFormat: DateFormat,
-    ): List<EpisodeItem> {
+    private fun List<Episode>.toEpisodeItems(anime: Anime): List<EpisodeItem> {
         val isLocal = anime.isLocal()
         return map { episode ->
             val activeDownload = if (isLocal) {
@@ -510,30 +498,6 @@ class AnimeInfoScreenModel(
                 episode = episode,
                 downloadState = downloadState,
                 downloadProgress = activeDownload?.progress ?: 0,
-                episodeTitleString = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
-                    context.getString(
-                        R.string.display_mode_episode,
-                        episodeDecimalFormat.format(episode.episodeNumber.toDouble()),
-                    )
-                } else {
-                    episode.name
-                },
-                dateUploadString = episode.dateUpload
-                    .takeIf { it > 0 }
-                    ?.let {
-                        Date(it).toRelativeString(
-                            context,
-                            dateRelativeTime,
-                            dateFormat,
-                        )
-                    },
-                seenProgressString = episode.lastSecondSeen.takeIf { !episode.seen && it > 0 }?.let {
-                    context.getString(
-                        R.string.episode_progress,
-                        formatProgress(it),
-                        formatProgress(episode.totalSeconds),
-                    )
-                },
                 selected = episode.id in selectedEpisodeIds,
             )
         }
@@ -1097,11 +1061,6 @@ data class EpisodeItem(
     val episode: Episode,
     val downloadState: AnimeDownload.State,
     val downloadProgress: Int,
-
-    val episodeTitleString: String,
-    val dateUploadString: String?,
-    val seenProgressString: String?,
-
     val selected: Boolean = false,
 ) {
     val isDownloaded = downloadState == AnimeDownload.State.DOWNLOADED

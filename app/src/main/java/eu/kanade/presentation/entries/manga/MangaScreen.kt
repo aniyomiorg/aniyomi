@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -46,6 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
+import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.components.EntryBottomActionMenu
@@ -71,11 +73,17 @@ import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.manga.getNameForMangaInfo
 import eu.kanade.tachiyomi.ui.entries.manga.ChapterItem
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreenState
+import eu.kanade.tachiyomi.ui.entries.manga.chapterDecimalFormat
+import eu.kanade.tachiyomi.util.lang.toRelativeString
+import java.text.DateFormat
+import java.util.Date
 
 @Composable
 fun MangaScreen(
     state: MangaScreenState.Success,
     snackbarHostState: SnackbarHostState,
+    dateRelativeTime: Int,
+    dateFormat: DateFormat,
     isTabletUi: Boolean,
     onBackClicked: () -> Unit,
     onChapterClicked: (Chapter) -> Unit,
@@ -114,6 +122,8 @@ fun MangaScreen(
         MangaScreenSmallImpl(
             state = state,
             snackbarHostState = snackbarHostState,
+            dateRelativeTime = dateRelativeTime,
+            dateFormat = dateFormat,
             onBackClicked = onBackClicked,
             onChapterClicked = onChapterClicked,
             onDownloadChapter = onDownloadChapter,
@@ -143,6 +153,8 @@ fun MangaScreen(
         MangaScreenLargeImpl(
             state = state,
             snackbarHostState = snackbarHostState,
+            dateRelativeTime = dateRelativeTime,
+            dateFormat = dateFormat,
             onBackClicked = onBackClicked,
             onChapterClicked = onChapterClicked,
             onDownloadChapter = onDownloadChapter,
@@ -175,6 +187,8 @@ fun MangaScreen(
 private fun MangaScreenSmallImpl(
     state: MangaScreenState.Success,
     snackbarHostState: SnackbarHostState,
+    dateRelativeTime: Int,
+    dateFormat: DateFormat,
     onBackClicked: () -> Unit,
     onChapterClicked: (Chapter) -> Unit,
     onDownloadChapter: ((List<ChapterItem>, ChapterDownloadAction) -> Unit)?,
@@ -369,7 +383,10 @@ private fun MangaScreenSmallImpl(
                     }
 
                     sharedChapterItems(
+                        manga = state.manga,
                         chapters = chapters,
+                        dateRelativeTime = dateRelativeTime,
+                        dateFormat = dateFormat,
                         onChapterClicked = onChapterClicked,
                         onDownloadChapter = onDownloadChapter,
                         onChapterSelected = onChapterSelected,
@@ -384,6 +401,8 @@ private fun MangaScreenSmallImpl(
 fun MangaScreenLargeImpl(
     state: MangaScreenState.Success,
     snackbarHostState: SnackbarHostState,
+    dateRelativeTime: Int,
+    dateFormat: DateFormat,
     onBackClicked: () -> Unit,
     onChapterClicked: (Chapter) -> Unit,
     onDownloadChapter: ((List<ChapterItem>, ChapterDownloadAction) -> Unit)?,
@@ -572,7 +591,10 @@ fun MangaScreenLargeImpl(
                             }
 
                             sharedChapterItems(
+                                manga = state.manga,
                                 chapters = chapters,
+                                dateRelativeTime = dateRelativeTime,
+                                dateFormat = dateFormat,
                                 onChapterClicked = onChapterClicked,
                                 onDownloadChapter = onDownloadChapter,
                                 onChapterSelected = onChapterSelected,
@@ -629,7 +651,10 @@ private fun SharedMangaBottomActionMenu(
 }
 
 private fun LazyListScope.sharedChapterItems(
+    manga: Manga,
     chapters: List<ChapterItem>,
+    dateRelativeTime: Int,
+    dateFormat: DateFormat,
     onChapterClicked: (Chapter) -> Unit,
     onDownloadChapter: ((List<ChapterItem>, ChapterDownloadAction) -> Unit)?,
     onChapterSelected: (ChapterItem, Boolean, Boolean, Boolean) -> Unit,
@@ -640,10 +665,34 @@ private fun LazyListScope.sharedChapterItems(
         contentType = { EntryScreenItem.ITEM },
     ) { chapterItem ->
         val haptic = LocalHapticFeedback.current
+        val context = LocalContext.current
+
         MangaChapterListItem(
-            title = chapterItem.chapterTitleString,
-            date = chapterItem.dateUploadString,
-            readProgress = chapterItem.readProgressString,
+            title = if (manga.displayMode == Manga.CHAPTER_DISPLAY_NUMBER) {
+                stringResource(
+                    R.string.display_mode_chapter,
+                    chapterDecimalFormat.format(chapterItem.chapter.chapterNumber.toDouble()),
+                )
+            } else {
+                chapterItem.chapter.name
+            },
+            date = chapterItem.chapter.dateUpload
+                .takeIf { it > 0L }
+                ?.let {
+                    Date(it).toRelativeString(
+                        context,
+                        dateRelativeTime,
+                        dateFormat,
+                    )
+                },
+            readProgress = chapterItem.chapter.lastPageRead
+                .takeIf { !chapterItem.chapter.read && it > 0L }
+                ?.let {
+                    stringResource(
+                        R.string.chapter_progress,
+                        it + 1,
+                    )
+                },
             scanlator = chapterItem.chapter.scanlator.takeIf { !it.isNullOrBlank() },
             read = chapterItem.chapter.read,
             bookmark = chapterItem.chapter.bookmark,

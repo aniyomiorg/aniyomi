@@ -10,6 +10,8 @@ data class AnimeUpdatesWithRelations(
     val scanlator: String?,
     val seen: Boolean,
     val bookmark: Boolean,
+    val lastSecondSeen: Long,
+    val totalSeconds: Long,
     val sourceId: Long,
     val dateFetch: Long,
     val coverData: AnimeCover,
