@@ -325,7 +325,9 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         val headers = video.headers ?: headers
         val newHeaders = if (bytes > 0L) {
             Headers.Builder().addAll(headers).add("Range", "bytes=$bytes-").build()
-        } else null
+        } else {
+            null
+        }
         return GET(video.videoUrl!!, newHeaders ?: headers)
     }
 

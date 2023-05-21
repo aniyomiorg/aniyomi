@@ -10,9 +10,6 @@ import data.Manga_sync
 import data.Mangas
 import dataanime.Anime_sync
 import dataanime.Animes
-import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
-import eu.kanade.data.handlers.manga.MangaDatabaseHandler
-import eu.kanade.data.updateStrategyAdapter
 import eu.kanade.domain.backup.service.BackupPreferences
 import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
 import eu.kanade.domain.category.manga.interactor.GetMangaCategories
@@ -72,6 +69,9 @@ import logcat.LogPriority
 import okio.buffer
 import okio.gzip
 import okio.sink
+import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
+import tachiyomi.data.handlers.manga.MangaDatabaseHandler
+import tachiyomi.data.updateStrategyAdapter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.FileOutputStream

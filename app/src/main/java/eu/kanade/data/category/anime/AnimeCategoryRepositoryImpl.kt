@@ -1,12 +1,12 @@
 package eu.kanade.data.category.anime
 
 import eu.kanade.data.category.categoryMapper
-import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
 import eu.kanade.domain.category.anime.repository.AnimeCategoryRepository
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.category.model.CategoryUpdate
-import eu.kanade.tachiyomi.mi.AnimeDatabase
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
+import tachiyomi.mi.data.AnimeDatabase
 
 class AnimeCategoryRepositoryImpl(
     private val handler: AnimeDatabaseHandler,

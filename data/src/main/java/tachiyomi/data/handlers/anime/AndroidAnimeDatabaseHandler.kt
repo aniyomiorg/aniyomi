@@ -1,4 +1,4 @@
-package eu.kanade.data.handlers.anime
+package tachiyomi.data.handlers.anime
 
 import androidx.paging.PagingSource
 import com.squareup.sqldelight.Query
@@ -7,11 +7,11 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
-import eu.kanade.tachiyomi.mi.AnimeDatabase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import tachiyomi.mi.data.AnimeDatabase
 
 class AndroidAnimeDatabaseHandler(
     val db: AnimeDatabase,

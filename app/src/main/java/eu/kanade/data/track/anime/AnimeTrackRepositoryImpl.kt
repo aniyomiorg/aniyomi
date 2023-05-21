@@ -1,9 +1,9 @@
 package eu.kanade.data.track.anime
 
-import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
 import eu.kanade.domain.track.anime.model.AnimeTrack
 import eu.kanade.domain.track.anime.repository.AnimeTrackRepository
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 
 class AnimeTrackRepositoryImpl(
     private val handler: AnimeDatabaseHandler,

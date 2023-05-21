@@ -1,8 +1,5 @@
 package eu.kanade.data.entries.anime
 
-import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
-import eu.kanade.data.listOfStringsAdapter
-import eu.kanade.data.updateStrategyAdapter
 import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.entries.anime.model.AnimeUpdate
 import eu.kanade.domain.entries.anime.repository.AnimeRepository
@@ -11,6 +8,9 @@ import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toLong
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
+import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
+import tachiyomi.data.listOfStringsAdapter
+import tachiyomi.data.updateStrategyAdapter
 
 class AnimeRepositoryImpl(
     private val handler: AnimeDatabaseHandler,

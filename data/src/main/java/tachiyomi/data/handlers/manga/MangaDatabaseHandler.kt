@@ -1,9 +1,9 @@
-package eu.kanade.data.handlers.manga
+package tachiyomi.data.handlers.manga
 
 import androidx.paging.PagingSource
 import com.squareup.sqldelight.Query
-import eu.kanade.tachiyomi.Database
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.data.Database
 
 interface MangaDatabaseHandler {
 

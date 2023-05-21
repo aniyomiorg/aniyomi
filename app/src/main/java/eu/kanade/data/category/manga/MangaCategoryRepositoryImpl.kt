@@ -1,12 +1,12 @@
 package eu.kanade.data.category.manga
 
 import eu.kanade.data.category.categoryMapper
-import eu.kanade.data.handlers.manga.MangaDatabaseHandler
 import eu.kanade.domain.category.manga.repository.MangaCategoryRepository
 import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.category.model.CategoryUpdate
-import eu.kanade.tachiyomi.Database
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.data.Database
+import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 
 class MangaCategoryRepositoryImpl(
     private val handler: MangaDatabaseHandler,

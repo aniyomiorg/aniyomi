@@ -1,9 +1,9 @@
-package eu.kanade.data.handlers.anime
+package tachiyomi.data.handlers.anime
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.squareup.sqldelight.Query
-import eu.kanade.tachiyomi.mi.AnimeDatabase
+import tachiyomi.mi.data.AnimeDatabase
 import kotlin.properties.Delegates
 
 class QueryPagingAnimeSource<RowType : Any>(

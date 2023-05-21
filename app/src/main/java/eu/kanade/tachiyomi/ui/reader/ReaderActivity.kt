@@ -50,6 +50,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.ReaderActivityBinding
+import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderViewModel.SetAsCoverResult.AddToLibraryFirst
@@ -314,6 +315,8 @@ class ReaderActivity : BaseActivity() {
         val isChapterBookmarked = viewModel.getCurrentChapter()?.chapter?.bookmark ?: false
         menu.findItem(R.id.action_bookmark).isVisible = !isChapterBookmarked
         menu.findItem(R.id.action_remove_bookmark).isVisible = isChapterBookmarked
+
+        menu.findItem(R.id.action_open_in_web_view).isVisible = viewModel.getSource() is HttpSource
 
         return true
     }
@@ -1028,10 +1031,10 @@ class ReaderActivity : BaseActivity() {
                 .onEach { theme ->
                     binding.readerContainer.setBackgroundResource(
                         when (theme) {
-                            0 -> android.R.color.white
+                            0 -> R.color.md_white_1000
                             2 -> R.color.reader_background_dark
                             3 -> automaticBackgroundColor()
-                            else -> android.R.color.black
+                            else -> R.color.md_black_1000
                         },
                     )
                 }
@@ -1086,7 +1089,7 @@ class ReaderActivity : BaseActivity() {
             return if (baseContext.isNightMode()) {
                 R.color.reader_background_dark
             } else {
-                android.R.color.white
+                R.color.md_white_1000
             }
         }
 

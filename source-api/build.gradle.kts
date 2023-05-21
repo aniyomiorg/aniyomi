@@ -6,22 +6,11 @@ plugins {
 
 android {
     namespace = "eu.kanade.tachiyomi.source"
-    compileSdk = AndroidConfig.compileSdk
 
     defaultConfig {
-        minSdk = AndroidConfig.minSdk
-        targetSdk = AndroidConfig.targetSdk
         consumerProguardFile("consumer-proguard.pro")
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
 }
 
 dependencies {

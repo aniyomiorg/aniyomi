@@ -1,6 +1,5 @@
 package eu.kanade.data.source.manga
 
-import eu.kanade.data.handlers.manga.MangaDatabaseHandler
 import eu.kanade.domain.source.manga.model.MangaSourceWithCount
 import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.domain.source.manga.model.SourcePagingSourceType
@@ -11,6 +10,7 @@ import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.FilterList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 
 class MangaSourceRepositoryImpl(
     private val sourceManager: MangaSourceManager,

@@ -2,7 +2,6 @@ package eu.kanade.presentation.browse.manga
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -43,7 +41,6 @@ import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.PullRefresh
-import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.entries.DotSeparatorNoSpaceText
 import eu.kanade.presentation.theme.header
 import eu.kanade.presentation.util.padding
@@ -55,7 +52,6 @@ import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionUiModel
 import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionsState
-import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.LocaleHelper
 
 @Composable
@@ -123,29 +119,10 @@ private fun ExtensionContent(
     onClickUpdateAll: () -> Unit,
 ) {
     var trustState by remember { mutableStateOf<MangaExtension.Untrusted?>(null) }
-    val showMiuiWarning = DeviceUtil.isMiui && DeviceUtil.miuiMajorVersion >= 13 && !DeviceUtil.isMiuiOptimizationDisabled()
-    val uriHandler = LocalUriHandler.current
 
     FastScrollLazyColumn(
-        contentPadding = if (showMiuiWarning) {
-            contentPadding
-        } else {
-            contentPadding + topSmallPaddingValues
-        },
+        contentPadding = contentPadding + topSmallPaddingValues,
     ) {
-        if (showMiuiWarning) {
-            item {
-                WarningBanner(
-                    textRes = R.string.ext_miui_warning,
-                    modifier = Modifier
-                        .padding(bottom = MaterialTheme.padding.small)
-                        .clickable {
-                            uriHandler.openUri("https://tachiyomi.org/extensions")
-                        },
-                )
-            }
-        }
-
         state.items.forEach { (header, items) ->
             item(
                 contentType = "header",

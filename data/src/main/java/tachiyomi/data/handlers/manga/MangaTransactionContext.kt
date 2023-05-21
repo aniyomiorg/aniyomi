@@ -1,4 +1,4 @@
-package eu.kanade.data.handlers.anime
+package tachiyomi.data.handlers.manga
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
@@ -17,8 +17,8 @@ import kotlin.coroutines.resume
 /**
  * Returns the transaction dispatcher if we are on a transaction, or the database dispatchers.
  */
-internal suspend fun AndroidAnimeDatabaseHandler.getCurrentAnimeDatabaseContext(): CoroutineContext {
-    return coroutineContext[AnimeTransactionElement]?.transactionDispatcher ?: queryDispatcher
+internal suspend fun AndroidMangaDatabaseHandler.getCurrentMangaDatabaseContext(): CoroutineContext {
+    return coroutineContext[TransactionElement]?.transactionDispatcher ?: queryDispatcher
 }
 
 /**
@@ -35,12 +35,12 @@ internal suspend fun AndroidAnimeDatabaseHandler.getCurrentAnimeDatabaseContext(
  *
  * The dispatcher used to execute the given [block] will utilize threads from SQLDelight's query executor.
  */
-internal suspend fun <T> AndroidAnimeDatabaseHandler.withAnimeTransaction(block: suspend () -> T): T {
+internal suspend fun <T> AndroidMangaDatabaseHandler.withMangaTransaction(block: suspend () -> T): T {
     // Use inherited transaction context if available, this allows nested suspending transactions.
     val transactionContext =
-        coroutineContext[AnimeTransactionElement]?.transactionDispatcher ?: createTransactionContext()
+        coroutineContext[TransactionElement]?.transactionDispatcher ?: createTransactionContext()
     return withContext(transactionContext) {
-        val transactionElement = coroutineContext[AnimeTransactionElement]!!
+        val transactionElement = coroutineContext[TransactionElement]!!
         transactionElement.acquire()
         try {
             db.transactionWithResult {
@@ -57,13 +57,13 @@ internal suspend fun <T> AndroidAnimeDatabaseHandler.withAnimeTransaction(block:
 /**
  * Creates a [CoroutineContext] for performing database operations within a coroutine transaction.
  *
- * The context is a combination of a dispatcher, a [AnimeTransactionElement] and a thread local element.
+ * The context is a combination of a dispatcher, a [TransactionElement] and a thread local element.
  *
  * * The dispatcher will dispatch coroutines to a single thread that is taken over from the SQLDelight
  * query executor. If the coroutine context is switched, suspending DAO functions will be able to
  * dispatch to the transaction thread.
  *
- * * The [AnimeTransactionElement] serves as an indicator for inherited context, meaning, if there is a
+ * * The [TransactionElement] serves as an indicator for inherited context, meaning, if there is a
  * switch of context, suspending DAO methods will be able to use the indicator to dispatch the
  * database operation to the transaction thread.
  *
@@ -72,8 +72,7 @@ internal suspend fun <T> AndroidAnimeDatabaseHandler.withAnimeTransaction(block:
  * if a blocking DAO method is invoked within the transaction coroutine. Never assign meaning to
  * this value, for now all we care is if its present or not.
  */
-
-private suspend fun AndroidAnimeDatabaseHandler.createTransactionContext(): CoroutineContext {
+private suspend fun AndroidMangaDatabaseHandler.createTransactionContext(): CoroutineContext {
     val controlJob = Job()
     // make sure to tie the control job to this context to avoid blocking the transaction if
     // context get cancelled before we can even start using this job. Otherwise, the acquired
@@ -84,7 +83,7 @@ private suspend fun AndroidAnimeDatabaseHandler.createTransactionContext(): Coro
     }
 
     val dispatcher = transactionDispatcher.acquireTransactionThread(controlJob)
-    val transactionElement = AnimeTransactionElement(controlJob, dispatcher)
+    val transactionElement = TransactionElement(controlJob, dispatcher)
     val threadLocalElement =
         suspendingTransactionId.asContextElement(System.identityHashCode(controlJob))
     return dispatcher + transactionElement + threadLocalElement
@@ -128,15 +127,15 @@ private suspend fun CoroutineDispatcher.acquireTransactionThread(
 /**
  * A [CoroutineContext.Element] that indicates there is an on-going database transaction.
  */
-private class AnimeTransactionElement(
+private class TransactionElement(
     private val transactionThreadControlJob: Job,
     val transactionDispatcher: ContinuationInterceptor,
 ) : CoroutineContext.Element {
 
-    companion object Key : CoroutineContext.Key<AnimeTransactionElement>
+    companion object Key : CoroutineContext.Key<TransactionElement>
 
-    override val key: CoroutineContext.Key<AnimeTransactionElement>
-        get() = AnimeTransactionElement
+    override val key: CoroutineContext.Key<TransactionElement>
+        get() = TransactionElement
 
     /**
      * Number of transactions (including nested ones) started with this element.

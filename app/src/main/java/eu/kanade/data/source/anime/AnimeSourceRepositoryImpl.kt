@@ -1,6 +1,5 @@
 package eu.kanade.data.source.anime
 
-import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
 import eu.kanade.domain.source.anime.model.AnimeSource
 import eu.kanade.domain.source.anime.model.AnimeSourcePagingSourceType
 import eu.kanade.domain.source.anime.model.AnimeSourceWithCount
@@ -11,6 +10,7 @@ import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 
 class AnimeSourceRepositoryImpl(
     private val sourceManager: AnimeSourceManager,
