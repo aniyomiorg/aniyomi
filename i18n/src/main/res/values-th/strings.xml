@@ -371,7 +371,6 @@
     <string name="action_disable">ปิดการใช้งาน</string>
     <string name="action_display_show_number_of_items">แสดงจำนวน</string>
     <string name="action_display_show_tabs">แสดงแท็บหมวดหมู่</string>
-    <string name="action_display_unread_badge">ตอนที่ยังไม่ได้อ่าน</string>
     <string name="action_display_comfortable_grid">ตารางแบบเต็มที</string>
     <string name="action_migrate">โยกย้าย</string>
     <string name="action_start">เริ่ม</string>
@@ -619,9 +618,6 @@
     <string name="pref_landscape_zoom">ซูมภาพแนวนอน</string>
     <string name="skipped_reason_not_caught_up">ถูกข้ามเนื่องจากมีตอนที่ยังไม่ได้อ่าน</string>
     <string name="skipped_reason_not_started">ถูกข้ามเนื่องจากยังไม่มีตอนใด ๆ ถูกอ่าน</string>
-    <string name="confirm_manga_add_duplicate">มีรายการในคลังที่มีชื่อเดียวกัน แต่มาจากคนละแหล่งที่มา (%1$s)
-\n
-\nยังต้องการดำเนินการต่อหรือไม่\?</string>
     <string name="action_filter_started">เริ่มอ่านแล้ว</string>
     <string name="pref_update_only_started">ที่ยังไม่ได้เริ่มอ่าน</string>
     <string name="skipped_reason_completed">ถูกข้ามเนื่องจากเรื่องนี้จบแล้ว</string>

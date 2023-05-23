@@ -400,7 +400,6 @@
     <string name="action_pin">Ghim</string>
     <string name="action_disable">Tắt</string>
     <string name="action_display_show_tabs">Hiện các thẻ danh mục</string>
-    <string name="action_display_unread_badge">Số chương chưa đọc</string>
     <string name="action_display_comfortable_grid">Lưới</string>
     <string name="action_migrate">Chuyển</string>
     <string name="action_start">Bắt đầu</string>
@@ -649,9 +648,6 @@
     <string name="learn_more">Nhấn để tìm hiểu thêm</string>
     <string name="pref_landscape_zoom">Phóng ảnh phong cảnh</string>
     <string name="webtoon_side_padding_5">5%</string>
-    <string name="confirm_manga_add_duplicate">Bạn đang có một bộ truyện ở trong thư viện có cùng tên nhưng sử dụng nguồn khác (%1$s).
-\n
-\nBạn vẫn muốn tiếp tục chứ\?</string>
     <string name="action_filter_started">Đã bắt đầu</string>
     <string name="pref_navigate_pan">Điều hướng tới quay chiều</string>
     <string name="action_display_cover_only_grid">Lưới chỉ mỗi bìa</string>

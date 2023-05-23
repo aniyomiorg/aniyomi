@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Categories Manga</string>
-    <string name="unlock_app">Desbloca Aniyomi</string>
+    <string name="unlock_app">Desbloca el Aniyomi</string>
     <string name="action_sort_last_manga_update">Darrera actualització de Manga</string>
     <string name="action_show_manga">Mostra Manga</string>
     <string name="action_display_local_badge_manga">Manga local</string>

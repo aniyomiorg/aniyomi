@@ -22,7 +22,6 @@
     <string name="action_pin">I-pin</string>
     <string name="action_disable">Isara</string>
     <string name="action_display_show_tabs">Ipakita ang mga kategorya</string>
-    <string name="action_display_unread_badge">Bilang ng babasahin</string>
     <string name="action_display_download_badge">Bilang ng na-download</string>
     <string name="action_display_comfortable_grid">Maginhawa</string>
     <string name="action_display_list">Listahan</string>
@@ -632,9 +631,6 @@
     <string name="pref_update_only_started">Hindi pa nasisimulan</string>
     <string name="skipped_reason_not_caught_up">Nilaktawan dahil may di pa nababasang kabanata</string>
     <string name="skipped_reason_not_started">Nilaktawan dahil wala pang nababasang kabanata</string>
-    <string name="confirm_manga_add_duplicate">May entry ka sa Aklatan na may kaparehong pangalan pero galing sa ibang source (%1$s).
-\n
-\nGusto mo pa rin bang magpatuloy\?</string>
     <string name="pref_landscape_zoom">Mag-zoom sa pahigang larawan</string>
     <string name="pref_navigate_pan">I-pan ang malapad na larawan kapag nag-tap</string>
     <string name="learn_more">Matuto pa</string>
@@ -728,7 +724,6 @@
     <string name="error_user_agent_string_invalid">Hindi wasto ang string ng user agent</string>
     <string name="updates_last_update_info_just_now">Ngayon lang</string>
     <string name="download_notifier_cache_renewal">Pag-index ng mga pag-download</string>
-    <string name="channel_downloader_cache">Cache ng mga download</string>
     <string name="information_no_entries_found">Walang mga entry ang nahanap sa kategoryang ito</string>
     <string name="action_open_random_manga">Buksan ang random na entry</string>
     <string name="fdroid_warning">Ang mga build ng F-Droid ay hindi opisyal na sinusuportahan.

@@ -427,7 +427,6 @@
     <string name="ext_unofficial">Neslužbeno</string>
     <string name="pref_library_update_refresh_metadata_summary">Provjeri nove naslovnice i pojedinosti prilikom aktualiziranja biblioteke</string>
     <string name="pref_library_update_refresh_metadata">Automatski osvježi metapodatke</string>
-    <string name="action_display_unread_badge">Nepročitana poglavlja</string>
     <string name="action_migrate">Migriraj</string>
     <string name="action_disable_all">Deaktiviraj sve</string>
     <string name="action_enable_all">Aktiviraj sve</string>
@@ -639,9 +638,6 @@
     <string name="action_faq_and_guides">ČPP i vodiči</string>
     <string name="action_display_cover_only_grid">Samo naslovnice</string>
     <string name="webtoon_side_padding_5">5 %</string>
-    <string name="confirm_manga_add_duplicate">U biblioteci imaš unos s istim imenom ali iz drugog izvora (%1$s).
-\n
-\nŽeliš li svejedno nastaviti\?</string>
     <string name="pref_navigate_pan">Navigiraj pomicanjem slike</string>
     <string name="pref_landscape_zoom">Promijeni uvećanje slike u ležećem formatu</string>
     <string name="action_filter_started">Započeto</string>
@@ -696,4 +692,10 @@
     <string name="missing_storage_permission">Nedostaje dozvola za spremanje</string>
     <string name="theme_tidalwave">Tsunami</string>
 <string name="label_download_queue">Popis preuzimanja</string>
+    <string name="enhanced_services_not_installed">Dostupne, ali izvor nije instaliran: %s</string>
+    <string name="confirm_add_duplicate_manga">U tvojoj biblioteci imaš unos s istim imenom.
+\n
+\nŽeliš li svejedno nastaviti\?</string>
+    <string name="pref_skip_dupe_chapters">Preskoči dupla poglavlja</string>
+    <string name="track_error">%1$s greška: %2$s</string>
     </resources>

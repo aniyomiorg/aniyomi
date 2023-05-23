@@ -449,7 +449,6 @@
         <item quantity="many">%d categorie</item>
         <item quantity="other">%d categorie</item>
     </plurals>
-    <string name="action_display_unread_badge">Capitoli non letti</string>
     <string name="gray_background">Grigio</string>
     <string name="page_list_empty_error">Nessuna pagina trovata</string>
     <string name="sort_by_upload_date">Per data di aggiunta</string>
@@ -585,14 +584,14 @@
     <string name="chapter_not_found">Capitolo non trovato</string>
     <string name="source_unsupported">Fonte non supportata</string>
     <string name="date">Data</string>
-    <string name="off">Disattivato</string>
+    <string name="off">Disattivo</string>
     <string name="error_sharing_cover">Errore nella condivisione della copertina</string>
     <string name="error_saving_cover">Errore nel salvataggio della copertina</string>
     <string name="cover_saved">Copertina salvata</string>
     <string name="unread">Non letti</string>
     <string name="categorized_display_settings">Impostazioni di ordinamento e visualizzazione per categoria</string>
     <string name="information_empty_category_dialog">Non hai ancora nessuna categoria.</string>
-    <string name="on">Attivato</string>
+    <string name="on">Attivo</string>
     <string name="restrictions">Restrizioni: %s</string>
     <string name="manga_cover">Copertina</string>
     <string name="local_invalid_format">Formato capitolo non valido</string>
@@ -672,9 +671,6 @@
     <string name="webtoon_side_padding_5">5%</string>
     <string name="pref_navigate_pan">Scorri le pagine larghe toccando</string>
     <string name="pref_landscape_zoom">Ingrandisci le immagini orizzontali</string>
-    <string name="confirm_manga_add_duplicate">Hai un elemento nella libreria con lo stesso nome ma da un altra fonte (%1$s).
-\n
-\nVuoi comunque continuare\?</string>
     <string name="action_display_cover_only_grid">Griglia con solo copertine</string>
     <string name="action_filter_started">Iniziati</string>
     <string name="pref_update_only_started">Che non sono state iniziate</string>
@@ -772,11 +768,17 @@
     <string name="unknown_title">Titolo sconosciuto</string>
     <string name="error_user_agent_string_invalid">Stringa «user agent» non valida</string>
     <string name="updates_last_update_info_just_now">Proprio adesso</string>
-    <string name="channel_downloader_cache">Cache di download</string>
-    <string name="download_notifier_cache_renewal">Indicizzazione dei download</string>
+    <string name="download_notifier_cache_renewal">Controllando i download</string>
     <string name="action_open_random_manga">Apri una voce casuale</string>
     <string name="information_no_entries_found">Nessuna voce trovata in questa categoria</string>
     <string name="fdroid_warning">Le versioni F-Droid non sono ufficialmente supportate.
 \nToccare per saperne di più.</string>
     <string name="label_download_queue">Coda download</string>
+    <string name="enhanced_services_not_installed">Disponibile ma la fonte non è installata: %s</string>
+    <string name="pref_skip_dupe_chapters">Salta i capitoli duplicati</string>
+    <string name="confirm_add_duplicate_manga">Hai già una voce in libreria con lo stesso nome.
+\n
+\nVuoi comunque continuare\?</string>
+    <string name="track_error">%1$s errore: %2$s</string>
+    <string name="information_required_plain">*obbligatorio</string>
     </resources>

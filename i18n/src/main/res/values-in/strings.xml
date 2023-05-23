@@ -392,7 +392,6 @@
     <plurals name="num_categories">
         <item quantity="other">%d kategori</item>
     </plurals>
-    <string name="action_display_unread_badge">Belum Dibaca</string>
     <string name="gray_background">Abu-abu</string>
     <string name="pref_category_for_this_series">Untuk seri ini</string>
     <string name="battery_optimization_setting_activity_not_found">Tidak dapat membuka pengaturan perangkat</string>
@@ -616,9 +615,6 @@
     <string name="webtoon_side_padding_5">5%</string>
     <string name="action_display_cover_only_grid">Grid sampul saja</string>
     <string name="pref_update_only_started">Yang belum dibaca</string>
-    <string name="confirm_manga_add_duplicate">Anda memiliki sebuah entri di pustaka anda dengan nama yang sama tapi dari sumber yang berbeda (%1$s).
-\n
-\nApakah Anda yakin untuk melanjutkan\?</string>
     <string name="action_filter_started">Dimulai</string>
     <string name="skipped_reason_completed">Dilewati karena seri telah selesai</string>
     <string name="skipped_reason_not_caught_up">Dilewati karena ada bab yang belum dibaca</string>
@@ -715,4 +711,10 @@
     <string name="error_user_agent_string_invalid">String agen pengguna tidak valid</string>
     <string name="updates_last_update_info_just_now">Baru saja</string>
     <string name="label_download_queue">Antrian unduhan</string>
+    <string name="enhanced_services_not_installed">Tersedia tetapi sumber tidak terpasang: %s</string>
+    <string name="pref_skip_dupe_chapters">Melewati bab terduplikasi</string>
+    <string name="confirm_add_duplicate_manga">Kamu memiliki entri di pustaka dengan nama yang sama.
+\n
+\nApakah kamu ingin melanjutkan\?</string>
+    <string name="track_error">%1$seror%2$s</string>
     </resources>

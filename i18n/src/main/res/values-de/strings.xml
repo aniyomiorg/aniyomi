@@ -408,7 +408,6 @@
         <item quantity="one">Erledigt in %1$s mit %2$s Fehler</item>
         <item quantity="other">Erledigt in %1$s mit %2$s Fehlern</item>
     </plurals>
-    <string name="action_display_unread_badge">Ungelesene Kapitel</string>
     <string name="tracking_info">Einweg-Synchronisation zum Aktualisieren der Kapitelfortschritte in den Trackingdiensten. Richte Tracking für einzelne Einträge über deren jeweiligen Tracking-Button ein.</string>
     <string name="pref_refresh_library_covers">Bibliothekscover aktualisieren</string>
     <string name="unofficial_extension_message">Diese Erweiterung stammt nicht von der offiziellen Tachiyomi-Erweiterungsliste.</string>
@@ -626,9 +625,6 @@
     <string name="publishing_finished">Veröffentlichung abgeschlossen</string>
     <string name="action_faq_and_guides">Häufige Fragen und Leitfäden</string>
     <string name="webtoon_side_padding_5">5 %</string>
-    <string name="confirm_manga_add_duplicate">In deiner Bibliothek existiert ein Eintrag mit dem gleichen Namen, aber aus einer anderen Quelle (%1$s).
-\n
-\nMöchtest du trotzdem fortfahren\?</string>
     <string name="action_display_cover_only_grid">Nur-Cover-Kacheln</string>
     <string name="pref_landscape_zoom">Bild im Querformat vergrößern</string>
     <string name="pref_navigate_pan">Beim Tippen innerhalb breiter Seiten navigieren</string>
@@ -727,11 +723,17 @@
     <string name="invalid_location">Ungültiger Speicherort: %s</string>
     <string name="error_user_agent_string_invalid">Ungültiger User-Agent-Text</string>
     <string name="updates_last_update_info_just_now">Gerade eben</string>
-    <string name="channel_downloader_cache">Download-Zwischenspeicher</string>
-    <string name="download_notifier_cache_renewal">Downloads werden indiziert</string>
+    <string name="download_notifier_cache_renewal">Downloads werden überprüft</string>
     <string name="action_open_random_manga">Zufälligen Eintrag öffnen</string>
     <string name="information_no_entries_found">Keine Einträge in dieser Kategorie gefunden</string>
     <string name="fdroid_warning">F-Droid-Builds werden nicht offiziell unterstützt.
 \nTippe, um mehr zu erfahren.</string>
     <string name="label_download_queue">Download-Warteschlange</string>
+    <string name="enhanced_services_not_installed">Verfügbar, aber Quelle ist nicht installiert: %s</string>
+    <string name="pref_skip_dupe_chapters">Doppelte Kapitel überspringen</string>
+    <string name="confirm_add_duplicate_manga">In deiner Bibliothek gibt es einen Eintrag mit dem gleichen Namen.
+\n
+\nMöchtest du trotzdem fortfahren\?</string>
+    <string name="track_error">%1$s-Fehler: %2$s</string>
+    <string name="information_required_plain">*erforderlich</string>
     </resources>
