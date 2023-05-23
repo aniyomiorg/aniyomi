@@ -1,12 +1,12 @@
 package eu.kanade.data.history.manga
 
-import eu.kanade.domain.history.manga.model.MangaHistoryUpdate
-import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
 import eu.kanade.domain.history.manga.repository.MangaHistoryRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
+import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
+import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 
 class MangaHistoryRepositoryImpl(
     private val handler: MangaDatabaseHandler,

@@ -16,7 +16,6 @@ import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.anime.interactor.GetAnime
 import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.history.anime.interactor.UpsertAnimeHistory
-import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
 import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.items.episode.interactor.UpdateEpisode
 import eu.kanade.domain.items.episode.model.Episode
@@ -48,6 +47,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first
 import logcat.LogPriority
+import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy

@@ -7,11 +7,6 @@ import android.view.View
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.category.manga.interactor.SetDisplayModeForMangaCategory
 import eu.kanade.domain.category.manga.interactor.SetSortModeForMangaCategory
-import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.library.model.LibraryDisplayMode
-import eu.kanade.domain.library.model.LibrarySort
-import eu.kanade.domain.library.model.display
-import eu.kanade.domain.library.model.sort
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.MangaTrackService
@@ -24,6 +19,11 @@ import eu.kanade.tachiyomi.widget.sheet.TabbedBottomSheetDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.library.model.LibraryDisplayMode
+import tachiyomi.domain.library.model.LibrarySort
+import tachiyomi.domain.library.model.display
+import tachiyomi.domain.library.model.sort
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy

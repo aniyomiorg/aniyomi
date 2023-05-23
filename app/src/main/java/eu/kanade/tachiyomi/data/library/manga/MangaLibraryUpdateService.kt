@@ -8,7 +8,6 @@ import android.os.PowerManager
 import androidx.core.content.ContextCompat
 import eu.kanade.data.items.chapter.NoChaptersException
 import eu.kanade.domain.category.manga.interactor.GetMangaCategories
-import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.manga.interactor.GetLibraryManga
 import eu.kanade.domain.entries.manga.interactor.GetManga
@@ -65,6 +64,7 @@ import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
+import tachiyomi.domain.category.model.Category
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File

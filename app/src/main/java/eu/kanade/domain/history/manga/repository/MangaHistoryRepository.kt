@@ -1,8 +1,8 @@
 package eu.kanade.domain.history.manga.repository
 
-import eu.kanade.domain.history.manga.model.MangaHistoryUpdate
-import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
+import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 
 interface MangaHistoryRepository {
 

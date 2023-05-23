@@ -29,7 +29,6 @@ import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.category.manga.interactor.SetMangaCategories
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.entries.manga.model.MangaUpdate
 import eu.kanade.domain.entries.manga.model.hasCustomCover
 import eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
@@ -51,6 +50,7 @@ import eu.kanade.tachiyomi.ui.browse.manga.migration.MangaMigrationFlags
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import kotlinx.coroutines.flow.update
+import tachiyomi.domain.entries.manga.model.MangaUpdate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date

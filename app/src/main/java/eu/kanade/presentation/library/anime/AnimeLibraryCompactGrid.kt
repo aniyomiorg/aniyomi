@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastAny
-import eu.kanade.domain.entries.anime.model.AnimeCover
 import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.presentation.animelib.components.DownloadsBadge
 import eu.kanade.presentation.animelib.components.LanguageBadge
@@ -15,6 +14,7 @@ import eu.kanade.presentation.components.EntryCompactGridItem
 import eu.kanade.presentation.library.LazyLibraryGrid
 import eu.kanade.presentation.library.globalSearchItem
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
+import tachiyomi.domain.entries.anime.model.AnimeCover
 
 @Composable
 fun AnimeLibraryCompactGrid(

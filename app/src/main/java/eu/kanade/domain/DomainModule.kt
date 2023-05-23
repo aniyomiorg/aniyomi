@@ -1,7 +1,5 @@
 package eu.kanade.domain
 
-import eu.kanade.data.category.anime.AnimeCategoryRepositoryImpl
-import eu.kanade.data.category.manga.MangaCategoryRepositoryImpl
 import eu.kanade.data.entries.anime.AnimeRepositoryImpl
 import eu.kanade.data.entries.manga.MangaRepositoryImpl
 import eu.kanade.data.history.anime.AnimeHistoryRepositoryImpl
@@ -26,7 +24,6 @@ import eu.kanade.domain.category.anime.interactor.SetAnimeCategories
 import eu.kanade.domain.category.anime.interactor.SetDisplayModeForAnimeCategory
 import eu.kanade.domain.category.anime.interactor.SetSortModeForAnimeCategory
 import eu.kanade.domain.category.anime.interactor.UpdateAnimeCategory
-import eu.kanade.domain.category.anime.repository.AnimeCategoryRepository
 import eu.kanade.domain.category.manga.interactor.CreateMangaCategoryWithName
 import eu.kanade.domain.category.manga.interactor.DeleteMangaCategory
 import eu.kanade.domain.category.manga.interactor.GetMangaCategories
@@ -37,7 +34,6 @@ import eu.kanade.domain.category.manga.interactor.SetDisplayModeForMangaCategory
 import eu.kanade.domain.category.manga.interactor.SetMangaCategories
 import eu.kanade.domain.category.manga.interactor.SetSortModeForMangaCategory
 import eu.kanade.domain.category.manga.interactor.UpdateMangaCategory
-import eu.kanade.domain.category.manga.repository.MangaCategoryRepository
 import eu.kanade.domain.download.anime.interactor.DeleteAnimeDownload
 import eu.kanade.domain.download.manga.interactor.DeleteChapterDownload
 import eu.kanade.domain.entries.anime.interactor.GetAnime
@@ -128,6 +124,10 @@ import eu.kanade.domain.updates.anime.interactor.GetAnimeUpdates
 import eu.kanade.domain.updates.anime.repository.AnimeUpdatesRepository
 import eu.kanade.domain.updates.manga.interactor.GetMangaUpdates
 import eu.kanade.domain.updates.manga.repository.MangaUpdatesRepository
+import tachiyomi.data.category.anime.AnimeCategoryRepositoryImpl
+import tachiyomi.data.category.manga.MangaCategoryRepositoryImpl
+import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
+import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addFactory

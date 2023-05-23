@@ -1,11 +1,11 @@
 package eu.kanade.domain.category.anime.interactor
 
-import eu.kanade.domain.category.anime.repository.AnimeCategoryRepository
-import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
 import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
+import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
+import tachiyomi.domain.category.model.Category
 
 class CreateAnimeCategoryWithName(
     private val categoryRepository: AnimeCategoryRepository,

@@ -15,15 +15,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import eu.kanade.core.prefs.PreferenceMutableState
-import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.library.anime.LibraryAnime
-import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.presentation.components.PullRefresh
 import eu.kanade.presentation.components.rememberPagerState
 import eu.kanade.presentation.library.LibraryTabs
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.library.model.LibraryDisplayMode
 import kotlin.time.Duration.Companion.seconds
 
 @Composable

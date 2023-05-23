@@ -8,7 +8,6 @@ import android.os.PowerManager
 import androidx.core.content.ContextCompat
 import eu.kanade.data.items.episode.NoEpisodesException
 import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
-import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.anime.interactor.GetAnime
 import eu.kanade.domain.entries.anime.interactor.GetLibraryAnime
@@ -66,6 +65,7 @@ import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import logcat.LogPriority
+import tachiyomi.domain.category.model.Category
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File

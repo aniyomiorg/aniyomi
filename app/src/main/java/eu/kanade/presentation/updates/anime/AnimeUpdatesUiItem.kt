@@ -1,6 +1,7 @@
 package eu.kanade.presentation.updates.anime
 
 import android.text.format.DateUtils
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.updates.anime.model.AnimeUpdatesWithRelations
 import eu.kanade.presentation.components.EpisodeDownloadAction
 import eu.kanade.presentation.components.EpisodeDownloadIndicator
 import eu.kanade.presentation.components.ItemCover
@@ -45,10 +45,12 @@ import eu.kanade.presentation.util.selectedBackground
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
+import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import java.util.Date
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.minutes
 
+@OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.animeUpdatesLastUpdatedItem(
     lastUpdated: Long,
 ) {
@@ -79,6 +81,7 @@ fun LazyListScope.animeUpdatesLastUpdatedItem(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.animeUpdatesUiItems(
     uiModels: List<AnimeUpdatesUiModel>,
     selectionMode: Boolean,
@@ -145,6 +148,7 @@ fun LazyListScope.animeUpdatesUiItems(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AnimeUpdatesUiItem(
     modifier: Modifier,

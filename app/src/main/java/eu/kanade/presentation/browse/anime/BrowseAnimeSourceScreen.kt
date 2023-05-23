@@ -16,7 +16,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import eu.kanade.data.items.episode.NoEpisodesException
 import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceComfortableGrid
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceCompactGrid
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceList
@@ -27,6 +26,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import kotlinx.coroutines.flow.StateFlow
+import tachiyomi.domain.library.model.LibraryDisplayMode
 
 @Composable
 fun BrowseAnimeSourceContent(

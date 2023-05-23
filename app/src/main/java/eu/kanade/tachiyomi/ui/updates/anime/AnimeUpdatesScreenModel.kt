@@ -19,7 +19,6 @@ import eu.kanade.domain.items.episode.model.EpisodeUpdate
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.updates.anime.interactor.GetAnimeUpdates
-import eu.kanade.domain.updates.anime.model.AnimeUpdatesWithRelations
 import eu.kanade.presentation.components.EpisodeDownloadAction
 import eu.kanade.presentation.updates.anime.AnimeUpdatesUiModel
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
@@ -44,6 +43,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Calendar

@@ -1,10 +1,10 @@
 package eu.kanade.domain.category.manga.interactor
 
-import eu.kanade.domain.category.manga.repository.MangaCategoryRepository
-import eu.kanade.domain.category.model.CategoryUpdate
 import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
 import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
+import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
+import tachiyomi.domain.category.model.CategoryUpdate
 
 class DeleteMangaCategory(
     private val categoryRepository: MangaCategoryRepository,

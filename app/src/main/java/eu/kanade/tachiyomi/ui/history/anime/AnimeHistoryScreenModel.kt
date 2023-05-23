@@ -7,7 +7,6 @@ import eu.kanade.core.util.insertSeparators
 import eu.kanade.domain.history.anime.interactor.GetAnimeHistory
 import eu.kanade.domain.history.anime.interactor.GetNextEpisodes
 import eu.kanade.domain.history.anime.interactor.RemoveAnimeHistory
-import eu.kanade.domain.history.anime.model.AnimeHistoryWithRelations
 import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.presentation.history.anime.AnimeHistoryUiModel
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -29,6 +28,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date

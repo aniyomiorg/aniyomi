@@ -1,8 +1,8 @@
 package eu.kanade.domain.category.manga.interactor
 
-import eu.kanade.domain.category.manga.repository.MangaCategoryRepository
-import eu.kanade.domain.library.model.plus
 import eu.kanade.domain.library.service.LibraryPreferences
+import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
+import tachiyomi.domain.library.model.plus
 
 class ResetMangaCategoryFlags(
     private val preferences: LibraryPreferences,

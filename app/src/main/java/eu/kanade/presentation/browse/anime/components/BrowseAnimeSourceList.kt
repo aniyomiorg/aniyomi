@@ -9,7 +9,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.entries.anime.model.AnimeCover
 import eu.kanade.presentation.browse.InLibraryBadge
 import eu.kanade.presentation.browse.manga.components.BrowseSourceLoadingItem
 import eu.kanade.presentation.components.CommonEntryItemDefaults
@@ -17,6 +16,7 @@ import eu.kanade.presentation.components.EntryListItem
 import eu.kanade.presentation.components.LazyColumn
 import eu.kanade.presentation.util.plus
 import kotlinx.coroutines.flow.StateFlow
+import tachiyomi.domain.entries.anime.model.AnimeCover
 
 @Composable
 fun BrowseAnimeSourceList(

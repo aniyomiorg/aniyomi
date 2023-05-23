@@ -1,7 +1,7 @@
 package eu.kanade.domain.history.manga.interactor
 
-import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
 import eu.kanade.domain.history.manga.repository.MangaHistoryRepository
+import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 
 class RemoveMangaHistory(
     private val repository: MangaHistoryRepository,

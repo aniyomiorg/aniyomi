@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.source.anime
 
 import android.content.Context
-import eu.kanade.domain.source.anime.model.AnimeSourceData
 import eu.kanade.domain.source.anime.repository.AnimeSourceDataRepository
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
@@ -21,6 +20,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import tachiyomi.domain.source.anime.model.AnimeSourceData
 import uy.kohesive.injekt.injectLazy
 import java.util.concurrent.ConcurrentHashMap
 

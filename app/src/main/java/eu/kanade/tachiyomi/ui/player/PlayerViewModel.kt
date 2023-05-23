@@ -15,7 +15,6 @@ import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.entries.anime.model.isLocal
 import eu.kanade.domain.history.anime.interactor.GetNextEpisodes
 import eu.kanade.domain.history.anime.interactor.UpsertAnimeHistory
-import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
 import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.items.episode.interactor.UpdateEpisode
 import eu.kanade.domain.items.episode.model.EpisodeUpdate
@@ -71,6 +70,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
+import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.InputStream

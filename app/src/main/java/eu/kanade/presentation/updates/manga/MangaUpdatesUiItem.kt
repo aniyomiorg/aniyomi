@@ -1,6 +1,7 @@
 package eu.kanade.presentation.updates.manga
 
 import android.text.format.DateUtils
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.updates.manga.model.MangaUpdatesWithRelations
 import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.components.ChapterDownloadIndicator
 import eu.kanade.presentation.components.ItemCover
@@ -45,9 +45,11 @@ import eu.kanade.presentation.util.selectedBackground
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
+import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
 import java.util.Date
 import kotlin.time.Duration.Companion.minutes
 
+@OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.mangaUpdatesLastUpdatedItem(
     lastUpdated: Long,
 ) {
@@ -78,6 +80,7 @@ fun LazyListScope.mangaUpdatesLastUpdatedItem(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.mangaUpdatesUiItems(
     uiModels: List<MangaUpdatesUiModel>,
     selectionMode: Boolean,
@@ -143,6 +146,7 @@ fun LazyListScope.mangaUpdatesUiItems(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MangaUpdatesUiItem(
     modifier: Modifier,

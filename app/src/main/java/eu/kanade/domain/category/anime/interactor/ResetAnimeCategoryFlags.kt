@@ -1,8 +1,8 @@
 package eu.kanade.domain.category.anime.interactor
 
-import eu.kanade.domain.category.anime.repository.AnimeCategoryRepository
-import eu.kanade.domain.library.model.plus
 import eu.kanade.domain.library.service.LibraryPreferences
+import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
+import tachiyomi.domain.library.model.plus
 
 class ResetAnimeCategoryFlags(
     private val preferences: LibraryPreferences,

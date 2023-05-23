@@ -9,13 +9,13 @@ import eu.kanade.domain.category.anime.interactor.DeleteAnimeCategory
 import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
 import eu.kanade.domain.category.anime.interactor.RenameAnimeCategory
 import eu.kanade.domain.category.anime.interactor.ReorderAnimeCategory
-import eu.kanade.domain.category.model.Category
 import eu.kanade.tachiyomi.R
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import tachiyomi.domain.category.model.Category
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

@@ -29,7 +29,6 @@ import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
 import eu.kanade.domain.category.anime.interactor.SetAnimeCategories
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.entries.anime.model.AnimeUpdate
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
@@ -52,6 +51,7 @@ import eu.kanade.tachiyomi.ui.browse.manga.migration.MangaMigrationFlags
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.lang.withUIContext
 import kotlinx.coroutines.flow.update
+import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date

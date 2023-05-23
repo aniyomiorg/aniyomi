@@ -7,7 +7,6 @@ import eu.kanade.core.util.insertSeparators
 import eu.kanade.domain.history.manga.interactor.GetMangaHistory
 import eu.kanade.domain.history.manga.interactor.GetNextChapters
 import eu.kanade.domain.history.manga.interactor.RemoveMangaHistory
-import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
 import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.presentation.history.manga.MangaHistoryUiModel
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -29,6 +28,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date

@@ -1,8 +1,8 @@
 package eu.kanade.domain.history.anime.repository
 
-import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
-import eu.kanade.domain.history.anime.model.AnimeHistoryWithRelations
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
+import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 
 interface AnimeHistoryRepository {
 

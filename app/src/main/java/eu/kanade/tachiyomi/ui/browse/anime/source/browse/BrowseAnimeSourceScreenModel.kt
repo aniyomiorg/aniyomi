@@ -19,7 +19,6 @@ import eu.kanade.core.prefs.asState
 import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
 import eu.kanade.domain.category.anime.interactor.SetAnimeCategories
-import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.entries.anime.interactor.GetAnime
 import eu.kanade.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import eu.kanade.domain.entries.anime.interactor.NetworkToLocalAnime
@@ -71,6 +70,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.domain.category.model.Category
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date

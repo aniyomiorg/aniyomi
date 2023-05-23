@@ -14,7 +14,6 @@ import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.history.manga.interactor.GetNextChapters
 import eu.kanade.domain.history.manga.interactor.UpsertMangaHistory
-import eu.kanade.domain.history.manga.model.MangaHistoryUpdate
 import eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId
 import eu.kanade.domain.items.chapter.interactor.UpdateChapter
 import eu.kanade.domain.items.chapter.model.ChapterUpdate
@@ -77,6 +76,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
+import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date

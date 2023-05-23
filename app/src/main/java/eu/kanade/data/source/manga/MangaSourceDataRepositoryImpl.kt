@@ -1,9 +1,9 @@
 package eu.kanade.data.source.manga
 
-import eu.kanade.domain.source.manga.model.MangaSourceData
 import eu.kanade.domain.source.manga.repository.MangaSourceDataRepository
 import kotlinx.coroutines.flow.Flow
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
+import tachiyomi.domain.source.manga.model.MangaSourceData
 
 class MangaSourceDataRepositoryImpl(
     private val handler: MangaDatabaseHandler,

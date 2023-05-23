@@ -1,8 +1,8 @@
 package eu.kanade.domain.updates.manga.interactor
 
-import eu.kanade.domain.updates.manga.model.MangaUpdatesWithRelations
 import eu.kanade.domain.updates.manga.repository.MangaUpdatesRepository
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
 import java.util.Calendar
 
 class GetMangaUpdates(

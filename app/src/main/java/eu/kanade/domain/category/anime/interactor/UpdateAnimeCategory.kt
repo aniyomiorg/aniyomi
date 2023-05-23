@@ -1,8 +1,8 @@
 package eu.kanade.domain.category.anime.interactor
 
-import eu.kanade.domain.category.anime.repository.AnimeCategoryRepository
-import eu.kanade.domain.category.model.CategoryUpdate
 import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
+import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
+import tachiyomi.domain.category.model.CategoryUpdate
 
 class UpdateAnimeCategory(
     private val categoryRepository: AnimeCategoryRepository,

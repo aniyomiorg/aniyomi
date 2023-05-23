@@ -15,7 +15,6 @@ import eu.kanade.core.util.addOrRemove
 import eu.kanade.data.items.chapter.NoChaptersException
 import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.category.manga.interactor.SetMangaCategories
-import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.TriStateFilter
 import eu.kanade.domain.entries.manga.interactor.GetDuplicateLibraryManga
@@ -71,6 +70,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.domain.category.model.Category
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DecimalFormat

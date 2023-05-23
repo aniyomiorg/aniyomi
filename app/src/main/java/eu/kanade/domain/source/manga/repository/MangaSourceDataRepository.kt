@@ -1,7 +1,7 @@
 package eu.kanade.domain.source.manga.repository
 
-import eu.kanade.domain.source.manga.model.MangaSourceData
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.domain.source.manga.model.MangaSourceData
 
 interface MangaSourceDataRepository {
     fun subscribeAllManga(): Flow<List<MangaSourceData>>

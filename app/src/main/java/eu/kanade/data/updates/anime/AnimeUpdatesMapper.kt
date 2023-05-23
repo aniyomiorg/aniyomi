@@ -1,7 +1,7 @@
 package eu.kanade.data.updates.anime
 
-import eu.kanade.domain.entries.anime.model.AnimeCover
-import eu.kanade.domain.updates.anime.model.AnimeUpdatesWithRelations
+import tachiyomi.domain.entries.anime.model.AnimeCover
+import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 
 val animeUpdateWithRelationMapper: (Long, String, Long, String, String?, Boolean, Boolean, Long, Long, Long, Boolean, String?, Long, Long, Long) -> AnimeUpdatesWithRelations = {
         animeId, animeTitle, episodeId, episodeName, scanlator, seen, bookmark, lastSecondSeen, totalSeconds, sourceId, favorite, thumbnailUrl, coverLastModified, _, dateFetch ->

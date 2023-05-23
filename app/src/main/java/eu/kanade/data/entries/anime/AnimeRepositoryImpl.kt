@@ -1,7 +1,6 @@
 package eu.kanade.data.entries.anime
 
 import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.entries.anime.model.AnimeUpdate
 import eu.kanade.domain.entries.anime.repository.AnimeRepository
 import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.tachiyomi.util.system.logcat
@@ -11,6 +10,7 @@ import logcat.LogPriority
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.data.listOfStringsAdapter
 import tachiyomi.data.updateStrategyAdapter
+import tachiyomi.domain.entries.anime.model.AnimeUpdate
 
 class AnimeRepositoryImpl(
     private val handler: AnimeDatabaseHandler,

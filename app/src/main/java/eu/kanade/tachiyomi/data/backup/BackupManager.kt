@@ -13,11 +13,8 @@ import dataanime.Animes
 import eu.kanade.domain.backup.service.BackupPreferences
 import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
 import eu.kanade.domain.category.manga.interactor.GetMangaCategories
-import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.entries.anime.interactor.GetAnimeFavorites
 import eu.kanade.domain.entries.manga.interactor.GetMangaFavorites
-import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
-import eu.kanade.domain.history.manga.model.MangaHistoryUpdate
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CATEGORY
@@ -72,6 +69,9 @@ import okio.sink
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 import tachiyomi.data.updateStrategyAdapter
+import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
+import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.FileOutputStream

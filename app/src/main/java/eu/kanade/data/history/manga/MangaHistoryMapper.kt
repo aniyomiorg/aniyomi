@@ -1,8 +1,8 @@
 package eu.kanade.data.history.manga
 
-import eu.kanade.domain.entries.manga.model.MangaCover
-import eu.kanade.domain.history.manga.model.MangaHistory
-import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
+import tachiyomi.domain.entries.manga.model.MangaCover
+import tachiyomi.domain.history.manga.model.MangaHistory
+import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
 import java.util.Date
 
 val mangaHistoryMapper: (Long, Long, Date?, Long) -> MangaHistory = { id, chapterId, readAt, readDuration ->

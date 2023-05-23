@@ -1,12 +1,14 @@
 package eu.kanade.tachiyomi.ui.library.manga
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.HelpOutline
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -28,11 +30,9 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.library.manga.LibraryManga
-import eu.kanade.domain.library.model.display
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.DeleteLibraryEntryDialog
@@ -58,6 +58,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.library.model.display
 import uy.kohesive.injekt.injectLazy
 
 object MangaLibraryTab : Tab {
@@ -65,6 +67,7 @@ object MangaLibraryTab : Tab {
     val libraryPreferences: LibraryPreferences by injectLazy()
     private val fromMore = libraryPreferences.bottomNavStyle().get() == 2
 
+    @OptIn(ExperimentalAnimationGraphicsApi::class)
     override val options: TabOptions
         @Composable
         get() {
@@ -87,6 +90,7 @@ object MangaLibraryTab : Tab {
         requestOpenSettingsSheet()
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow

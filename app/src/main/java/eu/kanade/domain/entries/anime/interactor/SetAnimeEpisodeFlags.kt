@@ -1,8 +1,8 @@
 package eu.kanade.domain.entries.anime.interactor
 
 import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.entries.anime.model.AnimeUpdate
 import eu.kanade.domain.entries.anime.repository.AnimeRepository
+import tachiyomi.domain.entries.anime.model.AnimeUpdate
 
 class SetAnimeEpisodeFlags(
     private val animeRepository: AnimeRepository,

@@ -10,7 +10,6 @@ import coil.fetch.SourceResult
 import coil.network.HttpException
 import coil.request.Options
 import coil.request.Parameters
-import eu.kanade.domain.entries.anime.model.AnimeCover
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher.Companion.USE_CUSTOM_COVER
@@ -28,6 +27,7 @@ import okio.Path.Companion.toOkioPath
 import okio.Source
 import okio.buffer
 import okio.sink
+import tachiyomi.domain.entries.anime.model.AnimeCover
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import eu.kanade.domain.entries.anime.model.Anime as DomainAnime

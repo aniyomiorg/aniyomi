@@ -1,12 +1,12 @@
 package eu.kanade.data.history.anime
 
-import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
-import eu.kanade.domain.history.anime.model.AnimeHistoryWithRelations
 import eu.kanade.domain.history.anime.repository.AnimeHistoryRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
+import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
+import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
 
 class AnimeHistoryRepositoryImpl(
     private val handler: AnimeDatabaseHandler,

@@ -1,8 +1,8 @@
 package eu.kanade.domain.category.anime.interactor
 
-import eu.kanade.domain.category.anime.repository.AnimeCategoryRepository
-import eu.kanade.domain.category.model.Category
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
+import tachiyomi.domain.category.model.Category
 
 class GetAnimeCategories(
     private val categoryRepository: AnimeCategoryRepository,

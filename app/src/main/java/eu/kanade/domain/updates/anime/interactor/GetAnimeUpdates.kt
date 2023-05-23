@@ -1,8 +1,8 @@
 package eu.kanade.domain.updates.anime.interactor
 
-import eu.kanade.domain.updates.anime.model.AnimeUpdatesWithRelations
 import eu.kanade.domain.updates.anime.repository.AnimeUpdatesRepository
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import java.util.Calendar
 
 class GetAnimeUpdates(

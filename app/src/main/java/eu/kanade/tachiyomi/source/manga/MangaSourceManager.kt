@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.source.manga
 
 import android.content.Context
-import eu.kanade.domain.source.manga.model.MangaSourceData
 import eu.kanade.domain.source.manga.repository.MangaSourceDataRepository
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
@@ -22,6 +21,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import rx.Observable
+import tachiyomi.domain.source.manga.model.MangaSourceData
 import uy.kohesive.injekt.injectLazy
 import java.util.concurrent.ConcurrentHashMap
 

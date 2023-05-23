@@ -228,7 +228,6 @@
     <string name="error_category_exists">Категорія з таким іменем вже існує!</string>
     <string name="snack_categories_deleted">Категорію видалено</string>
     <string name="dialog_with_checkbox_remove_description">Ця дія видалить дату прочитання розділу. Ви впевнені\?</string>
-    <string name="dialog_with_checkbox_reset">Скинути всіх розділи для цього запису</string>
     <string name="picture_saved">Картинку збережено</string>
     <string name="custom_filter">Користувацький фільтр</string>
     <string name="set_as_cover">Встановити як обкладинку</string>

@@ -1,10 +1,10 @@
 package eu.kanade.tachiyomi.source.manga
 
 import android.graphics.drawable.Drawable
-import eu.kanade.domain.source.manga.model.MangaSourceData
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.source.MangaSource
+import tachiyomi.domain.source.manga.model.MangaSourceData
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

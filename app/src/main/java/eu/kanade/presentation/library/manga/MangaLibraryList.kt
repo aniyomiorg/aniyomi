@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
-import eu.kanade.domain.entries.manga.model.MangaCover
 import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.presentation.animelib.components.DownloadsBadge
 import eu.kanade.presentation.animelib.components.GlobalSearchItem
@@ -18,6 +17,7 @@ import eu.kanade.presentation.components.EntryListItem
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.util.plus
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryItem
+import tachiyomi.domain.entries.manga.model.MangaCover
 
 @Composable
 fun MangaLibraryList(

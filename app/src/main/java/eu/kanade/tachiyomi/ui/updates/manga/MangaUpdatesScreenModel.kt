@@ -19,7 +19,6 @@ import eu.kanade.domain.items.chapter.model.ChapterUpdate
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.domain.updates.manga.interactor.GetMangaUpdates
-import eu.kanade.domain.updates.manga.model.MangaUpdatesWithRelations
 import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.updates.manga.MangaUpdatesUiModel
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
@@ -44,6 +43,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Calendar

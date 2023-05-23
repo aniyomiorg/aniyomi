@@ -1,7 +1,7 @@
 package eu.kanade.domain.history.anime.interactor
 
-import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
 import eu.kanade.domain.history.anime.repository.AnimeHistoryRepository
+import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
 
 class UpsertAnimeHistory(
     private val historyRepository: AnimeHistoryRepository,

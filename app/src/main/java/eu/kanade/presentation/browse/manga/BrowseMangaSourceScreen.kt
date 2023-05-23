@@ -16,7 +16,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import eu.kanade.data.items.chapter.NoChaptersException
 import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceComfortableGrid
 import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceCompactGrid
 import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceList
@@ -27,6 +26,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.manga.LocalMangaSource
 import kotlinx.coroutines.flow.StateFlow
+import tachiyomi.domain.library.model.LibraryDisplayMode
 
 @Composable
 fun BrowseSourceContent(
