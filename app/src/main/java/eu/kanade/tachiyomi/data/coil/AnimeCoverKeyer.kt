@@ -9,7 +9,7 @@ import eu.kanade.tachiyomi.data.database.models.anime.toDomainAnime
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import eu.kanade.domain.entries.anime.model.Anime as DomainAnime
+import tachiyomi.domain.entries.anime.model.Anime as DomainAnime
 
 class AnimeKeyer : Keyer<Anime> {
     override fun key(data: Anime, options: Options): String {

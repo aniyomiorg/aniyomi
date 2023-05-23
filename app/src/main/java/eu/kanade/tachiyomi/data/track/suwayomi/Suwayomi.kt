@@ -10,8 +10,8 @@ import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.source.MangaSource
-import eu.kanade.domain.entries.manga.model.Manga as DomainManga
 import eu.kanade.domain.track.manga.model.MangaTrack as DomainTrack
+import tachiyomi.domain.entries.manga.model.Manga as DomainManga
 
 class Suwayomi(private val context: Context, id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTrackService {
     val api by lazy { TachideskApi() }

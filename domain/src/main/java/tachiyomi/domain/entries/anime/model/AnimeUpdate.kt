@@ -22,3 +22,26 @@ data class AnimeUpdate(
     val updateStrategy: UpdateStrategy? = null,
     val initialized: Boolean? = null,
 )
+
+fun Anime.toAnimeUpdate(): AnimeUpdate {
+    return AnimeUpdate(
+        id = id,
+        source = source,
+        favorite = favorite,
+        lastUpdate = lastUpdate,
+        dateAdded = dateAdded,
+        viewerFlags = viewerFlags,
+        episodeFlags = episodeFlags,
+        coverLastModified = coverLastModified,
+        url = url,
+        title = title,
+        artist = artist,
+        author = author,
+        description = description,
+        genre = genre,
+        status = status,
+        thumbnailUrl = thumbnailUrl,
+        updateStrategy = updateStrategy,
+        initialized = initialized,
+    )
+}

@@ -47,8 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastMap
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.items.chapter.model.Chapter
+import eu.kanade.domain.entries.manga.model.chaptersFiltered
 import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.components.EntryBottomActionMenu
 import eu.kanade.presentation.components.ExtendedFloatingActionButton
@@ -75,6 +74,8 @@ import eu.kanade.tachiyomi.ui.entries.manga.ChapterItem
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreenState
 import eu.kanade.tachiyomi.ui.entries.manga.chapterDecimalFormat
 import eu.kanade.tachiyomi.util.lang.toRelativeString
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.model.Chapter
 import java.text.DateFormat
 import java.util.Date
 

@@ -1,13 +1,13 @@
 package eu.kanade.data.items.episode
 
-import eu.kanade.domain.items.episode.model.Episode
-import eu.kanade.domain.items.episode.model.EpisodeUpdate
 import eu.kanade.domain.items.episode.repository.EpisodeRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toLong
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
+import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.items.episode.model.EpisodeUpdate
 
 class EpisodeRepositoryImpl(
     private val handler: AnimeDatabaseHandler,

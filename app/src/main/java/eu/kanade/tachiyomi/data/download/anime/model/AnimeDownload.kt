@@ -1,13 +1,13 @@
 package eu.kanade.tachiyomi.data.download.anime.model
 
 import eu.kanade.domain.entries.anime.interactor.GetAnime
-import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.items.episode.interactor.GetEpisode
-import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import rx.subjects.PublishSubject
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

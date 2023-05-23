@@ -1,9 +1,9 @@
 package eu.kanade.domain.items.chapter.interactor
 
-import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.domain.items.chapter.repository.ChapterRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
+import tachiyomi.domain.items.chapter.model.Chapter
 
 class GetChapter(
     private val chapterRepository: ChapterRepository,

@@ -30,7 +30,7 @@ import okio.sink
 import tachiyomi.domain.entries.manga.model.MangaCover
 import uy.kohesive.injekt.injectLazy
 import java.io.File
-import eu.kanade.domain.entries.manga.model.Manga as DomainManga
+import tachiyomi.domain.entries.manga.model.Manga as DomainManga
 
 /**
  * A [Fetcher] that fetches cover image for [Manga] object.

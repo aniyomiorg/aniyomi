@@ -9,7 +9,7 @@ import eu.kanade.tachiyomi.data.database.models.manga.toDomainManga
 import tachiyomi.domain.entries.manga.model.MangaCover
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import eu.kanade.domain.entries.manga.model.Manga as DomainManga
+import tachiyomi.domain.entries.manga.model.Manga as DomainManga
 
 class MangaKeyer : Keyer<Manga> {
     override fun key(data: Manga, options: Options): String {

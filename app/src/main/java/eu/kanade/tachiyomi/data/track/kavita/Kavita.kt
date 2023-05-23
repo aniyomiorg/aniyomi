@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.annotation.StringRes
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
@@ -12,6 +11,7 @@ import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.source.MangaSource
+import tachiyomi.domain.entries.manga.model.Manga
 import java.security.MessageDigest
 import eu.kanade.domain.track.manga.model.MangaTrack as DomainTrack
 

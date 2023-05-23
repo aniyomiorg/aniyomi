@@ -1,10 +1,10 @@
 package eu.kanade.tachiyomi.util.chapter
 
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.domain.items.chapter.model.applyFilters
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.ui.entries.manga.ChapterItem
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.model.Chapter
 
 /**
  * Gets next unread chapter with filters and sorting applied

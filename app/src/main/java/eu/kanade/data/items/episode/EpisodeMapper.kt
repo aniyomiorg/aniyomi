@@ -1,6 +1,6 @@
 package eu.kanade.data.items.episode
 
-import eu.kanade.domain.items.episode.model.Episode
+import tachiyomi.domain.items.episode.model.Episode
 
 val episodeMapper: (Long, Long, String, String, String?, Boolean, Boolean, Long, Long, Float, Long, Long, Long) -> Episode =
     { id, animeId, url, name, scanlator, seen, bookmark, lastSecondSeen, totalSeconds, episodeNumber, sourceOrder, dateFetch, dateUpload ->

@@ -1,8 +1,8 @@
 package eu.kanade.domain.items.episode.repository
 
-import eu.kanade.domain.items.episode.model.Episode
-import eu.kanade.domain.items.episode.model.EpisodeUpdate
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.items.episode.model.EpisodeUpdate
 
 interface EpisodeRepository {
 

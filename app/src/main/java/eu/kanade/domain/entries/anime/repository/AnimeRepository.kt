@@ -1,8 +1,8 @@
 package eu.kanade.domain.entries.anime.repository
 
-import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.library.anime.LibraryAnime
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 
 interface AnimeRepository {

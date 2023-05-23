@@ -10,13 +10,13 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.manga.interactor.GetManga
 import eu.kanade.domain.entries.manga.interactor.SetMangaViewerFlags
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.entries.manga.model.isLocal
+import eu.kanade.domain.entries.manga.model.orientationType
+import eu.kanade.domain.entries.manga.model.readingModeType
 import eu.kanade.domain.history.manga.interactor.GetNextChapters
 import eu.kanade.domain.history.manga.interactor.UpsertMangaHistory
 import eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId
 import eu.kanade.domain.items.chapter.interactor.UpdateChapter
-import eu.kanade.domain.items.chapter.model.ChapterUpdate
 import eu.kanade.domain.items.chapter.model.toDbChapter
 import eu.kanade.domain.track.manga.interactor.GetMangaTracks
 import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
@@ -76,7 +76,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
+import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
+import tachiyomi.domain.items.chapter.model.ChapterUpdate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date

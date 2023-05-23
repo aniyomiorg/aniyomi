@@ -1,11 +1,11 @@
 package eu.kanade.domain.entries.manga.interactor
 
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.entries.manga.repository.MangaRepository
-import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.domain.items.chapter.repository.ChapterRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.model.Chapter
 
 class GetMangaWithChapters(
     private val mangaRepository: MangaRepository,

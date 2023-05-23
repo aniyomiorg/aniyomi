@@ -30,7 +30,7 @@ import okio.sink
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import uy.kohesive.injekt.injectLazy
 import java.io.File
-import eu.kanade.domain.entries.anime.model.Anime as DomainAnime
+import tachiyomi.domain.entries.anime.model.Anime as DomainAnime
 
 /**
  * A [Fetcher] that fetches cover image for [Anime] object.

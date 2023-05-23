@@ -3,8 +3,8 @@ package eu.kanade.domain.history.anime.interactor
 import eu.kanade.domain.entries.anime.interactor.GetAnime
 import eu.kanade.domain.history.anime.repository.AnimeHistoryRepository
 import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.util.episode.getEpisodeSort
+import tachiyomi.domain.items.episode.model.Episode
 import kotlin.math.max
 
 class GetNextEpisodes(

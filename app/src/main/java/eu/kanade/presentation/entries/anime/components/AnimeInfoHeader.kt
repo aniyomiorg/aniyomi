@@ -72,7 +72,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowRow
-import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.presentation.components.ItemCover
 import eu.kanade.presentation.components.TextButton
 import eu.kanade.presentation.entries.DotSeparatorText
@@ -82,6 +81,7 @@ import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.util.system.copyToClipboard
+import tachiyomi.domain.entries.anime.model.Anime
 import kotlin.math.roundToInt
 
 private val whitespaceLineRegex = Regex("[\\r\\n]{2,}", setOf(RegexOption.MULTILINE))

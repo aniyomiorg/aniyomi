@@ -1,8 +1,8 @@
 package eu.kanade.data.entries.anime
 
-import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
+import tachiyomi.domain.entries.anime.model.Anime
 
 val animeMapper: (Long, Long, String, String?, String?, String?, List<String>?, String, Long, String?, Boolean, Long?, Long?, Boolean, Long, Long, Long, Long, UpdateStrategy) -> Anime =
     { id, source, url, artist, author, description, genre, title, status, thumbnailUrl, favorite, lastUpdate, _, initialized, viewerFlags, episodeFlags, coverLastModified, dateAdded, updateStrategy ->

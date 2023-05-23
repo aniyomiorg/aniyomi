@@ -1,4 +1,4 @@
-package eu.kanade.domain.items.episode.model
+package tachiyomi.domain.items.episode.model
 
 data class EpisodeUpdate(
     val id: Long,

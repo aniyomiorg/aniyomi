@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.tachiyomi.data.database.models.manga.ChapterImpl
 import eu.kanade.tachiyomi.data.database.models.manga.MangaImpl
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrackImpl
@@ -8,6 +7,7 @@ import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
+import tachiyomi.domain.entries.manga.model.Manga
 
 @Suppress("DEPRECATION")
 @Serializable

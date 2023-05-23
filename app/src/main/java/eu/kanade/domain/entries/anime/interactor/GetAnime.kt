@@ -1,10 +1,10 @@
 package eu.kanade.domain.entries.anime.interactor
 
-import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.entries.anime.repository.AnimeRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
+import tachiyomi.domain.entries.anime.model.Anime
 
 class GetAnime(
     private val animeRepository: AnimeRepository,

@@ -1,6 +1,6 @@
 package eu.kanade.domain.items.episode.interactor
 
-import eu.kanade.domain.items.episode.model.Episode
+import tachiyomi.domain.items.episode.model.Episode
 
 class ShouldUpdateDbEpisode {
 

@@ -1,6 +1,6 @@
 package eu.kanade.domain.items.chapter.interactor
 
-import eu.kanade.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.chapter.model.Chapter
 
 class ShouldUpdateDbChapter {
 

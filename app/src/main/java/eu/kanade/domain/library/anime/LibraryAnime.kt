@@ -1,6 +1,6 @@
 package eu.kanade.domain.library.anime
 
-import eu.kanade.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.model.Anime
 
 data class LibraryAnime(
     val anime: Anime,

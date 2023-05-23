@@ -77,8 +77,8 @@ import uy.kohesive.injekt.api.get
 import java.io.FileOutputStream
 import java.util.Date
 import kotlin.math.max
-import eu.kanade.domain.entries.anime.model.Anime as DomainAnime
-import eu.kanade.domain.entries.manga.model.Manga as DomainManga
+import tachiyomi.domain.entries.anime.model.Anime as DomainAnime
+import tachiyomi.domain.entries.manga.model.Manga as DomainManga
 
 class BackupManager(
     private val context: Context,
