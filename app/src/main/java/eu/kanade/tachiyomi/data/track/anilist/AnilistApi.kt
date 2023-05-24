@@ -7,7 +7,7 @@ import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.POST
-import eu.kanade.tachiyomi.network.await
+import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.interceptor.rateLimit
 import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.network.parseAs
@@ -61,7 +61,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     body = payload.toString().toRequestBody(jsonMime),
                 ),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     track.library_id =
@@ -101,7 +101,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                 }
             }
             authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
-                .await()
+                .awaitSuccess()
             track
         }
     }
@@ -131,7 +131,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     body = payload.toString().toRequestBody(jsonMime),
                 ),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     track.library_id =
@@ -171,7 +171,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                 }
             }
             authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
-                .await()
+                .awaitSuccess()
             track
         }
     }
@@ -215,7 +215,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     body = payload.toString().toRequestBody(jsonMime),
                 ),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let { response ->
                     val data = response["data"]!!.jsonObject
@@ -266,7 +266,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     body = payload.toString().toRequestBody(jsonMime),
                 ),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let { response ->
                     val data = response["data"]!!.jsonObject
@@ -334,7 +334,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     body = payload.toString().toRequestBody(jsonMime),
                 ),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let { response ->
                     val data = response["data"]!!.jsonObject
@@ -402,7 +402,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     body = payload.toString().toRequestBody(jsonMime),
                 ),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let { response ->
                     val data = response["data"]!!.jsonObject
@@ -448,7 +448,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     body = payload.toString().toRequestBody(jsonMime),
                 ),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     val data = it["data"]!!.jsonObject

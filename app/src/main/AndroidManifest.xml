@@ -256,7 +256,7 @@
             android:exported="false" />
 
         <receiver
-            android:name=".glance.manga.MangaUpdatesGridGlanceReceiver"
+            android:name="tachiyomi.presentation.widget.entries.manga.MangaUpdatesGridGlanceReceiver"
             android:enabled="@bool/glance_appwidget_available"
             android:exported="false"
             android:label="@string/label_recent_updates">

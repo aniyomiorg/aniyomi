@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.glance
+package tachiyomi.presentation.widget
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
@@ -11,7 +11,6 @@ import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
 import androidx.glance.layout.fillMaxSize
-import eu.kanade.tachiyomi.R
 
 fun GlanceModifier.appWidgetBackgroundRadius(): GlanceModifier {
     return this.cornerRadius(R.dimen.appwidget_background_radius)

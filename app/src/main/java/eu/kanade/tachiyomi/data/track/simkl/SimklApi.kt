@@ -7,7 +7,7 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
-import eu.kanade.tachiyomi.network.await
+import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.network.parseAs
 import eu.kanade.tachiyomi.util.lang.withIOContext
@@ -61,7 +61,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         }.toString().toRequestBody(jsonMime)
         authClient.newCall(
             POST("$apiUrl/sync/add-to-list", body = payload),
-        ).await()
+        ).awaitSuccess()
     }
 
     private suspend fun updateRating(track: AnimeTrack, mediaType: String) {
@@ -79,11 +79,11 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         if (track.score == 0F) {
             authClient.newCall(
                 POST("$apiUrl/sync/ratings/remove", body = payload),
-            ).await()
+            ).awaitSuccess()
         } else {
             authClient.newCall(
                 POST("$apiUrl/sync/ratings", body = payload),
-            ).await()
+            ).awaitSuccess()
         }
     }
 
@@ -91,11 +91,11 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         // first remove
         authClient.newCall(
             POST("$apiUrl/sync/history/remove", body = buildProgressObject(track, false)),
-        ).await()
+        ).awaitSuccess()
         // then add again
         authClient.newCall(
             POST("$apiUrl/sync/history", body = buildProgressObject(track, true)),
-        ).await()
+        ).awaitSuccess()
     }
 
     private fun buildProgressObject(track: AnimeTrack, add: Boolean = true) = buildJsonObject {
@@ -150,7 +150,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                 .appendQueryParameter("client_id", clientId)
                 .build()
             client.newCall(GET(searchUrl.toString()))
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonArray>()
                 .let { response ->
                     response.map {
@@ -210,7 +210,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
             val foundAnime = authClient.newCall(
                 POST("$apiUrl/sync/watched", body = payload),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonArray>()
                 .firstOrNull()?.jsonObject ?: return@withIOContext null
 
@@ -227,7 +227,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
 
             val typeName = if (type == "movies") "movie" else "show"
             val listAnime = authClient.newCall(GET(url.toString()))
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()[queryType]!!.jsonArray
                 .firstOrNull {
                     it.jsonObject[typeName]
@@ -243,7 +243,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
     fun getCurrentUser(): Int {
         return runBlocking {
             authClient.newCall(GET("$apiUrl/users/settings"))
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     it["account"]!!.jsonObject["id"]!!.jsonPrimitive.int
@@ -254,7 +254,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
     suspend fun accessToken(code: String): OAuth {
         return withIOContext {
             client.newCall(accessTokenRequest(code))
-                .await()
+                .awaitSuccess()
                 .parseAs()
         }
     }

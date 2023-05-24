@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.glance.anime
+package tachiyomi.presentation.widget.entries.manga
 
 import android.app.Application
 import android.content.Intent
@@ -40,29 +40,27 @@ import coil.request.ImageRequest
 import coil.size.Precision
 import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
-import eu.kanade.tachiyomi.glance.ContainerModifier
-import eu.kanade.tachiyomi.glance.CoverHeight
-import eu.kanade.tachiyomi.glance.CoverWidth
-import eu.kanade.tachiyomi.glance.appWidgetInnerRadius
-import eu.kanade.tachiyomi.glance.calculateRowAndColumnCount
-import eu.kanade.tachiyomi.glance.stringResource
-import eu.kanade.tachiyomi.ui.main.MainActivity
-import eu.kanade.tachiyomi.util.Constants
 import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.dpToPx
 import kotlinx.coroutines.MainScope
-import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
-import tachiyomi.domain.entries.anime.model.AnimeCover
+import tachiyomi.data.handlers.manga.MangaDatabaseHandler
+import tachiyomi.domain.entries.manga.model.MangaCover
+import tachiyomi.presentation.widget.ContainerModifier
+import tachiyomi.presentation.widget.CoverHeight
+import tachiyomi.presentation.widget.CoverWidth
+import tachiyomi.presentation.widget.R
+import tachiyomi.presentation.widget.appWidgetInnerRadius
+import tachiyomi.presentation.widget.calculateRowAndColumnCount
+import tachiyomi.presentation.widget.stringResource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import view.AnimeupdatesView
+import view.UpdatesView
 import java.util.Calendar
 import java.util.Date
 
-class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
+class MangaUpdatesGridGlanceWidget : GlanceAppWidget() {
     private val app: Application by injectLazy()
     private val preferences: SecurityPreferences by injectLazy()
 
@@ -84,7 +82,8 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
 
     @Composable
     private fun WidgetNotAvailable() {
-        val intent = Intent(LocalContext.current, MainActivity::class.java).apply {
+        val clazz = Class.forName("eu.kanade.tachiyomi.ui.main.MainActivity")
+        val intent = Intent(LocalContext.current, clazz).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         Box(
@@ -131,23 +130,20 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            coverRow.forEach { (animeId, cover) ->
+                            coverRow.forEach { (mangaId, cover) ->
                                 Box(
                                     modifier = GlanceModifier
                                         .padding(horizontal = 3.dp),
                                     contentAlignment = Alignment.Center,
                                 ) {
-                                    val intent = Intent(
-                                        LocalContext.current,
-                                        MainActivity::class.java,
-                                    ).apply {
-                                        action = MainActivity.SHORTCUT_ANIME
-                                        putExtra(Constants.ANIME_EXTRA, animeId)
+                                    val intent = Intent(LocalContext.current, Class.forName("eu.kanade.tachiyomi.ui.main.MainActivity")).apply {
+                                        action = "eu.kanade.tachiyomi.SHOW_MANGA"
+                                        putExtra("manga", mangaId)
                                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
                                         // https://issuetracker.google.com/issues/238793260
-                                        addCategory(animeId.toString())
+                                        addCategory(mangaId.toString())
                                     }
                                     Cover(
                                         modifier = GlanceModifier.clickable(
@@ -197,7 +193,7 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
         }
     }
 
-    fun loadData(list: List<AnimeupdatesView>? = null) {
+    fun loadData(list: List<UpdatesView>? = null) {
         coroutineScope.launchIO {
             // Don't show anything when lock is active
             if (preferences.useAuthenticator().get()) {
@@ -206,12 +202,12 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
             }
 
             val manager = GlanceAppWidgetManager(app)
-            val ids = manager.getGlanceIds(this@AnimeUpdatesGridGlanceWidget::class.java)
+            val ids = manager.getGlanceIds(this@MangaUpdatesGridGlanceWidget::class.java)
             if (ids.isEmpty()) return@launchIO
 
             val processList = list
-                ?: Injekt.get<AnimeDatabaseHandler>()
-                    .awaitList { animeupdatesViewQueries.animeupdates(after = DateLimit.timeInMillis) }
+                ?: Injekt.get<MangaDatabaseHandler>()
+                    .awaitList { updatesViewQueries.updates(after = DateLimit.timeInMillis) }
             val (rowCount, columnCount) = ids
                 .flatMap { manager.getAppWidgetSizes(it) }
                 .maxBy { it.height.value * it.width.value }
@@ -222,23 +218,23 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
         }
     }
 
-    private fun prepareList(processList: List<AnimeupdatesView>, take: Int): List<Pair<Long, Bitmap?>> {
+    private fun prepareList(processList: List<UpdatesView>, take: Int): List<Pair<Long, Bitmap?>> {
         // Resize to cover size
         val widthPx = CoverWidth.value.toInt().dpToPx
         val heightPx = CoverHeight.value.toInt().dpToPx
         val roundPx = app.resources.getDimension(R.dimen.appwidget_inner_radius)
         return processList
-            .distinctBy { it.animeId }
+            .distinctBy { it.mangaId }
             .take(take)
-            .map { animeupdatesView ->
+            .map { updatesView ->
                 val request = ImageRequest.Builder(app)
                     .data(
-                        AnimeCover(
-                            animeId = animeupdatesView.animeId,
-                            sourceId = animeupdatesView.source,
-                            isAnimeFavorite = animeupdatesView.favorite,
-                            url = animeupdatesView.thumbnailUrl,
-                            lastModified = animeupdatesView.coverLastModified,
+                        MangaCover(
+                            mangaId = updatesView.mangaId,
+                            sourceId = updatesView.source,
+                            isMangaFavorite = updatesView.favorite,
+                            url = updatesView.thumbnailUrl,
+                            lastModified = updatesView.coverLastModified,
                         ),
                     )
                     .memoryCachePolicy(CachePolicy.DISABLED)
@@ -253,7 +249,7 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
                         }
                     }
                     .build()
-                Pair(animeupdatesView.animeId, app.imageLoader.executeBlocking(request).drawable?.toBitmap())
+                Pair(updatesView.mangaId, app.imageLoader.executeBlocking(request).drawable?.toBitmap())
             }
     }
 

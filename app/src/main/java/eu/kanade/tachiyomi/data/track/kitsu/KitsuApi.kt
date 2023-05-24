@@ -7,7 +7,7 @@ import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
-import eu.kanade.tachiyomi.network.await
+import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.network.parseAs
 import eu.kanade.tachiyomi.util.lang.withIOContext
@@ -69,7 +69,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                     body = data.toString().toRequestBody("application/vnd.api+json".toMediaType()),
                 ),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     track.media_id = it["data"]!!.jsonObject["id"]!!.jsonPrimitive.long
@@ -114,7 +114,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                     body = data.toString().toRequestBody("application/vnd.api+json".toMediaType()),
                 ),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     track.media_id = it["data"]!!.jsonObject["id"]!!.jsonPrimitive.long
@@ -151,7 +151,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                     .patch(data.toString().toRequestBody("application/vnd.api+json".toMediaType()))
                     .build(),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     track
@@ -187,7 +187,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                     .patch(data.toString().toRequestBody("application/vnd.api+json".toMediaType()))
                     .build(),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     track
@@ -198,7 +198,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
     suspend fun search(query: String): List<MangaTrackSearch> {
         return withIOContext {
             authClient.newCall(GET(algoliaKeyUrl))
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     val key = it["media"]!!.jsonObject["key"]!!.jsonPrimitive.content
@@ -210,7 +210,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
     suspend fun searchAnime(query: String): List<AnimeTrackSearch> {
         return withIOContext {
             authClient.newCall(GET(algoliaKeyUrl))
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     val key = it["media"]!!.jsonObject["key"]!!.jsonPrimitive.content
@@ -237,7 +237,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                     body = jsonObject.toString().toRequestBody(jsonMime),
                 ),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     it["hits"]!!.jsonArray
@@ -266,7 +266,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                     body = jsonObject.toString().toRequestBody(jsonMime),
                 ),
             )
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     it["hits"]!!.jsonArray
@@ -284,7 +284,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                 .appendQueryParameter("include", "manga")
                 .build()
             authClient.newCall(GET(url.toString()))
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     val data = it["data"]!!.jsonArray
@@ -305,7 +305,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                 .appendQueryParameter("include", "anime")
                 .build()
             authClient.newCall(GET(url.toString()))
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     val data = it["data"]!!.jsonArray
@@ -326,7 +326,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                 .appendQueryParameter("include", "manga")
                 .build()
             authClient.newCall(GET(url.toString()))
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     val data = it["data"]!!.jsonArray
@@ -347,7 +347,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                 .appendQueryParameter("include", "anime")
                 .build()
             authClient.newCall(GET(url.toString()))
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     val data = it["data"]!!.jsonArray
@@ -371,7 +371,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                 .add("client_secret", clientSecret)
                 .build()
             client.newCall(POST(loginUrl, body = formBody))
-                .await()
+                .awaitSuccess()
                 .parseAs()
         }
     }
@@ -382,7 +382,7 @@ class KitsuApi(private val client: OkHttpClient, interceptor: KitsuInterceptor) 
                 .encodedQuery("filter[self]=true")
                 .build()
             authClient.newCall(GET(url.toString()))
-                .await()
+                .awaitSuccess()
                 .parseAs<JsonObject>()
                 .let {
                     it["data"]!!.jsonArray[0].jsonObject["id"]!!.jsonPrimitive.content

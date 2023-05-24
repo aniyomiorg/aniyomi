@@ -23,13 +23,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 import logcat.LogPriority
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
@@ -277,7 +276,7 @@ class MangaDownloadCache(
             var sources = getSources()
 
             // Try to wait until extensions and sources have loaded
-            withTimeout(30.seconds) {
+            withTimeoutOrNull(30.seconds) {
                 while (!extensionManager.isInitialized) {
                     delay(2.seconds)
                 }

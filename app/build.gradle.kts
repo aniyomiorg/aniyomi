@@ -144,6 +144,8 @@ dependencies {
     implementation(project(":source-api"))
     implementation(project(":data"))
     implementation(project(":domain"))
+    implementation(project(":presentation-core"))
+    implementation(project(":presentation-widget"))
 
     // Compose
     implementation(platform(compose.bom))
@@ -182,7 +184,6 @@ dependencies {
     implementation(androidx.splashscreen)
     implementation(androidx.recyclerview)
     implementation(androidx.viewpager)
-    implementation(androidx.glance)
     implementation(androidx.profileinstaller)
 
     implementation(androidx.bundles.lifecycle)
