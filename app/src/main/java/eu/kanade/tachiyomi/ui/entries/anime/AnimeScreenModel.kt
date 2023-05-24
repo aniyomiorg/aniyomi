@@ -12,7 +12,6 @@ import eu.kanade.core.prefs.CheckboxState
 import eu.kanade.core.prefs.asState
 import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.core.util.addOrRemove
-import eu.kanade.data.items.episode.NoEpisodesException
 import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
 import eu.kanade.domain.category.anime.interactor.SetAnimeCategories
 import eu.kanade.domain.download.service.DownloadPreferences
@@ -73,6 +72,7 @@ import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
+import tachiyomi.domain.items.episode.model.NoEpisodesException
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DecimalFormat

@@ -1,8 +1,8 @@
 package eu.kanade.domain.history.anime.interactor
 
-import eu.kanade.domain.history.anime.repository.AnimeHistoryRepository
 import kotlinx.coroutines.flow.Flow
 import tachiyomi.domain.history.anime.model.AnimeHistoryWithRelations
+import tachiyomi.domain.history.anime.repository.AnimeHistoryRepository
 
 class GetAnimeHistory(
     private val repository: AnimeHistoryRepository,

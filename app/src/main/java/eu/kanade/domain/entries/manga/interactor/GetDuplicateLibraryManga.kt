@@ -1,7 +1,7 @@
 package eu.kanade.domain.entries.manga.interactor
 
-import eu.kanade.domain.entries.manga.repository.MangaRepository
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.entries.manga.repository.MangaRepository
 
 class GetDuplicateLibraryManga(
     private val mangaRepository: MangaRepository,

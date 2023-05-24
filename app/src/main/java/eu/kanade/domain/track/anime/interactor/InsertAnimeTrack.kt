@@ -1,9 +1,9 @@
 package eu.kanade.domain.track.anime.interactor
 
-import eu.kanade.domain.track.anime.model.AnimeTrack
-import eu.kanade.domain.track.anime.repository.AnimeTrackRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
+import tachiyomi.domain.track.anime.model.AnimeTrack
+import tachiyomi.domain.track.anime.repository.AnimeTrackRepository
 
 class InsertAnimeTrack(
     private val animetrackRepository: AnimeTrackRepository,

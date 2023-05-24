@@ -15,7 +15,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import eu.kanade.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
 
 interface AnimeTrackService {
 

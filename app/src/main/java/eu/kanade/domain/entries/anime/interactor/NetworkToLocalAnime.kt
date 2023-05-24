@@ -1,7 +1,7 @@
 package eu.kanade.domain.entries.anime.interactor
 
-import eu.kanade.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.repository.AnimeRepository
 
 class NetworkToLocalAnime(
     private val animeRepository: AnimeRepository,

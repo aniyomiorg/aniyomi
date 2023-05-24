@@ -48,10 +48,10 @@ data class BrowseTab(
 
         // Hoisted for extensions tab's search bar
         val mangaExtensionsScreenModel = rememberScreenModel { MangaExtensionsScreenModel() }
-        val mangaExtensionsQuery by mangaExtensionsScreenModel.query.collectAsState()
+        val mangaExtensionsState by mangaExtensionsScreenModel.state.collectAsState()
 
         val animeExtensionsScreenModel = rememberScreenModel { AnimeExtensionsScreenModel() }
-        val animeExtensionsQuery by animeExtensionsScreenModel.query.collectAsState()
+        val animeExtensionsState by animeExtensionsScreenModel.state.collectAsState()
 
         TabbedScreen(
             titleRes = R.string.browse,
@@ -64,9 +64,9 @@ data class BrowseTab(
                 migrateMangaSourceTab(),
             ),
             startIndex = 2.takeIf { toExtensions },
-            mangaSearchQuery = mangaExtensionsQuery,
+            mangaSearchQuery = mangaExtensionsState.searchQuery,
             onChangeMangaSearchQuery = mangaExtensionsScreenModel::search,
-            animeSearchQuery = animeExtensionsQuery,
+            animeSearchQuery = animeExtensionsState.searchQuery,
             onChangeAnimeSearchQuery = animeExtensionsScreenModel::search,
             scrollable = true,
         )

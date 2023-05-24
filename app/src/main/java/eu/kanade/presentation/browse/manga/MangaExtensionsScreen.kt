@@ -58,7 +58,7 @@ import eu.kanade.tachiyomi.util.system.LocaleHelper
 fun MangaExtensionScreen(
     state: MangaExtensionsState,
     contentPadding: PaddingValues,
-    searchQuery: String? = null,
+    searchQuery: String?,
     onLongClickItem: (MangaExtension) -> Unit,
     onClickItemCancel: (MangaExtension) -> Unit,
     onInstallExtension: (MangaExtension.Available) -> Unit,

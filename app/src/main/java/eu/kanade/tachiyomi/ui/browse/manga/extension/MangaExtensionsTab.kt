@@ -21,7 +21,6 @@ fun mangaExtensionsTab(
 ): TabContent {
     val navigator = LocalNavigator.currentOrThrow
     val state by extensionsScreenModel.state.collectAsState()
-    val searchQuery by extensionsScreenModel.query.collectAsState()
 
     return TabContent(
         titleRes = R.string.label_mangaextensions,
@@ -38,7 +37,7 @@ fun mangaExtensionsTab(
             MangaExtensionScreen(
                 state = state,
                 contentPadding = contentPadding,
-                searchQuery = searchQuery,
+                searchQuery = state.searchQuery,
                 onLongClickItem = { extension ->
                     when (extension) {
                         is MangaExtension.Available -> extensionsScreenModel.installExtension(extension)

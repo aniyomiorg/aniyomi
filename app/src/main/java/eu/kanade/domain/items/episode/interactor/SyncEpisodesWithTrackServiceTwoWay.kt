@@ -1,13 +1,13 @@
 package eu.kanade.domain.items.episode.interactor
 
 import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
-import eu.kanade.domain.track.anime.model.AnimeTrack
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.toEpisodeUpdate
+import tachiyomi.domain.track.anime.model.AnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

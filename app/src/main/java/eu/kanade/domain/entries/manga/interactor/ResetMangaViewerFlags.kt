@@ -1,6 +1,6 @@
 package eu.kanade.domain.entries.manga.interactor
 
-import eu.kanade.domain.entries.manga.repository.MangaRepository
+import tachiyomi.domain.entries.manga.repository.MangaRepository
 
 class ResetMangaViewerFlags(
     private val mangaRepository: MangaRepository,

@@ -24,9 +24,9 @@ import eu.kanade.domain.entries.anime.model.isLocal
 import eu.kanade.domain.history.anime.interactor.GetNextEpisodes
 import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
-import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.anime.interactor.GetTracksPerAnime
+import eu.kanade.presentation.components.SEARCH_DEBOUNCE_MILLIS
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.library.LibraryToolbarTitle
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -46,6 +46,7 @@ import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -57,6 +58,7 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.model.LibrarySort
 import tachiyomi.domain.library.model.sort
 import uy.kohesive.injekt.Injekt
@@ -93,7 +95,7 @@ class AnimeLibraryScreenModel(
     init {
         coroutineScope.launchIO {
             combine(
-                state.map { it.searchQuery }.distinctUntilChanged(),
+                state.map { it.searchQuery }.debounce(SEARCH_DEBOUNCE_MILLIS),
                 getLibraryFlow(),
                 getTracksPerAnime.subscribe(),
                 getTrackingFilterFlow(),

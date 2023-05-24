@@ -1,8 +1,8 @@
 package eu.kanade.domain.entries.anime.interactor
 
-import eu.kanade.domain.entries.anime.repository.AnimeRepository
 import kotlinx.coroutines.flow.Flow
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.repository.AnimeRepository
 
 class GetAnimeFavorites(
     private val animeRepository: AnimeRepository,

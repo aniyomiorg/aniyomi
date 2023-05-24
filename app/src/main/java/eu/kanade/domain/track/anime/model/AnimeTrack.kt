@@ -1,31 +1,16 @@
 package eu.kanade.domain.track.anime.model
 
+import tachiyomi.domain.track.anime.model.AnimeTrack
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack as DbAnimeTrack
 
-data class AnimeTrack(
-    val id: Long,
-    val animeId: Long,
-    val syncId: Long,
-    val remoteId: Long,
-    val libraryId: Long?,
-    val title: String,
-    val lastEpisodeSeen: Double,
-    val totalEpisodes: Long,
-    val status: Long,
-    val score: Float,
-    val remoteUrl: String,
-    val startDate: Long,
-    val finishDate: Long,
-) {
-    fun copyPersonalFrom(other: AnimeTrack): AnimeTrack {
-        return this.copy(
-            lastEpisodeSeen = other.lastEpisodeSeen,
-            score = other.score,
-            status = other.status,
-            startDate = other.startDate,
-            finishDate = other.finishDate,
-        )
-    }
+fun AnimeTrack.copyPersonalFrom(other: AnimeTrack): AnimeTrack {
+    return this.copy(
+        lastEpisodeSeen = other.lastEpisodeSeen,
+        score = other.score,
+        status = other.status,
+        startDate = other.startDate,
+        finishDate = other.finishDate,
+    )
 }
 
 fun AnimeTrack.toDbTrack(): DbAnimeTrack = eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack.create(syncId).also {

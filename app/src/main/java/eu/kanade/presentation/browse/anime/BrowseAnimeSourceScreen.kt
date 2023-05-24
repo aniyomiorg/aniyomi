@@ -14,7 +14,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import eu.kanade.data.items.episode.NoEpisodesException
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceComfortableGrid
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceCompactGrid
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceList
@@ -26,6 +25,7 @@ import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import kotlinx.coroutines.flow.StateFlow
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.model.LibraryDisplayMode
 
 @Composable

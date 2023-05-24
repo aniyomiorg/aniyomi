@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.browse.anime.migration.sources
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.source.anime.interactor.GetAnimeSourcesWithFavoriteCount
-import eu.kanade.domain.source.anime.model.AnimeSource
 import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -16,6 +15,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import logcat.LogPriority
+import tachiyomi.domain.source.anime.model.AnimeSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

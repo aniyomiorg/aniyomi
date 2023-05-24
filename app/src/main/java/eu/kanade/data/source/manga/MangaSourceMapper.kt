@@ -1,9 +1,9 @@
 package eu.kanade.data.source.manga
 
-import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import tachiyomi.domain.source.manga.model.MangaSourceData
+import tachiyomi.domain.source.manga.model.Source
 
 val mangaSourceMapper: (eu.kanade.tachiyomi.source.MangaSource) -> Source = { source ->
     Source(

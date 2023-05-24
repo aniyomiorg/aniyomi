@@ -1,9 +1,9 @@
 package eu.kanade.data.source.anime
 
-import eu.kanade.domain.source.anime.repository.AnimeSourceDataRepository
 import kotlinx.coroutines.flow.Flow
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.domain.source.anime.model.AnimeSourceData
+import tachiyomi.domain.source.anime.repository.AnimeSourceDataRepository
 
 class AnimeSourceDataRepositoryImpl(
     private val handler: AnimeDatabaseHandler,

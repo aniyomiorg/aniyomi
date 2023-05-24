@@ -42,7 +42,6 @@ import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwo
 import eu.kanade.domain.track.manga.interactor.DeleteMangaTrack
 import eu.kanade.domain.track.manga.interactor.GetMangaTracks
 import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
-import eu.kanade.domain.track.manga.model.MangaTrack
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.domain.ui.UiPreferences
@@ -73,6 +72,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.domain.track.manga.model.MangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.time.Instant

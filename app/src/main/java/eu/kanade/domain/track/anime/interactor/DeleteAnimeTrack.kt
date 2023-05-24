@@ -1,8 +1,8 @@
 package eu.kanade.domain.track.anime.interactor
 
-import eu.kanade.domain.track.anime.repository.AnimeTrackRepository
 import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
+import tachiyomi.domain.track.anime.repository.AnimeTrackRepository
 
 class DeleteAnimeTrack(
     private val trackRepository: AnimeTrackRepository,

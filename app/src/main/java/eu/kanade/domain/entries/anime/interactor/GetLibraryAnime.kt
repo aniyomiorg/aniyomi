@@ -1,8 +1,8 @@
 package eu.kanade.domain.entries.anime.interactor
 
-import eu.kanade.domain.entries.anime.repository.AnimeRepository
-import eu.kanade.domain.library.anime.LibraryAnime
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.domain.entries.anime.repository.AnimeRepository
+import tachiyomi.domain.library.anime.LibraryAnime
 
 class GetLibraryAnime(
     private val animeRepository: AnimeRepository,

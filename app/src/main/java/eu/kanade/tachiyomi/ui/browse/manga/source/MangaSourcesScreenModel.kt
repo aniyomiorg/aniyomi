@@ -7,8 +7,6 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.manga.interactor.GetEnabledMangaSources
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSource
 import eu.kanade.domain.source.manga.interactor.ToggleMangaSourcePin
-import eu.kanade.domain.source.manga.model.Pin
-import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.browse.manga.MangaSourceUiModel
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -21,6 +19,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import logcat.LogPriority
+import tachiyomi.domain.source.manga.model.Pin
+import tachiyomi.domain.source.manga.model.Source
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.TreeMap

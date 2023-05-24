@@ -21,8 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.source.manga.model.Pin
-import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.presentation.browse.manga.components.BaseMangaSourceItem
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.LoadingScreen
@@ -36,6 +34,8 @@ import eu.kanade.tachiyomi.source.manga.LocalMangaSource
 import eu.kanade.tachiyomi.ui.browse.manga.source.MangaSourcesState
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel.Listing
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import tachiyomi.domain.source.manga.model.Pin
+import tachiyomi.domain.source.manga.model.Source
 
 @Composable
 fun MangaSourcesScreen(

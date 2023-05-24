@@ -60,7 +60,7 @@ import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.manga.model.copyFrom
 import eu.kanade.tachiyomi.util.system.hasPermission
 import eu.kanade.tachiyomi.util.system.logcat
-import eu.kanade.tachiyomi.util.system.toLong
+import eu.kanade.tachiyomi.util.toLong
 import kotlinx.serialization.protobuf.ProtoBuf
 import logcat.LogPriority
 import okio.buffer

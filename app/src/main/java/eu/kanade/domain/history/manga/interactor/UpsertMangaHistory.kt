@@ -1,7 +1,7 @@
 package eu.kanade.domain.history.manga.interactor
 
-import eu.kanade.domain.history.manga.repository.MangaHistoryRepository
 import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
+import tachiyomi.domain.history.manga.repository.MangaHistoryRepository
 
 class UpsertMangaHistory(
     private val historyRepository: MangaHistoryRepository,

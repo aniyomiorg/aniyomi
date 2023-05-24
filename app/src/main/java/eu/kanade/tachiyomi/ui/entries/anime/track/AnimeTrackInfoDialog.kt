@@ -42,7 +42,6 @@ import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwo
 import eu.kanade.domain.track.anime.interactor.DeleteAnimeTrack
 import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
 import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
-import eu.kanade.domain.track.anime.model.AnimeTrack
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.domain.ui.UiPreferences
@@ -73,6 +72,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.domain.track.anime.model.AnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.time.Instant

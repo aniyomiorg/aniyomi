@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
-import eu.kanade.data.items.episode.NoEpisodesException
 import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.anime.interactor.GetAnime
@@ -17,7 +16,6 @@ import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
-import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
 import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
@@ -68,6 +66,8 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.items.episode.model.NoEpisodesException
+import tachiyomi.domain.library.anime.LibraryAnime
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File

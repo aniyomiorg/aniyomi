@@ -14,7 +14,7 @@ import eu.kanade.tachiyomi.util.system.toast
 import logcat.LogPriority
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import eu.kanade.domain.track.manga.model.MangaTrack as DomainTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
 interface MangaTrackService {
 

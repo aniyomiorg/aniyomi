@@ -15,8 +15,8 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
-import eu.kanade.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
-import eu.kanade.domain.track.manga.model.MangaTrack as DomainTrack
+import tachiyomi.domain.track.anime.model.AnimeTrack as DomainAnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
 class Anilist(private val context: Context, id: Long) : TrackService(id), MangaTrackService, AnimeTrackService {
 

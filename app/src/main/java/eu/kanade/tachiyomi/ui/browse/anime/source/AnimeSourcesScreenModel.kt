@@ -7,8 +7,6 @@ import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.anime.interactor.GetEnabledAnimeSources
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSource
 import eu.kanade.domain.source.anime.interactor.ToggleAnimeSourcePin
-import eu.kanade.domain.source.anime.model.AnimeSource
-import eu.kanade.domain.source.anime.model.Pin
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.presentation.browse.anime.AnimeSourceUiModel
 import eu.kanade.tachiyomi.util.lang.launchIO
@@ -21,6 +19,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import logcat.LogPriority
+import tachiyomi.domain.source.anime.model.AnimeSource
+import tachiyomi.domain.source.anime.model.Pin
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.TreeMap

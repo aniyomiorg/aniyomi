@@ -35,8 +35,6 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.source.manga.interactor.GetMangaSourcesWithNonLibraryManga
-import eu.kanade.domain.source.manga.model.MangaSourceWithCount
-import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.presentation.browse.manga.components.MangaSourceIcon
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
@@ -54,6 +52,8 @@ import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import tachiyomi.data.Database
+import tachiyomi.domain.source.manga.model.MangaSourceWithCount
+import tachiyomi.domain.source.manga.model.Source
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

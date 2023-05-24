@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.content.ContextCompat
-import eu.kanade.data.items.chapter.NoChaptersException
 import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.manga.interactor.GetLibraryManga
@@ -17,7 +16,6 @@ import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.manga.interactor.GetMangaTracks
 import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
@@ -67,6 +65,8 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.toMangaUpdate
 import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.chapter.model.NoChaptersException
+import tachiyomi.domain.library.manga.LibraryManga
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File

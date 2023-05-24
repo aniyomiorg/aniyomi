@@ -1,11 +1,11 @@
 package eu.kanade.domain.entries.anime.interactor
 
-import eu.kanade.domain.entries.anime.repository.AnimeRepository
-import eu.kanade.domain.items.episode.repository.EpisodeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.repository.AnimeRepository
 import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.items.episode.repository.EpisodeRepository
 
 class GetAnimeWithEpisodes(
     private val animeRepository: AnimeRepository,

@@ -57,7 +57,7 @@ import eu.kanade.tachiyomi.util.system.LocaleHelper
 fun AnimeExtensionScreen(
     state: AnimeExtensionsState,
     contentPadding: PaddingValues,
-    searchQuery: String? = null,
+    searchQuery: String?,
     onLongClickItem: (AnimeExtension) -> Unit,
     onClickItemCancel: (AnimeExtension) -> Unit,
     onInstallExtension: (AnimeExtension.Available) -> Unit,

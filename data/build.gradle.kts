@@ -28,6 +28,7 @@ android {
 dependencies {
     implementation(project(":source-api"))
     implementation(project(":domain"))
+    implementation(project(":core"))
     api(libs.sqldelight.android.driver)
     api(libs.sqldelight.coroutines)
     api(libs.sqldelight.android.paging)

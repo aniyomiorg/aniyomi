@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.presentation.browse.manga.components.BaseMangaSourceItem
 import eu.kanade.presentation.browse.manga.components.MangaSourceIcon
@@ -40,6 +39,7 @@ import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.MigrateMangaSourceState
 import eu.kanade.tachiyomi.util.system.copyToClipboard
+import tachiyomi.domain.source.manga.model.Source
 
 @Composable
 fun MigrateMangaSourceScreen(

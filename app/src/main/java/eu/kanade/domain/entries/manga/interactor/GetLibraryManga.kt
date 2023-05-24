@@ -1,8 +1,8 @@
 package eu.kanade.domain.entries.manga.interactor
 
-import eu.kanade.domain.entries.manga.repository.MangaRepository
-import eu.kanade.domain.library.manga.LibraryManga
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.domain.entries.manga.repository.MangaRepository
+import tachiyomi.domain.library.manga.LibraryManga
 
 class GetLibraryManga(
     private val mangaRepository: MangaRepository,

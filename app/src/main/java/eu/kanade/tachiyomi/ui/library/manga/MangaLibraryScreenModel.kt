@@ -24,9 +24,9 @@ import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.history.manga.interactor.GetNextChapters
 import eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
-import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.manga.interactor.GetTracksPerManga
+import eu.kanade.presentation.components.SEARCH_DEBOUNCE_MILLIS
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.presentation.library.LibraryToolbarTitle
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
@@ -46,6 +46,7 @@ import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -57,6 +58,7 @@ import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.MangaUpdate
 import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.library.manga.LibraryManga
 import tachiyomi.domain.library.model.LibrarySort
 import tachiyomi.domain.library.model.sort
 import uy.kohesive.injekt.Injekt
@@ -93,7 +95,7 @@ class MangaLibraryScreenModel(
     init {
         coroutineScope.launchIO {
             combine(
-                state.map { it.searchQuery }.distinctUntilChanged(),
+                state.map { it.searchQuery }.debounce(SEARCH_DEBOUNCE_MILLIS),
                 getLibraryFlow(),
                 getTracksPerManga.subscribe(),
                 getTrackingFilterFlow(),

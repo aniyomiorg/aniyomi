@@ -13,7 +13,7 @@ import eu.kanade.tachiyomi.source.MangaSource
 import okhttp3.Dns
 import okhttp3.OkHttpClient
 import tachiyomi.domain.entries.manga.model.Manga
-import eu.kanade.domain.track.manga.model.MangaTrack as DomainTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
 class Komga(private val context: Context, id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTrackService {
 

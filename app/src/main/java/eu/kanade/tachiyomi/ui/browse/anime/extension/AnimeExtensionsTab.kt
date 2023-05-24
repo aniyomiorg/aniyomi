@@ -21,7 +21,7 @@ fun animeExtensionsTab(
 ): TabContent {
     val navigator = LocalNavigator.currentOrThrow
     val state by extensionsScreenModel.state.collectAsState()
-    val searchQuery by extensionsScreenModel.query.collectAsState()
+
     return TabContent(
         titleRes = R.string.label_animeextensions,
         badgeNumber = state.updates.takeIf { it > 0 },
@@ -37,7 +37,7 @@ fun animeExtensionsTab(
             AnimeExtensionScreen(
                 state = state,
                 contentPadding = contentPadding,
-                searchQuery = searchQuery,
+                searchQuery = state.searchQuery,
                 onLongClickItem = { extension ->
                     when (extension) {
                         is AnimeExtension.Available -> extensionsScreenModel.installExtension(extension)
