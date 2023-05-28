@@ -1,7 +1,7 @@
 package eu.kanade.domain.category.anime.interactor
 
-import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
+import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.repository.AnimeRepository
 
 class SetAnimeCategories(

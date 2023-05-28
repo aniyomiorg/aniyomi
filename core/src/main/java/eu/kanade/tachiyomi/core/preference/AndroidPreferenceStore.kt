@@ -12,6 +12,8 @@ import eu.kanade.tachiyomi.core.preference.AndroidPreference.StringPrimitive
 import eu.kanade.tachiyomi.core.preference.AndroidPreference.StringSetPrimitive
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
+import tachiyomi.core.preference.Preference
+import tachiyomi.core.preference.PreferenceStore
 
 class AndroidPreferenceStore(
     context: Context,

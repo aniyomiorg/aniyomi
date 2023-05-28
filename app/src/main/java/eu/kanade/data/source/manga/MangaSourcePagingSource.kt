@@ -6,8 +6,8 @@ import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.MangasPage
 import eu.kanade.tachiyomi.source.model.SManga
-import eu.kanade.tachiyomi.util.lang.awaitSingle
-import eu.kanade.tachiyomi.util.lang.withIOContext
+import tachiyomi.core.util.lang.awaitSingle
+import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 
 abstract class SourcePagingSource(

@@ -1,8 +1,8 @@
 package eu.kanade.domain.source.service
 
-import eu.kanade.tachiyomi.core.preference.PreferenceStore
-import eu.kanade.tachiyomi.core.preference.getEnum
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.preference.getEnum
 import tachiyomi.domain.library.model.LibraryDisplayMode
 
 class SourcePreferences(

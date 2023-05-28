@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.data.download.anime.model
 import eu.kanade.core.util.asFlow
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadStore
-import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -15,6 +14,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import rx.Observable
 import rx.subjects.PublishSubject
+import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import java.util.concurrent.CopyOnWriteArrayList

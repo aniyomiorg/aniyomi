@@ -1,9 +1,9 @@
 package tachiyomi.data.items.episode
 
-import eu.kanade.tachiyomi.util.system.logcat
-import eu.kanade.tachiyomi.util.toLong
 import kotlinx.coroutines.flow.Flow
 import logcat.LogPriority
+import tachiyomi.core.util.lang.toLong
+import tachiyomi.core.util.system.logcat
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate

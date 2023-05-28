@@ -3,7 +3,7 @@ package eu.kanade.domain.items.chapter.interactor
 import eu.kanade.domain.entries.manga.interactor.GetMangaFavorites
 import eu.kanade.domain.entries.manga.interactor.SetMangaChapterFlags
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
+import tachiyomi.core.util.lang.withNonCancellableContext
 import tachiyomi.domain.entries.manga.model.Manga
 
 class SetMangaDefaultChapterFlags(

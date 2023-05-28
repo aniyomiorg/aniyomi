@@ -65,6 +65,7 @@ import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.BuildConfig
 import eu.kanade.tachiyomi.Migrations
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
@@ -87,11 +88,8 @@ import eu.kanade.tachiyomi.ui.library.manga.MangaLibrarySettingsSheet
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
 import eu.kanade.tachiyomi.ui.more.NewUpdateScreen
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
-import eu.kanade.tachiyomi.util.Constants
-import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.dpToPx
 import eu.kanade.tachiyomi.util.system.isNavigationBarNeedsScrim
-import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
@@ -103,6 +101,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.model.Category
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -439,27 +439,27 @@ class MainActivity : BaseActivity() {
         isHandlingShortcut = true
 
         when (intent.action) {
-            SHORTCUT_ANIMELIB -> HomeScreen.openTab(HomeScreen.Tab.Animelib())
-            SHORTCUT_LIBRARY -> HomeScreen.openTab(HomeScreen.Tab.Library())
-            SHORTCUT_MANGA -> {
+            Constants.SHORTCUT_ANIMELIB -> HomeScreen.openTab(HomeScreen.Tab.Animelib())
+            Constants.SHORTCUT_LIBRARY -> HomeScreen.openTab(HomeScreen.Tab.Library())
+            Constants.SHORTCUT_MANGA -> {
                 val idToOpen = intent.extras?.getLong(Constants.MANGA_EXTRA) ?: return false
                 navigator.popUntilRoot()
                 HomeScreen.openTab(HomeScreen.Tab.Library(idToOpen))
             }
-            SHORTCUT_ANIME -> {
+            Constants.SHORTCUT_ANIME -> {
                 val idToOpen = intent.extras?.getLong(Constants.ANIME_EXTRA) ?: return false
                 navigator.popUntilRoot()
                 HomeScreen.openTab(HomeScreen.Tab.Animelib(idToOpen))
             }
-            SHORTCUT_UPDATES -> HomeScreen.openTab(HomeScreen.Tab.Updates)
-            SHORTCUT_HISTORY -> HomeScreen.openTab(HomeScreen.Tab.History)
-            SHORTCUT_SOURCES -> HomeScreen.openTab(HomeScreen.Tab.Browse(false))
-            SHORTCUT_EXTENSIONS -> HomeScreen.openTab(HomeScreen.Tab.Browse(true))
-            SHORTCUT_DOWNLOADS -> {
+            Constants.SHORTCUT_UPDATES -> HomeScreen.openTab(HomeScreen.Tab.Updates)
+            Constants.SHORTCUT_HISTORY -> HomeScreen.openTab(HomeScreen.Tab.History)
+            Constants.SHORTCUT_SOURCES -> HomeScreen.openTab(HomeScreen.Tab.Browse(false))
+            Constants.SHORTCUT_EXTENSIONS -> HomeScreen.openTab(HomeScreen.Tab.Browse(true))
+            Constants.SHORTCUT_DOWNLOADS -> {
                 navigator.popUntilRoot()
                 HomeScreen.openTab(HomeScreen.Tab.More(toDownloads = true))
             }
-            SHORTCUT_ANIME_DOWNLOADS -> {
+            Constants.SHORTCUT_ANIME_DOWNLOADS -> {
                 navigator.popUntilRoot()
                 HomeScreen.openTab(HomeScreen.Tab.More(toDownloads = true))
             }
@@ -535,19 +535,6 @@ class MainActivity : BaseActivity() {
         private const val SPLASH_MIN_DURATION = 500 // ms
         private const val SPLASH_MAX_DURATION = 5000 // ms
         private const val SPLASH_EXIT_ANIM_DURATION = 400L // ms
-
-        // Shortcut actions
-        const val SHORTCUT_ANIMELIB = "eu.kanade.tachiyomi.SHOW_ANIMELIB"
-        const val SHORTCUT_LIBRARY = "eu.kanade.tachiyomi.SHOW_LIBRARY"
-        const val SHORTCUT_ANIME = "eu.kanade.tachiyomi.SHOW_ANIME"
-        const val SHORTCUT_MANGA = "eu.kanade.tachiyomi.SHOW_MANGA"
-        const val SHORTCUT_UPDATES = "eu.kanade.tachiyomi.SHOW_RECENTLY_UPDATED"
-        const val SHORTCUT_HISTORY = "eu.kanade.tachiyomi.SHOW_RECENTLY_READ"
-        const val SHORTCUT_SOURCES = "eu.kanade.tachiyomi.SHOW_CATALOGUES"
-        const val SHORTCUT_ANIMEEXTENSIONS = "eu.kanade.tachiyomi.ANIMEEXTENSIONS"
-        const val SHORTCUT_EXTENSIONS = "eu.kanade.tachiyomi.EXTENSIONS"
-        const val SHORTCUT_ANIME_DOWNLOADS = "eu.kanade.tachiyomi.SHOW_ANIME_DOWNLOADS"
-        const val SHORTCUT_DOWNLOADS = "eu.kanade.tachiyomi.SHOW_DOWNLOADS"
 
         const val INTENT_SEARCH = "eu.kanade.tachiyomi.SEARCH"
         const val INTENT_ANIMESEARCH = "eu.kanade.tachiyomi.ANIMESEARCH"

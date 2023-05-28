@@ -1,38 +1,19 @@
 package tachiyomi.presentation.widget.entries.anime
 
 import android.app.Application
-import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.glance.GlanceModifier
-import androidx.glance.Image
 import androidx.glance.ImageProvider
-import androidx.glance.LocalContext
-import androidx.glance.LocalSize
-import androidx.glance.action.clickable
-import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.SizeMode
-import androidx.glance.appwidget.action.actionStartActivity
+import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.updateAll
-import androidx.glance.layout.Alignment
-import androidx.glance.layout.Box
-import androidx.glance.layout.Column
-import androidx.glance.layout.ContentScale
-import androidx.glance.layout.Row
+import androidx.glance.background
 import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.fillMaxWidth
-import androidx.glance.layout.padding
-import androidx.glance.layout.size
-import androidx.glance.text.Text
-import androidx.glance.text.TextAlign
-import androidx.glance.text.TextStyle
-import androidx.glance.unit.ColorProvider
 import coil.executeBlocking
 import coil.imageLoader
 import coil.request.CachePolicy
@@ -41,18 +22,18 @@ import coil.size.Precision
 import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
-import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.system.dpToPx
 import kotlinx.coroutines.MainScope
+import tachiyomi.core.util.lang.launchIO
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.domain.entries.anime.model.AnimeCover
-import tachiyomi.presentation.widget.ContainerModifier
-import tachiyomi.presentation.widget.CoverHeight
-import tachiyomi.presentation.widget.CoverWidth
 import tachiyomi.presentation.widget.R
-import tachiyomi.presentation.widget.appWidgetInnerRadius
-import tachiyomi.presentation.widget.calculateRowAndColumnCount
-import tachiyomi.presentation.widget.stringResource
+import tachiyomi.presentation.widget.components.anime.CoverHeight
+import tachiyomi.presentation.widget.components.anime.CoverWidth
+import tachiyomi.presentation.widget.components.anime.LockedAnimeWidget
+import tachiyomi.presentation.widget.components.anime.UpdatesAnimeWidget
+import tachiyomi.presentation.widget.util.appWidgetBackgroundRadius
+import tachiyomi.presentation.widget.util.calculateRowAndColumnCount
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -66,131 +47,18 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
 
     private val coroutineScope = MainScope()
 
-    var data: List<Pair<Long, Bitmap?>>? = null
+    private var data: List<Pair<Long, Bitmap?>>? = null
 
     override val sizeMode = SizeMode.Exact
 
     @Composable
     override fun Content() {
-        // App lock enabled, don't do anything
+        // If app lock enabled, don't do anything
         if (preferences.useAuthenticator().get()) {
-            WidgetNotAvailable()
-        } else {
-            UpdatesWidget()
+            LockedAnimeWidget()
+            return
         }
-    }
-
-    @Composable
-    private fun WidgetNotAvailable() {
-        val clazz = Class.forName("eu.kanade.tachiyomi.ui.main.MainActivity")
-        val intent = Intent(LocalContext.current, clazz).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        Box(
-            modifier = GlanceModifier
-                .clickable(actionStartActivity(intent))
-                .then(ContainerModifier)
-                .padding(8.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = stringResource(R.string.appwidget_unavailable_locked),
-                style = TextStyle(
-                    color = ColorProvider(R.color.appwidget_on_secondary_container),
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.Center,
-                ),
-            )
-        }
-    }
-
-    @Composable
-    private fun UpdatesWidget() {
-        val (rowCount, columnCount) = LocalSize.current.calculateRowAndColumnCount()
-        Column(
-            modifier = ContainerModifier,
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            val inData = data
-            if (inData == null) {
-                CircularProgressIndicator()
-            } else if (inData.isEmpty()) {
-                Text(text = stringResource(R.string.information_no_recent))
-            } else {
-                (0 until rowCount).forEach { i ->
-                    val coverRow = (0 until columnCount).mapNotNull { j ->
-                        inData.getOrNull(j + (i * columnCount))
-                    }
-                    if (coverRow.isNotEmpty()) {
-                        Row(
-                            modifier = GlanceModifier
-                                .padding(vertical = 4.dp)
-                                .fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            coverRow.forEach { (animeId, cover) ->
-                                Box(
-                                    modifier = GlanceModifier
-                                        .padding(horizontal = 3.dp),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    val intent = Intent(LocalContext.current, Class.forName("eu.kanade.tachiyomi.ui.main.MainActivity")).apply {
-                                        action = "eu.kanade.tachiyomi.SHOW_ANIME"
-                                        putExtra("anime", animeId)
-                                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
-                                        // https://issuetracker.google.com/issues/238793260
-                                        addCategory(animeId.toString())
-                                    }
-                                    Cover(
-                                        modifier = GlanceModifier.clickable(
-                                            actionStartActivity(
-                                                intent,
-                                            ),
-                                        ),
-                                        cover = cover,
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @Composable
-    private fun Cover(
-        modifier: GlanceModifier = GlanceModifier,
-        cover: Bitmap?,
-    ) {
-        Box(
-            modifier = modifier
-                .size(width = CoverWidth, height = CoverHeight)
-                .appWidgetInnerRadius(),
-        ) {
-            if (cover != null) {
-                Image(
-                    provider = ImageProvider(cover),
-                    contentDescription = null,
-                    modifier = GlanceModifier
-                        .fillMaxSize()
-                        .appWidgetInnerRadius(),
-                    contentScale = ContentScale.Crop,
-                )
-            } else {
-                // Enjoy placeholder
-                Image(
-                    provider = ImageProvider(R.drawable.appwidget_cover_error),
-                    contentDescription = null,
-                    modifier = GlanceModifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop,
-                )
-            }
-        }
+        UpdatesAnimeWidget(data)
     }
 
     fun loadData(list: List<AnimeupdatesView>? = null) {
@@ -261,3 +129,9 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
             }
     }
 }
+
+val ContainerModifier = GlanceModifier
+    .fillMaxSize()
+    .background(ImageProvider(R.drawable.appwidget_background))
+    .appWidgetBackground()
+    .appWidgetBackgroundRadius()

@@ -3,7 +3,7 @@ package eu.kanade.domain.base
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import eu.kanade.tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.preference.PreferenceStore
 
 class BasePreferences(
     val context: Context,

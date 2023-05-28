@@ -44,7 +44,6 @@ import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.animatorDurationScale
-import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.notification
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -53,6 +52,7 @@ import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import logcat.LogcatLogger
 import org.conscrypt.Conscrypt
+import tachiyomi.core.util.system.logcat
 import tachiyomi.presentation.widget.entries.anime.TachiyomiAnimeWidgetManager
 import tachiyomi.presentation.widget.entries.manga.TachiyomiMangaWidgetManager
 import uy.kohesive.injekt.Injekt
@@ -124,12 +124,12 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
         setAppCompatDelegateThemeMode(Injekt.get<UiPreferences>().themeMode().get())
 
         // Updates widget update
-        with(TachiyomiMangaWidgetManager) {
-            init(ProcessLifecycleOwner.get().lifecycleScope, Injekt.get())
+        with(TachiyomiMangaWidgetManager(Injekt.get())) {
+            init(ProcessLifecycleOwner.get().lifecycleScope)
         }
 
-        with(TachiyomiAnimeWidgetManager) {
-            init(ProcessLifecycleOwner.get().lifecycleScope, Injekt.get())
+        with(TachiyomiAnimeWidgetManager(Injekt.get())) {
+            init(ProcessLifecycleOwner.get().lifecycleScope)
         }
 
         if (!LogcatLogger.isInstalled && networkPreferences.verboseLogging().get()) {

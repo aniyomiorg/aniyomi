@@ -13,9 +13,9 @@ import eu.kanade.tachiyomi.extension.anime.installer.PackageInstallerInstallerAn
 import eu.kanade.tachiyomi.extension.anime.installer.ShizukuInstallerAnime
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstaller.Companion.EXTRA_DOWNLOAD_ID
 import eu.kanade.tachiyomi.util.system.getSerializableExtraCompat
-import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import logcat.LogPriority
+import tachiyomi.core.util.system.logcat
 
 class AnimeExtensionInstallService : Service() {
 

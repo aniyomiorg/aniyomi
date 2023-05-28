@@ -8,10 +8,14 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
-object TachiyomiAnimeWidgetManager {
+class TachiyomiAnimeWidgetManager(
+    private val database: AnimeDatabaseHandler = Injekt.get(),
+) {
 
-    fun Context.init(scope: LifecycleCoroutineScope, database: AnimeDatabaseHandler) {
+    fun Context.init(scope: LifecycleCoroutineScope) {
         database.subscribeToList { animeupdatesViewQueries.animeupdates(after = AnimeUpdatesGridGlanceWidget.DateLimit.timeInMillis) }
             .drop(1)
             .distinctUntilChanged()

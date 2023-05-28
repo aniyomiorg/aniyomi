@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.player.settings
 
 import android.os.Build
-import eu.kanade.tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.preference.PreferenceStore
 
 class PlayerPreferences(
     private val preferenceStore: PreferenceStore,

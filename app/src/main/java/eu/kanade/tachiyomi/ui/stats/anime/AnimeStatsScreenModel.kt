@@ -21,8 +21,8 @@ import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.util.lang.launchIO
 import kotlinx.coroutines.flow.update
+import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.track.anime.model.AnimeTrack
 import uy.kohesive.injekt.Injekt

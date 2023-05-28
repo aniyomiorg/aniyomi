@@ -32,7 +32,7 @@ import eu.kanade.presentation.util.rememberResourceBitmapPainter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
-import eu.kanade.tachiyomi.util.lang.withIOContext
+import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.source.anime.model.AnimeSource
 
 private val defaultModifier = Modifier

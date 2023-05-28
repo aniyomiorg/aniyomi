@@ -43,8 +43,8 @@ import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
-import eu.kanade.tachiyomi.util.lang.launchUI
 import kotlinx.coroutines.CoroutineScope
+import tachiyomi.core.util.lang.launchUI
 import kotlin.math.roundToInt
 
 @Composable

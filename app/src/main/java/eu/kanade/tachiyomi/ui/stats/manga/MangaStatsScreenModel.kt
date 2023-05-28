@@ -9,7 +9,6 @@ import eu.kanade.core.util.fastFilterNot
 import eu.kanade.core.util.fastMapNotNull
 import eu.kanade.domain.entries.manga.interactor.GetLibraryManga
 import eu.kanade.domain.entries.manga.model.isLocal
-import eu.kanade.domain.history.manga.interactor.GetTotalReadDuration
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.manga.interactor.GetMangaTracks
 import eu.kanade.presentation.more.stats.StatsScreenState
@@ -21,8 +20,9 @@ import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
 import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.model.SManga
-import eu.kanade.tachiyomi.util.lang.launchIO
 import kotlinx.coroutines.flow.update
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.domain.history.manga.interactor.GetTotalReadDuration
 import tachiyomi.domain.library.manga.LibraryManga
 import tachiyomi.domain.track.manga.model.MangaTrack
 import uy.kohesive.injekt.Injekt

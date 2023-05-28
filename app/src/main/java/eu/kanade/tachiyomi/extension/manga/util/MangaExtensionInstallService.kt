@@ -13,9 +13,9 @@ import eu.kanade.tachiyomi.extension.manga.installer.PackageInstallerInstallerMa
 import eu.kanade.tachiyomi.extension.manga.installer.ShizukuInstallerManga
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstaller.Companion.EXTRA_DOWNLOAD_ID
 import eu.kanade.tachiyomi.util.system.getSerializableExtraCompat
-import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import logcat.LogPriority
+import tachiyomi.core.util.system.logcat
 
 class MangaExtensionInstallService : Service() {
 

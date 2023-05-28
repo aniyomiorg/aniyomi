@@ -27,8 +27,8 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.util.lang.launchIO
 import kotlinx.coroutines.flow.collectLatest
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.injectLazy
 
 @Composable
