@@ -177,8 +177,6 @@ class AnimeLibraryUpdateService(
      * the wake lock.
      */
     override fun onCreate() {
-        super.onCreate()
-
         notifier = AnimeLibraryUpdateNotifier(this)
         wakeLock = acquireWakeLock(javaClass.name)
 
@@ -198,7 +196,6 @@ class AnimeLibraryUpdateService(
         if (instance == this) {
             instance = null
         }
-        super.onDestroy()
     }
 
     /**

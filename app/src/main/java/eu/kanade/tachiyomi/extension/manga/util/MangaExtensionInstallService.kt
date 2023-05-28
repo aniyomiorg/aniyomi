@@ -22,7 +22,6 @@ class MangaExtensionInstallService : Service() {
     private var installer: InstallerManga? = null
 
     override fun onCreate() {
-        super.onCreate()
         val notification = notificationBuilder(Notifications.CHANNEL_EXTENSIONS_UPDATE) {
             setSmallIcon(R.drawable.ic_ani)
             setAutoCancel(false)
@@ -61,7 +60,6 @@ class MangaExtensionInstallService : Service() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         installer?.onDestroy()
         installer = null
     }

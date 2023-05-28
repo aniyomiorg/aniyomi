@@ -10,7 +10,7 @@ voyager = "1.0.0-rc07"
 richtext = "0.16.0"
 
 [libraries]
-desugar = "com.android.tools:desugar_jdk_libs:1.2.2"
+desugar = "com.android.tools:desugar_jdk_libs:2.0.2"
 android-shortcut-gradle = "com.github.zellius:android-shortcut-gradle-plugin:0.1.2"
 google-services-gradle = "com.google.gms:google-services:4.3.15"
 google-crashlytics-gradle = "com.google.firebase:firebase-crashlytics-gradle:2.8.0"
@@ -55,7 +55,7 @@ natural-comparator = "com.github.gpanther:java-nat-sort:natural-comparator-1.1"
 richtext-commonmark = { module = "com.halilibo.compose-richtext:richtext-commonmark", version.ref = "richtext" }
 richtext-m3 = { module = "com.halilibo.compose-richtext:richtext-ui-material3", version.ref = "richtext" }
 
-material = "com.google.android.material:material:1.7.0"
+material = "com.google.android.material:material:1.8.0"
 flexible-adapter-core = "com.github.arkon.FlexibleAdapter:flexible-adapter:c8013533"
 flexible-adapter-ui = "com.github.arkon.FlexibleAdapter:flexible-adapter-ui:c8013533"
 photoview = "com.github.chrisbanes:PhotoView:2.3.0"

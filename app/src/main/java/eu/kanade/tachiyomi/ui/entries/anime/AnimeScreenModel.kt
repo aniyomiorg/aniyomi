@@ -75,9 +75,6 @@ import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.util.concurrent.TimeUnit
 
 class AnimeInfoScreenModel(
     val context: Context,
@@ -228,8 +225,7 @@ class AnimeInfoScreenModel(
 
             logcat(LogPriority.ERROR, e)
             coroutineScope.launch {
-                val errorMessage = e.message.orEmpty().ifEmpty { e.toString() }
-                snackbarHostState.showSnackbar(message = errorMessage)
+                snackbarHostState.showSnackbar(message = e.snackbarMessage)
             }
         }
     }
@@ -529,7 +525,7 @@ class AnimeInfoScreenModel(
                 context.getString(R.string.no_episodes_error)
             } else {
                 logcat(LogPriority.ERROR, e)
-                e.message.orEmpty().ifEmpty { e.toString() }
+                e.snackbarMessage
             }
 
             coroutineScope.launch {
@@ -1068,28 +1064,9 @@ data class EpisodeItem(
     val isDownloaded = downloadState == AnimeDownload.State.DOWNLOADED
 }
 
-val episodeDecimalFormat = DecimalFormat(
-    "#.###",
-    DecimalFormatSymbols()
-        .apply { decimalSeparator = '.' },
-)
-
-private fun formatProgress(milliseconds: Long): String {
-    return if (milliseconds > 3600000L) {
-        String.format(
-            "%d:%02d:%02d",
-            TimeUnit.MILLISECONDS.toHours(milliseconds),
-            TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
-                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)),
-            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
-                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
-        )
-    } else {
-        String.format(
-            "%d:%02d",
-            TimeUnit.MILLISECONDS.toMinutes(milliseconds),
-            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
-                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
-        )
+private val Throwable.snackbarMessage: String
+    get() = when (val className = this::class.simpleName) {
+        null -> message ?: ""
+        "Exception", "HttpException", "IOException", "SourceNotInstalledException" -> message ?: className
+        else -> "$className: $message"
     }
-}

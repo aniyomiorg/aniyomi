@@ -47,7 +47,6 @@ fun MigrateAnimeSearchScreen(
         MigrateAnimeSearchContent(
             sourceId = state.anime?.source ?: -1,
             items = state.items,
-            isPinnedOnly = state.isPinnedOnly,
             contentPadding = paddingValues,
             getAnime = getAnime,
             onClickSource = onClickSource,
@@ -61,20 +60,12 @@ fun MigrateAnimeSearchScreen(
 fun MigrateAnimeSearchContent(
     sourceId: Long,
     items: Map<AnimeCatalogueSource, AnimeSearchItemResult>,
-    isPinnedOnly: Boolean,
     contentPadding: PaddingValues,
     getAnime: @Composable (AnimeCatalogueSource, Anime) -> State<Anime>,
     onClickSource: (AnimeCatalogueSource) -> Unit,
     onClickItem: (Anime) -> Unit,
     onLongClickItem: (Anime) -> Unit,
 ) {
-    if (items.isEmpty() && isPinnedOnly) {
-        EmptyScreen(
-            message = stringResource(R.string.no_pinned_sources),
-        )
-        return
-    }
-
     LazyColumn(
         contentPadding = contentPadding,
     ) {

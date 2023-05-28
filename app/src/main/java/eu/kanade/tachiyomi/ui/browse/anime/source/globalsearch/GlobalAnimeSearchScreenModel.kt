@@ -18,8 +18,7 @@ class GlobalAnimeSearchScreenModel(
 ) : AnimeSearchScreenModel<GlobalAnimeSearchState>(
     GlobalAnimeSearchState(
         searchQuery = initialQuery,
-        isPinnedOnly = sourcePreferences.searchPinnedAnimeSourcesOnly().get(),
-    ),
+    )
 ) {
 
     val incognitoMode = preferences.incognitoMode()
@@ -64,7 +63,6 @@ class GlobalAnimeSearchScreenModel(
 data class GlobalAnimeSearchState(
     val searchQuery: String? = null,
     val items: Map<AnimeCatalogueSource, AnimeSearchItemResult> = emptyMap(),
-    val isPinnedOnly: Boolean,
 ) {
 
     val progress: Int = items.count { it.value !is AnimeSearchItemResult.Loading }

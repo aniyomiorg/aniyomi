@@ -768,11 +768,13 @@
     <string name="unknown_title">Titre inconnu</string>
     <string name="updates_last_update_info_just_now">À l\'instant</string>
     <string name="label_download_queue">File de téléchargement</string>
-    <string name="copied_to_clipboard_plain">Copier dans le presse-papier</string>
+    <string name="copied_to_clipboard_plain">Copié dans le presse-papier</string>
     <string name="pref_skip_dupe_chapters">Passer les chapitres en double</string>
     <string name="confirm_add_duplicate_manga">Il existe un enregistrement dans la bibliothèque avec le même nom.
 \n
 \nVoulez-vous continuer \?</string>
-    <string name="track_error">%1$s erreur : %2$s</string>
+    <string name="track_error">%1$s erreur : %2$s</string>
     <string name="enhanced_services_not_installed">Disponible mais la source n\'est pas installée : %s</string>
+    <string name="information_required_plain">*obligatoire</string>
+    <string name="pref_worker_info">Infos sur les processus</string>
     </resources>

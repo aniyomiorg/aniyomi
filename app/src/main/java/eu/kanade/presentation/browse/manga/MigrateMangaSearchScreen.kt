@@ -47,7 +47,6 @@ fun MigrateMangaSearchScreen(
         MigrateMangaSearchContent(
             sourceId = state.manga?.source ?: -1,
             items = state.items,
-            isPinnedOnly = state.isPinnedOnly,
             contentPadding = paddingValues,
             getManga = getManga,
             onClickSource = onClickSource,
@@ -61,20 +60,12 @@ fun MigrateMangaSearchScreen(
 fun MigrateMangaSearchContent(
     sourceId: Long,
     items: Map<CatalogueSource, MangaSearchItemResult>,
-    isPinnedOnly: Boolean,
     contentPadding: PaddingValues,
     getManga: @Composable (CatalogueSource, Manga) -> State<Manga>,
     onClickSource: (CatalogueSource) -> Unit,
     onClickItem: (Manga) -> Unit,
     onLongClickItem: (Manga) -> Unit,
 ) {
-    if (items.isEmpty() && isPinnedOnly) {
-        EmptyScreen(
-            message = stringResource(R.string.no_pinned_sources),
-        )
-        return
-    }
-
     LazyColumn(
         contentPadding = contentPadding,
     ) {

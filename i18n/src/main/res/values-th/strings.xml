@@ -711,4 +711,11 @@
     <string name="updates_last_update_info_just_now">เมื่อสักครู่</string>
     <string name="error_user_agent_string_invalid">สตริงตัวแทนผู้ใช้ไม่ถูกต้อง</string>
 <string name="label_download_queue">คิวดาวน์โหลด</string>
+    <string name="pref_skip_dupe_chapters">ข้ามตอนที่ซ้ำกัน</string>
+    <string name="enhanced_services_not_installed">พร้อมใช้งานแต่ไม่ได้ติดตั้งแหล่งที่มา: %s</string>
+    <string name="confirm_add_duplicate_manga">มีรายการชื่อเดียวกันอยู่ในคลัง
+\n
+\nต้องการดำเนินการต่อหรือไม่\?</string>
+    <string name="track_error">%1$s ข้อผิดพลาด: %2$s</string>
+    <string name="information_required_plain">*จำเป็น</string>
     </resources>
