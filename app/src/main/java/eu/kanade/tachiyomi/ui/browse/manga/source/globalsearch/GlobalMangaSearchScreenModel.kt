@@ -18,7 +18,7 @@ class GlobalMangaSearchScreenModel(
 ) : MangaSearchScreenModel<GlobalMangaSearchState>(
     GlobalMangaSearchState(
         searchQuery = initialQuery,
-    )
+    ),
 ) {
 
     val incognitoMode = preferences.incognitoMode()

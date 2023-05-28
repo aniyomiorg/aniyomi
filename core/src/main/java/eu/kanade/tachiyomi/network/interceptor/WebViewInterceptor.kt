@@ -11,6 +11,7 @@ import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.setDefaultSettings
 import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.coroutines.DelicateCoroutinesApi
 import okhttp3.Headers
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -49,6 +50,7 @@ abstract class WebViewInterceptor(private val context: Context) : Interceptor {
 
     abstract fun intercept(chain: Interceptor.Chain, request: Request, response: Response): Response
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val response = chain.proceed(request)
