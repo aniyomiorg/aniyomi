@@ -64,7 +64,7 @@ class ExternalIntents {
         anime = getAnime.await(animeId!!) ?: return null
         source = sourceManager.get(anime.source) ?: return null
         episode = getEpisodeByAnimeId.await(anime.id).find { it.id == episodeId } ?: return null
-        val video = EpisodeLoader.getLinks(episode.toDbEpisode(), anime, source).asFlow().first()[0]
+        val video = EpisodeLoader.getLinks(episode, anime, source).asFlow().first()[0]
 
         val videoUrl = if (video.videoUrl == null) {
             makeErrorToast(context, Exception("video URL is null."))

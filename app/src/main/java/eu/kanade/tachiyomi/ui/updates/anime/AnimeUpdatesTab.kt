@@ -17,7 +17,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.AppBar
+import eu.kanade.presentation.components.NavigatorAdaptiveSheet
 import eu.kanade.presentation.components.TabContent
+import eu.kanade.presentation.entries.anime.EpisodeOptionsDialogScreen
+import eu.kanade.presentation.entries.anime.onDismissEpisodeOptionsDialogScreen
 import eu.kanade.presentation.updates.UpdatesDeleteConfirmationDialog
 import eu.kanade.presentation.updates.anime.AnimeUpdateScreen
 import eu.kanade.tachiyomi.R
@@ -95,6 +98,18 @@ fun Screen.animeUpdatesTab(
                         onDismissRequest = onDismissDialog,
                         onConfirm = { screenModel.deleteEpisodes(dialog.toDelete) },
                         isManga = false,
+                    )
+                }
+                is AnimeUpdatesScreenModel.Dialog.Options -> {
+                    onDismissEpisodeOptionsDialogScreen = onDismissDialog
+                    NavigatorAdaptiveSheet(
+                        screen = EpisodeOptionsDialogScreen(
+                            episodeId = dialog.episodeId,
+                            animeId = dialog.animeId,
+                            sourceId = dialog.sourceId,
+                            useExternalDownloader = screenModel.downloadPreferences.useExternalDownloader().get(),
+                        ),
+                        onDismissRequest = onDismissDialog,
                     )
                 }
                 null -> {}

@@ -268,7 +268,7 @@ class AnimeDownloader(
      * @param episodes the list of episodes to download.
      * @param autoStart whether to start the downloader after enqueing the episodes.
      */
-    fun queueEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean, changeDownloader: Boolean = false) = launchIO {
+    fun queueEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean, changeDownloader: Boolean = false, video: Video? = null) = launchIO {
         if (episodes.isEmpty()) {
             return@launchIO
         }
@@ -289,7 +289,7 @@ class AnimeDownloader(
             // Filter out those already enqueued.
             .filter { episode -> queue.none { it.episode.id == episode.id } }
             // Create a download for each one.
-            .map { AnimeDownload(source, anime, it, changeDownloader) }
+            .map { AnimeDownload(source, anime, it, changeDownloader, video) }
 
         if (episodesToQueue.isNotEmpty()) {
             queue.addAll(episodesToQueue)

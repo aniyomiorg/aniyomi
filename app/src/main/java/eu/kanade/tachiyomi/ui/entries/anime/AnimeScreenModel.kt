@@ -34,6 +34,7 @@ import eu.kanade.presentation.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.DownloadAction
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
@@ -80,7 +81,7 @@ class AnimeInfoScreenModel(
     val context: Context,
     val animeId: Long,
     private val isFromSource: Boolean,
-    private val downloadPreferences: DownloadPreferences = Injekt.get(),
+    internal val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     uiPreferences: UiPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
@@ -236,7 +237,7 @@ class AnimeInfoScreenModel(
                 coroutineScope.launch {
                     if (!hasDownloads()) return@launch
                     val result = snackbarHostState.showSnackbar(
-                        message = context.getString(R.string.delete_downloads_for_manga),
+                        message = context.getString(R.string.delete_downloads_for_anime),
                         actionLabel = context.getString(R.string.action_delete),
                         withDismissAction = true,
                     )
@@ -559,6 +560,7 @@ class AnimeInfoScreenModel(
     private fun startDownload(
         episodes: List<Episode>,
         startNow: Boolean,
+        video: Video? = null,
     ) {
         val successState = successState ?: return
 
@@ -566,7 +568,7 @@ class AnimeInfoScreenModel(
             val episodeId = episodes.singleOrNull()?.id ?: return
             downloadManager.startDownloadNow(episodeId)
         } else {
-            downloadEpisodes(episodes)
+            downloadEpisodes(episodes, false, video)
         }
         if (!isFavorited && !successState.hasPromptedToAddBefore) {
             coroutineScope.launch {
@@ -607,7 +609,10 @@ class AnimeInfoScreenModel(
             EpisodeDownloadAction.DELETE -> {
                 deleteEpisodes(items.map { it.episode })
             }
-            EpisodeDownloadAction.START_ALT -> TODO()
+            EpisodeDownloadAction.SHOW_OPTIONS -> {
+                val episode = items.singleOrNull()?.episode ?: return
+                showOptionsDialog(episode)
+            }
         }
     }
 
@@ -659,13 +664,9 @@ class AnimeInfoScreenModel(
      * Downloads the given list of episodes with the manager.
      * @param episodes the list of episodes to download.
      */
-    private fun downloadEpisodes(episodes: List<Episode>, alt: Boolean = false) {
+    private fun downloadEpisodes(episodes: List<Episode>, alt: Boolean = false, video: Video? = null) {
         val anime = successState?.anime ?: return
-        if (alt) {
-            downloadManager.downloadEpisodesAlt(anime, episodes)
-        } else {
-            downloadManager.downloadEpisodes(anime, episodes)
-        }
+        downloadManager.downloadEpisodes(anime, episodes, true, alt, video)
         toggleAllSelection(false)
     }
 
@@ -920,6 +921,7 @@ class AnimeInfoScreenModel(
         data class ChangeCategory(val anime: Anime, val initialSelection: List<CheckboxState<Category>>) : Dialog()
         data class DeleteEpisodes(val episodes: List<Episode>) : Dialog()
         data class DuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog()
+        data class Options(val episode: Episode, val anime: Anime, val source: AnimeSource) : Dialog()
         object ChangeAnimeSkipIntro : Dialog()
         object SettingsSheet : Dialog()
         object TrackSheet : Dialog()
@@ -976,6 +978,15 @@ class AnimeInfoScreenModel(
             when (state) {
                 AnimeScreenState.Loading -> state
                 is AnimeScreenState.Success -> state.copy(dialog = Dialog.ChangeAnimeSkipIntro)
+            }
+        }
+    }
+
+    private fun showOptionsDialog(episode: Episode) {
+        mutableState.update { state ->
+            when (state) {
+                AnimeScreenState.Loading -> state
+                is AnimeScreenState.Success -> { state.copy(dialog = Dialog.Options(episode, state.anime, state.source)) }
             }
         }
     }
