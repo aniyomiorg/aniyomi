@@ -39,7 +39,6 @@ import eu.kanade.presentation.components.DuplicateAnimeDialog
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.NavigatorAdaptiveSheet
 import eu.kanade.presentation.entries.DeleteItemsDialog
-import eu.kanade.presentation.entries.DownloadCustomAmountDialog
 import eu.kanade.presentation.entries.EditCoverAction
 import eu.kanade.presentation.entries.anime.AnimeScreen
 import eu.kanade.presentation.entries.anime.EpisodeSettingsDialog
@@ -187,18 +186,6 @@ class AnimeScreen(
                         screenModel.deleteEpisodes(dialog.episodes)
                     },
                     isManga = false,
-                )
-            }
-            is AnimeInfoScreenModel.Dialog.DownloadCustomAmount -> {
-                DownloadCustomAmountDialog(
-                    maxAmount = dialog.max,
-                    onDismissRequest = onDismissRequest,
-                    onConfirm = { amount ->
-                        val episodesToDownload = screenModel.getUnseenEpisodesSorted().take(amount)
-                        if (episodesToDownload.isNotEmpty()) {
-                            screenModel.startDownload(episodes = episodesToDownload, startNow = false)
-                        }
-                    },
                 )
             }
             is AnimeInfoScreenModel.Dialog.DuplicateAnime -> DuplicateAnimeDialog(

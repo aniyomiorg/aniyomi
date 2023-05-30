@@ -82,7 +82,7 @@ class AnimeInfoScreenModel(
     private val isFromSource: Boolean,
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
-    private val uiPreferences: UiPreferences = Injekt.get(),
+    uiPreferences: UiPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
     private val trackManager: TrackManager = Injekt.get(),
@@ -364,7 +364,7 @@ class AnimeInfoScreenModel(
     /**
      * Returns true if the anime has any downloads.
      */
-    fun hasDownloads(): Boolean {
+    private fun hasDownloads(): Boolean {
         val anime = successState?.anime ?: return false
         return downloadManager.getDownloadCount(anime) > 0
     }
@@ -542,7 +542,7 @@ class AnimeInfoScreenModel(
         return successState.episodes.getNextUnseen(successState.anime)
     }
 
-    fun getUnseenEpisodes(): List<Episode> {
+    private fun getUnseenEpisodes(): List<Episode> {
         return successState?.processedEpisodes
             ?.filter { (episode, dlStatus) -> !episode.seen && dlStatus == AnimeDownload.State.NOT_DOWNLOADED }
             ?.map { it.episode }
@@ -550,13 +550,13 @@ class AnimeInfoScreenModel(
             ?: emptyList()
     }
 
-    fun getUnseenEpisodesSorted(): List<Episode> {
+    private fun getUnseenEpisodesSorted(): List<Episode> {
         val anime = successState?.anime ?: return emptyList()
         val episodes = getUnseenEpisodes().sortedWith(getEpisodeSort(anime))
         return if (anime.sortDescending()) episodes.reversed() else episodes
     }
 
-    fun startDownload(
+    private fun startDownload(
         episodes: List<Episode>,
         startNow: Boolean,
     ) {
@@ -616,10 +616,8 @@ class AnimeInfoScreenModel(
             DownloadAction.NEXT_1_ITEM -> getUnseenEpisodesSorted().take(1)
             DownloadAction.NEXT_5_ITEMS -> getUnseenEpisodesSorted().take(5)
             DownloadAction.NEXT_10_ITEMS -> getUnseenEpisodesSorted().take(10)
-            DownloadAction.CUSTOM -> {
-                showDownloadCustomDialog()
-                return
-            }
+            DownloadAction.NEXT_25_ITEMS -> getUnseenEpisodesSorted().take(25)
+
             DownloadAction.UNVIEWED_ITEMS -> getUnseenEpisodes()
             DownloadAction.ALL_ITEMS -> successState?.episodes?.map { it.episode }
         }
@@ -628,7 +626,7 @@ class AnimeInfoScreenModel(
         }
     }
 
-    fun cancelDownload(episodeId: Long) {
+    private fun cancelDownload(episodeId: Long) {
         val activeDownload = downloadManager.getQueuedDownloadOrNull(episodeId) ?: return
         downloadManager.cancelQueuedDownloads(listOf(activeDownload))
         updateDownloadState(activeDownload.apply { status = AnimeDownload.State.NOT_DOWNLOADED })
@@ -922,7 +920,6 @@ class AnimeInfoScreenModel(
         data class ChangeCategory(val anime: Anime, val initialSelection: List<CheckboxState<Category>>) : Dialog()
         data class DeleteEpisodes(val episodes: List<Episode>) : Dialog()
         data class DuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog()
-        data class DownloadCustomAmount(val max: Int) : Dialog()
         object ChangeAnimeSkipIntro : Dialog()
         object SettingsSheet : Dialog()
         object TrackSheet : Dialog()
@@ -934,15 +931,6 @@ class AnimeInfoScreenModel(
             when (state) {
                 AnimeScreenState.Loading -> state
                 is AnimeScreenState.Success -> state.copy(dialog = null)
-            }
-        }
-    }
-    private fun showDownloadCustomDialog() {
-        val max = processedEpisodes?.count() ?: return
-        mutableState.update { state ->
-            when (state) {
-                AnimeScreenState.Loading -> state
-                is AnimeScreenState.Success -> state.copy(dialog = Dialog.DownloadCustomAmount(max))
             }
         }
     }

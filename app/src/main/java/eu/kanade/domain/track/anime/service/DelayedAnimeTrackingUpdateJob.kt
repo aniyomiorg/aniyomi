@@ -61,9 +61,9 @@ class DelayedAnimeTrackingUpdateJob(context: Context, workerParams: WorkerParame
         private const val TAG = "DelayedTrackingUpdate"
 
         fun setupTask(context: Context) {
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
+            val constraints = Constraints(
+                requiredNetworkType = NetworkType.CONNECTED,
+            )
 
             val request = OneTimeWorkRequestBuilder<DelayedAnimeTrackingUpdateJob>()
                 .setConstraints(constraints)

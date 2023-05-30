@@ -29,7 +29,6 @@ import eu.kanade.presentation.components.DuplicateMangaDialog
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.NavigatorAdaptiveSheet
 import eu.kanade.presentation.entries.DeleteItemsDialog
-import eu.kanade.presentation.entries.DownloadCustomAmountDialog
 import eu.kanade.presentation.entries.EditCoverAction
 import eu.kanade.presentation.entries.manga.ChapterSettingsDialog
 import eu.kanade.presentation.entries.manga.MangaScreen
@@ -162,18 +161,6 @@ class MangaScreen(
                         screenModel.deleteChapters(dialog.chapters)
                     },
                     isManga = true,
-                )
-            }
-            is MangaInfoScreenModel.Dialog.DownloadCustomAmount -> {
-                DownloadCustomAmountDialog(
-                    maxAmount = dialog.max,
-                    onDismissRequest = onDismissRequest,
-                    onConfirm = { amount ->
-                        val chaptersToDownload = screenModel.getUnreadChaptersSorted().take(amount)
-                        if (chaptersToDownload.isNotEmpty()) {
-                            screenModel.startDownload(chapters = chaptersToDownload, startNow = false)
-                        }
-                    },
                 )
             }
             is MangaInfoScreenModel.Dialog.DuplicateManga -> DuplicateMangaDialog(

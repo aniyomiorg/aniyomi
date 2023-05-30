@@ -457,18 +457,8 @@ class AnimeLibraryScreenModel(
             DownloadAction.NEXT_1_ITEM -> downloadUnseenEpisodes(animes, 1)
             DownloadAction.NEXT_5_ITEMS -> downloadUnseenEpisodes(animes, 5)
             DownloadAction.NEXT_10_ITEMS -> downloadUnseenEpisodes(animes, 10)
+            DownloadAction.NEXT_25_ITEMS -> downloadUnseenEpisodes(animes, 25)
             DownloadAction.UNVIEWED_ITEMS -> downloadUnseenEpisodes(animes, null)
-            DownloadAction.CUSTOM -> {
-                mutableState.update { state ->
-                    state.copy(
-                        dialog = Dialog.DownloadCustomAmount(
-                            animes,
-                            selection.maxOf { it.unseenCount }.toInt(),
-                        ),
-                    )
-                }
-                return
-            }
             else -> {}
         }
         clearSelection()
@@ -480,7 +470,7 @@ class AnimeLibraryScreenModel(
      * @param animes the list of anime.
      * @param amount the amount to queue or null to queue all
      */
-    fun downloadUnseenEpisodes(animes: List<Anime>, amount: Int?) {
+    private fun downloadUnseenEpisodes(animes: List<Anime>, amount: Int?) {
         coroutineScope.launchNonCancellable {
             animes.forEach { anime ->
                 val episodes = getNextEpisodes.await(anime.id)
@@ -702,7 +692,6 @@ class AnimeLibraryScreenModel(
     sealed class Dialog {
         data class ChangeCategory(val anime: List<Anime>, val initialSelection: List<CheckboxState<Category>>) : Dialog()
         data class DeleteAnime(val anime: List<Anime>) : Dialog()
-        data class DownloadCustomAmount(val anime: List<Anime>, val max: Int) : Dialog()
     }
 
     @Immutable

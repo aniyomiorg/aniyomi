@@ -40,7 +40,6 @@ import eu.kanade.presentation.components.EmptyScreenAction
 import eu.kanade.presentation.components.LibraryBottomActionMenu
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.entries.DownloadCustomAmountDialog
 import eu.kanade.presentation.library.LibraryToolbar
 import eu.kanade.presentation.library.anime.AnimeLibraryContent
 import eu.kanade.presentation.util.Tab
@@ -259,16 +258,6 @@ object AnimeLibraryTab : Tab {
                         screenModel.clearSelection()
                     },
                     isManga = false,
-                )
-            }
-            is AnimeLibraryScreenModel.Dialog.DownloadCustomAmount -> {
-                DownloadCustomAmountDialog(
-                    maxAmount = dialog.max,
-                    onDismissRequest = onDismissRequest,
-                    onConfirm = { amount ->
-                        screenModel.downloadUnseenEpisodes(dialog.anime, amount)
-                        screenModel.clearSelection()
-                    },
                 )
             }
             null -> {}

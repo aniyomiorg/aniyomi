@@ -39,7 +39,6 @@ import eu.kanade.presentation.components.EmptyScreenAction
 import eu.kanade.presentation.components.LibraryBottomActionMenu
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.entries.DownloadCustomAmountDialog
 import eu.kanade.presentation.library.LibraryToolbar
 import eu.kanade.presentation.library.manga.MangaLibraryContent
 import eu.kanade.presentation.util.Tab
@@ -246,16 +245,6 @@ object MangaLibraryTab : Tab {
                         screenModel.clearSelection()
                     },
                     isManga = true,
-                )
-            }
-            is MangaLibraryScreenModel.Dialog.DownloadCustomAmount -> {
-                DownloadCustomAmountDialog(
-                    maxAmount = dialog.max,
-                    onDismissRequest = onDismissRequest,
-                    onConfirm = { amount ->
-                        screenModel.downloadUnreadChapters(dialog.manga, amount)
-                        screenModel.clearSelection()
-                    },
                 )
             }
             null -> {}

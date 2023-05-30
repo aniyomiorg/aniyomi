@@ -171,9 +171,10 @@
     <string name="download_paused">Paused</string>
     <string name="show_episode_number">Episode number</string>
     <string name="sort_by_episode_number">By episode number</string>
-    <string name="download_1_episode">Next episode</string>
-    <string name="download_5_episodes">Next 5 episodes</string>
-    <string name="download_10_episodes">Next 10 episodes</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one">Next episode</item>
+        <item quantity="other">Next %d episode</item>
+    </plurals>
     <string name="download_unseen">Unseen</string>
     <string name="confirm_delete_episodes">Are you sure you want to delete the selected episodes?</string>
     <string name="also_set_chapter_settings_for_library">Also apply to all manga in my library</string>
