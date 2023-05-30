@@ -11,6 +11,7 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.prefs.asState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.core.util.insertSeparators
+import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.anime.interactor.GetAnime
 import eu.kanade.domain.items.episode.interactor.GetEpisode
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
@@ -59,6 +60,7 @@ class AnimeUpdatesScreenModel(
     private val getAnime: GetAnime = Injekt.get(),
     private val getEpisode: GetEpisode = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
+    internal val downloadPreferences: DownloadPreferences = Injekt.get(),
     val snackbarHostState: SnackbarHostState = SnackbarHostState(),
     uiPreferences: UiPreferences = Injekt.get(),
 ) : StateScreenModel<AnimeUpdatesState>(AnimeUpdatesState()) {
@@ -175,18 +177,16 @@ class AnimeUpdatesScreenModel(
                     val episodeId = items.singleOrNull()?.update?.episodeId ?: return@launch
                     startDownloadingNow(episodeId)
                 }
-                EpisodeDownloadAction.START_ALT -> {
-                    downloadEpisodes(items, alt = true)
-                    if (items.any { it.downloadStateProvider() == AnimeDownload.State.ERROR }) {
-                        AnimeDownloadService.start(Injekt.get<Application>())
-                    }
-                }
                 EpisodeDownloadAction.CANCEL -> {
                     val episodeId = items.singleOrNull()?.update?.episodeId ?: return@launch
                     cancelDownload(episodeId)
                 }
                 EpisodeDownloadAction.DELETE -> {
                     deleteEpisodes(items)
+                }
+                EpisodeDownloadAction.SHOW_OPTIONS -> {
+                    val update = items.singleOrNull()?.update ?: return@launch
+                    showOptionsDialog(update)
                 }
             }
             toggleAllSelection(false)
@@ -274,6 +274,10 @@ class AnimeUpdatesScreenModel(
 
     fun showConfirmDeleteEpisodes(updatesItem: List<AnimeUpdatesItem>) {
         setDialog(Dialog.DeleteConfirmation(updatesItem))
+    }
+
+    private fun showOptionsDialog(update: AnimeUpdatesWithRelations) {
+        setDialog(Dialog.Options(update.episodeId, update.animeId, update.sourceId))
     }
 
     fun toggleSelection(
@@ -375,6 +379,7 @@ class AnimeUpdatesScreenModel(
 
     sealed class Dialog {
         data class DeleteConfirmation(val toDelete: List<AnimeUpdatesItem>) : Dialog()
+        data class Options(val episodeId: Long, val animeId: Long, val sourceId: Long) : Dialog()
     }
 
     sealed class Event {

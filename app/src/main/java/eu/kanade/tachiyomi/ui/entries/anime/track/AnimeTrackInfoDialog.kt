@@ -240,7 +240,7 @@ data class AnimeTrackInfoDialogHomeScreen(
                     }
                 }
             } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { "Failed to refresh track data mangaId=$animeId" }
+                logcat(LogPriority.ERROR, e) { "Failed to refresh track data animeId=$animeId" }
                 withUIContext { context.toast(e.message) }
             }
         }

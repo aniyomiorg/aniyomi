@@ -285,4 +285,6 @@
     <string name="label_migration_manga">Migrate Manga</string>
     <string name="label_migration_anime">Migrate Anime</string>
     <string name="settings">Settings</string>
+    <string name="copied_video_link_to_clipboard">Copied video quality link to clipboard</string>
+    <string name="choose_video_quality">Choose video quality:</string>
 </resources>

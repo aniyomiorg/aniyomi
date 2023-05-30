@@ -234,7 +234,7 @@ class PlayerViewModel(
 
                     val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
 
-                    currentVideoList = EpisodeLoader.getLinks(currentEpisode, anime, source).asFlow().first()
+                    currentVideoList = EpisodeLoader.getLinks(currentEpisode.toDomainEpisode()!!, anime, source).asFlow().first()
                     episodeId = currentEpisode.id!!
 
                     Pair(currentVideoList, Result.success(true))
@@ -251,7 +251,7 @@ class PlayerViewModel(
     fun isEpisodeOnline(): Boolean? {
         val anime = anime ?: return null
         val episode = currentEpisode ?: return null
-        return source is AnimeHttpSource && !EpisodeLoader.isDownloaded(episode, anime)
+        return source is AnimeHttpSource && !EpisodeLoader.isDownloaded(episode.toDomainEpisode()!!, anime)
     }
 
     suspend fun nextEpisode(): Pair<List<Video>?, String?>? {
@@ -265,10 +265,10 @@ class PlayerViewModel(
         return withIOContext {
             try {
                 val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
-                currentVideoList = EpisodeLoader.getLinks(currentEpisode, anime, source).asFlow().first()
+                currentVideoList = EpisodeLoader.getLinks(currentEpisode.toDomainEpisode()!!, anime, source).asFlow().first()
                 episodeId = currentEpisode.id!!
             } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links." }
+                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
             }
 
             Pair(currentVideoList, anime.title + " - " + episodeList[index + 1].name)
@@ -286,10 +286,10 @@ class PlayerViewModel(
         return withIOContext {
             try {
                 val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
-                currentVideoList = EpisodeLoader.getLinks(currentEpisode, anime, source).asFlow().first()
+                currentVideoList = EpisodeLoader.getLinks(currentEpisode.toDomainEpisode()!!, anime, source).asFlow().first()
                 episodeId = currentEpisode.id!!
             } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links." }
+                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
             }
             Pair(currentVideoList, anime.title + " - " + episodeList[index - 1].name)
         }
@@ -337,8 +337,8 @@ class PlayerViewModel(
         val currentEpisode = currentEpisode ?: return
         val nextEpisode = episodeList[getCurrentEpisodeIndex() + 1]
         viewModelScope.launchIO {
-            if (EpisodeLoader.isDownloaded(currentEpisode, anime) &&
-                EpisodeLoader.isDownloaded(nextEpisode, anime)
+            if (EpisodeLoader.isDownloaded(currentEpisode.toDomainEpisode()!!, anime) &&
+                EpisodeLoader.isDownloaded(nextEpisode.toDomainEpisode()!!, anime)
             ) {
                 return@launchIO
             }

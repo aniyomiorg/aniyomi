@@ -41,8 +41,10 @@ import eu.kanade.presentation.components.NavigatorAdaptiveSheet
 import eu.kanade.presentation.entries.DeleteItemsDialog
 import eu.kanade.presentation.entries.EditCoverAction
 import eu.kanade.presentation.entries.anime.AnimeScreen
+import eu.kanade.presentation.entries.anime.EpisodeOptionsDialogScreen
 import eu.kanade.presentation.entries.anime.EpisodeSettingsDialog
 import eu.kanade.presentation.entries.anime.components.AnimeCoverDialog
+import eu.kanade.presentation.entries.anime.onDismissEpisodeOptionsDialogScreen
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.isTabletUi
 import eu.kanade.tachiyomi.R
@@ -245,6 +247,18 @@ class AnimeScreen(
                     anime = successState.anime,
                     onDismissRequest = onDismissRequest,
                     defaultIntroLength = screenModel.playerPreferences.defaultIntroLength().get(),
+                )
+            }
+            is AnimeInfoScreenModel.Dialog.Options -> {
+                onDismissEpisodeOptionsDialogScreen = onDismissRequest
+                NavigatorAdaptiveSheet(
+                    screen = EpisodeOptionsDialogScreen(
+                        episodeId = dialog.episode.id,
+                        animeId = dialog.anime.id,
+                        sourceId = dialog.source.id,
+                        useExternalDownloader = screenModel.downloadPreferences.useExternalDownloader().get(),
+                    ),
+                    onDismissRequest = onDismissRequest,
                 )
             }
         }
