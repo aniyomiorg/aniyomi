@@ -20,8 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.commandiron.wheel_picker_compose.WheelTextPicker
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.presentation.components.WheelTextPicker
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
@@ -362,9 +362,8 @@ object SettingsPlayerScreen : SearchableSettings {
                                     it,
                                 )
                             },
-                            onScrollFinished = {
+                            onSelectionChanged = {
                                 newLength = it
-                                null
                             },
                             startIndex = skipIntroLengthValue,
                         )

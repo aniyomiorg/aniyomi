@@ -74,6 +74,8 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.updater.AppUpdateChecker
 import eu.kanade.tachiyomi.data.updater.AppUpdateResult
 import eu.kanade.tachiyomi.data.updater.RELEASE_URL
+import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionGithubApi
+import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
@@ -278,7 +280,7 @@ class MainActivity : BaseActivity() {
                         .launchIn(this)
                 }
 
-                CheckForUpdate()
+                CheckForUpdates()
             }
 
             var showChangelog by remember { mutableStateOf(didMigration && !BuildConfig.DEBUG) }
@@ -354,11 +356,12 @@ class MainActivity : BaseActivity() {
     }
 
     @Composable
-    private fun CheckForUpdate() {
+    private fun CheckForUpdates() {
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
+
+        // App updates
         LaunchedEffect(Unit) {
-            // App updates
             if (BuildConfig.INCLUDE_UPDATER) {
                 try {
                     val result = AppUpdateChecker().checkForUpdate(context)
@@ -374,6 +377,16 @@ class MainActivity : BaseActivity() {
                 } catch (e: Exception) {
                     logcat(LogPriority.ERROR, e)
                 }
+            }
+        }
+
+        // Extensions updates
+        LaunchedEffect(Unit) {
+            try {
+                MangaExtensionGithubApi().checkForUpdates(context)
+                AnimeExtensionGithubApi().checkForUpdates(context)
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e)
             }
         }
     }

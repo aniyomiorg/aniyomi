@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.extension.anime.api
 
 import android.content.Context
+import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
@@ -18,7 +19,7 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 import java.util.Date
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.days
 
 internal class AnimeExtensionGithubApi {
 
@@ -70,7 +71,7 @@ internal class AnimeExtensionGithubApi {
 
     suspend fun checkForUpdates(context: Context, fromAvailableExtensionList: Boolean = false): List<AnimeExtension.Installed>? {
         // Limit checks to once a day at most
-        if (fromAvailableExtensionList.not() && Date().time < lastExtCheck.get() + TimeUnit.DAYS.toMillis(1)) {
+        if (fromAvailableExtensionList && Date().time < lastExtCheck.get() + 1.days.inWholeMilliseconds) {
             return null
         }
 
@@ -95,6 +96,10 @@ internal class AnimeExtensionGithubApi {
             if (hasUpdate) {
                 extensionsWithUpdate.add(installedExt)
             }
+        }
+
+        if (extensionsWithUpdate.isNotEmpty()) {
+            ExtensionUpdateNotifier(context).promptUpdates(extensionsWithUpdate.map { it.name })
         }
 
         return extensionsWithUpdate

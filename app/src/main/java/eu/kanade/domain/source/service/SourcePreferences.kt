@@ -39,4 +39,8 @@ class SourcePreferences(
 
     fun searchPinnedAnimeSourcesOnly() = preferenceStore.getBoolean("search_pinned_anime_sources_only", false)
     fun searchPinnedMangaSourcesOnly() = preferenceStore.getBoolean("search_pinned_sources_only", false)
+
+    fun hideInAnimeLibraryItems() = preferenceStore.getBoolean("browse_hide_in_anime_library_items", false)
+
+    fun hideInMangaLibraryItems() = preferenceStore.getBoolean("browse_hide_in_library_items", false)
 }

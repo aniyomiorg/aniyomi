@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import androidx.paging.map
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
@@ -137,16 +138,17 @@ class BrowseAnimeSourceScreenModel(
                 PagingConfig(pageSize = 25),
             ) {
                 getRemoteAnime.subscribe(sourceId, listing.query ?: "", listing.filters)
-            }.flow
-                .map { pagingData ->
-                    pagingData.map { sAnime ->
-                        val dbAnime = withIOContext { networkToLocalAnime.await(sAnime.toDomainAnime(sourceId)) }
-                        getAnime.subscribe(dbAnime.url, dbAnime.source)
+            }.flow.map { pagingData ->
+                pagingData
+                    .map { withIOContext { networkToLocalAnime.await(it.toDomainAnime(sourceId)) } }
+                    .filter { !sourcePreferences.hideInAnimeLibraryItems().get() || !it.favorite }
+                    .map {
+                        getAnime.subscribe(it.url, it.source)
                             .filterNotNull()
-                            .onEach { initializeAnime(it) }
+                            .onEach(::initializeAnime)
                             .stateIn(coroutineScope)
                     }
-                }
+            }
                 .cachedIn(coroutineScope)
         }
         .stateIn(coroutineScope, SharingStarted.Lazily, emptyFlow())

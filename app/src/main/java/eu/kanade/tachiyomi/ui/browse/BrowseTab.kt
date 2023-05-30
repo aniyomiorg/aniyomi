@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.model.rememberScreenModel
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import eu.kanade.presentation.components.TabbedScreen
@@ -19,6 +20,7 @@ import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsScreenModel
 import eu.kanade.tachiyomi.ui.browse.anime.extension.animeExtensionsTab
 import eu.kanade.tachiyomi.ui.browse.anime.migration.sources.migrateAnimeSourceTab
 import eu.kanade.tachiyomi.ui.browse.anime.source.animeSourcesTab
+import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionsScreenModel
 import eu.kanade.tachiyomi.ui.browse.manga.extension.mangaExtensionsTab
 import eu.kanade.tachiyomi.ui.browse.manga.migration.sources.migrateMangaSourceTab
@@ -41,6 +43,11 @@ data class BrowseTab(
                 icon = rememberAnimatedVectorPainter(image, isSelected),
             )
         }
+
+    // TODO: Find a way to let it open Global Anime/Manga Search depending on what Tab(e.g. Anime/Manga Source Tab) is open
+    override suspend fun onReselect(navigator: Navigator) {
+        navigator.push(GlobalAnimeSearchScreen())
+    }
 
     @Composable
     override fun Content() {

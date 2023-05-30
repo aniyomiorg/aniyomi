@@ -30,7 +30,6 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.commandiron.wheel_picker_compose.WheelTextPicker
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.domain.entries.anime.model.toSAnime
@@ -38,6 +37,7 @@ import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.DuplicateAnimeDialog
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.NavigatorAdaptiveSheet
+import eu.kanade.presentation.components.WheelTextPicker
 import eu.kanade.presentation.entries.DeleteItemsDialog
 import eu.kanade.presentation.entries.EditCoverAction
 import eu.kanade.presentation.entries.anime.AnimeScreen
@@ -401,9 +401,8 @@ fun ChangeIntroLength(
                                 it,
                             )
                         },
-                        onScrollFinished = {
+                        onSelectionChanged = {
                             newLength = it + 1
-                            null
                         },
                         startIndex = if (anime.viewerFlags > 0) {
                             anime.viewerFlags.toInt() - 1
