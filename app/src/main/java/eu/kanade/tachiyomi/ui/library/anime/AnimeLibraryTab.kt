@@ -45,7 +45,7 @@ import eu.kanade.presentation.library.LibraryToolbar
 import eu.kanade.presentation.library.anime.AnimeLibraryContent
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateService
+import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.ui.browse.anime.source.globalsearch.GlobalAnimeSearchScreen
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
@@ -107,7 +107,7 @@ object AnimeLibraryTab : Tab {
         val snackbarHostState = remember { SnackbarHostState() }
 
         val onClickRefresh: (Category?) -> Boolean = {
-            val started = AnimeLibraryUpdateService.start(context, it)
+            val started = AnimeLibraryUpdateJob.startNow(context, it)
             scope.launch {
                 val msgRes = if (started) R.string.updating_category else R.string.update_already_running
                 snackbarHostState.showSnackbar(context.getString(msgRes))

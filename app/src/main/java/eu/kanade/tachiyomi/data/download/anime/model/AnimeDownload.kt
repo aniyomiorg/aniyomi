@@ -5,6 +5,14 @@ import eu.kanade.domain.items.episode.interactor.GetEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import rx.subjects.PublishSubject
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
@@ -32,23 +40,34 @@ data class AnimeDownload(
     @Transient
     var downloadedImages: Int = 0
 
-    @Volatile
     @Transient
-    var status: State = State.NOT_DOWNLOADED
+    private val _statusFlow = MutableStateFlow(State.NOT_DOWNLOADED)
+
+    @Transient
+    val statusFlow = _statusFlow.asStateFlow()
+    var status: State
+        get() = _statusFlow.value
         set(status) {
-            field = status
-            statusSubject?.onNext(this)
-            statusCallback?.invoke(this)
+            _statusFlow.value = status
         }
 
     @Transient
-    var statusSubject: PublishSubject<AnimeDownload>? = null
+    val progressFlow = flow {
+        if (video == null) {
+            emit(0)
+            while (video == null) {
+                delay(50)
+            }
+        }
+
+        val progressFlows = video!!.progressFlow
+        emitAll(combine(progressFlows) { it.average().toInt() })
+    }
+        .distinctUntilChanged()
+        .debounce(50)
 
     @Transient
     var progressSubject: PublishSubject<AnimeDownload>? = null
-
-    @Transient
-    var statusCallback: ((AnimeDownload) -> Unit)? = null
 
     @Transient
     var progressCallback: ((AnimeDownload) -> Unit)? = null

@@ -162,6 +162,8 @@ fun MangaUpdatesUiItem(
     downloadProgressProvider: () -> Int,
 ) {
     val haptic = LocalHapticFeedback.current
+    val textAlpha = if (update.read) ReadItemAlpha else 1f
+
     Row(
         modifier = modifier
             .selectedBackground(selected)
@@ -188,10 +190,6 @@ fun MangaUpdatesUiItem(
                 .padding(horizontal = MaterialTheme.padding.medium)
                 .weight(1f),
         ) {
-            val bookmark = remember(update.bookmark) { update.bookmark }
-            val read = remember(update.read) { update.read }
-            val textAlpha = remember(read) { if (read) ReadItemAlpha else 1f }
-
             Text(
                 text = update.mangaTitle,
                 maxLines = 1,
@@ -201,7 +199,7 @@ fun MangaUpdatesUiItem(
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 var textHeight by remember { mutableStateOf(0) }
-                if (bookmark) {
+                if (update.bookmark) {
                     Icon(
                         imageVector = Icons.Filled.Bookmark,
                         contentDescription = stringResource(R.string.action_filter_bookmarked),
@@ -232,6 +230,7 @@ fun MangaUpdatesUiItem(
                 }
             }
         }
+
         ChapterDownloadIndicator(
             enabled = onDownloadChapter != null,
             modifier = Modifier.padding(start = 4.dp),

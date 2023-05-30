@@ -44,7 +44,7 @@ import eu.kanade.presentation.library.LibraryToolbar
 import eu.kanade.presentation.library.manga.MangaLibraryContent
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateService
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchScreen
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
@@ -104,7 +104,7 @@ object MangaLibraryTab : Tab {
         val snackbarHostState = remember { SnackbarHostState() }
 
         val onClickRefresh: (Category?) -> Boolean = {
-            val started = MangaLibraryUpdateService.start(context, it)
+            val started = MangaLibraryUpdateJob.startNow(context, it)
             scope.launch {
                 val msgRes = if (started) R.string.updating_category else R.string.update_already_running
                 snackbarHostState.showSnackbar(context.getString(msgRes))

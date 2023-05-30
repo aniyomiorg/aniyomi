@@ -162,7 +162,7 @@ class AnimeDownloader(
             return
         }
 
-        if (notifier.paused && !queue.isEmpty()) {
+        if (notifier.paused && queue.isNotEmpty()) {
             notifier.onPaused()
         } else {
             notifier.onComplete()
@@ -614,7 +614,7 @@ class AnimeDownloader(
                         file.renameTo("$filename.mp4")
                     } catch (e: Exception) {
                         response.close()
-                        if (!queue.contains(download)) file.delete()
+                        if (!queue.equals(download)) file.delete()
                         // file.delete()
                         throw e
                     }

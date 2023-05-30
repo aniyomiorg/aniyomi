@@ -117,7 +117,7 @@ class AnimeDownloadManager(
      * @param downloads value to set the download queue to
      */
     fun reorderQueue(downloads: List<AnimeDownload>) {
-        if (downloader.queue.queue == downloads) return
+        if (downloader.queue.state == downloads) return
         val wasRunning = downloader.isRunning
 
         if (downloads.isEmpty()) {

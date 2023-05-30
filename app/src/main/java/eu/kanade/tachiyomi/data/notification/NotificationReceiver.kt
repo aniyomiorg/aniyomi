@@ -22,8 +22,8 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
-import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateService
-import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateService
+import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.updater.AppUpdateService
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
@@ -114,8 +114,8 @@ class NotificationReceiver : BroadcastReceiver() {
                 intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1),
             )
             // Cancel library update and dismiss notification
-            ACTION_CANCEL_LIBRARY_UPDATE -> cancelLibraryUpdate(context, Notifications.ID_LIBRARY_PROGRESS)
-            ACTION_CANCEL_ANIMELIB_UPDATE -> cancelAnimelibUpdate(context, Notifications.ID_LIBRARY_PROGRESS)
+            ACTION_CANCEL_LIBRARY_UPDATE -> cancelLibraryUpdate(context)
+            ACTION_CANCEL_ANIMELIB_UPDATE -> cancelAnimelibUpdate(context)
             // Cancel downloading app update
             ACTION_CANCEL_APP_UPDATE_DOWNLOAD -> cancelDownloadAppUpdate(context)
             // Open reader activity
@@ -298,11 +298,9 @@ class NotificationReceiver : BroadcastReceiver() {
      * Method called when user wants to stop a library update
      *
      * @param context context of application
-     * @param notificationId id of notification
      */
-    private fun cancelLibraryUpdate(context: Context, notificationId: Int) {
-        MangaLibraryUpdateService.stop(context)
-        ContextCompat.getMainExecutor(context).execute { dismissNotification(context, notificationId) }
+    private fun cancelLibraryUpdate(context: Context) {
+        MangaLibraryUpdateJob.stop(context)
     }
 
     private fun cancelDownloadAppUpdate(context: Context) {
@@ -315,9 +313,8 @@ class NotificationReceiver : BroadcastReceiver() {
      * @param context context of application
      * @param notificationId id of notification
      */
-    private fun cancelAnimelibUpdate(context: Context, notificationId: Int) {
-        AnimeLibraryUpdateService.stop(context)
-        ContextCompat.getMainExecutor(context).execute { dismissNotification(context, notificationId) }
+    private fun cancelAnimelibUpdate(context: Context) {
+        AnimeLibraryUpdateJob.stop(context)
     }
 
     /**

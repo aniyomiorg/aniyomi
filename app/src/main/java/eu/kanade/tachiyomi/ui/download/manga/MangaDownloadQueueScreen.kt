@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
@@ -113,7 +112,6 @@ fun DownloadQueueScreen(
                         }
                     },
                     expanded = fabExpanded,
-                    modifier = Modifier.navigationBarsPadding(),
                 )
             }
         },

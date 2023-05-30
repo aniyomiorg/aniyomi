@@ -270,14 +270,6 @@
         </receiver>
 
         <service
-            android:name=".data.library.manga.MangaLibraryUpdateService"
-            android:exported="false" />
-
-        <service
-            android:name=".data.library.anime.AnimeLibraryUpdateService"
-            android:exported="false" />
-
-        <service
             android:name=".data.download.manga.MangaDownloadService"
             android:exported="false" />
 

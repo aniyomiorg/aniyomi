@@ -11,6 +11,10 @@ const val MANGA_NON_COMPLETED = "manga_ongoing"
 const val MANGA_HAS_UNREAD = "manga_fully_read"
 const val MANGA_NON_READ = "manga_started"
 
+const val ANIME_NON_COMPLETED = "anime_ongoing"
+const val ANIME_HAS_UNSEEN = "anime_fully_seen"
+const val ANIME_NON_SEEN = "anime_started"
+
 const val FLAG_CATEGORIES = "1"
 const val FLAG_CHAPTERS = "2"
 const val FLAG_HISTORY = "4"

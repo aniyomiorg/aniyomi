@@ -164,6 +164,8 @@ fun AnimeUpdatesUiItem(
     downloadProgressProvider: () -> Int,
 ) {
     val haptic = LocalHapticFeedback.current
+    val textAlpha = if (update.seen) ReadItemAlpha else 1f
+
     Row(
         modifier = modifier
             .selectedBackground(selected)
@@ -190,10 +192,6 @@ fun AnimeUpdatesUiItem(
                 .padding(horizontal = MaterialTheme.padding.medium)
                 .weight(1f),
         ) {
-            val bookmark = remember(update.bookmark) { update.bookmark }
-            val seen = remember(update.seen) { update.seen }
-            val textAlpha = remember(seen) { if (seen) ReadItemAlpha else 1f }
-
             Text(
                 text = update.animeTitle,
                 maxLines = 1,
@@ -201,9 +199,10 @@ fun AnimeUpdatesUiItem(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.alpha(textAlpha),
             )
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 var textHeight by remember { mutableStateOf(0) }
-                if (bookmark) {
+                if (update.bookmark) {
                     Icon(
                         imageVector = Icons.Filled.Bookmark,
                         contentDescription = stringResource(R.string.action_filter_bookmarked),
@@ -234,6 +233,7 @@ fun AnimeUpdatesUiItem(
                 }
             }
         }
+
         EpisodeDownloadIndicator(
             enabled = onDownloadEpisode != null,
             modifier = Modifier.padding(start = 4.dp),

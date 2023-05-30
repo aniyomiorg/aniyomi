@@ -53,6 +53,9 @@ fun AnimeEpisodeListItem(
     onClick: () -> Unit,
     onDownloadClick: ((EpisodeDownloadAction) -> Unit)?,
 ) {
+    val textAlpha = remember(seen) { if (seen) ReadItemAlpha else 1f }
+    val textSubtitleAlpha = remember(seen) { if (seen) ReadItemAlpha else SecondaryItemAlpha }
+
     Row(
         modifier = modifier
             .selectedBackground(selected)
@@ -63,9 +66,6 @@ fun AnimeEpisodeListItem(
             .padding(start = 16.dp, top = 12.dp, end = 8.dp, bottom = 12.dp),
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            val textAlpha = remember(seen) { if (seen) ReadItemAlpha else 1f }
-            val textSubtitleAlpha = remember(seen) { if (seen) ReadItemAlpha else SecondaryItemAlpha }
-
             Row(verticalAlignment = Alignment.CenterVertically) {
                 var textHeight by remember { mutableStateOf(0) }
                 if (bookmark) {
@@ -87,7 +87,9 @@ fun AnimeEpisodeListItem(
                     modifier = Modifier.alpha(textAlpha),
                 )
             }
+
             Spacer(modifier = Modifier.height(6.dp))
+
             Row(modifier = Modifier.alpha(textSubtitleAlpha)) {
                 ProvideTextStyle(
                     value = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
@@ -120,7 +122,6 @@ fun AnimeEpisodeListItem(
             }
         }
 
-        // Download view
         if (onDownloadClick != null) {
             EpisodeDownloadIndicator(
                 enabled = downloadIndicatorEnabled,

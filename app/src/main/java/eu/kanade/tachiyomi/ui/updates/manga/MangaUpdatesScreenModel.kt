@@ -23,7 +23,7 @@ import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
-import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateService
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.util.lang.toDateKey
 import eu.kanade.tachiyomi.util.lang.toRelativeString
@@ -130,7 +130,7 @@ class MangaUpdatesScreenModel(
     }
 
     fun updateLibrary(): Boolean {
-        val started = MangaLibraryUpdateService.start(Injekt.get<Application>())
+        val started = MangaLibraryUpdateJob.startNow(Injekt.get<Application>())
         coroutineScope.launch {
             _events.send(Event.LibraryUpdateTriggered(started))
         }

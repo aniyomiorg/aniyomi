@@ -116,8 +116,7 @@ class MangaDownloadQueueScreenModel(
 
     init {
         coroutineScope.launch {
-            downloadManager.queue.updates
-                .catch { logcat(LogPriority.ERROR, it) }
+            downloadManager.queue.state
                 .map { downloads ->
                     downloads
                         .groupBy { it.source }

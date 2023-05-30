@@ -33,7 +33,7 @@ import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
-import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateService
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -317,13 +317,13 @@ object SettingsAdvancedScreen : SearchableSettings {
             preferenceItems = listOf(
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_refresh_library_covers),
-                    onClick = { MangaLibraryUpdateService.start(context, target = MangaLibraryUpdateService.Target.COVERS) },
+                    onClick = { MangaLibraryUpdateJob.startNow(context, target = MangaLibraryUpdateJob.Target.COVERS) },
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_refresh_library_tracking),
                     subtitle = stringResource(R.string.pref_refresh_library_tracking_summary),
                     enabled = trackManager.hasLoggedServices(),
-                    onClick = { MangaLibraryUpdateService.start(context, target = MangaLibraryUpdateService.Target.TRACKING) },
+                    onClick = { MangaLibraryUpdateJob.startNow(context, target = MangaLibraryUpdateJob.Target.TRACKING) },
                 ),
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_reset_viewer_flags),

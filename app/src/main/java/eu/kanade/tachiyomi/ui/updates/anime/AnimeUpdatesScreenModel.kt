@@ -23,7 +23,7 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
-import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateService
+import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.util.lang.toDateKey
 import eu.kanade.tachiyomi.util.lang.toRelativeString
@@ -130,7 +130,7 @@ class AnimeUpdatesScreenModel(
     }
 
     fun updateLibrary(): Boolean {
-        val started = AnimeLibraryUpdateService.start(Injekt.get<Application>())
+        val started = AnimeLibraryUpdateJob.startNow(Injekt.get<Application>())
         coroutineScope.launch {
             _events.send(Event.LibraryUpdateTriggered(started))
         }

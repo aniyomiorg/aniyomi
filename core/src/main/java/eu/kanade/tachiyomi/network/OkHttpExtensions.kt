@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.network
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
@@ -134,13 +135,11 @@ fun OkHttpClient.newCachelessCallWithProgress(request: Request, listener: Progre
 }
 
 inline fun <reified T> Response.parseAs(): T {
-    return internalParseAs(typeOf<T>(), this)
+    return decodeFromJsonResponse(serializer(), this)
 }
 
-@Suppress("UNCHECKED_CAST")
 @OptIn(ExperimentalSerializationApi::class)
-fun <T> internalParseAs(type: KType, response: Response): T {
-    val deserializer = serializer(type) as KSerializer<T>
+fun <T> decodeFromJsonResponse(deserializer: DeserializationStrategy<T>, response: Response): T {
     return response.body.source().use {
         Injekt.get<Json>().decodeFromBufferedSource(deserializer, it)
     }

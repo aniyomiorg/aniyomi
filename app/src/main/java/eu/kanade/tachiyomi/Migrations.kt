@@ -406,6 +406,12 @@ object Migrations {
                             }
                         }
                     }
+                    if (oldVersion < 96) {
+                        MangaLibraryUpdateJob.cancelAllWorks(context)
+                        AnimeLibraryUpdateJob.cancelAllWorks(context)
+                        MangaLibraryUpdateJob.setupTask(context)
+                        AnimeLibraryUpdateJob.setupTask(context)
+                    }
                     return true
                 }
             }
