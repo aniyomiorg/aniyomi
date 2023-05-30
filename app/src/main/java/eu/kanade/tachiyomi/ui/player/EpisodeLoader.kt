@@ -69,7 +69,7 @@ class EpisodeLoader {
                 val video = Video(episode.url, "Local source: ${episode.url}", episode.url, Uri.parse(episode.url))
                 Observable.just(listOf(video))
             } catch (e: Exception) {
-                errorMessage = e.message ?: "error getting links"
+                errorMessage = e.message ?: "Error getting links"
                 Observable.just(emptyList())
             }
         }

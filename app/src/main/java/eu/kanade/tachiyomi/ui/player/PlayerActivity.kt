@@ -576,7 +576,7 @@ class PlayerActivity :
                             else -> setVideoList(switchMethod.first!!)
                         }
                     } else {
-                        logcat(LogPriority.ERROR) { "Error getting links." }
+                        logcat(LogPriority.ERROR) { "Error getting links" }
                     }
 
                     if (isInPipMode && playerPreferences.pipEpisodeToasts().get()) {

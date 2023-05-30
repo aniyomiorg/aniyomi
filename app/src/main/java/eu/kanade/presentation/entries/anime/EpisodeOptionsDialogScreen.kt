@@ -47,10 +47,14 @@ import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.player.EpisodeLoader
 import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import logcat.LogPriority
+import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.Injekt
@@ -120,6 +124,7 @@ class EpisodeOptionsDialogScreen(
         val resultList: Result<List<Video>>? = null,
     )
 
+    @OptIn(DelicateCoroutinesApi::class)
     @Composable
     fun EpisodeOptionsDialog(
         episode: Episode?,
@@ -151,7 +156,7 @@ class EpisodeOptionsDialogScreen(
                 LoadingScreen()
             } else {
                 val videoList = resultList.getOrNull()
-                if (videoList != null) {
+                if (!videoList.isNullOrEmpty()) {
                     videoList.forEach { video ->
                         val downloadEpisode: (Boolean) -> Unit = {
                             downloadManager.downloadEpisodes(anime!!, listOf(episode!!), true, it, video)
@@ -172,7 +177,9 @@ class EpisodeOptionsDialogScreen(
                         )
                     }
                 } else {
-                    // yes
+                    logcat(LogPriority.ERROR) { "Error getting links" }
+                    launchUI { context.toast("Video list is missing") }
+                    onDismissEpisodeOptionsDialogScreen()
                 }
             }
         }

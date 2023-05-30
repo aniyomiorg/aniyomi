@@ -268,7 +268,7 @@ class PlayerViewModel(
                 currentVideoList = EpisodeLoader.getLinks(currentEpisode.toDomainEpisode()!!, anime, source).asFlow().first()
                 episodeId = currentEpisode.id!!
             } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links." }
+                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
             }
 
             Pair(currentVideoList, anime.title + " - " + episodeList[index + 1].name)
@@ -289,7 +289,7 @@ class PlayerViewModel(
                 currentVideoList = EpisodeLoader.getLinks(currentEpisode.toDomainEpisode()!!, anime, source).asFlow().first()
                 episodeId = currentEpisode.id!!
             } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links." }
+                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
             }
             Pair(currentVideoList, anime.title + " - " + episodeList[index - 1].name)
         }
