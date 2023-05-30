@@ -60,8 +60,8 @@ fun MangaLibraryList(
                     lastModified = manga.coverLastModified,
                 ),
                 badge = {
-                    DownloadsBadge(count = libraryItem.downloadCount.toInt())
-                    UnviewedBadge(count = libraryItem.unreadCount.toInt())
+                    DownloadsBadge(count = libraryItem.downloadCount)
+                    UnviewedBadge(count = libraryItem.unreadCount)
                     LanguageBadge(
                         isLocal = libraryItem.isLocal,
                         sourceLanguage = libraryItem.sourceLanguage,

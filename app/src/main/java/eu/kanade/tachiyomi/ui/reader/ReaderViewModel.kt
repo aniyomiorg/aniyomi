@@ -365,6 +365,10 @@ class ReaderViewModel(
      * that the user doesn't have to wait too long to continue reading.
      */
     private suspend fun preload(chapter: ReaderChapter) {
+        if (chapter.state is ReaderChapter.State.Loaded || chapter.state == ReaderChapter.State.Loading) {
+            return
+        }
+
         if (chapter.pageLoader is HttpPageLoader) {
             val manga = manga ?: return
             val dbChapter = chapter.chapter
@@ -384,20 +388,17 @@ class ReaderViewModel(
             return
         }
 
-        logcat { "Preloading ${chapter.chapter.url}" }
-
         val loader = loader ?: return
-        withIOContext {
-            try {
-                loader.loadChapter(chapter)
-            } catch (e: Throwable) {
-                if (e is CancellationException) {
-                    throw e
-                }
-                return@withIOContext
+        try {
+            logcat { "Preloading ${chapter.chapter.url}" }
+            loader.loadChapter(chapter)
+        } catch (e: Throwable) {
+            if (e is CancellationException) {
+                throw e
             }
-            eventChannel.trySend(Event.ReloadViewerChapters)
+            return
         }
+        eventChannel.trySend(Event.ReloadViewerChapters)
     }
 
     /**

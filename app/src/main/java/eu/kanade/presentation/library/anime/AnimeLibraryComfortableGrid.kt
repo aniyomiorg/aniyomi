@@ -51,8 +51,8 @@ fun AnimeLibraryComfortableGrid(
                     lastModified = anime.coverLastModified,
                 ),
                 coverBadgeStart = {
-                    DownloadsBadge(count = libraryItem.downloadCount.toInt())
-                    UnviewedBadge(count = libraryItem.unseenCount.toInt())
+                    DownloadsBadge(count = libraryItem.downloadCount)
+                    UnviewedBadge(count = libraryItem.unseenCount)
                 },
                 coverBadgeEnd = {
                     LanguageBadge(

@@ -53,6 +53,7 @@ import kotlinx.coroutines.flow.update
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.data.entries.anime.libraryAnime
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.anime.model.Anime
@@ -372,20 +373,21 @@ class AnimeLibraryScreenModel(
             animelibAnimeList
                 .map { animelibAnime ->
                     // Display mode based on user preference: take it from global library setting or category
-                    AnimeLibraryItem(animelibAnime).apply {
+                    AnimeLibraryItem(
+                        animelibAnime,
                         downloadCount = if (prefs.downloadBadge) {
                             downloadManager.getDownloadCount(animelibAnime.anime).toLong()
                         } else {
                             0
-                        }
-                        unseenCount = animelibAnime.unseenCount
-                        isLocal = if (prefs.localBadge) animelibAnime.anime.isLocal() else false
+                        },
+                        unseenCount = animelibAnime.unseenCount,
+                        isLocal = if (prefs.localBadge) animelibAnime.anime.isLocal() else false,
                         sourceLanguage = if (prefs.languageBadge) {
                             sourceManager.getOrStub(animelibAnime.anime.source).lang
                         } else {
                             ""
-                        }
-                    }
+                        },
+                    )
                 }
                 .groupBy { it.libraryAnime.category }
         }
