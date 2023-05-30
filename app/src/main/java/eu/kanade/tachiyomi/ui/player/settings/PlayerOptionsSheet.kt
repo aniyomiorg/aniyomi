@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player
+package eu.kanade.tachiyomi.ui.player.settings
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerOptionsSheetBinding
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.widget.sheet.PlayerBottomSheetDialog
 
 /**
@@ -27,15 +28,19 @@ class PlayerOptionsSheet(
         binding.setAsCover.setOnClickListener { setAsCover(); this.dismiss() }
         binding.share.setOnClickListener { share(); this.dismiss() }
         binding.save.setOnClickListener { save(); this.dismiss() }
+
         binding.toggleSubs.isChecked = activity.screenshotSubs
         binding.toggleSubs.setOnCheckedChangeListener { _, newValue -> activity.screenshotSubs = newValue }
+
         binding.toggleVolumeBrightnessGestures.isChecked = activity.gestureVolumeBrightness
         binding.toggleVolumeBrightnessGestures.setOnCheckedChangeListener { _, newValue -> activity.gestureVolumeBrightness = newValue }
         binding.toggleHorizontalSeekGesture.isChecked = activity.gestureHorizontalSeek
         binding.toggleHorizontalSeekGesture.setOnCheckedChangeListener { _, newValue -> activity.gestureHorizontalSeek = newValue }
+
         binding.toggleStats.isChecked = activity.stats
-        binding.statsPage.isVisible = activity.stats
         binding.toggleStats.setOnCheckedChangeListener(toggleStats)
+
+        binding.statsPage.isVisible = activity.stats
         binding.statsPage.setSelection(activity.statsPage)
         binding.statsPage.onItemSelectedListener = setStatsPage
 

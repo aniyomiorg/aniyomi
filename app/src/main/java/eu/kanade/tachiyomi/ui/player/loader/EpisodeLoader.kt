@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player
+package eu.kanade.tachiyomi.ui.player.loader
 
 import android.net.Uri
 import eu.kanade.domain.items.episode.model.toSEpisode
