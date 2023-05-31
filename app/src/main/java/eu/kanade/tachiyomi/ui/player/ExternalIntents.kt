@@ -65,7 +65,6 @@ class ExternalIntents {
     lateinit var source: AnimeSource
     lateinit var episode: Episode
 
-
     /**
      * Returns the [Intent] to be sent to an external player.
      *
@@ -101,21 +100,24 @@ class ExternalIntents {
      * @param context the application context.
      * @param video the video being sent to the external player.
      */
-    private suspend fun getVideoUrl(context: Context, video: Video) : Uri? {
+    private suspend fun getVideoUrl(context: Context, video: Video): Uri? {
         if (video.videoUrl == null) {
             makeErrorToast(context, Exception("Video URL is null."))
             return null
         } else {
             val uri = video.videoUrl!!.toUri()
 
-            val isOnDevice = if (anime.source == LocalAnimeSource.ID) true
-            else downloadManager.isEpisodeDownloaded(
-                episodeName = episode.name,
-                episodeScanlator =episode.scanlator,
-                animeTitle = anime.title,
-                sourceId = anime.source,
-                skipCache = true
-            )
+            val isOnDevice = if (anime.source == LocalAnimeSource.ID) {
+                true
+            } else {
+                downloadManager.isEpisodeDownloaded(
+                    episodeName = episode.name,
+                    episodeScanlator = episode.scanlator,
+                    animeTitle = anime.title,
+                    sourceId = anime.source,
+                    skipCache = true,
+                )
+            }
 
             return if (isOnDevice && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && uri.scheme != "content") {
                 FileProvider.getUriForFile(
@@ -136,8 +138,11 @@ class ExternalIntents {
         val preserveWatchPos = playerPreferences.preserveWatchingPosition().get()
         val isEpisodeWatched = episode.lastSecondSeen == episode.totalSeconds
 
-        return if (episode.seen && (!preserveWatchPos || (preserveWatchPos && isEpisodeWatched))) 1L
-            else episode.lastSecondSeen
+        return if (episode.seen && (!preserveWatchPos || (preserveWatchPos && isEpisodeWatched))) {
+            1L
+        } else {
+            episode.lastSecondSeen
+        }
     }
 
     /**
@@ -192,7 +197,7 @@ class ExternalIntents {
 
             // VLC
             if (enabledSubUrl != null) putExtra("subtitles_location", enabledSubUrl)
-            */
+             */
         }
     }
 
@@ -202,13 +207,12 @@ class ExternalIntents {
      * @param isSupportedPlayer is it a supported external player.
      * @param intent the [Intent] that the extras and flags are added to.
      */
-    private fun addExtrasAndFlags(isSupportedPlayer: Boolean, intent: Intent) : Intent {
+    private fun addExtrasAndFlags(isSupportedPlayer: Boolean, intent: Intent): Intent {
         return intent.apply {
             putExtra("title", anime.title + " - " + episode.name)
             putExtra("position", getLastSecondSeen().toInt())
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             if (isSupportedPlayer) putExtra("secure_uri", true)
-
         }
     }
 
@@ -219,7 +223,7 @@ class ExternalIntents {
      * @param video the [Video] to get the headers from.
      * @param intent the [Intent] that the headers are added to.
      */
-    private fun addVideoHeaders(isSupportedPlayer: Boolean, video: Video, intent: Intent) : Intent {
+    private fun addVideoHeaders(isSupportedPlayer: Boolean, video: Video, intent: Intent): Intent {
         return intent.apply {
             val headers = video.headers ?: (source as? AnimeHttpSource)?.headers
             if (headers != null) {
