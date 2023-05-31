@@ -474,11 +474,7 @@ class PlayerActivity :
                     width = height.also { height = width }
                 }
 
-                playerControls.binding.titleMainTxt.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    rightToLeft = playerControls.binding.toggleAutoplay.id
-                    rightToRight = ConstraintLayout.LayoutParams.UNSET
-                }
-                playerControls.binding.titleSecondaryTxt.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                playerControls.binding.episodeListBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     rightToLeft = playerControls.binding.toggleAutoplay.id
                     rightToRight = ConstraintLayout.LayoutParams.UNSET
                 }
@@ -488,24 +484,20 @@ class PlayerActivity :
                 }
                 playerControls.binding.toggleAutoplay.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     leftToLeft = ConstraintLayout.LayoutParams.UNSET
-                    leftToRight = playerControls.binding.titleMainTxt.id
+                    leftToRight = playerControls.binding.episodeListBtn.id
                 }
             } else {
                 if (width >= height) {
                     width = height.also { height = width }
                 }
 
-                playerControls.binding.titleMainTxt.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    rightToLeft = ConstraintLayout.LayoutParams.UNSET
-                    rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
-                }
-                playerControls.binding.titleSecondaryTxt.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                playerControls.binding.episodeListBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     rightToLeft = ConstraintLayout.LayoutParams.UNSET
                     rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
                 }
                 playerControls.binding.playerOverflow.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     topToTop = ConstraintLayout.LayoutParams.UNSET
-                    topToBottom = playerControls.binding.backArrowBtn.id
+                    topToBottom = playerControls.binding.episodeListBtn.id
                 }
                 playerControls.binding.toggleAutoplay.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID

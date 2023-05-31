@@ -184,6 +184,18 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked ->
             activity.toggleAutoplay(isChecked)
         }
+
+        binding.titleMainTxt.setOnClickListener {
+            episodeListDialog()
+        }
+
+        binding.titleSecondaryTxt.setOnClickListener {
+            episodeListDialog()
+        }
+
+        binding.episodeListBtn.setOnClickListener {
+            episodeListDialog()
+        }
     }
 
     private val animationHandler = Handler(Looper.getMainLooper())
@@ -454,5 +466,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             create()
             show()
         }
+    }
+
+    private fun episodeListDialog() {
     }
 }
