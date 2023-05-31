@@ -20,7 +20,7 @@ import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.components.RadioMenuItem
 import eu.kanade.presentation.components.SearchToolbar
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import tachiyomi.domain.library.model.LibraryDisplayMode
 
@@ -28,7 +28,7 @@ import tachiyomi.domain.library.model.LibraryDisplayMode
 fun BrowseAnimeSourceToolbar(
     searchQuery: String?,
     onSearchQueryChange: (String?) -> Unit,
-    source: AnimeCatalogueSource?,
+    source: AnimeSource?,
     displayMode: LibraryDisplayMode,
     onDisplayModeChange: (LibraryDisplayMode) -> Unit,
     navigateUp: () -> Unit,

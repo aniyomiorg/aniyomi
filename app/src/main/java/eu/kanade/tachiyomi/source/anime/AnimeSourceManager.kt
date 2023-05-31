@@ -137,6 +137,6 @@ class AnimeSourceManager(
         }
     }
 
-    inner class AnimeSourceNotInstalledException(val sourceString: String) :
+    inner class AnimeSourceNotInstalledException(sourceString: String) :
         Exception(context.getString(R.string.source_not_installed, sourceString))
 }

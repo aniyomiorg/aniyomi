@@ -35,6 +35,7 @@ import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Sync
 import androidx.compose.material.icons.outlined.Warning
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
@@ -72,6 +73,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowRow
+import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.components.ItemCover
 import eu.kanade.presentation.components.TextButton
 import eu.kanade.presentation.entries.DotSeparatorText
@@ -211,7 +213,8 @@ fun ExpandableAnimeDescription(
     defaultExpandState: Boolean,
     description: String?,
     tagsProvider: () -> List<String>?,
-    onTagClicked: (String) -> Unit,
+    onTagSearch: (String) -> Unit,
+    onCopyTagToClipboard: (tag: String) -> Unit,
 ) {
     Column(modifier = modifier) {
         val (expanded, onExpanded) = rememberSaveable {
@@ -241,6 +244,27 @@ fun ExpandableAnimeDescription(
                     .padding(vertical = 12.dp)
                     .animateContentSize(),
             ) {
+                var showMenu by remember { mutableStateOf(false) }
+                var tagSelected by remember { mutableStateOf("") }
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false },
+                ) {
+                    DropdownMenuItem(
+                        text = { Text(text = stringResource(R.string.action_search)) },
+                        onClick = {
+                            onTagSearch(tagSelected)
+                            showMenu = false
+                        },
+                    )
+                    DropdownMenuItem(
+                        text = { Text(text = stringResource(R.string.action_copy_to_clipboard)) },
+                        onClick = {
+                            onCopyTagToClipboard(tagSelected)
+                            showMenu = false
+                        },
+                    )
+                }
                 if (expanded) {
                     FlowRow(
                         modifier = Modifier.padding(horizontal = 16.dp),
@@ -250,7 +274,10 @@ fun ExpandableAnimeDescription(
                         tags.forEach {
                             TagsChip(
                                 text = it,
-                                onClick = { onTagClicked(it) },
+                                onClick = {
+                                    tagSelected = it
+                                    showMenu = true
+                                },
                             )
                         }
                     }
@@ -262,7 +289,10 @@ fun ExpandableAnimeDescription(
                         items(items = tags) {
                             TagsChip(
                                 text = it,
-                                onClick = { onTagClicked(it) },
+                                onClick = {
+                                    tagSelected = it
+                                    showMenu = true
+                                },
                             )
                         }
                     }

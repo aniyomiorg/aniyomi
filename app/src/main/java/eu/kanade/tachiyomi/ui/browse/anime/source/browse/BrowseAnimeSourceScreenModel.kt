@@ -103,23 +103,25 @@ class BrowseAnimeSourceScreenModel(
 
     var displayMode by sourcePreferences.sourceDisplayMode().asState(coroutineScope)
 
-    val source = sourceManager.get(sourceId) as AnimeCatalogueSource
+    val source = sourceManager.getOrStub(sourceId)
 
     init {
-        mutableState.update {
-            var query: String? = null
-            var listing = it.listing
+        if (source is AnimeCatalogueSource) {
+            mutableState.update {
+                var query: String? = null
+                var listing = it.listing
 
-            if (listing is Listing.Search) {
-                query = listing.query
-                listing = Listing.Search(query, source.getFilterList())
+                if (listing is Listing.Search) {
+                    query = listing.query
+                    listing = Listing.Search(query, source.getFilterList())
+                }
+
+                it.copy(
+                    listing = listing,
+                    filters = source.getFilterList(),
+                    toolbarQuery = query,
+                )
             }
-
-            it.copy(
-                listing = listing,
-                filters = source.getFilterList(),
-                toolbarQuery = query,
-            )
         }
     }
 
@@ -164,6 +166,8 @@ class BrowseAnimeSourceScreenModel(
     }
 
     fun resetFilters() {
+        if (source !is AnimeCatalogueSource) return
+
         mutableState.update { it.copy(filters = source.getFilterList()) }
     }
 
@@ -172,6 +176,8 @@ class BrowseAnimeSourceScreenModel(
     }
 
     fun search(query: String? = null, filters: AnimeFilterList? = null) {
+        if (source !is AnimeCatalogueSource) return
+
         val input = state.value.listing as? Listing.Search
             ?: Listing.Search(query = null, filters = source.getFilterList())
 
@@ -187,6 +193,8 @@ class BrowseAnimeSourceScreenModel(
     }
 
     fun searchGenre(genreName: String) {
+        if (source !is AnimeCatalogueSource) return
+
         val defaultFilters = source.getFilterList()
         var genreExists = false
 

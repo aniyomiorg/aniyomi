@@ -40,6 +40,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.anime.components.RemoveEntryDialog
 import eu.kanade.presentation.browse.manga.BrowseSourceContent
+import eu.kanade.presentation.browse.manga.MissingSourceScreen
 import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceToolbar
 import eu.kanade.presentation.components.ChangeCategoryDialog
 import eu.kanade.presentation.components.Divider
@@ -49,7 +50,9 @@ import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.padding
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
+import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.manga.LocalMangaSource
+import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel.Listing
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
@@ -73,17 +76,10 @@ data class BrowseMangaSourceScreen(
 
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        val scope = rememberCoroutineScope()
-        val context = LocalContext.current
-        val haptic = LocalHapticFeedback.current
-        val uriHandler = LocalUriHandler.current
-
         val screenModel = rememberScreenModel { BrowseMangaSourceScreenModel(sourceId, listingQuery) }
         val state by screenModel.state.collectAsState()
 
-        val snackbarHostState = remember { SnackbarHostState() }
-
+        val navigator = LocalNavigator.currentOrThrow
         val navigateUp: () -> Unit = {
             when {
                 !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(null)
@@ -91,8 +87,21 @@ data class BrowseMangaSourceScreen(
             }
         }
 
-        val onHelpClick = { uriHandler.openUri(LocalMangaSource.HELP_URL) }
+        if (screenModel.source is MangaSourceManager.StubMangaSource) {
+            MissingSourceScreen(
+                source = screenModel.source,
+                navigateUp = navigateUp,
+            )
+            return
+        }
 
+        val scope = rememberCoroutineScope()
+        val context = LocalContext.current
+        val haptic = LocalHapticFeedback.current
+        val uriHandler = LocalUriHandler.current
+        val snackbarHostState = remember { SnackbarHostState() }
+
+        val onHelpClick = { uriHandler.openUri(LocalMangaSource.HELP_URL) }
         val onWebViewClick = f@{
             val source = screenModel.source as? HttpSource ?: return@f
             navigator.push(
@@ -147,7 +156,7 @@ data class BrowseMangaSourceScreen(
                                 Text(text = stringResource(R.string.popular))
                             },
                         )
-                        if (screenModel.source.supportsLatest) {
+                        if ((screenModel.source as CatalogueSource).supportsLatest) {
                             FilterChip(
                                 selected = state.listing == Listing.Latest,
                                 onClick = {

@@ -49,7 +49,7 @@ class MigrateAnimeSearchScreenModel(
             .filter { it.lang in enabledLanguages }
             .filterNot { "${it.id}" in disabledSources }
             .sortedWith(compareBy({ "${it.id}" !in pinnedSources }, { "${it.name.lowercase()} (${it.lang})" }))
-            .sortedByDescending { it.id == state.value.anime!!.id }
+            .sortedByDescending { it.id == state.value.anime!!.source }
     }
 
     override fun updateSearchQuery(query: String?) {

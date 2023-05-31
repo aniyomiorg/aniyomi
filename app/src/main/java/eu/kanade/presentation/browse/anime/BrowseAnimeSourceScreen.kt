@@ -1,6 +1,7 @@
 package eu.kanade.presentation.browse.anime
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.HelpOutline
@@ -11,17 +12,21 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceComfortableGrid
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceCompactGrid
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceList
+import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.EmptyScreenAction
 import eu.kanade.presentation.components.LoadingScreen
+import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeSource
+import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import kotlinx.coroutines.flow.StateFlow
 import tachiyomi.domain.entries.anime.model.Anime
@@ -30,7 +35,7 @@ import tachiyomi.domain.library.model.LibraryDisplayMode
 
 @Composable
 fun BrowseAnimeSourceContent(
-    source: AnimeCatalogueSource?,
+    source: AnimeSource?,
     animeList: LazyPagingItems<StateFlow<Anime>>,
     columns: GridCells,
     displayMode: LibraryDisplayMode,
@@ -137,5 +142,26 @@ fun BrowseAnimeSourceContent(
                 onAnimeLongClick = onAnimeLongClick,
             )
         }
+    }
+}
+
+@Composable
+fun MissingSourceScreen(
+    source: AnimeSourceManager.StubAnimeSource,
+    navigateUp: () -> Unit,
+) {
+    Scaffold(
+        topBar = { scrollBehavior ->
+            AppBar(
+                title = source.name,
+                navigateUp = navigateUp,
+                scrollBehavior = scrollBehavior,
+            )
+        },
+    ) { paddingValues ->
+        EmptyScreen(
+            message = source.getSourceNotInstalledException().message!!,
+            modifier = Modifier.padding(paddingValues),
+        )
     }
 }

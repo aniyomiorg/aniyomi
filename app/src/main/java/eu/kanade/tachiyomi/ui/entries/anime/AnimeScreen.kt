@@ -136,7 +136,7 @@ class AnimeScreen(
             onWebViewClicked = { openAnimeInWebView(navigator, screenModel.anime, screenModel.source) }.takeIf { isAnimeHttpSource },
             onWebViewLongClicked = { copyAnimeUrl(context, screenModel.anime, screenModel.source) }.takeIf { isAnimeHttpSource },
             onTrackingClicked = screenModel::showTrackDialog.takeIf { successState.trackingAvailable },
-            onTagClicked = { scope.launch { performGenreSearch(navigator, it, screenModel.source!!) } },
+            onTagSearch = { scope.launch { performGenreSearch(navigator, it, screenModel.source!!) } },
             onFilterButtonClicked = screenModel::showSettingsDialog,
             onRefresh = screenModel::fetchAllFromSource,
             onContinueWatching = {

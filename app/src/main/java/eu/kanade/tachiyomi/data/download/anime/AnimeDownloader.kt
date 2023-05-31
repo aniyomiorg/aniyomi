@@ -27,7 +27,6 @@ import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
-import eu.kanade.tachiyomi.util.lang.plusAssign
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
@@ -36,6 +35,7 @@ import kotlinx.coroutines.async
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import rx.Observable
+import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
@@ -762,6 +762,8 @@ class AnimeDownloader(
     private fun areAllAnimeDownloadsFinished(): Boolean {
         return queue.none { it.status.value <= AnimeDownload.State.DOWNLOADING.value }
     }
+
+    private operator fun CompositeSubscription.plusAssign(subscription: Subscription) = add(subscription)
 
     companion object {
         const val TMP_DIR_SUFFIX = "_tmp"

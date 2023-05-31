@@ -76,6 +76,7 @@ import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
 import eu.kanade.tachiyomi.ui.entries.manga.chapterDecimalFormat
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.lang.toRelativeString
+import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.Injekt
@@ -98,7 +99,10 @@ fun AnimeScreen(
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
-    onTagClicked: (String) -> Unit,
+
+    // For tags menu
+    onTagSearch: (String) -> Unit,
+
     onFilterButtonClicked: () -> Unit,
     onRefresh: () -> Unit,
     onContinueWatching: () -> Unit,
@@ -125,6 +129,13 @@ fun AnimeScreen(
     onAllEpisodeSelected: (Boolean) -> Unit,
     onInvertSelection: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val onCopyTagToClipboard: (tag: String) -> Unit = {
+        if (it.isNotEmpty()) {
+            context.copyToClipboard(it, it)
+        }
+    }
+
     if (!isTabletUi) {
         AnimeScreenSmallImpl(
             state = state,
@@ -138,7 +149,8 @@ fun AnimeScreen(
             onWebViewClicked = onWebViewClicked,
             onWebViewLongClicked = onWebViewLongClicked,
             onTrackingClicked = onTrackingClicked,
-            onTagClicked = onTagClicked,
+            onTagSearch = onTagSearch,
+            onCopyTagToClipboard = onCopyTagToClipboard,
             onFilterClicked = onFilterButtonClicked,
             onRefresh = onRefresh,
             onContinueWatching = onContinueWatching,
@@ -170,7 +182,8 @@ fun AnimeScreen(
             onWebViewClicked = onWebViewClicked,
             onWebViewLongClicked = onWebViewLongClicked,
             onTrackingClicked = onTrackingClicked,
-            onTagClicked = onTagClicked,
+            onTagSearch = onTagSearch,
+            onCopyTagToClipboard = onCopyTagToClipboard,
             onFilterButtonClicked = onFilterButtonClicked,
             onRefresh = onRefresh,
             onContinueWatching = onContinueWatching,
@@ -206,7 +219,11 @@ private fun AnimeScreenSmallImpl(
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
-    onTagClicked: (String) -> Unit,
+
+    // For tags menu
+    onTagSearch: (String) -> Unit,
+    onCopyTagToClipboard: (tag: String) -> Unit,
+
     onFilterClicked: () -> Unit,
     onRefresh: () -> Unit,
     onContinueWatching: () -> Unit,
@@ -382,7 +399,8 @@ private fun AnimeScreenSmallImpl(
                             defaultExpandState = state.isFromSource,
                             description = state.anime.description,
                             tagsProvider = { state.anime.genre },
-                            onTagClicked = onTagClicked,
+                            onTagSearch = onTagSearch,
+                            onCopyTagToClipboard = onCopyTagToClipboard,
                         )
                     }
 
@@ -427,7 +445,11 @@ fun AnimeScreenLargeImpl(
     onWebViewClicked: (() -> Unit)?,
     onWebViewLongClicked: (() -> Unit)?,
     onTrackingClicked: (() -> Unit)?,
-    onTagClicked: (String) -> Unit,
+
+    // For tags menu
+    onTagSearch: (String) -> Unit,
+    onCopyTagToClipboard: (tag: String) -> Unit,
+
     onFilterButtonClicked: () -> Unit,
     onRefresh: () -> Unit,
     onContinueWatching: () -> Unit,
@@ -581,7 +603,8 @@ fun AnimeScreenLargeImpl(
                             defaultExpandState = true,
                             description = state.anime.description,
                             tagsProvider = { state.anime.genre },
-                            onTagClicked = onTagClicked,
+                            onTagSearch = onTagSearch,
+                            onCopyTagToClipboard = onCopyTagToClipboard,
                         )
                     }
                 },

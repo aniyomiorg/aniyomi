@@ -24,10 +24,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import rx.Observable
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.suspendCancellableCoroutine
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.core.util.lang.withUIContext
 import java.io.BufferedInputStream
 import java.io.InputStream
 
@@ -77,22 +78,6 @@ class WebtoonPageHolder(
      */
     private var loadJob: Job? = null
 
-    /**
-     * Job for status changes of the page.
-     */
-    private var statusJob: Job? = null
-
-    /**
-     * Job for progress changes of the page.
-     */
-    private var progressJob: Job? = null
-
-    /**
-     * Subscription used to read the header of the image. This is needed in order to instantiate
-     * the appropriate image view depending if the image is animated (GIF).
-     */
-    private var readImageHeaderSubscription: Subscription? = null
-
     init {
         refreshLayoutParams()
 
@@ -106,7 +91,8 @@ class WebtoonPageHolder(
      */
     fun bind(page: ReaderPage) {
         this.page = page
-        launchLoadJob()
+        loadJob?.cancel()
+        loadJob = scope.launch { loadPageAndProcessStatus() }
         refreshLayoutParams()
     }
 
@@ -126,9 +112,8 @@ class WebtoonPageHolder(
      * Called when the view is recycled and added to the view pool.
      */
     override fun recycle() {
-        cancelLoadJob()
-        cancelProgressJob()
-        unsubscribeReadImageHeader()
+        loadJob?.cancel()
+        loadJob = null
 
         removeErrorLayout()
         frame.recycle()
@@ -136,84 +121,34 @@ class WebtoonPageHolder(
     }
 
     /**
-     * Starts loading the page and processing changes to the page's status.
+     * Loads the page and processes changes to the page's status.
      *
-     * @see processStatus
+     * Returns immediately if there is no page or the page has no PageLoader.
+     * Otherwise, this function does not return. It will continue to process status changes until
+     * the Job is cancelled.
      */
-    private fun launchLoadJob() {
-        cancelLoadJob()
-
+    private suspend fun loadPageAndProcessStatus() {
         val page = page ?: return
         val loader = page.chapter.pageLoader ?: return
-        loadJob = scope.launch {
-            loader.loadPage(page)
-        }
-        statusJob = scope.launch {
-            page.statusFlow.collectLatest { processStatus(it) }
-        }
-    }
-
-    /**
-     * Observes the progress of the page and updates view.
-     */
-    private fun launchProgressJob() {
-        cancelProgressJob()
-
-        val page = page ?: return
-
-        progressJob = scope.launch {
-            page.progressFlow.collectLatest { value -> progressIndicator.setProgress(value) }
-        }
-    }
-
-    /**
-     * Called when the status of the page changes.
-     *
-     * @param status the new status of the page.
-     */
-    private fun processStatus(status: Page.State) {
-        when (status) {
-            Page.State.QUEUE -> setQueued()
-            Page.State.LOAD_PAGE -> setLoading()
-            Page.State.DOWNLOAD_IMAGE -> {
-                launchProgressJob()
-                setDownloading()
+        supervisorScope {
+            launchIO {
+                loader.loadPage(page)
             }
-            Page.State.READY -> {
-                setImage()
-                cancelProgressJob()
-            }
-            Page.State.ERROR -> {
-                setError()
-                cancelProgressJob()
+            page.statusFlow.collectLatest { state ->
+                when (state) {
+                    Page.State.QUEUE -> setQueued()
+                    Page.State.LOAD_PAGE -> setLoading()
+                    Page.State.DOWNLOAD_IMAGE -> {
+                        setDownloading()
+                        page.progressFlow.collectLatest { value ->
+                            progressIndicator.setProgress(value)
+                        }
+                    }
+                    Page.State.READY -> setImage()
+                    Page.State.ERROR -> setError()
+                }
             }
         }
-    }
-
-    /**
-     * Cancels loading the page and processing changes to the page's status.
-     */
-    private fun cancelLoadJob() {
-        loadJob?.cancel()
-        loadJob = null
-        statusJob?.cancel()
-        statusJob = null
-    }
-
-    /**
-     * Unsubscribes from the progress subscription.
-     */
-    private fun cancelProgressJob() {
-        progressJob?.cancel()
-        progressJob = null
-    }
-
-    /**
-     * Unsubscribes from the read image header subscription.
-     */
-    private fun unsubscribeReadImageHeader() {
-        removeSubscription(readImageHeaderSubscription)
-        readImageHeaderSubscription = null
     }
 
     /**
@@ -246,40 +181,34 @@ class WebtoonPageHolder(
     /**
      * Called when the page is ready.
      */
-    private fun setImage() {
+    private suspend fun setImage() {
         progressIndicator.setProgress(0)
         removeErrorLayout()
 
-        unsubscribeReadImageHeader()
         val streamFn = page?.stream ?: return
 
-        var openStream: InputStream? = null
-        readImageHeaderSubscription = Observable
-            .fromCallable {
-                val stream = streamFn().buffered(16)
-                openStream = process(stream)
+        val (openStream, isAnimated) = withIOContext {
+            val stream = streamFn().buffered(16)
+            val openStream = process(stream)
 
-                ImageUtil.isAnimatedAndSupported(stream)
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext { isAnimated ->
-                frame.setImage(
-                    openStream!!,
-                    isAnimated,
-                    ReaderPageImageView.Config(
-                        zoomDuration = viewer.config.doubleTapAnimDuration,
-                        minimumScaleType = SubsamplingScaleImageView.SCALE_TYPE_FIT_WIDTH,
-                        cropBorders = viewer.config.imageCropBorders,
-                    ),
-                )
-            }
-            // Keep the Rx stream alive to close the input stream only when unsubscribed
-            .flatMap { Observable.never<Unit>() }
-            .doOnUnsubscribe { openStream?.close() }
-            .subscribe({}, {})
-
-        addSubscription(readImageHeaderSubscription)
+            val isAnimated = ImageUtil.isAnimatedAndSupported(stream)
+            Pair(openStream, isAnimated)
+        }
+        withUIContext {
+            frame.setImage(
+                openStream,
+                isAnimated,
+                ReaderPageImageView.Config(
+                    zoomDuration = viewer.config.doubleTapAnimDuration,
+                    minimumScaleType = SubsamplingScaleImageView.SCALE_TYPE_FIT_WIDTH,
+                    cropBorders = viewer.config.imageCropBorders,
+                ),
+            )
+        }
+        // Suspend the coroutine to close the input stream only when the WebtoonPageHolder is recycled
+        suspendCancellableCoroutine<Nothing> { continuation ->
+            continuation.invokeOnCancellation { openStream.close() }
+        }
     }
 
     private fun process(imageStream: BufferedInputStream): InputStream {

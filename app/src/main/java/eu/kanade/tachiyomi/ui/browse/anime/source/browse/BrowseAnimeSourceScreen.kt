@@ -39,6 +39,7 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.anime.BrowseAnimeSourceContent
+import eu.kanade.presentation.browse.anime.MissingSourceScreen
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceToolbar
 import eu.kanade.presentation.browse.anime.components.RemoveEntryDialog
 import eu.kanade.presentation.components.ChangeCategoryDialog
@@ -48,8 +49,10 @@ import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.padding
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.core.Constants
+import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
@@ -73,17 +76,10 @@ data class BrowseAnimeSourceScreen(
 
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        val scope = rememberCoroutineScope()
-        val context = LocalContext.current
-        val haptic = LocalHapticFeedback.current
-        val uriHandler = LocalUriHandler.current
-
         val screenModel = rememberScreenModel { BrowseAnimeSourceScreenModel(sourceId, listingQuery) }
         val state by screenModel.state.collectAsState()
 
-        val snackbarHostState = remember { SnackbarHostState() }
-
+        val navigator = LocalNavigator.currentOrThrow
         val navigateUp: () -> Unit = {
             when {
                 !state.isUserQuery && state.toolbarQuery != null -> screenModel.setToolbarQuery(null)
@@ -91,8 +87,21 @@ data class BrowseAnimeSourceScreen(
             }
         }
 
-        val onHelpClick = { uriHandler.openUri(LocalAnimeSource.HELP_URL) }
+        if (screenModel.source is AnimeSourceManager.StubAnimeSource) {
+            MissingSourceScreen(
+                source = screenModel.source,
+                navigateUp = navigateUp,
+            )
+            return
+        }
 
+        val scope = rememberCoroutineScope()
+        val context = LocalContext.current
+        val haptic = LocalHapticFeedback.current
+        val uriHandler = LocalUriHandler.current
+        val snackbarHostState = remember { SnackbarHostState() }
+
+        val onHelpClick = { uriHandler.openUri(LocalAnimeSource.HELP_URL) }
         val onWebViewClick = f@{
             val source = screenModel.source as? AnimeHttpSource ?: return@f
             navigator.push(
@@ -147,7 +156,7 @@ data class BrowseAnimeSourceScreen(
                                 Text(text = stringResource(R.string.popular))
                             },
                         )
-                        if (screenModel.source.supportsLatest) {
+                        if ((screenModel.source as AnimeCatalogueSource).supportsLatest) {
                             FilterChip(
                                 selected = state.listing == Listing.Latest,
                                 onClick = {
