@@ -199,9 +199,9 @@
 
             <ImageButton
                 android:id="@+id/prevBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="255dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginRight="256dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/action_previous_episode"
                 android:padding="@dimen/screen_edge_margin"
@@ -209,13 +209,13 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_skip_previous_50dp"
+                app:srcCompat="@drawable/ic_skip_previous_40dp"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <ImageButton
                 android:id="@+id/play_btn"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Play/Pause"
                 android:onClick="playPause"
@@ -226,14 +226,14 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="?attr/colorOnPrimarySurface"
-                tools:src="@drawable/ic_play_arrow_72dp"
+                tools:src="@drawable/ic_play_arrow_64dp"
                 tools:visibility="visible" />
 
             <ImageButton
                 android:id="@+id/nextBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="255dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="256dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/action_next_episode"
                 android:padding="@dimen/screen_edge_margin"
@@ -241,7 +241,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_skip_next_50dp"
+                app:srcCompat="@drawable/ic_skip_next_40dp"
                 app:tint="?attr/colorOnPrimarySurface" />
 
             <TextView

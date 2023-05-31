@@ -522,7 +522,6 @@ class PlayerActivity :
      * Sets up the gestures to be used
      */
 
-    @Suppress("DEPRECATION")
     @SuppressLint("ClickableViewAccessibility")
     private fun setupGestures() {
         val gestures = Gestures(this, width.toFloat(), height.toFloat())
@@ -743,8 +742,8 @@ class PlayerActivity :
 
         if (!playerControls.binding.controlsView.isVisible) {
             when {
-                player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_72dp) }
-                !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_72dp) }
+                player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_64dp) }
+                !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_64dp) }
             }
 
             AnimationUtils.loadAnimation(this, R.anim.player_fade_in).also { fadeAnimation ->
@@ -1212,7 +1211,7 @@ class PlayerActivity :
 
     private fun updatePlaybackStatus(paused: Boolean) {
         if (isPipSupportedAndEnabled && isInPipMode) updatePictureInPictureActions(!paused)
-        val r = if (paused) R.drawable.ic_play_arrow_72dp else R.drawable.ic_pause_72dp
+        val r = if (paused) R.drawable.ic_play_arrow_64dp else R.drawable.ic_pause_64dp
         playerControls.binding.playBtn.setImageResource(r)
 
         if (paused) {
@@ -1320,7 +1319,6 @@ class PlayerActivity :
         }
     }
 
-    @Suppress("DEPRECATION")
     fun startPiP() {
         if (isInPipMode) return
         if (isPipSupportedAndEnabled) {
@@ -1634,7 +1632,6 @@ class PlayerActivity :
 
     private val nextEpisodeRunnable = Runnable { switchEpisode(previous = false, autoPlay = true) }
 
-    @Suppress("DEPRECATION")
     private fun eventPropertyUi(property: String, value: Boolean) {
         when (property) {
             "seeking" -> isSeeking(value)
