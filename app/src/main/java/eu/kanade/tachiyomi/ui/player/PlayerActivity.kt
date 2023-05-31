@@ -55,7 +55,10 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
+import eu.kanade.tachiyomi.ui.player.settings.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksSheet
+import eu.kanade.tachiyomi.ui.player.viewer.Gestures
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
@@ -471,11 +474,7 @@ class PlayerActivity :
                     width = height.also { height = width }
                 }
 
-                playerControls.binding.titleMainTxt.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    rightToLeft = playerControls.binding.toggleAutoplay.id
-                    rightToRight = ConstraintLayout.LayoutParams.UNSET
-                }
-                playerControls.binding.titleSecondaryTxt.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                playerControls.binding.episodeListBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     rightToLeft = playerControls.binding.toggleAutoplay.id
                     rightToRight = ConstraintLayout.LayoutParams.UNSET
                 }
@@ -485,24 +484,20 @@ class PlayerActivity :
                 }
                 playerControls.binding.toggleAutoplay.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     leftToLeft = ConstraintLayout.LayoutParams.UNSET
-                    leftToRight = playerControls.binding.titleMainTxt.id
+                    leftToRight = playerControls.binding.episodeListBtn.id
                 }
             } else {
                 if (width >= height) {
                     width = height.also { height = width }
                 }
 
-                playerControls.binding.titleMainTxt.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    rightToLeft = ConstraintLayout.LayoutParams.UNSET
-                    rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
-                }
-                playerControls.binding.titleSecondaryTxt.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                playerControls.binding.episodeListBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     rightToLeft = ConstraintLayout.LayoutParams.UNSET
                     rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
                 }
                 playerControls.binding.playerOverflow.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     topToTop = ConstraintLayout.LayoutParams.UNSET
-                    topToBottom = playerControls.binding.backArrowBtn.id
+                    topToBottom = playerControls.binding.episodeListBtn.id
                 }
                 playerControls.binding.toggleAutoplay.updateLayoutParams<ConstraintLayout.LayoutParams> {
                     leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
@@ -519,7 +514,6 @@ class PlayerActivity :
      * Sets up the gestures to be used
      */
 
-    @Suppress("DEPRECATION")
     @SuppressLint("ClickableViewAccessibility")
     private fun setupGestures() {
         val gestures = Gestures(this, width.toFloat(), height.toFloat())
@@ -740,8 +734,8 @@ class PlayerActivity :
 
         if (!playerControls.binding.controlsView.isVisible) {
             when {
-                player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_72dp) }
-                !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_72dp) }
+                player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_64dp) }
+                !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_64dp) }
             }
 
             AnimationUtils.loadAnimation(this, R.anim.player_fade_in).also { fadeAnimation ->
@@ -948,6 +942,7 @@ class PlayerActivity :
             ::setAudio,
             audioTracks,
             selectedAudio,
+            null,
         ).show()
     }
 
@@ -962,6 +957,7 @@ class PlayerActivity :
             ::setSub,
             subTracks,
             selectedSub,
+            null,
         ).show()
     }
 
@@ -980,6 +976,7 @@ class PlayerActivity :
             ::changeQuality,
             videoTracks,
             currentQuality,
+            null,
         ).show()
     }
 
@@ -1206,7 +1203,7 @@ class PlayerActivity :
 
     private fun updatePlaybackStatus(paused: Boolean) {
         if (isPipSupportedAndEnabled && isInPipMode) updatePictureInPictureActions(!paused)
-        val r = if (paused) R.drawable.ic_play_arrow_72dp else R.drawable.ic_pause_72dp
+        val r = if (paused) R.drawable.ic_play_arrow_64dp else R.drawable.ic_pause_64dp
         playerControls.binding.playBtn.setImageResource(r)
 
         if (paused) {
@@ -1314,7 +1311,6 @@ class PlayerActivity :
         }
     }
 
-    @Suppress("DEPRECATION")
     fun startPiP() {
         if (isInPipMode) return
         if (isPipSupportedAndEnabled) {
@@ -1628,7 +1624,6 @@ class PlayerActivity :
 
     private val nextEpisodeRunnable = Runnable { switchEpisode(previous = false, autoPlay = true) }
 
-    @Suppress("DEPRECATION")
     private fun eventPropertyUi(property: String, value: Boolean) {
         when (property) {
             "seeking" -> isSeeking(value)

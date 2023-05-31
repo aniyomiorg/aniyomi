@@ -98,6 +98,7 @@ import eu.kanade.tachiyomi.util.system.isNavigationBarNeedsScrim
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.setComposeContent
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
@@ -490,7 +491,7 @@ class MainActivity : BaseActivity() {
 
                 // Get the search query provided in extras, and if not null, perform a global search with it.
                 val query = intent.getStringExtra(SearchManager.QUERY) ?: intent.getStringExtra(Intent.EXTRA_TEXT)
-                if (query != null && query.isNotEmpty()) {
+                if (!query.isNullOrEmpty()) {
                     navigator.popUntilRoot()
                     navigator.push(GlobalMangaSearchScreen(query))
                 }
@@ -498,7 +499,7 @@ class MainActivity : BaseActivity() {
             }
             INTENT_SEARCH -> {
                 val query = intent.getStringExtra(INTENT_SEARCH_QUERY)
-                if (query != null && query.isNotEmpty()) {
+                if (!query.isNullOrEmpty()) {
                     val filter = intent.getStringExtra(INTENT_SEARCH_FILTER) ?: ""
                     navigator.popUntilRoot()
                     navigator.push(GlobalMangaSearchScreen(query, filter))
@@ -507,7 +508,7 @@ class MainActivity : BaseActivity() {
             }
             INTENT_ANIMESEARCH -> {
                 val query = intent.getStringExtra(INTENT_SEARCH_QUERY)
-                if (query != null && query.isNotEmpty()) {
+                if (!query.isNullOrEmpty()) {
                     val filter = intent.getStringExtra(INTENT_SEARCH_FILTER) ?: ""
                     navigator.popUntilRoot()
                     navigator.push(GlobalAnimeSearchScreen(query, filter))
@@ -548,6 +549,7 @@ class MainActivity : BaseActivity() {
         registerSecureActivity(this)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         launchIO { externalIntents.onActivityResult(requestCode, resultCode, data) }

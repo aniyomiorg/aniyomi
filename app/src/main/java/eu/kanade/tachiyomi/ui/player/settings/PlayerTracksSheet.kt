@@ -1,17 +1,26 @@
-package eu.kanade.tachiyomi.ui.player
+package eu.kanade.tachiyomi.ui.player.settings
 
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.databinding.PlayerTracksItemBinding
 import eu.kanade.tachiyomi.databinding.PlayerTracksSheetBinding
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.widget.sheet.PlayerBottomSheetDialog
 
 /**
  * Sheet to show when track selection buttons in player are clicked.
+ *
+ * @param activity the instance of the PlayerActivity in use.
+ * @param textRes the header text of the sheet
+ * @param changeTrackMethod the method to run on changing tracks
+ * @param tracks the given array of tracks
+ * @param preselectedTrack the index of the current selected track
+ * @param trackSettings the method to run on clicking the settings button, null if no button
  */
 class PlayerTracksSheet(
     private val activity: PlayerActivity,
@@ -19,6 +28,7 @@ class PlayerTracksSheet(
     private val changeTrackMethod: (Int) -> Unit,
     private val tracks: Array<Track>,
     private val preselectedTrack: Int,
+    private val trackSettings: (() -> Unit)?,
 ) : PlayerBottomSheetDialog(activity) {
 
     private lateinit var binding: PlayerTracksSheetBinding
@@ -28,6 +38,11 @@ class PlayerTracksSheet(
         wasPaused = activity.player.paused
         activity.player.paused = true
         binding = PlayerTracksSheetBinding.inflate(activity.layoutInflater, null, false)
+
+        if (trackSettings != null) {
+            binding.trackSettingsButton.isVisible = true
+            binding.trackSettingsButton.setOnClickListener { trackSettings.invoke() }
+        }
 
         binding.trackSelectionHeader.setText(textRes)
         tracks.forEachIndexed { i, track ->
