@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import eu.kanade.tachiyomi.ui.player.*
+import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
