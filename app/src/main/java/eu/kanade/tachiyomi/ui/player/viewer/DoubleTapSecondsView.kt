@@ -6,11 +6,13 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.annotation.DrawableRes
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerDoubleTapSeekViewBinding
 
+/**
+ * View that shows the arrows animation when double tapping to seek
+ */
 class DoubleTapSecondsView(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
     var binding: PlayerDoubleTapSeekViewBinding
@@ -44,9 +46,6 @@ class DoubleTapSecondsView(context: Context, attrs: AttributeSet?) : LinearLayou
             binding.triangleContainer.rotation = if (value) 0f else 180f
             field = value
         }
-
-    val textView: TextView
-        get() = binding.doubleTapSeconds
 
     @DrawableRes
     var icon: Int = R.drawable.ic_play_seek_triangle

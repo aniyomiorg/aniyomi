@@ -12,6 +12,8 @@ import eu.kanade.tachiyomi.widget.sheet.PlayerBottomSheetDialog
 
 /**
  * Sheet to show when overflow button in player is clicked.
+ *
+ * @param activity the instance of the PlayerActivity in use.
  */
 class PlayerOptionsSheet(
     private val activity: PlayerActivity,

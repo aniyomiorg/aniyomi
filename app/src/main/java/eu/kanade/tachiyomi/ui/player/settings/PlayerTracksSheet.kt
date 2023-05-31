@@ -14,6 +14,13 @@ import eu.kanade.tachiyomi.widget.sheet.PlayerBottomSheetDialog
 
 /**
  * Sheet to show when track selection buttons in player are clicked.
+ *
+ * @param activity the instance of the PlayerActivity in use.
+ * @param textRes the header text of the sheet
+ * @param changeTrackMethod the method to run on changing tracks
+ * @param tracks the given array of tracks
+ * @param preselectedTrack the index of the current selected track
+ * @param trackSettings the method to run on clicking the settings button, null if no button
  */
 class PlayerTracksSheet(
     private val activity: PlayerActivity,

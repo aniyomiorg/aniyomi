@@ -16,10 +16,22 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.lang.Exception
 
+/**
+ * Loader used to retrieve the video links for a given episode.
+ */
 class EpisodeLoader {
-    companion object {
-        var errorMessage = ""
 
+    companion object {
+
+        private var errorMessage = ""
+
+        /**
+         * Returns an observable list of videos of an [episode] based on the type of [source] used.
+         *
+         * @param episode the episode being parsed.
+         * @param anime the anime of the episode.
+         * @param source the source of the anime.
+         */
         fun getLinks(episode: Episode, anime: Anime, source: AnimeSource): Observable<List<Video>> {
             val downloadManager: AnimeDownloadManager = Injekt.get()
             val isDownloaded = downloadManager.isEpisodeDownloaded(episode.name, episode.scanlator, anime.title, anime.source, skipCache = true)
@@ -31,11 +43,23 @@ class EpisodeLoader {
             }
         }
 
+        /**
+         * Returns true if the given [episode] is downloaded.
+         *
+         * @param episode the episode being parsed.
+         * @param anime the anime of the episode.
+         */
         fun isDownloaded(episode: Episode, anime: Anime): Boolean {
             val downloadManager: AnimeDownloadManager = Injekt.get()
             return downloadManager.isEpisodeDownloaded(episode.name, episode.scanlator, anime.title, anime.source, skipCache = true)
         }
 
+        /**
+         * Returns an observable list of videos when the [episode] is online.
+         *
+         * @param episode the episode being parsed.
+         * @param source the online source of the episode.
+         */
         private fun isHttp(episode: Episode, source: AnimeHttpSource): Observable<List<Video>> {
             return source.fetchVideoList(episode.toSEpisode())
                 .flatMapIterable { it }
@@ -44,6 +68,14 @@ class EpisodeLoader {
                 }.toList()
         }
 
+        /**
+         * Returns an observable list of videos when the [episode] is downloaded.
+         *
+         * @param episode the episode being parsed.
+         * @param anime the anime of the episode.
+         * @param source the source of the anime.
+         * @param downloadManager the AnimeDownloadManager instance to use.
+         */
         private fun isDownloaded(
             episode: Episode,
             anime: Anime,
@@ -61,6 +93,11 @@ class EpisodeLoader {
                 }
         }
 
+        /**
+         * Returns an observable list of videos when the [episode] is from local source.
+         *
+         * @param episode the episode being parsed.
+         */
         private fun isLocal(
             episode: Episode,
         ): Observable<List<Video>> {
