@@ -22,7 +22,6 @@ import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceList
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.EmptyScreenAction
-import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
@@ -31,6 +30,7 @@ import kotlinx.coroutines.flow.StateFlow
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.model.LibraryDisplayMode
+import tachiyomi.presentation.core.components.LoadingScreen
 import tachiyomi.presentation.core.components.material.Scaffold
 
 @Composable

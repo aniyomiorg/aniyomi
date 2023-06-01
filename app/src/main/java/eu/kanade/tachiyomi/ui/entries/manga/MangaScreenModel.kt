@@ -24,8 +24,8 @@ import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.presentation.components.ChapterDownloadAction
 import eu.kanade.presentation.entries.DownloadAction
+import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager

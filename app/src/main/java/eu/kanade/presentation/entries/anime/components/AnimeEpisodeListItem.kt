@@ -27,14 +27,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.kanade.presentation.components.EpisodeDownloadAction
-import eu.kanade.presentation.components.EpisodeDownloadIndicator
 import eu.kanade.presentation.entries.DotSeparatorText
-import eu.kanade.presentation.util.ReadItemAlpha
-import eu.kanade.presentation.util.SecondaryItemAlpha
-import eu.kanade.presentation.util.selectedBackground
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
+import tachiyomi.presentation.core.components.material.ReadItemAlpha
+import tachiyomi.presentation.core.components.material.SecondaryItemAlpha
+import tachiyomi.presentation.core.util.selectedBackground
 
 @Composable
 fun AnimeEpisodeListItem(

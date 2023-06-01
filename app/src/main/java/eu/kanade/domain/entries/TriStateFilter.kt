@@ -10,8 +10,8 @@ enum class TriStateFilter {
 
 fun TriStateFilter.toTriStateGroupState(): ExtendedNavigationView.Item.TriStateGroup.State {
     return when (this) {
-        TriStateFilter.DISABLED -> ExtendedNavigationView.Item.TriStateGroup.State.IGNORE
-        TriStateFilter.ENABLED_IS -> ExtendedNavigationView.Item.TriStateGroup.State.INCLUDE
-        TriStateFilter.ENABLED_NOT -> ExtendedNavigationView.Item.TriStateGroup.State.EXCLUDE
+        TriStateFilter.DISABLED -> ExtendedNavigationView.Item.TriStateGroup.State.DISABLED
+        TriStateFilter.ENABLED_IS -> ExtendedNavigationView.Item.TriStateGroup.State.ENABLED_IS
+        TriStateFilter.ENABLED_NOT -> ExtendedNavigationView.Item.TriStateGroup.State.ENABLED_NOT
     }
 }

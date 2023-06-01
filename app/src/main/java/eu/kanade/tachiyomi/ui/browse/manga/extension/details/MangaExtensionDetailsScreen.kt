@@ -11,8 +11,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.browse.manga.ExtensionDetailsScreen
-import eu.kanade.presentation.components.LoadingScreen
 import kotlinx.coroutines.flow.collectLatest
+import tachiyomi.presentation.core.components.LoadingScreen
 
 data class MangaExtensionDetailsScreen(
     private val pkgName: String,

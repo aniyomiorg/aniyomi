@@ -11,9 +11,9 @@ import eu.kanade.presentation.category.AnimeCategoryScreen
 import eu.kanade.presentation.category.components.CategoryCreateDialog
 import eu.kanade.presentation.category.components.CategoryDeleteDialog
 import eu.kanade.presentation.category.components.CategoryRenameDialog
-import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
+import tachiyomi.presentation.core.components.LoadingScreen
 
 @Composable
 fun Screen.animeCategoryTab(): TabContent {

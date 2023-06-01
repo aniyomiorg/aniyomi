@@ -24,8 +24,8 @@ import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.presentation.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.DownloadAction
+import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video

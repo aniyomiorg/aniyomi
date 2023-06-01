@@ -24,7 +24,12 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import tachiyomi.presentation.core.components.HorizontalPager
+import tachiyomi.presentation.core.components.PagerState
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.components.material.TabIndicator
+import tachiyomi.presentation.core.components.material.TabText
+import tachiyomi.presentation.core.components.rememberPagerState
 
 @Composable
 fun TabbedScreen(

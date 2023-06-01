@@ -12,12 +12,12 @@ import eu.kanade.presentation.animelib.components.DownloadsBadge
 import eu.kanade.presentation.animelib.components.GlobalSearchItem
 import eu.kanade.presentation.animelib.components.LanguageBadge
 import eu.kanade.presentation.animelib.components.UnviewedBadge
-import eu.kanade.presentation.components.EntryListItem
-import eu.kanade.presentation.components.FastScrollLazyColumn
-import eu.kanade.presentation.util.plus
+import eu.kanade.presentation.library.EntryListItem
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
 import tachiyomi.domain.entries.anime.model.AnimeCover
 import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.presentation.core.components.FastScrollLazyColumn
+import tachiyomi.presentation.core.util.plus
 
 @Composable
 fun AnimeLibraryList(

@@ -105,55 +105,6 @@ fun ChapterSettingsDialog(
 }
 
 @Composable
-private fun SetAsDefaultDialog(
-    onDismissRequest: () -> Unit,
-    onConfirmed: (optionalChecked: Boolean) -> Unit,
-) {
-    var optionalChecked by rememberSaveable { mutableStateOf(false) }
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text(text = stringResource(R.string.chapter_settings)) },
-        text = {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                Text(text = stringResource(R.string.confirm_set_chapter_settings))
-
-                Row(
-                    modifier = Modifier
-                        .clickable { optionalChecked = !optionalChecked }
-                        .padding(vertical = 8.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Checkbox(
-                        checked = optionalChecked,
-                        onCheckedChange = null,
-                    )
-                    Text(text = stringResource(R.string.also_set_chapter_settings_for_library))
-                }
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(android.R.string.cancel))
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onConfirmed(optionalChecked)
-                    onDismissRequest()
-                },
-            ) {
-                Text(text = stringResource(android.R.string.ok))
-            }
-        },
-    )
-}
-
-@Composable
 private fun FilterPage(
     downloadFilter: TriStateFilter,
     onDownloadFilterChanged: ((TriStateFilter) -> Unit)?,
@@ -216,5 +167,54 @@ private fun DisplayPage(
         label = stringResource(R.string.show_chapter_number),
         selected = displayMode == Manga.CHAPTER_DISPLAY_NUMBER,
         onClick = { onItemSelected(Manga.CHAPTER_DISPLAY_NUMBER) },
+    )
+}
+
+@Composable
+private fun SetAsDefaultDialog(
+    onDismissRequest: () -> Unit,
+    onConfirmed: (optionalChecked: Boolean) -> Unit,
+) {
+    var optionalChecked by rememberSaveable { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text(text = stringResource(R.string.chapter_settings)) },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(text = stringResource(R.string.confirm_set_chapter_settings))
+
+                Row(
+                    modifier = Modifier
+                        .clickable { optionalChecked = !optionalChecked }
+                        .padding(vertical = 8.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Checkbox(
+                        checked = optionalChecked,
+                        onCheckedChange = null,
+                    )
+                    Text(text = stringResource(R.string.also_set_chapter_settings_for_library))
+                }
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text(text = stringResource(android.R.string.cancel))
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirmed(optionalChecked)
+                    onDismissRequest()
+                },
+            ) {
+                Text(text = stringResource(android.R.string.ok))
+            }
+        },
     )
 }

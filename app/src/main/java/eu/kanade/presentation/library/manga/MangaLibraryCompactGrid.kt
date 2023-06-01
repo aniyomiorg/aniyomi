@@ -9,7 +9,7 @@ import androidx.compose.ui.util.fastAny
 import eu.kanade.presentation.animelib.components.DownloadsBadge
 import eu.kanade.presentation.animelib.components.LanguageBadge
 import eu.kanade.presentation.animelib.components.UnviewedBadge
-import eu.kanade.presentation.components.EntryCompactGridItem
+import eu.kanade.presentation.library.EntryCompactGridItem
 import eu.kanade.presentation.library.LazyLibraryGrid
 import eu.kanade.presentation.library.globalSearchItem
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryItem

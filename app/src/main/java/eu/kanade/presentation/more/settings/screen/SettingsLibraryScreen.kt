@@ -34,8 +34,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.domain.category.manga.interactor.ResetMangaCategoryFlags
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.category.visualName
-import eu.kanade.presentation.components.WheelPicker
-import eu.kanade.presentation.components.WheelPickerDefaults
 import eu.kanade.presentation.more.settings.Preference
 import eu.kanade.presentation.more.settings.widget.TriStateListDialog
 import eu.kanade.presentation.util.collectAsState
@@ -55,6 +53,8 @@ import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
+import tachiyomi.presentation.core.components.WheelPicker
+import tachiyomi.presentation.core.components.WheelPickerDefaults
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

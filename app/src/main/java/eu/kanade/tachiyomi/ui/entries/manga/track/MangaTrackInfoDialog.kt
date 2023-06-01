@@ -40,13 +40,12 @@ import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwo
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.presentation.entries.TrackDateSelector
-import eu.kanade.presentation.entries.TrackItemSelector
-import eu.kanade.presentation.entries.TrackScoreSelector
-import eu.kanade.presentation.entries.TrackStatusSelector
-import eu.kanade.presentation.entries.manga.MangaTrackInfoDialogHome
-import eu.kanade.presentation.entries.manga.MangaTrackServiceSearch
-import eu.kanade.presentation.util.padding
+import eu.kanade.presentation.track.TrackDateSelector
+import eu.kanade.presentation.track.TrackItemSelector
+import eu.kanade.presentation.track.TrackScoreSelector
+import eu.kanade.presentation.track.TrackStatusSelector
+import eu.kanade.presentation.track.manga.MangaTrackInfoDialogHome
+import eu.kanade.presentation.track.manga.MangaTrackServiceSearch
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -73,6 +72,7 @@ import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import tachiyomi.domain.track.manga.model.MangaTrack
 import tachiyomi.presentation.core.components.material.AlertDialogContent
+import tachiyomi.presentation.core.components.material.padding
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.time.Instant

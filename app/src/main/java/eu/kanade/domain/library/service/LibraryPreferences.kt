@@ -71,23 +71,23 @@ class LibraryPreferences(
 
     // Mixture Filter
 
-    fun filterDownloadedAnime() = preferenceStore.getInt("pref_filter_animelib_downloaded", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
-    fun filterDownloadedManga() = preferenceStore.getInt("pref_filter_library_downloaded", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
+    fun filterDownloadedAnime() = preferenceStore.getInt("pref_filter_animelib_downloaded", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
+    fun filterDownloadedManga() = preferenceStore.getInt("pref_filter_library_downloaded", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
 
-    fun filterUnseen() = preferenceStore.getInt("pref_filter_animelib_unread", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
-    fun filterUnread() = preferenceStore.getInt("pref_filter_library_unread", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
+    fun filterUnseen() = preferenceStore.getInt("pref_filter_animelib_unread", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
+    fun filterUnread() = preferenceStore.getInt("pref_filter_library_unread", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
 
-    fun filterStartedAnime() = preferenceStore.getInt("pref_filter_animelib_started", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
-    fun filterStartedManga() = preferenceStore.getInt("pref_filter_library_started", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
+    fun filterStartedAnime() = preferenceStore.getInt("pref_filter_animelib_started", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
+    fun filterStartedManga() = preferenceStore.getInt("pref_filter_library_started", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
 
-    fun filterBookmarkedAnime() = preferenceStore.getInt("pref_filter_animelib_bookmarked", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
-    fun filterBookmarkedManga() = preferenceStore.getInt("pref_filter_library_bookmarked", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
+    fun filterBookmarkedAnime() = preferenceStore.getInt("pref_filter_animelib_bookmarked", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
+    fun filterBookmarkedManga() = preferenceStore.getInt("pref_filter_library_bookmarked", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
 
-    fun filterCompletedAnime() = preferenceStore.getInt("pref_filter_animelib_completed", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
-    fun filterCompletedManga() = preferenceStore.getInt("pref_filter_library_completed", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
+    fun filterCompletedAnime() = preferenceStore.getInt("pref_filter_animelib_completed", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
+    fun filterCompletedManga() = preferenceStore.getInt("pref_filter_library_completed", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
 
-    fun filterTrackedAnime(name: Int) = preferenceStore.getInt("pref_filter_animelib_tracked_$name", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
-    fun filterTrackedManga(name: Int) = preferenceStore.getInt("pref_filter_library_tracked_$name", ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value)
+    fun filterTrackedAnime(name: Int) = preferenceStore.getInt("pref_filter_animelib_tracked_$name", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
+    fun filterTrackedManga(name: Int) = preferenceStore.getInt("pref_filter_library_tracked_$name", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
 
     // Mixture Update Count
 

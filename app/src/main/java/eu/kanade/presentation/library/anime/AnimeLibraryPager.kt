@@ -11,12 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import eu.kanade.core.prefs.PreferenceMutableState
-import eu.kanade.presentation.components.HorizontalPager
-import eu.kanade.presentation.components.PagerState
 import eu.kanade.presentation.library.manga.LibraryPagerEmptyScreen
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.model.LibraryDisplayMode
+import tachiyomi.presentation.core.components.HorizontalPager
+import tachiyomi.presentation.core.components.PagerState
 
 @Composable
 fun AnimeLibraryPager(

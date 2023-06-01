@@ -34,18 +34,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.presentation.components.ChapterDownloadAction
-import eu.kanade.presentation.components.ChapterDownloadIndicator
-import eu.kanade.presentation.components.ItemCover
-import eu.kanade.presentation.components.ListGroupHeader
 import eu.kanade.presentation.entries.DotSeparatorText
-import eu.kanade.presentation.util.ReadItemAlpha
-import eu.kanade.presentation.util.padding
-import eu.kanade.presentation.util.selectedBackground
+import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
+import eu.kanade.presentation.entries.manga.components.ChapterDownloadIndicator
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
 import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
+import tachiyomi.presentation.core.components.ListGroupHeader
+import tachiyomi.presentation.core.components.material.ReadItemAlpha
+import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.selectedBackground
 import java.util.Date
 import kotlin.time.Duration.Companion.minutes
 

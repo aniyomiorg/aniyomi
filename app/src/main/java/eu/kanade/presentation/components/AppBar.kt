@@ -48,10 +48,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import eu.kanade.presentation.util.runOnEnterKeyPressed
-import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.tachiyomi.R
 import tachiyomi.presentation.core.components.Pill
+import tachiyomi.presentation.core.util.runOnEnterKeyPressed
+import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 const val SEARCH_DEBOUNCE_MILLIS = 250L
 
@@ -302,18 +302,16 @@ fun SearchToolbar(
                         visualTransformation = visualTransformation,
                         interactionSource = interactionSource,
                         placeholder = {
-                            (placeholderText ?: stringResource(R.string.action_search_hint)).let { placeholderText ->
-                                Text(
-                                    modifier = Modifier.secondaryItemAlpha(),
-                                    text = placeholderText,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    style = MaterialTheme.typography.titleMedium.copy(
-                                        fontSize = 18.sp,
-                                        fontWeight = FontWeight.Normal,
-                                    ),
-                                )
-                            }
+                            Text(
+                                modifier = Modifier.secondaryItemAlpha(),
+                                text = (placeholderText ?: stringResource(R.string.action_search_hint)),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Normal,
+                                ),
+                            )
                         },
                     )
                 },

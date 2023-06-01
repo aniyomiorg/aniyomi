@@ -15,7 +15,7 @@ import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.presentation.components.EpisodeDownloadAction
+import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.updates.anime.AnimeUpdatesUiModel
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
