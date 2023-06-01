@@ -2,7 +2,7 @@
 <resources>
     <string name="name">Navn</string>
     <string name="manga">Manga</string>
-    <string name="chapters">Kapittel</string>
+    <string name="chapters">Kapitler</string>
     <string name="history">Historikk</string>
     <string name="label_settings">Innstillinger</string>
     <string name="label_library">Bibliotek</string>
@@ -19,7 +19,7 @@
     <string name="action_filter_unread">Ulest</string>
     <string name="action_filter_empty">Fjern filter</string>
     <string name="action_sort_alpha">Alfabetisk</string>
-    <string name="action_sort_total">Totale kapittel</string>
+    <string name="action_sort_total">Totale kapitler</string>
     <string name="action_sort_last_read">Sist lest</string>
     <string name="action_search">Søk</string>
     <string name="action_select_all">Velg alt</string>
@@ -103,7 +103,7 @@
     <string name="pref_crop_borders">Beskjær kanter</string>
     <string name="pref_custom_brightness">Egendefinert lysstyrke</string>
     <string name="pref_custom_color_filter">Egendefinert fargefilter</string>
-    <string name="pref_skip_read_chapters">Hopp over kapittel markert som leste</string>
+    <string name="pref_skip_read_chapters">Hopp over kapitler markert som leste</string>
     <string name="pref_read_with_volume_keys">Lydstyrkejusteringstaster</string>
     <string name="pref_read_with_volume_keys_inverted">Inverter lydstyrketaster</string>
     <string name="pref_read_with_long_tap">Vis ved langt trykk</string>
@@ -191,7 +191,7 @@
     <string name="remove_from_library">Fjern fra bibliotek</string>
     <string name="manga_added_library">Lagt til i biblioteket</string>
     <string name="manga_removed_library">Fjernet fra bibliotek</string>
-    <string name="delete_downloads_for_manga">Slett nedlastede kapittel\?</string>
+    <string name="delete_downloads_for_manga">Slett nedlastede kapitler\?</string>
     <string name="copied_to_clipboard">Kopiert til utklippstavle:
 \n%1$s</string>
     <string name="source_not_installed">Kilde ikke installert: %1$s</string>
@@ -202,11 +202,6 @@
     <string name="sort_by_source">Etter kilde</string>
     <string name="sort_by_number">Etter kapittelnummer</string>
     <string name="manga_download">Last ned</string>
-    <string name="custom_download">Last ned egendefinert mengde</string>
-    <string name="download_1">Neste kapittel</string>
-    <string name="download_5">Neste fem kapittel</string>
-    <string name="download_10">Neste ti kapittel</string>
-    <string name="download_custom">Egendefinert</string>
     <string name="download_all">Alle</string>
     <string name="download_unread">Ulest</string>
     <string name="confirm_delete_chapters">Er du sikker på at du vil slette de valgte kapitlene\?</string>
@@ -302,7 +297,7 @@
     <string name="theme_dark">På</string>
     <string name="theme_system">System</string>
     <string name="pref_manage_notifications">Håndter merknader</string>
-    <string name="pref_category_security">Sikkerhet</string>
+    <string name="pref_category_security">Sikkerhet og personvern</string>
     <string name="lock_with_biometrics">Krev opplåsning</string>
     <string name="lock_when_idle">Lås ved lediggang</string>
     <string name="lock_always">Alltid</string>
@@ -341,7 +336,6 @@
     <string name="pref_always_show_chapter_transition">Alltid vis kapittelovergang</string>
     <string name="vertical_plus_viewer">Kontinuerlig loddrett</string>
     <string name="pref_skip_filtered_chapters">Hopp over filtrerte kapittel</string>
-    <string name="pref_enable_automatic_extension_updates">Se etter oppdateringer for utvidelser</string>
     <string name="hide_notification_content">Skjul merknadsinnhold</string>
     <string name="secure_screen_summary">Sikker skjerm skjuler programinnhold ved bytting av programmer og blokker skjermavbildninger</string>
     <string name="pref_confirm_exit">Bekreft avslutning</string>
@@ -409,7 +403,7 @@
         <item quantity="one">Gjort på %1$s med %2$s feil</item>
         <item quantity="other">Gjort på %1$s med %2$s feil</item>
     </plurals>
-    <string name="pref_search_pinned_sources_only">Inkluder bare festede kilder</string>
+    <string name="pref_search_pinned_sources_only">Søk kun festede kilder i globalt søk</string>
     <string name="pref_show_reading_mode">Vis lesemodus</string>
     <string name="unofficial_extension_message">Denne utvidelsen kommer ikke fra den offisielle Tachiyomi-utvidelseslisten.</string>
     <string name="action_disable">deaktivere</string>
@@ -736,4 +730,10 @@
     <string name="pref_skip_dupe_chapters">Hopp over dupliserte kapitler</string>
     <string name="track_error">%1$s feil: %2$s</string>
     <string name="information_required_plain">*påkrevd</string>
+    <plurals name="download_amount">
+        <item quantity="one">Neste kapittel</item>
+        <item quantity="other">Neste %d kapitler</item>
+    </plurals>
+    <string name="pref_hide_in_library_items">Skjul oppføringer som allerede er i biblioteket</string>
+    <string name="action_copy_to_clipboard">Kopier til utklippstavle</string>
     </resources>

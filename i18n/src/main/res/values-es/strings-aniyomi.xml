@@ -46,7 +46,7 @@
     <string name="action_show_anime">Mostrar anime</string>
     <string name="action_display_download_badge_anime">Episodios descargados</string>
     <string name="action_display_unseen_badge">Episodios sin ver</string>
-    <string name="action_display_local_badge_manga">Manga local</string>
+    <string name="action_display_local_badge_manga">Fuente local</string>
     <string name="action_display_local_badge_anime">Anime local</string>
     <string name="action_display_show_continue_reading_button">Mostrar botón de continuar viendo/leyendo</string>
     <string name="action_order_by_episode_number">Por número de episodio</string>

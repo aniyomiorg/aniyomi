@@ -135,9 +135,6 @@
     <string name="sort_by_number">Por número de capítulos</string>
     <string name="sort_by_upload_date">Por fecha de subida</string>
     <string name="manga_download">Descargar</string>
-    <string name="download_1">Siguiente capítulo</string>
-    <string name="download_5">Siguientes 5 capítulos</string>
-    <string name="download_10">Siguientes 10 capítulos</string>
     <string name="download_all">Todos</string>
     <string name="download_unread">Sin leer</string>
     <string name="confirm_delete_chapters">¿Seguro que quieres eliminar los capítulos seleccionados\?</string>
@@ -286,8 +283,6 @@
     <string name="copied_to_clipboard">Copiado en portapapeles:
 \n«%1$s»</string>
     <string name="source_not_installed">Fuente no instalada: %1$s</string>
-    <string name="custom_download">Descargar cantidad personalizada</string>
-    <string name="download_custom">Personalizado</string>
     <string name="repeating">Releyendo</string>
     <string name="track_status">Estado</string>
     <string name="track_start_date">Empezado</string>
@@ -333,8 +328,8 @@
     <string name="theme_dark">Sí</string>
     <string name="theme_system">Según ajustes del sistema</string>
     <string name="pref_manage_notifications">Gestionar notificaciones</string>
-    <string name="pref_category_security">Seguridad</string>
-    <string name="lock_with_biometrics">Utilizar desbloqueo por biometría</string>
+    <string name="pref_category_security">Seguridad y privacidad</string>
+    <string name="lock_with_biometrics">Requiere utilizar desbloqueo por biometría</string>
     <string name="lock_when_idle">Bloquear por inactividad</string>
     <string name="lock_always">Siempre</string>
     <string name="lock_never">Nunca</string>
@@ -388,7 +383,6 @@
     </plurals>
     <string name="updating_library">Actualizando biblioteca</string>
     <string name="http_error_hint">Abrir sitio en WebView</string>
-    <string name="pref_enable_automatic_extension_updates">Buscar actualizaciones de extensiones</string>
     <string name="channel_ext_updates">Actualizaciones de extensiones</string>
     <string name="pref_skip_filtered_chapters">Saltar capítulos excluidos por filtros</string>
     <string name="pref_category_reading">Lectura</string>
@@ -430,7 +424,7 @@
         <item quantity="other">Quedan %1$s</item>
     </plurals>
     <string name="downloaded_only_summary">Filtra todos los elementos de tu biblioteca para ver solo los que estén disponibles sin conexión</string>
-    <string name="pref_search_pinned_sources_only">Solo incluir fuentes ancladas</string>
+    <string name="pref_search_pinned_sources_only">Solo incluir fuentes ancladas en la búsqueda global</string>
     <string name="viewer">Modo de lectura</string>
     <string name="pref_category_for_this_series">Para esta serie</string>
     <string name="gray_background">Gris</string>
@@ -725,7 +719,7 @@
     <string name="pref_user_agent_string">Nombre del navegador a usar («user agent»)</string>
     <string name="pref_reset_user_agent_string">Restablecer el nombre del navegador («user agent»)</string>
     <string name="action_remove_everything">Quitar todo</string>
-    <string name="loader_rar5_error">El formato RARv5 no se entiende</string>
+    <string name="loader_rar5_error">La app no soporta el formato RARv5</string>
     <string name="appwidget_updates_description">Ver el manga actualizado de forma reciente</string>
     <string name="appwidget_unavailable_locked">El widget no está disponible cuando el bloqueo de aplicación está activo</string>
     <string name="update_already_running">Ya se está actualizando</string>
@@ -768,7 +762,8 @@
     <string name="download_notifier_cache_renewal">Reindexando descargas</string>
     <string name="action_open_random_manga">Abrir un elemento al azar</string>
     <string name="information_no_entries_found">No se ha encontrado ningún manga en esta categoría</string>
-    <string name="fdroid_warning">No recomendamos el uso de la versión en F-Droid. Toca para más información.</string>
+    <string name="fdroid_warning">No damos soporte oficial a las versiones de F-Droid.
+\nToca para más información.</string>
     <string name="label_download_queue">Cola de descargas</string>
     <string name="pref_skip_dupe_chapters">Saltarse los capítulos repetidos</string>
     <string name="enhanced_services_not_installed">Está disponible, pero la fuente todavía no se ha instalado: %s</string>
@@ -777,4 +772,11 @@
 \n¿Seguro que quieres continuar\?</string>
     <string name="track_error">%1$s error: %2$s</string>
     <string name="information_required_plain">*necesaria</string>
+    <plurals name="download_amount">
+        <item quantity="one">El siguiente capítulo</item>
+        <item quantity="many">Los siguientes %d capítulos</item>
+        <item quantity="other">Los siguientes %d capítulos</item>
+    </plurals>
+    <string name="pref_hide_in_library_items">Saltar elementos que ya estén en la biblioteca</string>
+    <string name="action_copy_to_clipboard">Copiar al portapapeles</string>
     </resources>

@@ -80,7 +80,7 @@
     <string name="pref_clear_anime_database">Limpar base de dados de anime</string>
     <string name="pref_clear_manga_database_summary">Eliminar o histórico de mangás não guardados na biblioteca</string>
     <string name="pref_clear_anime_database_summary">Eliminar o histórico de animes não guardados na biblioteca</string>
-    <string name="clear_database_confirmation">Tens a certeza\? O progresso de capítulos e episódios fora da biblioteca será perdido</string>
+    <string name="clear_database_confirmation">Tem certeza\? Os capítulos lidos e o progresso em itens que não estão na sua biblioteca serão perdidos</string>
     <string name="pref_refresh_library_tracking_summary">Atualiza estado, avaliações e últimos capítulos lidos dos serviços de monitorização</string>
     <string name="pref_incognito_mode_summary">Pausar histórico</string>
     <string name="manga_from_library">Mangás da biblioteca</string>
@@ -104,7 +104,7 @@
     <string name="download_5_episodes">Próximos 5 episódios</string>
     <string name="download_10_episodes">Próximos 10 episódios</string>
     <string name="confirm_delete_episodes">Tens a certeza de que desejas apagar os episódios selecionados\?</string>
-    <string name="also_set_chapter_settings_for_library">Também aplicar a todos os mangás na minha biblioteca</string>
+    <string name="also_set_chapter_settings_for_library">Também aplicar a todos os itens na minha biblioteca</string>
     <string name="also_set_episode_settings_for_library">Também aplicar a todos os animes na minha biblioteca</string>
     <string name="no_episodes_error">Nenhum episódio encontrado</string>
     <string name="watching">Assistindo</string>
@@ -133,7 +133,7 @@
     <string name="notification_new_episodes">Novos episódios encontrados</string>
     <string name="information_no_recent_anime">Nada assistido recentemente</string>
     <string name="information_webview_required">WebView é necessário para Aniyomi</string>
-    <string name="download_notifier_download_paused_chapters">Transferência pausada</string>
+    <string name="download_notifier_download_paused_chapters">Downloads pausados</string>
     <string name="channel_new_chapters_episodes">Atualizações de capítulos/episódios</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
     <string name="no_next_episode">Próximo episódio não encontrado!</string>
