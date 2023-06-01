@@ -1,7 +1,5 @@
 package eu.kanade.tachiyomi.data.download.anime.model
 
-import eu.kanade.domain.entries.anime.interactor.GetAnime
-import eu.kanade.domain.items.episode.interactor.GetEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
@@ -14,7 +12,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import rx.subjects.PublishSubject
+import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.interactor.GetEpisode
 import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

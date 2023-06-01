@@ -16,7 +16,12 @@ class TachiyomiMangaWidgetManager(
 ) {
 
     fun Context.init(scope: LifecycleCoroutineScope) {
-        database.subscribeToList { updatesViewQueries.updates(after = MangaUpdatesGridGlanceWidget.DateLimit.timeInMillis) }
+        database.subscribeToList {
+            updatesViewQueries.getUpdatesByReadStatus(
+                read = false,
+                after = MangaUpdatesGridGlanceWidget.DateLimit.timeInMillis,
+            )
+        }
             .drop(1)
             .distinctUntilChanged()
             .onEach {

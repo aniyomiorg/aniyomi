@@ -46,10 +46,7 @@ import eu.kanade.presentation.browse.anime.components.AnimeExtensionIcon
 import eu.kanade.presentation.browse.manga.NsfwWarningDialog
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
-import eu.kanade.presentation.components.DIVIDER_ALPHA
-import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.components.ScrollbarLazyColumn
 import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
@@ -60,6 +57,9 @@ import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.AnimeExtensionDetailsState
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import tachiyomi.presentation.core.components.material.DIVIDER_ALPHA
+import tachiyomi.presentation.core.components.material.Divider
+import tachiyomi.presentation.core.components.material.Scaffold
 
 @Composable
 fun AnimeExtensionDetailsScreen(

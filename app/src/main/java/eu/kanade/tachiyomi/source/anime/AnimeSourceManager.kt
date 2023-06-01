@@ -38,7 +38,7 @@ class AnimeSourceManager(
     private val stubSourcesMap = ConcurrentHashMap<Long, StubAnimeSource>()
 
     val catalogueSources: Flow<List<AnimeCatalogueSource>> = sourcesMapFlow.map { it.values.filterIsInstance<AnimeCatalogueSource>() }
-    val onlineSources: Flow<List<AnimeHttpSource>> = catalogueSources.map { sources -> sources.filterIsInstance<AnimeHttpSource>() }
+    val onlineSources: Flow<List<AnimeHttpSource>> = catalogueSources.map { it.filterIsInstance<AnimeHttpSource>() }
 
     init {
         scope.launch {
@@ -108,7 +108,7 @@ class AnimeSourceManager(
     }
 
     @Suppress("OverridingDeprecatedMember")
-    open inner class StubAnimeSource(private val sourceData: AnimeSourceData) : AnimeSource {
+    inner class StubAnimeSource(private val sourceData: AnimeSourceData) : AnimeSource {
 
         override val id: Long = sourceData.id
 

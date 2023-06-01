@@ -25,3 +25,9 @@ animeupdates:
 SELECT *
 FROM animeupdatesView
 WHERE dateUpload > :after;
+
+getUpdatesBySeenStatus:
+SELECT *
+FROM animeupdatesView
+WHERE seen = :seen
+AND dateUpload > :after;

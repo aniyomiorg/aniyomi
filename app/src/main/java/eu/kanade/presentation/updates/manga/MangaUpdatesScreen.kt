@@ -21,14 +21,14 @@ import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.EntryBottomActionMenu
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.PullRefresh
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
 import eu.kanade.tachiyomi.ui.updates.manga.UpdatesState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tachiyomi.presentation.core.components.material.PullRefresh
+import tachiyomi.presentation.core.components.material.Scaffold
 import kotlin.time.Duration.Companion.seconds
 
 @Composable

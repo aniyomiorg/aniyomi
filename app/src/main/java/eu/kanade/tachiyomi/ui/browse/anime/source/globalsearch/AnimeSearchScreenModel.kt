@@ -5,8 +5,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.entries.anime.interactor.GetAnime
-import eu.kanade.domain.entries.anime.interactor.NetworkToLocalAnime
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toDomainAnime
@@ -25,6 +23,8 @@ import tachiyomi.core.util.lang.awaitSingle
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withNonCancellableContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.anime.interactor.GetAnime
+import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import uy.kohesive.injekt.Injekt

@@ -51,10 +51,7 @@ import androidx.compose.ui.util.fastMap
 import eu.kanade.domain.entries.anime.model.episodesFiltered
 import eu.kanade.presentation.components.EntryBottomActionMenu
 import eu.kanade.presentation.components.EpisodeDownloadAction
-import eu.kanade.presentation.components.ExtendedFloatingActionButton
 import eu.kanade.presentation.components.LazyColumn
-import eu.kanade.presentation.components.PullRefresh
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.components.TwoPanelBox
 import eu.kanade.presentation.components.VerticalFastScroller
 import eu.kanade.presentation.entries.DownloadAction
@@ -79,6 +76,9 @@ import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
+import tachiyomi.presentation.core.components.material.PullRefresh
+import tachiyomi.presentation.core.components.material.Scaffold
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DateFormat

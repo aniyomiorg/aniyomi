@@ -75,7 +75,12 @@ class MangaUpdatesGridGlanceWidget : GlanceAppWidget() {
 
             val processList = list
                 ?: Injekt.get<MangaDatabaseHandler>()
-                    .awaitList { updatesViewQueries.updates(after = DateLimit.timeInMillis) }
+                    .awaitList {
+                        updatesViewQueries.getUpdatesByReadStatus(
+                            read = false,
+                            after = DateLimit.timeInMillis,
+                        )
+                    }
             val (rowCount, columnCount) = ids
                 .flatMap { manager.getAppWidgetSizes(it) }
                 .maxBy { it.height.value * it.width.value }

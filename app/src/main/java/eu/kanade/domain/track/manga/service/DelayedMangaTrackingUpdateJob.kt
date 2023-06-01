@@ -9,14 +9,14 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import eu.kanade.domain.track.manga.interactor.GetMangaTracks
-import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.store.DelayedMangaTrackingStore
 import eu.kanade.tachiyomi.data.track.TrackManager
 import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.track.manga.interactor.GetMangaTracks
+import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.concurrent.TimeUnit

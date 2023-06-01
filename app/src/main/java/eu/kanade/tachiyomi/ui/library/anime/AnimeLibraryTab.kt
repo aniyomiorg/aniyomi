@@ -39,7 +39,6 @@ import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.EmptyScreenAction
 import eu.kanade.presentation.components.LibraryBottomActionMenu
 import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.library.LibraryToolbar
 import eu.kanade.presentation.library.anime.AnimeLibraryContent
 import eu.kanade.presentation.util.Tab
@@ -63,6 +62,7 @@ import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.model.display
+import tachiyomi.presentation.core.components.material.Scaffold
 import uy.kohesive.injekt.injectLazy
 
 object AnimeLibraryTab : Tab {

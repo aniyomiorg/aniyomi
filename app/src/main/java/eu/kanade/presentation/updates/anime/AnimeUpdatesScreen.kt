@@ -21,8 +21,6 @@ import eu.kanade.presentation.components.EntryBottomActionMenu
 import eu.kanade.presentation.components.EpisodeDownloadAction
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.PullRefresh
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -30,6 +28,8 @@ import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tachiyomi.presentation.core.components.material.PullRefresh
+import tachiyomi.presentation.core.components.material.Scaffold
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import kotlin.time.Duration.Companion.seconds

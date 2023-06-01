@@ -75,7 +75,12 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
 
             val processList = list
                 ?: Injekt.get<AnimeDatabaseHandler>()
-                    .awaitList { animeupdatesViewQueries.animeupdates(after = DateLimit.timeInMillis) }
+                    .awaitList {
+                        animeupdatesViewQueries.getUpdatesBySeenStatus(
+                            seen = false,
+                            after = DateLimit.timeInMillis,
+                        )
+                    }
             val (rowCount, columnCount) = ids
                 .flatMap { manager.getAppWidgetSizes(it) }
                 .maxBy { it.height.value * it.width.value }

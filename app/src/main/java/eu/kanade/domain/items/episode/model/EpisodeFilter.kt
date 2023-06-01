@@ -5,10 +5,10 @@ import eu.kanade.domain.entries.anime.model.isLocal
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
-import eu.kanade.tachiyomi.util.episode.getEpisodeSort
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.items.episode.service.getEpisodeSort
 
 /**
  * Applies the view filters to the list of episodes obtained from the database.

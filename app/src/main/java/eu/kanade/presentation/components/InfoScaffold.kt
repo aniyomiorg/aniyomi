@@ -30,6 +30,7 @@ import eu.kanade.presentation.theme.TachiyomiTheme
 import eu.kanade.presentation.util.ThemePreviews
 import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.secondaryItemAlpha
+import tachiyomi.presentation.core.components.material.Scaffold
 
 @Composable
 fun InfoScaffold(

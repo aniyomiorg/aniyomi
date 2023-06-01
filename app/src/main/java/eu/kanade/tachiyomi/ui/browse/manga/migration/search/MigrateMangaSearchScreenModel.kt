@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.browse.manga.migration.search
 import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.entries.manga.interactor.GetManga
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
@@ -11,6 +10,7 @@ import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchItemRe
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchScreenModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.model.Manga
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

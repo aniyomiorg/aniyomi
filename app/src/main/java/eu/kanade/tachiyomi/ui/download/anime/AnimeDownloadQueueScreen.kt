@@ -37,13 +37,13 @@ import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.ExtendedFloatingActionButton
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
 import kotlinx.coroutines.CoroutineScope
 import tachiyomi.core.util.lang.launchUI
+import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
+import tachiyomi.presentation.core.components.material.Scaffold
 import kotlin.math.roundToInt
 
 @Composable

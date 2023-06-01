@@ -12,7 +12,6 @@ import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.source.UnmeteredSource
-import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
@@ -25,6 +24,7 @@ import logcat.LogPriority
 import rx.Observable
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.InputStream

@@ -1,9 +1,7 @@
 package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
-import eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
@@ -13,6 +11,8 @@ import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
+import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack

@@ -43,9 +43,7 @@ import eu.kanade.presentation.browse.manga.BrowseSourceContent
 import eu.kanade.presentation.browse.manga.MissingSourceScreen
 import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceToolbar
 import eu.kanade.presentation.components.ChangeCategoryDialog
-import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.DuplicateMangaDialog
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.util.AssistContentScreen
 import eu.kanade.presentation.util.padding
 import eu.kanade.tachiyomi.R
@@ -62,6 +60,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import tachiyomi.core.util.lang.launchIO
+import tachiyomi.presentation.core.components.material.Divider
+import tachiyomi.presentation.core.components.material.Scaffold
 
 data class BrowseMangaSourceScreen(
     private val sourceId: Long,

@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import eu.kanade.presentation.util.runOnEnterKeyPressed
 import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.tachiyomi.R
+import tachiyomi.presentation.core.components.Pill
 
 const val SEARCH_DEBOUNCE_MILLIS = 250L
 

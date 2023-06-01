@@ -12,10 +12,7 @@ import eu.kanade.core.prefs.asState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.core.util.insertSeparators
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.anime.interactor.GetAnime
-import eu.kanade.domain.items.episode.interactor.GetEpisode
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
-import eu.kanade.domain.items.episode.interactor.UpdateEpisode
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.EpisodeDownloadAction
@@ -42,6 +39,9 @@ import logcat.LogPriority
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.anime.interactor.GetAnime
+import tachiyomi.domain.items.episode.interactor.GetEpisode
+import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.updates.anime.interactor.GetAnimeUpdates
 import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations

@@ -12,11 +12,7 @@ import eu.kanade.core.prefs.CheckboxState
 import eu.kanade.core.prefs.asState
 import eu.kanade.core.prefs.mapAsCheckboxState
 import eu.kanade.core.util.addOrRemove
-import eu.kanade.domain.category.anime.interactor.SetAnimeCategories
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.anime.interactor.GetAnimeWithEpisodes
-import eu.kanade.domain.entries.anime.interactor.GetDuplicateLibraryAnime
-import eu.kanade.domain.entries.anime.interactor.SetAnimeEpisodeFlags
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.downloadedFilter
 import eu.kanade.domain.entries.anime.model.isLocal
@@ -24,9 +20,7 @@ import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
 import eu.kanade.domain.items.episode.interactor.SetSeenStatus
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithSource
-import eu.kanade.domain.items.episode.interactor.UpdateEpisode
 import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
@@ -46,7 +40,6 @@ import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.util.episode.getEpisodeSort
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
@@ -68,12 +61,19 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.TriStateFilter
+import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodes
+import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
+import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.model.NoEpisodesException
+import tachiyomi.domain.items.episode.service.getEpisodeSort
+import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

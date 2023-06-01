@@ -10,14 +10,16 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadProvider
 import eu.kanade.tachiyomi.source.anime.isLocal
-import eu.kanade.tachiyomi.util.episode.EpisodeRecognition
 import tachiyomi.data.items.episode.EpisodeSanitizer
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.items.episode.interactor.ShouldUpdateDbEpisode
+import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.items.episode.model.toEpisodeUpdate
 import tachiyomi.domain.items.episode.repository.EpisodeRepository
+import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.lang.Long.max

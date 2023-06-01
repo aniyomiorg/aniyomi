@@ -40,7 +40,6 @@ import eu.kanade.presentation.browse.manga.ExtensionTrustDialog
 import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.components.FastScrollLazyColumn
 import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.PullRefresh
 import eu.kanade.presentation.entries.DotSeparatorNoSpaceText
 import eu.kanade.presentation.util.padding
 import eu.kanade.presentation.util.plus
@@ -52,6 +51,7 @@ import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionUiModel
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsState
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import tachiyomi.presentation.core.components.material.PullRefresh
 
 @Composable
 fun AnimeExtensionScreen(

@@ -1,12 +1,13 @@
 package eu.kanade.domain.items.chapter.interactor
 
-import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.tachiyomi.data.track.MangaTrackService
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.items.chapter.interactor.UpdateChapter
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.toChapterUpdate
+import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import tachiyomi.domain.track.manga.model.MangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

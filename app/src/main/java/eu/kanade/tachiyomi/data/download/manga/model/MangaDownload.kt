@@ -1,7 +1,5 @@
 package eu.kanade.tachiyomi.data.download.manga.model
 
-import eu.kanade.domain.entries.manga.interactor.GetManga
-import eu.kanade.domain.items.chapter.interactor.GetChapter
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
@@ -13,7 +11,9 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.interactor.GetChapter
 import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

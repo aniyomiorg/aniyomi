@@ -16,7 +16,12 @@ class TachiyomiAnimeWidgetManager(
 ) {
 
     fun Context.init(scope: LifecycleCoroutineScope) {
-        database.subscribeToList { animeupdatesViewQueries.animeupdates(after = AnimeUpdatesGridGlanceWidget.DateLimit.timeInMillis) }
+        database.subscribeToList {
+            animeupdatesViewQueries.getUpdatesBySeenStatus(
+                seen = false,
+                after = AnimeUpdatesGridGlanceWidget.DateLimit.timeInMillis,
+            )
+        }
             .drop(1)
             .distinctUntilChanged()
             .onEach {

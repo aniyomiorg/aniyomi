@@ -36,8 +36,6 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import eu.kanade.core.util.asFlow
-import eu.kanade.domain.entries.anime.interactor.GetAnime
-import eu.kanade.domain.items.episode.interactor.GetEpisode
 import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.presentation.util.padding
@@ -55,7 +53,9 @@ import logcat.LogPriority
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.interactor.GetEpisode
 import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

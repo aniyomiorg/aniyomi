@@ -11,10 +11,7 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.prefs.asState
 import eu.kanade.core.util.addOrRemove
 import eu.kanade.core.util.insertSeparators
-import eu.kanade.domain.entries.manga.interactor.GetManga
-import eu.kanade.domain.items.chapter.interactor.GetChapter
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
-import eu.kanade.domain.items.chapter.interactor.UpdateChapter
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.components.ChapterDownloadAction
@@ -41,6 +38,9 @@ import logcat.LogPriority
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.manga.interactor.GetManga
+import tachiyomi.domain.items.chapter.interactor.GetChapter
+import tachiyomi.domain.items.chapter.interactor.UpdateChapter
 import tachiyomi.domain.items.chapter.model.ChapterUpdate
 import tachiyomi.domain.updates.manga.interactor.GetMangaUpdates
 import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations

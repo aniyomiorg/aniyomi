@@ -30,15 +30,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.presentation.components.Divider
 import eu.kanade.presentation.components.TrackLogoIcon
-import eu.kanade.presentation.components.VerticalDivider
 import eu.kanade.presentation.entries.manga.TrackDetailsItem
 import eu.kanade.presentation.entries.manga.TrackInfoItemMenu
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.util.system.copyToClipboard
+import tachiyomi.presentation.core.components.material.Divider
+import tachiyomi.presentation.core.components.material.VerticalDivider
 import java.text.DateFormat
 
 private const val UnsetStatusTextAlpha = 0.5F

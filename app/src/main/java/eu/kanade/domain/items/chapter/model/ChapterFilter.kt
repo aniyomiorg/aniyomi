@@ -5,10 +5,10 @@ import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.entries.manga.ChapterItem
-import eu.kanade.tachiyomi.util.chapter.getChapterSort
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.chapter.service.getChapterSort
 
 /**
  * Applies the view filters to the list of chapters obtained from the database.
