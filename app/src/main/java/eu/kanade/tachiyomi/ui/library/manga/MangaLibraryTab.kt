@@ -39,6 +39,7 @@ import eu.kanade.presentation.entries.LibraryBottomActionMenu
 import eu.kanade.presentation.library.DeleteLibraryEntryDialog
 import eu.kanade.presentation.library.LibraryToolbar
 import eu.kanade.presentation.library.manga.MangaLibraryContent
+import eu.kanade.presentation.library.manga.MangaLibrarySettingsDialog
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
@@ -98,6 +99,7 @@ object MangaLibraryTab : Tab {
         val haptic = LocalHapticFeedback.current
 
         val screenModel = rememberScreenModel { MangaLibraryScreenModel() }
+        val settingsScreenModel = rememberScreenModel { MangaLibrarySettingsScreenModel() }
         val state by screenModel.state.collectAsState()
 
         val snackbarHostState = remember { SnackbarHostState() }
@@ -109,9 +111,6 @@ object MangaLibraryTab : Tab {
                 snackbarHostState.showSnackbar(context.getString(msgRes))
             }
             started
-        }
-        val onClickFilter: () -> Unit = {
-            scope.launch { sendSettingsSheetIntent(state.categories[screenModel.activeCategoryIndex]) }
         }
 
         val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
@@ -133,7 +132,7 @@ object MangaLibraryTab : Tab {
                     onClickUnselectAll = screenModel::clearSelection,
                     onClickSelectAll = { screenModel.selectAll(screenModel.activeCategoryIndex) },
                     onClickInvertSelection = { screenModel.invertSelection(screenModel.activeCategoryIndex) },
-                    onClickFilter = onClickFilter,
+                    onClickFilter = { screenModel.showSettingsDialog() },
                     onClickRefresh = { onClickRefresh(null) },
                     onClickOpenRandomEntry = {
                         scope.launch {
@@ -222,6 +221,11 @@ object MangaLibraryTab : Tab {
 
         val onDismissRequest = screenModel::closeDialog
         when (val dialog = state.dialog) {
+            is MangaLibraryScreenModel.Dialog.SettingsSheet -> MangaLibrarySettingsDialog(
+                onDismissRequest = onDismissRequest,
+                screenModel = settingsScreenModel,
+                activeCategoryIndex = screenModel.activeCategoryIndex,
+            )
             is MangaLibraryScreenModel.Dialog.ChangeCategory -> {
                 ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,
@@ -257,8 +261,8 @@ object MangaLibraryTab : Tab {
             }
         }
 
-        LaunchedEffect(state.selectionMode) {
-            HomeScreen.showBottomNav(!state.selectionMode)
+        LaunchedEffect(state.selectionMode, state.dialog) {
+            HomeScreen.showBottomNav(!state.selectionMode && state.dialog !is MangaLibraryScreenModel.Dialog.SettingsSheet)
         }
 
         LaunchedEffect(state.isLoading) {
@@ -269,7 +273,7 @@ object MangaLibraryTab : Tab {
 
         LaunchedEffect(Unit) {
             launch { queryEvent.receiveAsFlow().collect(screenModel::search) }
-            launch { requestSettingsSheetEvent.receiveAsFlow().collectLatest { onClickFilter() } }
+            launch { requestSettingsSheetEvent.receiveAsFlow().collectLatest { screenModel.showSettingsDialog() } }
         }
     }
 
@@ -279,8 +283,5 @@ object MangaLibraryTab : Tab {
 
     // For opening settings sheet in LibraryController
     private val requestSettingsSheetEvent = Channel<Unit>()
-    private val openSettingsSheetEvent_ = Channel<Category>()
-    val openSettingsSheetEvent = openSettingsSheetEvent_.receiveAsFlow()
-    private suspend fun sendSettingsSheetIntent(category: Category) = openSettingsSheetEvent_.send(category)
-    suspend fun requestOpenSettingsSheet() = requestSettingsSheetEvent.send(Unit)
+    private suspend fun requestOpenSettingsSheet() = requestSettingsSheetEvent.send(Unit)
 }

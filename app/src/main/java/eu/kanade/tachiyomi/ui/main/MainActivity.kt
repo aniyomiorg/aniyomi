@@ -86,10 +86,6 @@ import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearch
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 import eu.kanade.tachiyomi.ui.home.HomeScreen
-import eu.kanade.tachiyomi.ui.library.anime.AnimeLibrarySettingsSheet
-import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
-import eu.kanade.tachiyomi.ui.library.manga.MangaLibrarySettingsSheet
-import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryTab
 import eu.kanade.tachiyomi.ui.more.NewUpdateScreen
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.util.system.dpToPx
@@ -111,7 +107,6 @@ import kotlinx.coroutines.launch
 import logcat.LogPriority
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.system.logcat
-import tachiyomi.domain.category.model.Category
 import tachiyomi.presentation.core.components.material.Scaffold
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -136,12 +131,6 @@ class MainActivity : BaseActivity() {
 
     // To be checked by splash screen. If true then splash screen will be removed.
     var ready = false
-
-    /**
-     * Sheet containing filter/sort/display items.
-     */
-    private var animeSettingsSheet: AnimeLibrarySettingsSheet? = null
-    private var mangaSettingsSheet: MangaLibrarySettingsSheet? = null
 
     private var navigator: Navigator? = null
 
@@ -177,16 +166,6 @@ class MainActivity : BaseActivity() {
 
         // Draw edge-to-edge
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        animeSettingsSheet = AnimeLibrarySettingsSheet(this)
-        AnimeLibraryTab.openSettingsSheetEvent
-            .onEach(::showAnimeSettingsSheet)
-            .launchIn(lifecycleScope)
-
-        mangaSettingsSheet = MangaLibrarySettingsSheet(this)
-        MangaLibraryTab.openSettingsSheetEvent
-            .onEach(::showMangaSettingsSheet)
-            .launchIn(lifecycleScope)
 
         setComposeContent {
             val incognito by preferences.incognitoMode().collectAsState()
@@ -323,26 +302,6 @@ class MainActivity : BaseActivity() {
         when (val screen = navigator?.lastItem) {
             is AssistContentScreen -> {
                 screen.onProvideAssistUrl()?.let { outContent.webUri = it.toUri() }
-            }
-        }
-    }
-
-    private fun showAnimeSettingsSheet(category: Category? = null) {
-        if (category != null) {
-            animeSettingsSheet?.show(category)
-        } else {
-            lifecycleScope.launch {
-                AnimeLibraryTab.requestOpenSettingsSheet()
-            }
-        }
-    }
-
-    private fun showMangaSettingsSheet(category: Category? = null) {
-        if (category != null) {
-            mangaSettingsSheet?.show(category)
-        } else {
-            lifecycleScope.launch {
-                MangaLibraryTab.requestOpenSettingsSheet()
             }
         }
     }
@@ -524,14 +483,6 @@ class MainActivity : BaseActivity() {
 
         ready = true
         return true
-    }
-
-    override fun onDestroy() {
-        animeSettingsSheet?.sheetScope?.cancel()
-        mangaSettingsSheet?.sheetScope?.cancel()
-        animeSettingsSheet = null
-        mangaSettingsSheet = null
-        super.onDestroy()
     }
 
     override fun onBackPressed() {

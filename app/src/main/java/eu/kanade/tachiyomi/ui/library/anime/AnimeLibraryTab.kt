@@ -40,6 +40,7 @@ import eu.kanade.presentation.entries.LibraryBottomActionMenu
 import eu.kanade.presentation.library.DeleteLibraryEntryDialog
 import eu.kanade.presentation.library.LibraryToolbar
 import eu.kanade.presentation.library.anime.AnimeLibraryContent
+import eu.kanade.presentation.library.anime.AnimeLibrarySettingsDialog
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
@@ -101,6 +102,7 @@ object AnimeLibraryTab : Tab {
         val haptic = LocalHapticFeedback.current
 
         val screenModel = rememberScreenModel { AnimeLibraryScreenModel() }
+        val settingsScreenModel = rememberScreenModel { AnimeLibrarySettingsScreenModel() }
         val state by screenModel.state.collectAsState()
 
         val snackbarHostState = remember { SnackbarHostState() }
@@ -112,9 +114,6 @@ object AnimeLibraryTab : Tab {
                 snackbarHostState.showSnackbar(context.getString(msgRes))
             }
             started
-        }
-        val onClickFilter: () -> Unit = {
-            scope.launch { sendSettingsSheetIntent(state.categories[screenModel.activeCategoryIndex]) }
         }
 
         fun openEpisodeInternal(context: Context, animeId: Long, episodeId: Long) {
@@ -151,7 +150,7 @@ object AnimeLibraryTab : Tab {
                     onClickUnselectAll = screenModel::clearSelection,
                     onClickSelectAll = { screenModel.selectAll(screenModel.activeCategoryIndex) },
                     onClickInvertSelection = { screenModel.invertSelection(screenModel.activeCategoryIndex) },
-                    onClickFilter = onClickFilter,
+                    onClickFilter = { screenModel.showSettingsDialog() },
                     onClickRefresh = { onClickRefresh(null) },
                     onClickOpenRandomEntry = {
                         scope.launch {
@@ -235,6 +234,11 @@ object AnimeLibraryTab : Tab {
 
         val onDismissRequest = screenModel::closeDialog
         when (val dialog = state.dialog) {
+            is AnimeLibraryScreenModel.Dialog.SettingsSheet -> AnimeLibrarySettingsDialog(
+                onDismissRequest = onDismissRequest,
+                screenModel = settingsScreenModel,
+                activeCategoryIndex = screenModel.activeCategoryIndex,
+            )
             is AnimeLibraryScreenModel.Dialog.ChangeCategory -> {
                 ChangeCategoryDialog(
                     initialSelection = dialog.initialSelection,
@@ -270,8 +274,8 @@ object AnimeLibraryTab : Tab {
             }
         }
 
-        LaunchedEffect(state.selectionMode) {
-            HomeScreen.showBottomNav(!state.selectionMode)
+        LaunchedEffect(state.selectionMode, state.dialog) {
+            HomeScreen.showBottomNav(!state.selectionMode && state.dialog !is AnimeLibraryScreenModel.Dialog.SettingsSheet)
         }
 
         LaunchedEffect(state.isLoading) {
@@ -282,7 +286,7 @@ object AnimeLibraryTab : Tab {
 
         LaunchedEffect(Unit) {
             launch { queryEvent.receiveAsFlow().collect(screenModel::search) }
-            launch { requestSettingsSheetEvent.receiveAsFlow().collectLatest { onClickFilter() } }
+            launch { requestSettingsSheetEvent.receiveAsFlow().collectLatest { screenModel.showSettingsDialog() } }
         }
     }
 
@@ -292,8 +296,5 @@ object AnimeLibraryTab : Tab {
 
     // For opening settings sheet in LibraryController
     private val requestSettingsSheetEvent = Channel<Unit>()
-    private val openSettingsSheetEvent_ = Channel<Category>()
-    val openSettingsSheetEvent = openSettingsSheetEvent_.receiveAsFlow()
-    private suspend fun sendSettingsSheetIntent(category: Category) = openSettingsSheetEvent_.send(category)
-    suspend fun requestOpenSettingsSheet() = requestSettingsSheetEvent.send(Unit)
+    private suspend fun requestOpenSettingsSheet() = requestSettingsSheetEvent.send(Unit)
 }

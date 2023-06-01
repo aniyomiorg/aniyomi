@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.InternalCoroutinesApi
 import tachiyomi.presentation.core.util.animateElevation
 import androidx.compose.material3.ButtonDefaults as M3ButtonDefaults
 
@@ -235,6 +236,7 @@ class ButtonElevation internal constructor(
         return animateElevation(enabled = enabled, interactionSource = interactionSource)
     }
 
+    @OptIn(InternalCoroutinesApi::class)
     @Composable
     private fun animateElevation(
         enabled: Boolean,

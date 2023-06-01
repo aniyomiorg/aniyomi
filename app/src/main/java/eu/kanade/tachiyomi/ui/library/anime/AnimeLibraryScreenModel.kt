@@ -34,7 +34,7 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
-import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup
+import eu.kanade.tachiyomi.widget.TriState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -58,8 +58,8 @@ import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.library.anime.LibraryAnime
-import tachiyomi.domain.library.model.LibrarySort
-import tachiyomi.domain.library.model.sort
+import tachiyomi.domain.library.anime.model.AnimeLibrarySort
+import tachiyomi.domain.library.anime.model.sort
 import tachiyomi.domain.track.anime.interactor.GetTracksPerAnime
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -150,8 +150,8 @@ class AnimeLibraryScreenModel(
                     prefs.filterStarted or
                     prefs.filterBookmarked or
                     prefs.filterCompleted
-                ) != TriStateGroup.State.DISABLED.value
-            val b = trackFilter.values.any { it != TriStateGroup.State.DISABLED.value }
+                ) != TriState.DISABLED.value
+            val b = trackFilter.values.any { it != TriState.DISABLED.value }
             a || b
         }
             .distinctUntilChanged()
@@ -180,17 +180,17 @@ class AnimeLibraryScreenModel(
 
         val isNotLoggedInAnyTrack = loggedInTrackServices.isEmpty()
 
-        val excludedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriStateGroup.State.ENABLED_NOT.value) it.key else null }
-        val includedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriStateGroup.State.ENABLED_IS.value) it.key else null }
+        val excludedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriState.ENABLED_NOT.value) it.key else null }
+        val includedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriState.ENABLED_IS.value) it.key else null }
         val trackFiltersIsIgnored = includedTracks.isEmpty() && excludedTracks.isEmpty()
 
         val filterFnDownloaded: (AnimeLibraryItem) -> Boolean = downloaded@{
-            if (!downloadedOnly && filterDownloaded == TriStateGroup.State.DISABLED.value) return@downloaded true
+            if (!downloadedOnly && filterDownloaded == TriState.DISABLED.value) return@downloaded true
 
             val isDownloaded = it.libraryAnime.anime.isLocal() ||
                 it.downloadCount > 0 ||
                 downloadManager.getDownloadCount(it.libraryAnime.anime) > 0
-            return@downloaded if (downloadedOnly || filterDownloaded == TriStateGroup.State.ENABLED_IS.value) {
+            return@downloaded if (downloadedOnly || filterDownloaded == TriState.ENABLED_IS.value) {
                 isDownloaded
             } else {
                 !isDownloaded
@@ -198,10 +198,10 @@ class AnimeLibraryScreenModel(
         }
 
         val filterFnUnread: (AnimeLibraryItem) -> Boolean = unread@{
-            if (filterUnread == TriStateGroup.State.DISABLED.value) return@unread true
+            if (filterUnread == TriState.DISABLED.value) return@unread true
 
             val isUnread = it.libraryAnime.unseenCount > 0
-            return@unread if (filterUnread == TriStateGroup.State.ENABLED_IS.value) {
+            return@unread if (filterUnread == TriState.ENABLED_IS.value) {
                 isUnread
             } else {
                 !isUnread
@@ -209,10 +209,10 @@ class AnimeLibraryScreenModel(
         }
 
         val filterFnStarted: (AnimeLibraryItem) -> Boolean = started@{
-            if (filterStarted == TriStateGroup.State.DISABLED.value) return@started true
+            if (filterStarted == TriState.DISABLED.value) return@started true
 
             val hasStarted = it.libraryAnime.hasStarted
-            return@started if (filterStarted == TriStateGroup.State.ENABLED_IS.value) {
+            return@started if (filterStarted == TriState.ENABLED_IS.value) {
                 hasStarted
             } else {
                 !hasStarted
@@ -220,10 +220,10 @@ class AnimeLibraryScreenModel(
         }
 
         val filterFnBookmarked: (AnimeLibraryItem) -> Boolean = bookmarked@{
-            if (filterBookmarked == TriStateGroup.State.DISABLED.value) return@bookmarked true
+            if (filterBookmarked == TriState.DISABLED.value) return@bookmarked true
 
             val hasBookmarks = it.libraryAnime.hasBookmarks
-            return@bookmarked if (filterBookmarked == TriStateGroup.State.ENABLED_IS.value) {
+            return@bookmarked if (filterBookmarked == TriState.ENABLED_IS.value) {
                 hasBookmarks
             } else {
                 !hasBookmarks
@@ -231,10 +231,10 @@ class AnimeLibraryScreenModel(
         }
 
         val filterFnCompleted: (AnimeLibraryItem) -> Boolean = completed@{
-            if (filterCompleted == TriStateGroup.State.DISABLED.value) return@completed true
+            if (filterCompleted == TriState.DISABLED.value) return@completed true
 
             val isCompleted = it.libraryAnime.anime.status.toInt() == SAnime.COMPLETED
-            return@completed if (filterCompleted == TriStateGroup.State.ENABLED_IS.value) {
+            return@completed if (filterCompleted == TriState.ENABLED_IS.value) {
                 isCompleted
             } else {
                 !isCompleted
@@ -290,32 +290,32 @@ class AnimeLibraryScreenModel(
         val sortFn: (AnimeLibraryItem, AnimeLibraryItem) -> Int = { i1, i2 ->
             val sort = keys.find { it.id == i1.libraryAnime.category }!!.sort
             when (sort.type) {
-                LibrarySort.Type.Alphabetical -> {
+                AnimeLibrarySort.Type.Alphabetical -> {
                     sortAlphabetically(i1, i2)
                 }
-                LibrarySort.Type.LastRead -> {
+                AnimeLibrarySort.Type.LastSeen -> {
                     i1.libraryAnime.lastSeen.compareTo(i2.libraryAnime.lastSeen)
                 }
-                LibrarySort.Type.LastUpdate -> {
+                AnimeLibrarySort.Type.LastUpdate -> {
                     i1.libraryAnime.anime.lastUpdate.compareTo(i2.libraryAnime.anime.lastUpdate)
                 }
-                LibrarySort.Type.UnreadCount -> when {
+                AnimeLibrarySort.Type.UnseenCount -> when {
                     // Ensure unread content comes first
                     i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount -> 0
                     i1.libraryAnime.unseenCount == 0L -> if (sort.isAscending) 1 else -1
                     i2.libraryAnime.unseenCount == 0L -> if (sort.isAscending) -1 else 1
                     else -> i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
                 }
-                LibrarySort.Type.TotalChapters -> {
+                AnimeLibrarySort.Type.TotalEpisodes -> {
                     i1.libraryAnime.totalEpisodes.compareTo(i2.libraryAnime.totalEpisodes)
                 }
-                LibrarySort.Type.LatestChapter -> {
+                AnimeLibrarySort.Type.LatestEpisode -> {
                     i1.libraryAnime.latestUpload.compareTo(i2.libraryAnime.latestUpload)
                 }
-                LibrarySort.Type.ChapterFetchDate -> {
+                AnimeLibrarySort.Type.EpisodeFetchDate -> {
                     i1.libraryAnime.episodeFetchedAt.compareTo(i2.libraryAnime.episodeFetchedAt)
                 }
-                LibrarySort.Type.DateAdded -> {
+                AnimeLibrarySort.Type.DateAdded -> {
                     i1.libraryAnime.anime.dateAdded.compareTo(i2.libraryAnime.anime.dateAdded)
                 }
             }
@@ -573,6 +573,10 @@ class AnimeLibraryScreenModel(
         }
     }
 
+    fun showSettingsDialog() {
+        mutableState.update { it.copy(dialog = Dialog.SettingsSheet) }
+    }
+
     fun clearSelection() {
         mutableState.update { it.copy(selection = emptyList()) }
     }
@@ -691,6 +695,7 @@ class AnimeLibraryScreenModel(
     }
 
     sealed class Dialog {
+        object SettingsSheet : Dialog()
         data class ChangeCategory(val anime: List<Anime>, val initialSelection: List<CheckboxState<Category>>) : Dialog()
         data class DeleteAnime(val anime: List<Anime>) : Dialog()
     }

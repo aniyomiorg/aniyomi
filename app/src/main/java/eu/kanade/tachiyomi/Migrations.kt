@@ -25,7 +25,7 @@ import eu.kanade.tachiyomi.util.preference.minusAssign
 import eu.kanade.tachiyomi.util.preference.plusAssign
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.toast
-import eu.kanade.tachiyomi.widget.ExtendedNavigationView
+import eu.kanade.tachiyomi.widget.TriState
 import tachiyomi.core.preference.PreferenceStore
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -105,11 +105,19 @@ object Migrations {
             }
             if (oldVersion < 44) {
                 // Reset sorting preference if using removed sort by source
-                val oldSortingMode = prefs.getInt(libraryPreferences.librarySortingMode().key(), 0)
+                val oldMangaSortingMode = prefs.getInt(libraryPreferences.libraryMangaSortingMode().key(), 0)
 
-                if (oldSortingMode == 5) { // SOURCE = 5
+                if (oldMangaSortingMode == 5) { // SOURCE = 5
                     prefs.edit {
-                        putInt(libraryPreferences.librarySortingMode().key(), 0) // ALPHABETICAL = 0
+                        putInt(libraryPreferences.libraryMangaSortingMode().key(), 0) // ALPHABETICAL = 0
+                    }
+                }
+
+                val oldAnimeSortingMode = prefs.getInt(libraryPreferences.libraryAnimeSortingMode().key(), 0)
+
+                if (oldAnimeSortingMode == 5) { // SOURCE = 5
+                    prefs.edit {
+                        putInt(libraryPreferences.libraryAnimeSortingMode().key(), 0) // ALPHABETICAL = 0
                     }
                 }
             }
@@ -118,9 +126,9 @@ object Migrations {
                 fun convertBooleanPrefToTriState(key: String): Int {
                     val oldPrefValue = prefs.getBoolean(key, false)
                     return if (oldPrefValue) {
-                        ExtendedNavigationView.Item.TriStateGroup.State.ENABLED_IS.value
+                        TriState.ENABLED_IS.value
                     } else {
-                        ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value
+                        TriState.DISABLED.value
                     }
                 }
                 prefs.edit {
@@ -202,10 +210,11 @@ object Migrations {
                 AnimeLibraryUpdateJob.setupTask(context)
             }
             if (oldVersion < 64) {
-                val oldSortingMode = prefs.getInt(libraryPreferences.librarySortingMode().key(), 0)
+                val oldMangaSortingMode = prefs.getInt(libraryPreferences.libraryMangaSortingMode().key(), 0)
+                val oldAnimeSortingMode = prefs.getInt(libraryPreferences.libraryAnimeSortingMode().key(), 0)
                 val oldSortingDirection = prefs.getBoolean("library_sorting_ascending", true)
 
-                val newSortingMode = when (oldSortingMode) {
+                val newMangaSortingMode = when (oldMangaSortingMode) {
                     0 -> "ALPHABETICAL"
                     1 -> "LAST_READ"
                     2 -> "LAST_CHECKED"
@@ -217,18 +226,32 @@ object Migrations {
                     else -> "ALPHABETICAL"
                 }
 
+                val newAnimeSortingMode = when (oldAnimeSortingMode) {
+                    0 -> "ALPHABETICAL"
+                    1 -> "LAST_SEEN"
+                    2 -> "LAST_CHECKED"
+                    3 -> "UNSEEN"
+                    4 -> "TOTAL_EPISODES"
+                    6 -> "LATEST_EPISODE"
+                    8 -> "DATE_FETCHED"
+                    7 -> "DATE_ADDED"
+                    else -> "ALPHABETICAL"
+                }
+
                 val newSortingDirection = when (oldSortingDirection) {
                     true -> "ASCENDING"
                     else -> "DESCENDING"
                 }
 
                 prefs.edit(commit = true) {
-                    remove(libraryPreferences.librarySortingMode().key())
+                    remove(libraryPreferences.libraryMangaSortingMode().key())
+                    remove(libraryPreferences.libraryAnimeSortingMode().key())
                     remove("library_sorting_ascending")
                 }
 
                 prefs.edit {
-                    putString(libraryPreferences.librarySortingMode().key(), newSortingMode)
+                    putString(libraryPreferences.libraryMangaSortingMode().key(), newMangaSortingMode)
+                    putString(libraryPreferences.libraryAnimeSortingMode().key(), newAnimeSortingMode)
                     putString("library_sorting_ascending", newSortingDirection)
                 }
             }
@@ -274,20 +297,29 @@ object Migrations {
             if (oldVersion < 81) {
                 // Handle renamed enum values
                 prefs.edit {
-                    val newSortingMode = when (val oldSortingMode = prefs.getString(libraryPreferences.librarySortingMode().key(), "ALPHABETICAL")) {
+                    val newMangaSortingMode = when (val oldSortingMode = prefs.getString(libraryPreferences.libraryMangaSortingMode().key(), "ALPHABETICAL")) {
                         "LAST_CHECKED" -> "LAST_MANGA_UPDATE"
                         "UNREAD" -> "UNREAD_COUNT"
                         "DATE_FETCHED" -> "CHAPTER_FETCH_DATE"
                         else -> oldSortingMode
                     }
-                    putString(libraryPreferences.librarySortingMode().key(), newSortingMode)
+                    val newAnimeSortingMode = when (val oldSortingMode = prefs.getString(libraryPreferences.libraryAnimeSortingMode().key(), "ALPHABETICAL")) {
+                        "LAST_CHECKED" -> "LAST_MANGA_UPDATE"
+                        "UNREAD" -> "UNREAD_COUNT"
+                        "DATE_FETCHED" -> "CHAPTER_FETCH_DATE"
+                        else -> oldSortingMode
+                    }
+                    putString(libraryPreferences.libraryMangaSortingMode().key(), newMangaSortingMode)
+                    putString(libraryPreferences.libraryAnimeSortingMode().key(), newAnimeSortingMode)
                 }
             }
             if (oldVersion < 82) {
                 prefs.edit {
-                    val sort = prefs.getString(libraryPreferences.librarySortingMode().key(), null) ?: return@edit
+                    val mangasort = prefs.getString(libraryPreferences.libraryMangaSortingMode().key(), null) ?: return@edit
+                    val animesort = prefs.getString(libraryPreferences.libraryAnimeSortingMode().key(), null) ?: return@edit
                     val direction = prefs.getString("library_sorting_ascending", "ASCENDING")!!
-                    putString(libraryPreferences.librarySortingMode().key(), "$sort,$direction")
+                    putString(libraryPreferences.libraryMangaSortingMode().key(), "$mangasort,$direction")
+                    putString(libraryPreferences.libraryAnimeSortingMode().key(), "$animesort,$direction")
                     remove("library_sorting_ascending")
                 }
             }

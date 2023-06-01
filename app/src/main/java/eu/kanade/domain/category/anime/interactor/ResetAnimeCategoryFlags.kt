@@ -11,7 +11,7 @@ class ResetAnimeCategoryFlags(
 
     suspend fun await() {
         val display = preferences.libraryDisplayMode().get()
-        val sort = preferences.librarySortingMode().get()
+        val sort = preferences.libraryAnimeSortingMode().get()
         categoryRepository.updateAllAnimeCategoryFlags(display + sort.type + sort.direction)
     }
 }

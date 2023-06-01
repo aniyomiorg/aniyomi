@@ -14,7 +14,7 @@ class CreateMangaCategoryWithName(
 
     private val initialFlags: Long
         get() {
-            val sort = preferences.librarySortingMode().get()
+            val sort = preferences.libraryMangaSortingMode().get()
             return preferences.libraryDisplayMode().get().flag or
                 sort.type.flag or
                 sort.direction.flag

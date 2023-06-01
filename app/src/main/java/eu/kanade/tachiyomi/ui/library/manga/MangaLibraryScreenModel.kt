@@ -34,7 +34,7 @@ import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.chapter.getNextUnread
 import eu.kanade.tachiyomi.util.removeCovers
-import eu.kanade.tachiyomi.widget.ExtendedNavigationView.Item.TriStateGroup
+import eu.kanade.tachiyomi.widget.TriState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -58,8 +58,8 @@ import tachiyomi.domain.entries.manga.model.MangaUpdate
 import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.library.manga.LibraryManga
-import tachiyomi.domain.library.model.LibrarySort
-import tachiyomi.domain.library.model.sort
+import tachiyomi.domain.library.manga.model.MangaLibrarySort
+import tachiyomi.domain.library.manga.model.sort
 import tachiyomi.domain.track.manga.interactor.GetTracksPerManga
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -150,8 +150,8 @@ class MangaLibraryScreenModel(
                     prefs.filterStarted or
                     prefs.filterBookmarked or
                     prefs.filterCompleted
-                ) != TriStateGroup.State.DISABLED.value
-            val b = trackFilter.values.any { it != TriStateGroup.State.DISABLED.value }
+                ) != TriState.DISABLED.value
+            val b = trackFilter.values.any { it != TriState.DISABLED.value }
             a || b
         }
             .distinctUntilChanged()
@@ -180,17 +180,17 @@ class MangaLibraryScreenModel(
 
         val isNotLoggedInAnyTrack = loggedInTrackServices.isEmpty()
 
-        val excludedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriStateGroup.State.ENABLED_NOT.value) it.key else null }
-        val includedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriStateGroup.State.ENABLED_IS.value) it.key else null }
+        val excludedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriState.ENABLED_NOT.value) it.key else null }
+        val includedTracks = loggedInTrackServices.mapNotNull { if (it.value == TriState.ENABLED_IS.value) it.key else null }
         val trackFiltersIsIgnored = includedTracks.isEmpty() && excludedTracks.isEmpty()
 
         val filterFnDownloaded: (MangaLibraryItem) -> Boolean = downloaded@{
-            if (!downloadedOnly && filterDownloaded == TriStateGroup.State.DISABLED.value) return@downloaded true
+            if (!downloadedOnly && filterDownloaded == TriState.DISABLED.value) return@downloaded true
 
             val isDownloaded = it.libraryManga.manga.isLocal() ||
                 it.downloadCount > 0 ||
                 downloadManager.getDownloadCount(it.libraryManga.manga) > 0
-            return@downloaded if (downloadedOnly || filterDownloaded == TriStateGroup.State.ENABLED_IS.value) {
+            return@downloaded if (downloadedOnly || filterDownloaded == TriState.ENABLED_IS.value) {
                 isDownloaded
             } else {
                 !isDownloaded
@@ -198,10 +198,10 @@ class MangaLibraryScreenModel(
         }
 
         val filterFnUnread: (MangaLibraryItem) -> Boolean = unread@{
-            if (filterUnread == TriStateGroup.State.DISABLED.value) return@unread true
+            if (filterUnread == TriState.DISABLED.value) return@unread true
 
             val isUnread = it.libraryManga.unreadCount > 0
-            return@unread if (filterUnread == TriStateGroup.State.ENABLED_IS.value) {
+            return@unread if (filterUnread == TriState.ENABLED_IS.value) {
                 isUnread
             } else {
                 !isUnread
@@ -209,10 +209,10 @@ class MangaLibraryScreenModel(
         }
 
         val filterFnStarted: (MangaLibraryItem) -> Boolean = started@{
-            if (filterStarted == TriStateGroup.State.DISABLED.value) return@started true
+            if (filterStarted == TriState.DISABLED.value) return@started true
 
             val hasStarted = it.libraryManga.hasStarted
-            return@started if (filterStarted == TriStateGroup.State.ENABLED_IS.value) {
+            return@started if (filterStarted == TriState.ENABLED_IS.value) {
                 hasStarted
             } else {
                 !hasStarted
@@ -220,10 +220,10 @@ class MangaLibraryScreenModel(
         }
 
         val filterFnBookmarked: (MangaLibraryItem) -> Boolean = bookmarked@{
-            if (filterBookmarked == TriStateGroup.State.DISABLED.value) return@bookmarked true
+            if (filterBookmarked == TriState.DISABLED.value) return@bookmarked true
 
             val hasBookmarks = it.libraryManga.hasBookmarks
-            return@bookmarked if (filterBookmarked == TriStateGroup.State.ENABLED_IS.value) {
+            return@bookmarked if (filterBookmarked == TriState.ENABLED_IS.value) {
                 hasBookmarks
             } else {
                 !hasBookmarks
@@ -231,10 +231,10 @@ class MangaLibraryScreenModel(
         }
 
         val filterFnCompleted: (MangaLibraryItem) -> Boolean = completed@{
-            if (filterCompleted == TriStateGroup.State.DISABLED.value) return@completed true
+            if (filterCompleted == TriState.DISABLED.value) return@completed true
 
             val isCompleted = it.libraryManga.manga.status.toInt() == SManga.COMPLETED
-            return@completed if (filterCompleted == TriStateGroup.State.ENABLED_IS.value) {
+            return@completed if (filterCompleted == TriState.ENABLED_IS.value) {
                 isCompleted
             } else {
                 !isCompleted
@@ -290,32 +290,32 @@ class MangaLibraryScreenModel(
         val sortFn: (MangaLibraryItem, MangaLibraryItem) -> Int = { i1, i2 ->
             val sort = keys.find { it.id == i1.libraryManga.category }!!.sort
             when (sort.type) {
-                LibrarySort.Type.Alphabetical -> {
+                MangaLibrarySort.Type.Alphabetical -> {
                     sortAlphabetically(i1, i2)
                 }
-                LibrarySort.Type.LastRead -> {
+                MangaLibrarySort.Type.LastRead -> {
                     i1.libraryManga.lastRead.compareTo(i2.libraryManga.lastRead)
                 }
-                LibrarySort.Type.LastUpdate -> {
+                MangaLibrarySort.Type.LastUpdate -> {
                     i1.libraryManga.manga.lastUpdate.compareTo(i2.libraryManga.manga.lastUpdate)
                 }
-                LibrarySort.Type.UnreadCount -> when {
+                MangaLibrarySort.Type.UnreadCount -> when {
                     // Ensure unread content comes first
                     i1.libraryManga.unreadCount == i2.libraryManga.unreadCount -> 0
                     i1.libraryManga.unreadCount == 0L -> if (sort.isAscending) 1 else -1
                     i2.libraryManga.unreadCount == 0L -> if (sort.isAscending) -1 else 1
                     else -> i1.libraryManga.unreadCount.compareTo(i2.libraryManga.unreadCount)
                 }
-                LibrarySort.Type.TotalChapters -> {
+                MangaLibrarySort.Type.TotalChapters -> {
                     i1.libraryManga.totalChapters.compareTo(i2.libraryManga.totalChapters)
                 }
-                LibrarySort.Type.LatestChapter -> {
+                MangaLibrarySort.Type.LatestChapter -> {
                     i1.libraryManga.latestUpload.compareTo(i2.libraryManga.latestUpload)
                 }
-                LibrarySort.Type.ChapterFetchDate -> {
+                MangaLibrarySort.Type.ChapterFetchDate -> {
                     i1.libraryManga.chapterFetchedAt.compareTo(i2.libraryManga.chapterFetchedAt)
                 }
-                LibrarySort.Type.DateAdded -> {
+                MangaLibrarySort.Type.DateAdded -> {
                     i1.libraryManga.manga.dateAdded.compareTo(i2.libraryManga.manga.dateAdded)
                 }
             }
@@ -573,6 +573,10 @@ class MangaLibraryScreenModel(
         }
     }
 
+    fun showSettingsDialog() {
+        mutableState.update { it.copy(dialog = Dialog.SettingsSheet) }
+    }
+
     fun clearSelection() {
         mutableState.update { it.copy(selection = emptyList()) }
     }
@@ -691,6 +695,7 @@ class MangaLibraryScreenModel(
     }
 
     sealed class Dialog {
+        object SettingsSheet : Dialog()
         data class ChangeCategory(val manga: List<Manga>, val initialSelection: List<CheckboxState<Category>>) : Dialog()
         data class DeleteManga(val manga: List<Manga>) : Dialog()
     }

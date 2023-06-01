@@ -4,12 +4,13 @@ import eu.kanade.tachiyomi.data.preference.DEVICE_ONLY_ON_WIFI
 import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
-import eu.kanade.tachiyomi.widget.ExtendedNavigationView
+import eu.kanade.tachiyomi.widget.TriState
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.library.anime.model.AnimeLibrarySort
+import tachiyomi.domain.library.manga.model.MangaLibrarySort
 import tachiyomi.domain.library.model.LibraryDisplayMode
-import tachiyomi.domain.library.model.LibrarySort
 
 class LibraryPreferences(
     private val preferenceStore: PreferenceStore,
@@ -23,7 +24,9 @@ class LibraryPreferences(
 
     fun libraryDisplayMode() = preferenceStore.getObject("pref_display_mode_library", LibraryDisplayMode.default, LibraryDisplayMode.Serializer::serialize, LibraryDisplayMode.Serializer::deserialize)
 
-    fun librarySortingMode() = preferenceStore.getObject("library_sorting_mode", LibrarySort.default, LibrarySort.Serializer::serialize, LibrarySort.Serializer::deserialize)
+    fun libraryMangaSortingMode() = preferenceStore.getObject("library_sorting_mode", MangaLibrarySort.default, MangaLibrarySort.Serializer::serialize, MangaLibrarySort.Serializer::deserialize)
+
+    fun libraryAnimeSortingMode() = preferenceStore.getObject("animelib_sorting_mode", AnimeLibrarySort.default, AnimeLibrarySort.Serializer::serialize, AnimeLibrarySort.Serializer::deserialize)
 
     fun libraryUpdateInterval() = preferenceStore.getInt("pref_library_update_interval_key", 24)
 
@@ -71,23 +74,23 @@ class LibraryPreferences(
 
     // Mixture Filter
 
-    fun filterDownloadedAnime() = preferenceStore.getInt("pref_filter_animelib_downloaded", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
-    fun filterDownloadedManga() = preferenceStore.getInt("pref_filter_library_downloaded", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
+    fun filterDownloadedAnime() = preferenceStore.getInt("pref_filter_animelib_downloaded", TriState.DISABLED.value)
+    fun filterDownloadedManga() = preferenceStore.getInt("pref_filter_library_downloaded", TriState.DISABLED.value)
 
-    fun filterUnseen() = preferenceStore.getInt("pref_filter_animelib_unread", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
-    fun filterUnread() = preferenceStore.getInt("pref_filter_library_unread", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
+    fun filterUnseen() = preferenceStore.getInt("pref_filter_animelib_unread", TriState.DISABLED.value)
+    fun filterUnread() = preferenceStore.getInt("pref_filter_library_unread", TriState.DISABLED.value)
 
-    fun filterStartedAnime() = preferenceStore.getInt("pref_filter_animelib_started", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
-    fun filterStartedManga() = preferenceStore.getInt("pref_filter_library_started", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
+    fun filterStartedAnime() = preferenceStore.getInt("pref_filter_animelib_started", TriState.DISABLED.value)
+    fun filterStartedManga() = preferenceStore.getInt("pref_filter_library_started", TriState.DISABLED.value)
 
-    fun filterBookmarkedAnime() = preferenceStore.getInt("pref_filter_animelib_bookmarked", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
-    fun filterBookmarkedManga() = preferenceStore.getInt("pref_filter_library_bookmarked", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
+    fun filterBookmarkedAnime() = preferenceStore.getInt("pref_filter_animelib_bookmarked", TriState.DISABLED.value)
+    fun filterBookmarkedManga() = preferenceStore.getInt("pref_filter_library_bookmarked", TriState.DISABLED.value)
 
-    fun filterCompletedAnime() = preferenceStore.getInt("pref_filter_animelib_completed", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
-    fun filterCompletedManga() = preferenceStore.getInt("pref_filter_library_completed", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
+    fun filterCompletedAnime() = preferenceStore.getInt("pref_filter_animelib_completed", TriState.DISABLED.value)
+    fun filterCompletedManga() = preferenceStore.getInt("pref_filter_library_completed", TriState.DISABLED.value)
 
-    fun filterTrackedAnime(name: Int) = preferenceStore.getInt("pref_filter_animelib_tracked_$name", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
-    fun filterTrackedManga(name: Int) = preferenceStore.getInt("pref_filter_library_tracked_$name", ExtendedNavigationView.Item.TriStateGroup.State.DISABLED.value)
+    fun filterTrackedAnime(name: Int) = preferenceStore.getInt("pref_filter_animelib_tracked_$name", TriState.DISABLED.value)
+    fun filterTrackedManga(name: Int) = preferenceStore.getInt("pref_filter_library_tracked_$name", TriState.DISABLED.value)
 
     // Mixture Update Count
 

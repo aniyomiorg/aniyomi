@@ -1,8 +1,10 @@
-package tachiyomi.domain.library.model
+package tachiyomi.domain.library.manga.model
 
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.library.model.FlagWithMask
+import tachiyomi.domain.library.model.plus
 
-data class LibrarySort(
+data class MangaLibrarySort(
     val type: Type,
     val direction: Direction,
 ) : FlagWithMask {
@@ -55,11 +57,11 @@ data class LibrarySort(
     }
 
     object Serializer {
-        fun deserialize(serialized: String): LibrarySort {
+        fun deserialize(serialized: String): MangaLibrarySort {
             return Companion.deserialize(serialized)
         }
 
-        fun serialize(value: LibrarySort): String {
+        fun serialize(value: MangaLibrarySort): String {
             return value.serialize()
         }
     }
@@ -76,17 +78,17 @@ data class LibrarySort(
             Type.DateAdded,
         )
         val directions = setOf(Direction.Ascending, Direction.Descending)
-        val default = LibrarySort(Type.Alphabetical, Direction.Ascending)
+        val default = MangaLibrarySort(Type.Alphabetical, Direction.Ascending)
 
-        fun valueOf(flag: Long?): LibrarySort {
+        fun valueOf(flag: Long?): MangaLibrarySort {
             if (flag == null) return default
-            return LibrarySort(
+            return MangaLibrarySort(
                 Type.valueOf(flag),
                 Direction.valueOf(flag),
             )
         }
 
-        fun deserialize(serialized: String): LibrarySort {
+        fun deserialize(serialized: String): MangaLibrarySort {
             if (serialized.isEmpty()) return default
             return try {
                 val values = serialized.split(",")
@@ -102,7 +104,7 @@ data class LibrarySort(
                     else -> Type.Alphabetical
                 }
                 val ascending = if (values[1] == "ASCENDING") Direction.Ascending else Direction.Descending
-                LibrarySort(type, ascending)
+                MangaLibrarySort(type, ascending)
             } catch (e: Exception) {
                 default
             }
@@ -125,5 +127,5 @@ data class LibrarySort(
     }
 }
 
-val Category?.sort: LibrarySort
-    get() = LibrarySort.valueOf(this?.flags)
+val Category?.sort: MangaLibrarySort
+    get() = MangaLibrarySort.valueOf(this?.flags)

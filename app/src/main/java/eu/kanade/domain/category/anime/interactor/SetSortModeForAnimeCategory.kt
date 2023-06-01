@@ -4,7 +4,7 @@ import eu.kanade.domain.library.service.LibraryPreferences
 import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.category.model.CategoryUpdate
-import tachiyomi.domain.library.model.LibrarySort
+import tachiyomi.domain.library.anime.model.AnimeLibrarySort
 import tachiyomi.domain.library.model.plus
 
 class SetSortModeForAnimeCategory(
@@ -12,7 +12,7 @@ class SetSortModeForAnimeCategory(
     private val categoryRepository: AnimeCategoryRepository,
 ) {
 
-    suspend fun await(categoryId: Long, type: LibrarySort.Type, direction: LibrarySort.Direction) {
+    suspend fun await(categoryId: Long, type: AnimeLibrarySort.Type, direction: AnimeLibrarySort.Direction) {
         val category = categoryRepository.getAnimeCategory(categoryId) ?: return
         val flags = category.flags + type + direction
         if (preferences.categorizedDisplaySettings().get()) {
@@ -23,12 +23,12 @@ class SetSortModeForAnimeCategory(
                 ),
             )
         } else {
-            preferences.librarySortingMode().set(LibrarySort(type, direction))
+            preferences.libraryAnimeSortingMode().set(AnimeLibrarySort(type, direction))
             categoryRepository.updateAllAnimeCategoryFlags(flags)
         }
     }
 
-    suspend fun await(category: Category, type: LibrarySort.Type, direction: LibrarySort.Direction) {
+    suspend fun await(category: Category, type: AnimeLibrarySort.Type, direction: AnimeLibrarySort.Direction) {
         await(category.id, type, direction)
     }
 }

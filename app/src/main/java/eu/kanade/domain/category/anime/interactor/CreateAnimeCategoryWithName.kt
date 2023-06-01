@@ -14,7 +14,7 @@ class CreateAnimeCategoryWithName(
 
     private val initialFlags: Long
         get() {
-            val sort = preferences.librarySortingMode().get()
+            val sort = preferences.libraryAnimeSortingMode().get()
             return preferences.libraryDisplayMode().get().flag or
                 sort.type.flag or
                 sort.direction.flag
