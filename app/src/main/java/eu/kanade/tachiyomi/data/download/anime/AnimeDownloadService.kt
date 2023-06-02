@@ -89,7 +89,9 @@ class AnimeDownloadService : Service() {
 
     override fun onCreate() {
         scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-        startForeground(Notifications.ID_DOWNLOAD_EPISODE_PROGRESS, getPlaceholderNotification())
+        downloadManager.queue.state.value.forEach {
+            startForeground(it.episode.id.hashCode(), getPlaceholderNotification())
+        }
         wakeLock = acquireWakeLock(javaClass.name)
         _isRunning.value = true
         listenNetworkChanges()
