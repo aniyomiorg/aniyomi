@@ -27,6 +27,8 @@ import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CATEGORY
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CATEGORY_MASK
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CHAPTER
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CHAPTER_MASK
+import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_EXT_PREFS
+import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_EXT_PREFS_MASK
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_HISTORY
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_HISTORY_MASK
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_PREFS
@@ -38,6 +40,7 @@ import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeSource
 import eu.kanade.tachiyomi.data.backup.models.BackupCategory
+import eu.kanade.tachiyomi.data.backup.models.BackupExtensionPreferences
 import eu.kanade.tachiyomi.data.backup.models.BackupHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
 import eu.kanade.tachiyomi.data.backup.models.BackupPreference
@@ -61,8 +64,10 @@ import eu.kanade.tachiyomi.data.database.models.manga.Chapter
 import eu.kanade.tachiyomi.data.database.models.manga.Manga
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
+import eu.kanade.tachiyomi.source.anime.getPreferenceKey
 import eu.kanade.tachiyomi.source.anime.model.copyFrom
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
+import eu.kanade.tachiyomi.source.manga.getPreferenceKey
 import eu.kanade.tachiyomi.source.manga.model.copyFrom
 import eu.kanade.tachiyomi.util.system.hasPermission
 import eu.kanade.tachiyomi.util.system.logcat
@@ -124,6 +129,7 @@ class BackupManager(
             emptyList(),
             backupAnimeExtensionInfo(databaseAnime),
             backupPreferences(prefs, flags),
+            backupExtensionPreferences(flags),
         )
 
         var file: UniFile? = null
@@ -349,8 +355,27 @@ class BackupManager(
         return animeObject
     }
 
-    private fun backupPreferences(prefs: SharedPreferences, options: Int): List<BackupPreference> {
-        if (options and BACKUP_PREFS_MASK != BACKUP_PREFS) return emptyList()
+    private fun backupExtensionPreferences(flags: Int): List<BackupExtensionPreferences> {
+        if (flags and BACKUP_EXT_PREFS_MASK != BACKUP_EXT_PREFS) return emptyList()
+        val prefs = mutableListOf<Pair<String, SharedPreferences>>()
+        Injekt.get<AnimeSourceManager>().getOnlineSources().forEach {
+            val name = it.getPreferenceKey()
+            prefs += Pair(name, context.getSharedPreferences(name, 0x0))
+        }
+        Injekt.get<MangaSourceManager>().getOnlineSources().forEach {
+            val name = it.getPreferenceKey()
+            prefs += Pair(name, context.getSharedPreferences(name, 0x0))
+        }
+        return prefs.map {
+            BackupExtensionPreferences(
+                it.first,
+                backupPreferences(it.second, BACKUP_PREFS),
+            )
+        }
+    }
+
+    private fun backupPreferences(prefs: SharedPreferences, flags: Int): List<BackupPreference> {
+        if (flags and BACKUP_PREFS_MASK != BACKUP_PREFS) return emptyList()
         val backupPreferences = mutableListOf<BackupPreference>()
         for (pref in prefs.all) {
             val toAdd = when (pref.value) {
