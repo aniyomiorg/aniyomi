@@ -9,9 +9,29 @@ class AnimeUpdatesRepositoryImpl(
     private val databaseHandler: AnimeDatabaseHandler,
 ) : AnimeUpdatesRepository {
 
+    override suspend fun awaitWithSeen(seen: Boolean, after: Long): List<AnimeUpdatesWithRelations> {
+        return databaseHandler.awaitList {
+            animeupdatesViewQueries.getUpdatesBySeenStatus(
+                seen = seen,
+                after = after,
+                mapper = animeUpdateWithRelationMapper,
+            )
+        }
+    }
+
     override fun subscribeAllAnimeUpdates(after: Long): Flow<List<AnimeUpdatesWithRelations>> {
         return databaseHandler.subscribeToList {
             animeupdatesViewQueries.animeupdates(after, animeUpdateWithRelationMapper)
+        }
+    }
+
+    override fun subscribeWithSeen(seen: Boolean, after: Long): Flow<List<AnimeUpdatesWithRelations>> {
+        return databaseHandler.subscribeToList {
+            animeupdatesViewQueries.getUpdatesBySeenStatus(
+                seen = seen,
+                after = after,
+                mapper = animeUpdateWithRelationMapper,
+            )
         }
     }
 }

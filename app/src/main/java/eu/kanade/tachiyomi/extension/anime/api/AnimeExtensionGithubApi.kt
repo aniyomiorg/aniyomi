@@ -12,6 +12,7 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import logcat.LogPriority
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
@@ -25,11 +26,12 @@ internal class AnimeExtensionGithubApi {
 
     private val networkService: NetworkHelper by injectLazy()
     private val preferenceStore: PreferenceStore by injectLazy()
+    private val animeExtensionManager: AnimeExtensionManager by injectLazy()
+    private val json: Json by injectLazy()
+
     private val lastExtCheck: Preference<Long> by lazy {
         preferenceStore.getLong("last_ext_check", 0)
     }
-
-    private val animeExtensionManager: AnimeExtensionManager by injectLazy()
 
     private var requiresFallbackSource = false
 
@@ -55,9 +57,11 @@ internal class AnimeExtensionGithubApi {
                     .awaitSuccess()
             }
 
-            val extensions = response
-                .parseAs<List<AnimeExtensionJsonObject>>()
-                .toExtensions()
+            val extensions = with(json) {
+                response
+                    .parseAs<List<AnimeExtensionJsonObject>>()
+                    .toExtensions()
+            }
 
             // Sanity check - a small number of extensions probably means something broke
             // with the repo generator

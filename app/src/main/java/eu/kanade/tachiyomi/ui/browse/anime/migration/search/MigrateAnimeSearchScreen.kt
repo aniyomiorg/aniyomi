@@ -6,8 +6,8 @@ import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.core.navigation.Screen
 import eu.kanade.presentation.browse.anime.MigrateAnimeSearchScreen
+import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreen
 
 class MigrateAnimeSearchScreen(private val animeId: Long) : Screen() {

@@ -20,8 +20,6 @@ import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceComfortab
 import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceCompactGrid
 import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceList
 import eu.kanade.presentation.components.AppBar
-import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.EmptyScreenAction
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.manga.LocalMangaSource
@@ -30,8 +28,10 @@ import kotlinx.coroutines.flow.StateFlow
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.library.model.LibraryDisplayMode
-import tachiyomi.presentation.core.components.LoadingScreen
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.screens.EmptyScreen
+import tachiyomi.presentation.core.screens.EmptyScreenAction
+import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
 fun BrowseSourceContent(

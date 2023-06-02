@@ -14,16 +14,11 @@ android {
 }
 
 dependencies {
-
     implementation(project(":core"))
 
     api(kotlinx.serialization.json)
-
+    api(libs.injekt.core)
     api(libs.rxjava)
-
     api(libs.preferencektx)
-
     api(libs.jsoup)
-
-    implementation(androidx.corektx)
 }

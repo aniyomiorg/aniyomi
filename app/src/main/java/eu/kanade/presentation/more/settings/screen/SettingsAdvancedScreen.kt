@@ -232,7 +232,7 @@ object SettingsAdvancedScreen : SearchableSettings {
                 Preference.PreferenceItem.TextPreference(
                     title = stringResource(R.string.pref_clear_cookies),
                     onClick = {
-                        networkHelper.cookieManager.removeAll()
+                        networkHelper.cookieJar.removeAll()
                         context.toast(R.string.cookies_cleared)
                     },
                 ),
@@ -290,7 +290,6 @@ object SettingsAdvancedScreen : SearchableSettings {
                             context.toast(R.string.error_user_agent_string_invalid)
                             return@EditTextPreference false
                         }
-                        context.toast(R.string.requires_app_restart)
                         true
                     },
                 ),

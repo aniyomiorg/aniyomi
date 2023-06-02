@@ -101,7 +101,7 @@ class WebViewActivity : BaseActivity() {
     }
 
     private fun clearCookies(url: String) {
-        val cleared = network.cookieManager.remove(url.toHttpUrl())
+        val cleared = network.cookieJar.remove(url.toHttpUrl())
         logcat { "Cleared $cleared cookies for: $url" }
     }
 

@@ -36,7 +36,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
-import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
@@ -44,6 +43,7 @@ import kotlinx.coroutines.CoroutineScope
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.screens.EmptyScreen
 import kotlin.math.roundToInt
 
 @Composable

@@ -11,7 +11,7 @@ import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.more.stats.AnimeStatsScreenContent
 import eu.kanade.presentation.more.stats.StatsScreenState
 import eu.kanade.tachiyomi.R
-import tachiyomi.presentation.core.components.LoadingScreen
+import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
 fun Screen.animeStatsTab(): TabContent {

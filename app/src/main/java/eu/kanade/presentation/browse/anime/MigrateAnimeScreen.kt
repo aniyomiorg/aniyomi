@@ -6,13 +6,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import eu.kanade.presentation.components.AppBar
-import eu.kanade.presentation.components.EmptyScreen
 import eu.kanade.presentation.entries.anime.components.BaseAnimeListItem
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.browse.anime.migration.anime.MigrateAnimeState
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.presentation.core.components.FastScrollLazyColumn
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.screens.EmptyScreen
 
 @Composable
 fun MigrateAnimeScreen(

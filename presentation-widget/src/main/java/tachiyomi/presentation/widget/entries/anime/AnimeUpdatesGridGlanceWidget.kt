@@ -25,8 +25,9 @@ import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.util.system.dpToPx
 import kotlinx.coroutines.MainScope
 import tachiyomi.core.util.lang.launchIO
-import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.domain.entries.anime.model.AnimeCover
+import tachiyomi.domain.updates.anime.interactor.GetAnimeUpdates
+import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
 import tachiyomi.presentation.widget.R
 import tachiyomi.presentation.widget.components.anime.CoverHeight
 import tachiyomi.presentation.widget.components.anime.CoverWidth
@@ -37,11 +38,11 @@ import tachiyomi.presentation.widget.util.calculateRowAndColumnCount
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
-import view.AnimeupdatesView
 import java.util.Calendar
 import java.util.Date
 
 class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
+
     private val app: Application by injectLazy()
     private val preferences: SecurityPreferences by injectLazy()
 
@@ -61,7 +62,7 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
         UpdatesAnimeWidget(data)
     }
 
-    fun loadData(list: List<AnimeupdatesView>? = null) {
+    fun loadData(list: List<AnimeUpdatesWithRelations>? = null) {
         coroutineScope.launchIO {
             // Don't show anything when lock is active
             if (preferences.useAuthenticator().get()) {
@@ -74,13 +75,10 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
             if (ids.isEmpty()) return@launchIO
 
             val processList = list
-                ?: Injekt.get<AnimeDatabaseHandler>()
-                    .awaitList {
-                        animeupdatesViewQueries.getUpdatesBySeenStatus(
-                            seen = false,
-                            after = DateLimit.timeInMillis,
-                        )
-                    }
+                ?: Injekt.get<GetAnimeUpdates>().await(
+                    seen = false,
+                    after = DateLimit.timeInMillis,
+                )
             val (rowCount, columnCount) = ids
                 .flatMap { manager.getAppWidgetSizes(it) }
                 .maxBy { it.height.value * it.width.value }
@@ -91,7 +89,7 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
         }
     }
 
-    private fun prepareList(processList: List<AnimeupdatesView>, take: Int): List<Pair<Long, Bitmap?>> {
+    private fun prepareList(processList: List<AnimeUpdatesWithRelations>, take: Int): List<Pair<Long, Bitmap?>> {
         // Resize to cover size
         val widthPx = CoverWidth.value.toInt().dpToPx
         val heightPx = CoverHeight.value.toInt().dpToPx
@@ -104,10 +102,10 @@ class AnimeUpdatesGridGlanceWidget : GlanceAppWidget() {
                     .data(
                         AnimeCover(
                             animeId = animeupdatesView.animeId,
-                            sourceId = animeupdatesView.source,
-                            isAnimeFavorite = animeupdatesView.favorite,
-                            url = animeupdatesView.thumbnailUrl,
-                            lastModified = animeupdatesView.coverLastModified,
+                            sourceId = animeupdatesView.sourceId,
+                            isAnimeFavorite = true,
+                            url = animeupdatesView.coverData.url,
+                            lastModified = animeupdatesView.coverData.lastModified,
                         ),
                     )
                     .memoryCachePolicy(CachePolicy.DISABLED)

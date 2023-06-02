@@ -175,7 +175,7 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { MangaCoverCache(app) }
         addSingletonFactory { AnimeCoverCache(app) }
 
-        addSingletonFactory { NetworkHelper(app) }
+        addSingletonFactory { NetworkHelper(app, get()) }
         addSingletonFactory { JavaScriptEngine(app) }
 
         addSingletonFactory { MangaSourceManager(app, get(), get()) }
