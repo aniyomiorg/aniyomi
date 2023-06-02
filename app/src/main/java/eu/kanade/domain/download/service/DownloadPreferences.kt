@@ -40,4 +40,6 @@ class DownloadPreferences(
 
     fun downloadNewChapterCategoriesExclude() = preferenceStore.getStringSet("download_new_categories_exclude", emptySet())
     fun downloadNewEpisodeCategoriesExclude() = preferenceStore.getStringSet("download_new_anime_categories_exclude", emptySet())
+
+    fun numberOfDownloads() = preferenceStore.getInt("download_slots", 1)
 }

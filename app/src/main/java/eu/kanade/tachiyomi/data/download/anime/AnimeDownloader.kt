@@ -23,6 +23,7 @@ import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownloadQueue
+import eu.kanade.tachiyomi.data.download.manga.MangaDownloader.Companion.WARNING_NOTIF_TIMEOUT_MS
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.source.UnmeteredSource
@@ -72,6 +73,7 @@ class AnimeDownloader(
     private val cache: AnimeDownloadCache,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val episodeCache: EpisodeCache = Injekt.get(),
+    private val downloadPreferences: DownloadPreferences = Injekt.get(),
 ) {
 
     /**
@@ -158,14 +160,20 @@ class AnimeDownloader(
             .forEach { it.status = AnimeDownload.State.ERROR }
 
         if (reason != null) {
-            notifier.onWarning(reason)
-            return
+            queue.state.value.forEach {
+                notifier.onWarning(reason)
+                return
+            }
         }
 
         if (notifier.paused && queue.isNotEmpty()) {
-            notifier.onPaused()
+            queue.state.value.forEach {
+                notifier.onPaused(it)
+            }
         } else {
-            notifier.onComplete()
+            queue.state.value.forEach {
+                notifier.onComplete(it)
+            }
         }
 
         notifier.paused = false
@@ -207,8 +215,10 @@ class AnimeDownloader(
                     it.status = AnimeDownload.State.NOT_DOWNLOADED
                 }
         }
+        queue.state.value.forEach {
+            notifier.dismissProgress(it)
+        }
         queue.clear()
-        notifier.dismissProgress()
     }
 
     /**
@@ -219,27 +229,32 @@ class AnimeDownloader(
         isRunning = true
 
         subscriptions.clear()
-        subscriptions += downloadsRelay.concatMapIterable { it }
-            // Concurrently download from 5 different sources
+        subscriptions += downloadsRelay
+            .flatMapIterable { it }
             .groupBy { it.source }
             .flatMap(
                 { bySource ->
-                    bySource.concatMap { download ->
-                        downloadEpisode(download).subscribeOn(Schedulers.io())
-                    }
+                    bySource.flatMap(
+                        { download ->
+                            downloadEpisode(download)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                        },
+                        downloadPreferences.numberOfDownloads().get(),
+                    )
                 },
-                5,
+                downloadPreferences.numberOfDownloads().get(), // Set the maximum number of concurrent downloads here
             )
-            .onBackpressureLatest()
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                {
-                    completeAnimeDownload(it)
+                { completedDownload ->
+                    completeAnimeDownload(completedDownload)
                 },
                 { error ->
                     AnimeDownloadService.stop(context)
                     logcat(LogPriority.ERROR, error)
-                    notifier.onError(error.message)
+                    queue.state.value.forEach {
+                        notifier.onError(it, error.message, it.episode.name, it.anime.title)
+                    }
                 },
             )
     }
@@ -336,7 +351,7 @@ class AnimeDownloader(
         val availSpace = DiskUtil.getAvailableStorageSpace(animeDir)
         if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
             download.status = AnimeDownload.State.ERROR
-            notifier.onError(context.getString(R.string.download_insufficient_space), download.episode.name)
+            notifier.onError(download, context.getString(R.string.download_insufficient_space), download.episode.name, download.anime.title)
             return@defer Observable.just(download)
         }
 
@@ -402,12 +417,14 @@ class AnimeDownloader(
             .doOnNext {
                 ensureSuccessfulAnimeDownload(download, animeDir, tmpDir, episodeDirname)
 
-                if (download.status == AnimeDownload.State.DOWNLOADED) notifier.dismissProgress()
+                queue.state.value.forEach {
+                    if (download.status == AnimeDownload.State.DOWNLOADED) notifier.dismissProgress(it)
+                }
             }
             // If the video list threw, it will resume here
             .onErrorReturn { error ->
                 download.status = AnimeDownload.State.ERROR
-                notifier.onError(error.message, download.episode.name)
+                notifier.onError(download, error.message, download.episode.name, download.anime.title)
                 download
             }
     }
@@ -465,7 +482,7 @@ class AnimeDownloader(
             .onErrorReturn {
                 video.progress = 0
                 video.status = Video.State.ERROR
-                notifier.onError(it.message, download.episode.name, download.anime.title)
+                notifier.onError(download, it.message, download.episode.name, download.anime.title)
                 video
             }
     }

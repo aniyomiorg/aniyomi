@@ -88,12 +88,12 @@ data class AnimeDownload(
 
     companion object {
         suspend fun fromEpisodeId(
-            chapterId: Long,
+            episodeId: Long,
             getEpisode: GetEpisode = Injekt.get(),
             getAnimeById: GetAnime = Injekt.get(),
             sourceManager: AnimeSourceManager = Injekt.get(),
         ): AnimeDownload? {
-            val episode = getEpisode.await(chapterId) ?: return null
+            val episode = getEpisode.await(episodeId) ?: return null
             val anime = getAnimeById.await(episode.animeId) ?: return null
             val source = sourceManager.get(anime.source) as? AnimeHttpSource ?: return null
 
