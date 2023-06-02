@@ -4,10 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.core.navigation.Screen
 import eu.kanade.presentation.browse.manga.GlobalMangaSearchScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreen
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
@@ -15,9 +14,7 @@ import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
 class GlobalMangaSearchScreen(
     val searchQuery: String = "",
     val extensionFilter: String = "",
-) : Screen {
-
-    override val key = uniqueScreenKey
+) : Screen() {
 
     @Composable
     override fun Content() {

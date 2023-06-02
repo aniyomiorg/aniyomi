@@ -12,6 +12,7 @@ import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
+import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
@@ -28,10 +29,18 @@ class WebViewScreenModel(
 
     init {
         sourceId?.let { MangaSourceManager.get(it) as? HttpSource }?.let { mangasource ->
-            headers = mangasource.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }
+            try {
+                headers = mangasource.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e) { "Failed to build headers" }
+            }
         }
         sourceId?.let { AnimeSourceManager.get(it) as? AnimeHttpSource }?.let { animesource ->
-            headers = animesource.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }
+            try {
+                headers = animesource.headers.toMultimap().mapValues { it.value.getOrNull(0) ?: "" }
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR, e) { "Failed to build headers" }
+            }
         }
     }
 

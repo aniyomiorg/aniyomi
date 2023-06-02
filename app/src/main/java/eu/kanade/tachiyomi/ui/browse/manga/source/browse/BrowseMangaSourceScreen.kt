@@ -34,10 +34,9 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import eu.kanade.core.navigation.Screen
 import eu.kanade.presentation.browse.anime.components.RemoveEntryDialog
 import eu.kanade.presentation.browse.manga.BrowseSourceContent
 import eu.kanade.presentation.browse.manga.MissingSourceScreen
@@ -66,11 +65,9 @@ import tachiyomi.presentation.core.components.material.padding
 data class BrowseMangaSourceScreen(
     private val sourceId: Long,
     private val listingQuery: String?,
-) : Screen, AssistContentScreen {
+) : Screen(), AssistContentScreen {
 
     private var assistUrl: String? = null
-
-    override val key = uniqueScreenKey
 
     override fun onProvideAssistUrl() = assistUrl
 

@@ -34,7 +34,7 @@ import androidx.compose.ui.text.AnnotatedString
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
+import eu.kanade.core.navigation.Screen
 import eu.kanade.core.util.asFlow
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.tachiyomi.R
@@ -65,7 +65,7 @@ class EpisodeOptionsDialogScreen(
     private val animeId: Long,
     private val sourceId: Long,
     private val useExternalDownloader: Boolean,
-) : Screen {
+) : Screen() {
 
     @Composable
     override fun Content() {
