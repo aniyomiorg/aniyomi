@@ -62,4 +62,6 @@
     <string name="notification_episodes_multiple">第%1$s話</string>
     <string name="pref_waiting_time_aniskip_10">10秒</string>
     <string name="pref_waiting_time_aniskip_7">7秒</string>
+    <string name="chapters_episodes">章と話</string>
+    <string name="label_watched_episodes">見た</string>
 </resources>

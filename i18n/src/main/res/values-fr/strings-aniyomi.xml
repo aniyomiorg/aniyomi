@@ -120,7 +120,7 @@
     <string name="local_invalid_episode_format">Format d\'épisode invalide</string>
     <string name="unknown_studio">Studio inconnu</string>
     <plurals name="anime_num_episodes">
-        <item quantity="one">1 épisode</item>
+        <item quantity="one">%1$s épisode</item>
         <item quantity="many">%1$s épisodes</item>
         <item quantity="other">%1$s épisodes</item>
     </plurals>
@@ -258,4 +258,25 @@
     <string name="auto_download_while_watching">Télécharger automatiquement pendant le visionnage</string>
     <string name="pref_waiting_time_aniskip">Délai d\'expiration du bouton</string>
     <string name="action_global_manga_search">Recherche de Manga Globale</string>
+    <string name="action_global_anime_search">Recherche Globale d\'Anime</string>
+    <string name="pref_search_pinned_anime_sources_only">N\'inclure que les sources d\'anime épinglées</string>
+    <string name="pref_category_volume_brightness">Volume et Luminosité</string>
+    <string name="pref_category_player_seeking">Recherche en cours</string>
+    <string name="pref_category_pip">Incrustation vidéo (PiP)</string>
+    <string name="pref_default_home_tab_library">Définir l\'écran de démarrage sur l\'onglet Manga</string>
+    <string name="pref_intro_length">Durée des intros à sauter</string>
+    <string name="pref_skip_length">Durée de saut par double tap</string>
+    <string name="pref_remember_brightness">Appliquer la dernière luminosité utilisée</string>
+    <string name="pref_pip_episode_toasts">Afficher les toasts d’épisode lors du passage d\'un épisode à l\'autre en mode PiP</string>
+    <string name="pref_player_fullscreen">Ignorer les entailles en plein écran</string>
+    <string name="pref_remember_volume">Appliquer le dernier volume utilisé</string>
+    <string name="pref_track_on_add_library">Ouvrir le menu de pistes lors d’un ajout à la bibliothèque</string>
+    <string name="player_aniskip_mixedOp">Ignorer MixedOp</string>
+    <string name="pref_search_pinned_manga_sources_only">N\'inclure que les sources de manga épinglées</string>
+    <string name="player_hwdec_dialog_title">Définir le mode de décodage matériel par défaut</string>
+    <string name="unofficial_anime_extension_message">Cette extension ne fait pas partie de la liste officielle des extensions Aniyomi.</string>
+    <string name="pref_enable_pip">Permettre l\'utilisation du mode PiP</string>
+    <string name="pref_player_smooth_seek_summary">Si activé, la recherche ne va pas se concentrer sur les images-clés, permettant de faire une recherche plus précise mais plus lente</string>
+    <string name="pref_use_external_downloader">Toujours utiliser un outil de téléchargement externe pour les animés</string>
+    <string name="pref_enable_auto_skip_ani_skip">Activer le passage d\'intro automatique</string>
 </resources>

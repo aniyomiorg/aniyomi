@@ -6,15 +6,15 @@
     <string name="entries">Entri pustaka</string>
     <string name="chapters_episodes">chapter dan episode</string>
     <string name="episodes">Episode</string>
-    <string name="backup_settings_warning">Peringatan: Backup-an ini akan menyimpan kata sandi anda, jangan bagikan file backup ini!</string>
+    <string name="backup_settings_warning">Peringatan: Membuat cadangan pengaturan akan menyimpan kata sandi untuk sinkronisasi, jangan bagikan file cadangan ini!</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
     <string name="label_manga_sources">Sumber Manga</string>
     <string name="label_anime_sources">Sumber Anime</string>
-    <string name="pref_bottom_nav_no_history">Pindahkan Histori ke banyak tab</string>
-    <string name="pref_bottom_nav_no_updates">Pindahkan Update ke banyak tab</string>
-    <string name="pref_bottom_nav_no_manga">Pindahkan Manga ke banyak tab</string>
+    <string name="pref_bottom_nav_no_history">Pindahkan Riwayat ke tab Lainnya</string>
+    <string name="pref_bottom_nav_no_updates">Pindahkan Update ke tab Lainnya</string>
+    <string name="pref_bottom_nav_no_manga">Pindahkan Manga ke tab Lainnya</string>
     <string name="unlock_app">Buka Aniyomi</string>
     <string name="action_filter_unseen">Belum dilihat</string>
     <string name="action_sort_total_episodes">total episode</string>
@@ -47,19 +47,19 @@
     <string name="action_display_download_badge_anime">Episode diunduh</string>
     <string name="action_display_unseen_badge">Episode belum dilihat</string>
     <string name="action_display_local_badge_manga">Lokal manga</string>
-    <string name="action_display_local_badge_anime">Lokal anime</string>
+    <string name="action_display_local_badge_anime">Anime lokal</string>
     <string name="action_display_show_continue_reading_button">Tampilkan tombol lanjutkan menonton/membaca</string>
     <string name="action_order_by_episode_number">Dengan jumlah episode</string>
     <string name="action_start_download_externally">Gunakan pengunduhan eksternal</string>
     <string name="action_start_download_internally">Gunakan pengunduhan internal</string>
     <string name="pref_player_summary">Kontrol kemajuan, pemutaran internal, pemutaran eksternal</string>
     <string name="pref_bottom_nav_style">Gaya tombol navigasi</string>
-    <string name="pref_update_only_completely_read">Dengan episode belum dilihat (s)/chapter belul dibaca(s)</string>
-    <string name="pref_library_update_show_tab_badge">Tampilkan jumlah yang belum dibaca pada ikon Pembaruan</string>
+    <string name="pref_update_only_completely_read">Dengan episode belum dilihat/chapter belum dibaca</string>
+    <string name="pref_library_update_show_tab_badge">Tampilkan jumlah yang belum dilihat/dibaca pada ikon Pembaruan</string>
     <string name="default_manga_category">Kategori bawaan</string>
     <string name="default_anime_category">Kategori anime standar default</string>
     <string name="pref_manga_library_update_categories_details">Manga dalam kategori yang dikecualikan tidak akan diperbarui meskipun masuk dalam kategori yang disertakan.</string>
-    <string name="pref_anime_library_update_categories_details">Anime dalam kategori dikecualikan tidak akan diperbarui bahkan jika mereka juga termasuk dalam kategori.</string>
+    <string name="pref_anime_library_update_categories_details">Anime dalam kategori yang dikecualikan tidak akan diperbarui meskipun masuk dalam kategori yang disertakan.</string>
     <string name="untrusted_extension_message">Ekstensi ini ditanda tangani dengan sertifikat yang tidak terpercaya dan belum diaktifkan.
 \n
 \nSebuah ekstensi berbahaya dapat membaca kredensial login Anda yang tersimpan pada Tachiyomi atau mengeksekusi kode berbahaya.
@@ -102,7 +102,7 @@
     <string name="pref_remove_exclude_categories_manga">Kategori yang dikecualikan</string>
     <string name="pref_remove_exclude_categories_anime">Kategori anime yang dikecualikan</string>
     <string name="pref_category_external_downloader">Pengunduhan eksternal</string>
-    <string name="pref_use_external_downloader">Selalu gunakan pengunduhan eksternal pada anime</string>
+    <string name="pref_use_external_downloader">Selalu gunakan pengunduh eksternal untuk anime</string>
     <string name="pref_external_downloader_selection">Pemilihan app pengunduhan yang digunakan</string>
     <string name="pref_download_new_episodes">Unduh episode terbaru</string>
     <string name="auto_download_while_watching">Otomatis mengunduh saat sedang menonton</string>
@@ -111,17 +111,17 @@
     </plurals>
     <string name="download_ahead_info_anime">Hanya bekerja pada entri di perpustakaan dan jika episode saat ini ditambah yang berikutnya sudah diunduh</string>
     <string name="pref_auto_update_manga_sync">Perbarui kemajuan setelah membaca</string>
-    <string name="pref_track_on_add_library">Buka menu track untuk menambahkan ke perpustakaan</string>
-    <string name="pref_backup_flags_summ">informasi untuk memasukkan dalam file cadangan</string>
+    <string name="pref_track_on_add_library">Buka menu sinkronisasi saat menambahkan ke pustaka</string>
+    <string name="pref_backup_flags_summ">Informasi yang akan dimasukkan ke dalam file cadangan</string>
     <string name="pref_clear_chapter_cache">Hapus cache chapter dan episode</string>
     <string name="used_cache_both">Digunakan oleh anime: %1$s, digunakan oleh manga: %2$s</string>
     <string name="pref_auto_clear_chapter_cache">Bersihkan cache saat aplikasi tertutup</string>
-    <string name="pref_clear_manga_database">Hapus database</string>
+    <string name="pref_clear_manga_database">Hapus database Manga</string>
     <string name="pref_clear_anime_database">Bersihkan database Anime</string>
     <string name="pref_clear_manga_database_summary">Hapus riwayat manga yang tidak disimpan di pustaka Anda</string>
-    <string name="pref_clear_anime_database_summary">Hapus histori dari anime yang tidak disimpan di perpustakaan kamu</string>
-    <string name="clear_database_confirmation">Apakah Anda yakin\? episode/chapter yang sudah dilihat dan juga daftar dalam pustaka semua akan hilang</string>
-    <string name="pref_refresh_library_tracking_summary">Perbarui status, nilai dan proses terakhir yang dibaca dari layanan pelacakan</string>
+    <string name="pref_clear_anime_database_summary">Hapus riwayat anime yang tidak disimpan di pustaka Anda</string>
+    <string name="clear_database_confirmation">Yakin\? Semua catatan untuk entri di luar pustaka mengenai episode dan bab yang sudah diselesaikan beserta kemajuannya akan hilang</string>
+    <string name="pref_refresh_library_tracking_summary">Perbarui status, nilai dan proses terakhir yang dibaca dari layanan sinkronisasi</string>
     <string name="pref_incognito_mode_summary">Jeda riwayat membaca</string>
     <string name="manga_from_library">Manga dari pustaka</string>
     <string name="anime_from_library">Anime dari pustaka</string>
@@ -134,9 +134,9 @@
     <plurals name="anime_num_episodes">
         <item quantity="other">%1$s episode</item>
     </plurals>
-    <string name="delete_downloads_for_anime">hapus episode yang diunduh\?</string>
+    <string name="delete_downloads_for_anime">Hapus episode yang sudah diunduh\?</string>
     <string name="snack_add_to_manga_library">Tambahkan manga ke pustaka\?</string>
-    <string name="snack_add_to_anime_library">Tambahkan anime ke perpustakaan\?</string>
+    <string name="snack_add_to_anime_library">Tambahkan anime ke pustaka\?</string>
     <string name="display_mode_episode">Episode %1$s</string>
     <string name="episode_downloading_progress">Sedang mengunduh (%d%%)</string>
     <string name="download_error">Kesalahan</string>
@@ -149,7 +149,7 @@
     <string name="download_unseen">Belum dilihat</string>
     <string name="confirm_delete_episodes">Apa kamu yakin akan menghapus episode yang dipilih\?</string>
     <string name="also_set_chapter_settings_for_library">Juga terapkan untuk semua manga di pustaka saya</string>
-    <string name="also_set_episode_settings_for_library">juga terapkan untuk semua anime di pustaka saya</string>
+    <string name="also_set_episode_settings_for_library">Terapkan juga ke semua anime di pustaka saya</string>
     <string name="no_episodes_error">Tidak ada episode yang ditemukan</string>
     <string name="watching">Menonton</string>
     <string name="currently_reading">Sedang membaca</string>
@@ -159,8 +159,8 @@
     <string name="want_to_read">Ingin membaca</string>
     <string name="want_to_watch">Ingin menonton</string>
     <string name="repeating_anime">Menonton ulang</string>
-    <string name="dialog_with_checkbox_remove_description_anime">Ini akan menghapus tanggal menonton episode ini. Kau yakin\?</string>
-    <string name="dialog_with_checkbox_reset_anime">Reset ulang semua episode anime ini</string>
+    <string name="dialog_with_checkbox_remove_description_anime">Aksi ini akan menghapus tanggal menonton episode ini. Anda yakin\?</string>
+    <string name="dialog_with_checkbox_reset_anime">Reset semua episode anime ini</string>
     <string name="dialog_with_checkbox_reset">Setel ulang semua chapter untuk manga ini</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="episode_progress">Proses: %1$s/%2$s</string>
@@ -186,7 +186,7 @@
     <plurals name="notification_episodes_generic">
         <item quantity="other">episode baru %1$d</item>
     </plurals>
-    <string name="information_no_recent_anime">Tidak ada yang di tonton baru-baru ini</string>
+    <string name="information_no_recent_anime">Tidak ada yang ditonton baru-baru ini</string>
     <string name="information_webview_required">WebView dibutuhkan untuk Tachiyomi</string>
     <string name="episode_settings_updated">Ubah pengaturan standar episode</string>
     <string name="download_notifier_download_paused_chapters">Pengunduhan dijeda</string>
@@ -221,7 +221,7 @@
     <string name="player_aniskip_ed">Lewati Ending</string>
     <string name="player_aniskip_mixedOp">Lewati MixedOp</string>
     <string name="player_aniskip_recap">Lewati Recap</string>
-    <string name="pref_category_player_aniskip_info">Pengaturan AniSkip</string>
+    <string name="pref_category_player_aniskip_info">Agar AniSkip berfungsi, anime harus disinkronisasi menggunakan MAL atau Anilist</string>
     <string name="pref_enable_aniskip">Aktifkan AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Aktifkan otomatis skip</string>
     <string name="pref_waiting_time_aniskip">Tombol waktu habis</string>
@@ -245,7 +245,7 @@
     <string name="episode_settings">Pengaturan episode</string>
     <string name="pref_backup_flags">Opsi cadangan</string>
     <string name="label_mangaextensions">Manga Ekstension</string>
-    <string name="label_animeextensions">Anime Ekstension</string>
+    <string name="label_animeextensions">Ekstensi Anime</string>
     <string name="label_migration_manga">Migrasi Manga</string>
     <string name="label_migration_anime">Migrasi Anime</string>
     <string name="settings">Pengaturan</string>

@@ -73,4 +73,7 @@
     <string name="action_mark_as_seen">দেখা হয়েছে হিসাবে চিহ্নিত করুন</string>
     <string name="action_mark_as_unseen">অদেখা হিসেবে চিহ্নিত করুন</string>
     <string name="action_download_unread">অপঠিত অধ্যায় ডাউনলোড করুন</string>
+    <string name="action_global_manga_search">গ্লোবাল মাঙ্গা অনুসন্ধান</string>
+    <string name="action_global_anime_search">গ্লোবাল অ্যানিমে অনুসন্ধান</string>
+    <string name="action_remove_bookmark_episode">আনবুকমার্ক পর্ব</string>
 </resources>
