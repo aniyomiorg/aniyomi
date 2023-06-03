@@ -50,7 +50,6 @@
     <string name="lock_with_biometrics">Zatraži otključavanje</string>
     <string name="pref_category_security">Sigurnost i privatnost</string>
     <string name="pref_manage_notifications">Upravljaj obavijestima</string>
-    <string name="pref_confirm_exit">Potvrdi zatvaranje programa</string>
     <string name="pref_date_format">Format datuma</string>
     <string name="theme_system">Slijedi sustav</string>
     <string name="theme_dark">Uključeno</string>
@@ -98,7 +97,6 @@
     <string name="action_move_to_top">Premjesti na vrh</string>
     <string name="action_oldest">Najstarije</string>
     <string name="action_newest">Najnovije</string>
-    <string name="action_reorganize_by">Promijeni redoslijed</string>
     <string name="action_sort">Razvrstaj</string>
     <string name="action_cancel_all">Prekini sve</string>
     <string name="action_cancel">Prekini</string>
@@ -703,4 +701,13 @@
     <string name="missing_items_unknown">Možda nedostaje poglavlje</string>
     <string name="pref_page_rotate">Prilagodi prikaz širokih stranica okretanjem</string>
     <string name="pref_page_rotate_invert">Preokreni položaj širokih stranica</string>
-    </resources>
+    <string name="pref_debug_info">Informacije otklanjanja grešaka</string>
+    <string name="pref_library_columns_per_row">%d po retku</string>
+    <string name="pref_chapter_swipe_start">Povuci prstom ulijevo</string>
+    <string name="pref_double_tap_zoom">Dodirni dvaput za zumiranje</string>
+    <string name="pref_chapter_swipe">Listanje u poglavljima</string>
+    <string name="pref_chapter_swipe_end">Povuci prstom udesno</string>
+    <string name="action_set_interval">Postavi interval</string>
+    <string name="action_filter_interval_custom">Prilagođeni interval dohvaćanja</string>
+    <string name="action_filter_interval_long">Mjesečno dohvaćanje (28 dana)</string>
+</resources>

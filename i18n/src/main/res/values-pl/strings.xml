@@ -321,7 +321,6 @@
     <string name="action_move_to_top">Przenieś na górę</string>
     <string name="action_oldest">Najstarsze</string>
     <string name="action_newest">Najnowsze</string>
-    <string name="action_reorganize_by">Zmień kolejność</string>
     <string name="action_cancel_all">Anuluj wszystko</string>
     <string name="action_select_inverse">Odwróć zaznaczenie</string>
     <string name="action_sort_latest_chapter">Ostatni rozdział</string>
@@ -358,7 +357,6 @@
         <item quantity="other">%d kategorii</item>
     </plurals>
     <string name="secure_screen">Ukryj ekran</string>
-    <string name="pref_confirm_exit">Potwierdź wyjście</string>
     <string name="action_unpin">Odepnij</string>
     <string name="action_pin">Przypnij</string>
     <string name="confirm_exit">Wciśnij wstecz ponownie, aby wyjść</string>
@@ -714,9 +712,59 @@
     <string name="multi_lang">Wielojęzykowe</string>
     <string name="pref_long_strip_split">Dziel wysokie obrazy (BETA)</string>
     <string name="popular">Popularne</string>
-    <string name="updates_last_update_info">Biblioteka ostatnio aktualizowana: %1$s</string>
-    <string name="remove_manga">Zamierzasz usunąć tę mangę ze swojej biblioteki</string>
-<string name="label_download_queue">Kolejka pobierania</string>
+    <string name="updates_last_update_info">Biblioteka ostatnio aktualizowana: %s</string>
+    <string name="remove_manga">Zamierzasz usunąć \"%s\" ze swojej biblioteki</string>
+    <string name="label_stats">Statystyki</string>
+    <string name="label_started">Początek</string>
+    <string name="label_local">Lokalne</string>
+    <string name="label_downloaded">Pobrane</string>
+    <string name="crash_screen_description">%s napotkał nieoczekiwany błąd. Sugerujemy podzielenie się logami crasha, a następnie udostępnienie ich na naszym kanale wsparcia na Discordzie.</string>
+    <string name="pref_reader_summary">Tryb czytania, wyświetl, nawigacja</string>
+    <string name="invalid_location">Nieprawidłowa lokalizacja: %s</string>
+    <string name="pref_general_summary">Język aplikacji, powiadomienia</string>
+    <string name="pref_tracking_summary">Jednokierunkowa synchronizacja postępu, ulepszona synchronizacja</string>
+    <string name="pref_browse_summary">Źródła, rozszerzenia, globalne wyszukiwanie</string>
+    <string name="pref_security_summary">Blokada aplikacji, bezpieczny ekran</string>
+    <string name="pref_appearance_summary">Tło, data &amp; format czasu</string>
+    <string name="pref_advanced_summary">Zrzuć logi, optymalizacje baterii</string>
+    <string name="missing_storage_permission">Nie przyznano uprawnień do przechowywania</string>
+    <string name="pref_backup_summary">Manualna &amp; automatyczna kopia</string>
+    <string name="label_read_duration">Czas odczytu</string>
+    <string name="label_titles_section">Wpisy</string>
+    <string name="label_titles_in_global_update">W globalnej aktualizacji</string>
+    <string name="label_tracker_section">Śledzenie</string>
+    <string name="unknown_title">Nieznany tytuł</string>
+    <string name="updates_last_update_info_just_now">Właśnie teraz</string>
+    <string name="crash_screen_title">Ups!</string>
+    <string name="track_remove_date_conf_title">Usunąć datę\?</string>
+    <string name="track_remove_finish_date_conf_text">To spowoduje usunięcie wcześniej wybranej daty zakończenia z %s</string>
+    <string name="error_user_agent_string_invalid">Nieprawidłowy ciąg agenta użytkownika</string>
+    <string name="crash_screen_restart_application">Uruchom ponownie aplikację</string>
+    <string name="action_not_now">Nie teraz</string>
+    <string name="label_overview_section">Przegląd</string>
+    <string name="label_completed_titles">Zakończone wpisy</string>
+    <string name="label_total_chapters">Całość</string>
+    <string name="action_search_hint">Szukaj…</string>
+    <string name="action_open_random_manga">Otwórz losową pozycję</string>
+    <string name="pref_library_summary">Kategorie, aktualizacja globalna, przesunięcie rozdziału</string>
+    <string name="pref_invalidate_download_cache">Unieważnij indeks pobierania</string>
+    <string name="fdroid_warning">Kompilacje F-Droid nie są oficjalnie obsługiwane.
+\nNaciśnij, aby dowiedzieć się więcej.</string>
+    <string name="label_read_chapters">Czytaj</string>
+    <string name="pref_downloads_summary">Automatyczne pobieranie, pobierz wstępnie</string>
+    <string name="track_remove_start_date_conf_text">To spowoduje usunięcie wcześniej wybranej daty rozpoczęcia z %s</string>
+    <string name="not_applicable">N/A</string>
+    <string name="day_short">%dd</string>
+    <string name="hour_short">%d godz</string>
+    <string name="minute_short">%d minut</string>
+    <string name="seconds_short">%d sekund</string>
+    <string name="label_used">Używane</string>
+    <string name="label_tracked_titles">Śledzone wpisy</string>
+    <string name="label_mean_score">Średnia ocena</string>
+    <string name="skipped_reason_not_always_update">Pominięto, ponieważ aktualizacja nie jest wymagana</string>
+    <string name="information_no_entries_found">Nie znaleziono wpisów w tej kategorii</string>
+    <string name="download_notifier_cache_renewal">Sprawdzanie pobranych plików</string>
+    <string name="information_no_manga_category">Kategoria jest pusta</string>
     <string name="copied_to_clipboard_plain">Skopiowano do schowka</string>
     <string name="confirm_add_duplicate_manga">Masz w swojej bibliotece pozycję o tej samej nazwie.
 \n
@@ -734,4 +782,21 @@
         <item quantity="many">Następne %d rozdziałów</item>
         <item quantity="other">Następne %d rozdziałów</item>
     </plurals>
-    </resources>
+    <string name="action_update_category">Aktualizuj kategorię</string>
+    <string name="split_tall_images">Dziel długie obrazy</string>
+    <string name="overlay_header">Nakładka</string>
+    <string name="pref_page_rotate">Dopasuj szerokie strony</string>
+    <string name="pref_page_rotate_invert">Zmień orientację obróconych obrazów</string>
+    <string name="pref_debug_info">Informacje debugowania</string>
+    <plurals name="missing_chapters">
+        <item quantity="one">Brakujący %1$s rozdział</item>
+        <item quantity="few">Brakujące %1$s rozdziały</item>
+        <item quantity="many">Brakuje %1$s rozdziałów</item>
+        <item quantity="other">Brakuje %1$s rozdziałów</item>
+    </plurals>
+    <string name="pref_library_columns_per_row">%d na rząd</string>
+    <string name="pref_double_tap_zoom">Dotknij dwukrotnie, aby powiększyć</string>
+    <string name="pref_chapter_swipe_end">Przesuń palcem w prawo</string>
+    <string name="pref_chapter_swipe_start">Przesuń palcem w lewo</string>
+    <string name="pref_chapter_swipe">Przesunięcie rozdziału</string>
+</resources>
