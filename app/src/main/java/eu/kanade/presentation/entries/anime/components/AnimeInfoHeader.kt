@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.AttachMoney
@@ -38,7 +40,6 @@ import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.SuggestionChip
@@ -72,7 +73,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.google.accompanist.flowlayout.FlowRow
 import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.entries.DotSeparatorText
 import eu.kanade.presentation.entries.ItemCover
@@ -268,11 +268,11 @@ fun ExpandableAnimeDescription(
                 if (expanded) {
                     FlowRow(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        mainAxisSpacing = 4.dp,
-                        crossAxisSpacing = 8.dp,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
                         tags.forEach {
                             TagsChip(
+                                modifier = Modifier.padding(vertical = 4.dp),
                                 text = it,
                                 onClick = {
                                     tagSelected = it
@@ -288,6 +288,7 @@ fun ExpandableAnimeDescription(
                     ) {
                         items(items = tags) {
                             TagsChip(
+                                modifier = Modifier.padding(vertical = 4.dp),
                                 text = it,
                                 onClick = {
                                     tagSelected = it
@@ -642,10 +643,12 @@ private fun AnimeSummary(
 @Composable
 private fun TagsChip(
     text: String,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
+    CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
         SuggestionChip(
+            modifier = modifier,
             onClick = onClick,
             label = { Text(text = text, style = MaterialTheme.typography.bodySmall) },
             border = null,

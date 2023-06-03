@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.minimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -38,7 +39,6 @@ import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.util.isScrolledToEnd
 import tachiyomi.presentation.core.util.isScrolledToStart
-import tachiyomi.presentation.core.util.minimumTouchTargetSize
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
@@ -68,7 +68,7 @@ fun TrackStatusSelector(
                                     onClick = { onSelectionChange(key) },
                                 )
                                 .fillMaxWidth()
-                                .minimumTouchTargetSize(),
+                                .minimumInteractiveComponentSize(),
                         ) {
                             RadioButton(
                                 selected = isSelected,

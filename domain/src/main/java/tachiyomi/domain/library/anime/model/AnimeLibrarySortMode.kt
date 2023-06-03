@@ -67,17 +67,19 @@ data class AnimeLibrarySort(
     }
 
     companion object {
-        val types = setOf(
-            Type.Alphabetical,
-            Type.LastSeen,
-            Type.LastUpdate,
-            Type.UnseenCount,
-            Type.TotalEpisodes,
-            Type.LatestEpisode,
-            Type.EpisodeFetchDate,
-            Type.DateAdded,
-        )
-        val directions = setOf(Direction.Ascending, Direction.Descending)
+        val types by lazy {
+            setOf(
+                Type.Alphabetical,
+                Type.LastSeen,
+                Type.LastUpdate,
+                Type.UnseenCount,
+                Type.TotalEpisodes,
+                Type.LatestEpisode,
+                Type.EpisodeFetchDate,
+                Type.DateAdded,
+            )
+        }
+        val directions by lazy { setOf(Direction.Ascending, Direction.Descending) }
         val default = AnimeLibrarySort(Type.Alphabetical, Direction.Ascending)
 
         fun valueOf(flag: Long?): AnimeLibrarySort {
