@@ -335,8 +335,8 @@
         <item quantity="one">%d girdi için</item>
         <item quantity="other">%d girdi için</item>
     </plurals>
-    <string name="action_menu">Menü</string>
     <string name="action_reorganize_by">Yeniden sırala</string>
+    <string name="action_menu">Komut-Seçenek Dizelgesi</string>
     <string name="action_newest">En yeni</string>
     <string name="action_oldest">En eski</string>
     <string name="action_move_to_top">En üste taşı</string>

@@ -61,8 +61,9 @@
     <string name="pref_category_tracking">Theo dõi</string>
     <string name="pref_category_advanced">Nâng cao</string>
     <string name="pref_category_about">Giới thiệu</string>
-    
-    <string name="pref_library_columns">Số truyện hiển thị mỗi dòng</string>
+
+    <!-- General section -->
+    <string name="pref_library_columns">Cỡ lưới</string>
     <string name="portrait">Dọc</string>
     <string name="landscape">Ngang</string>
     <string name="pref_library_update_interval">Tự động cập nhật</string>
@@ -87,10 +88,10 @@
     <string name="white_background">Trắng</string>
     <string name="black_background">Đen</string>
     <string name="pref_viewer_type">Kiểu đọc mặc định</string>
-    <string name="left_to_right_viewer">Trái sang phải</string>
-    <string name="right_to_left_viewer">Phải sang trái</string>
-    <string name="vertical_viewer">Theo chiều dọc</string>
-    <string name="webtoon_viewer">Webtoon</string>
+    <string name="left_to_right_viewer">Phân trang (trái sang phải)</string>
+    <string name="right_to_left_viewer">Phân trang (phải sang trái)</string>
+    <string name="vertical_viewer">Phân trang (chiều dọc)</string>
+    <string name="webtoon_viewer">Dải dài</string>
     <string name="pref_image_scale_type">Kiểu tỉ lệ</string>
     <string name="scale_type_fit_screen">Vừa màn hình</string>
     <string name="scale_type_stretch">Kéo dãn</string>
@@ -362,7 +363,6 @@
     <string name="action_move_to_top">Di chuyển lên đầu</string>
     <string name="action_oldest">Cũ nhất</string>
     <string name="action_newest">Mới nhất</string>
-    <string name="action_reorganize_by">Sắp xếp lại</string>
     <string name="action_cancel_all">Huỷ bỏ tất cả</string>
     <string name="action_view_chapters">Xem các chương</string>
     <string name="action_select_inverse">Đảo ngược lựa chọn</string>
@@ -377,7 +377,7 @@
     <string name="webtoon_side_padding_15">15%</string>
     <string name="webtoon_side_padding_10">10%</string>
     <string name="pref_category_reading_mode">Kiểu đọc</string>
-    <string name="vertical_plus_viewer">Dọc</string>
+    <string name="vertical_plus_viewer">Dải dài có khoảng cách</string>
     <string name="pref_show_reading_mode_summary">Hiển thị ngắn gọn chế độ hiện tại khi mở trang đọc truyện</string>
     <string name="pref_show_reading_mode">Hiển thị chế độ đọc</string>
     <string name="unofficial_extension_message">Tiện ích mở rộng này không nằm trong danh sách tiện ích mở rộng chính thức của Tachiyomi.</string>
@@ -386,7 +386,6 @@
         <item quantity="other">%d danh mục</item>
     </plurals>
     <string name="pref_library_update_refresh_metadata_summary">Kiểm tra ảnh bìa và chi tiết khi cập nhật thư viện</string>
-    <string name="pref_confirm_exit">Xác nhận thoát</string>
     <string name="pref_category_theme">Chủ đề</string>
     <string name="action_unpin">Bỏ ghim</string>
     <string name="action_pin">Ghim</string>
@@ -444,7 +443,7 @@
     <string name="notification_chapters_single_and_more">Chương %1$s và thêm %2$d</string>
     <string name="recent_manga_time">Ch.%1$s-%2$s</string>
     <plurals name="missing_chapters_warning">
-        <item quantity="other">Đã bỏ qua %d chương, vì nguồn đang bị thiếu hoặc chúng đã bị lọc ra</item>
+        <item quantity="other">Đã bỏ qua %d chương, vì nguồn đang bị thiếu hoặc đã bị lọc ra</item>
     </plurals>
     <string name="loader_not_implemented_error">Nguồn không tìm thấy</string>
     <string name="page_list_empty_error">Trang không tìm thấy</string>
@@ -638,7 +637,7 @@
     <string name="pref_landscape_zoom">Phóng ảnh phong cảnh</string>
     <string name="webtoon_side_padding_5">5%</string>
     <string name="action_filter_started">Đã bắt đầu</string>
-    <string name="pref_navigate_pan">Điều hướng tới quay chiều</string>
+    <string name="pref_navigate_pan">Xoay ảnh rộng</string>
     <string name="action_display_cover_only_grid">Lưới chỉ mỗi bìa</string>
     <string name="rotation_reverse_portrait">Đảo ngược chân dung</string>
     <string name="notification_update_error">%1$d cập nhật thất bại</string>
@@ -713,7 +712,7 @@
     <string name="action_search_hint">Tìm kiếm…</string>
     <string name="pref_general_summary">Ngôn ngữ ứng dụng, thông báo</string>
     <string name="pref_appearance_summary">Chủ đề, kiểu hiển thị ngày &amp; giờ</string>
-    <string name="pref_library_summary">Danh mục, cập nhật toàn bộ</string>
+    <string name="pref_library_summary">Danh mục, cập nhật toàn bộ, vuốt chương</string>
     <string name="pref_reader_summary">Dạng đọc, hiển thị, điều hướng</string>
     <string name="pref_downloads_summary">Tự động tải xuống, tải xuống trước</string>
     <string name="pref_backup_summary">Sao lưu thủ công &amp; tự động</string>
@@ -721,7 +720,37 @@
     <string name="pref_advanced_summary">Tệp báo lỗi tạm, tối ưu hoá pin</string>
     <string name="pref_tracking_summary">Đồng bộ tiến trình đọc, đồng bộ nâng cao</string>
     <string name="pref_browse_summary">Nguồn, tiện ích, tìm kiếm toàn bộ</string>
-<string name="label_download_queue">Hàng chờ tải xuống</string>
+    <string name="action_display_show_continue_reading_button">Nút tiếp tục đọc</string>
+    <string name="action_open_random_manga">Mở một truyện ngẫu nhiên</string>
+    <string name="invalid_location">Vị trí không hợp lệ: %s</string>
+    <string name="label_stats">Thống kê</string>
+    <string name="label_downloaded">Đã tải xuống</string>
+    <string name="label_local">Nội bộ</string>
+    <string name="label_total_chapters">Tổng số chương</string>
+    <string name="label_read_chapters">Đã đọc</string>
+    <string name="information_no_entries_found">Không có gì trong danh mục này</string>
+    <string name="label_overview_section">Tổng quát</string>
+    <string name="label_completed_titles">Truyện đã đọc</string>
+    <string name="label_titles_section">Truyện</string>
+    <string name="label_read_duration">Thời gian đọc</string>
+    <string name="label_started">Đang tiến hành</string>
+    <string name="label_mean_score">Điểm trung bình</string>
+    <string name="updates_last_update_info_just_now">Ngay bây giờ</string>
+    <string name="pref_invalidate_download_cache_summary">Buộc ứng dụng kiểm tra lại các chương đã tải xuống</string>
+    <string name="label_titles_in_global_update">Tổng cập nhật</string>
+    <string name="label_used">Đã theo dõi</string>
+    <string name="label_tracker_section">Theo dõi</string>
+    <string name="label_tracked_titles">Tổng theo dõi</string>
+    <string name="crash_screen_restart_application">Khởi động lại ứng dụng</string>
+    <string name="pref_library_update_show_tab_badge">Hiển thị số chương chưa đọc</string>
+    <string name="error_user_agent_string_invalid">Chuỗi tác nhân người dùng không hợp lệ</string>
+    <string name="unknown_title">Tiêu đề không xác định</string>
+    <string name="track_remove_start_date_conf_text">Thao tác này sẽ xóa ngày bắt đầu đã chọn trước đó của bạn khỏi %s</string>
+    <string name="crash_screen_title">Ôi trời!</string>
+    <string name="track_remove_finish_date_conf_text">Thao tác này sẽ xóa ngày kết thúc đã chọn trước đó của bạn khỏi %s</string>
+    <string name="information_no_manga_category">Hạng mục trống</string>
+    <string name="pref_invalidate_download_cache">Vô hiệu hóa chỉ mục tải xuống</string>
+    <string name="action_not_now">Lúc khác</string>
     <string name="fdroid_warning">Bản dựng F-Droid không được hỗ trợ chính thức.
 \nNhấn để tìm hiểu thêm.</string>
     <string name="pref_skip_dupe_chapters">Bỏ qua chương đúp</string>
@@ -753,4 +782,10 @@
     <string name="track_error">%1$s Lỗi: %2$s</string>
     <string name="not_applicable">N/A</string>
     <string name="information_required_plain">*bắt buộc</string>
-    </resources>
+    <string name="pref_library_columns_per_row">%d mỗi hàng</string>
+    <string name="pref_double_tap_zoom">Nhấn đúp để phóng to</string>
+    <string name="pref_chapter_swipe">Vuốt chương</string>
+    <string name="pref_chapter_swipe_end">Thao tác vuốt sang phải</string>
+    <string name="pref_chapter_swipe_start">Thao tác vuốt sang trái</string>
+    <string name="pref_debug_info">Thông tin Debug</string>
+</resources>

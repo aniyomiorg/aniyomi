@@ -366,11 +366,9 @@
     <string name="pref_category_display">画面</string>
     <string name="hide_notification_content">通知内容を非表示</string>
     <string name="secure_screen_summary">セキュア画面はアプリを切り替える時アプリの内容を非表示し、画面キャプチャを無効化します</string>
-    <string name="pref_confirm_exit">終了時に確認</string>
     <string name="action_move_to_bottom">底に移動</string>
     <string name="action_move_to_top">トップに移動</string>
     <string name="action_oldest">最古</string>
-    <string name="action_reorganize_by">再並び替え</string>
     <string name="action_unpin">ピン留めを外す</string>
     <string name="action_pin">ピン留め</string>
     <string name="action_display_show_tabs">カテゴリータブを表示</string>
@@ -702,8 +700,37 @@
     <string name="download_notifier_cache_renewal">ダウンロード内容を検査しています</string>
     <string name="fdroid_warning">F-Droidビルドは正式にサポートされていません。
 \n詳細はタップしてご覧ください。</string>
-<string name="label_download_queue">ダウンロードキュー</string>
-    <string name="enhanced_services_not_installed">利用可能ですが、ソースがインストールされていません: %s</string>
+    <string name="action_display_show_continue_reading_button">続きを読むボタン</string>
+    <string name="track_remove_date_conf_title">日付を削除しますか？</string>
+    <string name="pref_invalidate_download_cache">ダウンロードのインデックスを消去</string>
+    <string name="track_remove_finish_date_conf_text">%sで指定された終了日付を消去します</string>
+    <string name="track_remove_start_date_conf_text">%sで指定された開始日付を消去します</string>
+    <string name="pref_invalidate_download_cache_summary">ダウンロードした章の再スキャンを強制</string>
+    <string name="label_local">ローカル</string>
+    <string name="label_started">開始済み</string>
+    <string name="label_read_duration">閲覧時間</string>
+    <string name="label_titles_section">項目</string>
+    <string name="label_titles_in_global_update">グローバルアップデート対象</string>
+    <string name="label_total_chapters">総計</string>
+    <string name="label_read_chapters">閲覧済み</string>
+    <string name="label_tracker_section">トラッカー</string>
+    <string name="label_tracked_titles">追跡中の作品</string>
+    <string name="label_used">使用中</string>
+    <string name="not_applicable">N/A</string>
+    <string name="hour_short">%d時間</string>
+    <string name="minute_short">%d分</string>
+    <string name="seconds_short">%d秒</string>
+    <string name="label_stats">統計情報</string>
+    <string name="label_overview_section">概要</string>
+    <string name="label_completed_titles">読了した作品</string>
+    <string name="label_downloaded">ダウンロード済み</string>
+    <string name="label_mean_score">平均点数</string>
+    <string name="day_short">%d日</string>
+    <string name="action_not_now">後で</string>
+    <string name="information_no_manga_category">カテゴリが空です</string>
+    <string name="pref_library_update_show_tab_badge">アップデートアイコンに未読メッセージの件数を表示</string>
+    <string name="copied_to_clipboard_plain">クリップボードにコピーしました</string>
+    <string name="enhanced_services_not_installed">利用可能ですが未インストールのソース： %s</string>
     <string name="pref_skip_dupe_chapters">重複の章をスキップ</string>
     <string name="confirm_add_duplicate_manga">ライブラリにはもう同名の項目が存在しています。
 \n
@@ -729,4 +756,17 @@
     <string name="pref_library_columns_per_row">列あたり%d件の項目</string>
     <string name="pref_chapter_swipe">章の間のスワイプ</string>
     <string name="pref_double_tap_zoom">ダブルタップでズーム</string>
-    </resources>
+    <string name="action_set_interval">間隔を設定</string>
+    <string name="action_filter_interval_custom">カスタマイズした取得間隔</string>
+    <string name="action_filter_interval_long">月一回に取得（28日）</string>
+    <string name="action_sort_next_updated">次の更新予定</string>
+    <string name="pref_update_release_grace_period">予想された更新猶予時間</string>
+    <string name="pref_update_only_in_release_period">更新予定時間外</string>
+    <string name="intervals_header">間隔</string>
+    <plurals name="day">
+        <item quantity="other">%d日</item>
+    </plurals>
+    <string name="skipped_reason_not_in_release_period">今日、連載更新が予想されていないためスキップしました</string>
+    <string name="manga_modify_calculated_interval_title">間隔を設定</string>
+    <string name="manga_modify_interval_title">間隔を変更</string>
+</resources>
