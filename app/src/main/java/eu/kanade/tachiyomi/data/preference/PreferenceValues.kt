@@ -20,6 +20,7 @@ const val FLAG_CHAPTERS = "2"
 const val FLAG_HISTORY = "4"
 const val FLAG_TRACK = "8"
 const val FLAG_SETTINGS = "10"
+const val FLAG_EXT_SETTINGS = "20"
 
 /**
  * This class stores the values for the preferences in the application.

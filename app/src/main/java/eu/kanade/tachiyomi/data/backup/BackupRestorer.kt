@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.data.backup
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.preference.PreferenceManager
 import eu.kanade.tachiyomi.R
@@ -8,6 +9,7 @@ import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeSource
 import eu.kanade.tachiyomi.data.backup.models.BackupCategory
+import eu.kanade.tachiyomi.data.backup.models.BackupExtensionPreferences
 import eu.kanade.tachiyomi.data.backup.models.BackupHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
 import eu.kanade.tachiyomi.data.backup.models.BackupPreference
@@ -131,7 +133,14 @@ class BackupRestorer(
         // TODO: optionally trigger online library + tracker update
 
         if (backup.backupPreferences.isNotEmpty()) {
-            restorePreferences(backup.backupPreferences)
+            restorePreferences(
+                backup.backupPreferences,
+                PreferenceManager.getDefaultSharedPreferences(context),
+            )
+        }
+
+        if (backup.backupExtensionPreferences.isNotEmpty()) {
+            restoreExtensionPreferences(backup.backupExtensionPreferences)
         }
 
         return true
@@ -289,41 +298,47 @@ class BackupRestorer(
         backupManager.restoreAnimeTracking(anime, tracks)
     }
 
-    private fun restorePreferences(preferences: List<BackupPreference>) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    private fun restorePreferences(preferences: List<BackupPreference>, sharedPrefs: SharedPreferences) {
         preferences.forEach { pref ->
             when (pref.value) {
                 is IntPreferenceValue -> {
-                    if (prefs.all[pref.key] is Int?) {
-                        prefs.edit().putInt(pref.key, pref.value.value).apply()
+                    if (sharedPrefs.all[pref.key] is Int?) {
+                        sharedPrefs.edit().putInt(pref.key, pref.value.value).apply()
                     }
                 }
                 is LongPreferenceValue -> {
-                    if (prefs.all[pref.key] is Long?) {
-                        prefs.edit().putLong(pref.key, pref.value.value).apply()
+                    if (sharedPrefs.all[pref.key] is Long?) {
+                        sharedPrefs.edit().putLong(pref.key, pref.value.value).apply()
                     }
                 }
                 is FloatPreferenceValue -> {
-                    if (prefs.all[pref.key] is Float?) {
-                        prefs.edit().putFloat(pref.key, pref.value.value).apply()
+                    if (sharedPrefs.all[pref.key] is Float?) {
+                        sharedPrefs.edit().putFloat(pref.key, pref.value.value).apply()
                     }
                 }
                 is StringPreferenceValue -> {
-                    if (prefs.all[pref.key] is String?) {
-                        prefs.edit().putString(pref.key, pref.value.value).apply()
+                    if (sharedPrefs.all[pref.key] is String?) {
+                        sharedPrefs.edit().putString(pref.key, pref.value.value).apply()
                     }
                 }
                 is BooleanPreferenceValue -> {
-                    if (prefs.all[pref.key] is Boolean?) {
-                        prefs.edit().putBoolean(pref.key, pref.value.value).apply()
+                    if (sharedPrefs.all[pref.key] is Boolean?) {
+                        sharedPrefs.edit().putBoolean(pref.key, pref.value.value).apply()
                     }
                 }
                 is StringSetPreferenceValue -> {
-                    if (prefs.all[pref.key] is Set<*>?) {
-                        prefs.edit().putStringSet(pref.key, pref.value.value).apply()
+                    if (sharedPrefs.all[pref.key] is Set<*>?) {
+                        sharedPrefs.edit().putStringSet(pref.key, pref.value.value).apply()
                     }
                 }
             }
+        }
+    }
+
+    private fun restoreExtensionPreferences(prefs: List<BackupExtensionPreferences>) {
+        prefs.forEach {
+            val sharedPrefs = context.getSharedPreferences(it.name, 0x0)
+            restorePreferences(it.prefs, sharedPrefs)
         }
     }
 

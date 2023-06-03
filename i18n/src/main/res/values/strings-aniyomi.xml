@@ -289,4 +289,5 @@
     <string name="settings">Settings</string>
     <string name="copied_video_link_to_clipboard">Copied video quality link to clipboard</string>
     <string name="choose_video_quality">Choose video quality:</string>
+    <string name="extension_settings">Extension settings</string>
 </resources>

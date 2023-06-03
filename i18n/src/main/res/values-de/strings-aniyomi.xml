@@ -265,10 +265,12 @@
     <string name="label_watched_duration">Gesehene Dauer</string>
     <string name="action_global_manga_search">Globale Mangasuche</string>
     <string name="action_global_anime_search">Globale Animesuche</string>
-    <string name="pref_search_pinned_anime_sources_only">Nur angeheftete Anime Quellen einschließen</string>
+    <string name="pref_search_pinned_anime_sources_only">Nur angeheftete Anime Quellen nutzen</string>
     <string name="pref_category_volume_brightness">Lautstärke und Helligkeit</string>
     <string name="pref_default_home_tab_library">Startbildschirm zum Manga-Tab setzen</string>
-    <string name="pref_search_pinned_manga_sources_only">Nur angeheftete Manga Quellen einschließen</string>
+    <string name="pref_search_pinned_manga_sources_only">Nur angeheftete Manga Quellen nutzen</string>
     <string name="unofficial_anime_extension_message">Diese Erweiterung kommt nicht von der offiziellen Aniyomi Erweiterungs Liste.</string>
-    <string name="pref_enable_pip">Aktiviere Nutzung des PiP Modus</string>
+    <string name="pref_enable_pip">Aktiviere Nutzung des Bild-im-Bild (PiP) Modus</string>
+    <string name="pref_category_pip">Bild-im-Bild (PiP)</string>
+    <string name="pref_category_player_seeking">Suchen</string>
 </resources>

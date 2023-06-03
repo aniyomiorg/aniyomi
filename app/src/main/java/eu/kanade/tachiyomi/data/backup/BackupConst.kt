@@ -18,5 +18,7 @@ object BackupConst {
     internal const val BACKUP_TRACK_MASK = 0x8
     internal const val BACKUP_PREFS = 0x10
     internal const val BACKUP_PREFS_MASK = 0x10
-    internal const val BACKUP_ALL = 0x1F
+    internal const val BACKUP_EXT_PREFS = 0x20
+    internal const val BACKUP_EXT_PREFS_MASK = 0x20
+    internal const val BACKUP_ALL = 0x3F
 }

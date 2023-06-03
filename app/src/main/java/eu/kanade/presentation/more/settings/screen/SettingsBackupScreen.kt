@@ -47,6 +47,7 @@ import eu.kanade.tachiyomi.data.backup.BackupRestoreService
 import eu.kanade.tachiyomi.data.backup.models.Backup
 import eu.kanade.tachiyomi.data.preference.FLAG_CATEGORIES
 import eu.kanade.tachiyomi.data.preference.FLAG_CHAPTERS
+import eu.kanade.tachiyomi.data.preference.FLAG_EXT_SETTINGS
 import eu.kanade.tachiyomi.data.preference.FLAG_HISTORY
 import eu.kanade.tachiyomi.data.preference.FLAG_SETTINGS
 import eu.kanade.tachiyomi.data.preference.FLAG_TRACK
@@ -148,6 +149,7 @@ object SettingsBackupScreen : SearchableSettings {
                 BackupConst.BACKUP_TRACK to R.string.track,
                 BackupConst.BACKUP_HISTORY to R.string.history,
                 BackupConst.BACKUP_PREFS to R.string.settings,
+                BackupConst.BACKUP_EXT_PREFS to R.string.extension_settings,
             )
         }
         val flags = remember { choices.keys.toMutableStateList() }
@@ -406,9 +408,10 @@ object SettingsBackupScreen : SearchableSettings {
                         FLAG_HISTORY to stringResource(R.string.history),
                         FLAG_TRACK to stringResource(R.string.track),
                         FLAG_SETTINGS to stringResource(R.string.settings),
+                        FLAG_EXT_SETTINGS to stringResource(R.string.extension_settings),
                     ),
                     onValueChanged = {
-                        if (it.contains(FLAG_SETTINGS)) {
+                        if (FLAG_SETTINGS in it || FLAG_EXT_SETTINGS in it) {
                             context.toast(R.string.backup_settings_warning, Toast.LENGTH_LONG)
                         }
                         true
