@@ -74,7 +74,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.launchUI
 import tachiyomi.core.util.lang.withUIContext
@@ -94,8 +93,8 @@ class PlayerActivity :
     companion object {
         fun newIntent(context: Context, animeId: Long?, episodeId: Long?): Intent {
             return Intent(context, PlayerActivity::class.java).apply {
-                putExtra("anime", animeId)
-                putExtra("episode", episodeId)
+                putExtra("animeId", animeId)
+                putExtra("episodeId", episodeId)
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
         }
@@ -108,17 +107,25 @@ class PlayerActivity :
     val viewModel by viewModels<PlayerViewModel>()
 
     override fun onNewIntent(intent: Intent) {
-        val anime = intent.extras!!.getLong("anime", -1)
-        val episode = intent.extras!!.getLong("episode", -1)
-        if (anime == -1L || episode == -1L) {
+        val animeId = intent.extras!!.getLong("animeId", -1)
+        val episodeId = intent.extras!!.getLong("episodeId", -1)
+        if (animeId == -1L || episodeId == -1L) {
             finish()
             return
         }
+        NotificationReceiver.dismissNotification(this, animeId.hashCode(), Notifications.ID_NEW_EPISODES)
+
         viewModel.saveCurrentEpisodeWatchingProgress()
 
-        viewModel.mutableState.update { it.copy(anime = null) }
-        viewModel.viewModelScope.launchIO {
-            viewModel.init(anime, episode).first?.let { setVideoList(it) }
+        lifecycleScope.launchNonCancellable {
+            val initResult = viewModel.init(animeId, episodeId)
+            if (!initResult.second.getOrDefault(false)) {
+                val exception = initResult.second.exceptionOrNull() ?: IllegalStateException("Unknown error")
+                withUIContext {
+                    setInitialEpisodeError(exception)
+                }
+            }
+            lifecycleScope.launch { setVideoList(initResult.first!!) }
         }
         super.onNewIntent(intent)
     }
@@ -370,26 +377,8 @@ class PlayerActivity :
 
         volumeControlStream = AudioManager.STREAM_MUSIC
 
-        if (viewModel.needsInit()) {
-            val anime = intent.extras!!.getLong("anime", -1)
-            val episode = intent.extras!!.getLong("episode", -1)
-            if (anime == -1L || episode == -1L) {
-                finish()
-                return
-            }
-            NotificationReceiver.dismissNotification(this, anime.hashCode(), Notifications.ID_NEW_EPISODES)
+        onNewIntent(this.intent)
 
-            lifecycleScope.launchNonCancellable {
-                val initResult = viewModel.init(anime, episode)
-                if (!initResult.second.getOrDefault(false)) {
-                    val exception = initResult.second.exceptionOrNull() ?: IllegalStateException("Unknown err")
-                    withUIContext {
-                        setInitialEpisodeError(exception)
-                    }
-                }
-                lifecycleScope.launch { setVideoList(initResult.first!!) }
-            }
-        }
         val dm = DisplayMetrics()
         windowManager.defaultDisplay.getRealMetrics(dm)
         width = dm.widthPixels
@@ -558,7 +547,7 @@ class PlayerActivity :
 
             when (switchMethod) {
                 null -> {
-                    if (viewModel.anime != null && !autoPlay) {
+                    if (viewModel.currentAnime != null && !autoPlay) {
                         launchUI { toast(errorRes) }
                     }
                     showLoadingIndicator(false)
@@ -1051,7 +1040,7 @@ class PlayerActivity :
      * default sharing tool.
      */
     private fun onShareImageResult(uri: Uri, seconds: String) {
-        val anime = viewModel.anime ?: return
+        val anime = viewModel.currentAnime ?: return
         val episode = viewModel.currentEpisode ?: return
 
         val intent = uri.toShareIntent(
@@ -1180,7 +1169,7 @@ class PlayerActivity :
     }
 
     private fun updateEpisodeText() {
-        playerControls.binding.titleMainTxt.text = viewModel.anime?.title
+        playerControls.binding.titleMainTxt.text = viewModel.currentAnime?.title
         playerControls.binding.titleSecondaryTxt.text = viewModel.currentEpisode?.name
         playerControls.binding.controlsSkipIntroBtn.text = getString(R.string.player_controls_skip_intro_text, viewModel.getAnimeSkipIntroLength())
     }
@@ -1213,10 +1202,14 @@ class PlayerActivity :
         }
     }
 
+    override fun finishAndRemoveTask() {
+        viewModel.deletePendingEpisodes()
+        super.finishAndRemoveTask()
+    }
+
     override fun onDestroy() {
         playerPreferences.playerVolumeValue().set(fineVolume)
         playerPreferences.playerBrightnessValue().set(brightness)
-        viewModel.deletePendingEpisodes()
         MPVLib.removeLogObserver(this)
         if (!playerIsDestroyed) {
             playerIsDestroyed = true
@@ -1451,7 +1444,7 @@ class PlayerActivity :
 
     private fun setHttpOptions(video: Video) {
         if (viewModel.isEpisodeOnline() != true) return
-        val source = viewModel.source as AnimeHttpSource
+        val source = viewModel.currentSource as AnimeHttpSource
 
         val headers = video.headers?.toMultimap()
             ?.mapValues { it.value.firstOrNull() ?: "" }

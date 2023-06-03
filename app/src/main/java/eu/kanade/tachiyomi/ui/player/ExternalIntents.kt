@@ -402,10 +402,10 @@ class ExternalIntents {
      * Determines if deleting option is enabled and nth to last episode actually exists.
      * If both conditions are satisfied enqueues episode for delete
      *
-     * @param currentEpisode the episode, which is going to be marked as seen.
+     * @param episode the episode, which is going to be marked as seen.
      * @param anime the anime of the episode.
      */
-    private suspend fun deleteEpisodeIfNeeded(currentEpisode: Episode, anime: Anime) {
+    private suspend fun deleteEpisodeIfNeeded(episode: Episode, anime: Anime) {
         // Determine which episode should be deleted and enqueue
         val sortFunction: (Episode, Episode) -> Int = when (anime.sorting) {
             Anime.EPISODE_SORTING_SOURCE -> { c1, c2 -> c2.sourceOrder.compareTo(c1.sourceOrder) }
@@ -417,7 +417,7 @@ class ExternalIntents {
         val episodes = getEpisodeByAnimeId.await(anime.id)
             .sortedWith { e1, e2 -> sortFunction(e1, e2) }
 
-        val currentEpisodePosition = episodes.indexOf(currentEpisode)
+        val currentEpisodePosition = episodes.indexOf(episode)
         val removeAfterSeenSlots = downloadPreferences.removeAfterReadSlots().get()
         val episodeToDelete = episodes.getOrNull(currentEpisodePosition - removeAfterSeenSlots)
 
@@ -477,11 +477,11 @@ class ExternalIntents {
     /**
      * Enqueues an [Episode] to be deleted later.
      *
-     * @param currentEpisode the episode being deleted.
+     * @param episode the episode being deleted.
      * @param anime the anime of the episode.
      */
-    private suspend fun enqueueDeleteSeenEpisodes(currentEpisode: Episode, anime: Anime) {
-        if (currentEpisode.seen) withIOContext { downloadManager.enqueueEpisodesToDelete(listOf(currentEpisode), anime) }
+    private suspend fun enqueueDeleteSeenEpisodes(episode: Episode, anime: Anime) {
+        if (episode.seen) withIOContext { downloadManager.enqueueEpisodesToDelete(listOf(episode), anime) }
     }
 
     companion object {
