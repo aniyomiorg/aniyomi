@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.ui.library.manga
 
-import androidx.compose.runtime.Immutable
-import cafe.adriel.voyager.core.model.StateScreenModel
+import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.category.manga.interactor.SetDisplayModeForMangaCategory
@@ -10,8 +9,6 @@ import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.util.preference.toggle
 import eu.kanade.tachiyomi.widget.TriState
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.core.util.lang.launchIO
@@ -29,22 +26,9 @@ class MangaLibrarySettingsScreenModel(
     private val setDisplayModeForCategory: SetDisplayModeForMangaCategory = Injekt.get(),
     private val setSortModeForCategory: SetSortModeForMangaCategory = Injekt.get(),
     trackManager: TrackManager = Injekt.get(),
-) : StateScreenModel<MangaLibrarySettingsScreenModel.State>(State()) {
+) : ScreenModel {
 
     val trackServices = trackManager.services.filter { service -> service.isLogged }
-
-    init {
-        coroutineScope.launchIO {
-            getCategories.subscribe()
-                .collectLatest {
-                    mutableState.update { state ->
-                        state.copy(
-                            categories = it,
-                        )
-                    }
-                }
-        }
-    }
 
     fun togglePreference(preference: (LibraryPreferences) -> Preference<Boolean>) {
         preference(libraryPreferences).toggle()
@@ -52,12 +36,7 @@ class MangaLibrarySettingsScreenModel(
 
     fun toggleFilter(preference: (LibraryPreferences) -> Preference<Int>) {
         preference(libraryPreferences).getAndSet {
-            when (it) {
-                TriState.DISABLED.value -> TriState.ENABLED_IS.value
-                TriState.ENABLED_IS.value -> TriState.ENABLED_NOT.value
-                TriState.ENABLED_NOT.value -> TriState.DISABLED.value
-                else -> throw IllegalStateException("Unknown TriStateGroup state: $this")
-            }
+            TriState.valueOf(it).next().value
         }
     }
 
@@ -76,9 +55,4 @@ class MangaLibrarySettingsScreenModel(
             setSortModeForCategory.await(category, mode, direction)
         }
     }
-
-    @Immutable
-    data class State(
-        val categories: List<Category> = emptyList(),
-    )
 }

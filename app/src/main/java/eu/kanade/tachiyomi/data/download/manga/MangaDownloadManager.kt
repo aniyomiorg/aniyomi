@@ -75,11 +75,9 @@ class MangaDownloadManager(
 
     /**
      * Empties the download queue.
-     *
-     * @param isNotification value that determines if status is set (needed for view updates)
      */
-    fun clearQueue(isNotification: Boolean = false) {
-        downloader.clearQueue(isNotification)
+    fun clearQueue() {
+        downloader.clearQueue()
     }
 
     /**

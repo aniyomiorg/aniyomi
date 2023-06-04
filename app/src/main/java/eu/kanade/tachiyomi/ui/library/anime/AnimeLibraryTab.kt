@@ -237,7 +237,7 @@ object AnimeLibraryTab : Tab {
             is AnimeLibraryScreenModel.Dialog.SettingsSheet -> AnimeLibrarySettingsDialog(
                 onDismissRequest = onDismissRequest,
                 screenModel = settingsScreenModel,
-                activeCategoryIndex = screenModel.activeCategoryIndex,
+                category = state.categories[screenModel.activeCategoryIndex],
             )
             is AnimeLibraryScreenModel.Dialog.ChangeCategory -> {
                 ChangeCategoryDialog(

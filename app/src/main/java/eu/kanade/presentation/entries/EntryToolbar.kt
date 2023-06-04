@@ -154,7 +154,7 @@ fun EntryToolbar(
                     }
                 }
             },
-            colors = TopAppBarDefaults.smallTopAppBarColors(
+            colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme
                     .surfaceColorAtElevation(3.dp)
                     .copy(alpha = if (isActionMode) 1f else backgroundAlphaProvider()),

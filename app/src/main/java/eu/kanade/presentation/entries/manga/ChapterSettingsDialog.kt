@@ -24,14 +24,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.kanade.domain.entries.manga.model.downloadedFilter
 import eu.kanade.domain.entries.manga.model.forceDownloaded
-import eu.kanade.presentation.components.RadioItem
-import eu.kanade.presentation.components.SortItem
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.presentation.components.TriStateItem
 import eu.kanade.tachiyomi.R
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.presentation.core.components.RadioItem
+import tachiyomi.presentation.core.components.SortItem
 
 @Composable
 fun ChapterSettingsDialog(

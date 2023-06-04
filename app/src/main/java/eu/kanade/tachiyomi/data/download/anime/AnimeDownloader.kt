@@ -197,24 +197,10 @@ class AnimeDownloader(
 
     /**
      * Removes everything from the queue.
-     *
-     * @param isNotification value that determines if status is set (needed for view updates)
      */
-    fun clearQueue(isNotification: Boolean = false) {
+    fun clearQueue() {
         destroySubscriptions()
 
-        // Needed to update the episode view
-        if (isNotification) {
-            queue
-                .filter { it.status == AnimeDownload.State.QUEUE }
-                .forEach {
-                    val animeDir = provider.getAnimeDir(it.anime.title, it.source)
-                    val episodeDirname = provider.getEpisodeDirName(it.episode.name, it.episode.scanlator)
-                    val tmpDir = animeDir.findFile(episodeDirname + TMP_DIR_SUFFIX)
-                    tmpDir?.delete()
-                    it.status = AnimeDownload.State.NOT_DOWNLOADED
-                }
-        }
         queue.state.value.forEach {
             notifier.dismissProgress(it)
         }

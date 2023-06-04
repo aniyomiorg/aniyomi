@@ -224,7 +224,7 @@ object MangaLibraryTab : Tab {
             is MangaLibraryScreenModel.Dialog.SettingsSheet -> MangaLibrarySettingsDialog(
                 onDismissRequest = onDismissRequest,
                 screenModel = settingsScreenModel,
-                activeCategoryIndex = screenModel.activeCategoryIndex,
+                category = state.categories[screenModel.activeCategoryIndex],
             )
             is MangaLibraryScreenModel.Dialog.ChangeCategory -> {
                 ChangeCategoryDialog(

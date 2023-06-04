@@ -78,7 +78,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 mangaDownloadManager.pauseDownloads()
             }
             // Clear the download queue
-            ACTION_CLEAR_DOWNLOADS -> mangaDownloadManager.clearQueue(true)
+            ACTION_CLEAR_DOWNLOADS -> mangaDownloadManager.clearQueue()
             ACTION_RESUME_ANIME_DOWNLOADS -> AnimeDownloadService.start(context)
             // Pause the download service
             ACTION_PAUSE_ANIME_DOWNLOADS -> {
@@ -86,7 +86,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 animeDownloadManager.pauseDownloads()
             }
             // Clear the download queue
-            ACTION_CLEAR_ANIME_DOWNLOADS -> animeDownloadManager.clearQueue(true)
+            ACTION_CLEAR_ANIME_DOWNLOADS -> animeDownloadManager.clearQueue()
             // Launch share activity and dismiss notification
             ACTION_SHARE_IMAGE ->
                 shareImage(

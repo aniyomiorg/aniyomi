@@ -28,7 +28,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
@@ -93,7 +92,6 @@ data class BrowseMangaSourceScreen(
         }
 
         val scope = rememberCoroutineScope()
-        val context = LocalContext.current
         val haptic = LocalHapticFeedback.current
         val uriHandler = LocalUriHandler.current
         val snackbarHostState = remember { SnackbarHostState() }
@@ -231,7 +229,21 @@ data class BrowseMangaSourceScreen(
 
         val onDismissRequest = { screenModel.setDialog(null) }
         when (val dialog = state.dialog) {
-            is BrowseMangaSourceScreenModel.Dialog.Migrate -> {}
+            is BrowseMangaSourceScreenModel.Dialog.Filter -> {
+                SourceFilterMangaDialog(
+                    onDismissRequest = onDismissRequest,
+                    filters = state.filters,
+                    onReset = {
+                        screenModel.resetFilters()
+                    },
+                    onFilter = {
+                        screenModel.search(filters = state.filters)
+                    },
+                    onUpdate = {
+                        screenModel.setFilters(it)
+                    },
+                )
+            }
             is BrowseMangaSourceScreenModel.Dialog.AddDuplicateManga -> {
                 DuplicateMangaDialog(
                     onDismissRequest = onDismissRequest,
@@ -259,11 +271,8 @@ data class BrowseMangaSourceScreen(
                     },
                 )
             }
+            is BrowseMangaSourceScreenModel.Dialog.Migrate -> {}
             else -> {}
-        }
-
-        LaunchedEffect(state.filters) {
-            screenModel.initFilterSheet(context)
         }
 
         LaunchedEffect(Unit) {
