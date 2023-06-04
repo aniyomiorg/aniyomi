@@ -48,22 +48,18 @@ class MangaDownloadManager(
     val queue: MangaDownloadQueue
         get() = downloader.queue
 
-    /**
-     * Tells the downloader to begin downloads.
-     *
-     * @return true if it's started, false otherwise (empty queue).
-     */
-    fun startDownloads(): Boolean {
-        return downloader.start()
-    }
+    // For use by DownloadService only
+    fun downloaderStart() = downloader.start()
+    fun downloaderStop(reason: String? = null) = downloader.stop(reason)
+
+    val isDownloaderRunning
+        get() = MangaDownloadService.isRunning
 
     /**
-     * Tells the downloader to stop downloads.
-     *
-     * @param reason an optional reason for being stopped, used to notify the user.
+     * Tells the downloader to begin downloads.
      */
-    fun stopDownloads(reason: String? = null) {
-        downloader.stop(reason)
+    fun startDownloads() {
+        MangaDownloadService.start(context)
     }
 
     /**
@@ -71,6 +67,7 @@ class MangaDownloadManager(
      */
     fun pauseDownloads() {
         downloader.pause()
+        MangaDownloadService.stop(context)
     }
 
     /**
@@ -78,6 +75,7 @@ class MangaDownloadManager(
      */
     fun clearQueue() {
         downloader.clearQueue()
+        MangaDownloadService.stop(context)
     }
 
     /**
@@ -99,7 +97,7 @@ class MangaDownloadManager(
         download?.let { queue.remove(it) }
         queue.add(0, toAdd)
         reorderQueue(queue)
-        if (downloader.isPaused()) {
+        if (!downloader.isRunning) {
             if (MangaDownloadService.isRunning(context)) {
                 downloader.start()
             } else {

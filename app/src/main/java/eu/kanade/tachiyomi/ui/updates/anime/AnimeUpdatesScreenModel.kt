@@ -19,7 +19,6 @@ import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.updates.anime.AnimeUpdatesUiModel
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
@@ -170,7 +169,7 @@ class AnimeUpdatesScreenModel(
                 EpisodeDownloadAction.START -> {
                     downloadEpisodes(items)
                     if (items.any { it.downloadStateProvider() == AnimeDownload.State.ERROR }) {
-                        AnimeDownloadService.start(Injekt.get<Application>())
+                        downloadManager.startDownloads()
                     }
                 }
                 EpisodeDownloadAction.START_NOW -> {

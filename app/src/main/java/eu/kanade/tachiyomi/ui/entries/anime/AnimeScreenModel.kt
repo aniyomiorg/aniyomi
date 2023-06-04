@@ -29,7 +29,6 @@ import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
@@ -68,6 +67,7 @@ import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodes
 import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.SetAnimeEpisodeFlags
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
@@ -595,7 +595,7 @@ class AnimeInfoScreenModel(
             EpisodeDownloadAction.START -> {
                 startDownload(items.map { it.episode }, false)
                 if (items.any { it.downloadState == AnimeDownload.State.ERROR }) {
-                    AnimeDownloadService.start(context)
+                    downloadManager.startDownloads()
                 }
             }
             EpisodeDownloadAction.START_NOW -> {
@@ -1027,27 +1027,9 @@ sealed class AnimeScreenState {
             val downloadedFilter = anime.downloadedFilter
             val bookmarkedFilter = anime.bookmarkedFilter
             return asSequence()
-                .filter { (episode) ->
-                    when (unseenFilter) {
-                        TriStateFilter.DISABLED -> true
-                        TriStateFilter.ENABLED_IS -> !episode.seen
-                        TriStateFilter.ENABLED_NOT -> episode.seen
-                    }
-                }
-                .filter { (episode) ->
-                    when (bookmarkedFilter) {
-                        TriStateFilter.DISABLED -> true
-                        TriStateFilter.ENABLED_IS -> episode.bookmark
-                        TriStateFilter.ENABLED_NOT -> !episode.bookmark
-                    }
-                }
-                .filter {
-                    when (downloadedFilter) {
-                        TriStateFilter.DISABLED -> true
-                        TriStateFilter.ENABLED_IS -> it.isDownloaded || isLocalAnime
-                        TriStateFilter.ENABLED_NOT -> !it.isDownloaded && !isLocalAnime
-                    }
-                }
+                .filter { (episode) -> applyFilter(unseenFilter) { !episode.seen } }
+                .filter { (episode) -> applyFilter(bookmarkedFilter) { episode.bookmark } }
+                .filter { applyFilter(downloadedFilter) { it.isDownloaded || isLocalAnime } }
                 .sortedWith { (episode1), (episode2) -> getEpisodeSort(anime).invoke(episode1, episode2) }
         }
     }

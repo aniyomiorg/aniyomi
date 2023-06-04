@@ -27,7 +27,6 @@ import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.DEVICE_BATTERY_NOT_LOW
 import eu.kanade.tachiyomi.data.preference.DEVICE_CHARGING
@@ -309,7 +308,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         if (newUpdates.isNotEmpty()) {
             notifier.showUpdateNotifications(newUpdates)
             if (hasDownloads.get()) {
-                MangaDownloadService.start(context)
+                downloadManager.startDownloads()
             }
         }
 

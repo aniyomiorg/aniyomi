@@ -77,7 +77,9 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
 import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack as DbAnimeTrack
 
 data class AnimeTrackInfoDialogHomeScreen(
@@ -433,7 +435,6 @@ private data class TrackDateSelectorScreen(
                 start = start,
             )
         }
-        val state by sm.state.collectAsState()
 
         val canRemove = if (start) {
             track.started_watching_date > 0
@@ -446,22 +447,35 @@ private data class TrackDateSelectorScreen(
             } else {
                 stringResource(R.string.track_finished_reading_date)
             },
-            minDate = if (!start && track.started_watching_date > 0) {
-                // Disallow end date to be set earlier than start date
-                Instant.ofEpochMilli(track.started_watching_date).atZone(ZoneId.systemDefault()).toLocalDate()
-            } else {
-                null
+            initialSelectedDateMillis = sm.initialSelection,
+            dateValidator = { utcMillis ->
+                val dateToCheck = Instant.ofEpochMilli(utcMillis)
+                    .atZone(ZoneOffset.systemDefault())
+                    .toLocalDate()
+
+                if (dateToCheck > LocalDate.now()) {
+                    // Disallow future dates
+                    return@TrackDateSelector false
+                }
+
+                if (start && track.finished_watching_date > 0) {
+                    // Disallow start date to be set later than finish date
+                    val dateFinished = Instant.ofEpochMilli(track.finished_watching_date)
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate()
+                    dateToCheck <= dateFinished
+                } else if (!start && track.started_watching_date > 0) {
+                    // Disallow end date to be set earlier than start date
+                    val dateStarted = Instant.ofEpochMilli(track.started_watching_date)
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate()
+                    dateToCheck >= dateStarted
+                } else {
+                    // Nothing set before
+                    true
+                }
             },
-            maxDate = if (start && track.finished_watching_date > 0) {
-                // Disallow start date to be set later than finish date
-                Instant.ofEpochMilli(track.finished_watching_date).atZone(ZoneId.systemDefault()).toLocalDate()
-            } else {
-                // Disallow future dates
-                LocalDate.now()
-            },
-            selection = state.selection,
-            onSelectionChange = sm::setSelection,
-            onConfirm = { sm.setDate(); navigator.pop() },
+            onConfirm = { sm.setDate(it); navigator.pop() },
             onRemove = { sm.confirmRemoveDate(navigator) }.takeIf { canRemove },
             onDismissRequest = navigator::pop,
         )
@@ -471,32 +485,28 @@ private data class TrackDateSelectorScreen(
         private val track: DbAnimeTrack,
         private val service: TrackService,
         private val start: Boolean,
-    ) : StateScreenModel<Model.State>(
-        State(
-            (if (start) track.started_watching_date else track.finished_watching_date)
-                .takeIf { it != 0L }
-                ?.let {
-                    Instant.ofEpochMilli(it)
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate()
-                }
-                ?: LocalDate.now(),
-        ),
-    ) {
+    ) : ScreenModel {
 
-        fun setSelection(selection: LocalDate) {
-            mutableState.update { it.copy(selection = selection) }
-        }
+        // In UTC
+        val initialSelection: Long
+            get() {
+                val millis =
+                    (if (start) track.started_watching_date else track.finished_watching_date)
+                        .takeIf { it != 0L }
+                        ?: Instant.now().toEpochMilli()
+                return convertEpochMillisZone(millis, ZoneOffset.systemDefault(), ZoneOffset.UTC)
+            }
 
-        fun setDate() {
+        // In UTC
+        fun setDate(millis: Long) {
+            // Convert to local time
+            val localMillis =
+                convertEpochMillisZone(millis, ZoneOffset.UTC, ZoneOffset.systemDefault())
             coroutineScope.launchNonCancellable {
-                val millis = state.value.selection.atStartOfDay(ZoneId.systemDefault())
-                    .toInstant()
-                    .toEpochMilli()
                 if (start) {
-                    service.animeService.setRemoteStartDate(track, millis)
+                    service.animeService.setRemoteStartDate(track, localMillis)
                 } else {
-                    service.animeService.setRemoteFinishDate(track, millis)
+                    service.animeService.setRemoteFinishDate(track, localMillis)
                 }
             }
         }
@@ -504,10 +514,19 @@ private data class TrackDateSelectorScreen(
         fun confirmRemoveDate(navigator: Navigator) {
             navigator.push(TrackDateRemoverScreen(track, service.id, start))
         }
+    }
 
-        data class State(
-            val selection: LocalDate,
-        )
+    companion object {
+        private fun convertEpochMillisZone(
+            localMillis: Long,
+            from: ZoneId,
+            to: ZoneId,
+        ): Long {
+            return LocalDateTime.ofInstant(Instant.ofEpochMilli(localMillis), from)
+                .atZone(to)
+                .toInstant()
+                .toEpochMilli()
+        }
     }
 }
 

@@ -16,7 +16,6 @@ import eu.kanade.presentation.components.TriStateItem
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibrarySettingsScreenModel
-import eu.kanade.tachiyomi.widget.toTriStateFilter
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.library.manga.model.MangaLibrarySort
@@ -76,7 +75,7 @@ private fun ColumnScope.FilterPage(
         state = if (downloadedOnly) {
             TriStateFilter.ENABLED_IS
         } else {
-            filterDownloaded.toTriStateFilter()
+            filterDownloaded
         },
         enabled = !downloadedOnly,
         onClick = { screenModel.toggleFilter(LibraryPreferences::filterDownloadedManga) },
@@ -84,25 +83,25 @@ private fun ColumnScope.FilterPage(
     val filterUnread by screenModel.libraryPreferences.filterUnread().collectAsState()
     TriStateItem(
         label = stringResource(R.string.action_filter_unread),
-        state = filterUnread.toTriStateFilter(),
+        state = filterUnread,
         onClick = { screenModel.toggleFilter(LibraryPreferences::filterUnread) },
     )
     val filterStarted by screenModel.libraryPreferences.filterStartedManga().collectAsState()
     TriStateItem(
         label = stringResource(R.string.label_started),
-        state = filterStarted.toTriStateFilter(),
+        state = filterStarted,
         onClick = { screenModel.toggleFilter(LibraryPreferences::filterStartedManga) },
     )
     val filterBookmarked by screenModel.libraryPreferences.filterBookmarkedManga().collectAsState()
     TriStateItem(
         label = stringResource(R.string.action_filter_bookmarked),
-        state = filterBookmarked.toTriStateFilter(),
+        state = filterBookmarked,
         onClick = { screenModel.toggleFilter(LibraryPreferences::filterBookmarkedManga) },
     )
     val filterCompleted by screenModel.libraryPreferences.filterCompletedManga().collectAsState()
     TriStateItem(
         label = stringResource(R.string.completed),
-        state = filterCompleted.toTriStateFilter(),
+        state = filterCompleted,
         onClick = { screenModel.toggleFilter(LibraryPreferences::filterCompletedManga) },
     )
 
@@ -115,7 +114,7 @@ private fun ColumnScope.FilterPage(
             val filterTracker by screenModel.libraryPreferences.filterTrackedManga(service.id.toInt()).collectAsState()
             TriStateItem(
                 label = stringResource(R.string.action_filter_tracked),
-                state = filterTracker.toTriStateFilter(),
+                state = filterTracker,
                 onClick = { screenModel.toggleTracker(service.id.toInt()) },
             )
         }
@@ -125,7 +124,7 @@ private fun ColumnScope.FilterPage(
                 val filterTracker by screenModel.libraryPreferences.filterTrackedManga(service.id.toInt()).collectAsState()
                 TriStateItem(
                     label = stringResource(service.nameRes()),
-                    state = filterTracker.toTriStateFilter(),
+                    state = filterTracker,
                     onClick = { screenModel.toggleTracker(service.id.toInt()) },
                 )
             }

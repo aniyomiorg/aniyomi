@@ -104,7 +104,7 @@ class AnimeDownloadService : Service() {
     override fun onDestroy() {
         scope.cancel()
         _isRunning.value = false
-        downloadManager.stopDownloads()
+        downloadManager.downloaderStop()
         if (wakeLock.isHeld) {
             wakeLock.release()
         }
@@ -120,8 +120,8 @@ class AnimeDownloadService : Service() {
         return null
     }
 
-    private fun stopDownloads(@StringRes string: Int) {
-        downloadManager.stopDownloads(getString(string))
+    private fun downloaderStop(@StringRes string: Int) {
+        downloadManager.downloaderStop(getString(string))
     }
 
     private fun listenNetworkChanges() {
@@ -131,13 +131,13 @@ class AnimeDownloadService : Service() {
                 withUIContext {
                     if (isOnline()) {
                         if (downloadPreferences.downloadOnlyOverWifi().get() && !isConnectedToWifi()) {
-                            stopDownloads(R.string.download_notifier_text_only_wifi)
+                            downloaderStop(R.string.download_notifier_text_only_wifi)
                         } else {
-                            val started = downloadManager.startDownloads()
+                            val started = downloadManager.downloaderStart()
                             if (!started) stopSelf()
                         }
                     } else {
-                        stopDownloads(R.string.download_notifier_no_network)
+                        downloaderStop(R.string.download_notifier_no_network)
                     }
                 }
             }

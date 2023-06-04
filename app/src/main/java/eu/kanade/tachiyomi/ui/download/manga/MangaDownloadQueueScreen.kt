@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.download.manga
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.animation.AnimatedVisibility
@@ -37,7 +36,6 @@ import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
 import eu.kanade.tachiyomi.databinding.DownloadListBinding
 import kotlinx.coroutines.CoroutineScope
 import tachiyomi.core.util.lang.launchUI
@@ -48,7 +46,6 @@ import kotlin.math.roundToInt
 
 @Composable
 fun DownloadQueueScreen(
-    context: Context,
     contentPadding: PaddingValues,
     scope: CoroutineScope,
     screenModel: MangaDownloadQueueScreenModel,
@@ -85,7 +82,7 @@ fun DownloadQueueScreen(
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
-                val isRunning by MangaDownloadService.isRunning.collectAsState()
+                val isRunning by screenModel.isDownloaderRunning.collectAsState()
                 ExtendedFloatingActionButton(
                     text = {
                         val id = if (isRunning) {
@@ -105,10 +102,9 @@ fun DownloadQueueScreen(
                     },
                     onClick = {
                         if (isRunning) {
-                            MangaDownloadService.stop(context)
                             screenModel.pauseDownloads()
                         } else {
-                            MangaDownloadService.start(context)
+                            screenModel.startDownloads()
                         }
                     },
                     expanded = fabExpanded,

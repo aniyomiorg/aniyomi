@@ -28,7 +28,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.preference.ANIME_HAS_UNSEEN
 import eu.kanade.tachiyomi.data.preference.ANIME_NON_COMPLETED
@@ -309,7 +308,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
         if (newUpdates.isNotEmpty()) {
             notifier.showUpdateNotifications(newUpdates)
             if (hasDownloads.get()) {
-                AnimeDownloadService.start(context)
+                downloadManager.startDownloads()
             }
         }
 

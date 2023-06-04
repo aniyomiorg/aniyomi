@@ -8,12 +8,12 @@ import eu.kanade.domain.category.manga.interactor.SetSortModeForMangaCategory
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.util.preference.toggle
-import eu.kanade.tachiyomi.widget.TriState
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.library.manga.model.MangaLibrarySort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import uy.kohesive.injekt.Injekt
@@ -34,9 +34,9 @@ class MangaLibrarySettingsScreenModel(
         preference(libraryPreferences).toggle()
     }
 
-    fun toggleFilter(preference: (LibraryPreferences) -> Preference<Int>) {
+    fun toggleFilter(preference: (LibraryPreferences) -> Preference<TriStateFilter>) {
         preference(libraryPreferences).getAndSet {
-            TriState.valueOf(it).next().value
+            it.next()
         }
     }
 

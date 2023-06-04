@@ -24,9 +24,7 @@ import eu.kanade.presentation.more.MoreScreen
 import eu.kanade.presentation.util.Tab
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.download.DownloadsTab
 import eu.kanade.tachiyomi.ui.history.HistoriesTab
@@ -111,12 +109,12 @@ private class MoreScreenModel(
         // Handle running/paused status change and queue progress updating
         coroutineScope.launchIO {
             combine(
-                MangaDownloadService.isRunning,
+                downloadManager.isDownloaderRunning,
                 downloadManager.queue.state,
             ) { isRunningManga, mangaDownloadQueue -> Pair(isRunningManga, mangaDownloadQueue.size) }
                 .collectLatest { (isDownloadingManga, mangaDownloadQueueSize) ->
                     combine(
-                        AnimeDownloadService.isRunning,
+                        animeDownloadManager.isDownloaderRunning,
                         animeDownloadManager.queue.state,
                     ) { isRunningAnime, animeDownloadQueue -> Pair(isRunningAnime, animeDownloadQueue.size) }
                         .collectLatest { (isDownloadingAnime, animeDownloadQueueSize) ->

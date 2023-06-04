@@ -46,11 +46,6 @@ internal class AnimeDownloadNotifier(private val context: Context) {
     private var isDownloading = false
 
     /**
-     * Updated when error is thrown
-     */
-    private var errorThrown = false
-
-    /**
      * Updated when paused
      */
     var paused = false
@@ -181,7 +176,6 @@ internal class AnimeDownloadNotifier(private val context: Context) {
         dismissProgress(download)
 
         // Reset states to default
-        errorThrown = false
         isDownloading = false
         paused = false
     }
@@ -237,7 +231,6 @@ internal class AnimeDownloadNotifier(private val context: Context) {
         }
 
         // Reset download information
-        errorThrown = true
         isDownloading = false
     }
 }
