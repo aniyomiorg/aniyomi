@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.data.download.anime
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -77,6 +78,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      *
      * @param download download object containing download information.
      */
+    @SuppressLint("RestrictedApi")
     fun onProgressChange(download: AnimeDownload) {
         val notificationId = download.episode.id.hashCode()
 
@@ -112,17 +114,18 @@ internal class AnimeDownloadNotifier(private val context: Context) {
             }
             setOngoing(true)
 
-            // Add pause action if not already added
-            if (!paused) {
-                addAction(
-                    R.drawable.ic_pause_24dp,
-                    context.getString(R.string.action_pause),
-                    NotificationReceiver.pauseAnimeDownloadsPendingBroadcast(context),
-                )
-                paused = true
-            }
-
             show(notificationId)
+        }
+
+        // Add pause action if not already added
+        val pauseActionAdded = progressNotificationBuilder.mActions.any { it.icon == R.drawable.ic_pause_24dp }
+        if (!paused && !pauseActionAdded) {
+            progressNotificationBuilder.addAction(
+                R.drawable.ic_pause_24dp,
+                context.getString(R.string.action_pause),
+                NotificationReceiver.pauseAnimeDownloadsPendingBroadcast(context),
+            )
+            paused = true
         }
     }
 
