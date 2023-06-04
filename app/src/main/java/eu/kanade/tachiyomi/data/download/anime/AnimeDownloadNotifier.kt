@@ -56,6 +56,11 @@ internal class AnimeDownloadNotifier(private val context: Context) {
     var paused = false
 
     /**
+     * Map to store notification IDs for each download
+     */
+    private val notificationIdMap: MutableMap<Long, Int> = mutableMapOf()
+
+    /**
      * Shows a notification from this builder.
      *
      * @param id the id of the notification.
@@ -69,8 +74,9 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      * those can only be dismissed by the user.
      */
     fun dismissProgress(download: AnimeDownload) {
-        val notificationId = download.episode.id.hashCode()
+        val notificationId = notificationIdMap[download.episode.id] ?: return
         context.notificationManager.cancel(notificationId)
+        notificationIdMap.remove(download.episode.id)
     }
 
     /**
@@ -78,9 +84,11 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      *
      * @param download download object containing download information.
      */
-    @SuppressLint("RestrictedApi")
+    @SuppressLint("RestrictedApi", "StringFormatInvalid")
     fun onProgressChange(download: AnimeDownload) {
-        val notificationId = download.episode.id.hashCode()
+        val notificationId = notificationIdMap.getOrPut(download.episode.id) {
+            download.episode.id.hashCode()
+        }
 
         with(progressNotificationBuilder) {
             if (!isDownloading) {
@@ -118,12 +126,13 @@ internal class AnimeDownloadNotifier(private val context: Context) {
         }
 
         // Add pause action if not already added
-        val pauseActionAdded = progressNotificationBuilder.mActions.any { it.icon == R.drawable.ic_pause_24dp }
+        val pauseActionIntent = NotificationReceiver.pauseAnimeDownloadsPendingBroadcast(context)
+        val pauseActionAdded = progressNotificationBuilder.mActions.any { it.actionIntent == pauseActionIntent }
         if (!paused && !pauseActionAdded) {
             progressNotificationBuilder.addAction(
                 R.drawable.ic_pause_24dp,
                 context.getString(R.string.action_pause),
-                NotificationReceiver.pauseAnimeDownloadsPendingBroadcast(context),
+                pauseActionIntent,
             )
             paused = true
         }
@@ -133,7 +142,7 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      * Show notification when download is paused.
      */
     fun onPaused(download: AnimeDownload) {
-        val notificationId = download.episode.id.hashCode()
+        val notificationId = notificationIdMap[download.episode.id] ?: return
 
         with(progressNotificationBuilder) {
             setContentTitle(context.getString(R.string.download_paused))
@@ -209,7 +218,9 @@ internal class AnimeDownloadNotifier(private val context: Context) {
      * @param episode string containing episode title.
      */
     fun onError(download: AnimeDownload, error: String? = null, episode: String? = null, animeTitle: String? = null) {
-        val notificationId = download.episode.id.hashCode()
+        val notificationId = notificationIdMap.getOrPut(download.episode.id) {
+            download.episode.id.hashCode()
+        }
 
         // Create notification
         with(errorNotificationBuilder) {
