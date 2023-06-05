@@ -2,9 +2,6 @@ package eu.kanade.tachiyomi.ui.player
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.PendingIntent
-import android.app.PictureInPictureParams
-import android.app.RemoteAction
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -12,7 +9,6 @@ import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.drawable.Icon
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.net.Uri
@@ -22,7 +18,6 @@ import android.os.Handler
 import android.os.Looper
 import android.os.ParcelFileDescriptor
 import android.util.DisplayMetrics
-import android.util.Rational
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -45,7 +40,6 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -58,7 +52,15 @@ import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksSheet
+import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
+import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
+import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
+import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
+import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
+import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
 import eu.kanade.tachiyomi.ui.player.viewer.Gestures
+import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
+import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
@@ -130,10 +132,7 @@ class PlayerActivity :
         super.onNewIntent(intent)
     }
 
-    private var isInPipMode: Boolean = false
-    private var isPipStarted: Boolean = false
-    internal val isPipSupportedAndEnabled: Boolean
-        get() = Injekt.get<BasePreferences>().deviceHasPip() && playerPreferences.enablePip().get()
+    internal val pip = PictureInPictureHandler(this, playerPreferences.enablePip().get())
 
     internal var isDoubleTapSeeking: Boolean = false
 
@@ -495,7 +494,7 @@ class PlayerActivity :
             }
             setupGestures()
             setViewMode()
-            if (isPipSupportedAndEnabled) player.paused?.let { updatePictureInPictureActions(!it) }
+            if (pip.supportedAndEnabled) player.paused?.let { pip.update(!it) }
         }
     }
 
@@ -515,7 +514,7 @@ class PlayerActivity :
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        if (!isPipStarted) {
+        if (PipState.mode == PipState.STARTED) {
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 switchOrientation(true)
             } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -562,7 +561,7 @@ class PlayerActivity :
                         logcat(LogPriority.ERROR) { "Error getting links" }
                     }
 
-                    if (isInPipMode && playerPreferences.pipEpisodeToasts().get()) {
+                    if (PipState.mode == PipState.ON && playerPreferences.pipEpisodeToasts().get()) {
                         launchUI { toast(switchMethod.second) }
                     }
                 }
@@ -1191,7 +1190,7 @@ class PlayerActivity :
     }
 
     private fun updatePlaybackStatus(paused: Boolean) {
-        if (isPipSupportedAndEnabled && isInPipMode) updatePictureInPictureActions(!paused)
+        if (pip.supportedAndEnabled && PipState.mode == PipState.ON) pip.update(!paused)
         val r = if (paused) R.drawable.ic_play_arrow_64dp else R.drawable.ic_pause_64dp
         playerControls.binding.playBtn.setImageResource(r)
 
@@ -1223,9 +1222,9 @@ class PlayerActivity :
     @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (isPipSupportedAndEnabled) {
+        if (pip.supportedAndEnabled) {
             if (player.paused == false && playerPreferences.pipOnExit().get()) {
-                startPiP()
+                pip.start()
             } else {
                 finishAndRemoveTask()
                 super.onBackPressed()
@@ -1237,7 +1236,7 @@ class PlayerActivity :
     }
 
     override fun onUserLeaveHint() {
-        if (player.paused == false && playerPreferences.pipOnExit().get()) startPiP()
+        if (player.paused == false && playerPreferences.pipOnExit().get()) pip.start()
         super.onUserLeaveHint()
     }
 
@@ -1246,7 +1245,7 @@ class PlayerActivity :
         if (!playerIsDestroyed) {
             player.paused = true
         }
-        if (isPipSupportedAndEnabled && isInPipMode && powerManager.isInteractive) {
+        if (pip.supportedAndEnabled && PipState.mode == PipState.ON && powerManager.isInteractive) {
             finishAndRemoveTask()
         }
 
@@ -1256,19 +1255,19 @@ class PlayerActivity :
     override fun onResume() {
         super.onResume()
         setVisibilities()
-        if (isPipSupportedAndEnabled && isInPipMode) player.paused?.let { updatePictureInPictureActions(!it) }
+        if (pip.supportedAndEnabled && PipState.mode == PipState.ON) player.paused?.let { pip.update(!it) }
     }
 
     @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
-        isInPipMode = isInPictureInPictureMode
-        isPipStarted = isInPipMode
-        playerControls.lockControls(isInPipMode)
+        PipState.mode = if (isInPictureInPictureMode) PipState.ON else PipState.OFF
+
+        playerControls.lockControls(locked = PipState.mode == PipState.ON)
         super.onPictureInPictureModeChanged(isInPictureInPictureMode)
 
-        if (isInPictureInPictureMode) {
+        if (PipState.mode == PipState.ON) {
             // On Android TV it is required to hide controller in this PIP change callback
             playerControls.hideControls(true)
             binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize / 2
@@ -1302,88 +1301,6 @@ class PlayerActivity :
                 mReceiver = null
             }
         }
-    }
-
-    fun startPiP() {
-        if (isInPipMode) return
-        if (isPipSupportedAndEnabled) {
-            isPipStarted = true
-            playerControls.hideControls(true)
-            player.paused?.let { updatePictureInPictureActions(!it) }
-                ?.let { this.enterPictureInPictureMode(it) }
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createRemoteAction(
-        iconResId: Int,
-        titleResId: Int,
-        requestCode: Int,
-        controlType: Int,
-    ): RemoteAction {
-        return RemoteAction(
-            Icon.createWithResource(this, iconResId),
-            getString(titleResId),
-            getString(titleResId),
-            PendingIntent.getBroadcast(
-                this,
-                requestCode,
-                Intent(ACTION_MEDIA_CONTROL)
-                    .putExtra(EXTRA_CONTROL_TYPE, controlType),
-                PendingIntent.FLAG_IMMUTABLE,
-            ),
-        )
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun updatePictureInPictureActions(
-        playing: Boolean,
-    ): PictureInPictureParams {
-        var aspect: Int? = null
-        if (player.videoAspect != null) {
-            aspect = if (player.videoAspect!!.times(10000) >= 23900) 23899 else if (player.videoAspect!!.times(10000) <= 4184) 4185 else player.videoAspect!!.times(10000).toInt()
-        }
-        val mPictureInPictureParams = PictureInPictureParams.Builder()
-            // Set action items for the picture-in-picture mode. These are the only custom controls
-            // available during the picture-in-picture mode.
-            .setActions(
-                arrayListOf(
-
-                    createRemoteAction(
-                        R.drawable.ic_skip_previous_24dp,
-                        R.string.action_previous_episode,
-                        CONTROL_TYPE_PREVIOUS,
-                        REQUEST_PREVIOUS,
-                    ),
-
-                    if (playing) {
-                        createRemoteAction(
-                            R.drawable.ic_pause_24dp,
-                            R.string.action_pause,
-                            CONTROL_TYPE_PAUSE,
-                            REQUEST_PAUSE,
-                        )
-                    } else {
-                        createRemoteAction(
-                            R.drawable.ic_play_arrow_24dp,
-                            R.string.action_play,
-                            CONTROL_TYPE_PLAY,
-                            REQUEST_PLAY,
-                        )
-                    },
-                    createRemoteAction(
-                        R.drawable.ic_skip_next_24dp,
-                        R.string.action_next_episode,
-                        CONTROL_TYPE_NEXT,
-                        REQUEST_NEXT,
-                    ),
-
-                ),
-            )
-            .setAspectRatio(aspect?.let { Rational(it, 10000) })
-            .build()
-        setPictureInPictureParams(mPictureInPictureParams)
-        return mPictureInPictureParams
     }
 
     /**
@@ -1690,14 +1607,3 @@ class PlayerActivity :
         }
     }
 }
-
-private const val ACTION_MEDIA_CONTROL = "media_control"
-private const val EXTRA_CONTROL_TYPE = "control_type"
-private const val REQUEST_PLAY = 1
-private const val REQUEST_PAUSE = 2
-private const val CONTROL_TYPE_PLAY = 1
-private const val CONTROL_TYPE_PAUSE = 2
-private const val REQUEST_PREVIOUS = 3
-private const val REQUEST_NEXT = 4
-private const val CONTROL_TYPE_PREVIOUS = 3
-private const val CONTROL_TYPE_NEXT = 4
