@@ -10,7 +10,6 @@ import android.util.Rational
 import androidx.annotation.RequiresApi
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

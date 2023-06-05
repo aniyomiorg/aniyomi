@@ -61,6 +61,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
 import eu.kanade.tachiyomi.ui.player.viewer.Gestures
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
+import eu.kanade.tachiyomi.ui.player.viewer.SeekState
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
@@ -134,8 +135,6 @@ class PlayerActivity :
 
     internal val pip = PictureInPictureHandler(this, playerPreferences.enablePip().get())
 
-    internal var isDoubleTapSeeking: Boolean = false
-
     private var mReceiver: BroadcastReceiver? = null
 
     lateinit var binding: PlayerActivityBinding
@@ -154,8 +153,6 @@ class PlayerActivity :
 
     private var width = 0
     private var height = 0
-
-    internal var isLocked = false
 
     private val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
 
@@ -246,7 +243,7 @@ class PlayerActivity :
     // Slide out Volume Bar
     internal val volumeViewRunnable = Runnable {
         AnimationUtils.loadAnimation(this, R.anim.player_exit_left).also { slideAnimation ->
-            if (!playerControls.shouldHideUiForSeek) playerControls.binding.volumeView.startAnimation(slideAnimation)
+            if (SeekState.mode != SeekState.SCROLL) playerControls.binding.volumeView.startAnimation(slideAnimation)
             playerControls.binding.volumeView.visibility = View.GONE
         }
     }
@@ -254,7 +251,7 @@ class PlayerActivity :
     // Slide out Brightness Bar
     internal val brightnessViewRunnable = Runnable {
         AnimationUtils.loadAnimation(this, R.anim.player_exit_right).also { slideAnimation ->
-            if (!playerControls.shouldHideUiForSeek) playerControls.binding.brightnessView.startAnimation(slideAnimation)
+            if (SeekState.mode != SeekState.SCROLL) playerControls.binding.brightnessView.startAnimation(slideAnimation)
             playerControls.binding.brightnessView.visibility = View.GONE
         }
     }
@@ -740,7 +737,7 @@ class PlayerActivity :
     private lateinit var doubleTapBg: ImageView
 
     private val doubleTapSeekRunnable = Runnable {
-        isDoubleTapSeeking = false
+        SeekState.mode = SeekState.NONE
         binding.secondsView.isVisible = false
         doubleTapBg.isVisible = false
         binding.secondsView.seconds = 0
@@ -748,13 +745,13 @@ class PlayerActivity :
     }
 
     fun doubleTapSeek(time: Int, event: MotionEvent? = null, isDoubleTap: Boolean = true) {
-        if (!isDoubleTapSeeking) doubleTapBg = if (time < 0) binding.rewBg else binding.ffwdBg
+        if (SeekState.mode != SeekState.DOUBLE_TAP) doubleTapBg = if (time < 0) binding.rewBg else binding.ffwdBg
         val v = if (time < 0) binding.rewTap else binding.ffwdTap
         val w = if (time < 0) width * 0.2F else width * 0.8F
         val x = (event?.x?.toInt() ?: w.toInt()) - v.x.toInt()
         val y = (event?.y?.toInt() ?: (height / 2)) - v.y.toInt()
 
-        isDoubleTapSeeking = isDoubleTap
+        SeekState.mode = if (isDoubleTap) SeekState.DOUBLE_TAP else SeekState.NONE
         binding.secondsView.isVisible = true
         animationHandler.removeCallbacks(doubleTapSeekRunnable)
         animationHandler.postDelayed(doubleTapSeekRunnable, 750L)

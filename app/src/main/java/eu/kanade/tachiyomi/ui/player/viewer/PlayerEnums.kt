@@ -7,3 +7,11 @@ enum class PipState {
         internal var mode: PipState = OFF
     }
 }
+
+enum class SeekState {
+    DOUBLE_TAP, LOCKED, NONE, SCROLL, SEEKBAR;
+
+    companion object {
+        internal var mode = NONE
+    }
+}

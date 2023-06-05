@@ -34,8 +34,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     val activity: PlayerActivity = context.getActivity()!!
 
-    private var userIsOperatingSeekbar = false
-    internal var shouldHideUiForSeek = false
     private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
             if (!fromUser) {
@@ -57,14 +55,14 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar) {
-            userIsOperatingSeekbar = true
+            SeekState.mode = SeekState.SEEKBAR
             activity.initSeek()
         }
 
         override fun onStopTrackingTouch(seekBar: SeekBar) {
             val newPos = seekBar.progress
             if (playerPreferences.playerSmoothSeek().get()) activity.player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
-            userIsOperatingSeekbar = false
+            SeekState.mode = SeekState.NONE
             animationHandler.removeCallbacks(hideUiForSeekRunnable)
             animationHandler.postDelayed(hideUiForSeekRunnable, 500L)
             animationHandler.postDelayed(controlsViewRunnable, 3500L)
@@ -81,7 +79,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     private val hideUiForSeekRunnable = Runnable {
-        shouldHideUiForSeek = false
+        SeekState.mode = SeekState.NONE
         activity.player.paused = wasPausedBeforeSeeking
         if (showControls) {
             AnimationUtils.loadAnimation(activity, R.anim.player_fade_in).also { fadeAnimation ->
@@ -124,10 +122,10 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             activity.binding.seekView.isVisible = false
             binding.seekBarGroup.isVisible = true
             binding.controlsView.isVisible = true
-            shouldHideUiForSeek = true
+            SeekState.mode = SeekState.SCROLL
         }
 
-        val delay = if (activity.isDoubleTapSeeking) 1000L else 500L
+        val delay = if (SeekState.mode == SeekState.DOUBLE_TAP) 1000L else 500L
 
         animationHandler.postDelayed(hideUiForSeekRunnable, delay)
     }
@@ -202,7 +200,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     // Fade out Player controls
     private val controlsViewRunnable = Runnable {
-        if (activity.isLocked) {
+        if (SeekState.mode == SeekState.LOCKED) {
             fadeOutView(binding.lockedView)
         } else {
             fadeOutView(binding.controlsView)
@@ -210,12 +208,12 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     internal fun lockControls(locked: Boolean) {
-        activity.isLocked = locked
+        SeekState.mode = if (locked) SeekState.LOCKED else SeekState.NONE
         toggleControls()
     }
 
     internal fun toggleControls() {
-        if (activity.isLocked) {
+        if (SeekState.mode == SeekState.LOCKED) {
             binding.controlsView.isVisible = false
 
             if (!binding.lockedView.isVisible && !activity.player.paused!!) {
@@ -277,7 +275,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             binding.playbackDurationTxt.text = Utils.prettyTime(duration)
         }
 
-        if (!userIsOperatingSeekbar) {
+        if (SeekState.mode != SeekState.SEEKBAR) {
             binding.playbackSeekbar.max = duration
         }
     }
@@ -303,17 +301,17 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     internal fun showAndFadeControls() {
-        val itemView = if (!activity.isLocked) binding.controlsView else binding.lockedView
+        val itemView = if (SeekState.mode != SeekState.LOCKED) binding.controlsView else binding.lockedView
         if (!itemView.isVisible) fadeInView(itemView)
         itemView.visibility = View.VISIBLE
         resetControlsFade()
     }
 
     internal fun resetControlsFade() {
-        val itemView = if (!activity.isLocked) binding.controlsView else binding.lockedView
+        val itemView = if (SeekState.mode != SeekState.LOCKED) binding.controlsView else binding.lockedView
         if (!itemView.isVisible) return
         animationHandler.removeCallbacks(controlsViewRunnable)
-        if (userIsOperatingSeekbar) return
+        if (SeekState.mode == SeekState.SEEKBAR) return
         animationHandler.postDelayed(controlsViewRunnable, 3500L)
     }
 
