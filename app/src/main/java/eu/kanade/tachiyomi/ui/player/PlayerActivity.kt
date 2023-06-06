@@ -47,9 +47,7 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
-import eu.kanade.tachiyomi.ui.player.settings.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksSheet
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
@@ -63,6 +61,8 @@ import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
 import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
+import eu.kanade.tachiyomi.ui.player.viewer.components.PlayerOptionsSheet
+import eu.kanade.tachiyomi.ui.player.viewer.components.PlayerTracksSheet
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
