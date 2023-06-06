@@ -248,7 +248,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
 
         binding.playbackSeekbar.progress = position
-        updateDecoderButton()
         updateSpeedButton()
     }
 
@@ -265,17 +264,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun updateBufferPosition(duration: Int) {
         binding.playbackSeekbar.secondaryProgress = duration
-    }
-
-    internal fun updateDecoderButton() {
-        if (binding.cycleDecoderBtn.visibility != View.VISIBLE && binding.cycleDecoderBtn.visibility != View.VISIBLE) {
-            return
-        }
-        binding.cycleDecoderBtn.text = when (activity.player.hwdecActive) {
-            "mediacodec" -> "HW+"
-            "no" -> "SW"
-            else -> "HW"
-        }
     }
 
     internal fun updateSpeedButton() {
@@ -365,11 +353,14 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         val restore = pauseForDialog()
 
         val items = mutableListOf(
-            Pair("HW (mediacodec-copy)", "mediacodec-copy"),
-            Pair("SW", "no"),
+            Pair("${HwDecType.HW.title} (${HwDecType.HW.mpvValue})", HwDecType.HW.mpvValue),
+            Pair(HwDecType.SW.title, HwDecType.SW.mpvValue),
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            items.add(0, Pair("HW+ (mediacodec)", "mediacodec"))
+            items.add(
+                index = 0,
+                Pair("${HwDecType.HW_PLUS.title} (${HwDecType.HW_PLUS.mpvValue})", HwDecType.HW_PLUS.mpvValue),
+            )
         }
         var hwdecActive = playerPreferences.standardHwDec().get()
         val selectedIndex = items.indexOfFirst { it.second == hwdecActive }

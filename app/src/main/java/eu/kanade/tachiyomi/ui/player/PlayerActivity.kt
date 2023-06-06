@@ -60,6 +60,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
 import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
 import eu.kanade.tachiyomi.ui.player.viewer.Gestures
+import eu.kanade.tachiyomi.ui.player.viewer.HwDecType
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
@@ -73,7 +74,6 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -1087,7 +1087,7 @@ class PlayerActivity :
         if (playerIsDestroyed) return
         if (currentQuality == quality) return
         showLoadingIndicator(true)
-        logcat(LogPriority.INFO) { "changing quality" }
+        logcat(LogPriority.INFO) { "Changing quality" }
         currentVideoList?.getOrNull(quality)?.let {
             currentQuality = quality
             setHttpOptions(it)
@@ -1101,26 +1101,27 @@ class PlayerActivity :
         viewModel.viewModelScope.launchUI { refreshUi() }
     }
 
+    private fun updateDecoderButton() {
+        if (playerControls.binding.cycleDecoderBtn.visibility == View.VISIBLE) {
+            playerControls.binding.cycleDecoderBtn.text = when (player.hwdecActive) {
+                HwDecType.HW_PLUS.mpvValue -> HwDecType.HW_PLUS.title
+                HwDecType.SW.mpvValue -> HwDecType.SW.title
+                else -> HwDecType.HW.title
+            }
+        }
+    }
+
     @Suppress("UNUSED_PARAMETER")
     fun switchDecoder(view: View) {
-        val standardHwDec = playerPreferences.standardHwDec().get()
-        val currentHwDec = player.hwdecActive
-
-        if (standardHwDec == currentHwDec) {
-            val hwDecEnabled = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                "mediacodec"
-            } else {
-                "mediacodec-copy"
-            }
-            val otherHwDec = when (standardHwDec) {
-                "no" -> hwDecEnabled
-                else -> "no"
-            }
-            MPVLib.setPropertyString("hwdec", otherHwDec)
-        } else {
-            MPVLib.setOptionString("hwdec", standardHwDec)
+        val currentHwDec = HwDecType.get(player.hwdecActive)
+        val hwSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        val newHwDec = when (currentHwDec) {
+            HwDecType.HW -> if (hwSupported) HwDecType.HW_PLUS else HwDecType.SW
+            HwDecType.HW_PLUS -> HwDecType.SW
+            HwDecType.SW -> HwDecType.HW
         }
-        playerControls.updateDecoderButton()
+        MPVLib.setOptionString("hwdec", newHwDec.mpvValue)
+        updateDecoderButton()
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -1132,7 +1133,7 @@ class PlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     fun skipIntro(view: View) {
         if (skipType != null) {
-            // this stop the counter
+            // this stops the counter
             if (waitingAniSkip > 0 && netflixStyle) {
                 waitingAniSkip = -1
                 return
@@ -1145,7 +1146,7 @@ class PlayerActivity :
         }
     }
 
-    private fun refreshUi() {
+    private suspend fun refreshUi() {
         // forces update of entire UI, used when resuming the activity
         val paused = player.paused ?: return
         updatePlaybackStatus(paused)
@@ -1153,28 +1154,35 @@ class PlayerActivity :
         player.timePos?.let { playerControls.updatePlaybackPos(it) }
         updatePlaylistButtons()
         updateEpisodeText()
+        updateDecoderButton()
         player.loadTracks()
     }
 
-    private fun updateEpisodeText() {
-        playerControls.binding.titleMainTxt.text = viewModel.currentAnime?.title
-        playerControls.binding.titleSecondaryTxt.text = viewModel.currentEpisode?.name
-        playerControls.binding.controlsSkipIntroBtn.text = getString(R.string.player_controls_skip_intro_text, viewModel.getAnimeSkipIntroLength())
+    private suspend fun updateEpisodeText() {
+        val skipIntroText = getString(R.string.player_controls_skip_intro_text, viewModel.getAnimeSkipIntroLength())
+        withUIContext {
+            playerControls.binding.titleMainTxt.text = viewModel.currentAnime?.title
+            playerControls.binding.titleSecondaryTxt.text = viewModel.currentEpisode?.name
+            playerControls.binding.controlsSkipIntroBtn.text = skipIntroText
+        }
     }
 
-    private fun updatePlaylistButtons() {
+    private suspend fun updatePlaylistButtons() {
         val plCount = viewModel.episodeList.size
         val plPos = viewModel.getCurrentEpisodeIndex()
 
         val grey = ContextCompat.getColor(this, R.color.tint_disabled)
         val white = ContextCompat.getColor(this, R.color.tint_normal)
-        with(playerControls.binding.prevBtn) {
-            this.imageTintList = ColorStateList.valueOf(if (plPos == 0) grey else white)
-            this.isClickable = plPos != 0
-        }
-        with(playerControls.binding.nextBtn) {
-            this.imageTintList = ColorStateList.valueOf(if (plPos == plCount - 1) grey else white)
-            this.isClickable = plPos != plCount - 1
+        withUIContext {
+            with(playerControls.binding.prevBtn) {
+                this.imageTintList = ColorStateList.valueOf(if (plPos == 0) grey else white)
+                this.isClickable = plPos != 0
+            }
+            with(playerControls.binding.nextBtn) {
+                this.imageTintList =
+                    ColorStateList.valueOf(if (plPos == plCount - 1) grey else white)
+                this.isClickable = plPos != plCount - 1
+            }
         }
     }
 
@@ -1515,13 +1523,12 @@ class PlayerActivity :
         MPVLib.setOptionString("panscan", pan)
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun eventPropertyUi(property: String, value: Long) {
         when (property) {
             "demuxer-cache-time" -> playerControls.updateBufferPosition(value.toInt())
             "time-pos" -> {
                 playerControls.updatePlaybackPos(value.toInt())
-                launchUI { aniSkipStuff(value) }
+                viewModel.viewModelScope.launchUI { aniSkipStuff(value) }
             }
             "duration" -> playerControls.updatePlaybackDuration(value.toInt())
         }

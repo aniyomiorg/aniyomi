@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.ui.player.viewer
 
+import android.os.Build
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
 
@@ -45,5 +46,26 @@ enum class AspectState(val index: Int, @StringRes val stringRes: Int) {
         internal var mode: AspectState = FIT
 
         internal fun get(index: Int) = values().find { index == it.index } ?: FIT
+    }
+}
+
+/**
+ * Player's Hardware Decoder type handler
+ */
+enum class HwDecType(val title: String, val mpvValue: String) {
+    HW_PLUS(title = "HW+", mpvValue = "mediacodec"),
+    HW(title = "HW", mpvValue = "mediacodec-copy"),
+    SW(title = "SW", mpvValue = "no"),
+    ;
+
+    companion object {
+        internal val defaultHwDec = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) HW_PLUS else HW
+
+        internal fun get(title: String) = when (title) {
+            "mediacodec" -> HW_PLUS
+            "mediacodec-copy" -> HW
+            "no" -> SW
+            else -> defaultHwDec
+        }
     }
 }

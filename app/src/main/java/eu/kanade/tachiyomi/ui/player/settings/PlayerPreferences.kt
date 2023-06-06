@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.player.settings
 
-import android.os.Build
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
+import eu.kanade.tachiyomi.ui.player.viewer.HwDecType
 import tachiyomi.core.preference.PreferenceStore
 
 class PlayerPreferences(
@@ -73,10 +73,5 @@ class PlayerPreferences(
 
     fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean("pref_enable_netflixStyle_aniskip", false)
 
-    private val defaultHwDec = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        "mediacodec"
-    } else {
-        "mediacodec-copy"
-    }
-    fun standardHwDec() = preferenceStore.getString("pref_hwdec", defaultHwDec)
+    fun standardHwDec() = preferenceStore.getString("pref_hwdec", HwDecType.defaultHwDec.mpvValue)
 }
