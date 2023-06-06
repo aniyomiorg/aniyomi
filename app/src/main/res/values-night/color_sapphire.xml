@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Colors for Sapphire theme
+  ~
+  ~ Key colors:
+  ~ Primary #FF5722
+  ~ Secondary #FF5722
+  ~ Tertiary #FFECE4
+  ~ Neutral #FFFFFF
+-->
+<resources>
+    <color name="sapphire_primary">#1E88E5</color>
+    <color name="sapphire_onPrimary">#FAFAFA</color>
+    <color name="sapphire_primaryContainer">#1E88E5</color>
+    <color name="sapphire_onPrimaryContainer">#FAFAFA</color>
+    <color name="sapphire_secondary">#1E88E5</color>
+    <color name="sapphire_onSecondary">#FAFAFA</color>
+    <color name="sapphire_secondaryContainer">#1E88E5</color>
+    <color name="sapphire_onSecondaryContainer">#FAFAFA</color>
+    <color name="sapphire_tertiary">#212121</color>
+    <color name="sapphire_onTertiary">#1E88E5</color>
+    <color name="sapphire_tertiaryContainer">#212121</color>
+    <color name="sapphire_onTertiaryContainer">#1E88E5</color>
+    <color name="sapphire_background">#212121</color>
+    <color name="sapphire_onBackground">#FFFFFF</color>
+    <color name="sapphire_surface">#212121</color>
+    <color name="sapphire_onSurface">#FFFFFF</color>
+    <color name="sapphire_surfaceVariant">#424242</color>
+    <color name="sapphire_onSurfaceVariant">#D8FFFFFF</color>
+    <color name="sapphire_outline">#1E88E5</color>
+    <color name="sapphire_inverseOnSurface">#313131</color>
+    <color name="sapphire_inverseSurface">#FAFAFA</color>
+    <color name="sapphire_primaryInverse">#2979FF</color>
+    <color name="sapphire_elevationOverlay">@color/sapphire_primary</color>
+</resources>
+

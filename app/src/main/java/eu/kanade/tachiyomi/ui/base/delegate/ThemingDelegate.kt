@@ -44,6 +44,15 @@ interface ThemingDelegate {
                 AppTheme.CLOUDFLARE -> {
                     resIds += R.style.Theme_Tachiyomi_Cloudflare
                 }
+                AppTheme.SAPPHIRE -> {
+                    resIds += R.style.Theme_Tachiyomi_Sapphire
+                }
+                AppTheme.DOOM -> {
+                    resIds += R.style.Theme_Tachiyomi_Doom
+                }
+                AppTheme.MATRIX -> {
+                    resIds += R.style.Theme_Tachiyomi_Matrix
+                }
                 AppTheme.TIDAL_WAVE -> {
                     resIds += R.style.Theme_Tachiyomi_TidalWave
                 }
