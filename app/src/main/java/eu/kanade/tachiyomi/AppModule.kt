@@ -62,6 +62,14 @@ import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 import tachiyomi.data.listOfStringsAdapter
 import tachiyomi.data.updateStrategyAdapter
 import tachiyomi.mi.data.AnimeDatabase
+import tachiyomi.source.local.image.anime.AndroidLocalAnimeCoverManager
+import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
+import tachiyomi.source.local.image.manga.AndroidLocalMangaCoverManager
+import tachiyomi.source.local.image.manga.LocalMangaCoverManager
+import tachiyomi.source.local.io.anime.AndroidLocalAnimeSourceFileSystem
+import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
+import tachiyomi.source.local.io.manga.AndroidLocalMangaSourceFileSystem
+import tachiyomi.source.local.io.manga.LocalMangaSourceFileSystem
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addSingleton
@@ -197,6 +205,12 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { DelayedMangaTrackingStore(app) }
 
         addSingletonFactory { ImageSaver(app) }
+
+        addSingletonFactory<LocalMangaSourceFileSystem> { AndroidLocalMangaSourceFileSystem(app) }
+        addSingletonFactory<LocalMangaCoverManager> { AndroidLocalMangaCoverManager(app, get()) }
+
+        addSingletonFactory<LocalAnimeSourceFileSystem> { AndroidLocalAnimeSourceFileSystem(app) }
+        addSingletonFactory<LocalAnimeCoverManager> { AndroidLocalAnimeCoverManager(app, get()) }
 
         addSingletonFactory { ExternalIntents() }
 

@@ -24,7 +24,6 @@ import eu.kanade.presentation.components.SearchToolbar
 import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
-import eu.kanade.tachiyomi.source.manga.LocalMangaSource
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
@@ -34,6 +33,7 @@ import kotlinx.coroutines.launch
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.presentation.core.components.material.ExtendedFloatingActionButton
 import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 data class MangaSourceSearchScreen(
     private val oldManga: Manga,

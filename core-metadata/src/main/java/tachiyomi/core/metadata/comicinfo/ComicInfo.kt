@@ -1,36 +1,12 @@
-package eu.kanade.domain.entries.manga.model
+package tachiyomi.core.metadata.comicinfo
 
 import eu.kanade.tachiyomi.source.model.SManga
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import nl.adaptivity.xmlutil.serialization.XmlValue
-import tachiyomi.domain.entries.manga.model.Manga
-import tachiyomi.domain.items.chapter.model.Chapter
 
 const val COMIC_INFO_FILE = "ComicInfo.xml"
-
-/**
- * Creates a ComicInfo instance based on the manga and chapter metadata.
- */
-fun getComicInfo(manga: Manga, chapter: Chapter, chapterUrl: String) = ComicInfo(
-    title = ComicInfo.Title(chapter.name),
-    series = ComicInfo.Series(manga.title),
-    web = ComicInfo.Web(chapterUrl),
-    summary = manga.description?.let { ComicInfo.Summary(it) },
-    writer = manga.author?.let { ComicInfo.Writer(it) },
-    penciller = manga.artist?.let { ComicInfo.Penciller(it) },
-    translator = chapter.scanlator?.let { ComicInfo.Translator(it) },
-    genre = manga.genre?.let { ComicInfo.Genre(it.joinToString()) },
-    publishingStatus = ComicInfo.PublishingStatusTachiyomi(
-        ComicInfoPublishingStatus.toComicInfoValue(manga.status),
-    ),
-    inker = null,
-    colorist = null,
-    letterer = null,
-    coverArtist = null,
-    tags = null,
-)
 
 fun SManga.copyFromComicInfo(comicInfo: ComicInfo) {
     comicInfo.series?.let { title = it.value }
@@ -149,7 +125,7 @@ data class ComicInfo(
     data class PublishingStatusTachiyomi(@XmlValue(true) val value: String = "")
 }
 
-private enum class ComicInfoPublishingStatus(
+enum class ComicInfoPublishingStatus(
     val comicInfoValue: String,
     val sMangaModelValue: Int,
 ) {

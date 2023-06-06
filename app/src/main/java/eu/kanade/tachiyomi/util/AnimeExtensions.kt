@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.util
 
-import android.content.Context
 import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.hasCustomCover
@@ -8,8 +7,8 @@ import eu.kanade.domain.entries.anime.model.isLocal
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
-import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.InputStream
@@ -77,13 +76,13 @@ fun Anime.shouldDownloadNewEpisodes(dbCategories: List<Long>, preferences: Downl
 }
 
 suspend fun Anime.editCover(
-    context: Context,
+    coverManager: LocalAnimeCoverManager,
     stream: InputStream,
     updateAnime: UpdateAnime = Injekt.get(),
     coverCache: AnimeCoverCache = Injekt.get(),
 ) {
     if (isLocal()) {
-        LocalAnimeSource.updateCover(context, toSAnime(), stream)
+        coverManager.update(toSAnime(), stream)
         updateAnime.awaitUpdateCoverLastModified(id)
     } else if (favorite) {
         coverCache.setCustomCoverToCache(this, stream)

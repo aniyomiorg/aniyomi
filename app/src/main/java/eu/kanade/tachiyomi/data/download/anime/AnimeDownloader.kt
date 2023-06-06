@@ -23,7 +23,6 @@ import eu.kanade.tachiyomi.animesource.online.fetchUrlFromVideo
 import eu.kanade.tachiyomi.data.cache.EpisodeCache
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownloadQueue
-import eu.kanade.tachiyomi.data.download.manga.MangaDownloader.Companion.WARNING_NOTIF_TIMEOUT_MS
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.source.UnmeteredSource
@@ -31,7 +30,6 @@ import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
-import eu.kanade.tachiyomi.util.system.ImageUtil
 import kotlinx.coroutines.async
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -42,6 +40,7 @@ import rx.schedulers.Schedulers
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNow
 import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
@@ -179,6 +178,11 @@ class AnimeDownloader(
         }
 
         isPaused = false
+
+        // Prevent recursion when DownloadService.onDestroy() calls downloader.stop()
+        if (AnimeDownloadService.isRunning.value) {
+            AnimeDownloadService.stop(context)
+        }
     }
 
     /**
@@ -232,11 +236,11 @@ class AnimeDownloader(
                     completeAnimeDownload(completedDownload)
                 },
                 { error ->
-                    AnimeDownloadService.stop(context)
                     logcat(LogPriority.ERROR, error)
                     queue.state.value.forEach {
                         notifier.onError(it, error.message, it.episode.name, it.anime.title)
                     }
+                    stop()
                 },
             )
     }
@@ -749,7 +753,7 @@ class AnimeDownloader(
             queue.remove(download)
         }
         if (areAllAnimeDownloadsFinished()) {
-            AnimeDownloadService.stop(context)
+            stop()
         }
     }
 

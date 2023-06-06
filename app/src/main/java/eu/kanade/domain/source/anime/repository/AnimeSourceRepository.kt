@@ -1,8 +1,8 @@
 package eu.kanade.domain.source.anime.repository
 
-import eu.kanade.domain.source.anime.model.AnimeSourcePagingSourceType
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import kotlinx.coroutines.flow.Flow
+import tachiyomi.data.source.anime.AnimeSourcePagingSourceType
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.domain.source.anime.model.AnimeSourceWithCount
 

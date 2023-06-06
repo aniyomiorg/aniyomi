@@ -21,6 +21,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.source.anime.model.AnimeSourceData
 import tachiyomi.domain.source.anime.repository.AnimeSourceDataRepository
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.concurrent.ConcurrentHashMap
 
@@ -44,7 +47,15 @@ class AnimeSourceManager(
         scope.launch {
             extensionManager.installedExtensionsFlow
                 .collectLatest { extensions ->
-                    val mutableMap = ConcurrentHashMap<Long, AnimeSource>(mapOf(LocalAnimeSource.ID to LocalAnimeSource(context)))
+                    val mutableMap = ConcurrentHashMap<Long, AnimeSource>(
+                        mapOf(
+                            LocalAnimeSource.ID to LocalAnimeSource(
+                                context,
+                                Injekt.get(),
+                                Injekt.get(),
+                            ),
+                        ),
+                    )
                     extensions.forEach { extension ->
                         extension.sources.forEach {
                             mutableMap[it.id] = it

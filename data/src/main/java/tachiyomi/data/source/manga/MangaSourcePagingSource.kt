@@ -1,7 +1,7 @@
-package eu.kanade.data.source.manga
+package tachiyomi.data.source.manga
 
+import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import eu.kanade.domain.source.manga.model.SourcePagingSourceType
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.MangasPage
@@ -9,6 +9,8 @@ import eu.kanade.tachiyomi.source.model.SManga
 import tachiyomi.core.util.lang.awaitSingle
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.items.chapter.model.NoChaptersException
+
+typealias SourcePagingSourceType = PagingSource<Long, SManga>
 
 abstract class SourcePagingSource(
     protected val source: CatalogueSource,

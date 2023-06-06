@@ -509,7 +509,7 @@ class PlayerViewModel(
 
         viewModelScope.launchNonCancellable {
             val result = try {
-                anime.editCover(context, imageStream)
+                anime.editCover(Injekt.get(), imageStream)
                 if (anime.isLocal() || anime.favorite) {
                     SetAsCoverResult.Success
                 } else {

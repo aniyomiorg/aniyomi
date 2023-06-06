@@ -13,7 +13,7 @@ import androidx.paging.filter
 import androidx.paging.map
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.core.prefs.asState
+import eu.kanade.core.preference.asState
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.copyFrom
 import eu.kanade.domain.entries.manga.model.toDomainManga

@@ -68,7 +68,7 @@ class AnimeDownloadManager(
      */
     fun pauseDownloads() {
         downloader.pause()
-        AnimeDownloadService.stop(context)
+        downloader.stop()
     }
 
     /**
@@ -76,7 +76,7 @@ class AnimeDownloadManager(
      */
     fun clearQueue() {
         downloader.clearQueue()
-        AnimeDownloadService.stop(context)
+        downloader.stop()
     }
 
     /**
@@ -117,8 +117,8 @@ class AnimeDownloadManager(
         val wasRunning = downloader.isRunning
 
         if (downloads.isEmpty()) {
-            AnimeDownloadService.stop(context)
-            queue.clear()
+            downloader.clearQueue()
+            downloader.stop()
             return
         }
 
@@ -277,7 +277,6 @@ class AnimeDownloadManager(
 
         if (wasRunning) {
             if (queue.isEmpty()) {
-                AnimeDownloadService.stop(context)
                 downloader.stop()
             } else if (queue.isNotEmpty()) {
                 downloader.start()

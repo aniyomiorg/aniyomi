@@ -67,7 +67,7 @@ class MangaDownloadManager(
      */
     fun pauseDownloads() {
         downloader.pause()
-        MangaDownloadService.stop(context)
+        downloader.stop()
     }
 
     /**
@@ -75,7 +75,7 @@ class MangaDownloadManager(
      */
     fun clearQueue() {
         downloader.clearQueue()
-        MangaDownloadService.stop(context)
+        downloader.stop()
     }
 
     /**
@@ -115,8 +115,8 @@ class MangaDownloadManager(
         val wasRunning = downloader.isRunning
 
         if (downloads.isEmpty()) {
-            MangaDownloadService.stop(context)
-            queue.clear()
+            downloader.clearQueue()
+            downloader.stop()
             return
         }
 
@@ -274,7 +274,6 @@ class MangaDownloadManager(
 
         if (wasRunning) {
             if (queue.isEmpty()) {
-                MangaDownloadService.stop(context)
                 downloader.stop()
             } else if (queue.isNotEmpty()) {
                 downloader.start()

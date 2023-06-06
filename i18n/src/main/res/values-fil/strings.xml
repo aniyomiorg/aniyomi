@@ -736,4 +736,10 @@
     <string name="hour_short">%dh</string>
     <string name="minute_short">%dm</string>
     <string name="seconds_short">%ds</string>
+    <string name="action_copy_to_clipboard">Kopyahin sa clipboard</string>
+    <string name="pref_hide_in_library_items">Itago ang mga entry na nasa aklatan na</string>
+    <plurals name="download_amount">
+        <item quantity="one">Susunod na kabanata</item>
+        <item quantity="other">Susunod na %d (mga) kabanata</item>
+    </plurals>
     </resources>

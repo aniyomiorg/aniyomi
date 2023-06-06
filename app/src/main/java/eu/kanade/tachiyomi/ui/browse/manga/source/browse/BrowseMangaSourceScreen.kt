@@ -46,9 +46,9 @@ import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.manga.LocalMangaSource
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.ui.browse.manga.extension.details.MangaSourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.browse.manga.source.browse.BrowseMangaSourceScreenModel.Listing
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreen
@@ -60,6 +60,7 @@ import tachiyomi.core.util.lang.launchIO
 import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 data class BrowseMangaSourceScreen(
     private val sourceId: Long,
@@ -124,6 +125,7 @@ data class BrowseMangaSourceScreen(
                         navigateUp = navigateUp,
                         onWebViewClick = onWebViewClick,
                         onHelpClick = onHelpClick,
+                        onSettingsClick = { navigator.push(MangaSourcePreferencesScreen(sourceId)) },
                         onSearch = { screenModel.search(it) },
                     )
 

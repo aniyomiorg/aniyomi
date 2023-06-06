@@ -22,7 +22,6 @@ import eu.kanade.presentation.browse.manga.components.BrowseMangaSourceList
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.MangaSource
-import eu.kanade.tachiyomi.source.manga.LocalMangaSource
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import kotlinx.coroutines.flow.StateFlow
 import tachiyomi.domain.entries.manga.model.Manga
@@ -32,6 +31,7 @@ import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 @Composable
 fun BrowseSourceContent(

@@ -1,16 +1,19 @@
 package eu.kanade.data.source.anime
 
-import eu.kanade.domain.source.anime.model.AnimeSourcePagingSourceType
 import eu.kanade.domain.source.anime.repository.AnimeSourceRepository
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
-import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
+import tachiyomi.data.source.anime.AnimeSourceLatestPagingSource
+import tachiyomi.data.source.anime.AnimeSourcePagingSourceType
+import tachiyomi.data.source.anime.AnimeSourcePopularPagingSource
+import tachiyomi.data.source.anime.AnimeSourceSearchPagingSource
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.domain.source.anime.model.AnimeSourceWithCount
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
 
 class AnimeSourceRepositoryImpl(
     private val sourceManager: AnimeSourceManager,
@@ -35,9 +38,7 @@ class AnimeSourceRepositoryImpl(
             sourceIdsWithCount
                 .filterNot { it.source == LocalAnimeSource.ID }
                 .map { (sourceId, count) ->
-                    val source = sourceManager.getOrStub(sourceId).run {
-                        animeSourceMapper(this)
-                    }
+                    val source = animeSourceMapper(sourceManager.getOrStub(sourceId))
                     source to count
                 }
         }

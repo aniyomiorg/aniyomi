@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.util.preference
 
 import android.widget.CompoundButton
-import eu.kanade.core.prefs.PreferenceMutableState
+import eu.kanade.core.preference.PreferenceMutableState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach

@@ -121,7 +121,7 @@ class AnimeCoverScreenModel(
             @Suppress("BlockingMethodInNonBlockingContext")
             context.contentResolver.openInputStream(data)?.use {
                 try {
-                    anime.editCover(context, it, updateAnime, coverCache)
+                    anime.editCover(Injekt.get(), it, updateAnime, coverCache)
                     notifyCoverUpdated(context)
                 } catch (e: Exception) {
                     notifyFailedCoverUpdate(context, e)

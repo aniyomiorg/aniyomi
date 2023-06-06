@@ -1,7 +1,7 @@
-package eu.kanade.data.source.anime
+package tachiyomi.data.source.anime
 
+import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import eu.kanade.domain.source.anime.model.AnimeSourcePagingSourceType
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
@@ -9,6 +9,8 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import tachiyomi.core.util.lang.awaitSingle
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.items.episode.model.NoEpisodesException
+
+typealias AnimeSourcePagingSourceType = PagingSource<Long, SAnime>
 
 abstract class AnimeSourcePagingSource(
     protected val source: AnimeCatalogueSource,

@@ -4,8 +4,6 @@ import android.content.Context
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.manga.model.COMIC_INFO_FILE
-import eu.kanade.domain.entries.manga.model.ComicInfo
 import eu.kanade.domain.entries.manga.model.getComicInfo
 import eu.kanade.domain.items.chapter.model.toSChapter
 import eu.kanade.tachiyomi.R
@@ -21,7 +19,6 @@ import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.DiskUtil.NOMEDIA_FILE
 import eu.kanade.tachiyomi.util.storage.saveTo
-import eu.kanade.tachiyomi.util.system.ImageUtil
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -40,11 +37,14 @@ import rx.Observable
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import tachiyomi.core.metadata.comicinfo.COMIC_INFO_FILE
+import tachiyomi.core.metadata.comicinfo.ComicInfo
 import tachiyomi.core.util.lang.awaitSingle
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.launchNow
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
@@ -167,6 +167,11 @@ class MangaDownloader(
         }
 
         isPaused = false
+
+        // Prevent recursion when DownloadService.onDestroy() calls downloader.stop()
+        if (MangaDownloadService.isRunning.value) {
+            MangaDownloadService.stop(context)
+        }
     }
 
     /**
@@ -217,9 +222,9 @@ class MangaDownloader(
                     completeDownload(it)
                 },
                 { error ->
-                    MangaDownloadService.stop(context)
                     logcat(LogPriority.ERROR, error)
                     notifier.onError(error.message)
+                    stop()
                 },
             )
     }
@@ -634,7 +639,7 @@ class MangaDownloader(
             queue.remove(download)
         }
         if (areAllDownloadsFinished()) {
-            MangaDownloadService.stop(context)
+            stop()
         }
     }
 

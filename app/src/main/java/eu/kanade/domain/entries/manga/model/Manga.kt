@@ -2,12 +2,15 @@ package eu.kanade.domain.entries.manga.model
 
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
-import eu.kanade.tachiyomi.source.manga.LocalMangaSource
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
+import tachiyomi.core.metadata.comicinfo.ComicInfo
+import tachiyomi.core.metadata.comicinfo.ComicInfoPublishingStatus
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.source.local.entries.manga.LocalMangaSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -91,3 +94,25 @@ fun Manga.isLocal(): Boolean = source == LocalMangaSource.ID
 fun Manga.hasCustomCover(coverCache: MangaCoverCache = Injekt.get()): Boolean {
     return coverCache.getCustomCoverFile(id).exists()
 }
+
+/**
+ * Creates a ComicInfo instance based on the manga and chapter metadata.
+ */
+fun getComicInfo(manga: Manga, chapter: Chapter, chapterUrl: String) = ComicInfo(
+    title = ComicInfo.Title(chapter.name),
+    series = ComicInfo.Series(manga.title),
+    web = ComicInfo.Web(chapterUrl),
+    summary = manga.description?.let { ComicInfo.Summary(it) },
+    writer = manga.author?.let { ComicInfo.Writer(it) },
+    penciller = manga.artist?.let { ComicInfo.Penciller(it) },
+    translator = chapter.scanlator?.let { ComicInfo.Translator(it) },
+    genre = manga.genre?.let { ComicInfo.Genre(it.joinToString()) },
+    publishingStatus = ComicInfo.PublishingStatusTachiyomi(
+        ComicInfoPublishingStatus.toComicInfoValue(manga.status),
+    ),
+    inker = null,
+    colorist = null,
+    letterer = null,
+    coverArtist = null,
+    tags = null,
+)

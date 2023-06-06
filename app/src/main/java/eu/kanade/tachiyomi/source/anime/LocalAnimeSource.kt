@@ -15,7 +15,6 @@ import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
-import eu.kanade.tachiyomi.util.system.ImageUtil
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -23,6 +22,7 @@ import kotlinx.serialization.json.decodeFromStream
 import logcat.LogPriority
 import rx.Observable
 import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.items.episode.service.EpisodeRecognition
 import uy.kohesive.injekt.injectLazy

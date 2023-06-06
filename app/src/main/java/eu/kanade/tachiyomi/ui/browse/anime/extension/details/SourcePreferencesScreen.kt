@@ -58,7 +58,7 @@ class SourcePreferencesScreen(val sourceId: Long) : Screen() {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = Injekt.get<AnimeSourceManager>().get(sourceId)!!.toString()) },
+                    title = { Text(text = Injekt.get<AnimeSourceManager>().getOrStub(sourceId).toString()) },
                     navigationIcon = {
                         IconButton(onClick = navigator::pop) {
                             Icon(
