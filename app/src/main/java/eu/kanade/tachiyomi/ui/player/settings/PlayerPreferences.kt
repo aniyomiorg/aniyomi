@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.player.settings
 
 import android.os.Build
+import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import tachiyomi.core.preference.PreferenceStore
 
 class PlayerPreferences(
@@ -42,7 +43,7 @@ class PlayerPreferences(
 
     fun playerSmoothSeek() = preferenceStore.getBoolean("pref_player_smooth_seek", false)
 
-    fun playerViewMode() = preferenceStore.getInt("pref_player_view_mode", 1)
+    fun playerViewMode() = preferenceStore.getInt("pref_player_view_mode", AspectState.FIT.index)
 
     fun playerFullscreen() = preferenceStore.getBoolean("player_fullscreen", true)
 

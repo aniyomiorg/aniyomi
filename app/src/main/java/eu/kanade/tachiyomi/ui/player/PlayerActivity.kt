@@ -53,6 +53,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksSheet
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
+import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
@@ -153,8 +154,8 @@ class PlayerActivity :
 
     private var brightness = 0F
 
-    private var width = 0
-    private var height = 0
+    private var deviceWidth = 0
+    private var deviceHeight = 0
 
     private val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
 
@@ -290,7 +291,7 @@ class PlayerActivity :
 
     private var currentVideoList: List<Video>? = null
 
-    private var playerViewMode: Int = playerPreferences.playerViewMode().get()
+    private var playerViewMode = AspectState.get(playerPreferences.playerViewMode().get())
 
     private var playerIsDestroyed = true
 
@@ -379,9 +380,9 @@ class PlayerActivity :
 
         val dm = DisplayMetrics()
         windowManager.defaultDisplay.getRealMetrics(dm)
-        width = dm.widthPixels
-        height = dm.heightPixels
-        if (width <= height) {
+        deviceWidth = dm.widthPixels
+        deviceHeight = dm.heightPixels
+        if (deviceWidth <= deviceHeight) {
             switchOrientation(false)
         } else {
             switchOrientation(true)
@@ -457,8 +458,8 @@ class PlayerActivity :
         viewModel.viewModelScope.launchUI {
             setVisibilities()
             if (isLandscape) {
-                if (width <= height) {
-                    width = height.also { height = width }
+                if (deviceWidth <= deviceHeight) {
+                    deviceWidth = deviceHeight.also { deviceHeight = deviceWidth }
                 }
 
                 playerControls.binding.episodeListBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
@@ -474,8 +475,8 @@ class PlayerActivity :
                     leftToRight = playerControls.binding.episodeListBtn.id
                 }
             } else {
-                if (width >= height) {
-                    width = height.also { height = width }
+                if (deviceWidth >= deviceHeight) {
+                    deviceWidth = deviceHeight.also { deviceHeight = deviceWidth }
                 }
 
                 playerControls.binding.episodeListBtn.updateLayoutParams<ConstraintLayout.LayoutParams> {
@@ -492,7 +493,7 @@ class PlayerActivity :
                 }
             }
             setupGestures()
-            setViewMode()
+            setViewMode(showText = false)
             if (pip.supportedAndEnabled) player.paused?.let { pip.update(!it) }
         }
     }
@@ -503,7 +504,7 @@ class PlayerActivity :
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupGestures() {
-        val gestures = Gestures(this, width.toFloat(), height.toFloat())
+        val gestures = Gestures(this, deviceWidth.toFloat(), deviceHeight.toFloat())
         mDetector = GestureDetectorCompat(this, gestures)
         player.setOnTouchListener { v, event ->
             gestures.onTouch(v, event)
@@ -643,35 +644,27 @@ class PlayerActivity :
             ?: MPVLib.command(arrayOf("audio-add", audioTracks[index].url, "select", audioTracks[index].url))
     }
 
-    private fun setViewMode() {
+    private fun setViewMode(showText: Boolean) {
+        playerControls.binding.playerInformation.text = getString(playerViewMode.stringRes)
         when (playerViewMode) {
-            2 -> {
-                MPVLib.setOptionString("video-aspect-override", "-1")
-                MPVLib.setOptionString("panscan", "1.0")
-
-                playerControls.binding.playerInformation.text = getString(R.string.video_crop_screen)
+            AspectState.CROP -> {
+                mpvUpdateAspect(aspect = "-1", pan = "1.0")
             }
-            1 -> {
-                MPVLib.setOptionString("video-aspect-override", "-1")
-                MPVLib.setOptionString("panscan", "0.0")
-
-                playerControls.binding.playerInformation.text = getString(R.string.video_fit_screen)
+            AspectState.FIT -> {
+                mpvUpdateAspect(aspect = "-1", pan = "0.0")
             }
-            0 -> {
-                val newAspect = "$width/$height"
-                MPVLib.setOptionString("video-aspect-override", newAspect)
-                MPVLib.setOptionString("panscan", "0.0")
-
-                playerControls.binding.playerInformation.text = getString(R.string.video_stretch_screen)
+            AspectState.STRETCH -> {
+                val newAspect = "$deviceWidth/$deviceHeight"
+                mpvUpdateAspect(aspect = newAspect, pan = "1.0")
             }
         }
-        if (playerViewMode != playerPreferences.playerViewMode().get()) {
+        if (showText) {
             animationHandler.removeCallbacks(playerInformationRunnable)
             playerControls.binding.playerInformation.visibility = View.VISIBLE
             animationHandler.postDelayed(playerInformationRunnable, 1000L)
         }
 
-        playerPreferences.playerViewMode().set(playerViewMode)
+        playerPreferences.playerViewMode().set(playerViewMode.index)
     }
 
     @Suppress("DEPRECATION")
@@ -747,9 +740,9 @@ class PlayerActivity :
     fun doubleTapSeek(time: Int, event: MotionEvent? = null, isDoubleTap: Boolean = true) {
         if (SeekState.mode != SeekState.DOUBLE_TAP) doubleTapBg = if (time < 0) binding.rewBg else binding.ffwdBg
         val v = if (time < 0) binding.rewTap else binding.ffwdTap
-        val w = if (time < 0) width * 0.2F else width * 0.8F
+        val w = if (time < 0) deviceWidth * 0.2F else deviceWidth * 0.8F
         val x = (event?.x?.toInt() ?: w.toInt()) - v.x.toInt()
-        val y = (event?.y?.toInt() ?: (height / 2)) - v.y.toInt()
+        val y = (event?.y?.toInt() ?: (deviceHeight / 2)) - v.y.toInt()
 
         SeekState.mode = if (isDoubleTap) SeekState.DOUBLE_TAP else SeekState.NONE
         binding.secondsView.visibility = View.VISIBLE
@@ -908,12 +901,11 @@ class PlayerActivity :
     @Suppress("UNUSED_PARAMETER")
     fun cycleViewMode(view: View) {
         playerViewMode = when (playerViewMode) {
-            0 -> 1
-            1 -> 2
-            2 -> 0
-            else -> 0
+            AspectState.STRETCH -> AspectState.FIT
+            AspectState.FIT -> AspectState.CROP
+            AspectState.CROP -> AspectState.STRETCH
         }
-        setViewMode()
+        setViewMode(showText = true)
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -1517,6 +1509,11 @@ class PlayerActivity :
     }
 
     // mpv events
+
+    private fun mpvUpdateAspect(aspect: String, pan: String) {
+        MPVLib.setOptionString("video-aspect-override", aspect)
+        MPVLib.setOptionString("panscan", pan)
+    }
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun eventPropertyUi(property: String, value: Long) {

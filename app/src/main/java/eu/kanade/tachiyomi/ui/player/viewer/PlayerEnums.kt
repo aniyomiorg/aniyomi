@@ -1,5 +1,8 @@
 package eu.kanade.tachiyomi.ui.player.viewer
 
+import androidx.annotation.StringRes
+import eu.kanade.tachiyomi.R
+
 /**
  * Results of the set as cover feature.
  */
@@ -26,5 +29,21 @@ enum class SeekState {
 
     companion object {
         internal var mode = NONE
+    }
+}
+
+/**
+ * Player's Video Aspect state handler
+ */
+enum class AspectState(val index: Int, @StringRes val stringRes: Int) {
+    CROP(index = 0, stringRes = R.string.video_crop_screen),
+    FIT(index = 1, stringRes = R.string.video_fit_screen),
+    STRETCH(index = 2, stringRes = R.string.video_stretch_screen),
+    ;
+
+    companion object {
+        internal var mode: AspectState = FIT
+
+        internal fun get(index: Int) = values().find { index == it.index } ?: FIT
     }
 }
