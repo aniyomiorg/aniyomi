@@ -29,7 +29,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
@@ -39,7 +38,6 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -106,11 +104,11 @@ class PlayerActivity :
         }
     }
 
-    private val playerPreferences: PlayerPreferences = Injekt.get()
+    internal val playerPreferences: PlayerPreferences = Injekt.get()
 
     private val networkPreferences: NetworkPreferences = Injekt.get()
 
-    val viewModel by viewModels<PlayerViewModel>()
+    internal val viewModel by viewModels<PlayerViewModel>()
 
     override fun onNewIntent(intent: Intent) {
         val animeId = intent.extras!!.getLong("animeId", -1)
@@ -234,8 +232,6 @@ class PlayerActivity :
 
     internal var initialSeek = -1
 
-    private lateinit var mDetector: GestureDetectorCompat
-
     private val animationHandler = Handler(Looper.getMainLooper())
 
     // Fade out seek text
@@ -313,79 +309,21 @@ class PlayerActivity :
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         registerSecureActivity(this)
         Utils.copyAssets(this)
         super.onCreate(savedInstanceState)
 
-        binding = PlayerActivityBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationType().get()
-
-        window.statusBarColor = 70000000
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            window.navigationBarColor = 70000000
-        }
-
-        setVisibilities()
-
-        if (playerPreferences.hideControls().get()) {
-            playerControls.hideControls(true)
-        } else {
-            playerControls.showAndFadeControls()
-        }
-        toggleAutoplay(playerPreferences.autoplayEnabled().get())
-
-        setMpvConf()
-        val logLevel = if (networkPreferences.verboseLogging().get()) "info" else "warn"
-        player.initialize(applicationContext.filesDir.path, logLevel)
-        val hwDec = playerPreferences.standardHwDec().get()
-        MPVLib.setOptionString("hwdec", hwDec)
-        MPVLib.setOptionString("keep-open", "always")
-        MPVLib.setOptionString("ytdl", "no")
-        MPVLib.addLogObserver(this)
-        player.addObserver(this)
+        setupPlayerControls()
+        setupPlayerMPV()
+        setupPlayerAudio()
+        setupPlayerBrightness()
+        loadDeviceDimensions()
 
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
             toast(throwable.message)
             logcat(LogPriority.ERROR, throwable)
             finish()
-        }
-
-        audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        val useDeviceVolume = playerPreferences.playerVolumeValue().get() == -1.0F || !playerPreferences.rememberPlayerVolume().get()
-        fineVolume = if (useDeviceVolume) {
-            audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
-        } else {
-            playerPreferences.playerVolumeValue().get()
-        }
-        verticalScrollRight(0F)
-
-        maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-        playerControls.binding.volumeBar.max = maxVolume
-        playerControls.binding.volumeBar.secondaryProgress = maxVolume
-
-        val useDeviceBrightness = playerPreferences.playerBrightnessValue().get() == -1.0F || !playerPreferences.rememberPlayerBrightness().get()
-        brightness = if (useDeviceBrightness) {
-            Utils.getScreenBrightness(this) ?: 0.5F
-        } else {
-            playerPreferences.playerBrightnessValue().get()
-        }
-        verticalScrollLeft(0F)
-
-        volumeControlStream = AudioManager.STREAM_MUSIC
-
-        onNewIntent(this.intent)
-
-        val dm = DisplayMetrics()
-        windowManager.defaultDisplay.getRealMetrics(dm)
-        deviceWidth = dm.widthPixels
-        deviceHeight = dm.heightPixels
-        if (deviceWidth <= deviceHeight) {
-            switchOrientation(false)
-        } else {
-            switchOrientation(true)
         }
 
         viewModel.eventFlow
@@ -407,12 +345,86 @@ class PlayerActivity :
             }
             .launchIn(lifecycleScope)
 
+        onNewIntent(this.intent)
+
         playerIsDestroyed = false
     }
 
-    private fun setMpvConf() {
+    private fun setupPlayerControls() {
+        binding = PlayerActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        window.statusBarColor = 70000000
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            window.navigationBarColor = 70000000
+        }
+
+        setVisibilities()
+
+        if (playerPreferences.hideControls().get()) {
+            playerControls.hideControls(true)
+        } else {
+            playerControls.showAndFadeControls()
+        }
+        toggleAutoplay(playerPreferences.autoplayEnabled().get())
+    }
+
+    private fun setupPlayerMPV() {
         val mpvConfFile = File("${applicationContext.filesDir.path}/mpv.conf")
         playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
+
+        val logLevel = if (networkPreferences.verboseLogging().get()) "info" else "warn"
+        player.initialize(applicationContext.filesDir.path, logLevel)
+
+        MPVLib.setOptionString("hwdec", playerPreferences.standardHwDec().get())
+        MPVLib.setOptionString("keep-open", "always")
+        MPVLib.setOptionString("ytdl", "no")
+
+        MPVLib.addLogObserver(this)
+        player.addObserver(this)
+    }
+
+    private fun setupPlayerAudio() {
+        audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        val useDeviceVolume = playerPreferences.playerVolumeValue().get() == -1.0F || !playerPreferences.rememberPlayerVolume().get()
+        fineVolume = if (useDeviceVolume) {
+            audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
+        } else {
+            playerPreferences.playerVolumeValue().get()
+        }
+
+        verticalScrollRight(0F)
+
+        maxVolume = audioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+        playerControls.binding.volumeBar.max = maxVolume
+        playerControls.binding.volumeBar.secondaryProgress = maxVolume
+
+        volumeControlStream = AudioManager.STREAM_MUSIC
+    }
+
+    private fun setupPlayerBrightness() {
+        val useDeviceBrightness = playerPreferences.playerBrightnessValue().get() == -1.0F || !playerPreferences.rememberPlayerBrightness().get()
+        brightness = if (useDeviceBrightness) {
+            Utils.getScreenBrightness(this) ?: 0.5F
+        } else {
+            playerPreferences.playerBrightnessValue().get()
+        }
+        verticalScrollLeft(0F)
+    }
+
+    @Suppress("DEPRECATION")
+    private fun loadDeviceDimensions() {
+        this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationType().get()
+        val dm = DisplayMetrics()
+        windowManager.defaultDisplay.getRealMetrics(dm)
+        deviceWidth = dm.widthPixels
+        deviceHeight = dm.heightPixels
+        if (deviceWidth <= deviceHeight) {
+            switchControlsOrientation(false)
+        } else {
+            switchControlsOrientation(true)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -428,33 +440,9 @@ class PlayerActivity :
     }
 
     /**
-     * Class to override [MaterialAlertDialogBuilder] to hide the navigation and status bars
-     */
-    internal inner class HideBarsMaterialAlertDialogBuilder(context: Context) : MaterialAlertDialogBuilder(context) {
-        override fun create(): AlertDialog {
-            return super.create().apply {
-                val window = this.window ?: return@apply
-                val alertWindowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
-                alertWindowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-                alertWindowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
-            }
-        }
-
-        override fun show(): AlertDialog {
-            return super.show().apply {
-                val window = this.window ?: return@apply
-                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
-            }
-        }
-    }
-
-    /**
      * Function to handle UI during orientation changes
      */
-
-    private fun switchOrientation(isLandscape: Boolean) {
+    private fun switchControlsOrientation(isLandscape: Boolean) {
         viewModel.viewModelScope.launchUI {
             setVisibilities()
             if (isLandscape) {
@@ -505,7 +493,7 @@ class PlayerActivity :
     @SuppressLint("ClickableViewAccessibility")
     private fun setupGestures() {
         val gestures = Gestures(this, deviceWidth.toFloat(), deviceHeight.toFloat())
-        mDetector = GestureDetectorCompat(this, gestures)
+        val mDetector = GestureDetectorCompat(this, gestures)
         player.setOnTouchListener { v, event ->
             gestures.onTouch(v, event)
             mDetector.onTouchEvent(event)
@@ -516,9 +504,9 @@ class PlayerActivity :
         super.onConfigurationChanged(newConfig)
         if (PipState.mode != PipState.STARTED) {
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                switchOrientation(true)
+                switchControlsOrientation(true)
             } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                switchOrientation(false)
+                switchControlsOrientation(false)
             }
         }
     }
@@ -1146,7 +1134,7 @@ class PlayerActivity :
         }
     }
 
-    private suspend fun refreshUi() {
+    internal suspend fun refreshUi() {
         // forces update of entire UI, used when resuming the activity
         val paused = player.paused ?: return
         updatePlaybackStatus(paused)
@@ -1463,10 +1451,10 @@ class PlayerActivity :
             if (playerPreferences.adjustOrientationVideoDimensions().get()) {
                 if ((player.videoW ?: 1) / (player.videoH ?: 1) >= 1) {
                     this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationLandscape().get()
-                    switchOrientation(true)
+                    switchControlsOrientation(true)
                 } else {
                     this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationPortrait().get()
-                    switchOrientation(false)
+                    switchControlsOrientation(false)
                 }
             }
 
