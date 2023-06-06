@@ -288,4 +288,5 @@
     <string name="pref_progress_70" translatable="false"></string>
     <string name="pref_progress_95" translatable="false"></string>
     <string name="pref_skip_10" translatable="false"></string>
+    <string name="extension_settings"></string>
 </resources>
