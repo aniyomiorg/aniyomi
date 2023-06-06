@@ -514,7 +514,7 @@ class PlayerActivity :
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        if (PipState.mode == PipState.STARTED) {
+        if (PipState.mode != PipState.STARTED) {
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 switchOrientation(true)
             } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
