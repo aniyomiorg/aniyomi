@@ -159,7 +159,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <eu.kanade.tachiyomi.ui.player.viewer.DoubleTapSecondsView
+        <eu.kanade.tachiyomi.ui.player.viewer.components.DoubleTapSecondsView
             android:id="@+id/seconds_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

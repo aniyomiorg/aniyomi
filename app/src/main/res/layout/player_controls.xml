@@ -30,7 +30,7 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/controlsView"
+        android:id="@+id/unlocked_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#70000000">
@@ -78,7 +78,7 @@
                 android:id="@+id/titleSecondaryTxt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginHorizontal="10dp"
                 android:alpha="0.5"
                 android:text=""
                 android:textColor="?attr/colorOnPrimarySurface"
@@ -393,7 +393,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
-            <eu.kanade.tachiyomi.ui.player.viewer.CustomSeekBar
+            <eu.kanade.tachiyomi.ui.player.viewer.components.CustomSeekBar
                 android:id="@+id/playbackSeekbar"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
