@@ -6,7 +6,7 @@
     <string name="entries">Library entries</string>
     <string name="chapters_episodes">Chapters and episodes</string>
     <string name="episodes">Episodes</string>
-    <string name="backup_settings_warning">Warning: Backing up settings will store your track passwords as well, do not share this backup file!</string>
+    <string name="backup_settings_warning">Warning: Backing up settings might store sensitive information like tracker passwords.\nDo not share this backup file!</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Anime</string>
     <string name="label_anime">Anime</string>

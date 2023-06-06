@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.data.backup
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.preference.PreferenceManager
@@ -9,6 +10,7 @@ import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeSource
 import eu.kanade.tachiyomi.data.backup.models.BackupCategory
+import eu.kanade.tachiyomi.data.backup.models.BackupExtension
 import eu.kanade.tachiyomi.data.backup.models.BackupExtensionPreferences
 import eu.kanade.tachiyomi.data.backup.models.BackupHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
@@ -27,8 +29,10 @@ import eu.kanade.tachiyomi.data.database.models.manga.Chapter
 import eu.kanade.tachiyomi.data.database.models.manga.Manga
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.util.BackupUtil
+import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import kotlinx.coroutines.Job
+import tachiyomi.core.util.system.logcat
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -141,6 +145,10 @@ class BackupRestorer(
 
         if (backup.backupExtensionPreferences.isNotEmpty()) {
             restoreExtensionPreferences(backup.backupExtensionPreferences)
+        }
+
+        if (backup.backupExtensions.isNotEmpty()) {
+            restoreExtensions(backup.backupExtensions)
         }
 
         return true
@@ -339,6 +347,21 @@ class BackupRestorer(
         prefs.forEach {
             val sharedPrefs = context.getSharedPreferences(it.name, 0x0)
             restorePreferences(it.prefs, sharedPrefs)
+        }
+    }
+
+    private fun restoreExtensions(extensions: List<BackupExtension>) {
+        extensions.forEach {
+            if (context.packageManager.getInstalledPackages(0).none { pkg -> pkg.packageName == it.pkgName }) {
+                logcat { it.pkgName }
+                // save apk in files dir and open installer dialog
+                val file = File(context.cacheDir, "${it.pkgName}.apk")
+                file.writeBytes(it.apk)
+                val intent = Intent(Intent.ACTION_VIEW)
+                    .setDataAndType(file.getUriCompat(context), "application/vnd.android.package-archive")
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                context.startActivity(intent)
+            }
         }
     }
 

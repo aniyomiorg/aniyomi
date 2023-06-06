@@ -23,12 +23,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -48,6 +48,7 @@ import eu.kanade.tachiyomi.data.backup.BackupRestoreService
 import eu.kanade.tachiyomi.data.backup.models.Backup
 import eu.kanade.tachiyomi.data.preference.FLAG_CATEGORIES
 import eu.kanade.tachiyomi.data.preference.FLAG_CHAPTERS
+import eu.kanade.tachiyomi.data.preference.FLAG_EXTENSIONS
 import eu.kanade.tachiyomi.data.preference.FLAG_EXT_SETTINGS
 import eu.kanade.tachiyomi.data.preference.FLAG_HISTORY
 import eu.kanade.tachiyomi.data.preference.FLAG_SETTINGS
@@ -151,9 +152,17 @@ object SettingsBackupScreen : SearchableSettings {
                 BackupConst.BACKUP_HISTORY to R.string.history,
                 BackupConst.BACKUP_PREFS to R.string.settings,
                 BackupConst.BACKUP_EXT_PREFS to R.string.extension_settings,
+                BackupConst.BACKUP_EXTENSIONS to R.string.label_extensions,
             )
         }
-        val flags = remember { choices.keys.toMutableStateList() }
+        val flags = remember {
+            mutableStateListOf(
+                BackupConst.BACKUP_CATEGORY,
+                BackupConst.BACKUP_CHAPTER,
+                BackupConst.BACKUP_TRACK,
+                BackupConst.BACKUP_HISTORY,
+            )
+        }
         AlertDialog(
             onDismissRequest = onDismissRequest,
             title = { Text(text = stringResource(R.string.backup_choice)) },
@@ -164,7 +173,7 @@ object SettingsBackupScreen : SearchableSettings {
                         item {
                             CreateBackupDialogItem(
                                 isSelected = true,
-                                title = stringResource(R.string.manga),
+                                title = stringResource(R.string.entries),
                             )
                         }
                         choices.forEach { (k, v) ->
@@ -410,6 +419,7 @@ object SettingsBackupScreen : SearchableSettings {
                         FLAG_TRACK to stringResource(R.string.track),
                         FLAG_SETTINGS to stringResource(R.string.settings),
                         FLAG_EXT_SETTINGS to stringResource(R.string.extension_settings),
+                        FLAG_EXTENSIONS to stringResource(R.string.label_extensions),
                     ),
                     onValueChanged = {
                         if (FLAG_SETTINGS in it || FLAG_EXT_SETTINGS in it) {
