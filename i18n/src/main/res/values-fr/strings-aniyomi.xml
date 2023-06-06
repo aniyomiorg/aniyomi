@@ -132,7 +132,6 @@
     <string name="download_paused">En pause</string>
     <string name="show_episode_number">Numéro de l\'épisode</string>
     <string name="sort_by_episode_number">Par numéro d\'épisode</string>
-    <string name="download_5_episodes">Les 5 prochains épisodes</string>
     <string name="download_unseen">Non vus</string>
     <string name="confirm_delete_episodes">Êtes-vous sûr·e de vouloir supprimer les épisodes sélectionnés \?</string>
     <string name="also_set_chapter_settings_for_library">S\'applique également à toutes les entrées de ma bibliothèque</string>

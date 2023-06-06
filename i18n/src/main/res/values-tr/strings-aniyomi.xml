@@ -133,7 +133,6 @@
     <string name="snack_add_to_anime_library">Anime kitaplığa eklensin mi\?</string>
     <string name="episode_downloading_progress">İndiriliyor (%d%%)</string>
     <string name="sort_by_episode_number">Bölüm sayısına göre</string>
-    <string name="download_10_episodes">Sonraki 10 bölüm</string>
     <string name="download_unseen">İzlenmeyen</string>
     <string name="also_set_episode_settings_for_library">Kitaplığımdaki bütün animelere uygula</string>
     <string name="no_episodes_error">Bölüm bulunamadı</string>

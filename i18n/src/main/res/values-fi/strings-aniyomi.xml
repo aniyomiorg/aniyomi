@@ -138,7 +138,6 @@
     <string name="currently_watching">Katsellaan parhaillaan</string>
     <string name="not_interesting">Ei kiinnostava</string>
     <string name="want_to_watch">Haluan katsoa</string>
-    <string name="download_5_episodes">Seuraavat 5 jaksoa</string>
     <string name="download_unseen">Katsomatta</string>
     <string name="confirm_delete_episodes">Haluatko varmasti poistaa valitut jaksot\?</string>
     <string name="also_set_episode_settings_for_library">Käytä myös kaikkiin kirjastossani oleviin animeihin</string>

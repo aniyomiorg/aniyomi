@@ -141,7 +141,6 @@
         <item quantity="other">%1$s epizod</item>
     </plurals>
     <string name="sort_by_episode_number">Podle čísla epizody</string>
-    <string name="download_10_episodes">Dalších 10 epizod</string>
     <string name="download_unseen">Neshlédnuto</string>
     <string name="confirm_delete_episodes">Jste si jistí, že chcete smazat vybrané epizody\?</string>
     <string name="also_set_episode_settings_for_library">Aplijovat také na všechny anime v mé knihovně</string>

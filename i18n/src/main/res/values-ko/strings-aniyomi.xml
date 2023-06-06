@@ -142,7 +142,6 @@
     <string name="download_paused">일시중지됨</string>
     <string name="show_episode_number">에피소드 번호</string>
     <string name="sort_by_episode_number">에피소드 번호 순</string>
-    <string name="download_5_episodes">다음 5 에피소드</string>
     <string name="download_unseen">안봄</string>
     <string name="confirm_delete_episodes">선택된 에피소드를 삭제하시겠습니까\?</string>
     <string name="also_set_chapter_settings_for_library">서재의 모든 항목에 적용</string>

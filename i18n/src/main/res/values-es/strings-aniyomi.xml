@@ -146,7 +146,6 @@
     <string name="download_paused">Pausado</string>
     <string name="show_episode_number">Número de episodio</string>
     <string name="sort_by_episode_number">Por número de episodio</string>
-    <string name="download_5_episodes">Siguientes 5 episodios</string>
     <string name="download_unseen">Sin ver</string>
     <string name="confirm_delete_episodes">¿Seguro que quieres eliminar los episodios seleccionados\?</string>
     <string name="also_set_chapter_settings_for_library">Aplicar también a todo el manga en mi biblioteca</string>

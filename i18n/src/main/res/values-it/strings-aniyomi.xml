@@ -119,7 +119,6 @@
     <string name="pref_backup_flags_summ">Quali informazioni sono contenute nel file di backup</string>
     <string name="local_invalid_episode_format">Formato episodio non valido</string>
     <string name="settings">Impostazioni</string>
-    <string name="download_10_episodes">Prossimi 10 episodi</string>
     <string name="confirm_delete_episodes">Sei sicuro di voler eliminare gli episodi selezionati\?</string>
     <string name="display_mode_episode">Episodio %1$s</string>
     <string name="label_migration_manga">Migra Manga</string>
