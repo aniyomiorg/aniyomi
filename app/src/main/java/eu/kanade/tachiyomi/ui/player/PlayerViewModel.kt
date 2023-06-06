@@ -33,6 +33,7 @@ import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.Stamp
@@ -515,22 +516,15 @@ class PlayerViewModel(
             val result = try {
                 anime.editCover(context, imageStream)
                 if (anime.isLocal() || anime.favorite) {
-                    SetAsCoverResult.Success
+                    SetAsCover.Success
                 } else {
-                    SetAsCoverResult.AddToLibraryFirst
+                    SetAsCover.AddToLibraryFirst
                 }
             } catch (e: Exception) {
-                SetAsCoverResult.Error
+                SetAsCover.Error
             }
             eventChannel.send(Event.SetCoverResult(result))
         }
-    }
-
-    /**
-     * Results of the set as cover feature.
-     */
-    enum class SetAsCoverResult {
-        Success, AddToLibraryFirst, Error
     }
 
     /**
@@ -684,7 +678,7 @@ class PlayerViewModel(
 
     sealed class Event {
         data class SetAnimeSkipIntro(val duration: Int) : Event()
-        data class SetCoverResult(val result: SetAsCoverResult) : Event()
+        data class SetCoverResult(val result: SetAsCover) : Event()
 
         data class SavedImage(val result: SaveImageResult) : Event()
         data class ShareImage(val uri: Uri, val seconds: String) : Event()

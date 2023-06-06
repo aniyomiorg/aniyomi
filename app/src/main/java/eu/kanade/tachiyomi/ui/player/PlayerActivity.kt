@@ -62,6 +62,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.Gestures
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
+import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
@@ -1080,12 +1081,12 @@ class PlayerActivity :
      * Called from the presenter when a screenshot is set as cover or fails.
      * It shows a different message depending on the [result].
      */
-    private fun onSetAsCoverResult(result: PlayerViewModel.SetAsCoverResult) {
+    private fun onSetAsCoverResult(result: SetAsCover) {
         toast(
             when (result) {
-                PlayerViewModel.SetAsCoverResult.Success -> R.string.cover_updated
-                PlayerViewModel.SetAsCoverResult.AddToLibraryFirst -> R.string.notification_first_add_to_library
-                PlayerViewModel.SetAsCoverResult.Error -> R.string.notification_cover_update_failed
+                SetAsCover.Success -> R.string.cover_updated
+                SetAsCover.AddToLibraryFirst -> R.string.notification_first_add_to_library
+                SetAsCover.Error -> R.string.notification_cover_update_failed
             },
         )
     }
