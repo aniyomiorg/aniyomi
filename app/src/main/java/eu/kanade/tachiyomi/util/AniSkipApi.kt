@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.util
 import android.annotation.SuppressLint
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
@@ -76,7 +75,7 @@ class AniSkipApi {
                 SkipType.MIXED_OP -> R.string.player_aniskip_mixedOp
             }
             launchUI {
-                playerControls.binding.controlsSkipIntroBtn.isVisible = true
+                playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
                 playerControls.binding.controlsSkipIntroBtn.text = activity.getString(skipButtonString)
             }
         }
@@ -93,7 +92,7 @@ class AniSkipApi {
             if (waitingTime > -1) {
                 if (waitingTime > 0) {
                     launchUI {
-                        playerControls.binding.controlsSkipIntroBtn.isVisible = true
+                        playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
                         playerControls.binding.controlsSkipIntroBtn.text = activity.getString(R.string.player_aniskip_dontskip)
                     }
                 } else {
@@ -113,7 +112,7 @@ class AniSkipApi {
                 rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
                 leftToLeft = ConstraintLayout.LayoutParams.UNSET
             }
-            binding.secondsView.isVisible = true
+            binding.secondsView.visibility = View.VISIBLE
             binding.secondsView.isForward = true
 
             binding.ffwdBg.visibility = View.VISIBLE
@@ -122,7 +121,7 @@ class AniSkipApi {
                     binding.secondsView.animate().alpha(0f).setDuration(500).withEndAction {
                         binding.ffwdBg.animate().alpha(0f).setDuration(100).withEndAction {
                             binding.ffwdBg.visibility = View.GONE
-                            binding.secondsView.isVisible = false
+                            binding.secondsView.visibility = View.GONE
                             binding.secondsView.alpha = 1f
                         }
                     }

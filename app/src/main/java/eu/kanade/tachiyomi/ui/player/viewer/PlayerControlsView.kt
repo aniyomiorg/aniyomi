@@ -65,7 +65,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             SeekState.mode = SeekState.NONE
             animationHandler.removeCallbacks(hideUiForSeekRunnable)
             animationHandler.postDelayed(hideUiForSeekRunnable, 500L)
-            animationHandler.postDelayed(controlsViewRunnable, 3500L)
+            animationHandler.postDelayed(fadeOutControlsRunnable, 3500L)
         }
     }
 
@@ -73,9 +73,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     private var wasPausedBeforeSeeking = false
 
     private val nonSeekViewRunnable = Runnable {
-        binding.topControlsGroup.isVisible = true
-        binding.middleControlsGroup.isVisible = true
-        binding.bottomControlsGroup.isVisible = true
+        binding.topControlsGroup.visibility = View.VISIBLE
+        binding.middleControlsGroup.visibility = View.VISIBLE
+        binding.bottomControlsGroup.visibility = View.VISIBLE
     }
 
     private val hideUiForSeekRunnable = Runnable {
@@ -84,44 +84,44 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         if (showControls) {
             AnimationUtils.loadAnimation(activity, R.anim.player_fade_in).also { fadeAnimation ->
                 binding.topControlsGroup.startAnimation(fadeAnimation)
-                binding.topControlsGroup.isVisible = true
+                binding.topControlsGroup.visibility = View.VISIBLE
 
                 binding.middleControlsGroup.startAnimation(fadeAnimation)
-                binding.middleControlsGroup.isVisible = true
+                binding.middleControlsGroup.visibility = View.VISIBLE
 
                 binding.bottomControlsGroup.startAnimation(fadeAnimation)
-                binding.bottomControlsGroup.isVisible = true
+                binding.bottomControlsGroup.visibility = View.VISIBLE
             }
             showControls = false
         } else {
             showControls = true
 
-            animationHandler.removeCallbacks(controlsViewRunnable)
-            animationHandler.postDelayed(controlsViewRunnable, 500L)
+            animationHandler.removeCallbacks(fadeOutControlsRunnable)
+            animationHandler.postDelayed(fadeOutControlsRunnable, 500L)
             animationHandler.removeCallbacks(nonSeekViewRunnable)
             animationHandler.postDelayed(nonSeekViewRunnable, 600L + resources.getInteger(R.integer.player_animation_duration).toLong())
         }
     }
 
     internal fun hideUiForSeek() {
-        animationHandler.removeCallbacks(controlsViewRunnable)
+        animationHandler.removeCallbacks(fadeOutControlsRunnable)
         animationHandler.removeCallbacks(hideUiForSeekRunnable)
 
-        if (!(binding.topControlsGroup.visibility == INVISIBLE && binding.middleControlsGroup.visibility == INVISIBLE && binding.bottomControlsGroup.visibility == INVISIBLE)) {
+        if (!(binding.topControlsGroup.visibility == View.INVISIBLE && binding.middleControlsGroup.visibility == INVISIBLE && binding.bottomControlsGroup.visibility == INVISIBLE)) {
             wasPausedBeforeSeeking = activity.player.paused!!
-            showControls = binding.controlsView.isVisible
-            binding.topControlsGroup.visibility = INVISIBLE
-            binding.middleControlsGroup.visibility = INVISIBLE
-            binding.bottomControlsGroup.visibility = INVISIBLE
+            showControls = binding.unlockedView.isVisible
+            binding.topControlsGroup.visibility = View.INVISIBLE
+            binding.middleControlsGroup.visibility = View.INVISIBLE
+            binding.bottomControlsGroup.visibility = View.INVISIBLE
             activity.player.paused = true
             animationHandler.removeCallbacks(activity.volumeViewRunnable)
             animationHandler.removeCallbacks(activity.brightnessViewRunnable)
             animationHandler.removeCallbacks(activity.seekTextRunnable)
-            binding.volumeView.isVisible = false
-            binding.brightnessView.isVisible = false
-            activity.binding.seekView.isVisible = false
-            binding.seekBarGroup.isVisible = true
-            binding.controlsView.isVisible = true
+            binding.volumeView.visibility = View.GONE
+            binding.brightnessView.visibility = View.GONE
+            activity.binding.seekView.visibility = View.GONE
+            binding.seekBarGroup.visibility = View.VISIBLE
+            binding.unlockedView.visibility = View.VISIBLE
             SeekState.mode = SeekState.SCROLL
         }
 
@@ -199,48 +199,31 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     private val animationHandler = Handler(Looper.getMainLooper())
 
     // Fade out Player controls
-    private val controlsViewRunnable = Runnable {
-        if (SeekState.mode == SeekState.LOCKED) {
-            fadeOutView(binding.lockedView)
-        } else {
-            fadeOutView(binding.controlsView)
-        }
-    }
+    private val fadeOutControlsRunnable = Runnable { fadeOutControls() }
 
     internal fun lockControls(locked: Boolean) {
         SeekState.mode = if (locked) SeekState.LOCKED else SeekState.NONE
-        toggleControls()
+        val itemView = if (locked) binding.unlockedView else binding.lockedView
+        itemView.visibility = View.GONE
+        showAndFadeControls()
     }
 
-    internal fun toggleControls() {
-        if (SeekState.mode == SeekState.LOCKED) {
-            binding.controlsView.isVisible = false
-
-            if (!binding.lockedView.isVisible && !activity.player.paused!!) {
-                showAndFadeControls()
-            } else if (!binding.lockedView.isVisible && activity.player.paused!!) {
-                fadeInView(binding.lockedView)
-            } else {
-                fadeOutView(binding.lockedView)
-            }
-        } else {
-            if (!binding.controlsView.isVisible && !activity.player.paused!!) {
-                showAndFadeControls()
-            } else if (!binding.controlsView.isVisible && activity.player.paused!!) {
-                fadeInView(binding.controlsView)
-            } else {
-                fadeOutView(binding.controlsView)
-            }
-
-            binding.lockedView.isVisible = false
+    internal fun toggleControls(isTapped: Boolean = false) {
+        val isControlsVisible = binding.lockedView.isVisible || binding.unlockedView.isVisible
+        if (!isControlsVisible && !activity.player.paused!!) {
+            showAndFadeControls()
+        } else if (!isControlsVisible && activity.player.paused!!) {
+            fadeInControls()
+        } else if (isTapped) {
+            fadeOutControls()
         }
     }
 
     internal fun hideControls(hide: Boolean) {
-        animationHandler.removeCallbacks(controlsViewRunnable)
+        animationHandler.removeCallbacks(fadeOutControlsRunnable)
         if (hide) {
-            binding.controlsView.isVisible = false
-            binding.lockedView.isVisible = false
+            binding.unlockedView.visibility = View.GONE
+            binding.lockedView.visibility = View.GONE
         } else {
             showAndFadeControls()
         }
@@ -301,26 +284,27 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     internal fun showAndFadeControls() {
-        val itemView = if (SeekState.mode != SeekState.LOCKED) binding.controlsView else binding.lockedView
-        if (!itemView.isVisible) fadeInView(itemView)
+        val itemView = if (SeekState.mode == SeekState.LOCKED) binding.lockedView else binding.unlockedView
+        if (!itemView.isVisible) fadeInControls()
         itemView.visibility = View.VISIBLE
         resetControlsFade()
     }
 
     internal fun resetControlsFade() {
-        val itemView = if (SeekState.mode != SeekState.LOCKED) binding.controlsView else binding.lockedView
+        val itemView = if (SeekState.mode == SeekState.LOCKED) binding.lockedView else binding.unlockedView
         if (!itemView.isVisible) return
-        animationHandler.removeCallbacks(controlsViewRunnable)
+        animationHandler.removeCallbacks(fadeOutControlsRunnable)
         if (SeekState.mode == SeekState.SEEKBAR) return
-        animationHandler.postDelayed(controlsViewRunnable, 3500L)
+        animationHandler.postDelayed(fadeOutControlsRunnable, 3500L)
     }
 
-    private fun fadeOutView(view: View) {
-        animationHandler.removeCallbacks(controlsViewRunnable)
+    private fun fadeOutControls() {
+        animationHandler.removeCallbacks(fadeOutControlsRunnable)
 
         AnimationUtils.loadAnimation(context, R.anim.player_fade_out).also { fadeAnimation ->
-            view.startAnimation(fadeAnimation)
-            view.visibility = View.GONE
+            val itemView = if (SeekState.mode == SeekState.LOCKED) binding.lockedView else binding.unlockedView
+            itemView.startAnimation(fadeAnimation)
+            itemView.visibility = View.GONE
         }
 
         binding.seekBarGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_exit_bottom))
@@ -333,12 +317,13 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         showControls = false
     }
 
-    private fun fadeInView(view: View) {
-        animationHandler.removeCallbacks(controlsViewRunnable)
+    private fun fadeInControls() {
+        animationHandler.removeCallbacks(fadeOutControlsRunnable)
 
         AnimationUtils.loadAnimation(context, R.anim.player_fade_in).also { fadeAnimation ->
-            view.startAnimation(fadeAnimation)
-            view.visibility = View.VISIBLE
+            val itemView = if (SeekState.mode == SeekState.LOCKED) binding.lockedView else binding.unlockedView
+            itemView.startAnimation(fadeAnimation)
+            itemView.visibility = View.VISIBLE
         }
 
         binding.seekBarGroup.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_enter_bottom))
@@ -360,10 +345,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun playPause() {
         when {
-            activity.player.paused!! -> animationHandler.removeCallbacks(controlsViewRunnable)
-            binding.controlsView.isVisible -> {
-                showAndFadeControls()
-            }
+            activity.player.paused!! -> animationHandler.removeCallbacks(fadeOutControlsRunnable)
+            binding.unlockedView.isVisible -> showAndFadeControls()
         }
     }
 

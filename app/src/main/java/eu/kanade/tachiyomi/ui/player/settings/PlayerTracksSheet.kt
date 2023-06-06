@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.children
-import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.databinding.PlayerTracksItemBinding
@@ -40,7 +39,7 @@ class PlayerTracksSheet(
         binding = PlayerTracksSheetBinding.inflate(activity.layoutInflater, null, false)
 
         if (trackSettings != null) {
-            binding.trackSettingsButton.isVisible = true
+            binding.trackSettingsButton.visibility = View.VISIBLE
             binding.trackSettingsButton.setOnClickListener { trackSettings.invoke() }
         }
 

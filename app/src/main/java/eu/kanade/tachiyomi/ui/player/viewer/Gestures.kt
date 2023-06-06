@@ -37,12 +37,12 @@ class Gestures(
     }
 
     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-        if (SeekState.mode != SeekState.DOUBLE_TAP) activity.toggleControls()
+        if (SeekState.mode != SeekState.DOUBLE_TAP) activity.playerControls.toggleControls(isTapped = true)
         return true
     }
 
     override fun onDoubleTap(e: MotionEvent): Boolean {
-        if (SeekState.mode == SeekState.LOCKED) { activity.toggleControls(); return false }
+        if (SeekState.mode == SeekState.LOCKED) { activity.playerControls.toggleControls(); return false }
         if (activity.player.timePos == null || activity.player.duration == null) return false
         when {
             e.x < width * 0.4F && interval != 0 -> if (activity.player.timePos!! > 0) activity.doubleTapSeek(-interval, e) else return false
@@ -60,7 +60,7 @@ class Gestures(
         distanceX: Float,
         distanceY: Float,
     ): Boolean {
-        if (SeekState.mode == SeekState.LOCKED) { activity.toggleControls(); return false }
+        if (SeekState.mode == SeekState.LOCKED) { activity.playerControls.toggleControls(); return false }
         if (e1.y < height * 0.05F || e1.y > height * 0.95F) return false
         val dx = e1.x - e2.x
         val dy = e1.y - e2.y

@@ -30,7 +30,7 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/controlsView"
+        android:id="@+id/unlocked_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#70000000">

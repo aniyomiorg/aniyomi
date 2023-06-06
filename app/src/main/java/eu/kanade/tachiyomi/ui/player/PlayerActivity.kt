@@ -596,8 +596,6 @@ class PlayerActivity :
         playerPreferences.autoplayEnabled().set(isAutoplay)
     }
 
-    fun toggleControls() = playerControls.toggleControls()
-
     private fun showLoadingIndicator(visible: Boolean) {
         viewModel.viewModelScope.launchUI {
             playerControls.binding.playBtn.isVisible = !visible
@@ -717,7 +715,7 @@ class PlayerActivity :
         animationHandler.removeCallbacks(doubleTapPlayPauseRunnable)
         playPause(playerControls.binding.playBtn)
 
-        if (!playerControls.binding.controlsView.isVisible) {
+        if (!playerControls.binding.unlockedView.isVisible) {
             when {
                 player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_64dp) }
                 !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_64dp) }
@@ -738,8 +736,8 @@ class PlayerActivity :
 
     private val doubleTapSeekRunnable = Runnable {
         SeekState.mode = SeekState.NONE
-        binding.secondsView.isVisible = false
-        doubleTapBg.isVisible = false
+        binding.secondsView.visibility = View.GONE
+        doubleTapBg.visibility = View.GONE
         binding.secondsView.seconds = 0
         binding.secondsView.stop()
     }
@@ -752,7 +750,7 @@ class PlayerActivity :
         val y = (event?.y?.toInt() ?: (height / 2)) - v.y.toInt()
 
         SeekState.mode = if (isDoubleTap) SeekState.DOUBLE_TAP else SeekState.NONE
-        binding.secondsView.isVisible = true
+        binding.secondsView.visibility = View.VISIBLE
         animationHandler.removeCallbacks(doubleTapSeekRunnable)
         animationHandler.postDelayed(doubleTapSeekRunnable, 750L)
 
@@ -764,11 +762,11 @@ class PlayerActivity :
             binding.secondsView.isForward = false
 
             if (doubleTapBg != binding.rewBg) {
-                doubleTapBg.isVisible = false
+                doubleTapBg.visibility = View.GONE
                 binding.secondsView.seconds = 0
                 doubleTapBg = binding.rewBg
             }
-            doubleTapBg.isVisible = true
+            doubleTapBg.visibility = View.VISIBLE
 
             binding.secondsView.seconds -= time
         } else {
@@ -779,11 +777,11 @@ class PlayerActivity :
             binding.secondsView.isForward = true
 
             if (doubleTapBg != binding.ffwdBg) {
-                doubleTapBg.isVisible = false
+                doubleTapBg.visibility = View.GONE
                 binding.secondsView.seconds = 0
                 doubleTapBg = binding.ffwdBg
             }
-            doubleTapBg.isVisible = true
+            doubleTapBg.visibility = View.VISIBLE
 
             binding.secondsView.seconds += time
         }
@@ -805,11 +803,11 @@ class PlayerActivity :
         }
 
         if (brightness < 0) {
-            binding.brightnessOverlay.isVisible = true
+            binding.brightnessOverlay.visibility = View.VISIBLE
             val alpha = (abs(brightness) * 256).toInt()
             binding.brightnessOverlay.setBackgroundColor(Color.argb(alpha, 0, 0, 0))
         } else {
-            binding.brightnessOverlay.isVisible = false
+            binding.brightnessOverlay.visibility = View.GONE
         }
         val finalBrightness = (brightness * 100).roundToInt()
         playerControls.binding.brightnessText.text = finalBrightness.toString()
