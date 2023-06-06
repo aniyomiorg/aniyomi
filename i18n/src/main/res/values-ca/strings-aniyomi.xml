@@ -64,7 +64,6 @@
     <string name="action_edit_anime_categories">Editar categories d\'anime</string>
     <string name="action_play_internally">Jugar internament</string>
     <string name="action_start_download_externally">Utilitza descarregador extern</string>
-    <string name="action_display_unseen_badge">Episodis no vistos</string>
     <string name="action_next_episode">Episodi següent</string>
     <string name="action_play">Inici</string>
     <string name="pref_bottom_nav_no_manga">Moure Manga a la pestanya Més</string>
@@ -135,9 +134,7 @@
     <string name="unknown_studio">Estudi desconegut</string>
     <string name="show_episode_number">Número d\'episodi</string>
     <string name="sort_by_episode_number">Per número d\'episodi</string>
-    <string name="download_1_episode">Següent capítol</string>
     <string name="download_5_episodes">Següents 5 capítols</string>
-    <string name="download_10_episodes">Següents 10 capítols</string>
     <string name="download_unseen">No vist</string>
     <string name="also_set_episode_settings_for_library">Aplicar a tots els anime de la meva llibreria</string>
     <string name="no_episodes_error">No s\'han trobat capítols</string>

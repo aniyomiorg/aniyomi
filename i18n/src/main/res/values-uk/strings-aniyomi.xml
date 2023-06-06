@@ -99,7 +99,6 @@
     <string name="action_view_episodes">Переглянути епізоди</string>
     <string name="action_display_download_badge_anime">Завантажені епізоди</string>
     <string name="action_show_anime">Показати аніме</string>
-    <string name="action_display_unseen_badge">Не переглянуті епізоди</string>
     <string name="action_display_show_continue_reading_button">Показати кнопку продовження перегляду/читання</string>
     <string name="action_start_download_externally">Використати зовнішній завантажувач</string>
     <string name="label_watched_episodes">Переглянуто</string>
@@ -155,7 +154,6 @@
     <string name="enable_horizontal_seek_gesture">Ввімкнути жест горизонтального пошуку</string>
     <string name="stats_page">Сторінка статистики</string>
     <string name="player_controls_skip_intro_text">+%1$d с</string>
-    <string name="download_5_episodes">Наступні 5 епізодів</string>
     <string name="label_animehistory">Аніме</string>
     <string name="disable_auto_play">Автовідтворення вимкнено</string>
     <string name="playback_speed_dialog_reset">Скинути</string>
@@ -173,11 +171,9 @@
     <string name="episode_not_found">Епізод не знайдено</string>
     <string name="snack_add_to_anime_library">Додати аніме до бібліотеки\?</string>
     <string name="unknown_studio">Невідома студія</string>
-    <string name="download_1_episode">Наступний епізод</string>
     <string name="download_unseen">Не переглянуто</string>
     <string name="watching">Переглядаю</string>
     <string name="toggle_stats">Перемикання статистики</string>
-    <string name="download_10_episodes">Наступні 10 епізодів</string>
     <string name="notification_new_episodes">Знайдено нові епізоди</string>
     <string name="information_no_recent_anime">Останнім часом нічого не дивилися</string>
     <string name="episode_settings_updated">Оновлено налаштування епізодів за умовчанням</string>

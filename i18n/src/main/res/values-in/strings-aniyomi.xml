@@ -45,7 +45,6 @@
     <string name="action_show_manga">Lihat Manga</string>
     <string name="action_show_anime">Tampilkan anime</string>
     <string name="action_display_download_badge_anime">Episode diunduh</string>
-    <string name="action_display_unseen_badge">Episode belum dilihat</string>
     <string name="action_display_local_badge_manga">Lokal manga</string>
     <string name="action_display_local_badge_anime">Anime lokal</string>
     <string name="action_display_show_continue_reading_button">Tampilkan tombol lanjutkan menonton/membaca</string>
@@ -143,9 +142,7 @@
     <string name="download_paused">Jeda</string>
     <string name="show_episode_number">Nomor episode</string>
     <string name="sort_by_episode_number">Berdasarkan jumlah episode</string>
-    <string name="download_1_episode">Episode selanjutnya</string>
     <string name="download_5_episodes">5 episode selanjutnya</string>
-    <string name="download_10_episodes">10 episode selanjutnya</string>
     <string name="download_unseen">Belum dilihat</string>
     <string name="confirm_delete_episodes">Apa kamu yakin akan menghapus episode yang dipilih\?</string>
     <string name="also_set_chapter_settings_for_library">Juga terapkan untuk semua manga di pustaka saya</string>

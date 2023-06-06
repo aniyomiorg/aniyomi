@@ -45,7 +45,6 @@
     <string name="action_show_manga">Mostrar manga</string>
     <string name="action_show_anime">Mostrar anime</string>
     <string name="action_display_download_badge_anime">Episodios descargados</string>
-    <string name="action_display_unseen_badge">Episodios sin ver</string>
     <string name="action_display_local_badge_manga">Fuente local</string>
     <string name="action_display_local_badge_anime">Anime local</string>
     <string name="action_display_show_continue_reading_button">Mostrar botón de continuar viendo/leyendo</string>
@@ -147,9 +146,7 @@
     <string name="download_paused">Pausado</string>
     <string name="show_episode_number">Número de episodio</string>
     <string name="sort_by_episode_number">Por número de episodio</string>
-    <string name="download_1_episode">Siguiente episodio</string>
     <string name="download_5_episodes">Siguientes 5 episodios</string>
-    <string name="download_10_episodes">Siguientes 10 episodios</string>
     <string name="download_unseen">Sin ver</string>
     <string name="confirm_delete_episodes">¿Seguro que quieres eliminar los episodios seleccionados\?</string>
     <string name="also_set_chapter_settings_for_library">Aplicar también a todo el manga en mi biblioteca</string>
