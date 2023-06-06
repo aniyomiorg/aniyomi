@@ -310,6 +310,33 @@
         <item name="colorPrimaryInverse">@color/yotsuba_primaryInverse</item>
     </style>
 
+    <!--== Cloudflare Theme ==-->
+    <style name="Theme.Tachiyomi.Cloudflare">
+        <!-- Theme Colors -->
+        <item name="colorPrimary">@color/cloudflare_primary</item>
+        <item name="colorOnPrimary">@color/cloudflare_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/cloudflare_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/cloudflare_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/cloudflare_secondary</item>
+        <item name="colorOnSecondary">@color/cloudflare_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/cloudflare_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/cloudflare_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/cloudflare_tertiary</item>
+        <item name="colorOnTertiary">@color/cloudflare_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/cloudflare_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/cloudflare_onTertiaryContainer</item>
+        <item name="android:colorBackground">@color/cloudflare_background</item>
+        <item name="colorOnBackground">@color/cloudflare_onBackground</item>
+        <item name="colorSurface">@color/cloudflare_surface</item>
+        <item name="colorOnSurface">@color/cloudflare_onSurface</item>
+        <item name="colorSurfaceVariant">@color/cloudflare_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/cloudflare_onSurfaceVariant</item>
+        <item name="colorOutline">@color/cloudflare_outline</item>
+        <item name="colorOnSurfaceInverse">@color/cloudflare_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/cloudflare_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/cloudflare_primaryInverse</item>
+    </style>
+
     <!--== Tidal Wave Theme ==-->
     <style name="Theme.Tachiyomi.TidalWave">
         <!-- Theme Colors -->

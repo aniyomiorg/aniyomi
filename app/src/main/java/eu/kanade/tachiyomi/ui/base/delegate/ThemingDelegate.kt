@@ -41,6 +41,9 @@ interface ThemingDelegate {
                 AppTheme.YOTSUBA -> {
                     resIds += R.style.Theme_Tachiyomi_Yotsuba
                 }
+                AppTheme.CLOUDFLARE -> {
+                    resIds += R.style.Theme_Tachiyomi_Cloudflare
+                }
                 AppTheme.TIDAL_WAVE -> {
                     resIds += R.style.Theme_Tachiyomi_TidalWave
                 }
