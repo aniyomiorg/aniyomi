@@ -144,7 +144,6 @@
     <string name="download_paused">Pausiert</string>
     <string name="show_episode_number">Folgennummer</string>
     <string name="sort_by_episode_number">Nach Folgennummer</string>
-    <string name="download_5_episodes">Nächste 5 Folgen</string>
     <string name="download_unseen">Ungesehene</string>
     <string name="confirm_delete_episodes">Bist du sicher, dass du die ausgewählten Folgen löschen willst\?</string>
     <string name="also_set_chapter_settings_for_library">Auch für alle Einträge in meiner Bibliothek anwenden</string>

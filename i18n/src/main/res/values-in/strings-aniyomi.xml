@@ -142,7 +142,6 @@
     <string name="download_paused">Jeda</string>
     <string name="show_episode_number">Nomor episode</string>
     <string name="sort_by_episode_number">Berdasarkan jumlah episode</string>
-    <string name="download_5_episodes">5 episode selanjutnya</string>
     <string name="download_unseen">Belum dilihat</string>
     <string name="confirm_delete_episodes">Apa kamu yakin akan menghapus episode yang dipilih\?</string>
     <string name="also_set_chapter_settings_for_library">Juga terapkan untuk semua manga di pustaka saya</string>

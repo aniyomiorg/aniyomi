@@ -231,7 +231,6 @@
     <string name="delete_downloads_for_anime">Tanggalin ang mga na-download na episode\?</string>
     <string name="episode_downloading_progress">Nagda-download (%d%%)</string>
     <string name="show_episode_number">Bilang ng episode</string>
-    <string name="download_10_episodes">Susunod na 10 (mga) episode</string>
     <string name="confirm_delete_episodes">Sigurado ka bang gusto mong tanggalin ang mga napiling episode\?</string>
     <string name="downloaded_episodes">Mga na-download na episode</string>
     <string name="local_invalid_episode_format">Di-wastong format ng episode</string>
