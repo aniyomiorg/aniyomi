@@ -74,7 +74,8 @@
     <string name="chapters_episodes">Розділи та епізоди</string>
     <string name="action_previous_episode">Попередній епізод</string>
     <string name="episodes">Епізоди</string>
-    <string name="backup_settings_warning">Попередження: Резервна копія налаштувань також збереже ваші паролі до треків, не поширюйте цей файл резервної копії!</string>
+    <string name="backup_settings_warning">Попередження: Резервна копія налаштувань може зберігати конфіденційну інформацію, наприклад, паролі трекера.
+\nНе діліться цим файлом резервної копії!</string>
     <string name="general_categories">Категорії</string>
     <string name="pref_bottom_nav_no_history">Перемістити історію на вкладку Детальніше</string>
     <string name="action_mark_as_unseen">Позначити як не переглянуте</string>
@@ -135,7 +136,7 @@
     <string name="download_ahead_info_anime">Працює лише для епізодів у бібліотеці та якщо поточний і наступний епізоди вже завантажено</string>
     <string name="pref_backup_flags_summ">Яку інформацію включити у файл резервної копії</string>
     <string name="action_global_manga_search">Глобальний пошук манґи</string>
-    <string name="pref_search_pinned_anime_sources_only">Включати лише закріплені джерела аніме</string>
+    <string name="pref_search_pinned_anime_sources_only">У глобальному пошуку шукайте лише закріплені джерела аніме</string>
     <string name="rotation_sensor_portrait">Вертикальне зображення</string>
     <string name="pref_category_volume_brightness">Гучність і яскравість</string>
     <string name="pref_category_player_seeking">Пошук</string>
@@ -196,7 +197,7 @@
     <string name="player_aniskip_dontskip">Не пропускати</string>
     <string name="player_aniskip_skip">%s пропущено</string>
     <string name="label_mangaextensions">Розширення манґи</string>
-    <string name="pref_search_pinned_manga_sources_only">Включати лише закріплені джерела манґи</string>
+    <string name="pref_search_pinned_manga_sources_only">У глобальному пошуку шукайте лише закріплені джерела манґи</string>
     <plurals name="notification_episodes_generic">
         <item quantity="one">1 новий епізод</item>
         <item quantity="few">%1$d нові епізоди</item>
@@ -281,4 +282,15 @@
     <string name="label_animeextensions">Розширення аніме</string>
     <string name="label_migration_manga">Перенести манґу</string>
     <string name="label_migration_anime">Перенести аніме</string>
+    <string name="pref_hide_in_manga_library_items">Приховати записи манґи, які вже є в бібліотеці</string>
+    <string name="pref_hide_in_anime_library_items">Приховати записи про аніме, які вже є в бібліотеці</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one">Наступний епізод</item>
+        <item quantity="few">Наступні %d епізоди</item>
+        <item quantity="many">Наступні %d епізодів</item>
+        <item quantity="other">Наступні %d епізодів</item>
+    </plurals>
+    <string name="copied_video_link_to_clipboard">Скопійоване якісне посилання на відео в буфер обміну</string>
+    <string name="choose_video_quality">Виберіть якість відео:</string>
+    <string name="extension_settings">Налаштування розширення</string>
 </resources>
