@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - master
-      - aniyomi-mpv
+      - dev
     tags:
       - v*
 
