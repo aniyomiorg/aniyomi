@@ -9,12 +9,12 @@ import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
-import eu.kanade.tachiyomi.network.await
+import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
 import eu.kanade.tachiyomi.util.PkceUtil
-import eu.kanade.tachiyomi.util.lang.withIOContext
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.contentOrNull
@@ -29,10 +29,14 @@ import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import tachiyomi.core.util.lang.withIOContext
+import uy.kohesive.injekt.injectLazy
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListInterceptor) {
+
+    private val json: Json by injectLazy()
 
     private val authClient = client.newBuilder().addInterceptor(interceptor).build()
 
@@ -44,9 +48,11 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .add("code_verifier", codeVerifier)
                 .add("grant_type", "authorization_code")
                 .build()
-            client.newCall(POST("$baseOAuthUrl/token", body = formBody))
-                .await()
-                .parseAs()
+            with(json) {
+                client.newCall(POST("$baseOAuthUrl/token", body = formBody))
+                    .awaitSuccess()
+                    .parseAs()
+            }
         }
     }
 
@@ -56,10 +62,12 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .url("$baseApiUrl/users/@me")
                 .get()
                 .build()
-            authClient.newCall(request)
-                .await()
-                .parseAs<JsonObject>()
-                .let { it["name"]!!.jsonPrimitive.content }
+            with(json) {
+                authClient.newCall(request)
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let { it["name"]!!.jsonPrimitive.content }
+            }
         }
     }
 
@@ -70,19 +78,21 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .appendQueryParameter("q", query.take(64))
                 .appendQueryParameter("nsfw", "true")
                 .build()
-            authClient.newCall(GET(url.toString()))
-                .await()
-                .parseAs<JsonObject>()
-                .let {
-                    it["data"]!!.jsonArray
-                        .map { data -> data.jsonObject["node"]!!.jsonObject }
-                        .map { node ->
-                            val id = node["id"]!!.jsonPrimitive.int
-                            async { getMangaDetails(id) }
-                        }
-                        .awaitAll()
-                        .filter { trackSearch -> !trackSearch.publishing_type.contains("novel") }
-                }
+            with(json) {
+                authClient.newCall(GET(url.toString()))
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let {
+                        it["data"]!!.jsonArray
+                            .map { data -> data.jsonObject["node"]!!.jsonObject }
+                            .map { node ->
+                                val id = node["id"]!!.jsonPrimitive.int
+                                async { getMangaDetails(id) }
+                            }
+                            .awaitAll()
+                            .filter { trackSearch -> !trackSearch.publishing_type.contains("novel") }
+                    }
+            }
         }
     }
 
@@ -94,18 +104,20 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .appendQueryParameter("q", query)
                 .appendQueryParameter("nsfw", "true")
                 .build()
-            authClient.newCall(GET(url.toString()))
-                .await()
-                .parseAs<JsonObject>()
-                .let {
-                    it["data"]!!.jsonArray
-                        .map { data -> data.jsonObject["node"]!!.jsonObject }
-                        .map { node ->
-                            val id = node["id"]!!.jsonPrimitive.int
-                            async { getAnimeDetails(id) }
-                        }
-                        .awaitAll()
-                }
+            with(json) {
+                authClient.newCall(GET(url.toString()))
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let {
+                        it["data"]!!.jsonArray
+                            .map { data -> data.jsonObject["node"]!!.jsonObject }
+                            .map { node ->
+                                val id = node["id"]!!.jsonPrimitive.int
+                                async { getAnimeDetails(id) }
+                            }
+                            .awaitAll()
+                    }
+            }
         }
     }
 
@@ -115,28 +127,34 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .appendPath(id.toString())
                 .appendQueryParameter("fields", "id,title,synopsis,num_chapters,main_picture,status,media_type,start_date")
                 .build()
-            authClient.newCall(GET(url.toString()))
-                .await()
-                .parseAs<JsonObject>()
-                .let {
-                    val obj = it.jsonObject
-                    MangaTrackSearch.create(TrackManager.MYANIMELIST).apply {
-                        media_id = obj["id"]!!.jsonPrimitive.long
-                        title = obj["title"]!!.jsonPrimitive.content
-                        summary = obj["synopsis"]?.jsonPrimitive?.content ?: ""
-                        total_chapters = obj["num_chapters"]!!.jsonPrimitive.int
-                        cover_url = obj["main_picture"]?.jsonObject?.get("large")?.jsonPrimitive?.content ?: ""
-                        tracking_url = "https://myanimelist.net/manga/$media_id"
-                        publishing_status = obj["status"]!!.jsonPrimitive.content.replace("_", " ")
-                        publishing_type = obj["media_type"]!!.jsonPrimitive.content.replace("_", " ")
-                        start_date = try {
-                            val outputDf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                            outputDf.format(obj["start_date"]!!)
-                        } catch (e: Exception) {
-                            ""
+            with(json) {
+                authClient.newCall(GET(url.toString()))
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let {
+                        val obj = it.jsonObject
+                        MangaTrackSearch.create(TrackManager.MYANIMELIST).apply {
+                            media_id = obj["id"]!!.jsonPrimitive.long
+                            title = obj["title"]!!.jsonPrimitive.content
+                            summary = obj["synopsis"]?.jsonPrimitive?.content ?: ""
+                            total_chapters = obj["num_chapters"]!!.jsonPrimitive.int
+                            cover_url =
+                                obj["main_picture"]?.jsonObject?.get("large")?.jsonPrimitive?.content
+                                    ?: ""
+                            tracking_url = "https://myanimelist.net/manga/$media_id"
+                            publishing_status =
+                                obj["status"]!!.jsonPrimitive.content.replace("_", " ")
+                            publishing_type =
+                                obj["media_type"]!!.jsonPrimitive.content.replace("_", " ")
+                            start_date = try {
+                                val outputDf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                                outputDf.format(obj["start_date"]!!)
+                            } catch (e: Exception) {
+                                ""
+                            }
                         }
                     }
-                }
+            }
         }
     }
 
@@ -146,28 +164,34 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .appendPath(id.toString())
                 .appendQueryParameter("fields", "id,title,synopsis,num_episodes,main_picture,status,media_type,start_date")
                 .build()
-            authClient.newCall(GET(url.toString()))
-                .await()
-                .parseAs<JsonObject>()
-                .let {
-                    val obj = it.jsonObject
-                    AnimeTrackSearch.create(TrackManager.MYANIMELIST).apply {
-                        media_id = obj["id"]!!.jsonPrimitive.long
-                        title = obj["title"]!!.jsonPrimitive.content
-                        summary = obj["synopsis"]?.jsonPrimitive?.content ?: ""
-                        total_episodes = obj["num_episodes"]!!.jsonPrimitive.int
-                        cover_url = obj["main_picture"]?.jsonObject?.get("large")?.jsonPrimitive?.content ?: ""
-                        tracking_url = "https://myanimelist.net/anime/$media_id"
-                        publishing_status = obj["status"]!!.jsonPrimitive.content.replace("_", " ")
-                        publishing_type = obj["media_type"]!!.jsonPrimitive.content.replace("_", " ")
-                        start_date = try {
-                            val outputDf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                            outputDf.format(obj["start_date"]!!)
-                        } catch (e: Exception) {
-                            ""
+            with(json) {
+                authClient.newCall(GET(url.toString()))
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let {
+                        val obj = it.jsonObject
+                        AnimeTrackSearch.create(TrackManager.MYANIMELIST).apply {
+                            media_id = obj["id"]!!.jsonPrimitive.long
+                            title = obj["title"]!!.jsonPrimitive.content
+                            summary = obj["synopsis"]?.jsonPrimitive?.content ?: ""
+                            total_episodes = obj["num_episodes"]!!.jsonPrimitive.int
+                            cover_url =
+                                obj["main_picture"]?.jsonObject?.get("large")?.jsonPrimitive?.content
+                                    ?: ""
+                            tracking_url = "https://myanimelist.net/anime/$media_id"
+                            publishing_status =
+                                obj["status"]!!.jsonPrimitive.content.replace("_", " ")
+                            publishing_type =
+                                obj["media_type"]!!.jsonPrimitive.content.replace("_", " ")
+                            start_date = try {
+                                val outputDf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                                outputDf.format(obj["start_date"]!!)
+                            } catch (e: Exception) {
+                                ""
+                            }
                         }
                     }
-                }
+            }
         }
     }
 
@@ -189,10 +213,12 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .url(mangaUrl(track.media_id).toString())
                 .put(formBodyBuilder.build())
                 .build()
-            authClient.newCall(request)
-                .await()
-                .parseAs<JsonObject>()
-                .let { parseMangaItem(it, track) }
+            with(json) {
+                authClient.newCall(request)
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let { parseMangaItem(it, track) }
+            }
         }
     }
 
@@ -214,10 +240,12 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .url(animeUrl(track.media_id).toString())
                 .put(formBodyBuilder.build())
                 .build()
-            authClient.newCall(request)
-                .await()
-                .parseAs<JsonObject>()
-                .let { parseAnimeItem(it, track) }
+            with(json) {
+                authClient.newCall(request)
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let { parseAnimeItem(it, track) }
+            }
         }
     }
 
@@ -227,15 +255,17 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .appendPath(track.media_id.toString())
                 .appendQueryParameter("fields", "num_chapters,my_list_status{start_date,finish_date}")
                 .build()
-            authClient.newCall(GET(uri.toString()))
-                .await()
-                .parseAs<JsonObject>()
-                .let { obj ->
-                    track.total_chapters = obj["num_chapters"]!!.jsonPrimitive.int
-                    obj.jsonObject["my_list_status"]?.jsonObject?.let {
-                        parseMangaItem(it, track)
+            with(json) {
+                authClient.newCall(GET(uri.toString()))
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let { obj ->
+                        track.total_chapters = obj["num_chapters"]!!.jsonPrimitive.int
+                        obj.jsonObject["my_list_status"]?.jsonObject?.let {
+                            parseMangaItem(it, track)
+                        }
                     }
-                }
+            }
         }
     }
 
@@ -245,15 +275,17 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .appendPath(track.media_id.toString())
                 .appendQueryParameter("fields", "num_episodes,my_list_status{start_date,finish_date}")
                 .build()
-            authClient.newCall(GET(uri.toString()))
-                .await()
-                .parseAs<JsonObject>()
-                .let { obj ->
-                    track.total_episodes = obj["num_episodes"]!!.jsonPrimitive.int
-                    obj.jsonObject["my_list_status"]?.jsonObject?.let {
-                        parseAnimeItem(it, track)
+            with(json) {
+                authClient.newCall(GET(uri.toString()))
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let { obj ->
+                        track.total_episodes = obj["num_episodes"]!!.jsonPrimitive.int
+                        obj.jsonObject["my_list_status"]?.jsonObject?.let {
+                            parseAnimeItem(it, track)
+                        }
                     }
-                }
+            }
         }
     }
 
@@ -324,9 +356,11 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
                 .url(urlBuilder.build().toString())
                 .get()
                 .build()
-            authClient.newCall(request)
-                .await()
-                .parseAs()
+            with(json) {
+                authClient.newCall(request)
+                    .awaitSuccess()
+                    .parseAs()
+            }
         }
     }
 
@@ -334,7 +368,7 @@ class MyAnimeListApi(private val client: OkHttpClient, interceptor: MyAnimeListI
         val obj = response.jsonObject
         return track.apply {
             val isRereading = obj["is_rereading"]!!.jsonPrimitive.boolean
-            status = if (isRereading) MyAnimeList.REREADING else getStatus(obj["status"]!!.jsonPrimitive.content)
+            status = if (isRereading) MyAnimeList.REREADING else getStatus(obj["status"]?.jsonPrimitive?.content)
             last_chapter_read = obj["num_chapters_read"]!!.jsonPrimitive.float
             score = obj["score"]!!.jsonPrimitive.int.toFloat()
             obj["start_date"]?.let {

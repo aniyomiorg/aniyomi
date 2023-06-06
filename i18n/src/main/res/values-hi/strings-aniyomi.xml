@@ -2,9 +2,9 @@
 <resources>
     <string name="manga_categories">श्रेणियाँ</string>
     <string name="unlock_app">अनलॉक Aniyomi</string>
-    <string name="action_sort_last_manga_update">आखिरी किताब अद्यतन</string>
-    <string name="action_show_manga">मंगा दिखाएँ</string>
-    <string name="action_display_local_badge_manga">स्थानीय पुस्तक</string>
+    <string name="action_sort_last_manga_update">आखिरी आइटम अद्यतन</string>
+    <string name="action_show_manga">आइटम दिखाएँ</string>
+    <string name="action_display_local_badge_manga">स्थानीय स्रोत</string>
     <string name="pref_update_only_completely_read">अपठित अध्याय हैं</string>
     <string name="pref_library_update_show_tab_badge">अपडेट आइकन पर अपठित संख्या दिखाएं</string>
     <string name="default_manga_category">डिफ़ॉल्ट श्रेणी</string>

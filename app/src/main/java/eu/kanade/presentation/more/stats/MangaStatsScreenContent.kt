@@ -13,14 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import eu.kanade.core.util.toDurationString
-import eu.kanade.presentation.components.LazyColumn
 import eu.kanade.presentation.more.stats.components.StatsItem
 import eu.kanade.presentation.more.stats.components.StatsOverviewItem
 import eu.kanade.presentation.more.stats.components.StatsSection
 import eu.kanade.presentation.more.stats.data.StatsData
-import eu.kanade.presentation.util.padding
+import eu.kanade.presentation.util.toDurationString
 import eu.kanade.tachiyomi.R
+import tachiyomi.presentation.core.components.LazyColumn
+import tachiyomi.presentation.core.components.material.padding
 import java.util.Locale
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration

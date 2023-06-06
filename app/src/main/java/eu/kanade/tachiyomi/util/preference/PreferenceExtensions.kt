@@ -1,11 +1,11 @@
 package eu.kanade.tachiyomi.util.preference
 
 import android.widget.CompoundButton
-import eu.kanade.core.prefs.PreferenceMutableState
-import eu.kanade.tachiyomi.core.preference.Preference
+import eu.kanade.core.preference.PreferenceMutableState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
+import tachiyomi.core.preference.Preference
 
 /**
  * Binds a checkbox or switch view with a boolean preference.

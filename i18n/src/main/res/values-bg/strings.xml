@@ -161,9 +161,6 @@
     <string name="sort_by_source">По източник</string>
     <string name="sort_by_number">По ред на главите</string>
     <string name="manga_download">Изтегли</string>
-    <string name="download_1">Следващата глава</string>
-    <string name="download_5">Следващите 5 глави</string>
-    <string name="download_10">Следващите 10 глави</string>
     <string name="download_all">Всички</string>
     <string name="download_unread">Непрочетени</string>
     <string name="confirm_delete_chapters">Сигурни ли сте, че искате да изтриете избраните глави?</string>
@@ -286,8 +283,6 @@
     <string name="manga_removed_library">Премахната от библиотеката</string>
     <string name="copied_to_clipboard">Копирано към клипборда:
 \n%1$s</string>
-    <string name="custom_download">Изтегли определен брой</string>
-    <string name="download_custom">Определен брой</string>
     <string name="migration_dialog_what_to_include">Изберете кои данни ще мигрирате</string>
     <string name="migrate">Мигрирай</string>
     <string name="copy">Копирай</string>
@@ -385,7 +380,6 @@
     <string name="backup_in_progress">Копието вече се запазва</string>
     <string name="restore_duration">%02d мин, %02d сек</string>
     <string name="pref_search_pinned_sources_only">Включвай само закачени източници</string>
-    <string name="pref_enable_automatic_extension_updates">Проверявай за ъпдейти на разширенията</string>
     <string name="webtoon_side_padding_25">25%</string>
     <string name="webtoon_side_padding_20">20%</string>
     <string name="webtoon_side_padding_15">15%</string>
@@ -446,7 +440,6 @@
         <item quantity="one">%d категория</item>
         <item quantity="other">%d категории</item>
     </plurals>
-    <string name="action_display_unread_badge">Непрочетени глави</string>
     <string name="action_migrate">Мигрирай</string>
     <string name="loader_not_implemented_error">Източникът не е намерен</string>
     <string name="page_list_empty_error">Няма намерени страници</string>
@@ -708,9 +701,6 @@
     <string name="empty_screen">Това е неудобно</string>
     <string name="notification_update_skipped">%1$d пропуснати обновление/я</string>
     <string name="cancelled">Отменена</string>
-    <string name="confirm_manga_add_duplicate">Имате заглавие в библиотеката със същото име, но от различен източник (%1$s).
-\n
-\nИскате ли да продължите\?</string>
     <string name="library_errors_help">За помощ при оправянето на грешки с обновленията, виж %1$s</string>
     <string name="theme_tidalwave">Приливна вълна</string>
     <string name="action_sort_unread_count">Брой непрочетени</string>

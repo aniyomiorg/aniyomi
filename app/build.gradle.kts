@@ -1,4 +1,3 @@
-import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 
@@ -8,7 +7,6 @@ plugins {
     kotlin("android")
     kotlin("plugin.serialization")
     id("com.github.zellius.shortcut-helper")
-    id("com.squareup.sqldelight")
 }
 
 if (gradle.startParameter.taskRequests.toString().contains("Standard")) {
@@ -22,15 +20,11 @@ val SUPPORTED_ABIS = setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
 
 android {
     namespace = "eu.kanade.tachiyomi"
-    compileSdk = AndroidConfig.compileSdk
-    ndkVersion = AndroidConfig.ndk
 
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
-        minSdk = AndroidConfig.minSdk
-        targetSdk = AndroidConfig.targetSdk
-        versionCode = 94
-        versionName = "0.14.3"
+        versionCode = 99
+        versionName = "0.14.5"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -142,38 +136,18 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = compose.versions.compiler.get()
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-
-        isCoreLibraryDesugaringEnabled = true
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-
-    sqldelight {
-        database("Database") {
-            packageName = "eu.kanade.tachiyomi"
-            dialect = "sqlite:3.24"
-            sourceFolders = listOf("sqldelight")
-        }
-        database("AnimeDatabase") {
-            packageName = "eu.kanade.tachiyomi.mi"
-            dialect = "sqlite:3.24"
-            sourceFolders = listOf("sqldelightanime")
-        }
-    }
 }
 
 dependencies {
     implementation(project(":i18n"))
     implementation(project(":core"))
+    implementation(project(":core-metadata"))
     implementation(project(":source-api"))
-
-    coreLibraryDesugaring(libs.desugar)
+    implementation(project(":source-local"))
+    implementation(project(":data"))
+    implementation(project(":domain"))
+    implementation(project(":presentation-core"))
+    implementation(project(":presentation-widget"))
 
     // Compose
     implementation(platform(compose.bom))
@@ -187,7 +161,6 @@ dependencies {
     implementation(compose.ui.tooling)
     implementation(compose.ui.util)
     implementation(compose.accompanist.webview)
-    implementation(compose.accompanist.flowlayout)
     implementation(compose.accompanist.permissions)
     implementation(compose.accompanist.themeadapter)
     implementation(compose.accompanist.systemuicontroller)
@@ -196,9 +169,6 @@ dependencies {
     implementation(androidx.paging.compose)
 
     implementation(libs.bundles.sqlite)
-    implementation(libs.sqldelight.android.driver)
-    implementation(libs.sqldelight.coroutines)
-    implementation(libs.sqldelight.android.paging)
 
     implementation(kotlinx.reflect)
 
@@ -215,7 +185,6 @@ dependencies {
     implementation(androidx.splashscreen)
     implementation(androidx.recyclerview)
     implementation(androidx.viewpager)
-    implementation(androidx.glance)
     implementation(androidx.profileinstaller)
 
     implementation(androidx.bundles.lifecycle)
@@ -234,7 +203,7 @@ dependencies {
     // TLS 1.3 support for Android < 10
     implementation(libs.conscrypt.android)
 
-    // Data serialization (JSON, protobuf)
+    // Data serialization (JSON, protobuf, xml)
     implementation(kotlinx.bundles.serialization)
 
     // HTML parser
@@ -258,9 +227,6 @@ dependencies {
     }
     implementation(libs.image.decoder)
 
-    // Sort
-    implementation(libs.natural.comparator)
-
     // UI libraries
     implementation(libs.material)
     implementation(libs.flexible.adapter.core)
@@ -274,7 +240,6 @@ dependencies {
     implementation(libs.aboutLibraries.compose)
     implementation(libs.cascade)
     implementation(libs.bundles.voyager)
-    implementation(libs.wheelpicker)
     implementation(libs.materialmotion.core)
 
     // Logging
@@ -323,13 +288,6 @@ androidComponents {
 }
 
 tasks {
-    withType<Test> {
-        useJUnitPlatform()
-        testLogging {
-            events(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
-        }
-    }
-
     withType<LintTask>().configureEach {
         exclude { it.file.path.contains("generated[\\\\/]".toRegex()) }
     }
@@ -337,6 +295,7 @@ tasks {
     // See https://kotlinlang.org/docs/reference/experimental.html#experimental-status-of-experimental-api(-markers)
     withType<KotlinCompile> {
         kotlinOptions.freeCompilerArgs += listOf(
+            "-Xcontext-receivers",
             "-opt-in=coil.annotation.ExperimentalCoilApi",
             "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi",
             "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
@@ -365,11 +324,6 @@ tasks {
                     project.buildDir.absolutePath + "/compose_metrics"
             )
         }
-    }
-
-    preBuild {
-        val ktlintTask = if (System.getenv("GITHUB_BASE_REF") == null) formatKotlin else lintKotlin
-        dependsOn(ktlintTask)
     }
 }
 

@@ -1,75 +1,57 @@
 package eu.kanade.tachiyomi.data.download.anime.model
 
 import eu.kanade.core.util.asFlow
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadStore
-import eu.kanade.tachiyomi.util.lang.launchNonCancellable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.shareIn
-import rx.Observable
+import kotlinx.coroutines.flow.update
 import rx.subjects.PublishSubject
-import java.util.concurrent.CopyOnWriteArrayList
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.model.Episode
 
 class AnimeDownloadQueue(
     private val store: AnimeDownloadStore,
-    val queue: MutableList<AnimeDownload> = CopyOnWriteArrayList(),
-) : List<AnimeDownload> by queue {
-
-    private val scope = CoroutineScope(Dispatchers.IO)
-
-    private val statusSubject = PublishSubject.create<AnimeDownload>()
+) {
+    private val _state = MutableStateFlow<List<AnimeDownload>>(emptyList())
+    val state = _state.asStateFlow()
 
     private val progressSubject = PublishSubject.create<AnimeDownload>()
 
-    private val _updates: Channel<Unit> = Channel(Channel.UNLIMITED)
-    val updates = _updates.receiveAsFlow()
-        .onStart { emit(Unit) }
-        .map { queue }
-        .shareIn(scope, SharingStarted.Eagerly, 1)
-
     fun addAll(downloads: List<AnimeDownload>) {
-        downloads.forEach { download ->
-            download.statusSubject = statusSubject
-            download.progressSubject = progressSubject
-            download.statusCallback = ::setVideoFor
-            download.progressCallback = ::setProgressFor
-            download.status = AnimeDownload.State.QUEUE
-        }
-        queue.addAll(downloads)
-        store.addAll(downloads)
-        scope.launchNonCancellable {
-            _updates.send(Unit)
+        _state.update {
+            downloads.forEach { download ->
+                download.progressSubject = progressSubject
+                download.progressCallback = ::setProgressFor
+                download.status = AnimeDownload.State.QUEUE
+            }
+            store.addAll(downloads)
+            it + downloads
         }
     }
 
     fun remove(download: AnimeDownload) {
-        val removed = queue.remove(download)
-        store.remove(download)
-        download.statusSubject = null
-        download.progressSubject = null
-        download.statusCallback = null
-        download.progressCallback = null
-        if (download.status == AnimeDownload.State.DOWNLOADING || download.status == AnimeDownload.State.QUEUE) {
-            download.status = AnimeDownload.State.NOT_DOWNLOADED
-        }
-        if (removed) {
-            scope.launchNonCancellable {
-                _updates.send(Unit)
+        _state.update {
+            store.remove(download)
+            download.progressSubject = null
+            download.progressCallback = null
+            if (download.status == AnimeDownload.State.DOWNLOADING || download.status == AnimeDownload.State.QUEUE) {
+                download.status = AnimeDownload.State.NOT_DOWNLOADED
             }
+            it - download
         }
     }
 
     fun remove(episode: Episode) {
-        find { it.episode.id == episode.id }?.let { remove(it) }
+        _state.value.find { it.episode.id == episode.id }?.let { remove(it) }
     }
 
     fun remove(episodes: List<Episode>) {
@@ -77,50 +59,54 @@ class AnimeDownloadQueue(
     }
 
     fun remove(anime: Anime) {
-        filter { it.anime.id == anime.id }.forEach { remove(it) }
+        _state.value.filter { it.anime.id == anime.id }.forEach { remove(it) }
     }
 
     fun clear() {
-        queue.forEach { download ->
-            download.statusSubject = null
-            download.progressSubject = null
-            download.statusCallback = null
-            download.progressCallback = null
-            if (download.status == AnimeDownload.State.DOWNLOADING || download.status == AnimeDownload.State.QUEUE) {
-                download.status = AnimeDownload.State.NOT_DOWNLOADED
+        _state.update {
+            it.forEach { download ->
+                download.progressSubject = null
+                download.progressCallback = null
+                if (download.status == AnimeDownload.State.DOWNLOADING || download.status == AnimeDownload.State.QUEUE) {
+                    download.status = AnimeDownload.State.NOT_DOWNLOADED
+                }
             }
-        }
-        queue.clear()
-        store.clear()
-        scope.launchNonCancellable {
-            _updates.send(Unit)
+            store.clear()
+            emptyList()
         }
     }
 
-    fun statusFlow(): Flow<AnimeDownload> = getStatusObservable().asFlow()
-
-    fun progressFlow(): Flow<AnimeDownload> = getProgressObservable().asFlow()
-
-    private fun getActiveDownloads(): Observable<AnimeDownload> =
-        Observable.from(this).filter { download -> download.status == AnimeDownload.State.DOWNLOADING }
-
-    private fun getStatusObservable(): Observable<AnimeDownload> = statusSubject
-        .startWith(getActiveDownloads())
-        .onBackpressureBuffer()
-
-    private fun getProgressObservable(): Observable<AnimeDownload> {
-        return progressSubject.onBackpressureLatest()
-    }
-
-    private fun setVideoFor(download: AnimeDownload) {
-        if (download.status == AnimeDownload.State.DOWNLOADED || download.status == AnimeDownload.State.ERROR) {
-            setVideoSubject(download.video, null)
+    fun statusFlow(): Flow<AnimeDownload> = state
+        .flatMapLatest { downloads ->
+            downloads
+                .map { download ->
+                    download.statusFlow.drop(1).map { download }
+                }
+                .merge()
         }
-    }
+        .onStart { emitAll(getActiveDownloads()) }
 
-    private fun setVideoSubject(video: Video?, subject: PublishSubject<Video.State>?) {
-        video?.statusSubject = subject
-    }
+    fun progressFlow(): Flow<AnimeDownload> = state
+        .flatMapLatest { downloads ->
+            downloads
+                .map { download ->
+                    download.progressFlow.drop(1).map { download }
+                }
+                .merge()
+        }
+        .onStart { emitAll(getActiveDownloads()) }
+
+    private fun getActiveDownloads(): Flow<AnimeDownload> =
+        _state.value.filter { download -> download.status == AnimeDownload.State.DOWNLOADING }.asFlow()
+
+    fun count(predicate: (AnimeDownload) -> Boolean) = _state.value.count(predicate)
+    fun filter(predicate: (AnimeDownload) -> Boolean) = _state.value.filter(predicate)
+    fun find(predicate: (AnimeDownload) -> Boolean) = _state.value.find(predicate)
+    fun <K> groupBy(keySelector: (AnimeDownload) -> K) = _state.value.groupBy(keySelector)
+    fun isEmpty() = _state.value.isEmpty()
+    fun isNotEmpty() = _state.value.isNotEmpty()
+    fun none(predicate: (AnimeDownload) -> Boolean) = _state.value.none(predicate)
+    fun toMutableList() = _state.value.toMutableList()
 
     private fun setProgressFor(download: AnimeDownload) {
         if (download.status == AnimeDownload.State.DOWNLOADED || download.status == AnimeDownload.State.ERROR) {

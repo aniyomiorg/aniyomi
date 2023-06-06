@@ -20,11 +20,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.history.manga.model.MangaHistoryWithRelations
-import eu.kanade.presentation.components.ItemCover
-import eu.kanade.presentation.util.padding
+import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.lang.toTimestampString
+import tachiyomi.domain.history.manga.model.MangaHistoryWithRelations
+import tachiyomi.presentation.core.components.material.padding
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 

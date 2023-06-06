@@ -1,7 +1,7 @@
 package eu.kanade.domain.download.service
 
-import eu.kanade.tachiyomi.core.preference.PreferenceStore
-import eu.kanade.tachiyomi.core.provider.FolderProvider
+import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.provider.FolderProvider
 
 class DownloadPreferences(
     private val folderProvider: FolderProvider,
@@ -40,4 +40,6 @@ class DownloadPreferences(
 
     fun downloadNewChapterCategoriesExclude() = preferenceStore.getStringSet("download_new_categories_exclude", emptySet())
     fun downloadNewEpisodeCategoriesExclude() = preferenceStore.getStringSet("download_new_anime_categories_exclude", emptySet())
+
+    fun numberOfDownloads() = preferenceStore.getInt("download_slots", 1)
 }

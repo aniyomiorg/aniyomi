@@ -1,8 +1,8 @@
 package eu.kanade.domain.source.anime.interactor
 
-import eu.kanade.domain.source.anime.model.AnimeSourcePagingSourceType
 import eu.kanade.domain.source.anime.repository.AnimeSourceRepository
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
+import tachiyomi.data.source.anime.AnimeSourcePagingSourceType
 
 class GetRemoteAnime(
     private val repository: AnimeSourceRepository,

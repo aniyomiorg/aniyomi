@@ -1,8 +1,8 @@
 package eu.kanade.domain.category.anime.interactor
 
-import eu.kanade.domain.category.anime.repository.AnimeCategoryRepository
-import eu.kanade.domain.library.model.plus
 import eu.kanade.domain.library.service.LibraryPreferences
+import tachiyomi.domain.category.anime.repository.AnimeCategoryRepository
+import tachiyomi.domain.library.model.plus
 
 class ResetAnimeCategoryFlags(
     private val preferences: LibraryPreferences,
@@ -11,7 +11,7 @@ class ResetAnimeCategoryFlags(
 
     suspend fun await() {
         val display = preferences.libraryDisplayMode().get()
-        val sort = preferences.librarySortingMode().get()
+        val sort = preferences.libraryAnimeSortingMode().get()
         categoryRepository.updateAllAnimeCategoryFlags(display + sort.type + sort.direction)
     }
 }

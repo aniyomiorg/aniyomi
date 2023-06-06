@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.data.backup
 import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.preference.PreferenceManager
 import com.hippo.unifile.UniFile
@@ -10,23 +11,15 @@ import data.Manga_sync
 import data.Mangas
 import dataanime.Anime_sync
 import dataanime.Animes
-import eu.kanade.data.handlers.anime.AnimeDatabaseHandler
-import eu.kanade.data.handlers.manga.MangaDatabaseHandler
-import eu.kanade.data.updateStrategyAdapter
 import eu.kanade.domain.backup.service.BackupPreferences
-import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
-import eu.kanade.domain.category.manga.interactor.GetMangaCategories
-import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.entries.anime.interactor.GetAnimeFavorites
-import eu.kanade.domain.entries.manga.interactor.GetMangaFavorites
-import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
-import eu.kanade.domain.history.manga.model.MangaHistoryUpdate
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CATEGORY
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CATEGORY_MASK
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CHAPTER
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CHAPTER_MASK
+import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_EXTENSIONS
+import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_EXTENSIONS_MASK
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_EXT_PREFS
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_EXT_PREFS_MASK
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_HISTORY
@@ -40,6 +33,7 @@ import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeSource
 import eu.kanade.tachiyomi.data.backup.models.BackupCategory
+import eu.kanade.tachiyomi.data.backup.models.BackupExtension
 import eu.kanade.tachiyomi.data.backup.models.BackupExtensionPreferences
 import eu.kanade.tachiyomi.data.backup.models.BackupHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
@@ -63,6 +57,8 @@ import eu.kanade.tachiyomi.data.database.models.anime.Episode
 import eu.kanade.tachiyomi.data.database.models.manga.Chapter
 import eu.kanade.tachiyomi.data.database.models.manga.Manga
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.anime.getPreferenceKey
 import eu.kanade.tachiyomi.source.anime.model.copyFrom
@@ -70,20 +66,31 @@ import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.manga.getPreferenceKey
 import eu.kanade.tachiyomi.source.manga.model.copyFrom
 import eu.kanade.tachiyomi.util.system.hasPermission
-import eu.kanade.tachiyomi.util.system.logcat
-import eu.kanade.tachiyomi.util.system.toLong
 import kotlinx.serialization.protobuf.ProtoBuf
 import logcat.LogPriority
 import okio.buffer
 import okio.gzip
 import okio.sink
+import tachiyomi.core.util.lang.toLong
+import tachiyomi.core.util.system.logcat
+import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
+import tachiyomi.data.handlers.manga.MangaDatabaseHandler
+import tachiyomi.data.updateStrategyAdapter
+import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.domain.category.manga.interactor.GetMangaCategories
+import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.entries.anime.interactor.GetAnimeFavorites
+import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
+import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
+import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 import java.io.FileOutputStream
 import java.util.Date
 import kotlin.math.max
-import eu.kanade.domain.entries.anime.model.Anime as DomainAnime
-import eu.kanade.domain.entries.manga.model.Manga as DomainManga
+import tachiyomi.domain.entries.anime.model.Anime as DomainAnime
+import tachiyomi.domain.entries.manga.model.Manga as DomainManga
 
 class BackupManager(
     private val context: Context,
@@ -130,6 +137,7 @@ class BackupManager(
             backupAnimeExtensionInfo(databaseAnime),
             backupPreferences(prefs, flags),
             backupExtensionPreferences(flags),
+            backupExtensions(flags),
         )
 
         var file: UniFile? = null
@@ -406,6 +414,39 @@ class BackupManager(
             backupPreferences.add(toAdd)
         }
         return backupPreferences
+    }
+
+    @Suppress("DEPRECATION")
+    private fun backupExtensions(flags: Int): List<BackupExtension> {
+        if (flags and BACKUP_EXTENSIONS_MASK != BACKUP_EXTENSIONS) return emptyList()
+        val installedExtensions = mutableListOf<BackupExtension>()
+        Injekt.get<AnimeExtensionManager>().installedExtensionsFlow.value.forEach {
+            val packageName = it.pkgName
+            val apk = File(
+                context.packageManager
+                    .getApplicationInfo(
+                        packageName,
+                        PackageManager.GET_META_DATA,
+                    ).publicSourceDir,
+            ).readBytes()
+            installedExtensions.add(
+                BackupExtension(packageName, apk),
+            )
+        }
+        Injekt.get<MangaExtensionManager>().installedExtensionsFlow.value.forEach {
+            val packageName = it.pkgName
+            val apk = File(
+                context.packageManager
+                    .getApplicationInfo(
+                        packageName,
+                        PackageManager.GET_META_DATA,
+                    ).publicSourceDir,
+            ).readBytes()
+            installedExtensions.add(
+                BackupExtension(packageName, apk),
+            )
+        }
+        return installedExtensions
     }
 
     internal suspend fun restoreExistingManga(manga: Manga, dbManga: Mangas) {

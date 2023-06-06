@@ -1,15 +1,14 @@
 package eu.kanade.tachiyomi
 
 import android.content.Context
-import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import androidx.work.WorkManager
 import eu.kanade.domain.backup.service.BackupPreferences
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.ui.UiPreferences
-import eu.kanade.tachiyomi.core.preference.PreferenceStore
 import eu.kanade.tachiyomi.core.security.SecurityPreferences
 import eu.kanade.tachiyomi.data.backup.BackupCreatorJob
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
@@ -17,9 +16,6 @@ import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
 import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.data.updater.AppUpdateJob
-import eu.kanade.tachiyomi.extension.anime.AnimeExtensionUpdateJob
-import eu.kanade.tachiyomi.extension.manga.MangaExtensionUpdateJob
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -29,7 +25,9 @@ import eu.kanade.tachiyomi.util.preference.minusAssign
 import eu.kanade.tachiyomi.util.preference.plusAssign
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.toast
-import eu.kanade.tachiyomi.widget.ExtendedNavigationView
+import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.preference.getEnum
+import tachiyomi.domain.entries.TriStateFilter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -53,6 +51,7 @@ object Migrations {
         readerPreferences: ReaderPreferences,
         playerPreferences: PlayerPreferences,
         backupPreferences: BackupPreferences,
+        trackManager: TrackManager,
     ): Boolean {
         val lastVersionCode = preferenceStore.getInt("last_version_code", 0)
         val oldVersion = lastVersionCode.get()
@@ -60,11 +59,6 @@ object Migrations {
             lastVersionCode.set(BuildConfig.VERSION_CODE)
 
             // Always set up background tasks to ensure they're running
-            if (BuildConfig.INCLUDE_UPDATER) {
-                AppUpdateJob.setupTask(context)
-            }
-            MangaExtensionUpdateJob.setupTask(context)
-            AnimeExtensionUpdateJob.setupTask(context)
             MangaLibraryUpdateJob.setupTask(context)
             AnimeLibraryUpdateJob.setupTask(context)
             BackupCreatorJob.setupTask(context)
@@ -78,9 +72,6 @@ object Migrations {
 
             if (oldVersion < 14) {
                 // Restore jobs after upgrading to Evernote's job scheduler.
-                if (BuildConfig.INCLUDE_UPDATER) {
-                    AppUpdateJob.setupTask(context)
-                }
                 MangaLibraryUpdateJob.setupTask(context)
             }
             if (oldVersion < 15) {
@@ -111,22 +102,24 @@ object Migrations {
             }
             if (oldVersion < 43) {
                 // Restore jobs after migrating from Evernote's job scheduler to WorkManager.
-                if (BuildConfig.INCLUDE_UPDATER) {
-                    AppUpdateJob.setupTask(context)
-                }
                 MangaLibraryUpdateJob.setupTask(context)
                 BackupCreatorJob.setupTask(context)
-
-                // New extension update check job
-                MangaExtensionUpdateJob.setupTask(context)
             }
             if (oldVersion < 44) {
                 // Reset sorting preference if using removed sort by source
-                val oldSortingMode = prefs.getInt(libraryPreferences.librarySortingMode().key(), 0)
+                val oldMangaSortingMode = prefs.getInt(libraryPreferences.libraryMangaSortingMode().key(), 0)
 
-                if (oldSortingMode == 5) { // SOURCE = 5
+                if (oldMangaSortingMode == 5) { // SOURCE = 5
                     prefs.edit {
-                        putInt(libraryPreferences.librarySortingMode().key(), 0) // ALPHABETICAL = 0
+                        putInt(libraryPreferences.libraryMangaSortingMode().key(), 0) // ALPHABETICAL = 0
+                    }
+                }
+
+                val oldAnimeSortingMode = prefs.getInt(libraryPreferences.libraryAnimeSortingMode().key(), 0)
+
+                if (oldAnimeSortingMode == 5) { // SOURCE = 5
+                    prefs.edit {
+                        putInt(libraryPreferences.libraryAnimeSortingMode().key(), 0) // ALPHABETICAL = 0
                     }
                 }
             }
@@ -135,9 +128,9 @@ object Migrations {
                 fun convertBooleanPrefToTriState(key: String): Int {
                     val oldPrefValue = prefs.getBoolean(key, false)
                     return if (oldPrefValue) {
-                        ExtendedNavigationView.Item.TriStateGroup.State.INCLUDE.value
+                        1
                     } else {
-                        ExtendedNavigationView.Item.TriStateGroup.State.IGNORE.value
+                        0
                     }
                 }
                 prefs.edit {
@@ -178,18 +171,8 @@ object Migrations {
                         putInt("pref_rotation_type_key", 1)
                     }
                 }
-
-                // Disable update check for Android 5.x users
-                if (BuildConfig.INCLUDE_UPDATER && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-                    AppUpdateJob.cancelTask(context)
-                }
             }
             if (oldVersion < 60) {
-                // Re-enable update check that was previously accidentally disabled for M
-                if (BuildConfig.INCLUDE_UPDATER && Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
-                    AppUpdateJob.setupTask(context)
-                }
-
                 // Migrate Rotation and Viewer values to default values for viewer_flags
                 val newOrientation = when (prefs.getInt("pref_rotation_type_key", 1)) {
                     1 -> OrientationType.FREE.flagValue
@@ -225,19 +208,15 @@ object Migrations {
             }
             if (oldVersion < 64) {
                 // Set up background tasks
-                if (BuildConfig.INCLUDE_UPDATER) {
-                    AppUpdateJob.setupTask(context)
-                }
-                MangaExtensionUpdateJob.setupTask(context)
-                AnimeExtensionUpdateJob.setupTask(context)
                 MangaLibraryUpdateJob.setupTask(context)
                 AnimeLibraryUpdateJob.setupTask(context)
             }
             if (oldVersion < 64) {
-                val oldSortingMode = prefs.getInt(libraryPreferences.librarySortingMode().key(), 0)
+                val oldMangaSortingMode = prefs.getInt(libraryPreferences.libraryMangaSortingMode().key(), 0)
+                val oldAnimeSortingMode = prefs.getInt(libraryPreferences.libraryAnimeSortingMode().key(), 0)
                 val oldSortingDirection = prefs.getBoolean("library_sorting_ascending", true)
 
-                val newSortingMode = when (oldSortingMode) {
+                val newMangaSortingMode = when (oldMangaSortingMode) {
                     0 -> "ALPHABETICAL"
                     1 -> "LAST_READ"
                     2 -> "LAST_CHECKED"
@@ -249,18 +228,32 @@ object Migrations {
                     else -> "ALPHABETICAL"
                 }
 
+                val newAnimeSortingMode = when (oldAnimeSortingMode) {
+                    0 -> "ALPHABETICAL"
+                    1 -> "LAST_SEEN"
+                    2 -> "LAST_CHECKED"
+                    3 -> "UNSEEN"
+                    4 -> "TOTAL_EPISODES"
+                    6 -> "LATEST_EPISODE"
+                    8 -> "DATE_FETCHED"
+                    7 -> "DATE_ADDED"
+                    else -> "ALPHABETICAL"
+                }
+
                 val newSortingDirection = when (oldSortingDirection) {
                     true -> "ASCENDING"
                     else -> "DESCENDING"
                 }
 
                 prefs.edit(commit = true) {
-                    remove(libraryPreferences.librarySortingMode().key())
+                    remove(libraryPreferences.libraryMangaSortingMode().key())
+                    remove(libraryPreferences.libraryAnimeSortingMode().key())
                     remove("library_sorting_ascending")
                 }
 
                 prefs.edit {
-                    putString(libraryPreferences.librarySortingMode().key(), newSortingMode)
+                    putString(libraryPreferences.libraryMangaSortingMode().key(), newMangaSortingMode)
+                    putString(libraryPreferences.libraryAnimeSortingMode().key(), newAnimeSortingMode)
                     putString("library_sorting_ascending", newSortingDirection)
                 }
             }
@@ -306,20 +299,29 @@ object Migrations {
             if (oldVersion < 81) {
                 // Handle renamed enum values
                 prefs.edit {
-                    val newSortingMode = when (val oldSortingMode = prefs.getString(libraryPreferences.librarySortingMode().key(), "ALPHABETICAL")) {
+                    val newMangaSortingMode = when (val oldSortingMode = prefs.getString(libraryPreferences.libraryMangaSortingMode().key(), "ALPHABETICAL")) {
                         "LAST_CHECKED" -> "LAST_MANGA_UPDATE"
                         "UNREAD" -> "UNREAD_COUNT"
                         "DATE_FETCHED" -> "CHAPTER_FETCH_DATE"
                         else -> oldSortingMode
                     }
-                    putString(libraryPreferences.librarySortingMode().key(), newSortingMode)
+                    val newAnimeSortingMode = when (val oldSortingMode = prefs.getString(libraryPreferences.libraryAnimeSortingMode().key(), "ALPHABETICAL")) {
+                        "LAST_CHECKED" -> "LAST_MANGA_UPDATE"
+                        "UNREAD" -> "UNREAD_COUNT"
+                        "DATE_FETCHED" -> "CHAPTER_FETCH_DATE"
+                        else -> oldSortingMode
+                    }
+                    putString(libraryPreferences.libraryMangaSortingMode().key(), newMangaSortingMode)
+                    putString(libraryPreferences.libraryAnimeSortingMode().key(), newAnimeSortingMode)
                 }
             }
             if (oldVersion < 82) {
                 prefs.edit {
-                    val sort = prefs.getString(libraryPreferences.librarySortingMode().key(), null) ?: return@edit
+                    val mangasort = prefs.getString(libraryPreferences.libraryMangaSortingMode().key(), null) ?: return@edit
+                    val animesort = prefs.getString(libraryPreferences.libraryAnimeSortingMode().key(), null) ?: return@edit
                     val direction = prefs.getString("library_sorting_ascending", "ASCENDING")!!
-                    putString(libraryPreferences.librarySortingMode().key(), "$sort,$direction")
+                    putString(libraryPreferences.libraryMangaSortingMode().key(), "$mangasort,$direction")
+                    putString(libraryPreferences.libraryAnimeSortingMode().key(), "$animesort,$direction")
                     remove("library_sorting_ascending")
                 }
             }
@@ -403,6 +405,45 @@ object Migrations {
                             trackingQueuePref.edit {
                                 remove(it.key)
                                 putFloat(it.key, lastChapterRead.toFloat())
+                            }
+                        }
+                    }
+                    if (oldVersion < 96) {
+                        MangaLibraryUpdateJob.cancelAllWorks(context)
+                        AnimeLibraryUpdateJob.cancelAllWorks(context)
+                        MangaLibraryUpdateJob.setupTask(context)
+                        AnimeLibraryUpdateJob.setupTask(context)
+                    }
+                    if (oldVersion < 97) {
+                        // Removed background jobs
+                        WorkManager.getInstance(context).cancelAllWorkByTag("UpdateChecker")
+                        WorkManager.getInstance(context).cancelAllWorkByTag("ExtensionUpdate")
+                        prefs.edit {
+                            remove("automatic_ext_updates")
+                        }
+                    }
+                    if (oldVersion < 99) {
+                        val prefKeys = listOf(
+                            "pref_filter_library_downloaded",
+                            "pref_filter_library_unread",
+                            "pref_filter_library_unseen",
+                            "pref_filter_library_started",
+                            "pref_filter_library_bookmarked",
+                            "pref_filter_library_completed",
+                        ) + trackManager.services.map { "pref_filter_library_tracked_${it.id}" }
+
+                        prefKeys.forEach { key ->
+                            val pref = preferenceStore.getInt(key, 0)
+                            prefs.edit {
+                                remove(key)
+
+                                val newValue = when (pref.get()) {
+                                    1 -> TriStateFilter.ENABLED_IS
+                                    2 -> TriStateFilter.ENABLED_NOT
+                                    else -> TriStateFilter.DISABLED
+                                }
+
+                                preferenceStore.getEnum("${key}_v2", TriStateFilter.DISABLED).set(newValue)
                             }
                         }
                     }

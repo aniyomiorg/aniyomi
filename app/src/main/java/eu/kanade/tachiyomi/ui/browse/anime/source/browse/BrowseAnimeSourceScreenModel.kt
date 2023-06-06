@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.ui.browse.anime.source.browse
 
-import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.runtime.Immutable
@@ -10,57 +9,29 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import androidx.paging.map
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.davidea.flexibleadapter.items.IFlexible
-import eu.kanade.core.prefs.CheckboxState
-import eu.kanade.core.prefs.asState
-import eu.kanade.core.prefs.mapAsCheckboxState
-import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
-import eu.kanade.domain.category.anime.interactor.SetAnimeCategories
-import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.entries.anime.interactor.GetAnime
-import eu.kanade.domain.entries.anime.interactor.GetDuplicateLibraryAnime
-import eu.kanade.domain.entries.anime.interactor.NetworkToLocalAnime
+import eu.kanade.core.preference.asState
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.entries.anime.model.toAnimeUpdate
+import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toDomainAnime
-import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
+import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.domain.source.anime.interactor.GetRemoteAnime
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.CheckboxItem
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.CheckboxSectionItem
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.GroupItem
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.HeaderItem
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.SelectItem
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.SelectSectionItem
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.SeparatorItem
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.SortGroup
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.SortItem
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.TextItem
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.TextSectionItem
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.TriStateItem
-import eu.kanade.tachiyomi.ui.browse.anime.source.filter.TriStateSectionItem
-import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.withIOContext
-import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
 import eu.kanade.tachiyomi.util.removeCovers
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
@@ -72,6 +43,22 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.preference.CheckboxState
+import tachiyomi.core.preference.mapAsCheckboxState
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.core.util.lang.withNonCancellableContext
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
+import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.entries.anime.interactor.GetAnime
+import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
+import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.model.toAnimeUpdate
+import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
@@ -80,7 +67,7 @@ import eu.kanade.tachiyomi.animesource.model.AnimeFilter as AnimeSourceModelFilt
 class BrowseAnimeSourceScreenModel(
     private val sourceId: Long,
     listingQuery: String?,
-    private val sourceManager: AnimeSourceManager = Injekt.get(),
+    sourceManager: AnimeSourceManager = Injekt.get(),
     sourcePreferences: SourcePreferences = Injekt.get(),
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
@@ -101,30 +88,27 @@ class BrowseAnimeSourceScreenModel(
 
     var displayMode by sourcePreferences.sourceDisplayMode().asState(coroutineScope)
 
-    val source = sourceManager.get(sourceId) as AnimeCatalogueSource
+    val source = sourceManager.getOrStub(sourceId)
 
     init {
-        mutableState.update {
-            var query: String? = null
-            var listing = it.listing
+        if (source is AnimeCatalogueSource) {
+            mutableState.update {
+                var query: String? = null
+                var listing = it.listing
 
-            if (listing is Listing.Search) {
-                query = listing.query
-                listing = Listing.Search(query, source.getFilterList())
+                if (listing is Listing.Search) {
+                    query = listing.query
+                    listing = Listing.Search(query, source.getFilterList())
+                }
+
+                it.copy(
+                    listing = listing,
+                    filters = source.getFilterList(),
+                    toolbarQuery = query,
+                )
             }
-
-            it.copy(
-                listing = listing,
-                filters = source.getFilterList(),
-                toolbarQuery = query,
-            )
         }
     }
-
-    /**
-     * Sheet containing filter items.
-     */
-    private var filterSheet: AnimeSourceFilterSheet? = null
 
     /**
      * Flow of Pager flow tied to [State.listing]
@@ -136,16 +120,17 @@ class BrowseAnimeSourceScreenModel(
                 PagingConfig(pageSize = 25),
             ) {
                 getRemoteAnime.subscribe(sourceId, listing.query ?: "", listing.filters)
-            }.flow
-                .map { pagingData ->
-                    pagingData.map { sAnime ->
-                        val dbAnime = withIOContext { networkToLocalAnime.await(sAnime.toDomainAnime(sourceId)) }
-                        getAnime.subscribe(dbAnime.url, dbAnime.source)
+            }.flow.map { pagingData ->
+                pagingData
+                    .map { withIOContext { networkToLocalAnime.await(it.toDomainAnime(sourceId)) } }
+                    .filter { !sourcePreferences.hideInAnimeLibraryItems().get() || !it.favorite }
+                    .map {
+                        getAnime.subscribe(it.url, it.source)
                             .filterNotNull()
-                            .onEach { initializeAnime(it) }
+                            .onEach(::initializeAnime)
                             .stateIn(coroutineScope)
                     }
-                }
+            }
                 .cachedIn(coroutineScope)
         }
         .stateIn(coroutineScope, SharingStarted.Lazily, emptyFlow())
@@ -161,6 +146,8 @@ class BrowseAnimeSourceScreenModel(
     }
 
     fun resetFilters() {
+        if (source !is AnimeCatalogueSource) return
+
         mutableState.update { it.copy(filters = source.getFilterList()) }
     }
 
@@ -168,7 +155,19 @@ class BrowseAnimeSourceScreenModel(
         mutableState.update { it.copy(listing = listing) }
     }
 
+    fun setFilters(filters: AnimeFilterList) {
+        if (source !is AnimeCatalogueSource) return
+
+        mutableState.update {
+            it.copy(
+                filters = filters,
+            )
+        }
+    }
+
     fun search(query: String? = null, filters: AnimeFilterList? = null) {
+        if (source !is AnimeCatalogueSource) return
+
         val input = state.value.listing as? Listing.Search
             ?: Listing.Search(query = null, filters = source.getFilterList())
 
@@ -184,6 +183,8 @@ class BrowseAnimeSourceScreenModel(
     }
 
     fun searchGenre(genreName: String) {
+        if (source !is AnimeCatalogueSource) return
+
         val defaultFilters = source.getFilterList()
         var genreExists = false
 
@@ -272,10 +273,6 @@ class BrowseAnimeSourceScreenModel(
         }
     }
 
-    fun getSourceOrStub(anime: Anime): AnimeSource {
-        return sourceManager.getOrStub(anime.source)
-    }
-
     fun addFavorite(anime: Anime) {
         coroutineScope.launch {
             val categories = getCategories()
@@ -346,10 +343,10 @@ class BrowseAnimeSourceScreenModel(
     }
 
     suspend fun getDuplicateAnimelibAnime(anime: Anime): Anime? {
-        return getDuplicateAnimelibAnime.await(anime.title, anime.source)
+        return getDuplicateAnimelibAnime.await(anime.title)
     }
 
-    fun moveAnimeToCategories(anime: Anime, vararg categories: Category) {
+    private fun moveAnimeToCategories(anime: Anime, vararg categories: Category) {
         moveAnimeToCategories(anime, categories.filter { it.id != 0L }.map { it.id })
     }
 
@@ -363,7 +360,7 @@ class BrowseAnimeSourceScreenModel(
     }
 
     fun openFilterSheet() {
-        filterSheet?.show()
+        setDialog(Dialog.Filter)
     }
 
     fun setDialog(dialog: Dialog?) {
@@ -372,23 +369,6 @@ class BrowseAnimeSourceScreenModel(
 
     fun setToolbarQuery(query: String?) {
         mutableState.update { it.copy(toolbarQuery = query) }
-    }
-
-    fun initFilterSheet(context: Context) {
-        if (state.value.filters.isEmpty()) {
-            return
-        }
-
-        filterSheet = AnimeSourceFilterSheet(
-            context = context,
-            onFilterClicked = { search(filters = state.value.filters) },
-            onResetClicked = {
-                resetFilters()
-                filterSheet?.setFilters(state.value.filterItems)
-            },
-        )
-
-        filterSheet?.setFilters(state.value.filterItems)
     }
 
     sealed class Listing(open val query: String?, open val filters: AnimeFilterList) {
@@ -408,6 +388,7 @@ class BrowseAnimeSourceScreenModel(
     }
 
     sealed class Dialog {
+        object Filter : Dialog()
         data class RemoveAnime(val anime: Anime) : Dialog()
         data class AddDuplicateAnime(val anime: Anime, val duplicate: Anime) : Dialog()
         data class ChangeAnimeCategory(
@@ -424,43 +405,6 @@ class BrowseAnimeSourceScreenModel(
         val toolbarQuery: String? = null,
         val dialog: Dialog? = null,
     ) {
-        val filterItems get() = filters.toItems()
         val isUserQuery get() = listing is Listing.Search && !listing.query.isNullOrEmpty()
-    }
-}
-
-private fun AnimeFilterList.toItems(): List<IFlexible<*>> {
-    return mapNotNull { filter ->
-        when (filter) {
-            is AnimeSourceModelFilter.Header -> HeaderItem(filter)
-            is AnimeSourceModelFilter.Separator -> SeparatorItem(filter)
-            is AnimeSourceModelFilter.CheckBox -> CheckboxItem(filter)
-            is AnimeSourceModelFilter.TriState -> TriStateItem(filter)
-            is AnimeSourceModelFilter.Text -> TextItem(filter)
-            is AnimeSourceModelFilter.Select<*> -> SelectItem(filter)
-            is AnimeSourceModelFilter.Group<*> -> {
-                val group = GroupItem(filter)
-                val subItems = filter.state.mapNotNull {
-                    when (it) {
-                        is AnimeSourceModelFilter.CheckBox -> CheckboxSectionItem(it)
-                        is AnimeSourceModelFilter.TriState -> TriStateSectionItem(it)
-                        is AnimeSourceModelFilter.Text -> TextSectionItem(it)
-                        is AnimeSourceModelFilter.Select<*> -> SelectSectionItem(it)
-                        else -> null
-                    }
-                }
-                subItems.forEach { it.header = group }
-                group.subItems = subItems
-                group
-            }
-            is AnimeSourceModelFilter.Sort -> {
-                val group = SortGroup(filter)
-                val subItems = filter.values.map {
-                    SortItem(it, group)
-                }
-                group.subItems = subItems
-                group
-            }
-        }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
+import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstaller
 import eu.kanade.tachiyomi.ui.main.MainActivity
 
@@ -20,7 +21,7 @@ object NotificationHandler {
     internal fun openDownloadManagerPendingActivity(context: Context): PendingIntent {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            action = MainActivity.SHORTCUT_DOWNLOADS
+            action = Constants.SHORTCUT_DOWNLOADS
         }
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
@@ -33,7 +34,7 @@ object NotificationHandler {
     internal fun openAnimeDownloadManagerPendingActivity(context: Context): PendingIntent {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-            action = MainActivity.SHORTCUT_ANIME_DOWNLOADS
+            action = Constants.SHORTCUT_ANIME_DOWNLOADS
         }
         return PendingIntent.getActivity(context, 0, intent, 0)
     }

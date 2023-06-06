@@ -6,24 +6,24 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.Toast
 import eu.kanade.tachiyomi.core.R
-import eu.kanade.tachiyomi.network.NetworkHelper
-import eu.kanade.tachiyomi.util.lang.launchUI
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.setDefaultSettings
 import eu.kanade.tachiyomi.util.system.toast
+import kotlinx.coroutines.DelicateCoroutinesApi
 import okhttp3.Headers
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
-import uy.kohesive.injekt.injectLazy
+import tachiyomi.core.util.lang.launchUI
 import java.util.Locale
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-abstract class WebViewInterceptor(private val context: Context) : Interceptor {
-
-    private val networkHelper: NetworkHelper by injectLazy()
+abstract class WebViewInterceptor(
+    private val context: Context,
+    private val defaultUserAgentProvider: () -> String,
+) : Interceptor {
 
     /**
      * When this is called, it initializes the WebView if it wasn't already. We use this to avoid
@@ -49,6 +49,7 @@ abstract class WebViewInterceptor(private val context: Context) : Interceptor {
 
     abstract fun intercept(chain: Interceptor.Chain, request: Request, response: Response): Response
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val response = chain.proceed(request)
@@ -85,7 +86,7 @@ abstract class WebViewInterceptor(private val context: Context) : Interceptor {
         return WebView(context).apply {
             setDefaultSettings()
             // Avoid sending empty User-Agent, Chromium WebView will reset to default if empty
-            settings.userAgentString = request.header("User-Agent") ?: networkHelper.defaultUserAgent
+            settings.userAgentString = request.header("User-Agent") ?: defaultUserAgentProvider()
         }
     }
 }

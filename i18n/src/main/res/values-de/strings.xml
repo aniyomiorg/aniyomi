@@ -170,9 +170,6 @@
     <string name="sort_by_source">Quelle</string>
     <string name="sort_by_number">Kapitelnummer</string>
     <string name="manga_download">Herunterladen</string>
-    <string name="download_1">Nächstes Kapitel</string>
-    <string name="download_5">Nächste 5 Kapitel</string>
-    <string name="download_10">Nächste 10 Kapitel</string>
     <string name="download_all">Alle</string>
     <string name="download_unread">Ungelesen</string>
     <string name="confirm_delete_chapters">Bist du sicher, dass du die ausgewählten Kapitel löschen willst\?</string>
@@ -252,11 +249,9 @@
     <string name="ext_untrusted">Nicht vertrauenswürdig</string>
     <string name="untrusted_extension">Nicht vertrauenswürdige Erweiterung</string>
     <string name="pref_double_tap_anim_speed">Animationsgeschwindigkeit beim Doppeltippen</string>
-    <string name="custom_download">Benutzerdefinierte Anzahl herunterladen</string>
     <string name="migration_dialog_what_to_include">Wähle zu beinhaltende Daten</string>
     <string name="pager_viewer">Seiten</string>
     <string name="source_not_installed">Quelle nicht installiert: %1$s</string>
-    <string name="download_custom">Benutzerdefiniert</string>
     <string name="repeating">Am Wiederlesen</string>
     <string name="track_status">Status</string>
     <string name="track_start_date">Angefangen</string>
@@ -271,7 +266,7 @@
     <string name="transition_pages_error">Seiten konnten nicht geladen werden: %1$s</string>
     <string name="action_open_in_web_view">In WebView öffnen</string>
     <string name="pref_true_color">32-Bit-Farben</string>
-    <string name="pref_skip_read_chapters">Überspringe gelesene Kapitel</string>
+    <string name="pref_skip_read_chapters">Gelesene Kapitel überspringen</string>
     <string name="pref_read_with_long_tap">Bei langem Antippen anzeigen</string>
     <string name="filter_mode_overlay">Überlagerung</string>
     <string name="filter_mode_multiply">Multiplizieren</string>
@@ -303,7 +298,7 @@
     <string name="theme_dark">An</string>
     <string name="theme_system">Systemeinstellung</string>
     <string name="pref_manage_notifications">Benachrichtigungen verwalten</string>
-    <string name="pref_category_security">Sicherheit</string>
+    <string name="pref_category_security">Sicherheit und Privatsphäre</string>
     <string name="lock_with_biometrics">Entsperren erforderlich</string>
     <string name="lock_when_idle">Während Inaktivität sperren</string>
     <string name="lock_always">Immer</string>
@@ -347,7 +342,6 @@
     <string name="action_oldest">Älteste</string>
     <string name="action_move_to_top">Nach oben verschieben</string>
     <string name="action_move_to_bottom">Nach unten verschieben</string>
-    <string name="pref_enable_automatic_extension_updates">Nach Erweiterungsaktualisierungen suchen</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="one">Erweiterungsaktualisierung verfügbar</item>
         <item quantity="other">%d Erweiterungsaktualisierungen verfügbar</item>
@@ -355,7 +349,7 @@
     <string name="channel_ext_updates">Erweiterungsaktualisierungen</string>
     <string name="http_error_hint">Webseite in WebView prüfen</string>
     <string name="updating_library">Bibliothek wird aktualisiert</string>
-    <string name="pref_skip_filtered_chapters">Überspringe gefilterte Kapitel</string>
+    <string name="pref_skip_filtered_chapters">Gefilterte Kapitel überspringen</string>
     <string name="pref_category_reading">Beim Lesen</string>
     <string name="label_sources">Quellen</string>
     <string name="action_select_inverse">Auswahl umkehren</string>
@@ -394,7 +388,7 @@
         <item quantity="one">%1$s verbleibend</item>
         <item quantity="other">%1$s verbleibend</item>
     </plurals>
-    <string name="pref_search_pinned_sources_only">Nur angeheftete Quellen einbeziehen</string>
+    <string name="pref_search_pinned_sources_only">Nur angeheftete Quellen in der globalen Suche durchsuchen</string>
     <string name="gray_background">Grau</string>
     <string name="viewer">Lesemodus</string>
     <string name="pref_category_for_this_series">Für diese Serie</string>
@@ -408,7 +402,6 @@
         <item quantity="one">Erledigt in %1$s mit %2$s Fehler</item>
         <item quantity="other">Erledigt in %1$s mit %2$s Fehlern</item>
     </plurals>
-    <string name="action_display_unread_badge">Ungelesene Kapitel</string>
     <string name="tracking_info">Einweg-Synchronisation zum Aktualisieren der Kapitelfortschritte in den Trackingdiensten. Richte Tracking für einzelne Einträge über deren jeweiligen Tracking-Button ein.</string>
     <string name="pref_refresh_library_covers">Bibliothekscover aktualisieren</string>
     <string name="unofficial_extension_message">Diese Erweiterung stammt nicht von der offiziellen Tachiyomi-Erweiterungsliste.</string>
@@ -577,7 +570,7 @@
     <string name="pref_low">Niedrig</string>
     <string name="pref_high">Hoch</string>
     <string name="pref_highest">Höchste</string>
-    <string name="pref_hide_threshold">Empfindlichkeit für das Ausblenden des Menüs beim Scrollen</string>
+    <string name="pref_hide_threshold">Empfindlichkeit für das Menü-Ausblenden beim Scrollen</string>
     <string name="pref_inverted_colors">Invertiert</string>
     <string name="pref_relative_time_short">Kurz (Heute, Gestern)</string>
     <string name="pref_relative_format">Relative Zeitstempel</string>
@@ -626,9 +619,6 @@
     <string name="publishing_finished">Veröffentlichung abgeschlossen</string>
     <string name="action_faq_and_guides">Häufige Fragen und Leitfäden</string>
     <string name="webtoon_side_padding_5">5 %</string>
-    <string name="confirm_manga_add_duplicate">In deiner Bibliothek existiert ein Eintrag mit dem gleichen Namen, aber aus einer anderen Quelle (%1$s).
-\n
-\nMöchtest du trotzdem fortfahren\?</string>
     <string name="action_display_cover_only_grid">Nur-Cover-Kacheln</string>
     <string name="pref_landscape_zoom">Bild im Querformat vergrößern</string>
     <string name="pref_navigate_pan">Beim Tippen innerhalb breiter Seiten navigieren</string>
@@ -727,11 +717,23 @@
     <string name="invalid_location">Ungültiger Speicherort: %s</string>
     <string name="error_user_agent_string_invalid">Ungültiger User-Agent-Text</string>
     <string name="updates_last_update_info_just_now">Gerade eben</string>
-    <string name="channel_downloader_cache">Download-Zwischenspeicher</string>
-    <string name="download_notifier_cache_renewal">Downloads werden indiziert</string>
+    <string name="download_notifier_cache_renewal">Downloads werden überprüft</string>
     <string name="action_open_random_manga">Zufälligen Eintrag öffnen</string>
     <string name="information_no_entries_found">Keine Einträge in dieser Kategorie gefunden</string>
     <string name="fdroid_warning">F-Droid-Builds werden nicht offiziell unterstützt.
 \nTippe, um mehr zu erfahren.</string>
     <string name="label_download_queue">Download-Warteschlange</string>
+    <string name="enhanced_services_not_installed">Verfügbar, aber Quelle ist nicht installiert: %s</string>
+    <string name="pref_skip_dupe_chapters">Doppelte Kapitel überspringen</string>
+    <string name="confirm_add_duplicate_manga">In deiner Bibliothek gibt es einen Eintrag mit dem gleichen Namen.
+\n
+\nMöchtest du trotzdem fortfahren\?</string>
+    <string name="track_error">%1$s-Fehler: %2$s</string>
+    <string name="information_required_plain">*erforderlich</string>
+    <string name="pref_hide_in_library_items">Einträge verbergen, die bereits in der Bibliothek sind</string>
+    <plurals name="download_amount">
+        <item quantity="one">Nächstes Kapitel</item>
+        <item quantity="other">Nächste %d Kapitel</item>
+    </plurals>
+    <string name="action_copy_to_clipboard">In die Zwischenablage kopieren</string>
     </resources>

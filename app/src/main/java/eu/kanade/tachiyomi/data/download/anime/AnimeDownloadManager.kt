@@ -1,21 +1,21 @@
 package eu.kanade.tachiyomi.data.download.anime
 
 import android.content.Context
-import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownloadQueue
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
-import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import rx.Observable
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -49,22 +49,18 @@ class AnimeDownloadManager(
     val queue: AnimeDownloadQueue
         get() = downloader.queue
 
-    /**
-     * Tells the downloader to begin downloads.
-     *
-     * @return true if it's started, false otherwise (empty queue).
-     */
-    fun startDownloads(): Boolean {
-        return downloader.start()
-    }
+    // For use by DownloadService only
+    fun downloaderStart() = downloader.start()
+    fun downloaderStop(reason: String? = null) = downloader.stop(reason)
+
+    val isDownloaderRunning
+        get() = AnimeDownloadService.isRunning
 
     /**
-     * Tells the downloader to stop downloads.
-     *
-     * @param reason an optional reason for being stopped, used to notify the user.
+     * Tells the downloader to begin downloads.
      */
-    fun stopDownloads(reason: String? = null) {
-        downloader.stop(reason)
+    fun startDownloads() {
+        AnimeDownloadService.start(context)
     }
 
     /**
@@ -72,15 +68,15 @@ class AnimeDownloadManager(
      */
     fun pauseDownloads() {
         downloader.pause()
+        downloader.stop()
     }
 
     /**
      * Empties the download queue.
-     *
-     * @param isNotification value that determines if status is set (needed for view updates)
      */
-    fun clearQueue(isNotification: Boolean = false) {
-        downloader.clearQueue(isNotification)
+    fun clearQueue() {
+        downloader.clearQueue()
+        downloader.stop()
     }
 
     /**
@@ -102,7 +98,7 @@ class AnimeDownloadManager(
         download?.let { queue.remove(it) }
         queue.add(0, toAdd)
         reorderQueue(queue)
-        if (downloader.isPaused()) {
+        if (!downloader.isRunning) {
             if (AnimeDownloadService.isRunning(context)) {
                 downloader.start()
             } else {
@@ -117,12 +113,12 @@ class AnimeDownloadManager(
      * @param downloads value to set the download queue to
      */
     fun reorderQueue(downloads: List<AnimeDownload>) {
-        if (downloader.queue.queue == downloads) return
+        if (downloader.queue.state == downloads) return
         val wasRunning = downloader.isRunning
 
         if (downloads.isEmpty()) {
-            AnimeDownloadService.stop(context)
-            queue.clear()
+            downloader.clearQueue()
+            downloader.stop()
             return
         }
 
@@ -140,22 +136,11 @@ class AnimeDownloadManager(
      *
      * @param anime the anime of the episodes.
      * @param episodes the list of episodes to enqueue.
-     * @param autoStart whether to start the downloader after enqueing the episodes.
+     * @param autoStart whether to start the downloader after enqueuing the episodes.
+     * @param alt whether to use the alternative downloader
      */
-    fun downloadEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean = true, alt: Boolean = false) {
-        downloader.queueEpisodes(anime, episodes, autoStart, alt)
-    }
-
-    /**
-     * Tells the downloader to enqueue the given list of episodes
-     * using the alternative method of downloading.
-     *
-     * @param anime the anime of the episodes.
-     * @param episodes the list of episodes to enqueue.
-     * @param autoStart whether to start the downloader after enqueing the episodes.
-     */
-    fun downloadEpisodesAlt(anime: Anime, episodes: List<Episode>, autoStart: Boolean = true) {
-        downloader.queueEpisodes(anime, episodes, autoStart, true)
+    fun downloadEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean = true, alt: Boolean = false, video: Video? = null) {
+        downloader.queueEpisodes(anime, episodes, autoStart, alt, video)
     }
 
     /**
@@ -292,7 +277,6 @@ class AnimeDownloadManager(
 
         if (wasRunning) {
             if (queue.isEmpty()) {
-                AnimeDownloadService.stop(context)
                 downloader.stop()
             } else if (queue.isNotEmpty()) {
                 downloader.start()

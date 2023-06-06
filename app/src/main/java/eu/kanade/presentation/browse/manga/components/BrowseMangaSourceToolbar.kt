@@ -3,8 +3,6 @@ package eu.kanade.presentation.browse.manga.components
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material.icons.filled.ViewModule
-import androidx.compose.material.icons.outlined.Help
-import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -13,7 +11,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import eu.kanade.domain.library.model.LibraryDisplayMode
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
 import eu.kanade.presentation.components.AppBarTitle
@@ -21,25 +18,31 @@ import eu.kanade.presentation.components.DropdownMenu
 import eu.kanade.presentation.components.RadioMenuItem
 import eu.kanade.presentation.components.SearchToolbar
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.manga.LocalMangaSource
+import eu.kanade.tachiyomi.source.ConfigurableSource
+import eu.kanade.tachiyomi.source.MangaSource
+import tachiyomi.domain.library.model.LibraryDisplayMode
+import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 @Composable
 fun BrowseMangaSourceToolbar(
     searchQuery: String?,
     onSearchQueryChange: (String?) -> Unit,
-    source: CatalogueSource?,
+    source: MangaSource?,
     displayMode: LibraryDisplayMode,
     onDisplayModeChange: (LibraryDisplayMode) -> Unit,
     navigateUp: () -> Unit,
     onWebViewClick: () -> Unit,
     onHelpClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     onSearch: (String) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
     // Avoid capturing unstable source in actions lambda
     val title = source?.name
     val isLocalSource = source is LocalMangaSource
+    val isConfigurableSource = source is ConfigurableSource
+
+    var selectingDisplayMode by remember { mutableStateOf(false) }
 
     SearchToolbar(
         navigateUp = navigateUp,
@@ -49,29 +52,31 @@ fun BrowseMangaSourceToolbar(
         onSearch = onSearch,
         onClickCloseSearch = navigateUp,
         actions = {
-            var selectingDisplayMode by remember { mutableStateOf(false) }
             AppBarActions(
-                actions = listOf(
+                actions = listOfNotNull(
                     AppBar.Action(
                         title = stringResource(R.string.action_display_mode),
                         icon = if (displayMode == LibraryDisplayMode.List) Icons.Filled.ViewList else Icons.Filled.ViewModule,
                         onClick = { selectingDisplayMode = true },
                     ),
                     if (isLocalSource) {
-                        AppBar.Action(
+                        AppBar.OverflowAction(
                             title = stringResource(R.string.label_help),
-                            icon = Icons.Outlined.Help,
                             onClick = onHelpClick,
                         )
                     } else {
-                        AppBar.Action(
-                            title = stringResource(R.string.action_web_view),
-                            icon = Icons.Outlined.Public,
+                        AppBar.OverflowAction(
+                            title = stringResource(R.string.action_open_in_web_view),
                             onClick = onWebViewClick,
                         )
                     },
+                    AppBar.OverflowAction(
+                        title = stringResource(R.string.action_settings),
+                        onClick = onSettingsClick,
+                    ).takeIf { isConfigurableSource },
                 ),
             )
+
             DropdownMenu(
                 expanded = selectingDisplayMode,
                 onDismissRequest = { selectingDisplayMode = false },

@@ -45,11 +45,13 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import dev.chrisbanes.insetter.applyInsetter
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.orientationType
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.ReaderActivityBinding
+import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderViewModel.SetAsCoverResult.AddToLibraryFirst
@@ -66,16 +68,12 @@ import eu.kanade.tachiyomi.ui.reader.viewer.BaseViewer
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderProgressIndicator
 import eu.kanade.tachiyomi.ui.reader.viewer.pager.R2LPagerViewer
 import eu.kanade.tachiyomi.ui.webview.WebViewActivity
-import eu.kanade.tachiyomi.util.Constants
-import eu.kanade.tachiyomi.util.lang.launchNonCancellable
-import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.preference.toggle
 import eu.kanade.tachiyomi.util.system.applySystemAnimatorScale
 import eu.kanade.tachiyomi.util.system.createReaderThemeContext
 import eu.kanade.tachiyomi.util.system.getThemeColor
 import eu.kanade.tachiyomi.util.system.hasDisplayCutout
 import eu.kanade.tachiyomi.util.system.isNightMode
-import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import eu.kanade.tachiyomi.util.view.copy
@@ -92,6 +90,11 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.lang.launchNonCancellable
+import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.manga.model.Manga
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
 import kotlin.math.max
@@ -121,6 +124,7 @@ class ReaderActivity : BaseActivity() {
     lateinit var binding: ReaderActivityBinding
 
     val viewModel by viewModels<ReaderViewModel>()
+    private var assistUrl: String? = null
 
     val hasCutout by lazy { hasDisplayCutout() }
 
@@ -266,9 +270,7 @@ class ReaderActivity : BaseActivity() {
      */
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBoolean(::menuVisible.name, menuVisible)
-        if (!isChangingConfigurations) {
-            viewModel.onSaveInstanceStateNonConfigurationChange()
-        }
+        viewModel.onSaveInstanceState()
         super.onSaveInstanceState(outState)
     }
 
@@ -300,9 +302,7 @@ class ReaderActivity : BaseActivity() {
 
     override fun onProvideAssistContent(outContent: AssistContent) {
         super.onProvideAssistContent(outContent)
-        viewModel.getChapterUrl()?.let { url ->
-            outContent.webUri = url.toUri()
-        }
+        assistUrl?.let { outContent.webUri = it.toUri() }
     }
 
     /**
@@ -314,6 +314,8 @@ class ReaderActivity : BaseActivity() {
         val isChapterBookmarked = viewModel.getCurrentChapter()?.chapter?.bookmark ?: false
         menu.findItem(R.id.action_bookmark).isVisible = !isChapterBookmarked
         menu.findItem(R.id.action_remove_bookmark).isVisible = isChapterBookmarked
+
+        menu.findItem(R.id.action_open_in_web_view).isVisible = viewModel.getSource() is HttpSource
 
         return true
     }
@@ -402,7 +404,7 @@ class ReaderActivity : BaseActivity() {
             viewModel.manga?.id?.let { id ->
                 startActivity(
                     Intent(this, MainActivity::class.java).apply {
-                        action = MainActivity.SHORTCUT_MANGA
+                        action = Constants.SHORTCUT_MANGA
                         putExtra(Constants.MANGA_EXTRA, id)
                         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     },
@@ -558,15 +560,17 @@ class ReaderActivity : BaseActivity() {
         // Settings sheet
         with(binding.actionSettings) {
             setTooltip(R.string.action_settings)
-            val readerSettingSheetDialog = ReaderSettingsSheet(this@ReaderActivity)
+
+            var readerSettingSheet: ReaderSettingsSheet? = null
+
             setOnClickListener {
-                if (!readerSettingSheetDialog.isShowing()) {
-                    readerSettingSheetDialog.show()
-                }
+                if (readerSettingSheet?.isShowing == true) return@setOnClickListener
+                readerSettingSheet = ReaderSettingsSheet(this@ReaderActivity).apply { show() }
             }
 
             setOnLongClickListener {
-                ReaderSettingsSheet(this@ReaderActivity, showColorFilterSettings = true).show()
+                if (readerSettingSheet?.isShowing == true) return@setOnLongClickListener false
+                readerSettingSheet = ReaderSettingsSheet(this@ReaderActivity, showColorFilterSettings = true).apply { show() }
                 true
             }
         }
@@ -714,10 +718,12 @@ class ReaderActivity : BaseActivity() {
     private fun openChapterInWebview() {
         val manga = viewModel.manga ?: return
         val source = viewModel.getSource() ?: return
-        val url = viewModel.getChapterUrl() ?: return
-
-        val intent = WebViewActivity.newIntent(this, url, source.id, manga.title)
-        startActivity(intent)
+        lifecycleScope.launchIO {
+            viewModel.getChapterUrl()?.let { url ->
+                val intent = WebViewActivity.newIntent(this@ReaderActivity, url, source.id, manga.title)
+                withUIContext { startActivity(intent) }
+            }
+        }
     }
 
     private fun showReadingModeToast(mode: Int) {
@@ -759,6 +765,12 @@ class ReaderActivity : BaseActivity() {
 
         // Invalidate menu to show proper chapter bookmark state
         invalidateOptionsMenu()
+
+        lifecycleScope.launchIO {
+            viewModel.getChapterUrl()?.let { url ->
+                assistUrl = url
+            }
+        }
     }
 
     /**
@@ -791,7 +803,7 @@ class ReaderActivity : BaseActivity() {
      * Moves the viewer to the given page [index]. It does nothing if the viewer is null or the
      * page is not found.
      */
-    fun moveToPageIndex(index: Int) {
+    private fun moveToPageIndex(index: Int) {
         val viewer = viewer ?: return
         val currentChapter = viewModel.getCurrentChapter() ?: return
         val page = currentChapter.pages?.getOrNull(index) ?: return
@@ -860,7 +872,7 @@ class ReaderActivity : BaseActivity() {
      * the viewer is reaching the beginning or end of a chapter or the transition page is active.
      */
     fun requestPreloadChapter(chapter: ReaderChapter) {
-        lifecycleScope.launch { viewModel.preloadChapter(chapter) }
+        lifecycleScope.launchIO { viewModel.preloadChapter(chapter) }
     }
 
     /**
@@ -1018,10 +1030,10 @@ class ReaderActivity : BaseActivity() {
                 .onEach { theme ->
                     binding.readerContainer.setBackgroundResource(
                         when (theme) {
-                            0 -> android.R.color.white
+                            0 -> R.color.md_white_1000
                             2 -> R.color.reader_background_dark
                             3 -> automaticBackgroundColor()
-                            else -> android.R.color.black
+                            else -> R.color.md_black_1000
                         },
                     )
                 }
@@ -1076,7 +1088,7 @@ class ReaderActivity : BaseActivity() {
             return if (baseContext.isNightMode()) {
                 R.color.reader_background_dark
             } else {
-                android.R.color.white
+                R.color.md_white_1000
             }
         }
 

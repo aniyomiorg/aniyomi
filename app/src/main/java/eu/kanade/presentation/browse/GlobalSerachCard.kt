@@ -5,9 +5,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.entries.EntryCover
-import eu.kanade.presentation.components.CommonEntryItemDefaults
-import eu.kanade.presentation.components.EntryComfortableGridItem
+import eu.kanade.presentation.library.CommonEntryItemDefaults
+import eu.kanade.presentation.library.EntryComfortableGridItem
+import tachiyomi.domain.entries.EntryCover
 
 @Composable
 fun GlobalSearchCard(
@@ -17,7 +17,7 @@ fun GlobalSearchCard(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
 ) {
-    Box(modifier = Modifier.width(128.dp)) {
+    Box(modifier = Modifier.width(96.dp)) {
         EntryComfortableGridItem(
             title = title,
             coverData = cover,

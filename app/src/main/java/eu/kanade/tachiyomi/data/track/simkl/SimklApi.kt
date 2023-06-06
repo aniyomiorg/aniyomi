@@ -7,11 +7,11 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
-import eu.kanade.tachiyomi.network.await
+import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.network.parseAs
-import eu.kanade.tachiyomi.util.lang.withIOContext
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.addJsonObject
@@ -31,8 +31,12 @@ import kotlinx.serialization.json.putJsonArray
 import kotlinx.serialization.json.putJsonObject
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
+import tachiyomi.core.util.lang.withIOContext
+import uy.kohesive.injekt.injectLazy
 
 class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) {
+
+    private val json: Json by injectLazy()
 
     private val authClient = client.newBuilder().addInterceptor(interceptor).build()
 
@@ -61,7 +65,7 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         }.toString().toRequestBody(jsonMime)
         authClient.newCall(
             POST("$apiUrl/sync/add-to-list", body = payload),
-        ).await()
+        ).awaitSuccess()
     }
 
     private suspend fun updateRating(track: AnimeTrack, mediaType: String) {
@@ -79,11 +83,11 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         if (track.score == 0F) {
             authClient.newCall(
                 POST("$apiUrl/sync/ratings/remove", body = payload),
-            ).await()
+            ).awaitSuccess()
         } else {
             authClient.newCall(
                 POST("$apiUrl/sync/ratings", body = payload),
-            ).await()
+            ).awaitSuccess()
         }
     }
 
@@ -91,11 +95,11 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
         // first remove
         authClient.newCall(
             POST("$apiUrl/sync/history/remove", body = buildProgressObject(track, false)),
-        ).await()
+        ).awaitSuccess()
         // then add again
         authClient.newCall(
             POST("$apiUrl/sync/history", body = buildProgressObject(track, true)),
-        ).await()
+        ).awaitSuccess()
     }
 
     private fun buildProgressObject(track: AnimeTrack, add: Boolean = true) = buildJsonObject {
@@ -149,14 +153,16 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                 .appendQueryParameter("extended", "full")
                 .appendQueryParameter("client_id", clientId)
                 .build()
-            client.newCall(GET(searchUrl.toString()))
-                .await()
-                .parseAs<JsonArray>()
-                .let { response ->
-                    response.map {
-                        jsonToAnimeSearch(it.jsonObject, type)
+            with(json) {
+                client.newCall(GET(searchUrl.toString()))
+                    .awaitSuccess()
+                    .parseAs<JsonArray>()
+                    .let { response ->
+                        response.map {
+                            jsonToAnimeSearch(it.jsonObject, type)
+                        }
                     }
-                }
+            }
         }
     }
 
@@ -207,12 +213,15 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                     put("simkl", track.media_id)
                 }
             }.toString().toRequestBody(jsonMime)
-            val foundAnime = authClient.newCall(
-                POST("$apiUrl/sync/watched", body = payload),
-            )
-                .await()
-                .parseAs<JsonArray>()
-                .firstOrNull()?.jsonObject ?: return@withIOContext null
+            val foundAnime =
+                with(json) {
+                    authClient.newCall(
+                        POST("$apiUrl/sync/watched", body = payload),
+                    )
+                        .awaitSuccess()
+                        .parseAs<JsonArray>()
+                        .firstOrNull()?.jsonObject ?: return@withIOContext null
+                }
 
             if (foundAnime["result"]?.jsonPrimitive?.booleanOrNull != true) return@withIOContext null
             val lastWatched = foundAnime["last_watched"]?.jsonPrimitive?.contentOrNull ?: return@withIOContext null
@@ -226,36 +235,42 @@ class SimklApi(private val client: OkHttpClient, interceptor: SimklInterceptor) 
                 .build()
 
             val typeName = if (type == "movies") "movie" else "show"
-            val listAnime = authClient.newCall(GET(url.toString()))
-                .await()
-                .parseAs<JsonObject>()[queryType]!!.jsonArray
-                .firstOrNull {
-                    it.jsonObject[typeName]
-                        ?.jsonObject?.get("ids")
-                        ?.jsonObject?.get("simkl")
-                        ?.jsonPrimitive?.long == track.media_id
-                }?.jsonObject ?: return@withIOContext null
-
+            val listAnime =
+                with(json) {
+                    authClient.newCall(GET(url.toString()))
+                        .awaitSuccess()
+                        .parseAs<JsonObject>()[queryType]!!.jsonArray
+                        .firstOrNull {
+                            it.jsonObject[typeName]
+                                ?.jsonObject?.get("ids")
+                                ?.jsonObject?.get("simkl")
+                                ?.jsonPrimitive?.long == track.media_id
+                        }?.jsonObject ?: return@withIOContext null
+                }
             jsonToAnimeTrack(listAnime, typeName, type, status)
         }
     }
 
     fun getCurrentUser(): Int {
         return runBlocking {
-            authClient.newCall(GET("$apiUrl/users/settings"))
-                .await()
-                .parseAs<JsonObject>()
-                .let {
-                    it["account"]!!.jsonObject["id"]!!.jsonPrimitive.int
-                }
+            with(json) {
+                authClient.newCall(GET("$apiUrl/users/settings"))
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let {
+                        it["account"]!!.jsonObject["id"]!!.jsonPrimitive.int
+                    }
+            }
         }
     }
 
     suspend fun accessToken(code: String): OAuth {
         return withIOContext {
-            client.newCall(accessTokenRequest(code))
-                .await()
-                .parseAs()
+            with(json) {
+                client.newCall(accessTokenRequest(code))
+                    .awaitSuccess()
+                    .parseAs()
+            }
         }
     }
 

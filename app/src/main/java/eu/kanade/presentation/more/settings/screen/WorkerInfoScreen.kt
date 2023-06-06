@@ -34,19 +34,19 @@ import androidx.work.WorkQuery
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.presentation.components.LazyColumn
-import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.util.plus
+import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import tachiyomi.presentation.core.components.LazyColumn
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.util.plus
 
-object WorkerInfoScreen : Screen {
+object WorkerInfoScreen : Screen() {
 
     @Composable
     override fun Content() {

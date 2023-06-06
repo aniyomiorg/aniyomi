@@ -12,7 +12,6 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.util.system.acquireWakeLock
 import eu.kanade.tachiyomi.util.system.getParcelableExtraCompat
 import eu.kanade.tachiyomi.util.system.isServiceRunning
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +19,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import logcat.LogPriority
+import tachiyomi.core.util.system.logcat
 
 /**
  * Restores backup.
@@ -44,12 +44,12 @@ class BackupRestoreService : Service() {
          * @param uri path of Uri
          */
         fun start(context: Context, uri: Uri) {
-            if (!isRunning(context)) {
-                val intent = Intent(context, BackupRestoreService::class.java).apply {
-                    putExtra(BackupConst.EXTRA_URI, uri)
-                }
-                ContextCompat.startForegroundService(context, intent)
+            if (isRunning(context)) return
+
+            val intent = Intent(context, BackupRestoreService::class.java).apply {
+                putExtra(BackupConst.EXTRA_URI, uri)
             }
+            ContextCompat.startForegroundService(context, intent)
         }
 
         /**
@@ -74,8 +74,6 @@ class BackupRestoreService : Service() {
     private lateinit var notifier: BackupNotifier
 
     override fun onCreate() {
-        super.onCreate()
-
         scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
         notifier = BackupNotifier(this)
         wakeLock = acquireWakeLock(javaClass.name)
@@ -90,7 +88,6 @@ class BackupRestoreService : Service() {
 
     override fun onDestroy() {
         destroyJob()
-        super.onDestroy()
     }
 
     private fun destroyJob() {

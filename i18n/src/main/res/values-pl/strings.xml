@@ -63,9 +63,6 @@
     <string name="remove_from_library">Usuń z biblioteki</string>
     <string name="display_mode_chapter">Rozdział %1$s</string>
     <string name="manga_download">Pobierz</string>
-    <string name="download_1">Następny rozdział</string>
-    <string name="download_5">5 następnych rozdziałów</string>
-    <string name="download_10">10 następnych rozdziałów</string>
     <string name="download_all">Wszystko</string>
     <string name="download_unread">Pobierz nieprzeczytane</string>
     <string name="confirm_delete_chapters">Czy na pewno chcesz usunąć wybrane rozdziały?</string>
@@ -251,8 +248,6 @@
     <string name="ext_trust">Ufaj</string>
     <string name="ext_untrusted">Niezaufane</string>
     <string name="untrusted_extension">Niezaufane rozszerzenie</string>
-    <string name="custom_download">Pobierz wybraną ilość</string>
-    <string name="download_custom">Własna ilość</string>
     <string name="migration_dialog_what_to_include">Zaznacz dane do zawarcia</string>
     <string name="migrate">Migruj</string>
     <string name="pager_viewer">Widok stron</string>
@@ -302,7 +297,6 @@
     <string name="pref_always_show_chapter_transition">Zawsze pokazuj przejścia rozdziałów</string>
     <string name="vertical_plus_viewer">Pionowo bez przerw</string>
     <string name="pref_skip_filtered_chapters">Pomijaj odfiltrowane rozdziały</string>
-    <string name="pref_enable_automatic_extension_updates">Sprawdzaj aktualizacje rozszerzeń</string>
     <string name="pref_category_display">Wyświetlanie</string>
     <string name="hide_notification_content">Ukryj zawartość powiadomienia</string>
     <string name="lock_when_idle">Zablokuj podczas bezczynności</string>
@@ -319,7 +313,7 @@
     <string name="lock_never">Nigdy</string>
     <string name="lock_always">Zawsze</string>
     <string name="lock_with_biometrics">Wymagaj odblokowania</string>
-    <string name="pref_category_security">Bezpieczeństwo</string>
+    <string name="pref_category_security">Bezpieczeństwo i prywatność</string>
     <string name="pref_manage_notifications">Zarządzaj powiadomieniami</string>
     <string name="theme_system">Systemowy</string>
     <string name="theme_dark">Włącz</string>
@@ -354,7 +348,7 @@
     <string name="restore_in_progress">Kopia zapasowa jest w trakcie przywracania</string>
     <string name="backup_in_progress">Kopia zapasowa jest już w trakcie tworzenia</string>
     <string name="restore_duration">%02d min, %02d s</string>
-    <string name="pref_search_pinned_sources_only">Pokazuj tylko przypięte źródła</string>
+    <string name="pref_search_pinned_sources_only">Wyszukaj tylko w przypiętych źródłach</string>
     <string name="pref_webtoon_side_padding">Marginesy boczne</string>
     <string name="gray_background">Szary</string>
     <string name="pref_true_color_summary">Ogranicza banding, ale może mieć wpływ na wydajność</string>
@@ -413,7 +407,6 @@
         <item quantity="other">Pozostało %1$s</item>
     </plurals>
     <string name="pref_cutout_short">Pokazuj zawartość w strefie odcięcia</string>
-    <string name="action_display_unread_badge">Nieprzeczytane rozdziały</string>
     <string name="action_view_chapters">Przeglądaj rozdziały</string>
     <string name="add_tracking">Dodaj śledzenie</string>
     <string name="battery_optimization_setting_activity_not_found">Niepowodzenie otwarcia ustawień urządzenia</string>
@@ -658,9 +651,6 @@
     <string name="skipped_reason_completed">Pominięto ponieważ seria została ukończona</string>
     <string name="skipped_reason_not_caught_up">Pominięto ponieważ istnieją nieprzeczytane rozdziały</string>
     <string name="action_filter_started">Rozpoczęto</string>
-    <string name="confirm_manga_add_duplicate">W swojej bibliotece posiadasz wpis o tej samej nazwie lecz z innego źródła(%1$s).
-\n
-\nCzy nadal chcesz kontynuować\?</string>
     <string name="channel_skipped">Pominięty</string>
     <string name="notification_update_skipped">%1$d pominięto aktualizację(-e)</string>
     <string name="notification_update_error">%1$d aktualizacja (aktualizacje) nie powiodła się</string>
@@ -734,4 +724,21 @@
     <string name="updates_last_update_info">Biblioteka ostatnio aktualizowana: %1$s</string>
     <string name="remove_manga">Zamierzasz usunąć tę mangę ze swojej biblioteki</string>
 <string name="label_download_queue">Kolejka pobierania</string>
+    <string name="copied_to_clipboard_plain">Skopiowano do schowka</string>
+    <string name="confirm_add_duplicate_manga">Masz w swojej bibliotece pozycję o tej samej nazwie.
+\n
+\nCzy nadal chcesz kontynuować\?</string>
+    <string name="pref_skip_dupe_chapters">Pomiń zduplikowane rozdziały</string>
+    <string name="enhanced_services_not_installed">Dostępne, ale źródło nie jest zainstalowane: %s</string>
+    <string name="pref_worker_info">Informacje o procesach</string>
+    <string name="track_error">Błąd %1$s: %2$s</string>
+    <string name="information_required_plain">*wymagane</string>
+    <string name="pref_hide_in_library_items">Ukryj pozycje znajdujące się już w bibliotece</string>
+    <string name="action_copy_to_clipboard">Kopiuj do schowka</string>
+    <plurals name="download_amount">
+        <item quantity="one">Następny rozdział</item>
+        <item quantity="few">Następne %d rozdziały</item>
+        <item quantity="many">Następne %d rozdziałów</item>
+        <item quantity="other">Następne %d rozdziałów</item>
+    </plurals>
     </resources>

@@ -8,20 +8,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.presentation.browse.GlobalSearchErrorResultItem
 import eu.kanade.presentation.browse.GlobalSearchLoadingResultItem
 import eu.kanade.presentation.browse.GlobalSearchResultItem
 import eu.kanade.presentation.browse.GlobalSearchToolbar
 import eu.kanade.presentation.browse.manga.components.GlobalMangaSearchCardRow
-import eu.kanade.presentation.components.LazyColumn
-import eu.kanade.presentation.components.Scaffold
-import eu.kanade.presentation.util.padding
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.GlobalMangaSearchState
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchItemResult
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.presentation.core.components.LazyColumn
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun GlobalMangaSearchScreen(
@@ -71,16 +71,13 @@ fun GlobalSearchContent(
         contentPadding = contentPadding,
     ) {
         items.forEach { (source, result) ->
-            item {
+            item(key = source.id) {
                 GlobalSearchResultItem(
                     title = source.name,
                     subtitle = LocaleHelper.getDisplayName(source.lang),
                     onClick = { onClickSource(source) },
                 ) {
                     when (result) {
-                        is MangaSearchItemResult.Error -> {
-                            GlobalSearchErrorResultItem(message = result.throwable.message)
-                        }
                         MangaSearchItemResult.Loading -> {
                             GlobalSearchLoadingResultItem()
                         }
@@ -103,6 +100,9 @@ fun GlobalSearchContent(
                                 onClick = onClickItem,
                                 onLongClick = onLongClickItem,
                             )
+                        }
+                        is MangaSearchItemResult.Error -> {
+                            GlobalSearchErrorResultItem(message = result.throwable.message)
                         }
                     }
                 }

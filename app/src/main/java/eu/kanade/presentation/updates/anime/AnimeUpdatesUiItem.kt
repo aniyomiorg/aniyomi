@@ -1,6 +1,7 @@
 package eu.kanade.presentation.updates.anime
 
 import android.text.format.DateUtils
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,20 +34,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.updates.anime.model.AnimeUpdatesWithRelations
-import eu.kanade.presentation.components.EpisodeDownloadAction
-import eu.kanade.presentation.components.EpisodeDownloadIndicator
-import eu.kanade.presentation.components.ItemCover
-import eu.kanade.presentation.components.ListGroupHeader
-import eu.kanade.presentation.util.ReadItemAlpha
-import eu.kanade.presentation.util.padding
-import eu.kanade.presentation.util.selectedBackground
+import eu.kanade.presentation.entries.DotSeparatorText
+import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
+import eu.kanade.presentation.entries.anime.components.EpisodeDownloadIndicator
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.ui.updates.anime.AnimeUpdatesItem
+import tachiyomi.domain.updates.anime.model.AnimeUpdatesWithRelations
+import tachiyomi.presentation.core.components.ListGroupHeader
+import tachiyomi.presentation.core.components.material.ReadItemAlpha
+import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.selectedBackground
 import java.util.Date
+import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.minutes
 
+@OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.animeUpdatesLastUpdatedItem(
     lastUpdated: Long,
 ) {
@@ -77,6 +81,7 @@ fun LazyListScope.animeUpdatesLastUpdatedItem(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.animeUpdatesUiItems(
     uiModels: List<AnimeUpdatesUiModel>,
     selectionMode: Boolean,
@@ -113,6 +118,15 @@ fun LazyListScope.animeUpdatesUiItems(
                     modifier = Modifier.animateItemPlacement(),
                     update = updatesItem.update,
                     selected = updatesItem.selected,
+                    watchProgress = updatesItem.update.lastSecondSeen
+                        .takeIf { !updatesItem.update.seen && it > 0L }
+                        ?.let {
+                            stringResource(
+                                R.string.episode_progress,
+                                formatProgress(it),
+                                formatProgress(updatesItem.update.totalSeconds),
+                            )
+                        },
                     onLongClick = {
                         onUpdateSelected(updatesItem, !updatesItem.selected, true, true)
                     },
@@ -134,11 +148,13 @@ fun LazyListScope.animeUpdatesUiItems(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AnimeUpdatesUiItem(
     modifier: Modifier,
     update: AnimeUpdatesWithRelations,
     selected: Boolean,
+    watchProgress: String?,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onClickCover: (() -> Unit)?,
@@ -148,6 +164,8 @@ fun AnimeUpdatesUiItem(
     downloadProgressProvider: () -> Int,
 ) {
     val haptic = LocalHapticFeedback.current
+    val textAlpha = if (update.seen) ReadItemAlpha else 1f
+
     Row(
         modifier = modifier
             .selectedBackground(selected)
@@ -174,17 +192,6 @@ fun AnimeUpdatesUiItem(
                 .padding(horizontal = MaterialTheme.padding.medium)
                 .weight(1f),
         ) {
-            val bookmark = remember(update.bookmark) { update.bookmark }
-            val seen = remember(update.seen) { update.seen }
-
-            val textAlpha = remember(seen) { if (seen) ReadItemAlpha else 1f }
-
-            val secondaryTextColor = if (bookmark && !seen) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.onSurface
-            }
-
             Text(
                 text = update.animeTitle,
                 maxLines = 1,
@@ -192,9 +199,10 @@ fun AnimeUpdatesUiItem(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.alpha(textAlpha),
             )
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 var textHeight by remember { mutableStateOf(0) }
-                if (bookmark) {
+                if (update.bookmark) {
                     Icon(
                         imageVector = Icons.Filled.Bookmark,
                         contentDescription = stringResource(R.string.action_filter_bookmarked),
@@ -207,20 +215,51 @@ fun AnimeUpdatesUiItem(
                 Text(
                     text = update.episodeName,
                     maxLines = 1,
-                    color = secondaryTextColor,
                     style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     onTextLayout = { textHeight = it.size.height },
-                    modifier = Modifier.alpha(textAlpha),
+                    modifier = Modifier
+                        .weight(weight = 1f, fill = false)
+                        .alpha(textAlpha),
                 )
+                if (watchProgress != null) {
+                    DotSeparatorText()
+                    Text(
+                        text = watchProgress,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.alpha(ReadItemAlpha),
+                    )
+                }
             }
         }
+
         EpisodeDownloadIndicator(
             enabled = onDownloadEpisode != null,
             modifier = Modifier.padding(start = 4.dp),
             downloadStateProvider = downloadStateProvider,
             downloadProgressProvider = downloadProgressProvider,
             onClick = { onDownloadEpisode?.invoke(it) },
+        )
+    }
+}
+
+private fun formatProgress(milliseconds: Long): String {
+    return if (milliseconds > 3600000L) {
+        String.format(
+            "%d:%02d:%02d",
+            TimeUnit.MILLISECONDS.toHours(milliseconds),
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
+        )
+    } else {
+        String.format(
+            "%d:%02d",
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
         )
     }
 }

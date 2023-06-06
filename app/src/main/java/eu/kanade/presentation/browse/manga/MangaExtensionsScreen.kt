@@ -2,10 +2,11 @@ package eu.kanade.presentation.browse.manga
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -32,37 +33,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.flowlayout.FlowRow
 import eu.kanade.presentation.browse.BaseBrowseItem
 import eu.kanade.presentation.browse.manga.components.MangaExtensionIcon
-import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.FastScrollLazyColumn
-import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.PullRefresh
-import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.entries.DotSeparatorNoSpaceText
-import eu.kanade.presentation.theme.header
-import eu.kanade.presentation.util.padding
-import eu.kanade.presentation.util.plus
-import eu.kanade.presentation.util.secondaryItemAlpha
-import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionUiModel
 import eu.kanade.tachiyomi.ui.browse.manga.extension.MangaExtensionsState
-import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import tachiyomi.presentation.core.components.FastScrollLazyColumn
+import tachiyomi.presentation.core.components.material.PullRefresh
+import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.components.material.topSmallPaddingValues
+import tachiyomi.presentation.core.screens.EmptyScreen
+import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.presentation.core.theme.header
+import tachiyomi.presentation.core.util.plus
+import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 fun MangaExtensionScreen(
     state: MangaExtensionsState,
     contentPadding: PaddingValues,
-    searchQuery: String? = null,
+    searchQuery: String?,
     onLongClickItem: (MangaExtension) -> Unit,
     onClickItemCancel: (MangaExtension) -> Unit,
     onInstallExtension: (MangaExtension.Available) -> Unit,
@@ -123,101 +120,81 @@ private fun ExtensionContent(
     onClickUpdateAll: () -> Unit,
 ) {
     var trustState by remember { mutableStateOf<MangaExtension.Untrusted?>(null) }
-    val showMiuiWarning = DeviceUtil.isMiui && !DeviceUtil.isMiuiOptimizationDisabled()
-    val uriHandler = LocalUriHandler.current
 
     FastScrollLazyColumn(
-        contentPadding = if (showMiuiWarning) {
-            contentPadding
-        } else {
-            contentPadding + topSmallPaddingValues
-        },
+        contentPadding = contentPadding + topSmallPaddingValues,
     ) {
-        if (showMiuiWarning) {
-            item {
-                WarningBanner(
-                    textRes = R.string.ext_miui_warning,
-                    modifier = Modifier
-                        .padding(bottom = MaterialTheme.padding.small)
-                        .clickable {
-                            uriHandler.openUri("https://tachiyomi.org/extensions")
-                        },
-                )
-            }
-        }
-
-        items(
-            items = state.items,
-            contentType = {
-                when (it) {
-                    is MangaExtensionUiModel.Header -> "header"
-                    is MangaExtensionUiModel.Item -> "item"
-                }
-            },
-            key = {
-                when (it) {
-                    is MangaExtensionUiModel.Header -> "extensionHeader-${it.hashCode()}"
-                    is MangaExtensionUiModel.Item -> "extension-${it.hashCode()}"
-                }
-            },
-        ) { item ->
-            when (item) {
-                is MangaExtensionUiModel.Header.Resource -> {
-                    val action: @Composable RowScope.() -> Unit =
-                        if (item.textRes == R.string.ext_updates_pending) {
-                            {
-                                Button(onClick = { onClickUpdateAll() }) {
-                                    Text(
-                                        text = stringResource(R.string.ext_update_all),
-                                        style = LocalTextStyle.current.copy(
-                                            color = MaterialTheme.colorScheme.onPrimary,
-                                        ),
-                                    )
-                                }
-                            }
-                        } else {
-                            {}
-                        }
-                    ExtensionHeader(
-                        textRes = item.textRes,
-                        modifier = Modifier.animateItemPlacement(),
-                        action = action,
-                    )
-                }
-                is MangaExtensionUiModel.Header.Text -> {
-                    ExtensionHeader(
-                        text = item.text,
-                        modifier = Modifier.animateItemPlacement(),
-                    )
-                }
-                is MangaExtensionUiModel.Item -> {
-                    ExtensionItem(
-                        modifier = Modifier.animateItemPlacement(),
-                        item = item,
-                        onClickItem = {
-                            when (it) {
-                                is MangaExtension.Available -> onInstallExtension(it)
-                                is MangaExtension.Installed -> onOpenExtension(it)
-                                is MangaExtension.Untrusted -> { trustState = it }
-                            }
-                        },
-                        onLongClickItem = onLongClickItem,
-                        onClickItemCancel = onClickItemCancel,
-                        onClickItemAction = {
-                            when (it) {
-                                is MangaExtension.Available -> onInstallExtension(it)
-                                is MangaExtension.Installed -> {
-                                    if (it.hasUpdate) {
-                                        onUpdateExtension(it)
-                                    } else {
-                                        onOpenExtension(it)
+        state.items.forEach { (header, items) ->
+            item(
+                contentType = "header",
+                key = "extensionHeader-${header.hashCode()}",
+            ) {
+                when (header) {
+                    is MangaExtensionUiModel.Header.Resource -> {
+                        val action: @Composable RowScope.() -> Unit =
+                            if (header.textRes == R.string.ext_updates_pending) {
+                                {
+                                    Button(onClick = { onClickUpdateAll() }) {
+                                        Text(
+                                            text = stringResource(R.string.ext_update_all),
+                                            style = LocalTextStyle.current.copy(
+                                                color = MaterialTheme.colorScheme.onPrimary,
+                                            ),
+                                        )
                                     }
                                 }
-                                is MangaExtension.Untrusted -> { trustState = it }
+                            } else {
+                                {}
                             }
-                        },
-                    )
+                        ExtensionHeader(
+                            textRes = header.textRes,
+                            modifier = Modifier.animateItemPlacement(),
+                            action = action,
+                        )
+                    }
+                    is MangaExtensionUiModel.Header.Text -> {
+                        ExtensionHeader(
+                            text = header.text,
+                            modifier = Modifier.animateItemPlacement(),
+                        )
+                    }
                 }
+            }
+
+            items(
+                items = items,
+                contentType = { "item" },
+                key = { "extension-${it.hashCode()}" },
+            ) { item ->
+                ExtensionItem(
+                    modifier = Modifier.animateItemPlacement(),
+                    item = item,
+                    onClickItem = {
+                        when (it) {
+                            is MangaExtension.Available -> onInstallExtension(it)
+                            is MangaExtension.Installed -> onOpenExtension(it)
+                            is MangaExtension.Untrusted -> { trustState = it }
+                        }
+                    },
+                    onLongClickItem = onLongClickItem,
+                    onClickItemCancel = onClickItemCancel,
+                    onClickItemAction = {
+                        when (it) {
+                            is MangaExtension.Available -> onInstallExtension(it)
+                            is MangaExtension.Installed -> {
+                                if (it.hasUpdate) {
+                                    onUpdateExtension(it)
+                                } else {
+                                    onOpenExtension(it)
+                                }
+                            }
+
+                            is MangaExtension.Untrusted -> {
+                                trustState = it
+                            }
+                        }
+                    },
+                )
             }
         }
     }
@@ -314,7 +291,7 @@ private fun ExtensionItemContent(
         // Won't look good but it's not like we can ellipsize overflowing content
         FlowRow(
             modifier = Modifier.secondaryItemAlpha(),
-            mainAxisSpacing = 4.dp,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             ProvideTextStyle(value = MaterialTheme.typography.bodySmall) {
                 if (extension is MangaExtension.Installed && extension.lang.isNotEmpty()) {

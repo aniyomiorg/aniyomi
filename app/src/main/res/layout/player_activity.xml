@@ -9,7 +9,7 @@
     android:clipChildren="false"
     android:clipToPadding="false"
     tools:context=".ui.player.PlayerActivity"
-    tools:ignore="RtlHardcoded,HardcodedText" >
+    tools:ignore="RtlHardcoded,HardcodedText,ContentDescription" >
 
     <is.xyz.mpv.MPVView
         android:id="@+id/player"
@@ -20,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layoutDirection="ltr">
 
         <ImageView
             android:id="@+id/rew_tap"
@@ -85,7 +86,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toRightOf="@id/mid_bg" />
 
-        <eu.kanade.tachiyomi.ui.player.PlayerControlsView
+        <eu.kanade.tachiyomi.ui.player.viewer.PlayerControlsView
             android:id="@+id/player_controls"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -121,14 +122,14 @@
 
         <ImageView
             android:id="@+id/playPauseView"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_centerInParent="true"
             android:contentDescription="Play/Pause"
             android:background="@drawable/ic_play_pause_bg"
             android:visibility="gone"
             app:tint="?attr/colorOnPrimarySurface"
-            tools:src="@drawable/ic_play_arrow_72dp"
+            tools:src="@drawable/ic_play_arrow_64dp"
             tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -137,12 +138,12 @@
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/loading_indicator"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:layout_centerInParent="true"
             android:indeterminate="true"
             app:indicatorColor="?attr/colorPrimary"
-            app:indicatorSize="65dp"
+            app:indicatorSize="64dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -158,7 +159,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <eu.kanade.tachiyomi.ui.player.DoubleTapSecondsView
+        <eu.kanade.tachiyomi.ui.player.viewer.DoubleTapSecondsView
             android:id="@+id/seconds_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

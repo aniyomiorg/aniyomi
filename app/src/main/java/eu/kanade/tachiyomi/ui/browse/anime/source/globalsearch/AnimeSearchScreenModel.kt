@@ -5,24 +5,28 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.entries.anime.interactor.GetAnime
-import eu.kanade.domain.entries.anime.interactor.NetworkToLocalAnime
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.entries.anime.model.toAnimeUpdate
+import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toDomainAnime
+import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
-import eu.kanade.tachiyomi.util.lang.awaitSingle
-import eu.kanade.tachiyomi.util.lang.withIOContext
-import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority
+import tachiyomi.core.util.lang.awaitSingle
+import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.core.util.lang.withNonCancellableContext
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.anime.interactor.GetAnime
+import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.concurrent.Executors
@@ -133,32 +137,34 @@ abstract class AnimeSearchScreenModel<T>(
         updateItems(initialItems)
 
         coroutineScope.launch {
-            sources.forEach { source ->
-                val page = try {
-                    withContext(coroutineDispatcher) {
-                        source.fetchSearchAnime(1, query, source.getFilterList()).awaitSingle()
-                    }
-                } catch (e: Exception) {
-                    getAndUpdateItems { items ->
-                        val mutableMap = items.toMutableMap()
-                        mutableMap[source] = AnimeSearchItemResult.Error(throwable = e)
-                        mutableMap.toSortedMap(sortComparator(mutableMap))
-                    }
-                    return@forEach
-                }
+            sources
+                .map { source ->
+                    async {
+                        try {
+                            val page = withContext(coroutineDispatcher) {
+                                source.fetchSearchAnime(1, query, source.getFilterList()).awaitSingle()
+                            }
 
-                val titles = page.animes.map {
-                    withIOContext {
-                        networkToLocalAnime.await(it.toDomainAnime(source.id))
-                    }
-                }
+                            val titles = withIOContext {
+                                page.animes.map {
+                                    networkToLocalAnime.await(it.toDomainAnime(source.id))
+                                }
+                            }
 
-                getAndUpdateItems { items ->
-                    val mutableMap = items.toMutableMap()
-                    mutableMap[source] = AnimeSearchItemResult.Success(titles)
-                    mutableMap.toSortedMap(sortComparator(mutableMap))
-                }
-            }
+                            getAndUpdateItems { items ->
+                                val mutableMap = items.toMutableMap()
+                                mutableMap[source] = AnimeSearchItemResult.Success(titles)
+                                mutableMap.toSortedMap(sortComparator(mutableMap))
+                            }
+                        } catch (e: Exception) {
+                            getAndUpdateItems { items ->
+                                val mutableMap = items.toMutableMap()
+                                mutableMap[source] = AnimeSearchItemResult.Error(throwable = e)
+                                mutableMap.toSortedMap(sortComparator(mutableMap))
+                            }
+                        }
+                    }
+                }.awaitAll()
         }
     }
 }

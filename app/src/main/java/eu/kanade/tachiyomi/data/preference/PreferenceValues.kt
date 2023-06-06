@@ -11,12 +11,17 @@ const val MANGA_NON_COMPLETED = "manga_ongoing"
 const val MANGA_HAS_UNREAD = "manga_fully_read"
 const val MANGA_NON_READ = "manga_started"
 
+const val ANIME_NON_COMPLETED = "anime_ongoing"
+const val ANIME_HAS_UNSEEN = "anime_fully_seen"
+const val ANIME_NON_SEEN = "anime_started"
+
 const val FLAG_CATEGORIES = "1"
 const val FLAG_CHAPTERS = "2"
 const val FLAG_HISTORY = "4"
 const val FLAG_TRACK = "8"
 const val FLAG_SETTINGS = "10"
 const val FLAG_EXT_SETTINGS = "20"
+const val FLAG_EXTENSIONS = "40"
 
 /**
  * This class stores the values for the preferences in the application.

@@ -1,8 +1,8 @@
 package eu.kanade.tachiyomi.ui.reader.viewer
 
-import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.tachiyomi.data.database.models.manga.toDomainChapter
 import eu.kanade.tachiyomi.ui.reader.model.ReaderChapter
+import tachiyomi.domain.items.chapter.model.Chapter
 import kotlin.math.floor
 
 private val pattern = Regex("""\d+""")

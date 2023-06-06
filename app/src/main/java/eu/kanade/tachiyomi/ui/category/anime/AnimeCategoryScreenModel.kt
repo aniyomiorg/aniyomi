@@ -5,17 +5,17 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.category.anime.interactor.CreateAnimeCategoryWithName
-import eu.kanade.domain.category.anime.interactor.DeleteAnimeCategory
-import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
-import eu.kanade.domain.category.anime.interactor.RenameAnimeCategory
-import eu.kanade.domain.category.anime.interactor.ReorderAnimeCategory
-import eu.kanade.domain.category.model.Category
 import eu.kanade.tachiyomi.R
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import tachiyomi.domain.category.anime.interactor.DeleteAnimeCategory
+import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.domain.category.anime.interactor.RenameAnimeCategory
+import tachiyomi.domain.category.anime.interactor.ReorderAnimeCategory
+import tachiyomi.domain.category.model.Category
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -28,7 +28,7 @@ class AnimeCategoryScreenModel(
 ) : StateScreenModel<AnimeCategoryScreenState>(AnimeCategoryScreenState.Loading) {
 
     private val _events: Channel<AnimeCategoryEvent> = Channel()
-    val events = _events.consumeAsFlow()
+    val events = _events.receiveAsFlow()
 
     init {
         coroutineScope.launch {
@@ -47,7 +47,6 @@ class AnimeCategoryScreenModel(
         coroutineScope.launch {
             when (createCategoryWithName.await(name)) {
                 is CreateAnimeCategoryWithName.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
-                CreateAnimeCategoryWithName.Result.NameAlreadyExistsError -> _events.send(AnimeCategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }
@@ -84,7 +83,6 @@ class AnimeCategoryScreenModel(
         coroutineScope.launch {
             when (renameCategory.await(category, name)) {
                 is RenameAnimeCategory.Result.InternalError -> _events.send(AnimeCategoryEvent.InternalError)
-                RenameAnimeCategory.Result.NameAlreadyExistsError -> _events.send(AnimeCategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }
@@ -117,7 +115,6 @@ sealed class AnimeCategoryDialog {
 
 sealed class AnimeCategoryEvent {
     sealed class LocalizedMessage(@StringRes val stringRes: Int) : AnimeCategoryEvent()
-    object CategoryWithNameAlreadyExists : LocalizedMessage(R.string.error_category_exists)
     object InternalError : LocalizedMessage(R.string.internal_error)
 }
 

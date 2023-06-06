@@ -10,14 +10,12 @@ import coil.fetch.SourceResult
 import coil.network.HttpException
 import coil.request.Options
 import coil.request.Parameters
-import eu.kanade.domain.entries.anime.model.AnimeCover
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.coil.AnimeCoverFetcher.Companion.USE_CUSTOM_COVER
 import eu.kanade.tachiyomi.data.database.models.anime.Anime
 import eu.kanade.tachiyomi.network.await
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
-import eu.kanade.tachiyomi.util.system.logcat
 import logcat.LogPriority
 import okhttp3.CacheControl
 import okhttp3.Call
@@ -28,9 +26,11 @@ import okio.Path.Companion.toOkioPath
 import okio.Source
 import okio.buffer
 import okio.sink
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.anime.model.AnimeCover
 import uy.kohesive.injekt.injectLazy
 import java.io.File
-import eu.kanade.domain.entries.anime.model.Anime as DomainAnime
+import tachiyomi.domain.entries.anime.model.Anime as DomainAnime
 
 /**
  * A [Fetcher] that fetches cover image for [Anime] object.

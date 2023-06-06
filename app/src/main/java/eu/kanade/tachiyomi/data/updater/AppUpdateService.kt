@@ -15,18 +15,18 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.ProgressListener
 import eu.kanade.tachiyomi.network.await
 import eu.kanade.tachiyomi.network.newCachelessCallWithProgress
-import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.system.acquireWakeLock
 import eu.kanade.tachiyomi.util.system.isServiceRunning
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import logcat.LogPriority
 import okhttp3.Call
 import okhttp3.internal.http2.ErrorCode
 import okhttp3.internal.http2.StreamResetException
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 
@@ -45,8 +45,6 @@ class AppUpdateService : Service() {
     private var runningCall: Call? = null
 
     override fun onCreate() {
-        super.onCreate()
-
         notifier = AppUpdateNotifier(this)
         wakeLock = acquireWakeLock(javaClass.name)
 
@@ -79,7 +77,6 @@ class AppUpdateService : Service() {
 
     override fun onDestroy() {
         destroyJob()
-        super.onDestroy()
     }
 
     private fun destroyJob() {
@@ -166,13 +163,13 @@ class AppUpdateService : Service() {
          * @param url the url to the new update.
          */
         fun start(context: Context, url: String, title: String? = context.getString(R.string.app_name)) {
-            if (!isRunning(context)) {
-                val intent = Intent(context, AppUpdateService::class.java).apply {
-                    putExtra(EXTRA_DOWNLOAD_TITLE, title)
-                    putExtra(EXTRA_DOWNLOAD_URL, url)
-                }
-                ContextCompat.startForegroundService(context, intent)
+            if (isRunning(context)) return
+
+            val intent = Intent(context, AppUpdateService::class.java).apply {
+                putExtra(EXTRA_DOWNLOAD_TITLE, title)
+                putExtra(EXTRA_DOWNLOAD_URL, url)
             }
+            ContextCompat.startForegroundService(context, intent)
         }
 
         /**

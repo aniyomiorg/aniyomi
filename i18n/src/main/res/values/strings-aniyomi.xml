@@ -6,7 +6,7 @@
     <string name="entries">Library entries</string>
     <string name="chapters_episodes">Chapters and episodes</string>
     <string name="episodes">Episodes</string>
-    <string name="backup_settings_warning">Warning: Backing up settings will store your track passwords as well, do not share this backup file!</string>
+    <string name="backup_settings_warning">Warning: Backing up settings might store sensitive information like tracker passwords.\nDo not share this backup file!</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Anime</string>
     <string name="label_anime">Anime</string>
@@ -52,11 +52,12 @@
     <string name="action_show_manga">Show manga</string>
     <string name="action_show_anime">Show anime</string>
     <string name="action_display_download_badge_anime">Downloaded episodes</string>
-    <string name="action_display_unseen_badge">Unseen episodes</string>
     <string name="action_display_local_badge_manga">Local manga</string>
     <string name="action_display_local_badge_anime">Local anime</string>
-    <string name="pref_search_pinned_manga_sources_only">Only include pinned manga sources</string>
-    <string name="pref_search_pinned_anime_sources_only">Only include pinned anime sources</string>
+    <string name="pref_search_pinned_manga_sources_only">Only search pinned manga sources in global search</string>
+    <string name="pref_search_pinned_anime_sources_only">Only search pinned anime sources in global search</string>
+    <string name="pref_hide_in_manga_library_items">Hide manga entries already in library</string>
+    <string name="pref_hide_in_anime_library_items">Hide anime entries already in library</string>
     <string name="action_display_show_continue_reading_button">Show continue watching/reading button</string>
     <string name="action_order_by_episode_number">By episode number</string>
     <string name="action_start_download_externally">Use external downloader</string>
@@ -172,9 +173,10 @@
     <string name="download_paused">Paused</string>
     <string name="show_episode_number">Episode number</string>
     <string name="sort_by_episode_number">By episode number</string>
-    <string name="download_1_episode">Next episode</string>
-    <string name="download_5_episodes">Next 5 episodes</string>
-    <string name="download_10_episodes">Next 10 episodes</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one">Next episode</item>
+        <item quantity="other">Next %d episodes</item>
+    </plurals>
     <string name="download_unseen">Unseen</string>
     <string name="confirm_delete_episodes">Are you sure you want to delete the selected episodes?</string>
     <string name="also_set_chapter_settings_for_library">Also apply to all manga in my library</string>
@@ -285,5 +287,7 @@
     <string name="label_migration_manga">Migrate Manga</string>
     <string name="label_migration_anime">Migrate Anime</string>
     <string name="settings">Settings</string>
+    <string name="copied_video_link_to_clipboard">Copied video quality link to clipboard</string>
+    <string name="choose_video_quality">Choose video quality:</string>
     <string name="extension_settings">Extension settings</string>
 </resources>

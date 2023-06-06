@@ -216,9 +216,6 @@
     <string name="show_chapter_number">章節編號</string>
     <string name="sort_by_source">遵循來源</string>
     <string name="sort_by_number">章節編號</string>
-    <string name="download_1">後 1 章</string>
-    <string name="download_5">後 5 章</string>
-    <string name="download_10">後 10 章</string>
     <string name="completed">已完結</string>
     <string name="score">評分</string>
     <string name="title">標題</string>
@@ -229,8 +226,6 @@
     <string name="file_select_backup">選擇備份檔案</string>
     <string name="information_empty_category">尚無任何類別，輕觸新增按鈕即可建立類別以組織你的書櫃。</string>
     <string name="download_notifier_downloader_title">下載管理員</string>
-    <string name="custom_download">下載自訂範圍</string>
-    <string name="download_custom">自訂範圍</string>
     <string name="download_all">全部</string>
     <string name="download_unread">未讀</string>
     <string name="confirm_set_image_as_cover">要將該圖片設為封面嗎？</string>
@@ -278,7 +273,7 @@
     <string name="third_to_last">倒數第三閱畢的章節</string>
     <string name="fourth_to_last">倒數第四閱畢的章節</string>
     <string name="fifth_to_last">倒數第五閱畢的章節</string>
-    <string name="dropped">不看了</string>
+    <string name="dropped">已拋棄</string>
     <string name="on_hold">擱置中</string>
     <string name="no_results_found">找不到結果</string>
     <string name="migration_selection_prompt">請選擇檔案來源</string>
@@ -314,7 +309,6 @@
     <string name="pref_category_security">隱私</string>
     <string name="hide_notification_content">隱藏通知內容</string>
     <string name="pref_manage_notifications">管理通知設定</string>
-    <string name="pref_enable_automatic_extension_updates">自動檢查擴充套件更新</string>
     <string name="channel_ext_updates">擴充套件更新</string>
     <plurals name="update_check_notification_ext_updates">
         <item quantity="other">%d 個擴充套件可更新</item>
@@ -391,7 +385,6 @@
     <string name="creating_backup_error">備份失敗</string>
     <string name="logout_title">登出 %1$s？</string>
     <string name="badges_header">標記</string>
-    <string name="action_display_unread_badge">未讀章數</string>
     <plurals name="download_queue_summary">
         <item quantity="other">剩餘 %1$s 本</item>
     </plurals>
@@ -513,7 +506,7 @@
     <string name="none">無</string>
     <string name="action_show_errors">輕觸以檢視詳細資訊</string>
     <string name="update_check_eol">不再支援此 Android 版本</string>
-    <string name="clipboard_copy_error">無法複製至剪貼簿</string>
+    <string name="clipboard_copy_error">無法複製到剪貼簿</string>
     <string name="backup_restore_content_full">即將還原備份中的資料。
 \n
 \n隨後請安裝所有遺失的擴充套件並重新登入各歷程平台。</string>
@@ -617,9 +610,6 @@
     <string name="pref_landscape_zoom">縮放橫向圖片</string>
     <string name="pref_navigate_pan">輕觸時移動圖片</string>
     <string name="action_display_cover_only_grid">純封面格狀</string>
-    <string name="confirm_manga_add_duplicate">書櫃中已有一個來自不同來源 (%1$s) 的同名項目。
-\n
-\n你仍欲繼續嗎？</string>
     <string name="action_filter_started">已開始閱讀</string>
     <string name="pref_update_only_started">無已讀的章節</string>
     <string name="skipped_reason_completed">由於叢書連載已完結，因此略過</string>
@@ -714,11 +704,22 @@
     <string name="unknown_title">未知的標題</string>
     <string name="error_user_agent_string_invalid">無效的使用者代理字串</string>
     <string name="updates_last_update_info_just_now">剛剛</string>
-    <string name="channel_downloader_cache">下載快取</string>
     <string name="download_notifier_cache_renewal">正在建立下載索引</string>
     <string name="action_open_random_manga">隨機開卷</string>
     <string name="information_no_entries_found">類別沒有作品</string>
     <string name="fdroid_warning">F-Droid 的組建未被正式支援。
 \n輕觸以瞭解詳情。</string>
 <string name="label_download_queue">下載佇列</string>
+    <string name="pref_skip_dupe_chapters">略過重複的章節</string>
+    <string name="enhanced_services_not_installed">可供使用但來源尚未安裝：%s</string>
+    <string name="confirm_add_duplicate_manga">書櫃中已有同名作品。
+\n
+\n仍要新增嗎？</string>
+    <string name="track_error">%1$s 發生錯誤：%2$s</string>
+    <string name="information_required_plain">*必填</string>
+    <string name="pref_hide_in_library_items">隱藏已在書櫃的作品</string>
+    <string name="action_copy_to_clipboard">複製到剪貼簿</string>
+    <plurals name="download_amount">
+        <item quantity="other">後續 %d 章</item>
+    </plurals>
     </resources>

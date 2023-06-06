@@ -9,34 +9,19 @@ import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.anime.interactor.GetAnime
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.entries.manga.interactor.GetManga
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.items.chapter.interactor.GetChapter
-import eu.kanade.domain.items.chapter.interactor.UpdateChapter
-import eu.kanade.domain.items.chapter.model.Chapter
-import eu.kanade.domain.items.chapter.model.toChapterUpdate
-import eu.kanade.domain.items.episode.interactor.GetEpisode
-import eu.kanade.domain.items.episode.interactor.UpdateEpisode
-import eu.kanade.domain.items.episode.model.Episode
-import eu.kanade.domain.items.episode.model.toEpisodeUpdate
 import eu.kanade.tachiyomi.R
+import eu.kanade.tachiyomi.core.Constants
 import eu.kanade.tachiyomi.data.backup.BackupRestoreService
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
-import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadService
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.data.download.manga.MangaDownloadService
-import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateService
-import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateService
+import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateJob
+import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateJob
 import eu.kanade.tachiyomi.data.updater.AppUpdateService
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
-import eu.kanade.tachiyomi.util.Constants
-import eu.kanade.tachiyomi.util.lang.launchIO
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.getParcelableExtraCompat
@@ -44,6 +29,19 @@ import eu.kanade.tachiyomi.util.system.notificationManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.runBlocking
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.domain.entries.anime.interactor.GetAnime
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.manga.interactor.GetManga
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.interactor.GetChapter
+import tachiyomi.domain.items.chapter.interactor.UpdateChapter
+import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.chapter.model.toChapterUpdate
+import tachiyomi.domain.items.episode.interactor.GetEpisode
+import tachiyomi.domain.items.episode.interactor.UpdateEpisode
+import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.items.episode.model.toEpisodeUpdate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -71,22 +69,16 @@ class NotificationReceiver : BroadcastReceiver() {
             // Dismiss notification
             ACTION_DISMISS_NOTIFICATION -> dismissNotification(context, intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1))
             // Resume the download service
-            ACTION_RESUME_DOWNLOADS -> MangaDownloadService.start(context)
+            ACTION_RESUME_DOWNLOADS -> mangaDownloadManager.startDownloads()
             // Pause the download service
-            ACTION_PAUSE_DOWNLOADS -> {
-                MangaDownloadService.stop(context)
-                mangaDownloadManager.pauseDownloads()
-            }
+            ACTION_PAUSE_DOWNLOADS -> mangaDownloadManager.pauseDownloads()
             // Clear the download queue
-            ACTION_CLEAR_DOWNLOADS -> mangaDownloadManager.clearQueue(true)
-            ACTION_RESUME_ANIME_DOWNLOADS -> AnimeDownloadService.start(context)
+            ACTION_CLEAR_DOWNLOADS -> mangaDownloadManager.clearQueue()
+            ACTION_RESUME_ANIME_DOWNLOADS -> animeDownloadManager.startDownloads()
             // Pause the download service
-            ACTION_PAUSE_ANIME_DOWNLOADS -> {
-                AnimeDownloadService.stop(context)
-                animeDownloadManager.pauseDownloads()
-            }
+            ACTION_PAUSE_ANIME_DOWNLOADS -> animeDownloadManager.pauseDownloads()
             // Clear the download queue
-            ACTION_CLEAR_ANIME_DOWNLOADS -> animeDownloadManager.clearQueue(true)
+            ACTION_CLEAR_ANIME_DOWNLOADS -> animeDownloadManager.clearQueue()
             // Launch share activity and dismiss notification
             ACTION_SHARE_IMAGE ->
                 shareImage(
@@ -114,8 +106,8 @@ class NotificationReceiver : BroadcastReceiver() {
                 intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1),
             )
             // Cancel library update and dismiss notification
-            ACTION_CANCEL_LIBRARY_UPDATE -> cancelLibraryUpdate(context, Notifications.ID_LIBRARY_PROGRESS)
-            ACTION_CANCEL_ANIMELIB_UPDATE -> cancelAnimelibUpdate(context, Notifications.ID_LIBRARY_PROGRESS)
+            ACTION_CANCEL_LIBRARY_UPDATE -> cancelLibraryUpdate(context)
+            ACTION_CANCEL_ANIMELIB_UPDATE -> cancelAnimelibUpdate(context)
             // Cancel downloading app update
             ACTION_CANCEL_APP_UPDATE_DOWNLOAD -> cancelDownloadAppUpdate(context)
             // Open reader activity
@@ -298,11 +290,9 @@ class NotificationReceiver : BroadcastReceiver() {
      * Method called when user wants to stop a library update
      *
      * @param context context of application
-     * @param notificationId id of notification
      */
-    private fun cancelLibraryUpdate(context: Context, notificationId: Int) {
-        MangaLibraryUpdateService.stop(context)
-        ContextCompat.getMainExecutor(context).execute { dismissNotification(context, notificationId) }
+    private fun cancelLibraryUpdate(context: Context) {
+        MangaLibraryUpdateJob.stop(context)
     }
 
     private fun cancelDownloadAppUpdate(context: Context) {
@@ -315,9 +305,8 @@ class NotificationReceiver : BroadcastReceiver() {
      * @param context context of application
      * @param notificationId id of notification
      */
-    private fun cancelAnimelibUpdate(context: Context, notificationId: Int) {
-        AnimeLibraryUpdateService.stop(context)
-        ContextCompat.getMainExecutor(context).execute { dismissNotification(context, notificationId) }
+    private fun cancelAnimelibUpdate(context: Context) {
+        AnimeLibraryUpdateJob.stop(context)
     }
 
     /**
@@ -633,7 +622,7 @@ class NotificationReceiver : BroadcastReceiver() {
          */
         internal fun openEpisodePendingActivity(context: Context, anime: Anime, groupId: Int): PendingIntent {
             val newIntent =
-                Intent(context, MainActivity::class.java).setAction(MainActivity.SHORTCUT_ANIME)
+                Intent(context, MainActivity::class.java).setAction(Constants.SHORTCUT_ANIME)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(Constants.ANIME_EXTRA, anime.id)
                     .putExtra("notificationId", anime.id.hashCode())
@@ -683,7 +672,7 @@ class NotificationReceiver : BroadcastReceiver() {
          */
         internal fun openChapterPendingActivity(context: Context, manga: Manga, groupId: Int): PendingIntent {
             val newIntent =
-                Intent(context, MainActivity::class.java).setAction(MainActivity.SHORTCUT_MANGA)
+                Intent(context, MainActivity::class.java).setAction(Constants.SHORTCUT_MANGA)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(Constants.MANGA_EXTRA, manga.id)
                     .putExtra("notificationId", manga.id.hashCode())
@@ -801,7 +790,7 @@ class NotificationReceiver : BroadcastReceiver() {
          */
         internal fun openExtensionsPendingActivity(context: Context): PendingIntent {
             val intent = Intent(context, MainActivity::class.java).apply {
-                action = MainActivity.SHORTCUT_EXTENSIONS
+                action = Constants.SHORTCUT_EXTENSIONS
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
             return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
@@ -815,7 +804,7 @@ class NotificationReceiver : BroadcastReceiver() {
          */
         internal fun openAnimeExtensionsPendingActivity(context: Context): PendingIntent {
             val intent = Intent(context, MainActivity::class.java).apply {
-                action = MainActivity.SHORTCUT_ANIMEEXTENSIONS
+                action = Constants.SHORTCUT_ANIMEEXTENSIONS
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
             return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)

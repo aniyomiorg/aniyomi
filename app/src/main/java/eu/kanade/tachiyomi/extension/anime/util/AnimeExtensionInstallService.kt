@@ -13,16 +13,15 @@ import eu.kanade.tachiyomi.extension.anime.installer.PackageInstallerInstallerAn
 import eu.kanade.tachiyomi.extension.anime.installer.ShizukuInstallerAnime
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstaller.Companion.EXTRA_DOWNLOAD_ID
 import eu.kanade.tachiyomi.util.system.getSerializableExtraCompat
-import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 import logcat.LogPriority
+import tachiyomi.core.util.system.logcat
 
 class AnimeExtensionInstallService : Service() {
 
     private var installer: InstallerAnime? = null
 
     override fun onCreate() {
-        super.onCreate()
         val notification = notificationBuilder(Notifications.CHANNEL_EXTENSIONS_UPDATE) {
             setSmallIcon(R.drawable.ic_ani)
             setAutoCancel(false)
@@ -61,7 +60,6 @@ class AnimeExtensionInstallService : Service() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         installer?.onDestroy()
         installer = null
     }

@@ -1,8 +1,8 @@
 package eu.kanade.domain.source.manga.interactor
 
-import eu.kanade.domain.source.manga.model.Source
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.core.preference.getAndSet
+import tachiyomi.core.preference.getAndSet
+import tachiyomi.domain.source.manga.model.Source
 
 class ToggleMangaSource(
     private val preferences: SourcePreferences,

@@ -38,7 +38,7 @@ fun AnimeTrack.toMyAnimeListStatus() = when (status) {
     else -> null
 }
 
-fun getStatus(status: String) = when (status) {
+fun getStatus(status: String?) = when (status) {
     "reading" -> MyAnimeList.READING
     "watching" -> MyAnimeList.WATCHING
     "completed" -> MyAnimeList.COMPLETED

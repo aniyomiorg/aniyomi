@@ -16,16 +16,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import eu.kanade.core.prefs.PreferenceMutableState
-import eu.kanade.domain.library.manga.LibraryManga
-import eu.kanade.domain.library.model.LibraryDisplayMode
+import eu.kanade.core.preference.PreferenceMutableState
 import eu.kanade.presentation.animelib.components.GlobalSearchItem
-import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.HorizontalPager
-import eu.kanade.presentation.components.PagerState
-import eu.kanade.presentation.util.plus
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryItem
+import tachiyomi.domain.library.manga.LibraryManga
+import tachiyomi.domain.library.model.LibraryDisplayMode
+import tachiyomi.presentation.core.components.HorizontalPager
+import tachiyomi.presentation.core.components.PagerState
+import tachiyomi.presentation.core.screens.EmptyScreen
+import tachiyomi.presentation.core.util.plus
 
 @Composable
 fun MangaLibraryPager(

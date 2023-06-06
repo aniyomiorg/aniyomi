@@ -11,9 +11,9 @@ import eu.kanade.presentation.category.MangaCategoryScreen
 import eu.kanade.presentation.category.components.CategoryCreateDialog
 import eu.kanade.presentation.category.components.CategoryDeleteDialog
 import eu.kanade.presentation.category.components.CategoryRenameDialog
-import eu.kanade.presentation.components.LoadingScreen
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.tachiyomi.R
+import tachiyomi.presentation.core.screens.LoadingScreen
 
 @Composable
 fun Screen.mangaCategoryTab(): TabContent {
@@ -47,13 +47,15 @@ fun Screen.mangaCategoryTab(): TabContent {
                     MangaCategoryDialog.Create -> {
                         CategoryCreateDialog(
                             onDismissRequest = screenModel::dismissDialog,
-                            onCreate = { screenModel.createCategory(it) },
+                            onCreate = screenModel::createCategory,
+                            categories = successState.categories,
                         )
                     }
                     is MangaCategoryDialog.Rename -> {
                         CategoryRenameDialog(
                             onDismissRequest = screenModel::dismissDialog,
                             onRename = { screenModel.renameCategory(dialog.category, it) },
+                            categories = successState.categories,
                             category = dialog.category,
                         )
                     }

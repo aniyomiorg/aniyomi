@@ -1,6 +1,7 @@
 package eu.kanade.presentation.updates.manga
 
 import android.text.format.DateUtils
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,20 +34,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import eu.kanade.domain.updates.manga.model.MangaUpdatesWithRelations
-import eu.kanade.presentation.components.ChapterDownloadAction
-import eu.kanade.presentation.components.ChapterDownloadIndicator
-import eu.kanade.presentation.components.ItemCover
-import eu.kanade.presentation.components.ListGroupHeader
-import eu.kanade.presentation.util.ReadItemAlpha
-import eu.kanade.presentation.util.padding
-import eu.kanade.presentation.util.selectedBackground
+import eu.kanade.presentation.entries.DotSeparatorText
+import eu.kanade.presentation.entries.ItemCover
+import eu.kanade.presentation.entries.manga.components.ChapterDownloadAction
+import eu.kanade.presentation.entries.manga.components.ChapterDownloadIndicator
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.ui.updates.manga.MangaUpdatesItem
+import tachiyomi.domain.updates.manga.model.MangaUpdatesWithRelations
+import tachiyomi.presentation.core.components.ListGroupHeader
+import tachiyomi.presentation.core.components.material.ReadItemAlpha
+import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.selectedBackground
 import java.util.Date
 import kotlin.time.Duration.Companion.minutes
 
+@OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.mangaUpdatesLastUpdatedItem(
     lastUpdated: Long,
 ) {
@@ -77,6 +80,7 @@ fun LazyListScope.mangaUpdatesLastUpdatedItem(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.mangaUpdatesUiItems(
     uiModels: List<MangaUpdatesUiModel>,
     selectionMode: Boolean,
@@ -113,6 +117,14 @@ fun LazyListScope.mangaUpdatesUiItems(
                     modifier = Modifier.animateItemPlacement(),
                     update = updatesItem.update,
                     selected = updatesItem.selected,
+                    readProgress = updatesItem.update.lastPageRead
+                        .takeIf { !updatesItem.update.read && it > 0L }
+                        ?.let {
+                            stringResource(
+                                R.string.chapter_progress,
+                                it + 1,
+                            )
+                        },
                     onLongClick = {
                         onUpdateSelected(updatesItem, !updatesItem.selected, true, true)
                     },
@@ -134,11 +146,13 @@ fun LazyListScope.mangaUpdatesUiItems(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MangaUpdatesUiItem(
     modifier: Modifier,
     update: MangaUpdatesWithRelations,
     selected: Boolean,
+    readProgress: String?,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onClickCover: (() -> Unit)?,
@@ -148,6 +162,8 @@ fun MangaUpdatesUiItem(
     downloadProgressProvider: () -> Int,
 ) {
     val haptic = LocalHapticFeedback.current
+    val textAlpha = if (update.read) ReadItemAlpha else 1f
+
     Row(
         modifier = modifier
             .selectedBackground(selected)
@@ -174,17 +190,6 @@ fun MangaUpdatesUiItem(
                 .padding(horizontal = MaterialTheme.padding.medium)
                 .weight(1f),
         ) {
-            val bookmark = remember(update.bookmark) { update.bookmark }
-            val read = remember(update.read) { update.read }
-
-            val textAlpha = remember(read) { if (read) ReadItemAlpha else 1f }
-
-            val secondaryTextColor = if (bookmark && !read) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.onSurface
-            }
-
             Text(
                 text = update.mangaTitle,
                 maxLines = 1,
@@ -194,7 +199,7 @@ fun MangaUpdatesUiItem(
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 var textHeight by remember { mutableStateOf(0) }
-                if (bookmark) {
+                if (update.bookmark) {
                     Icon(
                         imageVector = Icons.Filled.Bookmark,
                         contentDescription = stringResource(R.string.action_filter_bookmarked),
@@ -207,14 +212,25 @@ fun MangaUpdatesUiItem(
                 Text(
                     text = update.chapterName,
                     maxLines = 1,
-                    color = secondaryTextColor,
                     style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     onTextLayout = { textHeight = it.size.height },
-                    modifier = Modifier.alpha(textAlpha),
+                    modifier = Modifier
+                        .weight(weight = 1f, fill = false)
+                        .alpha(textAlpha),
                 )
+                if (readProgress != null) {
+                    DotSeparatorText()
+                    Text(
+                        text = readProgress,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.alpha(ReadItemAlpha),
+                    )
+                }
             }
         }
+
         ChapterDownloadIndicator(
             enabled = onDownloadChapter != null,
             modifier = Modifier.padding(start = 4.dp),

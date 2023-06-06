@@ -46,7 +46,7 @@
     <string name="action_show_anime">Mostrar anime</string>
     <string name="action_display_download_badge_anime">Episodios descargados</string>
     <string name="action_display_unseen_badge">Episodios sin ver</string>
-    <string name="action_display_local_badge_manga">Manga local</string>
+    <string name="action_display_local_badge_manga">Fuente local</string>
     <string name="action_display_local_badge_anime">Anime local</string>
     <string name="action_display_show_continue_reading_button">Mostrar botón de continuar viendo/leyendo</string>
     <string name="action_order_by_episode_number">Por número de episodio</string>
@@ -97,7 +97,7 @@
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Borrar capítulos/episodios</string>
     <string name="pref_remove_after_marked_as_read">Tras marcarlos como leídos/vistos de forma manual</string>
-    <string name="pref_remove_after_read">Después de leer/ver borrar automáticamente</string>
+    <string name="pref_remove_after_read">Borrar capítulos terminados de forma automática</string>
     <string name="pref_remove_bookmarked_chapters">Permitir el borrado de capítulos/episodios marcados como favoritos</string>
     <string name="pref_remove_exclude_categories_manga">Categorías excluidas de manga</string>
     <string name="pref_remove_exclude_categories_anime">Categorías excluidas de anime</string>

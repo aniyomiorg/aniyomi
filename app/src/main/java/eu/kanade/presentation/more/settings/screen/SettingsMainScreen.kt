@@ -42,19 +42,20 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.AppBarActions
-import eu.kanade.presentation.components.LazyColumn
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.more.settings.widget.TextPreferenceWidget
 import eu.kanade.presentation.util.LocalBackPress
+import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
+import tachiyomi.presentation.core.components.LazyColumn
+import tachiyomi.presentation.core.components.material.Scaffold
+import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 
-object SettingsMainScreen : Screen {
+object SettingsMainScreen : Screen() {
     @Composable
     override fun Content() {
         Content(twoPane = false)
@@ -173,7 +174,7 @@ object SettingsMainScreen : Screen {
         )
     }
 
-    private fun Navigator.navigate(screen: Screen, twoPane: Boolean) {
+    private fun Navigator.navigate(screen: VoyagerScreen, twoPane: Boolean) {
         if (twoPane) replaceAll(screen) else push(screen)
     }
 
@@ -182,7 +183,7 @@ object SettingsMainScreen : Screen {
         @StringRes val subtitleRes: Int,
         val formatSubtitle: @Composable () -> String = { stringResource(subtitleRes) },
         val icon: ImageVector,
-        val screen: Screen,
+        val screen: VoyagerScreen,
     )
 
     private val items = listOf(

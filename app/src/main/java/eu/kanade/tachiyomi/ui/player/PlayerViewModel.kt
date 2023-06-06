@@ -9,19 +9,10 @@ import androidx.lifecycle.viewModelScope
 import eu.kanade.core.util.asFlow
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.anime.interactor.GetAnime
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
-import eu.kanade.domain.entries.anime.model.Anime
 import eu.kanade.domain.entries.anime.model.isLocal
 import eu.kanade.domain.history.anime.interactor.GetNextEpisodes
-import eu.kanade.domain.history.anime.interactor.UpsertAnimeHistory
-import eu.kanade.domain.history.anime.model.AnimeHistoryUpdate
-import eu.kanade.domain.items.episode.interactor.GetEpisodeByAnimeId
-import eu.kanade.domain.items.episode.interactor.UpdateEpisode
-import eu.kanade.domain.items.episode.model.EpisodeUpdate
 import eu.kanade.domain.items.episode.model.toDbEpisode
-import eu.kanade.domain.track.anime.interactor.GetAnimeTracks
-import eu.kanade.domain.track.anime.interactor.InsertAnimeTrack
 import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
@@ -40,21 +31,17 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
+import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.reader.SaveImageNotifier
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.Stamp
 import eu.kanade.tachiyomi.util.editCover
-import eu.kanade.tachiyomi.util.episode.getEpisodeSort
 import eu.kanade.tachiyomi.util.lang.byteSize
-import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.launchNonCancellable
 import eu.kanade.tachiyomi.util.lang.takeBytes
-import eu.kanade.tachiyomi.util.lang.withIOContext
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.cacheImageDir
 import eu.kanade.tachiyomi.util.system.isOnline
-import eu.kanade.tachiyomi.util.system.logcat
 import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -71,6 +58,20 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.lang.launchNonCancellable
+import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.anime.interactor.GetAnime
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.history.anime.interactor.UpsertAnimeHistory
+import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
+import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.UpdateEpisode
+import tachiyomi.domain.items.episode.model.EpisodeUpdate
+import tachiyomi.domain.items.episode.service.getEpisodeSort
+import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
+import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.InputStream
@@ -234,7 +235,7 @@ class PlayerViewModel(
 
                     val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
 
-                    currentVideoList = EpisodeLoader.getLinks(currentEpisode, anime, source).asFlow().first()
+                    currentVideoList = EpisodeLoader.getLinks(currentEpisode.toDomainEpisode()!!, anime, source).asFlow().first()
                     episodeId = currentEpisode.id!!
 
                     Pair(currentVideoList, Result.success(true))
@@ -251,7 +252,7 @@ class PlayerViewModel(
     fun isEpisodeOnline(): Boolean? {
         val anime = anime ?: return null
         val episode = currentEpisode ?: return null
-        return source is AnimeHttpSource && !EpisodeLoader.isDownloaded(episode, anime)
+        return source is AnimeHttpSource && !EpisodeLoader.isDownloaded(episode.toDomainEpisode()!!, anime)
     }
 
     suspend fun nextEpisode(): Pair<List<Video>?, String?>? {
@@ -265,10 +266,10 @@ class PlayerViewModel(
         return withIOContext {
             try {
                 val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
-                currentVideoList = EpisodeLoader.getLinks(currentEpisode, anime, source).asFlow().first()
+                currentVideoList = EpisodeLoader.getLinks(currentEpisode.toDomainEpisode()!!, anime, source).asFlow().first()
                 episodeId = currentEpisode.id!!
             } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links." }
+                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
             }
 
             Pair(currentVideoList, anime.title + " - " + episodeList[index + 1].name)
@@ -286,10 +287,10 @@ class PlayerViewModel(
         return withIOContext {
             try {
                 val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
-                currentVideoList = EpisodeLoader.getLinks(currentEpisode, anime, source).asFlow().first()
+                currentVideoList = EpisodeLoader.getLinks(currentEpisode.toDomainEpisode()!!, anime, source).asFlow().first()
                 episodeId = currentEpisode.id!!
             } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links." }
+                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
             }
             Pair(currentVideoList, anime.title + " - " + episodeList[index - 1].name)
         }
@@ -337,8 +338,8 @@ class PlayerViewModel(
         val currentEpisode = currentEpisode ?: return
         val nextEpisode = episodeList[getCurrentEpisodeIndex() + 1]
         viewModelScope.launchIO {
-            if (EpisodeLoader.isDownloaded(currentEpisode, anime) &&
-                EpisodeLoader.isDownloaded(nextEpisode, anime)
+            if (EpisodeLoader.isDownloaded(currentEpisode.toDomainEpisode()!!, anime) &&
+                EpisodeLoader.isDownloaded(nextEpisode.toDomainEpisode()!!, anime)
             ) {
                 return@launchIO
             }
@@ -508,7 +509,7 @@ class PlayerViewModel(
 
         viewModelScope.launchNonCancellable {
             val result = try {
-                anime.editCover(context, imageStream)
+                anime.editCover(Injekt.get(), imageStream)
                 if (anime.isLocal() || anime.favorite) {
                     SetAsCoverResult.Success
                 } else {
