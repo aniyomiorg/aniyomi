@@ -71,6 +71,7 @@ import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -1489,7 +1490,7 @@ class PlayerActivity :
 
     private var skipType: SkipType? = null
 
-    private fun aniSkipStuff(position: Long) {
+    private suspend fun aniSkipStuff(position: Long) {
         if (!aniSkipEnable) return
         // if it doesn't find any interval it will show the +85 button
         if (aniSkipInterval == null) return
@@ -1516,12 +1517,13 @@ class PlayerActivity :
 
     // mpv events
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun eventPropertyUi(property: String, value: Long) {
         when (property) {
             "demuxer-cache-time" -> playerControls.updateBufferPosition(value.toInt())
             "time-pos" -> {
                 playerControls.updatePlaybackPos(value.toInt())
-                aniSkipStuff(value)
+                launchUI { aniSkipStuff(value) }
             }
             "duration" -> playerControls.updatePlaybackDuration(value.toInt())
         }

@@ -19,7 +19,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
-import tachiyomi.core.util.lang.launchUI
+import tachiyomi.core.util.lang.withUIContext
 import uy.kohesive.injekt.injectLazy
 
 class AniSkipApi {
@@ -67,14 +67,14 @@ class AniSkipApi {
         private val playerControls get() = binding.playerControls
         private val activity: PlayerActivity get() = binding.root.context as PlayerActivity
 
-        fun showSkipButton(skipType: SkipType) {
+        internal suspend fun showSkipButton(skipType: SkipType) {
             val skipButtonString = when (skipType) {
                 SkipType.ED -> R.string.player_aniskip_ed
                 SkipType.OP -> R.string.player_aniskip_op
                 SkipType.RECAP -> R.string.player_aniskip_recap
                 SkipType.MIXED_OP -> R.string.player_aniskip_mixedOp
             }
-            launchUI {
+            withUIContext {
                 playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
                 playerControls.binding.controlsSkipIntroBtn.text = activity.getString(skipButtonString)
             }
@@ -82,7 +82,7 @@ class AniSkipApi {
 
         // this is used when netflixStyle is enabled
         @SuppressLint("SetTextI18n")
-        fun showSkipButton(skipType: SkipType, waitingTime: Int) {
+        suspend fun showSkipButton(skipType: SkipType, waitingTime: Int) {
             val skipTime = when (skipType) {
                 SkipType.ED -> aniSkipResponse.first { it.skipType == SkipType.ED }.interval
                 SkipType.OP -> aniSkipResponse.first { it.skipType == SkipType.OP }.interval
@@ -91,7 +91,7 @@ class AniSkipApi {
             }
             if (waitingTime > -1) {
                 if (waitingTime > 0) {
-                    launchUI {
+                    withUIContext {
                         playerControls.binding.controlsSkipIntroBtn.visibility = View.VISIBLE
                         playerControls.binding.controlsSkipIntroBtn.text = activity.getString(R.string.player_aniskip_dontskip)
                     }
