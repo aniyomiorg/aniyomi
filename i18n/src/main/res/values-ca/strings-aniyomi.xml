@@ -42,8 +42,8 @@
     <string name="action_global_manga_search">Cerca de Manga Global</string>
     <string name="action_global_anime_search">Cerca de Anime Global</string>
     <string name="action_edit_manga_categories">Editar categories de Manga</string>
-    <string name="pref_search_pinned_manga_sources_only">Només incloure fonts anclades de manga</string>
-    <string name="pref_search_pinned_anime_sources_only">Només incloure fonts anclades d\'anime</string>
+    <string name="pref_search_pinned_manga_sources_only">Inclou només fonts de manga anclades a la recerca global</string>
+    <string name="pref_search_pinned_anime_sources_only">Incloure només fonts d\'anime anclades a la recerca global</string>
     <string name="pref_library_manga_columns">Ítems Manga per línia</string>
     <string name="pref_library_anime_columns">Ítems Anime per línia</string>
     <string name="action_remove_bookmark_episode">Treure marca de llibre de l\'episodi</string>
@@ -208,7 +208,7 @@
     <string name="playback_speed_dialog_reset">Restablir</string>
     <string name="used_cache_both">Utilitzat per l\'anime: %1$s, utilitzat pel manga: %2$s</string>
     <string name="pref_skip_length">Doble click per ometre</string>
-    <string name="backup_settings_warning">Precaució: crear una còpia de seguretat desarà la teva clau d\'accès, no comparteixis l\'arxiu de còpia de seguretat!</string>
+    <string name="backup_settings_warning">Precaució: crear una còpia de seguretat desarà informació confidencial, com la teva clau d\'accès, no comparteixis l\'arxiu de còpia de seguretat!</string>
     <string name="rotation_reverse_landscape">Format apaisat invertit</string>
     <string name="pref_player_fullscreen">Mostra contingut a la part superior de la pantalla</string>
     <string name="pref_category_player_orientation">Orientació</string>
@@ -269,4 +269,6 @@
         <item quantity="other">Següents episodis %d pendents de visualització</item>
     </plurals>
     <string name="local_manga_source">Manga en font local</string>
+    <string name="pref_hide_in_anime_library_items">Amaga les entrades dels animes que ja siguin a la biblioteca</string>
+    <string name="pref_hide_in_manga_library_items">Amaga les entrades dels mangas que ja siguin a la biblioteca</string>
 </resources>
