@@ -6,7 +6,8 @@
     <string name="entries">Entri pustaka</string>
     <string name="chapters_episodes">chapter dan episode</string>
     <string name="episodes">Episode</string>
-    <string name="backup_settings_warning">Peringatan: Membuat cadangan pengaturan akan menyimpan kata sandi untuk sinkronisasi, jangan bagikan file cadangan ini!</string>
+    <string name="backup_settings_warning">Peringatan: Mencadangkan pengaturan mungkin menyimpan informasi sensitif seperti kata sandi pelacak.
+\nJangan bagikan file cadangan ini!</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
@@ -254,13 +255,21 @@
     <string name="pref_remember_brightness">Ingat dan beralih ke kecerahan terakhir yang digunakan</string>
     <string name="pref_remember_volume">Ingat dan beralih ke volume terakhir yang digunakan</string>
     <string name="pref_default_home_tab_library">Atur layar awal ke Tab Manga</string>
-    <string name="pref_search_pinned_anime_sources_only">Hanya sertakan sumber anime yang disematkan</string>
+    <string name="pref_search_pinned_anime_sources_only">Hanya cari sumber anime tersemat di pencarian global</string>
     <string name="pref_category_player_seeking">Pencarian</string>
-    <string name="pref_search_pinned_manga_sources_only">Hanya sertakan sumber manga yang disematkan</string>
+    <string name="pref_search_pinned_manga_sources_only">Hanya cari sumber manga tersemat di pencarian global</string>
     <string name="action_global_manga_search">Pencarian Manga Global</string>
     <string name="action_global_anime_search">Pencarian Anime Global</string>
     <string name="unofficial_anime_extension_message">Ekstensi ini bukan dari daftar ekstensi resmi Aniyomi.</string>
     <string name="pref_enable_pip">Aktifkan penggunaan mode PiP</string>
     <string name="pref_category_volume_brightness">Volume dan Kecerahan</string>
     <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
+    <string name="pref_hide_in_manga_library_items">Sembunyikan entri manga yang sudah ada di pustaka</string>
+    <string name="pref_hide_in_anime_library_items">Sembunyikan entri anime yang sudah ada di pustaka</string>
+    <plurals name="download_amount_anime">
+        <item quantity="other">Episode selanjutnya %d</item>
+    </plurals>
+    <string name="copied_video_link_to_clipboard">Tautan kualitas video yang disalin ke papan klip</string>
+    <string name="choose_video_quality">Pilih kualitas video:</string>
+    <string name="extension_settings">Pengaturan ekstensi</string>
 </resources>
