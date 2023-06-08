@@ -6,7 +6,8 @@
     <string name="entries">서재 항목</string>
     <string name="chapters_episodes">회차 및 에피소드</string>
     <string name="episodes">에피소드</string>
-    <string name="backup_settings_warning">경고: 설정을 백업하면 동기화 암호도 저장되므로 이 백업 파일을 공유하지 마십시오!</string>
+    <string name="backup_settings_warning">경고: 설정을 백업하면 동기화 암호와 같은 민감한 정보도 저장됩니다.
+\n이 백업 파일을 공유하지 마십시오!</string>
     <string name="label_manga_library">만화</string>
     <string name="label_anime_library">애니메이션</string>
     <string name="label_manga">만화</string>
@@ -256,11 +257,18 @@
     <string name="pref_default_home_tab_library">만화 탭을 시작화면으로 설정</string>
     <string name="action_global_manga_search">전체 만화 검색</string>
     <string name="action_global_anime_search">전체 애니메이션 검색</string>
-    <string name="pref_search_pinned_manga_sources_only">핀 설정된 만화 소스만 포함</string>
-    <string name="pref_search_pinned_anime_sources_only">핀 설정된 애니메이션 소스만 포함</string>
+    <string name="pref_search_pinned_manga_sources_only">전체 검색에서 핀 설정된 만화 소스만 검색</string>
+    <string name="pref_search_pinned_anime_sources_only">전체 검색에서 핀 설정된 애니메이션 소스만 검색</string>
     <string name="unofficial_anime_extension_message">이 확장기능은 Aniyomi의 공식 확장기능이 아닙니다.</string>
     <string name="pref_category_volume_brightness">볼륨 및 밝기</string>
     <string name="pref_category_player_seeking">찾기</string>
     <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
     <string name="pref_enable_pip">PiP 모드 사용 활성화</string>
+    <string name="pref_hide_in_manga_library_items">이미 서재에 있는 만화 항목 숨기기</string>
+    <string name="pref_hide_in_anime_library_items">이미 서재에 있는 애니메이션 항목 숨기기</string>
+    <plurals name="download_amount_anime">
+        <item quantity="other">다음 %d 에피소드</item>
+    </plurals>
+    <string name="choose_video_quality">동영상 화질 선택:</string>
+    <string name="extension_settings">확장기능 설정</string>
 </resources>
