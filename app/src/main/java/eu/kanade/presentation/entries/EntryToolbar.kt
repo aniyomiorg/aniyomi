@@ -121,42 +121,42 @@ fun EntryToolbar(
                                 closeMenu()
                             },
                         )
-                            if (onClickEditCategory != null) {
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(R.string.action_edit_categories)) },
-                                    onClick = {
-                                        onClickEditCategory()
-                                        closeMenu()
-                                    },
-                                )
-                            }
-                            if (onClickMigrate != null) {
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(R.string.action_migrate)) },
-                                    onClick = {
-                                        onClickMigrate()
-                                        closeMenu()
-                                    },
-                                )
-                            }
-                            if (changeAnimeSkipIntro != null) {
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(R.string.action_change_intro_length)) },
-                                    onClick = {
-                                        changeAnimeSkipIntro()
-                                        closeMenu()
-                                    },
-                                )
-                            }
-                            if (onClickShare != null) {
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(R.string.action_share)) },
-                                    onClick = {
-                                        onClickShare()
-                                        closeMenu()
-                                    },
-                                )
-                            }
+                        if (onClickEditCategory != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_edit_categories)) },
+                                onClick = {
+                                    onClickEditCategory()
+                                    closeMenu()
+                                },
+                            )
+                        }
+                        if (onClickMigrate != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_migrate)) },
+                                onClick = {
+                                    onClickMigrate()
+                                    closeMenu()
+                                },
+                            )
+                        }
+                        if (changeAnimeSkipIntro != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_change_intro_length)) },
+                                onClick = {
+                                    changeAnimeSkipIntro()
+                                    closeMenu()
+                                },
+                            )
+                        }
+                        if (onClickShare != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_share)) },
+                                onClick = {
+                                    onClickShare()
+                                    closeMenu()
+                                },
+                            )
+                        }
                     }
                 }
             },
