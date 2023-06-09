@@ -178,6 +178,10 @@ class PlayerViewModel(
                 downloadManager.addDownloadsToStartOfQueue(listOf(it))
             }
         }
+        val currentEpisode = currentEpisode ?: return
+        if (currentEpisode.seen) {
+            deletePendingEpisodes()
+        }
     }
 
     /**
@@ -593,9 +597,7 @@ class PlayerViewModel(
      * are ignored.
      */
     fun deletePendingEpisodes() {
-        viewModelScope.launchNonCancellable {
-            downloadManager.deletePendingEpisodes()
-        }
+        downloadManager.deletePendingEpisodes()
     }
 
     /**
