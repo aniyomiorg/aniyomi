@@ -16,7 +16,7 @@ import androidx.lifecycle.viewModelScope
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.player.viewer.components.PlayerDialogs
+import eu.kanade.tachiyomi.ui.player.settings.PlayerDialogs
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.StateRestoreCallback
 import `is`.xyz.mpv.Utils
@@ -31,7 +31,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     private tailrec fun Context.getActivity(): PlayerActivity? = this as? PlayerActivity
         ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
-    val activity: PlayerActivity = context.getActivity()!!
+    private val activity: PlayerActivity = context.getActivity()!!
 
     private val playerPreferences = activity.playerPreferences
 
@@ -39,6 +39,41 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     init {
         addView(binding.root)
+    }
+
+    private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+            if (!fromUser) {
+                return
+            }
+            hideUiForSeek()
+            MPVLib.command(arrayOf("seek", progress.toString(), "absolute+keyframes"))
+            updatePlaybackPos(progress)
+
+            val duration = activity.player.duration ?: 0
+            if (duration == 0 || activity.initialSeek < 0) {
+                return
+            }
+            val newDiff = activity.player.timePos!! - activity.initialSeek
+
+            val diffText = Utils.prettyTime(newDiff, true)
+            activity.binding.seekText.text = activity.getString(R.string.ui_seek_distance, Utils.prettyTime(activity.player.timePos!!), diffText)
+            activity.showGestureView("seek")
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar) {
+            SeekState.mode = SeekState.SEEKBAR
+            activity.initSeek()
+        }
+
+        override fun onStopTrackingTouch(seekBar: SeekBar) {
+            val newPos = seekBar.progress
+            if (playerPreferences.playerSmoothSeek().get()) activity.player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
+            SeekState.mode = SeekState.NONE
+            animationHandler.removeCallbacks(hideUiForSeekRunnable)
+            animationHandler.postDelayed(hideUiForSeekRunnable, 500L)
+            animationHandler.postDelayed(fadeOutControlsRunnable, 3500L)
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -97,7 +132,18 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         return {
             if (!wasPlayerPaused) {
                 activity.player.paused = false
+                updateDecoderButton()
                 activity.viewModel.viewModelScope.launchUI { activity.refreshUi() }
+            }
+        }
+    }
+
+    internal fun updateDecoderButton() {
+        if (binding.cycleDecoderBtn.visibility == View.VISIBLE) {
+            binding.cycleDecoderBtn.text = when (activity.player.hwdecActive) {
+                HwDecType.HW_PLUS.mpvValue -> HwDecType.HW_PLUS.title
+                HwDecType.SW.mpvValue -> HwDecType.SW.title
+                else -> HwDecType.HW.title
             }
         }
     }
@@ -292,41 +338,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         when {
             activity.player.paused!! -> animationHandler.removeCallbacks(fadeOutControlsRunnable)
             binding.unlockedView.isVisible -> showAndFadeControls()
-        }
-    }
-
-    private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-            if (!fromUser) {
-                return
-            }
-            hideUiForSeek()
-            MPVLib.command(arrayOf("seek", progress.toString(), "absolute+keyframes"))
-            updatePlaybackPos(progress)
-
-            val duration = activity.player.duration ?: 0
-            if (duration == 0 || activity.initialSeek < 0) {
-                return
-            }
-            val newDiff = activity.player.timePos!! - activity.initialSeek
-
-            val diffText = Utils.prettyTime(newDiff, true)
-            activity.binding.seekText.text = activity.getString(R.string.ui_seek_distance, Utils.prettyTime(activity.player.timePos!!), diffText)
-            activity.showGestureView("seek")
-        }
-
-        override fun onStartTrackingTouch(seekBar: SeekBar) {
-            SeekState.mode = SeekState.SEEKBAR
-            activity.initSeek()
-        }
-
-        override fun onStopTrackingTouch(seekBar: SeekBar) {
-            val newPos = seekBar.progress
-            if (playerPreferences.playerSmoothSeek().get()) activity.player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
-            SeekState.mode = SeekState.NONE
-            animationHandler.removeCallbacks(hideUiForSeekRunnable)
-            animationHandler.postDelayed(hideUiForSeekRunnable, 500L)
-            animationHandler.postDelayed(fadeOutControlsRunnable, 3500L)
         }
     }
 }
