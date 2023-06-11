@@ -160,7 +160,7 @@
     </plurals>
     <plurals name="anime_num_episodes">
         <item quantity="one">%1$s bölüm</item>
-        <item quantity="other">%1$s bölüm</item>
+        <item quantity="other">%1$s bölümler</item>
     </plurals>
     <string name="pref_library_manga_columns">Dize başına öğe</string>
     <string name="pref_library_anime_columns">Dize başına anime sayısı</string>
@@ -182,7 +182,7 @@
     <string name="pref_backup_flags">Yedekleme seçenekleri</string>
     <plurals name="seconds">
         <item quantity="one">%d saniye</item>
-        <item quantity="other">%d saniye</item>
+        <item quantity="other">%d saniyeler</item>
     </plurals>
     <string name="action_display_local_badge_anime">Yerel anime</string>
     <string name="label_anime">Anime</string>
