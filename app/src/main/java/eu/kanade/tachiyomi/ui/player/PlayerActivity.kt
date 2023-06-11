@@ -1387,6 +1387,11 @@ class PlayerActivity :
         }
     }
 
+    // TODO: exception java.util.ConcurrentModificationException:
+    // at java.lang.Object java.util.ArrayList$Itr.next() (ArrayList.java:860)
+    // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.fileLoaded() (PlayerActivity.kt:1874)
+    // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.event(int) (PlayerActivity.kt:1566)
+    // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
     @SuppressLint("SourceLockedOrientationActivity")
     private fun fileLoaded() {
         MPVLib.setPropertyDouble("speed", playerPreferences.playerSpeed().get().toDouble())
