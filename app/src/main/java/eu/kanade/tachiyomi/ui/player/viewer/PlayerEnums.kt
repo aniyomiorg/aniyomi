@@ -52,14 +52,18 @@ enum class AspectState(val index: Int, @StringRes val stringRes: Int) {
 /**
  * Player's Hardware Decoder type handler
  */
-enum class HwDecType(val title: String, val mpvValue: String) {
+enum class HwDecState(val title: String, val mpvValue: String) {
     HW_PLUS(title = "HW+", mpvValue = "mediacodec"),
     HW(title = "HW", mpvValue = "mediacodec-copy"),
     SW(title = "SW", mpvValue = "no"),
     ;
 
     companion object {
-        internal val defaultHwDec = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) HW_PLUS else HW
+        internal val isHwSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+
+        internal val defaultHwDec = if (isHwSupported) HW_PLUS else HW
+
+        internal var mode: HwDecState = defaultHwDec
 
         internal fun get(title: String) = when (title) {
             "mediacodec" -> HW_PLUS

@@ -1,7 +1,7 @@
 package eu.kanade.tachiyomi.ui.player.settings
 
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
-import eu.kanade.tachiyomi.ui.player.viewer.HwDecType
+import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import tachiyomi.core.preference.PreferenceStore
 
 class PlayerPreferences(
@@ -73,5 +73,5 @@ class PlayerPreferences(
 
     fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean("pref_enable_netflixStyle_aniskip", false)
 
-    fun standardHwDec() = preferenceStore.getString("pref_hwdec", HwDecType.defaultHwDec.mpvValue)
+    fun standardHwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
 }

@@ -58,7 +58,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
 import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
 import eu.kanade.tachiyomi.ui.player.viewer.Gestures
-import eu.kanade.tachiyomi.ui.player.viewer.HwDecType
+import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
@@ -375,6 +375,7 @@ class PlayerActivity :
         player.initialize(applicationContext.filesDir.path, logLevel)
 
         MPVLib.setOptionString("hwdec", playerPreferences.standardHwDec().get())
+        HwDecState.mode = HwDecState.get(playerPreferences.standardHwDec().get())
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
 
@@ -1105,14 +1106,14 @@ class PlayerActivity :
 
     @Suppress("UNUSED_PARAMETER")
     fun switchDecoder(view: View) {
-        val currentHwDec = HwDecType.get(player.hwdecActive)
-        val hwSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-        val newHwDec = when (currentHwDec) {
-            HwDecType.HW -> if (hwSupported) HwDecType.HW_PLUS else HwDecType.SW
-            HwDecType.HW_PLUS -> HwDecType.SW
-            HwDecType.SW -> HwDecType.HW
+        val newHwDec = when (HwDecState.get(player.hwdecActive)) {
+            HwDecState.HW -> if (HwDecState.isHwSupported) HwDecState.HW_PLUS else HwDecState.SW
+            HwDecState.HW_PLUS -> HwDecState.SW
+            HwDecState.SW -> HwDecState.HW
         }
         MPVLib.setOptionString("hwdec", newHwDec.mpvValue)
+        HwDecState.mode = newHwDec
+        playerControls.updateDecoderButton()
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -1454,8 +1455,6 @@ class PlayerActivity :
             }
         }
 
-        playerControls.updateDecoderButton()
-
         viewModel.viewModelScope.launchUI {
             if (playerPreferences.adjustOrientationVideoDimensions().get()) {
                 if ((player.videoW ?: 1) / (player.videoH ?: 1) >= 1) {
@@ -1466,6 +1465,8 @@ class PlayerActivity :
                     switchControlsOrientation(false)
                 }
             }
+
+            playerControls.updateDecoderButton()
 
             viewModel.mutableState.update {
                 it.copy(isLoadingAdjacentEpisode = false)

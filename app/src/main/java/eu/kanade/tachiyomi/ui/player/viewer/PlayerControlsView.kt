@@ -140,11 +140,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun updateDecoderButton() {
         if (binding.cycleDecoderBtn.visibility == View.VISIBLE) {
-            binding.cycleDecoderBtn.text = when (activity.player.hwdecActive) {
-                HwDecType.HW_PLUS.mpvValue -> HwDecType.HW_PLUS.title
-                HwDecType.SW.mpvValue -> HwDecType.SW.title
-                else -> HwDecType.HW.title
-            }
+            binding.cycleDecoderBtn.text = HwDecState.mode.title
         }
     }
 
