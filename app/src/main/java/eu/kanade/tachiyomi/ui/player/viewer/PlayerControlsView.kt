@@ -37,10 +37,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     private val playerDialogs = PlayerDialogs(activity)
 
-    init {
-        addView(binding.root)
-    }
-
     private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
             if (!fromUser) {
@@ -74,6 +70,10 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             animationHandler.postDelayed(hideUiForSeekRunnable, 500L)
             animationHandler.postDelayed(fadeOutControlsRunnable, 3500L)
         }
+    }
+
+    init {
+        addView(binding.root)
     }
 
     @Suppress("DEPRECATION")
