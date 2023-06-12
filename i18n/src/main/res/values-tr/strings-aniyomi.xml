@@ -6,8 +6,7 @@
     <string name="entries">Kütüphane girdileri</string>
     <string name="chapters_episodes">Manga ve Anime bölümleri</string>
     <string name="episodes">Anime Bölümleri</string>
-    <string name="backup_settings_warning">Uyarı: Yedekleme ayarları izleme şifrelerinizi de saklayabilir,
-\nBu yedekleme dosyasını asla paylaşma!</string>
+    <string name="backup_settings_warning">Uyarı: Yedekleme ayarları izleme şifrelerinizi de saklayacaktır. Bu yedekleme dosyasını asla paylaşmayın!</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
@@ -128,7 +127,7 @@
     <string name="downloaded_episodes">İndirilen bölümler</string>
     <string name="local_manga_source">Yerel manga kaynağı</string>
     <string name="local_anime_source">Yerel anime kaynağı</string>
-    <string name="episode_not_found">Bölüm bulunamadı</string>
+    <string name="episode_not_found">Hiç bölüm bulunmadı</string>
     <string name="local_invalid_episode_format">Geçersiz bölüm biçimi</string>
     <string name="delete_downloads_for_anime">İndirilen bölümler silinsin mi\?</string>
     <string name="snack_add_to_anime_library">Anime kitaplığa eklensin mi\?</string>
@@ -136,7 +135,7 @@
     <string name="sort_by_episode_number">Bölüm sayısına göre</string>
     <string name="download_unseen">İzlenmeyen</string>
     <string name="also_set_episode_settings_for_library">Kitaplığımdaki bütün animelere uygula</string>
-    <string name="no_episodes_error">Bölüm bulunamadı</string>
+    <string name="no_episodes_error">hiç bölüm bulunmadı</string>
     <string name="dialog_with_checkbox_remove_description_anime">Bu, bölümün izlenme tarihini kaldırır. Emin misiniz\?</string>
     <string name="dialog_with_checkbox_reset_anime">Bu anime için bütün bölümleri sıfırla</string>
     <string name="episode_progress_no_total">İlerleme: %1$s</string>
@@ -204,7 +203,7 @@
     <string name="label_animeupdates">Anime</string>
     <string name="player_overlay_back">Geri</string>
     <string name="playback_speed_dialog_reset">Sıfırla</string>
-    <string name="quality_dialog_header">Video kalitesini değiştir:</string>
+    <string name="quality_dialog_header">Video kalitesi</string>
     <string name="pref_waiting_time_aniskip_9">9 saniye</string>
     <string name="pref_waiting_time_aniskip_10">10 saniye</string>
     <string name="player_aniskip_dontskip">Atlama</string>
@@ -230,7 +229,7 @@
     <string name="enable_horizontal_seek_gesture">Yatay hareketle göz atmayı aktifleştir</string>
     <string name="toggle_stats">İstatistikleri değiştir</string>
     <string name="recent_anime_time">Bölüm %1$s - %2$s</string>
-    <string name="subtitle_dialog_header">Altyazı dosyasını değiştir:</string>
+    <string name="subtitle_dialog_header">Altyazı</string>
     <string name="notification_episodes_multiple">%1$s bölüm</string>
     <string name="pref_category_pip">Pencere içinde pencere</string>
     <string name="pref_enable_pip">Pencere içinde pencereye izin ver</string>
@@ -243,7 +242,7 @@
     <string name="stats_page">İstatistikler</string>
     <string name="episode_settings_updated">Varsayılan bölüm ayarları güncellendi</string>
     <string name="pref_invalidate_download_cache_summary">Uygulamayı indirilen bölümleri ve kısımları yeniden kontrol etmeye zorla</string>
-    <string name="audio_dialog_header">Ses dosyasını değiştir:</string>
+    <string name="audio_dialog_header">Ses</string>
     <string name="pref_category_player_aniskip_info">AniSkip çalışması için animenin MAL veya Anilist ile takip edilmesini gerektiriyor</string>
     <string name="copied_video_link_to_clipboard">Video kalitesi bağlantısı panoya kopyalandı</string>
     <string name="choose_video_quality">Video kalitesini seçin:</string>
