@@ -11,6 +11,7 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.SeekBar
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.viewModelScope
 import eu.kanade.tachiyomi.R
@@ -117,7 +118,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             }
         }
 
-        binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked -> activity.toggleAutoplay(isChecked) }
+        binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked -> toggleAutoplay(isChecked) }
+
+        binding.cycleViewModeBtn.setOnClickListener { cycleViewMode() }
 
         binding.titleMainTxt.setOnClickListener { playerDialogs.episodeListDialog(pauseForDialog()) }
 
@@ -335,5 +338,69 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             activity.player.paused!! -> animationHandler.removeCallbacks(fadeOutControlsRunnable)
             binding.unlockedView.isVisible -> showAndFadeControls()
         }
+    }
+
+    // Fade out Player information text
+    private val playerInformationRunnable = Runnable {
+        AnimationUtils.loadAnimation(activity, R.anim.player_fade_out).also { fadeAnimation ->
+            binding.playerInformation.startAnimation(fadeAnimation)
+            binding.playerInformation.visibility = View.GONE
+        }
+    }
+
+    private var playerViewMode = AspectState.get(playerPreferences.playerViewMode().get())
+
+    private fun cycleViewMode() {
+        playerViewMode = when (playerViewMode) {
+            AspectState.STRETCH -> AspectState.FIT
+            AspectState.FIT -> AspectState.CROP
+            AspectState.CROP -> AspectState.STRETCH
+        }
+        setViewMode(showText = true)
+    }
+
+    internal fun setViewMode(showText: Boolean) {
+        binding.playerInformation.text = activity.getString(playerViewMode.stringRes)
+        when (playerViewMode) {
+            AspectState.CROP -> {
+                activity.mpvUpdateAspect(aspect = "-1", pan = "1.0")
+            }
+            AspectState.FIT -> {
+                activity.mpvUpdateAspect(aspect = "-1", pan = "0.0")
+            }
+            AspectState.STRETCH -> {
+                val newAspect = "${activity.deviceWidth}/${activity.deviceHeight}"
+                activity.mpvUpdateAspect(aspect = newAspect, pan = "1.0")
+            }
+        }
+        if (showText) {
+            animationHandler.removeCallbacks(playerInformationRunnable)
+            binding.playerInformation.visibility = View.VISIBLE
+            animationHandler.postDelayed(playerInformationRunnable, 1000L)
+        }
+
+        playerPreferences.playerViewMode().set(playerViewMode.index)
+    }
+
+    internal fun toggleAutoplay(isAutoplay: Boolean) {
+        binding.toggleAutoplay.isChecked = isAutoplay
+        binding.toggleAutoplay.thumbDrawable = if (isAutoplay) {
+            ContextCompat.getDrawable(context, R.drawable.ic_play_circle_filled_24)
+        } else {
+            ContextCompat.getDrawable(context, R.drawable.ic_pause_circle_filled_24)
+        }
+
+        if (isAutoplay) {
+            binding.playerInformation.text = activity.getString(R.string.enable_auto_play)
+        } else {
+            binding.playerInformation.text = activity.getString(R.string.disable_auto_play)
+        }
+
+        if (!playerPreferences.autoplayEnabled().get() == isAutoplay) {
+            animationHandler.removeCallbacks(playerInformationRunnable)
+            binding.playerInformation.visibility = View.VISIBLE
+            animationHandler.postDelayed(playerInformationRunnable, 1000L)
+        }
+        playerPreferences.autoplayEnabled().set(isAutoplay)
     }
 }

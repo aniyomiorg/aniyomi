@@ -50,7 +50,6 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksSheet
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
-import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
@@ -150,8 +149,8 @@ class PlayerActivity : BaseActivity() {
 
     private var brightness = 0F
 
-    private var deviceWidth = 0
-    private var deviceHeight = 0
+    internal var deviceWidth = 0
+    internal var deviceHeight = 0
 
     private var audioFocusRestore: () -> Unit = {}
 
@@ -285,8 +284,6 @@ class PlayerActivity : BaseActivity() {
 
     private var currentVideoList: List<Video>? = null
 
-    private var playerViewMode = AspectState.get(playerPreferences.playerViewMode().get())
-
     private var playerIsDestroyed = true
 
     private val langName = LocaleHelper.getSimpleLocaleDisplayName()
@@ -366,7 +363,7 @@ class PlayerActivity : BaseActivity() {
         } else {
             playerControls.showAndFadeControls()
         }
-        toggleAutoplay(playerPreferences.autoplayEnabled().get())
+        playerControls.toggleAutoplay(playerPreferences.autoplayEnabled().get())
     }
 
     private fun setupPlayerMPV() {
@@ -480,7 +477,7 @@ class PlayerActivity : BaseActivity() {
                 }
             }
             setupGestures()
-            setViewMode(showText = false)
+            playerControls.setViewMode(showText = false)
             if (pip.supportedAndEnabled) player.paused?.let { pip.update(!it) }
             if (playerSettingsSheet?.isShowing == true) {
                 playerSettingsSheet!!.dismiss()
@@ -562,36 +559,6 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    // Fade out Player information text
-    private val playerInformationRunnable = Runnable {
-        AnimationUtils.loadAnimation(this, R.anim.player_fade_out).also { fadeAnimation ->
-            playerControls.binding.playerInformation.startAnimation(fadeAnimation)
-            playerControls.binding.playerInformation.visibility = View.GONE
-        }
-    }
-
-    internal fun toggleAutoplay(isAutoplay: Boolean) {
-        playerControls.binding.toggleAutoplay.isChecked = isAutoplay
-        playerControls.binding.toggleAutoplay.thumbDrawable = if (isAutoplay) {
-            ContextCompat.getDrawable(playerControls.context, R.drawable.ic_play_circle_filled_24)
-        } else {
-            ContextCompat.getDrawable(playerControls.context, R.drawable.ic_pause_circle_filled_24)
-        }
-
-        if (isAutoplay) {
-            playerControls.binding.playerInformation.text = getString(R.string.enable_auto_play)
-        } else {
-            playerControls.binding.playerInformation.text = getString(R.string.disable_auto_play)
-        }
-
-        if (!playerPreferences.autoplayEnabled().get() == isAutoplay) {
-            animationHandler.removeCallbacks(playerInformationRunnable)
-            playerControls.binding.playerInformation.visibility = View.VISIBLE
-            animationHandler.postDelayed(playerInformationRunnable, 1000L)
-        }
-        playerPreferences.autoplayEnabled().set(isAutoplay)
-    }
-
     internal fun showLoadingIndicator(visible: Boolean) {
         viewModel.viewModelScope.launchUI {
             playerControls.binding.playBtn.isVisible = !visible
@@ -635,29 +602,6 @@ class PlayerActivity : BaseActivity() {
         }
         selectedLoadedTrack?.let { player.aid = it.mpvId }
             ?: MPVLib.command(arrayOf("audio-add", audioTracks[index].url, "select", audioTracks[index].url))
-    }
-
-    private fun setViewMode(showText: Boolean) {
-        playerControls.binding.playerInformation.text = getString(playerViewMode.stringRes)
-        when (playerViewMode) {
-            AspectState.CROP -> {
-                mpvUpdateAspect(aspect = "-1", pan = "1.0")
-            }
-            AspectState.FIT -> {
-                mpvUpdateAspect(aspect = "-1", pan = "0.0")
-            }
-            AspectState.STRETCH -> {
-                val newAspect = "$deviceWidth/$deviceHeight"
-                mpvUpdateAspect(aspect = newAspect, pan = "1.0")
-            }
-        }
-        if (showText) {
-            animationHandler.removeCallbacks(playerInformationRunnable)
-            playerControls.binding.playerInformation.visibility = View.VISIBLE
-            animationHandler.postDelayed(playerInformationRunnable, 1000L)
-        }
-
-        playerPreferences.playerViewMode().set(playerViewMode.index)
     }
 
     @Suppress("DEPRECATION")
@@ -890,16 +834,6 @@ class PlayerActivity : BaseActivity() {
         val diffText = Utils.prettyTime(newDiff, true)
         binding.seekText.text = getString(R.string.ui_seek_distance, Utils.prettyTime(newPos), diffText)
         showGestureView("seek")
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun cycleViewMode(view: View) {
-        playerViewMode = when (playerViewMode) {
-            AspectState.STRETCH -> AspectState.FIT
-            AspectState.FIT -> AspectState.CROP
-            AspectState.CROP -> AspectState.STRETCH
-        }
-        setViewMode(showText = true)
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -1512,7 +1446,7 @@ class PlayerActivity : BaseActivity() {
 
     // mpv events
 
-    private fun mpvUpdateAspect(aspect: String, pan: String) {
+    internal fun mpvUpdateAspect(aspect: String, pan: String) {
         MPVLib.setOptionString("video-aspect-override", aspect)
         MPVLib.setOptionString("panscan", pan)
     }

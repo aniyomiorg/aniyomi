@@ -322,7 +322,6 @@
                     android:layout_height="48dp"
                     android:background="?attr/selectableItemBackground"
                     android:contentDescription="Cycle view modes"
-                    android:onClick="cycleViewMode"
                     android:src="@drawable/ic_fullscreen_black_24dp"
                     app:tint="?attr/colorOnPrimarySurface" />
 
