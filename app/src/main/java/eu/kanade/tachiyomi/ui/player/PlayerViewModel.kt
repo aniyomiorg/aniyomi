@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.ui.player
 
 import android.app.Application
-import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -30,6 +29,7 @@ import eu.kanade.tachiyomi.data.saver.Location
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
+import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.player.loader.EpisodeLoader
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
@@ -83,9 +83,8 @@ class PlayerViewModel(
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val imageSaver: ImageSaver = Injekt.get(),
-    preferences: BasePreferences = Injekt.get(),
+    basePreferences: BasePreferences = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
-    private val playerPreferences: PlayerPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
     private val delayedTrackingStore: DelayedAnimeTrackingStore = Injekt.get(),
     private val getAnime: GetAnime = Injekt.get(),
@@ -96,6 +95,8 @@ class PlayerViewModel(
     private val upsertHistory: UpsertAnimeHistory = Injekt.get(),
     private val updateEpisode: UpdateEpisode = Injekt.get(),
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
+    internal val networkPreferences: NetworkPreferences = Injekt.get(),
+    internal val playerPreferences: PlayerPreferences = Injekt.get(),
 ) : ViewModel() {
 
     val mutableState = MutableStateFlow(State())
@@ -104,7 +105,7 @@ class PlayerViewModel(
     private val eventChannel = Channel<Event>()
     val eventFlow = eventChannel.receiveAsFlow()
 
-    private val incognitoMode = preferences.incognitoMode().get()
+    private val incognitoMode = basePreferences.incognitoMode().get()
 
     /**
      * The episode loaded in the player. It can be null when instantiated for a short time.
@@ -508,7 +509,7 @@ class PlayerViewModel(
     /**
      * Sets the screenshot as cover and notifies the UI of the result.
      */
-    fun setAsCover(context: Context, image: InputStream?) {
+    fun setAsCover(image: InputStream?) {
         val anime = currentAnime ?: return
         val imageStream = image ?: return
 

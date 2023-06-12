@@ -45,9 +45,11 @@ import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
-import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
+import eu.kanade.tachiyomi.ui.player.settings.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsSheet
+import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksSheet
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
 import eu.kanade.tachiyomi.ui.player.viewer.AspectState
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
@@ -56,13 +58,11 @@ import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
 import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
 import eu.kanade.tachiyomi.ui.player.viewer.Gestures
-import eu.kanade.tachiyomi.ui.player.viewer.HwDecType
+import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
 import eu.kanade.tachiyomi.ui.player.viewer.SeekState
 import eu.kanade.tachiyomi.ui.player.viewer.SetAsCover
-import eu.kanade.tachiyomi.ui.player.viewer.components.PlayerOptionsSheet
-import eu.kanade.tachiyomi.ui.player.viewer.components.PlayerTracksSheet
 import eu.kanade.tachiyomi.util.AniSkipApi
 import eu.kanade.tachiyomi.util.SkipType
 import eu.kanade.tachiyomi.util.Stamp
@@ -94,6 +94,10 @@ class PlayerActivity :
     MPVLib.EventObserver,
     MPVLib.LogObserver {
 
+    internal val viewModel by viewModels<PlayerViewModel>()
+
+    internal val playerPreferences: PlayerPreferences = Injekt.get()
+
     companion object {
         fun newIntent(context: Context, animeId: Long?, episodeId: Long?): Intent {
             return Intent(context, PlayerActivity::class.java).apply {
@@ -103,12 +107,6 @@ class PlayerActivity :
             }
         }
     }
-
-    internal val playerPreferences: PlayerPreferences = Injekt.get()
-
-    private val networkPreferences: NetworkPreferences = Injekt.get()
-
-    internal val viewModel by viewModels<PlayerViewModel>()
 
     override fun onNewIntent(intent: Intent) {
         val animeId = intent.extras!!.getLong("animeId", -1)
@@ -144,7 +142,7 @@ class PlayerActivity :
 
     internal val player get() = binding.player
 
-    val playerControls get() = binding.playerControls
+    internal val playerControls get() = binding.playerControls
 
     private var audioManager: AudioManager? = null
     private var fineVolume = 0F
@@ -154,8 +152,6 @@ class PlayerActivity :
 
     private var deviceWidth = 0
     private var deviceHeight = 0
-
-    private val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
 
     private var audioFocusRestore: () -> Unit = {}
 
@@ -195,6 +191,8 @@ class PlayerActivity :
     } else {
         null
     }
+
+    private var playerSettingsSheet: PlayerSettingsSheet? = null
 
     @Suppress("DEPRECATION")
     private fun requestAudioFocus() {
@@ -373,10 +371,11 @@ class PlayerActivity :
         val mpvConfFile = File("${applicationContext.filesDir.path}/mpv.conf")
         playerPreferences.mpvConf().get().let { mpvConfFile.writeText(it) }
 
-        val logLevel = if (networkPreferences.verboseLogging().get()) "info" else "warn"
+        val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
         player.initialize(applicationContext.filesDir.path, logLevel)
 
         MPVLib.setOptionString("hwdec", playerPreferences.standardHwDec().get())
+        HwDecState.mode = HwDecState.get(playerPreferences.standardHwDec().get())
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
 
@@ -483,6 +482,9 @@ class PlayerActivity :
             setupGestures()
             setViewMode(showText = false)
             if (pip.supportedAndEnabled) player.paused?.let { pip.update(!it) }
+            if (playerSettingsSheet?.isShowing == true) {
+                playerSettingsSheet!!.dismiss()
+            }
         }
     }
 
@@ -516,6 +518,9 @@ class PlayerActivity :
      * to the next episode if [previous] is false
      */
     internal fun switchEpisode(previous: Boolean, autoPlay: Boolean = false) {
+        if (playerSettingsSheet?.isShowing == true) {
+            playerSettingsSheet!!.dismiss()
+        }
         player.paused = true
         showLoadingIndicator(true)
 
@@ -657,6 +662,7 @@ class PlayerActivity :
 
     @Suppress("DEPRECATION")
     fun setVisibilities() {
+        val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
         binding.root.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -864,11 +870,11 @@ class PlayerActivity :
         return super.onKeyDown(keyCode, event)
     }
 
-    fun initSeek() {
+    internal fun initSeek() {
         initialSeek = player.timePos ?: -1
     }
 
-    fun horizontalScroll(diff: Float, final: Boolean = false) {
+    internal fun horizontalScroll(diff: Float, final: Boolean = false) {
         // disable seeking when timePos is not available
         val duration = player.duration ?: 0
         if (duration == 0 || initialSeek < 0) {
@@ -897,52 +903,61 @@ class PlayerActivity :
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun pickAudio(view: View) {
-        val audioTracks = audioTracks.takeUnless { it.isEmpty() } ?: return
+    fun openTrackDialog(view: View) {
+        val qualityTracks = currentVideoList?.map { Track("", it.quality) }?.toTypedArray()?.takeUnless { it.isEmpty() }
+        val subTracks = subTracks.takeUnless { it.isEmpty() }
+        val audioTracks = audioTracks.takeUnless { it.isEmpty() }
+
+        if (qualityTracks == null || subTracks == null || audioTracks == null) return
+        if (playerSettingsSheet?.isShowing == true) return
 
         playerControls.hideControls(true)
-        PlayerTracksSheet(
-            this,
-            R.string.audio_dialog_header,
-            ::setAudio,
-            audioTracks,
-            selectedAudio,
-            null,
-        ).show()
+        playerSettingsSheet = PlayerSettingsSheet(this@PlayerActivity).apply { show() }
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun pickSub(view: View) {
-        val subTracks = subTracks.takeUnless { it.isEmpty() } ?: return
+    private var selectedQuality = 0
+
+    internal fun qualityTracksTab(dismissSheet: () -> Unit): PlayerTracksSheet {
+        val videoTracks = currentVideoList!!.map {
+            Track("", it.quality)
+        }.toTypedArray().takeUnless { it.isEmpty() }!!
+
+        return PlayerTracksSheet(
+            this,
+            ::changeQuality,
+            videoTracks,
+            selectedQuality,
+            dismissSheet,
+            null,
+        )
+    }
+
+    internal fun subtitleTracksTab(dismissTab: () -> Unit): PlayerTracksSheet {
+        val subTracks = subTracks.takeUnless { it.isEmpty() }!!
 
         playerControls.hideControls(true)
-        PlayerTracksSheet(
+        return PlayerTracksSheet(
             this,
-            R.string.subtitle_dialog_header,
             ::setSub,
             subTracks,
             selectedSub,
+            dismissTab,
             null,
-        ).show()
+        )
     }
 
-    private var currentQuality = 0
-
-    @Suppress("UNUSED_PARAMETER")
-    fun pickQuality(view: View) {
-        val videoTracks = currentVideoList?.map {
-            Track("", it.quality)
-        }?.toTypedArray()?.takeUnless { it.isEmpty() } ?: return
+    internal fun audioTracksTab(dismissTab: () -> Unit): PlayerTracksSheet {
+        val audioTracks = audioTracks.takeUnless { it.isEmpty() }!!
 
         playerControls.hideControls(true)
-        PlayerTracksSheet(
+        return PlayerTracksSheet(
             this,
-            R.string.quality_dialog_header,
-            ::changeQuality,
-            videoTracks,
-            currentQuality,
+            ::setAudio,
+            audioTracks,
+            selectedAudio,
+            dismissTab,
             null,
-        ).show()
+        )
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -1054,7 +1069,7 @@ class PlayerActivity :
      * as the cover to the presenter.
      */
     fun setAsCover() {
-        viewModel.setAsCover(this, takeScreenshot())
+        viewModel.setAsCover(takeScreenshot())
     }
 
     /**
@@ -1073,11 +1088,11 @@ class PlayerActivity :
 
     private fun changeQuality(quality: Int) {
         if (playerIsDestroyed) return
-        if (currentQuality == quality) return
+        if (selectedQuality == quality) return
         showLoadingIndicator(true)
         logcat(LogPriority.INFO) { "Changing quality" }
         currentVideoList?.getOrNull(quality)?.let {
-            currentQuality = quality
+            selectedQuality = quality
             setHttpOptions(it)
             player.timePos?.let {
                 MPVLib.command(arrayOf("set", "start", "${player.timePos}"))
@@ -1089,27 +1104,16 @@ class PlayerActivity :
         viewModel.viewModelScope.launchUI { refreshUi() }
     }
 
-    private fun updateDecoderButton() {
-        if (playerControls.binding.cycleDecoderBtn.visibility == View.VISIBLE) {
-            playerControls.binding.cycleDecoderBtn.text = when (player.hwdecActive) {
-                HwDecType.HW_PLUS.mpvValue -> HwDecType.HW_PLUS.title
-                HwDecType.SW.mpvValue -> HwDecType.SW.title
-                else -> HwDecType.HW.title
-            }
-        }
-    }
-
     @Suppress("UNUSED_PARAMETER")
     fun switchDecoder(view: View) {
-        val currentHwDec = HwDecType.get(player.hwdecActive)
-        val hwSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-        val newHwDec = when (currentHwDec) {
-            HwDecType.HW -> if (hwSupported) HwDecType.HW_PLUS else HwDecType.SW
-            HwDecType.HW_PLUS -> HwDecType.SW
-            HwDecType.SW -> HwDecType.HW
+        val newHwDec = when (HwDecState.get(player.hwdecActive)) {
+            HwDecState.HW -> if (HwDecState.isHwSupported) HwDecState.HW_PLUS else HwDecState.SW
+            HwDecState.HW_PLUS -> HwDecState.SW
+            HwDecState.SW -> HwDecState.HW
         }
         MPVLib.setOptionString("hwdec", newHwDec.mpvValue)
-        updateDecoderButton()
+        HwDecState.mode = newHwDec
+        playerControls.updateDecoderButton()
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -1142,7 +1146,6 @@ class PlayerActivity :
         player.timePos?.let { playerControls.updatePlaybackPos(it) }
         updatePlaylistButtons()
         updateEpisodeText()
-        updateDecoderButton()
         player.loadTracks()
     }
 
@@ -1385,6 +1388,11 @@ class PlayerActivity :
         }
     }
 
+    // TODO: exception java.util.ConcurrentModificationException:
+    // at java.lang.Object java.util.ArrayList$Itr.next() (ArrayList.java:860)
+    // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.fileLoaded() (PlayerActivity.kt:1874)
+    // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.event(int) (PlayerActivity.kt:1566)
+    // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
     @SuppressLint("SourceLockedOrientationActivity")
     private fun fileLoaded() {
         MPVLib.setPropertyDouble("speed", playerPreferences.playerSpeed().get().toDouble())
@@ -1403,7 +1411,7 @@ class PlayerActivity :
                 MPVLib.command(arrayOf("sub-add", sub.url, "select", sub.url))
             }
         } else {
-            currentVideoList?.getOrNull(currentQuality)
+            currentVideoList?.getOrNull(selectedQuality)
                 ?.subtitleTracks?.let { tracks ->
                     val langIndex = tracks.indexOfFirst {
                         it.lang.contains(langName)
@@ -1427,7 +1435,7 @@ class PlayerActivity :
                 MPVLib.command(arrayOf("audio-add", audio.url, "select", audio.url))
             }
         } else {
-            currentVideoList?.getOrNull(currentQuality)
+            currentVideoList?.getOrNull(selectedQuality)
                 ?.audioTracks?.let { tracks ->
                     val langIndex = tracks.indexOfFirst {
                         it.lang.contains(langName)
@@ -1457,6 +1465,8 @@ class PlayerActivity :
                     switchControlsOrientation(false)
                 }
             }
+
+            playerControls.updateDecoderButton()
 
             viewModel.mutableState.update {
                 it.copy(isLoadingAdjacentEpisode = false)

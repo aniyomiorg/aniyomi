@@ -1,6 +1,4 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/optionsScrollView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -11,41 +9,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginBottom="32dp" >
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="16dp">
-
-            <TextView
-                android:id="@+id/track_selection_header"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:paddingHorizontal="16dp"
-                tools:text="@string/quality_dialog_header"
-                android:textAppearance="@style/TextAppearance.Tachiyomi.SectionHeader"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/track_settings_button"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <ImageButton
-                android:id="@+id/track_settings_button"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_settings_24dp"
-                android:contentDescription="@string/settings"
-                app:tint="?attr/colorOnSurface"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 
