@@ -26,7 +26,6 @@ import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -89,10 +88,7 @@ import java.io.InputStream
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-class PlayerActivity :
-    BaseActivity(),
-    MPVLib.EventObserver,
-    MPVLib.LogObserver {
+class PlayerActivity : BaseActivity() {
 
     internal val viewModel by viewModels<PlayerViewModel>()
 
@@ -138,11 +134,11 @@ class PlayerActivity :
 
     internal val pip = PictureInPictureHandler(this, playerPreferences.enablePip().get())
 
+    private val playerObserver = PlayerObserver(this)
+
     private var mReceiver: BroadcastReceiver? = null
 
     lateinit var binding: PlayerActivityBinding
-
-    private val langName = LocaleHelper.getSimpleLocaleDisplayName()
 
     internal val player get() = binding.player
 
@@ -293,6 +289,8 @@ class PlayerActivity :
 
     private var playerIsDestroyed = true
 
+    private val langName = LocaleHelper.getSimpleLocaleDisplayName()
+
     private var subTracks: Array<Track> = emptyArray()
 
     private var selectedSub = 0
@@ -377,14 +375,12 @@ class PlayerActivity :
 
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
         player.initialize(applicationContext.filesDir.path, logLevel)
-
-        MPVLib.setOptionString("hwdec", playerPreferences.standardHwDec().get())
-        HwDecState.mode = HwDecState.get(playerPreferences.standardHwDec().get())
+        mpvUpdateHwDec(HwDecState.get(playerPreferences.standardHwDec().get()))
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
 
-        MPVLib.addLogObserver(this)
-        player.addObserver(this)
+        MPVLib.addLogObserver(playerObserver)
+        player.addObserver(playerObserver)
     }
 
     private fun setupPlayerAudio() {
@@ -596,7 +592,7 @@ class PlayerActivity :
         playerPreferences.autoplayEnabled().set(isAutoplay)
     }
 
-    private fun showLoadingIndicator(visible: Boolean) {
+    internal fun showLoadingIndicator(visible: Boolean) {
         viewModel.viewModelScope.launchUI {
             playerControls.binding.playBtn.isVisible = !visible
             binding.loadingIndicator.isVisible = visible
@@ -1105,8 +1101,7 @@ class PlayerActivity :
             HwDecState.HW_PLUS -> HwDecState.SW
             HwDecState.SW -> HwDecState.HW
         }
-        MPVLib.setOptionString("hwdec", newHwDec.mpvValue)
-        HwDecState.mode = newHwDec
+        mpvUpdateHwDec(newHwDec)
         playerControls.updateDecoderButton()
     }
 
@@ -1191,10 +1186,10 @@ class PlayerActivity :
     override fun onDestroy() {
         playerPreferences.playerVolumeValue().set(fineVolume)
         playerPreferences.playerBrightnessValue().set(brightness)
-        MPVLib.removeLogObserver(this)
+        MPVLib.removeLogObserver(playerObserver)
         if (!playerIsDestroyed) {
             playerIsDestroyed = true
-            player.removeObserver(this)
+            player.removeObserver(playerObserver)
             player.destroy()
         }
         abandonAudioFocus()
@@ -1395,7 +1390,7 @@ class PlayerActivity :
     // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.event(int) (PlayerActivity.kt:1566)
     // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
     @SuppressLint("SourceLockedOrientationActivity")
-    private fun fileLoaded() {
+    internal fun fileLoaded() {
         MPVLib.setPropertyDouble("speed", playerPreferences.playerSpeed().get().toDouble())
         clearTracks()
         player.loadTracks()
@@ -1522,7 +1517,12 @@ class PlayerActivity :
         MPVLib.setOptionString("panscan", pan)
     }
 
-    private fun eventPropertyUi(property: String, value: Long) {
+    internal fun mpvUpdateHwDec(hwDec: HwDecState) {
+        MPVLib.setOptionString("hwdec", hwDec.mpvValue)
+        HwDecState.mode = hwDec
+    }
+
+    internal fun eventPropertyUi(property: String, value: Long) {
         when (property) {
             "demuxer-cache-time" -> playerControls.updateBufferPosition(value.toInt())
             "time-pos" -> {
@@ -1533,9 +1533,7 @@ class PlayerActivity :
         }
     }
 
-    private val nextEpisodeRunnable = Runnable { switchEpisode(previous = false, autoPlay = true) }
-
-    private fun eventPropertyUi(property: String, value: Boolean) {
+    internal fun eventPropertyUi(property: String, value: Boolean) {
         when (property) {
             "seeking" -> isSeeking(value)
             "paused-for-cache" -> showLoadingIndicator(value)
@@ -1556,55 +1554,5 @@ class PlayerActivity :
         }
     }
 
-    override fun eventProperty(property: String) {}
-
-    override fun eventProperty(property: String, value: Boolean) {
-        runOnUiThread { eventPropertyUi(property, value) }
-    }
-
-    override fun eventProperty(property: String, value: Long) {
-        runOnUiThread { eventPropertyUi(property, value) }
-    }
-
-    override fun eventProperty(property: String, value: String) {}
-
-    override fun event(eventId: Int) {
-        when (eventId) {
-            MPVLib.mpvEventId.MPV_EVENT_FILE_LOADED -> fileLoaded()
-            MPVLib.mpvEventId.MPV_EVENT_START_FILE -> viewModel.viewModelScope.launchUI {
-                player.paused = false
-                refreshUi()
-                // Fixes a minor Ui bug but I have no idea why
-                if (viewModel.isEpisodeOnline() != true) showLoadingIndicator(false)
-            }
-        }
-    }
-
-    override fun efEvent(err: String?) {
-        var errorMessage = err ?: "Error: File ended"
-        if (!httpError.isNullOrEmpty()) {
-            errorMessage += ": $httpError"
-            httpError = null
-        }
-        logcat(LogPriority.ERROR) { errorMessage }
-        runOnUiThread {
-            showLoadingIndicator(false)
-            toast(errorMessage, Toast.LENGTH_LONG)
-        }
-    }
-
-    private var httpError: String? = null
-
-    override fun logMessage(prefix: String, level: Int, text: String) {
-        val logPriority = when (level) {
-            MPVLib.mpvLogLevel.MPV_LOG_LEVEL_FATAL, MPVLib.mpvLogLevel.MPV_LOG_LEVEL_ERROR -> LogPriority.ERROR
-            MPVLib.mpvLogLevel.MPV_LOG_LEVEL_WARN -> LogPriority.WARN
-            MPVLib.mpvLogLevel.MPV_LOG_LEVEL_INFO -> LogPriority.INFO
-            else -> null
-        }
-        if (logPriority != null) {
-            if (text.contains("HTTP error")) httpError = text
-            logcat.logcat("mpv/$prefix", logPriority) { text }
-        }
-    }
+    private val nextEpisodeRunnable = Runnable { switchEpisode(previous = false, autoPlay = true) }
 }
