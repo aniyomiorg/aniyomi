@@ -120,6 +120,10 @@ class PlayerActivity :
         viewModel.saveCurrentEpisodeWatchingProgress()
 
         lifecycleScope.launchNonCancellable {
+            viewModel.mutableState.update {
+                it.copy(isLoadingEpisode = true)
+            }
+
             val initResult = viewModel.init(animeId, episodeId)
             if (!initResult.second.getOrDefault(false)) {
                 val exception = initResult.second.exceptionOrNull() ?: IllegalStateException("Unknown error")
@@ -127,7 +131,7 @@ class PlayerActivity :
                     setInitialEpisodeError(exception)
                 }
             }
-            lifecycleScope.launch { setVideoList(initResult.first!!) }
+            lifecycleScope.launch { setVideoList(quality = 0, initResult.first!!) }
         }
         super.onNewIntent(intent)
     }
@@ -526,7 +530,7 @@ class PlayerActivity :
 
         lifecycleScope.launch {
             viewModel.mutableState.update {
-                it.copy(isLoadingAdjacentEpisode = true)
+                it.copy(isLoadingEpisode = true)
             }
             val switchMethod =
                 if (previous && !autoPlay) {
@@ -548,7 +552,7 @@ class PlayerActivity :
                     if (switchMethod.first != null) {
                         when {
                             switchMethod.first!!.isEmpty() -> setInitialEpisodeError(Exception("Video list is empty."))
-                            else -> setVideoList(switchMethod.first!!)
+                            else -> setVideoList(quality = 0, switchMethod.first!!)
                         }
                     } else {
                         logcat(LogPriority.ERROR) { "Error getting links" }
@@ -1091,17 +1095,7 @@ class PlayerActivity :
         if (selectedQuality == quality) return
         showLoadingIndicator(true)
         logcat(LogPriority.INFO) { "Changing quality" }
-        currentVideoList?.getOrNull(quality)?.let {
-            selectedQuality = quality
-            setHttpOptions(it)
-            player.timePos?.let {
-                MPVLib.command(arrayOf("set", "start", "${player.timePos}"))
-            }
-            subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
-            audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
-            MPVLib.command(arrayOf("loadfile", parseVideoUrl(it.videoUrl)))
-        }
-        viewModel.viewModelScope.launchUI { refreshUi() }
+        setVideoList(quality, currentVideoList)
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -1301,15 +1295,22 @@ class PlayerActivity :
         finish()
     }
 
-    private fun setVideoList(videos: List<Video>, fromStart: Boolean = false) {
+    private fun setVideoList(quality: Int, videos: List<Video>?, fromStart: Boolean = false) {
         if (playerIsDestroyed) return
         currentVideoList = videos
-        currentVideoList?.firstOrNull()?.let {
+        currentVideoList?.getOrNull(quality)?.let {
+            selectedQuality = quality
             setHttpOptions(it)
-            viewModel.currentEpisode?.let { episode ->
-                if ((episode.seen && !playerPreferences.preserveWatchingPosition().get()) || fromStart) episode.last_second_seen = 1L
-                MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
-                playerControls.updatePlaybackDuration(episode.total_seconds.toInt() / 1000)
+            if (viewModel.state.value.isLoadingEpisode) {
+                viewModel.currentEpisode?.let { episode ->
+                    if ((episode.seen && !playerPreferences.preserveWatchingPosition().get()) || fromStart) episode.last_second_seen = 1L
+                    MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
+                    playerControls.updatePlaybackDuration(episode.total_seconds.toInt() / 1000)
+                }
+            } else {
+                player.timePos?.let {
+                    MPVLib.command(arrayOf("set", "start", "${player.timePos}"))
+                }
             }
             subTracks = arrayOf(Track("nothing", "Off")) + it.subtitleTracks.toTypedArray()
             audioTracks = arrayOf(Track("nothing", "Off")) + it.audioTracks.toTypedArray()
@@ -1469,7 +1470,7 @@ class PlayerActivity :
             playerControls.updateDecoderButton()
 
             viewModel.mutableState.update {
-                it.copy(isLoadingAdjacentEpisode = false)
+                it.copy(isLoadingEpisode = false)
             }
         }
         // aniSkip stuff
