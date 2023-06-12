@@ -6,8 +6,7 @@
     <string name="entries">Entradas de la biblioteca</string>
     <string name="chapters_episodes">Capítulos y episodios</string>
     <string name="episodes">Episodios</string>
-    <string name="backup_settings_warning">Advertencia: la copia de seguridad de la configuración puede almacenar información confidencial, como contraseñas.
-\n¡No compartas este archivo de la copia de seguridad!</string>
+    <string name="backup_settings_warning">Advertencia: La copia de seguridad de la configuración también almacenará tus contraseñas, ¡no compartas este archivo de la copia de seguridad!</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
@@ -217,9 +216,9 @@
     <string name="video_stretch_screen">Extender a la pantalla</string>
     <string name="playback_speed_dialog_title">Cambiar la velocidad de reproducción:</string>
     <string name="playback_speed_dialog_reset">Restablecer</string>
-    <string name="quality_dialog_header">Cambia la calidad del vídeo:</string>
-    <string name="subtitle_dialog_header">Cambiar la pista de los subtítulos:</string>
-    <string name="audio_dialog_header">Cambia la pista del audio:</string>
+    <string name="quality_dialog_header">Calidad del video</string>
+    <string name="subtitle_dialog_header">Subtitular</string>
+    <string name="audio_dialog_header">Audio</string>
     <string name="playback_options_speed">Velocidad de reproducción</string>
     <string name="playback_options_quality">Calidad del vídeo</string>
     <string name="playback_options_title">Opciones de la reproducción</string>
