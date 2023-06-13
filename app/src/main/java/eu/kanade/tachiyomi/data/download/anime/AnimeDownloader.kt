@@ -648,7 +648,7 @@ class AnimeDownloader(
                         // 1DM
                         pkgName.startsWith("idm.internet.download.manager") -> {
                             intent.apply {
-                                component = ComponentName(pkgName, "${pkgName.substringBeforeLast(".")}.Downloader")
+                                component = ComponentName(pkgName, "idm.internet.download.manager.Downloader")
                                 action = Intent.ACTION_VIEW
                                 data = Uri.parse(video.videoUrl)
                                 putExtra("extra_filename", filename)

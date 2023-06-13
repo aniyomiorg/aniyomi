@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player.viewer.components
+package eu.kanade.tachiyomi.ui.player.settings
 
 import android.content.Context
 import android.os.Build
@@ -11,7 +11,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PrefSkipIntroLengthBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.player.viewer.HwDecType
+import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.SpeedPickerDialog
 import `is`.xyz.mpv.StateRestoreCallback
@@ -67,13 +67,13 @@ class PlayerDialogs(val activity: PlayerActivity) {
 
     internal fun decoderDialog(restoreState: StateRestoreCallback) {
         val items = mutableListOf(
-            Pair("${HwDecType.HW.title} (${HwDecType.HW.mpvValue})", HwDecType.HW.mpvValue),
-            Pair(HwDecType.SW.title, HwDecType.SW.mpvValue),
+            Pair("${HwDecState.HW.title} (${HwDecState.HW.mpvValue})", HwDecState.HW.mpvValue),
+            Pair(HwDecState.SW.title, HwDecState.SW.mpvValue),
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             items.add(
                 index = 0,
-                Pair("${HwDecType.HW_PLUS.title} (${HwDecType.HW_PLUS.mpvValue})", HwDecType.HW_PLUS.mpvValue),
+                Pair("${HwDecState.HW_PLUS.title} (${HwDecState.HW_PLUS.mpvValue})", HwDecState.HW_PLUS.mpvValue),
             )
         }
 
@@ -85,6 +85,7 @@ class PlayerDialogs(val activity: PlayerActivity) {
                 hwdecActive = items[idx].second
                 activity.playerPreferences.standardHwDec().set(hwdecActive)
                 MPVLib.setPropertyString("hwdec", hwdecActive)
+                HwDecState.mode = HwDecState.get(hwdecActive)
                 dialog.dismiss()
             }
             setNegativeButton(R.string.dialog_cancel) { dialog, _ -> dialog.cancel() }

@@ -27,7 +27,7 @@ import tachiyomi.domain.items.chapter.service.ChapterRecognition
 import tachiyomi.source.local.R
 import tachiyomi.source.local.filter.manga.MangaOrderBy
 import tachiyomi.source.local.image.manga.LocalMangaCoverManager
-import tachiyomi.source.local.io.Archive
+import tachiyomi.source.local.io.ArchiveManga
 import tachiyomi.source.local.io.Format
 import tachiyomi.source.local.io.manga.LocalMangaSourceFileSystem
 import tachiyomi.source.local.metadata.fillChapterMetadata
@@ -184,7 +184,7 @@ class LocalMangaSource(
                 // Copy ComicInfo.xml from chapter archive to top level if found
                 noXmlFile == null -> {
                     val chapterArchives = mangaDirFiles
-                        .filter(Archive::isSupported)
+                        .filter(ArchiveManga::isSupported)
                         .toList()
 
                     val mangaDir = fileSystem.getMangaDirectory(manga.url)
@@ -256,7 +256,7 @@ class LocalMangaSource(
     override suspend fun getChapterList(manga: SManga): List<SChapter> {
         return fileSystem.getFilesInMangaDirectory(manga.url)
             // Only keep supported formats
-            .filter { it.isDirectory || Archive.isSupported(it) }
+            .filter { it.isDirectory || ArchiveManga.isSupported(it) }
             .map { chapterFile ->
                 SChapter.create().apply {
                     url = "${manga.url}/${chapterFile.name}"

@@ -31,9 +31,9 @@ import eu.kanade.domain.source.anime.model.icon
 import eu.kanade.presentation.util.rememberResourceBitmapPainter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
-import eu.kanade.tachiyomi.source.anime.LocalAnimeSource
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.source.anime.model.AnimeSource
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
 
 private val defaultModifier = Modifier
     .height(40.dp)

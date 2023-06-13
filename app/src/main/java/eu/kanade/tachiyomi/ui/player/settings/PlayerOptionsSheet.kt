@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player.viewer.components
+package eu.kanade.tachiyomi.ui.player.settings
 
 import android.view.LayoutInflater
 import android.view.View

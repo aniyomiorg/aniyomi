@@ -348,7 +348,7 @@ object SettingsDownloadScreen : SearchableSettings {
             when (it.packageName) {
                 "idm.internet.download.manager" -> true
                 "idm.internet.download.manager.plus" -> true
-                "idm.internet.download.manager.lite" -> true
+                "idm.internet.download.manager.adm.lite" -> true
                 "com.dv.adm" -> true
                 else -> false
             }

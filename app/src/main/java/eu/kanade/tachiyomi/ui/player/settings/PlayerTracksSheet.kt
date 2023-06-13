@@ -1,49 +1,43 @@
-package eu.kanade.tachiyomi.ui.player.viewer.components
+package eu.kanade.tachiyomi.ui.player.settings
 
-import android.view.LayoutInflater
-import android.view.View
+import android.annotation.SuppressLint
 import android.widget.TextView
 import androidx.core.view.children
+import androidx.core.widget.NestedScrollView
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.databinding.PlayerTracksItemBinding
 import eu.kanade.tachiyomi.databinding.PlayerTracksSheetBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.widget.sheet.PlayerBottomSheetDialog
 
 /**
  * Sheet to show when track selection buttons in player are clicked.
  *
  * @param activity the instance of the PlayerActivity in use.
- * @param textRes the header text of the sheet
  * @param changeTrackMethod the method to run on changing tracks
  * @param tracks the given array of tracks
  * @param preselectedTrack the index of the current selected track
+ * @param dismissSheet the method to run on selecting a track to dismiss the sheet
  * @param trackSettings the method to run on clicking the settings button, null if no button
  */
+@SuppressLint("ViewConstructor")
 class PlayerTracksSheet(
     private val activity: PlayerActivity,
-    private val textRes: Int,
     private val changeTrackMethod: (Int) -> Unit,
     private val tracks: Array<Track>,
     private val preselectedTrack: Int,
+    private val dismissSheet: () -> Unit,
     private val trackSettings: (() -> Unit)?,
-) : PlayerBottomSheetDialog(activity) {
+) : NestedScrollView(activity, null) {
 
-    private lateinit var binding: PlayerTracksSheetBinding
-    private var wasPaused: Boolean? = null
+    private val binding = PlayerTracksSheetBinding.inflate(activity.layoutInflater, null, false)
 
-    override fun createView(inflater: LayoutInflater): View {
-        wasPaused = activity.player.paused
-        activity.player.paused = true
-        binding = PlayerTracksSheetBinding.inflate(activity.layoutInflater, null, false)
+    init {
+        addView(binding.root)
+        initTracks()
+    }
 
-        if (trackSettings != null) {
-            binding.trackSettingsButton.visibility = View.VISIBLE
-            binding.trackSettingsButton.setOnClickListener { trackSettings.invoke() }
-        }
-
-        binding.trackSelectionHeader.setText(textRes)
+    private fun initTracks() {
         tracks.forEachIndexed { i, track ->
             val trackView = PlayerTracksItemBinding.inflate(activity.layoutInflater).root
             trackView.text = track.lang
@@ -54,27 +48,16 @@ class PlayerTracksSheet(
                 clearSelection()
                 (it as? TextView)?.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_24dp, 0)
                 changeTrackMethod(i)
-                this.dismiss()
+                dismissSheet()
             }
             binding.linearLayout.addView(trackView)
         }
-
-        return binding.root
     }
 
     private fun clearSelection() {
         binding.linearLayout.children.forEach {
             val view = it as? TextView ?: return
-            if (view.id != R.id.track_selection_header) {
-                view.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_blank_24dp, 0)
-            }
+            view.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_blank_24dp, 0)
         }
-    }
-
-    override fun dismiss() {
-        activity.playerControls.showAndFadeControls()
-        wasPaused?.let { activity.player.paused = it }
-        super.dismiss()
-        activity.setVisibilities()
     }
 }
