@@ -110,12 +110,12 @@ private class MoreScreenModel(
         coroutineScope.launchIO {
             combine(
                 downloadManager.isDownloaderRunning,
-                downloadManager.queue.state,
+                downloadManager.queueState,
             ) { isRunningManga, mangaDownloadQueue -> Pair(isRunningManga, mangaDownloadQueue.size) }
                 .collectLatest { (isDownloadingManga, mangaDownloadQueueSize) ->
                     combine(
                         animeDownloadManager.isDownloaderRunning,
-                        animeDownloadManager.queue.state,
+                        animeDownloadManager.queueState,
                     ) { isRunningAnime, animeDownloadQueue -> Pair(isRunningAnime, animeDownloadQueue.size) }
                         .collectLatest { (isDownloadingAnime, animeDownloadQueueSize) ->
                             val isDownloading = isDownloadingAnime || isDownloadingManga

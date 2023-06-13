@@ -9,7 +9,6 @@ import eu.kanade.domain.items.chapter.model.toSChapter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.ChapterCache
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
-import eu.kanade.tachiyomi.data.download.manga.model.MangaDownloadQueue
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.source.UnmeteredSource
@@ -23,12 +22,15 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.retryWhen
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
 import nl.adaptivity.xmlutil.serialization.XML
@@ -59,7 +61,7 @@ import java.util.zip.ZipOutputStream
 /**
  * This class is the one in charge of downloading chapters.
  *
- * Its [queue] contains the list of chapters to download. In order to download them, the downloader
+ * Its queue contains the list of chapters to download. In order to download them, the downloader
  * subscription must be running and the list of chapters must be sent to them by [downloadsRelay].
  *
  * The queue manipulation must be done in one thread (currently the main thread) to avoid unexpected
@@ -88,7 +90,8 @@ class MangaDownloader(
     /**
      * Queue where active downloads are kept.
      */
-    val queue = MangaDownloadQueue(store)
+    val _queueState = MutableStateFlow<List<MangaDownload>>(emptyList())
+    val queueState = _queueState.asStateFlow()
 
     /**
      * Notifier for the downloader state and progress.
@@ -120,7 +123,7 @@ class MangaDownloader(
     init {
         launchNow {
             val chapters = async { store.restore() }
-            queue.addAll(chapters.await())
+            addAllToQueue(chapters.await())
         }
     }
 
@@ -131,13 +134,13 @@ class MangaDownloader(
      * @return true if the downloader is started, false otherwise.
      */
     fun start(): Boolean {
-        if (subscription != null || queue.isEmpty()) {
+        if (subscription != null || queueState.value.isEmpty()) {
             return false
         }
 
         initializeSubscription()
 
-        val pending = queue.filter { it.status != MangaDownload.State.DOWNLOADED }
+        val pending = queueState.value.filter { it: MangaDownload -> it.status != MangaDownload.State.DOWNLOADED }
         pending.forEach { if (it.status != MangaDownload.State.QUEUE) it.status = MangaDownload.State.QUEUE }
 
         isPaused = false
@@ -151,7 +154,7 @@ class MangaDownloader(
      */
     fun stop(reason: String? = null) {
         destroySubscription()
-        queue
+        queueState.value
             .filter { it.status == MangaDownload.State.DOWNLOADING }
             .forEach { it.status = MangaDownload.State.ERROR }
 
@@ -160,7 +163,7 @@ class MangaDownloader(
             return
         }
 
-        if (isPaused && queue.isNotEmpty()) {
+        if (isPaused && queueState.value.isNotEmpty()) {
             notifier.onPaused()
         } else {
             notifier.onComplete()
@@ -179,7 +182,7 @@ class MangaDownloader(
      */
     fun pause() {
         destroySubscription()
-        queue
+        queueState.value
             .filter { it.status == MangaDownload.State.DOWNLOADING }
             .forEach { it.status = MangaDownload.State.QUEUE }
         isPaused = true
@@ -191,7 +194,7 @@ class MangaDownloader(
     fun clearQueue() {
         destroySubscription()
 
-        queue.clear()
+        _clearQueue()
         notifier.dismissProgress()
     }
 
@@ -250,7 +253,7 @@ class MangaDownloader(
         }
 
         val source = sourceManager.get(manga.source) as? HttpSource ?: return@launchIO
-        val wasEmpty = queue.isEmpty()
+        val wasEmpty = queueState.value.isEmpty()
         // Called in background thread, the operation can be slow with SAF.
         val chaptersWithoutDir = async {
             chapters
@@ -263,12 +266,12 @@ class MangaDownloader(
         // Runs in main thread (synchronization needed).
         val chaptersToQueue = chaptersWithoutDir.await()
             // Filter out those already enqueued.
-            .filter { chapter -> queue.none { it.chapter.id == chapter.id } }
+            .filter { chapter -> queueState.value.none { it: MangaDownload -> it.chapter.id == chapter.id } }
             // Create a download for each one.
             .map { MangaDownload(source, manga, it) }
 
         if (chaptersToQueue.isNotEmpty()) {
-            queue.addAll(chaptersToQueue)
+            addAllToQueue(chaptersToQueue)
 
             if (isRunning) {
                 // Send the list of downloads to the downloader.
@@ -277,8 +280,8 @@ class MangaDownloader(
 
             // Start downloader if needed
             if (autoStart && wasEmpty) {
-                val queuedDownloads = queue.count { it.source !is UnmeteredSource }
-                val maxDownloadsFromSource = queue
+                val queuedDownloads = queueState.value.count { it: MangaDownload -> it.source !is UnmeteredSource }
+                val maxDownloadsFromSource = queueState.value
                     .groupBy { it.source }
                     .filterKeys { it !is UnmeteredSource }
                     .maxOfOrNull { it.value.size }
@@ -636,7 +639,7 @@ class MangaDownloader(
         // Delete successful downloads from queue
         if (download.status == MangaDownload.State.DOWNLOADED) {
             // Remove downloaded chapter from queue
-            queue.remove(download)
+            removeFromQueue(download)
         }
         if (areAllDownloadsFinished()) {
             stop()
@@ -647,7 +650,67 @@ class MangaDownloader(
      * Returns true if all the queued downloads are in DOWNLOADED or ERROR state.
      */
     private fun areAllDownloadsFinished(): Boolean {
-        return queue.none { it.status.value <= MangaDownload.State.DOWNLOADING.value }
+        return queueState.value.none { it: MangaDownload -> it.status.value <= MangaDownload.State.DOWNLOADING.value }
+    }
+
+    fun addAllToQueue(downloads: List<MangaDownload>) {
+        _queueState.update {
+            downloads.forEach { download ->
+                download.status = MangaDownload.State.QUEUE
+            }
+            store.addAll(downloads)
+            it + downloads
+        }
+    }
+
+    fun removeFromQueue(download: MangaDownload) {
+        _queueState.update {
+            store.remove(download)
+            if (download.status == MangaDownload.State.DOWNLOADING || download.status == MangaDownload.State.QUEUE) {
+                download.status = MangaDownload.State.NOT_DOWNLOADED
+            }
+            it - download
+        }
+    }
+
+    fun removeFromQueue(chapters: List<Chapter>) {
+        chapters.forEach { chapter ->
+            queueState.value.find { it.chapter.id == chapter.id }?.let { removeFromQueue(it) }
+        }
+    }
+
+    fun removeFromQueue(manga: Manga) {
+        queueState.value.filter { it.manga.id == manga.id }.forEach { removeFromQueue(it) }
+    }
+
+    fun _clearQueue() {
+        _queueState.update {
+            it.forEach { download ->
+                if (download.status == MangaDownload.State.DOWNLOADING || download.status == MangaDownload.State.QUEUE) {
+                    download.status = MangaDownload.State.NOT_DOWNLOADED
+                }
+            }
+            store.clear()
+            emptyList()
+        }
+    }
+
+    fun updateQueue(downloads: List<MangaDownload>) {
+        val wasRunning = isRunning
+
+        if (downloads.isEmpty()) {
+            clearQueue()
+            stop()
+            return
+        }
+
+        pause()
+        _clearQueue()
+        addAllToQueue(downloads)
+
+        if (wasRunning) {
+            start()
+        }
     }
 
     companion object {

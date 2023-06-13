@@ -445,7 +445,7 @@ class MangaInfoScreenModel(
 
     private fun observeDownloads() {
         coroutineScope.launchIO {
-            downloadManager.queue.statusFlow()
+            downloadManager.statusFlow()
                 .filter { it.manga.id == successState?.manga?.id }
                 .catch { error -> logcat(LogPriority.ERROR, error) }
                 .collect {
@@ -456,7 +456,7 @@ class MangaInfoScreenModel(
         }
 
         coroutineScope.launchIO {
-            downloadManager.queue.progressFlow()
+            downloadManager.progressFlow()
                 .filter { it.manga.id == successState?.manga?.id }
                 .catch { error -> logcat(LogPriority.ERROR, error) }
                 .collect {

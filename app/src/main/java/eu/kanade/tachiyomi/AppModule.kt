@@ -62,13 +62,9 @@ import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 import tachiyomi.data.listOfStringsAdapter
 import tachiyomi.data.updateStrategyAdapter
 import tachiyomi.mi.data.AnimeDatabase
-import tachiyomi.source.local.image.anime.AndroidLocalAnimeCoverManager
 import tachiyomi.source.local.image.anime.LocalAnimeCoverManager
-import tachiyomi.source.local.image.manga.AndroidLocalMangaCoverManager
 import tachiyomi.source.local.image.manga.LocalMangaCoverManager
-import tachiyomi.source.local.io.anime.AndroidLocalAnimeSourceFileSystem
 import tachiyomi.source.local.io.anime.LocalAnimeSourceFileSystem
-import tachiyomi.source.local.io.manga.AndroidLocalMangaSourceFileSystem
 import tachiyomi.source.local.io.manga.LocalMangaSourceFileSystem
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
@@ -206,11 +202,11 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory { ImageSaver(app) }
 
-        addSingletonFactory<LocalMangaSourceFileSystem> { AndroidLocalMangaSourceFileSystem(app) }
-        addSingletonFactory<LocalMangaCoverManager> { AndroidLocalMangaCoverManager(app, get()) }
+        addSingletonFactory { LocalMangaSourceFileSystem(app) }
+        addSingletonFactory { LocalMangaCoverManager(app, get()) }
 
-        addSingletonFactory<LocalAnimeSourceFileSystem> { AndroidLocalAnimeSourceFileSystem(app) }
-        addSingletonFactory<LocalAnimeCoverManager> { AndroidLocalAnimeCoverManager(app, get()) }
+        addSingletonFactory { LocalAnimeSourceFileSystem(app) }
+        addSingletonFactory { LocalAnimeCoverManager(app, get()) }
 
         addSingletonFactory { ExternalIntents() }
 

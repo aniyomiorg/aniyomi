@@ -105,7 +105,7 @@ class AnimeDownloadQueueScreenModel(
 
     init {
         coroutineScope.launch {
-            downloadManager.queue.state
+            downloadManager.queueState
                 .map { downloads ->
                     downloads
                         .groupBy { it.source }
@@ -130,8 +130,8 @@ class AnimeDownloadQueueScreenModel(
     val isDownloaderRunning
         get() = downloadManager.isDownloaderRunning
 
-    fun getDownloadStatusFlow() = downloadManager.queue.statusFlow()
-    fun getDownloadProgressFlow() = downloadManager.queue.progressFlow()
+    fun getDownloadStatusFlow() = downloadManager.statusFlow()
+    fun getDownloadProgressFlow() = downloadManager.progressFlow()
 
     fun startDownloads() {
         downloadManager.startDownloads()
