@@ -250,12 +250,12 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         if (duration != null) {
             if (invertedPlayback) {
-                binding.playbackPositionTxt.text = "-${Utils.prettyTime(duration - position)}"
+                binding.playbackPositionBtn.text = "-${Utils.prettyTime(duration - position)}"
             } else if (invertedDuration) {
-                binding.playbackPositionTxt.text = Utils.prettyTime(position)
-                binding.playbackDurationTxt.text = "-${Utils.prettyTime(duration - position)}"
+                binding.playbackPositionBtn.text = Utils.prettyTime(position)
+                binding.playbackDurationBtn.text = "-${Utils.prettyTime(duration - position)}"
             } else {
-                binding.playbackPositionTxt.text = Utils.prettyTime(position)
+                binding.playbackPositionBtn.text = Utils.prettyTime(position)
             }
             activity.viewModel.onSecondReached(position, duration)
         }
@@ -267,7 +267,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     @SuppressLint("SetTextI18n")
     internal fun updatePlaybackDuration(duration: Int) {
         if (!playerPreferences.invertedDurationTxt().get() && player.duration != null) {
-            binding.playbackDurationTxt.text = Utils.prettyTime(duration)
+            binding.playbackDurationBtn.text = Utils.prettyTime(duration)
         }
 
         if (SeekState.mode != SeekState.SEEKBAR) {
@@ -472,7 +472,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         if (volume == 0) {
             binding.volumeImg.setImageResource(R.drawable.ic_volume_off_24dp)
         } else {
-            binding.volumeImg.setImageResource(R.drawable.ic_volume_on_24dp)
+            binding.volumeImg.setImageResource(R.drawable.ic_volume_on_20dp)
         }
         if (showBar) showGestureView("volume")
     }
@@ -481,11 +481,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.brightnessText.text = brightness.toString()
         binding.brightnessBar.progress = abs(brightness)
         if (brightness >= 0) {
-            binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_24dp)
+            binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_20dp)
             binding.brightnessBar.max = 100
             binding.brightnessBar.secondaryProgress = 100
         } else {
-            binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_24dp)
+            binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_20dp)
             binding.brightnessBar.max = 75
             binding.brightnessBar.secondaryProgress = 75
         }

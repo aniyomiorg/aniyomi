@@ -46,7 +46,7 @@
         android:gravity="center"
         android:padding="4dp"
         android:textColor="@android:color/white"
-        android:textSize="14sp"
+        android:textSize="12sp"
         tools:text="10 seconds" />
 
 </merge>
