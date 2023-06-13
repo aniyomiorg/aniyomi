@@ -6,8 +6,7 @@
     <string name="entries">Entri pustaka</string>
     <string name="chapters_episodes">chapter dan episode</string>
     <string name="episodes">Episode</string>
-    <string name="backup_settings_warning">Peringatan: Mencadangkan pengaturan mungkin menyimpan informasi sensitif seperti kata sandi pelacak.
-\nJangan bagikan file cadangan ini!</string>
+    <string name="backup_settings_warning">Peringatan: Mencadangkan pengaturan akan menyimpan kata sandi anda juga, jangan bagikan file cadangan ini!</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
@@ -207,9 +206,9 @@
     <string name="video_stretch_screen">Perluas ke layar</string>
     <string name="playback_speed_dialog_title">Ubah kecepatan pemutaran:</string>
     <string name="playback_speed_dialog_reset">Setel ulang (reset)</string>
-    <string name="quality_dialog_header">Ubah kualitas Video:</string>
-    <string name="subtitle_dialog_header">Ubah sub judul:</string>
-    <string name="audio_dialog_header">Ubah trek audio:</string>
+    <string name="quality_dialog_header">Kualitas Video</string>
+    <string name="subtitle_dialog_header">Subtitle</string>
+    <string name="audio_dialog_header">Audio</string>
     <string name="playback_options_speed">Kecepatan pemutaran</string>
     <string name="playback_options_quality">Kualitas video</string>
     <string name="playback_options_title">Opsi pemutaran</string>
@@ -233,9 +232,9 @@
     <string name="player_aniskip_dontskip_toast">Lewati dalam %d detik</string>
     <string name="player_aniskip_skip">%s lewati</string>
     <string name="player_hwdec_dialog_title">Pengaturan standar mode decoding hardware</string>
-    <string name="notification_episodes_single">episode %1$s</string>
+    <string name="notification_episodes_single">Episode %1$s</string>
     <string name="notification_episodes_single_and_more">Episode %1$s dan %2$d lainnya</string>
-    <string name="notification_episodes_multiple">episode %1$s</string>
+    <string name="notification_episodes_multiple">Episode %1$s</string>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="other">Episode %1$s dan %2$d lainnya</item>
     </plurals>
