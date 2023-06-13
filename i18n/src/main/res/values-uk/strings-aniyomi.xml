@@ -74,8 +74,7 @@
     <string name="chapters_episodes">Розділи та епізоди</string>
     <string name="action_previous_episode">Попередній епізод</string>
     <string name="episodes">Епізоди</string>
-    <string name="backup_settings_warning">Попередження: Резервна копія налаштувань може зберігати конфіденційну інформацію, наприклад, паролі трекера.
-\nНе діліться цим файлом резервної копії!</string>
+    <string name="backup_settings_warning">Попередження: Резервна копія налаштувань також збереже ваші паролі до треків, не поширюйте цей файл резервної копії!</string>
     <string name="general_categories">Категорії</string>
     <string name="pref_bottom_nav_no_history">Перемістити історію на вкладку Детальніше</string>
     <string name="action_mark_as_unseen">Позначити як не переглянуте</string>
@@ -158,7 +157,7 @@
     <string name="label_animehistory">Аніме</string>
     <string name="disable_auto_play">Автовідтворення вимкнено</string>
     <string name="playback_speed_dialog_reset">Скинути</string>
-    <string name="quality_dialog_header">Змінити якість відео:</string>
+    <string name="quality_dialog_header">Якість відео</string>
     <string name="playback_options_quality">Якість відео</string>
     <string name="action_change_intro_length">Змінити довжину інтро</string>
     <string name="pref_category_player_aniskip_info">Для роботи AniSkip потрібно, щоб аніме відстежувалося за допомогою MAL або Anilist</string>
@@ -182,9 +181,9 @@
     <string name="video_stretch_screen">Розтягнуто на екрані</string>
     <string name="playback_speed_dialog_title">Змінити швидкість відтворення:</string>
     <string name="video_fit_screen">За розміром екрана</string>
-    <string name="audio_dialog_header">Змінити звукову доріжку:</string>
+    <string name="audio_dialog_header">Аудіо</string>
     <string name="playback_options_speed">Швидкість відтворення</string>
-    <string name="subtitle_dialog_header">Змінити доріжку субтитрів:</string>
+    <string name="subtitle_dialog_header">Субтитри</string>
     <string name="player_aniskip_ed">Пропустити Ендінґ</string>
     <string name="player_aniskip_recap">Пропустити підсумок</string>
     <string name="pref_enable_aniskip">Ввімкнути AniSkip</string>
