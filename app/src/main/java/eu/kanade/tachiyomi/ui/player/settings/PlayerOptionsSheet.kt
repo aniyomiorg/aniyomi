@@ -31,8 +31,8 @@ class PlayerOptionsSheet(
         binding.share.setOnClickListener { share(); this.dismiss() }
         binding.save.setOnClickListener { save(); this.dismiss() }
 
-        binding.toggleSubs.isChecked = activity.screenshotSubs
-        binding.toggleSubs.setOnCheckedChangeListener { _, newValue -> activity.screenshotSubs = newValue }
+        binding.toggleSubs.isChecked = activity.playerPreferences.screenshotSubtitles().get()
+        binding.toggleSubs.setOnCheckedChangeListener { _, newValue -> activity.playerPreferences.screenshotSubtitles().set(newValue) }
 
         binding.toggleVolumeBrightnessGestures.isChecked = activity.gestureVolumeBrightness
         binding.toggleVolumeBrightnessGestures.setOnCheckedChangeListener { _, newValue -> activity.gestureVolumeBrightness = newValue }
@@ -89,6 +89,6 @@ class PlayerOptionsSheet(
         activity.playerControls.showAndFadeControls()
         wasPaused?.let { activity.player.paused = it }
         super.dismiss()
-        activity.setVisibilities()
+        activity.refreshUi()
     }
 }

@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.player.viewer
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.res.ColorStateList
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
@@ -13,7 +14,6 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.viewModelScope
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
@@ -21,7 +21,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerDialogs
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.StateRestoreCallback
 import `is`.xyz.mpv.Utils
-import tachiyomi.core.util.lang.launchUI
+import tachiyomi.core.util.lang.withUIContext
 import kotlin.math.abs
 
 class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
@@ -136,15 +136,53 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         return {
             if (!wasPlayerPaused) {
                 player.paused = false
-                updateDecoderButton()
-                activity.viewModel.viewModelScope.launchUI { activity.refreshUi() }
+                activity.refreshUi()
             }
         }
     }
 
-    internal fun updateDecoderButton() {
-        if (binding.cycleDecoderBtn.visibility == View.VISIBLE) {
-            binding.cycleDecoderBtn.text = HwDecState.mode.title
+    internal suspend fun updateEpisodeText() {
+        val viewModel = activity.viewModel
+        val skipIntroText = activity.getString(R.string.player_controls_skip_intro_text, viewModel.getAnimeSkipIntroLength())
+        withUIContext {
+            binding.titleMainTxt.text = viewModel.currentAnime?.title
+            binding.titleSecondaryTxt.text = viewModel.currentEpisode?.name
+            binding.controlsSkipIntroBtn.text = skipIntroText
+        }
+    }
+
+    internal suspend fun updatePlaylistButtons() {
+        val viewModel = activity.viewModel
+        val plCount = viewModel.episodeList.size
+        val plPos = viewModel.getCurrentEpisodeIndex()
+
+        val grey = ContextCompat.getColor(context, R.color.tint_disabled)
+        val white = ContextCompat.getColor(context, R.color.tint_normal)
+        withUIContext {
+            with(binding.prevBtn) {
+                this.imageTintList = ColorStateList.valueOf(if (plPos == 0) grey else white)
+                this.isClickable = plPos != 0
+            }
+            with(binding.nextBtn) {
+                this.imageTintList =
+                    ColorStateList.valueOf(if (plPos == plCount - 1) grey else white)
+                this.isClickable = plPos != plCount - 1
+            }
+        }
+    }
+
+    internal suspend fun updateDecoderButton() {
+        withUIContext {
+            if (binding.cycleDecoderBtn.visibility == View.VISIBLE) {
+                binding.cycleDecoderBtn.text = HwDecState.mode.title
+            }
+        }
+    }
+
+    internal suspend fun updateSpeedButton() {
+        withUIContext {
+            binding.cycleSpeedBtn.text = context.getString(R.string.ui_speed, player.playbackSpeed)
+            player.playbackSpeed?.let { playerPreferences.playerSpeed().set(it.toFloat()) }
         }
     }
 
@@ -261,7 +299,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
 
         binding.playbackSeekbar.progress = position
-        updateSpeedButton()
     }
 
     @SuppressLint("SetTextI18n")
@@ -277,11 +314,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun updateBufferPosition(duration: Int) {
         binding.playbackSeekbar.secondaryProgress = duration
-    }
-
-    internal fun updateSpeedButton() {
-        binding.cycleSpeedBtn.text = context.getString(R.string.ui_speed, player.playbackSpeed)
-        player.playbackSpeed?.let { playerPreferences.playerSpeed().set(it.toFloat()) }
     }
 
     internal fun showAndFadeControls() {
