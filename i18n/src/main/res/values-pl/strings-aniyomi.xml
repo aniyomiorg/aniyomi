@@ -71,8 +71,8 @@
     <string name="pref_bottom_nav_no_updates">Przenieś Aktualizacje do zakładki Więcej</string>
     <string name="action_player_pip">Tryb obrazu w obrazie</string>
     <string name="action_edit_manga_categories">Edytuj kategorie mangi</string>
-    <string name="label_animeupdates">Anime</string>
-    <string name="label_animehistory">Anime</string>
+    <string name="label_anime_updates">Anime</string>
+    <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
     <string name="player_overlay_back">Wróć</string>
     <string name="pref_bottom_nav_no_history">Przenieś Historię to zakładki Więcej</string>

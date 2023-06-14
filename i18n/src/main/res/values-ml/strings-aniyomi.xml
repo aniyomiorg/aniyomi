@@ -3,7 +3,7 @@
     <string name="manga_categories">വിഭാഗങ്ങൾ</string>
     <string name="unlock_app">ടാച്ചിയോമി അൺലോക്ക് ചെയ്യുക</string>
     <string name="pref_remember_brightness">ഓർക്കുക, അവസാനം ഉപയോഗിച്ച തെളിച്ചത്തിലേക്ക് മാറുക</string>
-    <string name="playertitle">%1$s - %2$s</string>
+    <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_remove_after_marked_as_read">വായിച്ചത്/കണ്ടത് എന്ന് സ്വമേധയാ അടയാളപ്പെടുത്തിയ ശേഷം</string>
     <string name="pref_remove_after_read">വായിച്ചതിന് ശേഷം/കണ്ടതിന് ശേഷം സ്വയമേവ ഇല്ലാതാക്കുക</string>
