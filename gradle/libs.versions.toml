@@ -93,8 +93,8 @@ voyager-transitions = { module = "ca.gosyer:voyager-transitions", version.ref = 
 
 kotlinter = "org.jmailen.gradle:kotlinter-gradle:3.13.0"
 
-aniyomi-mpv = "com.github.jmir1:aniyomi-mpv-lib:1.9.n"
-ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:1.9"
+aniyomi-mpv = "com.github.jmir1:aniyomi-mpv-lib:1.8.n"
+ffmpeg-kit = "com.github.jmir1:ffmpeg-kit:1.8"
 arthenica-smartexceptions = "com.arthenica:smart-exception-java:0.1.1"
 
 [bundles]
