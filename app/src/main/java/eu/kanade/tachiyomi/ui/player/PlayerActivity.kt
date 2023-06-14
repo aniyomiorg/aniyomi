@@ -901,18 +901,6 @@ class PlayerActivity : BaseActivity() {
         stats = !stats
     }
 
-    var gestureVolumeBrightness: Boolean = playerPreferences.gestureVolumeBrightness().get()
-        set(value) {
-            playerPreferences.gestureVolumeBrightness().set(value)
-            field = value
-        }
-
-    var gestureHorizontalSeek: Boolean = playerPreferences.gestureHorizontalSeek().get()
-        set(value) {
-            playerPreferences.gestureHorizontalSeek().set(value)
-            field = value
-        }
-
     private fun takeScreenshot(): InputStream? {
         val filename = cacheDir.path + "/${System.currentTimeMillis()}_mpv_screenshot_tmp.png"
         val subtitleFlag = if (playerPreferences.screenshotSubtitles().get()) {

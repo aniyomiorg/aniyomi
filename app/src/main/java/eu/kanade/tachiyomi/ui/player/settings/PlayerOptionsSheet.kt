@@ -31,13 +31,17 @@ class PlayerOptionsSheet(
         binding.share.setOnClickListener { share(); this.dismiss() }
         binding.save.setOnClickListener { save(); this.dismiss() }
 
-        binding.toggleSubs.isChecked = activity.playerPreferences.screenshotSubtitles().get()
-        binding.toggleSubs.setOnCheckedChangeListener { _, newValue -> activity.playerPreferences.screenshotSubtitles().set(newValue) }
+        val screenshotSubtitles = activity.playerPreferences.screenshotSubtitles()
 
-        binding.toggleVolumeBrightnessGestures.isChecked = activity.gestureVolumeBrightness
-        binding.toggleVolumeBrightnessGestures.setOnCheckedChangeListener { _, newValue -> activity.gestureVolumeBrightness = newValue }
-        binding.toggleHorizontalSeekGesture.isChecked = activity.gestureHorizontalSeek
-        binding.toggleHorizontalSeekGesture.setOnCheckedChangeListener { _, newValue -> activity.gestureHorizontalSeek = newValue }
+        binding.toggleSubs.isChecked = screenshotSubtitles.get()
+        binding.toggleSubs.setOnCheckedChangeListener { _, newValue -> screenshotSubtitles.set(newValue) }
+
+        val gestureVolumeBrightness = activity.playerPreferences.gestureVolumeBrightness()
+        val gestureHorizontalSeek = activity.playerPreferences.gestureHorizontalSeek()
+        binding.toggleVolumeBrightnessGestures.isChecked = gestureVolumeBrightness.get()
+        binding.toggleVolumeBrightnessGestures.setOnCheckedChangeListener { _, newValue -> gestureVolumeBrightness.set(newValue) }
+        binding.toggleHorizontalSeekGesture.isChecked = gestureHorizontalSeek.get()
+        binding.toggleHorizontalSeekGesture.setOnCheckedChangeListener { _, newValue -> gestureHorizontalSeek.set(newValue) }
 
         binding.toggleStats.isChecked = activity.stats
         binding.toggleStats.setOnCheckedChangeListener(toggleStats)
