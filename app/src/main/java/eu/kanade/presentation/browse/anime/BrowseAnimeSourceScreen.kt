@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceComfortableGrid
@@ -22,11 +23,11 @@ import eu.kanade.presentation.browse.anime.components.BrowseAnimeSourceList
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import kotlinx.coroutines.flow.StateFlow
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.model.LibraryDisplayMode
+import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
@@ -147,7 +148,7 @@ fun BrowseAnimeSourceContent(
 
 @Composable
 fun MissingSourceScreen(
-    source: AnimeSourceManager.StubAnimeSource,
+    source: StubAnimeSource,
     navigateUp: () -> Unit,
 ) {
     Scaffold(
@@ -160,7 +161,7 @@ fun MissingSourceScreen(
         },
     ) { paddingValues ->
         EmptyScreen(
-            message = source.getSourceNotInstalledException().message!!,
+            message = stringResource(R.string.source_not_installed, source.toString()),
             modifier = Modifier.padding(paddingValues),
         )
     }

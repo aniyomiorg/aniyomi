@@ -14,7 +14,6 @@ import com.arthenica.ffmpegkit.SessionState
 import com.arthenica.ffmpegkit.StatisticsCallback
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.PublishRelay
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
@@ -25,7 +24,6 @@ import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.source.UnmeteredSource
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
@@ -45,8 +43,10 @@ import tachiyomi.core.util.lang.launchNow
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy

@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.data.download.manga
 import android.content.Context
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.PublishRelay
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.manga.model.getComicInfo
 import eu.kanade.domain.items.chapter.model.toSChapter
 import eu.kanade.tachiyomi.R
@@ -12,7 +11,6 @@ import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.data.library.manga.MangaLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.source.UnmeteredSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
@@ -48,8 +46,10 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.BufferedOutputStream

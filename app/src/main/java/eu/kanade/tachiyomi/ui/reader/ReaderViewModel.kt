@@ -7,7 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.manga.interactor.SetMangaViewerFlags
 import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.entries.manga.model.orientationType
@@ -26,7 +25,6 @@ import eu.kanade.tachiyomi.data.saver.Image
 import eu.kanade.tachiyomi.data.saver.ImageSaver
 import eu.kanade.tachiyomi.data.saver.Location
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.ui.reader.loader.ChapterLoader
@@ -68,6 +66,7 @@ import tachiyomi.core.util.lang.launchNonCancellable
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.lang.withUIContext
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.history.manga.interactor.UpsertMangaHistory
@@ -76,6 +75,7 @@ import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
 import tachiyomi.domain.items.chapter.interactor.UpdateChapter
 import tachiyomi.domain.items.chapter.model.ChapterUpdate
 import tachiyomi.domain.items.chapter.service.getChapterSort
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt

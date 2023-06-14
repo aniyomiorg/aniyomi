@@ -47,7 +47,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.core.Constants
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.browse.anime.extension.details.SourcePreferencesScreen
 import eu.kanade.tachiyomi.ui.browse.anime.source.browse.BrowseAnimeSourceScreenModel.Listing
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
@@ -57,6 +56,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import tachiyomi.core.util.lang.launchIO
+import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.presentation.core.components.material.Divider
 import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.components.material.padding
@@ -84,7 +84,7 @@ data class BrowseAnimeSourceScreen(
             }
         }
 
-        if (screenModel.source is AnimeSourceManager.StubAnimeSource) {
+        if (screenModel.source is StubAnimeSource) {
             MissingSourceScreen(
                 source = screenModel.source,
                 navigateUp = navigateUp,

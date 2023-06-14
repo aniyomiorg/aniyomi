@@ -52,11 +52,11 @@ import eu.kanade.tachiyomi.data.track.bangumi.BangumiApi
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeListApi
 import eu.kanade.tachiyomi.data.track.shikimori.ShikimoriApi
 import eu.kanade.tachiyomi.data.track.simkl.SimklApi
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.util.system.openInBrowser
 import eu.kanade.tachiyomi.util.system.toast
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.presentation.core.components.material.padding
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

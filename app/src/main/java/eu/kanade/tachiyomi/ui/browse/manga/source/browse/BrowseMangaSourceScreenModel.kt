@@ -29,7 +29,6 @@ import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.util.removeCovers
 import kotlinx.coroutines.flow.SharingStarted
@@ -58,6 +57,7 @@ import tachiyomi.domain.entries.manga.interactor.NetworkToLocalManga
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.toMangaUpdate
 import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

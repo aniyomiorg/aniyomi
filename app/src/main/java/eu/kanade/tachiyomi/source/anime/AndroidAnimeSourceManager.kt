@@ -1,12 +1,8 @@
 package eu.kanade.tachiyomi.source.anime
 
 import android.content.Context
-import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
-import eu.kanade.tachiyomi.animesource.model.SAnime
-import eu.kanade.tachiyomi.animesource.model.SEpisode
-import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.download.anime.AnimeDownloadManager
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -20,18 +16,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import tachiyomi.domain.source.anime.model.AnimeSourceData
+import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.domain.source.anime.repository.AnimeSourceDataRepository
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.concurrent.ConcurrentHashMap
 
-class AnimeSourceManager(
+class AndroidAnimeSourceManager(
     private val context: Context,
     private val extensionManager: AnimeExtensionManager,
     private val sourceRepository: AnimeSourceDataRepository,
-) {
+) : AnimeSourceManager {
     private val downloadManager: AnimeDownloadManager by injectLazy()
 
     private val scope = CoroutineScope(Job() + Dispatchers.IO)
@@ -40,8 +38,7 @@ class AnimeSourceManager(
 
     private val stubSourcesMap = ConcurrentHashMap<Long, StubAnimeSource>()
 
-    val catalogueSources: Flow<List<AnimeCatalogueSource>> = sourcesMapFlow.map { it.values.filterIsInstance<AnimeCatalogueSource>() }
-    val onlineSources: Flow<List<AnimeHttpSource>> = catalogueSources.map { it.filterIsInstance<AnimeHttpSource>() }
+    override val catalogueSources: Flow<List<AnimeCatalogueSource>> = sourcesMapFlow.map { it.values.filterIsInstance<AnimeCatalogueSource>() }
 
     init {
         scope.launch {
@@ -77,21 +74,21 @@ class AnimeSourceManager(
         }
     }
 
-    fun get(sourceKey: Long): AnimeSource? {
+    override fun get(sourceKey: Long): AnimeSource? {
         return sourcesMapFlow.value[sourceKey]
     }
 
-    fun getOrStub(sourceKey: Long): AnimeSource {
+    override fun getOrStub(sourceKey: Long): AnimeSource {
         return sourcesMapFlow.value[sourceKey] ?: stubSourcesMap.getOrPut(sourceKey) {
             runBlocking { createStubSource(sourceKey) }
         }
     }
 
-    fun getOnlineSources() = sourcesMapFlow.value.values.filterIsInstance<AnimeHttpSource>()
+    override fun getOnlineSources() = sourcesMapFlow.value.values.filterIsInstance<AnimeHttpSource>()
 
-    fun getCatalogueSources() = sourcesMapFlow.value.values.filterIsInstance<AnimeCatalogueSource>()
+    override fun getCatalogueSources() = sourcesMapFlow.value.values.filterIsInstance<AnimeCatalogueSource>()
 
-    fun getStubSources(): List<StubAnimeSource> {
+    override fun getStubSources(): List<StubAnimeSource> {
         val onlineSourceIds = getOnlineSources().map { it.id }
         return stubSourcesMap.values.filterNot { it.id in onlineSourceIds }
     }
@@ -117,37 +114,4 @@ class AnimeSourceManager(
         }
         return StubAnimeSource(AnimeSourceData(id, "", ""))
     }
-
-    @Suppress("OverridingDeprecatedMember")
-    inner class StubAnimeSource(private val sourceData: AnimeSourceData) : AnimeSource {
-
-        override val id: Long = sourceData.id
-
-        override val name: String = sourceData.name.ifBlank { id.toString() }
-
-        override val lang: String = sourceData.lang
-
-        override suspend fun getAnimeDetails(anime: SAnime): SAnime {
-            throw getSourceNotInstalledException()
-        }
-
-        override suspend fun getEpisodeList(anime: SAnime): List<SEpisode> {
-            throw getSourceNotInstalledException()
-        }
-
-        override suspend fun getVideoList(episode: SEpisode): List<Video> {
-            throw getSourceNotInstalledException()
-        }
-
-        override fun toString(): String {
-            return if (sourceData.isMissingInfo.not()) "$name (${lang.uppercase()})" else id.toString()
-        }
-
-        fun getSourceNotInstalledException(): AnimeSourceNotInstalledException {
-            return AnimeSourceNotInstalledException(toString())
-        }
-    }
-
-    inner class AnimeSourceNotInstalledException(sourceString: String) :
-        Exception(context.getString(R.string.source_not_installed, sourceString))
 }

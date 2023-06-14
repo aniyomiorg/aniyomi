@@ -1,9 +1,5 @@
-package eu.kanade.domain.backup.service
+package tachiyomi.domain.backup.service
 
-import eu.kanade.tachiyomi.data.preference.FLAG_CATEGORIES
-import eu.kanade.tachiyomi.data.preference.FLAG_CHAPTERS
-import eu.kanade.tachiyomi.data.preference.FLAG_HISTORY
-import eu.kanade.tachiyomi.data.preference.FLAG_TRACK
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.provider.FolderProvider
 

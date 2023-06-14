@@ -30,7 +30,6 @@ import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.util.removeCovers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -58,6 +57,7 @@ import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

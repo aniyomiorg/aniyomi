@@ -1,12 +1,10 @@
 package eu.kanade.tachiyomi.data.download.anime
 
 import android.content.Context
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.drop
@@ -21,8 +19,10 @@ import rx.Observable
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

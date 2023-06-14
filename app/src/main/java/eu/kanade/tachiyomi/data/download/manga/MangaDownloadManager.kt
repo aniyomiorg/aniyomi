@@ -1,11 +1,9 @@
 package eu.kanade.tachiyomi.data.download.manga
 
 import android.content.Context
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.source.MangaSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.Page
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
@@ -20,8 +18,10 @@ import logcat.LogPriority
 import tachiyomi.core.util.lang.launchIO
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

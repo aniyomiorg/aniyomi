@@ -10,7 +10,6 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.downloadedFilter
 import eu.kanade.domain.entries.anime.model.isLocal
@@ -34,7 +33,6 @@ import eu.kanade.tachiyomi.data.track.AnimeTrackService
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.network.HttpException
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
@@ -62,6 +60,7 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.anime.interactor.GetAnimeWithEpisodes
 import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
@@ -73,6 +72,7 @@ import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.EpisodeUpdate
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.items.episode.service.getEpisodeSort
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

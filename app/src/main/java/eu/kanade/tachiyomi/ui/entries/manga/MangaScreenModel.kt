@@ -10,7 +10,6 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.downloadedFilter
 import eu.kanade.domain.entries.manga.model.isLocal
@@ -33,7 +32,6 @@ import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.source.MangaSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.ui.entries.manga.track.MangaTrackItem
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.chapter.getNextUnread
@@ -61,6 +59,7 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.SetMangaCategories
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.entries.manga.interactor.GetDuplicateLibraryManga
@@ -72,6 +71,7 @@ import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.ChapterUpdate
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.items.chapter.service.getChapterSort
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

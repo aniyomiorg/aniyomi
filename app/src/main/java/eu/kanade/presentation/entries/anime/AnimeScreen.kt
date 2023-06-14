@@ -61,7 +61,6 @@ import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.ExpandableAnimeDescription
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenState
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
@@ -71,6 +70,7 @@ import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.TwoPanelBox
 import tachiyomi.presentation.core.components.VerticalFastScroller
@@ -369,7 +369,7 @@ private fun AnimeScreenSmallImpl(
                             author = state.anime.author,
                             artist = state.anime.artist,
                             sourceName = remember { state.source.getNameForAnimeInfo() },
-                            isStubSource = remember { state.source is AnimeSourceManager.StubAnimeSource },
+                            isStubSource = remember { state.source is StubAnimeSource },
                             coverDataProvider = { state.anime },
                             status = state.anime.status,
                             onCoverClick = onCoverClicked,
@@ -586,7 +586,7 @@ fun AnimeScreenLargeImpl(
                             author = state.anime.author,
                             artist = state.anime.artist,
                             sourceName = remember { state.source.getNameForAnimeInfo() },
-                            isStubSource = remember { state.source is AnimeSourceManager.StubAnimeSource },
+                            isStubSource = remember { state.source is StubAnimeSource },
                             coverDataProvider = { state.anime },
                             status = state.anime.status,
                             onCoverClick = onCoverClicked,

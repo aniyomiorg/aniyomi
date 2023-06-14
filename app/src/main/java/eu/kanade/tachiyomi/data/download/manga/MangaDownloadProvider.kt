@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.data.download.manga
 import android.content.Context
 import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.util.storage.DiskUtil
@@ -12,6 +11,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.Injekt

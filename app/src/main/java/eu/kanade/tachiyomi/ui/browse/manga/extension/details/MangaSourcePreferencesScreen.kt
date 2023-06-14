@@ -41,9 +41,9 @@ import eu.kanade.presentation.util.Screen
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
 import eu.kanade.tachiyomi.source.ConfigurableSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.manga.getPreferenceKey
 import eu.kanade.tachiyomi.widget.TachiyomiTextInputEditText.Companion.setIncognito
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.presentation.core.components.material.Scaffold
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

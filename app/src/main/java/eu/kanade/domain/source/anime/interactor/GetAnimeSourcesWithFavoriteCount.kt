@@ -6,6 +6,7 @@ import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import tachiyomi.domain.source.anime.model.AnimeSource
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import java.text.Collator
 import java.util.Collections
 import java.util.Locale
@@ -21,7 +22,9 @@ class GetAnimeSourcesWithFavoriteCount(
             preferences.migrationSortingMode().changes(),
             repository.getAnimeSourcesWithFavoriteCount(),
         ) { direction, mode, list ->
-            list.sortedWith(sortFn(direction, mode))
+            list
+                .filterNot { it.first.id == LocalAnimeSource.ID }
+                .sortedWith(sortFn(direction, mode))
         }
     }
 

@@ -60,7 +60,6 @@ import eu.kanade.presentation.entries.manga.components.MangaChapterListItem
 import eu.kanade.presentation.entries.manga.components.MangaInfoBox
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.manga.getNameForMangaInfo
 import eu.kanade.tachiyomi.ui.entries.manga.ChapterItem
 import eu.kanade.tachiyomi.ui.entries.manga.MangaScreenState
@@ -69,6 +68,7 @@ import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.source.manga.model.StubMangaSource
 import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.TwoPanelBox
 import tachiyomi.presentation.core.components.VerticalFastScroller
@@ -354,7 +354,7 @@ private fun MangaScreenSmallImpl(
                             author = state.manga.author,
                             artist = state.manga.artist,
                             sourceName = remember { state.source.getNameForMangaInfo() },
-                            isStubSource = remember { state.source is MangaSourceManager.StubMangaSource },
+                            isStubSource = remember { state.source is StubMangaSource },
                             coverDataProvider = { state.manga },
                             status = state.manga.status,
                             onCoverClick = onCoverClicked,
@@ -567,7 +567,7 @@ fun MangaScreenLargeImpl(
                             author = state.manga.author,
                             artist = state.manga.artist,
                             sourceName = remember { state.source.getNameForMangaInfo() },
-                            isStubSource = remember { state.source is MangaSourceManager.StubMangaSource },
+                            isStubSource = remember { state.source is StubMangaSource },
                             coverDataProvider = { state.manga },
                             status = state.manga.status,
                             onCoverClick = onCoverClicked,
