@@ -44,8 +44,9 @@ import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.PlayerScreenshotSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsSheet
-import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksSheet
+import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksBuilder
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
@@ -779,7 +780,7 @@ class PlayerActivity : BaseActivity() {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun openTrackDialog(view: View) {
+    fun openTracksSheet(view: View) {
         val qualityTracks = currentVideoList?.map { Track("", it.quality) }?.toTypedArray()?.takeUnless { it.isEmpty() }
         val subTracks = subTracks.takeUnless { it.isEmpty() }
         val audioTracks = audioTracks.takeUnless { it.isEmpty() }
@@ -793,18 +794,18 @@ class PlayerActivity : BaseActivity() {
 
     private var selectedQuality = 0
 
-    internal fun qualityTracksTab(dismissSheet: () -> Unit): PlayerTracksSheet {
+    internal fun qualityTracksTab(dismissSheet: () -> Unit): PlayerTracksBuilder {
         val videoTracks = currentVideoList!!.map {
             Track("", it.quality)
         }.toTypedArray().takeUnless { it.isEmpty() }!!
 
-        return PlayerTracksSheet(
-            this,
-            ::changeQuality,
-            videoTracks,
-            selectedQuality,
-            dismissSheet,
-            null,
+        return PlayerTracksBuilder(
+            activity = this,
+            changeTrackMethod = ::changeQuality,
+            tracks = videoTracks,
+            preselectedTrack = selectedQuality,
+            dismissSheet = dismissSheet,
+            trackSettings = null,
         )
     }
 
@@ -816,17 +817,17 @@ class PlayerActivity : BaseActivity() {
         setVideoList(quality, currentVideoList)
     }
 
-    internal fun subtitleTracksTab(dismissTab: () -> Unit): PlayerTracksSheet {
+    internal fun subtitleTracksTab(dismissTab: () -> Unit): PlayerTracksBuilder {
         val subTracks = subTracks.takeUnless { it.isEmpty() }!!
 
         playerControls.hideControls(true)
-        return PlayerTracksSheet(
-            this,
-            ::setSub,
-            subTracks,
-            selectedSub,
-            dismissTab,
-            null,
+        return PlayerTracksBuilder(
+            activity = this,
+            changeTrackMethod = ::setSub,
+            tracks = subTracks,
+            preselectedTrack = selectedSub,
+            dismissSheet = dismissTab,
+            trackSettings = null,
         )
     }
 
@@ -846,17 +847,17 @@ class PlayerActivity : BaseActivity() {
             ?: MPVLib.command(arrayOf("sub-add", subTracks[index].url, "select", subTracks[index].url))
     }
 
-    internal fun audioTracksTab(dismissTab: () -> Unit): PlayerTracksSheet {
+    internal fun audioTracksTab(dismissTab: () -> Unit): PlayerTracksBuilder {
         val audioTracks = audioTracks.takeUnless { it.isEmpty() }!!
 
         playerControls.hideControls(true)
-        return PlayerTracksSheet(
-            this,
-            ::setAudio,
-            audioTracks,
-            selectedAudio,
-            dismissTab,
-            null,
+        return PlayerTracksBuilder(
+            activity = this,
+            changeTrackMethod = ::setAudio,
+            tracks = audioTracks,
+            preselectedTrack = selectedAudio,
+            dismissSheet = dismissTab,
+            trackSettings = null,
         )
     }
 
@@ -876,10 +877,15 @@ class PlayerActivity : BaseActivity() {
             ?: MPVLib.command(arrayOf("audio-add", audioTracks[index].url, "select", audioTracks[index].url))
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun openOptions(view: View) {
+    fun openScreenshotSheet() {
         playerControls.hideControls(true)
-        PlayerOptionsSheet(this).show()
+        PlayerScreenshotSheet(this@PlayerActivity).show()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun openOptionsSheet(view: View) {
+        playerControls.hideControls(true)
+        PlayerOptionsSheet(this@PlayerActivity).show()
     }
 
     var stats: Boolean = false

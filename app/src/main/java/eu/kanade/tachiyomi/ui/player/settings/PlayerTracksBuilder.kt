@@ -21,7 +21,7 @@ import eu.kanade.tachiyomi.ui.player.PlayerActivity
  * @param trackSettings the method to run on clicking the settings button, null if no button
  */
 @SuppressLint("ViewConstructor")
-class PlayerTracksSheet(
+class PlayerTracksBuilder(
     private val activity: PlayerActivity,
     private val changeTrackMethod: (Int) -> Unit,
     private val tracks: Array<Track>,

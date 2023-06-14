@@ -111,6 +111,10 @@ class Gestures(
         }
         return false
     }
+
+    override fun onLongPress(e: MotionEvent) {
+        activity.openScreenshotSheet()
+    }
 }
 
 private const val STATE_UP = 0
