@@ -186,7 +186,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_progress_70" translatable="false"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>

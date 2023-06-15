@@ -36,7 +36,6 @@
     <string name="download_insufficient_space">Nepavyko atsisiųsti skyrių dėl mažos vietos saugykloje</string>
     <string name="download_queue_size_warning">Įspėjimas: dėl didelių masinių atsisiuntimų šaltiniai gali tapti lėtesni ir (arba) jie blokuoti \"Tachiyomi\". Bakstelėkite , jei norite sužinoti daugiau.</string>
     <string name="information_webview_required">\"WebView\" reikalingas \"Tachiyomi\"</string>
-    <string name="pref_progress_mark_as_seen"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="few"/>
@@ -62,7 +61,6 @@
         <item quantity="few"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_waiting_time_aniskip"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="few"/>
@@ -73,6 +71,5 @@
         <item quantity="few"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_manga_sources"/>
     <string name="pref_search_pinned_manga_sources_only"/>
 </resources>

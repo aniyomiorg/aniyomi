@@ -81,7 +81,6 @@
     <string name="action_edit_anime_categories">Edytuj kategorie anime</string>
     <string name="action_sort_unseen_count">Liczba nie obejrzanych</string>
     <string name="action_filter_unseen">Nie obejrzane</string>
-    <string name="pref_player_summary"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="few"/>
@@ -112,14 +111,12 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="stats_page_2"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="want_to_watch"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="few"/>

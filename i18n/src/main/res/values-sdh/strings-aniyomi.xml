@@ -6,17 +6,14 @@
     <string name="action_show_manga">نیشاندانی مانگا</string>
     <string name="action_display_local_badge_manga">مانگای ناوخۆیی</string>
     <string name="snack_add_to_manga_library">زیادکردنی مانگا بۆ کۆکراوەکان؟</string>
-    <string name="player_hwdec_dialog_title"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="auto_download_while_watching"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_waiting_time_aniskip_7"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -29,13 +26,11 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="download_ahead_info_anime"/>
     <string name="pref_skip_30" translatable="false"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_bottom_nav_no_history"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>

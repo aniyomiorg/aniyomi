@@ -19,7 +19,6 @@
     <string name="pref_remove_after_read">Аўтаматычна пасля чытання</string>
     <string name="pref_remove_bookmarked_chapters">Дазволіць выдаленне частак з закладкамі</string>
     <string name="pref_auto_update_manga_sync">Абнаўляць прагрэс пасля чытання</string>
-    <string name="notification_episodes_single_and_more"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="few"/>
@@ -44,7 +43,6 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_skip_20" translatable="false"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="few"/>
@@ -57,13 +55,11 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_animeextensions"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_auto_clear_chapter_cache"/>
     <string name="action_previous_episode"/>
 </resources>

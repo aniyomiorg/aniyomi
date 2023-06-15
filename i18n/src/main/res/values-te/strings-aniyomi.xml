@@ -2,7 +2,6 @@
 <resources>
     <string name="manga_categories">విభాగములు</string>
     <string name="unlock_app">టచియోమిని తెరవండి</string>
-    <string name="unknown_studio"/>
     <string name="anime_from_library"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
@@ -20,7 +19,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_bottom_nav_style"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -29,10 +27,8 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_category_volume_brightness"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="rotation_sensor_landscape"/>
 </resources>

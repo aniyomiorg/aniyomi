@@ -26,11 +26,7 @@
     <string name="download_paused">Тохтотулунна</string>
     <string name="also_set_chapter_settings_for_library">Мин бэбэлэтиэкэбэр баар маангаларга туттуҥ</string>
     <string name="dialog_with_checkbox_reset">Бу маанга бары түһүмэхтэрин түһэрии</string>
-    <string name="dialog_with_checkbox_remove_description_anime"/>
     <string name="pref_category_external_player"/>
-    <string name="player_aniskip_skip"/>
     <string name="label_history"/>
-    <string name="player_aniskip_dontskip_toast"/>
     <string name="action_start_download_internally"/>
-    <string name="delete_downloads_for_anime"/>
 </resources>

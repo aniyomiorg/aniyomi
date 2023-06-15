@@ -12,12 +12,10 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_player_smooth_seek_summary"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="player_hwdec_dialog_title"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -34,9 +32,7 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_search_pinned_anime_sources_only"/>
     <string name="pref_external_player_preference"/>
-    <string name="action_play_externally"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>

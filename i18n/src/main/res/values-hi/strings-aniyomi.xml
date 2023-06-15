@@ -38,7 +38,6 @@
     <string name="information_webview_required">ताचियोमी के लिए वेबव्हिव आवश्यक है</string>
     <string name="download_notifier_download_paused_chapters">डाउनलोड रोक दिया है</string>
     <string name="channel_new_chapters_episodes">अध्याय अद्यतन</string>
-    <string name="label_animeupdates"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -67,7 +66,5 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_default_landscape_orientation"/>
     <string name="label_watched_episodes"/>
-    <string name="auto_download_while_watching"/>
 </resources>

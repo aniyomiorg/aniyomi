@@ -8,7 +8,6 @@
     <string name="pref_update_only_completely_read">Med ulæst kapitler</string>
     <string name="default_manga_category">Standard kategori</string>
     <string name="pref_manga_library_update_categories_details">Manga i ekskluderede kategorier vil ikke blive opdateret selv hvis de også er i inkluderede kategorier.</string>
-    <string name="pref_category_progress"/>
     <string name="auto_download_while_watching"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
@@ -38,7 +37,5 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_sort_last_anime_update"/>
     <string name="action_sort_last_seen"/>
-    <string name="label_manga_sources"/>
 </resources>

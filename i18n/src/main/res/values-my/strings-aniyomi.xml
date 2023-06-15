@@ -3,12 +3,8 @@
     <string name="manga_categories">အမျိုးအစားများ</string>
     <string name="unlock_app">Aniyomi ကိုဖွင့်ပါ</string>
     <string name="default_manga_category">ပုံသေအမျိုးအစား</string>
-    <string name="pref_backup_flags_summ"/>
     <string name="stats_page"/>
-    <string name="pref_remember_volume"/>
     <string name="want_to_watch"/>
-    <string name="action_sort_total_episodes"/>
     <string name="label_watched_episodes"/>
-    <string name="pref_library_anime_columns"/>
     <string name="pref_library_manga_columns"/>
 </resources>

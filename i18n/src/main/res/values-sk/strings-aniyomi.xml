@@ -34,14 +34,12 @@
     <string name="download_insufficient_space">Nepodarilo sa stiahnuť kapitoly z dôvodu nedostatku úložného priestoru</string>
     <string name="download_queue_size_warning">Upozornenie: Veľké hromadné sťahovanie môže viesť k spomaleniu zdrojov a/alebo blokovaniu Tachiyomi. Klepnutím sa dozviete viac.</string>
     <string name="information_webview_required">WebView je potrebné pre Tachiyomi</string>
-    <string name="show_episode_number"/>
     <string name="pref_skip_5" translatable="false"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_waiting_time_aniskip_7"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="few"/>
@@ -67,7 +65,6 @@
         <item quantity="few"/>
         <item quantity="other"/>
     </plurals>
-    <string name="default_anime_category"/>
     <string name="action_show_anime"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>

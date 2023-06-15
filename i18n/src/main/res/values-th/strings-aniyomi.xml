@@ -38,11 +38,7 @@
     <string name="information_webview_required">Tachiyomi จำเป็นต้องใช้ WebView</string>
     <string name="download_notifier_download_paused_chapters">การดาวน์โหลดหยุดชั่วคราว</string>
     <string name="channel_new_chapters_episodes">อัปเดตตอน</string>
-    <string name="unofficial_extension_message_aniyomi"/>
     <string name="player_aniskip_op"/>
-    <string name="pref_player_smooth_seek_summary"/>
     <string name="pref_remember_volume"/>
-    <string name="recent_anime_time"/>
     <string name="pref_waiting_time_aniskip_9"/>
-    <string name="general_categories"/>
 </resources>

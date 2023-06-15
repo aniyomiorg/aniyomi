@@ -38,7 +38,6 @@
     <string name="information_webview_required">WebView is vereist voor Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Download gepauzeerd</string>
     <string name="channel_new_chapters_episodes">Hoofdstukupdates</string>
-    <string name="toggle_stats"/>
     <string name="pref_progress_85" translatable="false"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
@@ -56,12 +55,10 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_waiting_time_aniskip_7"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_sort_episode_fetch_date"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>

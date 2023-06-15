@@ -42,7 +42,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_anime_library_update_categories_details"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -55,7 +54,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_play"/>
     <string name="pref_auto_clear_chapter_cache"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>

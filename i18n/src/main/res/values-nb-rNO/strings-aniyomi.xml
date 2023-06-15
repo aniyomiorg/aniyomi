@@ -38,9 +38,7 @@
     <string name="information_webview_required">Tachiyomi krever WebView</string>
     <string name="download_notifier_download_paused_chapters">Nedlasting pauset</string>
     <string name="channel_new_chapters_episodes">Kapitteloppdateringer</string>
-    <string name="label_animeupdates"/>
     <string name="pref_progress_90" translatable="false"/>
-    <string name="pref_category_player_aniskip_info"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -61,9 +59,7 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="screenshot_header"/>
     <string name="action_mark_as_seen"/>
-    <string name="pref_clear_anime_database"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>

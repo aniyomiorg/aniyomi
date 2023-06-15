@@ -75,14 +75,12 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="no_previous_episode"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_preserve_watching_position"/>
     <string name="default_anime_category"/>
     <plurals name="seconds">
         <item quantity="one"/>
@@ -102,5 +100,4 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_mpv_conf"/>
 </resources>

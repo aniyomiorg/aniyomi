@@ -64,11 +64,8 @@
     <string name="pref_waiting_time_aniskip_7">7秒</string>
     <string name="chapters_episodes">章と話</string>
     <string name="label_watched_episodes">見た</string>
-    <string name="stats_page"/>
     <string name="pref_category_external_downloader"/>
-    <string name="action_next_episode"/>
     <string name="pref_category_player_orientation"/>
-    <string name="unofficial_extension_message_aniyomi"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="other"/>
     </plurals>

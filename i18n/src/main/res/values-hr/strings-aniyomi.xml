@@ -38,7 +38,6 @@
     <string name="information_webview_required">Za Tachiyomi je potreban WebView</string>
     <string name="download_notifier_download_paused_chapters">Preuzimanje zaustavljeno</string>
     <string name="channel_new_chapters_episodes">Ažuriranja poglavlja</string>
-    <string name="action_start_download_internally"/>
     <string name="subtitle_dialog_header"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
@@ -70,12 +69,10 @@
         <item quantity="few"/>
         <item quantity="other"/>
     </plurals>
-    <string name="stats_page"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_progress_95" translatable="false"/>
     <string name="information_no_recent_anime"/>
 </resources>

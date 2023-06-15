@@ -34,7 +34,6 @@
     <string name="download_insufficient_space">Жадыда орын аз болғандықтан тараулар жүктелмеді</string>
     <string name="download_queue_size_warning">Ескерту: Көп жүктеулер саны дереккөздер жұмысын баяулата алады және/немесе Tachiyomi бұғатталына алады. Толығырақ оқу үшін басыңыз.</string>
     <string name="information_webview_required">Tachiyomi-ны қолдану үшін WebView керек</string>
-    <string name="pref_category_external_player"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -51,20 +50,16 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_invalidate_download_cache_summary"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_animehistory"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="audio_dialog_header"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="local_manga_source"/>
 </resources>

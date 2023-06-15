@@ -38,11 +38,7 @@
     <string name="information_webview_required">WebView 為 Tachiyomi 的必要元件</string>
     <string name="download_notifier_download_paused_chapters">下載已暫停</string>
     <string name="channel_new_chapters_episodes">新刊發行</string>
-    <string name="default_anime_category"/>
     <string name="stats_page_1"/>
-    <string name="pref_clear_anime_database_summary"/>
     <string name="pref_preserve_watching_position"/>
-    <string name="pref_enable_auto_skip_ani_skip"/>
     <string name="playback_speed_dialog_reset"/>
-    <string name="pref_anime_library_update_categories_details"/>
 </resources>

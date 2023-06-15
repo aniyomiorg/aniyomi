@@ -3,7 +3,6 @@
     <string name="action_show_manga">ମାଙ୍ଗା ଦେଖାଅ</string>
     <string name="default_manga_category">ଡିଫଲ୍ଟ ବର୍ଗ</string>
     <string name="information_webview_required">Tachiyomi ପାଇଁ WebView ଆବଶ୍ୟକ ଅଟେ</string>
-    <string name="download_insufficient_space"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -28,12 +27,9 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_history"/>
     <string name="download_queue_size_warning"/>
-    <string name="action_sort_unseen_count"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_sort_total_episodes"/>
 </resources>

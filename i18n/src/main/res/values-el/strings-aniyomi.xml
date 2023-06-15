@@ -38,13 +38,11 @@
     <string name="information_webview_required">Το WebView απαιτείται για το Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Λήψη σε παύση</string>
     <string name="channel_new_chapters_episodes">Ενημερώσεις κεφαλαίων</string>
-    <string name="pref_skip_length"/>
     <string name="label_migration_anime"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="dialog_with_checkbox_reset_anime"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -69,6 +67,5 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="screenshot_header"/>
     <string name="action_player_pip"/>
 </resources>

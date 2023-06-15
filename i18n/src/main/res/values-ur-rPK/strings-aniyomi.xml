@@ -2,7 +2,6 @@
 <resources>
     <string name="manga_categories">زمرہ جات</string>
     <string name="unlock_app">انلاک تاچییومی</string>
-    <string name="pref_category_external_downloader"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -19,12 +18,10 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_edit_anime_categories"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_view_episodes"/>
     <string name="pref_mpv_conf"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
@@ -34,5 +31,4 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_bookmark_episode"/>
 </resources>

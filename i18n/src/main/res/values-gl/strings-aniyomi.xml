@@ -12,7 +12,6 @@
     <string name="pref_remove_after_marked_as_read">Despois de marcar manualmente como lido</string>
     <string name="pref_remove_after_read">Despois de ler</string>
     <string name="pref_remove_bookmarked_chapters">Eliminar capítulos marcados</string>
-    <string name="local_anime_source"/>
     <string name="player_aniskip_recap"/>
     <plurals name="seconds">
         <item quantity="one"/>
@@ -38,11 +37,9 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="notification_episodes_single_and_more"/>
     <string name="no_previous_episode"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_mark_as_unseen"/>
 </resources>

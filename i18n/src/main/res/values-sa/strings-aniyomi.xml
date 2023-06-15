@@ -60,8 +60,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="currently_reading"/>
     <string name="pref_pip_on_exit"/>
-    <string name="action_play"/>
     <string name="local_manga_source"/>
 </resources>

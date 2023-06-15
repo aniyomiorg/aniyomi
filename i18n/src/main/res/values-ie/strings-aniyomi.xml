@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="player_overlay_back"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -9,13 +8,11 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="download_error"/>
     <string name="action_sort_last_checked"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_clear_manga_database"/>
     <string name="pref_skip_5" translatable="false"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
