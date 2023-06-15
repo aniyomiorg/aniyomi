@@ -8,12 +8,10 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_sort_last_checked"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_skip_5" translatable="false"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>

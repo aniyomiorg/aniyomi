@@ -46,7 +46,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="entries"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>

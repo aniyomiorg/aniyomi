@@ -81,7 +81,6 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="default_anime_category"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="few"/>

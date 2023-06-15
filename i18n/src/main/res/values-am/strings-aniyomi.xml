@@ -30,7 +30,6 @@
     <string name="label_manga">ማንጋ</string>
     <string name="label_anime">አኒሜ</string>
     <string name="label_watched_duration">የእይታ ቆይታ</string>
-    <string name="notification_new_episodes"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>

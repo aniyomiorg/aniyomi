@@ -61,7 +61,6 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_edit_anime_categories"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="two"/>

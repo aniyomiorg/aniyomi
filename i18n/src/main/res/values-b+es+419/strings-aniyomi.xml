@@ -76,7 +76,6 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_sort_last_checked"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="many"/>

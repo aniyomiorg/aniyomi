@@ -66,5 +66,4 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_watched_episodes"/>
 </resources>

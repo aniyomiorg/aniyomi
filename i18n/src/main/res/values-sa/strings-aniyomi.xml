@@ -60,6 +60,5 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_pip_on_exit"/>
     <string name="local_manga_source"/>
 </resources>

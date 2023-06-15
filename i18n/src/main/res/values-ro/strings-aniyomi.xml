@@ -38,7 +38,6 @@
     <string name="information_webview_required">WebView este necesar pentru Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Descărcare întreruptă</string>
     <string name="channel_new_chapters_episodes">Actualizări de capitole</string>
-    <string name="pref_progress_mark_as_seen"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="few"/>

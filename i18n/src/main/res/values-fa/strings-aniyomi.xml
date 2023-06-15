@@ -54,7 +54,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_auto_clear_chapter_cache"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>

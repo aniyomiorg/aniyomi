@@ -67,5 +67,4 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_default_intro_length"/>
 </resources>

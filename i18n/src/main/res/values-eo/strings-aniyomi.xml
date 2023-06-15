@@ -31,12 +31,10 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_default_landscape_orientation"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_anime"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>

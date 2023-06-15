@@ -11,7 +11,6 @@
     <string name="manga_from_library">Manga frå biblioteket</string>
     <string name="snack_add_to_manga_library">Legg manga til i bibliotek\?</string>
     <string name="download_error">Feil</string>
-    <string name="video_fit_screen"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>

@@ -27,7 +27,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="download_queue_size_warning"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>

@@ -76,7 +76,6 @@
     <string name="action_global_manga_search">গ্লোবাল মাঙ্গা অনুসন্ধান</string>
     <string name="action_global_anime_search">গ্লোবাল অ্যানিমে অনুসন্ধান</string>
     <string name="action_remove_bookmark_episode">আনবুকমার্ক পর্ব</string>
-    <string name="pref_progress_mark_as_seen"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>

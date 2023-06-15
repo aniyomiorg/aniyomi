@@ -61,5 +61,4 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_previous_episode"/>
 </resources>
