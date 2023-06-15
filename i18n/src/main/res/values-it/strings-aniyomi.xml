@@ -275,4 +275,25 @@
     <string name="pref_enable_pip">Abilita l\'uso della modalità PiP</string>
     <string name="pref_category_volume_brightness">Volume e Luminosità</string>
     <string name="pref_category_pip">Picture in Picture (PiP)</string>
+    <string name="pref_skip_5" translatable="false"></string>
+    <string name="pref_hide_in_manga_library_items"></string>
+    <string name="pref_hide_in_anime_library_items"></string>
+    <plurals name="download_amount_anime">
+        <item quantity="one"></item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="copied_video_link_to_clipboard"></string>
+    <string name="pref_progress_70" translatable="false"></string>
+    <string name="pref_progress_80" translatable="false"></string>
+    <string name="pref_progress_85" translatable="false"></string>
+    <string name="pref_skip_30" translatable="false"></string>
+    <string name="pref_progress_90" translatable="false"></string>
+    <string name="pref_skip_10" translatable="false"></string>
+    <string name="choose_video_quality"></string>
+    <string name="pref_progress_95" translatable="false"></string>
+    <string name="pref_progress_75" translatable="false"></string>
+    <string name="pref_skip_20" translatable="false"></string>
+    <string name="pref_progress_100" translatable="false"></string>
+    <string name="extension_settings"></string>
 </resources>
