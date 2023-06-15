@@ -269,4 +269,30 @@
     <string name="pref_category_pip">Miniokno</string>
     <string name="action_global_manga_search">Globální vyhledávání mangy</string>
     <string name="action_global_anime_search">Globální vyhledávání anime</string>
+    <string name="pref_search_pinned_anime_sources_only"></string>
+    <string name="pref_default_home_tab_library"></string>
+    <string name="pref_enable_pip"></string>
+    <string name="pref_progress_100" translatable="false"></string>
+    <string name="pref_hide_in_manga_library_items"></string>
+    <string name="pref_hide_in_anime_library_items"></string>
+    <string name="pref_progress_75" translatable="false"></string>
+    <string name="pref_skip_30" translatable="false"></string>
+    <string name="pref_progress_70" translatable="false"></string>
+    <string name="pref_progress_95" translatable="false"></string>
+    <string name="pref_progress_80" translatable="false"></string>
+    <string name="copied_video_link_to_clipboard"></string>
+    <string name="pref_progress_85" translatable="false"></string>
+    <string name="unofficial_anime_extension_message"></string>
+    <plurals name="download_amount_anime">
+        <item quantity="one"></item>
+        <item quantity="few"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="pref_skip_20" translatable="false"></string>
+    <string name="pref_category_player_seeking"></string>
+    <string name="choose_video_quality"></string>
+    <string name="pref_progress_90" translatable="false"></string>
+    <string name="pref_skip_5" translatable="false"></string>
+    <string name="extension_settings"></string>
+    <string name="pref_skip_10" translatable="false"></string>
 </resources>
