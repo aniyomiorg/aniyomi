@@ -6,7 +6,7 @@
     <string name="entries">Entradas de la biblioteca</string>
     <string name="chapters_episodes">Capítulos y episodios</string>
     <string name="episodes">Episodios</string>
-    <string name="backup_settings_warning">Advertencia: Respaldar las configuraciones guardara tus contraseñas de seguimiento también, ¡no compartas este archivo de respaldo!</string>
+    <string name="backup_settings_warning">Advertencia: La copia de seguridad de la configuración también almacenará tus contraseñas, ¡no compartas este archivo de la copia de seguridad!</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
@@ -45,7 +45,6 @@
     <string name="action_show_manga">Mostrar manga</string>
     <string name="action_show_anime">Mostrar anime</string>
     <string name="action_display_download_badge_anime">Episodios descargados</string>
-    <string name="action_display_unseen_badge">Episodios sin ver</string>
     <string name="action_display_local_badge_manga">Fuente local</string>
     <string name="action_display_local_badge_anime">Anime local</string>
     <string name="action_display_show_continue_reading_button">Mostrar botón de continuar viendo/leyendo</string>
@@ -147,9 +146,6 @@
     <string name="download_paused">Pausado</string>
     <string name="show_episode_number">Número de episodio</string>
     <string name="sort_by_episode_number">Por número de episodio</string>
-    <string name="download_1_episode">Siguiente episodio</string>
-    <string name="download_5_episodes">Siguientes 5 episodios</string>
-    <string name="download_10_episodes">Siguientes 10 episodios</string>
     <string name="download_unseen">Sin ver</string>
     <string name="confirm_delete_episodes">¿Seguro que quieres eliminar los episodios seleccionados\?</string>
     <string name="also_set_chapter_settings_for_library">Aplicar también a todo el manga en mi biblioteca</string>
@@ -219,9 +215,9 @@
     <string name="video_stretch_screen">Extender a la pantalla</string>
     <string name="playback_speed_dialog_title">Cambiar la velocidad de reproducción:</string>
     <string name="playback_speed_dialog_reset">Restablecer</string>
-    <string name="quality_dialog_header">Cambia la calidad del vídeo:</string>
-    <string name="subtitle_dialog_header">Cambiar la pista de los subtítulos:</string>
-    <string name="audio_dialog_header">Cambia la pista del audio:</string>
+    <string name="quality_dialog_header">Calidad del video</string>
+    <string name="subtitle_dialog_header">Subtitular</string>
+    <string name="audio_dialog_header">Audio</string>
     <string name="playback_options_speed">Velocidad de reproducción</string>
     <string name="playback_options_quality">Calidad del vídeo</string>
     <string name="playback_options_title">Opciones de la reproducción</string>
@@ -271,11 +267,21 @@
     <string name="pref_default_home_tab_library">Configure la pantalla de inicio en la pestaña Manga</string>
     <string name="action_global_anime_search">Búsqueda global del anime</string>
     <string name="pref_category_player_seeking">Buscando</string>
-    <string name="pref_search_pinned_manga_sources_only">Solo incluye fuentes de manga ancladas</string>
+    <string name="pref_search_pinned_manga_sources_only">Buscar sólo fuentes de manga incrustadas en la búsqueda global</string>
     <string name="action_global_manga_search">Búsqueda global del manga</string>
-    <string name="pref_search_pinned_anime_sources_only">Solo incluye fuentes de anime fijas</string>
+    <string name="pref_search_pinned_anime_sources_only">Buscar solo fuentes del anime incrustadas en la búsqueda global</string>
     <string name="unofficial_anime_extension_message">Esta extensión no pertenece a la lista oficial de extensiones de Aniyomi.</string>
     <string name="pref_category_volume_brightness">Volumen y Brillo</string>
     <string name="pref_category_pip">Imagen en imagen (PiP)</string>
     <string name="pref_enable_pip">Habilitar el uso del modo PiP</string>
+    <string name="pref_hide_in_manga_library_items">Ocultar las entradas del manga que ya están en la biblioteca</string>
+    <string name="pref_hide_in_anime_library_items">Ocultar las entradas del anime que ya están en la biblioteca</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one">Siguiente episodio</item>
+        <item quantity="many">Los siguientes %d episodios</item>
+        <item quantity="other">Los siguientes %d episodios</item>
+    </plurals>
+    <string name="copied_video_link_to_clipboard">Enlace de calidad del video copiado al portapapeles</string>
+    <string name="choose_video_quality">Elige la calidad del vídeo:</string>
+    <string name="extension_settings">Configuración de las extensiones</string>
 </resources>

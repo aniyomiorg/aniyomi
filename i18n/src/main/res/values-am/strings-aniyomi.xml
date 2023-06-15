@@ -30,4 +30,32 @@
     <string name="label_manga">ማንጋ</string>
     <string name="label_anime">አኒሜ</string>
     <string name="label_watched_duration">የእይታ ቆይታ</string>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

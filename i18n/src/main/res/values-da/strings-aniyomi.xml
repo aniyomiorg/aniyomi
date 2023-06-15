@@ -8,4 +8,32 @@
     <string name="pref_update_only_completely_read">Med ulæst kapitler</string>
     <string name="default_manga_category">Standard kategori</string>
     <string name="pref_manga_library_update_categories_details">Manga i ekskluderede kategorier vil ikke blive opdateret selv hvis de også er i inkluderede kategorier.</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>
