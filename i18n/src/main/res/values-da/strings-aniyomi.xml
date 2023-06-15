@@ -8,15 +8,12 @@
     <string name="pref_update_only_completely_read">Med ulæst kapitler</string>
     <string name="default_manga_category">Standard kategori</string>
     <string name="pref_manga_library_update_categories_details">Manga i ekskluderede kategorier vil ikke blive opdateret selv hvis de også er i inkluderede kategorier.</string>
-    <string name="not_interesting"/>
     <string name="pref_category_progress"/>
-    <string name="toggle_stats"/>
     <string name="auto_download_while_watching"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="no_next_episode"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -41,11 +38,7 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_mpv_conf"/>
     <string name="action_sort_last_anime_update"/>
-    <string name="disable_auto_play"/>
     <string name="action_sort_last_seen"/>
-    <string name="notification_new_episodes"/>
     <string name="label_manga_sources"/>
-    <string name="pref_search_pinned_anime_sources_only"/>
 </resources>

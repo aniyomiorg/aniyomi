@@ -32,9 +32,7 @@
     <string name="information_webview_required">Tachiyomi валли WebView кирлӗ</string>
     <string name="download_notifier_download_paused_chapters">Тиеве вӑхӑтлӑха чарнӑ</string>
     <string name="channel_new_chapters_episodes">Сыпӑксен ҫӗнетӗвӗсем</string>
-    <string name="enable_horizontal_seek_gesture"/>
     <string name="currently_reading"/>
-    <string name="pref_progress_85" translatable="false"/>
     <string name="pref_skip_length"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
@@ -48,28 +46,22 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="local_invalid_episode_format"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_clear_anime_database_summary"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="rotation_sensor_portrait"/>
     <string name="action_screen_fit"/>
-    <string name="pref_bottom_nav_no_history"/>
     <string name="label_mangaextensions"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_history"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="unofficial_extension_message_aniyomi"/>
 </resources>

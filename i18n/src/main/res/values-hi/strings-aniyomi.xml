@@ -38,14 +38,11 @@
     <string name="information_webview_required">ताचियोमी के लिए वेबव्हिव आवश्यक है</string>
     <string name="download_notifier_download_paused_chapters">डाउनलोड रोक दिया है</string>
     <string name="channel_new_chapters_episodes">अध्याय अद्यतन</string>
-    <string name="rotation_sensor_landscape"/>
     <string name="label_animeupdates"/>
-    <string name="pref_category_player"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="stats_page_3"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -62,7 +59,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_hide_in_manga_library_items"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -71,11 +67,7 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_player_summary"/>
     <string name="pref_default_landscape_orientation"/>
-    <string name="video_fit_screen"/>
     <string name="label_watched_episodes"/>
-    <string name="label_anime_library"/>
     <string name="auto_download_while_watching"/>
-    <string name="show_episode_number"/>
 </resources>

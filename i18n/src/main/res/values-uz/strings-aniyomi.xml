@@ -2,14 +2,11 @@
 <resources>
     <string name="manga_categories">Kategoriyalar</string>
     <string name="unlock_app">Aniyomini ochish</string>
-    <string name="pref_category_player_orientation"/>
     <string name="screenshot_header"/>
-    <string name="label_migration_manga"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_default_portrait_orientation"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -18,13 +15,9 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_enable_pip"/>
     <string name="pref_remove_exclude_categories_anime"/>
-    <string name="want_to_watch"/>
     <string name="pref_mpv_conf"/>
-    <string name="video_fit_screen"/>
     <string name="pref_clear_anime_database"/>
-    <string name="default_anime_category"/>
     <string name="label_watched_duration"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
@@ -42,5 +35,4 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="playertitle"/>
 </resources>

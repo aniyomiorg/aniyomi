@@ -174,7 +174,6 @@
     <string name="label_anime_library">Anime</string>
     <string name="label_manga_sources">Mangalähteet</string>
     <string name="label_anime_sources">Animelähteet</string>
-    <string name="pref_category_external_downloader"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -187,9 +186,7 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_mangaextensions"/>
     <string name="pref_progress_70" translatable="false"/>
-    <string name="pref_bottom_nav_no_manga"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>

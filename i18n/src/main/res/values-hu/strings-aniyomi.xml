@@ -38,9 +38,7 @@
     <string name="information_webview_required">A Tachiyomi működéséhez WebView szükséges</string>
     <string name="download_notifier_download_paused_chapters">Letöltés szüneteltetve</string>
     <string name="channel_new_chapters_episodes">Fejezetfrissítések</string>
-    <string name="pref_adjust_orientation_video_dimensions"/>
     <string name="pref_default_home_tab_library"/>
-    <string name="download_ahead_info_anime"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -61,20 +59,15 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_default_portrait_orientation"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_hide_in_manga_library_items"/>
     <string name="extension_settings"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_screen_fit"/>
     <string name="rotation_reverse_landscape"/>
-    <string name="action_sort_last_seen"/>
     <string name="label_history"/>
-    <string name="pref_clear_anime_database"/>
 </resources>

@@ -26,13 +26,9 @@
     <string name="clear_database_confirmation">Sigurado ka\? Basaha ang mga kapitulo ug ang pag-uswag sa dili librarya nga manga mawala</string>
     <string name="pref_refresh_library_tracking_summary">Mga update sa status, score ug katapusang kapitulo nga gibasa gikan sa mga serbisyo sa pagsubay</string>
     <string name="pref_incognito_mode_summary">Paghunong sa pagbasa sa kasaysayan</string>
-    <string name="pref_intro_length"/>
     <string name="repeating_anime"/>
-    <string name="player_aniskip_recap"/>
     <string name="label_migration_manga"/>
-    <string name="pref_player_summary"/>
     <string name="screenshot_header"/>
-    <string name="pref_skip_10" translatable="false"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -45,7 +41,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_edit_anime_categories"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -58,9 +53,7 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_default_player_orientation"/>
     <string name="label_watched_episodes"/>
-    <string name="label_anime_library"/>
     <string name="pref_clear_anime_database"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>

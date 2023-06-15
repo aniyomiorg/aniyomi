@@ -36,7 +36,6 @@
     <string name="information_webview_required">Tachiyomi ir nepieciešams WebView</string>
     <string name="download_notifier_download_paused_chapters">Lejuplāde pauzēta</string>
     <string name="channel_new_chapters_episodes">Nodaļu atjauninājumi</string>
-    <string name="pref_waiting_time_aniskip"/>
     <string name="local_invalid_episode_format"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="zero"/>
@@ -53,14 +52,12 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_waiting_time_aniskip_10"/>
     <string name="action_sort_last_anime_update"/>
     <plurals name="notification_episodes_generic">
         <item quantity="zero"/>
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="anime_categories"/>
     <plurals name="download_amount_anime">
         <item quantity="zero"/>
         <item quantity="one"/>
@@ -71,13 +68,10 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_bookmark_episode"/>
     <string name="label_anime_library"/>
-    <string name="action_sort_unseen_count"/>
     <plurals name="anime_num_episodes">
         <item quantity="zero"/>
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="confirm_delete_episodes"/>
 </resources>

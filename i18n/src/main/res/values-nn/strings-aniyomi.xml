@@ -11,11 +11,8 @@
     <string name="manga_from_library">Manga frå biblioteket</string>
     <string name="snack_add_to_manga_library">Legg manga til i bibliotek\?</string>
     <string name="download_error">Feil</string>
-    <string name="pref_default_landscape_orientation"/>
     <string name="pref_clear_chapter_cache"/>
-    <string name="plan_to_watch"/>
     <string name="video_fit_screen"/>
-    <string name="action_start_download_externally"/>
     <string name="player_aniskip_dontskip"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
@@ -25,13 +22,11 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="playertitle"/>
     <string name="pref_search_pinned_anime_sources_only"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="choose_video_quality"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -40,13 +35,11 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_pip_episode_toasts"/>
     <string name="action_mark_as_seen"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_preserve_watching_position"/>
     <string name="display_mode_episode"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>

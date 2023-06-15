@@ -30,11 +30,8 @@
     <string name="label_manga">ማንጋ</string>
     <string name="label_anime">አኒሜ</string>
     <string name="label_watched_duration">የእይታ ቆይታ</string>
-    <string name="recent_anime_time"/>
     <string name="playertitle"/>
-    <string name="pref_player_hide_controls"/>
     <string name="notification_new_episodes"/>
-    <string name="pref_category_player_aniskip_info"/>
     <string name="episode_progress_no_total"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
@@ -52,21 +49,17 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_bottom_nav_style"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="no_episodes_error"/>
     <string name="episode_progress"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_order_by_episode_number"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_category_pip"/>
 </resources>

@@ -2,18 +2,15 @@
 <resources>
     <string name="manga_categories">زمرہ جات</string>
     <string name="unlock_app">انلاک تاچییومی</string>
-    <string name="pref_search_pinned_anime_sources_only"/>
     <string name="pref_category_external_downloader"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="player_aniskip_recap"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_category_internal_player"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -22,17 +19,13 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="enable_volume_brightness_gestures"/>
     <string name="action_edit_anime_categories"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="player_aniskip_dontskip"/>
     <string name="action_view_episodes"/>
-    <string name="action_mark_as_unseen"/>
     <string name="pref_mpv_conf"/>
-    <string name="playback_options_quality"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -41,6 +34,5 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_auto_update_manga_sync"/>
     <string name="action_bookmark_episode"/>
 </resources>

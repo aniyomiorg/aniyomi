@@ -2,15 +2,12 @@
 <resources>
     <string name="manga_categories">විවිධ වර්ග</string>
     <string name="unlock_app">Tachiyomi විවෘත කරන්න</string>
-    <string name="rotation_reverse_landscape"/>
     <string name="pref_pip_on_exit"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="information_webview_required"/>
     <string name="action_display_show_continue_reading_button"/>
-    <string name="pref_remember_volume"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -19,19 +16,15 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_mangaextensions"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="dialog_with_checkbox_reset_anime"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_show_manga"/>
     <string name="rotation_sensor_portrait"/>
-    <string name="action_edit_anime_categories"/>
     <string name="screenshot_show_subs"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>

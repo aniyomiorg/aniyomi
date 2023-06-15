@@ -76,31 +76,25 @@
     <string name="action_global_manga_search">গ্লোবাল মাঙ্গা অনুসন্ধান</string>
     <string name="action_global_anime_search">গ্লোবাল অ্যানিমে অনুসন্ধান</string>
     <string name="action_remove_bookmark_episode">আনবুকমার্ক পর্ব</string>
-    <string name="pref_use_external_downloader"/>
     <string name="video_fit_screen"/>
-    <string name="pref_waiting_time_aniskip_6"/>
     <string name="pref_progress_mark_as_seen"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="notification_episodes_single"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_player_summary"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="playertitle"/>
     <string name="pref_clear_anime_database"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_screen_fit"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>

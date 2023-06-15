@@ -26,9 +26,7 @@
     <string name="information_webview_required">WebView არის აუცილებელი Tachiyomi-ს სამუშაოდ</string>
     <string name="download_notifier_download_paused_chapters">გადმოწერა დაპაუზებულია</string>
     <string name="channel_new_chapters_episodes">თავების განახლებები</string>
-    <string name="pref_manga_library_update_categories_details"/>
     <string name="pref_progress_75" translatable="false"/>
-    <string name="pref_player_fullscreen"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -41,9 +39,7 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_external_downloader_selection"/>
     <string name="pref_waiting_time_aniskip"/>
-    <string name="also_set_chapter_settings_for_library"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -52,11 +48,8 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="currently_watching"/>
     <string name="action_previous_episode"/>
-    <string name="repeating_anime"/>
     <string name="entries"/>
-    <string name="pref_use_external_downloader"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>

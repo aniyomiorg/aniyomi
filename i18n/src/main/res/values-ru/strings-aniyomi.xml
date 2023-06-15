@@ -57,14 +57,12 @@
     <string name="pref_bottom_nav_no_history">Переместить историю на вкладку Дополнительно</string>
     <string name="label_anime_library">Аниме</string>
     <string name="label_manga_library">Манга</string>
-    <string name="pref_waiting_time_aniskip_9"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="screenshot_header"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="few"/>
@@ -77,7 +75,6 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="anime_from_library"/>
     <string name="no_previous_episode"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
@@ -85,9 +82,7 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="download_unseen"/>
     <string name="pref_preserve_watching_position"/>
-    <string name="action_bookmark_episode"/>
     <string name="default_anime_category"/>
     <plurals name="seconds">
         <item quantity="one"/>
@@ -107,6 +102,5 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_history"/>
     <string name="pref_mpv_conf"/>
 </resources>

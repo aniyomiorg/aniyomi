@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pref_intro_length"/>
     <string name="player_overlay_back"/>
     <plurals name="seconds">
         <item quantity="one"/>
@@ -10,17 +9,13 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_clear_manga_database_summary"/>
     <string name="download_error"/>
-    <string name="pref_library_manga_columns"/>
     <string name="action_sort_last_checked"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="repeating_anime"/>
     <string name="pref_clear_manga_database"/>
-    <string name="show_episode_number"/>
     <string name="pref_skip_5" translatable="false"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
@@ -30,15 +25,12 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="episode_download_progress"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_category_player_orientation"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_skip_20" translatable="false"/>
 </resources>

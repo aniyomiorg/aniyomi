@@ -38,11 +38,8 @@
     <string name="information_webview_required">WebView krävs för Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Nedladdning pausad</string>
     <string name="channel_new_chapters_episodes">Kapiteluppdateringar</string>
-    <string name="pref_clear_anime_database"/>
     <string name="screenshot_header"/>
-    <string name="action_order_by_episode_number"/>
     <string name="share_screenshot_info"/>
-    <string name="pref_backup_flags"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -59,11 +56,8 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="playback_options_speed"/>
     <string name="label_manga_library"/>
-    <string name="label_mangaextensions"/>
     <string name="label_watched_duration"/>
-    <string name="pref_bottom_nav_no_manga"/>
     <string name="plan_to_watch"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
@@ -77,5 +71,4 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_start_download_internally"/>
 </resources>

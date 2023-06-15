@@ -51,9 +51,7 @@
     <string name="label_anime_library">Anime</string>
     <string name="label_manga_sources">Fuentes de manga</string>
     <string name="label_anime_sources">Fuentes de anime</string>
-    <string name="screenshot_header"/>
     <string name="no_previous_episode"/>
-    <string name="settings"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="many"/>
@@ -79,13 +77,9 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="notification_episodes_single"/>
     <string name="share_screenshot_info"/>
-    <string name="action_global_anime_search"/>
     <string name="action_sort_last_checked"/>
-    <string name="no_episodes_error"/>
     <string name="action_mark_previous_as_seen"/>
-    <string name="unknown_studio"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="many"/>
@@ -96,5 +90,4 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="rotation_reverse_landscape"/>
 </resources>

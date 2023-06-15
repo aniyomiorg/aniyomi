@@ -26,21 +26,11 @@
     <string name="download_paused">Тохтотулунна</string>
     <string name="also_set_chapter_settings_for_library">Мин бэбэлэтиэкэбэр баар маангаларга туттуҥ</string>
     <string name="dialog_with_checkbox_reset">Бу маанга бары түһүмэхтэрин түһэрии</string>
-    <string name="playertitle"/>
     <string name="dialog_with_checkbox_remove_description_anime"/>
-    <string name="player_controls_skip_intro_text"/>
     <string name="pref_category_external_player"/>
-    <string name="no_next_episode"/>
     <string name="player_aniskip_skip"/>
-    <string name="unofficial_extension_message_aniyomi"/>
     <string name="label_history"/>
-    <plurals name="download_amount_anime">
-        <item quantity="other"/>
-    </plurals>
     <string name="player_aniskip_dontskip_toast"/>
-    <string name="anime_categories"/>
     <string name="action_start_download_internally"/>
-    <string name="label_manga_library"/>
     <string name="delete_downloads_for_anime"/>
-    <string name="anime_from_library"/>
 </resources>

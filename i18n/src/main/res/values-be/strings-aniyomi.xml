@@ -19,9 +19,7 @@
     <string name="pref_remove_after_read">Аўтаматычна пасля чытання</string>
     <string name="pref_remove_bookmarked_chapters">Дазволіць выдаленне частак з закладкамі</string>
     <string name="pref_auto_update_manga_sync">Абнаўляць прагрэс пасля чытання</string>
-    <string name="pref_progress_mark_as_seen"/>
     <string name="notification_episodes_single_and_more"/>
-    <string name="pref_always_use_external_player"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="few"/>
@@ -46,7 +44,6 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_waiting_time_aniskip_10"/>
     <string name="pref_skip_20" translatable="false"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
@@ -54,14 +51,12 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_refresh_library_tracking_summary"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_progress_70" translatable="false"/>
     <string name="label_animeextensions"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
@@ -69,8 +64,6 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_change_intro_length"/>
     <string name="pref_auto_clear_chapter_cache"/>
-    <string name="unknown_studio"/>
     <string name="action_previous_episode"/>
 </resources>

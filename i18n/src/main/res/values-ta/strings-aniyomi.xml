@@ -2,16 +2,12 @@
 <resources>
     <string name="manga_categories">பிரிவுகள்</string>
     <string name="unlock_app">\"டக்கியோமியை\" திறக்கவும்</string>
-    <string name="pref_skip_30" translatable="false"/>
     <string name="label_history"/>
-    <string name="pref_waiting_time_aniskip_5"/>
     <string name="pref_progress_85" translatable="false"/>
-    <string name="anime_from_library"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_enable_auto_skip_ani_skip"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -20,7 +16,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="currently_watching"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -29,18 +24,15 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="episode_progress"/>
     <string name="video_list_empty_error"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="share_screenshot_info"/>
     <string name="player_aniskip_dontskip_toast"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="entries"/>
     <string name="pref_manga_library_update_categories_details"/>
 </resources>

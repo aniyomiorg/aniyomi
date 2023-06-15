@@ -8,18 +8,15 @@
 \nअसे अविश्वासू एक्सटेन्शन आपले लॉगिन बाबत माहिती चोरू शकते.
 \n
 \nव अश्या एक्सटेन्शन वर विश्वास करून तुम्ही ह्या सगद्या जोखीम घेत आहेत.</string>
-    <string name="stats_header"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_default_home_tab_library"/>
     <string name="pref_player_smooth_seek_summary"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_mark_as_unseen"/>
     <string name="player_hwdec_dialog_title"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
@@ -37,16 +34,11 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="dialog_with_checkbox_reset_anime"/>
     <string name="pref_search_pinned_anime_sources_only"/>
-    <string name="pref_remove_after_marked_as_read"/>
     <string name="pref_external_player_preference"/>
-    <string name="pref_category_delete_chapters"/>
     <string name="action_play_externally"/>
-    <string name="information_webview_required"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_hide_in_anime_library_items"/>
 </resources>
