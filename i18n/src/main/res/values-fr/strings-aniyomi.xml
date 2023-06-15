@@ -275,17 +275,12 @@
     <string name="pref_player_smooth_seek_summary">Si activé, la recherche ne va pas se concentrer sur les images-clés, permettant de faire une recherche plus précise mais plus lente</string>
     <string name="pref_use_external_downloader">Toujours utiliser un outil de téléchargement externe pour les animés</string>
     <string name="pref_enable_auto_skip_ani_skip">Activer le passage d\'intro automatique</string>
-    <string name="pref_skip_20" translatable="false"/>
     <string name="pref_hide_in_anime_library_items"/>
-    <string name="pref_progress_85" translatable="false"/>
     <string name="extension_settings"/>
-    <string name="pref_progress_90" translatable="false"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_skip_5" translatable="false"/>
     <string name="pref_progress_70" translatable="false"/>
-    <string name="pref_progress_75" translatable="false"/>
 </resources>

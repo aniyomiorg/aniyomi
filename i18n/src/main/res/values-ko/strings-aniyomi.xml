@@ -271,10 +271,7 @@
     </plurals>
     <string name="choose_video_quality">동영상 화질 선택:</string>
     <string name="extension_settings">확장기능 설정</string>
-    <string name="pref_progress_80" translatable="false"/>
     <string name="pref_progress_100" translatable="false"/>
-    <string name="pref_skip_10" translatable="false"/>
     <string name="pref_skip_5" translatable="false"/>
-    <string name="pref_skip_20" translatable="false"/>
     <string name="pref_progress_90" translatable="false"/>
 </resources>

@@ -202,40 +202,22 @@
     <string name="playback_options_speed">播放速度</string>
     <string name="playback_options_quality">画质</string>
     <string name="playback_options_title">播放选项</string>
-    <string name="pref_category_player_aniskip_info"/>
     <string name="pref_skip_30" translatable="false"/>
-    <string name="player_aniskip_ed"/>
     <string name="pref_search_pinned_anime_sources_only"/>
-    <string name="pref_hide_in_anime_library_items"/>
     <string name="unofficial_anime_extension_message"/>
-    <string name="pref_progress_100" translatable="false"/>
     <string name="pref_skip_5" translatable="false"/>
-    <string name="share_screenshot_info"/>
     <string name="recent_anime_time"/>
-    <string name="action_change_intro_length"/>
     <string name="player_aniskip_recap"/>
-    <string name="pref_enable_auto_skip_ani_skip"/>
     <string name="pref_waiting_time_aniskip_5"/>
-    <string name="pref_waiting_time_aniskip_8"/>
     <string name="pref_waiting_time_aniskip_10"/>
-    <string name="pref_backup_flags"/>
     <string name="choose_video_quality"/>
-    <string name="pref_enable_netflix_style_aniskip"/>
     <string name="player_aniskip_dontskip_toast"/>
-    <string name="label_migration_manga"/>
     <string name="notification_episodes_multiple"/>
-    <string name="settings"/>
     <string name="player_aniskip_skip"/>
-    <string name="episode_settings"/>
     <string name="pref_progress_80" translatable="false"/>
-    <string name="label_anime"/>
     <string name="player_aniskip_mixedOp"/>
-    <string name="notification_episodes_single_and_more"/>
     <string name="pref_progress_70" translatable="false"/>
-    <string name="pref_enable_pip"/>
     <string name="pref_category_volume_brightness"/>
-    <string name="pref_waiting_time_aniskip_7"/>
     <string name="pref_remember_brightness"/>
-    <string name="label_watched_episodes"/>
     <string name="pref_search_pinned_manga_sources_only"/>
 </resources>

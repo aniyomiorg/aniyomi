@@ -275,17 +275,13 @@
     <string name="player_aniskip_recap">Saltar recapitulação</string>
     <string name="player_aniskip_mixedOp">Saltar MixedOp</string>
     <string name="pref_enable_auto_skip_ani_skip">Ativar salto automático</string>
-    <string name="pref_skip_10" translatable="false"/>
     <string name="pref_skip_5" translatable="false"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="choose_video_quality"/>
     <string name="pref_hide_in_manga_library_items"/>
-    <string name="pref_hide_in_anime_library_items"/>
     <string name="pref_progress_85" translatable="false"/>
-    <string name="pref_progress_75" translatable="false"/>
     <string name="pref_progress_90" translatable="false"/>
 </resources>

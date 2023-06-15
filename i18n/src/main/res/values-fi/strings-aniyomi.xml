@@ -174,69 +174,43 @@
     <string name="label_anime_library">Anime</string>
     <string name="label_manga_sources">Mangalähteet</string>
     <string name="label_anime_sources">Animelähteet</string>
-    <string name="pref_category_player_seeking"/>
     <string name="rotation_sensor_landscape"/>
-    <string name="pref_progress_85" translatable="false"/>
     <string name="pref_default_landscape_orientation"/>
-    <string name="pref_skip_5" translatable="false"/>
     <string name="pref_pip_on_exit"/>
-    <string name="playertitle"/>
     <string name="pref_category_external_downloader"/>
-    <string name="toggle_stats"/>
     <string name="backup_settings_warning"/>
-    <string name="pref_category_internal_player"/>
     <string name="episode_download_progress"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="share_screenshot_info"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_change_intro_length"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_screen_fit"/>
     <string name="pref_progress_100" translatable="false"/>
-    <string name="pref_skip_30" translatable="false"/>
     <string name="pref_player_fullscreen"/>
-    <string name="settings"/>
     <string name="pref_library_anime_columns"/>
-    <string name="label_migration_anime"/>
     <string name="label_mangaextensions"/>
-    <string name="default_anime_category"/>
     <string name="pref_bottom_nav_no_updates"/>
-    <string name="pref_preserve_watching_position"/>
     <string name="recent_anime_time"/>
-    <string name="pref_player_hide_controls"/>
     <string name="rotation_sensor_portrait"/>
-    <string name="choose_video_quality"/>
     <string name="pref_progress_70" translatable="false"/>
-    <string name="entries"/>
     <string name="enable_volume_brightness_gestures"/>
-    <string name="unofficial_extension_message_aniyomi"/>
     <string name="action_start_download_internally"/>
-    <string name="pref_progress_95" translatable="false"/>
     <string name="player_aniskip_ed"/>
-    <string name="pref_player_summary"/>
     <string name="pref_bottom_nav_no_manga"/>
-    <string name="action_sort_episode_fetch_date"/>
     <string name="action_player_pip"/>
-    <string name="action_view_episodes"/>
     <string name="repeating_anime"/>
-    <string name="episode_progress_no_total"/>
     <string name="notification_episodes_multiple"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_start_download_externally"/>
     <string name="pref_pip_episode_toasts"/>
-    <string name="notification_episodes_single_and_more"/>
     <string name="pref_progress_80" translatable="false"/>
-    <string name="pref_search_pinned_manga_sources_only"/>
 </resources>

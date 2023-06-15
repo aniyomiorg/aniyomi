@@ -2,45 +2,27 @@
 <resources>
     <string name="manga_categories">Kategoriyalar</string>
     <string name="unlock_app">Aniyomini ochish</string>
-    <string name="information_no_recent_anime"/>
     <string name="confirm_delete_episodes"/>
-    <string name="pref_default_home_tab_library"/>
     <string name="default_manga_category"/>
-    <string name="pref_anime_library_update_categories_details"/>
     <string name="unofficial_anime_extension_message"/>
-    <string name="pref_progress_80" translatable="false"/>
     <string name="pref_category_player_orientation"/>
-    <string name="pref_category_player_seeking"/>
     <string name="pref_skip_length"/>
-    <string name="pref_skip_10" translatable="false"/>
     <string name="pref_pip_on_exit"/>
-    <string name="pref_auto_clear_chapter_cache"/>
     <string name="not_interesting"/>
-    <string name="dialog_with_checkbox_reset"/>
     <string name="screenshot_header"/>
-    <string name="enable_horizontal_seek_gesture"/>
     <string name="download_insufficient_space"/>
-    <string name="video_list_empty_error"/>
     <string name="subtitle_dialog_header"/>
-    <string name="player_aniskip_recap"/>
     <string name="pref_enable_aniskip"/>
-    <string name="pref_waiting_time_aniskip_9"/>
     <string name="label_migration_manga"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_library_anime_columns"/>
     <string name="action_sort_last_anime_update"/>
-    <string name="action_download_unread"/>
     <string name="action_player_pip"/>
-    <string name="action_order_by_episode_number"/>
     <string name="pref_category_progress"/>
-    <string name="pref_progress_70" translatable="false"/>
     <string name="pref_default_portrait_orientation"/>
-    <string name="pref_skip_disable"/>
     <string name="pref_skip_5" translatable="false"/>
-    <string name="video_stretch_screen"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -49,77 +31,41 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_external_player_preference"/>
     <string name="extension_settings"/>
-    <string name="action_edit_anime_categories"/>
     <string name="want_to_read"/>
-    <string name="channel_new_chapters_episodes"/>
     <string name="pref_backup_flags_summ"/>
-    <string name="pref_player_fullscreen"/>
     <string name="pref_enable_pip"/>
-    <string name="recent_anime_time"/>
     <string name="local_manga_source"/>
-    <string name="pref_player_summary"/>
     <string name="action_global_anime_search"/>
-    <string name="player_controls_skip_intro_text"/>
     <string name="pref_hide_in_manga_library_items"/>
-    <string name="action_previous_episode"/>
     <string name="pref_remove_exclude_categories_anime"/>
-    <string name="download_notifier_download_paused_chapters"/>
     <string name="pref_use_external_downloader"/>
-    <string name="player_overlay_back"/>
     <string name="backup_settings_warning"/>
-    <string name="pref_remember_brightness"/>
     <string name="pref_category_external_downloader"/>
-    <string name="pref_pip_episode_toasts"/>
     <string name="want_to_watch"/>
-    <string name="dialog_with_checkbox_remove_description_anime"/>
     <string name="screenshot_show_subs"/>
-    <string name="pref_intro_length"/>
     <string name="display_mode_episode"/>
-    <string name="action_sort_last_checked"/>
     <string name="pref_clear_chapter_cache"/>
-    <string name="label_updates"/>
     <string name="pref_mpv_conf"/>
-    <string name="notification_episodes_multiple"/>
     <string name="download_notifier_download_paused_episodes"/>
-    <string name="currently_reading"/>
     <string name="label_animeextensions"/>
-    <string name="pref_bottom_nav_style"/>
     <string name="action_display_local_badge_manga"/>
-    <string name="manga_from_library"/>
     <string name="video_fit_screen"/>
-    <string name="action_display_show_continue_reading_button"/>
     <string name="playback_speed_dialog_reset"/>
-    <string name="playback_options_title"/>
     <string name="enable_auto_play"/>
-    <string name="player_hwdec_dialog_title"/>
     <string name="action_remove_bookmark_episode"/>
-    <string name="pref_adjust_orientation_video_dimensions"/>
     <string name="pref_clear_anime_database"/>
-    <string name="action_start_download_internally"/>
     <string name="action_sort_latest_episode"/>
-    <string name="information_webview_required"/>
     <string name="pref_progress_100" translatable="false"/>
-    <string name="action_bookmark_episode"/>
     <string name="untrusted_extension_message"/>
-    <string name="download_ahead_info_anime"/>
     <string name="default_anime_category"/>
-    <string name="action_sort_episode_fetch_date"/>
     <string name="anime_categories"/>
-    <string name="pref_progress_75" translatable="false"/>
     <string name="pref_library_update_show_tab_badge"/>
-    <string name="action_show_anime"/>
     <string name="pref_bottom_nav_no_manga"/>
-    <string name="action_sort_last_seen"/>
     <string name="label_watched_duration"/>
-    <string name="action_play"/>
     <string name="local_anime_source"/>
-    <string name="local_invalid_episode_format"/>
     <string name="download_error"/>
-    <string name="label_animehistory"/>
     <string name="disable_auto_play"/>
-    <string name="player_aniskip_dontskip"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -128,32 +74,21 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="snack_add_to_manga_library"/>
     <string name="episode_downloading_progress"/>
-    <string name="pref_remove_after_read"/>
     <string name="stats_page_2"/>
-    <string name="pref_refresh_library_tracking_summary"/>
     <string name="action_screen_fit"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_category_delete_chapters"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_default_player_orientation"/>
     <string name="video_crop_screen"/>
-    <string name="player_aniskip_mixedOp"/>
     <string name="watching"/>
-    <string name="label_mangaextensions"/>
     <string name="pref_clear_manga_database_summary"/>
-    <string name="label_manga"/>
     <string name="playertitle"/>
-    <string name="pref_invalidate_download_cache_summary"/>
     <string name="notification_new_episodes"/>
-    <string name="episode_progress"/>
     <string name="unofficial_extension_message_aniyomi"/>
-    <string name="pref_search_pinned_manga_sources_only"/>
 </resources>

@@ -269,20 +269,14 @@
     <string name="pref_category_pip">Miniokno</string>
     <string name="action_global_manga_search">Globální vyhledávání mangy</string>
     <string name="action_global_anime_search">Globální vyhledávání anime</string>
-    <string name="pref_default_home_tab_library"/>
     <string name="pref_progress_100" translatable="false"/>
-    <string name="pref_hide_in_anime_library_items"/>
     <string name="pref_skip_30" translatable="false"/>
-    <string name="pref_progress_95" translatable="false"/>
     <string name="copied_video_link_to_clipboard"/>
-    <string name="unofficial_anime_extension_message"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_category_player_seeking"/>
     <string name="pref_progress_90" translatable="false"/>
-    <string name="extension_settings"/>
     <string name="pref_search_pinned_manga_sources_only"/>
 </resources>
