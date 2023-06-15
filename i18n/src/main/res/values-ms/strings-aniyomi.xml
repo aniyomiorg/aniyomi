@@ -38,5 +38,4 @@
     <string name="information_webview_required">WebView diperlukan untuk Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Muat turun dihentikan sebentar</string>
     <string name="channel_new_chapters_episodes">Pengemaskinian bab</string>
-    <string name="action_sort_episode_fetch_date"/>
 </resources>

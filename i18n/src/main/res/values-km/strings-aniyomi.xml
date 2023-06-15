@@ -5,6 +5,5 @@
     <string name="action_show_manga">បង្ហាញម៊េងហ្គា</string>
     <string name="action_display_local_badge_manga">ម៊េងហ្គាដែលមានស្រាប់ក្នុងឧបករណ៍</string>
     <string name="default_manga_category">ថ្នាក់ធម្មតា</string>
-    <string name="pref_progress_95" translatable="false"/>
     <string name="pref_enable_auto_skip_ani_skip"/>
 </resources>

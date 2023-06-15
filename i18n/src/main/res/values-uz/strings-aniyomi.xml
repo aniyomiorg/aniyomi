@@ -14,7 +14,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_watched_duration"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>

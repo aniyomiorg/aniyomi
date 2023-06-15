@@ -60,5 +60,4 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="local_manga_source"/>
 </resources>
