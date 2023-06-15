@@ -280,5 +280,4 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="choose_video_quality"/>
 </resources>

@@ -38,22 +38,17 @@
     <string name="information_webview_required">A Tachiyomi működéséhez WebView szükséges</string>
     <string name="download_notifier_download_paused_chapters">Letöltés szüneteltetve</string>
     <string name="channel_new_chapters_episodes">Fejezetfrissítések</string>
-    <string name="action_change_intro_length"/>
     <string name="pref_adjust_orientation_video_dimensions"/>
-    <string name="local_invalid_episode_format"/>
     <string name="pref_default_home_tab_library"/>
-    <string name="pref_skip_length"/>
     <string name="download_ahead_info_anime"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="stats_header"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_mangaextensions"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -66,30 +61,20 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_invalidate_download_cache_summary"/>
     <string name="pref_default_portrait_orientation"/>
-    <string name="label_migration_manga"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_sort_episode_fetch_date"/>
     <string name="pref_hide_in_manga_library_items"/>
-    <string name="quality_dialog_header"/>
     <string name="extension_settings"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="backup_settings_warning"/>
     <string name="action_screen_fit"/>
-    <string name="rotation_sensor_portrait"/>
     <string name="rotation_reverse_landscape"/>
-    <string name="action_sort_unseen_count"/>
     <string name="action_sort_last_seen"/>
-    <string name="label_animeextensions"/>
     <string name="label_history"/>
-    <string name="share_screenshot_info"/>
     <string name="pref_clear_anime_database"/>
-    <string name="pref_download_new_episodes"/>
 </resources>

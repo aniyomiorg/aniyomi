@@ -57,7 +57,6 @@
     <string name="pref_bottom_nav_no_history">Переместить историю на вкладку Дополнительно</string>
     <string name="label_anime_library">Аниме</string>
     <string name="label_manga_library">Манга</string>
-    <string name="used_cache_both"/>
     <string name="pref_waiting_time_aniskip_9"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
@@ -65,7 +64,6 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_progress_100" translatable="false"/>
     <string name="screenshot_header"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
@@ -79,26 +77,18 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="enable_auto_play"/>
     <string name="anime_from_library"/>
-    <string name="pref_enable_pip"/>
     <string name="no_previous_episode"/>
-    <string name="notification_new_episodes"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="local_manga_source"/>
     <string name="download_unseen"/>
-    <string name="action_global_manga_search"/>
     <string name="pref_preserve_watching_position"/>
-    <string name="pref_progress_95" translatable="false"/>
     <string name="action_bookmark_episode"/>
-    <string name="action_sort_episode_fetch_date"/>
     <string name="default_anime_category"/>
-    <string name="stats_header"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="few"/>
@@ -117,8 +107,6 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_remember_volume"/>
     <string name="label_history"/>
-    <string name="pref_invalidate_download_cache_summary"/>
     <string name="pref_mpv_conf"/>
 </resources>

@@ -38,17 +38,11 @@
     <string name="information_webview_required">Tachiyomi krever WebView</string>
     <string name="download_notifier_download_paused_chapters">Nedlasting pauset</string>
     <string name="channel_new_chapters_episodes">Kapitteloppdateringer</string>
-    <string name="pref_external_player_preference"/>
     <string name="sort_by_episode_number"/>
-    <string name="stats_page"/>
     <string name="label_animeupdates"/>
-    <string name="audio_dialog_header"/>
     <string name="pref_waiting_time_aniskip_8"/>
-    <string name="label_migration_manga"/>
     <string name="pref_progress_90" translatable="false"/>
-    <string name="pref_skip_length"/>
     <string name="pref_download_new_episodes"/>
-    <string name="plan_to_watch"/>
     <string name="pref_category_player_aniskip_info"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
@@ -70,26 +64,18 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="video_fit_screen"/>
     <string name="episode_settings_updated"/>
-    <string name="pref_library_manga_columns"/>
     <string name="screenshot_header"/>
-    <string name="dialog_with_checkbox_remove_description_anime"/>
     <string name="pref_progress_80" translatable="false"/>
-    <string name="episode_not_found"/>
     <string name="action_mark_as_seen"/>
-    <string name="action_display_download_badge_anime"/>
     <string name="label_manga"/>
-    <string name="action_remove_bookmark_episode"/>
     <string name="pref_clear_anime_database"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="want_to_watch"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="want_to_read"/>
 </resources>

@@ -37,9 +37,7 @@
     <string name="information_webview_required">WebView beharrezkoa da Tachiyomi-rentzat</string>
     <string name="download_notifier_download_paused_chapters">Deskarga pausatu da</string>
     <string name="channel_new_chapters_episodes">Kapituluaren eguneraketak</string>
-    <string name="episode_download_progress"/>
     <string name="pref_default_player_orientation"/>
-    <string name="pref_clear_anime_database"/>
     <string name="no_next_episode"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
@@ -49,21 +47,15 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_show_anime"/>
     <string name="pref_default_intro_length"/>
-    <string name="pref_player_smooth_seek_summary"/>
     <string name="information_no_recent_anime"/>
-    <string name="video_stretch_screen"/>
     <string name="show_episode_number"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="playback_options_quality"/>
     <string name="pref_waiting_time_aniskip_10"/>
-    <string name="copied_video_link_to_clipboard"/>
     <string name="action_change_intro_length"/>
-    <string name="toggle_stats"/>
     <string name="plan_to_watch"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
@@ -77,16 +69,12 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="default_anime_category"/>
     <string name="pref_remember_brightness"/>
-    <string name="local_invalid_episode_format"/>
     <string name="label_manga_library"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_hide_in_anime_library_items"/>
     <string name="currently_watching"/>
-    <string name="episode_settings"/>
     <string name="episode_progress_no_total"/>
 </resources>

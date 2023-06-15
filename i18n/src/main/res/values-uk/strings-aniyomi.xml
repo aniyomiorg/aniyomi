@@ -292,5 +292,4 @@
     <string name="copied_video_link_to_clipboard">Скопійоване якісне посилання на відео в буфер обміну</string>
     <string name="choose_video_quality">Виберіть якість відео:</string>
     <string name="extension_settings">Налаштування розширення</string>
-    <string name="pref_progress_90" translatable="false"/>
 </resources>

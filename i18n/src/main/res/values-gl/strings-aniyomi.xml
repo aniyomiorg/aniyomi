@@ -12,26 +12,19 @@
     <string name="pref_remove_after_marked_as_read">Despois de marcar manualmente como lido</string>
     <string name="pref_remove_after_read">Despois de ler</string>
     <string name="pref_remove_bookmarked_chapters">Eliminar capítulos marcados</string>
-    <string name="playback_speed_dialog_title"/>
     <string name="pref_player_hide_controls"/>
-    <string name="pref_remove_exclude_categories_anime"/>
     <string name="local_anime_source"/>
-    <string name="repeating_anime"/>
     <string name="toggle_stats"/>
-    <string name="notification_new_episodes"/>
     <string name="player_aniskip_recap"/>
-    <string name="pref_waiting_time_aniskip_9"/>
     <string name="episode_settings"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="used_cache_both"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="enable_auto_play"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -48,25 +41,16 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_view_episodes"/>
     <string name="pref_bottom_nav_no_updates"/>
-    <string name="pref_library_update_show_tab_badge"/>
     <string name="notification_episodes_single_and_more"/>
-    <string name="also_set_episode_settings_for_library"/>
     <string name="pref_invalidate_download_cache_summary"/>
-    <string name="action_display_local_badge_anime"/>
     <string name="no_previous_episode"/>
-    <string name="pref_skip_disable"/>
     <string name="action_bookmark_episode"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_screen_fit"/>
     <string name="label_anime_library"/>
-    <string name="action_global_manga_search"/>
     <string name="action_mark_as_unseen"/>
-    <string name="playback_options_quality"/>
     <string name="unofficial_anime_extension_message"/>
-    <string name="unofficial_extension_message_aniyomi"/>
 </resources>

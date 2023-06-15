@@ -38,34 +38,20 @@
     <string name="information_webview_required">WebView 為 Tachiyomi 的必要元件</string>
     <string name="download_notifier_download_paused_chapters">下載已暫停</string>
     <string name="channel_new_chapters_episodes">新刊發行</string>
-    <string name="action_mark_previous_as_seen"/>
     <string name="download_unseen"/>
-    <string name="player_controls_skip_intro_text"/>
     <string name="default_anime_category"/>
-    <string name="pref_skip_20" translatable="false"/>
     <string name="pref_category_pip"/>
-    <string name="pref_external_player_preference"/>
     <string name="stats_page_1"/>
-    <string name="label_animehistory"/>
     <string name="pref_waiting_time_aniskip_10"/>
-    <string name="choose_video_quality"/>
     <string name="pref_clear_anime_database_summary"/>
-    <string name="action_edit_manga_categories"/>
     <plurals name="seconds">
         <item quantity="other"/>
     </plurals>
-    <string name="action_play"/>
     <string name="pref_preserve_watching_position"/>
-    <string name="label_migration_manga"/>
     <string name="delete_downloads_for_anime"/>
-    <string name="anime_categories"/>
     <string name="pref_enable_auto_skip_ani_skip"/>
-    <string name="rotation_sensor_portrait"/>
     <string name="action_view_episodes"/>
-    <string name="pref_external_downloader_selection"/>
     <string name="playback_speed_dialog_reset"/>
-    <string name="enable_auto_play"/>
     <string name="downloaded_episodes"/>
-    <string name="pref_default_portrait_orientation"/>
     <string name="pref_anime_library_update_categories_details"/>
 </resources>

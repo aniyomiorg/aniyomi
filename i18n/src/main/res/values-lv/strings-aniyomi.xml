@@ -36,17 +36,13 @@
     <string name="information_webview_required">Tachiyomi ir nepieciešams WebView</string>
     <string name="download_notifier_download_paused_chapters">Lejuplāde pauzēta</string>
     <string name="channel_new_chapters_episodes">Nodaļu atjauninājumi</string>
-    <string name="downloaded_episodes"/>
     <string name="pref_waiting_time_aniskip"/>
-    <string name="pref_progress_100" translatable="false"/>
     <string name="local_invalid_episode_format"/>
-    <string name="enable_horizontal_seek_gesture"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="zero"/>
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_animehistory"/>
     <plurals name="next_unseen_episodes">
         <item quantity="zero"/>
         <item quantity="one"/>
@@ -57,42 +53,31 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_category_internal_player"/>
     <string name="pref_waiting_time_aniskip_10"/>
-    <string name="label_animeextensions"/>
     <string name="action_sort_last_anime_update"/>
-    <string name="player_aniskip_dontskip_toast"/>
     <plurals name="notification_episodes_generic">
         <item quantity="zero"/>
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_migration_manga"/>
     <string name="anime_categories"/>
-    <string name="entries"/>
     <plurals name="download_amount_anime">
         <item quantity="zero"/>
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="playback_speed_dialog_reset"/>
     <plurals name="seconds">
         <item quantity="zero"/>
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_clear_anime_database_summary"/>
     <string name="action_bookmark_episode"/>
-    <string name="default_anime_category"/>
     <string name="label_anime_library"/>
-    <string name="pref_remember_brightness"/>
     <string name="action_sort_unseen_count"/>
     <plurals name="anime_num_episodes">
         <item quantity="zero"/>
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_player_summary"/>
     <string name="confirm_delete_episodes"/>
-    <string name="pref_remember_volume"/>
 </resources>

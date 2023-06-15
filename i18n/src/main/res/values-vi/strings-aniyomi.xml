@@ -42,34 +42,18 @@
     <string name="entries">Thư viên</string>
     <string name="chapters_episodes">Chương và tập</string>
     <string name="anime_categories">Thể loại Anime</string>
-    <string name="pref_search_pinned_anime_sources_only"/>
     <string name="pref_progress_95" translatable="false"/>
-    <string name="pref_skip_length"/>
     <string name="pref_external_player_preference"/>
-    <string name="snack_add_to_anime_library"/>
     <string name="action_change_intro_length"/>
-    <string name="pref_waiting_time_aniskip_9"/>
     <string name="pref_category_progress"/>
-    <string name="repeating_anime"/>
     <string name="action_display_local_badge_anime"/>
-    <string name="pref_waiting_time_aniskip_5"/>
     <string name="pref_player_smooth_seek"/>
-    <string name="pref_library_manga_columns"/>
     <string name="pref_bottom_nav_style"/>
-    <string name="label_animeextensions"/>
     <string name="enable_auto_play"/>
-    <string name="disable_auto_play"/>
     <string name="notification_episodes_single_and_more"/>
-    <string name="auto_download_while_watching"/>
     <string name="label_mangaextensions"/>
-    <string name="action_bookmark_episode"/>
     <string name="action_edit_manga_categories"/>
-    <string name="episode_progress"/>
     <string name="audio_dialog_header"/>
-    <plurals name="seconds">
-        <item quantity="other"/>
-    </plurals>
     <string name="pref_backup_flags_summ"/>
-    <string name="pref_progress_90" translatable="false"/>
     <string name="dialog_with_checkbox_reset_anime"/>
 </resources>

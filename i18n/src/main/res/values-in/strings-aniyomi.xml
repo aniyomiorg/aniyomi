@@ -271,5 +271,4 @@
     <string name="copied_video_link_to_clipboard">Tautan kualitas video yang disalin ke papan klip</string>
     <string name="choose_video_quality">Pilih kualitas video:</string>
     <string name="extension_settings">Pengaturan ekstensi</string>
-    <string name="pref_skip_20" translatable="false"/>
 </resources>

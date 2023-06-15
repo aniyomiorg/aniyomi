@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_show_manga">مانگا دکھائیں</string>
-    <string name="action_download_unread"/>
     <string name="pref_clear_manga_database"/>
-    <string name="pref_anime_library_update_categories_details"/>
     <string name="snack_add_to_manga_library"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="video_fit_screen"/>
     <string name="quality_dialog_header"/>
-    <string name="player_aniskip_dontskip_toast"/>
     <string name="pref_bottom_nav_style"/>
-    <string name="display_mode_episode"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -22,40 +17,29 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_player_smooth_seek"/>
     <string name="pref_category_player"/>
-    <string name="want_to_read"/>
     <string name="download_paused"/>
-    <string name="local_manga_source"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="plan_to_watch"/>
     <string name="also_set_episode_settings_for_library"/>
-    <string name="pref_adjust_orientation_video_dimensions"/>
     <string name="pref_library_anime_columns"/>
-    <string name="pref_waiting_time_aniskip_10"/>
     <string name="player_aniskip_recap"/>
-    <string name="action_display_download_badge_anime"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="anime_categories"/>
     <string name="action_sort_last_anime_update"/>
-    <string name="pref_remove_after_read"/>
     <string name="rotation_sensor_landscape"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_pip_episode_toasts"/>
     <string name="stats_page_2"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_display_local_badge_manga"/>
     <string name="pref_invalidate_download_cache_summary"/>
 </resources>

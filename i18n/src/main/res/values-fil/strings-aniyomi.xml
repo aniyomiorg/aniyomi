@@ -273,5 +273,4 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_skip_20" translatable="false"/>
 </resources>

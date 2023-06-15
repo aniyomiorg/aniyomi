@@ -38,21 +38,15 @@
     <string name="information_webview_required">Pro Tachiyomi b\'at bisòngiu de WebView</string>
     <string name="download_notifier_download_paused_chapters">Iscarrigamentu in pàusa</string>
     <string name="channel_new_chapters_episodes">Agiornamentos de sos capìtulos</string>
-    <string name="pref_skip_length"/>
     <string name="pref_external_downloader_selection"/>
-    <string name="episode_not_found"/>
     <string name="no_episodes_error"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_enable_auto_skip_ani_skip"/>
     <string name="player_aniskip_dontskip_toast"/>
-    <string name="pref_default_home_tab_library"/>
     <string name="pref_pip_on_exit"/>
-    <string name="plan_to_watch"/>
     <string name="pref_waiting_time_aniskip_6"/>
-    <string name="choose_video_quality"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -61,14 +55,11 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_progress_75" translatable="false"/>
     <string name="player_controls_skip_intro_text"/>
-    <string name="pref_default_landscape_orientation"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="unofficial_extension_message_aniyomi"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -77,17 +68,12 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_invalidate_download_cache_summary"/>
     <string name="action_download_unread"/>
-    <string name="action_mark_as_seen"/>
     <string name="action_sort_last_seen"/>
-    <string name="action_start_download_externally"/>
     <string name="action_display_download_badge_anime"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="dialog_with_checkbox_remove_description_anime"/>
     <string name="pref_adjust_orientation_video_dimensions"/>
-    <string name="anime_from_library"/>
 </resources>

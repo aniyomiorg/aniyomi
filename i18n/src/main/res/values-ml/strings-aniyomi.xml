@@ -39,17 +39,13 @@
     <string name="label_manga_library">മാങ്ക</string>
     <string name="label_anime">ആനിമേ</string>
     <string name="label_anime_library">ആനിമേ</string>
-    <string name="pref_category_player_orientation"/>
     <string name="delete_downloads_for_anime"/>
-    <string name="pref_progress_mark_as_seen"/>
     <string name="pref_remove_bookmarked_chapters"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_clear_anime_database_summary"/>
     <string name="no_episodes_error"/>
-    <string name="no_previous_episode"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -62,34 +58,24 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="stats_page"/>
     <string name="enable_auto_play"/>
-    <string name="label_migration_manga"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_order_by_episode_number"/>
     <string name="pref_player_smooth_seek_summary"/>
-    <string name="screenshot_header"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_updates"/>
     <string name="default_anime_category"/>
-    <string name="dialog_with_checkbox_reset_anime"/>
     <string name="pref_enable_aniskip"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_category_pip"/>
     <string name="backup_settings_warning"/>
-    <string name="episodes"/>
     <string name="pref_bottom_nav_no_updates"/>
-    <string name="pref_category_player_seeking"/>
     <string name="pref_library_anime_columns"/>
-    <string name="download_notifier_download_paused_episodes"/>
     <string name="pref_default_intro_length"/>
 </resources>

@@ -15,35 +15,19 @@
 \n
 \n Kanthi percaya karo sertifikat iki, sampeyan nampa risiko kasebut.</string>
     <string name="download_notifier_download_paused_chapters">Donlotan mandheg</string>
-    <string name="pref_progress_70" translatable="false"/>
     <string name="pref_refresh_library_tracking_summary"/>
-    <string name="download_insufficient_space"/>
     <string name="pref_category_pip"/>
-    <string name="enable_volume_brightness_gestures"/>
     <string name="pref_waiting_time_aniskip_9"/>
-    <string name="action_download_unseen"/>
     <string name="rotation_sensor_landscape"/>
-    <string name="pref_auto_update_manga_sync"/>
     <string name="pref_search_pinned_anime_sources_only"/>
-    <string name="pref_remove_after_marked_as_read"/>
     <string name="pref_waiting_time_aniskip"/>
-    <string name="share_screenshot_info"/>
     <string name="label_anime_library"/>
-    <string name="pref_library_anime_columns"/>
     <string name="player_hwdec_dialog_title"/>
-    <string name="label_manga_sources"/>
     <string name="manga_from_library"/>
-    <string name="pref_always_use_external_player"/>
     <string name="pref_player_smooth_seek_summary"/>
-    <string name="stats_page_1"/>
     <string name="chapters_episodes"/>
-    <string name="pref_bottom_nav_no_updates"/>
     <string name="download_paused"/>
-    <string name="subtitle_dialog_header"/>
     <string name="video_list_empty_error"/>
-    <string name="playback_options_title"/>
     <string name="pref_waiting_time_aniskip_8"/>
-    <string name="local_anime_source"/>
     <string name="player_aniskip_dontskip"/>
-    <string name="pref_hide_in_manga_library_items"/>
 </resources>

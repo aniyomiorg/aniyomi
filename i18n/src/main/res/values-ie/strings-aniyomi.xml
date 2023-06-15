@@ -1,38 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pref_category_player"/>
     <string name="pref_intro_length"/>
-    <string name="pref_clear_chapter_cache"/>
     <string name="player_overlay_back"/>
-    <string name="label_migration_manga"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="player_aniskip_op"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="want_to_read"/>
     <string name="pref_clear_manga_database_summary"/>
-    <string name="action_sort_total_episodes"/>
     <string name="download_error"/>
-    <string name="manga_categories"/>
     <string name="pref_library_manga_columns"/>
-    <string name="stats_page"/>
     <string name="action_sort_last_checked"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_play_internally"/>
     <string name="repeating_anime"/>
-    <string name="action_filter_unseen"/>
     <string name="pref_clear_manga_database"/>
-    <string name="pref_search_pinned_manga_sources_only"/>
     <string name="show_episode_number"/>
-    <string name="dialog_with_checkbox_remove_description_anime"/>
     <string name="pref_skip_5" translatable="false"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
@@ -42,19 +30,15 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_waiting_time_aniskip"/>
     <string name="episode_download_progress"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="player_hwdec_dialog_title"/>
     <string name="pref_category_player_orientation"/>
-    <string name="label_watched_duration"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="download_insufficient_space"/>
     <string name="pref_skip_20" translatable="false"/>
 </resources>

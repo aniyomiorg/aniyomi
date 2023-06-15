@@ -2,17 +2,13 @@
 <resources>
     <string name="manga_categories">Kategoriyalar</string>
     <string name="unlock_app">Aniyomini ochish</string>
-    <string name="default_manga_category"/>
     <string name="pref_category_player_orientation"/>
-    <string name="pref_pip_on_exit"/>
     <string name="screenshot_header"/>
-    <string name="subtitle_dialog_header"/>
     <string name="label_migration_manga"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_player_pip"/>
     <string name="pref_default_portrait_orientation"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
@@ -22,23 +18,14 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="want_to_read"/>
     <string name="pref_enable_pip"/>
-    <string name="action_global_anime_search"/>
     <string name="pref_remove_exclude_categories_anime"/>
-    <string name="backup_settings_warning"/>
     <string name="want_to_watch"/>
-    <string name="display_mode_episode"/>
     <string name="pref_mpv_conf"/>
-    <string name="label_animeextensions"/>
     <string name="video_fit_screen"/>
-    <string name="enable_auto_play"/>
     <string name="pref_clear_anime_database"/>
-    <string name="pref_progress_100" translatable="false"/>
     <string name="default_anime_category"/>
-    <string name="pref_library_update_show_tab_badge"/>
     <string name="label_watched_duration"/>
-    <string name="download_error"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -47,7 +34,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="stats_page_2"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -56,7 +42,5 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="watching"/>
     <string name="playertitle"/>
-    <string name="unofficial_extension_message_aniyomi"/>
 </resources>

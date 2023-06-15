@@ -3,38 +3,20 @@
     <string name="manga_categories">အမျိုးအစားများ</string>
     <string name="unlock_app">Aniyomi ကိုဖွင့်ပါ</string>
     <string name="default_manga_category">ပုံသေအမျိုးအစား</string>
-    <string name="player_aniskip_op"/>
     <string name="channel_new_chapters_episodes"/>
-    <string name="pref_default_home_tab_library"/>
     <string name="pref_backup_flags_summ"/>
-    <string name="stats_header"/>
     <string name="player_controls_skip_intro_text"/>
-    <string name="settings"/>
     <string name="stats_page"/>
-    <string name="pref_category_player_orientation"/>
     <string name="action_player_pip"/>
-    <string name="disable_auto_play"/>
     <string name="pref_remember_volume"/>
-    <string name="player_hwdec_dialog_title"/>
     <string name="pref_bottom_nav_no_history"/>
-    <string name="pref_progress_80" translatable="false"/>
     <string name="want_to_watch"/>
-    <string name="pref_player_smooth_seek"/>
     <string name="pref_enable_auto_skip_ani_skip"/>
-    <string name="snack_add_to_anime_library"/>
     <string name="action_sort_total_episodes"/>
-    <string name="playback_options_title"/>
     <string name="general_categories"/>
-    <string name="auto_download_while_watching"/>
     <string name="label_watched_episodes"/>
-    <string name="action_previous_episode"/>
     <string name="player_overlay_back"/>
-    <string name="no_episodes_error"/>
     <string name="pref_library_anime_columns"/>
-    <plurals name="anime_num_episodes">
-        <item quantity="other"/>
-    </plurals>
     <string name="pref_auto_clear_chapter_cache"/>
-    <string name="toggle_stats"/>
     <string name="pref_library_manga_columns"/>
 </resources>

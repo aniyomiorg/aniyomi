@@ -64,31 +64,18 @@
     <string name="pref_waiting_time_aniskip_7">7秒</string>
     <string name="chapters_episodes">章と話</string>
     <string name="label_watched_episodes">見た</string>
-    <string name="rotation_sensor_landscape"/>
     <string name="pref_external_player_preference"/>
-    <string name="display_mode_episode"/>
     <string name="stats_page"/>
-    <string name="action_change_intro_length"/>
     <string name="settings"/>
-    <string name="pref_category_volume_brightness"/>
     <string name="pref_category_external_downloader"/>
-    <string name="dialog_with_checkbox_remove_description_anime"/>
     <string name="pref_invalidate_download_cache_summary"/>
-    <string name="video_fit_screen"/>
     <string name="action_next_episode"/>
-    <string name="pref_skip_20" translatable="false"/>
     <string name="want_to_read"/>
-    <string name="dialog_with_checkbox_reset_anime"/>
     <string name="pref_category_player_orientation"/>
-    <string name="backup_settings_warning"/>
     <string name="no_next_episode"/>
-    <string name="episode_download_progress"/>
     <string name="unofficial_extension_message_aniyomi"/>
-    <string name="action_sort_total_episodes"/>
     <string name="pref_bottom_nav_no_updates"/>
-    <string name="extension_settings"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="other"/>
     </plurals>
-    <string name="sort_by_episode_number"/>
 </resources>

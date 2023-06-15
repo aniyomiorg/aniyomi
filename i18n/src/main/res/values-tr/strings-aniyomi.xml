@@ -278,5 +278,4 @@
     <string name="player_hwdec_dialog_title">Varsayılan donanım kod çözme modunu ayarla</string>
     <string name="label_migration_manga">Manga\'yı Taşı</string>
     <string name="label_migration_anime">Anime\'yi Taşı</string>
-    <string name="pref_progress_80" translatable="false"/>
 </resources>

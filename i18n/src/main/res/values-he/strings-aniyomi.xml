@@ -37,11 +37,8 @@
     <string name="information_webview_required">WebView נצרך ל-Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">ההורדה מושהית</string>
     <string name="channel_new_chapters_episodes">עדכונים לפרק</string>
-    <string name="pref_default_home_tab_library"/>
     <string name="local_manga_source"/>
-    <string name="no_previous_episode"/>
     <string name="action_display_local_badge_anime"/>
-    <string name="pref_progress_100" translatable="false"/>
     <string name="pref_remember_volume"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
@@ -55,7 +52,6 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="subtitle_dialog_header"/>
     <string name="player_hwdec_dialog_title"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
@@ -69,17 +65,11 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_progress_90" translatable="false"/>
     <string name="pref_pip_on_exit"/>
-    <string name="episode_progress"/>
     <string name="pref_external_player_preference"/>
-    <string name="player_aniskip_skip"/>
     <string name="action_sort_last_seen"/>
-    <string name="pref_waiting_time_aniskip_8"/>
     <string name="action_edit_anime_categories"/>
-    <string name="backup_settings_warning"/>
     <string name="pref_category_external_player"/>
-    <string name="action_sort_total_episodes"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="two"/>
@@ -92,17 +82,13 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_remove_bookmark_episode"/>
     <string name="label_watched_duration"/>
-    <string name="entries"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="two"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="episode_settings_updated"/>
     <string name="notification_episodes_multiple"/>
-    <string name="stats_page"/>
     <string name="action_start_download_externally"/>
 </resources>

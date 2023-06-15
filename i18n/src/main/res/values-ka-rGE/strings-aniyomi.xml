@@ -26,18 +26,13 @@
     <string name="information_webview_required">WebView არის აუცილებელი Tachiyomi-ს სამუშაოდ</string>
     <string name="download_notifier_download_paused_chapters">გადმოწერა დაპაუზებულია</string>
     <string name="channel_new_chapters_episodes">თავების განახლებები</string>
-    <string name="delete_downloads_for_anime"/>
     <string name="pref_manga_library_update_categories_details"/>
-    <string name="action_start_download_externally"/>
     <string name="pref_progress_75" translatable="false"/>
-    <string name="pref_category_internal_player"/>
     <string name="pref_player_fullscreen"/>
-    <string name="playertitle"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="extension_settings"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -46,13 +41,9 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="show_episode_number"/>
     <string name="pref_external_downloader_selection"/>
-    <string name="pref_skip_disable"/>
     <string name="pref_waiting_time_aniskip"/>
-    <string name="manga_from_library"/>
     <string name="also_set_chapter_settings_for_library"/>
-    <string name="player_aniskip_op"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -61,15 +52,10 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="anime_categories"/>
     <string name="currently_watching"/>
-    <string name="action_sort_unseen_count"/>
     <string name="action_previous_episode"/>
-    <string name="action_edit_anime_categories"/>
     <string name="repeating_anime"/>
-    <string name="video_crop_screen"/>
     <string name="entries"/>
-    <string name="pref_waiting_time_aniskip_9"/>
     <string name="pref_use_external_downloader"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
@@ -79,5 +65,4 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="notification_new_episodes"/>
 </resources>

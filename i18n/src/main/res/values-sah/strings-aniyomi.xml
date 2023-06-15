@@ -26,36 +26,21 @@
     <string name="download_paused">Тохтотулунна</string>
     <string name="also_set_chapter_settings_for_library">Мин бэбэлэтиэкэбэр баар маангаларга туттуҥ</string>
     <string name="dialog_with_checkbox_reset">Бу маанга бары түһүмэхтэрин түһэрии</string>
-    <string name="pref_progress_75" translatable="false"/>
     <string name="playertitle"/>
-    <string name="local_anime_source"/>
     <string name="dialog_with_checkbox_remove_description_anime"/>
-    <string name="stats_page_2"/>
     <string name="player_controls_skip_intro_text"/>
-    <string name="episode_settings"/>
     <string name="pref_category_external_player"/>
-    <string name="watching"/>
     <string name="no_next_episode"/>
-    <string name="pref_category_player_aniskip_info"/>
     <string name="player_aniskip_skip"/>
-    <string name="episode_download_progress"/>
     <string name="unofficial_extension_message_aniyomi"/>
-    <string name="pref_progress_mark_as_seen"/>
     <string name="label_history"/>
-    <string name="pref_search_pinned_anime_sources_only"/>
     <plurals name="download_amount_anime">
         <item quantity="other"/>
     </plurals>
-    <string name="pref_default_player_orientation"/>
     <string name="player_aniskip_dontskip_toast"/>
-    <string name="chapters_episodes"/>
     <string name="anime_categories"/>
-    <string name="label_watched_episodes"/>
     <string name="action_start_download_internally"/>
-    <string name="action_order_by_episode_number"/>
     <string name="label_manga_library"/>
-    <string name="action_display_download_badge_anime"/>
     <string name="delete_downloads_for_anime"/>
-    <string name="choose_video_quality"/>
     <string name="anime_from_library"/>
 </resources>

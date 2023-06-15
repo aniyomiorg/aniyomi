@@ -271,5 +271,4 @@
     </plurals>
     <string name="choose_video_quality">동영상 화질 선택:</string>
     <string name="extension_settings">확장기능 설정</string>
-    <string name="pref_skip_5" translatable="false"/>
 </resources>

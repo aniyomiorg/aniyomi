@@ -6,26 +6,19 @@
     <string name="action_show_manga">نیشاندانی مانگا</string>
     <string name="action_display_local_badge_manga">مانگای ناوخۆیی</string>
     <string name="snack_add_to_manga_library">زیادکردنی مانگا بۆ کۆکراوەکان؟</string>
-    <string name="pref_remove_exclude_categories_anime"/>
     <string name="video_crop_screen"/>
-    <string name="pref_enable_aniskip"/>
     <string name="player_hwdec_dialog_title"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_anime_library_update_categories_details"/>
     <string name="pref_adjust_orientation_video_dimensions"/>
-    <string name="pref_remember_volume"/>
     <string name="auto_download_while_watching"/>
-    <string name="local_manga_source"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="want_to_watch"/>
     <string name="enable_horizontal_seek_gesture"/>
-    <string name="information_no_recent_anime"/>
     <string name="pref_waiting_time_aniskip_7"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
@@ -39,28 +32,19 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_order_by_episode_number"/>
     <string name="pref_progress_75" translatable="false"/>
-    <string name="delete_downloads_for_anime"/>
     <string name="download_ahead_info_anime"/>
-    <string name="action_sort_last_anime_update"/>
     <string name="pref_invalidate_download_cache_summary"/>
-    <string name="label_anime_sources"/>
     <string name="pref_skip_30" translatable="false"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_enable_pip"/>
     <string name="action_sort_last_checked"/>
-    <string name="label_anime"/>
     <string name="pref_bottom_nav_no_history"/>
-    <string name="label_history"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_anime_library"/>
     <string name="action_start_download_externally"/>
-    <string name="pref_clear_chapter_cache"/>
 </resources>

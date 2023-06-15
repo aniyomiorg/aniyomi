@@ -15,16 +15,12 @@
     <string name="also_set_chapter_settings_for_library">Ankaŭ apliki al ĉiuj mangaoj en mia biblioteko</string>
     <string name="download_notifier_download_paused_chapters">Elŝutito paŭzigita</string>
     <string name="channel_new_chapters_episodes">Ĉapitraj ĝisdatigoj</string>
-    <string name="action_player_pip"/>
     <string name="pref_use_external_downloader"/>
-    <string name="not_interesting"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_anime_library_update_categories_details"/>
     <string name="no_episodes_error"/>
-    <string name="label_mangaextensions"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -37,39 +33,27 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_show_anime"/>
     <string name="pref_category_player"/>
-    <string name="pref_adjust_orientation_video_dimensions"/>
     <string name="dialog_with_checkbox_reset"/>
-    <string name="playback_options_title"/>
     <string name="video_list_empty_error"/>
-    <string name="episode_settings"/>
     <string name="pref_default_landscape_orientation"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="stats_page"/>
     <string name="player_controls_skip_intro_text"/>
-    <string name="copied_video_link_to_clipboard"/>
     <string name="player_hwdec_dialog_title"/>
-    <string name="pref_category_player_orientation"/>
     <string name="untrusted_extension_message"/>
-    <string name="pref_bottom_nav_no_manga"/>
     <string name="label_anime"/>
-    <string name="show_episode_number"/>
     <string name="playback_speed_dialog_title"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_sort_last_manga_update"/>
     <string name="pref_category_external_player"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_external_player_preference"/>
     <string name="enable_volume_brightness_gestures"/>
-    <string name="pref_skip_disable"/>
 </resources>

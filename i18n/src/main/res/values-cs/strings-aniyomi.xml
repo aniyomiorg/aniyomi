@@ -269,11 +269,9 @@
     <string name="pref_category_pip">Miniokno</string>
     <string name="action_global_manga_search">Globální vyhledávání mangy</string>
     <string name="action_global_anime_search">Globální vyhledávání anime</string>
-    <string name="pref_skip_30" translatable="false"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_search_pinned_manga_sources_only"/>
 </resources>

@@ -280,5 +280,4 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_progress_85" translatable="false"/>
 </resources>

@@ -11,17 +11,11 @@
     <string name="manga_from_library">Manga frå biblioteket</string>
     <string name="snack_add_to_manga_library">Legg manga til i bibliotek\?</string>
     <string name="download_error">Feil</string>
-    <string name="pref_progress_mark_as_seen"/>
     <string name="pref_default_landscape_orientation"/>
-    <string name="pref_skip_disable"/>
     <string name="pref_clear_chapter_cache"/>
-    <string name="snack_add_to_anime_library"/>
     <string name="plan_to_watch"/>
-    <string name="stats_page_1"/>
     <string name="video_fit_screen"/>
-    <string name="notification_episodes_single"/>
     <string name="action_start_download_externally"/>
-    <string name="toggle_stats"/>
     <string name="player_aniskip_dontskip"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
@@ -31,17 +25,13 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_view_episodes"/>
     <string name="playertitle"/>
-    <string name="enable_auto_play"/>
     <string name="pref_search_pinned_anime_sources_only"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_download_new_episodes"/>
     <string name="choose_video_quality"/>
-    <string name="pref_clear_anime_database_summary"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -50,18 +40,13 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="information_no_recent_anime"/>
     <string name="pref_pip_episode_toasts"/>
-    <string name="anime_categories"/>
     <string name="action_mark_as_seen"/>
-    <string name="action_sort_last_anime_update"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_remove_bookmarked_chapters"/>
     <string name="pref_preserve_watching_position"/>
-    <string name="auto_download_while_watching"/>
     <string name="display_mode_episode"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>

@@ -38,17 +38,11 @@
     <string name="information_webview_required">WebView is vereist voor Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Download gepauzeerd</string>
     <string name="channel_new_chapters_episodes">Hoofdstukupdates</string>
-    <string name="pref_skip_disable"/>
     <string name="download_ahead_info_anime"/>
-    <string name="local_invalid_episode_format"/>
     <string name="toggle_stats"/>
-    <string name="video_fit_screen"/>
     <string name="player_aniskip_recap"/>
-    <string name="notification_episodes_single_and_more"/>
     <string name="pref_progress_85" translatable="false"/>
-    <string name="pref_use_external_downloader"/>
     <string name="screenshot_header"/>
-    <string name="quality_dialog_header"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -65,29 +59,21 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_category_progress"/>
     <string name="pref_player_smooth_seek"/>
-    <string name="display_mode_episode"/>
     <string name="pref_waiting_time_aniskip_7"/>
-    <string name="pref_search_pinned_anime_sources_only"/>
     <string name="action_display_show_continue_reading_button"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="player_hwdec_dialog_title"/>
     <string name="action_sort_total_episodes"/>
-    <string name="pref_bottom_nav_no_history"/>
     <string name="action_sort_episode_fetch_date"/>
-    <string name="action_previous_episode"/>
     <string name="label_manga_library"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_display_local_badge_anime"/>
     <string name="pref_hide_in_anime_library_items"/>
-    <string name="pref_always_use_external_player"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>

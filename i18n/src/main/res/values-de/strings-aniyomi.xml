@@ -279,5 +279,4 @@
     <string name="pref_hide_in_anime_library_items">Animeeinträge verstecken, die schon in der Bibliothek sind</string>
     <string name="choose_video_quality">Videoqualität auswählen:</string>
     <string name="extension_settings">Erweiterungs-Einstellungen</string>
-    <string name="pref_progress_85" translatable="false"/>
 </resources>

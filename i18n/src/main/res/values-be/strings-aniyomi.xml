@@ -19,13 +19,9 @@
     <string name="pref_remove_after_read">Аўтаматычна пасля чытання</string>
     <string name="pref_remove_bookmarked_chapters">Дазволіць выдаленне частак з закладкамі</string>
     <string name="pref_auto_update_manga_sync">Абнаўляць прагрэс пасля чытання</string>
-    <string name="pref_category_player_seeking"/>
     <string name="pref_progress_mark_as_seen"/>
-    <string name="pref_external_player_preference"/>
     <string name="notification_episodes_single_and_more"/>
-    <string name="pref_category_player"/>
     <string name="pref_always_use_external_player"/>
-    <string name="pref_incognito_mode_summary"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="few"/>
@@ -38,7 +34,6 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="choose_video_quality"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="few"/>
@@ -51,9 +46,7 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="extension_settings"/>
     <string name="pref_waiting_time_aniskip_10"/>
-    <string name="currently_watching"/>
     <string name="pref_skip_20" translatable="false"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
@@ -61,18 +54,14 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="playback_options_speed"/>
     <string name="pref_refresh_library_tracking_summary"/>
-    <string name="rotation_sensor_landscape"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="not_interesting"/>
     <string name="pref_progress_70" translatable="false"/>
-    <string name="action_play"/>
     <string name="label_animeextensions"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
@@ -80,12 +69,8 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="episodes"/>
     <string name="action_change_intro_length"/>
-    <string name="anime_from_library"/>
     <string name="pref_auto_clear_chapter_cache"/>
-    <string name="download_queue_size_warning"/>
     <string name="unknown_studio"/>
-    <string name="player_aniskip_skip"/>
     <string name="action_previous_episode"/>
 </resources>

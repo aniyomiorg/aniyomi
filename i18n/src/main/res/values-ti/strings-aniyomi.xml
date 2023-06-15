@@ -2,18 +2,13 @@
 <resources>
     <string name="manga_categories">ምድባት</string>
     <string name="unlock_app">ታቺዮሚ ን ይክፈቱ</string>
-    <string name="label_mangaextensions"/>
     <string name="local_manga_source"/>
-    <string name="no_previous_episode"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="default_manga_category"/>
     <string name="pref_player_smooth_seek"/>
-    <string name="clear_database_confirmation"/>
     <string name="stats_header"/>
-    <string name="playback_options_speed"/>
     <string name="copied_video_link_to_clipboard"/>
     <plurals name="seconds">
         <item quantity="one"/>
@@ -23,7 +18,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_pip_episode_toasts"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -32,30 +26,19 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_sort_total_episodes"/>
     <string name="channel_new_chapters_episodes"/>
-    <string name="pref_remove_exclude_categories_manga"/>
     <string name="pref_default_landscape_orientation"/>
-    <string name="pref_remove_exclude_categories_anime"/>
     <string name="pref_external_downloader_selection"/>
-    <string name="pref_library_manga_columns"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="enable_auto_play"/>
     <string name="player_aniskip_dontskip"/>
-    <string name="label_animehistory"/>
     <string name="pref_enable_netflix_style_aniskip"/>
-    <string name="action_play_internally"/>
     <string name="action_display_local_badge_anime"/>
-    <string name="action_show_manga"/>
     <string name="label_anime_sources"/>
-    <string name="pref_backup_flags_summ"/>
     <string name="action_screen_fit"/>
-    <string name="pref_search_pinned_anime_sources_only"/>
     <string name="pref_progress_80" translatable="false"/>
-    <string name="pref_category_player"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>

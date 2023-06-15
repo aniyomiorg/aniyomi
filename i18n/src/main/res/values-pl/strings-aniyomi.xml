@@ -81,20 +81,15 @@
     <string name="action_edit_anime_categories">Edytuj kategorie anime</string>
     <string name="action_sort_unseen_count">Liczba nie obejrzanych</string>
     <string name="action_filter_unseen">Nie obejrzane</string>
-    <string name="pref_category_player_aniskip_info"/>
     <string name="no_previous_episode"/>
-    <string name="pref_waiting_time_aniskip_10"/>
     <string name="pref_player_summary"/>
-    <string name="pref_progress_80" translatable="false"/>
     <string name="pref_player_fullscreen"/>
-    <string name="pref_external_downloader_selection"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="playback_options_title"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="few"/>
@@ -119,9 +114,7 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_category_external_player"/>
     <string name="action_change_intro_length"/>
-    <string name="pref_skip_length"/>
     <string name="stats_page_2"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
@@ -129,18 +122,13 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="episode_not_found"/>
     <string name="pref_intro_length"/>
-    <string name="notification_episodes_single_and_more"/>
     <string name="want_to_watch"/>
-    <string name="action_display_local_badge_anime"/>
     <string name="auto_download_while_watching"/>
-    <string name="pref_default_portrait_orientation"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="few"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="episode_progress_no_total"/>
 </resources>
