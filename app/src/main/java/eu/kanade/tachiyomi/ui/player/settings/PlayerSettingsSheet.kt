@@ -41,6 +41,6 @@ class PlayerSettingsSheet(
         activity.playerControls.showAndFadeControls()
         wasPaused?.let { activity.player.paused = it }
         super.dismiss()
-        activity.setVisibilities()
+        activity.refreshUi()
     }
 }

@@ -411,7 +411,7 @@ object SettingsBackupScreen : SearchableSettings {
                     pref = backupPreferences.backupFlags(),
                     enabled = backupInterval != 0,
                     title = stringResource(R.string.pref_backup_flags),
-                    subtitle = stringResource(R.string.pref_backup_flags_summ),
+                    subtitle = stringResource(R.string.pref_backup_flags_summary),
                     entries = mapOf(
                         FLAG_CATEGORIES to stringResource(R.string.general_categories),
                         FLAG_CHAPTERS to stringResource(R.string.chapters_episodes),

@@ -93,7 +93,7 @@
     <string name="pref_category_external_player">외부 플레이어</string>
     <string name="pref_always_use_external_player">항상 외부 플레이어 사용</string>
     <string name="pref_external_player_preference">외부 플레이어 기본 설정</string>
-    <string name="playertitle">%1$s ‐ %2$s</string>
+    <string name="player_title">%1$s ‐ %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">회차 지우기</string>
     <string name="pref_remove_after_marked_as_read">수동으로 읽음 표시 될 경우 삭제</string>
@@ -112,7 +112,7 @@
     <string name="download_ahead_info_anime">항목이 내 서재에 추가되어 있고, 현재 에피소드와 다음 에피소드가 이미 다운로드된 경우에만 작동됩니다</string>
     <string name="pref_auto_update_manga_sync">읽은 기록 동기화</string>
     <string name="pref_track_on_add_library">서재에 추가할 때 동기화 메뉴 열기</string>
-    <string name="pref_backup_flags_summ">백업 파일에 포함할 정보</string>
+    <string name="pref_backup_flags_summary">백업 파일에 포함할 정보</string>
     <string name="pref_clear_chapter_cache">회차별 캐시 삭제</string>
     <string name="used_cache_both">애니메이션에서 사용: %1$s, 만화에서 사용: %2$s</string>
     <string name="pref_auto_clear_chapter_cache">앱 종료 시 회차 캐시 삭제</string>
@@ -169,7 +169,6 @@
     <string name="screenshot_show_subs">스크린 샷에 자막 표시</string>
     <string name="enable_volume_brightness_gestures">볼륨 및 밝기 제스처 활성화</string>
     <string name="enable_horizontal_seek_gesture">가로 탐색 제스처 활성화</string>
-    <string name="stats_header">통계 표시</string>
     <string name="toggle_stats">통계 활성화</string>
     <string name="stats_page">통계 페이지</string>
     <string name="stats_page_1">페이지 1</string>
@@ -199,9 +198,9 @@
     <string name="no_next_episode">다음 에피소드를 찾을 수 없습니다!</string>
     <string name="no_previous_episode">이전 에피소드를 찾을 수 없습니다!</string>
     <string name="label_history">만화</string>
-    <string name="label_animehistory">애니메이션</string>
+    <string name="label_anime_history">애니메이션</string>
     <string name="label_updates">만화</string>
-    <string name="label_animeupdates">애니메이션</string>
+    <string name="label_anime_updates">애니메이션</string>
     <string name="player_overlay_back">뒤로가기</string>
     <string name="enable_auto_play">자동 재생 사용 중</string>
     <string name="disable_auto_play">자동 재생이 사용 중지됨</string>
@@ -244,8 +243,8 @@
     </plurals>
     <string name="episode_settings">에피소드 설정</string>
     <string name="pref_backup_flags">백업 옵션</string>
-    <string name="label_mangaextensions">만화 확장기능</string>
-    <string name="label_animeextensions">애니메이션 확장기능</string>
+    <string name="label_manga_extensions">만화 확장기능</string>
+    <string name="label_anime_extensions">애니메이션 확장기능</string>
     <string name="label_migration_manga">만화 데이터 이전</string>
     <string name="label_migration_anime">애니메이션 데이터 이전</string>
     <string name="settings">설정</string>

@@ -61,7 +61,7 @@
     <string name="pref_skip_disable">Desativar</string>
     <string name="pref_player_smooth_seek">Ativar busca precisa</string>
     <string name="pref_player_hide_controls">Ocultar os controlos de reprodução ao abrir o reprodutor</string>
-    <string name="playertitle">%1$s - %2$s</string>
+    <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Eliminar capítulos/episódios</string>
     <string name="pref_remove_after_marked_as_read">Após marcado como lido/visto manualmente</string>
@@ -72,7 +72,7 @@
     <string name="pref_download_new_episodes">Descarregar novos episódios</string>
     <string name="auto_download_while_watching">Descarregar automaticamente enquanto assiste</string>
     <string name="pref_auto_update_manga_sync">Atualizar progresso após a leitura</string>
-    <string name="pref_backup_flags_summ">Quais informações incluir no ficheiro de backup</string>
+    <string name="pref_backup_flags_summary">Quais informações incluir no ficheiro de backup</string>
     <string name="pref_clear_chapter_cache">Limpar a cache de capítulos/episódios</string>
     <string name="used_cache_both">Usado por anime: %1$s, usado por mangá: %2$s</string>
     <string name="pref_auto_clear_chapter_cache">Limpar a cache de capítulos/episódios ao fechar a app</string>
@@ -122,7 +122,6 @@
     <string name="episode_progress_no_total">Progresso: %1$s</string>
     <string name="screenshot_header">Fazer captura de ecrã</string>
     <string name="screenshot_show_subs">Mostrar legendas na captura de ecrã</string>
-    <string name="stats_header">Mostrar estatísticas</string>
     <string name="stats_page_1">Página 1</string>
     <string name="stats_page_2">Página 2</string>
     <string name="stats_page_3">Página 3</string>
@@ -139,9 +138,9 @@
     <string name="no_next_episode">Próximo episódio não encontrado!</string>
     <string name="no_previous_episode">Episódio anterior não encontrado!</string>
     <string name="label_history">Mangá</string>
-    <string name="label_animehistory">Anime</string>
+    <string name="label_anime_history">Anime</string>
     <string name="label_updates">Mangá</string>
-    <string name="label_animeupdates">Anime</string>
+    <string name="label_anime_updates">Anime</string>
     <string name="player_overlay_back">Voltar</string>
     <string name="enable_auto_play">A reprodução automática está ativada</string>
     <string name="disable_auto_play">A reprodução automática está desativada</string>
@@ -173,8 +172,8 @@
         <item quantity="other">Episódios %1$s e %2$d mais</item>
     </plurals>
     <string name="episode_settings">Configurações do episódio</string>
-    <string name="label_mangaextensions">Extensões de Mangá</string>
-    <string name="label_animeextensions">Extensões de Anime</string>
+    <string name="label_manga_extensions">Extensões de Mangá</string>
+    <string name="label_anime_extensions">Extensões de Anime</string>
     <string name="label_migration_manga">Migrar Mangás</string>
     <string name="label_migration_anime">Migrar Animes</string>
     <string name="settings">Configurações</string>

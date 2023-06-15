@@ -52,7 +52,7 @@
     <string name="playback_options_title">Toistoasetukset</string>
     <string name="pref_category_progress">Edistyminen</string>
     <string name="pref_remember_brightness">Muista viimeksi käytetty kirkkaus ja käytä sitä</string>
-    <string name="pref_backup_flags_summ">Varmuuskopiotiedostoon sisällytettävät tiedot</string>
+    <string name="pref_backup_flags_summary">Varmuuskopiotiedostoon sisällytettävät tiedot</string>
     <string name="pref_auto_clear_chapter_cache">Tyhjennä jaksojen/lukujen välimuisti, kun sovellus suljetaan</string>
     <string name="downloaded_episodes">Ladatut jaksot</string>
     <string name="screenshot_show_subs">Näytä tekstitys näyttökuvassa</string>
@@ -98,7 +98,6 @@
     <string name="stats_page">Tilastosivu</string>
     <string name="snack_add_to_anime_library">Lisätäänkö anime kirjastoon\?</string>
     <string name="screenshot_header">Ota näyttökuva</string>
-    <string name="stats_header">Näytä tilastot</string>
     <string name="display_mode_episode">Jakso %1$s</string>
     <string name="label_history">Manga</string>
     <string name="episode_not_found">Jaksoa ei löytynyt</string>
@@ -151,9 +150,9 @@
     <string name="episode_settings_updated">Jaksojen oletusasetukset on päivitetty</string>
     <string name="no_next_episode">Seuraavaa jaksoa ei löytynyt!</string>
     <string name="no_previous_episode">Edellistä jaksoa ei löytynyt!</string>
-    <string name="label_animehistory">Anime</string>
+    <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
-    <string name="label_animeupdates">Anime</string>
+    <string name="label_anime_updates">Anime</string>
     <string name="player_overlay_back">Takaisin</string>
     <string name="enable_auto_play">Automaattinen toisto on käytössä</string>
     <string name="disable_auto_play">Automaattinen toisto on poissa käytöstä</string>

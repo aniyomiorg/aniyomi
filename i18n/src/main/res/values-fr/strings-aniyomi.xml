@@ -85,7 +85,7 @@
     <string name="pref_category_external_player">Lecteur externe</string>
     <string name="pref_always_use_external_player">Utiliser toujours un lecteur externe</string>
     <string name="pref_external_player_preference">Préférence pour les lecteurs externes</string>
-    <string name="playertitle">%1$s - %2$s</string>
+    <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d% %</string>
     <string name="pref_category_delete_chapters">Supprimer des chapitres</string>
     <string name="pref_remove_after_marked_as_read">Après avoir été marqué manuellement comme lu</string>
@@ -159,7 +159,6 @@
     <string name="screenshot_show_subs">Afficher les sous-titres dans la capture d\'écran</string>
     <string name="enable_volume_brightness_gestures">Gestes de basculement du volume et de la luminosité</string>
     <string name="enable_horizontal_seek_gesture">Activer le geste de recherche horizontale</string>
-    <string name="stats_header">Afficher les statistiques</string>
     <string name="stats_page_1">Page 1</string>
     <string name="stats_page_2">Page 2</string>
     <string name="stats_page_3">Page 3</string>
@@ -192,9 +191,9 @@
     <string name="no_next_episode">L\'épisode suivant n\'a pas été trouvé !</string>
     <string name="no_previous_episode">L\'épisode précédent n\'a pas été trouvé !</string>
     <string name="label_history">Manga</string>
-    <string name="label_animehistory">Animé</string>
+    <string name="label_anime_history">Animé</string>
     <string name="label_updates">Manga</string>
-    <string name="label_animeupdates">Animé</string>
+    <string name="label_anime_updates">Animé</string>
     <string name="player_overlay_back">Retour</string>
     <string name="enable_auto_play">La lecture automatique est activée</string>
     <string name="disable_auto_play">La lecture automatique est désactivée</string>
@@ -227,7 +226,7 @@
     <string name="pref_pip_on_exit">Passer automatiquement en mode PiP en quittant le lecteur</string>
     <string name="pref_library_manga_columns">Nombre de mangas par lignes</string>
     <string name="pref_library_anime_columns">Nombre d\'animés par lignes</string>
-    <string name="pref_backup_flags_summ">Quelle information inclure dans le fichier de sauvegarde</string>
+    <string name="pref_backup_flags_summary">Quelle information inclure dans le fichier de sauvegarde</string>
     <string name="pref_waiting_time_aniskip_8">8 secondes</string>
     <string name="pref_enable_aniskip">Activer AniSkip</string>
     <string name="pref_waiting_time_aniskip_7">7 secondes</string>
@@ -241,9 +240,9 @@
     <string name="stats_page">Pages des statistiques</string>
     <string name="download_notifier_download_paused_episodes">Téléchargement d\'épisodes en pause</string>
     <string name="pref_category_player_aniskip_info">Paramètres AniSkip</string>
-    <string name="label_animeextensions">Extensions d\'animés</string>
+    <string name="label_anime_extensions">Extensions d\'animés</string>
     <string name="label_migration_manga">Migrer les mangas</string>
-    <string name="label_mangaextensions">Extensions des mangas</string>
+    <string name="label_manga_extensions">Extensions des mangas</string>
     <string name="label_migration_anime">Migrer les animés</string>
     <string name="action_play_externally">Lire avec le lecteur externe</string>
     <string name="pref_player_hide_controls">Cacher les contrôles à l\'ouverture du lecteur</string>

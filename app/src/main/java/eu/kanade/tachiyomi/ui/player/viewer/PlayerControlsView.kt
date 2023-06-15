@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.ui.player.viewer
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.res.ColorStateList
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
@@ -11,8 +12,8 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.SeekBar
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.viewModelScope
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
@@ -20,7 +21,8 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerDialogs
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.StateRestoreCallback
 import `is`.xyz.mpv.Utils
-import tachiyomi.core.util.lang.launchUI
+import tachiyomi.core.util.lang.withUIContext
+import kotlin.math.abs
 
 class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
@@ -35,6 +37,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     private val playerPreferences = activity.playerPreferences
 
+    private val player get() = activity.player
+
     private val playerDialogs = PlayerDialogs(activity)
 
     private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
@@ -42,19 +46,16 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             if (!fromUser) {
                 return
             }
-            hideUiForSeek()
             MPVLib.command(arrayOf("seek", progress.toString(), "absolute+keyframes"))
-            updatePlaybackPos(progress)
 
-            val duration = activity.player.duration ?: 0
+            val duration = player.duration ?: 0
             if (duration == 0 || activity.initialSeek < 0) {
                 return
             }
-            val newDiff = activity.player.timePos!! - activity.initialSeek
 
-            val diffText = Utils.prettyTime(newDiff, true)
-            activity.binding.seekText.text = activity.getString(R.string.ui_seek_distance, Utils.prettyTime(activity.player.timePos!!), diffText)
-            activity.showGestureView("seek")
+            val newDiff = player.timePos!! - activity.initialSeek
+
+            showSeekText(progress, newDiff)
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -64,7 +65,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         override fun onStopTrackingTouch(seekBar: SeekBar) {
             val newPos = seekBar.progress
-            if (playerPreferences.playerSmoothSeek().get()) activity.player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
+            if (playerPreferences.playerSmoothSeek().get()) player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
             SeekState.mode = SeekState.NONE
             animationHandler.removeCallbacks(hideUiForSeekRunnable)
             animationHandler.postDelayed(hideUiForSeekRunnable, 500L)
@@ -90,8 +91,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
 
-        binding.nextBtn.setOnClickListener { activity.switchEpisode(false) }
         binding.prevBtn.setOnClickListener { activity.switchEpisode(true) }
+        binding.playBtn.setOnClickListener { playPause() }
+        binding.nextBtn.setOnClickListener { activity.switchEpisode(false) }
 
         binding.pipBtn.setOnClickListener { activity.pip.start() }
 
@@ -100,24 +102,26 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.controlsSkipIntroBtn.setOnLongClickListener { playerDialogs.skipIntroDialog(pauseForDialog()); true }
 
         binding.playbackPositionBtn.setOnClickListener {
-            if (activity.player.timePos != null && activity.player.duration != null) {
+            if (player.timePos != null && player.duration != null) {
                 playerPreferences.invertedDurationTxt().set(false)
                 playerPreferences.invertedPlaybackTxt().set(!playerPreferences.invertedPlaybackTxt().get())
-                updatePlaybackPos(activity.player.timePos!!)
-                updatePlaybackDuration(activity.player.duration!!)
+                updatePlaybackPos(player.timePos!!)
+                updatePlaybackDuration(player.duration!!)
             }
         }
 
         binding.playbackDurationBtn.setOnClickListener {
-            if (activity.player.timePos != null && activity.player.duration != null) {
+            if (player.timePos != null && player.duration != null) {
                 playerPreferences.invertedPlaybackTxt().set(false)
                 playerPreferences.invertedDurationTxt().set(!playerPreferences.invertedDurationTxt().get())
-                updatePlaybackPos(activity.player.timePos!!)
-                updatePlaybackDuration(activity.player.duration!!)
+                updatePlaybackPos(player.timePos!!)
+                updatePlaybackDuration(player.duration!!)
             }
         }
 
-        binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked -> activity.toggleAutoplay(isChecked) }
+        binding.toggleAutoplay.setOnCheckedChangeListener { _, isChecked -> toggleAutoplay(isChecked) }
+
+        binding.cycleViewModeBtn.setOnClickListener { cycleViewMode() }
 
         binding.titleMainTxt.setOnClickListener { playerDialogs.episodeListDialog(pauseForDialog()) }
 
@@ -127,20 +131,58 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     private fun pauseForDialog(): StateRestoreCallback {
-        val wasPlayerPaused = activity.player.paused ?: true // default to not changing state
-        activity.player.paused = true
+        val wasPlayerPaused = player.paused ?: true // default to not changing state
+        player.paused = true
         return {
             if (!wasPlayerPaused) {
-                activity.player.paused = false
-                updateDecoderButton()
-                activity.viewModel.viewModelScope.launchUI { activity.refreshUi() }
+                player.paused = false
+                activity.refreshUi()
             }
         }
     }
 
-    internal fun updateDecoderButton() {
-        if (binding.cycleDecoderBtn.visibility == View.VISIBLE) {
-            binding.cycleDecoderBtn.text = HwDecState.mode.title
+    internal suspend fun updateEpisodeText() {
+        val viewModel = activity.viewModel
+        val skipIntroText = activity.getString(R.string.player_controls_skip_intro_text, viewModel.getAnimeSkipIntroLength())
+        withUIContext {
+            binding.titleMainTxt.text = viewModel.currentAnime?.title
+            binding.titleSecondaryTxt.text = viewModel.currentEpisode?.name
+            binding.controlsSkipIntroBtn.text = skipIntroText
+        }
+    }
+
+    internal suspend fun updatePlaylistButtons() {
+        val viewModel = activity.viewModel
+        val plCount = viewModel.episodeList.size
+        val plPos = viewModel.getCurrentEpisodeIndex()
+
+        val grey = ContextCompat.getColor(context, R.color.tint_disabled)
+        val white = ContextCompat.getColor(context, R.color.tint_normal)
+        withUIContext {
+            with(binding.prevBtn) {
+                this.imageTintList = ColorStateList.valueOf(if (plPos == 0) grey else white)
+                this.isClickable = plPos != 0
+            }
+            with(binding.nextBtn) {
+                this.imageTintList =
+                    ColorStateList.valueOf(if (plPos == plCount - 1) grey else white)
+                this.isClickable = plPos != plCount - 1
+            }
+        }
+    }
+
+    internal suspend fun updateDecoderButton() {
+        withUIContext {
+            if (binding.cycleDecoderBtn.visibility == View.VISIBLE) {
+                binding.cycleDecoderBtn.text = HwDecState.mode.title
+            }
+        }
+    }
+
+    internal suspend fun updateSpeedButton() {
+        withUIContext {
+            binding.cycleSpeedBtn.text = context.getString(R.string.ui_speed, player.playbackSpeed)
+            player.playbackSpeed?.let { playerPreferences.playerSpeed().set(it.toFloat()) }
         }
     }
 
@@ -155,9 +197,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     private val hideUiForSeekRunnable = Runnable {
         SeekState.mode = SeekState.NONE
-        activity.player.paused = wasPausedBeforeSeeking
+        player.paused = wasPausedBeforeSeeking
         if (showControls) {
-            AnimationUtils.loadAnimation(activity, R.anim.player_fade_in).also { fadeAnimation ->
+            AnimationUtils.loadAnimation(context, R.anim.player_fade_in).also { fadeAnimation ->
                 binding.topControlsGroup.startAnimation(fadeAnimation)
                 binding.topControlsGroup.visibility = View.VISIBLE
 
@@ -183,15 +225,15 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         animationHandler.removeCallbacks(hideUiForSeekRunnable)
 
         if (!(binding.topControlsGroup.visibility == View.INVISIBLE && binding.middleControlsGroup.visibility == INVISIBLE && binding.bottomControlsGroup.visibility == INVISIBLE)) {
-            wasPausedBeforeSeeking = activity.player.paused!!
+            wasPausedBeforeSeeking = player.paused!!
             showControls = binding.unlockedView.isVisible
             binding.topControlsGroup.visibility = View.INVISIBLE
             binding.middleControlsGroup.visibility = View.INVISIBLE
             binding.bottomControlsGroup.visibility = View.INVISIBLE
-            activity.player.paused = true
-            animationHandler.removeCallbacks(activity.volumeViewRunnable)
-            animationHandler.removeCallbacks(activity.brightnessViewRunnable)
-            animationHandler.removeCallbacks(activity.seekTextRunnable)
+            player.paused = true
+            animationHandler.removeCallbacks(volumeViewRunnable)
+            animationHandler.removeCallbacks(brightnessViewRunnable)
+            animationHandler.removeCallbacks(seekTextRunnable)
             binding.volumeView.visibility = View.GONE
             binding.brightnessView.visibility = View.GONE
             activity.binding.seekView.visibility = View.GONE
@@ -219,9 +261,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun toggleControls(isTapped: Boolean = false) {
         val isControlsVisible = binding.lockedView.isVisible || binding.unlockedView.isVisible
-        if (!isControlsVisible && !activity.player.paused!!) {
+        if (!isControlsVisible && !player.paused!!) {
             showAndFadeControls()
-        } else if (!isControlsVisible && activity.player.paused!!) {
+        } else if (!isControlsVisible && player.paused!!) {
             fadeInControls()
         } else if (isTapped) {
             fadeOutControls()
@@ -240,30 +282,29 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     @SuppressLint("SetTextI18n")
     internal fun updatePlaybackPos(position: Int) {
-        val duration = activity.player.duration
+        val duration = player.duration
         val invertedPlayback = playerPreferences.invertedPlaybackTxt().get()
         val invertedDuration = playerPreferences.invertedDurationTxt().get()
 
         if (duration != null) {
             if (invertedPlayback) {
-                binding.playbackPositionTxt.text = "-${Utils.prettyTime(duration - position)}"
+                binding.playbackPositionBtn.text = "-${Utils.prettyTime(duration - position)}"
             } else if (invertedDuration) {
-                binding.playbackPositionTxt.text = Utils.prettyTime(position)
-                binding.playbackDurationTxt.text = "-${Utils.prettyTime(duration - position)}"
+                binding.playbackPositionBtn.text = Utils.prettyTime(position)
+                binding.playbackDurationBtn.text = "-${Utils.prettyTime(duration - position)}"
             } else {
-                binding.playbackPositionTxt.text = Utils.prettyTime(position)
+                binding.playbackPositionBtn.text = Utils.prettyTime(position)
             }
             activity.viewModel.onSecondReached(position, duration)
         }
 
         binding.playbackSeekbar.progress = position
-        updateSpeedButton()
     }
 
     @SuppressLint("SetTextI18n")
     internal fun updatePlaybackDuration(duration: Int) {
-        if (!playerPreferences.invertedDurationTxt().get() && activity.player.duration != null) {
-            binding.playbackDurationTxt.text = Utils.prettyTime(duration)
+        if (!playerPreferences.invertedDurationTxt().get() && player.duration != null) {
+            binding.playbackDurationBtn.text = Utils.prettyTime(duration)
         }
 
         if (SeekState.mode != SeekState.SEEKBAR) {
@@ -273,11 +314,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal fun updateBufferPosition(duration: Int) {
         binding.playbackSeekbar.secondaryProgress = duration
-    }
-
-    internal fun updateSpeedButton() {
-        binding.cycleSpeedBtn.text = context.getString(R.string.ui_speed, activity.player.playbackSpeed)
-        activity.player.playbackSpeed?.let { playerPreferences.playerSpeed().set(it.toFloat()) }
     }
 
     internal fun showAndFadeControls() {
@@ -331,9 +367,160 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     internal fun playPause() {
+        player.cyclePause()
         when {
-            activity.player.paused!! -> animationHandler.removeCallbacks(fadeOutControlsRunnable)
+            player.paused!! -> animationHandler.removeCallbacks(fadeOutControlsRunnable)
             binding.unlockedView.isVisible -> showAndFadeControls()
         }
+    }
+
+    // Fade out Player information text
+    private val playerInformationRunnable = Runnable {
+        AnimationUtils.loadAnimation(context, R.anim.player_fade_out).also { fadeAnimation ->
+            binding.playerInformation.startAnimation(fadeAnimation)
+            binding.playerInformation.visibility = View.GONE
+        }
+    }
+
+    private var playerViewMode = AspectState.get(playerPreferences.playerViewMode().get())
+
+    private fun cycleViewMode() {
+        playerViewMode = when (playerViewMode) {
+            AspectState.STRETCH -> AspectState.FIT
+            AspectState.FIT -> AspectState.CROP
+            AspectState.CROP -> AspectState.STRETCH
+        }
+        setViewMode(showText = true)
+    }
+
+    internal fun setViewMode(showText: Boolean) {
+        binding.playerInformation.text = activity.getString(playerViewMode.stringRes)
+        when (playerViewMode) {
+            AspectState.CROP -> {
+                activity.mpvUpdateAspect(aspect = "-1", pan = "1.0")
+            }
+            AspectState.FIT -> {
+                activity.mpvUpdateAspect(aspect = "-1", pan = "0.0")
+            }
+            AspectState.STRETCH -> {
+                val newAspect = "${activity.deviceWidth}/${activity.deviceHeight}"
+                activity.mpvUpdateAspect(aspect = newAspect, pan = "1.0")
+            }
+        }
+        if (showText) {
+            animationHandler.removeCallbacks(playerInformationRunnable)
+            binding.playerInformation.visibility = View.VISIBLE
+            animationHandler.postDelayed(playerInformationRunnable, 1000L)
+        }
+
+        playerPreferences.playerViewMode().set(playerViewMode.index)
+    }
+
+    internal fun toggleAutoplay(isAutoplay: Boolean) {
+        binding.toggleAutoplay.isChecked = isAutoplay
+        binding.toggleAutoplay.thumbDrawable = if (isAutoplay) {
+            ContextCompat.getDrawable(context, R.drawable.ic_play_circle_filled_24)
+        } else {
+            ContextCompat.getDrawable(context, R.drawable.ic_pause_circle_filled_24)
+        }
+
+        if (isAutoplay) {
+            binding.playerInformation.text = activity.getString(R.string.enable_auto_play)
+        } else {
+            binding.playerInformation.text = activity.getString(R.string.disable_auto_play)
+        }
+
+        if (!playerPreferences.autoplayEnabled().get() == isAutoplay) {
+            animationHandler.removeCallbacks(playerInformationRunnable)
+            binding.playerInformation.visibility = View.VISIBLE
+            animationHandler.postDelayed(playerInformationRunnable, 1000L)
+        }
+        playerPreferences.autoplayEnabled().set(isAutoplay)
+    }
+
+    // Fade out seek text
+    private val seekTextRunnable = Runnable {
+        activity.binding.seekView.visibility = View.GONE
+    }
+
+    // Slide out Volume Bar
+    private val volumeViewRunnable = Runnable {
+        AnimationUtils.loadAnimation(context, R.anim.player_exit_left).also { slideAnimation ->
+            if (SeekState.mode != SeekState.SCROLL) binding.volumeView.startAnimation(slideAnimation)
+            binding.volumeView.visibility = View.GONE
+        }
+    }
+
+    // Slide out Brightness Bar
+    private val brightnessViewRunnable = Runnable {
+        AnimationUtils.loadAnimation(context, R.anim.player_exit_right).also { slideAnimation ->
+            if (SeekState.mode != SeekState.SCROLL) binding.brightnessView.startAnimation(slideAnimation)
+            binding.brightnessView.visibility = View.GONE
+        }
+    }
+
+    private fun showGestureView(type: String) {
+        val callback: Runnable
+        val itemView: LinearLayout
+        val delay: Long
+        when (type) {
+            "seek" -> {
+                callback = seekTextRunnable
+                itemView = activity.binding.seekView
+                delay = 0L
+            }
+            "volume" -> {
+                callback = volumeViewRunnable
+                itemView = binding.volumeView
+                delay = 750L
+                if (!itemView.isVisible) itemView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_enter_left))
+            }
+            "brightness" -> {
+                callback = brightnessViewRunnable
+                itemView = binding.brightnessView
+                delay = 750L
+                if (!itemView.isVisible) itemView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.player_enter_right))
+            }
+            else -> return
+        }
+
+        animationHandler.removeCallbacks(callback)
+        itemView.visibility = View.VISIBLE
+        animationHandler.postDelayed(callback, delay)
+    }
+
+    internal fun showSeekText(position: Int, difference: Int) {
+        hideUiForSeek()
+        updatePlaybackPos(position)
+
+        val diffText = Utils.prettyTime(difference, true)
+        activity.binding.seekText.text = activity.getString(R.string.ui_seek_distance, Utils.prettyTime(position), diffText)
+        showGestureView("seek")
+    }
+
+    internal fun showVolumeBar(showBar: Boolean, volume: Int) {
+        binding.volumeText.text = volume.toString()
+        binding.volumeBar.progress = volume
+        if (volume == 0) {
+            binding.volumeImg.setImageResource(R.drawable.ic_volume_off_24dp)
+        } else {
+            binding.volumeImg.setImageResource(R.drawable.ic_volume_on_20dp)
+        }
+        if (showBar) showGestureView("volume")
+    }
+
+    internal fun showBrightnessBar(showBar: Boolean, brightness: Int) {
+        binding.brightnessText.text = brightness.toString()
+        binding.brightnessBar.progress = abs(brightness)
+        if (brightness >= 0) {
+            binding.brightnessImg.setImageResource(R.drawable.ic_brightness_positive_20dp)
+            binding.brightnessBar.max = 100
+            binding.brightnessBar.secondaryProgress = 100
+        } else {
+            binding.brightnessImg.setImageResource(R.drawable.ic_brightness_negative_20dp)
+            binding.brightnessBar.max = 75
+            binding.brightnessBar.secondaryProgress = 75
+        }
+        if (showBar) showGestureView("brightness")
     }
 }

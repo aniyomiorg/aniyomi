@@ -93,7 +93,7 @@
     <string name="pref_category_external_player">pemutaran eksternal</string>
     <string name="pref_always_use_external_player">Selalu gunakan pemutaran eksternal</string>
     <string name="pref_external_player_preference">Pemilihan pemutaran eksternal</string>
-    <string name="playertitle">%1$s - %2$s</string>
+    <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Hapus chapter/episode</string>
     <string name="pref_remove_after_marked_as_read">Setelah secara manual ditandai telah dibaca</string>
@@ -112,7 +112,7 @@
     <string name="download_ahead_info_anime">Hanya bekerja pada entri di perpustakaan dan jika episode saat ini ditambah yang berikutnya sudah diunduh</string>
     <string name="pref_auto_update_manga_sync">Perbarui kemajuan setelah membaca</string>
     <string name="pref_track_on_add_library">Buka menu sinkronisasi saat menambahkan ke pustaka</string>
-    <string name="pref_backup_flags_summ">Informasi yang akan dimasukkan ke dalam file cadangan</string>
+    <string name="pref_backup_flags_summary">Informasi yang akan dimasukkan ke dalam file cadangan</string>
     <string name="pref_clear_chapter_cache">Hapus cache chapter dan episode</string>
     <string name="used_cache_both">Digunakan oleh anime: %1$s, digunakan oleh manga: %2$s</string>
     <string name="pref_auto_clear_chapter_cache">Bersihkan cache saat aplikasi tertutup</string>
@@ -169,7 +169,6 @@
     <string name="screenshot_show_subs">Tampilkan subtitel di tangkap layar</string>
     <string name="enable_volume_brightness_gestures">Ubah volume dan gestur kecerahan</string>
     <string name="enable_horizontal_seek_gesture">ubah gestur gerakan horisontal</string>
-    <string name="stats_header">Tampilkan statistik</string>
     <string name="toggle_stats">Ubah status</string>
     <string name="stats_page">Halaman status</string>
     <string name="stats_page_1">halaman 1</string>
@@ -199,9 +198,9 @@
     <string name="no_next_episode">episode selanjutnya tidak ditemukan!</string>
     <string name="no_previous_episode">Episode sebelumnya tidak ditemukan!</string>
     <string name="label_history">Manga</string>
-    <string name="label_animehistory">Anime</string>
+    <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
-    <string name="label_animeupdates">Anime</string>
+    <string name="label_anime_updates">Anime</string>
     <string name="player_overlay_back">Kembali</string>
     <string name="enable_auto_play">Otomatis memutar menyala</string>
     <string name="disable_auto_play">Otomatis memutar mati</string>
@@ -244,8 +243,8 @@
     </plurals>
     <string name="episode_settings">Pengaturan episode</string>
     <string name="pref_backup_flags">Opsi cadangan</string>
-    <string name="label_mangaextensions">Manga Ekstension</string>
-    <string name="label_animeextensions">Ekstensi Anime</string>
+    <string name="label_manga_extensions">Manga Ekstension</string>
+    <string name="label_anime_extensions">Ekstensi Anime</string>
     <string name="label_migration_manga">Migrasi Manga</string>
     <string name="label_migration_anime">Migrasi Anime</string>
     <string name="settings">Pengaturan</string>
