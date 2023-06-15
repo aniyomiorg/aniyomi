@@ -16,7 +16,7 @@ class Gestures(
 ) : GestureDetector.SimpleOnGestureListener(), View.OnTouchListener {
     private var scrollState = STATE_UP
 
-    private val trigger = width.coerceAtMost(height) / 20
+    private val trigger = width.coerceAtMost(height) / 25
 
     private val preferences: PlayerPreferences by injectLazy()
 

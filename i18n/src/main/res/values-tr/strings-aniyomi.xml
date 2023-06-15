@@ -144,7 +144,6 @@
     <string name="episode_progress_no_total">İlerleme: %1$s</string>
     <string name="episode_progress">İlerleme: %1$s/%2$s</string>
     <string name="screenshot_show_subs">Ekran görüntüsünde alt yazıları göster</string>
-    <string name="stats_header">İstatistikleri göster</string>
     <string name="stats_page_1">Sayfa 1</string>
     <string name="stats_page_2">Sayfa 2</string>
     <string name="stats_page_3">Sayfa 3</string>

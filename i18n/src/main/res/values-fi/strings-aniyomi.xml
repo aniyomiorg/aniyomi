@@ -98,7 +98,6 @@
     <string name="stats_page">Tilastosivu</string>
     <string name="snack_add_to_anime_library">Lisätäänkö anime kirjastoon\?</string>
     <string name="screenshot_header">Ota näyttökuva</string>
-    <string name="stats_header">Näytä tilastot</string>
     <string name="display_mode_episode">Jakso %1$s</string>
     <string name="label_history">Manga</string>
     <string name="episode_not_found">Jaksoa ei löytynyt</string>

@@ -171,7 +171,6 @@
     <string name="screenshot_show_subs">Untertitel in Bildschirmfoto zeigen</string>
     <string name="enable_volume_brightness_gestures">Lautstärke- und Helligkeitsgesten aktivieren</string>
     <string name="enable_horizontal_seek_gesture">Horizontale Spul-Geste aktivieren</string>
-    <string name="stats_header">Statistiken anzeigen</string>
     <string name="toggle_stats">Statistiken aktivieren</string>
     <string name="stats_page">Statistik-Seite</string>
     <string name="stats_page_1">Seite 1</string>

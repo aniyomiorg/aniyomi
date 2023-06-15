@@ -191,7 +191,6 @@
     <string name="screenshot_show_subs">Zobrazit titulky ve snímku obrazovky</string>
     <string name="enable_volume_brightness_gestures">Přepnutí gest pro hlasitost a jas</string>
     <string name="enable_horizontal_seek_gesture">Přepnutí gesta pro horizontální posun</string>
-    <string name="stats_header">Zobrazit statistiky</string>
     <string name="toggle_stats">Přepnout statistiky</string>
     <string name="stats_page_1">Strana 1</string>
     <string name="stats_page_2">Strana 2</string>

@@ -169,7 +169,6 @@
     <string name="screenshot_show_subs">스크린 샷에 자막 표시</string>
     <string name="enable_volume_brightness_gestures">볼륨 및 밝기 제스처 활성화</string>
     <string name="enable_horizontal_seek_gesture">가로 탐색 제스처 활성화</string>
-    <string name="stats_header">통계 표시</string>
     <string name="toggle_stats">통계 활성화</string>
     <string name="stats_page">통계 페이지</string>
     <string name="stats_page_1">페이지 1</string>

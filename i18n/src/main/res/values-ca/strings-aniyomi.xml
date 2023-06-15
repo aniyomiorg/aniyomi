@@ -151,7 +151,6 @@
     <string name="episode_progress_no_total">Progrés: %1$s</string>
     <string name="screenshot_show_subs">Mostra els subtítols a la captura de pantalla</string>
     <string name="screenshot_header">Fes captura de pantalla</string>
-    <string name="stats_header">Mostra estadístiques</string>
     <string name="toggle_stats">Alternar estadístiques</string>
     <string name="stats_page_1">Pàgina 1</string>
     <string name="stats_page_2">Pàgina 2</string>

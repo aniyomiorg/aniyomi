@@ -96,7 +96,6 @@
     <string name="screenshot_show_subs">Mostra i sottotitoli negli screenshot</string>
     <string name="enable_volume_brightness_gestures">Attiva regolazione Volume e Retroilluminazione attraverso i gesti</string>
     <string name="enable_horizontal_seek_gesture">Attiva movimento di ricerca orizzontale attraverso i gesti</string>
-    <string name="stats_header">Mostra statistiche</string>
     <string name="information_no_recent_anime">Nulla è stato guardato di recente</string>
     <plurals name="notification_episodes_generic">
         <item quantity="one">1 nuovo episodio</item>

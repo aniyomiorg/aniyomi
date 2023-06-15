@@ -159,7 +159,6 @@
     <string name="screenshot_show_subs">Afficher les sous-titres dans la capture d\'écran</string>
     <string name="enable_volume_brightness_gestures">Gestes de basculement du volume et de la luminosité</string>
     <string name="enable_horizontal_seek_gesture">Activer le geste de recherche horizontale</string>
-    <string name="stats_header">Afficher les statistiques</string>
     <string name="stats_page_1">Page 1</string>
     <string name="stats_page_2">Page 2</string>
     <string name="stats_page_3">Page 3</string>

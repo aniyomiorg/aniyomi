@@ -173,7 +173,6 @@
     <string name="screenshot_show_subs">Mostrar subtítulos en captura de pantalla</string>
     <string name="enable_volume_brightness_gestures">Gestos para cambiar el volumen y el brillo</string>
     <string name="enable_horizontal_seek_gesture">Alternar con el gesto de la búsqueda horizontal</string>
-    <string name="stats_header">Mostrar las estadísticas</string>
     <string name="toggle_stats">Alternar estadísticas</string>
     <string name="stats_page">Página de las estadísticas</string>
     <string name="stats_page_1">Página 1</string>

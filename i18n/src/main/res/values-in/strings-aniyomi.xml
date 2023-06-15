@@ -169,7 +169,6 @@
     <string name="screenshot_show_subs">Tampilkan subtitel di tangkap layar</string>
     <string name="enable_volume_brightness_gestures">Ubah volume dan gestur kecerahan</string>
     <string name="enable_horizontal_seek_gesture">ubah gestur gerakan horisontal</string>
-    <string name="stats_header">Tampilkan statistik</string>
     <string name="toggle_stats">Ubah status</string>
     <string name="stats_page">Halaman status</string>
     <string name="stats_page_1">halaman 1</string>

@@ -253,7 +253,6 @@
     <string name="screenshot_show_subs">Ipakita ang mga subtitle sa screenshot</string>
     <string name="dialog_with_checkbox_remove_description_anime">Aalisin nito ang petsa ng panonood ng episode na ito. Sigurado ka ba\?</string>
     <string name="episode_progress">Progress: %1$s/%2$s</string>
-    <string name="stats_header">Ipakita ang mga istatistika</string>
     <string name="stats_page">Pahina ng istatistika</string>
     <string name="stats_page_2">Pahina 2</string>
     <string name="notification_new_episodes">May nakitang mga bagong episode</string>

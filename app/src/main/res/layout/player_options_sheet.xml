@@ -31,17 +31,6 @@
 
         <!-- Stats preferences -->
 
-        <TextView
-            android:id="@+id/stats_prefs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/stats_header"
-            android:textAppearance="@style/TextAppearance.Tachiyomi.SectionHeader" />
-
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/toggleStats"
             android:layout_width="match_parent"
