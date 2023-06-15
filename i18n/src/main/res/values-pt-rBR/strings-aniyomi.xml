@@ -112,9 +112,6 @@
     <string name="download_paused">Pausado</string>
     <string name="show_episode_number">Número do episódio</string>
     <string name="sort_by_episode_number">Por número de episódios</string>
-    <string name="download_1_episode">Próximo episódio</string>
-    <string name="download_5_episodes">Próximos 5 episódios</string>
-    <string name="download_10_episodes">Próximos 10 episódios</string>
     <string name="confirm_delete_episodes">Tem certeza de que deseja excluir os episódios selecionados\?</string>
     <string name="also_set_chapter_settings_for_library">Também aplicar a todos os itens na minha biblioteca</string>
     <string name="also_set_episode_settings_for_library">Também se aplica a todos os animes da minha biblioteca</string>
@@ -208,7 +205,6 @@
     <string name="action_play_externally">Reproduzir externamente</string>
     <string name="action_play_internally">Reproduzir internamente</string>
     <string name="action_player_pip">Modo PiP</string>
-    <string name="action_display_unseen_badge">Episódios não vistos</string>
     <string name="pref_category_player">Reprodutor</string>
     <string name="action_start_download_externally">Usar downloader externo</string>
     <string name="action_start_download_internally">Usar downloader interno</string>
@@ -277,5 +273,10 @@
         <item quantity="one">Para 1 título</item>
         <item quantity="many">Para %d títulos</item>
         <item quantity="other">Para %d títulos</item>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
     </plurals>
 </resources>

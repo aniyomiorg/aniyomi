@@ -44,7 +44,6 @@
     <string name="action_show_manga">Afficher l\'entrée</string>
     <string name="action_show_anime">Afficher l\'animé</string>
     <string name="action_display_download_badge_anime">Épisodes téléchargés</string>
-    <string name="action_display_unseen_badge">Épisodes non vus</string>
     <string name="action_display_local_badge_manga">Source locale</string>
     <string name="action_display_local_badge_anime">Animé local</string>
     <string name="action_display_show_continue_reading_button">Afficher le bouton Continuer à regarder/lire</string>
@@ -133,9 +132,6 @@
     <string name="download_paused">En pause</string>
     <string name="show_episode_number">Numéro de l\'épisode</string>
     <string name="sort_by_episode_number">Par numéro d\'épisode</string>
-    <string name="download_1_episode">Épisode suivant</string>
-    <string name="download_5_episodes">Les 5 prochains épisodes</string>
-    <string name="download_10_episodes">Les 10 prochains épisodes</string>
     <string name="download_unseen">Non vus</string>
     <string name="confirm_delete_episodes">Êtes-vous sûr·e de vouloir supprimer les épisodes sélectionnés \?</string>
     <string name="also_set_chapter_settings_for_library">S\'applique également à toutes les entrées de ma bibliothèque</string>
@@ -278,4 +274,9 @@
     <string name="pref_player_smooth_seek_summary">Si activé, la recherche ne va pas se concentrer sur les images-clés, permettant de faire une recherche plus précise mais plus lente</string>
     <string name="pref_use_external_downloader">Toujours utiliser un outil de téléchargement externe pour les animés</string>
     <string name="pref_enable_auto_skip_ani_skip">Activer le passage d\'intro automatique</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

@@ -3,9 +3,37 @@
     <string name="manga_categories">श्रेण्या</string>
     <string name="unlock_app">तचीयोमी उघडा</string>
     <string name="default_manga_category">मूलभूत श्रेणी</string>
-    <string name="untrusted_extension_message">हे एक्सटेन्शन एका अविश्वासू प्रमानपत्रासहित आले आहे म्हणून हे स्थापित होऊ शकले नाही. 
+    <string name="untrusted_extension_message">हे एक्सटेन्शन एका अविश्वासू प्रमानपत्रासहित आले आहे म्हणून हे स्थापित होऊ शकले नाही.
 \n
 \nअसे अविश्वासू एक्सटेन्शन आपले लॉगिन बाबत माहिती चोरू शकते.
-\n 
+\n
 \nव अश्या एक्सटेन्शन वर विश्वास करून तुम्ही ह्या सगद्या जोखीम घेत आहेत.</string>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

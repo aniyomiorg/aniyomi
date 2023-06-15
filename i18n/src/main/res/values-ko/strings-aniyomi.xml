@@ -6,7 +6,8 @@
     <string name="entries">서재 항목</string>
     <string name="chapters_episodes">회차 및 에피소드</string>
     <string name="episodes">에피소드</string>
-    <string name="backup_settings_warning">경고: 설정을 백업하면 동기화 암호도 저장되므로 이 백업 파일을 공유하지 마십시오!</string>
+    <string name="backup_settings_warning">경고: 설정을 백업하면 동기화 암호와 같은 민감한 정보도 저장됩니다.
+\n이 백업 파일을 공유하지 마십시오!</string>
     <string name="label_manga_library">만화</string>
     <string name="label_anime_library">애니메이션</string>
     <string name="label_manga">만화</string>
@@ -45,7 +46,6 @@
     <string name="action_show_manga">항목 표시</string>
     <string name="action_show_anime">애니메이션 표시</string>
     <string name="action_display_download_badge_anime">다운로드된 에피소드</string>
-    <string name="action_display_unseen_badge">보지 않은 에피소드</string>
     <string name="action_display_local_badge_manga">로컬 소스</string>
     <string name="action_display_local_badge_anime">로컬 애니메이션</string>
     <string name="action_display_show_continue_reading_button">이어서 보기/읽기 버튼 표시</string>
@@ -143,9 +143,6 @@
     <string name="download_paused">일시중지됨</string>
     <string name="show_episode_number">에피소드 번호</string>
     <string name="sort_by_episode_number">에피소드 번호 순</string>
-    <string name="download_1_episode">다음 에피소드</string>
-    <string name="download_5_episodes">다음 5 에피소드</string>
-    <string name="download_10_episodes">다음 10 에피소드</string>
     <string name="download_unseen">안봄</string>
     <string name="confirm_delete_episodes">선택된 에피소드를 삭제하시겠습니까\?</string>
     <string name="also_set_chapter_settings_for_library">서재의 모든 항목에 적용</string>
@@ -259,11 +256,18 @@
     <string name="pref_default_home_tab_library">만화 탭을 시작화면으로 설정</string>
     <string name="action_global_manga_search">전체 만화 검색</string>
     <string name="action_global_anime_search">전체 애니메이션 검색</string>
-    <string name="pref_search_pinned_manga_sources_only">핀 설정된 만화 소스만 포함</string>
-    <string name="pref_search_pinned_anime_sources_only">핀 설정된 애니메이션 소스만 포함</string>
+    <string name="pref_search_pinned_manga_sources_only">전체 검색에서 핀 설정된 만화 소스만 검색</string>
+    <string name="pref_search_pinned_anime_sources_only">전체 검색에서 핀 설정된 애니메이션 소스만 검색</string>
     <string name="unofficial_anime_extension_message">이 확장기능은 Aniyomi의 공식 확장기능이 아닙니다.</string>
     <string name="pref_category_volume_brightness">볼륨 및 밝기</string>
     <string name="pref_category_player_seeking">찾기</string>
     <string name="pref_category_pip">Picture-in-Picture (PiP)</string>
     <string name="pref_enable_pip">PiP 모드 사용 활성화</string>
+    <string name="pref_hide_in_manga_library_items">이미 서재에 있는 만화 항목 숨기기</string>
+    <string name="pref_hide_in_anime_library_items">이미 서재에 있는 애니메이션 항목 숨기기</string>
+    <plurals name="download_amount_anime">
+        <item quantity="other">다음 %d 에피소드</item>
+    </plurals>
+    <string name="choose_video_quality">동영상 화질 선택:</string>
+    <string name="extension_settings">확장기능 설정</string>
 </resources>

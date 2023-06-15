@@ -66,7 +66,6 @@
     <string name="snack_add_to_anime_library">Přidat anime do knihovny\?</string>
     <string name="display_mode_episode">Epizoda %1$s</string>
     <string name="show_episode_number">Číslo epizody</string>
-    <string name="download_5_episodes">Dalších 5 epizod</string>
     <string name="pref_default_player_orientation">Výchozí orientace</string>
     <string name="pref_category_internal_player">Interní přehrávač</string>
     <string name="pref_default_intro_length">Výchozí délka přeskakování intra</string>
@@ -110,7 +109,6 @@
     <string name="action_edit_anime_categories">Upravit kategorie anime</string>
     <string name="action_edit_manga_categories">Upravit kategorie mangy</string>
     <string name="action_screen_fit">Režim přizpůsobení obrazovky</string>
-    <string name="action_display_unseen_badge">Nezhlédnuté epizody</string>
     <string name="label_manga_library">Manga</string>
     <string name="action_sort_unseen_count">Počet nezhlédnutých epizod</string>
     <string name="action_sort_episode_fetch_date">Datum načtení epizody</string>
@@ -143,8 +141,6 @@
         <item quantity="other">%1$s epizod</item>
     </plurals>
     <string name="sort_by_episode_number">Podle čísla epizody</string>
-    <string name="download_1_episode">Další epizoda</string>
-    <string name="download_10_episodes">Dalších 10 epizod</string>
     <string name="download_unseen">Neshlédnuto</string>
     <string name="confirm_delete_episodes">Jste si jistí, že chcete smazat vybrané epizody\?</string>
     <string name="also_set_episode_settings_for_library">Aplijovat také na všechny anime v mé knihovně</string>
@@ -272,4 +268,9 @@
     <string name="pref_category_pip">Miniokno</string>
     <string name="action_global_manga_search">Globální vyhledávání mangy</string>
     <string name="action_global_anime_search">Globální vyhledávání anime</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="few"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

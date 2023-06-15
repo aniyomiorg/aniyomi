@@ -41,7 +41,6 @@
     <string name="default_anime_category">تصنيف الأنمي الإفتراضي</string>
     <string name="pref_anime_library_update_categories_details">الأنمي في الفئات المستبعدة لن يتم تحديثها حتى وإن كانت أيضا في الفئات المضمنة</string>
     <string name="action_order_by_episode_number">حسب رقم الحلقة</string>
-    <string name="action_display_unseen_badge">الحلقات الغير المشاهدة</string>
     <string name="label_history">مانغا</string>
     <string name="settings">الإعدادات</string>
     <string name="pref_invalidate_download_cache_summary">إجبار التطبيق على إعادة فحص الفصول والحلقات التي تم تنزيلها</string>
@@ -89,7 +88,6 @@
     <string name="action_remove_bookmark_episode">بدون علامة مرجعية للحلقة</string>
     <string name="pref_default_portrait_orientation">اتجاه عمودي بشكل افتراضي</string>
     <string name="video_list_empty_error">لا يوجد فيديو</string>
-    <string name="download_1_episode">الحلقة التالية</string>
     <string name="action_next_episode">الحلقة التالية</string>
     <string name="audio_dialog_header">تغيير مسار الصوت:</string>
     <string name="action_start_download_externally">استخدام أداة التحميل الخارجية</string>
@@ -140,7 +138,6 @@
     <string name="action_display_local_badge_anime">الأنمي المحلي</string>
     <string name="want_to_watch">تريد المشاهدة</string>
     <string name="label_anime_history">أنمي</string>
-    <string name="download_5_episodes">الحلقات الـ 5 التالية</string>
     <string name="player_aniskip_op">تخطي الافتتاحية</string>
     <string name="pref_skip_length">إضغط مرتين لتخطي المقدمة</string>
     <string name="label_manga">مانغا</string>
@@ -220,7 +217,6 @@
     <string name="no_episodes_error">لم يتم العثور على حلقات</string>
     <string name="also_set_episode_settings_for_library">تنطبق أيضا على جميع الإنميات في مكتبتي</string>
     <string name="confirm_delete_episodes">هل أنت متأكد من أنك تريد حذف الحلقات المحددة؟</string>
-    <string name="download_10_episodes">الحلقات الـ 10 التالية</string>
     <string name="sort_by_episode_number">حسب رقم الحلقة</string>
     <string name="video_crop_screen">اقتصاص على الشاشة</string>
     <string name="download_notifier_download_paused_episodes">تم إيقاف تنزيل الحلقة مؤقتا</string>
@@ -296,4 +292,12 @@
     <string name="unofficial_anime_extension_message">هذا الملحق ليس من قائمة ملحقات انيومي الرسمية.</string>
     <string name="pref_category_pip">صورة في صورة</string>
     <string name="pref_category_player_seeking">البحث عن</string>
+    <plurals name="download_amount_anime">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="two"/>
+        <item quantity="few"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

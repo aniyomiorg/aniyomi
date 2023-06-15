@@ -45,7 +45,6 @@
     <string name="action_show_manga">显示漫画</string>
     <string name="action_show_anime">显示动画</string>
     <string name="action_display_download_badge_anime">已下载剧集</string>
-    <string name="action_display_unseen_badge">未观看剧集</string>
     <string name="action_display_local_badge_manga">本地漫画</string>
     <string name="action_display_local_badge_anime">本地动画</string>
     <string name="action_display_show_continue_reading_button">显示“继续观看/阅读”按键</string>
@@ -140,7 +139,6 @@
     <string name="download_paused">下载搁置中</string>
     <string name="show_episode_number">剧集序号</string>
     <string name="sort_by_episode_number">根据剧集序号排序</string>
-    <string name="download_1_episode">下一集</string>
     <string name="download_unseen">未观看</string>
     <string name="confirm_delete_episodes">确定要删除选中的剧集吗？</string>
     <string name="also_set_chapter_settings_for_library">同时应用至书架里的所有漫画</string>

@@ -40,7 +40,6 @@
     <string name="action_global_manga_search">Yleinen mangahaku</string>
     <string name="action_global_anime_search">Yleinen animehaku</string>
     <string name="action_show_anime">Näytä anime</string>
-    <string name="action_display_unseen_badge">Katsomattomat jaksot</string>
     <string name="action_order_by_episode_number">Jaksonumeroiden mukaisesti</string>
     <string name="pref_category_volume_brightness">Äänenvoimakkuus ja kirkkaus</string>
     <string name="pref_category_pip">Kuva kuvassa (PiP)</string>
@@ -138,9 +137,6 @@
     <string name="currently_watching">Katsellaan parhaillaan</string>
     <string name="not_interesting">Ei kiinnostava</string>
     <string name="want_to_watch">Haluan katsoa</string>
-    <string name="download_1_episode">Seuraava jakso</string>
-    <string name="download_5_episodes">Seuraavat 5 jaksoa</string>
-    <string name="download_10_episodes">Seuraavat 10 jaksoa</string>
     <string name="download_unseen">Katsomatta</string>
     <string name="confirm_delete_episodes">Haluatko varmasti poistaa valitut jaksot\?</string>
     <string name="also_set_episode_settings_for_library">Käytä myös kaikkiin kirjastossani oleviin animeihin</string>
@@ -177,4 +173,20 @@
     <string name="label_anime_library">Anime</string>
     <string name="label_manga_sources">Mangalähteet</string>
     <string name="label_anime_sources">Animelähteet</string>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>
