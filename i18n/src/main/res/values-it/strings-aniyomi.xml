@@ -280,7 +280,5 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_progress_85" translatable="false"/>
     <string name="choose_video_quality"/>
-    <string name="pref_progress_100" translatable="false"/>
 </resources>

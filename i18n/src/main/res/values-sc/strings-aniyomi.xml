@@ -38,32 +38,20 @@
     <string name="information_webview_required">Pro Tachiyomi b\'at bisòngiu de WebView</string>
     <string name="download_notifier_download_paused_chapters">Iscarrigamentu in pàusa</string>
     <string name="channel_new_chapters_episodes">Agiornamentos de sos capìtulos</string>
-    <string name="rotation_sensor_portrait"/>
     <string name="pref_skip_length"/>
-    <string name="pref_always_use_external_player"/>
     <string name="pref_external_downloader_selection"/>
-    <string name="pref_backup_flags_summ"/>
     <string name="episode_not_found"/>
-    <string name="snack_add_to_anime_library"/>
     <string name="no_episodes_error"/>
-    <string name="share_screenshot_info"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="quality_dialog_header"/>
     <string name="pref_enable_auto_skip_ani_skip"/>
-    <string name="pref_waiting_time_aniskip_9"/>
     <string name="player_aniskip_dontskip_toast"/>
-    <string name="backup_settings_warning"/>
     <string name="pref_default_home_tab_library"/>
-    <string name="pref_category_player_seeking"/>
     <string name="pref_pip_on_exit"/>
-    <string name="playertitle"/>
     <string name="plan_to_watch"/>
-    <string name="video_crop_screen"/>
     <string name="pref_waiting_time_aniskip_6"/>
-    <string name="notification_episodes_single_and_more"/>
     <string name="choose_video_quality"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
@@ -73,20 +61,14 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_bookmark_episode"/>
     <string name="pref_progress_75" translatable="false"/>
-    <string name="pref_category_internal_player"/>
     <string name="player_controls_skip_intro_text"/>
-    <string name="player_aniskip_mixedOp"/>
     <string name="pref_default_landscape_orientation"/>
-    <string name="pref_pip_episode_toasts"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_display_local_badge_anime"/>
     <string name="unofficial_extension_message_aniyomi"/>
-    <string name="pref_progress_90" translatable="false"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -95,27 +77,17 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="episode_settings_updated"/>
     <string name="pref_invalidate_download_cache_summary"/>
-    <string name="video_list_empty_error"/>
     <string name="action_download_unread"/>
-    <string name="anime_categories"/>
     <string name="action_mark_as_seen"/>
-    <string name="action_mark_previous_as_seen"/>
     <string name="action_sort_last_seen"/>
-    <string name="action_show_anime"/>
     <string name="action_start_download_externally"/>
-    <string name="action_next_episode"/>
     <string name="action_display_download_badge_anime"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="stats_page"/>
     <string name="dialog_with_checkbox_remove_description_anime"/>
-    <string name="label_anime_library"/>
     <string name="pref_adjust_orientation_video_dimensions"/>
-    <string name="downloaded_episodes"/>
     <string name="anime_from_library"/>
-    <string name="repeating_anime"/>
 </resources>

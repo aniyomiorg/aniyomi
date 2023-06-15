@@ -26,33 +26,19 @@
     <string name="clear_database_confirmation">Sigurado ka\? Basaha ang mga kapitulo ug ang pag-uswag sa dili librarya nga manga mawala</string>
     <string name="pref_refresh_library_tracking_summary">Mga update sa status, score ug katapusang kapitulo nga gibasa gikan sa mga serbisyo sa pagsubay</string>
     <string name="pref_incognito_mode_summary">Paghunong sa pagbasa sa kasaysayan</string>
-    <string name="action_sort_last_anime_update"/>
     <string name="action_display_local_badge_manga"/>
-    <string name="unofficial_anime_extension_message"/>
     <string name="pref_intro_length"/>
-    <string name="pref_mpv_conf"/>
     <string name="unknown_studio"/>
-    <string name="watching"/>
     <string name="repeating_anime"/>
-    <string name="enable_volume_brightness_gestures"/>
     <string name="no_next_episode"/>
-    <string name="label_animeupdates"/>
     <string name="player_aniskip_recap"/>
-    <string name="pref_waiting_time_aniskip_6"/>
     <string name="pref_waiting_time_aniskip_10"/>
-    <string name="player_aniskip_skip"/>
     <string name="label_migration_manga"/>
-    <string name="local_invalid_episode_format"/>
     <string name="dialog_with_checkbox_remove_description_anime"/>
-    <string name="audio_dialog_header"/>
     <string name="pref_player_summary"/>
-    <string name="pref_category_player"/>
     <string name="pref_external_player_preference"/>
-    <string name="delete_downloads_for_anime"/>
     <string name="screenshot_header"/>
-    <string name="video_stretch_screen"/>
     <string name="rotation_reverse_landscape"/>
-    <string name="pref_category_player_orientation"/>
     <string name="pref_skip_10" translatable="false"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
@@ -66,49 +52,32 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="player_hwdec_dialog_title"/>
     <string name="notification_episodes_single_and_more"/>
-    <string name="enable_auto_play"/>
     <string name="action_edit_anime_categories"/>
-    <string name="sort_by_episode_number"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="download_notifier_download_paused_episodes"/>
     <string name="pref_remember_brightness"/>
-    <string name="action_download_unseen"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_watched_duration"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_download_unread"/>
     <string name="pref_progress_70" translatable="false"/>
-    <string name="backup_settings_warning"/>
     <string name="pref_default_player_orientation"/>
-    <string name="pref_bottom_nav_no_history"/>
     <string name="stats_page"/>
-    <string name="pref_category_progress"/>
     <string name="label_watched_episodes"/>
-    <string name="pref_bottom_nav_no_manga"/>
     <string name="stats_header"/>
-    <string name="download_insufficient_space"/>
     <string name="label_anime_library"/>
-    <string name="dialog_with_checkbox_reset"/>
     <string name="copied_video_link_to_clipboard"/>
-    <string name="pref_waiting_time_aniskip"/>
     <string name="pref_clear_anime_database"/>
-    <string name="action_mark_previous_as_seen"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="show_episode_number"/>
     <string name="pref_bottom_nav_style"/>
-    <string name="quality_dialog_header"/>
 </resources>

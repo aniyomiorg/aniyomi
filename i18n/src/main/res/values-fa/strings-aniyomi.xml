@@ -38,34 +38,23 @@
     <string name="information_webview_required">وب نما برای تاچیومی مورد نیاز است</string>
     <string name="download_notifier_download_paused_chapters">دانلود متوقف شد</string>
     <string name="channel_new_chapters_episodes">به روزرسانی قسمت‌ها</string>
-    <string name="action_mark_previous_as_seen"/>
     <string name="action_edit_manga_categories"/>
-    <string name="pref_default_home_tab_library"/>
     <string name="unknown_studio"/>
-    <string name="episode_downloading_progress"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="player_controls_skip_intro_text"/>
     <string name="label_updates"/>
-    <string name="video_fit_screen"/>
     <string name="pref_enable_aniskip"/>
-    <string name="player_aniskip_dontskip"/>
     <string name="label_migration_manga"/>
-    <string name="pref_hide_in_manga_library_items"/>
     <string name="pref_anime_library_update_categories_details"/>
-    <string name="pref_skip_30" translatable="false"/>
     <string name="local_anime_source"/>
-    <string name="want_to_read"/>
     <string name="enable_horizontal_seek_gesture"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="video_crop_screen"/>
     <string name="player_aniskip_op"/>
-    <string name="pref_waiting_time_aniskip_9"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -74,48 +63,31 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_bookmark_episode"/>
     <string name="pref_skip_length"/>
-    <string name="pref_pip_on_exit"/>
     <string name="action_mark_as_unseen"/>
-    <string name="pref_skip_disable"/>
     <string name="stats_header"/>
-    <string name="pref_clear_anime_database"/>
     <string name="action_play"/>
-    <string name="pref_category_progress"/>
     <string name="pref_external_player_preference"/>
-    <string name="pref_remember_brightness"/>
     <string name="pref_category_player"/>
-    <string name="action_remove_bookmark_episode"/>
     <string name="pref_player_smooth_seek_summary"/>
-    <string name="action_filter_unseen"/>
     <string name="pref_auto_clear_chapter_cache"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_manga_sources"/>
     <string name="information_no_recent_anime"/>
-    <string name="pref_default_player_orientation"/>
     <string name="pref_bottom_nav_no_updates"/>
-    <string name="action_screen_fit"/>
     <string name="label_watched_duration"/>
-    <string name="action_sort_episode_fetch_date"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="rotation_reverse_landscape"/>
     <string name="action_start_download_internally"/>
-    <string name="pref_player_fullscreen"/>
     <string name="label_mangaextensions"/>
-    <string name="share_screenshot_info"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_external_downloader_selection"/>
     <string name="pref_adjust_orientation_video_dimensions"/>
-    <string name="pref_pip_episode_toasts"/>
     <string name="pref_search_pinned_manga_sources_only"/>
 </resources>

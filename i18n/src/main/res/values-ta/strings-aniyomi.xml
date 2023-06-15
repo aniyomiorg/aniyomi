@@ -2,36 +2,22 @@
 <resources>
     <string name="manga_categories">பிரிவுகள்</string>
     <string name="unlock_app">\"டக்கியோமியை\" திறக்கவும்</string>
-    <string name="action_download_unread"/>
     <string name="pref_progress_70" translatable="false"/>
-    <string name="pref_category_player_orientation"/>
     <string name="pref_skip_30" translatable="false"/>
-    <string name="pref_category_delete_chapters"/>
     <string name="local_anime_source"/>
-    <string name="download_notifier_download_paused_episodes"/>
     <string name="label_history"/>
-    <string name="video_fit_screen"/>
     <string name="playback_options_quality"/>
-    <string name="player_aniskip_ed"/>
     <string name="pref_waiting_time_aniskip_5"/>
-    <string name="notification_episodes_single_and_more"/>
     <string name="pref_hide_in_anime_library_items"/>
-    <string name="pref_update_only_completely_read"/>
     <string name="pref_progress_85" translatable="false"/>
-    <string name="pref_pip_episode_toasts"/>
     <string name="pref_auto_update_manga_sync"/>
-    <string name="pref_clear_anime_database_summary"/>
     <string name="anime_from_library"/>
-    <string name="show_episode_number"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="enable_horizontal_seek_gesture"/>
     <string name="information_no_recent_anime"/>
-    <string name="disable_auto_play"/>
     <string name="pref_enable_auto_skip_ani_skip"/>
-    <string name="pref_backup_flags"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -40,11 +26,8 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="untrusted_extension_message"/>
     <string name="pref_progress_80" translatable="false"/>
-    <string name="pref_skip_5" translatable="false"/>
     <string name="currently_watching"/>
-    <string name="notification_episodes_single"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -53,43 +36,27 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="no_episodes_error"/>
     <string name="pref_intro_length"/>
-    <string name="unofficial_anime_extension_message"/>
     <string name="episode_progress"/>
-    <string name="label_manga_library"/>
     <string name="action_play_externally"/>
-    <string name="download_insufficient_space"/>
     <string name="video_list_empty_error"/>
-    <string name="pref_category_player"/>
     <string name="pref_download_new_episodes"/>
-    <string name="pref_search_pinned_anime_sources_only"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_track_on_add_library"/>
     <string name="pref_clear_chapter_cache"/>
-    <string name="pref_player_smooth_seek_summary"/>
     <string name="share_screenshot_info"/>
-    <string name="anime_categories"/>
     <string name="auto_download_while_watching"/>
-    <string name="download_error"/>
     <string name="player_aniskip_dontskip_toast"/>
-    <string name="notification_new_episodes"/>
     <string name="action_display_download_badge_anime"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_start_download_internally"/>
     <string name="pref_remove_after_read"/>
-    <string name="episode_progress_no_total"/>
     <string name="entries"/>
-    <string name="action_sort_last_checked"/>
     <string name="dialog_with_checkbox_reset_anime"/>
-    <string name="repeating_anime"/>
     <string name="pref_manga_library_update_categories_details"/>
-    <string name="chapters_episodes"/>
     <string name="label_anime_library"/>
 </resources>

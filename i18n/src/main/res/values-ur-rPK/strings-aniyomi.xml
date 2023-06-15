@@ -2,32 +2,22 @@
 <resources>
     <string name="manga_categories">زمرہ جات</string>
     <string name="unlock_app">انلاک تاچییومی</string>
-    <string name="action_sort_episode_fetch_date"/>
     <string name="action_next_episode"/>
-    <string name="episode_progress"/>
     <string name="pref_search_pinned_anime_sources_only"/>
-    <string name="pref_manga_library_update_categories_details"/>
     <string name="pref_default_landscape_orientation"/>
-    <string name="pref_player_smooth_seek"/>
     <string name="pref_category_external_downloader"/>
-    <string name="snack_add_to_anime_library"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="no_episodes_error"/>
     <string name="player_controls_skip_intro_text"/>
-    <string name="enable_auto_play"/>
     <string name="player_aniskip_recap"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_screen_fit"/>
     <string name="rotation_sensor_portrait"/>
-    <string name="pref_progress_mark_as_seen"/>
     <string name="pref_category_internal_player"/>
-    <string name="pref_player_hide_controls"/>
     <string name="recent_anime_time"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
@@ -37,42 +27,25 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_bottom_nav_style"/>
     <string name="used_cache_both"/>
-    <string name="pref_update_only_completely_read"/>
     <string name="enable_volume_brightness_gestures"/>
-    <string name="action_order_by_episode_number"/>
     <string name="show_episode_number"/>
-    <string name="pref_remove_after_read"/>
     <string name="action_edit_anime_categories"/>
-    <string name="pref_auto_clear_chapter_cache"/>
     <string name="label_history"/>
-    <string name="action_display_show_continue_reading_button"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_previous_episode"/>
     <string name="episode_downloading_progress"/>
-    <string name="copied_video_link_to_clipboard"/>
     <string name="player_aniskip_dontskip"/>
-    <string name="pref_remove_bookmarked_chapters"/>
     <string name="video_crop_screen"/>
-    <string name="pref_category_delete_chapters"/>
     <string name="action_view_episodes"/>
-    <string name="pref_player_smooth_seek_summary"/>
     <string name="action_display_local_badge_anime"/>
-    <string name="pref_waiting_time_aniskip_8"/>
     <string name="action_mark_as_unseen"/>
-    <string name="backup_settings_warning"/>
     <string name="action_sort_last_seen"/>
-    <string name="label_anime"/>
     <string name="pref_mpv_conf"/>
-    <string name="episode_not_found"/>
     <string name="stats_page_1"/>
-    <string name="playback_speed_dialog_title"/>
     <string name="playback_options_quality"/>
-    <string name="label_mangaextensions"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -81,15 +54,9 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="download_error"/>
     <string name="pref_category_player_aniskip_info"/>
-    <string name="player_aniskip_skip"/>
     <string name="pref_auto_update_manga_sync"/>
-    <string name="action_edit_manga_categories"/>
     <string name="pref_progress_90" translatable="false"/>
-    <string name="anime_from_library"/>
     <string name="action_bookmark_episode"/>
-    <string name="notification_new_episodes"/>
     <string name="pref_intro_length"/>
-    <string name="unknown_studio"/>
 </resources>

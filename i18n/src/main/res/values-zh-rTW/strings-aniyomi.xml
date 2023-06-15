@@ -38,67 +38,34 @@
     <string name="information_webview_required">WebView 為 Tachiyomi 的必要元件</string>
     <string name="download_notifier_download_paused_chapters">下載已暫停</string>
     <string name="channel_new_chapters_episodes">新刊發行</string>
-    <string name="action_sort_last_anime_update"/>
     <string name="action_mark_previous_as_seen"/>
-    <string name="action_next_episode"/>
     <string name="download_unseen"/>
-    <string name="pref_category_external_player"/>
     <string name="player_controls_skip_intro_text"/>
-    <string name="backup_settings_warning"/>
     <string name="default_anime_category"/>
-    <string name="pref_default_player_orientation"/>
     <string name="pref_skip_20" translatable="false"/>
-    <string name="pref_player_smooth_seek"/>
     <string name="pref_category_pip"/>
-    <string name="pref_remember_brightness"/>
     <string name="pref_external_player_preference"/>
-    <string name="dialog_with_checkbox_remove_description_anime"/>
     <string name="stats_page_1"/>
-    <string name="download_notifier_download_paused_episodes"/>
     <string name="label_animehistory"/>
-    <string name="pref_waiting_time_aniskip"/>
     <string name="pref_waiting_time_aniskip_10"/>
-    <string name="notification_episodes_multiple"/>
     <string name="choose_video_quality"/>
-    <string name="entries"/>
     <string name="pref_clear_anime_database_summary"/>
-    <string name="no_episodes_error"/>
     <string name="action_edit_manga_categories"/>
-    <string name="download_ahead_info_anime"/>
     <plurals name="seconds">
         <item quantity="other"/>
     </plurals>
-    <string name="display_mode_episode"/>
     <string name="action_play"/>
-    <string name="repeating_anime"/>
     <string name="pref_preserve_watching_position"/>
-    <plurals name="next_unseen_episodes">
-        <item quantity="other"/>
-    </plurals>
     <string name="label_migration_manga"/>
-    <string name="auto_download_while_watching"/>
     <string name="delete_downloads_for_anime"/>
-    <string name="confirm_delete_episodes"/>
     <string name="anime_categories"/>
-    <string name="action_bookmark_episode"/>
     <string name="pref_enable_auto_skip_ani_skip"/>
-    <string name="playback_options_quality"/>
     <string name="rotation_sensor_portrait"/>
-    <string name="action_sort_last_seen"/>
     <string name="action_view_episodes"/>
-    <string name="pref_player_summary"/>
     <string name="pref_external_downloader_selection"/>
-    <string name="unknown_studio"/>
     <string name="playback_speed_dialog_reset"/>
-    <string name="action_sort_last_checked"/>
     <string name="enable_auto_play"/>
-    <string name="player_aniskip_dontskip"/>
     <string name="downloaded_episodes"/>
-    <string name="pref_adjust_orientation_video_dimensions"/>
     <string name="pref_default_portrait_orientation"/>
-    <string name="pref_bottom_nav_style"/>
     <string name="pref_anime_library_update_categories_details"/>
-    <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="other"/>
-    </plurals>
 </resources>

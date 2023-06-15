@@ -293,9 +293,7 @@
     <string name="unofficial_anime_extension_message">هذا الملحق ليس من قائمة ملحقات انيومي الرسمية.</string>
     <string name="pref_category_pip">صورة في صورة</string>
     <string name="pref_category_player_seeking">البحث عن</string>
-    <string name="copied_video_link_to_clipboard"/>
     <string name="pref_hide_in_anime_library_items"/>
-    <string name="pref_progress_95" translatable="false"/>
     <plurals name="download_amount_anime">
         <item quantity="zero"/>
         <item quantity="one"/>
@@ -304,5 +302,4 @@
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_progress_90" translatable="false"/>
 </resources>

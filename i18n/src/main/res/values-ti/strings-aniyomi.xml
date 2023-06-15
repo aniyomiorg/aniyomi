@@ -2,28 +2,18 @@
 <resources>
     <string name="manga_categories">ምድባት</string>
     <string name="unlock_app">ታቺዮሚ ን ይክፈቱ</string>
-    <string name="share_screenshot_info"/>
     <string name="label_mangaextensions"/>
-    <string name="pref_progress_100" translatable="false"/>
     <string name="local_manga_source"/>
-    <string name="episode_progress_no_total"/>
     <string name="no_previous_episode"/>
-    <string name="pref_waiting_time_aniskip_6"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_start_download_internally"/>
     <string name="default_manga_category"/>
-    <string name="pref_progress_90" translatable="false"/>
     <string name="pref_player_smooth_seek"/>
-    <string name="playertitle"/>
     <string name="clear_database_confirmation"/>
-    <string name="screenshot_header"/>
     <string name="stats_header"/>
-    <string name="label_history"/>
     <string name="playback_options_speed"/>
-    <string name="player_hwdec_dialog_title"/>
     <string name="copied_video_link_to_clipboard"/>
     <plurals name="seconds">
         <item quantity="one"/>
@@ -33,7 +23,6 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_sort_episode_fetch_date"/>
     <string name="pref_pip_episode_toasts"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
@@ -43,53 +32,32 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_skip_30" translatable="false"/>
     <string name="action_sort_total_episodes"/>
-    <string name="also_set_chapter_settings_for_library"/>
     <string name="channel_new_chapters_episodes"/>
-    <string name="action_display_local_badge_manga"/>
     <string name="pref_remove_exclude_categories_manga"/>
-    <string name="action_show_anime"/>
     <string name="pref_default_landscape_orientation"/>
-    <string name="action_mark_as_unseen"/>
     <string name="pref_remove_exclude_categories_anime"/>
-    <string name="auto_download_while_watching"/>
     <string name="pref_external_downloader_selection"/>
-    <string name="pref_library_anime_columns"/>
     <string name="pref_library_manga_columns"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="dialog_with_checkbox_remove_description_anime"/>
     <string name="enable_auto_play"/>
-    <string name="pref_library_update_show_tab_badge"/>
     <string name="player_aniskip_dontskip"/>
-    <string name="stats_page_2"/>
     <string name="label_animehistory"/>
-    <string name="anime_categories"/>
     <string name="pref_enable_netflix_style_aniskip"/>
-    <string name="pref_skip_length"/>
     <string name="action_play_internally"/>
-    <string name="label_watched_episodes"/>
     <string name="action_display_local_badge_anime"/>
-    <string name="action_edit_anime_categories"/>
     <string name="action_show_manga"/>
-    <string name="pref_adjust_orientation_video_dimensions"/>
     <string name="label_anime_sources"/>
-    <string name="player_controls_skip_intro_text"/>
     <string name="pref_backup_flags_summ"/>
-    <string name="pref_remove_bookmarked_chapters"/>
     <string name="action_screen_fit"/>
-    <string name="pref_pip_on_exit"/>
     <string name="pref_search_pinned_anime_sources_only"/>
-    <string name="action_next_episode"/>
     <string name="pref_progress_80" translatable="false"/>
-    <string name="pref_progress_75" translatable="false"/>
     <string name="pref_category_player"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_external_player_preference"/>
 </resources>

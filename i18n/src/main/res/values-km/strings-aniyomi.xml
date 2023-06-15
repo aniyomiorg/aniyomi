@@ -5,70 +5,36 @@
     <string name="action_show_manga">បង្ហាញម៊េងហ្គា</string>
     <string name="action_display_local_badge_manga">ម៊េងហ្គាដែលមានស្រាប់ក្នុងឧបករណ៍</string>
     <string name="default_manga_category">ថ្នាក់ធម្មតា</string>
-    <string name="pref_category_internal_player"/>
     <string name="manga_from_library"/>
-    <string name="player_aniskip_ed"/>
     <string name="player_hwdec_dialog_title"/>
-    <string name="episode_settings"/>
     <string name="pref_default_home_tab_library"/>
-    <string name="pref_auto_update_manga_sync"/>
     <string name="pref_clear_anime_database"/>
-    <string name="pref_refresh_library_tracking_summary"/>
     <string name="snack_add_to_manga_library"/>
-    <string name="also_set_episode_settings_for_library"/>
     <string name="enable_volume_brightness_gestures"/>
-    <string name="playback_speed_dialog_reset"/>
     <string name="player_aniskip_recap"/>
-    <string name="pref_enable_netflix_style_aniskip"/>
     <string name="label_animeextensions"/>
-    <string name="pref_library_anime_columns"/>
     <string name="action_display_local_badge_anime"/>
-    <string name="pref_progress_85" translatable="false"/>
     <string name="pref_track_on_add_library"/>
-    <string name="downloaded_episodes"/>
     <string name="local_invalid_episode_format"/>
-    <string name="playback_speed_dialog_title"/>
     <string name="episode_settings_updated"/>
-    <string name="pref_player_hide_controls"/>
     <string name="pref_skip_20" translatable="false"/>
-    <string name="pref_mpv_conf"/>
     <string name="screenshot_show_subs"/>
-    <string name="label_migration_anime"/>
     <string name="pref_player_smooth_seek"/>
-    <string name="pref_category_player"/>
     <string name="pref_progress_95" translatable="false"/>
-    <string name="pref_remove_exclude_categories_manga"/>
     <string name="toggle_stats"/>
-    <string name="pref_search_pinned_anime_sources_only"/>
     <string name="action_download_unseen"/>
-    <string name="show_episode_number"/>
     <string name="pref_category_volume_brightness"/>
-    <string name="playback_options_speed"/>
     <string name="pref_player_smooth_seek_summary"/>
-    <plurals name="next_unseen_episodes">
-        <item quantity="other"/>
-    </plurals>
     <string name="download_unseen"/>
-    <string name="recent_anime_time"/>
     <string name="pref_default_portrait_orientation"/>
-    <string name="pref_default_intro_length"/>
     <string name="pref_bottom_nav_no_updates"/>
-    <string name="stats_page_1"/>
     <string name="action_sort_latest_episode"/>
-    <string name="label_manga"/>
     <string name="chapters_episodes"/>
-    <string name="entries"/>
     <string name="label_anime_sources"/>
-    <string name="watching"/>
     <string name="rotation_sensor_landscape"/>
-    <string name="action_view_episodes"/>
     <string name="channel_new_chapters_episodes"/>
-    <string name="pref_player_fullscreen"/>
     <string name="action_sort_last_anime_update"/>
-    <string name="action_download_unread"/>
     <string name="action_edit_manga_categories"/>
-    <string name="pref_skip_5" translatable="false"/>
     <string name="stats_page_2"/>
-    <string name="action_mark_as_unseen"/>
     <string name="pref_enable_auto_skip_ani_skip"/>
 </resources>

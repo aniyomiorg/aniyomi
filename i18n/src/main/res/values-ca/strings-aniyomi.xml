@@ -271,11 +271,9 @@
     <string name="local_manga_source">Manga en font local</string>
     <string name="pref_hide_in_anime_library_items">Amaga les entrades dels animes que ja siguin a la biblioteca</string>
     <string name="pref_hide_in_manga_library_items">Amaga les entrades dels mangas que ja siguin a la biblioteca</string>
-    <string name="pref_progress_95" translatable="false"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="extension_settings"/>
     <string name="pref_skip_30" translatable="false"/>
 </resources>

@@ -64,59 +64,31 @@
     <string name="pref_waiting_time_aniskip_7">7秒</string>
     <string name="chapters_episodes">章と話</string>
     <string name="label_watched_episodes">見た</string>
-    <string name="action_mark_previous_as_seen"/>
     <string name="rotation_sensor_landscape"/>
-    <string name="pref_pip_episode_toasts"/>
     <string name="pref_external_player_preference"/>
-    <string name="pref_default_home_tab_library"/>
     <string name="display_mode_episode"/>
-    <string name="currently_watching"/>
     <string name="stats_page"/>
-    <string name="video_crop_screen"/>
     <string name="action_change_intro_length"/>
-    <string name="player_hwdec_dialog_title"/>
     <string name="settings"/>
-    <string name="action_order_by_episode_number"/>
     <string name="pref_category_volume_brightness"/>
-    <string name="pref_player_fullscreen"/>
     <string name="pref_category_external_downloader"/>
-    <string name="episode_downloading_progress"/>
     <string name="dialog_with_checkbox_remove_description_anime"/>
-    <string name="stats_page_1"/>
     <string name="pref_invalidate_download_cache_summary"/>
-    <plurals name="seconds">
-        <item quantity="other"/>
-    </plurals>
     <string name="video_fit_screen"/>
-    <string name="player_aniskip_recap"/>
     <string name="action_next_episode"/>
-    <string name="pref_progress_95" translatable="false"/>
     <string name="pref_skip_20" translatable="false"/>
-    <string name="auto_download_while_watching"/>
     <string name="want_to_read"/>
-    <string name="episode_settings_updated"/>
     <string name="dialog_with_checkbox_reset_anime"/>
-    <string name="delete_downloads_for_anime"/>
     <string name="pref_category_player_orientation"/>
-    <string name="local_invalid_episode_format"/>
     <string name="backup_settings_warning"/>
-    <string name="pref_anime_library_update_categories_details"/>
     <string name="no_next_episode"/>
-    <string name="action_previous_episode"/>
     <string name="episode_download_progress"/>
-    <string name="action_download_unread"/>
     <string name="unofficial_extension_message_aniyomi"/>
-    <string name="enable_auto_play"/>
     <string name="action_sort_total_episodes"/>
-    <string name="action_edit_manga_categories"/>
     <string name="pref_bottom_nav_no_updates"/>
-    <string name="pref_default_portrait_orientation"/>
     <string name="extension_settings"/>
-    <string name="pref_backup_flags_summ"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="other"/>
     </plurals>
-    <string name="playback_options_quality"/>
     <string name="sort_by_episode_number"/>
-    <string name="pref_search_pinned_manga_sources_only"/>
 </resources>

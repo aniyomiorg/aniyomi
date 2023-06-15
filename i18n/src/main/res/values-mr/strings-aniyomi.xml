@@ -8,36 +8,24 @@
 \nअसे अविश्वासू एक्सटेन्शन आपले लॉगिन बाबत माहिती चोरू शकते.
 \n
 \nव अश्या एक्सटेन्शन वर विश्वास करून तुम्ही ह्या सगद्या जोखीम घेत आहेत.</string>
-    <string name="pref_mpv_conf"/>
     <string name="anime_from_library"/>
-    <string name="unknown_studio"/>
     <string name="stats_header"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="label_history"/>
     <string name="player_aniskip_ed"/>
-    <string name="notification_episodes_single_and_more"/>
     <string name="pref_default_home_tab_library"/>
-    <string name="pref_progress_75" translatable="false"/>
     <string name="pref_default_landscape_orientation"/>
-    <string name="pref_default_intro_length"/>
     <string name="pref_player_smooth_seek_summary"/>
-    <string name="pref_pip_episode_toasts"/>
     <string name="pref_remove_exclude_categories_anime"/>
-    <string name="episode_downloading_progress"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="episode_settings_updated"/>
     <string name="pref_waiting_time_aniskip_8"/>
-    <string name="pref_backup_flags"/>
     <string name="action_mark_as_unseen"/>
-    <string name="action_show_manga"/>
     <string name="pref_skip_10" translatable="false"/>
-    <string name="pref_backup_flags_summ"/>
     <string name="player_hwdec_dialog_title"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
@@ -55,46 +43,26 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_progress_100" translatable="false"/>
     <string name="label_animehistory"/>
-    <string name="playertitle"/>
     <string name="dialog_with_checkbox_reset_anime"/>
-    <string name="clear_database_confirmation"/>
     <string name="pref_waiting_time_aniskip_6"/>
-    <string name="video_fit_screen"/>
     <string name="pref_search_pinned_anime_sources_only"/>
-    <string name="pref_category_player_orientation"/>
     <string name="pref_manga_library_update_categories_details"/>
-    <string name="label_anime_library"/>
     <string name="pref_remove_after_marked_as_read"/>
-    <string name="episode_progress_no_total"/>
     <string name="pref_remove_exclude_categories_manga"/>
-    <string name="label_manga_sources"/>
     <string name="pref_external_player_preference"/>
-    <string name="share_screenshot_info"/>
     <string name="no_previous_episode"/>
-    <string name="pref_bottom_nav_no_history"/>
     <string name="pref_category_delete_chapters"/>
-    <string name="pref_category_player"/>
     <string name="episodes"/>
-    <string name="action_sort_episode_fetch_date"/>
     <string name="action_play_externally"/>
-    <string name="anime_categories"/>
     <string name="action_player_pip"/>
-    <string name="general_categories"/>
     <string name="information_webview_required"/>
-    <string name="also_set_episode_settings_for_library"/>
     <string name="toggle_stats"/>
-    <string name="stats_page_1"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_next_episode"/>
     <string name="action_change_intro_length"/>
-    <string name="pref_preserve_watching_position"/>
     <string name="pref_hide_in_anime_library_items"/>
-    <string name="entries"/>
     <string name="action_previous_episode"/>
-    <string name="pref_player_summary"/>
 </resources>

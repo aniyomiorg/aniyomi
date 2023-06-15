@@ -30,29 +30,17 @@
     <string name="label_manga">ማንጋ</string>
     <string name="label_anime">አኒሜ</string>
     <string name="label_watched_duration">የእይታ ቆይታ</string>
-    <string name="action_play"/>
     <string name="pref_manga_library_update_categories_details"/>
-    <string name="pref_remove_exclude_categories_manga"/>
     <string name="recent_anime_time"/>
-    <string name="quality_dialog_header"/>
     <string name="pref_category_progress"/>
-    <string name="pref_skip_disable"/>
     <string name="playertitle"/>
-    <string name="auto_download_while_watching"/>
     <string name="download_unseen"/>
-    <string name="pref_hide_in_anime_library_items"/>
     <string name="pref_player_hide_controls"/>
-    <string name="pref_external_downloader_selection"/>
     <string name="anime_from_library"/>
-    <string name="toggle_stats"/>
     <string name="notification_new_episodes"/>
-    <string name="no_previous_episode"/>
     <string name="enable_auto_play"/>
-    <string name="audio_dialog_header"/>
     <string name="pref_category_player_aniskip_info"/>
-    <string name="notification_episodes_single_and_more"/>
     <string name="pref_library_anime_columns"/>
-    <string name="pref_progress_80" translatable="false"/>
     <string name="episode_progress_no_total"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
@@ -62,55 +50,38 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="extension_settings"/>
     <string name="player_aniskip_ed"/>
-    <string name="playback_options_title"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="rotation_reverse_landscape"/>
     <string name="pref_progress_100" translatable="false"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="also_set_chapter_settings_for_library"/>
     <string name="delete_downloads_for_anime"/>
-    <string name="pref_skip_20" translatable="false"/>
     <string name="pref_bottom_nav_style"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="playback_speed_dialog_title"/>
     <string name="action_sort_episode_fetch_date"/>
-    <string name="pref_skip_30" translatable="false"/>
     <string name="no_episodes_error"/>
-    <string name="action_sort_unseen_count"/>
     <string name="pref_waiting_time_aniskip_5"/>
-    <string name="action_play_internally"/>
     <string name="episode_progress"/>
-    <string name="player_hwdec_dialog_title"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_clear_chapter_cache"/>
     <string name="pref_progress_75" translatable="false"/>
-    <string name="pref_bottom_nav_no_history"/>
     <string name="action_order_by_episode_number"/>
-    <string name="action_view_episodes"/>
     <string name="pref_bottom_nav_no_manga"/>
-    <string name="local_anime_source"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="rotation_sensor_portrait"/>
     <string name="show_episode_number"/>
-    <string name="no_next_episode"/>
     <string name="pref_category_pip"/>
-    <string name="pref_auto_clear_chapter_cache"/>
     <string name="pref_backup_flags"/>
 </resources>

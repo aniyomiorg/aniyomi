@@ -38,15 +38,10 @@
     <string name="information_webview_required">WebView е необходим за Tachiyomi</string>
     <string name="download_notifier_download_paused_chapters">Изтеглянето спряно</string>
     <string name="channel_new_chapters_episodes">Нови глави</string>
-    <string name="pref_search_pinned_anime_sources_only"/>
     <string name="unknown_studio"/>
-    <string name="enable_horizontal_seek_gesture"/>
     <string name="pref_clear_anime_database_summary"/>
-    <string name="stats_header"/>
     <string name="default_anime_category"/>
-    <string name="pref_progress_85" translatable="false"/>
     <string name="pref_skip_10" translatable="false"/>
-    <string name="pref_always_use_external_player"/>
     <plurals name="anime_num_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
@@ -55,68 +50,44 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="want_to_watch"/>
     <string name="toggle_stats"/>
-    <string name="episode_settings_updated"/>
     <string name="copied_video_link_to_clipboard"/>
-    <string name="pref_pip_on_exit"/>
     <string name="pref_use_external_downloader"/>
-    <string name="currently_reading"/>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="player_aniskip_recap"/>
     <string name="pref_library_anime_columns"/>
-    <string name="pref_external_downloader_selection"/>
     <string name="action_player_pip"/>
-    <string name="pref_track_on_add_library"/>
     <string name="pref_waiting_time_aniskip_9"/>
-    <string name="pref_bottom_nav_no_history"/>
     <string name="confirm_delete_episodes"/>
-    <string name="pref_skip_length"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="video_crop_screen"/>
     <string name="pref_invalidate_download_cache_summary"/>
-    <string name="action_sort_latest_episode"/>
     <string name="episodes"/>
-    <string name="player_aniskip_dontskip"/>
     <string name="pref_remember_volume"/>
-    <string name="pref_default_home_tab_library"/>
     <string name="pref_bottom_nav_no_updates"/>
-    <string name="pref_enable_pip"/>
     <string name="stats_page_1"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_download_unread"/>
     <string name="local_invalid_episode_format"/>
-    <string name="action_previous_episode"/>
     <string name="pref_intro_length"/>
-    <string name="screenshot_show_subs"/>
     <plurals name="seconds">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="action_show_anime"/>
     <string name="pref_player_summary"/>
-    <string name="label_manga_sources"/>
     <string name="action_display_download_badge_anime"/>
-    <string name="action_sort_last_seen"/>
     <string name="pref_progress_mark_as_seen"/>
-    <string name="pref_default_portrait_orientation"/>
     <string name="general_categories"/>
     <plurals name="notification_episodes_generic">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_bottom_nav_style"/>
     <string name="pref_category_pip"/>
-    <string name="pref_player_smooth_seek"/>
     <string name="episode_settings"/>
-    <string name="pref_search_pinned_manga_sources_only"/>
 </resources>

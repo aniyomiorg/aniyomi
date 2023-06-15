@@ -15,67 +15,35 @@
 \n
 \n Kanthi percaya karo sertifikat iki, sampeyan nampa risiko kasebut.</string>
     <string name="download_notifier_download_paused_chapters">Donlotan mandheg</string>
-    <string name="no_episodes_error"/>
     <string name="pref_progress_70" translatable="false"/>
-    <string name="pref_progress_100" translatable="false"/>
     <string name="pref_refresh_library_tracking_summary"/>
-    <string name="repeating_anime"/>
     <string name="download_insufficient_space"/>
-    <string name="pref_waiting_time_aniskip_10"/>
     <string name="pref_category_pip"/>
-    <string name="pref_backup_flags_summ"/>
     <string name="enable_volume_brightness_gestures"/>
-    <string name="playback_speed_dialog_title"/>
     <string name="pref_waiting_time_aniskip_9"/>
-    <string name="label_migration_manga"/>
     <string name="action_download_unseen"/>
-    <string name="action_display_local_badge_anime"/>
     <string name="rotation_sensor_landscape"/>
-    <string name="pref_skip_length"/>
     <string name="pref_auto_update_manga_sync"/>
-    <string name="pref_default_landscape_orientation"/>
     <string name="pref_search_pinned_anime_sources_only"/>
-    <string name="unknown_studio"/>
     <string name="pref_remove_after_marked_as_read"/>
-    <string name="unofficial_anime_extension_message"/>
     <string name="pref_waiting_time_aniskip"/>
-    <string name="local_invalid_episode_format"/>
     <string name="share_screenshot_info"/>
-    <string name="settings"/>
     <string name="label_anime_library"/>
-    <string name="pref_use_external_downloader"/>
     <string name="pref_library_anime_columns"/>
-    <string name="download_notifier_download_paused_episodes"/>
     <string name="player_hwdec_dialog_title"/>
-    <string name="action_view_episodes"/>
     <string name="label_manga_sources"/>
-    <string name="pref_waiting_time_aniskip_5"/>
     <string name="manga_from_library"/>
-    <string name="action_previous_episode"/>
     <string name="pref_always_use_external_player"/>
-    <string name="label_updates"/>
     <string name="pref_player_smooth_seek_summary"/>
-    <string name="label_history"/>
     <string name="stats_page_1"/>
-    <string name="pref_bottom_nav_no_history"/>
     <string name="chapters_episodes"/>
-    <string name="action_mark_as_seen"/>
     <string name="pref_bottom_nav_no_updates"/>
-    <string name="action_play_internally"/>
     <string name="download_paused"/>
-    <string name="enable_auto_play"/>
     <string name="subtitle_dialog_header"/>
-    <string name="action_player_pip"/>
     <string name="video_list_empty_error"/>
-    <string name="action_play"/>
     <string name="playback_options_title"/>
-    <string name="pref_category_player_seeking"/>
     <string name="pref_waiting_time_aniskip_8"/>
-    <string name="downloaded_episodes"/>
     <string name="local_anime_source"/>
-    <string name="pref_waiting_time_aniskip_7"/>
     <string name="player_aniskip_dontskip"/>
-    <string name="pref_adjust_orientation_video_dimensions"/>
     <string name="pref_hide_in_manga_library_items"/>
-    <string name="label_anime_sources"/>
 </resources>

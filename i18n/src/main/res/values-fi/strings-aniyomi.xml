@@ -174,11 +174,8 @@
     <string name="label_anime_library">Anime</string>
     <string name="label_manga_sources">Mangalähteet</string>
     <string name="label_anime_sources">Animelähteet</string>
-    <string name="rotation_sensor_landscape"/>
     <string name="pref_default_landscape_orientation"/>
-    <string name="pref_pip_on_exit"/>
     <string name="pref_category_external_downloader"/>
-    <string name="backup_settings_warning"/>
     <string name="episode_download_progress"/>
     <plurals name="next_unseen_episodes">
         <item quantity="one"/>
@@ -192,25 +189,16 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_progress_100" translatable="false"/>
     <string name="pref_player_fullscreen"/>
-    <string name="pref_library_anime_columns"/>
     <string name="label_mangaextensions"/>
-    <string name="pref_bottom_nav_no_updates"/>
     <string name="recent_anime_time"/>
-    <string name="rotation_sensor_portrait"/>
     <string name="pref_progress_70" translatable="false"/>
-    <string name="enable_volume_brightness_gestures"/>
     <string name="action_start_download_internally"/>
-    <string name="player_aniskip_ed"/>
     <string name="pref_bottom_nav_no_manga"/>
-    <string name="action_player_pip"/>
     <string name="repeating_anime"/>
-    <string name="notification_episodes_multiple"/>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_pip_episode_toasts"/>
     <string name="pref_progress_80" translatable="false"/>
 </resources>

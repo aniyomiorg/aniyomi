@@ -275,13 +275,11 @@
         <item quantity="many">Para %d títulos</item>
         <item quantity="other">Para %d títulos</item>
     </plurals>
-    <string name="pref_progress_100" translatable="false"/>
     <string name="pref_hide_in_anime_library_items"/>
     <plurals name="download_amount_anime">
         <item quantity="one"/>
         <item quantity="many"/>
         <item quantity="other"/>
     </plurals>
-    <string name="pref_progress_75" translatable="false"/>
     <string name="pref_hide_in_manga_library_items"/>
 </resources>
