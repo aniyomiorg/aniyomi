@@ -269,4 +269,23 @@
     <string name="label_anime_library">Anime</string>
     <string name="label_manga_sources">Mga Source ng Manga</string>
     <string name="label_anime_sources">Mga Source ng Anime</string>
+    <string name="pref_progress_80" translatable="false"></string>
+    <string name="pref_hide_in_manga_library_items"></string>
+    <plurals name="download_amount_anime">
+        <item quantity="one"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="pref_progress_100" translatable="false"></string>
+    <string name="choose_video_quality"></string>
+    <string name="copied_video_link_to_clipboard"></string>
+    <string name="pref_progress_85" translatable="false"></string>
+    <string name="pref_skip_30" translatable="false"></string>
+    <string name="pref_progress_90" translatable="false"></string>
+    <string name="pref_hide_in_anime_library_items"></string>
+    <string name="pref_skip_20" translatable="false"></string>
+    <string name="pref_skip_5" translatable="false"></string>
+    <string name="pref_progress_75" translatable="false"></string>
+    <string name="pref_progress_70" translatable="false"></string>
+    <string name="pref_progress_95" translatable="false"></string>
+    <string name="pref_skip_10" translatable="false"></string>
 </resources>
