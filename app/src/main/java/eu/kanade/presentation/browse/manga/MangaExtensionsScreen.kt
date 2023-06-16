@@ -140,7 +140,7 @@ private fun ExtensionContent(
                     modifier = Modifier
                         .padding(bottom = MaterialTheme.padding.small)
                         .clickable {
-                            uriHandler.openUri("https://aniyomi.org/extensions")
+                            uriHandler.openUri("https://tachiyomi.org/extensions")
                         },
                 )
             }
