@@ -284,4 +284,6 @@
     <string name="copied_video_link_to_clipboard">Enlace de calidad del video copiado al portapapeles</string>
     <string name="choose_video_quality">Elige la calidad del vídeo:</string>
     <string name="extension_settings">Configuración de las extensiones</string>
+    <string name="action_save_screenshot">Guardar la captura de pantalla</string>
+    <string name="stats_header">Mostrar las estadísticas</string>
 </resources>
