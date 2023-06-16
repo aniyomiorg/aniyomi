@@ -152,8 +152,8 @@ private fun AnimeExtensionJsonObject.extractLibVersion(): Double {
     return version.substringBeforeLast('.').toDouble()
 }
 
-private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/jmir1/aniyomi-extensions/repo/"
-private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/jmir1/aniyomi-extensions@repo/"
+private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo/"
+private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/aniyomiorg/aniyomi-extensions@repo/"
 
 @Serializable
 private data class AnimeExtensionJsonObject(

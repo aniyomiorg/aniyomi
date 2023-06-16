@@ -161,7 +161,7 @@ object AboutScreen : Screen {
                         LinkIcon(
                             label = "GitHub",
                             painter = painterResource(R.drawable.ic_github_24dp),
-                            url = "https://github.com/jmir1/aniyomi",
+                            url = "https://github.com/aniyomiorg/aniyomi",
                         )
                     }
                 }
