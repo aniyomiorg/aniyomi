@@ -102,7 +102,7 @@ class MangaExtensionDetailsScreenModel(
         val extension = state.value.extension ?: return ""
 
         if (!extension.hasReadme) {
-            return "https://tachiyomi.org/help/faq/#extensions"
+            return "https://aniyomi.org/help/faq/#extensions"
         }
 
         val pkgName = extension.pkgName.substringAfter("eu.kanade.tachiyomi.extension.")

@@ -139,7 +139,7 @@ private fun AnimeExtensionContent(
                     modifier = Modifier
                         .padding(bottom = MaterialTheme.padding.small)
                         .clickable {
-                            uriHandler.openUri("https://tachiyomi.org/extensions")
+                            uriHandler.openUri("https://aniyomi.org/extensions")
                         },
                 )
             }
