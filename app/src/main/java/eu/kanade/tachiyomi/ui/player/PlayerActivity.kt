@@ -817,6 +817,21 @@ class PlayerActivity : BaseActivity() {
         setVideoList(quality, currentVideoList)
     }
 
+    private fun setChapter(index: Int) {
+        player.timePos = player.loadChapters()[index].time.roundToInt()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun pickChapter(view: View) {
+        playerControls.hideControls(true)
+        PlayerChaptersSheet(
+            this,
+            R.string.chapter_dialog_header,
+            ::setChapter,
+            player.loadChapters(),
+        ).show()
+    }
+
     internal fun subtitleTracksTab(dismissTab: () -> Unit): PlayerTracksBuilder {
         val subTracks = subTracks.takeUnless { it.isEmpty() }!!
 
