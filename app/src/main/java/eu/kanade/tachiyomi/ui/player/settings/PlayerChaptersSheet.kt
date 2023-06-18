@@ -3,8 +3,10 @@ package eu.kanade.tachiyomi.ui.player
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
+import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerChaptersItemBinding
 import eu.kanade.tachiyomi.databinding.PlayerChaptersSheetBinding
+import eu.kanade.tachiyomi.util.system.getResourceColor
 import eu.kanade.tachiyomi.widget.sheet.PlayerBottomSheetDialog
 import `is`.xyz.mpv.MPVView
 import `is`.xyz.mpv.Utils
@@ -30,6 +32,18 @@ class PlayerChaptersSheet(
         chapters.forEachIndexed { i, chapter ->
             val chapterView = PlayerChaptersItemBinding.inflate(activity.layoutInflater).root
             chapterView.text = "${chapter.title}(${Utils.prettyTime(chapter.time.roundToInt())})"
+            // Highlighted the current chapter
+            if (i == chapters.lastIndex) {
+                if (activity.player.timePos!!.toInt() >= chapter.time.toInt()) {
+                    chapterView.setBackgroundColor(context.getResourceColor(R.attr.colorPrimary))
+                    chapterView.setTextColor(context.getResourceColor(R.attr.colorOnPrimary))
+                }
+            } else if (activity.player.timePos!!.toInt() >= chapter.time.toInt() &&
+                activity.player.timePos!!.toInt() < chapters[i + 1].time.toInt()
+            ) {
+                chapterView.setBackgroundColor(context.getResourceColor(R.attr.colorPrimary))
+                chapterView.setTextColor(context.getResourceColor(R.attr.colorOnPrimary))
+            }
             chapterView.setOnClickListener {
                 seekToChapterMethod(i)
                 this.dismiss()
