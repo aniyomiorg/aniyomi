@@ -9,7 +9,7 @@ class AndroidLocalAnimeSourceFileSystem(
     private val context: Context,
 ) : LocalAnimeSourceFileSystem {
 
-    private val baseFolderLocation = "${context.getString(R.string.app_name)}${File.separator}local"
+    private val baseFolderLocation = "${context.getString(R.string.app_name)}${File.separator}localanime"
 
     override fun getBaseDirectories(): Sequence<File> {
         return DiskUtil.getExternalStorages(context)
