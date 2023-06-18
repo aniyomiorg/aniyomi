@@ -141,6 +141,7 @@
                 android:contentDescription="Settings"
                 android:onClick="pickChapter"
                 android:src="@drawable/ic_bookmark_24dp"
+                android:visibility="gone"
                 app:layout_constraintLeft_toRightOf="@id/cycleDecoderBtn"
                 app:layout_constraintRight_toLeftOf="@id/settingsBtn"
                 app:layout_constraintTop_toTopOf="@id/settingsBtn"
