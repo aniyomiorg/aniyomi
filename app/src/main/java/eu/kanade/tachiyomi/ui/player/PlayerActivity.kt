@@ -820,6 +820,7 @@ class PlayerActivity : BaseActivity() {
 
     private fun setChapter(index: Int) {
         player.timePos = player.loadChapters()[index].time.roundToInt()
+        player.paused = false
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -1301,8 +1302,9 @@ class PlayerActivity : BaseActivity() {
         }
 
         viewModel.viewModelScope.launchUI {
-            if (player.loadChapters() != emptyList<MPVView.Chapter>())
+            if (player.loadChapters() != emptyList<MPVView.Chapter>()) {
                 binding.playerControls.binding.chaptersBtn.visibility = View.VISIBLE
+            }
             if (playerPreferences.adjustOrientationVideoDimensions().get()) {
                 if ((player.videoW ?: 1) / (player.videoH ?: 1) >= 1) {
                     this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationLandscape().get()
