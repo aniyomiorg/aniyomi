@@ -13,7 +13,6 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.presentation.components.AppBar
 import eu.kanade.presentation.components.TabContent
 import eu.kanade.presentation.history.HistoryDeleteAllDialog
@@ -27,7 +26,8 @@ import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.injectLazy
 
 val resumeLastEpisodeSeenEvent = Channel<Unit>()
@@ -62,7 +62,7 @@ fun Screen.animeHistoryTab(
     val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
 
     return TabContent(
-        titleRes = R.string.label_animehistory,
+        titleRes = R.string.label_anime_history,
         searchEnabled = true,
         content = { contentPadding, _ ->
             AnimeHistoryScreen(
@@ -118,7 +118,7 @@ fun Screen.animeHistoryTab(
             }
 
             LaunchedEffect(Unit) {
-                resumeLastEpisodeSeenEvent.consumeAsFlow().collectLatest {
+                resumeLastEpisodeSeenEvent.receiveAsFlow().collectLatest {
                     openEpisode(context, screenModel.getNextEpisode())
                 }
             }

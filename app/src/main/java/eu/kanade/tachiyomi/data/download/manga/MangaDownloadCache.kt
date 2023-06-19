@@ -5,14 +5,9 @@ import androidx.core.net.toUri
 import com.hippo.unifile.UniFile
 import eu.kanade.core.util.mapNotNullKeys
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
-import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.launchNonCancellable
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,22 +16,26 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 import logcat.LogPriority
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.lang.launchNonCancellable
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -64,17 +63,17 @@ class MangaDownloadCache(
      * The interval after which this cache should be invalidated. 1 hour shouldn't cause major
      * issues, as the cache is only used for UI feedback.
      */
-    private val renewInterval = TimeUnit.HOURS.toMillis(1)
+    private val renewInterval = 1.hours.inWholeMilliseconds
 
     /**
      * The last time the cache was refreshed.
      */
     private var lastRenew = 0L
     private var renewalJob: Job? = null
-    val isRenewing = changes
-        .map { renewalJob?.isActive ?: false }
-        .distinctUntilChanged()
-        .debounce(1000L)
+
+    private val _isInitializing = MutableStateFlow(false)
+    val isInitializing = _isInitializing
+        .debounce(1000L) // Don't notify if it finishes quickly enough
         .stateIn(scope, SharingStarted.WhileSubscribed(), false)
 
     private var rootDownloadsDir = RootDirectory(getDirectoryFromPreference())
@@ -270,10 +269,14 @@ class MangaDownloadCache(
         }
 
         renewalJob = scope.launchIO {
+            if (lastRenew == 0L) {
+                _isInitializing.emit(true)
+            }
+
             var sources = getSources()
 
             // Try to wait until extensions and sources have loaded
-            withTimeout(30.seconds) {
+            withTimeoutOrNull(30.seconds) {
                 while (!extensionManager.isInitialized) {
                     delay(2.seconds)
                 }
@@ -324,6 +327,8 @@ class MangaDownloadCache(
                     }
                 }
                 .awaitAll()
+
+            _isInitializing.emit(false)
         }.also {
             it.invokeOnCompletion(onCancelling = true) { exception ->
                 if (exception != null && exception !is CancellationException) {

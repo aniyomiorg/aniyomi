@@ -5,24 +5,28 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import eu.kanade.domain.entries.manga.interactor.GetManga
-import eu.kanade.domain.entries.manga.interactor.NetworkToLocalManga
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
-import eu.kanade.domain.entries.manga.model.Manga
+import eu.kanade.domain.entries.manga.model.copyFrom
 import eu.kanade.domain.entries.manga.model.toDomainManga
-import eu.kanade.domain.entries.manga.model.toMangaUpdate
+import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.util.lang.awaitSingle
-import eu.kanade.tachiyomi.util.lang.withIOContext
-import eu.kanade.tachiyomi.util.lang.withNonCancellableContext
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logcat.LogPriority
+import tachiyomi.core.util.lang.awaitSingle
+import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.core.util.lang.withNonCancellableContext
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.manga.interactor.GetManga
+import tachiyomi.domain.entries.manga.interactor.NetworkToLocalManga
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.entries.manga.model.toMangaUpdate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.concurrent.Executors
@@ -133,32 +137,34 @@ abstract class MangaSearchScreenModel<T>(
         updateItems(initialItems)
 
         coroutineScope.launch {
-            sources.forEach { source ->
-                val page = try {
-                    withContext(coroutineDispatcher) {
-                        source.fetchSearchManga(1, query, source.getFilterList()).awaitSingle()
-                    }
-                } catch (e: Exception) {
-                    getAndUpdateItems { items ->
-                        val mutableMap = items.toMutableMap()
-                        mutableMap[source] = MangaSearchItemResult.Error(throwable = e)
-                        mutableMap.toSortedMap(sortComparator(mutableMap))
-                    }
-                    return@forEach
-                }
+            sources
+                .map { source ->
+                    async {
+                        try {
+                            val page = withContext(coroutineDispatcher) {
+                                source.fetchSearchManga(1, query, source.getFilterList()).awaitSingle()
+                            }
 
-                val titles = page.mangas.map {
-                    withIOContext {
-                        networkToLocalManga.await(it.toDomainManga(source.id))
-                    }
-                }
+                            val titles = withIOContext {
+                                page.mangas.map {
+                                    networkToLocalManga.await(it.toDomainManga(source.id))
+                                }
+                            }
 
-                getAndUpdateItems { items ->
-                    val mutableMap = items.toMutableMap()
-                    mutableMap[source] = MangaSearchItemResult.Success(titles)
-                    mutableMap.toSortedMap(sortComparator(mutableMap))
-                }
-            }
+                            getAndUpdateItems { items ->
+                                val mutableMap = items.toMutableMap()
+                                mutableMap[source] = MangaSearchItemResult.Success(titles)
+                                mutableMap.toSortedMap(sortComparator(mutableMap))
+                            }
+                        } catch (e: Exception) {
+                            getAndUpdateItems { items ->
+                                val mutableMap = items.toMutableMap()
+                                mutableMap[source] = MangaSearchItemResult.Error(throwable = e)
+                                mutableMap.toSortedMap(sortComparator(mutableMap))
+                            }
+                        }
+                    }
+                }.awaitAll()
         }
     }
 }

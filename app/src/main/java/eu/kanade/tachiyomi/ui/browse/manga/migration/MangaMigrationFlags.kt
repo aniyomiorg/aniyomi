@@ -1,11 +1,11 @@
 package eu.kanade.tachiyomi.ui.browse.manga.migration
 
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.domain.entries.manga.model.hasCustomCover
-import eu.kanade.domain.track.manga.interactor.GetMangaTracks
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import kotlinx.coroutines.runBlocking
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy

@@ -8,10 +8,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.entries.manga.model.asMangaCover
 import eu.kanade.presentation.browse.GlobalSearchCard
-import eu.kanade.presentation.util.padding
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.entries.manga.model.asMangaCover
+import tachiyomi.presentation.core.components.material.padding
 
 @Composable
 fun GlobalMangaSearchCardRow(
@@ -21,11 +21,8 @@ fun GlobalMangaSearchCardRow(
     onLongClick: (Manga) -> Unit,
 ) {
     LazyRow(
-        contentPadding = PaddingValues(
-            horizontal = MaterialTheme.padding.medium,
-            vertical = MaterialTheme.padding.small,
-        ),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
+        contentPadding = PaddingValues(MaterialTheme.padding.small),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.tiny),
     ) {
         items(titles) {
             val title by getManga(it)

@@ -256,7 +256,7 @@
             android:exported="false" />
 
         <receiver
-            android:name=".glance.manga.MangaUpdatesGridGlanceReceiver"
+            android:name="tachiyomi.presentation.widget.entries.manga.MangaUpdatesGridGlanceReceiver"
             android:enabled="@bool/glance_appwidget_available"
             android:exported="false"
             android:label="@string/label_recent_updates">
@@ -268,14 +268,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/updates_grid_glance_widget_info" />
         </receiver>
-
-        <service
-            android:name=".data.library.manga.MangaLibraryUpdateService"
-            android:exported="false" />
-
-        <service
-            android:name=".data.library.anime.AnimeLibraryUpdateService"
-            android:exported="false" />
 
         <service
             android:name=".data.download.manga.MangaDownloadService"

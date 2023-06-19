@@ -1,11 +1,11 @@
 package eu.kanade.domain.category.manga.interactor
 
-import eu.kanade.domain.category.manga.repository.MangaCategoryRepository
-import eu.kanade.domain.category.model.Category
-import eu.kanade.domain.category.model.CategoryUpdate
-import eu.kanade.domain.library.model.LibraryDisplayMode
-import eu.kanade.domain.library.model.plus
 import eu.kanade.domain.library.service.LibraryPreferences
+import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
+import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.category.model.CategoryUpdate
+import tachiyomi.domain.library.model.LibraryDisplayMode
+import tachiyomi.domain.library.model.plus
 
 class SetDisplayModeForMangaCategory(
     private val preferences: LibraryPreferences,

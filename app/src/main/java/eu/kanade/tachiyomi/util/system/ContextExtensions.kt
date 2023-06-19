@@ -41,10 +41,11 @@ import eu.kanade.tachiyomi.ui.base.delegate.ThemingDelegate
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.lang.truncateCenter
 import logcat.LogPriority
+import rikka.sui.Sui
+import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
-import kotlin.math.max
 import kotlin.math.roundToInt
 
 /**
@@ -110,15 +111,6 @@ fun Context.hasPermission(permission: String) = ContextCompat.checkSelfPermissio
         0
     }
 }
-
-val getDisplayMaxHeightInPx: Int
-    get() = Resources.getSystem().displayMetrics.let { max(it.heightPixels, it.widthPixels) }
-
-/**
- * Converts to px.
- */
-val Int.dpToPx: Int
-    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 /**
  * Converts to px and takes into account LTR/RTL layout.
@@ -347,6 +339,10 @@ fun Context.isPackageInstalled(packageName: String): Boolean {
         false
     }
 }
+
+val Context.hasMiuiPackageInstaller get() = isPackageInstalled("com.miui.packageinstaller")
+
+val Context.isShizukuInstalled get() = isPackageInstalled("moe.shizuku.privileged.api") || Sui.isSui()
 
 fun Context.isInstalledFromFDroid(): Boolean {
     val installerPackageName = try {

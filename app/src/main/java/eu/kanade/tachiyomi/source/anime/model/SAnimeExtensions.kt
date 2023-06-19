@@ -17,7 +17,7 @@ fun SAnime.copyFrom(other: Animes) {
     }
 
     if (other.genre != null) {
-        genre = other.genre.joinToString(separator = ", ")
+        genre = other.genre!!.joinToString(separator = ", ")
     }
 
     if (other.thumbnail_url != null) {

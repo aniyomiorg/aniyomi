@@ -5,17 +5,17 @@ import androidx.compose.runtime.Immutable
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.category.manga.interactor.CreateMangaCategoryWithName
-import eu.kanade.domain.category.manga.interactor.DeleteMangaCategory
-import eu.kanade.domain.category.manga.interactor.GetMangaCategories
-import eu.kanade.domain.category.manga.interactor.RenameMangaCategory
-import eu.kanade.domain.category.manga.interactor.ReorderMangaCategory
-import eu.kanade.domain.category.model.Category
 import eu.kanade.tachiyomi.R
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import tachiyomi.domain.category.manga.interactor.DeleteMangaCategory
+import tachiyomi.domain.category.manga.interactor.GetMangaCategories
+import tachiyomi.domain.category.manga.interactor.RenameMangaCategory
+import tachiyomi.domain.category.manga.interactor.ReorderMangaCategory
+import tachiyomi.domain.category.model.Category
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -28,7 +28,7 @@ class MangaCategoryScreenModel(
 ) : StateScreenModel<MangaCategoryScreenState>(MangaCategoryScreenState.Loading) {
 
     private val _events: Channel<MangaCategoryEvent> = Channel()
-    val events = _events.consumeAsFlow()
+    val events = _events.receiveAsFlow()
 
     init {
         coroutineScope.launch {
@@ -47,7 +47,6 @@ class MangaCategoryScreenModel(
         coroutineScope.launch {
             when (createCategoryWithName.await(name)) {
                 is CreateMangaCategoryWithName.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
-                CreateMangaCategoryWithName.Result.NameAlreadyExistsError -> _events.send(MangaCategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }
@@ -84,7 +83,6 @@ class MangaCategoryScreenModel(
         coroutineScope.launch {
             when (renameCategory.await(category, name)) {
                 is RenameMangaCategory.Result.InternalError -> _events.send(MangaCategoryEvent.InternalError)
-                RenameMangaCategory.Result.NameAlreadyExistsError -> _events.send(MangaCategoryEvent.CategoryWithNameAlreadyExists)
                 else -> {}
             }
         }
@@ -117,7 +115,6 @@ sealed class MangaCategoryDialog {
 
 sealed class MangaCategoryEvent {
     sealed class LocalizedMessage(@StringRes val stringRes: Int) : MangaCategoryEvent()
-    object CategoryWithNameAlreadyExists : LocalizedMessage(R.string.error_category_exists)
     object InternalError : LocalizedMessage(R.string.internal_error)
 }
 

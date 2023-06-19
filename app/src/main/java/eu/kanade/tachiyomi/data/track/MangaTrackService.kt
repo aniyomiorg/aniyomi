@@ -2,19 +2,20 @@ package eu.kanade.tachiyomi.data.track
 
 import android.app.Application
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
-import eu.kanade.domain.track.manga.interactor.InsertMangaTrack
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.model.toDomainTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
-import eu.kanade.tachiyomi.util.lang.withIOContext
-import eu.kanade.tachiyomi.util.lang.withUIContext
-import eu.kanade.tachiyomi.util.system.logcat
 import eu.kanade.tachiyomi.util.system.toast
 import logcat.LogPriority
+import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
+import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import eu.kanade.domain.track.manga.model.MangaTrack as DomainTrack
+import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
 interface MangaTrackService {
 
@@ -53,7 +54,7 @@ interface MangaTrackService {
         item.manga_id = mangaId
         try {
             withIOContext {
-                val allChapters = Injekt.get<eu.kanade.domain.items.chapter.interactor.GetChapterByMangaId>().await(mangaId)
+                val allChapters = Injekt.get<GetChapterByMangaId>().await(mangaId)
                 val hasReadChapters = allChapters.any { it.read }
                 bind(item, hasReadChapters)
 

@@ -8,16 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
-import eu.kanade.domain.entries.anime.model.AnimeCover
-import eu.kanade.domain.library.anime.LibraryAnime
 import eu.kanade.presentation.animelib.components.DownloadsBadge
 import eu.kanade.presentation.animelib.components.GlobalSearchItem
 import eu.kanade.presentation.animelib.components.LanguageBadge
 import eu.kanade.presentation.animelib.components.UnviewedBadge
-import eu.kanade.presentation.components.EntryListItem
-import eu.kanade.presentation.components.FastScrollLazyColumn
-import eu.kanade.presentation.util.plus
+import eu.kanade.presentation.library.EntryListItem
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryItem
+import tachiyomi.domain.entries.anime.model.AnimeCover
+import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.presentation.core.components.FastScrollLazyColumn
+import tachiyomi.presentation.core.util.plus
 
 @Composable
 fun AnimeLibraryList(
@@ -60,8 +60,8 @@ fun AnimeLibraryList(
                     lastModified = anime.coverLastModified,
                 ),
                 badge = {
-                    DownloadsBadge(count = libraryItem.downloadCount.toInt())
-                    UnviewedBadge(count = libraryItem.unseenCount.toInt())
+                    DownloadsBadge(count = libraryItem.downloadCount)
+                    UnviewedBadge(count = libraryItem.unseenCount)
                     LanguageBadge(
                         isLocal = libraryItem.isLocal,
                         sourceLanguage = libraryItem.sourceLanguage,
@@ -69,7 +69,7 @@ fun AnimeLibraryList(
                 },
                 onLongClick = { onLongClick(libraryItem.libraryAnime) },
                 onClick = { onClick(libraryItem.libraryAnime) },
-                onClickContinueViewing = if (onClickContinueWatching != null) {
+                onClickContinueViewing = if (onClickContinueWatching != null && libraryItem.unseenCount > 0) {
                     { onClickContinueWatching(libraryItem.libraryAnime) }
                 } else {
                     null

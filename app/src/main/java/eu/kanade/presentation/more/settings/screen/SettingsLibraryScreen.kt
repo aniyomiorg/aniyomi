@@ -1,15 +1,12 @@
 package eu.kanade.presentation.more.settings.screen
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,7 +20,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -35,11 +31,7 @@ import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.commandiron.wheel_picker_compose.WheelPicker
-import eu.kanade.domain.category.anime.interactor.GetAnimeCategories
-import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.category.manga.interactor.ResetMangaCategoryFlags
-import eu.kanade.domain.category.model.Category
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.category.visualName
 import eu.kanade.presentation.more.settings.Preference
@@ -58,6 +50,11 @@ import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
+import tachiyomi.domain.category.manga.interactor.GetMangaCategories
+import tachiyomi.domain.category.model.Category
+import tachiyomi.presentation.core.components.WheelPicker
+import tachiyomi.presentation.core.components.WheelPickerDefaults
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -399,7 +396,10 @@ object SettingsLibraryScreen : SearchableSettings {
                 }
             },
             confirmButton = {
-                TextButton(onClick = { onValueChanged(portraitValue, landscapeValue) }) {
+                TextButton(
+                    enabled = portraitValue != initialPortrait || landscapeValue != initialLandscape,
+                    onClick = { onValueChanged(portraitValue, landscapeValue) },
+                ) {
                     Text(text = stringResource(android.R.string.ok))
                 }
             },
@@ -418,12 +418,7 @@ object SettingsLibraryScreen : SearchableSettings {
             modifier = modifier,
             contentAlignment = Alignment.Center,
         ) {
-            Surface(
-                modifier = Modifier.size(maxWidth, maxHeight / 3),
-                shape = MaterialTheme.shapes.large,
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-            ) {}
+            WheelPickerDefaults.Background(size = DpSize(maxWidth, maxHeight))
 
             val size = DpSize(width = maxWidth / 2, height = 128.dp)
             Row {
@@ -431,46 +426,22 @@ object SettingsLibraryScreen : SearchableSettings {
                     size = size,
                     count = 11,
                     startIndex = portraitValue,
-                    onScrollFinished = {
-                        onPortraitChange(it)
-                        null
-                    },
-                ) { index, snappedIndex ->
-                    ColumnPickerLabel(index = index, snappedIndex = snappedIndex)
+                    onSelectionChanged = onPortraitChange,
+                    backgroundContent = null,
+                ) { index ->
+                    WheelPickerDefaults.Item(text = getColumnValue(value = index))
                 }
                 WheelPicker(
                     size = size,
                     count = 11,
                     startIndex = landscapeValue,
-                    onScrollFinished = {
-                        onLandscapeChange(it)
-                        null
-                    },
-                ) { index, snappedIndex ->
-                    ColumnPickerLabel(index = index, snappedIndex = snappedIndex)
+                    onSelectionChanged = onLandscapeChange,
+                    backgroundContent = null,
+                ) { index ->
+                    WheelPickerDefaults.Item(text = getColumnValue(value = index))
                 }
             }
         }
-    }
-
-    @Composable
-    private fun ColumnPickerLabel(
-        index: Int,
-        snappedIndex: Int,
-    ) {
-        Text(
-            modifier = Modifier.alpha(
-                when (snappedIndex) {
-                    index + 1 -> 0.2f
-                    index -> 1f
-                    index - 1 -> 0.2f
-                    else -> 0.2f
-                },
-            ),
-            text = getColumnValue(index),
-            style = MaterialTheme.typography.titleMedium,
-            maxLines = 1,
-        )
     }
 
     @Composable

@@ -1,31 +1,16 @@
 package eu.kanade.domain.track.manga.model
 
+import tachiyomi.domain.track.manga.model.MangaTrack
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack as DbMangaTrack
 
-data class MangaTrack(
-    val id: Long,
-    val mangaId: Long,
-    val syncId: Long,
-    val remoteId: Long,
-    val libraryId: Long?,
-    val title: String,
-    val lastChapterRead: Double,
-    val totalChapters: Long,
-    val status: Long,
-    val score: Float,
-    val remoteUrl: String,
-    val startDate: Long,
-    val finishDate: Long,
-) {
-    fun copyPersonalFrom(other: MangaTrack): MangaTrack {
-        return this.copy(
-            lastChapterRead = other.lastChapterRead,
-            score = other.score,
-            status = other.status,
-            startDate = other.startDate,
-            finishDate = other.finishDate,
-        )
-    }
+fun MangaTrack.copyPersonalFrom(other: MangaTrack): MangaTrack {
+    return this.copy(
+        lastChapterRead = other.lastChapterRead,
+        score = other.score,
+        status = other.status,
+        startDate = other.startDate,
+        finishDate = other.finishDate,
+    )
 }
 
 fun MangaTrack.toDbTrack(): DbMangaTrack = eu.kanade.tachiyomi.data.database.models.manga.MangaTrack.create(syncId).also {

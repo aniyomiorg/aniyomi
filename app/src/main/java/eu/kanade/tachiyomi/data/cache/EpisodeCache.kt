@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.data.cache
 import android.content.Context
 import android.text.format.Formatter
 import com.jakewharton.disklrucache.DiskLruCache
-import eu.kanade.domain.items.episode.model.Episode
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
@@ -12,6 +11,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.Response
 import okio.buffer
 import okio.sink
+import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.io.IOException

@@ -1,21 +1,20 @@
 package eu.kanade.tachiyomi.data.download.manga
 
 import android.content.Context
-import eu.kanade.domain.category.manga.interactor.GetMangaCategories
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.manga.model.Manga
-import eu.kanade.domain.items.chapter.model.Chapter
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownload
 import eu.kanade.tachiyomi.data.download.manga.model.MangaDownloadQueue
 import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.Page
-import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.runBlocking
 import logcat.LogPriority
-import rx.Observable
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.category.manga.interactor.GetMangaCategories
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.model.Chapter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -49,22 +48,18 @@ class MangaDownloadManager(
     val queue: MangaDownloadQueue
         get() = downloader.queue
 
-    /**
-     * Tells the downloader to begin downloads.
-     *
-     * @return true if it's started, false otherwise (empty queue).
-     */
-    fun startDownloads(): Boolean {
-        return downloader.start()
-    }
+    // For use by DownloadService only
+    fun downloaderStart() = downloader.start()
+    fun downloaderStop(reason: String? = null) = downloader.stop(reason)
+
+    val isDownloaderRunning
+        get() = MangaDownloadService.isRunning
 
     /**
-     * Tells the downloader to stop downloads.
-     *
-     * @param reason an optional reason for being stopped, used to notify the user.
+     * Tells the downloader to begin downloads.
      */
-    fun stopDownloads(reason: String? = null) {
-        downloader.stop(reason)
+    fun startDownloads() {
+        MangaDownloadService.start(context)
     }
 
     /**
@@ -72,15 +67,15 @@ class MangaDownloadManager(
      */
     fun pauseDownloads() {
         downloader.pause()
+        downloader.stop()
     }
 
     /**
      * Empties the download queue.
-     *
-     * @param isNotification value that determines if status is set (needed for view updates)
      */
-    fun clearQueue(isNotification: Boolean = false) {
-        downloader.clearQueue(isNotification)
+    fun clearQueue() {
+        downloader.clearQueue()
+        downloader.stop()
     }
 
     /**
@@ -102,7 +97,7 @@ class MangaDownloadManager(
         download?.let { queue.remove(it) }
         queue.add(0, toAdd)
         reorderQueue(queue)
-        if (downloader.isPaused()) {
+        if (!downloader.isRunning) {
             if (MangaDownloadService.isRunning(context)) {
                 downloader.start()
             } else {
@@ -120,8 +115,8 @@ class MangaDownloadManager(
         val wasRunning = downloader.isRunning
 
         if (downloads.isEmpty()) {
-            MangaDownloadService.stop(context)
-            queue.clear()
+            downloader.clearQueue()
+            downloader.stop()
             return
         }
 
@@ -165,23 +160,20 @@ class MangaDownloadManager(
      * @param source the source of the chapter.
      * @param manga the manga of the chapter.
      * @param chapter the downloaded chapter.
-     * @return an observable containing the list of pages from the chapter.
+     * @return the list of pages from the chapter.
      */
-    fun buildPageList(source: MangaSource, manga: Manga, chapter: Chapter): Observable<List<Page>> {
+    fun buildPageList(source: MangaSource, manga: Manga, chapter: Chapter): List<Page> {
         val chapterDir = provider.findChapterDir(chapter.name, chapter.scanlator, manga.title, source)
-        return Observable.fromCallable {
-            val files = chapterDir?.listFiles().orEmpty()
-                .filter { "image" in it.type.orEmpty() }
+        val files = chapterDir?.listFiles().orEmpty()
+            .filter { "image" in it.type.orEmpty() }
 
-            if (files.isEmpty()) {
-                throw Exception(context.getString(R.string.page_list_empty_error))
-            }
-
-            files.sortedBy { it.name }
-                .mapIndexed { i, file ->
-                    Page(i, uri = file.uri).apply { status = Page.State.READY }
-                }
+        if (files.isEmpty()) {
+            throw Exception(context.getString(R.string.page_list_empty_error))
         }
+        return files.sortedBy { it.name }
+            .mapIndexed { i, file ->
+                Page(i, uri = file.uri).apply { status = Page.State.READY }
+            }
     }
 
     /**
@@ -282,7 +274,6 @@ class MangaDownloadManager(
 
         if (wasRunning) {
             if (queue.isEmpty()) {
-                MangaDownloadService.stop(context)
                 downloader.stop()
             } else if (queue.isNotEmpty()) {
                 downloader.start()

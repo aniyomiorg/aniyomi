@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="manga_categories">Kategoriar</string>
+<resources>
+    <string name="manga_categories">Kategoriar</string>
     <string name="unlock_app">Lås opp Tachiyomi</string>
     <string name="action_show_manga">Vis manga</string>
     <string name="action_display_local_badge_manga">Lokal manga</string>
@@ -10,4 +11,32 @@
     <string name="manga_from_library">Manga frå biblioteket</string>
     <string name="snack_add_to_manga_library">Legg manga til i bibliotek\?</string>
     <string name="download_error">Feil</string>
-    </resources>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+</resources>

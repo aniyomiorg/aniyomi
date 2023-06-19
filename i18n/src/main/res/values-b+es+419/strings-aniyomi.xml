@@ -39,4 +39,51 @@
     <string name="download_notifier_download_paused_chapters">Descarga pausada</string>
     <string name="channel_new_chapters_episodes">Actualizaciones de capítulos</string>
     <string name="general_categories">Categorías</string>
+    <string name="episodes">Episodios</string>
+    <string name="backup_settings_warning">Advertencia: La configuración de respaldo también almacenará sus contraseñas, no comparta esta copia de seguridad!</string>
+    <string name="label_manga">Manga</string>
+    <string name="anime_categories">Categorías de anime</string>
+    <string name="chapters_episodes">Capitulos y episodios</string>
+    <string name="label_anime">Anime</string>
+    <string name="label_watched_duration">Tiempo visto</string>
+    <string name="entries">Entradas de la librería</string>
+    <string name="label_manga_library">Manga</string>
+    <string name="label_anime_library">Anime</string>
+    <string name="label_manga_sources">Fuentes de manga</string>
+    <string name="label_anime_sources">Fuentes de anime</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="one"/>
+        <item quantity="many"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

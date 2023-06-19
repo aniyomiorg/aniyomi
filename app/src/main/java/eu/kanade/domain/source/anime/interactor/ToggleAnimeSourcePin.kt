@@ -1,8 +1,8 @@
 package eu.kanade.domain.source.anime.interactor
 
-import eu.kanade.domain.source.anime.model.AnimeSource
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.core.preference.getAndSet
+import tachiyomi.core.preference.getAndSet
+import tachiyomi.domain.source.anime.model.AnimeSource
 
 class ToggleAnimeSourcePin(
     private val preferences: SourcePreferences,

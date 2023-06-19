@@ -19,6 +19,7 @@ data class Backup(
     @ProtoNumber(103) var backupAnimeSources: List<BackupAnimeSource> = emptyList(),
     @ProtoNumber(104) var backupPreferences: List<BackupPreference> = emptyList(),
     @ProtoNumber(105) var backupExtensionPreferences: List<BackupExtensionPreferences> = emptyList(),
+    @ProtoNumber(106) var backupExtensions: List<BackupExtension> = emptyList(),
 ) {
 
     companion object {

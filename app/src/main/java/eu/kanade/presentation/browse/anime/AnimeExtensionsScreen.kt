@@ -1,10 +1,11 @@
 package eu.kanade.presentation.browse.anime
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -30,38 +31,34 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.flowlayout.FlowRow
 import eu.kanade.presentation.browse.BaseBrowseItem
 import eu.kanade.presentation.browse.anime.components.AnimeExtensionIcon
 import eu.kanade.presentation.browse.manga.ExtensionHeader
 import eu.kanade.presentation.browse.manga.ExtensionTrustDialog
-import eu.kanade.presentation.components.EmptyScreen
-import eu.kanade.presentation.components.FastScrollLazyColumn
-import eu.kanade.presentation.components.LoadingScreen
-import eu.kanade.presentation.components.PullRefresh
-import eu.kanade.presentation.components.WarningBanner
 import eu.kanade.presentation.entries.DotSeparatorNoSpaceText
-import eu.kanade.presentation.util.padding
-import eu.kanade.presentation.util.plus
-import eu.kanade.presentation.util.secondaryItemAlpha
-import eu.kanade.presentation.util.topSmallPaddingValues
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionUiModel
 import eu.kanade.tachiyomi.ui.browse.anime.extension.AnimeExtensionsState
-import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import tachiyomi.presentation.core.components.FastScrollLazyColumn
+import tachiyomi.presentation.core.components.material.PullRefresh
+import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.components.material.topSmallPaddingValues
+import tachiyomi.presentation.core.screens.EmptyScreen
+import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.presentation.core.util.plus
+import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 fun AnimeExtensionScreen(
     state: AnimeExtensionsState,
     contentPadding: PaddingValues,
-    searchQuery: String? = null,
+    searchQuery: String?,
     onLongClickItem: (AnimeExtension) -> Unit,
     onClickItemCancel: (AnimeExtension) -> Unit,
     onInstallExtension: (AnimeExtension.Available) -> Unit,
@@ -122,101 +119,81 @@ private fun AnimeExtensionContent(
     onClickUpdateAll: () -> Unit,
 ) {
     var trustState by remember { mutableStateOf<AnimeExtension.Untrusted?>(null) }
-    val showMiuiWarning = DeviceUtil.isMiui && !DeviceUtil.isMiuiOptimizationDisabled()
-    val uriHandler = LocalUriHandler.current
 
     FastScrollLazyColumn(
-        contentPadding = if (showMiuiWarning) {
-            contentPadding
-        } else {
-            contentPadding + topSmallPaddingValues
-        },
+        contentPadding = contentPadding + topSmallPaddingValues,
     ) {
-        if (showMiuiWarning) {
-            item {
-                WarningBanner(
-                    textRes = R.string.ext_miui_warning,
-                    modifier = Modifier
-                        .padding(bottom = MaterialTheme.padding.small)
-                        .clickable {
-                            uriHandler.openUri("https://aniyomi.org/extensions")
-                        },
-                )
-            }
-        }
-
-        items(
-            items = state.items,
-            contentType = {
-                when (it) {
-                    is AnimeExtensionUiModel.Header -> "header"
-                    is AnimeExtensionUiModel.Item -> "item"
-                }
-            },
-            key = {
-                when (it) {
-                    is AnimeExtensionUiModel.Header -> "animeextensionHeader-${it.hashCode()}"
-                    is AnimeExtensionUiModel.Item -> "animeextension-${it.hashCode()}"
-                }
-            },
-        ) { item ->
-            when (item) {
-                is AnimeExtensionUiModel.Header.Resource -> {
-                    val action: @Composable RowScope.() -> Unit =
-                        if (item.textRes == R.string.ext_updates_pending) {
-                            {
-                                Button(onClick = { onClickUpdateAll() }) {
-                                    Text(
-                                        text = stringResource(R.string.ext_update_all),
-                                        style = LocalTextStyle.current.copy(
-                                            color = MaterialTheme.colorScheme.onPrimary,
-                                        ),
-                                    )
-                                }
-                            }
-                        } else {
-                            {}
-                        }
-                    ExtensionHeader(
-                        textRes = item.textRes,
-                        modifier = Modifier.animateItemPlacement(),
-                        action = action,
-                    )
-                }
-                is AnimeExtensionUiModel.Header.Text -> {
-                    ExtensionHeader(
-                        text = item.text,
-                        modifier = Modifier.animateItemPlacement(),
-                    )
-                }
-                is AnimeExtensionUiModel.Item -> {
-                    AnimeExtensionItem(
-                        modifier = Modifier.animateItemPlacement(),
-                        item = item,
-                        onClickItem = {
-                            when (it) {
-                                is AnimeExtension.Available -> onInstallExtension(it)
-                                is AnimeExtension.Installed -> onOpenExtension(it)
-                                is AnimeExtension.Untrusted -> { trustState = it }
-                            }
-                        },
-                        onLongClickItem = onLongClickItem,
-                        onClickItemCancel = onClickItemCancel,
-                        onClickItemAction = {
-                            when (it) {
-                                is AnimeExtension.Available -> onInstallExtension(it)
-                                is AnimeExtension.Installed -> {
-                                    if (it.hasUpdate) {
-                                        onUpdateExtension(it)
-                                    } else {
-                                        onOpenExtension(it)
+        state.items.forEach { (header, items) ->
+            item(
+                contentType = "header",
+                key = "extensionHeader-${header.hashCode()}",
+            ) {
+                when (header) {
+                    is AnimeExtensionUiModel.Header.Resource -> {
+                        val action: @Composable RowScope.() -> Unit =
+                            if (header.textRes == R.string.ext_updates_pending) {
+                                {
+                                    Button(onClick = { onClickUpdateAll() }) {
+                                        Text(
+                                            text = stringResource(R.string.ext_update_all),
+                                            style = LocalTextStyle.current.copy(
+                                                color = MaterialTheme.colorScheme.onPrimary,
+                                            ),
+                                        )
                                     }
                                 }
-                                is AnimeExtension.Untrusted -> { trustState = it }
+                            } else {
+                                {}
                             }
-                        },
-                    )
+                        ExtensionHeader(
+                            textRes = header.textRes,
+                            modifier = Modifier.animateItemPlacement(),
+                            action = action,
+                        )
+                    }
+                    is AnimeExtensionUiModel.Header.Text -> {
+                        ExtensionHeader(
+                            text = header.text,
+                            modifier = Modifier.animateItemPlacement(),
+                        )
+                    }
                 }
+            }
+
+            items(
+                items = items,
+                contentType = { "item" },
+                key = { "extension-${it.hashCode()}" },
+            ) { item ->
+                AnimeExtensionItem(
+                    modifier = Modifier.animateItemPlacement(),
+                    item = item,
+                    onClickItem = {
+                        when (it) {
+                            is AnimeExtension.Available -> onInstallExtension(it)
+                            is AnimeExtension.Installed -> onOpenExtension(it)
+                            is AnimeExtension.Untrusted -> { trustState = it }
+                        }
+                    },
+                    onLongClickItem = onLongClickItem,
+                    onClickItemCancel = onClickItemCancel,
+                    onClickItemAction = {
+                        when (it) {
+                            is AnimeExtension.Available -> onInstallExtension(it)
+                            is AnimeExtension.Installed -> {
+                                if (it.hasUpdate) {
+                                    onUpdateExtension(it)
+                                } else {
+                                    onOpenExtension(it)
+                                }
+                            }
+
+                            is AnimeExtension.Untrusted -> {
+                                trustState = it
+                            }
+                        }
+                    },
+                )
             }
         }
     }
@@ -313,7 +290,7 @@ private fun AnimeExtensionItemContent(
         // Won't look good but it's not like we can ellipsize overflowing content
         FlowRow(
             modifier = Modifier.secondaryItemAlpha(),
-            mainAxisSpacing = 4.dp,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             ProvideTextStyle(value = MaterialTheme.typography.bodySmall) {
                 if (extension is AnimeExtension.Installed && extension.lang.isNotEmpty()) {

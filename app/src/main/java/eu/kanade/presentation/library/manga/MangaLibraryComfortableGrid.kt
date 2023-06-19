@@ -6,15 +6,15 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastAny
-import eu.kanade.domain.entries.manga.model.MangaCover
-import eu.kanade.domain.library.manga.LibraryManga
 import eu.kanade.presentation.animelib.components.DownloadsBadge
 import eu.kanade.presentation.animelib.components.LanguageBadge
 import eu.kanade.presentation.animelib.components.UnviewedBadge
-import eu.kanade.presentation.components.EntryComfortableGridItem
+import eu.kanade.presentation.library.EntryComfortableGridItem
 import eu.kanade.presentation.library.LazyLibraryGrid
 import eu.kanade.presentation.library.globalSearchItem
 import eu.kanade.tachiyomi.ui.library.manga.MangaLibraryItem
+import tachiyomi.domain.entries.manga.model.MangaCover
+import tachiyomi.domain.library.manga.LibraryManga
 
 @Composable
 fun MangaLibraryComfortableGrid(
@@ -51,8 +51,8 @@ fun MangaLibraryComfortableGrid(
                     lastModified = manga.coverLastModified,
                 ),
                 coverBadgeStart = {
-                    DownloadsBadge(count = libraryItem.downloadCount.toInt())
-                    UnviewedBadge(count = libraryItem.unreadCount.toInt())
+                    DownloadsBadge(count = libraryItem.downloadCount)
+                    UnviewedBadge(count = libraryItem.unreadCount)
                 },
                 coverBadgeEnd = {
                     LanguageBadge(
@@ -62,7 +62,7 @@ fun MangaLibraryComfortableGrid(
                 },
                 onLongClick = { onLongClick(libraryItem.libraryManga) },
                 onClick = { onClick(libraryItem.libraryManga) },
-                onClickContinueViewing = if (onClickContinueReading != null) {
+                onClickContinueViewing = if (onClickContinueReading != null && libraryItem.unreadCount > 0) {
                     { onClickContinueReading(libraryItem.libraryManga) }
                 } else {
                     null

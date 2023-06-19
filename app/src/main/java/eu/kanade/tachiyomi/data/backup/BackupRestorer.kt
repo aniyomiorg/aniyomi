@@ -1,20 +1,20 @@
 package eu.kanade.tachiyomi.data.backup
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.preference.PreferenceManager
 import eu.kanade.tachiyomi.R
-import eu.kanade.tachiyomi.data.backup.models.Backup
 import eu.kanade.tachiyomi.data.backup.models.BackupAnime
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupAnimeSource
 import eu.kanade.tachiyomi.data.backup.models.BackupCategory
+import eu.kanade.tachiyomi.data.backup.models.BackupExtension
 import eu.kanade.tachiyomi.data.backup.models.BackupExtensionPreferences
 import eu.kanade.tachiyomi.data.backup.models.BackupHistory
 import eu.kanade.tachiyomi.data.backup.models.BackupManga
 import eu.kanade.tachiyomi.data.backup.models.BackupPreference
-import eu.kanade.tachiyomi.data.backup.models.BackupSerializer
 import eu.kanade.tachiyomi.data.backup.models.BackupSource
 import eu.kanade.tachiyomi.data.backup.models.BooleanPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.FloatPreferenceValue
@@ -28,23 +28,15 @@ import eu.kanade.tachiyomi.data.database.models.anime.Episode
 import eu.kanade.tachiyomi.data.database.models.manga.Chapter
 import eu.kanade.tachiyomi.data.database.models.manga.Manga
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
+import eu.kanade.tachiyomi.util.BackupUtil
+import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import kotlinx.coroutines.Job
-import kotlinx.serialization.SerializationException
-import okio.buffer
-import okio.gzip
-import okio.source
+import tachiyomi.core.util.system.logcat
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import eu.kanade.tachiyomi.data.backup.full.models.BackupSerializer as FullBackupSerializer
-import eu.kanade.tachiyomi.data.backup.full.models.BooleanPreferenceValue as FullBooleanPreferenceValue
-import eu.kanade.tachiyomi.data.backup.full.models.FloatPreferenceValue as FullFloatPreferenceValue
-import eu.kanade.tachiyomi.data.backup.full.models.IntPreferenceValue as FullIntPreferenceValue
-import eu.kanade.tachiyomi.data.backup.full.models.LongPreferenceValue as FullLongPreferenceValue
-import eu.kanade.tachiyomi.data.backup.full.models.StringPreferenceValue as FullStringPreferenceValue
-import eu.kanade.tachiyomi.data.backup.full.models.StringSetPreferenceValue as FullStringSetPreferenceValue
 
 class BackupRestorer(
     private val context: Context,
@@ -105,36 +97,7 @@ class BackupRestorer(
 
     @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun performRestore(uri: Uri): Boolean {
-        val backupString = context.contentResolver.openInputStream(uri)!!.source().gzip().buffer().use { it.readByteArray() }
-
-        // Sadly, this is necessary because of old "full" backups.
-        val backup = try {
-            backupManager.parser.decodeFromByteArray(BackupSerializer, backupString)
-        } catch (e: SerializationException) {
-            val fullBackup = backupManager.parser.decodeFromByteArray(FullBackupSerializer, backupString)
-            val backupPreferences = fullBackup.backupPreferences.map {
-                val value = when (it.value) {
-                    is FullIntPreferenceValue -> IntPreferenceValue(it.value.value)
-                    is FullLongPreferenceValue -> LongPreferenceValue(it.value.value)
-                    is FullFloatPreferenceValue -> FloatPreferenceValue(it.value.value)
-                    is FullBooleanPreferenceValue -> BooleanPreferenceValue(it.value.value)
-                    is FullStringPreferenceValue -> StringPreferenceValue(it.value.value)
-                    is FullStringSetPreferenceValue -> StringSetPreferenceValue(it.value.value)
-                }
-                BackupPreference(it.key, value)
-            }
-            Backup(
-                fullBackup.backupManga,
-                fullBackup.backupCategories,
-                fullBackup.backupAnime,
-                fullBackup.backupAnimeCategories,
-                fullBackup.backupBrokenSources,
-                fullBackup.backupSources,
-                fullBackup.backupBrokenAnimeSources,
-                fullBackup.backupAnimeSources,
-                backupPreferences,
-            )
-        }
+        val backup = BackupUtil.decodeBackup(context, uri)
 
         restoreAmount = backup.backupManga.size + backup.backupAnime.size + 2 // +2 for categories
 
@@ -182,6 +145,10 @@ class BackupRestorer(
 
         if (backup.backupExtensionPreferences.isNotEmpty()) {
             restoreExtensionPreferences(backup.backupExtensionPreferences)
+        }
+
+        if (backup.backupExtensions.isNotEmpty()) {
+            restoreExtensions(backup.backupExtensions)
         }
 
         return true
@@ -380,6 +347,21 @@ class BackupRestorer(
         prefs.forEach {
             val sharedPrefs = context.getSharedPreferences(it.name, 0x0)
             restorePreferences(it.prefs, sharedPrefs)
+        }
+    }
+
+    private fun restoreExtensions(extensions: List<BackupExtension>) {
+        extensions.forEach {
+            if (context.packageManager.getInstalledPackages(0).none { pkg -> pkg.packageName == it.pkgName }) {
+                logcat { it.pkgName }
+                // save apk in files dir and open installer dialog
+                val file = File(context.cacheDir, "${it.pkgName}.apk")
+                file.writeBytes(it.apk)
+                val intent = Intent(Intent.ACTION_VIEW)
+                    .setDataAndType(file.getUriCompat(context), "application/vnd.android.package-archive")
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                context.startActivity(intent)
+            }
         }
     }
 

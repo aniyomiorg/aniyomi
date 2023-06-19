@@ -28,8 +28,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.components.EntryDownloadDropdownMenu
 import eu.kanade.presentation.components.OverflowMenu
-import eu.kanade.presentation.theme.active
 import eu.kanade.tachiyomi.R
+import tachiyomi.presentation.core.theme.active
 
 @Composable
 fun EntryToolbar(
@@ -154,7 +154,7 @@ fun EntryToolbar(
                     }
                 }
             },
-            colors = TopAppBarDefaults.smallTopAppBarColors(
+            colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme
                     .surfaceColorAtElevation(3.dp)
                     .copy(alpha = if (isActionMode) 1f else backgroundAlphaProvider()),

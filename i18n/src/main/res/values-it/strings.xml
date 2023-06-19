@@ -156,9 +156,6 @@
     <string name="sort_by_source">Per fonte</string>
     <string name="sort_by_number">Per numero di capitolo</string>
     <string name="manga_download">Scarica</string>
-    <string name="download_1">Prossimo capitolo</string>
-    <string name="download_5">Prossimi 5 capitoli</string>
-    <string name="download_10">Prossimi 10 capitoli</string>
     <string name="download_all">Tutti</string>
     <string name="download_unread">Non letti</string>
     <string name="confirm_delete_chapters">Sei sicuro di voler eliminare i capitoli selezionati\?</string>
@@ -281,8 +278,6 @@
     <string name="copied_to_clipboard">Copiato negli appunti:
 \n%1$s</string>
     <string name="source_not_installed">Fonte non installata: %1$s</string>
-    <string name="custom_download">Scarica quantità personalizzata</string>
-    <string name="download_custom">Personalizzato</string>
     <string name="repeating">Rileggendo</string>
     <string name="track_status">Stato</string>
     <string name="track_start_date">Iniziato</string>
@@ -335,7 +330,7 @@
     <string name="theme_dark">Attivo</string>
     <string name="theme_system">Segui l\'impostazione di sistema</string>
     <string name="pref_manage_notifications">Gestisci le notifiche</string>
-    <string name="pref_category_security">Sicurezza</string>
+    <string name="pref_category_security">Sicurezza e privacy</string>
     <string name="lock_with_biometrics">Richiede sblocco</string>
     <string name="lock_when_idle">Blocca quando inattivo</string>
     <string name="lock_always">Sempre</string>
@@ -384,7 +379,6 @@
     <string name="pref_disable_battery_optimization_summary">Facilita gli aggiornamenti e i backup in secondo piano</string>
     <string name="pref_disable_battery_optimization">Disattiva ottimizzazione batteria</string>
     <string name="pref_always_show_chapter_transition">Mostra sempre la transizione tra capitoli</string>
-    <string name="pref_enable_automatic_extension_updates">Controlla aggiornamenti per le estensioni</string>
     <string name="hide_notification_content">Nascondi contenuto notifiche</string>
     <string name="action_move_to_bottom">Sposta in fondo</string>
     <string name="action_move_to_top">Sposta in cima</string>
@@ -441,7 +435,7 @@
         <item quantity="other">Completato in %1$s con %2$s errori</item>
     </plurals>
     <string name="restore_duration">%02d min, %02d sec</string>
-    <string name="pref_search_pinned_sources_only">Includi solo le fonti fissate</string>
+    <string name="pref_search_pinned_sources_only">Usa solo le fonti fissate per la ricerca globale</string>
     <string name="tracking_info">Sincronizzazione a senso unico per aggiornare l\'avanzamento del capitolo sui servizi di tracking. Imposta il tracking per le singole voci dai loro pulsanti di tracking.</string>
     <string name="pref_true_color_summary">Riduce il banding, ma potrebbe influire sulle prestazioni</string>
     <plurals name="num_categories">
@@ -449,7 +443,6 @@
         <item quantity="many">%d categorie</item>
         <item quantity="other">%d categorie</item>
     </plurals>
-    <string name="action_display_unread_badge">Capitoli non letti</string>
     <string name="gray_background">Grigio</string>
     <string name="page_list_empty_error">Nessuna pagina trovata</string>
     <string name="sort_by_upload_date">Per data di aggiunta</string>
@@ -585,14 +578,14 @@
     <string name="chapter_not_found">Capitolo non trovato</string>
     <string name="source_unsupported">Fonte non supportata</string>
     <string name="date">Data</string>
-    <string name="off">Disattivato</string>
+    <string name="off">Disattivo</string>
     <string name="error_sharing_cover">Errore nella condivisione della copertina</string>
     <string name="error_saving_cover">Errore nel salvataggio della copertina</string>
     <string name="cover_saved">Copertina salvata</string>
     <string name="unread">Non letti</string>
     <string name="categorized_display_settings">Impostazioni di ordinamento e visualizzazione per categoria</string>
     <string name="information_empty_category_dialog">Non hai ancora nessuna categoria.</string>
-    <string name="on">Attivato</string>
+    <string name="on">Attivo</string>
     <string name="restrictions">Restrizioni: %s</string>
     <string name="manga_cover">Copertina</string>
     <string name="local_invalid_format">Formato capitolo non valido</string>
@@ -672,9 +665,6 @@
     <string name="webtoon_side_padding_5">5%</string>
     <string name="pref_navigate_pan">Scorri le pagine larghe toccando</string>
     <string name="pref_landscape_zoom">Ingrandisci le immagini orizzontali</string>
-    <string name="confirm_manga_add_duplicate">Hai un elemento nella libreria con lo stesso nome ma da un altra fonte (%1$s).
-\n
-\nVuoi comunque continuare\?</string>
     <string name="action_display_cover_only_grid">Griglia con solo copertine</string>
     <string name="action_filter_started">Iniziati</string>
     <string name="pref_update_only_started">Che non sono state iniziate</string>
@@ -772,11 +762,24 @@
     <string name="unknown_title">Titolo sconosciuto</string>
     <string name="error_user_agent_string_invalid">Stringa «user agent» non valida</string>
     <string name="updates_last_update_info_just_now">Proprio adesso</string>
-    <string name="channel_downloader_cache">Cache di download</string>
-    <string name="download_notifier_cache_renewal">Indicizzazione dei download</string>
+    <string name="download_notifier_cache_renewal">Controllando i download</string>
     <string name="action_open_random_manga">Apri una voce casuale</string>
     <string name="information_no_entries_found">Nessuna voce trovata in questa categoria</string>
     <string name="fdroid_warning">Le versioni F-Droid non sono ufficialmente supportate.
 \nToccare per saperne di più.</string>
     <string name="label_download_queue">Coda download</string>
+    <string name="enhanced_services_not_installed">Disponibile ma la fonte non è installata: %s</string>
+    <string name="pref_skip_dupe_chapters">Salta i capitoli duplicati</string>
+    <string name="confirm_add_duplicate_manga">Hai già una voce in libreria con lo stesso nome.
+\n
+\nVuoi comunque continuare\?</string>
+    <string name="track_error">%1$s errore: %2$s</string>
+    <string name="information_required_plain">*obbligatorio</string>
+    <plurals name="download_amount">
+        <item quantity="one">Prossimo capitolo</item>
+        <item quantity="many">Prossimo %d capitoli</item>
+        <item quantity="other">Prossimo %d capitoli</item>
+    </plurals>
+    <string name="pref_hide_in_library_items">Nascondi le voci già in libreria</string>
+    <string name="action_copy_to_clipboard">Copia negli appunti</string>
     </resources>

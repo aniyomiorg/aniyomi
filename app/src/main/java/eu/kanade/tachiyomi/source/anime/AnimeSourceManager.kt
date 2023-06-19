@@ -1,8 +1,6 @@
 package eu.kanade.tachiyomi.source.anime
 
 import android.content.Context
-import eu.kanade.domain.source.anime.model.AnimeSourceData
-import eu.kanade.domain.source.anime.repository.AnimeSourceDataRepository
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
@@ -21,6 +19,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import tachiyomi.domain.source.anime.model.AnimeSourceData
+import tachiyomi.domain.source.anime.repository.AnimeSourceDataRepository
+import tachiyomi.source.local.entries.anime.LocalAnimeSource
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.concurrent.ConcurrentHashMap
 
@@ -38,13 +41,21 @@ class AnimeSourceManager(
     private val stubSourcesMap = ConcurrentHashMap<Long, StubAnimeSource>()
 
     val catalogueSources: Flow<List<AnimeCatalogueSource>> = sourcesMapFlow.map { it.values.filterIsInstance<AnimeCatalogueSource>() }
-    val onlineSources: Flow<List<AnimeHttpSource>> = catalogueSources.map { sources -> sources.filterIsInstance<AnimeHttpSource>() }
+    val onlineSources: Flow<List<AnimeHttpSource>> = catalogueSources.map { it.filterIsInstance<AnimeHttpSource>() }
 
     init {
         scope.launch {
             extensionManager.installedExtensionsFlow
                 .collectLatest { extensions ->
-                    val mutableMap = ConcurrentHashMap<Long, AnimeSource>(mapOf(LocalAnimeSource.ID to LocalAnimeSource(context)))
+                    val mutableMap = ConcurrentHashMap<Long, AnimeSource>(
+                        mapOf(
+                            LocalAnimeSource.ID to LocalAnimeSource(
+                                context,
+                                Injekt.get(),
+                                Injekt.get(),
+                            ),
+                        ),
+                    )
                     extensions.forEach { extension ->
                         extension.sources.forEach {
                             mutableMap[it.id] = it
@@ -108,7 +119,7 @@ class AnimeSourceManager(
     }
 
     @Suppress("OverridingDeprecatedMember")
-    open inner class StubAnimeSource(private val sourceData: AnimeSourceData) : AnimeSource {
+    inner class StubAnimeSource(private val sourceData: AnimeSourceData) : AnimeSource {
 
         override val id: Long = sourceData.id
 
@@ -137,6 +148,6 @@ class AnimeSourceManager(
         }
     }
 
-    inner class AnimeSourceNotInstalledException(val sourceString: String) :
+    inner class AnimeSourceNotInstalledException(sourceString: String) :
         Exception(context.getString(R.string.source_not_installed, sourceString))
 }

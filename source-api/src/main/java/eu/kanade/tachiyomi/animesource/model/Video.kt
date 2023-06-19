@@ -33,11 +33,11 @@ open class Video(
     var status: State = State.QUEUE
         set(value) {
             field = value
-            statusSubject?.onNext(value)
         }
 
     @Transient
     private val _progressFlow = MutableStateFlow(0)
+
     @Transient
     val progressFlow = _progressFlow.asStateFlow()
     var progress: Int
@@ -65,9 +65,6 @@ open class Video(
             }
             field = value
         }
-
-    @Transient
-    var statusSubject: Subject<State, State>? = null
 
     @Transient
     var progressSubject: Subject<State, State>? = null

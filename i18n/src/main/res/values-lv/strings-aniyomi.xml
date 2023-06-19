@@ -36,4 +36,39 @@
     <string name="information_webview_required">Tachiyomi ir nepieciešams WebView</string>
     <string name="download_notifier_download_paused_chapters">Lejuplāde pauzēta</string>
     <string name="channel_new_chapters_episodes">Nodaļu atjauninājumi</string>
+    <plurals name="notification_new_episodes_summary">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="next_unseen_episodes">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_multiple_and_more">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="notification_episodes_generic">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="download_amount_anime">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
+    <plurals name="anime_num_episodes">
+        <item quantity="zero"/>
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

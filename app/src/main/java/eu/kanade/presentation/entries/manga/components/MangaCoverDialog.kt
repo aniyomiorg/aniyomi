@@ -40,15 +40,16 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.view.updatePadding
 import coil.imageLoader
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import coil.size.Size
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.presentation.components.DropdownMenu
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.presentation.entries.EditCoverAction
-import eu.kanade.presentation.util.clickableNoIndication
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.reader.viewer.ReaderPageImageView
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.presentation.core.components.material.Scaffold
+import tachiyomi.presentation.core.util.clickableNoIndication
 
 @Composable
 fun MangaCoverDialog(
@@ -162,6 +163,7 @@ fun MangaCoverDialog(
                         val request = ImageRequest.Builder(view.context)
                             .data(coverDataProvider())
                             .size(Size.ORIGINAL)
+                            .memoryCachePolicy(CachePolicy.DISABLED)
                             .target { drawable ->
                                 // Copy bitmap in case it came from memory cache
                                 // Because SSIV needs to thoroughly read the image

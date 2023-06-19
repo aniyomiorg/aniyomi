@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.material.minimumInteractiveComponentSize
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +24,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import eu.kanade.presentation.more.settings.Preference
-import eu.kanade.presentation.util.minimumTouchTargetSize
 import eu.kanade.tachiyomi.R
 
 @Composable
@@ -69,7 +69,7 @@ fun MultiSelectListPreferenceWidget(
                                         selected = isSelected,
                                         onClick = { onSelectionChanged() },
                                     )
-                                    .minimumTouchTargetSize()
+                                    .minimumInteractiveComponentSize()
                                     .fillMaxWidth(),
                             ) {
                                 Checkbox(

@@ -1,8 +1,8 @@
 package eu.kanade.domain.category.manga.interactor
 
-import eu.kanade.domain.category.manga.repository.MangaCategoryRepository
-import eu.kanade.domain.library.model.plus
 import eu.kanade.domain.library.service.LibraryPreferences
+import tachiyomi.domain.category.manga.repository.MangaCategoryRepository
+import tachiyomi.domain.library.model.plus
 
 class ResetMangaCategoryFlags(
     private val preferences: LibraryPreferences,
@@ -11,7 +11,7 @@ class ResetMangaCategoryFlags(
 
     suspend fun await() {
         val display = preferences.libraryDisplayMode().get()
-        val sort = preferences.librarySortingMode().get()
+        val sort = preferences.libraryMangaSortingMode().get()
         categoryRepository.updateAllMangaCategoryFlags(display + sort.type + sort.direction)
     }
 }

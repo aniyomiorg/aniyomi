@@ -15,7 +15,11 @@ class GlobalAnimeSearchScreenModel(
     preferences: BasePreferences = Injekt.get(),
     private val sourcePreferences: SourcePreferences = Injekt.get(),
     private val sourceManager: AnimeSourceManager = Injekt.get(),
-) : AnimeSearchScreenModel<GlobalAnimeSearchState>(GlobalAnimeSearchState(searchQuery = initialQuery)) {
+) : AnimeSearchScreenModel<GlobalAnimeSearchState>(
+    GlobalAnimeSearchState(
+        searchQuery = initialQuery,
+    ),
+) {
 
     val incognitoMode = preferences.incognitoMode()
     val lastUsedSourceId = sourcePreferences.lastUsedAnimeSource()

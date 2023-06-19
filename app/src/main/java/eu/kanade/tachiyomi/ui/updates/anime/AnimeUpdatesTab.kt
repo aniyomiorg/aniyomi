@@ -17,7 +17,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import eu.kanade.presentation.components.AppBar
+import eu.kanade.presentation.components.NavigatorAdaptiveSheet
 import eu.kanade.presentation.components.TabContent
+import eu.kanade.presentation.entries.anime.EpisodeOptionsDialogScreen
+import eu.kanade.presentation.entries.anime.onDismissEpisodeOptionsDialogScreen
 import eu.kanade.presentation.updates.UpdatesDeleteConfirmationDialog
 import eu.kanade.presentation.updates.anime.AnimeUpdateScreen
 import eu.kanade.tachiyomi.R
@@ -27,8 +30,8 @@ import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.util.lang.launchIO
 import kotlinx.coroutines.flow.collectLatest
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.injectLazy
 
 @Composable
@@ -62,7 +65,7 @@ fun Screen.animeUpdatesTab(
     }
 
     return TabContent(
-        titleRes = R.string.label_animeupdates,
+        titleRes = R.string.label_anime_updates,
         searchEnabled = false,
         content = { contentPadding, _ ->
             AnimeUpdateScreen(
@@ -95,6 +98,18 @@ fun Screen.animeUpdatesTab(
                         onDismissRequest = onDismissDialog,
                         onConfirm = { screenModel.deleteEpisodes(dialog.toDelete) },
                         isManga = false,
+                    )
+                }
+                is AnimeUpdatesScreenModel.Dialog.Options -> {
+                    onDismissEpisodeOptionsDialogScreen = onDismissDialog
+                    NavigatorAdaptiveSheet(
+                        screen = EpisodeOptionsDialogScreen(
+                            episodeId = dialog.episodeId,
+                            animeId = dialog.animeId,
+                            sourceId = dialog.sourceId,
+                            useExternalDownloader = screenModel.downloadPreferences.useExternalDownloader().get(),
+                        ),
+                        onDismissRequest = onDismissDialog,
                     )
                 }
                 null -> {}

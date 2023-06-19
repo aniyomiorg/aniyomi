@@ -15,8 +15,7 @@ import com.arthenica.ffmpegkit.StatisticsCallback
 import com.hippo.unifile.UniFile
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.download.service.DownloadPreferences
-import eu.kanade.domain.entries.anime.model.Anime
-import eu.kanade.domain.items.episode.model.Episode
+import eu.kanade.domain.items.episode.model.toSEpisode
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -28,22 +27,23 @@ import eu.kanade.tachiyomi.data.library.anime.AnimeLibraryUpdateNotifier
 import eu.kanade.tachiyomi.data.notification.NotificationHandler
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
-import eu.kanade.tachiyomi.util.lang.launchIO
-import eu.kanade.tachiyomi.util.lang.launchNow
-import eu.kanade.tachiyomi.util.lang.plusAssign
-import eu.kanade.tachiyomi.util.lang.withUIContext
 import eu.kanade.tachiyomi.util.storage.DiskUtil
 import eu.kanade.tachiyomi.util.storage.saveTo
 import eu.kanade.tachiyomi.util.storage.toFFmpegString
-import eu.kanade.tachiyomi.util.system.ImageUtil
-import eu.kanade.tachiyomi.util.system.logcat
 import kotlinx.coroutines.async
 import logcat.LogPriority
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import rx.Observable
+import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import rx.subscriptions.CompositeSubscription
+import tachiyomi.core.util.lang.launchIO
+import tachiyomi.core.util.lang.launchNow
+import tachiyomi.core.util.lang.withUIContext
+import tachiyomi.core.util.system.ImageUtil
+import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.items.episode.model.Episode
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
@@ -55,7 +55,7 @@ import java.util.concurrent.TimeUnit
  * This class is the one in charge of downloading episodes.
  *
  * Its [queue] contains the list of episodes to download. In order to download them, the downloader
- * subscriptions must be running and the list of episodes must be sent to them by [downloadsRelay].
+ * subscription must be running and the list of episodes must be sent to them by [downloadsRelay].
  *
  * The queue manipulation must be done in one thread (currently the main thread) to avoid unexpected
  * behavior, but it's safe to read it from multiple threads.
@@ -71,6 +71,7 @@ class AnimeDownloader(
     private val cache: AnimeDownloadCache,
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val episodeCache: EpisodeCache = Injekt.get(),
+    private val downloadPreferences: DownloadPreferences = Injekt.get(),
 ) {
 
     /**
@@ -89,9 +90,9 @@ class AnimeDownloader(
     private val notifier by lazy { AnimeDownloadNotifier(context) }
 
     /**
-     * AnimeDownloader subscriptions.
+     * AnimeDownloader subscription.
      */
-    private val subscriptions = CompositeSubscription()
+    private var subscription: Subscription? = null
 
     /**
      * Relay to send a list of downloads to the downloader.
@@ -106,9 +107,14 @@ class AnimeDownloader(
     /**
      * Whether the downloader is running.
      */
+    val isRunning: Boolean
+        get() = subscription != null
+
+    /**
+     * Whether the downloader is paused
+     */
     @Volatile
-    var isRunning: Boolean = false
-        private set
+    var isPaused: Boolean = false
 
     /**
      * Whether FFmpeg is running.
@@ -130,18 +136,16 @@ class AnimeDownloader(
      * @return true if the downloader is started, false otherwise.
      */
     fun start(): Boolean {
-        if (isRunning || queue.isEmpty()) {
+        if (subscription != null || queue.isEmpty()) {
             return false
         }
 
-        if (!subscriptions.hasSubscriptions()) {
-            initializeSubscriptions()
-        }
+        initializeSubscription()
 
         val pending = queue.filter { it.status != AnimeDownload.State.DOWNLOADED }
         pending.forEach { if (it.status != AnimeDownload.State.QUEUE) it.status = AnimeDownload.State.QUEUE }
 
-        notifier.paused = false
+        isPaused = false
 
         downloadsRelay.call(pending)
         return pending.isNotEmpty()
@@ -151,94 +155,92 @@ class AnimeDownloader(
      * Stops the downloader.
      */
     fun stop(reason: String? = null) {
-        destroySubscriptions()
+        destroySubscription()
         queue
             .filter { it.status == AnimeDownload.State.DOWNLOADING }
             .forEach { it.status = AnimeDownload.State.ERROR }
 
         if (reason != null) {
-            notifier.onWarning(reason)
-            return
+            queue.state.value.forEach {
+                notifier.onWarning(reason)
+                return
+            }
         }
 
-        if (notifier.paused && !queue.isEmpty()) {
-            notifier.onPaused()
+        if (isPaused && queue.isNotEmpty()) {
+            queue.state.value.forEach {
+                notifier.onPaused(it)
+            }
         } else {
-            notifier.onComplete()
+            queue.state.value.forEach {
+                notifier.onComplete(it)
+            }
         }
 
-        notifier.paused = false
+        isPaused = false
+
+        // Prevent recursion when DownloadService.onDestroy() calls downloader.stop()
+        if (AnimeDownloadService.isRunning.value) {
+            AnimeDownloadService.stop(context)
+        }
     }
 
     /**
      * Pauses the downloader
      */
     fun pause() {
-        destroySubscriptions()
+        destroySubscription()
         queue
             .filter { it.status == AnimeDownload.State.DOWNLOADING }
             .forEach { it.status = AnimeDownload.State.QUEUE }
-        notifier.paused = true
+        isPaused = true
     }
 
     /**
-     * Check if downloader is paused
-     */
-    fun isPaused() = !isRunning
-
-    /**
      * Removes everything from the queue.
-     *
-     * @param isNotification value that determines if status is set (needed for view updates)
      */
-    fun clearQueue(isNotification: Boolean = false) {
-        destroySubscriptions()
+    fun clearQueue() {
+        destroySubscription()
 
-        // Needed to update the episode view
-        if (isNotification) {
-            queue
-                .filter { it.status == AnimeDownload.State.QUEUE }
-                .forEach {
-                    val animeDir = provider.getAnimeDir(it.anime.title, it.source)
-                    val episodeDirname = provider.getEpisodeDirName(it.episode.name, it.episode.scanlator)
-                    val tmpDir = animeDir.findFile(episodeDirname + TMP_DIR_SUFFIX)
-                    tmpDir?.delete()
-                    it.status = AnimeDownload.State.NOT_DOWNLOADED
-                }
+        queue.state.value.forEach {
+            notifier.dismissProgress(it)
         }
         queue.clear()
-        notifier.dismissProgress()
     }
 
     /**
      * Prepares the subscriptions to start downloading.
      */
-    private fun initializeSubscriptions() {
-        if (isRunning) return
-        isRunning = true
+    private fun initializeSubscription() {
+        // Unsubscribe the previous subscription if it exists
+        destroySubscription()
 
-        subscriptions.clear()
-        subscriptions += downloadsRelay.concatMapIterable { it }
-            // Concurrently download from 5 different sources
+        subscription = downloadsRelay
+            .flatMapIterable { it }
             .groupBy { it.source }
             .flatMap(
                 { bySource ->
-                    bySource.concatMap { download ->
-                        downloadEpisode(download).subscribeOn(Schedulers.io())
-                    }
+                    bySource.flatMap(
+                        { download ->
+                            downloadEpisode(download)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                        },
+                        downloadPreferences.numberOfDownloads().get(),
+                    )
                 },
-                5,
+                downloadPreferences.numberOfDownloads().get(), // Set the maximum number of concurrent downloads here
             )
-            .onBackpressureLatest()
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                {
-                    completeAnimeDownload(it)
+                { completedDownload ->
+                    completeAnimeDownload(completedDownload)
                 },
                 { error ->
-                    AnimeDownloadService.stop(context)
                     logcat(LogPriority.ERROR, error)
-                    notifier.onError(error.message)
+                    queue.state.value.forEach {
+                        notifier.onError(it, error.message, it.episode.name, it.anime.title)
+                    }
+                    stop()
                 },
             )
     }
@@ -246,10 +248,7 @@ class AnimeDownloader(
     /**
      * Destroys the downloader subscriptions.
      */
-    private fun destroySubscriptions() {
-        if (!isRunning) return
-        isRunning = false
-
+    private fun destroySubscription() {
         isFFmpegRunning = false
         FFmpegKitConfig.getSessions().filter {
             it.isFFmpeg && (it.state == SessionState.CREATED || it.state == SessionState.RUNNING)
@@ -257,7 +256,8 @@ class AnimeDownloader(
             it.cancel()
         }
 
-        subscriptions.clear()
+        subscription?.unsubscribe()
+        subscription = null
     }
 
     /**
@@ -267,7 +267,7 @@ class AnimeDownloader(
      * @param episodes the list of episodes to download.
      * @param autoStart whether to start the downloader after enqueing the episodes.
      */
-    fun queueEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean, changeDownloader: Boolean = false) = launchIO {
+    fun queueEpisodes(anime: Anime, episodes: List<Episode>, autoStart: Boolean, changeDownloader: Boolean = false, video: Video? = null) = launchIO {
         if (episodes.isEmpty()) {
             return@launchIO
         }
@@ -288,7 +288,7 @@ class AnimeDownloader(
             // Filter out those already enqueued.
             .filter { episode -> queue.none { it.episode.id == episode.id } }
             // Create a download for each one.
-            .map { AnimeDownload(source, anime, it, changeDownloader) }
+            .map { AnimeDownload(source, anime, it, changeDownloader, video) }
 
         if (episodesToQueue.isNotEmpty()) {
             queue.addAll(episodesToQueue)
@@ -335,7 +335,7 @@ class AnimeDownloader(
         val availSpace = DiskUtil.getAvailableStorageSpace(animeDir)
         if (availSpace != -1L && availSpace < MIN_DISK_SPACE) {
             download.status = AnimeDownload.State.ERROR
-            notifier.onError(context.getString(R.string.download_insufficient_space), download.episode.name)
+            notifier.onError(download, context.getString(R.string.download_insufficient_space), download.episode.name, download.anime.title)
             return@defer Observable.just(download)
         }
 
@@ -401,12 +401,14 @@ class AnimeDownloader(
             .doOnNext {
                 ensureSuccessfulAnimeDownload(download, animeDir, tmpDir, episodeDirname)
 
-                if (download.status == AnimeDownload.State.DOWNLOADED) notifier.dismissProgress()
+                queue.state.value.forEach {
+                    if (download.status == AnimeDownload.State.DOWNLOADED) notifier.dismissProgress(it)
+                }
             }
             // If the video list threw, it will resume here
             .onErrorReturn { error ->
                 download.status = AnimeDownload.State.ERROR
-                notifier.onError(error.message, download.episode.name)
+                notifier.onError(download, error.message, download.episode.name, download.anime.title)
                 download
             }
     }
@@ -464,7 +466,7 @@ class AnimeDownloader(
             .onErrorReturn {
                 video.progress = 0
                 video.status = Video.State.ERROR
-                notifier.onError(it.message, download.episode.name, download.anime.title)
+                notifier.onError(download, it.message, download.episode.name, download.anime.title)
                 video
             }
     }
@@ -613,7 +615,7 @@ class AnimeDownloader(
                         file.renameTo("$filename.mp4")
                     } catch (e: Exception) {
                         response.close()
-                        if (!queue.contains(download)) file.delete()
+                        if (!queue.equals(download)) file.delete()
                         // file.delete()
                         throw e
                     }
@@ -646,7 +648,7 @@ class AnimeDownloader(
                         // 1DM
                         pkgName.startsWith("idm.internet.download.manager") -> {
                             intent.apply {
-                                component = ComponentName(pkgName, "${pkgName.substringBeforeLast(".")}.Downloader")
+                                component = ComponentName(pkgName, "idm.internet.download.manager.Downloader")
                                 action = Intent.ACTION_VIEW
                                 data = Uri.parse(video.videoUrl)
                                 putExtra("extra_filename", filename)
@@ -751,7 +753,7 @@ class AnimeDownloader(
             queue.remove(download)
         }
         if (areAllAnimeDownloadsFinished()) {
-            AnimeDownloadService.stop(context)
+            stop()
         }
     }
 

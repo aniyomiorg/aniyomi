@@ -14,6 +14,10 @@ enum class AppTheme(val titleResId: Int?) {
     TIDAL_WAVE(R.string.theme_tidalwave),
     YINYANG(R.string.theme_yinyang),
     YOTSUBA(R.string.theme_yotsuba),
+    CLOUDFLARE(R.string.theme_cloudflare),
+    SAPPHIRE(R.string.theme_sapphire),
+    DOOM(R.string.theme_doom),
+    MATRIX(R.string.theme_matrix),
 
     // Deprecated
     DARK_BLUE(null),

@@ -1,8 +1,6 @@
 package eu.kanade.tachiyomi.source.manga
 
 import android.content.Context
-import eu.kanade.domain.source.manga.model.MangaSourceData
-import eu.kanade.domain.source.manga.repository.MangaSourceDataRepository
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
@@ -22,6 +20,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import rx.Observable
+import tachiyomi.domain.source.manga.model.MangaSourceData
+import tachiyomi.domain.source.manga.repository.MangaSourceDataRepository
+import tachiyomi.source.local.entries.manga.LocalMangaSource
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.concurrent.ConcurrentHashMap
 
@@ -39,13 +42,21 @@ class MangaSourceManager(
     private val stubSourcesMap = ConcurrentHashMap<Long, StubMangaSource>()
 
     val catalogueSources: Flow<List<CatalogueSource>> = sourcesMapFlow.map { it.values.filterIsInstance<CatalogueSource>() }
-    val onlineSources: Flow<List<HttpSource>> = catalogueSources.map { sources -> sources.filterIsInstance<HttpSource>() }
+    val onlineSources: Flow<List<HttpSource>> = catalogueSources.map { it.filterIsInstance<HttpSource>() }
 
     init {
         scope.launch {
             extensionManager.installedExtensionsFlow
                 .collectLatest { extensions ->
-                    val mutableMap = ConcurrentHashMap<Long, MangaSource>(mapOf(LocalMangaSource.ID to LocalMangaSource(context)))
+                    val mutableMap = ConcurrentHashMap<Long, MangaSource>(
+                        mapOf(
+                            LocalMangaSource.ID to LocalMangaSource(
+                                context,
+                                Injekt.get(),
+                                Injekt.get(),
+                            ),
+                        ),
+                    )
                     extensions.forEach { extension ->
                         extension.sources.forEach {
                             mutableMap[it.id] = it
@@ -110,7 +121,7 @@ class MangaSourceManager(
     }
 
     @Suppress("OverridingDeprecatedMember")
-    open inner class StubMangaSource(private val sourceData: MangaSourceData) : MangaSource {
+    inner class StubMangaSource(private val sourceData: MangaSourceData) : MangaSource {
 
         override val id: Long = sourceData.id
 
@@ -154,6 +165,6 @@ class MangaSourceManager(
         }
     }
 
-    inner class SourceNotInstalledException(val sourceString: String) :
+    inner class SourceNotInstalledException(sourceString: String) :
         Exception(context.getString(R.string.source_not_installed, sourceString))
 }

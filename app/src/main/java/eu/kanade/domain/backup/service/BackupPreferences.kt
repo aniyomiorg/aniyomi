@@ -1,11 +1,11 @@
 package eu.kanade.domain.backup.service
 
-import eu.kanade.tachiyomi.core.preference.PreferenceStore
-import eu.kanade.tachiyomi.core.provider.FolderProvider
 import eu.kanade.tachiyomi.data.preference.FLAG_CATEGORIES
 import eu.kanade.tachiyomi.data.preference.FLAG_CHAPTERS
 import eu.kanade.tachiyomi.data.preference.FLAG_HISTORY
 import eu.kanade.tachiyomi.data.preference.FLAG_TRACK
+import tachiyomi.core.preference.PreferenceStore
+import tachiyomi.core.provider.FolderProvider
 
 class BackupPreferences(
     private val folderProvider: FolderProvider,

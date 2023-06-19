@@ -1,8 +1,8 @@
 package eu.kanade.domain.source.manga.interactor
 
-import eu.kanade.domain.source.manga.model.SourcePagingSourceType
 import eu.kanade.domain.source.manga.repository.MangaSourceRepository
 import eu.kanade.tachiyomi.source.model.FilterList
+import tachiyomi.data.source.manga.SourcePagingSourceType
 
 class GetRemoteManga(
     private val repository: MangaSourceRepository,

@@ -1,6 +1,5 @@
 package eu.kanade.presentation.more.settings.widget
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,14 +39,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import eu.kanade.domain.ui.model.AppTheme
-import eu.kanade.presentation.components.DIVIDER_ALPHA
-import eu.kanade.presentation.components.ItemCover
+import eu.kanade.presentation.entries.ItemCover
 import eu.kanade.presentation.theme.TachiyomiTheme
-import eu.kanade.presentation.util.ThemePreviews
-import eu.kanade.presentation.util.secondaryItemAlpha
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.util.system.DeviceUtil
 import eu.kanade.tachiyomi.util.system.isDynamicColorAvailable
+import tachiyomi.presentation.core.components.material.DIVIDER_ALPHA
+import tachiyomi.presentation.core.components.material.padding
+import tachiyomi.presentation.core.util.ThemePreviews
+import tachiyomi.presentation.core.util.secondaryItemAlpha
 
 @Composable
 internal fun AppThemePreferenceWidget(
@@ -78,11 +79,8 @@ private fun AppThemesList(
             .filterNot { it.titleResId == null || (it == AppTheme.MONET && !DeviceUtil.isDynamicColorAvailable) }
     }
     LazyRow(
-        modifier = Modifier
-            .animateContentSize()
-            .padding(vertical = 8.dp),
         contentPadding = PaddingValues(horizontal = PrefsHorizontalPadding),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.padding.small),
     ) {
         items(
             items = appThemes,
@@ -103,15 +101,16 @@ private fun AppThemesList(
                     )
                 }
 
+                Spacer(modifier = Modifier.height(8.dp))
+
                 Text(
                     text = stringResource(appTheme.titleResId!!),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp)
                         .secondaryItemAlpha(),
-                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
                     maxLines = 2,
+                    minLines = 2,
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }

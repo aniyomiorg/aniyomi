@@ -18,7 +18,6 @@
     <string name="action_display_show_number_of_items">Паказаць колькасць прадметаў</string>
     <string name="action_display_show_tabs">Паказаць укладкі катэгорый</string>
     <string name="action_display_download_badge">Значкі загружаных</string>
-    <string name="action_display_unread_badge">Значкі непрачытаных</string>
     <string name="action_display_list">Спіс</string>
     <string name="action_display_comfortable_grid">Зручная сетка</string>
     <string name="action_display_grid">Кампактная сетка</string>

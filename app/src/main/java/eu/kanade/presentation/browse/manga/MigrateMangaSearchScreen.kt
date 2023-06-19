@@ -3,19 +3,19 @@ package eu.kanade.presentation.browse.manga
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import eu.kanade.domain.entries.manga.model.Manga
 import eu.kanade.presentation.browse.GlobalSearchEmptyResultItem
 import eu.kanade.presentation.browse.GlobalSearchErrorResultItem
 import eu.kanade.presentation.browse.GlobalSearchLoadingResultItem
 import eu.kanade.presentation.browse.GlobalSearchResultItem
 import eu.kanade.presentation.browse.GlobalSearchToolbar
 import eu.kanade.presentation.browse.manga.components.GlobalMangaSearchCardRow
-import eu.kanade.presentation.components.LazyColumn
-import eu.kanade.presentation.components.Scaffold
 import eu.kanade.tachiyomi.source.CatalogueSource
 import eu.kanade.tachiyomi.ui.browse.manga.migration.search.MigrateMangaSearchState
 import eu.kanade.tachiyomi.ui.browse.manga.source.globalsearch.MangaSearchItemResult
 import eu.kanade.tachiyomi.util.system.LocaleHelper
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.presentation.core.components.LazyColumn
+import tachiyomi.presentation.core.components.material.Scaffold
 
 @Composable
 fun MigrateMangaSearchScreen(
@@ -67,16 +67,13 @@ fun MigrateMangaSearchContent(
         contentPadding = contentPadding,
     ) {
         items.forEach { (source, result) ->
-            item {
+            item(key = source.id) {
                 GlobalSearchResultItem(
                     title = if (source.id == sourceId) "▶ ${source.name}" else source.name,
                     subtitle = LocaleHelper.getDisplayName(source.lang),
                     onClick = { onClickSource(source) },
                 ) {
                     when (result) {
-                        is MangaSearchItemResult.Error -> {
-                            GlobalSearchErrorResultItem(message = result.throwable.message)
-                        }
                         MangaSearchItemResult.Loading -> {
                             GlobalSearchLoadingResultItem()
                         }
@@ -92,6 +89,9 @@ fun MigrateMangaSearchContent(
                                 onClick = onClickItem,
                                 onLongClick = onLongClickItem,
                             )
+                        }
+                        is MangaSearchItemResult.Error -> {
+                            GlobalSearchErrorResultItem(message = result.throwable.message)
                         }
                     }
                 }

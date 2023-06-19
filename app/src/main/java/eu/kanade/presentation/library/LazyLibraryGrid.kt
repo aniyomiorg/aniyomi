@@ -9,9 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import eu.kanade.presentation.animelib.components.GlobalSearchItem
-import eu.kanade.presentation.components.CommonEntryItemDefaults
-import eu.kanade.presentation.components.FastScrollLazyVerticalGrid
-import eu.kanade.presentation.util.plus
+import tachiyomi.presentation.core.components.FastScrollLazyVerticalGrid
+import tachiyomi.presentation.core.util.plus
 
 @Composable
 fun LazyLibraryGrid(

@@ -3,7 +3,7 @@ package eu.kanade.tachiyomi.data.database.models.manga
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
-import eu.kanade.domain.entries.manga.model.Manga as DomainManga
+import tachiyomi.domain.entries.manga.model.Manga as DomainManga
 
 interface Manga : SManga {
 

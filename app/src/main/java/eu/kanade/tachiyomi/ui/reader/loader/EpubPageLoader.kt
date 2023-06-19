@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.ui.reader.loader
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.ui.reader.model.ReaderPage
 import eu.kanade.tachiyomi.util.storage.EpubFile
-import rx.Observable
 import java.io.File
 
 /**
@@ -25,10 +24,9 @@ class EpubPageLoader(file: File) : PageLoader() {
     }
 
     /**
-     * Returns an observable containing the pages found on this zip archive ordered with a natural
-     * comparator.
+     * Returns the pages found on this zip archive ordered with a natural comparator.
      */
-    override fun getPages(): Observable<List<ReaderPage>> {
+    override suspend fun getPages(): List<ReaderPage> {
         return epub.getImagesFromPages()
             .mapIndexed { i, path ->
                 val streamFn = { epub.getInputStream(epub.getEntry(path)!!) }
@@ -37,19 +35,12 @@ class EpubPageLoader(file: File) : PageLoader() {
                     status = Page.State.READY
                 }
             }
-            .let { Observable.just(it) }
     }
 
     /**
-     * Returns an observable that emits a ready state unless the loader was recycled.
+     * No additional action required to load the page
      */
-    override fun getPage(page: ReaderPage): Observable<Page.State> {
-        return Observable.just(
-            if (isRecycled) {
-                Page.State.ERROR
-            } else {
-                Page.State.READY
-            },
-        )
+    override suspend fun loadPage(page: ReaderPage) {
+        check(!isRecycled)
     }
 }

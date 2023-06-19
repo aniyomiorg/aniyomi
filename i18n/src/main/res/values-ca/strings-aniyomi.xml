@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">Categories Manga</string>
-    <string name="unlock_app">Desbloca Aniyomi</string>
+    <string name="unlock_app">Desbloca el Aniyomi</string>
     <string name="action_sort_last_manga_update">Darrera actualització de Manga</string>
     <string name="action_show_manga">Mostra Manga</string>
     <string name="action_display_local_badge_manga">Manga local</string>
@@ -42,8 +42,8 @@
     <string name="action_global_manga_search">Cerca de Manga Global</string>
     <string name="action_global_anime_search">Cerca de Anime Global</string>
     <string name="action_edit_manga_categories">Editar categories de Manga</string>
-    <string name="pref_search_pinned_manga_sources_only">Només incloure fonts anclades de manga</string>
-    <string name="pref_search_pinned_anime_sources_only">Només incloure fonts anclades d\'anime</string>
+    <string name="pref_search_pinned_manga_sources_only">Inclou només fonts de manga anclades a la recerca global</string>
+    <string name="pref_search_pinned_anime_sources_only">Incloure només fonts d\'anime anclades a la recerca global</string>
     <string name="pref_library_manga_columns">Ítems Manga per línia</string>
     <string name="pref_library_anime_columns">Ítems Anime per línia</string>
     <string name="action_remove_bookmark_episode">Treure marca de llibre de l\'episodi</string>
@@ -64,7 +64,6 @@
     <string name="action_edit_anime_categories">Editar categories d\'anime</string>
     <string name="action_play_internally">Jugar internament</string>
     <string name="action_start_download_externally">Utilitza descarregador extern</string>
-    <string name="action_display_unseen_badge">Episodis no vistos</string>
     <string name="action_next_episode">Episodi següent</string>
     <string name="action_play">Inici</string>
     <string name="pref_bottom_nav_no_manga">Moure Manga a la pestanya Més</string>
@@ -100,7 +99,7 @@
     <string name="pref_category_player_seeking">Buscant</string>
     <string name="pref_category_pip">Imatge inserida a la pantalla (PiP)</string>
     <string name="download_ahead_info_anime">Només funciona per entrades de la biblioteca, i si l\'episodi actual i el següent ja han estat descarregats</string>
-    <string name="pref_backup_flags_summ">Informació inclosa al fitxer de còpia de seguretat</string>
+    <string name="pref_backup_flags_summary">Informació inclosa al fitxer de còpia de seguretat</string>
     <string name="pref_clear_anime_database">Neteja la base de dades de l\'anime</string>
     <string name="snack_add_to_anime_library">Afegir l\'anime a la llibreria\?</string>
     <string name="display_mode_episode">Episodi %1$s</string>
@@ -119,7 +118,7 @@
     <string name="pref_default_portrait_orientation">Vertial per defecte</string>
     <string name="pref_skip_disable">Deshabilitar</string>
     <string name="pref_external_player_preference">Preferències del reproductor extern</string>
-    <string name="playertitle">%1$s - %2$s</string>
+    <string name="player_title">%1$s - %2$s</string>
     <string name="pref_category_external_player">Reproductor extern</string>
     <string name="pref_always_use_external_player">Utilitza sempre un reproductor extern</string>
     <string name="episode_download_progress">%1$d%%</string>
@@ -135,9 +134,6 @@
     <string name="unknown_studio">Estudi desconegut</string>
     <string name="show_episode_number">Número d\'episodi</string>
     <string name="sort_by_episode_number">Per número d\'episodi</string>
-    <string name="download_1_episode">Següent capítol</string>
-    <string name="download_5_episodes">Següents 5 capítols</string>
-    <string name="download_10_episodes">Següents 10 capítols</string>
     <string name="download_unseen">No vist</string>
     <string name="also_set_episode_settings_for_library">Aplicar a tots els anime de la meva llibreria</string>
     <string name="no_episodes_error">No s\'han trobat capítols</string>
@@ -151,7 +147,6 @@
     <string name="episode_progress_no_total">Progrés: %1$s</string>
     <string name="screenshot_show_subs">Mostra els subtítols a la captura de pantalla</string>
     <string name="screenshot_header">Fes captura de pantalla</string>
-    <string name="stats_header">Mostra estadístiques</string>
     <string name="toggle_stats">Alternar estadístiques</string>
     <string name="stats_page_1">Pàgina 1</string>
     <string name="stats_page_2">Pàgina 2</string>
@@ -162,7 +157,7 @@
     <string name="download_notifier_download_paused_episodes">Atura la descàrrega d\'episodis</string>
     <string name="no_next_episode">No s\'ha trobat el següent episodi!</string>
     <string name="no_previous_episode">Episodi anterior no trobat!</string>
-    <string name="label_animehistory">Anime</string>
+    <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
     <string name="player_overlay_back">Enrera</string>
     <string name="enable_auto_play">Reproducció automàtica activada</string>
@@ -212,12 +207,12 @@
     <string name="playback_speed_dialog_reset">Restablir</string>
     <string name="used_cache_both">Utilitzat per l\'anime: %1$s, utilitzat pel manga: %2$s</string>
     <string name="pref_skip_length">Doble click per ometre</string>
-    <string name="backup_settings_warning">Precaució: crear una còpia de seguretat desarà la teva clau d\'accès, no comparteixis l\'arxiu de còpia de seguretat!</string>
+    <string name="backup_settings_warning">Precaució: crear una còpia de seguretat desarà informació confidencial, com la teva clau d\'accès, no comparteixis l\'arxiu de còpia de seguretat!</string>
     <string name="rotation_reverse_landscape">Format apaisat invertit</string>
     <string name="pref_player_fullscreen">Mostra contingut a la part superior de la pantalla</string>
     <string name="pref_category_player_orientation">Orientació</string>
     <string name="currently_reading">Actualment llegint</string>
-    <string name="label_animeupdates">Anime</string>
+    <string name="label_anime_updates">Anime</string>
     <string name="pref_waiting_time_aniskip_8">8 segons</string>
     <plurals name="seconds">
         <item quantity="one">%d segon</item>
@@ -229,7 +224,7 @@
     <string name="pref_progress_mark_as_seen">Punt on marcar l\'episodi com a vist</string>
     <string name="pref_preserve_watching_position">Mantindre la posició de visionat als capítols finalitzats</string>
     <string name="stats_page">Pàgina d\'estats</string>
-    <string name="label_animeextensions">Extensions d\'anime</string>
+    <string name="label_anime_extensions">Extensions d\'anime</string>
     <string name="label_migration_manga">Migrar el manga</string>
     <string name="label_migration_anime">Migrar l\'anime</string>
     <string name="settings">Ajustaments</string>
@@ -266,11 +261,17 @@
         <item quantity="one">Episodis %1$s i 1 més</item>
         <item quantity="other">Episodis %1$s i %2$d més</item>
     </plurals>
-    <string name="label_mangaextensions">Extensions del manga</string>
+    <string name="label_manga_extensions">Extensions del manga</string>
     <string name="player_aniskip_ed">Saltar ending</string>
     <plurals name="next_unseen_episodes">
         <item quantity="one">Següent episodi pendent de visualització</item>
         <item quantity="other">Següents episodis %d pendents de visualització</item>
     </plurals>
     <string name="local_manga_source">Manga en font local</string>
+    <string name="pref_hide_in_anime_library_items">Amaga les entrades dels animes que ja siguin a la biblioteca</string>
+    <string name="pref_hide_in_manga_library_items">Amaga les entrades dels mangas que ja siguin a la biblioteca</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

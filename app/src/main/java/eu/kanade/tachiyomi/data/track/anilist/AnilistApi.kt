@@ -7,11 +7,11 @@ import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.data.track.model.AnimeTrackSearch
 import eu.kanade.tachiyomi.data.track.model.MangaTrackSearch
 import eu.kanade.tachiyomi.network.POST
-import eu.kanade.tachiyomi.network.await
+import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.interceptor.rateLimit
 import eu.kanade.tachiyomi.network.jsonMime
 import eu.kanade.tachiyomi.network.parseAs
-import eu.kanade.tachiyomi.util.lang.withIOContext
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
@@ -26,10 +26,14 @@ import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonObject
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
+import tachiyomi.core.util.lang.withIOContext
+import uy.kohesive.injekt.injectLazy
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
+
+    private val json: Json by injectLazy()
 
     private val authClient = client.newBuilder()
         .addInterceptor(interceptor)
@@ -55,19 +59,21 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("status", track.toAnilistStatus())
                 }
             }
-            authClient.newCall(
-                POST(
-                    apiUrl,
-                    body = payload.toString().toRequestBody(jsonMime),
-                ),
-            )
-                .await()
-                .parseAs<JsonObject>()
-                .let {
-                    track.library_id =
-                        it["data"]!!.jsonObject["SaveMediaListEntry"]!!.jsonObject["id"]!!.jsonPrimitive.long
-                    track
-                }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        apiUrl,
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let {
+                        track.library_id =
+                            it["data"]!!.jsonObject["SaveMediaListEntry"]!!.jsonObject["id"]!!.jsonPrimitive.long
+                        track
+                    }
+            }
         }
     }
 
@@ -101,7 +107,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                 }
             }
             authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
-                .await()
+                .awaitSuccess()
             track
         }
     }
@@ -125,19 +131,21 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("status", track.toAnilistStatus())
                 }
             }
-            authClient.newCall(
-                POST(
-                    apiUrl,
-                    body = payload.toString().toRequestBody(jsonMime),
-                ),
-            )
-                .await()
-                .parseAs<JsonObject>()
-                .let {
-                    track.library_id =
-                        it["data"]!!.jsonObject["SaveMediaListEntry"]!!.jsonObject["id"]!!.jsonPrimitive.long
-                    track
-                }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        apiUrl,
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let {
+                        track.library_id =
+                            it["data"]!!.jsonObject["SaveMediaListEntry"]!!.jsonObject["id"]!!.jsonPrimitive.long
+                        track
+                    }
+            }
         }
     }
 
@@ -171,7 +179,7 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                 }
             }
             authClient.newCall(POST(apiUrl, body = payload.toString().toRequestBody(jsonMime)))
-                .await()
+                .awaitSuccess()
             track
         }
     }
@@ -209,21 +217,23 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("query", search)
                 }
             }
-            authClient.newCall(
-                POST(
-                    apiUrl,
-                    body = payload.toString().toRequestBody(jsonMime),
-                ),
-            )
-                .await()
-                .parseAs<JsonObject>()
-                .let { response ->
-                    val data = response["data"]!!.jsonObject
-                    val page = data["Page"]!!.jsonObject
-                    val media = page["media"]!!.jsonArray
-                    val entries = media.map { jsonToALManga(it.jsonObject) }
-                    entries.map { it.toTrack() }
-                }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        apiUrl,
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let { response ->
+                        val data = response["data"]!!.jsonObject
+                        val page = data["Page"]!!.jsonObject
+                        val media = page["media"]!!.jsonArray
+                        val entries = media.map { jsonToALManga(it.jsonObject) }
+                        entries.map { it.toTrack() }
+                    }
+            }
         }
     }
 
@@ -260,21 +270,23 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("query", search)
                 }
             }
-            authClient.newCall(
-                POST(
-                    apiUrl,
-                    body = payload.toString().toRequestBody(jsonMime),
-                ),
-            )
-                .await()
-                .parseAs<JsonObject>()
-                .let { response ->
-                    val data = response["data"]!!.jsonObject
-                    val page = data["Page"]!!.jsonObject
-                    val media = page["media"]!!.jsonArray
-                    val entries = media.map { jsonToALAnime(it.jsonObject) }
-                    entries.map { it.toTrack() }
-                }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        apiUrl,
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let { response ->
+                        val data = response["data"]!!.jsonObject
+                        val page = data["Page"]!!.jsonObject
+                        val media = page["media"]!!.jsonArray
+                        val entries = media.map { jsonToALAnime(it.jsonObject) }
+                        entries.map { it.toTrack() }
+                    }
+            }
         }
     }
 
@@ -328,21 +340,23 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("manga_id", track.media_id)
                 }
             }
-            authClient.newCall(
-                POST(
-                    apiUrl,
-                    body = payload.toString().toRequestBody(jsonMime),
-                ),
-            )
-                .await()
-                .parseAs<JsonObject>()
-                .let { response ->
-                    val data = response["data"]!!.jsonObject
-                    val page = data["Page"]!!.jsonObject
-                    val media = page["mediaList"]!!.jsonArray
-                    val entries = media.map { jsonToALUserManga(it.jsonObject) }
-                    entries.firstOrNull()?.toTrack()
-                }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        apiUrl,
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let { response ->
+                        val data = response["data"]!!.jsonObject
+                        val page = data["Page"]!!.jsonObject
+                        val media = page["mediaList"]!!.jsonArray
+                        val entries = media.map { jsonToALUserManga(it.jsonObject) }
+                        entries.firstOrNull()?.toTrack()
+                    }
+            }
         }
     }
 
@@ -396,21 +410,23 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
                     put("anime_id", track.media_id)
                 }
             }
-            authClient.newCall(
-                POST(
-                    apiUrl,
-                    body = payload.toString().toRequestBody(jsonMime),
-                ),
-            )
-                .await()
-                .parseAs<JsonObject>()
-                .let { response ->
-                    val data = response["data"]!!.jsonObject
-                    val page = data["Page"]!!.jsonObject
-                    val media = page["mediaList"]!!.jsonArray
-                    val entries = media.map { jsonToALUserAnime(it.jsonObject) }
-                    entries.firstOrNull()?.toTrack()
-                }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        apiUrl,
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let { response ->
+                        val data = response["data"]!!.jsonObject
+                        val page = data["Page"]!!.jsonObject
+                        val media = page["mediaList"]!!.jsonArray
+                        val entries = media.map { jsonToALUserAnime(it.jsonObject) }
+                        entries.firstOrNull()?.toTrack()
+                    }
+            }
         }
     }
 
@@ -442,22 +458,24 @@ class AnilistApi(val client: OkHttpClient, interceptor: AnilistInterceptor) {
             val payload = buildJsonObject {
                 put("query", query)
             }
-            authClient.newCall(
-                POST(
-                    apiUrl,
-                    body = payload.toString().toRequestBody(jsonMime),
-                ),
-            )
-                .await()
-                .parseAs<JsonObject>()
-                .let {
-                    val data = it["data"]!!.jsonObject
-                    val viewer = data["Viewer"]!!.jsonObject
-                    Pair(
-                        viewer["id"]!!.jsonPrimitive.int,
-                        viewer["mediaListOptions"]!!.jsonObject["scoreFormat"]!!.jsonPrimitive.content,
-                    )
-                }
+            with(json) {
+                authClient.newCall(
+                    POST(
+                        apiUrl,
+                        body = payload.toString().toRequestBody(jsonMime),
+                    ),
+                )
+                    .awaitSuccess()
+                    .parseAs<JsonObject>()
+                    .let {
+                        val data = it["data"]!!.jsonObject
+                        val viewer = data["Viewer"]!!.jsonObject
+                        Pair(
+                            viewer["id"]!!.jsonPrimitive.int,
+                            viewer["mediaListOptions"]!!.jsonObject["scoreFormat"]!!.jsonPrimitive.content,
+                        )
+                    }
+            }
         }
     }
 
