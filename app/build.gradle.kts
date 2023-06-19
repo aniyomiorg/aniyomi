@@ -271,6 +271,8 @@ dependencies {
     // FFmpeg-kit
     implementation(libs.ffmpeg.kit)
     implementation(libs.arthenica.smartexceptions)
+    // seeker seek bar
+    implementation(libs.seeker)
 }
 
 androidComponents {

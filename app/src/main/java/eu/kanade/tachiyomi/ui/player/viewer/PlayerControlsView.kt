@@ -18,6 +18,7 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerDialogs
+import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.StateRestoreCallback
 import `is`.xyz.mpv.Utils
@@ -40,6 +41,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     private val player get() = activity.player
 
     private val playerDialogs = PlayerDialogs(activity)
+
+    val seekbar: Seekbar = Seekbar(binding.playbackSeekbar) {
+        MPVLib.command(arrayOf("seek", it.toInt().toString(), "absolute+keyframes"))
+        // if (playerPreferences.playerSmoothSeek().get()) player.timePos = it.toInt() else MPVLib.command(arrayOf("seek", it.toString(), "absolute+keyframes"))
+    }
 
     private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -88,8 +94,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         // Long click controls
         binding.cycleSpeedBtn.setOnLongClickListener { playerDialogs.speedPickerDialog(pauseForDialog()); true }
         binding.cycleDecoderBtn.setOnLongClickListener { playerDialogs.decoderDialog(pauseForDialog()); true }
-
-        binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
 
         binding.prevBtn.setOnClickListener { activity.switchEpisode(true) }
         binding.playBtn.setOnClickListener { playPause() }
@@ -297,8 +301,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             }
             activity.viewModel.onSecondReached(position, duration)
         }
-
-        binding.playbackSeekbar.progress = position
+        seekbar.updateSeekbar(value = position.toFloat())
     }
 
     @SuppressLint("SetTextI18n")
@@ -307,13 +310,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             binding.playbackDurationBtn.text = Utils.prettyTime(duration)
         }
 
-        if (SeekState.mode != SeekState.SEEKBAR) {
-            binding.playbackSeekbar.max = duration
-        }
+        seekbar.updateSeekbar(duration = duration.toFloat())
     }
 
-    internal fun updateBufferPosition(duration: Int) {
-        binding.playbackSeekbar.secondaryProgress = duration
+    internal fun updateBufferPosition(bufferPosition: Int) {
+        seekbar.updateSeekbar(readAheadValue = bufferPosition.toFloat())
     }
 
     internal fun showAndFadeControls() {
