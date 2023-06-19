@@ -11,7 +11,6 @@ import data.Manga_sync
 import data.Mangas
 import dataanime.Anime_sync
 import dataanime.Animes
-import eu.kanade.domain.backup.service.BackupPreferences
 import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.backup.BackupConst.BACKUP_CATEGORY
@@ -59,10 +58,8 @@ import eu.kanade.tachiyomi.data.database.models.manga.Manga
 import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.anime.getPreferenceKey
 import eu.kanade.tachiyomi.source.anime.model.copyFrom
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.manga.getPreferenceKey
 import eu.kanade.tachiyomi.source.manga.model.copyFrom
 import eu.kanade.tachiyomi.util.system.hasPermission
@@ -76,6 +73,7 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
 import tachiyomi.data.updateStrategyAdapter
+import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
@@ -83,6 +81,8 @@ import tachiyomi.domain.entries.anime.interactor.GetAnimeFavorites
 import tachiyomi.domain.entries.manga.interactor.GetMangaFavorites
 import tachiyomi.domain.history.anime.model.AnimeHistoryUpdate
 import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File

@@ -5,6 +5,7 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import tachiyomi.domain.source.anime.model.AnimeSourceData
+import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -32,4 +33,4 @@ fun AnimeSource.getNameForAnimeInfo(): String {
 
 fun AnimeSource.isLocal(): Boolean = id == LocalAnimeSource.ID
 
-fun AnimeSource.isLocalOrStub(): Boolean = isLocal() || this is AnimeSourceManager.StubAnimeSource
+fun AnimeSource.isLocalOrStub(): Boolean = isLocal() || this is StubAnimeSource

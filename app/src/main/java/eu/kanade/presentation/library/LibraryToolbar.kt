@@ -37,6 +37,7 @@ fun LibraryToolbar(
     onClickInvertSelection: () -> Unit,
     onClickFilter: () -> Unit,
     onClickRefresh: () -> Unit,
+    onClickGlobalUpdate: () -> Unit,
     onClickOpenRandomEntry: () -> Unit,
     searchQuery: String?,
     onSearchQueryChange: (String?) -> Unit,
@@ -57,6 +58,7 @@ fun LibraryToolbar(
         onSearchQueryChange = onSearchQueryChange,
         onClickFilter = onClickFilter,
         onClickRefresh = onClickRefresh,
+        onClickGlobalUpdate = onClickGlobalUpdate,
         onClickOpenRandomEntry = onClickOpenRandomEntry,
         scrollBehavior = scrollBehavior,
         navigateUp = navigateUp,
@@ -71,6 +73,7 @@ fun LibraryRegularToolbar(
     onSearchQueryChange: (String?) -> Unit,
     onClickFilter: () -> Unit,
     onClickRefresh: () -> Unit,
+    onClickGlobalUpdate: () -> Unit,
     onClickOpenRandomEntry: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior?,
     navigateUp: (() -> Unit)? = null,
@@ -105,6 +108,13 @@ fun LibraryRegularToolbar(
             OverflowMenu { closeMenu ->
                 DropdownMenuItem(
                     text = { Text(text = stringResource(R.string.pref_category_library_update)) },
+                    onClick = {
+                        onClickGlobalUpdate()
+                        closeMenu()
+                    },
+                )
+                DropdownMenuItem(
+                    text = { Text(text = stringResource(R.string.action_update_category)) },
                     onClick = {
                         onClickRefresh()
                         closeMenu()

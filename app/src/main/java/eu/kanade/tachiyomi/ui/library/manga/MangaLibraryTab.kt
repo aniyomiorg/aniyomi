@@ -104,8 +104,8 @@ object MangaLibraryTab : Tab {
 
         val snackbarHostState = remember { SnackbarHostState() }
 
-        val onClickRefresh: (Category?) -> Boolean = {
-            val started = MangaLibraryUpdateJob.startNow(context, it)
+        val onClickRefresh: (Category?) -> Boolean = { category ->
+            val started = MangaLibraryUpdateJob.startNow(context, category)
             scope.launch {
                 val msgRes = if (started) R.string.updating_category else R.string.update_already_running
                 snackbarHostState.showSnackbar(context.getString(msgRes))
@@ -133,7 +133,8 @@ object MangaLibraryTab : Tab {
                     onClickSelectAll = { screenModel.selectAll(screenModel.activeCategoryIndex) },
                     onClickInvertSelection = { screenModel.invertSelection(screenModel.activeCategoryIndex) },
                     onClickFilter = { screenModel.showSettingsDialog() },
-                    onClickRefresh = { onClickRefresh(null) },
+                    onClickRefresh = { onClickRefresh(state.categories[screenModel.activeCategoryIndex]) },
+                    onClickGlobalUpdate = { onClickRefresh(null) },
                     onClickOpenRandomEntry = {
                         scope.launch {
                             val randomItem = screenModel.getRandomLibraryItemForCurrentCategory()

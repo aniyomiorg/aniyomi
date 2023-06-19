@@ -43,6 +43,7 @@ fun EntryToolbar(
     onClickShare: (() -> Unit)?,
     onClickDownload: ((DownloadAction) -> Unit)?,
     onClickEditCategory: (() -> Unit)?,
+    onClickRefresh: () -> Unit,
     onClickMigrate: (() -> Unit)?,
     // Anime only
     changeAnimeSkipIntro: (() -> Unit)?,
@@ -112,44 +113,49 @@ fun EntryToolbar(
                         Icon(Icons.Outlined.FilterList, contentDescription = stringResource(R.string.action_filter), tint = filterTint)
                     }
 
-                    if (onClickEditCategory != null || onClickMigrate != null || onClickShare != null || changeAnimeSkipIntro != null) {
-                        OverflowMenu { closeMenu ->
-                            if (onClickEditCategory != null) {
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(R.string.action_edit_categories)) },
-                                    onClick = {
-                                        onClickEditCategory()
-                                        closeMenu()
-                                    },
-                                )
-                            }
-                            if (onClickMigrate != null) {
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(R.string.action_migrate)) },
-                                    onClick = {
-                                        onClickMigrate()
-                                        closeMenu()
-                                    },
-                                )
-                            }
-                            if (changeAnimeSkipIntro != null) {
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(R.string.action_change_intro_length)) },
-                                    onClick = {
-                                        changeAnimeSkipIntro()
-                                        closeMenu()
-                                    },
-                                )
-                            }
-                            if (onClickShare != null) {
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(R.string.action_share)) },
-                                    onClick = {
-                                        onClickShare()
-                                        closeMenu()
-                                    },
-                                )
-                            }
+                    OverflowMenu { closeMenu ->
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(R.string.action_webview_refresh)) },
+                            onClick = {
+                                onClickRefresh()
+                                closeMenu()
+                            },
+                        )
+                        if (onClickEditCategory != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_edit_categories)) },
+                                onClick = {
+                                    onClickEditCategory()
+                                    closeMenu()
+                                },
+                            )
+                        }
+                        if (onClickMigrate != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_migrate)) },
+                                onClick = {
+                                    onClickMigrate()
+                                    closeMenu()
+                                },
+                            )
+                        }
+                        if (changeAnimeSkipIntro != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_change_intro_length)) },
+                                onClick = {
+                                    changeAnimeSkipIntro()
+                                    closeMenu()
+                                },
+                            )
+                        }
+                        if (onClickShare != null) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(R.string.action_share)) },
+                                onClick = {
+                                    onClickShare()
+                                    closeMenu()
+                                },
+                            )
                         }
                     }
                 }

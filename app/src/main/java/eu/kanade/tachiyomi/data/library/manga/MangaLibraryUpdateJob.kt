@@ -15,7 +15,6 @@ import androidx.work.WorkManager
 import androidx.work.WorkQuery
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.copyFrom
 import eu.kanade.domain.entries.manga.model.toSManga
@@ -39,7 +38,6 @@ import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.UnmeteredSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.util.prepUpdateCover
@@ -64,6 +62,7 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.interactor.GetLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.model.Manga
@@ -72,6 +71,8 @@ import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.library.manga.LibraryManga
+import tachiyomi.domain.source.manga.model.SourceNotInstalledException
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
 import uy.kohesive.injekt.Injekt
@@ -284,7 +285,7 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                                 val errorMessage = when (e) {
                                                     is NoChaptersException -> context.getString(R.string.no_chapters_error)
                                                     // failedUpdates will already have the source, don't need to copy it into the message
-                                                    is MangaSourceManager.SourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
+                                                    is SourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
                                                     else -> e.message
                                                 }
                                                 failedUpdates.add(manga to errorMessage)

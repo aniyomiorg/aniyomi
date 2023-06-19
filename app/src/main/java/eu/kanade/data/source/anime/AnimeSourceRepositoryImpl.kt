@@ -3,7 +3,7 @@ package eu.kanade.data.source.anime
 import eu.kanade.domain.source.anime.repository.AnimeSourceRepository
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import tachiyomi.data.handlers.anime.AnimeDatabaseHandler
@@ -11,8 +11,11 @@ import tachiyomi.data.source.anime.AnimeSourceLatestPagingSource
 import tachiyomi.data.source.anime.AnimeSourcePagingSourceType
 import tachiyomi.data.source.anime.AnimeSourcePopularPagingSource
 import tachiyomi.data.source.anime.AnimeSourceSearchPagingSource
+import tachiyomi.data.source.anime.animeSourceMapper
 import tachiyomi.domain.source.anime.model.AnimeSource
 import tachiyomi.domain.source.anime.model.AnimeSourceWithCount
+import tachiyomi.domain.source.anime.model.StubAnimeSource
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
 
 class AnimeSourceRepositoryImpl(
@@ -22,13 +25,19 @@ class AnimeSourceRepositoryImpl(
 
     override fun getAnimeSources(): Flow<List<AnimeSource>> {
         return sourceManager.catalogueSources.map { sources ->
-            sources.map(catalogueAnimeSourceMapper)
+            sources.map {
+                animeSourceMapper(it).copy(
+                    supportsLatest = it.supportsLatest,
+                )
+            }
         }
     }
 
     override fun getOnlineAnimeSources(): Flow<List<AnimeSource>> {
-        return sourceManager.onlineSources.map { sources ->
-            sources.map(animeSourceMapper)
+        return sourceManager.catalogueSources.map { sources ->
+            sources
+                .filterIsInstance<AnimeHttpSource>()
+                .map(animeSourceMapper)
         }
     }
 
@@ -38,8 +47,11 @@ class AnimeSourceRepositoryImpl(
             sourceIdsWithCount
                 .filterNot { it.source == LocalAnimeSource.ID }
                 .map { (sourceId, count) ->
-                    val source = animeSourceMapper(sourceManager.getOrStub(sourceId))
-                    source to count
+                    val source = sourceManager.getOrStub(sourceId)
+                    val domainSource = animeSourceMapper(source).copy(
+                        isStub = source is StubAnimeSource,
+                    )
+                    domainSource to count
                 }
         }
     }
@@ -49,7 +61,10 @@ class AnimeSourceRepositoryImpl(
         return sourceIdWithNonLibraryAnime.map { sourceId ->
             sourceId.map { (sourceId, count) ->
                 val source = sourceManager.getOrStub(sourceId)
-                AnimeSourceWithCount(animeSourceMapper(source), count)
+                val domainSource = animeSourceMapper(source).copy(
+                    isStub = source is StubAnimeSource,
+                )
+                AnimeSourceWithCount(domainSource, count)
             }
         }
     }

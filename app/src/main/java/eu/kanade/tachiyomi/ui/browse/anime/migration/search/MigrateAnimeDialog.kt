@@ -35,7 +35,6 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.browse.anime.migration.AnimeMigrationFlags
 import eu.kanade.tachiyomi.ui.browse.manga.migration.MangaMigrationFlags
 import kotlinx.coroutines.flow.update
@@ -50,6 +49,7 @@ import tachiyomi.domain.entries.anime.model.AnimeUpdate
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.items.episode.interactor.UpdateEpisode
 import tachiyomi.domain.items.episode.model.toEpisodeUpdate
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import tachiyomi.presentation.core.screens.LoadingScreen

@@ -2,8 +2,8 @@ package eu.kanade.data.source.manga
 
 import eu.kanade.domain.source.manga.repository.MangaSourceRepository
 import eu.kanade.tachiyomi.source.CatalogueSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.source.model.FilterList
+import eu.kanade.tachiyomi.source.online.HttpSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import tachiyomi.data.handlers.manga.MangaDatabaseHandler
@@ -11,8 +11,11 @@ import tachiyomi.data.source.manga.SourceLatestPagingSource
 import tachiyomi.data.source.manga.SourcePagingSourceType
 import tachiyomi.data.source.manga.SourcePopularPagingSource
 import tachiyomi.data.source.manga.SourceSearchPagingSource
+import tachiyomi.data.source.manga.mangaSourceMapper
 import tachiyomi.domain.source.manga.model.MangaSourceWithCount
 import tachiyomi.domain.source.manga.model.Source
+import tachiyomi.domain.source.manga.model.StubMangaSource
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 class MangaSourceRepositoryImpl(
@@ -22,13 +25,19 @@ class MangaSourceRepositoryImpl(
 
     override fun getMangaSources(): Flow<List<Source>> {
         return sourceManager.catalogueSources.map { sources ->
-            sources.map(catalogueMangaSourceMapper)
+            sources.map {
+                mangaSourceMapper(it).copy(
+                    supportsLatest = it.supportsLatest,
+                )
+            }
         }
     }
 
     override fun getOnlineMangaSources(): Flow<List<Source>> {
-        return sourceManager.onlineSources.map { sources ->
-            sources.map(mangaSourceMapper)
+        return sourceManager.catalogueSources.map { sources ->
+            sources
+                .filterIsInstance<HttpSource>()
+                .map(mangaSourceMapper)
         }
     }
 
@@ -38,8 +47,11 @@ class MangaSourceRepositoryImpl(
             sourceIdsWithCount
                 .filterNot { it.source == LocalMangaSource.ID }
                 .map { (sourceId, count) ->
-                    val source = mangaSourceMapper(sourceManager.getOrStub(sourceId))
-                    source to count
+                    val source = sourceManager.getOrStub(sourceId)
+                    val domainSource = mangaSourceMapper(source).copy(
+                        isStub = source is StubMangaSource,
+                    )
+                    domainSource to count
                 }
         }
     }
@@ -49,7 +61,10 @@ class MangaSourceRepositoryImpl(
         return sourceIdWithNonLibraryManga.map { sourceId ->
             sourceId.map { (sourceId, count) ->
                 val source = sourceManager.getOrStub(sourceId)
-                MangaSourceWithCount(mangaSourceMapper(source), count)
+                val domainSource = mangaSourceMapper(source).copy(
+                    isStub = source is StubMangaSource,
+                )
+                MangaSourceWithCount(domainSource, count)
             }
         }
     }

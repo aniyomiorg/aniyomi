@@ -15,7 +15,6 @@ import androidx.work.WorkManager
 import androidx.work.WorkQuery
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toSAnime
@@ -40,7 +39,6 @@ import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
 import eu.kanade.tachiyomi.source.UnmeteredSource
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import eu.kanade.tachiyomi.util.prepUpdateCover
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
@@ -64,6 +62,7 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.GetLibraryAnime
 import tachiyomi.domain.entries.anime.model.Anime
@@ -72,6 +71,8 @@ import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.anime.LibraryAnime
+import tachiyomi.domain.source.anime.model.AnimeSourceNotInstalledException
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
@@ -284,7 +285,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                                 val errorMessage = when (e) {
                                                     is NoEpisodesException -> context.getString(R.string.no_chapters_error)
                                                     // failedUpdates will already have the source, don't need to copy it into the message
-                                                    is AnimeSourceManager.AnimeSourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
+                                                    is AnimeSourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
                                                     else -> e.message
                                                 }
                                                 failedUpdates.add(anime to errorMessage)
