@@ -140,7 +140,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="Settings"
                 android:onClick="pickChapter"
-                android:src="@drawable/ic_chapter_24dp"
+                android:src="@drawable/ic_video_chapter_24dp"
                 android:visibility="gone"
                 app:layout_constraintLeft_toRightOf="@id/cycleDecoderBtn"
                 app:layout_constraintRight_toLeftOf="@id/settingsBtn"
