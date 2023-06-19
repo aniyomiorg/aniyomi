@@ -6,7 +6,8 @@
     <string name="entries">Bibliothekseinträge</string>
     <string name="chapters_episodes">Kapitel und Folgen</string>
     <string name="episodes">Folgen</string>
-    <string name="backup_settings_warning">Warnung: Die Einstellungen zu sichern, führt dazu, dass die Passwörter zu deinen Trackingdiensten gespeichert werden. Teile deine Sicherungsdatei mit niemandem!</string>
+    <string name="backup_settings_warning">Warnung: Die Einstellungen zu sichern, kann dazu führen, dass sensible Daten wie Passwörter zu deinen Trackingdiensten gespeichert werden.
+\nTeile deine Sicherungsdatei mit niemandem!</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
@@ -45,7 +46,6 @@
     <string name="action_show_manga">Eintrag anzeigen</string>
     <string name="action_show_anime">Eintrag anzeigen</string>
     <string name="action_display_download_badge_anime">Heruntergeladene Folgen</string>
-    <string name="action_display_unseen_badge">Ungesehene Folgen</string>
     <string name="action_display_local_badge_manga">Lokale Quelle</string>
     <string name="action_display_local_badge_anime">Lokale Animequelle</string>
     <string name="action_display_show_continue_reading_button">Fortsetzen-Knopf anzeigen</string>
@@ -93,7 +93,7 @@
     <string name="pref_category_external_player">Externer Player</string>
     <string name="pref_always_use_external_player">Immer externen Player benutzen</string>
     <string name="pref_external_player_preference">Bevorzugter externer Player</string>
-    <string name="playertitle">%1$s-%2$s</string>
+    <string name="player_title">%1$s-%2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Kapitel löschen</string>
     <string name="pref_remove_after_marked_as_read">Nachdem manuell als gelesen markiert</string>
@@ -113,7 +113,7 @@
     <string name="download_ahead_info_anime">Funktioniert nur mit Bibliothekseinträgen und wenn die aktuelle Folge und die nächste bereits heruntergeladen sind</string>
     <string name="pref_auto_update_manga_sync">Fortschritt nach dem Lesen aktualisieren</string>
     <string name="pref_track_on_add_library">Beim Hinzufügen zur Bibliothek das Tracking-Menü öffnen</string>
-    <string name="pref_backup_flags_summ">Welche Informationen in der Sicherungsdatei enthalten sind</string>
+    <string name="pref_backup_flags_summary">Welche Informationen in der Sicherungsdatei enthalten sind</string>
     <string name="pref_clear_chapter_cache">Kapitel-Zwischenspeicher leeren</string>
     <string name="used_cache_both">Von Anime verwendet: %1$s, von Manga verwendet: %2$s</string>
     <string name="pref_auto_clear_chapter_cache">Kapitel-Zwischenspeicher beim Schließen der App löschen</string>
@@ -145,9 +145,6 @@
     <string name="download_paused">Pausiert</string>
     <string name="show_episode_number">Folgennummer</string>
     <string name="sort_by_episode_number">Nach Folgennummer</string>
-    <string name="download_1_episode">Nächste Folge</string>
-    <string name="download_5_episodes">Nächste 5 Folgen</string>
-    <string name="download_10_episodes">Nächste 10 Folgen</string>
     <string name="download_unseen">Ungesehene</string>
     <string name="confirm_delete_episodes">Bist du sicher, dass du die ausgewählten Folgen löschen willst\?</string>
     <string name="also_set_chapter_settings_for_library">Auch für alle Einträge in meiner Bibliothek anwenden</string>
@@ -171,7 +168,6 @@
     <string name="screenshot_show_subs">Untertitel in Bildschirmfoto zeigen</string>
     <string name="enable_volume_brightness_gestures">Lautstärke- und Helligkeitsgesten aktivieren</string>
     <string name="enable_horizontal_seek_gesture">Horizontale Spul-Geste aktivieren</string>
-    <string name="stats_header">Statistiken anzeigen</string>
     <string name="toggle_stats">Statistiken aktivieren</string>
     <string name="stats_page">Statistik-Seite</string>
     <string name="stats_page_1">Seite 1</string>
@@ -204,9 +200,9 @@
     <string name="no_next_episode">Nächste Folge nicht gefunden!</string>
     <string name="no_previous_episode">Vorherige Folge nicht gefunden!</string>
     <string name="label_history">Manga</string>
-    <string name="label_animehistory">Anime</string>
+    <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
-    <string name="label_animeupdates">Anime</string>
+    <string name="label_anime_updates">Anime</string>
     <string name="player_overlay_back">Zurück</string>
     <string name="enable_auto_play">Automatische Wiedergabe ist an</string>
     <string name="disable_auto_play">Automatische Wiedergabe ist aus</string>
@@ -250,8 +246,8 @@
     </plurals>
     <string name="episode_settings">Folgeneinstellungen</string>
     <string name="pref_backup_flags">Sicherungsoptionen</string>
-    <string name="label_mangaextensions">Manga-Erweiterungen</string>
-    <string name="label_animeextensions">Anime-Erweiterungen</string>
+    <string name="label_manga_extensions">Manga-Erweiterungen</string>
+    <string name="label_anime_extensions">Anime-Erweiterungen</string>
     <string name="label_migration_manga">Manga migrieren</string>
     <string name="label_migration_anime">Anime migrieren</string>
     <string name="settings">Einstellungen</string>
@@ -265,12 +261,21 @@
     <string name="label_watched_duration">Gesehene Dauer</string>
     <string name="action_global_manga_search">Globale Mangasuche</string>
     <string name="action_global_anime_search">Globale Animesuche</string>
-    <string name="pref_search_pinned_anime_sources_only">Nur angeheftete Anime Quellen nutzen</string>
+    <string name="pref_search_pinned_anime_sources_only">In der globalen Suche nur angeheftete Animequellen durchsuchen</string>
     <string name="pref_category_volume_brightness">Lautstärke und Helligkeit</string>
     <string name="pref_default_home_tab_library">Startbildschirm zum Manga-Tab setzen</string>
-    <string name="pref_search_pinned_manga_sources_only">Nur angeheftete Manga Quellen nutzen</string>
+    <string name="pref_search_pinned_manga_sources_only">In der globalen Suche nur angeheftete Mangaquellen durchsuchen</string>
     <string name="unofficial_anime_extension_message">Diese Erweiterung kommt nicht von der offiziellen Aniyomi Erweiterungs Liste.</string>
     <string name="pref_enable_pip">Aktiviere Nutzung des Bild-im-Bild (PiP) Modus</string>
     <string name="pref_category_pip">Bild-im-Bild (PiP)</string>
     <string name="pref_category_player_seeking">Suchen</string>
+    <string name="pref_hide_in_manga_library_items">Mangaeinträge verstecken, die schon in der Bibliothek sind</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one">Nächste Folge</item>
+        <item quantity="other">Nächste %d Folgen</item>
+    </plurals>
+    <string name="copied_video_link_to_clipboard">Videolink in die Zwischenablage kopiert</string>
+    <string name="pref_hide_in_anime_library_items">Animeeinträge verstecken, die schon in der Bibliothek sind</string>
+    <string name="choose_video_quality">Videoqualität auswählen:</string>
+    <string name="extension_settings">Erweiterungs-Einstellungen</string>
 </resources>

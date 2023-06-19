@@ -30,11 +30,11 @@ abstract class PlayerBottomSheetDialog(context: Context) : BottomSheetDialog(con
             behavior.maxWidth = width
         }
 
-        // Set peek height to 33% display height
+        // Set peek height to 50% display height
         context.displayCompat?.let {
             val metrics = DisplayMetrics()
             it.getRealMetrics(metrics)
-            behavior.peekHeight = metrics.heightPixels / 3
+            behavior.peekHeight = metrics.heightPixels / 2
         }
 
         val bottomSheet = rootView.parent as ViewGroup

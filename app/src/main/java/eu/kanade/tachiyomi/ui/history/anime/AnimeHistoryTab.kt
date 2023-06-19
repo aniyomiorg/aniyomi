@@ -62,7 +62,7 @@ fun Screen.animeHistoryTab(
     val navigateUp: (() -> Unit)? = if (fromMore) navigator::pop else null
 
     return TabContent(
-        titleRes = R.string.label_animehistory,
+        titleRes = R.string.label_anime_history,
         searchEnabled = true,
         content = { contentPadding, _ ->
             AnimeHistoryScreen(

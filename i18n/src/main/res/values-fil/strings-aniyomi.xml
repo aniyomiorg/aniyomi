@@ -51,7 +51,6 @@
     <string name="action_screen_fit">Screen fit mode</string>
     <string name="action_show_anime">Ipakita ang anime</string>
     <string name="action_display_download_badge_anime">Mga na-download na episode</string>
-    <string name="action_display_unseen_badge">Di pa nakitang mga episode</string>
     <string name="pref_search_pinned_anime_sources_only">Isama lang ang mga naka-pin na mga anime source</string>
     <string name="action_start_download_internally">Gumamit ng internal na downloader</string>
     <string name="action_order_by_episode_number">Ayon sa bilang ng episode</string>
@@ -89,7 +88,7 @@
     <string name="disable_auto_play">Naka-off ang auto-play</string>
     <string name="video_fit_screen">Pagkasyahin sa screen</string>
     <string name="video_crop_screen">Na-crop sa screen</string>
-    <string name="label_animeupdates">Anime</string>
+    <string name="label_anime_updates">Anime</string>
     <string name="player_overlay_back">Bumalik</string>
     <string name="enable_auto_play">Naka-on ang auto-play</string>
     <string name="video_stretch_screen">Naka-stretch sa screen</string>
@@ -158,7 +157,7 @@
     <string name="pref_player_fullscreen">Ipakita ang nilalaman sa display cutout</string>
     <string name="pref_player_hide_controls">Itago ang mga kontrol ng player kapag binubuksan ang player</string>
     <string name="pref_mpv_conf">I-edit ang MPV configuration file para sa karagdagang mga setting ng player</string>
-    <string name="pref_backup_flags_summ">Anong impormasyon ang isama sa backup file</string>
+    <string name="pref_backup_flags_summary">Anong impormasyon ang isama sa backup file</string>
     <plurals name="next_unseen_episodes">
         <item quantity="one">Susunod na hindi nakitang episode</item>
         <item quantity="other">Susunod na %d hindi nakitang mga episode</item>
@@ -174,7 +173,7 @@
     <string name="information_no_recent_anime">Walang napanood kamakailan</string>
     <string name="pref_skip_disable">Isara</string>
     <string name="action_next_episode">Susunod na episode</string>
-    <string name="playertitle">%1$s - %2$s</string>
+    <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="playback_options_quality">Kalidad ng video</string>
     <string name="playback_options_title">Mga opsyon sa playback</string>
@@ -189,7 +188,6 @@
     <string name="label_manga">Manga</string>
     <string name="backup_settings_warning">Babala: Ang pag-back up ng mga setting ay mag-iimbak din ng iyong mga track password, huwag ibahagi ang backup na file na ito!</string>
     <string name="episodes">Mga Episode</string>
-    <string name="download_5_episodes">Susunod na 5 (mga) episode</string>
     <string name="action_sort_last_seen">Huling nakita</string>
     <string name="action_player_pip">PiP mode</string>
     <string name="pref_category_player">Player</string>
@@ -233,8 +231,6 @@
     <string name="delete_downloads_for_anime">Tanggalin ang mga na-download na episode\?</string>
     <string name="episode_downloading_progress">Nagda-download (%d%%)</string>
     <string name="show_episode_number">Bilang ng episode</string>
-    <string name="download_1_episode">Susunod na episode</string>
-    <string name="download_10_episodes">Susunod na 10 (mga) episode</string>
     <string name="confirm_delete_episodes">Sigurado ka bang gusto mong tanggalin ang mga napiling episode\?</string>
     <string name="downloaded_episodes">Mga na-download na episode</string>
     <string name="local_invalid_episode_format">Di-wastong format ng episode</string>
@@ -253,7 +249,6 @@
     <string name="screenshot_show_subs">Ipakita ang mga subtitle sa screenshot</string>
     <string name="dialog_with_checkbox_remove_description_anime">Aalisin nito ang petsa ng panonood ng episode na ito. Sigurado ka ba\?</string>
     <string name="episode_progress">Progress: %1$s/%2$s</string>
-    <string name="stats_header">Ipakita ang mga istatistika</string>
     <string name="stats_page">Pahina ng istatistika</string>
     <string name="stats_page_2">Pahina 2</string>
     <string name="notification_new_episodes">May nakitang mga bagong episode</string>
@@ -263,14 +258,18 @@
     <string name="no_next_episode">Hindi nahanap ang Susunod na Episode!</string>
     <string name="no_previous_episode">Hindi nahanap ang Nakaraang Episode!</string>
     <string name="label_history">Manga</string>
-    <string name="label_animehistory">Anime</string>
+    <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
-    <string name="label_mangaextensions">Mga Extension ng Manga</string>
-    <string name="label_animeextensions">Mga Extension ng Anime</string>
+    <string name="label_manga_extensions">Mga Extension ng Manga</string>
+    <string name="label_anime_extensions">Mga Extension ng Anime</string>
     <string name="label_migration_manga">Lumipat ng Manga</string>
     <string name="entries">Mga entry ng aklatan</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Anime</string>
     <string name="label_manga_sources">Mga Source ng Manga</string>
     <string name="label_anime_sources">Mga Source ng Anime</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one"/>
+        <item quantity="other"/>
+    </plurals>
 </resources>

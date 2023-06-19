@@ -308,7 +308,7 @@ class PlayerViewModel(
      * seen, update tracking services, enqueue downloaded episode deletion and download next episode.
      */
     fun onSecondReached(position: Int, duration: Int) {
-        if (state.value.isLoadingAdjacentEpisode) return
+        if (state.value.isLoadingEpisode) return
         val currentEp = currentEpisode ?: return
         if (savedEpisodeId == -1L) return
 
@@ -674,7 +674,7 @@ class PlayerViewModel(
         val episode: Episode? = null,
         val anime: Anime? = null,
         val source: AnimeSource? = null,
-        val isLoadingAdjacentEpisode: Boolean = false,
+        val isLoadingEpisode: Boolean = false,
     )
 
     sealed class Event {

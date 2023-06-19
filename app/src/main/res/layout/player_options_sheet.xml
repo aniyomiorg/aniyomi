@@ -11,71 +11,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/screenshot_prefs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/screenshot_header"
-            android:textAppearance="@style/TextAppearance.Tachiyomi.SectionHeader" />
-
-        <TextView
-            android:id="@+id/set_as_cover"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:clickable="true"
-            android:drawablePadding="32dp"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="16dp"
-            android:text="@string/set_as_cover"
-            android:textColor="?attr/colorOnBackground"
-            app:drawableStartCompat="@drawable/ic_photo_24dp"
-            app:drawableTint="?attr/colorOnBackground" />
-
-        <TextView
-            android:id="@+id/share"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:clickable="true"
-            android:drawablePadding="32dp"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="16dp"
-            android:text="@string/action_share"
-            android:textColor="?attr/colorOnBackground"
-            app:drawableStartCompat="@drawable/ic_share_24dp"
-            app:drawableTint="?attr/colorOnBackground" />
-
-        <TextView
-            android:id="@+id/save"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:clickable="true"
-            android:drawablePadding="32dp"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="16dp"
-            android:text="@string/action_save"
-            android:textColor="?attr/colorOnBackground"
-            app:drawableStartCompat="@drawable/ic_save_24dp"
-            app:drawableTint="?attr/colorOnBackground" />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/toggleSubs"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/screenshot_show_subs"
-            android:textColor="?android:attr/textColorSecondary" />
-
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/toggleVolumeBrightnessGestures"
             android:layout_width="match_parent"
@@ -96,17 +31,6 @@
 
         <!-- Stats preferences -->
 
-        <TextView
-            android:id="@+id/stats_prefs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/stats_header"
-            android:textAppearance="@style/TextAppearance.Tachiyomi.SectionHeader" />
-
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/toggleStats"
             android:layout_width="match_parent"
@@ -123,10 +47,6 @@
             android:entries="@array/stats_pages"
             app:title="@string/stats_page" />
 
-        <ListView
-            android:id="@+id/listview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

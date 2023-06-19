@@ -68,11 +68,11 @@ class AppUpdateChecker {
         val newVersion = versionTag.replace("[^\\d.]".toRegex(), "")
 
         return if (BuildConfig.PREVIEW) {
-            // Preview builds: based on releases in "jmir1/tachiyomi-preview" repo
+            // Preview builds: based on releases in "aniyomiorg/aniyomi-preview" repo
             // tagged as something like "r1234"
             newVersion.toInt() > BuildConfig.COMMIT_COUNT.toInt()
         } else {
-            // Release builds: based on releases in "jmir1/aniyomi" repo
+            // Release builds: based on releases in "aniyomiorg/aniyomi" repo
             // tagged as something like "v0.1.2"
             val oldVersion = BuildConfig.VERSION_NAME.replace("[^\\d.]".toRegex(), "")
 
@@ -92,9 +92,9 @@ class AppUpdateChecker {
 
 val GITHUB_REPO: String by lazy {
     if (BuildConfig.PREVIEW) {
-        "jmir1/aniyomi-preview"
+        "aniyomiorg/aniyomi-preview"
     } else {
-        "jmir1/aniyomi"
+        "aniyomiorg/aniyomi"
     }
 }
 

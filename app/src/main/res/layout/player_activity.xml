@@ -115,7 +115,7 @@
                 android:text="[gesture]"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
-                android:textSize="36sp"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
         </LinearLayout>

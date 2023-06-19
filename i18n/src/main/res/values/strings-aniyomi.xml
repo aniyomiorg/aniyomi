@@ -121,7 +121,7 @@
     <string name="pref_category_external_player">External player</string>
     <string name="pref_always_use_external_player">Always use external player</string>
     <string name="pref_external_player_preference">External player preference</string>
-    <string name="playertitle">%1$s - %2$s</string>
+    <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Delete chapters/episodes</string>
     <string name="pref_remove_after_marked_as_read">After manually marked as read/watched</string>
@@ -141,7 +141,7 @@
     <string name="download_ahead_info_anime">Only works on entries in library and if the current episode plus the next one are already downloaded</string>
     <string name="pref_auto_update_manga_sync">Update progress after reading/watching</string>
     <string name="pref_track_on_add_library">Open track menu on adding to library</string>
-    <string name="pref_backup_flags_summ">What information to include in the backup file</string>
+    <string name="pref_backup_flags_summary">What information to include in the backup file</string>
     <string name="pref_clear_chapter_cache">Clear chapter and episode cache</string>
     <string name="used_cache_both">Used by anime: %1$s, used by manga: %2$s</string>
     <string name="pref_auto_clear_chapter_cache">Clear episode/chapter cache on app close</string>
@@ -235,9 +235,9 @@
     <string name="no_next_episode">Next Episode not found!</string>
     <string name="no_previous_episode">Previous Episode not found!</string>
     <string name="label_history">Manga</string>
-    <string name="label_animehistory">Anime</string>
+    <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
-    <string name="label_animeupdates">Anime</string>
+    <string name="label_anime_updates">Anime</string>
     <string name="player_overlay_back">Back</string>
     <string name="enable_auto_play">"Auto-play is on"</string>
     <string name="disable_auto_play">"Auto-play is off"</string>
@@ -282,12 +282,13 @@
     </plurals>
     <string name="episode_settings">Episode settings</string>
     <string name="pref_backup_flags">Backup options</string>
-    <string name="label_mangaextensions">Manga Extensions</string>
-    <string name="label_animeextensions">Anime Extensions</string>
+    <string name="label_manga_extensions">Manga Extensions</string>
+    <string name="label_anime_extensions">Anime Extensions</string>
     <string name="label_migration_manga">Migrate Manga</string>
     <string name="label_migration_anime">Migrate Anime</string>
     <string name="settings">Settings</string>
     <string name="copied_video_link_to_clipboard">Copied video quality link to clipboard</string>
     <string name="choose_video_quality">Choose video quality:</string>
     <string name="extension_settings">Extension settings</string>
+    <string name="action_save_screenshot">Save screenshot</string>
 </resources>

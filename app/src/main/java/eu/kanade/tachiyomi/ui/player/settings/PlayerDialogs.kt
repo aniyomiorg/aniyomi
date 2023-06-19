@@ -84,8 +84,7 @@ class PlayerDialogs(val activity: PlayerActivity) {
             setSingleChoiceItems(items.map { it.first }.toTypedArray(), selectedIndex) { dialog, idx ->
                 hwdecActive = items[idx].second
                 activity.playerPreferences.standardHwDec().set(hwdecActive)
-                MPVLib.setPropertyString("hwdec", hwdecActive)
-                HwDecState.mode = HwDecState.get(hwdecActive)
+                activity.mpvUpdateHwDec(HwDecState.get(hwdecActive))
                 dialog.dismiss()
             }
             setNegativeButton(R.string.dialog_cancel) { dialog, _ -> dialog.cancel() }

@@ -23,7 +23,7 @@ fun mangaExtensionsTab(
     val state by extensionsScreenModel.state.collectAsState()
 
     return TabContent(
-        titleRes = R.string.label_mangaextensions,
+        titleRes = R.string.label_manga_extensions,
         badgeNumber = state.updates.takeIf { it > 0 },
         searchEnabled = true,
         actions = listOf(

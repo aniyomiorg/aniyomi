@@ -6,7 +6,7 @@
     <string name="entries">Entradas de la biblioteca</string>
     <string name="chapters_episodes">Capítulos y episodios</string>
     <string name="episodes">Episodios</string>
-    <string name="backup_settings_warning">Advertencia: Respaldar las configuraciones guardara tus contraseñas de seguimiento también, ¡no compartas este archivo de respaldo!</string>
+    <string name="backup_settings_warning">Advertencia: La copia de seguridad de la configuración también almacenará tus contraseñas, ¡no compartas este archivo de la copia de seguridad!</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
@@ -45,7 +45,6 @@
     <string name="action_show_manga">Mostrar manga</string>
     <string name="action_show_anime">Mostrar anime</string>
     <string name="action_display_download_badge_anime">Episodios descargados</string>
-    <string name="action_display_unseen_badge">Episodios sin ver</string>
     <string name="action_display_local_badge_manga">Fuente local</string>
     <string name="action_display_local_badge_anime">Anime local</string>
     <string name="action_display_show_continue_reading_button">Mostrar botón de continuar viendo/leyendo</string>
@@ -93,7 +92,7 @@
     <string name="pref_category_external_player">Reproductor externo</string>
     <string name="pref_always_use_external_player">Siempre usar reproductor externo</string>
     <string name="pref_external_player_preference">Preferencia de reproductor externo</string>
-    <string name="playertitle">%1$s - %2$s</string>
+    <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d%%</string>
     <string name="pref_category_delete_chapters">Borrar capítulos/episodios</string>
     <string name="pref_remove_after_marked_as_read">Tras marcarlos como leídos/vistos de forma manual</string>
@@ -114,7 +113,7 @@
     <string name="download_ahead_info_anime">Solo funciona en entradas en biblioteca y si el episodio actual junto al siguiente ya se encuentran descargados</string>
     <string name="pref_auto_update_manga_sync">Actualizar progreso al terminar de leer/ver</string>
     <string name="pref_track_on_add_library">Abrir menú de rastreador al añadir a biblioteca</string>
-    <string name="pref_backup_flags_summ">Que información incluir en el archivo de respaldo</string>
+    <string name="pref_backup_flags_summary">Que información incluir en el archivo de respaldo</string>
     <string name="pref_clear_chapter_cache">Vaciar la caché de capítulos y episodios</string>
     <string name="used_cache_both">Usado por anime: %1$s, usado por manga: %2$s</string>
     <string name="pref_auto_clear_chapter_cache">Borrar la caché de episodios/capítulos al cerrar la aplicación</string>
@@ -147,9 +146,6 @@
     <string name="download_paused">Pausado</string>
     <string name="show_episode_number">Número de episodio</string>
     <string name="sort_by_episode_number">Por número de episodio</string>
-    <string name="download_1_episode">Siguiente episodio</string>
-    <string name="download_5_episodes">Siguientes 5 episodios</string>
-    <string name="download_10_episodes">Siguientes 10 episodios</string>
     <string name="download_unseen">Sin ver</string>
     <string name="confirm_delete_episodes">¿Seguro que quieres eliminar los episodios seleccionados\?</string>
     <string name="also_set_chapter_settings_for_library">Aplicar también a todo el manga en mi biblioteca</string>
@@ -173,7 +169,6 @@
     <string name="screenshot_show_subs">Mostrar subtítulos en captura de pantalla</string>
     <string name="enable_volume_brightness_gestures">Gestos para cambiar el volumen y el brillo</string>
     <string name="enable_horizontal_seek_gesture">Alternar con el gesto de la búsqueda horizontal</string>
-    <string name="stats_header">Mostrar las estadísticas</string>
     <string name="toggle_stats">Alternar estadísticas</string>
     <string name="stats_page">Página de las estadísticas</string>
     <string name="stats_page_1">Página 1</string>
@@ -209,9 +204,9 @@
     <string name="no_next_episode">¡Próximo episodio no encontrado!</string>
     <string name="no_previous_episode">¡Episodio anterior no encontrado!</string>
     <string name="label_history">Manga</string>
-    <string name="label_animehistory">Anime</string>
+    <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
-    <string name="label_animeupdates">Anime</string>
+    <string name="label_anime_updates">Anime</string>
     <string name="player_overlay_back">Atrás</string>
     <string name="enable_auto_play">Reproducción automática activada</string>
     <string name="disable_auto_play">Reproducción automática desactivada</string>
@@ -220,9 +215,9 @@
     <string name="video_stretch_screen">Extender a la pantalla</string>
     <string name="playback_speed_dialog_title">Cambiar la velocidad de reproducción:</string>
     <string name="playback_speed_dialog_reset">Restablecer</string>
-    <string name="quality_dialog_header">Cambia la calidad del vídeo:</string>
-    <string name="subtitle_dialog_header">Cambiar la pista de los subtítulos:</string>
-    <string name="audio_dialog_header">Cambia la pista del audio:</string>
+    <string name="quality_dialog_header">Calidad del video</string>
+    <string name="subtitle_dialog_header">Subtitular</string>
+    <string name="audio_dialog_header">Audio</string>
     <string name="playback_options_speed">Velocidad de reproducción</string>
     <string name="playback_options_quality">Calidad del vídeo</string>
     <string name="playback_options_title">Opciones de la reproducción</string>
@@ -256,8 +251,8 @@
     </plurals>
     <string name="episode_settings">Ajustes del episodio</string>
     <string name="pref_backup_flags">Opciones de la copia de seguridad</string>
-    <string name="label_mangaextensions">Extensiones del manga</string>
-    <string name="label_animeextensions">Extensiones del anime</string>
+    <string name="label_manga_extensions">Extensiones del manga</string>
+    <string name="label_anime_extensions">Extensiones del anime</string>
     <string name="label_migration_manga">Migrar el manga</string>
     <string name="label_migration_anime">Migrar el anime</string>
     <string name="settings">Ajustes</string>
@@ -272,11 +267,21 @@
     <string name="pref_default_home_tab_library">Configure la pantalla de inicio en la pestaña Manga</string>
     <string name="action_global_anime_search">Búsqueda global del anime</string>
     <string name="pref_category_player_seeking">Buscando</string>
-    <string name="pref_search_pinned_manga_sources_only">Solo incluye fuentes de manga ancladas</string>
+    <string name="pref_search_pinned_manga_sources_only">Buscar sólo fuentes de manga incrustadas en la búsqueda global</string>
     <string name="action_global_manga_search">Búsqueda global del manga</string>
-    <string name="pref_search_pinned_anime_sources_only">Solo incluye fuentes de anime fijas</string>
+    <string name="pref_search_pinned_anime_sources_only">Buscar solo fuentes del anime incrustadas en la búsqueda global</string>
     <string name="unofficial_anime_extension_message">Esta extensión no pertenece a la lista oficial de extensiones de Aniyomi.</string>
     <string name="pref_category_volume_brightness">Volumen y Brillo</string>
     <string name="pref_category_pip">Imagen en imagen (PiP)</string>
     <string name="pref_enable_pip">Habilitar el uso del modo PiP</string>
+    <string name="pref_hide_in_manga_library_items">Ocultar las entradas del manga que ya están en la biblioteca</string>
+    <string name="pref_hide_in_anime_library_items">Ocultar las entradas del anime que ya están en la biblioteca</string>
+    <plurals name="download_amount_anime">
+        <item quantity="one">Siguiente episodio</item>
+        <item quantity="many">Los siguientes %d episodios</item>
+        <item quantity="other">Los siguientes %d episodios</item>
+    </plurals>
+    <string name="copied_video_link_to_clipboard">Enlace de calidad del video copiado al portapapeles</string>
+    <string name="choose_video_quality">Elige la calidad del vídeo:</string>
+    <string name="extension_settings">Configuración de las extensiones</string>
 </resources>
