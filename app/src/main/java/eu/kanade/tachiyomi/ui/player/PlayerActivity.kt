@@ -67,6 +67,7 @@ import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
+import `is`.xyz.mpv.MPVView
 import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -817,6 +818,22 @@ class PlayerActivity : BaseActivity() {
         setVideoList(quality, currentVideoList)
     }
 
+    private fun setChapter(index: Int) {
+        player.timePos = player.loadChapters()[index].time.roundToInt()
+        player.paused = false
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun pickChapter(view: View) {
+        playerControls.hideControls(true)
+        PlayerChaptersSheet(
+            this,
+            R.string.chapter_dialog_header,
+            ::setChapter,
+            player.loadChapters(),
+        ).show()
+    }
+
     internal fun subtitleTracksTab(dismissTab: () -> Unit): PlayerTracksBuilder {
         val subTracks = subTracks.takeUnless { it.isEmpty() }!!
 
@@ -1285,6 +1302,9 @@ class PlayerActivity : BaseActivity() {
         }
 
         viewModel.viewModelScope.launchUI {
+            if (player.loadChapters() != emptyList<MPVView.Chapter>()) {
+                binding.playerControls.binding.chaptersBtn.visibility = View.VISIBLE
+            }
             if (playerPreferences.adjustOrientationVideoDimensions().get()) {
                 if ((player.videoW ?: 1) / (player.videoH ?: 1) >= 1) {
                     this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationLandscape().get()
