@@ -41,7 +41,10 @@ data class Anime(
         get() = episodeFlags and EPISODE_BOOKMARKED_MASK
 
     val skipIntroLength: Long
-        get() = viewerFlags
+        get() = viewerFlags and ANIME_INTRO_MASK
+
+    val nextEpisodeAiringAt: Long
+        get() = viewerFlags and ANIME_AIRING_MASK
 
     val unseenFilter: TriStateFilter
         get() = when (unseenFilterRaw) {
@@ -89,6 +92,9 @@ data class Anime(
         const val EPISODE_DISPLAY_NAME = 0x00000000L
         const val EPISODE_DISPLAY_NUMBER = 0x00100000L
         const val EPISODE_DISPLAY_MASK = 0x00100000L
+
+        const val ANIME_INTRO_MASK = 0x000000FFL
+        const val ANIME_AIRING_MASK = 0xFFFFFF00L
 
         fun create() = Anime(
             id = -1L,
