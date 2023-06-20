@@ -9,13 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import dev.vivvvek.seeker.Seeker
 import dev.vivvvek.seeker.SeekerDefaults
 import dev.vivvvek.seeker.Segment
-import eu.kanade.tachiyomi.util.Stamp
-import tachiyomi.core.util.system.logcat
+import `is`.xyz.mpv.MPVView.Chapter
 
 class Seekbar(
     private val view: ComposeView,
@@ -24,13 +24,13 @@ class Seekbar(
     private var duration: Float = 1F
     private var value: Float = 0F
     private var readAheadValue: Float = 0F
-    private var stamps: List<Stamp> = listOf()
+    private var chapters: List<Chapter> = listOf()
 
     fun updateSeekbar(
         duration: Float? = null,
         value: Float? = null,
         readAheadValue: Float? = null,
-        stamps: List<Stamp>? = null,
+        chapters: List<Chapter>? = null,
     ) {
         if (duration != null) {
             this.duration = duration
@@ -41,9 +41,8 @@ class Seekbar(
         if (readAheadValue != null) {
             this.readAheadValue = readAheadValue
         }
-        if (stamps != null) {
-            logcat { "stamps: $stamps" }
-            this.stamps = stamps
+        if (chapters != null) {
+            this.chapters = chapters
         }
 
         view.setContent {
@@ -51,8 +50,8 @@ class Seekbar(
                 duration ?: this.duration,
                 value ?: this.value,
                 readAheadValue ?: this.readAheadValue,
-                stamps?.toSegments(duration ?: this.duration)
-                    ?: this.stamps.toSegments(duration ?: this.duration),
+                chapters?.toSegments()
+                    ?: this.chapters.toSegments(),
             )
         }
     }
@@ -99,41 +98,18 @@ class Seekbar(
 }
 
 @Composable
-private fun List<Stamp>.toSegments(duration: Float): List<Segment> {
-    if (this.isEmpty()) return emptyList()
-    val startSegments = this.map {
-        Segment(
-            it.skipType.getString(),
-            it.interval.startTime.toFloat(),
-            MaterialTheme.colorScheme.tertiary,
-        )
-    }
-    val gapSegments = mutableListOf<Segment>()
-    if (this.first().interval.startTime != 0.0) {
-        gapSegments.add(
-            Segment(
-                "",
-                0F,
-            ),
-        )
-    }
-    if (this.last().interval.endTime < duration - 1.0) {
-        gapSegments.add(
-            Segment(
-                "",
-                this.last().interval.endTime.toFloat(),
-            ),
-        )
-    }
-    for (i in 0 until this.lastIndex) {
-        if (this[i].interval.endTime - this[i + 1].interval.startTime > 1) {
-            gapSegments.add(
-                Segment(
-                    "",
-                    this[i].interval.endTime.toFloat(),
-                ),
-            )
+private fun List<Chapter>.toSegments(): List<Segment> {
+    return this.sortedBy { it.time }.map {
+        // Color for AniSkip chapters
+        val color = if (it.index == -2) {
+            MaterialTheme.colorScheme.tertiary
+        } else {
+            Color.Unspecified
         }
+        Segment(
+            it.title ?: "",
+            it.time.toFloat(),
+            color,
+        )
     }
-    return (startSegments + gapSegments).sortedBy { it.start }
 }
