@@ -37,6 +37,7 @@ import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.util.AniChartApi
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
@@ -179,7 +180,7 @@ class AnimeInfoScreenModel(
                     dialog = null,
                 )
             }
-            // Start observe tracking since it only needs mangaId
+            // Start observe tracking since it only needs animeId
             observeTrackers()
 
             // Fetch info-episodes when needed
@@ -896,7 +897,6 @@ class AnimeInfoScreenModel(
 
     private fun observeTrackers() {
         val anime = successState?.anime ?: return
-
         coroutineScope.launchIO {
             getTracks.subscribe(anime.id)
                 .catch { logcat(LogPriority.ERROR, it) }
@@ -911,8 +911,14 @@ class AnimeInfoScreenModel(
                 .distinctUntilChanged()
                 .collectLatest { trackItems ->
                     updateSuccessState { it.copy(trackItems = trackItems) }
+                    updateAiringTime(anime, trackItems)
                 }
         }
+    }
+
+    suspend fun updateAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>) {
+        val airingTime = AniChartApi().loadAiringTime(anime, trackItems)
+        updateSuccessState { it.copy(airingTime = airingTime) }
     }
 
     // Track sheet - end
@@ -1006,6 +1012,7 @@ sealed class AnimeScreenState {
         val isRefreshingData: Boolean = false,
         val dialog: AnimeInfoScreenModel.Dialog? = null,
         val hasPromptedToAddBefore: Boolean = false,
+        val airingTime: Long = anime.nextEpisodeAiringAt,
     ) : AnimeScreenState() {
 
         val processedEpisodes: Sequence<EpisodeItem>

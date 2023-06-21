@@ -1,5 +1,6 @@
 package eu.kanade.presentation.entries.anime
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -31,6 +32,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -69,6 +71,7 @@ import eu.kanade.tachiyomi.ui.entries.manga.chapterDecimalFormat
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
+import kotlinx.coroutines.delay
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.presentation.core.components.LazyColumn
@@ -82,6 +85,7 @@ import tachiyomi.presentation.core.util.isScrollingUp
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -402,6 +406,28 @@ private fun AnimeScreenSmallImpl(
                             onTagSearch = onTagSearch,
                             onCopyTagToClipboard = onCopyTagToClipboard,
                         )
+                    }
+
+                    // TODO: Add Anilist timing here
+                    if (state.airingTime > 0L) {
+                        item(
+                            key = EntryScreenItem.AIRING_TIME,
+                            contentType = EntryScreenItem.AIRING_TIME,
+                        ) {
+                            val time = state.airingTime
+                                .times(1000L)
+                                .minus(Calendar.getInstance().timeInMillis)
+                            var timer by remember { mutableStateOf(time) }
+                            LaunchedEffect(key1 = timer) {
+                                if (timer > 0L) {
+                                    delay(1000L)
+                                    timer -= 1000L
+                                }
+                            }
+                            if (timer > 0L) {
+                                Text(text = formatTime(timer, useDayFormat = true))
+                            }
+                        }
                     }
 
                     item(
@@ -741,8 +767,8 @@ private fun LazyListScope.sharedEpisodeItems(
                 ?.let {
                     stringResource(
                         R.string.episode_progress,
-                        formatProgress(it),
-                        formatProgress(episodeItem.episode.totalSeconds),
+                        formatTime(it),
+                        formatTime(episodeItem.episode.totalSeconds),
                     )
                 },
             scanlator = episodeItem.episode.scanlator.takeIf { !it.isNullOrBlank() },
@@ -786,8 +812,19 @@ private fun onEpisodeItemClick(
     }
 }
 
-private fun formatProgress(milliseconds: Long): String {
-    return if (milliseconds > 3600000L) {
+private fun formatTime(milliseconds: Long, useDayFormat: Boolean = false): String {
+    return if (useDayFormat) {
+        String.format(
+            "%02d:%02d:%02d:%02d",
+            TimeUnit.MILLISECONDS.toDays(milliseconds),
+            TimeUnit.MILLISECONDS.toHours(milliseconds) -
+                TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(milliseconds)),
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
+        )
+    } else if (milliseconds > 3600000L) {
         String.format(
             "%d:%02d:%02d",
             TimeUnit.MILLISECONDS.toHours(milliseconds),

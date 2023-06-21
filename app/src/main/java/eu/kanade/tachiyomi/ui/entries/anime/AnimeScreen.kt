@@ -210,7 +210,12 @@ class AnimeScreen(
                         sourceId = successState.source.id,
                     ),
                     enableSwipeDismiss = { it.lastItem is AnimeTrackInfoDialogHomeScreen },
-                    onDismissRequest = onDismissRequest,
+                    onDismissRequest = {
+                        onDismissRequest()
+                        scope.launchIO {
+                            screenModel.updateAiringTime(successState.anime, successState.trackItems)
+                        }
+                    },
                 )
             }
             AnimeInfoScreenModel.Dialog.FullCover -> {

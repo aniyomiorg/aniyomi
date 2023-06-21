@@ -11,18 +11,22 @@ import kotlinx.serialization.json.put
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import tachiyomi.core.util.lang.withIOContext
+import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Calendar
 
 class AniChartApi {
     private val client = OkHttpClient()
     private val getEpisodesByAnimeId: GetEpisodeByAnimeId = Injekt.get()
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get()
 
-    internal suspend fun loadAiringTime(animeId: Long, trackItems: List<AnimeTrackItem>): Long {
+    internal suspend fun loadAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>): Long {
+        if (anime.nextEpisodeAiringAt.times(1000L) > Calendar.getInstance().timeInMillis) return anime.nextEpisodeAiringAt
+
         return withIOContext {
-            val episodes = getEpisodesByAnimeId.await(animeId)
+            val episodes = getEpisodesByAnimeId.await(anime.id)
             var alId: Long? = 0L
             var airingTime = 0L
             trackItems.forEach {
@@ -38,7 +42,7 @@ class AniChartApi {
                 val latestEpisode = episodes.maxByOrNull { it.episodeNumber }!!
                 val episodeToAir = latestEpisode.episodeNumber.toInt() + 1
                 airingTime = getAiringAt(alId!!, episodeToAir)
-                setAnimeViewerFlags.awaitSetNextEpisodeAiringAt(animeId, airingTime)
+                setAnimeViewerFlags.awaitSetNextEpisodeAiringAt(anime.id, airingTime)
             }
             return@withIOContext airingTime
         }

@@ -20,4 +20,5 @@ enum class EntryScreenItem {
     DESCRIPTION_WITH_TAG,
     ITEM_HEADER,
     ITEM,
+    AIRING_TIME,
 }
