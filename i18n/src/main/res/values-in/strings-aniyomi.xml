@@ -272,4 +272,5 @@
     <string name="extension_settings">Pengaturan ekstensi</string>
     <string name="stats_header">Tampilkan statistik</string>
     <string name="action_save_screenshot">Tangkap layar disimpan</string>
+    <string name="chapter_dialog_header">Geser untuk ke chapter</string>
 </resources>
