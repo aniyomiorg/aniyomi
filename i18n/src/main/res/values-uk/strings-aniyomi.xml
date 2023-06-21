@@ -293,4 +293,5 @@
     <string name="extension_settings">Налаштування розширення</string>
     <string name="action_save_screenshot">Зберегти знімок екрана</string>
     <string name="stats_header">Показати статистику</string>
+    <string name="chapter_dialog_header">Перейти до розділу</string>
 </resources>
