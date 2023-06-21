@@ -286,4 +286,5 @@
     <string name="extension_settings">Configuración de las extensiones</string>
     <string name="action_save_screenshot">Guardar la captura de pantalla</string>
     <string name="stats_header">Mostrar las estadísticas</string>
+    <string name="chapter_dialog_header">Ir al capítulo</string>
 </resources>
