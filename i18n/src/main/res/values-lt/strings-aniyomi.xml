@@ -37,9 +37,9 @@
     <string name="download_queue_size_warning">Įspėjimas: dėl didelių masinių atsisiuntimų šaltiniai gali tapti lėtesni ir (arba) jie blokuoti \"Tachiyomi\". Bakstelėkite , jei norite sužinoti daugiau.</string>
     <string name="information_webview_required">\"WebView\" reikalingas \"Tachiyomi\"</string>
     <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="few"/>
-        <item quantity="other"/>
+        <item quantity="one"></item>
+        <item quantity="few"></item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"></item>
