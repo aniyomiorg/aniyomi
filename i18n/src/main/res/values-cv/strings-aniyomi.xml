@@ -33,8 +33,8 @@
     <string name="download_notifier_download_paused_chapters">Тиеве вӑхӑтлӑха чарнӑ</string>
     <string name="channel_new_chapters_episodes">Сыпӑксен ҫӗнетӗвӗсем</string>
     <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
+        <item quantity="one"></item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="anime_num_episodes">
         <item quantity="one"></item>
