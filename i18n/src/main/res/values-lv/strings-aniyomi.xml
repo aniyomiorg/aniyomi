@@ -56,9 +56,9 @@
         <item quantity="other"></item>
     </plurals>
     <plurals name="download_amount_anime">
-        <item quantity="zero"/>
-        <item quantity="one"/>
-        <item quantity="other"/>
+        <item quantity="zero"></item>
+        <item quantity="one"></item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="seconds">
         <item quantity="zero"></item>
