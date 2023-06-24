@@ -77,6 +77,8 @@ import tachiyomi.domain.items.episode.service.getEpisodeSort
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 
 class AnimeInfoScreenModel(
     val context: Context,
@@ -911,14 +913,14 @@ class AnimeInfoScreenModel(
                 .distinctUntilChanged()
                 .collectLatest { trackItems ->
                     updateSuccessState { it.copy(trackItems = trackItems) }
-                    updateAiringTime(anime, trackItems)
+                    updateAiringTime(anime, trackItems, useCache = false)
                 }
         }
     }
 
-    suspend fun updateAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>) {
-        val airingTime = AniChartApi().loadAiringTime(anime, trackItems)
-        updateSuccessState { it.copy(airingTime = airingTime) }
+    private suspend fun updateAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>, useCache: Boolean) {
+        val airingTime = AniChartApi().loadAiringTime(anime, trackItems, useCache)
+        updateSuccessState { it.copy(nextAiringEpisode = airingTime) }
     }
 
     // Track sheet - end
@@ -1012,7 +1014,7 @@ sealed class AnimeScreenState {
         val isRefreshingData: Boolean = false,
         val dialog: AnimeInfoScreenModel.Dialog? = null,
         val hasPromptedToAddBefore: Boolean = false,
-        val airingTime: Long = anime.nextEpisodeAiringAt,
+        val nextAiringEpisode: Pair<Int, Long> = Pair(anime.nextEpisodeToAir, anime.nextEpisodeAiringAt),
     ) : AnimeScreenState() {
 
         val processedEpisodes: Sequence<EpisodeItem>
@@ -1023,6 +1025,10 @@ sealed class AnimeScreenState {
 
         val trackingCount: Int
             get() = trackItems.count { it.track != null }
+
+        val airingEpisodeNumber = nextAiringEpisode.first
+
+        val airingTime = nextAiringEpisode.second
 
         /**
          * Applies the view filters to the list of chapters obtained from the database.
@@ -1051,6 +1057,12 @@ data class EpisodeItem(
 ) {
     val isDownloaded = downloadState == AnimeDownload.State.DOWNLOADED
 }
+
+val episodeDecimalFormat = DecimalFormat(
+    "#.###",
+    DecimalFormatSymbols()
+        .apply { decimalSeparator = '.' },
+)
 
 private val Throwable.snackbarMessage: String
     get() = when (val className = this::class.simpleName) {

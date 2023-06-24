@@ -29,10 +29,6 @@ interface Anime : SAnime {
     var skipIntroLength: Int
         get() = viewer_flags and DomainAnime.ANIME_INTRO_MASK.toInt()
         set(flag) = setViewerFlags(flag, DomainAnime.ANIME_INTRO_MASK.toInt())
-
-    var nextEpisodeAiringAt: Int
-        get() = viewer_flags and DomainAnime.ANIME_AIRING_MASK.toInt()
-        set(flag) = setViewerFlags(flag, DomainAnime.ANIME_AIRING_MASK.toInt())
 }
 
 fun Anime.toDomainAnime(): DomainAnime? {

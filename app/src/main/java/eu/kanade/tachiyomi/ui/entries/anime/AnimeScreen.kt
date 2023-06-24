@@ -210,12 +210,7 @@ class AnimeScreen(
                         sourceId = successState.source.id,
                     ),
                     enableSwipeDismiss = { it.lastItem is AnimeTrackInfoDialogHomeScreen },
-                    onDismissRequest = {
-                        onDismissRequest()
-                        scope.launchIO {
-                            screenModel.updateAiringTime(successState.anime, successState.trackItems)
-                        }
-                    },
+                    onDismissRequest = onDismissRequest,
                 )
             }
             AnimeInfoScreenModel.Dialog.FullCover -> {
@@ -406,8 +401,8 @@ fun ChangeIntroLength(
                         onSelectionChanged = {
                             newLength = it + 1
                         },
-                        startIndex = if (anime.viewerFlags > 0) {
-                            anime.viewerFlags.toInt() - 1
+                        startIndex = if (anime.skipIntroLength > 0) {
+                            anime.skipIntroLength - 1
                         } else {
                             defaultIntroLength
                         },

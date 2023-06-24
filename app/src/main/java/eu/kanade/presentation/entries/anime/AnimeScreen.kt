@@ -1,6 +1,5 @@
 package eu.kanade.presentation.entries.anime
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -61,13 +60,14 @@ import eu.kanade.presentation.entries.anime.components.AnimeEpisodeListItem
 import eu.kanade.presentation.entries.anime.components.AnimeInfoBox
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.ExpandableAnimeDescription
+import eu.kanade.presentation.entries.anime.components.NextEpisodeAiringListItem
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenState
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
-import eu.kanade.tachiyomi.ui.entries.manga.chapterDecimalFormat
+import eu.kanade.tachiyomi.ui.entries.anime.episodeDecimalFormat
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
@@ -408,7 +408,18 @@ private fun AnimeScreenSmallImpl(
                         )
                     }
 
-                    // TODO: Add Anilist timing here
+                    item(
+                        key = EntryScreenItem.ITEM_HEADER,
+                        contentType = EntryScreenItem.ITEM_HEADER,
+                    ) {
+                        ItemHeader(
+                            enabled = episodes.fastAll { !it.selected },
+                            itemCount = episodes.size,
+                            onClick = onFilterClicked,
+                            isManga = false,
+                        )
+                    }
+
                     if (state.airingTime > 0L) {
                         item(
                             key = EntryScreenItem.AIRING_TIME,
@@ -425,21 +436,15 @@ private fun AnimeScreenSmallImpl(
                                 }
                             }
                             if (timer > 0L) {
-                                Text(text = formatTime(timer, useDayFormat = true))
+                                NextEpisodeAiringListItem(
+                                    title = stringResource(
+                                        R.string.display_mode_episode,
+                                        episodeDecimalFormat.format(state.airingEpisodeNumber.toDouble()),
+                                    ),
+                                    date = formatTime(timer, useDayFormat = true),
+                                )
                             }
                         }
-                    }
-
-                    item(
-                        key = EntryScreenItem.ITEM_HEADER,
-                        contentType = EntryScreenItem.ITEM_HEADER,
-                    ) {
-                        ItemHeader(
-                            enabled = episodes.fastAll { !it.selected },
-                            itemCount = episodes.size,
-                            onClick = onFilterClicked,
-                            isManga = false,
-                        )
                     }
 
                     sharedEpisodeItems(
@@ -747,8 +752,8 @@ private fun LazyListScope.sharedEpisodeItems(
         AnimeEpisodeListItem(
             title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
                 stringResource(
-                    R.string.display_mode_chapter,
-                    chapterDecimalFormat.format(episodeItem.episode.episodeNumber.toDouble()),
+                    R.string.display_mode_episode,
+                    episodeDecimalFormat.format(episodeItem.episode.episodeNumber.toDouble()),
                 )
             } else {
                 episodeItem.episode.name
@@ -815,7 +820,7 @@ private fun onEpisodeItemClick(
 private fun formatTime(milliseconds: Long, useDayFormat: Boolean = false): String {
     return if (useDayFormat) {
         String.format(
-            "%02d:%02d:%02d:%02d",
+            "Airing in %02dd %02dh %02dm %02ds",
             TimeUnit.MILLISECONDS.toDays(milliseconds),
             TimeUnit.MILLISECONDS.toHours(milliseconds) -
                 TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(milliseconds)),
