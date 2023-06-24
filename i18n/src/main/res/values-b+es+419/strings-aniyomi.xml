@@ -52,9 +52,9 @@
     <string name="label_manga_sources">Fuentes de manga</string>
     <string name="label_anime_sources">Fuentes de anime</string>
     <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="one"></item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="notification_episodes_generic">
         <item quantity="one"></item>
