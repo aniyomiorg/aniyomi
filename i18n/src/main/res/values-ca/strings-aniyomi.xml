@@ -270,8 +270,8 @@
     <string name="pref_hide_in_anime_library_items">Amaga les entrades dels animes que ja siguin a la biblioteca</string>
     <string name="pref_hide_in_manga_library_items">Amaga les entrades dels mangas que ja siguin a la biblioteca</string>
     <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
+        <item quantity="one"></item>
+        <item quantity="other"></item>
     </plurals>
     <string name="stats_header"></string>
     <string name="wsrv"></string>
