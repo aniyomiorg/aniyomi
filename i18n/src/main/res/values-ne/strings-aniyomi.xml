@@ -59,8 +59,8 @@
         <item quantity="other"></item>
     </plurals>
     <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
+        <item quantity="one"></item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="notification_episodes_multiple_and_more">
         <item quantity="one"></item>
