@@ -320,4 +320,7 @@
     <string name="pref_skip_5" translatable="false"></string>
     <string name="pref_remember_brightness"></string>
     <string name="label_watched_episodes"></string>
+    <plurals name="download_amount_anime">
+        <item quantity="other"></item>
+    </plurals>
 </resources>
