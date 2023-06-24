@@ -3,8 +3,8 @@
     <string name="manga_categories">విభాగములు</string>
     <string name="unlock_app">టచియోమిని తెరవండి</string>
     <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
+        <item quantity="one"></item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="anime_num_episodes">
         <item quantity="one"></item>
