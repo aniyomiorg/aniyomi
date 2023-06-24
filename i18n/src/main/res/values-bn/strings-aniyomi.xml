@@ -97,8 +97,8 @@
         <item quantity="other"></item>
     </plurals>
     <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="other"/>
+        <item quantity="one"></item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="notification_new_episodes_summary">
         <item quantity="one"></item>
