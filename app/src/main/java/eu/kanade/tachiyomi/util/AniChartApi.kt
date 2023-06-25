@@ -19,8 +19,8 @@ class AniChartApi {
     private val client = OkHttpClient()
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get()
 
-    internal suspend fun loadAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>, useCache: Boolean): Pair<Int, Long> {
-        if (anime.status == SAnime.COMPLETED.toLong() && useCache) return Pair(anime.nextEpisodeToAir, anime.nextEpisodeAiringAt)
+    internal suspend fun loadAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>, manualFetch: Boolean): Pair<Int, Long> {
+        if (anime.status == SAnime.COMPLETED.toLong() && !manualFetch) return Pair(anime.nextEpisodeToAir, anime.nextEpisodeAiringAt)
         return withIOContext {
             var alId = 0L
             var airingTime = Pair(0, 0L)

@@ -915,13 +915,13 @@ class AnimeInfoScreenModel(
                 .distinctUntilChanged()
                 .collectLatest { trackItems ->
                     updateSuccessState { it.copy(trackItems = trackItems) }
-                    updateAiringTime(anime, trackItems, useCache = true)
+                    updateAiringTime(anime, trackItems, manualFetch = false)
                 }
         }
     }
 
-    private suspend fun updateAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>, useCache: Boolean) {
-        val airingEpisode = AniChartApi().loadAiringTime(anime, trackItems, useCache)
+    private suspend fun updateAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>, manualFetch: Boolean) {
+        val airingEpisode = AniChartApi().loadAiringTime(anime, trackItems, manualFetch)
         updateSuccessState { it.copy(nextAiringEpisode = airingEpisode) }
     }
 
