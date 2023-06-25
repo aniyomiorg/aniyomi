@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.util
-
-import android.util.Log
 import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
+import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.track.anilist.Anilist
 import eu.kanade.tachiyomi.data.track.myanimelist.MyAnimeList
 import eu.kanade.tachiyomi.network.POST
@@ -21,28 +20,24 @@ class AniChartApi {
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get()
 
     internal suspend fun loadAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>, useCache: Boolean): Pair<Int, Long> {
-        if (useCache) {
-            Log.i("YESSIR F cache", "THEY ${anime.nextEpisodeToAir} YES ${anime.nextEpisodeAiringAt}")
-            return Pair(anime.nextEpisodeToAir, anime.nextEpisodeAiringAt)
-        } else {
-            return withIOContext {
-                var alId: Long? = 0L
-                var airingTime = Pair(0, 0L)
-                trackItems.forEach {
-                    if (it.track != null) {
-                        alId = when (it.service) {
-                            is Anilist -> it.track.media_id
-                            is MyAnimeList -> getAlIdFromMal(it.track.media_id)
-                            else -> null
-                        }
+        if (anime.status == SAnime.COMPLETED.toLong() && useCache) return Pair(anime.nextEpisodeToAir, anime.nextEpisodeAiringAt)
+        return withIOContext {
+            var alId = 0L
+            var airingTime = Pair(0, 0L)
+            trackItems.forEach {
+                if (it.track != null) {
+                    alId = when (it.service) {
+                        is Anilist -> it.track.media_id
+                        is MyAnimeList -> getAlIdFromMal(it.track.media_id)
+                        else -> 0L
                     }
                 }
-                if (alId != null) {
-                    airingTime = getAiringAt(alId!!)
-                    setAnimeViewerFlags.awaitSetNextEpisodeAiring(anime.id, airingTime)
-                }
-                return@withIOContext airingTime
             }
+            if (alId != 0L) {
+                airingTime = getAiringAt(alId)
+                setAnimeViewerFlags.awaitSetNextEpisodeAiring(anime.id, airingTime)
+            }
+            return@withIOContext airingTime
         }
     }
 
@@ -97,7 +92,6 @@ class AniChartApi {
                 return@withIOContext Pair(0, 0L)
             }
             val data = response.body.string()
-            Log.i("HERROBRO", data.substringAfter("episode\":").substringBefore(","))
             val episodeNumber = data.substringAfter("episode\":").substringBefore(",").toIntOrNull() ?: 0
             val airingAt = data.substringAfter("airingAt\":").substringBefore("}").toLongOrNull() ?: 0L
 

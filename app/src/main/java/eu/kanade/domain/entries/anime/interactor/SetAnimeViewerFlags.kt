@@ -19,7 +19,6 @@ class SetAnimeViewerFlags(
         )
     }
 
-    // TODO: Add Aired at, completed anime support, and fix for user re entering anime screen
     suspend fun awaitSetNextEpisodeAiring(id: Long, flags: Pair<Int, Long>) {
         awaitSetNextEpisodeToAir(id, flags.first.toLong().addHexZeros(zeros = 2))
         awaitSetNextEpisodeAiringAt(id, flags.second.addHexZeros(zeros = 6))

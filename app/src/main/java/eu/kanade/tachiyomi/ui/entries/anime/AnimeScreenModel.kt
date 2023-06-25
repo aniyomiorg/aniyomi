@@ -79,6 +79,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.util.Calendar
 
 class AnimeInfoScreenModel(
     val context: Context,
@@ -208,6 +209,7 @@ class AnimeInfoScreenModel(
             )
             fetchFromSourceTasks.awaitAll()
             updateSuccessState { it.copy(isRefreshingData = false) }
+            successState?.let { updateAiringTime(it.anime, it.trackItems, manualFetch) }
         }
     }
 
@@ -913,14 +915,14 @@ class AnimeInfoScreenModel(
                 .distinctUntilChanged()
                 .collectLatest { trackItems ->
                     updateSuccessState { it.copy(trackItems = trackItems) }
-                    updateAiringTime(anime, trackItems, useCache = false)
+                    updateAiringTime(anime, trackItems, useCache = true)
                 }
         }
     }
 
     private suspend fun updateAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>, useCache: Boolean) {
-        val airingTime = AniChartApi().loadAiringTime(anime, trackItems, useCache)
-        updateSuccessState { it.copy(nextAiringEpisode = airingTime) }
+        val airingEpisode = AniChartApi().loadAiringTime(anime, trackItems, useCache)
+        updateSuccessState { it.copy(nextAiringEpisode = airingEpisode) }
     }
 
     // Track sheet - end
@@ -1026,9 +1028,11 @@ sealed class AnimeScreenState {
         val trackingCount: Int
             get() = trackItems.count { it.track != null }
 
-        val airingEpisodeNumber = nextAiringEpisode.first
+        val airingEpisodeNumber: Double
+            get() = nextAiringEpisode.first.toDouble()
 
-        val airingTime = nextAiringEpisode.second
+        val airingTime: Long
+            get() = nextAiringEpisode.second.times(1000L).minus(Calendar.getInstance().timeInMillis)
 
         /**
          * Applies the view filters to the list of chapters obtained from the database.

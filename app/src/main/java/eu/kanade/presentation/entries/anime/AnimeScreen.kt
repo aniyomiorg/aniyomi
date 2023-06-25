@@ -85,7 +85,6 @@ import tachiyomi.presentation.core.util.isScrollingUp
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -425,10 +424,8 @@ private fun AnimeScreenSmallImpl(
                             key = EntryScreenItem.AIRING_TIME,
                             contentType = EntryScreenItem.AIRING_TIME,
                         ) {
-                            val time = state.airingTime
-                                .times(1000L)
-                                .minus(Calendar.getInstance().timeInMillis)
-                            var timer by remember { mutableStateOf(time) }
+                            // Handles the second by second countdown
+                            var timer by remember { mutableStateOf(state.airingTime) }
                             LaunchedEffect(key1 = timer) {
                                 if (timer > 0L) {
                                     delay(1000L)
@@ -439,9 +436,9 @@ private fun AnimeScreenSmallImpl(
                                 NextEpisodeAiringListItem(
                                     title = stringResource(
                                         R.string.display_mode_episode,
-                                        episodeDecimalFormat.format(state.airingEpisodeNumber.toDouble()),
+                                        episodeDecimalFormat.format(state.airingEpisodeNumber),
                                     ),
-                                    date = formatTime(timer, useDayFormat = true),
+                                    date = formatTime(state.airingTime, useDayFormat = true),
                                 )
                             }
                         }
@@ -662,6 +659,31 @@ fun AnimeScreenLargeImpl(
                                     onClick = onFilterButtonClicked,
                                     isManga = false,
                                 )
+                            }
+
+                            if (state.airingTime > 0L) {
+                                item(
+                                    key = EntryScreenItem.AIRING_TIME,
+                                    contentType = EntryScreenItem.AIRING_TIME,
+                                ) {
+                                    // Handles the second by second countdown
+                                    var timer by remember { mutableStateOf(state.airingTime) }
+                                    LaunchedEffect(key1 = timer) {
+                                        if (timer > 0L) {
+                                            delay(1000L)
+                                            timer -= 1000L
+                                        }
+                                    }
+                                    if (timer > 0L) {
+                                        NextEpisodeAiringListItem(
+                                            title = stringResource(
+                                                R.string.display_mode_episode,
+                                                episodeDecimalFormat.format(state.airingEpisodeNumber),
+                                            ),
+                                            date = formatTime(state.airingTime, useDayFormat = true),
+                                        )
+                                    }
+                                }
                             }
 
                             sharedEpisodeItems(
