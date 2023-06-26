@@ -284,9 +284,9 @@
     <string name="pref_hide_in_anime_library_items">Приховати записи про аніме, які вже є в бібліотеці</string>
     <plurals name="download_amount_anime">
         <item quantity="one">Наступний епізод</item>
-        <item quantity="few">Наступні %d епізоди</item>
-        <item quantity="many">Наступні %d епізодів</item>
-        <item quantity="other">Наступні %d епізодів</item>
+        <item quantity="few">Наступні епізоди</item>
+        <item quantity="many">Наступні епізодів</item>
+        <item quantity="other">Наступні епізодів</item>
     </plurals>
     <string name="copied_video_link_to_clipboard">Скопійоване якісне посилання на відео в буфер обміну</string>
     <string name="choose_video_quality">Виберіть якість відео:</string>
