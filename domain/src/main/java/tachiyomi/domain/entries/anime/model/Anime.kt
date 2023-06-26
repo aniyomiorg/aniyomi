@@ -3,6 +3,7 @@ package tachiyomi.domain.entries.anime.model
 import eu.kanade.tachiyomi.source.model.UpdateStrategy
 import tachiyomi.domain.entries.TriStateFilter
 import java.io.Serializable
+import kotlin.math.pow
 
 data class Anime(
     val id: Long,
@@ -40,8 +41,14 @@ data class Anime(
     val bookmarkedFilterRaw: Long
         get() = episodeFlags and EPISODE_BOOKMARKED_MASK
 
-    val skipIntroLength: Long
-        get() = viewerFlags
+    val skipIntroLength: Int
+        get() = (viewerFlags and ANIME_INTRO_MASK).toInt()
+
+    val nextEpisodeToAir: Int
+        get() = (viewerFlags and ANIME_AIRING_EPISODE_MASK).removeHexZeros(zeros = 2).toInt()
+
+    val nextEpisodeAiringAt: Long
+        get() = (viewerFlags and ANIME_AIRING_TIME_MASK).removeHexZeros(zeros = 6)
 
     val unseenFilter: TriStateFilter
         get() = when (unseenFilterRaw) {
@@ -59,6 +66,11 @@ data class Anime(
 
     fun sortDescending(): Boolean {
         return episodeFlags and EPISODE_SORT_DIR_MASK == EPISODE_SORT_DESC
+    }
+
+    private fun Long.removeHexZeros(zeros: Int): Long {
+        val hex = 16.0
+        return this.div(hex.pow(zeros)).toLong()
     }
 
     companion object {
@@ -89,6 +101,10 @@ data class Anime(
         const val EPISODE_DISPLAY_NAME = 0x00000000L
         const val EPISODE_DISPLAY_NUMBER = 0x00100000L
         const val EPISODE_DISPLAY_MASK = 0x00100000L
+
+        const val ANIME_INTRO_MASK = 0x000000000000FFL
+        const val ANIME_AIRING_EPISODE_MASK = 0x00000000FFFF00L
+        const val ANIME_AIRING_TIME_MASK = 0xFFFFFFFF000000L
 
         fun create() = Anime(
             id = -1L,

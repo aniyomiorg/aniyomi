@@ -401,8 +401,8 @@ fun ChangeIntroLength(
                         onSelectionChanged = {
                             newLength = it + 1
                         },
-                        startIndex = if (anime.viewerFlags > 0) {
-                            anime.viewerFlags.toInt() - 1
+                        startIndex = if (anime.skipIntroLength > 0) {
+                            anime.skipIntroLength - 1
                         } else {
                             defaultIntroLength
                         },
