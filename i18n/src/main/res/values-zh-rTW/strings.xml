@@ -140,7 +140,6 @@
     <string name="copy">副本</string>
     <string name="update_check_confirm">下載</string>
     <string name="update_check_no_new_updates">沒有可用的更新</string>
-    <string name="update_check_look_for_updates">正在檢查更新…</string>
     <string name="update_check_notification_download_in_progress">正在下載更新…</string>
     <string name="update_check_notification_download_complete">輕觸即可更新</string>
     <string name="update_check_notification_download_error">更新下載失敗</string>
@@ -721,4 +720,11 @@
     </plurals>
     <string name="pref_page_rotate">旋轉寬頁以符合螢幕</string>
     <string name="pref_page_rotate_invert">調換旋轉寬頁方向</string>
-    </resources>
+    <string name="pref_debug_info">偵錯資訊</string>
+    <string name="pref_chapter_swipe_start">向左滑動</string>
+    <string name="pref_double_tap_zoom">輕觸兩下以縮放</string>
+    <string name="pref_chapter_swipe_end">向右滑動</string>
+    <string name="pref_chapter_swipe">目錄滑動動作</string>
+    <string name="pref_library_columns_per_row">每列 %d 欄</string>
+    <string name="action_ok">確定</string>
+</resources>
