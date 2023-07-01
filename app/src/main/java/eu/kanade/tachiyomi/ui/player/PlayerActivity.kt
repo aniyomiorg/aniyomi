@@ -53,7 +53,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
 import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
-import eu.kanade.tachiyomi.ui.player.viewer.Gestures
+import eu.kanade.tachiyomi.ui.player.viewer.GestureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.PipState
@@ -514,7 +514,7 @@ class PlayerActivity : BaseActivity() {
      */
     @SuppressLint("ClickableViewAccessibility")
     private fun setupGestures() {
-        val gestures = Gestures(this, deviceWidth.toFloat(), deviceHeight.toFloat())
+        val gestures = GestureHandler(this, deviceWidth.toFloat(), deviceHeight.toFloat())
         val mDetector = GestureDetectorCompat(this, gestures)
         player.setOnTouchListener { v, event ->
             gestures.onTouch(v, event)

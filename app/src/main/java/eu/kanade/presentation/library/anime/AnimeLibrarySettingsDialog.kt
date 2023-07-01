@@ -19,7 +19,7 @@ import eu.kanade.tachiyomi.ui.library.anime.AnimeLibrarySettingsScreenModel
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.library.anime.model.AnimeLibrarySort
-import tachiyomi.domain.library.manga.model.sort
+import tachiyomi.domain.library.anime.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.model.display
 import tachiyomi.presentation.core.components.CheckboxItem
@@ -149,6 +149,7 @@ private fun ColumnScope.SortPage(
         R.string.action_sort_latest_episode to AnimeLibrarySort.Type.LatestEpisode,
         R.string.action_sort_episode_fetch_date to AnimeLibrarySort.Type.EpisodeFetchDate,
         R.string.action_sort_date_added to AnimeLibrarySort.Type.DateAdded,
+        R.string.action_sort_airing_time to AnimeLibrarySort.Type.AiringTime,
     ).map { (titleRes, mode) ->
         SortItem(
             label = stringResource(titleRes),
