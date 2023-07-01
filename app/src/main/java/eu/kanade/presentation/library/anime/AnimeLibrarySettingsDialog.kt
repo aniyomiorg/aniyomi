@@ -149,6 +149,7 @@ private fun ColumnScope.SortPage(
         R.string.action_sort_latest_episode to AnimeLibrarySort.Type.LatestEpisode,
         R.string.action_sort_episode_fetch_date to AnimeLibrarySort.Type.EpisodeFetchDate,
         R.string.action_sort_date_added to AnimeLibrarySort.Type.DateAdded,
+        R.string.action_sort_airing_time to AnimeLibrarySort.Type.AiringTime,
     ).map { (titleRes, mode) ->
         SortItem(
             label = stringResource(titleRes),
