@@ -19,7 +19,7 @@ import eu.kanade.tachiyomi.ui.library.anime.AnimeLibrarySettingsScreenModel
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.library.anime.model.AnimeLibrarySort
-import tachiyomi.domain.library.manga.model.sort
+import tachiyomi.domain.library.anime.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.model.display
 import tachiyomi.presentation.core.components.CheckboxItem
