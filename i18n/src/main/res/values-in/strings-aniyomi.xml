@@ -265,9 +265,12 @@
     <string name="pref_hide_in_manga_library_items">Sembunyikan entri manga yang sudah ada di pustaka</string>
     <string name="pref_hide_in_anime_library_items">Sembunyikan entri anime yang sudah ada di pustaka</string>
     <plurals name="download_amount_anime">
-        <item quantity="other">Episode selanjutnya %d</item>
+        <item quantity="other">Episode selanjutnya</item>
     </plurals>
     <string name="copied_video_link_to_clipboard">Tautan kualitas video yang disalin ke papan klip</string>
     <string name="choose_video_quality">Pilih kualitas video:</string>
     <string name="extension_settings">Pengaturan ekstensi</string>
+    <string name="stats_header">Tampilkan statistik</string>
+    <string name="action_save_screenshot">Tangkap layar disimpan</string>
+    <string name="chapter_dialog_header">Geser untuk ke chapter</string>
 </resources>

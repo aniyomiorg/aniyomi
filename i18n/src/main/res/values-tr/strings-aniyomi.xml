@@ -277,4 +277,7 @@
     <string name="player_hwdec_dialog_title">Varsayılan donanım kod çözme modunu ayarla</string>
     <string name="label_migration_manga">Manga\'yı Taşı</string>
     <string name="label_migration_anime">Anime\'yi Taşı</string>
+    <string name="chapter_dialog_header">Bölüm ara</string>
+    <string name="stats_header">İstatistikleri göster</string>
+    <string name="action_save_screenshot">Ekran görüntüsünü kaydet</string>
 </resources>
