@@ -1,6 +1,5 @@
 package tachiyomi.data.source.anime
 
-import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
@@ -9,8 +8,25 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import tachiyomi.core.util.lang.awaitSingle
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.items.episode.model.NoEpisodesException
+import tachiyomi.domain.source.anime.repository.AnimeSourcePagingSourceType
 
-typealias AnimeSourcePagingSourceType = PagingSource<Long, SAnime>
+class AnimeSourceSearchPagingSource(source: AnimeCatalogueSource, val query: String, val filters: AnimeFilterList) : AnimeSourcePagingSource(source) {
+    override suspend fun requestNextPage(currentPage: Int): AnimesPage {
+        return source.fetchSearchAnime(currentPage, query, filters).awaitSingle()
+    }
+}
+
+class AnimeSourcePopularPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
+    override suspend fun requestNextPage(currentPage: Int): AnimesPage {
+        return source.fetchPopularAnime(currentPage).awaitSingle()
+    }
+}
+
+class AnimeSourceLatestPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
+    override suspend fun requestNextPage(currentPage: Int): AnimesPage {
+        return source.fetchLatestUpdates(currentPage).awaitSingle()
+    }
+}
 
 abstract class AnimeSourcePagingSource(
     protected val source: AnimeCatalogueSource,
@@ -43,23 +59,5 @@ abstract class AnimeSourcePagingSource(
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey ?: anchorPage?.nextKey
         }
-    }
-}
-
-class AnimeSourceSearchPagingSource(source: AnimeCatalogueSource, val query: String, val filters: AnimeFilterList) : AnimeSourcePagingSource(source) {
-    override suspend fun requestNextPage(currentPage: Int): AnimesPage {
-        return source.fetchSearchAnime(currentPage, query, filters).awaitSingle()
-    }
-}
-
-class AnimeSourcePopularPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
-    override suspend fun requestNextPage(currentPage: Int): AnimesPage {
-        return source.fetchPopularAnime(currentPage).awaitSingle()
-    }
-}
-
-class AnimeSourceLatestPagingSource(source: AnimeCatalogueSource) : AnimeSourcePagingSource(source) {
-    override suspend fun requestNextPage(currentPage: Int): AnimesPage {
-        return source.fetchLatestUpdates(currentPage).awaitSingle()
     }
 }

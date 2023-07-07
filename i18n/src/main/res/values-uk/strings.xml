@@ -759,4 +759,5 @@
         <item quantity="many">Наступних %d розділів</item>
         <item quantity="other">Наступних %d розділів</item>
     </plurals>
+    <string name="action_update_category">Оновити категорію</string>
     </resources>

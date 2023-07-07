@@ -16,7 +16,9 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -196,12 +198,22 @@ fun AnimeUpdatesUiItem(
                 text = update.animeTitle,
                 maxLines = 1,
                 style = MaterialTheme.typography.bodyMedium,
+                color = LocalContentColor.current.copy(alpha = textAlpha),
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.alpha(textAlpha),
             )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 var textHeight by remember { mutableStateOf(0) }
+                if (!update.seen) {
+                    Icon(
+                        imageVector = Icons.Filled.Circle,
+                        contentDescription = stringResource(R.string.unread),
+                        modifier = Modifier
+                            .height(8.dp)
+                            .padding(end = 4.dp),
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
                 if (update.bookmark) {
                     Icon(
                         imageVector = Icons.Filled.Bookmark,
@@ -216,19 +228,19 @@ fun AnimeUpdatesUiItem(
                     text = update.episodeName,
                     maxLines = 1,
                     style = MaterialTheme.typography.bodySmall,
+                    color = LocalContentColor.current.copy(alpha = textAlpha),
                     overflow = TextOverflow.Ellipsis,
                     onTextLayout = { textHeight = it.size.height },
                     modifier = Modifier
-                        .weight(weight = 1f, fill = false)
-                        .alpha(textAlpha),
+                        .weight(weight = 1f, fill = false),
                 )
                 if (watchProgress != null) {
                     DotSeparatorText()
                     Text(
                         text = watchProgress,
                         maxLines = 1,
+                        color = LocalContentColor.current.copy(alpha = ReadItemAlpha),
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.alpha(ReadItemAlpha),
                     )
                 }
             }

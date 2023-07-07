@@ -11,7 +11,6 @@ import eu.kanade.domain.entries.manga.interactor.SetMangaViewerFlags
 import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.entries.manga.model.orientationType
 import eu.kanade.domain.entries.manga.model.readingModeType
-import eu.kanade.domain.history.manga.interactor.GetNextChapters
 import eu.kanade.domain.items.chapter.model.toDbChapter
 import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.manga.service.DelayedMangaTrackingUpdateJob
@@ -69,6 +68,7 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.history.manga.interactor.GetNextChapters
 import tachiyomi.domain.history.manga.interactor.UpsertMangaHistory
 import tachiyomi.domain.history.manga.model.MangaHistoryUpdate
 import tachiyomi.domain.items.chapter.interactor.GetChapterByMangaId

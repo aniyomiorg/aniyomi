@@ -1,11 +1,11 @@
 package eu.kanade.domain.source.anime.interactor
 
-import eu.kanade.domain.source.anime.repository.AnimeSourceRepository
 import eu.kanade.domain.source.service.SetMigrateSorting
 import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import tachiyomi.domain.source.anime.model.AnimeSource
+import tachiyomi.domain.source.anime.repository.AnimeSourceRepository
 import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import java.text.Collator
 import java.util.Collections

@@ -59,7 +59,7 @@ fun GlobalAnimeSearchScreen(
 }
 
 @Composable
-fun GlobalAnimeSearchContent(
+private fun GlobalAnimeSearchContent(
     items: Map<AnimeCatalogueSource, AnimeSearchItemResult>,
     contentPadding: PaddingValues,
     getAnime: @Composable (AnimeCatalogueSource, Anime) -> State<Anime>,
