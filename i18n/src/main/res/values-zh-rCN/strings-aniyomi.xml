@@ -201,4 +201,17 @@
     <string name="playback_options_speed">播放速度</string>
     <string name="playback_options_quality">画质</string>
     <string name="playback_options_title">播放选项</string>
+    <string name="pref_search_pinned_manga_sources_only">全局搜索仅限置顶漫画图源</string>
+    <string name="pref_category_volume_brightness">音量和亮度</string>
+    <string name="pref_library_manga_columns">每行漫画数目</string>
+    <string name="pref_search_pinned_anime_sources_only">全局搜索仅限置顶动画图源</string>
+    <string name="extension_settings">插件设置</string>
+    <string name="label_watched_duration">观看时长</string>
+    <string name="pref_library_anime_columns">每行动画数目</string>
+    <string name="settings">设置</string>
+    <string name="label_anime_extensions">动画插件</string>
+    <string name="label_anime">动画</string>
+    <string name="action_global_manga_search">全局漫画搜索</string>
+    <string name="action_global_anime_search">全局动画搜索</string>
+    <string name="unofficial_anime_extension_message">此插件不是Aniyomi官方插件。</string>
 </resources>

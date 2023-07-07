@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="manga_categories">카테고리</string>
+    <string name="manga_categories">만화 카테고리</string>
     <string name="general_categories">카테고리</string>
     <string name="anime_categories">애니메이션 카테고리</string>
     <string name="entries">서재 항목</string>
     <string name="chapters_episodes">회차 및 에피소드</string>
     <string name="episodes">에피소드</string>
-    <string name="backup_settings_warning">경고: 설정을 백업하면 동기화 암호와 같은 민감한 정보도 저장됩니다.
-\n이 백업 파일을 공유하지 마십시오!</string>
+    <string name="backup_settings_warning">경고: 설정을 백업하면 동기화 암호와 같은 민감한 정보도 저장됩니다, 이 백업 파일을 공유하지 마십시오!</string>
     <string name="label_manga_library">만화</string>
     <string name="label_anime_library">애니메이션</string>
     <string name="label_manga">만화</string>
@@ -132,12 +131,12 @@
     <string name="local_invalid_episode_format">잘못된 에피소드 형식</string>
     <string name="unknown_studio">알 수없는 스튜디오</string>
     <plurals name="anime_num_episodes">
-        <item quantity="other">%1$s화</item>
+        <item quantity="other">%1$s개의 에피소드</item>
     </plurals>
     <string name="delete_downloads_for_anime">다운로드한 에피소드를 삭제하시겠습니까\?</string>
     <string name="snack_add_to_manga_library">서재에 추가합니까\?</string>
     <string name="snack_add_to_anime_library">서재에 애니메이션을 추가하시겠습니까\?</string>
-    <string name="display_mode_episode">%1$s화</string>
+    <string name="display_mode_episode">에피소드 %1$s</string>
     <string name="episode_downloading_progress">다운로드 중 (%d%%)</string>
     <string name="download_error">오류</string>
     <string name="download_paused">일시중지됨</string>
@@ -147,7 +146,7 @@
     <string name="confirm_delete_episodes">선택된 에피소드를 삭제하시겠습니까\?</string>
     <string name="also_set_chapter_settings_for_library">서재의 모든 항목에 적용</string>
     <string name="also_set_episode_settings_for_library">서재의 모든 애니메이션에 적용</string>
-    <string name="no_episodes_error">에피소드를 찾을 수 없음</string>
+    <string name="no_episodes_error">에피소드 없음</string>
     <string name="watching">시청 중</string>
     <string name="currently_reading">현재 읽는 중</string>
     <string name="currently_watching">현재 시청 중</string>
@@ -206,9 +205,9 @@
     <string name="video_stretch_screen">화면에 맞게 늘림</string>
     <string name="playback_speed_dialog_title">재생 속도 변경:</string>
     <string name="playback_speed_dialog_reset">초기화</string>
-    <string name="quality_dialog_header">동영상 화질 변경:</string>
-    <string name="subtitle_dialog_header">자막 트랙 변경:</string>
-    <string name="audio_dialog_header">오디오 트랙 변경:</string>
+    <string name="quality_dialog_header">동영상 화질</string>
+    <string name="subtitle_dialog_header">자막</string>
+    <string name="audio_dialog_header">오디오</string>
     <string name="playback_options_speed">재생 속도</string>
     <string name="playback_options_quality">동영상 화질</string>
     <string name="playback_options_title">재생 옵션</string>
@@ -232,11 +231,11 @@
     <string name="player_aniskip_dontskip_toast">%d초 후에 건너뛰기</string>
     <string name="player_aniskip_skip">%s 건너뜀</string>
     <string name="player_hwdec_dialog_title">기본 하드웨어 디코딩 모드 설정</string>
-    <string name="notification_episodes_single">%1$s화</string>
-    <string name="notification_episodes_single_and_more">%1$s화와 그 외 %2$d화</string>
-    <string name="notification_episodes_multiple">%1$s화</string>
+    <string name="notification_episodes_single">에피소드 %1$s</string>
+    <string name="notification_episodes_single_and_more">에피소드 %1$s와 그 외 %2$d</string>
+    <string name="notification_episodes_multiple">에피소드 %1$s</string>
     <plurals name="notification_episodes_multiple_and_more">
-        <item quantity="other">%1$s화와 그 외 %2$d화</item>
+        <item quantity="other">에피소드 %1$s와 그 외 %2$d</item>
     </plurals>
     <string name="episode_settings">에피소드 설정</string>
     <string name="pref_backup_flags">백업 옵션</string>
@@ -270,4 +269,6 @@
     </plurals>
     <string name="choose_video_quality">동영상 화질 선택:</string>
     <string name="extension_settings">확장기능 설정</string>
+    <string name="action_save_screenshot">스크린샷 저장</string>
+    <string name="stats_header">통계 표시</string>
 </resources>

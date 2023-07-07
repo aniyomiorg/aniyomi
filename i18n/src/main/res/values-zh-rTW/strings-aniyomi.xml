@@ -38,4 +38,6 @@
     <string name="information_webview_required">WebView 為 Tachiyomi 的必要元件</string>
     <string name="download_notifier_download_paused_chapters">下載已暫停</string>
     <string name="channel_new_chapters_episodes">新刊發行</string>
+    <string name="label_manga_library">漫畫</string>
+    <string name="general_categories">分類</string>
 </resources>

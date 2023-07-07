@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="manga_categories">श्रेणियाँ</string>
-    <string name="unlock_app">अनलॉक Aniyomi</string>
-    <string name="action_sort_last_manga_update">आखिरी आइटम अद्यतन</string>
+    <string name="manga_categories">मंगा श्रेणियाँ</string>
+    <string name="unlock_app">अनलॉक अनियोमी</string>
+    <string name="action_sort_last_manga_update">अंतिम मंगा अपडेट</string>
     <string name="action_show_manga">आइटम दिखाएँ</string>
     <string name="action_display_local_badge_manga">स्थानीय स्रोत</string>
     <string name="pref_update_only_completely_read">अपठित अध्याय हैं</string>
@@ -66,4 +66,32 @@
         <item quantity="one"/>
         <item quantity="other"/>
     </plurals>
+    <string name="pref_bottom_nav_no_updates">अपडेट टैब के स्थान पर मोर टैब ले जाएं</string>
+    <string name="action_global_anime_search">वैश्विक एनीमे खोज</string>
+    <string name="action_filter_unseen">अनदेखे</string>
+    <string name="label_anime">एनिमे</string>
+    <string name="label_anime_sources">एनीमे स्रोत</string>
+    <string name="label_watched_duration">देखी गई अवधि</string>
+    <string name="label_watched_episodes">देखा है</string>
+    <string name="pref_library_manga_columns">प्रति पंक्ति मंगा आइटम</string>
+    <string name="pref_library_anime_columns">प्रति पंक्ति एनीमे आइटम</string>
+    <string name="action_global_manga_search">वैश्विक मंगा खोज</string>
+    <string name="episodes">एपिसोड</string>
+    <string name="chapters_episodes">अध्याय और एपिसोड</string>
+    <string name="entries">पुस्तकालय प्रविष्टियाँ</string>
+    <string name="label_manga_library">मंगा</string>
+    <string name="label_anime_library">एनिमे</string>
+    <string name="label_manga_sources">मंगा स्रोत</string>
+    <string name="general_categories">श्रेणियाँ</string>
+    <string name="anime_categories">एनीमे श्रेणियाँ</string>
+    <string name="backup_settings_warning">चेतावनी: सेटिंग्स का बैकअप लेने से आपके ट्रैक पासवर्ड भी संग्रहीत हो जाएंगे, इस बैकअप फ़ाइल को साझा न करें!</string>
+    <string name="label_manga">मंगा</string>
+    <string name="pref_bottom_nav_no_history">हिस्ट्री टैब के स्थान पर मोर टैब ले जाएं</string>
+    <string name="pref_bottom_nav_no_manga">मंगा टैब के स्थान पर मोर टैब को स्थानांतरित करें</string>
+    <string name="action_sort_total_episodes">कुल एपिसोड</string>
+    <string name="action_sort_last_seen">अंतिम बार देखा गया</string>
+    <string name="action_sort_latest_episode">नवीनतम कड़ी</string>
+    <string name="action_sort_last_anime_update">अंतिम एनीमे अपडेट</string>
+    <string name="action_sort_unseen_count">अनदेखे की संख्या</string>
+    <string name="action_sort_episode_fetch_date">एपिसोड लाने की तारीख</string>
 </resources>

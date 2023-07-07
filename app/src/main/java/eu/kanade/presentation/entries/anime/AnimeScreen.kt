@@ -31,6 +31,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,15 +60,17 @@ import eu.kanade.presentation.entries.anime.components.AnimeEpisodeListItem
 import eu.kanade.presentation.entries.anime.components.AnimeInfoBox
 import eu.kanade.presentation.entries.anime.components.EpisodeDownloadAction
 import eu.kanade.presentation.entries.anime.components.ExpandableAnimeDescription
+import eu.kanade.presentation.entries.anime.components.NextEpisodeAiringListItem
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.download.anime.model.AnimeDownload
 import eu.kanade.tachiyomi.source.anime.getNameForAnimeInfo
 import eu.kanade.tachiyomi.ui.entries.anime.AnimeScreenState
 import eu.kanade.tachiyomi.ui.entries.anime.EpisodeItem
-import eu.kanade.tachiyomi.ui.entries.manga.chapterDecimalFormat
+import eu.kanade.tachiyomi.ui.entries.anime.episodeDecimalFormat
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import eu.kanade.tachiyomi.util.system.copyToClipboard
+import kotlinx.coroutines.delay
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.source.anime.model.StubAnimeSource
@@ -417,6 +420,31 @@ private fun AnimeScreenSmallImpl(
                         )
                     }
 
+                    if (state.airingTime > 0L) {
+                        item(
+                            key = EntryScreenItem.AIRING_TIME,
+                            contentType = EntryScreenItem.AIRING_TIME,
+                        ) {
+                            // Handles the second by second countdown
+                            var timer by remember { mutableStateOf(state.airingTime) }
+                            LaunchedEffect(key1 = timer) {
+                                if (timer > 0L) {
+                                    delay(1000L)
+                                    timer -= 1000L
+                                }
+                            }
+                            if (timer > 0L) {
+                                NextEpisodeAiringListItem(
+                                    title = stringResource(
+                                        R.string.display_mode_episode,
+                                        episodeDecimalFormat.format(state.airingEpisodeNumber),
+                                    ),
+                                    date = formatTime(state.airingTime, useDayFormat = true),
+                                )
+                            }
+                        }
+                    }
+
                     sharedEpisodeItems(
                         anime = state.anime,
                         episodes = episodes,
@@ -635,6 +663,31 @@ fun AnimeScreenLargeImpl(
                                 )
                             }
 
+                            if (state.airingTime > 0L) {
+                                item(
+                                    key = EntryScreenItem.AIRING_TIME,
+                                    contentType = EntryScreenItem.AIRING_TIME,
+                                ) {
+                                    // Handles the second by second countdown
+                                    var timer by remember { mutableStateOf(state.airingTime) }
+                                    LaunchedEffect(key1 = timer) {
+                                        if (timer > 0L) {
+                                            delay(1000L)
+                                            timer -= 1000L
+                                        }
+                                    }
+                                    if (timer > 0L) {
+                                        NextEpisodeAiringListItem(
+                                            title = stringResource(
+                                                R.string.display_mode_episode,
+                                                episodeDecimalFormat.format(state.airingEpisodeNumber),
+                                            ),
+                                            date = formatTime(state.airingTime, useDayFormat = true),
+                                        )
+                                    }
+                                }
+                            }
+
                             sharedEpisodeItems(
                                 anime = state.anime,
                                 episodes = episodes,
@@ -723,8 +776,8 @@ private fun LazyListScope.sharedEpisodeItems(
         AnimeEpisodeListItem(
             title = if (anime.displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
                 stringResource(
-                    R.string.display_mode_chapter,
-                    chapterDecimalFormat.format(episodeItem.episode.episodeNumber.toDouble()),
+                    R.string.display_mode_episode,
+                    episodeDecimalFormat.format(episodeItem.episode.episodeNumber.toDouble()),
                 )
             } else {
                 episodeItem.episode.name
@@ -743,8 +796,8 @@ private fun LazyListScope.sharedEpisodeItems(
                 ?.let {
                     stringResource(
                         R.string.episode_progress,
-                        formatProgress(it),
-                        formatProgress(episodeItem.episode.totalSeconds),
+                        formatTime(it),
+                        formatTime(episodeItem.episode.totalSeconds),
                     )
                 },
             scanlator = episodeItem.episode.scanlator.takeIf { !it.isNullOrBlank() },
@@ -788,8 +841,19 @@ private fun onEpisodeItemClick(
     }
 }
 
-private fun formatProgress(milliseconds: Long): String {
-    return if (milliseconds > 3600000L) {
+private fun formatTime(milliseconds: Long, useDayFormat: Boolean = false): String {
+    return if (useDayFormat) {
+        String.format(
+            "Airing in %02dd %02dh %02dm %02ds",
+            TimeUnit.MILLISECONDS.toDays(milliseconds),
+            TimeUnit.MILLISECONDS.toHours(milliseconds) -
+                TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(milliseconds)),
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)),
+        )
+    } else if (milliseconds > 3600000L) {
         String.format(
             "%d:%02d:%02d",
             TimeUnit.MILLISECONDS.toHours(milliseconds),

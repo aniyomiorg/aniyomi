@@ -84,7 +84,7 @@ data class BackupAnime(
                 favorite = anime.favorite,
                 source = anime.source,
                 dateAdded = anime.dateAdded,
-                viewer_flags = anime.viewerFlags.toInt(),
+                viewer_flags = anime.skipIntroLength,
                 episodeFlags = anime.episodeFlags.toInt(),
                 updateStrategy = anime.updateStrategy,
             )

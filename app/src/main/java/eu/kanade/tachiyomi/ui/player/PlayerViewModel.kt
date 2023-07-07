@@ -606,7 +606,7 @@ class PlayerViewModel(
         val skipIntroLength = anime.skipIntroLength
         return when {
             resolveDefault && skipIntroLength <= 0 -> default
-            else -> anime.skipIntroLength.toInt()
+            else -> anime.skipIntroLength
         }
     }
 
