@@ -293,7 +293,7 @@ private data class TrackStatusSelectorScreen(
         private val service: TrackService,
     ) : StateScreenModel<Model.State>(State(track.status)) {
 
-        fun getSelections(): Map<Int, String> {
+        fun getSelections(): Map<Int, Int?> {
             return service.mangaService.getStatusListManga().associateWith { service.getStatus(it) }
         }
 

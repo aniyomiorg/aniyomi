@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.track.simkl
 
-import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
@@ -13,7 +12,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.injectLazy
 
-class Simkl(private val context: Context, id: Long) : TrackService(id), AnimeTrackService {
+class Simkl(id: Long) : TrackService(id), AnimeTrackService {
 
     companion object {
         const val WATCHING = 1
@@ -99,15 +98,14 @@ class Simkl(private val context: Context, id: Long) : TrackService(id), AnimeTra
         return listOf(WATCHING, COMPLETED, ON_HOLD, NOT_INTERESTING, PLAN_TO_WATCH)
     }
 
-    override fun getStatus(status: Int): String = with(context) {
-        when (status) {
-            WATCHING -> getString(R.string.watching)
-            PLAN_TO_WATCH -> getString(R.string.plan_to_watch)
-            COMPLETED -> getString(R.string.completed)
-            ON_HOLD -> getString(R.string.on_hold)
-            NOT_INTERESTING -> getString(R.string.not_interesting)
-            else -> ""
-        }
+    @StringRes
+    override fun getStatus(status: Int): Int? = when (status) {
+        WATCHING -> R.string.watching
+        PLAN_TO_WATCH -> R.string.plan_to_watch
+        COMPLETED -> R.string.completed
+        ON_HOLD -> R.string.on_hold
+        NOT_INTERESTING -> R.string.not_interesting
+        else -> null
     }
 
     override fun getWatchingStatus(): Int = WATCHING

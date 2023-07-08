@@ -1,5 +1,6 @@
 package eu.kanade.presentation.track.anime
 
+import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -114,7 +115,7 @@ fun AnimeTrackInfoDialogHome(
 private fun TrackInfoItem(
     title: String,
     service: TrackService,
-    status: String,
+    @StringRes status: Int?,
     onStatusClick: () -> Unit,
     episodes: String,
     onEpisodesClick: () -> Unit,
@@ -176,7 +177,7 @@ private fun TrackInfoItem(
                 Row(modifier = Modifier.height(IntrinsicSize.Min)) {
                     TrackDetailsItem(
                         modifier = Modifier.weight(1f),
-                        text = status,
+                        text = status?.let { stringResource(it) } ?: "",
                         onClick = onStatusClick,
                     )
                     VerticalDivider()

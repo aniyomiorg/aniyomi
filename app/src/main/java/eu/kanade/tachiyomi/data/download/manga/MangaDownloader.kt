@@ -527,7 +527,7 @@ class MangaDownloader(
      * @param tmpDir the directory where the download is currently stored.
      * @param dirname the real (non temporary) directory name of the download.
      */
-    private fun ensureSuccessfulDownload(
+    private suspend fun ensureSuccessfulDownload(
         download: MangaDownload,
         mangaDir: UniFile,
         tmpDir: UniFile,

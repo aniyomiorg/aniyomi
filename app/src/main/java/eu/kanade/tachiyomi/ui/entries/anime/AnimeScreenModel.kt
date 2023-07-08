@@ -629,7 +629,6 @@ class AnimeInfoScreenModel(
             DownloadAction.NEXT_25_ITEMS -> getUnseenEpisodesSorted().take(25)
 
             DownloadAction.UNVIEWED_ITEMS -> getUnseenEpisodes()
-            DownloadAction.ALL_ITEMS -> successState?.episodes?.map { it.episode }
         }
         if (!episodesToDownload.isNullOrEmpty()) {
             startDownload(episodesToDownload, false)
