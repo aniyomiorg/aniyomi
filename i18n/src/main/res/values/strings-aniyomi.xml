@@ -104,6 +104,7 @@
     <string name="pref_skip_20" translatable="false">20s</string>
     <string name="pref_skip_10" translatable="false">10s</string>
     <string name="pref_skip_5" translatable="false">5s</string>
+    <string name="pref_skip_3" translatable="false">3s</string>
     <string name="pref_skip_disable">Disable</string>
     <string name="pref_player_smooth_seek">Enable precise seeking</string>
     <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
