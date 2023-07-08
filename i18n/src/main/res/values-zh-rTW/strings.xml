@@ -599,8 +599,8 @@
     <string name="publishing_finished">出版完畢</string>
     <string name="action_faq_and_guides">常見問題與指南</string>
     <string name="webtoon_side_padding_5">5%</string>
-    <string name="pref_landscape_zoom">縮放橫向圖片</string>
-    <string name="pref_navigate_pan">輕觸大圖時先平移後翻頁</string>
+    <string name="pref_landscape_zoom">自動縮放寬頁</string>
+    <string name="pref_navigate_pan">導覽寬頁時先平移後翻頁</string>
     <string name="action_display_cover_only_grid">純封面格狀</string>
     <string name="action_filter_started">已開始閱讀</string>
     <string name="pref_update_only_started">無已讀的章節</string>
@@ -727,4 +727,8 @@
     <string name="pref_chapter_swipe">目錄滑動動作</string>
     <string name="pref_library_columns_per_row">每列 %d 欄</string>
     <string name="action_ok">確定</string>
+    <string name="delete_downloaded">刪除舊有下載章節</string>
+    <string name="track_delete_title">移除「%s」歷程平台？</string>
+    <string name="track_delete_text">這將在本機上解除登錄該歷程平台。</string>
+    <string name="track_delete_remote_text">同時移除「%s」上的資料</string>
 </resources>

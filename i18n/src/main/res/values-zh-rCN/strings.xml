@@ -736,4 +736,5 @@
     <string name="track_delete_title">要删除 %s 的记录吗？</string>
     <string name="track_delete_remote_text">同时删除 %s 上的数据</string>
     <string name="track_delete_text">将会在本地删除进度记录的关联。</string>
+    <string name="delete_downloaded">删除已下载章节</string>
 </resources>

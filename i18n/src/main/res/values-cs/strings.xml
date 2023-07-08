@@ -791,4 +791,5 @@
     <string name="track_delete_remote_text">Odebrat také z %s</string>
     <string name="action_ok">OK</string>
     <string name="track_delete_title">Odebrat sledování %s\?</string>
+    <string name="delete_downloaded">Odstranit stažené</string>
 </resources>

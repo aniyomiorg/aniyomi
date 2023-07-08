@@ -537,7 +537,7 @@
     <string name="pref_appearance_summary">Темӑ, кун тата вӑхӑт хармачӗ</string>
     <string name="pref_library_summary">Пухмӑшсем, пӗтӗмӗшле ҫӗнетӳ</string>
     <string name="pref_reader_summary">Вулав тытӑмӗ, кӑтартӑнни, куҫӑм</string>
-    <string name="label_default">Пӳрӳлле</string>
+    <string name="label_default">Йаланхилле</string>
     <string name="action_open_random_manga">Ӑнсӑрт ҫырав уҫ</string>
     <string name="theme_strawberrydaiquiri">Ҫӗр ҫырли тайккирийӗ</string>
     <string name="theme_midnightdusk">Ҫур ҫӗр ӗнтрӗкӗ</string>
@@ -583,4 +583,24 @@
     <string name="pref_backup_summary">Хӑй тӗллӗн тата хӑй-хальлӗн йантӑлав</string>
     <string name="action_update_category">Пухмӑш ҫӗнет</string>
     <string name="pref_advanced_summary">Йӑнӑш кӗнекине тийесе йани, петтерей лайӑхлатни</string>
-    </resources>
+    <string name="pref_library_update_show_tab_badge">Вуламан сыпӑксен шутне «Ҫӗнӗлӗх» ыккун ҫинче кӑтартни</string>
+    <string name="pref_landscape_zoom">Сӑна тӑрӑх пысӑклатни</string>
+    <string name="multi_lang">Нумай чӗлхеллӗ</string>
+    <string name="automatic_background">Хӑй-хальлӗн</string>
+    <string name="disabled_nav">Сӳнтернӗ</string>
+    <string name="extension_api_error">Хушмасен йат-йышне илесси пулаймарӗ</string>
+    <string name="pref_library_update_refresh_trackers_summary">Вулавӑша ҫӗнетнӗ май йӗрлеве те ҫӗнетни</string>
+    <string name="pref_long_strip_split">Вӑрӑм сӑнсене пайлани (ПЕТТӖ)</string>
+    <string name="categorized_display_settings">Кашни пухмӑшӑн хӑйӗн ӗнерӳсем</string>
+    <string name="ext_app_info">Ап ҫинчен</string>
+    <string name="split_tall_images_summary">Вулӑшӑн тухӑҫа лайӑхлатать</string>
+    <string name="error_user_agent_string_blank">User agent пушӑ пулмалла мар</string>
+    <string name="ext_info_language">Чӗлхе</string>
+    <string name="pref_navigate_pan">Пуснӑ чухне анлӑ сӑнсене сарӑмлатни</string>
+    <string name="split_tall_images">Вӑрӑм сӑнсене пайлани</string>
+    <string name="missing_storage_permission">Управ ирӗкӗсене паман</string>
+    <string name="ext_info_version">Версси</string>
+    <string name="pref_library_update_refresh_trackers">Йӗрлеве хӑй-хальлӗн ҫӗнетни</string>
+    <string name="ext_update_all">Пурне те ҫӗнет</string>
+    <string name="delete_downloaded">Тийесе илнисене катерт</string>
+</resources>

@@ -623,7 +623,7 @@
     <string name="update_72hour">Каждые 3 дня</string>
     <string name="ext_update_all">Обновить все</string>
     <string name="channel_app_updates">Обновления приложения</string>
-    <string name="clear_database_source_item_count">%1$d не библиотечных записей в базе данных</string>
+    <string name="clear_database_source_item_count">%1$d не библиотечных серий в базе данных</string>
     <string name="database_clean">Нечего очищать</string>
     <string name="extension_api_error">Не удалось получить список расширений</string>
     <string name="privacy_policy">Политика конфиденциальности</string>
@@ -808,4 +808,5 @@
     <string name="track_delete_text">Это удалит отслеживание локально.</string>
     <string name="track_delete_remote_text">Также удалить из %s</string>
     <string name="action_ok">ОК</string>
+    <string name="delete_downloaded">Удалить загруженное</string>
 </resources>

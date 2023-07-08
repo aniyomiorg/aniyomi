@@ -822,4 +822,5 @@
     <string name="track_delete_remote_text">Rimuovi anche da %s</string>
     <string name="action_ok">OK</string>
     <string name="track_delete_text">Questo rimuoverà il tracciamento locale.</string>
+    <string name="delete_downloaded">Cancella scaricati</string>
 </resources>

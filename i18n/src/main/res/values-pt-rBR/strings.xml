@@ -783,4 +783,5 @@
     <string name="track_delete_title">Remover o monitoramento do %s\?</string>
     <string name="track_delete_text">Isso irá remover o monitoramento localmente.</string>
     <string name="track_delete_remote_text">Também remover do %s</string>
+    <string name="delete_downloaded">Deletar os disponíveis offline</string>
 </resources>

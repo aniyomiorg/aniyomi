@@ -365,7 +365,7 @@
     <string name="in_library">In der Bibliothek</string>
     <string name="add_to_library">Zur Bibliothek hinzufügen</string>
     <string name="confirm_exit">Zum Beenden nochmal die Zurück-Taste drücken</string>
-    <string name="licenses">Quelloffene Lizenzen</string>
+    <string name="licenses">Open-Source-Lizenzen</string>
     <string name="website">Webseite</string>
     <string name="label_downloaded_only">Nur Heruntergeladenes</string>
     <string name="recent_manga_time">Kap. %1$s - %2$s</string>
@@ -772,4 +772,5 @@
     <string name="track_delete_remote_text">Auch aus %s entfernen</string>
     <string name="action_ok">OK</string>
     <string name="track_delete_title">Tracking von %s entfernen\?</string>
+    <string name="delete_downloaded">Heruntergeladenes löschen</string>
 </resources>

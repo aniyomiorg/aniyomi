@@ -757,4 +757,5 @@
     <string name="track_delete_text">Ini akan membuang penjejakan secara lokal.</string>
     <string name="action_ok">OK</string>
     <string name="track_delete_remote_text">Juga buang daripada %s</string>
+    <string name="delete_downloaded">Padam dimuat turun</string>
 </resources>

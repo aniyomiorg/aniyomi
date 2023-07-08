@@ -820,4 +820,5 @@
     <string name="track_delete_title">¿Quitar el rastreo de %s\?</string>
     <string name="track_delete_text">Esto eliminará el seguimiento localmente.</string>
     <string name="track_delete_remote_text">Quitar también de %s</string>
+    <string name="delete_downloaded">Borrar los ya descargados</string>
 </resources>
