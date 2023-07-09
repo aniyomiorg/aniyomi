@@ -123,11 +123,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.cycleViewModeBtn.setOnClickListener { cycleViewMode() }
 
-        binding.titleMainTxt.setOnClickListener { playerDialogs.episodeListDialog(pauseForDialog()) }
+        binding.titleMainTxt.setOnClickListener {} // activity.viewModel.showEpisodeList() }
 
-        binding.titleSecondaryTxt.setOnClickListener { playerDialogs.episodeListDialog(pauseForDialog()) }
+        binding.titleSecondaryTxt.setOnClickListener {} // activity.viewModel.showEpisodeList() }
 
-        binding.episodeListBtn.setOnClickListener { playerDialogs.episodeListDialog(pauseForDialog()) }
+        binding.episodeListBtn.setOnClickListener {} // activity.viewModel.showEpisodeList() }
     }
 
     private fun pauseForDialog(): StateRestoreCallback {

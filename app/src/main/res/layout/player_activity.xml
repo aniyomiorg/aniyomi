@@ -174,4 +174,9 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/dialog_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </RelativeLayout>

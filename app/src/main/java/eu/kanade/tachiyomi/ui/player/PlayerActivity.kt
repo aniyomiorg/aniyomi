@@ -26,6 +26,8 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.WindowInsetsCompat
@@ -53,6 +55,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
 import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
+import eu.kanade.tachiyomi.ui.player.viewer.EpisodeListDialog
 import eu.kanade.tachiyomi.ui.player.viewer.GestureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
@@ -66,6 +69,7 @@ import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
+import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.MPVView
 import `is`.xyz.mpv.Utils
@@ -109,7 +113,11 @@ class PlayerActivity : BaseActivity() {
             finish()
             return
         }
-        NotificationReceiver.dismissNotification(this, animeId.hashCode(), Notifications.ID_NEW_EPISODES)
+        NotificationReceiver.dismissNotification(
+            this,
+            animeId.hashCode(),
+            Notifications.ID_NEW_EPISODES
+        )
 
         viewModel.saveCurrentEpisodeWatchingProgress()
 
@@ -120,7 +128,8 @@ class PlayerActivity : BaseActivity() {
 
             val initResult = viewModel.init(animeId, episodeId)
             if (!initResult.second.getOrDefault(false)) {
-                val exception = initResult.second.exceptionOrNull() ?: IllegalStateException("Unknown error")
+                val exception =
+                    initResult.second.exceptionOrNull() ?: IllegalStateException("Unknown error")
                 withUIContext {
                     setInitialEpisodeError(exception)
                 }
@@ -158,7 +167,7 @@ class PlayerActivity : BaseActivity() {
             AudioManager.AUDIOFOCUS_LOSS,
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
             -> {
-                // loss can occur in addition to ducking, so remember the old callback
+// loss can occur in addition to ducking, so remember the old callback
                 val oldRestore = audioFocusRestore
                 val wasPlayerPaused = player.paused ?: false
                 player.paused = true
@@ -167,12 +176,14 @@ class PlayerActivity : BaseActivity() {
                     if (!wasPlayerPaused) player.paused = false
                 }
             }
+
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
                 MPVLib.command(arrayOf("multiply", "volume", 0.5F.toString()))
                 audioFocusRestore = {
                     MPVLib.command(arrayOf("multiply", "volume", 2F.toString()))
                 }
             }
+
             AudioManager.AUDIOFOCUS_GAIN -> {
                 audioFocusRestore()
                 audioFocusRestore = {}
@@ -251,7 +262,7 @@ class PlayerActivity : BaseActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-    // Create Player -- Start --
+// Create Player -- Start --
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -277,12 +288,15 @@ class PlayerActivity : BaseActivity() {
                     is PlayerViewModel.Event.SavedImage -> {
                         onSaveImageResult(event.result)
                     }
+
                     is PlayerViewModel.Event.ShareImage -> {
                         onShareImageResult(event.uri, event.seconds)
                     }
+
                     is PlayerViewModel.Event.SetCoverResult -> {
                         onSetAsCoverResult(event.result)
                     }
+
                     is PlayerViewModel.Event.SetAnimeSkipIntro -> {
                         refreshUi()
                     }
@@ -291,6 +305,26 @@ class PlayerActivity : BaseActivity() {
             .launchIn(lifecycleScope)
 
         onNewIntent(this.intent)
+
+        binding.dialogRoot.setComposeContent {
+            val state by viewModel.state.collectAsState()
+            val onDismissRequest = viewModel::closeDialog
+            when (state.dialog) {
+                is PlayerViewModel.Dialog.EpisodeListSelector -> {
+                    if (state.anime != null) {
+                        EpisodeListDialog(
+                            displayMode = state.anime!!.displayMode,
+                            episodeList = viewModel.episodeList,
+                            onEpisodeClicked = { newIntent(this, it.anime_id, it.id) },
+                            onBookmarkClicked = viewModel::bookmarkEpisode,
+                            onDismissRequest = onDismissRequest,
+                        )
+                    }
+                }
+
+                null -> {}
+            }
+        }
 
         playerIsDestroyed = false
     }
@@ -331,7 +365,8 @@ class PlayerActivity : BaseActivity() {
     private fun setupPlayerAudio() {
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-        val useDeviceVolume = playerPreferences.playerVolumeValue().get() == -1.0F || !playerPreferences.rememberPlayerVolume().get()
+        val useDeviceVolume = playerPreferences.playerVolumeValue()
+            .get() == -1.0F || !playerPreferences.rememberPlayerVolume().get()
         fineVolume = if (useDeviceVolume) {
             audioManager!!.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
         } else {
@@ -348,7 +383,8 @@ class PlayerActivity : BaseActivity() {
     }
 
     private fun setupPlayerBrightness() {
-        val useDeviceBrightness = playerPreferences.playerBrightnessValue().get() == -1.0F || !playerPreferences.rememberPlayerBrightness().get()
+        val useDeviceBrightness = playerPreferences.playerBrightnessValue()
+            .get() == -1.0F || !playerPreferences.rememberPlayerBrightness().get()
         brightness = if (useDeviceBrightness) {
             Utils.getScreenBrightness(this) ?: 0.5F
         } else {
@@ -359,7 +395,8 @@ class PlayerActivity : BaseActivity() {
 
     @Suppress("DEPRECATION")
     private fun loadDeviceDimensions() {
-        this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationType().get()
+        this@PlayerActivity.requestedOrientation =
+            playerPreferences.defaultPlayerOrientationType().get()
         val dm = DisplayMetrics()
         windowManager.defaultDisplay.getRealMetrics(dm)
         deviceWidth = dm.widthPixels
@@ -371,9 +408,9 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    // Create Player -- End --
+// Create Player -- End --
 
-    // Override PlayerActivity lifecycle -- Start --
+// Override PlayerActivity lifecycle -- Start --
 
     override fun onSaveInstanceState(outState: Bundle) {
         if (!isChangingConfigurations) {
@@ -385,7 +422,11 @@ class PlayerActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         refreshUi()
-        if (pip.supportedAndEnabled && PipState.mode == PipState.ON) player.paused?.let { pip.update(!it) }
+        if (pip.supportedAndEnabled && PipState.mode == PipState.ON) player.paused?.let {
+            pip.update(
+                !it
+            )
+        }
     }
 
     override fun onPause() {
@@ -455,7 +496,7 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    // Override PlayerActivity lifecycle -- End --
+// Override PlayerActivity lifecycle -- End --
 
     /**
      * Function to handle Player UI on orientation changes
@@ -556,6 +597,7 @@ class PlayerActivity : BaseActivity() {
                     }
                     showLoadingIndicator(false)
                 }
+
                 else -> {
                     if (switchMethod.first != null) {
                         when {
@@ -566,7 +608,9 @@ class PlayerActivity : BaseActivity() {
                         logcat(LogPriority.ERROR) { "Error getting links" }
                     }
 
-                    if (PipState.mode == PipState.ON && playerPreferences.pipEpisodeToasts().get()) {
+                    if (PipState.mode == PipState.ON && playerPreferences.pipEpisodeToasts()
+                            .get()
+                    ) {
                         launchUI { toast(switchMethod.second) }
                     }
                 }
@@ -610,8 +654,13 @@ class PlayerActivity : BaseActivity() {
 
         if (!playerControls.binding.unlockedView.isVisible) {
             when {
-                player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_64dp) }
-                !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_64dp) }
+                player.paused!! -> {
+                    binding.playPauseView.setImageResource(R.drawable.ic_pause_64dp)
+                }
+
+                !player.paused!! -> {
+                    binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_64dp)
+                }
             }
 
             AnimationUtils.loadAnimation(this, R.anim.player_fade_in).also { fadeAnimation ->
@@ -683,7 +732,13 @@ class PlayerActivity : BaseActivity() {
         }
         playerControls.hideUiForSeek()
         binding.secondsView.start()
-        ViewAnimationUtils.createCircularReveal(view, x, y, 0f, kotlin.math.max(view.height, view.width).toFloat()).setDuration(500).start()
+        ViewAnimationUtils.createCircularReveal(
+            view,
+            x,
+            y,
+            0f,
+            kotlin.math.max(view.height, view.width).toFloat()
+        ).setDuration(500).start()
 
         ObjectAnimator.ofFloat(view, "alpha", 0f, 0.15f).setDuration(500).start()
         ObjectAnimator.ofFloat(view, "alpha", 0.15f, 0.15f, 0f).setDuration(1000).start()
@@ -691,27 +746,29 @@ class PlayerActivity : BaseActivity() {
         MPVLib.command(arrayOf("seek", time.toString(), "relative+exact"))
     }
 
-    // Gesture Functions -- Start --
+// Gesture Functions -- Start --
 
     internal fun initSeek() {
         initialSeek = player.timePos ?: -1
     }
 
     internal fun horizontalScroll(diff: Float, final: Boolean = false) {
-        // disable seeking when timePos is not available
+// disable seeking when timePos is not available
         val duration = player.duration ?: 0
         if (duration == 0 || initialSeek < 0) {
             return
         }
         val newPos = (initialSeek + diff.toInt()).coerceIn(0, duration)
-        if (playerPreferences.playerSmoothSeek().get() && final) player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
+        if (playerPreferences.playerSmoothSeek().get() && final) player.timePos =
+            newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
         val newDiff = newPos - initialSeek
 
         playerControls.showSeekText(newPos, newDiff)
     }
 
     fun verticalScrollRight(diff: Float) {
-        if (diff != 0F) fineVolume = (fineVolume + (diff * maxVolume)).coerceIn(0F, maxVolume.toFloat())
+        if (diff != 0F) fineVolume =
+            (fineVolume + (diff * maxVolume)).coerceIn(0F, maxVolume.toFloat())
         val newVolume = fineVolume.toInt()
         audioManager!!.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
 
@@ -721,7 +778,7 @@ class PlayerActivity : BaseActivity() {
     fun verticalScrollLeft(diff: Float) {
         if (diff != 0F) brightness = (brightness + diff).coerceIn(-0.75F, 1F)
         window.attributes = window.attributes.apply {
-            // value of 0 and 0.01 is broken somehow
+// value of 0 and 0.01 is broken somehow
             screenBrightness = brightness.coerceAtLeast(0.02F)
         }
 
@@ -737,7 +794,7 @@ class PlayerActivity : BaseActivity() {
         playerControls.showBrightnessBar(diff != 0F, finalBrightness)
     }
 
-    // Gesture Functions -- End --
+// Gesture Functions -- End --
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         when (keyCode) {
@@ -745,35 +802,36 @@ class PlayerActivity : BaseActivity() {
                 verticalScrollRight(1 / maxVolume.toFloat())
                 return true
             }
+
             KeyEvent.KEYCODE_VOLUME_DOWN -> {
                 verticalScrollRight(-1 / maxVolume.toFloat())
                 return true
             }
-            // Not entirely sure how to handle these KeyCodes yet, need to learn some more
+// Not entirely sure how to handle these KeyCodes yet, need to learn some more
             /**
-             KeyEvent.KEYCODE_MEDIA_NEXT -> {
-             switchEpisode(false)
-             return true
-             }
+            KeyEvent.KEYCODE_MEDIA_NEXT -> {
+            switchEpisode(false)
+            return true
+            }
 
-             KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
-             switchEpisode(true)
-             return true
-             }
-             KeyEvent.KEYCODE_MEDIA_PLAY -> {
-             player.paused = true
-             doubleTapPlayPause()
-             return true
-             }
-             KeyEvent.KEYCODE_MEDIA_PAUSE -> {
-             player.paused = false
-             doubleTapPlayPause()
-             return true
-             }
-             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
-             doubleTapPlayPause()
-             return true
-             }
+            KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
+            switchEpisode(true)
+            return true
+            }
+            KeyEvent.KEYCODE_MEDIA_PLAY -> {
+            player.paused = true
+            doubleTapPlayPause()
+            return true
+            }
+            KeyEvent.KEYCODE_MEDIA_PAUSE -> {
+            player.paused = false
+            doubleTapPlayPause()
+            return true
+            }
+            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
+            doubleTapPlayPause()
+            return true
+            }
              */
             else -> {}
         }
@@ -782,7 +840,8 @@ class PlayerActivity : BaseActivity() {
 
     @Suppress("UNUSED_PARAMETER")
     fun openTracksSheet(view: View) {
-        val qualityTracks = currentVideoList?.map { Track("", it.quality) }?.toTypedArray()?.takeUnless { it.isEmpty() }
+        val qualityTracks = currentVideoList?.map { Track("", it.quality) }?.toTypedArray()
+            ?.takeUnless { it.isEmpty() }
         val subTracks = subTracks.takeUnless { it.isEmpty() }
         val audioTracks = audioTracks.takeUnless { it.isEmpty() }
 
@@ -861,7 +920,14 @@ class PlayerActivity : BaseActivity() {
                 it.mpvId.toString() == subTracks[index].url
         }
         selectedLoadedTrack?.let { player.sid = it.mpvId }
-            ?: MPVLib.command(arrayOf("sub-add", subTracks[index].url, "select", subTracks[index].url))
+            ?: MPVLib.command(
+                arrayOf(
+                    "sub-add",
+                    subTracks[index].url,
+                    "select",
+                    subTracks[index].url
+                )
+            )
     }
 
     internal fun audioTracksTab(dismissTab: () -> Unit): PlayerTracksBuilder {
@@ -891,7 +957,14 @@ class PlayerActivity : BaseActivity() {
                 it.mpvId.toString() == audioTracks[index].url
         }
         selectedLoadedTrack?.let { player.aid = it.mpvId }
-            ?: MPVLib.command(arrayOf("audio-add", audioTracks[index].url, "select", audioTracks[index].url))
+            ?: MPVLib.command(
+                arrayOf(
+                    "audio-add",
+                    audioTracks[index].url,
+                    "select",
+                    audioTracks[index].url
+                )
+            )
     }
 
     fun openScreenshotSheet() {
@@ -979,6 +1052,7 @@ class PlayerActivity : BaseActivity() {
             is PlayerViewModel.SaveImageResult.Success -> {
                 toast(R.string.picture_saved)
             }
+
             is PlayerViewModel.SaveImageResult.Error -> {
                 logcat(LogPriority.ERROR, result.error)
             }
@@ -1027,12 +1101,20 @@ class PlayerActivity : BaseActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun skipIntro(view: View) {
         if (skipType != null) {
-            // this stops the counter
+// this stops the counter
             if (waitingAniSkip > 0 && netflixStyle) {
                 waitingAniSkip = -1
                 return
             }
-            skipType.let { MPVLib.command(arrayOf("seek", "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}", "absolute")) }
+            skipType.let {
+                MPVLib.command(
+                    arrayOf(
+                        "seek",
+                        "${aniSkipInterval!!.first { it.skipType == skipType }.interval.endTime}",
+                        "absolute"
+                    )
+                )
+            }
             AniSkipApi.PlayerUtils(binding, aniSkipInterval!!).skipAnimation(skipType!!)
         } else if (playerControls.binding.controlsSkipIntroBtn.text != "") {
             doubleTapSeek(viewModel.getAnimeSkipIntroLength(), isDoubleTap = false)
@@ -1062,13 +1144,16 @@ class PlayerActivity : BaseActivity() {
         val windowInsetsController by lazy { WindowInsetsControllerCompat(window, binding.root) }
         binding.root.systemUiVisibility =
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-            View.SYSTEM_UI_FLAG_LOW_PROFILE
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_LOW_PROFILE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && playerPreferences.playerFullscreen().get()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && playerPreferences.playerFullscreen()
+                .get()
+        ) {
             window.attributes.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
@@ -1096,7 +1181,7 @@ class PlayerActivity : BaseActivity() {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode)
 
         if (PipState.mode == PipState.ON) {
-            // On Android TV it is required to hide controller in this PIP change callback
+// On Android TV it is required to hide controller in this PIP change callback
             playerControls.hideControls(true)
             binding.loadingIndicator.indicatorSize = binding.loadingIndicator.indicatorSize / 2
             mReceiver = object : BroadcastReceiver() {
@@ -1108,12 +1193,15 @@ class PlayerActivity : BaseActivity() {
                         CONTROL_TYPE_PLAY -> {
                             player.paused = false
                         }
+
                         CONTROL_TYPE_PAUSE -> {
                             player.paused = true
                         }
+
                         CONTROL_TYPE_PREVIOUS -> {
                             switchEpisode(true)
                         }
+
                         CONTROL_TYPE_NEXT -> {
                             switchEpisode(false)
                         }
@@ -1149,7 +1237,9 @@ class PlayerActivity : BaseActivity() {
             setHttpOptions(it)
             if (viewModel.state.value.isLoadingEpisode) {
                 viewModel.currentEpisode?.let { episode ->
-                    if ((episode.seen && !playerPreferences.preserveWatchingPosition().get()) || fromStart) episode.last_second_seen = 1L
+                    if ((episode.seen && !playerPreferences.preserveWatchingPosition()
+                            .get()) || fromStart
+                    ) episode.last_second_seen = 1L
                     MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
                     playerControls.updatePlaybackDuration(episode.total_seconds.toInt() / 1000)
                 }
@@ -1181,7 +1271,7 @@ class PlayerActivity : BaseActivity() {
             logcat { "Failed to open content fd: $e" }
             return null
         }
-        // Find out real file path and see if we can read it directly
+// Find out real file path and see if we can read it directly
         try {
             val path = File("/proc/self/fd/$fd").canonicalPath
             if (!path.startsWith("/proc") && File(path).canRead()) {
@@ -1189,8 +1279,9 @@ class PlayerActivity : BaseActivity() {
                 ParcelFileDescriptor.adoptFd(fd).close() // we don't need that anymore
                 return path
             }
-        } catch (_: Exception) {}
-        // Else, pass the fd to mpv
+        } catch (_: Exception) {
+        }
+// Else, pass the fd to mpv
         return "fdclose://$fd"
     }
 
@@ -1209,16 +1300,16 @@ class PlayerActivity : BaseActivity() {
 
         MPVLib.setOptionString("http-header-fields", httpHeaderString)
 
-        // need to fix the cache
-        // MPVLib.setOptionString("cache-on-disk", "yes")
-        // val cacheDir = File(applicationContext.filesDir, "media").path
-        // MPVLib.setOptionString("cache-dir", cacheDir)
+// need to fix the cache
+// MPVLib.setOptionString("cache-on-disk", "yes")
+// val cacheDir = File(applicationContext.filesDir, "media").path
+// MPVLib.setOptionString("cache-dir", cacheDir)
     }
 
     private fun clearTracks() {
         val count = MPVLib.getPropertyInt("track-list/count")!!
-        // Note that because events are async, properties might disappear at any moment
-        // so use ?: continue instead of !!
+// Note that because events are async, properties might disappear at any moment
+// so use ?: continue instead of !!
         for (i in 0 until count) {
             val type = MPVLib.getPropertyString("track-list/$i/type") ?: continue
             if (!player.tracks.containsKey(type)) {
@@ -1234,10 +1325,10 @@ class PlayerActivity : BaseActivity() {
     }
 
     // TODO: exception java.util.ConcurrentModificationException:
-    // at java.lang.Object java.util.ArrayList$Itr.next() (ArrayList.java:860)
-    // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.fileLoaded() (PlayerActivity.kt:1874)
-    // at void eu.kanade.tachiyomi.ui.player.PlayerActivity.event(int) (PlayerActivity.kt:1566)
-    // at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
+// at java.lang.Object java.util.ArrayList$Itr.next() (ArrayList.java:860)
+// at void eu.kanade.tachiyomi.ui.player.PlayerActivity.fileLoaded() (PlayerActivity.kt:1874)
+// at void eu.kanade.tachiyomi.ui.player.PlayerActivity.event(int) (PlayerActivity.kt:1566)
+// at void is.xyz.mpv.MPVLib.event(int) (MPVLib.java:86)
     @SuppressLint("SourceLockedOrientationActivity")
     internal fun fileLoaded() {
         val localLangName = LocaleHelper.getSimpleLocaleDisplayName()
@@ -1307,10 +1398,12 @@ class PlayerActivity : BaseActivity() {
             }
             if (playerPreferences.adjustOrientationVideoDimensions().get()) {
                 if ((player.videoW ?: 1) / (player.videoH ?: 1) >= 1) {
-                    this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationLandscape().get()
+                    this@PlayerActivity.requestedOrientation =
+                        playerPreferences.defaultPlayerOrientationLandscape().get()
                     switchControlsOrientation(true)
                 } else {
-                    this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationPortrait().get()
+                    this@PlayerActivity.requestedOrientation =
+                        playerPreferences.defaultPlayerOrientationPortrait().get()
                     switchControlsOrientation(false)
                 }
             }
@@ -1319,7 +1412,7 @@ class PlayerActivity : BaseActivity() {
                 it.copy(isLoadingEpisode = false)
             }
         }
-        // aniSkip stuff
+// aniSkip stuff
         waitingAniSkip = playerPreferences.waitingTimeAniSkip().get()
         runBlocking {
             if (!aniSkipEnable) {
@@ -1339,23 +1432,39 @@ class PlayerActivity : BaseActivity() {
 
     private suspend fun aniSkipStuff(position: Long) {
         if (!aniSkipEnable) return
-        // if it doesn't find any interval it will show the +85 button
+// if it doesn't find any interval it will show the +85 button
         if (aniSkipInterval == null) return
 
         val autoSkipAniSkip = playerPreferences.autoSkipAniSkip().get()
 
-        skipType = aniSkipInterval?.firstOrNull { it.interval.startTime <= position && it.interval.endTime > position }?.skipType
+        skipType =
+            aniSkipInterval?.firstOrNull { it.interval.startTime <= position && it.interval.endTime > position }?.skipType
         skipType?.let { skipType ->
             val aniSkipPlayerUtils = AniSkipApi.PlayerUtils(binding, aniSkipInterval!!)
             if (netflixStyle) {
-                // show a toast with the seconds before the skip
+// show a toast with the seconds before the skip
                 if (waitingAniSkip == playerPreferences.waitingTimeAniSkip().get()) {
-                    toast("AniSkip: ${getString(R.string.player_aniskip_dontskip_toast,waitingAniSkip)}")
+                    toast(
+                        "AniSkip: ${
+                            getString(
+                                R.string.player_aniskip_dontskip_toast,
+                                waitingAniSkip
+                            )
+                        }"
+                    )
                 }
                 aniSkipPlayerUtils.showSkipButton(skipType, waitingAniSkip)
                 waitingAniSkip--
             } else if (autoSkipAniSkip) {
-                skipType.let { MPVLib.command(arrayOf("seek", "${aniSkipInterval!!.first{it.skipType == skipType}.interval.endTime}", "absolute")) }
+                skipType.let {
+                    MPVLib.command(
+                        arrayOf(
+                            "seek",
+                            "${aniSkipInterval!!.first { it.skipType == skipType }.interval.endTime}",
+                            "absolute"
+                        )
+                    )
+                }
             } else {
                 aniSkipPlayerUtils.showSkipButton(skipType)
             }
@@ -1364,7 +1473,7 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    // mpv events
+// mpv events
 
     internal fun mpvUpdateAspect(aspect: String, pan: String) {
         MPVLib.setOptionString("video-aspect-override", aspect)
@@ -1383,6 +1492,7 @@ class PlayerActivity : BaseActivity() {
                 playerControls.updatePlaybackPos(value.toInt())
                 viewModel.viewModelScope.launchUI { aniSkipStuff(value) }
             }
+
             "duration" -> playerControls.updatePlaybackDuration(value.toInt())
         }
     }
@@ -1397,6 +1507,7 @@ class PlayerActivity : BaseActivity() {
                     updatePlaybackStatus(value)
                 }
             }
+
             "eof-reached" -> endFile(value)
         }
     }
