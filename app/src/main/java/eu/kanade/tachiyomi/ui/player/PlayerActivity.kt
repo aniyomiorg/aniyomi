@@ -1322,13 +1322,14 @@ class PlayerActivity : BaseActivity() {
         // aniSkip stuff
         waitingAniSkip = playerPreferences.waitingTimeAniSkip().get()
         runBlocking {
-            aniSkipInterval = viewModel.aniSkipResponse(player.duration)
-            playerControls.binding.playbackSeekbar.setStamps(aniSkipInterval)
+            if (!aniSkipEnable) {
+                aniSkipInterval = viewModel.aniSkipResponse(player.duration)
+                playerControls.binding.playbackSeekbar.setStamps(aniSkipInterval)
+            }
         }
     }
 
     private val aniSkipEnable = playerPreferences.aniSkipEnabled().get()
-    private val autoSkipAniSkip = playerPreferences.autoSkipAniSkip().get()
     private val netflixStyle = playerPreferences.enableNetflixStyleAniSkip().get()
 
     private var aniSkipInterval: List<Stamp>? = null
@@ -1340,6 +1341,8 @@ class PlayerActivity : BaseActivity() {
         if (!aniSkipEnable) return
         // if it doesn't find any interval it will show the +85 button
         if (aniSkipInterval == null) return
+
+        val autoSkipAniSkip = playerPreferences.autoSkipAniSkip().get()
 
         skipType = aniSkipInterval?.firstOrNull { it.interval.startTime <= position && it.interval.endTime > position }?.skipType
         skipType?.let { skipType ->
