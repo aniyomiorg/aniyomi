@@ -31,8 +31,10 @@ import eu.kanade.tachiyomi.util.removeCovers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -49,7 +51,6 @@ import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.SetMangaCategories
 import tachiyomi.domain.category.model.Category
 import tachiyomi.domain.entries.manga.interactor.GetDuplicateLibraryManga
-import tachiyomi.domain.entries.manga.interactor.GetManga
 import tachiyomi.domain.entries.manga.interactor.NetworkToLocalManga
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.entries.manga.model.toMangaUpdate
@@ -72,7 +73,6 @@ class BrowseMangaSourceScreenModel(
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: MangaCoverCache = Injekt.get(),
     private val getRemoteManga: GetRemoteManga = Injekt.get(),
-    private val getManga: GetManga = Injekt.get(),
     private val getDuplicateLibraryManga: GetDuplicateLibraryManga = Injekt.get(),
     private val getCategories: GetMangaCategories = Injekt.get(),
     private val getChapterByMangaId: GetChapterByMangaId = Injekt.get(),
@@ -122,11 +122,15 @@ class BrowseMangaSourceScreenModel(
                 getRemoteManga.subscribe(sourceId, listing.query ?: "", listing.filters)
             }.flow.map { pagingData ->
                 pagingData
-                    .map { withIOContext { networkToLocalManga.await(it.toDomainManga(sourceId)) } }
-                    .filter { !sourcePreferences.hideInMangaLibraryItems().get() || !it.favorite }
                     .map {
-                        getManga.subscribe(it.url, it.source)
+                        flow {
+                            val localManga = withIOContext { networkToLocalManga.await(it.toDomainManga(sourceId)) }
+                            emit(localManga)
+                        }
                             .filterNotNull()
+                            .filter {
+                                !sourcePreferences.hideInMangaLibraryItems().get() || !it.favorite
+                            }
                             .onEach(::initializeManga)
                             .stateIn(coroutineScope)
                     }

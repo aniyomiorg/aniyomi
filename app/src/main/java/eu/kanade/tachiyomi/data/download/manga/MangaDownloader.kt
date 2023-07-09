@@ -410,10 +410,7 @@ class MangaDownloader(
             }
 
             // When the page is ready, set page path, progress (just in case) and status
-            val success = splitTallImageIfNeeded(page, tmpDir)
-            if (!success) {
-                notifier.onError(context.getString(R.string.download_notifier_split_failed), download.chapter.name, download.manga.title)
-            }
+            splitTallImageIfNeeded(page, tmpDir)
             page.uri = file.uri
             page.progress = 100
             page.status = Page.State.READY
@@ -501,21 +498,18 @@ class MangaDownloader(
         return ImageUtil.getExtensionFromMimeType(mime)
     }
 
-    private fun splitTallImageIfNeeded(page: Page, tmpDir: UniFile): Boolean {
-        if (!downloadPreferences.splitTallImages().get()) return true
+    private fun splitTallImageIfNeeded(page: Page, tmpDir: UniFile) {
+        try {
+            val filenamePrefix = String.format("%03d", page.number)
+            val imageFile = tmpDir.listFiles()?.firstOrNull { it.name.orEmpty().startsWith(filenamePrefix) }
+                ?: error(context.getString(R.string.download_notifier_split_page_not_found, page.number))
 
-        val filenamePrefix = String.format("%03d", page.number)
-        val imageFile = tmpDir.listFiles()?.firstOrNull { it.name.orEmpty().startsWith(filenamePrefix) }
-            ?: throw Error(context.getString(R.string.download_notifier_split_page_not_found, page.number))
+            // If the original page was previously split, then skip
+            if (imageFile.name.orEmpty().startsWith("${filenamePrefix}__")) return
 
-        // If the original page was previously split, then skip
-        if (imageFile.name.orEmpty().startsWith("${filenamePrefix}__")) return true
-
-        return try {
             ImageUtil.splitTallImage(tmpDir, imageFile, filenamePrefix)
         } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e)
-            false
+            logcat(LogPriority.ERROR, e) { "Failed to split downloaded image" }
         }
     }
 
@@ -550,14 +544,12 @@ class MangaDownloader(
         }
 
         download.status = if (downloadedImagesCount == downloadPageCount) {
-            // TODO: Uncomment when #8537 is resolved
-//            val chapterUrl = download.source.getChapterUrl(download.chapter)
-//            createComicInfoFile(
-//                tmpDir,
-//                download.manga,
-//                download.chapter.toDomainChapter()!!,
-//                chapterUrl,
-//            )
+            createComicInfoFile(
+                tmpDir,
+                download.manga,
+                download.chapter,
+                download.source,
+            )
 
             // Only rename the directory if it's downloaded
             if (downloadPreferences.saveChaptersAsCBZ().get()) {
@@ -611,23 +603,19 @@ class MangaDownloader(
 
     /**
      * Creates a ComicInfo.xml file inside the given directory.
-     *
-     * @param dir the directory in which the ComicInfo file will be generated.
-     * @param manga the manga.
-     * @param chapter the chapter.
-     * @param chapterUrl the resolved URL for the chapter.
      */
     private fun createComicInfoFile(
         dir: UniFile,
         manga: Manga,
         chapter: Chapter,
-        chapterUrl: String,
+        source: HttpSource,
     ) {
+        val chapterUrl = source.getChapterUrl(chapter.toSChapter())
         val comicInfo = getComicInfo(manga, chapter, chapterUrl)
-        val comicInfoString = xml.encodeToString(ComicInfo.serializer(), comicInfo)
         // Remove the old file
         dir.findFile(COMIC_INFO_FILE)?.delete()
         dir.createFile(COMIC_INFO_FILE).openOutputStream().use {
+            val comicInfoString = xml.encodeToString(ComicInfo.serializer(), comicInfo)
             it.write(comicInfoString.toByteArray())
         }
     }

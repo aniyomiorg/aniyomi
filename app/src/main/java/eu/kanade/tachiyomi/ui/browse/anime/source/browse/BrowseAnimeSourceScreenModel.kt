@@ -31,8 +31,10 @@ import eu.kanade.tachiyomi.util.removeCovers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -48,7 +50,6 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.category.model.Category
-import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.model.Anime
@@ -72,7 +73,6 @@ class BrowseAnimeSourceScreenModel(
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val getRemoteAnime: GetRemoteAnime = Injekt.get(),
-    private val getAnime: GetAnime = Injekt.get(),
     private val getDuplicateAnimelibAnime: GetDuplicateLibraryAnime = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
@@ -122,11 +122,15 @@ class BrowseAnimeSourceScreenModel(
                 getRemoteAnime.subscribe(sourceId, listing.query ?: "", listing.filters)
             }.flow.map { pagingData ->
                 pagingData
-                    .map { withIOContext { networkToLocalAnime.await(it.toDomainAnime(sourceId)) } }
-                    .filter { !sourcePreferences.hideInAnimeLibraryItems().get() || !it.favorite }
                     .map {
-                        getAnime.subscribe(it.url, it.source)
+                        flow {
+                            val localAnime = withIOContext { networkToLocalAnime.await(it.toDomainAnime(sourceId)) }
+                            emit(localAnime)
+                        }
                             .filterNotNull()
+                            .filter {
+                                !sourcePreferences.hideInAnimeLibraryItems().get() || !it.favorite
+                            }
                             .onEach(::initializeAnime)
                             .stateIn(coroutineScope)
                     }

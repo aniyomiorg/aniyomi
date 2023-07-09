@@ -58,7 +58,7 @@
     <string name="pref_search_pinned_anime_sources_only">Only search pinned anime sources in global search</string>
     <string name="pref_hide_in_manga_library_items">Hide manga entries already in library</string>
     <string name="pref_hide_in_anime_library_items">Hide anime entries already in library</string>
-    <string name="action_display_show_continue_reading_button">Show continue watching/reading button</string>
+    <string name="action_display_show_continue_reading_button">Continue watching/reading button</string>
     <string name="action_order_by_episode_number">By episode number</string>
     <string name="action_start_download_externally">Use external downloader</string>
     <string name="action_start_download_internally">Use internal downloader</string>

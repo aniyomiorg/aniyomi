@@ -309,7 +309,6 @@
     <string name="manga_tracking_tab">Praćenje</string>
     <string name="confirm_delete_chapters">Stvarno želiš izbrisati odabrana poglavlja\?</string>
     <string name="download_unread">Nepročitano</string>
-    <string name="download_all">Sve</string>
     <string name="manga_download">Preuzmi</string>
     <string name="sort_by_number">Po broju poglavlja</string>
     <string name="sort_by_source">Po izvoru</string>
