@@ -15,16 +15,19 @@ import androidx.compose.ui.unit.dp
 import dev.vivvvek.seeker.Seeker
 import dev.vivvvek.seeker.SeekerDefaults
 import dev.vivvvek.seeker.Segment
+import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVView.Chapter
 
 class Seekbar(
     private val view: ComposeView,
-    private val onValueChange: (Float) -> Unit,
+    private val onValueChange: (Float, Boolean) -> Unit,
+    private val onValueChangeFinished: (Float) -> Unit,
 ) {
     private var duration: Float = 1F
     private var value: Float = 0F
     private var readAheadValue: Float = 0F
     private var chapters: List<Chapter> = listOf()
+    private var isDragging: Boolean = false
 
     fun updateSeekbar(
         duration: Float? = null,
@@ -45,7 +48,7 @@ class Seekbar(
             this.chapters = chapters
         }
 
-        view.setContent {
+        view.setComposeContent {
             SeekbarComposable(
                 duration ?: this.duration,
                 value ?: this.value,
@@ -63,29 +66,40 @@ class Seekbar(
         readAheadValue: Float,
         segments: List<Segment>,
     ) {
+        val range = 0F..duration
+        val validSegments = segments.filter { it.start in range }
         var mutableValue by remember { mutableStateOf(value) }
         val interactionSource = remember { MutableInteractionSource() }
         val isDragging by interactionSource.collectIsDraggedAsState()
         val gap by animateDpAsState(if (isDragging) 5.dp else 2.dp, label = "gap")
-        val thumbRadius by animateDpAsState(if (isDragging) 10.dp else 0.dp, label = "thumbRadius")
+        val thumbRadius by animateDpAsState(if (isDragging) 8.dp else 4.dp, label = "thumbRadius")
         val trackHeight by animateDpAsState(targetValue = if (isDragging) 6.dp else 4.dp, label = "trackHeight")
-        val range = 0F..duration
         return Seeker(
-            value = if (isDragging) {
-                mutableValue
-            } else {
-                value
-            },
+            value = value,
             readAheadValue = readAheadValue,
             range = range,
-            onValueChange = {
-                if (isDragging) mutableValue = it
-                onValueChange(it)
+            onValueChangeFinished = {
+                if (this.isDragging) {
+                    onValueChangeFinished(mutableValue)
+                    this.isDragging = false
+                }
             },
-            segments = segments,
+            onValueChange = {
+                mutableValue = it
+                if (isDragging) {
+                    val wasDragging = this.isDragging
+                    this.isDragging = true
+                    onValueChange(mutableValue, wasDragging)
+                } else {
+                    onValueChangeFinished(mutableValue)
+                }
+            },
+            segments = validSegments,
             colors = SeekerDefaults.seekerColors(
                 progressColor = MaterialTheme.colorScheme.primary,
-                readAheadColor = MaterialTheme.colorScheme.inversePrimary,
+                readAheadColor = MaterialTheme.colorScheme.onSurface,
+                trackColor = MaterialTheme.colorScheme.surface,
+                thumbColor = MaterialTheme.colorScheme.primary,
             ),
             dimensions = SeekerDefaults.seekerDimensions(
                 trackHeight = trackHeight,

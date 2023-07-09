@@ -250,7 +250,9 @@ class PlayerActivity : BaseActivity() {
     private var videoChapters: List<Chapter> = emptyList()
         set(value) {
             field = value
-            playerControls.seekbar.updateSeekbar(chapters = value)
+            runOnUiThread {
+                playerControls.seekbar.updateSeekbar(chapters = value)
+            }
         }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

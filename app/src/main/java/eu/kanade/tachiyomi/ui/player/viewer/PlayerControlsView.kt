@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
-import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
@@ -42,40 +41,40 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     private val playerDialogs = PlayerDialogs(activity)
 
-    val seekbar: Seekbar = Seekbar(binding.playbackSeekbar) {
-        MPVLib.command(arrayOf("seek", it.toInt().toString(), "absolute+keyframes"))
-        // if (playerPreferences.playerSmoothSeek().get()) player.timePos = it.toInt() else MPVLib.command(arrayOf("seek", it.toString(), "absolute+keyframes"))
-    }
+    val seekbar: Seekbar = Seekbar(
+        view = binding.playbackSeekbar,
+        onValueChange = ::onValueChange,
+        onValueChangeFinished = ::onValueChangeFinished,
+    )
 
-    private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-            if (!fromUser) {
-                return
-            }
-            MPVLib.command(arrayOf("seek", progress.toString(), "absolute+keyframes"))
-
-            val duration = player.duration ?: 0
-            if (duration == 0 || activity.initialSeek < 0) {
-                return
-            }
-
-            val newDiff = player.timePos!! - activity.initialSeek
-
-            showSeekText(progress, newDiff)
-        }
-
-        override fun onStartTrackingTouch(seekBar: SeekBar) {
+    private fun onValueChange(value: Float, wasSeeking: Boolean) {
+        if (!wasSeeking) {
             SeekState.mode = SeekState.SEEKBAR
             activity.initSeek()
         }
 
-        override fun onStopTrackingTouch(seekBar: SeekBar) {
-            val newPos = seekBar.progress
-            if (playerPreferences.playerSmoothSeek().get()) player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
+        MPVLib.command(arrayOf("seek", value.toInt().toString(), "absolute+keyframes"))
+
+        val duration = player.duration ?: 0
+        if (duration == 0 || activity.initialSeek < 0) {
+            return
+        }
+
+        val difference = value.toInt() - activity.initialSeek
+
+        showSeekText(value.toInt(), difference)
+    }
+
+    private fun onValueChangeFinished(value: Float) {
+        if (SeekState.mode == SeekState.SEEKBAR) {
+            if (playerPreferences.playerSmoothSeek().get()) player.timePos = value.toInt() else MPVLib.command(arrayOf("seek", value.toInt().toString(), "absolute+keyframes"))
             SeekState.mode = SeekState.NONE
             animationHandler.removeCallbacks(hideUiForSeekRunnable)
+            animationHandler.removeCallbacks(fadeOutControlsRunnable)
             animationHandler.postDelayed(hideUiForSeekRunnable, 500L)
             animationHandler.postDelayed(fadeOutControlsRunnable, 3500L)
+        } else {
+            MPVLib.command(arrayOf("seek", value.toInt().toString(), "absolute+keyframes"))
         }
     }
 
