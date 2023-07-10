@@ -249,7 +249,6 @@
         <item quantity="other">%d секунд</item>
     </plurals>
     <string name="no_next_episode">Наступний епізод не знайдено!</string>
-    <string name="no_previous_episode">Попередній епізод не знайдено!</string>
     <string name="player_aniskip_mixedOp">Пропустити змішаний ОП</string>
     <string name="anime_from_library">Аніме з бібліотеки</string>
     <string name="action_play_internally">Дивитися в застосунку</string>

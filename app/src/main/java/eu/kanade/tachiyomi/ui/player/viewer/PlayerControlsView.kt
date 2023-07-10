@@ -91,9 +91,9 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
 
-        binding.prevBtn.setOnClickListener { activity.switchEpisode(true) }
+        binding.prevBtn.setOnClickListener { switchEpisode(previous = true) }
         binding.playBtn.setOnClickListener { playPause() }
-        binding.nextBtn.setOnClickListener { activity.switchEpisode(false) }
+        binding.nextBtn.setOnClickListener { switchEpisode(previous = false) }
 
         binding.pipBtn.setOnClickListener { activity.pip.start() }
 
@@ -139,6 +139,10 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
                 activity.refreshUi()
             }
         }
+    }
+
+    private fun switchEpisode(previous: Boolean) {
+        return activity.switchEpisode(activity.viewModel.getAdjacentEpisodeId(previous = previous))
     }
 
     internal suspend fun updateEpisodeText() {

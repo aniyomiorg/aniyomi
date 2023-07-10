@@ -318,8 +318,8 @@ class PlayerActivity : BaseActivity() {
                             currentEpisodeIndex = viewModel.getCurrentEpisodeIndex(),
                             relativeTime = viewModel.relativeTime,
                             dateFormat = viewModel.dateFormat,
-                            onEpisodeClicked = { newIntent(this, it.anime_id, it.id) },
                             onBookmarkClicked = viewModel::bookmarkEpisode,
+                            onEpisodeClicked = this::switchEpisode,
                             onDismissRequest = onDismissRequest,
                         )
                     }
@@ -569,36 +569,29 @@ class PlayerActivity : BaseActivity() {
     }
 
     /**
-     * Switches to the previous episode if [previous] is true,
-     * to the next episode if [previous] is false
-     * @param previous whether the player should switch to the previous episode
+     * Switches to the episode based on [episodeId],
+     * @param episodeId id of the episode to switch the player to
      * @param autoPlay whether the episode is switching due to auto play
      */
-    internal fun switchEpisode(previous: Boolean, autoPlay: Boolean = false) {
+    internal fun switchEpisode(episodeId: Long?, autoPlay: Boolean = false) {
         animationHandler.removeCallbacks(nextEpisodeRunnable)
+        viewModel.closeDialog()
         if (playerSettingsSheet?.isShowing == true) {
             playerSettingsSheet!!.dismiss()
         }
+
         player.paused = true
         showLoadingIndicator(true)
 
         lifecycleScope.launch {
-            viewModel.mutableState.update {
-                it.copy(isLoadingEpisode = true)
-            }
-            val switchMethod =
-                if (previous && !autoPlay) {
-                    viewModel.previousEpisode()
-                } else {
-                    viewModel.nextEpisode()
-                }
+            viewModel.mutableState.update { it.copy(isLoadingEpisode = true) }
 
-            val errorRes = if (previous) R.string.no_previous_episode else R.string.no_next_episode
+            val pipEpisodeToasts = playerPreferences.pipEpisodeToasts().get()
 
-            when (switchMethod) {
+            when (val switchMethod = viewModel.openEpisode(episodeId)) {
                 null -> {
                     if (viewModel.currentAnime != null && !autoPlay) {
-                        launchUI { toast(errorRes) }
+                        launchUI { toast(R.string.no_next_episode) }
                     }
                     showLoadingIndicator(false)
                 }
@@ -613,9 +606,7 @@ class PlayerActivity : BaseActivity() {
                         logcat(LogPriority.ERROR) { "Error getting links" }
                     }
 
-                    if (PipState.mode == PipState.ON && playerPreferences.pipEpisodeToasts()
-                        .get()
-                    ) {
+                    if (PipState.mode == PipState.ON && pipEpisodeToasts) {
                         launchUI { toast(switchMethod.second) }
                     }
                 }
@@ -1210,11 +1201,11 @@ class PlayerActivity : BaseActivity() {
                         }
 
                         CONTROL_TYPE_PREVIOUS -> {
-                            switchEpisode(true)
+                            switchEpisode(viewModel.getAdjacentEpisodeId(previous = true))
                         }
 
                         CONTROL_TYPE_NEXT -> {
-                            switchEpisode(false)
+                            switchEpisode(viewModel.getAdjacentEpisodeId(previous = false))
                         }
                     }
                 }
@@ -1248,11 +1239,8 @@ class PlayerActivity : BaseActivity() {
             setHttpOptions(it)
             if (viewModel.state.value.isLoadingEpisode) {
                 viewModel.currentEpisode?.let { episode ->
-                    if ((
-                        episode.seen && !playerPreferences.preserveWatchingPosition()
-                            .get()
-                        ) || fromStart
-                    ) {
+                    val preservePos = playerPreferences.preserveWatchingPosition().get()
+                    if ((episode.seen && !preservePos) || fromStart) {
                         episode.last_second_seen = 1L
                     }
                     MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
@@ -1527,7 +1515,7 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    private val nextEpisodeRunnable = Runnable { switchEpisode(previous = false, autoPlay = true) }
+    private val nextEpisodeRunnable = Runnable { switchEpisode(viewModel.getAdjacentEpisodeId(previous = false), autoPlay = true) }
 
     private fun endFile(eofReached: Boolean) {
         animationHandler.removeCallbacks(nextEpisodeRunnable)

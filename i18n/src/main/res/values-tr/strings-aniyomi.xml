@@ -146,7 +146,6 @@
     <string name="stats_page_3">Sayfa 3</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
     <string name="no_next_episode">Sonraki bölüm bulunamadı!</string>
-    <string name="no_previous_episode">Önceki Bölüm bulunamadı!</string>
     <string name="label_history">Manga</string>
     <string name="pref_waiting_time_aniskip_7">7 saniye</string>
     <string name="pref_waiting_time_aniskip_8">8 saniye</string>

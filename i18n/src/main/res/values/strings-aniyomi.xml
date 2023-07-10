@@ -234,7 +234,6 @@
         <item quantity="other">%d seconds</item>
     </plurals>
     <string name="no_next_episode">Next Episode not found!</string>
-    <string name="no_previous_episode">Previous Episode not found!</string>
     <string name="label_history">Manga</string>
     <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>

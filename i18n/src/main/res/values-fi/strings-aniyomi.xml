@@ -145,7 +145,6 @@
     <string name="dialog_with_checkbox_reset_anime">Nollaa kaikki tämän animen jaksot</string>
     <string name="episode_settings_updated">Jaksojen oletusasetukset on päivitetty</string>
     <string name="no_next_episode">Seuraavaa jaksoa ei löytynyt!</string>
-    <string name="no_previous_episode">Edellistä jaksoa ei löytynyt!</string>
     <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>
     <string name="label_anime_updates">Anime</string>

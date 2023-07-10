@@ -59,8 +59,8 @@ fun EpisodeListDialog(
     episodeList: List<Episode>,
     relativeTime: Int,
     dateFormat: DateFormat,
-    onEpisodeClicked: (Episode) -> Unit,
-    onBookmarkClicked: (Episode) -> Unit,
+    onBookmarkClicked: (Long?, Boolean) -> Unit,
+    onEpisodeClicked: (Long?) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -147,8 +147,8 @@ private fun EpisodeListItem(
     isCurrentEpisode: Boolean,
     title: String,
     date: String?,
-    onBookmarkClicked: (Episode) -> Unit,
-    onEpisodeClicked: (Episode) -> Unit,
+    onBookmarkClicked: (Long?, Boolean) -> Unit,
+    onEpisodeClicked: (Long?) -> Unit,
 ) {
     var isBookmarked by remember { mutableStateOf(episode.bookmark) }
     var textHeight by remember { mutableStateOf(0) }
@@ -162,13 +162,13 @@ private fun EpisodeListItem(
     val clickBookmark: (Boolean) -> Unit = { bookmarked ->
         episode.bookmark = bookmarked
         isBookmarked = bookmarked
-        onBookmarkClicked(episode)
+        onBookmarkClicked(episode.id, bookmarked)
     }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = { onEpisodeClicked(episode) })
+            .clickable(onClick = { onEpisodeClicked(episode.id) })
             .padding(vertical = MaterialTheme.padding.small),
     ) {
         IconButton(onClick = { clickBookmark(!isBookmarked) }) {

@@ -179,6 +179,18 @@ class PlayerViewModel(
         return episodeList.indexOfFirst { currentEpisode?.id == it.id }
     }
 
+    fun getAdjacentEpisodeId(previous: Boolean): Long {
+        val newIndex = if (previous) getCurrentEpisodeIndex() - 1 else getCurrentEpisodeIndex() + 1
+
+        return if (previous && getCurrentEpisodeIndex() == 0) {
+            -1L
+        } else if (!previous && episodeList.lastIndex == getCurrentEpisodeIndex()) {
+            -1L
+        } else {
+            episodeList[newIndex].id ?: -1L
+        }
+    }
+
     override fun onCleared() {
         if (currentEpisode != null) {
             saveWatchingProgress(currentEpisode!!)
@@ -267,13 +279,13 @@ class PlayerViewModel(
         return currentSource is AnimeHttpSource && !EpisodeLoader.isDownloaded(episode.toDomainEpisode()!!, anime)
     }
 
-    suspend fun nextEpisode(): Pair<List<Video>?, String?>? {
+    suspend fun openEpisode(episodeId: Long?): Pair<List<Video>?, String>? {
         val anime = currentAnime ?: return null
         val source = sourceManager.getOrStub(anime.source)
 
-        val index = getCurrentEpisodeIndex()
-        if (index == episodeList.lastIndex) return null
-        mutableState.update { it.copy(episode = episodeList[index + 1]) }
+        val chosenEpisode = episodeList.firstOrNull { ep -> ep.id == episodeId } ?: return null
+
+        mutableState.update { it.copy(episode = chosenEpisode) }
 
         return withIOContext {
             try {
@@ -284,27 +296,7 @@ class PlayerViewModel(
                 logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
             }
 
-            Pair(currentVideoList, anime.title + " - " + episodeList[index + 1].name)
-        }
-    }
-
-    suspend fun previousEpisode(): Pair<List<Video>?, String?>? {
-        val anime = currentAnime ?: return null
-        val source = sourceManager.getOrStub(anime.source)
-
-        val index = getCurrentEpisodeIndex()
-        if (index == 0) return null
-        mutableState.update { it.copy(episode = episodeList[index - 1]) }
-
-        return withIOContext {
-            try {
-                val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
-                currentVideoList = EpisodeLoader.getLinks(currentEpisode.toDomainEpisode()!!, anime, source).asFlow().first()
-                savedEpisodeId = currentEpisode.id!!
-            } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
-            }
-            Pair(currentVideoList, anime.title + " - " + episodeList[index - 1].name)
+            Pair(currentVideoList, anime.title + " - " + chosenEpisode.name)
         }
     }
 
@@ -429,12 +421,12 @@ class PlayerViewModel(
     /**
      * Bookmarks the currently active episode.
      */
-    fun bookmarkEpisode(episode: Episode) {
+    fun bookmarkEpisode(episodeId: Long?, bookmarked: Boolean) {
         viewModelScope.launchNonCancellable {
             updateEpisode.await(
                 EpisodeUpdate(
-                    id = episode.id!!,
-                    bookmark = episode.bookmark,
+                    id = episodeId!!,
+                    bookmark = bookmarked,
                 ),
             )
         }
