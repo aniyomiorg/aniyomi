@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -21,50 +22,64 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.view.WindowInsetsControllerCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
 import eu.kanade.tachiyomi.ui.entries.anime.episodeDecimalFormat
+import eu.kanade.tachiyomi.util.lang.toRelativeString
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.VerticalFastScroller
+import tachiyomi.presentation.core.components.material.ReadItemAlpha
 import tachiyomi.presentation.core.components.material.padding
+import java.text.DateFormat
+import java.util.Date
 
 @Composable
 fun EpisodeListDialog(
     displayMode: Long,
     episodeList: List<Episode>,
+    relativeTime: Int,
+    dateFormat: DateFormat,
     // currentEpisodeIndex: Int,
     onEpisodeClicked: (Episode) -> Unit,
     onBookmarkClicked: (Episode) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    val context = LocalContext.current
     val episodeListState = rememberLazyListState()
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        modifier = Modifier.fillMaxWidth(fraction = 0.85F).fillMaxHeight(fraction = 0.85F),
+        modifier = Modifier.fillMaxWidth(fraction = 0.8F).fillMaxHeight(fraction = 0.8F),
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false,
         ),
     ) {
         Surface(shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth()) {
+            val systemUIController = rememberSystemUiController()
+            systemUIController.isSystemBarsVisible = false
+            systemUIController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = stringResource(R.string.episodes),
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
-                // Spacer(modifier = Modifier.height(2.dp))
 
                 VerticalFastScroller(
                     listState = episodeListState,
@@ -87,9 +102,20 @@ fun EpisodeListDialog(
                                 episode.name
                             }
 
+                            val date = episode.date_upload
+                                .takeIf { it > 0L }
+                                ?.let {
+                                    Date(it).toRelativeString(
+                                        context,
+                                        relativeTime,
+                                        dateFormat,
+                                    )
+                                } ?: ""
+
                             EpisodeListItem(
                                 episode = episode,
                                 title = title,
+                                date = date,
                                 onBookmarkClicked = onBookmarkClicked,
                                 onEpisodeClicked = onEpisodeClicked,
                             )
@@ -105,15 +131,23 @@ fun EpisodeListDialog(
 private fun EpisodeListItem(
     episode: Episode,
     title: String,
+    date: String,
     onBookmarkClicked: (Episode) -> Unit,
     onEpisodeClicked: (Episode) -> Unit,
 ) {
     var isBookmarked by remember { mutableStateOf(episode.bookmark) }
+    var textHeight by remember { mutableStateOf(0) }
+    val textAlpha = if (episode.seen) ReadItemAlpha else 1f
 
     val clickBookmark: (Boolean) -> Unit = { bookmarked ->
         episode.bookmark = bookmarked
         isBookmarked = bookmarked
         onBookmarkClicked(episode)
+    }
+
+    val episodeTextColor = when {
+        isBookmarked -> MaterialTheme.colorScheme.primary
+        else -> MaterialTheme.colorScheme.onSurface
     }
 
     Row(
@@ -128,6 +162,8 @@ private fun EpisodeListItem(
                     imageVector = Icons.Filled.Bookmark,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
                 )
             }
         } else {
@@ -136,6 +172,8 @@ private fun EpisodeListItem(
                     imageVector = Icons.Outlined.Bookmark,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier
+                        .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
                 )
             }
         }
@@ -148,14 +186,17 @@ private fun EpisodeListItem(
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = episodeTextColor,
+                modifier = Modifier.alpha(textAlpha),
+                onTextLayout = { textHeight = it.size.height },
             )
             Text(
-                text = episode.date_fetch.toString(),
+                text = date,
                 style = MaterialTheme.typography.labelMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = episodeTextColor,
+                modifier = Modifier.alpha(textAlpha),
             )
         }
     }

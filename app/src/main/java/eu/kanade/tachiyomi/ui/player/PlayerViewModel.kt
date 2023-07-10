@@ -16,6 +16,7 @@ import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -83,7 +84,6 @@ class PlayerViewModel(
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val imageSaver: ImageSaver = Injekt.get(),
-    basePreferences: BasePreferences = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
     private val delayedTrackingStore: DelayedAnimeTrackingStore = Injekt.get(),
@@ -97,6 +97,8 @@ class PlayerViewModel(
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     internal val networkPreferences: NetworkPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
+    basePreferences: BasePreferences = Injekt.get(),
+    uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
 
     val mutableState = MutableStateFlow(State())
@@ -106,6 +108,9 @@ class PlayerViewModel(
     val eventFlow = eventChannel.receiveAsFlow()
 
     private val incognitoMode = basePreferences.incognitoMode().get()
+
+    internal val relativeTime = uiPreferences.relativeTime().get()
+    internal val dateFormat = UiPreferences.dateFormat(uiPreferences.dateFormat().get())
 
     /**
      * The episode loaded in the player. It can be null when instantiated for a short time.
