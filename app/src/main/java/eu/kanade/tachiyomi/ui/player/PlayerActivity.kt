@@ -315,6 +315,7 @@ class PlayerActivity : BaseActivity() {
                         EpisodeListDialog(
                             displayMode = state.anime!!.displayMode,
                             episodeList = viewModel.episodeList,
+                            currentEpisodeIndex = viewModel.getCurrentEpisodeIndex(),
                             relativeTime = viewModel.relativeTime,
                             dateFormat = viewModel.dateFormat,
                             onEpisodeClicked = { newIntent(this, it.anime_id, it.id) },
