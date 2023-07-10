@@ -21,6 +21,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,14 +44,14 @@ fun EpisodeListDialog(
     episodeList: List<Episode>,
     // currentEpisodeIndex: Int,
     onEpisodeClicked: (Episode) -> Unit,
-    onBookmarkClicked: (Long?, Boolean) -> Unit,
+    onBookmarkClicked: (Episode) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     val episodeListState = rememberLazyListState()
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        modifier = Modifier.fillMaxWidth(fraction = 0.8F).fillMaxHeight(fraction = 0.8F),
+        modifier = Modifier.fillMaxWidth(fraction = 0.85F).fillMaxHeight(fraction = 0.85F),
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false,
@@ -86,17 +87,10 @@ fun EpisodeListDialog(
                                 episode.name
                             }
 
-                            var isBookmarked by remember { mutableStateOf(episode.bookmark) }
-
-                            val clickBookmark: (Boolean) -> Unit = { bookmarked ->
-                                onBookmarkClicked(episode.id, bookmarked)
-                                isBookmarked = bookmarked
-                            }
-
                             EpisodeListItem(
                                 episode = episode,
                                 title = title,
-                                clickBookmark = clickBookmark,
+                                onBookmarkClicked = onBookmarkClicked,
                                 onEpisodeClicked = onEpisodeClicked,
                             )
                         }
@@ -111,16 +105,24 @@ fun EpisodeListDialog(
 private fun EpisodeListItem(
     episode: Episode,
     title: String,
-    clickBookmark: (Boolean) -> Unit,
+    onBookmarkClicked: (Episode) -> Unit,
     onEpisodeClicked: (Episode) -> Unit,
 ) {
+    var isBookmarked by remember { mutableStateOf(episode.bookmark) }
+
+    val clickBookmark: (Boolean) -> Unit = { bookmarked ->
+        episode.bookmark = bookmarked
+        isBookmarked = bookmarked
+        onBookmarkClicked(episode)
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = { onEpisodeClicked(episode) })
             .padding(vertical = MaterialTheme.padding.small),
     ) {
-        if (episode.bookmark) {
+        if (isBookmarked) {
             IconButton(onClick = { clickBookmark(false) }) {
                 Icon(
                     imageVector = Icons.Filled.Bookmark,
@@ -137,24 +139,24 @@ private fun EpisodeListItem(
                 )
             }
         }
-    }
 
-    Spacer(modifier = Modifier.width(2.dp))
+        Spacer(modifier = Modifier.width(2.dp))
 
-    Column {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        Text(
-            text = episode.date_fetch.toString(),
-            style = MaterialTheme.typography.labelLarge,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
+        Column {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Text(
+                text = episode.date_fetch.toString(),
+                style = MaterialTheme.typography.labelMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        }
     }
 }

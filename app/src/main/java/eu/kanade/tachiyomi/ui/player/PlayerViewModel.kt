@@ -195,7 +195,7 @@ class PlayerViewModel(
     }
 
     init {
-// To save state
+        // To save state
         state.map { currentEpisode }
             .distinctUntilChanged()
             .filterNotNull()
@@ -241,7 +241,7 @@ class PlayerViewModel(
 
                 Pair(currentVideoList, Result.success(true))
             } else {
-// Unlikely but okay
+                // Unlikely but okay
                 Pair(currentVideoList, Result.success(false))
             }
         } catch (e: Throwable) {
@@ -314,7 +314,7 @@ class PlayerViewModel(
 
         val seconds = position * 1000L
         val totalSeconds = duration * 1000L
-// Save last second seen and mark as seen if needed
+        // Save last second seen and mark as seen if needed
         currentEp.last_second_seen = seconds
         currentEp.total_seconds = totalSeconds
 
@@ -338,7 +338,7 @@ class PlayerViewModel(
         val anime = currentAnime ?: return
         val amount = downloadPreferences.autoDownloadWhileWatching().get()
         if (amount == 0 || !anime.favorite) return
-// Only download ahead if current + next episode is already downloaded too to avoid jank
+        // Only download ahead if current + next episode is already downloaded too to avoid jank
         if (getCurrentEpisodeIndex() == episodeList.lastIndex) return
         val currentEpisode = currentEpisode ?: return
 
@@ -363,14 +363,14 @@ class PlayerViewModel(
      * @param currentEpisode current episode, which is going to be marked as seen.
      */
     private fun deleteEpisodeIfNeeded(currentEpisode: Episode) {
-// Determine which episode should be deleted and enqueue
+        // Determine which episode should be deleted and enqueue
         val currentEpisodePosition = episodeList.indexOf(currentEpisode)
         val removeAfterSeenSlots = downloadPreferences.removeAfterReadSlots().get()
         val episodeToDelete = episodeList.getOrNull(currentEpisodePosition - removeAfterSeenSlots)
-// If episode is completely seen no need to download it
+        // If episode is completely seen no need to download it
         episodeToDownload = null
 
-// Check if deleting option is enabled and episode exists
+        // Check if deleting option is enabled and episode exists
         if (removeAfterSeenSlots != -1 && episodeToDelete != null) {
             enqueueDeleteSeenEpisodes(episodeToDelete)
         }
@@ -424,12 +424,12 @@ class PlayerViewModel(
     /**
      * Bookmarks the currently active episode.
      */
-    fun bookmarkEpisode(episodeId: Long?, bookmarked: Boolean) {
+    fun bookmarkEpisode(episode: Episode) {
         viewModelScope.launchNonCancellable {
             updateEpisode.await(
                 EpisodeUpdate(
-                    id = episodeId!!,
-                    bookmark = bookmarked,
+                    id = episode.id!!,
+                    bookmark = episode.bookmark,
                 ),
             )
         }
@@ -449,10 +449,10 @@ class PlayerViewModel(
         val seconds = timePos?.let { Utils.prettyTime(it) } ?: return
         val filename = generateFilename(anime, seconds) ?: return
 
-// Pictures directory.
+        // Pictures directory.
         val relativePath = DiskUtil.buildValidFilename(anime.title)
 
-// Copy file in background.
+        // Copy file in background.
         viewModelScope.launchNonCancellable {
             try {
                 val uri = imageSaver.save(
@@ -550,8 +550,8 @@ class PlayerViewModel(
                     if (service != null && service.isLogged && episodeSeen > track.lastEpisodeSeen) {
                         val updatedTrack = track.copy(lastEpisodeSeen = episodeSeen)
 
-// We want these to execute even if the presenter is destroyed and leaks
-// for a while. The view can still be garbage collected.
+                        // We want these to execute even if the presenter is destroyed and leaks
+                        // for a while. The view can still be garbage collected.
                         async {
                             runCatching {
                                 if (context.isOnline()) {
