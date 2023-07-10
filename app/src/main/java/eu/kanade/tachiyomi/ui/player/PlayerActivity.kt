@@ -310,16 +310,17 @@ class PlayerActivity : BaseActivity() {
             val state by viewModel.state.collectAsState()
             val onDismissRequest = viewModel::closeDialog
             when (state.dialog) {
+
                 is PlayerViewModel.Dialog.EpisodeListSelector -> {
                     if (state.anime != null) {
                         EpisodeListDialog(
                             displayMode = state.anime!!.displayMode,
-                            episodeList = viewModel.episodeList,
+                            episodeList = viewModel.currentEpisodeList,
                             currentEpisodeIndex = viewModel.getCurrentEpisodeIndex(),
                             relativeTime = viewModel.relativeTime,
                             dateFormat = viewModel.dateFormat,
                             onBookmarkClicked = viewModel::bookmarkEpisode,
-                            onEpisodeClicked = this::switchEpisode,
+                            onEpisodeClicked = this::changeEpisode,
                             onDismissRequest = onDismissRequest,
                         )
                     }
@@ -549,6 +550,7 @@ class PlayerActivity : BaseActivity() {
             setupGestures()
             playerControls.setViewMode(showText = false)
             if (pip.supportedAndEnabled) player.paused?.let { pip.update(!it) }
+            viewModel.closeDialog()
             if (playerSettingsSheet?.isShowing == true) {
                 playerSettingsSheet!!.dismiss()
             }
@@ -573,7 +575,7 @@ class PlayerActivity : BaseActivity() {
      * @param episodeId id of the episode to switch the player to
      * @param autoPlay whether the episode is switching due to auto play
      */
-    internal fun switchEpisode(episodeId: Long?, autoPlay: Boolean = false) {
+    internal fun changeEpisode(episodeId: Long?, autoPlay: Boolean = false) {
         animationHandler.removeCallbacks(nextEpisodeRunnable)
         viewModel.closeDialog()
         if (playerSettingsSheet?.isShowing == true) {
@@ -588,7 +590,7 @@ class PlayerActivity : BaseActivity() {
 
             val pipEpisodeToasts = playerPreferences.pipEpisodeToasts().get()
 
-            when (val switchMethod = viewModel.openEpisode(episodeId)) {
+            when (val switchMethod = viewModel.loadEpisode(episodeId)) {
                 null -> {
                     if (viewModel.currentAnime != null && !autoPlay) {
                         launchUI { toast(R.string.no_next_episode) }
@@ -1201,11 +1203,11 @@ class PlayerActivity : BaseActivity() {
                         }
 
                         CONTROL_TYPE_PREVIOUS -> {
-                            switchEpisode(viewModel.getAdjacentEpisodeId(previous = true))
+                            changeEpisode(viewModel.getAdjacentEpisodeId(previous = true))
                         }
 
                         CONTROL_TYPE_NEXT -> {
-                            switchEpisode(viewModel.getAdjacentEpisodeId(previous = false))
+                            changeEpisode(viewModel.getAdjacentEpisodeId(previous = false))
                         }
                     }
                 }
@@ -1515,7 +1517,7 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    private val nextEpisodeRunnable = Runnable { switchEpisode(viewModel.getAdjacentEpisodeId(previous = false), autoPlay = true) }
+    private val nextEpisodeRunnable = Runnable { changeEpisode(viewModel.getAdjacentEpisodeId(previous = false), autoPlay = true) }
 
     private fun endFile(eofReached: Boolean) {
         animationHandler.removeCallbacks(nextEpisodeRunnable)

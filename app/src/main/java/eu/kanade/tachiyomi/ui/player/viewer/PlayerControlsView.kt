@@ -142,7 +142,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     private fun switchEpisode(previous: Boolean) {
-        return activity.switchEpisode(activity.viewModel.getAdjacentEpisodeId(previous = previous))
+        return activity.changeEpisode(activity.viewModel.getAdjacentEpisodeId(previous = previous))
     }
 
     internal suspend fun updateEpisodeText() {
@@ -157,7 +157,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal suspend fun updatePlaylistButtons() {
         val viewModel = activity.viewModel
-        val plCount = viewModel.episodeList.size
+        val plCount = viewModel.currentEpisodeList.size
         val plPos = viewModel.getCurrentEpisodeIndex()
 
         val grey = ContextCompat.getColor(context, R.color.tint_disabled)
