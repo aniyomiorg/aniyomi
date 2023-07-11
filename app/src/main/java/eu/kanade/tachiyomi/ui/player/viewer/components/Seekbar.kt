@@ -48,7 +48,7 @@ class Seekbar(
             this.chapters = chapters
         }
 
-        view.setContent {
+        view.setComposeContent {
             SeekbarComposable(
                 duration ?: this.duration,
                 value ?: this.value,
