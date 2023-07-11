@@ -42,6 +42,7 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
+import eu.kanade.tachiyomi.ui.player.settings.PlayerChaptersSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerScreenshotSheet
@@ -67,7 +68,7 @@ import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
 import `is`.xyz.mpv.MPVLib
-import `is`.xyz.mpv.MPVView
+import `is`.xyz.mpv.MPVView.Chapter
 import `is`.xyz.mpv.Utils
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -246,6 +247,14 @@ class PlayerActivity : BaseActivity() {
 
     private var hadPreviousAudio = false
 
+    private var videoChapters: List<Chapter> = emptyList()
+        set(value) {
+            field = value
+            runOnUiThread {
+                playerControls.seekbar.updateSeekbar(chapters = value)
+            }
+        }
+
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         playerControls.resetControlsFade()
         return super.dispatchTouchEvent(ev)
@@ -320,6 +329,7 @@ class PlayerActivity : BaseActivity() {
 
         val logLevel = if (viewModel.networkPreferences.verboseLogging().get()) "info" else "warn"
         player.initialize(applicationContext.filesDir.path, logLevel)
+        MPVLib.observeProperty("chapter-list", MPVLib.mpvFormat.MPV_FORMAT_NONE)
         mpvUpdateHwDec(HwDecState.get(playerPreferences.standardHwDec().get()))
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
@@ -535,6 +545,8 @@ class PlayerActivity : BaseActivity() {
         }
         player.paused = true
         showLoadingIndicator(true)
+        videoChapters = emptyList()
+        aniskipStamps = emptyList()
 
         lifecycleScope.launch {
             viewModel.mutableState.update {
@@ -635,7 +647,13 @@ class PlayerActivity : BaseActivity() {
         binding.secondsView.stop()
     }
 
-    fun doubleTapSeek(time: Int, event: MotionEvent? = null, isDoubleTap: Boolean = true) {
+    fun doubleTapSeek(
+        time: Int,
+        event: MotionEvent? = null,
+        isDoubleTap: Boolean = true,
+        isChapter: Boolean = false,
+        text: String? = null,
+    ) {
         if (SeekState.mode != SeekState.DOUBLE_TAP) {
             doubleTapBg = if (time < 0) binding.rewBg else binding.ffwdBg
         }
@@ -664,7 +682,11 @@ class PlayerActivity : BaseActivity() {
             }
             doubleTapBg.visibility = View.VISIBLE
 
-            binding.secondsView.seconds -= time
+            if (isChapter) {
+                binding.secondsView.binding.doubleTapSeconds.text = text
+            } else {
+                binding.secondsView.seconds -= time
+            }
         } else {
             binding.secondsView.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
@@ -679,9 +701,15 @@ class PlayerActivity : BaseActivity() {
             }
             doubleTapBg.visibility = View.VISIBLE
 
-            binding.secondsView.seconds += time
+            if (isChapter) {
+                binding.secondsView.binding.doubleTapSeconds.text = text
+            } else {
+                binding.secondsView.seconds += time
+            }
         }
-        playerControls.hideUiForSeek()
+        if (!isChapter) {
+            playerControls.hideUiForSeek()
+        }
         binding.secondsView.start()
         ViewAnimationUtils.createCircularReveal(view, x, y, 0f, kotlin.math.max(view.height, view.width).toFloat()).setDuration(500).start()
 
@@ -818,19 +846,25 @@ class PlayerActivity : BaseActivity() {
         setVideoList(quality, currentVideoList)
     }
 
-    private fun setChapter(index: Int) {
-        player.timePos = player.loadChapters()[index].time.roundToInt()
-        player.paused = false
+    private fun setChapter(chapter: Chapter) {
+        val seekDifference = chapter.time.roundToInt() - (player.timePos ?: 0)
+        doubleTapSeek(
+            time = seekDifference,
+            isDoubleTap = false,
+            isChapter = true,
+            text = chapter.title.takeIf { !it.isNullOrBlank() }
+                ?: Utils.prettyTime(chapter.time.roundToInt()),
+        )
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun pickChapter(view: View) {
         playerControls.hideControls(true)
         PlayerChaptersSheet(
-            this,
-            R.string.chapter_dialog_header,
-            ::setChapter,
-            player.loadChapters(),
+            activity = this@PlayerActivity,
+            textRes = R.string.chapter_dialog_header,
+            seekToChapterMethod = ::setChapter,
+            chapters = videoChapters,
         ).show()
     }
 
@@ -1302,9 +1336,6 @@ class PlayerActivity : BaseActivity() {
         }
 
         viewModel.viewModelScope.launchUI {
-            if (player.loadChapters() != emptyList<MPVView.Chapter>()) {
-                binding.playerControls.binding.chaptersBtn.visibility = View.VISIBLE
-            }
             if (playerPreferences.adjustOrientationVideoDimensions().get()) {
                 if ((player.videoW ?: 1) / (player.videoH ?: 1) >= 1) {
                     this@PlayerActivity.requestedOrientation = playerPreferences.defaultPlayerOrientationLandscape().get()
@@ -1323,8 +1354,80 @@ class PlayerActivity : BaseActivity() {
         waitingAniSkip = playerPreferences.waitingTimeAniSkip().get()
         runBlocking {
             aniSkipInterval = viewModel.aniSkipResponse(player.duration)
-            playerControls.binding.playbackSeekbar.setStamps(aniSkipInterval)
+            aniSkipInterval?.let {
+                aniskipStamps = it
+                updateChapters(it, player.duration)
+            }
         }
+    }
+
+    private var aniskipStamps: List<Stamp> = emptyList()
+
+    private fun updateChapters(stamps: List<Stamp>? = null, duration: Int? = null) {
+        val aniskipStamps = stamps ?: aniskipStamps
+        val sortedAniskipStamps = aniskipStamps.sortedBy { it.interval.startTime }
+        val aniskipChapters = sortedAniskipStamps.mapIndexed { i, it ->
+            val startTime = if (i == 0 && it.interval.startTime < 1.0) {
+                0.0
+            } else {
+                it.interval.startTime
+            }
+            val startChapter = Chapter(
+                index = -2, // Index -2 is used to indicate that this is an AniSkip chapter
+                title = it.skipType.getString(),
+                time = startTime,
+            )
+            val nextStart = sortedAniskipStamps.getOrNull(i + 1)?.interval?.startTime
+            val isNotLastChapter = abs(it.interval.endTime - (duration?.toDouble() ?: -2.0)) > 1.0
+            val isNotAdjacent = nextStart == null || (abs(it.interval.endTime - nextStart) > 1.0)
+            if (isNotLastChapter && isNotAdjacent) {
+                val endChapter = Chapter(
+                    index = -1,
+                    title = null,
+                    time = it.interval.endTime,
+                )
+                return@mapIndexed listOf(startChapter, endChapter)
+            } else {
+                listOf(startChapter)
+            }
+        }.flatten()
+        val playerChapters = player.loadChapters().filter { playerChapter ->
+            aniskipChapters.none { aniskipChapter ->
+                abs(aniskipChapter.time - playerChapter.time) < 1.0 && aniskipChapter.index == -2
+            }
+        }.sortedBy { it.time }.mapIndexed { i, it ->
+            if (i == 0 && it.time < 1.0) {
+                Chapter(
+                    it.index,
+                    it.title,
+                    0.0,
+                )
+            } else {
+                it
+            }
+        }
+        val filteredAniskipChapters = aniskipChapters.filter { aniskipChapter ->
+            playerChapters.none { playerChapter ->
+                abs(aniskipChapter.time - playerChapter.time) < 1.0 && aniskipChapter.index != -2
+            }
+        }
+        val startChapter = if ((playerChapters + filteredAniskipChapters).isNotEmpty() &&
+            playerChapters.none { it.time == 0.0 } &&
+            filteredAniskipChapters.none { it.time == 0.0 }
+        ) {
+            listOf(
+                Chapter(
+                    index = -1,
+                    title = null,
+                    time = 0.0,
+                ),
+            )
+        } else {
+            emptyList()
+        }
+        val combinedChapters = (startChapter + playerChapters + filteredAniskipChapters).sortedBy { it.time }
+        runOnUiThread { binding.playerControls.binding.chaptersBtn.isVisible = combinedChapters.isNotEmpty() }
+        videoChapters = combinedChapters
     }
 
     private val aniSkipEnable = playerPreferences.aniSkipEnabled().get()
@@ -1395,6 +1498,12 @@ class PlayerActivity : BaseActivity() {
                 }
             }
             "eof-reached" -> endFile(value)
+        }
+    }
+
+    internal fun eventPropertyUi(property: String) {
+        when (property) {
+            "chapter-list" -> updateChapters()
         }
     }
 

@@ -378,19 +378,15 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
-            <eu.kanade.tachiyomi.ui.player.viewer.components.CustomSeekBar
+            <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/playbackSeekbar"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="80"
-                android:progressBackgroundTint="@color/tint_seekbar_bg"
-                android:secondaryProgressTint="?attr/colorSecondaryVariant"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/playbackPositionBtn"
-                app:layout_constraintRight_toLeftOf="@id/playbackDurationBtn"
-                tools:progress="25"
-                tools:secondaryProgress="50" />
+                app:layout_constraintRight_toLeftOf="@id/playbackDurationBtn" />
 
             <TextView
                 android:id="@+id/playbackDurationBtn"

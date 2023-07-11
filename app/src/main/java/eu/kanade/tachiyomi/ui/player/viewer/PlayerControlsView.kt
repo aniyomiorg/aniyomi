@@ -11,13 +11,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
-import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerDialogs
+import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.StateRestoreCallback
 import `is`.xyz.mpv.Utils
@@ -41,35 +41,40 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     private val playerDialogs = PlayerDialogs(activity)
 
-    private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-            if (!fromUser) {
-                return
-            }
-            MPVLib.command(arrayOf("seek", progress.toString(), "absolute+keyframes"))
+    val seekbar: Seekbar = Seekbar(
+        view = binding.playbackSeekbar,
+        onValueChange = ::onValueChange,
+        onValueChangeFinished = ::onValueChangeFinished,
+    )
 
-            val duration = player.duration ?: 0
-            if (duration == 0 || activity.initialSeek < 0) {
-                return
-            }
-
-            val newDiff = player.timePos!! - activity.initialSeek
-
-            showSeekText(progress, newDiff)
-        }
-
-        override fun onStartTrackingTouch(seekBar: SeekBar) {
+    private fun onValueChange(value: Float, wasSeeking: Boolean) {
+        if (!wasSeeking) {
             SeekState.mode = SeekState.SEEKBAR
             activity.initSeek()
         }
 
-        override fun onStopTrackingTouch(seekBar: SeekBar) {
-            val newPos = seekBar.progress
-            if (playerPreferences.playerSmoothSeek().get()) player.timePos = newPos else MPVLib.command(arrayOf("seek", newPos.toString(), "absolute+keyframes"))
+        MPVLib.command(arrayOf("seek", value.toInt().toString(), "absolute+keyframes"))
+
+        val duration = player.duration ?: 0
+        if (duration == 0 || activity.initialSeek < 0) {
+            return
+        }
+
+        val difference = value.toInt() - activity.initialSeek
+
+        showSeekText(value.toInt(), difference)
+    }
+
+    private fun onValueChangeFinished(value: Float) {
+        if (SeekState.mode == SeekState.SEEKBAR) {
+            if (playerPreferences.playerSmoothSeek().get()) player.timePos = value.toInt() else MPVLib.command(arrayOf("seek", value.toInt().toString(), "absolute+keyframes"))
             SeekState.mode = SeekState.NONE
             animationHandler.removeCallbacks(hideUiForSeekRunnable)
+            animationHandler.removeCallbacks(fadeOutControlsRunnable)
             animationHandler.postDelayed(hideUiForSeekRunnable, 500L)
             animationHandler.postDelayed(fadeOutControlsRunnable, 3500L)
+        } else {
+            MPVLib.command(arrayOf("seek", value.toInt().toString(), "absolute+keyframes"))
         }
     }
 
@@ -88,8 +93,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         // Long click controls
         binding.cycleSpeedBtn.setOnLongClickListener { playerDialogs.speedPickerDialog(pauseForDialog()); true }
         binding.cycleDecoderBtn.setOnLongClickListener { playerDialogs.decoderDialog(pauseForDialog()); true }
-
-        binding.playbackSeekbar.setOnSeekBarChangeListener(seekBarChangeListener)
 
         binding.prevBtn.setOnClickListener { activity.switchEpisode(true) }
         binding.playBtn.setOnClickListener { playPause() }
@@ -297,8 +300,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             }
             activity.viewModel.onSecondReached(position, duration)
         }
-
-        binding.playbackSeekbar.progress = position
+        seekbar.updateSeekbar(value = position.toFloat())
     }
 
     @SuppressLint("SetTextI18n")
@@ -307,13 +309,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
             binding.playbackDurationBtn.text = Utils.prettyTime(duration)
         }
 
-        if (SeekState.mode != SeekState.SEEKBAR) {
-            binding.playbackSeekbar.max = duration
-        }
+        seekbar.updateSeekbar(duration = duration.toFloat())
     }
 
-    internal fun updateBufferPosition(duration: Int) {
-        binding.playbackSeekbar.secondaryProgress = duration
+    internal fun updateBufferPosition(bufferPosition: Int) {
+        seekbar.updateSeekbar(readAheadValue = bufferPosition.toFloat())
     }
 
     internal fun showAndFadeControls() {
