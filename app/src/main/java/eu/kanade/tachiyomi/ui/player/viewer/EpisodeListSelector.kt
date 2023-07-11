@@ -154,6 +154,7 @@ private fun EpisodeListItem(
     var textHeight by remember { mutableStateOf(0) }
 
     val bookmarkIcon = if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.Bookmark
+    val bookmarkAlpha = if (isBookmarked) 1f else ReadItemAlpha
     val episodeColor = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
     val textAlpha = if (episode.seen) ReadItemAlpha else 1f
     val textWeight = if (isCurrentEpisode) FontWeight.Bold else FontWeight.Normal
@@ -177,7 +178,8 @@ private fun EpisodeListItem(
                 contentDescription = null,
                 tint = episodeColor,
                 modifier = Modifier
-                    .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp }),
+                    .sizeIn(maxHeight = with(LocalDensity.current) { textHeight.toDp() - 2.dp })
+                    .alpha(bookmarkAlpha),
             )
         }
 

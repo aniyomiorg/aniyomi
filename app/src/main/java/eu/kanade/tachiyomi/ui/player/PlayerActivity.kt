@@ -310,7 +310,6 @@ class PlayerActivity : BaseActivity() {
             val state by viewModel.state.collectAsState()
             val onDismissRequest = viewModel::closeDialog
             when (state.dialog) {
-
                 is PlayerViewModel.Dialog.EpisodeListSelector -> {
                     if (state.anime != null) {
                         EpisodeListDialog(

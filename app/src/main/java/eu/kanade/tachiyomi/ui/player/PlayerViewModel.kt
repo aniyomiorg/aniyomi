@@ -239,7 +239,7 @@ class PlayerViewModel(
                 checkTrackers(anime)
                 savedEpisodeId = episodeId
 
-                mutableState.update { it.copy(episodeList = initEpisodeList(anime))}
+                mutableState.update { it.copy(episodeList = initEpisodeList(anime)) }
                 val episode = this.currentEpisodeList.first { it.id == episodeId }
 
                 val source = sourceManager.getOrStub(anime.source)
