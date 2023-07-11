@@ -182,7 +182,6 @@
         <item quantity="other">%d秒</item>
     </plurals>
     <string name="no_next_episode">未找到下一集！</string>
-    <string name="no_previous_episode">未找到上一集！</string>
     <string name="label_history">漫画</string>
     <string name="label_anime_history">动画</string>
     <string name="label_updates">漫画</string>

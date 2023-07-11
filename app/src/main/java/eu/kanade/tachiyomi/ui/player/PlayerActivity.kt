@@ -26,6 +26,8 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.WindowInsetsCompat
@@ -54,6 +56,7 @@ import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
 import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
+import eu.kanade.tachiyomi.ui.player.viewer.EpisodeListDialog
 import eu.kanade.tachiyomi.ui.player.viewer.GestureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
@@ -67,6 +70,7 @@ import eu.kanade.tachiyomi.util.system.LocaleHelper
 import eu.kanade.tachiyomi.util.system.powerManager
 import eu.kanade.tachiyomi.util.system.toShareIntent
 import eu.kanade.tachiyomi.util.system.toast
+import eu.kanade.tachiyomi.util.view.setComposeContent
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.MPVView.Chapter
 import `is`.xyz.mpv.Utils
@@ -301,6 +305,29 @@ class PlayerActivity : BaseActivity() {
 
         onNewIntent(this.intent)
 
+        binding.dialogRoot.setComposeContent {
+            val state by viewModel.state.collectAsState()
+
+            when (state.dialog) {
+                is PlayerViewModel.Dialog.EpisodeListSelector -> {
+                    if (state.anime != null) {
+                        EpisodeListDialog(
+                            displayMode = state.anime!!.displayMode,
+                            episodeList = viewModel.currentPlaylist,
+                            currentEpisodeIndex = viewModel.getCurrentEpisodeIndex(),
+                            relativeTime = viewModel.relativeTime,
+                            dateFormat = viewModel.dateFormat,
+                            onBookmarkClicked = viewModel::bookmarkEpisode,
+                            onEpisodeClicked = this::changeEpisode,
+                            onDismissRequest = pauseForDialog(),
+                        )
+                    }
+                }
+
+                null -> {}
+            }
+        }
+
         playerIsDestroyed = false
     }
 
@@ -378,6 +405,16 @@ class PlayerActivity : BaseActivity() {
             switchControlsOrientation(false)
         } else {
             switchControlsOrientation(true)
+        }
+    }
+
+    internal fun pauseForDialog(): () -> Unit {
+        val wasPlayerPaused = player.paused ?: true // default to not changing state
+        player.paused = true
+        return {
+            if (!wasPlayerPaused) player.paused = false
+            viewModel.closeDialog()
+            refreshUi()
         }
     }
 
@@ -513,6 +550,7 @@ class PlayerActivity : BaseActivity() {
             setupGestures()
             playerControls.setViewMode(showText = false)
             if (pip.supportedAndEnabled) player.paused?.let { pip.update(!it) }
+            viewModel.closeDialog()
             if (playerSettingsSheet?.isShowing == true) {
                 playerSettingsSheet!!.dismiss()
             }
@@ -533,41 +571,35 @@ class PlayerActivity : BaseActivity() {
     }
 
     /**
-     * Switches to the previous episode if [previous] is true,
-     * to the next episode if [previous] is false
-     * @param previous whether the player should switch to the previous episode
+     * Switches to the episode based on [episodeId],
+     * @param episodeId id of the episode to switch the player to
      * @param autoPlay whether the episode is switching due to auto play
      */
-    internal fun switchEpisode(previous: Boolean, autoPlay: Boolean = false) {
+    internal fun changeEpisode(episodeId: Long?, autoPlay: Boolean = false) {
         animationHandler.removeCallbacks(nextEpisodeRunnable)
+        viewModel.closeDialog()
         if (playerSettingsSheet?.isShowing == true) {
             playerSettingsSheet!!.dismiss()
         }
+
         player.paused = true
         showLoadingIndicator(true)
         videoChapters = emptyList()
         aniskipStamps = emptyList()
 
         lifecycleScope.launch {
-            viewModel.mutableState.update {
-                it.copy(isLoadingEpisode = true)
-            }
-            val switchMethod =
-                if (previous && !autoPlay) {
-                    viewModel.previousEpisode()
-                } else {
-                    viewModel.nextEpisode()
-                }
+            viewModel.mutableState.update { it.copy(isLoadingEpisode = true) }
 
-            val errorRes = if (previous) R.string.no_previous_episode else R.string.no_next_episode
+            val pipEpisodeToasts = playerPreferences.pipEpisodeToasts().get()
 
-            when (switchMethod) {
+            when (val switchMethod = viewModel.loadEpisode(episodeId)) {
                 null -> {
                     if (viewModel.currentAnime != null && !autoPlay) {
-                        launchUI { toast(errorRes) }
+                        launchUI { toast(R.string.no_next_episode) }
                     }
                     showLoadingIndicator(false)
                 }
+
                 else -> {
                     if (switchMethod.first != null) {
                         when {
@@ -578,7 +610,7 @@ class PlayerActivity : BaseActivity() {
                         logcat(LogPriority.ERROR) { "Error getting links" }
                     }
 
-                    if (PipState.mode == PipState.ON && playerPreferences.pipEpisodeToasts().get()) {
+                    if (PipState.mode == PipState.ON && pipEpisodeToasts) {
                         launchUI { toast(switchMethod.second) }
                     }
                 }
@@ -622,8 +654,13 @@ class PlayerActivity : BaseActivity() {
 
         if (!playerControls.binding.unlockedView.isVisible) {
             when {
-                player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_pause_64dp) }
-                !player.paused!! -> { binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_64dp) }
+                player.paused!! -> {
+                    binding.playPauseView.setImageResource(R.drawable.ic_pause_64dp)
+                }
+
+                !player.paused!! -> {
+                    binding.playPauseView.setImageResource(R.drawable.ic_play_arrow_64dp)
+                }
             }
 
             AnimationUtils.loadAnimation(this, R.anim.player_fade_in).also { fadeAnimation ->
@@ -1146,10 +1183,10 @@ class PlayerActivity : BaseActivity() {
                             player.paused = true
                         }
                         CONTROL_TYPE_PREVIOUS -> {
-                            switchEpisode(true)
+                            changeEpisode(viewModel.getAdjacentEpisodeId(previous = true))
                         }
                         CONTROL_TYPE_NEXT -> {
-                            switchEpisode(false)
+                            changeEpisode(viewModel.getAdjacentEpisodeId(previous = false))
                         }
                     }
                 }
@@ -1183,7 +1220,10 @@ class PlayerActivity : BaseActivity() {
             setHttpOptions(it)
             if (viewModel.state.value.isLoadingEpisode) {
                 viewModel.currentEpisode?.let { episode ->
-                    if ((episode.seen && !playerPreferences.preserveWatchingPosition().get()) || fromStart) episode.last_second_seen = 1L
+                    val preservePos = playerPreferences.preserveWatchingPosition().get()
+                    if ((episode.seen && !preservePos) || fromStart) {
+                        episode.last_second_seen = 1L
+                    }
                     MPVLib.command(arrayOf("set", "start", "${episode.last_second_seen / 1000F}"))
                     playerControls.updatePlaybackDuration(episode.total_seconds.toInt() / 1000)
                 }
@@ -1353,10 +1393,12 @@ class PlayerActivity : BaseActivity() {
         // aniSkip stuff
         waitingAniSkip = playerPreferences.waitingTimeAniSkip().get()
         runBlocking {
-            aniSkipInterval = viewModel.aniSkipResponse(player.duration)
-            aniSkipInterval?.let {
-                aniskipStamps = it
-                updateChapters(it, player.duration)
+            if (!aniSkipEnable) {
+                aniSkipInterval = viewModel.aniSkipResponse(player.duration)
+                aniSkipInterval?.let {
+                    aniskipStamps = it
+                    updateChapters(it, player.duration)
+                }
             }
         }
     }
@@ -1431,7 +1473,6 @@ class PlayerActivity : BaseActivity() {
     }
 
     private val aniSkipEnable = playerPreferences.aniSkipEnabled().get()
-    private val autoSkipAniSkip = playerPreferences.autoSkipAniSkip().get()
     private val netflixStyle = playerPreferences.enableNetflixStyleAniSkip().get()
 
     private var aniSkipInterval: List<Stamp>? = null
@@ -1444,7 +1485,10 @@ class PlayerActivity : BaseActivity() {
         // if it doesn't find any interval it will show the +85 button
         if (aniSkipInterval == null) return
 
-        skipType = aniSkipInterval?.firstOrNull { it.interval.startTime <= position && it.interval.endTime > position }?.skipType
+        val autoSkipAniSkip = playerPreferences.autoSkipAniSkip().get()
+
+        skipType =
+            aniSkipInterval?.firstOrNull { it.interval.startTime <= position && it.interval.endTime > position }?.skipType
         skipType?.let { skipType ->
             val aniSkipPlayerUtils = AniSkipApi.PlayerUtils(binding, aniSkipInterval!!)
             if (netflixStyle) {
@@ -1507,7 +1551,7 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    private val nextEpisodeRunnable = Runnable { switchEpisode(previous = false, autoPlay = true) }
+    private val nextEpisodeRunnable = Runnable { changeEpisode(viewModel.getAdjacentEpisodeId(previous = false), autoPlay = true) }
 
     private fun endFile(eofReached: Boolean) {
         animationHandler.removeCallbacks(nextEpisodeRunnable)

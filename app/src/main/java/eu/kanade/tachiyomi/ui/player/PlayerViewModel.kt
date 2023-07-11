@@ -16,6 +16,7 @@ import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.domain.track.anime.service.DelayedAnimeTrackingUpdateJob
 import eu.kanade.domain.track.anime.store.DelayedAnimeTrackingStore
 import eu.kanade.domain.track.service.TrackPreferences
+import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.tachiyomi.animesource.AnimeSource
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
@@ -83,7 +84,6 @@ class PlayerViewModel(
     private val sourceManager: AnimeSourceManager = Injekt.get(),
     private val downloadManager: AnimeDownloadManager = Injekt.get(),
     private val imageSaver: ImageSaver = Injekt.get(),
-    basePreferences: BasePreferences = Injekt.get(),
     private val downloadPreferences: DownloadPreferences = Injekt.get(),
     private val trackPreferences: TrackPreferences = Injekt.get(),
     private val delayedTrackingStore: DelayedAnimeTrackingStore = Injekt.get(),
@@ -97,6 +97,8 @@ class PlayerViewModel(
     private val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get(),
     internal val networkPreferences: NetworkPreferences = Injekt.get(),
     internal val playerPreferences: PlayerPreferences = Injekt.get(),
+    basePreferences: BasePreferences = Injekt.get(),
+    uiPreferences: UiPreferences = Injekt.get(),
 ) : ViewModel() {
 
     val mutableState = MutableStateFlow(State())
@@ -106,6 +108,15 @@ class PlayerViewModel(
     val eventFlow = eventChannel.receiveAsFlow()
 
     private val incognitoMode = basePreferences.incognitoMode().get()
+
+    internal val relativeTime = uiPreferences.relativeTime().get()
+    internal val dateFormat = UiPreferences.dateFormat(uiPreferences.dateFormat().get())
+
+    /**
+     * The episode playlist loaded in the player. It can be empty when instantiated for a short time.
+     */
+    val currentPlaylist: List<Episode>
+        get() = filterEpisodeList(state.value.episodeList)
 
     /**
      * The episode loaded in the player. It can be null when instantiated for a short time.
@@ -140,15 +151,8 @@ class PlayerViewModel(
 
     private var requestedSecond: Long = 0L
 
-    /**
-     * Episode list for the active anime. It's retrieved lazily and should be accessed for the first
-     * time in a background thread to avoid blocking the UI.
-     */
-    lateinit var episodeList: List<Episode>
-
-    private fun initEpisodeList(anime: Anime): List<Episode> {
-        val episodes = runBlocking { getEpisodeByAnimeId.await(anime.id) }
-
+    private fun filterEpisodeList(episodes: List<Episode>): List<Episode> {
+        val anime = currentAnime ?: return episodes
         val selectedEpisode = episodes.find { it.id == savedEpisodeId }
             ?: error("Requested episode of id $savedEpisodeId not found in episode list")
 
@@ -166,12 +170,20 @@ class PlayerViewModel(
         }
 
         return episodesForPlayer
-            .sortedWith(getEpisodeSort(anime, sortDescending = false))
-            .map { it.toDbEpisode() }
     }
 
     fun getCurrentEpisodeIndex(): Int {
-        return episodeList.indexOfFirst { currentEpisode?.id == it.id }
+        return this.currentPlaylist.indexOfFirst { currentEpisode?.id == it.id }
+    }
+
+    fun getAdjacentEpisodeId(previous: Boolean): Long {
+        val newIndex = if (previous) getCurrentEpisodeIndex() - 1 else getCurrentEpisodeIndex() + 1
+
+        return when {
+            previous && getCurrentEpisodeIndex() == 0 -> -1L
+            !previous && this.currentPlaylist.lastIndex == getCurrentEpisodeIndex() -> -1L
+            else -> this.currentPlaylist[newIndex].id ?: -1L
+        }
     }
 
     override fun onCleared() {
@@ -225,10 +237,10 @@ class PlayerViewModel(
             val anime = getAnime.await(animeId)
             if (anime != null) {
                 checkTrackers(anime)
-
                 savedEpisodeId = episodeId
-                episodeList = initEpisodeList(anime)
-                val episode = episodeList.first { it.id == episodeId }
+
+                mutableState.update { it.copy(episodeList = initEpisodeList(anime)) }
+                val episode = this.currentPlaylist.first { it.id == episodeId }
 
                 val source = sourceManager.getOrStub(anime.source)
 
@@ -249,6 +261,14 @@ class PlayerViewModel(
         }
     }
 
+    private fun initEpisodeList(anime: Anime): List<Episode> {
+        val episodes = runBlocking { getEpisodeByAnimeId.await(anime.id) }
+
+        return episodes
+            .sortedWith(getEpisodeSort(anime, sortDescending = false))
+            .map { it.toDbEpisode() }
+    }
+
     private var hasTrackers: Boolean = false
 
     private val checkTrackers: (Anime) -> Unit = { anime ->
@@ -262,13 +282,13 @@ class PlayerViewModel(
         return currentSource is AnimeHttpSource && !EpisodeLoader.isDownloaded(episode.toDomainEpisode()!!, anime)
     }
 
-    suspend fun nextEpisode(): Pair<List<Video>?, String?>? {
+    suspend fun loadEpisode(episodeId: Long?): Pair<List<Video>?, String>? {
         val anime = currentAnime ?: return null
         val source = sourceManager.getOrStub(anime.source)
 
-        val index = getCurrentEpisodeIndex()
-        if (index == episodeList.lastIndex) return null
-        mutableState.update { it.copy(episode = episodeList[index + 1]) }
+        val chosenEpisode = this.currentPlaylist.firstOrNull { ep -> ep.id == episodeId } ?: return null
+
+        mutableState.update { it.copy(episode = chosenEpisode) }
 
         return withIOContext {
             try {
@@ -279,27 +299,7 @@ class PlayerViewModel(
                 logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
             }
 
-            Pair(currentVideoList, anime.title + " - " + episodeList[index + 1].name)
-        }
-    }
-
-    suspend fun previousEpisode(): Pair<List<Video>?, String?>? {
-        val anime = currentAnime ?: return null
-        val source = sourceManager.getOrStub(anime.source)
-
-        val index = getCurrentEpisodeIndex()
-        if (index == 0) return null
-        mutableState.update { it.copy(episode = episodeList[index - 1]) }
-
-        return withIOContext {
-            try {
-                val currentEpisode = currentEpisode ?: throw Exception("No episode loaded.")
-                currentVideoList = EpisodeLoader.getLinks(currentEpisode.toDomainEpisode()!!, anime, source).asFlow().first()
-                savedEpisodeId = currentEpisode.id!!
-            } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e) { e.message ?: "Error getting links" }
-            }
-            Pair(currentVideoList, anime.title + " - " + episodeList[index - 1].name)
+            Pair(currentVideoList, anime.title + " - " + chosenEpisode.name)
         }
     }
 
@@ -339,10 +339,10 @@ class PlayerViewModel(
         val amount = downloadPreferences.autoDownloadWhileWatching().get()
         if (amount == 0 || !anime.favorite) return
         // Only download ahead if current + next episode is already downloaded too to avoid jank
-        if (getCurrentEpisodeIndex() == episodeList.lastIndex) return
+        if (getCurrentEpisodeIndex() == this.currentPlaylist.lastIndex) return
         val currentEpisode = currentEpisode ?: return
 
-        val nextEpisode = episodeList[getCurrentEpisodeIndex() + 1]
+        val nextEpisode = this.currentPlaylist[getCurrentEpisodeIndex() + 1]
         val episodesAreDownloaded =
             EpisodeLoader.isDownloaded(currentEpisode.toDomainEpisode()!!, anime) &&
                 EpisodeLoader.isDownloaded(nextEpisode.toDomainEpisode()!!, anime)
@@ -360,13 +360,13 @@ class PlayerViewModel(
     /**
      * Determines if deleting option is enabled and nth to last episode actually exists.
      * If both conditions are satisfied enqueues episode for delete
-     * @param currentEpisode current episode, which is going to be marked as seen.
+     * @param chosenEpisode current episode, which is going to be marked as seen.
      */
-    private fun deleteEpisodeIfNeeded(currentEpisode: Episode) {
+    private fun deleteEpisodeIfNeeded(chosenEpisode: Episode) {
         // Determine which episode should be deleted and enqueue
-        val currentEpisodePosition = episodeList.indexOf(currentEpisode)
+        val currentEpisodePosition = this.currentPlaylist.indexOf(chosenEpisode)
         val removeAfterSeenSlots = downloadPreferences.removeAfterReadSlots().get()
-        val episodeToDelete = episodeList.getOrNull(currentEpisodePosition - removeAfterSeenSlots)
+        val episodeToDelete = this.currentPlaylist.getOrNull(currentEpisodePosition - removeAfterSeenSlots)
         // If episode is completely seen no need to download it
         episodeToDownload = null
 
@@ -424,13 +424,11 @@ class PlayerViewModel(
     /**
      * Bookmarks the currently active episode.
      */
-    fun bookmarkCurrentEpisode(bookmarked: Boolean) {
-        val episode = currentEpisode ?: return
-        episode.bookmark = bookmarked // Otherwise the bookmark icon doesn't update
+    fun bookmarkEpisode(episodeId: Long?, bookmarked: Boolean) {
         viewModelScope.launchNonCancellable {
             updateEpisode.await(
                 EpisodeUpdate(
-                    id = episode.id!!.toLong(),
+                    id = episodeId!!,
                     bookmark = bookmarked,
                 ),
             )
@@ -670,12 +668,26 @@ class PlayerViewModel(
         return null
     }
 
+    fun closeDialog() {
+        mutableState.update { it.copy(dialog = null) }
+    }
+
+    fun showEpisodeList() {
+        mutableState.update { it.copy(dialog = Dialog.EpisodeListSelector) }
+    }
+
     data class State(
+        val episodeList: List<Episode> = emptyList(),
         val episode: Episode? = null,
         val anime: Anime? = null,
         val source: AnimeSource? = null,
         val isLoadingEpisode: Boolean = false,
+        val dialog: Dialog? = null,
     )
+
+    sealed class Dialog {
+        object EpisodeListSelector : Dialog()
+    }
 
     sealed class Event {
         data class SetAnimeSkipIntro(val duration: Int) : Event()

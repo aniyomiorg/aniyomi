@@ -256,7 +256,6 @@
     <string name="download_notifier_download_paused_episodes">Na-pause ang pag-download ng episode</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
     <string name="no_next_episode">Hindi nahanap ang Susunod na Episode!</string>
-    <string name="no_previous_episode">Hindi nahanap ang Nakaraang Episode!</string>
     <string name="label_history">Manga</string>
     <string name="label_anime_history">Anime</string>
     <string name="label_updates">Manga</string>

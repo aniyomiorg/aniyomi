@@ -192,7 +192,6 @@
         <item quantity="other">%d 초</item>
     </plurals>
     <string name="no_next_episode">다음 에피소드를 찾을 수 없습니다!</string>
-    <string name="no_previous_episode">이전 에피소드를 찾을 수 없습니다!</string>
     <string name="label_history">만화</string>
     <string name="label_anime_history">애니메이션</string>
     <string name="label_updates">만화</string>

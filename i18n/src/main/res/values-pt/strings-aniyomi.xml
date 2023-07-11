@@ -133,7 +133,6 @@
     <string name="channel_new_chapters_episodes">Atualizações de capítulos/episódios</string>
     <string name="player_controls_skip_intro_text">+%1$d s</string>
     <string name="no_next_episode">Próximo episódio não encontrado!</string>
-    <string name="no_previous_episode">Episódio anterior não encontrado!</string>
     <string name="label_history">Mangá</string>
     <string name="label_anime_history">Anime</string>
     <string name="label_updates">Mangá</string>
