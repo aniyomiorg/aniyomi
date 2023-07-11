@@ -104,6 +104,7 @@
     <string name="pref_skip_20" translatable="false">20s</string>
     <string name="pref_skip_10" translatable="false">10s</string>
     <string name="pref_skip_5" translatable="false">5s</string>
+    <string name="pref_skip_3" translatable="false">3s</string>
     <string name="pref_skip_disable">Disable</string>
     <string name="pref_player_smooth_seek">Enable precise seeking</string>
     <string name="pref_player_smooth_seek_summary">When enabled, seeking will not focus on keyframes, leading to slower but precise seeking</string>
@@ -175,7 +176,7 @@
     <string name="sort_by_episode_number">By episode number</string>
     <plurals name="download_amount_anime">
         <item quantity="one">Next episode</item>
-        <item quantity="other">Next %d episodes</item>
+        <item quantity="other">Next episodes</item>
     </plurals>
     <string name="download_unseen">Unseen</string>
     <string name="confirm_delete_episodes">Are you sure you want to delete the selected episodes?</string>

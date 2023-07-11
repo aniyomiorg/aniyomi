@@ -32,6 +32,7 @@ data class AnimeLibrarySort(
         object LatestEpisode : Type(0b00010100)
         object EpisodeFetchDate : Type(0b00011000)
         object DateAdded : Type(0b00011100)
+        object AiringTime : Type(0b00100000)
 
         companion object {
             fun valueOf(flag: Long): Type {
@@ -77,6 +78,7 @@ data class AnimeLibrarySort(
                 Type.LatestEpisode,
                 Type.EpisodeFetchDate,
                 Type.DateAdded,
+                Type.AiringTime,
             )
         }
         val directions by lazy { setOf(Direction.Ascending, Direction.Descending) }
@@ -103,6 +105,7 @@ data class AnimeLibrarySort(
                     "LATEST_EPISODE" -> Type.LatestEpisode
                     "EPISODE_FETCH_DATE" -> Type.EpisodeFetchDate
                     "DATE_ADDED" -> Type.DateAdded
+                    "AIRING_TIME" -> Type.AiringTime
                     else -> Type.Alphabetical
                 }
                 val ascending = if (values[1] == "ASCENDING") Direction.Ascending else Direction.Descending
@@ -123,6 +126,7 @@ data class AnimeLibrarySort(
             Type.LatestEpisode -> "LATEST_EPISODE"
             Type.EpisodeFetchDate -> "EPISODE_FETCH_DATE"
             Type.DateAdded -> "DATE_ADDED"
+            Type.AiringTime -> "AIRING_TIME"
         }
         val direction = if (direction == Direction.Ascending) "ASCENDING" else "DESCENDING"
         return "$type,$direction"

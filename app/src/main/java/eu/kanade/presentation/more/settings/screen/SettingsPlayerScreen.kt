@@ -226,6 +226,7 @@ object SettingsPlayerScreen : SearchableSettings {
                         20 to stringResource(R.string.pref_skip_20),
                         10 to stringResource(R.string.pref_skip_10),
                         5 to stringResource(R.string.pref_skip_5),
+                        3 to stringResource(R.string.pref_skip_3),
                         0 to stringResource(R.string.pref_skip_disable),
                     ),
                 ),

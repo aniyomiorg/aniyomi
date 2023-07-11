@@ -6,8 +6,7 @@
     <string name="entries">Bibliothekseinträge</string>
     <string name="chapters_episodes">Kapitel und Folgen</string>
     <string name="episodes">Folgen</string>
-    <string name="backup_settings_warning">Warnung: Die Einstellungen zu sichern, kann dazu führen, dass sensible Daten wie Passwörter zu deinen Trackingdiensten gespeichert werden.
-\nTeile deine Sicherungsdatei mit niemandem!</string>
+    <string name="backup_settings_warning">Warnung: Wenn du die Einstellungen sicherst, werden auch deine Passwörter zu Trackingdiensten gespeichert, teile deine Sicherungsdatei mit niemandem!</string>
     <string name="label_manga_library">Manga</string>
     <string name="label_anime_library">Anime</string>
     <string name="label_manga">Manga</string>
@@ -22,8 +21,8 @@
     <string name="action_sort_last_seen">Zuletzt gesehen</string>
     <string name="action_sort_last_checked">Zuletzt überprüft</string>
     <string name="action_sort_latest_episode">Neueste Folge</string>
-    <string name="action_sort_last_manga_update">Letzte Aktualisierungsprüfung</string>
-    <string name="action_sort_last_anime_update">Letzte Aktualisierungsprüfung</string>
+    <string name="action_sort_last_manga_update">Letzte Manga-Aktualisierung</string>
+    <string name="action_sort_last_anime_update">Letzte Anime-Aktualisierung</string>
     <string name="action_sort_unseen_count">Anzahl ungesehener Folgen</string>
     <string name="action_sort_episode_fetch_date">Aubrufdatum der Folge</string>
     <string name="action_mark_as_seen">Als gesehen markieren</string>
@@ -43,8 +42,8 @@
     <string name="action_next_episode">Nächste Folge</string>
     <string name="action_screen_fit">Bildschirmanpassungsmodus</string>
     <string name="action_player_pip">PiP-Modus</string>
-    <string name="action_show_manga">Eintrag anzeigen</string>
-    <string name="action_show_anime">Eintrag anzeigen</string>
+    <string name="action_show_manga">Manga anzeigen</string>
+    <string name="action_show_anime">Anime anzeigen</string>
     <string name="action_display_download_badge_anime">Heruntergeladene Folgen</string>
     <string name="action_display_local_badge_manga">Lokale Quelle</string>
     <string name="action_display_local_badge_anime">Lokale Animequelle</string>
@@ -151,7 +150,7 @@
     <string name="also_set_episode_settings_for_library">Auch für alle Anime in meiner Bibliothek anwenden</string>
     <string name="no_episodes_error">Keine Folgen gefunden</string>
     <string name="watching">Am Schauen</string>
-    <string name="currently_reading">Am Schauen</string>
+    <string name="currently_reading">Am Lesen</string>
     <string name="currently_watching">Am Schauen</string>
     <string name="plan_to_watch">Plane ich zu schauen</string>
     <string name="not_interesting">Nicht interessant</string>
@@ -211,9 +210,9 @@
     <string name="video_stretch_screen">Auf den Bildschirm strecken</string>
     <string name="playback_speed_dialog_title">Wiedergabegeschwindigkeit ändern:</string>
     <string name="playback_speed_dialog_reset">Zurücksetzen</string>
-    <string name="quality_dialog_header">Videoqualität ändern:</string>
-    <string name="subtitle_dialog_header">Untertitelspur ändern:</string>
-    <string name="audio_dialog_header">Audiospur ändern:</string>
+    <string name="quality_dialog_header">Videoqualität</string>
+    <string name="subtitle_dialog_header">Untertitel</string>
+    <string name="audio_dialog_header">Audiospur</string>
     <string name="playback_options_speed">Wiedergabegeschwindigkeit</string>
     <string name="playback_options_quality">Videoqualität</string>
     <string name="playback_options_title">Wiedergabeoptionen</string>
@@ -278,4 +277,6 @@
     <string name="pref_hide_in_anime_library_items">Animeeinträge verstecken, die schon in der Bibliothek sind</string>
     <string name="choose_video_quality">Videoqualität auswählen:</string>
     <string name="extension_settings">Erweiterungs-Einstellungen</string>
+    <string name="stats_header">Statistiken anzeigen</string>
+    <string name="action_save_screenshot">Bildschirmfoto speichern</string>
 </resources>

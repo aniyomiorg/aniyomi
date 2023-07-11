@@ -37,6 +37,7 @@ import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.ui.entries.anime.track.AnimeTrackItem
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.util.AniChartApi
 import eu.kanade.tachiyomi.util.episode.getNextUnseen
 import eu.kanade.tachiyomi.util.removeCovers
 import eu.kanade.tachiyomi.util.shouldDownloadNewEpisodes
@@ -76,6 +77,9 @@ import tachiyomi.domain.items.episode.service.getEpisodeSort
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Calendar
 
 class AnimeInfoScreenModel(
     val context: Context,
@@ -179,7 +183,7 @@ class AnimeInfoScreenModel(
                     dialog = null,
                 )
             }
-            // Start observe tracking since it only needs mangaId
+            // Start observe tracking since it only needs animeId
             observeTrackers()
 
             // Fetch info-episodes when needed
@@ -205,6 +209,7 @@ class AnimeInfoScreenModel(
             )
             fetchFromSourceTasks.awaitAll()
             updateSuccessState { it.copy(isRefreshingData = false) }
+            successState?.let { updateAiringTime(it.anime, it.trackItems, manualFetch) }
         }
     }
 
@@ -896,7 +901,6 @@ class AnimeInfoScreenModel(
 
     private fun observeTrackers() {
         val anime = successState?.anime ?: return
-
         coroutineScope.launchIO {
             getTracks.subscribe(anime.id)
                 .catch { logcat(LogPriority.ERROR, it) }
@@ -911,8 +915,14 @@ class AnimeInfoScreenModel(
                 .distinctUntilChanged()
                 .collectLatest { trackItems ->
                     updateSuccessState { it.copy(trackItems = trackItems) }
+                    updateAiringTime(anime, trackItems, manualFetch = false)
                 }
         }
+    }
+
+    private suspend fun updateAiringTime(anime: Anime, trackItems: List<AnimeTrackItem>, manualFetch: Boolean) {
+        val airingEpisode = AniChartApi().loadAiringTime(anime, trackItems, manualFetch)
+        updateSuccessState { it.copy(nextAiringEpisode = airingEpisode) }
     }
 
     // Track sheet - end
@@ -1006,6 +1016,7 @@ sealed class AnimeScreenState {
         val isRefreshingData: Boolean = false,
         val dialog: AnimeInfoScreenModel.Dialog? = null,
         val hasPromptedToAddBefore: Boolean = false,
+        val nextAiringEpisode: Pair<Int, Long> = Pair(anime.nextEpisodeToAir, anime.nextEpisodeAiringAt),
     ) : AnimeScreenState() {
 
         val processedEpisodes: Sequence<EpisodeItem>
@@ -1016,6 +1027,12 @@ sealed class AnimeScreenState {
 
         val trackingCount: Int
             get() = trackItems.count { it.track != null }
+
+        val airingEpisodeNumber: Double
+            get() = nextAiringEpisode.first.toDouble()
+
+        val airingTime: Long
+            get() = nextAiringEpisode.second.times(1000L).minus(Calendar.getInstance().timeInMillis)
 
         /**
          * Applies the view filters to the list of chapters obtained from the database.
@@ -1044,6 +1061,12 @@ data class EpisodeItem(
 ) {
     val isDownloaded = downloadState == AnimeDownload.State.DOWNLOADED
 }
+
+val episodeDecimalFormat = DecimalFormat(
+    "#.###",
+    DecimalFormatSymbols()
+        .apply { decimalSeparator = '.' },
+)
 
 private val Throwable.snackbarMessage: String
     get() = when (val className = this::class.simpleName) {

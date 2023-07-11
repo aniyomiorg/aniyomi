@@ -165,9 +165,9 @@
     <string name="disable_auto_play">A reprodução automática está desativada</string>
     <string name="video_fit_screen">Ajustar a tela</string>
     <string name="playback_speed_dialog_reset">Redefinir</string>
-    <string name="quality_dialog_header">Mudar a qualidade do vídeo:</string>
-    <string name="subtitle_dialog_header">Alterar faixa de legenda:</string>
-    <string name="audio_dialog_header">Alterar faixa de áudio:</string>
+    <string name="quality_dialog_header">Qualidade do vídeo</string>
+    <string name="subtitle_dialog_header">Legenda</string>
+    <string name="audio_dialog_header">Áudio</string>
     <string name="playback_options_speed">Velocidade de reprodução</string>
     <string name="playback_options_quality">Qualidade de vídeo</string>
     <string name="playback_options_title">Opções de reprodução</string>
@@ -217,8 +217,8 @@
     <string name="pref_external_downloader_selection">App de download preferido</string>
     <string name="player_aniskip_dontskip">Não pular</string>
     <string name="action_global_anime_search">Pesquisa Global de Animes</string>
-    <string name="pref_search_pinned_anime_sources_only">Incluir apenas fontes de anime fixadas</string>
-    <string name="pref_search_pinned_manga_sources_only">Incluir apenas fontes de mangá fixadas</string>
+    <string name="pref_search_pinned_anime_sources_only">Pesquisar apenas fontes de anime fixadas na pesquisa global</string>
+    <string name="pref_search_pinned_manga_sources_only">Pesquisar apenas fontes de mangá fixadas na pesquisa global</string>
     <string name="action_global_manga_search">Pesquisa Global de Mangás</string>
     <string name="pref_library_manga_columns">Mangás por linha</string>
     <string name="pref_library_anime_columns">Animes por linha</string>
@@ -275,8 +275,16 @@
         <item quantity="other">Para %d títulos</item>
     </plurals>
     <plurals name="download_amount_anime">
-        <item quantity="one"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="one">Próximo episódio</item>
+        <item quantity="many">Próximos %d episódios</item>
+        <item quantity="other">Próximos %d episódios</item>
     </plurals>
+    <string name="choose_video_quality">Escolher qualidade do vídeo:</string>
+    <string name="copied_video_link_to_clipboard">Link de qualidade de vídeo copiado para a área de transferência</string>
+    <string name="extension_settings">Configurações da extensão</string>
+    <string name="pref_hide_in_anime_library_items">Ocultar entradas de anime já na biblioteca</string>
+    <string name="pref_hide_in_manga_library_items">Ocultar entradas de mangá já na biblioteca</string>
+    <string name="action_save_screenshot">Salvar captura de tela</string>
+    <string name="stats_header">Mostrar estatisticas</string>
+    <string name="chapter_dialog_header">Procurar capítulo</string>
 </resources>

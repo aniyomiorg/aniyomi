@@ -9,7 +9,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import uy.kohesive.injekt.injectLazy
 import kotlin.math.abs
 
-class Gestures(
+class GestureHandler(
     private val activity: PlayerActivity,
     private val width: Float,
     private val height: Float,
