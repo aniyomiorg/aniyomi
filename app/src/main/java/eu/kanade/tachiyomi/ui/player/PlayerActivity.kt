@@ -307,19 +307,19 @@ class PlayerActivity : BaseActivity() {
 
         binding.dialogRoot.setComposeContent {
             val state by viewModel.state.collectAsState()
-            val onDismissRequest = viewModel::closeDialog
+
             when (state.dialog) {
                 is PlayerViewModel.Dialog.EpisodeListSelector -> {
                     if (state.anime != null) {
                         EpisodeListDialog(
                             displayMode = state.anime!!.displayMode,
-                            episodeList = viewModel.currentEpisodeList,
+                            episodeList = viewModel.currentPlaylist,
                             currentEpisodeIndex = viewModel.getCurrentEpisodeIndex(),
                             relativeTime = viewModel.relativeTime,
                             dateFormat = viewModel.dateFormat,
                             onBookmarkClicked = viewModel::bookmarkEpisode,
                             onEpisodeClicked = this::changeEpisode,
-                            onDismissRequest = onDismissRequest,
+                            onDismissRequest = pauseForDialog(),
                         )
                     }
                 }
@@ -405,6 +405,16 @@ class PlayerActivity : BaseActivity() {
             switchControlsOrientation(false)
         } else {
             switchControlsOrientation(true)
+        }
+    }
+
+    internal fun pauseForDialog(): () -> Unit {
+        val wasPlayerPaused = player.paused ?: true // default to not changing state
+        player.paused = true
+        return {
+            if (!wasPlayerPaused) player.paused = false
+            viewModel.closeDialog()
+            refreshUi()
         }
     }
 

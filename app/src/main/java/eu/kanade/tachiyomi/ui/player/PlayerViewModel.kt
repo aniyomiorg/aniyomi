@@ -113,9 +113,9 @@ class PlayerViewModel(
     internal val dateFormat = UiPreferences.dateFormat(uiPreferences.dateFormat().get())
 
     /**
-     * The episode list loaded in the player. It can be empty when instantiated for a short time.
+     * The episode playlist loaded in the player. It can be empty when instantiated for a short time.
      */
-    val currentEpisodeList: List<Episode>
+    val currentPlaylist: List<Episode>
         get() = filterEpisodeList(state.value.episodeList)
 
     /**
@@ -173,7 +173,7 @@ class PlayerViewModel(
     }
 
     fun getCurrentEpisodeIndex(): Int {
-        return this.currentEpisodeList.indexOfFirst { currentEpisode?.id == it.id }
+        return this.currentPlaylist.indexOfFirst { currentEpisode?.id == it.id }
     }
 
     fun getAdjacentEpisodeId(previous: Boolean): Long {
@@ -181,8 +181,8 @@ class PlayerViewModel(
 
         return when {
             previous && getCurrentEpisodeIndex() == 0 -> -1L
-            !previous && this.currentEpisodeList.lastIndex == getCurrentEpisodeIndex() -> -1L
-            else -> this.currentEpisodeList[newIndex].id ?: -1L
+            !previous && this.currentPlaylist.lastIndex == getCurrentEpisodeIndex() -> -1L
+            else -> this.currentPlaylist[newIndex].id ?: -1L
         }
     }
 
@@ -240,7 +240,7 @@ class PlayerViewModel(
                 savedEpisodeId = episodeId
 
                 mutableState.update { it.copy(episodeList = initEpisodeList(anime)) }
-                val episode = this.currentEpisodeList.first { it.id == episodeId }
+                val episode = this.currentPlaylist.first { it.id == episodeId }
 
                 val source = sourceManager.getOrStub(anime.source)
 
@@ -286,7 +286,7 @@ class PlayerViewModel(
         val anime = currentAnime ?: return null
         val source = sourceManager.getOrStub(anime.source)
 
-        val chosenEpisode = this.currentEpisodeList.firstOrNull { ep -> ep.id == episodeId } ?: return null
+        val chosenEpisode = this.currentPlaylist.firstOrNull { ep -> ep.id == episodeId } ?: return null
 
         mutableState.update { it.copy(episode = chosenEpisode) }
 
@@ -339,10 +339,10 @@ class PlayerViewModel(
         val amount = downloadPreferences.autoDownloadWhileWatching().get()
         if (amount == 0 || !anime.favorite) return
         // Only download ahead if current + next episode is already downloaded too to avoid jank
-        if (getCurrentEpisodeIndex() == this.currentEpisodeList.lastIndex) return
+        if (getCurrentEpisodeIndex() == this.currentPlaylist.lastIndex) return
         val currentEpisode = currentEpisode ?: return
 
-        val nextEpisode = this.currentEpisodeList[getCurrentEpisodeIndex() + 1]
+        val nextEpisode = this.currentPlaylist[getCurrentEpisodeIndex() + 1]
         val episodesAreDownloaded =
             EpisodeLoader.isDownloaded(currentEpisode.toDomainEpisode()!!, anime) &&
                 EpisodeLoader.isDownloaded(nextEpisode.toDomainEpisode()!!, anime)
@@ -364,9 +364,9 @@ class PlayerViewModel(
      */
     private fun deleteEpisodeIfNeeded(chosenEpisode: Episode) {
         // Determine which episode should be deleted and enqueue
-        val currentEpisodePosition = this.currentEpisodeList.indexOf(chosenEpisode)
+        val currentEpisodePosition = this.currentPlaylist.indexOf(chosenEpisode)
         val removeAfterSeenSlots = downloadPreferences.removeAfterReadSlots().get()
-        val episodeToDelete = this.currentEpisodeList.getOrNull(currentEpisodePosition - removeAfterSeenSlots)
+        val episodeToDelete = this.currentPlaylist.getOrNull(currentEpisodePosition - removeAfterSeenSlots)
         // If episode is completely seen no need to download it
         episodeToDownload = null
 
