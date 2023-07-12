@@ -279,7 +279,7 @@ class AnimeLibraryScreenModel(
                 AnimeLibrarySort.Type.AiringTime -> when {
                     i1.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (sort.isAscending) 1 else -1
                     i2.libraryAnime.anime.nextEpisodeAiringAt == 0L -> if (sort.isAscending) -1 else 1
-                    i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount -> i1.libraryAnime.anime.nextEpisodeAiringAt.compareTo(i1.libraryAnime.anime.nextEpisodeAiringAt)
+                    i1.libraryAnime.unseenCount == i2.libraryAnime.unseenCount -> i1.libraryAnime.anime.nextEpisodeAiringAt.compareTo(i2.libraryAnime.anime.nextEpisodeAiringAt)
                     else -> i1.libraryAnime.unseenCount.compareTo(i2.libraryAnime.unseenCount)
                 }
             }
