@@ -269,7 +269,7 @@
     <string name="video_crop_screen">Ekrana göre kırpılmış</string>
     <string name="playback_options_speed">Oynatma hızı</string>
     <string name="playback_options_title">Oynatma seçenekleri</string>
-    <string name="action_change_skip_length">İntro uzunluğunu değiştir</string>
+    <string name="action_change_intro_length">İntro uzunluğunu değiştir</string>
     <string name="player_aniskip_recap">Özeti Atla</string>
     <string name="pref_waiting_time_aniskip">Düğme zaman aşımı</string>
     <string name="player_aniskip_mixedOp">MixedOp\'u atla</string>

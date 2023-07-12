@@ -167,7 +167,7 @@
     <string name="subtitle_dialog_header">Canviar pista de subtítols:</string>
     <string name="audio_dialog_header">Canviar pista d\'àudio:</string>
     <string name="playback_options_title">Opcions de reproducció</string>
-    <string name="action_change_skip_length">Canviar la duració de la introducció</string>
+    <string name="action_change_intro_length">Canviar la duració de la introducció</string>
     <string name="player_aniskip_op">Saltar opening</string>
     <string name="player_aniskip_recap">Saltar resum</string>
     <string name="player_aniskip_mixedOp">Saltar introducció mixta</string>

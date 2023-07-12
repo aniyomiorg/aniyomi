@@ -254,7 +254,7 @@
     <string name="playback_options_speed">Playback speed</string>
     <string name="playback_options_quality">Video quality</string>
     <string name="playback_options_title">Playback options</string>
-    <string name="action_change_skip_length">Change skip length</string>
+    <string name="action_change_intro_length">Change intro length</string>
     <string name="player_aniskip_op">Skip Opening</string>
     <string name="player_aniskip_ed">Skip Ending</string>
     <string name="player_aniskip_mixedOp">Skip MixedOp</string>

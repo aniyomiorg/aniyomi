@@ -210,7 +210,7 @@
     <string name="playback_options_speed">Kecepatan pemutaran</string>
     <string name="playback_options_quality">Kualitas video</string>
     <string name="playback_options_title">Opsi pemutaran</string>
-    <string name="action_change_skip_length">Ubah panjang intro</string>
+    <string name="action_change_intro_length">Ubah panjang intro</string>
     <string name="player_aniskip_op">Lewati Opening</string>
     <string name="player_aniskip_ed">Lewati Ending</string>
     <string name="player_aniskip_mixedOp">Lewati MixedOp</string>

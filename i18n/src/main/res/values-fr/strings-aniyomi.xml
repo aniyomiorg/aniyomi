@@ -203,7 +203,7 @@
     <string name="playback_options_speed">Vitesse de lecture</string>
     <string name="playback_options_quality">Qualité de la vidéo</string>
     <string name="playback_options_title">Options de lecture</string>
-    <string name="action_change_skip_length">Modifier la durée de l\'intro</string>
+    <string name="action_change_intro_length">Modifier la durée de l\'intro</string>
     <string name="player_aniskip_op">Sauter l\'ouverture</string>
     <string name="player_aniskip_ed">Sauter la fin</string>
     <string name="settings">Paramètres</string>

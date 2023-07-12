@@ -104,7 +104,7 @@
     <string name="player_aniskip_op">Salta l\'Opening</string>
     <string name="player_aniskip_mixedOp">Salta MixedOp</string>
     <string name="playback_options_title">Opzioni di riproduzione</string>
-    <string name="action_change_skip_length">Cambia la lunghezza dell\'intro</string>
+    <string name="action_change_intro_length">Cambia la lunghezza dell\'intro</string>
     <string name="player_aniskip_ed">Salta l\'Ending</string>
     <string name="label_anime_extensions">Estensioni Anime</string>
     <plurals name="notification_episodes_multiple_and_more">

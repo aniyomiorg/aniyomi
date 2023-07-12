@@ -260,7 +260,7 @@
     <string name="episode_settings_updated">Configurações de episódio padrão atualizadas</string>
     <string name="video_crop_screen">Cortado para a tela</string>
     <string name="playback_speed_dialog_title">Alterar a velocidade de reprodução:</string>
-    <string name="action_change_skip_length">Alterar a duração da abertura</string>
+    <string name="action_change_intro_length">Alterar a duração da abertura</string>
     <string name="player_aniskip_mixedOp">Pular MixedOp</string>
     <string name="pref_enable_auto_skip_ani_skip">Ativar pulo automático</string>
     <string name="pref_waiting_time_aniskip">Tempo limite do botão</string>

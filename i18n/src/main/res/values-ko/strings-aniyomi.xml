@@ -210,7 +210,7 @@
     <string name="playback_options_speed">재생 속도</string>
     <string name="playback_options_quality">동영상 화질</string>
     <string name="playback_options_title">재생 옵션</string>
-    <string name="action_change_skip_length">인트로 길이 변경</string>
+    <string name="action_change_intro_length">인트로 길이 변경</string>
     <string name="player_aniskip_op">오프닝 건너뛰기</string>
     <string name="player_aniskip_ed">엔딩 건너뛰기</string>
     <string name="player_aniskip_mixedOp">MixedOp 건너뛰기</string>

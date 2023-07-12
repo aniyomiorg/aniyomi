@@ -62,7 +62,7 @@
     <string name="download_ahead_info_anime">يعمل فقط على الإدخالات في المكتبة وإذا كانت الحلقة الحالية بالإضافة إلى الحلقة التالية قد تم تنزيلها بالفعل</string>
     <string name="pref_player_smooth_seek">تمكين البحث الدقيق</string>
     <string name="player_aniskip_mixedOp">تخطي المقدمة المختلطة</string>
-    <string name="action_change_skip_length">تغيير طول المقدمة</string>
+    <string name="action_change_intro_length">تغيير طول المقدمة</string>
     <string name="video_fit_screen">ملائمة الشاشة</string>
     <string name="pref_mpv_conf">قم بتحرير ملف تكوين MPV لمزيد من إعدادات مشغل الوسائط</string>
     <string name="pref_remove_exclude_categories_anime">فئات الأنمي المستبعدة</string>
