@@ -309,7 +309,7 @@ class PlayerActivity : BaseActivity() {
             val state by viewModel.state.collectAsState()
 
             when (state.dialog) {
-                is PlayerViewModel.Dialog.EpisodeListSelector -> {
+                is PlayerViewModel.Dialog.EpisodeList -> {
                     if (state.anime != null) {
                         EpisodeListDialog(
                             displayMode = state.anime!!.displayMode,

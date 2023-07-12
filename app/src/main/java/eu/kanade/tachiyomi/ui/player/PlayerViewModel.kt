@@ -673,7 +673,7 @@ class PlayerViewModel(
     }
 
     fun showEpisodeList() {
-        mutableState.update { it.copy(dialog = Dialog.EpisodeListSelector) }
+        mutableState.update { it.copy(dialog = Dialog.EpisodeList) }
     }
 
     data class State(
@@ -686,7 +686,7 @@ class PlayerViewModel(
     )
 
     sealed class Dialog {
-        object EpisodeListSelector : Dialog()
+        object EpisodeList : Dialog()
     }
 
     sealed class Event {
