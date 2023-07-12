@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player.settings
+package eu.kanade.tachiyomi.ui.player.settings.dialogs
 
 import android.content.Context
 import android.os.Build
@@ -7,7 +7,6 @@ import android.view.WindowManager
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
@@ -27,8 +26,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PrefSkipIntroLengthBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
-import `is`.xyz.mpv.MPVLib
-import `is`.xyz.mpv.SpeedPickerDialog
 import `is`.xyz.mpv.StateRestoreCallback
 
 class PlayerDialogs(val activity: PlayerActivity) {
@@ -54,30 +51,6 @@ class PlayerDialogs(val activity: PlayerActivity) {
                 window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
             }
         }
-    }
-
-    // TODO: replace this with SliderPickerDialog
-    internal fun speedPickerDialog(restoreState: StateRestoreCallback) {
-        val picker = SpeedPickerDialog()
-        with(HideBarsMaterialAlertDialogBuilder(activity)) {
-            setTitle(R.string.title_speed_dialog)
-            setView(picker.buildView(LayoutInflater.from(context)))
-            setPositiveButton(R.string.dialog_ok) { _, _ ->
-                picker.number?.let {
-                    activity.playerPreferences.playerSpeed().set(it.toFloat())
-                    if (picker.isInteger()) {
-                        MPVLib.setPropertyInt("speed", it.toInt())
-                    } else {
-                        MPVLib.setPropertyDouble("speed", it)
-                    }
-                }
-            }
-            setNegativeButton(R.string.dialog_cancel) { dialog, _ -> dialog.cancel() }
-            setOnDismissListener { restoreState() }
-            create()
-            show()
-        }
-        picker.number = MPVLib.getPropertyDouble("speed")
     }
 
     internal fun decoderDialog(restoreState: StateRestoreCallback) {
@@ -144,13 +117,14 @@ class PlayerDialogs(val activity: PlayerActivity) {
 
 @Composable
 fun PlayerDialog(
-    @StringRes titleRes:  Int,
+    @StringRes titleRes: Int,
+    modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        modifier = Modifier.fillMaxWidth(fraction = 0.8F).fillMaxHeight(fraction = 0.8F),
+        modifier = modifier.fillMaxWidth(fraction = 0.8F),
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false,

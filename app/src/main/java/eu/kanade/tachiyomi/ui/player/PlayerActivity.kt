@@ -50,6 +50,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerScreenshotSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksBuilder
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
@@ -322,6 +323,18 @@ class PlayerActivity : BaseActivity() {
                             onDismissRequest = pauseForDialog(),
                         )
                     }
+                }
+
+                is PlayerViewModel.Dialog.SpeedPicker -> {
+                    fun updateSpeed(speed: Float) {
+                        playerPreferences.playerSpeed().set(speed)
+                        MPVLib.setPropertyDouble("speed", speed.toDouble())
+                    }
+                    SpeedPickerDialog(
+                        currentSpeed = MPVLib.getPropertyDouble("speed"),
+                        onSpeedChanged = ::updateSpeed,
+                        onDismissRequest = pauseForDialog(),
+                    )
                 }
 
                 null -> {}
