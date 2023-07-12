@@ -215,7 +215,7 @@
     <string name="playback_options_speed">Wiedergabegeschwindigkeit</string>
     <string name="playback_options_quality">Videoqualität</string>
     <string name="playback_options_title">Wiedergabeoptionen</string>
-    <string name="action_change_intro_length">Intro-Länge ändern</string>
+    <string name="action_change_skip_length">Intro-Länge ändern</string>
     <string name="player_aniskip_op">Intro überspringen</string>
     <string name="player_aniskip_ed">Outro überspringen</string>
     <string name="player_aniskip_mixedOp">Gemischtes Intro überspringen</string>

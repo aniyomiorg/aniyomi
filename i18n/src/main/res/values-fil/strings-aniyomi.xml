@@ -102,7 +102,7 @@
     <string name="pref_enable_aniskip">Paganahin ang AniSkip</string>
     <string name="pref_enable_auto_skip_ani_skip">Paganahin ang auto skip</string>
     <string name="player_aniskip_op">Laktawan ang Pagbubukas</string>
-    <string name="action_change_intro_length">Baguhin ang haba ng intro</string>
+    <string name="action_change_skip_length">Baguhin ang haba ng intro</string>
     <string name="player_aniskip_ed">Laktawan ang Pagtatapos</string>
     <string name="player_aniskip_mixedOp">Laktawan ang MixedOp</string>
     <string name="pref_waiting_time_aniskip">Timeout ng button</string>

@@ -173,7 +173,7 @@
     <string name="label_anime_history">Anime</string>
     <string name="player_overlay_back">Zpět</string>
     <string name="enable_auto_play">Automatické přerávání je zapnuté</string>
-    <string name="action_change_intro_length">Změnit délku intra</string>
+    <string name="action_change_skip_length">Změnit délku intra</string>
     <string name="share_screenshot_info">%1$s: %2$s, %3$s</string>
     <string name="stats_page">Stránka statistik</string>
     <string name="repeating_anime">Sleduji znovu</string>

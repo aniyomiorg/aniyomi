@@ -232,7 +232,7 @@
     <string name="enable_volume_brightness_gestures">Ativar Gestos de Volume e Brilho</string>
     <string name="toggle_stats">Alternar estatísticas</string>
     <string name="video_stretch_screen">Esticado ao ecrã</string>
-    <string name="action_change_intro_length">Alterar a duração da abertura</string>
+    <string name="action_change_skip_length">Alterar a duração da abertura</string>
     <string name="player_aniskip_skip">%s saltado</string>
     <string name="player_hwdec_dialog_title">Definir o modo de descodificação de hardware padrão</string>
     <plurals name="seconds">
