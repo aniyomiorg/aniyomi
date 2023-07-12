@@ -14,11 +14,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.Bookmark
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,13 +32,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
-import androidx.core.view.WindowInsetsControllerCompat
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import eu.kanade.presentation.entries.DotSeparatorText
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
 import eu.kanade.tachiyomi.ui.entries.anime.episodeDecimalFormat
+import eu.kanade.tachiyomi.ui.player.settings.PlayerDialog
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.presentation.core.components.LazyColumn
@@ -65,70 +61,52 @@ fun EpisodeListDialog(
     val itemScrollIndex = (episodeList.size - currentEpisodeIndex) - 1
     val episodeListState = rememberLazyListState(initialFirstVisibleItemIndex = itemScrollIndex)
 
-    AlertDialog(
+    PlayerDialog(
+        titleRes = R.string.episodes,
         onDismissRequest = onDismissRequest,
-        modifier = Modifier.fillMaxWidth(fraction = 0.8F).fillMaxHeight(fraction = 0.8F),
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false,
-            decorFitsSystemWindows = false,
-        ),
     ) {
-        Surface(shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth()) {
-            val systemUIController = rememberSystemUiController()
-            systemUIController.isSystemBarsVisible = false
-            systemUIController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        VerticalFastScroller(
+            listState = episodeListState,
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxHeight(),
+                state = episodeListState,
+            ) {
+                items(
+                    items = episodeList.reversed(),
+                    key = { "episode-${it.id}" },
+                    contentType = { "episode" },
+                ) { episode ->
 
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = stringResource(R.string.episodes),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
+                    val isCurrentEpisode = episode.id == episodeList[currentEpisodeIndex].id
 
-                VerticalFastScroller(
-                    listState = episodeListState,
-                ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxHeight(),
-                        state = episodeListState,
-                    ) {
-                        items(
-                            items = episodeList.reversed(),
-                            key = { "episode-${it.id}" },
-                            contentType = { "episode" },
-                        ) { episode ->
-
-                            val isCurrentEpisode = episode.id == episodeList[currentEpisodeIndex].id
-
-                            val title = if (displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
-                                stringResource(
-                                    R.string.display_mode_episode,
-                                    episodeDecimalFormat.format(episode.episode_number.toDouble()),
-                                )
-                            } else {
-                                episode.name
-                            }
-
-                            val date = episode.date_upload
-                                .takeIf { it > 0L }
-                                ?.let {
-                                    Date(it).toRelativeString(
-                                        context,
-                                        relativeTime,
-                                        dateFormat,
-                                    )
-                                } ?: ""
-
-                            EpisodeListItem(
-                                episode = episode,
-                                isCurrentEpisode = isCurrentEpisode,
-                                title = title,
-                                date = date,
-                                onBookmarkClicked = onBookmarkClicked,
-                                onEpisodeClicked = onEpisodeClicked,
-                            )
-                        }
+                    val title = if (displayMode == Anime.EPISODE_DISPLAY_NUMBER) {
+                        stringResource(
+                            R.string.display_mode_episode,
+                            episodeDecimalFormat.format(episode.episode_number.toDouble()),
+                        )
+                    } else {
+                        episode.name
                     }
+
+                    val date = episode.date_upload
+                        .takeIf { it > 0L }
+                        ?.let {
+                            Date(it).toRelativeString(
+                                context,
+                                relativeTime,
+                                dateFormat,
+                            )
+                        } ?: ""
+
+                    EpisodeListItem(
+                        episode = episode,
+                        isCurrentEpisode = isCurrentEpisode,
+                        title = title,
+                        date = date,
+                        onBookmarkClicked = onBookmarkClicked,
+                        onEpisodeClicked = onEpisodeClicked,
+                    )
                 }
             }
         }

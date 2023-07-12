@@ -4,9 +4,24 @@ import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.WindowManager
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PrefSkipIntroLengthBinding
@@ -125,7 +140,36 @@ class PlayerDialogs(val activity: PlayerActivity) {
             show()
         }
     }
+}
 
-    internal fun episodeListDialog(restoreState: StateRestoreCallback) {
+@Composable
+fun PlayerDialog(
+    @StringRes titleRes:  Int,
+    onDismissRequest: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        modifier = Modifier.fillMaxWidth(fraction = 0.8F).fillMaxHeight(fraction = 0.8F),
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            decorFitsSystemWindows = false,
+        ),
+    ) {
+        Surface(shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth()) {
+            val systemUIController = rememberSystemUiController()
+            systemUIController.isSystemBarsVisible = false
+            systemUIController.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = stringResource(titleRes),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                content()
+            }
+        }
     }
 }
