@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -43,7 +42,6 @@ import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
 import eu.kanade.tachiyomi.ui.entries.anime.episodeDecimalFormat
 import eu.kanade.tachiyomi.util.lang.toRelativeString
-import kotlinx.coroutines.launch
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.VerticalFastScroller
@@ -64,8 +62,8 @@ fun EpisodeListDialog(
     onDismissRequest: () -> Unit,
 ) {
     val context = LocalContext.current
-    val episodeListState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
+    val itemScrollIndex = (episodeList.size - currentEpisodeIndex) - 1
+    val episodeListState = rememberLazyListState(initialFirstVisibleItemIndex = itemScrollIndex)
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -94,10 +92,6 @@ fun EpisodeListDialog(
                         modifier = Modifier.fillMaxHeight(),
                         state = episodeListState,
                     ) {
-                        val itemScrollIndex = (episodeList.size - currentEpisodeIndex) - 1
-                        coroutineScope.launch {
-                            episodeListState.scrollToItem(index = itemScrollIndex)
-                        }
                         items(
                             items = episodeList.reversed(),
                             key = { "episode-${it.id}" },
