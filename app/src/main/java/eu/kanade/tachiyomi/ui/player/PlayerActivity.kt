@@ -44,11 +44,11 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
-import eu.kanade.tachiyomi.ui.player.settings.PlayerChaptersSheet
-import eu.kanade.tachiyomi.ui.player.settings.PlayerOptionsSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerChaptersSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.ui.player.settings.PlayerScreenshotSheet
-import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerScreenshotSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksBuilder
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
