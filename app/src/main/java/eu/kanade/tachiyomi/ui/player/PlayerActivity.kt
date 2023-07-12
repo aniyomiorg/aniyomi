@@ -51,6 +51,8 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerScreenshotSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksBuilder
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
@@ -58,7 +60,6 @@ import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
 import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
-import eu.kanade.tachiyomi.ui.player.viewer.EpisodeListDialog
 import eu.kanade.tachiyomi.ui.player.viewer.GestureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
@@ -350,6 +351,18 @@ class PlayerActivity : BaseActivity() {
                     )
                 }
 
+                is PlayerViewModel.Dialog.SkipIntroLength -> {
+                    if (state.anime != null) {
+                        SkipIntroLengthDialog(
+                            currentSkipIntroLength = state.anime!!.skipIntroLength,
+                            defaultSkipIntroLength = playerPreferences.defaultIntroLength().get(),
+                            fromPlayer = true,
+                            updateSkipIntroLength = viewModel::setAnimeSkipIntroLength,
+                            onDismissRequest = pauseForDialog(),
+                        )
+                    }
+                }
+
                 null -> {}
             }
         }
@@ -434,7 +447,7 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    internal fun pauseForDialog(): () -> Unit {
+    private fun pauseForDialog(): () -> Unit {
         val wasPlayerPaused = player.paused ?: true // default to not changing state
         player.paused = true
         return {
@@ -1536,12 +1549,7 @@ class PlayerActivity : BaseActivity() {
 
     // mpv events
 
-    internal fun mpvUpdateAspect(aspect: String, pan: String) {
-        MPVLib.setOptionString("video-aspect-override", aspect)
-        MPVLib.setOptionString("panscan", pan)
-    }
-
-    internal fun mpvUpdateHwDec(hwDec: HwDecState) {
+    private fun mpvUpdateHwDec(hwDec: HwDecState) {
         MPVLib.setOptionString("hwdec", hwDec.mpvValue)
         HwDecState.mode = hwDec
     }

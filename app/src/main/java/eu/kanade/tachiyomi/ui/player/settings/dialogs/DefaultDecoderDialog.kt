@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.ui.player.settings.dialogs
 
 import android.os.Build
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -36,13 +37,15 @@ fun DefaultDecoderDialog(
         titleRes = R.string.player_hwdec_dialog_title,
         onDismissRequest = onDismissRequest,
     ) {
-        items.forEach {
-            Spacer(Modifier.height(16.dp))
-            RadioItem(
-                label = it.first,
-                selected = it.second == currentDecoder,
-                onClick = { selectDecoder(it.second) },
-            )
+        Column {
+            items.forEach {
+                Spacer(Modifier.height(16.dp))
+                RadioItem(
+                    label = it.first,
+                    selected = it.second == currentDecoder,
+                    onClick = { selectDecoder(it.second) },
+                )
+            }
         }
     }
 }

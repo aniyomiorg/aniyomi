@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player.viewer
+package eu.kanade.tachiyomi.ui.player.settings.dialogs
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -36,7 +36,6 @@ import eu.kanade.presentation.entries.DotSeparatorText
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.database.models.anime.Episode
 import eu.kanade.tachiyomi.ui.entries.anime.episodeDecimalFormat
-import eu.kanade.tachiyomi.ui.player.settings.dialogs.PlayerDialog
 import eu.kanade.tachiyomi.util.lang.toRelativeString
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.presentation.core.components.LazyColumn
