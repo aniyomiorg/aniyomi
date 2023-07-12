@@ -4,31 +4,22 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.window.DialogProperties
 import androidx.core.net.toUri
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.entries.anime.model.hasCustomCover
 import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.presentation.category.ChangeCategoryDialog
@@ -57,6 +48,7 @@ import eu.kanade.tachiyomi.ui.home.HomeScreen
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibraryTab
 import eu.kanade.tachiyomi.ui.player.ExternalIntents
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.webview.WebViewScreen
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import eu.kanade.tachiyomi.util.system.toShareIntent
@@ -68,10 +60,7 @@ import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
-import tachiyomi.presentation.core.components.WheelTextPicker
 import tachiyomi.presentation.core.screens.LoadingScreen
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 
 class AnimeScreen(
     private val animeId: Long,
@@ -240,10 +229,17 @@ class AnimeScreen(
                 }
             }
             AnimeInfoScreenModel.Dialog.ChangeAnimeSkipIntro -> {
-                ChangeIntroLength(
-                    anime = successState.anime,
+                fun updateSkipIntroLength(newLength: Long) {
+                    scope.launchIO {
+                        screenModel.setAnimeViewerFlags.awaitSetSkipIntroLength(animeId, newLength)
+                    }
+                }
+                SkipIntroLengthDialog(
+                    currentSkipIntroLength = successState.anime.skipIntroLength,
+                    defaultSkipIntroLength = screenModel.playerPreferences.defaultIntroLength().get(),
+                    fromPlayer = false,
+                    updateSkipIntroLength = ::updateSkipIntroLength,
                     onDismissRequest = onDismissRequest,
-                    defaultIntroLength = screenModel.playerPreferences.defaultIntroLength().get(),
                 )
             }
             is AnimeInfoScreenModel.Dialog.Options -> {
@@ -367,66 +363,4 @@ class AnimeScreen(
         val url = source.getAnimeUrl(anime.toSAnime())
         context.copyToClipboard(url, url)
     }
-}
-
-@Composable
-fun ChangeIntroLength(
-    anime: Anime,
-    onDismissRequest: () -> Unit,
-    defaultIntroLength: Int,
-) {
-    val scope = rememberCoroutineScope()
-    val setAnimeViewerFlags: SetAnimeViewerFlags = Injekt.get()
-    val titleText = R.string.action_change_intro_length
-    var newLength = 0
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false,
-            decorFitsSystemWindows = false, // Doesn't work https://issuetracker.google.com/issues/246909281
-        ),
-        title = { Text(text = stringResource(titleText)) },
-        text = {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                content = {
-                    WheelTextPicker(
-                        modifier = Modifier.align(Alignment.Center),
-                        texts = remember { 1..255 }.map {
-                            stringResource(
-                                R.string.seconds_short,
-                                it,
-                            )
-                        },
-                        onSelectionChanged = {
-                            newLength = it + 1
-                        },
-                        startIndex = if (anime.skipIntroLength > 0) {
-                            anime.skipIntroLength - 1
-                        } else {
-                            defaultIntroLength
-                        },
-                    )
-                },
-            )
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    scope.launchIO {
-                        setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, newLength.toLong())
-                        onDismissRequest()
-                    }
-                    Unit
-                },
-            ) {
-                Text(text = stringResource(android.R.string.ok))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(text = stringResource(android.R.string.cancel))
-            }
-        },
-    )
 }

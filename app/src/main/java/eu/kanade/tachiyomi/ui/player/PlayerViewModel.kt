@@ -611,10 +611,10 @@ class PlayerViewModel(
     /**
      * Updates the skipIntroLength for the open anime.
      */
-    fun setAnimeSkipIntroLength(skipIntroLength: Int) {
+    fun setAnimeSkipIntroLength(skipIntroLength: Long) {
         val anime = currentAnime ?: return
         viewModelScope.launchIO {
-            setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, skipIntroLength.toLong())
+            setAnimeViewerFlags.awaitSetSkipIntroLength(anime.id, skipIntroLength)
             logcat(LogPriority.INFO) { "New Skip Intro Length is ${anime.skipIntroLength}" }
             mutableState.update {
                 it.copy(
@@ -673,7 +673,19 @@ class PlayerViewModel(
     }
 
     fun showEpisodeList() {
-        mutableState.update { it.copy(dialog = Dialog.EpisodeListSelector) }
+        mutableState.update { it.copy(dialog = Dialog.EpisodeList) }
+    }
+
+    fun showSpeedPicker() {
+        mutableState.update { it.copy(dialog = Dialog.SpeedPicker) }
+    }
+
+    fun showDefaultDecoder() {
+        mutableState.update { it.copy(dialog = Dialog.DefaultDecoder) }
+    }
+
+    fun showSkipIntroLength() {
+        mutableState.update { it.copy(dialog = Dialog.SkipIntroLength) }
     }
 
     data class State(
@@ -686,7 +698,10 @@ class PlayerViewModel(
     )
 
     sealed class Dialog {
-        object EpisodeListSelector : Dialog()
+        object EpisodeList : Dialog()
+        object SpeedPicker : Dialog()
+        object DefaultDecoder : Dialog()
+        object SkipIntroLength : Dialog()
     }
 
     sealed class Event {

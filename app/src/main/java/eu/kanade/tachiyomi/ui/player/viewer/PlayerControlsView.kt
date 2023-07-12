@@ -16,7 +16,6 @@ import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.player.settings.PlayerDialogs
 import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
 import `is`.xyz.mpv.MPVLib
 import `is`.xyz.mpv.Utils
@@ -37,8 +36,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     private val playerPreferences = activity.playerPreferences
 
     private val player get() = activity.player
-
-    private val playerDialogs = PlayerDialogs(activity)
 
     val seekbar: Seekbar = Seekbar(
         view = binding.playbackSeekbar,
@@ -90,8 +87,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.unlockBtn.setOnClickListener { lockControls(false) }
 
         // Long click controls
-        binding.cycleSpeedBtn.setOnLongClickListener { playerDialogs.speedPickerDialog(activity.pauseForDialog()); true }
-        binding.cycleDecoderBtn.setOnLongClickListener { playerDialogs.decoderDialog(activity.pauseForDialog()); true }
+        binding.cycleSpeedBtn.setOnLongClickListener { activity.viewModel.showSpeedPicker(); true }
+        binding.cycleDecoderBtn.setOnLongClickListener { activity.viewModel.showDefaultDecoder(); true }
 
         binding.prevBtn.setOnClickListener { switchEpisode(previous = true) }
         binding.playBtn.setOnClickListener { playPause() }
@@ -101,7 +98,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.pipBtn.isVisible = !playerPreferences.pipOnExit().get() && activity.pip.supportedAndEnabled
 
-        binding.controlsSkipIntroBtn.setOnLongClickListener { playerDialogs.skipIntroDialog(activity.pauseForDialog()); true }
+        binding.controlsSkipIntroBtn.setOnLongClickListener { activity.viewModel.showSkipIntroLength(); true }
 
         binding.playbackPositionBtn.setOnClickListener {
             if (player.timePos != null && player.duration != null) {
@@ -389,14 +386,14 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.playerInformation.text = activity.getString(playerViewMode.stringRes)
         when (playerViewMode) {
             AspectState.CROP -> {
-                activity.mpvUpdateAspect(aspect = "-1", pan = "1.0")
+                mpvUpdateAspect(aspect = "-1", pan = "1.0")
             }
             AspectState.FIT -> {
-                activity.mpvUpdateAspect(aspect = "-1", pan = "0.0")
+                mpvUpdateAspect(aspect = "-1", pan = "0.0")
             }
             AspectState.STRETCH -> {
                 val newAspect = "${activity.deviceWidth}/${activity.deviceHeight}"
-                activity.mpvUpdateAspect(aspect = newAspect, pan = "1.0")
+                mpvUpdateAspect(aspect = newAspect, pan = "1.0")
             }
         }
         if (showText) {
@@ -406,6 +403,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
 
         playerPreferences.playerViewMode().set(playerViewMode.index)
+    }
+
+    private fun mpvUpdateAspect(aspect: String, pan: String) {
+        MPVLib.setOptionString("video-aspect-override", aspect)
+        MPVLib.setOptionString("panscan", pan)
     }
 
     internal fun toggleAutoplay(isAutoplay: Boolean) {

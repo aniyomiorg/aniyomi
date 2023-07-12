@@ -44,19 +44,22 @@ import eu.kanade.tachiyomi.data.notification.NotificationReceiver
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
-import eu.kanade.tachiyomi.ui.player.settings.PlayerChaptersSheet
-import eu.kanade.tachiyomi.ui.player.settings.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
-import eu.kanade.tachiyomi.ui.player.settings.PlayerScreenshotSheet
-import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksBuilder
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerChaptersSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerScreenshotSheet
+import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerSettingsSheet
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PAUSE
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PLAY
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_PREVIOUS
 import eu.kanade.tachiyomi.ui.player.viewer.EXTRA_CONTROL_TYPE
-import eu.kanade.tachiyomi.ui.player.viewer.EpisodeListDialog
 import eu.kanade.tachiyomi.ui.player.viewer.GestureHandler
 import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import eu.kanade.tachiyomi.ui.player.viewer.PictureInPictureHandler
@@ -309,7 +312,7 @@ class PlayerActivity : BaseActivity() {
             val state by viewModel.state.collectAsState()
 
             when (state.dialog) {
-                is PlayerViewModel.Dialog.EpisodeListSelector -> {
+                is PlayerViewModel.Dialog.EpisodeList -> {
                     if (state.anime != null) {
                         EpisodeListDialog(
                             displayMode = state.anime!!.displayMode,
@@ -319,6 +322,42 @@ class PlayerActivity : BaseActivity() {
                             dateFormat = viewModel.dateFormat,
                             onBookmarkClicked = viewModel::bookmarkEpisode,
                             onEpisodeClicked = this::changeEpisode,
+                            onDismissRequest = pauseForDialog(),
+                        )
+                    }
+                }
+
+                is PlayerViewModel.Dialog.SpeedPicker -> {
+                    fun updateSpeed(speed: Float) {
+                        playerPreferences.playerSpeed().set(speed)
+                        MPVLib.setPropertyDouble("speed", speed.toDouble())
+                    }
+                    SpeedPickerDialog(
+                        currentSpeed = MPVLib.getPropertyDouble("speed"),
+                        onSpeedChanged = ::updateSpeed,
+                        onDismissRequest = pauseForDialog(),
+                    )
+                }
+
+                is PlayerViewModel.Dialog.DefaultDecoder -> {
+                    fun updateDecoder(newDec: String) {
+                        playerPreferences.standardHwDec().set(newDec)
+                        mpvUpdateHwDec(HwDecState.get(newDec))
+                    }
+                    DefaultDecoderDialog(
+                        currentDecoder = playerPreferences.standardHwDec().get(),
+                        onSelectDecoder = ::updateDecoder,
+                        onDismissRequest = pauseForDialog(),
+                    )
+                }
+
+                is PlayerViewModel.Dialog.SkipIntroLength -> {
+                    if (state.anime != null) {
+                        SkipIntroLengthDialog(
+                            currentSkipIntroLength = state.anime!!.skipIntroLength,
+                            defaultSkipIntroLength = playerPreferences.defaultIntroLength().get(),
+                            fromPlayer = true,
+                            updateSkipIntroLength = viewModel::setAnimeSkipIntroLength,
                             onDismissRequest = pauseForDialog(),
                         )
                     }
@@ -408,7 +447,7 @@ class PlayerActivity : BaseActivity() {
         }
     }
 
-    internal fun pauseForDialog(): () -> Unit {
+    private fun pauseForDialog(): () -> Unit {
         val wasPlayerPaused = player.paused ?: true // default to not changing state
         player.paused = true
         return {
@@ -1510,12 +1549,7 @@ class PlayerActivity : BaseActivity() {
 
     // mpv events
 
-    internal fun mpvUpdateAspect(aspect: String, pan: String) {
-        MPVLib.setOptionString("video-aspect-override", aspect)
-        MPVLib.setOptionString("panscan", pan)
-    }
-
-    internal fun mpvUpdateHwDec(hwDec: HwDecState) {
+    private fun mpvUpdateHwDec(hwDec: HwDecState) {
         MPVLib.setOptionString("hwdec", hwDec.mpvValue)
         HwDecState.mode = hwDec
     }
