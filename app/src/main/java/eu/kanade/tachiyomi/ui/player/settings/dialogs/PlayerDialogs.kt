@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.ui.player.settings.dialogs
 
 import android.content.Context
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.annotation.StringRes
@@ -25,7 +24,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PrefSkipIntroLengthBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.player.viewer.HwDecState
 import `is`.xyz.mpv.StateRestoreCallback
 
 class PlayerDialogs(val activity: PlayerActivity) {
@@ -50,35 +48,6 @@ class PlayerDialogs(val activity: PlayerActivity) {
                 val window = this.window ?: return@apply
                 window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
             }
-        }
-    }
-
-    internal fun decoderDialog(restoreState: StateRestoreCallback) {
-        val items = mutableListOf(
-            Pair("${HwDecState.HW.title} (${HwDecState.HW.mpvValue})", HwDecState.HW.mpvValue),
-            Pair(HwDecState.SW.title, HwDecState.SW.mpvValue),
-        )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            items.add(
-                index = 0,
-                Pair("${HwDecState.HW_PLUS.title} (${HwDecState.HW_PLUS.mpvValue})", HwDecState.HW_PLUS.mpvValue),
-            )
-        }
-
-        var hwdecActive = activity.playerPreferences.standardHwDec().get()
-        val selectedIndex = items.indexOfFirst { it.second == hwdecActive }
-        with(HideBarsMaterialAlertDialogBuilder(activity)) {
-            setTitle(R.string.player_hwdec_dialog_title)
-            setSingleChoiceItems(items.map { it.first }.toTypedArray(), selectedIndex) { dialog, idx ->
-                hwdecActive = items[idx].second
-                activity.playerPreferences.standardHwDec().set(hwdecActive)
-                activity.mpvUpdateHwDec(HwDecState.get(hwdecActive))
-                dialog.dismiss()
-            }
-            setNegativeButton(R.string.dialog_cancel) { dialog, _ -> dialog.cancel() }
-            setOnDismissListener { restoreState() }
-            create()
-            show()
         }
     }
 

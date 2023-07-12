@@ -91,7 +91,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         // Long click controls
         binding.cycleSpeedBtn.setOnLongClickListener { activity.viewModel.showSpeedPicker(); true }
-        binding.cycleDecoderBtn.setOnLongClickListener { playerDialogs.decoderDialog(activity.pauseForDialog()); true }
+        binding.cycleDecoderBtn.setOnLongClickListener { activity.viewModel.showDefaultDecoder(); true }
 
         binding.prevBtn.setOnClickListener { switchEpisode(previous = true) }
         binding.playBtn.setOnClickListener { playPause() }

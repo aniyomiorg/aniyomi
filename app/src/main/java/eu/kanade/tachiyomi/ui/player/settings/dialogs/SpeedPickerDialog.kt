@@ -25,6 +25,10 @@ fun SpeedPickerDialog(
     onSpeedChanged: (Float) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    fun Double.toHundredths(): BigDecimal {
+        return BigDecimal(this).setScale(2, RoundingMode.FLOOR)
+    }
+
     var speed by remember { mutableStateOf(currentSpeed.toHundredths()) }
 
     PlayerDialog(
@@ -50,8 +54,4 @@ fun SpeedPickerDialog(
             Spacer(Modifier.height(4.dp))
         }
     }
-}
-
-private fun Double.toHundredths(): BigDecimal {
-    return BigDecimal(this).setScale(2, RoundingMode.FLOOR)
 }

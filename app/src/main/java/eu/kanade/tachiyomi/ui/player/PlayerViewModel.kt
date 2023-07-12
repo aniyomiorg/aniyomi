@@ -680,6 +680,10 @@ class PlayerViewModel(
         mutableState.update { it.copy(dialog = Dialog.SpeedPicker) }
     }
 
+    fun showDefaultDecoder() {
+        mutableState.update { it.copy(dialog = Dialog.DefaultDecoder) }
+    }
+
     data class State(
         val episodeList: List<Episode> = emptyList(),
         val episode: Episode? = null,
@@ -692,6 +696,7 @@ class PlayerViewModel(
     sealed class Dialog {
         object EpisodeList : Dialog()
         object SpeedPicker : Dialog()
+        object DefaultDecoder : Dialog()
     }
 
     sealed class Event {

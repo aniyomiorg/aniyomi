@@ -50,6 +50,7 @@ import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
 import eu.kanade.tachiyomi.ui.player.settings.PlayerScreenshotSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksBuilder
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
 import eu.kanade.tachiyomi.ui.player.viewer.ACTION_MEDIA_CONTROL
 import eu.kanade.tachiyomi.ui.player.viewer.CONTROL_TYPE_NEXT
@@ -333,6 +334,18 @@ class PlayerActivity : BaseActivity() {
                     SpeedPickerDialog(
                         currentSpeed = MPVLib.getPropertyDouble("speed"),
                         onSpeedChanged = ::updateSpeed,
+                        onDismissRequest = pauseForDialog(),
+                    )
+                }
+
+                is PlayerViewModel.Dialog.DefaultDecoder -> {
+                    fun updateDecoder(newDec: String) {
+                        playerPreferences.standardHwDec().set(newDec)
+                        mpvUpdateHwDec(HwDecState.get(newDec))
+                    }
+                    DefaultDecoderDialog(
+                        currentDecoder = playerPreferences.standardHwDec().get(),
+                        onSelectDecoder = ::updateDecoder,
                         onDismissRequest = pauseForDialog(),
                     )
                 }
