@@ -64,7 +64,6 @@
     <string name="player_aniskip_mixedOp">تخطي المقدمة المختلطة</string>
     <string name="action_change_intro_length">تغيير طول المقدمة</string>
     <string name="video_fit_screen">ملائمة الشاشة</string>
-    <string name="no_previous_episode">الحلقة السابقة غير موجودة!</string>
     <string name="pref_mpv_conf">قم بتحرير ملف تكوين MPV لمزيد من إعدادات مشغل الوسائط</string>
     <string name="pref_remove_exclude_categories_anime">فئات الأنمي المستبعدة</string>
     <string name="pref_backup_flags_summary">ما هي المعلومات المراد تضمينها في ملف النسخ الاحتياطي</string>

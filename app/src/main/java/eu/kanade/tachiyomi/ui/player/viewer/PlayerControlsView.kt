@@ -16,10 +16,8 @@ import androidx.core.view.isVisible
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.databinding.PlayerControlsBinding
 import eu.kanade.tachiyomi.ui.player.PlayerActivity
-import eu.kanade.tachiyomi.ui.player.settings.PlayerDialogs
 import eu.kanade.tachiyomi.ui.player.viewer.components.Seekbar
 import `is`.xyz.mpv.MPVLib
-import `is`.xyz.mpv.StateRestoreCallback
 import `is`.xyz.mpv.Utils
 import tachiyomi.core.util.lang.withUIContext
 import kotlin.math.abs
@@ -38,8 +36,6 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     private val playerPreferences = activity.playerPreferences
 
     private val player get() = activity.player
-
-    private val playerDialogs = PlayerDialogs(activity)
 
     val seekbar: Seekbar = Seekbar(
         view = binding.playbackSeekbar,
@@ -91,18 +87,18 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.unlockBtn.setOnClickListener { lockControls(false) }
 
         // Long click controls
-        binding.cycleSpeedBtn.setOnLongClickListener { playerDialogs.speedPickerDialog(pauseForDialog()); true }
-        binding.cycleDecoderBtn.setOnLongClickListener { playerDialogs.decoderDialog(pauseForDialog()); true }
+        binding.cycleSpeedBtn.setOnLongClickListener { activity.viewModel.showSpeedPicker(); true }
+        binding.cycleDecoderBtn.setOnLongClickListener { activity.viewModel.showDefaultDecoder(); true }
 
-        binding.prevBtn.setOnClickListener { activity.switchEpisode(true) }
+        binding.prevBtn.setOnClickListener { switchEpisode(previous = true) }
         binding.playBtn.setOnClickListener { playPause() }
-        binding.nextBtn.setOnClickListener { activity.switchEpisode(false) }
+        binding.nextBtn.setOnClickListener { switchEpisode(previous = false) }
 
         binding.pipBtn.setOnClickListener { activity.pip.start() }
 
         binding.pipBtn.isVisible = !playerPreferences.pipOnExit().get() && activity.pip.supportedAndEnabled
 
-        binding.controlsSkipIntroBtn.setOnLongClickListener { playerDialogs.skipIntroDialog(pauseForDialog()); true }
+        binding.controlsSkipIntroBtn.setOnLongClickListener { activity.viewModel.showSkipIntroLength(); true }
 
         binding.playbackPositionBtn.setOnClickListener {
             if (player.timePos != null && player.duration != null) {
@@ -126,22 +122,15 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.cycleViewModeBtn.setOnClickListener { cycleViewMode() }
 
-        binding.titleMainTxt.setOnClickListener { playerDialogs.episodeListDialog(pauseForDialog()) }
+        binding.titleMainTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
 
-        binding.titleSecondaryTxt.setOnClickListener { playerDialogs.episodeListDialog(pauseForDialog()) }
+        binding.titleSecondaryTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
 
-        binding.episodeListBtn.setOnClickListener { playerDialogs.episodeListDialog(pauseForDialog()) }
+        binding.episodeListBtn.setOnClickListener { activity.viewModel.showEpisodeList() }
     }
 
-    private fun pauseForDialog(): StateRestoreCallback {
-        val wasPlayerPaused = player.paused ?: true // default to not changing state
-        player.paused = true
-        return {
-            if (!wasPlayerPaused) {
-                player.paused = false
-                activity.refreshUi()
-            }
-        }
+    private fun switchEpisode(previous: Boolean) {
+        return activity.changeEpisode(activity.viewModel.getAdjacentEpisodeId(previous = previous))
     }
 
     internal suspend fun updateEpisodeText() {
@@ -156,7 +145,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
     internal suspend fun updatePlaylistButtons() {
         val viewModel = activity.viewModel
-        val plCount = viewModel.episodeList.size
+        val plCount = viewModel.currentPlaylist.size
         val plPos = viewModel.getCurrentEpisodeIndex()
 
         val grey = ContextCompat.getColor(context, R.color.tint_disabled)
@@ -397,14 +386,14 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         binding.playerInformation.text = activity.getString(playerViewMode.stringRes)
         when (playerViewMode) {
             AspectState.CROP -> {
-                activity.mpvUpdateAspect(aspect = "-1", pan = "1.0")
+                mpvUpdateAspect(aspect = "-1", pan = "1.0")
             }
             AspectState.FIT -> {
-                activity.mpvUpdateAspect(aspect = "-1", pan = "0.0")
+                mpvUpdateAspect(aspect = "-1", pan = "0.0")
             }
             AspectState.STRETCH -> {
                 val newAspect = "${activity.deviceWidth}/${activity.deviceHeight}"
-                activity.mpvUpdateAspect(aspect = newAspect, pan = "1.0")
+                mpvUpdateAspect(aspect = newAspect, pan = "1.0")
             }
         }
         if (showText) {
@@ -414,6 +403,11 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
         }
 
         playerPreferences.playerViewMode().set(playerViewMode.index)
+    }
+
+    private fun mpvUpdateAspect(aspect: String, pan: String) {
+        MPVLib.setOptionString("video-aspect-override", aspect)
+        MPVLib.setOptionString("panscan", pan)
     }
 
     internal fun toggleAutoplay(isAutoplay: Boolean) {

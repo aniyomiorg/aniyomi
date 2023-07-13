@@ -64,15 +64,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Miru Tights"
                 android:textColor="?attr/colorOnPrimarySurface"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:maxLines="1"
                 android:clickable="true"
                 android:focusable="true"
                 app:layout_constraintLeft_toRightOf="@id/backArrowBtn"
                 app:layout_constraintRight_toLeftOf="@id/episodeListBtn"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Anime Name" />
 
             <TextView
                 android:id="@+id/titleSecondaryTxt"
@@ -80,14 +81,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:alpha="0.5"
-                android:text="Episode: BRUH"
                 android:textColor="?attr/colorOnPrimarySurface"
                 android:textSize="12sp"
+                android:textStyle="italic"
+                android:maxLines="1"
                 android:clickable="true"
                 android:focusable="true"
                 app:layout_constraintLeft_toRightOf="@id/backArrowBtn"
                 app:layout_constraintRight_toLeftOf="@id/episodeListBtn"
-                app:layout_constraintTop_toBottomOf="@id/titleMainTxt" />
+                app:layout_constraintTop_toBottomOf="@id/titleMainTxt"
+                tools:text="Episode Name" />
 
             <ImageButton
                 android:id="@+id/episodeListBtn"
@@ -310,7 +313,7 @@
                     android:background="?attr/selectableItemBackground"
                     android:onClick="cycleSpeed"
                     android:gravity="center"
-                    android:text="10.00x"
+                    android:text="1.00x"
                     android:textSize="12sp"
                     android:textColor="?attr/colorOnPrimarySurface" />
 
@@ -331,7 +334,7 @@
                     android:onClick="skipIntro"
                     android:text=""
                     android:textSize="12sp"
-                    tools:text="+255s"
+                    tools:text="+85s"
                     android:textColor="?attr/colorOnPrimary" />
 
                 <ImageButton

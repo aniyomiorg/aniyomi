@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player.settings
+package eu.kanade.tachiyomi.ui.player.settings.sheets
 
 import android.os.Bundle
 import android.view.View

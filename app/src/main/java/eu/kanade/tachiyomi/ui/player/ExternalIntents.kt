@@ -53,7 +53,6 @@ import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.util.Date
-import eu.kanade.tachiyomi.data.database.models.anime.Episode as DbEpisode
 
 class ExternalIntents {
 
@@ -368,31 +367,29 @@ class ExternalIntents {
      *
      * @param currentEpisode the episode to update.
      * @param anime the anime of the episode.
-     * @param seconds the position of the episode.
+     * @param lastSecondSeen the position of the episode.
      * @param totalSeconds the duration of the episode.
      */
-    private suspend fun saveEpisodeProgress(currentEpisode: Episode?, anime: Anime, seconds: Long, totalSeconds: Long) {
+    private suspend fun saveEpisodeProgress(currentEpisode: Episode?, anime: Anime, lastSecondSeen: Long, totalSeconds: Long) {
         if (basePreferences.incognitoMode().get()) return
-        val currentDbEpisode = currentEpisode?.toDbEpisode() ?: return
+        val currEp = currentEpisode ?: return
 
         if (totalSeconds > 0L) {
-            currentDbEpisode.last_second_seen = seconds
-            currentDbEpisode.total_seconds = totalSeconds
             val progress = playerPreferences.progressPreference().get()
-            if (!currentDbEpisode.seen) currentDbEpisode.seen = currentDbEpisode.last_second_seen >= currentDbEpisode.total_seconds * progress
+            val seen = if (!currEp.seen) lastSecondSeen >= totalSeconds * progress else true
             updateEpisode.await(
                 EpisodeUpdate(
-                    id = currentDbEpisode.id!!,
-                    seen = currentDbEpisode.seen,
-                    bookmark = currentDbEpisode.bookmark,
-                    lastSecondSeen = currentDbEpisode.last_second_seen,
-                    totalSeconds = currentDbEpisode.total_seconds,
+                    id = currEp.id,
+                    seen = seen,
+                    bookmark = currEp.bookmark,
+                    lastSecondSeen = lastSecondSeen,
+                    totalSeconds = totalSeconds,
                 ),
             )
-            if (trackPreferences.autoUpdateTrack().get() && currentDbEpisode.seen) {
-                updateTrackEpisodeSeen(currentDbEpisode, anime)
+            if (trackPreferences.autoUpdateTrack().get() && currEp.seen) {
+                updateTrackEpisodeSeen(currEp.episodeNumber.toDouble(), anime)
             }
-            if (currentDbEpisode.seen) {
+            if (seen) {
                 deleteEpisodeIfNeeded(currentEpisode, anime)
             }
         }
@@ -431,13 +428,11 @@ class ExternalIntents {
      * Starts the service that updates the last episode seen in sync services.
      * This operation will run in a background thread and errors are ignored.
      *
-     * @param currentDbEpisode the episode to be updated.
+     * @param episodeNumber the episode number to be updated.
      * @param anime the anime of the episode.
      */
-    private suspend fun updateTrackEpisodeSeen(currentDbEpisode: DbEpisode, anime: Anime) {
+    private suspend fun updateTrackEpisodeSeen(episodeNumber: Double, anime: Anime) {
         if (!trackPreferences.autoUpdateTrack().get()) return
-
-        val episodeSeen = currentDbEpisode.episode_number.toDouble()
 
         val trackManager = Injekt.get<TrackManager>()
         val context = Injekt.get<Application>()
@@ -447,9 +442,9 @@ class ExternalIntents {
                 .mapNotNull { track ->
                     val service = trackManager.getService(track.syncId)
                     if (service != null && service.isLogged &&
-                        service is AnimeTrackService && episodeSeen > track.lastEpisodeSeen
+                        service is AnimeTrackService && episodeNumber > track.lastEpisodeSeen
                     ) {
-                        val updatedTrack = track.copy(lastEpisodeSeen = episodeSeen)
+                        val updatedTrack = track.copy(lastEpisodeSeen = episodeNumber)
 
                         // We want these to execute even if the presenter is destroyed and leaks
                         // for a while. The view can still be garbage collected.

@@ -217,7 +217,6 @@
         <item quantity="few">%1$d nové epizody</item>
         <item quantity="other">%1$d nových epizod</item>
     </plurals>
-    <string name="no_previous_episode">Předchozí epizoda nenalezena!</string>
     <string name="label_history">Manga</string>
     <string name="label_anime_updates">Anime</string>
     <string name="disable_auto_play">Automatické přerávání je vypnuté</string>
