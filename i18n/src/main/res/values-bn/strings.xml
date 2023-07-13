@@ -179,7 +179,6 @@
     <string name="sort_by_number">অধ্যায়ের নাম্বার অনুযায়ী</string>
     <string name="manga_download">ডাউনলোড</string>
     <string name="download_unread">অপঠিত</string>
-    <string name="confirm_delete_chapters">আপনি কি নিশ্চিত যে আপনি নির্বাচিত অধ্যায়গুলো মুছে ফেলতে চান?</string>
     <string name="manga_tracking_tab">অনুসরিত</string>
     <string name="reading">পড়া হচ্ছে</string>
     <string name="completed">সম্পন্ন</string>
@@ -343,11 +342,6 @@
     <string name="invalid_backup_file_missing_manga">ব্যাকআপে কোনো মাংগা নেই।</string>
     <string name="invalid_backup_file">ব্যাকআপ ফাইল গ্রহণযোগ্য নয়</string>
     <string name="pref_search_pinned_sources_only">শুধু আটকানো উৎস যোগ করুন</string>
-    <string name="webtoon_side_padding_25">২৫%</string>
-    <string name="webtoon_side_padding_20">২০%</string>
-    <string name="webtoon_side_padding_15">১৫%</string>
-    <string name="webtoon_side_padding_10">১০%</string>
-    <string name="webtoon_side_padding_0">কিছুই না</string>
     <string name="pref_webtoon_side_padding">পার্শ্ব প্যাডিং</string>
     <string name="pref_category_reading">পড়া হচ্ছে</string>
     <string name="pref_category_reading_mode">পঠন ধরন</string>

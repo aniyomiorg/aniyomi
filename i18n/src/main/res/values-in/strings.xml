@@ -349,8 +349,6 @@
     <string name="licenses">Lisensi terbuka</string>
     <string name="restoring_backup_error">Gagal memulihkan data dari cadangan</string>
     <string name="creating_backup_error">Pencadangan data gagal</string>
-    <string name="webtoon_side_padding_10">10%</string>
-    <string name="webtoon_side_padding_0">Tidak ada</string>
     <string name="pref_webtoon_side_padding">Pinggiran samping</string>
     <string name="pref_skip_filtered_chapters">Lewati bab yang difilter</string>
     <string name="action_unpin">Hilangkan tanda</string>
@@ -360,10 +358,7 @@
     <string name="label_downloaded_only">Hanya yang sudah diunduh</string>
     <string name="pinned_sources">Tersemat</string>
     <string name="website">Situs web</string>
-    <string name="webtoon_side_padding_25">25%</string>
-    <string name="webtoon_side_padding_20">20%</string>
-    <string name="webtoon_side_padding_15">15%</string>
-    <string name="vertical_plus_viewer">Tegak kontinu</string>
+    <string name="vertical_plus_viewer">Strip panjang dengan celah</string>
     <string name="local_source_help_guide">Petunjuk sumber lokal</string>
     <string name="last_used_source">Terakhir digunakan</string>
     <plurals name="download_queue_summary">
@@ -598,7 +593,6 @@
     <string name="library_errors_help">Untuk bantuan cara memperbaiki kesalahan pembaruan pustaka, lihat %1$s</string>
     <string name="save_chapter_as_cbz">Simpan sebagai arsip CBZ</string>
     <string name="action_faq_and_guides">Tanya Jawab dan Panduan</string>
-    <string name="webtoon_side_padding_5">5%</string>
     <string name="action_display_cover_only_grid">Grid sampul saja</string>
     <string name="pref_update_only_started">Yang belum dibaca</string>
     <string name="action_filter_started">Dimulai</string>
@@ -748,4 +742,5 @@
     <string name="action_ok">Oke</string>
     <string name="track_delete_text">Ini akan menghapus pelacakan lokal.</string>
     <string name="track_delete_remote_text">Hapus juga dari %s</string>
+    <string name="delete_downloaded">Hapus unduhan</string>
 </resources>

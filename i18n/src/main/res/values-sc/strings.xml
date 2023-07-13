@@ -349,12 +349,7 @@
     <string name="pref_skip_filtered_chapters">Brinca sos capìtulos filtrados</string>
     <string name="label_sources">Fontes</string>
     <string name="pref_webtoon_side_padding">Distantziamentu laterale</string>
-    <string name="webtoon_side_padding_0">Perunu</string>
-    <string name="webtoon_side_padding_25">25%</string>
-    <string name="webtoon_side_padding_20">20%</string>
-    <string name="webtoon_side_padding_15">15%</string>
-    <string name="webtoon_side_padding_10">10%</string>
-    <string name="vertical_plus_viewer">Verticale sighidu</string>
+    <string name="vertical_plus_viewer">Verticale longu cun interrutziones</string>
     <string name="action_select_inverse">Fùrria s\'ischertada</string>
     <string name="pinned_sources">Apicadu</string>
     <string name="action_unpin">Boga</string>
@@ -610,7 +605,6 @@
     <string name="publishing_finished">Publicatzione acabada</string>
     <string name="on_hiatus">In pàusa</string>
     <string name="cancelled">Annullada</string>
-    <string name="webtoon_side_padding_5">5%</string>
     <string name="pref_landscape_zoom">Ismànnia in automàticu sas immàgines largas</string>
     <string name="action_display_cover_only_grid">Grìllia cun coberteddas ebbia</string>
     <string name="pref_update_only_started">No incumintzadas</string>
@@ -679,7 +673,7 @@
         <item quantity="one">Su capìtulu non lèghidu imbeniente</item>
         <item quantity="other">Sos %d capìtulos non lèghidos imbenientes</item>
     </plurals>
-    <string name="download_ahead_info">Funtzionat petzi cun sos elementos in biblioteca e si su capìtulu atuale e cussu imbeniente sunt giai iscarrigados</string>
+    <string name="download_ahead_info">Funtzionat petzi si su capìtulu atuale e s\'imbeniente sunt giai iscarrigados.</string>
     <string name="are_you_sure">Seguru ses\?</string>
     <string name="remove_manga">As a bogare \"%s\" dae sa biblioteca tua</string>
     <string name="multi_lang">Mùltiplas</string>
@@ -770,4 +764,5 @@
         <item quantity="one">1 die</item>
         <item quantity="other">%d dies</item>
     </plurals>
+    <string name="delete_downloaded">Iscantzella sos iscarrigados</string>
 </resources>

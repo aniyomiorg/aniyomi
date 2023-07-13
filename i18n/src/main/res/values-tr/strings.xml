@@ -350,12 +350,7 @@
     <string name="pref_skip_filtered_chapters">Filtrelenmiş bölümleri geç</string>
     <string name="label_sources">Kaynaklar</string>
     <string name="action_select_inverse">Tersini seç</string>
-    <string name="vertical_plus_viewer">Dikey sürekli</string>
-    <string name="webtoon_side_padding_25">%25</string>
-    <string name="webtoon_side_padding_20">%20</string>
-    <string name="webtoon_side_padding_15">%15</string>
-    <string name="webtoon_side_padding_10">%10</string>
-    <string name="webtoon_side_padding_0">Yok</string>
+    <string name="vertical_plus_viewer">Aralıklı uzun şerit</string>
     <string name="pref_webtoon_side_padding">Yan dolgu</string>
     <string name="pinned_sources">Sabit</string>
     <string name="action_unpin">Çöz</string>
@@ -611,7 +606,6 @@
     <string name="privacy_policy">Gizlilik politikası</string>
     <string name="cancelled">İptal edildi</string>
     <string name="on_hiatus">Molada</string>
-    <string name="webtoon_side_padding_5">%5</string>
     <string name="library_errors_help">Kitaplık güncelleme hatalarının nasıl düzeltileceği konusunda yardım için bkz. %1$s</string>
     <string name="action_filter_started">Başlanılan</string>
     <string name="action_display_cover_only_grid">Sadece-kapak ızgara</string>
