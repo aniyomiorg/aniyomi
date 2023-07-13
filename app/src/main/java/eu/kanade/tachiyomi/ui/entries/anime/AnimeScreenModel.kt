@@ -10,6 +10,7 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
+import eu.kanade.domain.entries.anime.interactor.SetAnimeViewerFlags
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.downloadedFilter
 import eu.kanade.domain.entries.anime.model.isLocal
