@@ -176,7 +176,7 @@
     <string name="sort_by_episode_number">By episode number</string>
     <plurals name="download_amount_anime">
         <item quantity="one">Next episode</item>
-        <item quantity="other">Next episodes</item>
+        <item quantity="other">Next %d episodes</item>
     </plurals>
     <string name="download_unseen">Unseen</string>
     <string name="confirm_delete_episodes">Are you sure you want to delete the selected episodes?</string>
