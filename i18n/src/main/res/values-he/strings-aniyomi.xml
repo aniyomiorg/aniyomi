@@ -64,8 +64,8 @@
     <plurals name="next_unseen_episodes">
         <item quantity="one">הפרק הבא שלא נצפה</item>
         <item quantity="two">ה-%d פרקים הבאים שלא נצפו</item>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="seconds">
         <item quantity="one">%d שנייה</item>
