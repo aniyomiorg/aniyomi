@@ -80,7 +80,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
-import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack as DbAnimeTrack
+import tachiyomi.domain.track.anime.model.AnimeTrack as DbAnimeTrack
 
 data class AnimeTrackInfoDialogHomeScreen(
     private val animeId: Long,
@@ -149,7 +149,7 @@ data class AnimeTrackInfoDialogHomeScreen(
                         TrackServiceSearchScreen(
                             animeId = animeId,
                             initialQuery = it.track?.title ?: animeTitle,
-                            currentUrl = it.track?.tracking_url,
+                            currentUrl = it.track?.remoteUrl,
                             serviceId = it.service.id,
                         ),
                     )
@@ -163,7 +163,7 @@ data class AnimeTrackInfoDialogHomeScreen(
      * Opens registered tracker url in browser
      */
     private fun openTrackerInBrowser(context: Context, trackItem: AnimeTrackItem) {
-        val url = trackItem.track?.tracking_url ?: return
+        val url = trackItem.track?.remoteUrl ?: return
         if (url.isNotBlank()) {
             context.openInBrowser(url)
         }
@@ -218,7 +218,7 @@ data class AnimeTrackInfoDialogHomeScreen(
                 for (trackItem in trackItems) {
                     try {
                         val track = trackItem.track ?: continue
-                        val domainAnimeTrack = trackItem.service.animeService.refresh(track).toDomainTrack() ?: continue
+                        val domainAnimeTrack = trackItem.service.animeService.refresh(track.toDbTrack()).toDomainTrack() ?: continue
                         insertAnimeTrack.await(domainAnimeTrack)
 
                         if (trackItem.service is EnhancedAnimeTrackService) {
@@ -253,7 +253,7 @@ data class AnimeTrackInfoDialogHomeScreen(
             val source = Injekt.get<AnimeSourceManager>().getOrStub(sourceId)
             return loggedServices
                 // Map to TrackItem
-                .map { service -> AnimeTrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
+                .map { service -> AnimeTrackItem(find { it.syncId.toLong() == service.id }, service) }
                 // Show only if the service supports this anime's source
                 .filter { (it.service as? EnhancedAnimeTrackService)?.accept(source) ?: true }
         }
@@ -291,7 +291,7 @@ private data class TrackStatusSelectorScreen(
     private class Model(
         private val track: DbAnimeTrack,
         private val service: TrackService,
-    ) : StateScreenModel<Model.State>(State(track.status)) {
+    ) : StateScreenModel<Model.State>(State(track.status.toInt())) {
 
         fun getSelections(): Map<Int, Int?> {
             return service.animeService.getStatusListAnime().associateWith { service.getStatus(it) }
@@ -303,7 +303,7 @@ private data class TrackStatusSelectorScreen(
 
         fun setStatus() {
             coroutineScope.launchNonCancellable {
-                service.animeService.setRemoteAnimeStatus(track, state.value.selection)
+                service.animeService.setRemoteAnimeStatus(track.toDbTrack(), state.value.selection)
             }
         }
 
@@ -342,15 +342,15 @@ private data class TrackEpisodeSelectorScreen(
     private class Model(
         private val track: DbAnimeTrack,
         private val service: TrackService,
-    ) : StateScreenModel<Model.State>(State(track.last_episode_seen.toInt())) {
+    ) : StateScreenModel<Model.State>(State(track.lastEpisodeSeen.toInt())) {
 
         fun getRange(): Iterable<Int> {
-            val endRange = if (track.total_episodes > 0) {
-                track.total_episodes
+            val endRange = if (track.totalEpisodes > 0) {
+                track.totalEpisodes
             } else {
                 10000
             }
-            return 0..endRange
+            return 0..endRange.toInt()
         }
 
         fun setSelection(selection: Int) {
@@ -359,7 +359,7 @@ private data class TrackEpisodeSelectorScreen(
 
         fun setEpisode() {
             coroutineScope.launchNonCancellable {
-                service.animeService.setRemoteLastEpisodeSeen(track, state.value.selection)
+                service.animeService.setRemoteLastEpisodeSeen(track.toDbTrack(), state.value.selection)
             }
         }
 
@@ -397,7 +397,7 @@ private data class TrackScoreSelectorScreen(
     private class Model(
         private val track: DbAnimeTrack,
         private val service: TrackService,
-    ) : StateScreenModel<Model.State>(State(service.animeService.displayScore(track))) {
+    ) : StateScreenModel<Model.State>(State(service.animeService.displayScore(track.toDbTrack()))) {
 
         fun getSelections(): List<String> {
             return service.animeService.getScoreList()
@@ -409,7 +409,7 @@ private data class TrackScoreSelectorScreen(
 
         fun setScore() {
             coroutineScope.launchNonCancellable {
-                service.animeService.setRemoteScore(track, state.value.selection)
+                service.animeService.setRemoteScore(track.toDbTrack(), state.value.selection)
             }
         }
 
@@ -437,9 +437,9 @@ private data class TrackDateSelectorScreen(
         }
 
         val canRemove = if (start) {
-            track.started_watching_date > 0
+            track.startDate > 0
         } else {
-            track.finished_watching_date > 0
+            track.finishDate > 0
         }
         TrackDateSelector(
             title = if (start) {
@@ -458,15 +458,15 @@ private data class TrackDateSelectorScreen(
                     return@TrackDateSelector false
                 }
 
-                if (start && track.finished_watching_date > 0) {
+                if (start && track.finishDate > 0) {
                     // Disallow start date to be set later than finish date
-                    val dateFinished = Instant.ofEpochMilli(track.finished_watching_date)
+                    val dateFinished = Instant.ofEpochMilli(track.finishDate)
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate()
                     dateToCheck <= dateFinished
-                } else if (!start && track.started_watching_date > 0) {
+                } else if (!start && track.startDate > 0) {
                     // Disallow end date to be set earlier than start date
-                    val dateStarted = Instant.ofEpochMilli(track.started_watching_date)
+                    val dateStarted = Instant.ofEpochMilli(track.startDate)
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate()
                     dateToCheck >= dateStarted
@@ -491,7 +491,7 @@ private data class TrackDateSelectorScreen(
         val initialSelection: Long
             get() {
                 val millis =
-                    (if (start) track.started_watching_date else track.finished_watching_date)
+                    (if (start) track.startDate else track.finishDate)
                         .takeIf { it != 0L }
                         ?: Instant.now().toEpochMilli()
                 return convertEpochMillisZone(millis, ZoneOffset.systemDefault(), ZoneOffset.UTC)
@@ -504,9 +504,9 @@ private data class TrackDateSelectorScreen(
                 convertEpochMillisZone(millis, ZoneOffset.UTC, ZoneOffset.systemDefault())
             coroutineScope.launchNonCancellable {
                 if (start) {
-                    service.animeService.setRemoteStartDate(track, localMillis)
+                    service.animeService.setRemoteStartDate(track.toDbTrack(), localMillis)
                 } else {
-                    service.animeService.setRemoteFinishDate(track, localMillis)
+                    service.animeService.setRemoteFinishDate(track.toDbTrack(), localMillis)
                 }
             }
         }
@@ -603,9 +603,9 @@ private data class TrackDateRemoverScreen(
         fun removeDate() {
             coroutineScope.launchNonCancellable {
                 if (start) {
-                    service.animeService.setRemoteStartDate(track, 0)
+                    service.animeService.setRemoteStartDate(track.toDbTrack(), 0)
                 } else {
-                    service.animeService.setRemoteFinishDate(track, 0)
+                    service.animeService.setRemoteFinishDate(track.toDbTrack(), 0)
                 }
             }
         }
@@ -682,7 +682,7 @@ data class TrackServiceSearchScreen(
             }
         }
 
-        fun registerTracking(item: DbAnimeTrack) {
+        fun registerTracking(item: AnimeTrackSearch) {
             coroutineScope.launchNonCancellable { service.animeService.registerTracking(item, animeId) }
         }
 

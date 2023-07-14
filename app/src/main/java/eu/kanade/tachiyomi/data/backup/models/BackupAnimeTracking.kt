@@ -1,9 +1,8 @@
 package eu.kanade.tachiyomi.data.backup.models
 
-import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrackImpl
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.protobuf.ProtoNumber
+import tachiyomi.domain.track.anime.model.AnimeTrack
 
 @Serializable
 data class BackupAnimeTracking(
@@ -29,43 +28,44 @@ data class BackupAnimeTracking(
     @ProtoNumber(11) var finishedWatchingDate: Long = 0,
     @ProtoNumber(100) var mediaId: Long = 0,
 ) {
-    fun getTrackingImpl(): AnimeTrackImpl {
-        return AnimeTrackImpl().apply {
-            sync_id = this@BackupAnimeTracking.syncId
-            @Suppress("DEPRECATION")
-            media_id = if (this@BackupAnimeTracking.mediaIdInt != 0) {
+    fun getTrackingImpl(): AnimeTrack {
+        return AnimeTrack(
+            id = -1,
+            animeId = -1,
+            syncId = this@BackupAnimeTracking.syncId.toLong(),
+            remoteId = if (this@BackupAnimeTracking.mediaIdInt != 0) {
                 this@BackupAnimeTracking.mediaIdInt.toLong()
             } else {
                 this@BackupAnimeTracking.mediaId
-            }
-            library_id = this@BackupAnimeTracking.libraryId
-            title = this@BackupAnimeTracking.title
-            last_episode_seen = this@BackupAnimeTracking.lastEpisodeSeen
-            total_episodes = this@BackupAnimeTracking.totalEpisodes
-            score = this@BackupAnimeTracking.score
-            status = this@BackupAnimeTracking.status
-            started_watching_date = this@BackupAnimeTracking.startedWatchingDate
-            finished_watching_date = this@BackupAnimeTracking.finishedWatchingDate
-            tracking_url = this@BackupAnimeTracking.trackingUrl
-        }
+            },
+            libraryId = this@BackupAnimeTracking.libraryId,
+            title = this@BackupAnimeTracking.title,
+            lastEpisodeSeen = this@BackupAnimeTracking.lastEpisodeSeen.toDouble(),
+            totalEpisodes = this@BackupAnimeTracking.totalEpisodes.toLong(),
+            score = this@BackupAnimeTracking.score,
+            status = this@BackupAnimeTracking.status.toLong(),
+            startDate = this@BackupAnimeTracking.startedWatchingDate,
+            finishDate = this@BackupAnimeTracking.finishedWatchingDate,
+            remoteUrl = this@BackupAnimeTracking.trackingUrl,
+        )
     }
 
     companion object {
         fun copyFrom(track: AnimeTrack): BackupAnimeTracking {
             return BackupAnimeTracking(
-                syncId = track.sync_id,
-                mediaId = track.media_id,
+                syncId = track.syncId.toInt(),
+                mediaId = track.remoteId,
                 // forced not null so its compatible with 1.x backup system
-                libraryId = track.library_id!!,
+                libraryId = track.libraryId!!,
                 title = track.title,
                 // convert to float for 1.x
-                lastEpisodeSeen = track.last_episode_seen,
-                totalEpisodes = track.total_episodes,
+                lastEpisodeSeen = track.lastEpisodeSeen.toFloat(),
+                totalEpisodes = track.totalEpisodes.toInt(),
                 score = track.score,
-                status = track.status,
-                startedWatchingDate = track.started_watching_date,
-                finishedWatchingDate = track.finished_watching_date,
-                trackingUrl = track.tracking_url,
+                status = track.status.toInt(),
+                startedWatchingDate = track.startDate,
+                finishedWatchingDate = track.finishDate,
+                trackingUrl = track.remoteUrl,
             )
         }
     }

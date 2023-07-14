@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import eu.kanade.domain.track.anime.model.toDbTrack
 import eu.kanade.presentation.track.components.TrackLogoIcon
 import eu.kanade.presentation.track.manga.TrackDetailsItem
 import eu.kanade.presentation.track.manga.TrackInfoItemMenu
@@ -73,10 +74,10 @@ fun AnimeTrackInfoDialogHome(
                 TrackInfoItem(
                     title = item.track.title,
                     service = item.service,
-                    status = item.service.getStatus(item.track.status),
+                    status = item.service.getStatus(item.track.status.toInt()),
                     onStatusClick = { onStatusClick(item) },
-                    episodes = "${item.track.last_episode_seen.toInt()}".let {
-                        val totalEpisodes = item.track.total_episodes
+                    episodes = "${item.track.lastEpisodeSeen.toInt()}".let {
+                        val totalEpisodes = item.track.totalEpisodes
                         if (totalEpisodes > 0) {
                             // Add known total episode count
                             "$it / $totalEpisodes"
@@ -85,16 +86,16 @@ fun AnimeTrackInfoDialogHome(
                         }
                     },
                     onEpisodesClick = { onEpisodeClick(item) },
-                    score = item.service.animeService.displayScore(item.track)
+                    score = item.service.animeService.displayScore(item.track.toDbTrack())
                         .takeIf { supportsScoring && item.track.score != 0F },
                     onScoreClick = { onScoreClick(item) }
                         .takeIf { supportsScoring },
-                    startDate = remember(item.track.started_watching_date) { dateFormat.format(item.track.started_watching_date) }
-                        .takeIf { supportsReadingDates && item.track.started_watching_date != 0L },
+                    startDate = remember(item.track.startDate) { dateFormat.format(item.track.startDate) }
+                        .takeIf { supportsReadingDates && item.track.startDate != 0L },
                     onStartDateClick = { onStartDateEdit(item) } // TODO
                         .takeIf { supportsReadingDates },
-                    endDate = dateFormat.format(item.track.finished_watching_date)
-                        .takeIf { supportsReadingDates && item.track.finished_watching_date != 0L },
+                    endDate = dateFormat.format(item.track.finishDate)
+                        .takeIf { supportsReadingDates && item.track.finishDate != 0L },
                     onEndDateClick = { onEndDateEdit(item) }
                         .takeIf { supportsReadingDates },
                     onNewSearch = { onNewSearch(item) },

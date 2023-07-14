@@ -27,8 +27,8 @@ class AniChartApi {
             trackItems.forEach {
                 if (it.track != null) {
                     alId = when (it.service) {
-                        is Anilist -> it.track.media_id
-                        is MyAnimeList -> getAlIdFromMal(it.track.media_id)
+                        is Anilist -> it.track.remoteId
+                        is MyAnimeList -> getAlIdFromMal(it.track.remoteId)
                         else -> 0L
                     }
                 }

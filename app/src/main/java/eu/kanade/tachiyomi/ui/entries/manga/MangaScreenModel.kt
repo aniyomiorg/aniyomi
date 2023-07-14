@@ -16,7 +16,6 @@ import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.entries.manga.model.toSManga
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.entries.DownloadAction
@@ -901,10 +900,9 @@ class MangaInfoScreenModel(
             getTracks.subscribe(manga.id)
                 .catch { logcat(LogPriority.ERROR, it) }
                 .map { tracks ->
-                    val dbTracks = tracks.map { it.toDbTrack() }
                     loggedServices
                         // Map to TrackItem
-                        .map { service -> MangaTrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
+                        .map { service -> MangaTrackItem(tracks.find { it.syncId.toLong() == service.id }, service) }
                         // Show only if the service supports this manga's source
                         .filter { (it.service as? EnhancedMangaTrackService)?.accept(source!!) ?: true }
                 }

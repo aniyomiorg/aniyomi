@@ -1,5 +1,6 @@
 package eu.kanade.domain.items.episode.model
 
+import dataanime.Episodes
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.data.database.models.anime.EpisodeImpl
 import tachiyomi.domain.items.episode.model.Episode
@@ -23,6 +24,16 @@ fun Episode.copyFromSEpisode(sEpisode: SEpisode): Episode {
         dateUpload = sEpisode.date_upload,
         episodeNumber = sEpisode.episode_number,
         scanlator = sEpisode.scanlator?.ifBlank { null },
+    )
+}
+
+fun Episode.copyFrom(other: Episodes): Episode {
+    return copy(
+        name = other.name,
+        url = other.url,
+        dateUpload = other.date_upload,
+        episodeNumber = other.episode_number,
+        scanlator = other.scanlator?.ifBlank { null },
     )
 }
 
