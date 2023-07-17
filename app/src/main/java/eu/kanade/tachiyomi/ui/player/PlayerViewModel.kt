@@ -688,6 +688,10 @@ class PlayerViewModel(
         mutableState.update { it.copy(dialog = Dialog.SkipIntroLength) }
     }
 
+    fun showSubtitleSettings() {
+        mutableState.update { it.copy(dialog = Dialog.SubtitleSettings) }
+    }
+
     data class State(
         val episodeList: List<Episode> = emptyList(),
         val episode: Episode? = null,
@@ -702,6 +706,7 @@ class PlayerViewModel(
         object SpeedPicker : Dialog()
         object DefaultDecoder : Dialog()
         object SkipIntroLength : Dialog()
+        object SubtitleSettings: Dialog()
     }
 
     sealed class Event {

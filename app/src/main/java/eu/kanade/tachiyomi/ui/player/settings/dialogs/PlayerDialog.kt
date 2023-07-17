@@ -83,8 +83,3 @@ fun PlayerDialog(
         dismissButton = dismissButton,
     )
 }
-
-/**
- * style = MaterialTheme.typography.titleLarge,
-color = MaterialTheme.colorScheme.onSurface,
- */

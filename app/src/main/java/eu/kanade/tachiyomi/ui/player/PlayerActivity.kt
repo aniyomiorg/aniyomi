@@ -50,6 +50,7 @@ import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
+import eu.kanade.tachiyomi.ui.player.settings.dialogs.SubtitleSettingsDialog
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerChaptersSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerScreenshotSheet
@@ -361,6 +362,12 @@ class PlayerActivity : BaseActivity() {
                             onDismissRequest = pauseForDialog(),
                         )
                     }
+                }
+
+                is PlayerViewModel.Dialog.SubtitleSettings -> {
+                    SubtitleSettingsDialog(
+                        onDismissRequest = pauseForDialog()
+                    )
                 }
 
                 null -> {}
