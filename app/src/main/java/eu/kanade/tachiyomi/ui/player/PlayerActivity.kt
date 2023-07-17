@@ -408,6 +408,8 @@ class PlayerActivity : BaseActivity() {
         mpvUpdateHwDec(HwDecState.get(playerPreferences.standardHwDec().get()))
         MPVLib.setOptionString("keep-open", "always")
         MPVLib.setOptionString("ytdl", "no")
+        val overrideType = if (viewModel.playerPreferences.overrideSubtitlesStyle().get()) "no" else "force"
+        MPVLib.setPropertyString("sub-ass-override", overrideType)
 
         MPVLib.addLogObserver(playerObserver)
         player.addObserver(playerObserver)

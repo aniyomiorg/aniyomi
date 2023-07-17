@@ -74,4 +74,14 @@ class PlayerPreferences(
     fun enableNetflixStyleAniSkip() = preferenceStore.getBoolean("pref_enable_netflixStyle_aniskip", false)
 
     fun standardHwDec() = preferenceStore.getString("pref_hwdec", HwDecState.defaultHwDec.mpvValue)
+
+    fun overrideSubtitlesStyle() = preferenceStore.getBoolean("pref_override_subtitles_style", false)
+
+    fun boldSubtitles() = preferenceStore.getBoolean("pref_bold_subtitles", false)
+
+    fun italicSubtitles() = preferenceStore.getBoolean("pref_italic_subtitles", false)
+
+    fun textColourSubtitles() = preferenceStore.getInt("pref_text_colour_subtitles", 0)
+    fun borderColourSubtitles() = preferenceStore.getLong("pref_border_colour_subtitles", 0x000000FFL)
+    fun backgroundColourSubtitles() = preferenceStore.getLong("pref_background_colour_subtitles", 0x00000000L)
 }
