@@ -1,9 +1,9 @@
 package eu.kanade.domain.library.service
 
 import eu.kanade.tachiyomi.data.preference.DEVICE_ONLY_ON_WIFI
-import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
-import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
-import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
+import eu.kanade.tachiyomi.data.preference.ENTRY_HAS_UNVIEWED
+import eu.kanade.tachiyomi.data.preference.ENTRY_NON_COMPLETED
+import eu.kanade.tachiyomi.data.preference.ENTRY_NON_VIEWED
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.preference.getEnum
 import tachiyomi.domain.entries.TriStateFilter
@@ -35,7 +35,7 @@ class LibraryPreferences(
 
     fun libraryUpdateDeviceRestriction() = preferenceStore.getStringSet("library_update_restriction", setOf(DEVICE_ONLY_ON_WIFI))
 
-    fun libraryUpdateItemRestriction() = preferenceStore.getStringSet("library_update_manga_restriction", setOf(MANGA_HAS_UNREAD, MANGA_NON_COMPLETED, MANGA_NON_READ))
+    fun libraryUpdateItemRestriction() = preferenceStore.getStringSet("library_update_manga_restriction", setOf(ENTRY_HAS_UNVIEWED, ENTRY_NON_COMPLETED, ENTRY_NON_VIEWED))
 
     fun autoUpdateMetadata() = preferenceStore.getBoolean("auto_update_metadata", false)
 

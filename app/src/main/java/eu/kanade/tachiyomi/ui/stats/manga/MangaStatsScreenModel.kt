@@ -12,9 +12,9 @@ import eu.kanade.domain.library.service.LibraryPreferences
 import eu.kanade.presentation.more.stats.StatsScreenState
 import eu.kanade.presentation.more.stats.data.StatsData
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
-import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
-import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
-import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
+import eu.kanade.tachiyomi.data.preference.ENTRY_HAS_UNVIEWED
+import eu.kanade.tachiyomi.data.preference.ENTRY_NON_COMPLETED
+import eu.kanade.tachiyomi.data.preference.ENTRY_NON_VIEWED
 import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.source.model.SManga
@@ -109,9 +109,9 @@ class MangaStatsScreenModel(
             .fastFilterNot { it.manga.id in excludedMangaIds }
             .fastDistinctBy { it.manga.id }
             .fastCountNot {
-                (MANGA_NON_COMPLETED in updateRestrictions && it.manga.status.toInt() == SManga.COMPLETED) ||
-                    (MANGA_HAS_UNREAD in updateRestrictions && it.unreadCount != 0L) ||
-                    (MANGA_NON_READ in updateRestrictions && it.totalChapters > 0 && !it.hasStarted)
+                (ENTRY_NON_COMPLETED in updateRestrictions && it.manga.status.toInt() == SManga.COMPLETED) ||
+                    (ENTRY_HAS_UNVIEWED in updateRestrictions && it.unreadCount != 0L) ||
+                    (ENTRY_NON_VIEWED in updateRestrictions && it.totalChapters > 0 && !it.hasStarted)
             }
     }
 

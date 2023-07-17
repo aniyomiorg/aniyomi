@@ -32,9 +32,9 @@ import eu.kanade.tachiyomi.data.preference.DEVICE_BATTERY_NOT_LOW
 import eu.kanade.tachiyomi.data.preference.DEVICE_CHARGING
 import eu.kanade.tachiyomi.data.preference.DEVICE_NETWORK_NOT_METERED
 import eu.kanade.tachiyomi.data.preference.DEVICE_ONLY_ON_WIFI
-import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
-import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
-import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
+import eu.kanade.tachiyomi.data.preference.ENTRY_HAS_UNVIEWED
+import eu.kanade.tachiyomi.data.preference.ENTRY_NON_COMPLETED
+import eu.kanade.tachiyomi.data.preference.ENTRY_NON_VIEWED
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
@@ -251,13 +251,13 @@ class MangaLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     manga,
                                 ) {
                                     when {
-                                        MANGA_NON_COMPLETED in restrictions && manga.status.toInt() == SManga.COMPLETED ->
+                                        ENTRY_NON_COMPLETED in restrictions && manga.status.toInt() == SManga.COMPLETED ->
                                             skippedUpdates.add(manga to context.getString(R.string.skipped_reason_completed))
 
-                                        MANGA_HAS_UNREAD in restrictions && libraryManga.unreadCount != 0L ->
+                                        ENTRY_HAS_UNVIEWED in restrictions && libraryManga.unreadCount != 0L ->
                                             skippedUpdates.add(manga to context.getString(R.string.skipped_reason_not_caught_up))
 
-                                        MANGA_NON_READ in restrictions && libraryManga.totalChapters > 0L && !libraryManga.hasStarted ->
+                                        ENTRY_NON_VIEWED in restrictions && libraryManga.totalChapters > 0L && !libraryManga.hasStarted ->
                                             skippedUpdates.add(manga to context.getString(R.string.skipped_reason_not_started))
 
                                         manga.updateStrategy != UpdateStrategy.ALWAYS_UPDATE ->

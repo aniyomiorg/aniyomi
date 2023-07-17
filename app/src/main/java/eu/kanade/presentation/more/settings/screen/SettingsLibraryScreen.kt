@@ -43,9 +43,9 @@ import eu.kanade.tachiyomi.data.preference.DEVICE_BATTERY_NOT_LOW
 import eu.kanade.tachiyomi.data.preference.DEVICE_CHARGING
 import eu.kanade.tachiyomi.data.preference.DEVICE_NETWORK_NOT_METERED
 import eu.kanade.tachiyomi.data.preference.DEVICE_ONLY_ON_WIFI
-import eu.kanade.tachiyomi.data.preference.MANGA_HAS_UNREAD
-import eu.kanade.tachiyomi.data.preference.MANGA_NON_COMPLETED
-import eu.kanade.tachiyomi.data.preference.MANGA_NON_READ
+import eu.kanade.tachiyomi.data.preference.ENTRY_HAS_UNVIEWED
+import eu.kanade.tachiyomi.data.preference.ENTRY_NON_COMPLETED
+import eu.kanade.tachiyomi.data.preference.ENTRY_NON_VIEWED
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.ui.category.CategoriesTab
 import kotlinx.coroutines.launch
@@ -312,9 +312,9 @@ object SettingsLibraryScreen : SearchableSettings {
                     pref = libraryUpdateMangaRestrictionPref,
                     title = stringResource(R.string.pref_library_update_manga_restriction),
                     entries = mapOf(
-                        MANGA_HAS_UNREAD to stringResource(R.string.pref_update_only_completely_read),
-                        MANGA_NON_READ to stringResource(R.string.pref_update_only_started),
-                        MANGA_NON_COMPLETED to stringResource(R.string.pref_update_only_non_completed),
+                        ENTRY_HAS_UNVIEWED to stringResource(R.string.pref_update_only_completely_read),
+                        ENTRY_NON_VIEWED to stringResource(R.string.pref_update_only_started),
+                        ENTRY_NON_COMPLETED to stringResource(R.string.pref_update_only_non_completed),
                     ),
                 ),
                 Preference.PreferenceItem.TextPreference(
