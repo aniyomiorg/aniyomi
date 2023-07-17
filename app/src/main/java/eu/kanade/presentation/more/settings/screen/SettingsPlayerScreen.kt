@@ -75,7 +75,8 @@ object SettingsPlayerScreen : SearchableSettings {
         val scope = rememberCoroutineScope()
         val playerFullscreen = playerPreferences.playerFullscreen()
         val playerHideControls = playerPreferences.hideControls()
-        val mpvConf = playerPreferences.mpvConf()
+        val mpvConfPref = playerPreferences.mpvConf()
+        val mpvConf by mpvConfPref.collectAsState()
 
         return Preference.PreferenceGroup(
             title = stringResource(R.string.pref_category_internal_player),
@@ -90,15 +91,22 @@ object SettingsPlayerScreen : SearchableSettings {
                     title = stringResource(R.string.pref_player_hide_controls),
                 ),
                 Preference.PreferenceItem.MultiLineEditTextPreference(
-                    pref = mpvConf,
+                    pref = mpvConfPref,
                     title = stringResource(R.string.pref_mpv_conf),
-                    subtitle = mpvConf.asState(scope).value
+                    subtitle = mpvConfPref.asState(scope).value
                         .lines().take(2)
                         .joinToString(
                             separator = "\n",
-                            postfix = if (mpvConf.asState(scope).value.lines().size > 2) "\n..." else "",
+                            postfix = if (mpvConfPref.asState(scope).value.lines().size > 2) "\n..." else "",
                         ),
 
+                ),
+                Preference.PreferenceItem.TextPreference(
+                    title = stringResource(R.string.pref_reset_mpv_conf),
+                    enabled = remember(mpvConf) { mpvConf.isNotBlank() },
+                    onClick = {
+                        mpvConfPref.delete()
+                    },
                 ),
             ),
         )
