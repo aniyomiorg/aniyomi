@@ -45,6 +45,7 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.databinding.PlayerActivityBinding
 import eu.kanade.tachiyomi.ui.base.activity.BaseActivity
 import eu.kanade.tachiyomi.ui.player.settings.PlayerPreferences
+import eu.kanade.tachiyomi.ui.player.settings.PlayerSettingsScreenModel
 import eu.kanade.tachiyomi.ui.player.settings.PlayerTracksBuilder
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
@@ -366,7 +367,8 @@ class PlayerActivity : BaseActivity() {
 
                 is PlayerViewModel.Dialog.SubtitleSettings -> {
                     SubtitleSettingsDialog(
-                        onDismissRequest = pauseForDialog()
+                        screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
+                        onDismissRequest = pauseForDialog(),
                     )
                 }
 

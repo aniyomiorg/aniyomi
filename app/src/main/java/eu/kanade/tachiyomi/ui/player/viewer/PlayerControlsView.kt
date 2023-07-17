@@ -126,7 +126,8 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
 
         binding.titleSecondaryTxt.setOnClickListener { activity.viewModel.showEpisodeList() }
 
-        binding.episodeListBtn.setOnClickListener { activity.viewModel.showEpisodeList() }
+        // TODO: Update the Dialog opened
+        binding.episodeListBtn.setOnClickListener { activity.viewModel.showSubtitleSettings() }
     }
 
     private fun switchEpisode(previous: Boolean) {

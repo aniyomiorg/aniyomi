@@ -706,7 +706,7 @@ class PlayerViewModel(
         object SpeedPicker : Dialog()
         object DefaultDecoder : Dialog()
         object SkipIntroLength : Dialog()
-        object SubtitleSettings: Dialog()
+        object SubtitleSettings : Dialog()
     }
 
     sealed class Event {
