@@ -293,4 +293,7 @@
     <string name="choose_video_quality">Choose video quality:</string>
     <string name="extension_settings">Extension settings</string>
     <string name="action_save_screenshot">Save screenshot</string>
+    <!-- Subtitle settings -->
+    <string name="player_subtitle_settings">Subtitle settings</string>
+    <string name="player_override_subtitle_style">Override subtitle style</string>
 </resources>
