@@ -81,7 +81,7 @@ class PlayerPreferences(
 
     fun italicSubtitles() = preferenceStore.getBoolean("pref_italic_subtitles", false)
 
-    fun textColourSubtitles() = preferenceStore.getInt("pref_text_colour_subtitles", 0)
-    fun borderColourSubtitles() = preferenceStore.getLong("pref_border_colour_subtitles", 0x000000FFL)
-    fun backgroundColourSubtitles() = preferenceStore.getLong("pref_background_colour_subtitles", 0x00000000L)
+    fun textColorSubtitles() = preferenceStore.getInt("pref_text_color_subtitles", 0)
+    fun borderColorSubtitles() = preferenceStore.getLong("pref_border_color_subtitles", 0x000000FFL)
+    fun backgroundColorSubtitles() = preferenceStore.getLong("pref_background_color_subtitles", 0x00000000L)
 }
