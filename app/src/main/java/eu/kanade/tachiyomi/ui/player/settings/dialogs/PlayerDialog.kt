@@ -25,7 +25,7 @@ fun PlayerDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        modifier = modifier.fillMaxWidth(fraction = 0.8F),
+        modifier = modifier,
         properties = DialogProperties(
             dismissOnBackPress = true,
             dismissOnClickOutside = true,
