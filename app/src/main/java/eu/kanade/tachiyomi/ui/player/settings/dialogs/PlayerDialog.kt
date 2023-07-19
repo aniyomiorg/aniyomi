@@ -27,6 +27,8 @@ fun PlayerDialog(
         onDismissRequest = onDismissRequest,
         modifier = modifier.fillMaxWidth(fraction = 0.8F),
         properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true,
             usePlatformDefaultWidth = false,
             decorFitsSystemWindows = false,
         ),

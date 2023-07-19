@@ -13,8 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.DialogProperties
-import androidx.core.view.WindowInsetsControllerCompat
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import eu.kanade.tachiyomi.R
 import tachiyomi.presentation.core.components.WheelTextPicker
 
@@ -28,7 +26,7 @@ fun SkipIntroLengthDialog(
 ) {
     var newLength = 0
 
-    if(fromPlayer) {
+    if (fromPlayer) {
         PlayerDialog(
             titleRes = R.string.action_change_intro_length,
             onDismissRequest = {
