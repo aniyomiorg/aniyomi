@@ -296,5 +296,7 @@
     <!-- Subtitle settings -->
     <string name="player_subtitle_settings">Subtitle settings</string>
     <string name="player_override_subtitle_style">Override subtitle style</string>
-    <string name="player_subtitle_text_color">Text color</string>
+    <string name="player_subtitle_text_color">Text</string>
+    <string name="player_subtitle_border_color">Border</string>
+    <string name="player_subtitle_background_color">Background</string>
 </resources>

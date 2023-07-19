@@ -5,22 +5,25 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.FormatBold
 import androidx.compose.material.icons.outlined.FormatItalic
 import androidx.compose.material.icons.outlined.FormatSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -77,7 +80,7 @@ fun SubtitleSettingsDialog(
 }
 
 @Composable
-private fun ColumnScope.SubtitleLook(
+private fun SubtitleLook(
     screenModel: PlayerSettingsScreenModel,
 ) {
     val boldSubtitles by screenModel.preferences.boldSubtitles().collectAsState()
@@ -95,7 +98,7 @@ private fun ColumnScope.SubtitleLook(
         MPVLib.setPropertyString("sub-italic", toItalicize)
     }
 
-    Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+    Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
         Icon(
             imageVector = Icons.Outlined.FormatSize,
             contentDescription = null,
@@ -128,31 +131,103 @@ private fun ColumnScope.SubtitleLook(
 private fun SubtitleColors(
     screenModel: PlayerSettingsScreenModel,
 ) {
-    SubtitleColorSlider(
-        preference = screenModel.preferences.textColorSubtitles(),
-        argb = ARGBValue.ALPHA,
-    )
+    var subsColor by remember { mutableStateOf(SubsColor.NONE) }
 
-    SubtitleColorSlider(
-        preference = screenModel.preferences.textColorSubtitles(),
-        argb = ARGBValue.RED,
-    )
+    fun updateType(newColor: SubsColor) {
+        subsColor = if (newColor != subsColor) newColor else SubsColor.NONE
+    }
 
-    SubtitleColorSlider(
-        preference = screenModel.preferences.textColorSubtitles(),
-        argb = ARGBValue.GREEN,
-    )
+    Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
+        SubtitleColorSelector(
+            label = R.string.player_subtitle_text_color,
+            onClick = { updateType(SubsColor.TEXT) },
+            selected = subsColor == SubsColor.TEXT,
+            preference = screenModel.preferences.textColorSubtitles(),
 
-    SubtitleColorSlider(
-        preference = screenModel.preferences.textColorSubtitles(),
-        argb = ARGBValue.BLUE,
-    )
+        )
+        SubtitleColorSelector(
+            label = R.string.player_subtitle_border_color,
+            onClick = { updateType(SubsColor.BORDER) },
+            selected = subsColor == SubsColor.BORDER,
+            preference = screenModel.preferences.borderColorSubtitles(),
+        )
+        SubtitleColorSelector(
+            label = R.string.player_subtitle_background_color,
+            onClick = { updateType(SubsColor.BACKGROUND) },
+            selected = subsColor == SubsColor.BACKGROUND,
+            preference = screenModel.preferences.backgroundColorSubtitles(),
+        )
+    }
+
+    if (subsColor != SubsColor.NONE) {
+        SubtitleColorSlider(
+            argb = ARGBValue.ALPHA,
+            subsColor = subsColor,
+            preference = subsColor.preference(screenModel.preferences),
+        )
+
+        SubtitleColorSlider(
+            argb = ARGBValue.RED,
+            subsColor = subsColor,
+            preference = subsColor.preference(screenModel.preferences),
+        )
+
+        SubtitleColorSlider(
+            argb = ARGBValue.GREEN,
+            subsColor = subsColor,
+            preference = subsColor.preference(screenModel.preferences),
+        )
+
+        SubtitleColorSlider(
+            argb = ARGBValue.BLUE,
+            subsColor = subsColor,
+            preference = subsColor.preference(screenModel.preferences),
+        )
+    }
+}
+
+@Composable
+private fun SubtitleColorSelector(
+    @StringRes label: Int,
+    selected: Boolean,
+    onClick: () -> Unit,
+    preference: Preference<Int>,
+) {
+    val colorCode by preference.collectAsState()
+
+    val borderColor = MaterialTheme.colorScheme.onSurface
+    Column(
+        modifier = Modifier.clickable(onClick = onClick),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(text = stringResource(label))
+        Canvas(
+            modifier = Modifier
+                .wrapContentSize(Alignment.Center)
+                .requiredSize(20.dp),
+        ) {
+            drawColorBox(
+                boxColor = Color(colorCode),
+                borderColor = borderColor,
+                radius = floor(2.dp.toPx()),
+                strokeWidth = floor(2.dp.toPx()),
+            )
+        }
+
+        Text(text = colorCode.toHexString())
+
+        if (selected) {
+            Icon(imageVector = Icons.Outlined.ArrowDropDown, contentDescription = null)
+        }
+    }
 }
 
 @Composable
 private fun SubtitleColorSlider(
-    preference: Preference<Int>,
     argb: ARGBValue,
+    subsColor: SubsColor,
+    preference: Preference<Int>,
 ) {
     val colorCode by preference.collectAsState()
 
@@ -168,7 +243,12 @@ private fun SubtitleColorSlider(
         )
 
         val borderColor = MaterialTheme.colorScheme.onSurface
-        Canvas(modifier = Modifier.wrapContentSize(Alignment.Center).requiredSize(20.dp).weight(0.5f)) {
+        Canvas(
+            modifier = Modifier
+                .wrapContentSize(Alignment.Center)
+                .requiredSize(20.dp)
+                .weight(0.5f),
+        ) {
             drawColorBox(
                 boxColor = argb.asColor(colorCode),
                 borderColor = borderColor,
@@ -187,11 +267,11 @@ private fun SubtitleColorSlider(
             value = argb.toValue(colorCode).toFloat(),
             onValueChange = { newColorValue ->
                 preference.getAndSet { getColorValue(it, newColorValue, argb.mask, argb.bitShift) }
+                MPVLib.setPropertyString(subsColor.mpvProperty, colorCode.toHexString())
             },
             modifier = Modifier.weight(10f),
             valueRange = 0f..255f,
             steps = 255,
-            colors = SliderDefaults.colors(thumbColor = argb.asColor(colorCode), activeTrackColor = argb.asColor(colorCode)),
         )
     }
 }
@@ -230,6 +310,14 @@ private fun DrawScope.drawColorBox(
     }
 }
 
+private enum class SubsColor(val mpvProperty: String, val preference: (PlayerPreferences) -> Preference<Int>) {
+    NONE("", PlayerPreferences::textColorSubtitles),
+    TEXT("sub-color", PlayerPreferences::textColorSubtitles),
+    BORDER("sub-border-color", PlayerPreferences::borderColorSubtitles),
+    BACKGROUND("sub-back-color", PlayerPreferences::backgroundColorSubtitles),
+    ;
+}
+
 private enum class ARGBValue(@StringRes val label: Int, val mask: Long, val bitShift: Int, val toValue: (Int) -> Int, val asColor: (Int) -> Color) {
 
     ALPHA(R.string.color_filter_a_value, 0xFF000000L, 24, ::toAlpha, ::asAlpha),
@@ -250,3 +338,12 @@ private fun asGreen(color: Int) = Color((color.toLong() and 0x0000FF00L) or 0xFF
 
 private fun toBlue(color: Int) = (color ushr 0) and 0xFF
 private fun asBlue(color: Int) = Color((color.toLong() and 0x000000FFL) or 0xFF000000L)
+
+fun Int.toHexString(): String {
+    val colorCodeAlpha = String.format("%02X", toAlpha(this))
+    val colorCodeRed = String.format("%02X", toRed(this))
+    val colorCodeGreen = String.format("%02X", toGreen(this))
+    val colorCodeBlue = String.format("%02X", toBlue(this))
+
+    return "#$colorCodeAlpha$colorCodeRed$colorCodeGreen$colorCodeBlue"
+}
