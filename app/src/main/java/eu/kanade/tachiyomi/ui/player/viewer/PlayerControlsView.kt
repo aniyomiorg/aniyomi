@@ -243,7 +243,7 @@ class PlayerControlsView @JvmOverloads constructor(context: Context, attrs: Attr
     private val animationHandler = Handler(Looper.getMainLooper())
 
     // Fade out Player controls
-    private val fadeOutControlsRunnable = Runnable { fadeOutControls() }
+    internal val fadeOutControlsRunnable = Runnable { fadeOutControls() }
 
     internal fun lockControls(locked: Boolean) {
         SeekState.mode = if (locked) SeekState.LOCKED else SeekState.NONE

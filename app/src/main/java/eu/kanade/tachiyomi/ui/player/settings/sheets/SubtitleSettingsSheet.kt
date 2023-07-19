@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.ui.player.settings.dialogs
+package eu.kanade.tachiyomi.ui.player.settings.sheets
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Canvas
@@ -6,9 +6,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
@@ -45,11 +48,12 @@ import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.getAndSet
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.material.ReadItemAlpha
+import tachiyomi.presentation.core.components.material.padding
 import kotlin.math.floor
 import kotlin.math.max
 
 @Composable
-fun SubtitleSettingsDialog(
+fun SubtitleSettingsSheet(
     screenModel: PlayerSettingsScreenModel,
     onDismissRequest: () -> Unit,
 ) {
@@ -61,7 +65,7 @@ fun SubtitleSettingsDialog(
         MPVLib.setPropertyString("sub-ass-override", overrideType)
     }
 
-    PlayerDialog(
+    PlayerSheet(
         titleRes = R.string.player_subtitle_settings,
         onDismissRequest = onDismissRequest,
     ) {
@@ -159,30 +163,32 @@ private fun SubtitleColors(
         )
     }
 
-    if (subsColor != SubsColor.NONE) {
-        SubtitleColorSlider(
-            argb = ARGBValue.ALPHA,
-            subsColor = subsColor,
-            preference = subsColor.preference(screenModel.preferences),
-        )
+    Column(verticalArrangement = Arrangement.SpaceEvenly) {
+        if (subsColor != SubsColor.NONE) {
+            SubtitleColorSlider(
+                argb = ARGBValue.ALPHA,
+                subsColor = subsColor,
+                preference = subsColor.preference(screenModel.preferences),
+            )
 
-        SubtitleColorSlider(
-            argb = ARGBValue.RED,
-            subsColor = subsColor,
-            preference = subsColor.preference(screenModel.preferences),
-        )
+            SubtitleColorSlider(
+                argb = ARGBValue.RED,
+                subsColor = subsColor,
+                preference = subsColor.preference(screenModel.preferences),
+            )
 
-        SubtitleColorSlider(
-            argb = ARGBValue.GREEN,
-            subsColor = subsColor,
-            preference = subsColor.preference(screenModel.preferences),
-        )
+            SubtitleColorSlider(
+                argb = ARGBValue.GREEN,
+                subsColor = subsColor,
+                preference = subsColor.preference(screenModel.preferences),
+            )
 
-        SubtitleColorSlider(
-            argb = ARGBValue.BLUE,
-            subsColor = subsColor,
-            preference = subsColor.preference(screenModel.preferences),
-        )
+            SubtitleColorSlider(
+                argb = ARGBValue.BLUE,
+                subsColor = subsColor,
+                preference = subsColor.preference(screenModel.preferences),
+            )
+        }
     }
 }
 
@@ -197,11 +203,14 @@ private fun SubtitleColorSelector(
 
     val borderColor = MaterialTheme.colorScheme.onSurface
     Column(
-        modifier = Modifier.clickable(onClick = onClick),
-        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.clickable(onClick = onClick).padding(MaterialTheme.padding.small),
+        verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(text = stringResource(label))
+
+        Spacer(modifier = Modifier.width(MaterialTheme.padding.tiny))
+
         Canvas(
             modifier = Modifier
                 .wrapContentSize(Alignment.Center)
@@ -214,6 +223,8 @@ private fun SubtitleColorSelector(
                 strokeWidth = floor(2.dp.toPx()),
             )
         }
+
+        Spacer(modifier = Modifier.width(MaterialTheme.padding.tiny))
 
         Text(text = colorCode.toHexString())
 
@@ -235,19 +246,21 @@ private fun SubtitleColorSlider(
         return (color.toInt() shl bitShift) or (currentColor and mask.inv().toInt())
     }
 
-    Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Spacer(modifier = Modifier.width(MaterialTheme.padding.small))
+
         Text(
             text = stringResource(argb.label),
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.weight(0.5f),
         )
+
+        Spacer(modifier = Modifier.width(MaterialTheme.padding.small))
 
         val borderColor = MaterialTheme.colorScheme.onSurface
         Canvas(
             modifier = Modifier
                 .wrapContentSize(Alignment.Center)
-                .requiredSize(20.dp)
-                .weight(0.5f),
+                .requiredSize(20.dp),
         ) {
             drawColorBox(
                 boxColor = argb.asColor(colorCode),
@@ -257,11 +270,14 @@ private fun SubtitleColorSlider(
             )
         }
 
+        Spacer(modifier = Modifier.width(MaterialTheme.padding.small))
+
         val colorValue = argb.toValue(colorCode)
         Text(
             text = String.format("%03d", colorValue),
-            modifier = Modifier.weight(0.5f),
         )
+
+        Spacer(modifier = Modifier.width(MaterialTheme.padding.small))
 
         Slider(
             value = argb.toValue(colorCode).toFloat(),
@@ -269,10 +285,11 @@ private fun SubtitleColorSlider(
                 preference.getAndSet { getColorValue(it, newColorValue, argb.mask, argb.bitShift) }
                 MPVLib.setPropertyString(subsColor.mpvProperty, colorCode.toHexString())
             },
-            modifier = Modifier.weight(10f),
             valueRange = 0f..255f,
             steps = 255,
         )
+
+        Spacer(modifier = Modifier.width(MaterialTheme.padding.small))
     }
 }
 

@@ -55,9 +55,9 @@ import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
 
 private const val SheetAnimationDuration = 500
-private val SheetAnimationSpec = tween<Float>(durationMillis = SheetAnimationDuration)
+val SheetAnimationSpec = tween<Float>(durationMillis = SheetAnimationDuration)
 private const val ScrimAnimationDuration = 350
-private val ScrimAnimationSpec = tween<Float>(durationMillis = ScrimAnimationDuration)
+val ScrimAnimationSpec = tween<Float>(durationMillis = ScrimAnimationDuration)
 
 @Composable
 fun AdaptiveSheet(
@@ -210,7 +210,7 @@ fun AdaptiveSheet(
 /**
  * Yoinked from Swipeable.kt with modifications to disable
  */
-private fun <T> SwipeableState<T>.preUpPostDownNestedScrollConnection(
+fun <T> SwipeableState<T>.preUpPostDownNestedScrollConnection(
     enabled: Boolean = true,
     anchor: Map<Float, T>,
 ) = object : NestedScrollConnection {

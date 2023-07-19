@@ -33,7 +33,7 @@ fun PlayerDialog(
             decorFitsSystemWindows = false,
         ),
     ) {
-        Surface(shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth()) {
+        Surface(shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth(), tonalElevation = 1.dp) {
             rememberSystemUiController().apply {
                 isSystemBarsVisible = false
                 systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE

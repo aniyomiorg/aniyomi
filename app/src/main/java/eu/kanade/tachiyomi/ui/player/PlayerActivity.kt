@@ -51,7 +51,7 @@ import eu.kanade.tachiyomi.ui.player.settings.dialogs.DefaultDecoderDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.EpisodeListDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SkipIntroLengthDialog
 import eu.kanade.tachiyomi.ui.player.settings.dialogs.SpeedPickerDialog
-import eu.kanade.tachiyomi.ui.player.settings.dialogs.SubtitleSettingsDialog
+import eu.kanade.tachiyomi.ui.player.settings.sheets.SubtitleSettingsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerChaptersSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerOptionsSheet
 import eu.kanade.tachiyomi.ui.player.settings.sheets.PlayerScreenshotSheet
@@ -366,7 +366,7 @@ class PlayerActivity : BaseActivity() {
                 }
 
                 is PlayerViewModel.Dialog.SubtitleSettings -> {
-                    SubtitleSettingsDialog(
+                    SubtitleSettingsSheet(
                         screenModel = PlayerSettingsScreenModel(viewModel.playerPreferences),
                         onDismissRequest = pauseForDialog(),
                     )
@@ -461,8 +461,13 @@ class PlayerActivity : BaseActivity() {
     private fun pauseForDialog(): () -> Unit {
         val wasPlayerPaused = player.paused ?: true // default to not changing state
         player.paused = true
+        playerControls.fadeOutControlsRunnable.run()
         return {
-            if (!wasPlayerPaused) player.paused = false
+            if (!wasPlayerPaused) {
+                player.paused = false
+            } else {
+                playerControls.showAndFadeControls()
+            }
             viewModel.closeDialog()
             refreshUi()
         }
