@@ -32,10 +32,10 @@ fun PlayerDialog(
         ),
     ) {
         Surface(shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth()) {
-            val systemUIController = rememberSystemUiController()
-            systemUIController.isSystemBarsVisible = false
-            systemUIController.systemBarsBehavior =
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            rememberSystemUiController().apply {
+                isSystemBarsVisible = false
+                systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
 
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
@@ -47,39 +47,4 @@ fun PlayerDialog(
             }
         }
     }
-}
-
-@Composable
-fun PlayerDialog(
-    @StringRes titleRes: Int,
-    modifier: Modifier = Modifier,
-    hideSystemBars: Boolean,
-    confirmButton: @Composable () -> Unit,
-    dismissButton: @Composable () -> Unit,
-    onDismissRequest: () -> Unit,
-    content: @Composable () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        modifier = modifier.fillMaxWidth(fraction = 0.8F),
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false,
-            decorFitsSystemWindows = false,
-        ),
-        title = { Text(text = stringResource(titleRes)) },
-        text = {
-            Surface(shape = MaterialTheme.shapes.large, modifier = Modifier.fillMaxWidth()) {
-                if (hideSystemBars) {
-                    rememberSystemUiController().apply {
-                        isSystemBarsVisible = false
-                        systemBarsBehavior =
-                            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                    }
-                }
-                content()
-            }
-        },
-        confirmButton = confirmButton,
-        dismissButton = dismissButton,
-    )
 }
