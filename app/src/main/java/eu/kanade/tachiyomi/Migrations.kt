@@ -27,7 +27,7 @@ import tachiyomi.core.preference.getEnum
 import tachiyomi.domain.backup.service.BackupPreferences
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.library.service.LibraryPreferences
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.MANGA_NON_COMPLETED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -274,7 +274,7 @@ object Migrations {
             if (oldVersion < 72) {
                 val oldUpdateOngoingOnly = prefs.getBoolean("pref_update_only_non_completed_key", true)
                 if (!oldUpdateOngoingOnly) {
-                    libraryPreferences.libraryUpdateItemRestriction() -= MANGA_NON_COMPLETED
+                    libraryPreferences.libraryUpdateItemRestriction() -= ENTRY_NON_COMPLETED
                 }
             }
             if (oldVersion < 75) {

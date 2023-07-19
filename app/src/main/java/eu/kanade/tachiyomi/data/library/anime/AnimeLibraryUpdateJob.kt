@@ -64,9 +64,9 @@ import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.service.LibraryPreferences
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.ANIME_HAS_UNSEEN
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.ANIME_NON_COMPLETED
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.ANIME_NON_SEEN
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_BATTERY_NOT_LOW
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
@@ -252,13 +252,13 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                     anime,
                                 ) {
                                     when {
-                                        ANIME_NON_COMPLETED in restrictions && anime.status.toInt() == SAnime.COMPLETED ->
+                                        ENTRY_NON_COMPLETED in restrictions && anime.status.toInt() == SAnime.COMPLETED ->
                                             skippedUpdates.add(anime to context.getString(R.string.skipped_reason_completed))
 
-                                        ANIME_HAS_UNSEEN in restrictions && libraryAnime.unseenCount != 0L ->
+                                        ENTRY_HAS_UNVIEWED in restrictions && libraryAnime.unseenCount != 0L ->
                                             skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_caught_up))
 
-                                        ANIME_NON_SEEN in restrictions && libraryAnime.totalEpisodes > 0L && !libraryAnime.hasStarted ->
+                                        ENTRY_NON_VIEWED in restrictions && libraryAnime.totalEpisodes > 0L && !libraryAnime.hasStarted ->
                                             skippedUpdates.add(anime to context.getString(R.string.skipped_reason_not_started))
 
                                         anime.updateStrategy != UpdateStrategy.ALWAYS_UPDATE ->
@@ -283,7 +283,7 @@ class AnimeLibraryUpdateJob(private val context: Context, workerParams: WorkerPa
                                                 }
                                             } catch (e: Throwable) {
                                                 val errorMessage = when (e) {
-                                                    is NoEpisodesException -> context.getString(R.string.no_chapters_error)
+                                                    is NoEpisodesException -> context.getString(R.string.no_episodes_error)
                                                     // failedUpdates will already have the source, don't need to copy it into the message
                                                     is AnimeSourceNotInstalledException -> context.getString(R.string.loader_not_implemented_error)
                                                     else -> e.message

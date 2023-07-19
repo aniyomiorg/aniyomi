@@ -50,9 +50,9 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_BATT
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_ONLY_ON_WIFI
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.MANGA_HAS_UNREAD
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.MANGA_NON_COMPLETED
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.MANGA_NON_READ
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
 import tachiyomi.presentation.core.components.WheelPicker
 import tachiyomi.presentation.core.components.WheelPickerDefaults
 import uy.kohesive.injekt.Injekt
@@ -312,9 +312,9 @@ object SettingsLibraryScreen : SearchableSettings {
                     pref = libraryUpdateMangaRestrictionPref,
                     title = stringResource(R.string.pref_library_update_manga_restriction),
                     entries = mapOf(
-                        MANGA_HAS_UNREAD to stringResource(R.string.pref_update_only_completely_read),
-                        MANGA_NON_READ to stringResource(R.string.pref_update_only_started),
-                        MANGA_NON_COMPLETED to stringResource(R.string.pref_update_only_non_completed),
+                        ENTRY_HAS_UNVIEWED to stringResource(R.string.pref_update_only_completely_read),
+                        ENTRY_NON_VIEWED to stringResource(R.string.pref_update_only_started),
+                        ENTRY_NON_COMPLETED to stringResource(R.string.pref_update_only_non_completed),
                     ),
                 ),
                 Preference.PreferenceItem.TextPreference(
