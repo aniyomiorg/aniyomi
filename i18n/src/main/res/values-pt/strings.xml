@@ -139,7 +139,6 @@
     <string name="sort_by_source">Por fonte</string>
     <string name="sort_by_number">Por número de capítulo</string>
     <string name="manga_download">Transferir</string>
-    <string name="download_all">Tudo</string>
     <string name="download_unread">Não lidos</string>
     <string name="confirm_delete_chapters">Tem certeza de que deseja eliminar os capítulos selecionados\?</string>
     
@@ -264,7 +263,7 @@
     <string name="browse">Navegar</string>
     <string name="manga_added_library">Adicionado à biblioteca</string>
     <string name="manga_removed_library">Removido da biblioteca</string>
-    <string name="delete_downloads_for_manga">Eliminar capítulos transferidos\?</string>
+    <string name="delete_downloads_for_manga">Eliminar capítulos descarregados\?</string>
     <string name="copied_to_clipboard">Copiado para área de transferência:
 \n%1$s</string>
     <string name="source_not_installed">Fonte não instalada: %1$s</string>
@@ -293,7 +292,7 @@
     <string name="copy">Copiar</string>
     <string name="notification_cover_update_failed">Falha ao atualizar a capa</string>
     <string name="information_empty_category">Não tem nenhuma categoria. Toque no botão (+) para criar uma e organizar a sua biblioteca.</string>
-    <string name="download_notifier_downloader_title">Gestor de transferências</string>
+    <string name="download_notifier_downloader_title">Descarregador</string>
     <string name="download_notifier_no_network">Conexão à rede indisponível</string>
     <string name="channel_common">Comum</string>
     <string name="filter_mode_overlay">Sobrepor</string>
@@ -775,7 +774,7 @@
     <string name="label_read_duration">Duração de leitura</string>
     <string name="pref_security_summary">Bloqueio da app, ecrã seguro</string>
     <string name="pref_advanced_summary">Exportar registos de travamento, otimizações de bateria</string>
-    <string name="pref_invalidate_download_cache">Invalidar o índice de downloads</string>
+    <string name="pref_invalidate_download_cache">Invalidar o índice de descargas</string>
     <string name="track_remove_finish_date_conf_text">Isto irá remover a sua data de término selecionada anteriormente no %s</string>
     <string name="pref_worker_info">Informações do worker</string>
     <string name="minute_short">%dm</string>
@@ -784,7 +783,7 @@
     <string name="label_mean_score">Avaliação média</string>
     <string name="label_used">Usados</string>
     <string name="seconds_short">%ds</string>
-    <string name="download_notifier_cache_renewal">Verificando os downloads</string>
+    <string name="download_notifier_cache_renewal">A verificar as descargas</string>
     <string name="track_remove_date_conf_title">Remover data\?</string>
     <string name="label_overview_section">Visão geral</string>
     <string name="label_completed_titles">Itens completos</string>
@@ -800,4 +799,5 @@
         <item quantity="many">Próximos %d capítulos</item>
         <item quantity="other">Próximos %d capítulos</item>
     </plurals>
+    <string name="action_update_category">Atualizar categoria</string>
     </resources>

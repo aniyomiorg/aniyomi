@@ -22,17 +22,17 @@ import eu.kanade.tachiyomi.data.backup.models.IntPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.LongPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.StringPreferenceValue
 import eu.kanade.tachiyomi.data.backup.models.StringSetPreferenceValue
-import eu.kanade.tachiyomi.data.database.models.anime.Anime
-import eu.kanade.tachiyomi.data.database.models.anime.AnimeTrack
-import eu.kanade.tachiyomi.data.database.models.anime.Episode
-import eu.kanade.tachiyomi.data.database.models.manga.Chapter
-import eu.kanade.tachiyomi.data.database.models.manga.Manga
-import eu.kanade.tachiyomi.data.database.models.manga.MangaTrack
 import eu.kanade.tachiyomi.util.BackupUtil
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import eu.kanade.tachiyomi.util.system.createFileInCacheDir
 import kotlinx.coroutines.Job
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.anime.model.Anime
+import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.model.Chapter
+import tachiyomi.domain.items.episode.model.Episode
+import tachiyomi.domain.track.anime.model.AnimeTrack
+import tachiyomi.domain.track.manga.model.MangaTrack
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -184,7 +184,7 @@ class BackupRestorer(
             } else {
                 // Manga in database
                 // Copy information from manga already in database
-                backupManager.restoreExistingManga(manga, dbManga)
+                val manga = backupManager.restoreExistingManga(manga, dbManga)
                 // Fetch rest of manga information
                 restoreNewManga(manga, chapters, categories, history, tracks, backupCategories)
             }
@@ -213,8 +213,6 @@ class BackupRestorer(
         backupCategories: List<BackupCategory>,
     ) {
         val fetchedManga = backupManager.restoreNewManga(manga)
-        fetchedManga.id ?: return
-
         backupManager.restoreChapters(fetchedManga, chapters)
         restoreExtras(fetchedManga, categories, history, tracks, backupCategories)
     }
@@ -253,7 +251,7 @@ class BackupRestorer(
             } else {
                 // Anime in database
                 // Copy information from anime already in database
-                backupManager.restoreExistingAnime(anime, dbAnime)
+                val anime = backupManager.restoreExistingAnime(anime, dbAnime)
                 // Fetch rest of anime information
                 restoreNewAnime(anime, episodes, categories, history, tracks, backupCategories)
             }
@@ -282,8 +280,6 @@ class BackupRestorer(
         backupCategories: List<BackupCategory>,
     ) {
         val fetchedAnime = backupManager.restoreNewAnime(anime)
-        fetchedAnime.id ?: return
-
         backupManager.restoreEpisodes(fetchedAnime, episodes)
         restoreExtras(fetchedAnime, categories, history, tracks, backupCategories)
     }

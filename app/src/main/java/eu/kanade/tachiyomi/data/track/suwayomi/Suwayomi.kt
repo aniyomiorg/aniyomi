@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.data.track.suwayomi
 
-import android.content.Context
 import android.graphics.Color
 import androidx.annotation.StringRes
 import eu.kanade.tachiyomi.R
@@ -13,7 +12,7 @@ import eu.kanade.tachiyomi.source.MangaSource
 import tachiyomi.domain.entries.manga.model.Manga as DomainManga
 import tachiyomi.domain.track.manga.model.MangaTrack as DomainTrack
 
-class Suwayomi(private val context: Context, id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTrackService {
+class Suwayomi(id: Long) : TrackService(id), EnhancedMangaTrackService, MangaTrackService {
     val api by lazy { TachideskApi() }
 
     @StringRes
@@ -31,13 +30,12 @@ class Suwayomi(private val context: Context, id: Long) : TrackService(id), Enhan
 
     override fun getStatusListManga() = listOf(UNREAD, READING, COMPLETED)
 
-    override fun getStatus(status: Int): String = with(context) {
-        when (status) {
-            UNREAD -> getString(R.string.unread)
-            READING -> getString(R.string.reading)
-            COMPLETED -> getString(R.string.completed)
-            else -> ""
-        }
+    @StringRes
+    override fun getStatus(status: Int): Int? = when (status) {
+        UNREAD -> R.string.unread
+        READING -> R.string.reading
+        COMPLETED -> R.string.completed
+        else -> null
     }
 
     override fun getReadingStatus(): Int = READING

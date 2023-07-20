@@ -10,16 +10,12 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.core.preference.asState
 import eu.kanade.core.util.addOrRemove
-import eu.kanade.domain.download.service.DownloadPreferences
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
 import eu.kanade.domain.entries.manga.model.downloadedFilter
 import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.entries.manga.model.toSManga
-import eu.kanade.domain.items.chapter.interactor.SetMangaDefaultChapterFlags
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithSource
-import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.track.manga.model.toDbTrack
 import eu.kanade.domain.track.service.TrackPreferences
 import eu.kanade.domain.ui.UiPreferences
 import eu.kanade.presentation.entries.DownloadAction
@@ -33,7 +29,6 @@ import eu.kanade.tachiyomi.data.track.MangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.network.HttpException
 import eu.kanade.tachiyomi.source.MangaSource
-import eu.kanade.tachiyomi.source.manga.MangaSourceManager
 import eu.kanade.tachiyomi.ui.entries.manga.track.MangaTrackItem
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.util.chapter.getNextUnread
@@ -61,17 +56,21 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.SetMangaCategories
 import tachiyomi.domain.category.model.Category
+import tachiyomi.domain.download.service.DownloadPreferences
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.entries.manga.interactor.GetDuplicateLibraryManga
 import tachiyomi.domain.entries.manga.interactor.GetMangaWithChapters
 import tachiyomi.domain.entries.manga.interactor.SetMangaChapterFlags
 import tachiyomi.domain.entries.manga.model.Manga
+import tachiyomi.domain.items.chapter.interactor.SetMangaDefaultChapterFlags
 import tachiyomi.domain.items.chapter.interactor.UpdateChapter
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.model.ChapterUpdate
 import tachiyomi.domain.items.chapter.model.NoChaptersException
 import tachiyomi.domain.items.chapter.service.getChapterSort
+import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -445,7 +444,7 @@ class MangaInfoScreenModel(
 
     private fun observeDownloads() {
         coroutineScope.launchIO {
-            downloadManager.queue.statusFlow()
+            downloadManager.statusFlow()
                 .filter { it.manga.id == successState?.manga?.id }
                 .catch { error -> logcat(LogPriority.ERROR, error) }
                 .collect {
@@ -456,7 +455,7 @@ class MangaInfoScreenModel(
         }
 
         coroutineScope.launchIO {
-            downloadManager.queue.progressFlow()
+            downloadManager.progressFlow()
                 .filter { it.manga.id == successState?.manga?.id }
                 .catch { error -> logcat(LogPriority.ERROR, error) }
                 .collect {
@@ -543,13 +542,6 @@ class MangaInfoScreenModel(
     }
 
     /**
-     * Returns the list of filtered or all chapter items if [skipFiltered] is false.
-     */
-    private fun getChapterItems(): List<ChapterItem> {
-        return if (skipFiltered) filteredChapters.orEmpty().toList() else allChapters.orEmpty()
-    }
-
-    /**
      * Returns the next unread chapter or null if everything is read.
      */
     fun getNextUnreadChapter(): Chapter? {
@@ -558,7 +550,8 @@ class MangaInfoScreenModel(
     }
 
     private fun getUnreadChapters(): List<Chapter> {
-        return getChapterItems()
+        val chapterItems = if (skipFiltered) filteredChapters.orEmpty().toList() else allChapters.orEmpty()
+        return chapterItems
             .filter { (chapter, dlStatus) -> !chapter.read && dlStatus == MangaDownload.State.NOT_DOWNLOADED }
             .map { it.chapter }
     }
@@ -631,7 +624,6 @@ class MangaInfoScreenModel(
             DownloadAction.NEXT_25_ITEMS -> getUnreadChaptersSorted().take(25)
 
             DownloadAction.UNVIEWED_ITEMS -> getUnreadChapters()
-            DownloadAction.ALL_ITEMS -> getChapterItems().map { it.chapter }
         }
         if (!chaptersToDownload.isNotEmpty()) {
             startDownload(chaptersToDownload, false)
@@ -908,10 +900,9 @@ class MangaInfoScreenModel(
             getTracks.subscribe(manga.id)
                 .catch { logcat(LogPriority.ERROR, it) }
                 .map { tracks ->
-                    val dbTracks = tracks.map { it.toDbTrack() }
                     loggedServices
                         // Map to TrackItem
-                        .map { service -> MangaTrackItem(dbTracks.find { it.sync_id.toLong() == service.id }, service) }
+                        .map { service -> MangaTrackItem(tracks.find { it.syncId.toLong() == service.id }, service) }
                         // Show only if the service supports this manga's source
                         .filter { (it.service as? EnhancedMangaTrackService)?.accept(source!!) ?: true }
                 }

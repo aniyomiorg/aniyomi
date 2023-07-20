@@ -1,6 +1,5 @@
 package eu.kanade.domain.source.manga.interactor
 
-import eu.kanade.domain.source.manga.repository.MangaSourceRepository
 import eu.kanade.domain.source.service.SourcePreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -8,6 +7,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import tachiyomi.domain.source.manga.model.Pin
 import tachiyomi.domain.source.manga.model.Pins
 import tachiyomi.domain.source.manga.model.Source
+import tachiyomi.domain.source.manga.repository.MangaSourceRepository
 import tachiyomi.source.local.entries.manga.LocalMangaSource
 
 class GetEnabledMangaSources(

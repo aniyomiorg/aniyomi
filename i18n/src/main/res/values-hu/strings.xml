@@ -273,7 +273,6 @@
     <string name="repeating">Újraolvasás</string>
     <string name="confirm_delete_chapters">Biztosan törölni akarja a kijelölt fejezeteket\?</string>
     <string name="download_unread">Olvasatlan</string>
-    <string name="download_all">Összes</string>
     <string name="source_not_installed">Forrás nincs telepítve: %1$s</string>
     <string name="ongoing">Folyamatban van</string>
     <string name="last_used_source">Utoljára használt</string>

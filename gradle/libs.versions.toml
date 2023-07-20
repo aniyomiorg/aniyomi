@@ -37,7 +37,7 @@ junrar = "com.github.junrar:junrar:7.5.4"
 
 sqlite-framework = { module = "androidx.sqlite:sqlite-framework", version.ref = "sqlite" }
 sqlite-ktx = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqlite" }
-sqlite-android = "com.github.requery:sqlite-android:3.39.2"
+sqlite-android = "com.github.requery:sqlite-android:3.41.1"
 
 preferencektx = "androidx.preference:preference-ktx:1.2.0"
 
@@ -61,8 +61,9 @@ flexible-adapter-ui = "com.github.arkon.FlexibleAdapter:flexible-adapter-ui:c801
 photoview = "com.github.chrisbanes:PhotoView:2.3.0"
 directionalviewpager = "com.github.tachiyomiorg:DirectionalViewPager:1.0.0"
 insetter = "dev.chrisbanes.insetter:insetter:0.6.1"
-cascade = "me.saket.cascade:cascade-compose:2.0.0-rc02"
-materialmotion-core = "io.github.fornewid:material-motion-compose-core:0.10.4"
+compose-cascade = "me.saket.cascade:cascade-compose:2.0.0-rc02"
+compose-materialmotion = "io.github.fornewid:material-motion-compose-core:0.10.4"
+compose-simpleicons = "br.com.devsrsouza.compose.icons.android:simple-icons:1.0.0"
 
 logcat = "com.squareup.logcat:logcat:0.1"
 

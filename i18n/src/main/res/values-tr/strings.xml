@@ -203,7 +203,6 @@
     <string name="sort_by_source">Kaynağa göre</string>
     <string name="sort_by_number">Bölüm numarasına göre</string>
     <string name="manga_download">İndir</string>
-    <string name="download_all">Hepsi</string>
     <string name="download_unread">Okunmayan</string>
     <string name="confirm_delete_chapters">Seçilen bölümleri silmek istediğinize emin misiniz?</string>
     <string name="manga_tracking_tab">İzleme</string>
@@ -737,4 +736,5 @@
         <item quantity="other">Sonraki %d bölüm</item>
     </plurals>
     <string name="action_copy_to_clipboard">Panoya kopyala</string>
+    <string name="action_update_category">Kategoriyi güncelle</string>
     </resources>

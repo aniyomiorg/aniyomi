@@ -499,12 +499,12 @@
     <string name="action_global_search_query">إبحث عن \"%1$s\" بشكلٍ شامل</string>
     <string name="updated_version">حُدِّث إلى الإصدار v%1$s</string>
     <plurals name="missing_chapters_warning">
-        <item quantity="zero">لم يتخطَّى أيُّ فصل</item>
-        <item quantity="one">تُخطِّي فصل</item>
-        <item quantity="two">تُخطِّي فصلان</item>
-        <item quantity="few">تُخطِّيت %d فصول</item>
-        <item quantity="many">تُخطِّي %d فصلًا</item>
-        <item quantity="other">تُخطِّي %d فصل</item>
+        <item quantity="zero">لم يتم تخطِّي أي فصل</item>
+        <item quantity="one">تم تخطِّي فصل</item>
+        <item quantity="two">تم تخطِّي فصلان</item>
+        <item quantity="few">تم تخطِّي بعض الفصول</item>
+        <item quantity="many">تم تخطِّي فصول</item>
+        <item quantity="other">غير ذلك</item>
     </plurals>
     <string name="no_chapters_error">لم يتم العثور على الفصول</string>
     <string name="share_page_info">%1$s: %2$s, صفحة %3$d</string>
@@ -786,4 +786,5 @@
         <item quantity="other">%d فصل تالي</item>
     </plurals>
     <string name="pref_hide_in_library_items">إخفاء الإدخالات الموجودة بالفعل في المكتبة</string>
+    <string name="action_update_category">تحديث الفئة</string>
     </resources>

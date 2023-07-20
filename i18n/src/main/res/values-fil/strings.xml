@@ -245,7 +245,7 @@
     <string name="pref_restore_backup">I-restore ang backup</string>
     <string name="pref_create_backup_summ">Magagamit para ma-restore ang kasalukuyang Aklatan</string>
     <string name="pref_create_backup">Mag-backup</string>
-    <string name="pref_search_pinned_sources_only">Isama lang ang mga naka-pin</string>
+    <string name="pref_search_pinned_sources_only">Hanapin lamang ang mga naka-pin na mapagkukunan sa pangkalahatang paghahanap</string>
     <string name="tracking_info">One-way na pag-sync upang i-update ang pag-unlad ng kabanata sa mga serbisyo sa pagsubaybay. I-set up ang pagsubaybay para sa mga indibidwal na entry mula sa kanilang button sa pagsubaybay.</string>
     <string name="services">Mga Serbisyo</string>
     <string name="pref_download_new">I-download ang mga bago</string>
@@ -347,7 +347,6 @@
     <string name="manga_tracking_tab">Pagta-track</string>
     <string name="confirm_delete_chapters">Sigurado ka bang gusto mong burahin ang (mga) piniling kabanata\?</string>
     <string name="download_unread">Babasahin</string>
-    <string name="download_all">Lahat</string>
     <string name="manga_download">I-download</string>
     <string name="sort_by_upload_date">Base sa petsa ng pag-upload</string>
     <string name="sort_by_number">Base sa bilang</string>
@@ -460,7 +459,7 @@
     <string name="ext_nsfw_short">18+</string>
     <plurals name="missing_chapters_warning">
         <item quantity="one">Nilaktawan ang %d na kabanata, maaaring ito ay wala sa pinagmula o na-filter ang mga ito</item>
-        <item quantity="other">Nilaktawan ang %d na mga chapter, maaaring wala ang pinagmulan nila o na-filter ang mga ito</item>
+        <item quantity="other">Nilaktawan ang %d na (mga) kabanata, maaaring wala ang pinagmulan nila o na-filter ang mga ito</item>
     </plurals>
     <string name="no_chapters_error">Walang nakitang kabanata</string>
     <string name="confirm_set_chapter_settings">Gusto mo bang i-save at ipagpaubaya ang pagsasaayos na ito\?</string>
@@ -742,4 +741,5 @@
         <item quantity="one">Susunod na kabanata</item>
         <item quantity="other">Susunod na %d (mga) kabanata</item>
     </plurals>
+    <string name="action_update_category">I-update ang kategorya</string>
     </resources>

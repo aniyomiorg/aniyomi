@@ -200,7 +200,6 @@
     <string name="sort_by_source">ソースに基づいた順</string>
     <string name="sort_by_number">章番号順</string>
     <string name="manga_download">ダウンロード</string>
-    <string name="download_all">すべて</string>
     <string name="download_unread">未読</string>
     <string name="confirm_delete_chapters">選択した章を削除してもよろしいですか？</string>
     <string name="manga_tracking_tab">同期</string>
@@ -722,4 +721,5 @@
     <plurals name="download_amount">
         <item quantity="other">次の%d章</item>
     </plurals>
+    <string name="action_update_category">カテゴリを更新</string>
     </resources>

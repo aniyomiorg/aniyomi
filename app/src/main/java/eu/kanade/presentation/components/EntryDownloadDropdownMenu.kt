@@ -13,7 +13,6 @@ fun EntryDownloadDropdownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     onDownloadClicked: (DownloadAction) -> Unit,
-    includeDownloadAllOption: Boolean = true,
     isManga: Boolean,
 ) {
     DropdownMenu(
@@ -28,7 +27,6 @@ fun EntryDownloadDropdownMenu(
             DownloadAction.NEXT_10_ITEMS to pluralStringResource(downloadAmount, 10, 10),
             DownloadAction.NEXT_25_ITEMS to pluralStringResource(downloadAmount, 25, 25),
             DownloadAction.UNVIEWED_ITEMS to stringResource(downloadUnviewed),
-            (DownloadAction.ALL_ITEMS to stringResource(R.string.download_all)).takeIf { includeDownloadAllOption },
         ).map { (downloadAction, string) ->
             DropdownMenuItem(
                 text = { Text(text = string) },

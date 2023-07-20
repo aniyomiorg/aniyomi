@@ -18,10 +18,7 @@ import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toDomainAnime
 import eu.kanade.domain.entries.anime.model.toSAnime
-import eu.kanade.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
-import eu.kanade.domain.library.service.LibraryPreferences
-import eu.kanade.domain.source.anime.interactor.GetRemoteAnime
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.model.toDomainTrack
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
@@ -30,13 +27,14 @@ import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedAnimeTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
 import eu.kanade.tachiyomi.data.track.TrackService
-import eu.kanade.tachiyomi.source.anime.AnimeSourceManager
 import eu.kanade.tachiyomi.util.removeCovers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
@@ -52,12 +50,15 @@ import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
 import tachiyomi.domain.category.model.Category
-import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.GetDuplicateLibraryAnime
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import tachiyomi.domain.items.episode.interactor.GetEpisodeByAnimeId
+import tachiyomi.domain.items.episode.interactor.SetAnimeDefaultEpisodeFlags
+import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.domain.source.anime.interactor.GetRemoteAnime
+import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.InsertAnimeTrack
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -72,7 +73,6 @@ class BrowseAnimeSourceScreenModel(
     private val libraryPreferences: LibraryPreferences = Injekt.get(),
     private val coverCache: AnimeCoverCache = Injekt.get(),
     private val getRemoteAnime: GetRemoteAnime = Injekt.get(),
-    private val getAnime: GetAnime = Injekt.get(),
     private val getDuplicateAnimelibAnime: GetDuplicateLibraryAnime = Injekt.get(),
     private val getCategories: GetAnimeCategories = Injekt.get(),
     private val getEpisodeByAnimeId: GetEpisodeByAnimeId = Injekt.get(),
@@ -122,11 +122,15 @@ class BrowseAnimeSourceScreenModel(
                 getRemoteAnime.subscribe(sourceId, listing.query ?: "", listing.filters)
             }.flow.map { pagingData ->
                 pagingData
-                    .map { withIOContext { networkToLocalAnime.await(it.toDomainAnime(sourceId)) } }
-                    .filter { !sourcePreferences.hideInAnimeLibraryItems().get() || !it.favorite }
                     .map {
-                        getAnime.subscribe(it.url, it.source)
+                        flow {
+                            val localAnime = withIOContext { networkToLocalAnime.await(it.toDomainAnime(sourceId)) }
+                            emit(localAnime)
+                        }
                             .filterNotNull()
+                            .filter {
+                                !sourcePreferences.hideInAnimeLibraryItems().get() || !it.favorite
+                            }
                             .onEach(::initializeAnime)
                             .stateIn(coroutineScope)
                     }

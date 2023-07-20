@@ -98,7 +98,6 @@
     <string name="chapter_downloading_progress">Stahování (%1$d/%2$d)</string>
     <string name="sort_by_source">Podle zdroje</string>
     <string name="manga_download">Stáhnout</string>
-    <string name="download_all">Stáhnout vše</string>
     <string name="download_unread">Stáhnout nepřečtené</string>
     <string name="confirm_delete_chapters">Opravdu chcete smazat vybrané kapitoly\?</string>
     <string name="reading">Rozečtené</string>
@@ -751,4 +750,5 @@
         <item quantity="other">Dalších %d kapitol</item>
     </plurals>
     <string name="action_copy_to_clipboard">Zkopírovat do schránky</string>
+    <string name="action_update_category">Aktualizovat kategorii</string>
     </resources>

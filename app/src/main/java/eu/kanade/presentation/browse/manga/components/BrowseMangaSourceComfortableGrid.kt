@@ -57,7 +57,7 @@ fun BrowseMangaSourceComfortableGrid(
 }
 
 @Composable
-fun BrowseMangaSourceComfortableGridItem(
+private fun BrowseMangaSourceComfortableGridItem(
     manga: Manga,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = onClick,

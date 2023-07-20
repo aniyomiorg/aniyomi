@@ -63,7 +63,6 @@
     <string name="remove_from_library">Usuń z biblioteki</string>
     <string name="display_mode_chapter">Rozdział %1$s</string>
     <string name="manga_download">Pobierz</string>
-    <string name="download_all">Wszystko</string>
     <string name="download_unread">Pobierz nieprzeczytane</string>
     <string name="confirm_delete_chapters">Czy na pewno chcesz usunąć wybrane rozdziały?</string>
     <string name="reading">Czytane</string>
