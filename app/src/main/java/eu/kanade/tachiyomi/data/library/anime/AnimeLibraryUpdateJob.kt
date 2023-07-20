@@ -64,13 +64,13 @@ import tachiyomi.domain.items.episode.model.Episode
 import tachiyomi.domain.items.episode.model.NoEpisodesException
 import tachiyomi.domain.library.anime.LibraryAnime
 import tachiyomi.domain.library.service.LibraryPreferences
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
-import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_BATTERY_NOT_LOW
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_CHARGING
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_NETWORK_NOT_METERED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_ONLY_ON_WIFI
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
+import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
 import tachiyomi.domain.source.anime.model.AnimeSourceNotInstalledException
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
 import tachiyomi.domain.track.anime.interactor.GetAnimeTracks
