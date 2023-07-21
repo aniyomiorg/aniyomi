@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.IBinder
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.data.preference.PreferenceValues
 import eu.kanade.tachiyomi.extension.manga.installer.InstallerManga
 import eu.kanade.tachiyomi.extension.manga.installer.PackageInstallerInstallerManga
 import eu.kanade.tachiyomi.extension.manga.installer.ShizukuInstallerManga
@@ -36,7 +36,7 @@ class MangaExtensionInstallService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val uri = intent?.data
         val id = intent?.getLongExtra(EXTRA_DOWNLOAD_ID, -1)?.takeIf { it != -1L }
-        val installerUsed = intent?.getSerializableExtraCompat<PreferenceValues.ExtensionInstaller>(
+        val installerUsed = intent?.getSerializableExtraCompat<BasePreferences.ExtensionInstaller>(
             EXTRA_INSTALLER,
         )
         if (uri == null || id == null || installerUsed == null) {
@@ -46,8 +46,8 @@ class MangaExtensionInstallService : Service() {
 
         if (installer == null) {
             installer = when (installerUsed) {
-                PreferenceValues.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstallerManga(this)
-                PreferenceValues.ExtensionInstaller.SHIZUKU -> ShizukuInstallerManga(this)
+                BasePreferences.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstallerManga(this)
+                BasePreferences.ExtensionInstaller.SHIZUKU -> ShizukuInstallerManga(this)
                 else -> {
                     logcat(LogPriority.ERROR) { "Not implemented for installer $installerUsed" }
                     stopSelf()
@@ -73,7 +73,7 @@ class MangaExtensionInstallService : Service() {
             context: Context,
             downloadId: Long,
             uri: Uri,
-            installer: PreferenceValues.ExtensionInstaller,
+            installer: BasePreferences.ExtensionInstaller,
         ): Intent {
             return Intent(context, MangaExtensionInstallService::class.java)
                 .setDataAndType(uri, MangaExtensionInstaller.APK_MIME)

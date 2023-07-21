@@ -2,6 +2,7 @@ package tachiyomi.source.local.entries.manga
 
 import android.content.Context
 import eu.kanade.tachiyomi.source.CatalogueSource
+import eu.kanade.tachiyomi.source.MangaSource
 import eu.kanade.tachiyomi.source.UnmeteredSource
 import eu.kanade.tachiyomi.source.model.FilterList
 import eu.kanade.tachiyomi.source.model.MangasPage
@@ -23,6 +24,7 @@ import tachiyomi.core.metadata.tachiyomi.MangaDetails
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.ImageUtil
 import tachiyomi.core.util.system.logcat
+import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.service.ChapterRecognition
 import tachiyomi.source.local.R
 import tachiyomi.source.local.filter.manga.MangaOrderBy
@@ -370,3 +372,7 @@ actual class LocalMangaSource(
         private val LATEST_THRESHOLD = TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)
     }
 }
+
+fun Manga.isLocal(): Boolean = source == LocalMangaSource.ID
+
+fun MangaSource.isLocal(): Boolean = id == LocalMangaSource.ID

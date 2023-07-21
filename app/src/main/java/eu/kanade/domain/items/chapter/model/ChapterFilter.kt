@@ -1,13 +1,13 @@
 package eu.kanade.domain.items.chapter.model
 
 import eu.kanade.domain.entries.manga.model.downloadedFilter
-import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.tachiyomi.data.download.manga.MangaDownloadManager
 import eu.kanade.tachiyomi.ui.entries.manga.ChapterItem
 import tachiyomi.domain.entries.applyFilter
 import tachiyomi.domain.entries.manga.model.Manga
 import tachiyomi.domain.items.chapter.model.Chapter
 import tachiyomi.domain.items.chapter.service.getChapterSort
+import tachiyomi.source.local.entries.manga.isLocal
 
 /**
  * Applies the view filters to the list of chapters obtained from the database.

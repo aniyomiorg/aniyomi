@@ -952,7 +952,7 @@ class ReaderActivity : BaseActivity() {
      * cover to the presenter.
      */
     fun setAsCover(page: ReaderPage) {
-        viewModel.setAsCover(this, page)
+        viewModel.setAsCover(page)
     }
 
     /**

@@ -66,11 +66,6 @@ import java.util.zip.ZipOutputStream
  *
  * The queue manipulation must be done in one thread (currently the main thread) to avoid unexpected
  * behavior, but it's safe to read it from multiple threads.
- *
- * @param context the application context.
- * @param provider the downloads directory provider.
- * @param cache the downloads cache, used to add the downloads to the cache after their completion.
- * @param sourceManager the source manager.
  */
 class MangaDownloader(
     private val context: Context,
@@ -90,7 +85,7 @@ class MangaDownloader(
     /**
      * Queue where active downloads are kept.
      */
-    val _queueState = MutableStateFlow<List<MangaDownload>>(emptyList())
+    private val _queueState = MutableStateFlow<List<MangaDownload>>(emptyList())
     val queueState = _queueState.asStateFlow()
 
     /**
@@ -140,7 +135,7 @@ class MangaDownloader(
 
         initializeSubscription()
 
-        val pending = queueState.value.filter { it: MangaDownload -> it.status != MangaDownload.State.DOWNLOADED }
+        val pending = queueState.value.filter { it.status != MangaDownload.State.DOWNLOADED }
         pending.forEach { if (it.status != MangaDownload.State.QUEUE) it.status = MangaDownload.State.QUEUE }
 
         isPaused = false
@@ -266,7 +261,7 @@ class MangaDownloader(
         // Runs in main thread (synchronization needed).
         val chaptersToQueue = chaptersWithoutDir.await()
             // Filter out those already enqueued.
-            .filter { chapter -> queueState.value.none { it: MangaDownload -> it.chapter.id == chapter.id } }
+            .filter { chapter -> queueState.value.none { it.chapter.id == chapter.id } }
             // Create a download for each one.
             .map { MangaDownload(source, manga, it) }
 
@@ -499,6 +494,8 @@ class MangaDownloader(
     }
 
     private fun splitTallImageIfNeeded(page: Page, tmpDir: UniFile) {
+        if (!downloadPreferences.splitTallImages().get()) return
+
         try {
             val filenamePrefix = String.format("%03d", page.number)
             val imageFile = tmpDir.listFiles()?.firstOrNull { it.name.orEmpty().startsWith(filenamePrefix) }
@@ -638,10 +635,10 @@ class MangaDownloader(
      * Returns true if all the queued downloads are in DOWNLOADED or ERROR state.
      */
     private fun areAllDownloadsFinished(): Boolean {
-        return queueState.value.none { it: MangaDownload -> it.status.value <= MangaDownload.State.DOWNLOADING.value }
+        return queueState.value.none { it.status.value <= MangaDownload.State.DOWNLOADING.value }
     }
 
-    fun addAllToQueue(downloads: List<MangaDownload>) {
+    private fun addAllToQueue(downloads: List<MangaDownload>) {
         _queueState.update {
             downloads.forEach { download ->
                 download.status = MangaDownload.State.QUEUE
@@ -651,7 +648,7 @@ class MangaDownloader(
         }
     }
 
-    fun removeFromQueue(download: MangaDownload) {
+    private fun removeFromQueue(download: MangaDownload) {
         _queueState.update {
             store.remove(download)
             if (download.status == MangaDownload.State.DOWNLOADING || download.status == MangaDownload.State.QUEUE) {
@@ -671,7 +668,7 @@ class MangaDownloader(
         queueState.value.filter { it.manga.id == manga.id }.forEach { removeFromQueue(it) }
     }
 
-    fun _clearQueue() {
+    private fun _clearQueue() {
         _queueState.update {
             it.forEach { download ->
                 if (download.status == MangaDownload.State.DOWNLOADING || download.status == MangaDownload.State.QUEUE) {
