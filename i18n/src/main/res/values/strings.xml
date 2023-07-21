@@ -311,6 +311,8 @@
     <string name="pref_dual_page_split">Split wide pages</string>
     <string name="pref_dual_page_invert">Invert split page placement</string>
     <string name="pref_dual_page_invert_summary">If the placement of the split wide pages don\'t match reading direction</string>
+    <string name="pref_page_rotate">Rotate wide pages to fit</string>
+    <string name="pref_page_rotate_invert">Flip orientation of rotated wide pages</string>
     <string name="pref_long_strip_split">Split tall images (BETA)</string>
     <string name="pref_cutout_short">Show content in cutout area</string>
     <string name="pref_page_transitions">Animate page transitions</string>
@@ -598,6 +600,13 @@
     <string name="local_invalid_format">Invalid chapter format</string>
     <string name="local_filter_order_by">Order by</string>
     <string name="date">Date</string>
+
+    <!-- Item info -->
+    <plurals name="missing_items">
+        <item quantity="one">Missing %1$s item</item>
+        <item quantity="other">Missing %1$s items</item>
+    </plurals>
+    <string name="missing_items_unknown">Might be missing items</string>
 
     <!-- Manga info -->
     <string name="ongoing">Ongoing</string>

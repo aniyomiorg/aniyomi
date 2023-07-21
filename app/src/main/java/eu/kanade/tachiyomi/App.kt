@@ -41,7 +41,7 @@ import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegate
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import eu.kanade.tachiyomi.util.system.animatorDurationScale
-import eu.kanade.tachiyomi.util.system.notificationManager
+import eu.kanade.tachiyomi.util.system.cancelNotification
 import eu.kanade.tachiyomi.util.system.notify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -115,7 +115,7 @@ class App : Application(), DefaultLifecycleObserver, ImageLoaderFactory {
                     }
                 } else {
                     disableIncognitoReceiver.unregister()
-                    notificationManager.cancel(Notifications.ID_INCOGNITO_MODE)
+                    cancelNotification(Notifications.ID_INCOGNITO_MODE)
                 }
             }
             .launchIn(ProcessLifecycleOwner.get().lifecycleScope)

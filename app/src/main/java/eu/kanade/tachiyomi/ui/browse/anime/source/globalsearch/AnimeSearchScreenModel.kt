@@ -6,9 +6,7 @@ import androidx.compose.runtime.produceState
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
-import eu.kanade.domain.entries.anime.model.copyFrom
 import eu.kanade.domain.entries.anime.model.toDomainAnime
-import eu.kanade.domain.entries.anime.model.toSAnime
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -18,15 +16,11 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import logcat.LogPriority
 import tachiyomi.core.util.lang.awaitSingle
 import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.lang.withNonCancellableContext
-import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.domain.entries.anime.model.toAnimeUpdate
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.concurrent.Executors
@@ -57,43 +51,19 @@ abstract class AnimeSearchScreenModel<T>(
     }
 
     @Composable
-    fun getAnime(source: AnimeCatalogueSource, initialAnime: Anime): State<Anime> {
+    fun getAnime(initialAnime: Anime): State<Anime> {
         return produceState(initialValue = initialAnime) {
             getAnime.subscribe(initialAnime.url, initialAnime.source)
                 .collectLatest { anime ->
                     if (anime == null) return@collectLatest
-                    withIOContext {
-                        initializeAnime(source, anime)
-                    }
                     value = anime
                 }
         }
     }
 
-    /**
-     * Initialize a anime.
-     *
-     * @param source to interact with
-     * @param anime to initialize.
-     */
-    private suspend fun initializeAnime(source: AnimeCatalogueSource, anime: Anime) {
-        if (anime.thumbnailUrl != null || anime.initialized) return
-        withNonCancellableContext {
-            try {
-                val networkAnime = source.getAnimeDetails(anime.toSAnime())
-                val updatedAnime = anime.copyFrom(networkAnime)
-                    .copy(initialized = true)
-
-                updateAnime.await(updatedAnime.toAnimeUpdate())
-            } catch (e: Exception) {
-                logcat(LogPriority.ERROR, e)
-            }
-        }
-    }
-
     abstract fun getEnabledSources(): List<AnimeCatalogueSource>
 
-    fun getSelectedSources(): List<AnimeCatalogueSource> {
+    private fun getSelectedSources(): List<AnimeCatalogueSource> {
         val filter = extensionFilter
 
         val enabledSources = getEnabledSources()

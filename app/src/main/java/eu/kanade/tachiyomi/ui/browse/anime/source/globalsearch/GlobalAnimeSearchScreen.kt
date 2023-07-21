@@ -33,12 +33,7 @@ class GlobalAnimeSearchScreen(
             navigateUp = navigator::pop,
             onChangeSearchQuery = screenModel::updateSearchQuery,
             onSearch = screenModel::search,
-            getAnime = { source, anime ->
-                screenModel.getAnime(
-                    source = source,
-                    initialAnime = anime,
-                )
-            },
+            getAnime = { screenModel.getAnime(it) },
             onClickSource = {
                 if (!screenModel.incognitoMode.get()) {
                     screenModel.lastUsedSourceId.set(it.id)

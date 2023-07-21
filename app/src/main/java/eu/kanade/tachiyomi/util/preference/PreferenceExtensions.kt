@@ -3,8 +3,6 @@ package eu.kanade.tachiyomi.util.preference
 import android.widget.CompoundButton
 import eu.kanade.core.preference.PreferenceMutableState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onEach
 import tachiyomi.core.preference.Preference
 
 /**
@@ -13,12 +11,6 @@ import tachiyomi.core.preference.Preference
 fun CompoundButton.bindToPreference(pref: Preference<Boolean>) {
     isChecked = pref.get()
     setOnCheckedChangeListener { _, isChecked -> pref.set(isChecked) }
-}
-
-fun <T> Preference<T>.asHotFlow(block: (T) -> Unit): Flow<T> {
-    block(get())
-    return changes()
-        .onEach { block(it) }
 }
 
 operator fun <T> Preference<Set<T>>.plusAssign(item: T) {
