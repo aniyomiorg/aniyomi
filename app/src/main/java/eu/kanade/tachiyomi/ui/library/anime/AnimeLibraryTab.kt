@@ -150,7 +150,7 @@ object AnimeLibraryTab : Tab {
                     onClickUnselectAll = screenModel::clearSelection,
                     onClickSelectAll = { screenModel.selectAll(screenModel.activeCategoryIndex) },
                     onClickInvertSelection = { screenModel.invertSelection(screenModel.activeCategoryIndex) },
-                    onClickFilter = { screenModel.showSettingsDialog() },
+                    onClickFilter = screenModel::showSettingsDialog,
                     onClickRefresh = { onClickRefresh(state.categories[screenModel.activeCategoryIndex]) },
                     onClickGlobalUpdate = { onClickRefresh(null) },
                     onClickOpenRandomEntry = {
@@ -216,7 +216,7 @@ object AnimeLibraryTab : Tab {
                             }
                             Unit
                         }.takeIf { state.showAnimeContinueButton },
-                        onToggleSelection = { screenModel.toggleSelection(it) },
+                        onToggleSelection = screenModel::toggleSelection,
                         onToggleRangeSelection = {
                             screenModel.toggleRangeSelection(it)
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)

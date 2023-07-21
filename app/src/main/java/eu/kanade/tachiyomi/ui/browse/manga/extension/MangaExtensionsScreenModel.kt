@@ -144,7 +144,7 @@ class MangaExtensionsScreenModel(
                             else -> it.extension
                         }
                     }
-                    .forEach { updateExtension(it) }
+                    .forEach(::updateExtension)
             }
         }
     }

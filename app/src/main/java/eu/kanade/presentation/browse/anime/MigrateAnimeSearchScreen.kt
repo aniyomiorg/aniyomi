@@ -21,7 +21,7 @@ import tachiyomi.presentation.core.components.material.Scaffold
 fun MigrateAnimeSearchScreen(
     navigateUp: () -> Unit,
     state: MigrateAnimeSearchState,
-    getAnime: @Composable (AnimeCatalogueSource, Anime) -> State<Anime>,
+    getAnime: @Composable (Anime) -> State<Anime>,
     onChangeSearchQuery: (String?) -> Unit,
     onSearch: (String) -> Unit,
     onClickSource: (AnimeCatalogueSource) -> Unit,
@@ -58,7 +58,7 @@ fun MigrateAnimeSearchContent(
     sourceId: Long,
     items: Map<AnimeCatalogueSource, AnimeSearchItemResult>,
     contentPadding: PaddingValues,
-    getAnime: @Composable (AnimeCatalogueSource, Anime) -> State<Anime>,
+    getAnime: @Composable (Anime) -> State<Anime>,
     onClickSource: (AnimeCatalogueSource) -> Unit,
     onClickItem: (Anime) -> Unit,
     onLongClickItem: (Anime) -> Unit,
@@ -85,7 +85,7 @@ fun MigrateAnimeSearchContent(
 
                             GlobalAnimeSearchCardRow(
                                 titles = result.result,
-                                getAnime = { getAnime(source, it) },
+                                getAnime = getAnime,
                                 onClick = onClickItem,
                                 onLongClick = onLongClickItem,
                             )

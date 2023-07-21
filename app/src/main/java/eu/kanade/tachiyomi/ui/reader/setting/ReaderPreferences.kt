@@ -18,6 +18,7 @@ class ReaderPreferences(
 
     fun showReadingMode() = preferenceStore.getBoolean("pref_show_reading_mode", true)
 
+    // TODO: default this to true if reader long strip ever goes stable
     fun trueColor() = preferenceStore.getBoolean("pref_true_color_key", false)
 
     fun fullscreen() = preferenceStore.getBoolean("fullscreen", true)
@@ -74,6 +75,10 @@ class ReaderPreferences(
     fun dualPageSplitWebtoon() = preferenceStore.getBoolean("pref_dual_page_split_webtoon", false)
 
     fun dualPageInvertWebtoon() = preferenceStore.getBoolean("pref_dual_page_invert_webtoon", false)
+
+    fun dualPageRotateToFit() = preferenceStore.getBoolean("pref_dual_page_rotate", false)
+
+    fun dualPageRotateToFitInvert() = preferenceStore.getBoolean("pref_dual_page_rotate_invert", false)
 
     // endregion
 
