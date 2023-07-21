@@ -982,6 +982,14 @@ class AnimeInfoScreenModel(
         }
     }
 
+    private val Throwable.snackbarMessage: String
+        get() = when (val className = this::class.simpleName) {
+            null -> message ?: ""
+            "SourceNotInstalledException" -> context.getString(R.string.loader_not_implemented_error)
+            "Exception", "HttpException", "IOException" -> message ?: className
+            else -> "$className: $message"
+        }
+
     fun showAnimeSkipIntroDialog() {
         mutableState.update { state ->
             when (state) {
@@ -1066,10 +1074,3 @@ val episodeDecimalFormat = DecimalFormat(
     DecimalFormatSymbols()
         .apply { decimalSeparator = '.' },
 )
-
-private val Throwable.snackbarMessage: String
-    get() = when (val className = this::class.simpleName) {
-        null -> message ?: ""
-        "Exception", "HttpException", "IOException", "SourceNotInstalledException" -> message ?: className
-        else -> "$className: $message"
-    }
