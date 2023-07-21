@@ -16,7 +16,6 @@ import eu.kanade.core.util.fastMapNotNull
 import eu.kanade.core.util.fastPartition
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.manga.interactor.UpdateManga
-import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.items.chapter.interactor.SetReadStatus
 import eu.kanade.presentation.components.SEARCH_DEBOUNCE_MILLIS
 import eu.kanade.presentation.entries.DownloadAction
@@ -62,6 +61,7 @@ import tachiyomi.domain.library.manga.model.sort
 import tachiyomi.domain.library.service.LibraryPreferences
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetTracksPerManga
+import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.Collator
@@ -418,7 +418,6 @@ class MangaLibraryScreenModel(
             DownloadAction.NEXT_10_ITEMS -> downloadUnreadChapters(mangas, 10)
             DownloadAction.NEXT_25_ITEMS -> downloadUnreadChapters(mangas, 25)
             DownloadAction.UNVIEWED_ITEMS -> downloadUnreadChapters(mangas, null)
-            else -> {}
         }
         clearSelection()
     }

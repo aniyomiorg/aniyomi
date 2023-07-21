@@ -1,14 +1,12 @@
 package eu.kanade.tachiyomi.ui.reader
 
 import android.app.Application
-import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.entries.manga.interactor.SetMangaViewerFlags
-import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.domain.entries.manga.model.orientationType
 import eu.kanade.domain.entries.manga.model.readingModeType
 import eu.kanade.domain.items.chapter.model.toDbChapter
@@ -78,6 +76,7 @@ import tachiyomi.domain.items.chapter.service.getChapterSort
 import tachiyomi.domain.source.manga.service.MangaSourceManager
 import tachiyomi.domain.track.manga.interactor.GetMangaTracks
 import tachiyomi.domain.track.manga.interactor.InsertMangaTrack
+import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Date
@@ -767,7 +766,7 @@ class ReaderViewModel(
     /**
      * Sets the image of this [page] as cover and notifies the UI of the result.
      */
-    fun setAsCover(context: Context, page: ReaderPage) {
+    fun setAsCover(page: ReaderPage) {
         if (page.status != Page.State.READY) return
         val manga = manga ?: return
         val stream = page.stream ?: return

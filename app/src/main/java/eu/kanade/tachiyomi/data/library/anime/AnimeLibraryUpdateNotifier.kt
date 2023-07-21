@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
@@ -82,7 +83,7 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
                 .setStyle(NotificationCompat.BigTextStyle().bigText(updatingText))
         }
 
-        context.notificationManager.notify(
+        context.notify(
             Notifications.ID_LIBRARY_PROGRESS,
             progressNotificationBuilder
                 .setProgress(total, current, false)
@@ -190,9 +191,11 @@ class AnimeLibraryUpdateNotifier(private val context: Context) {
         // Per-anime notification
         if (!preferences.hideNotificationContent().get()) {
             launchUI {
-                updates.forEach { (anime, episodes) ->
-                    context.notificationManager.notify(anime.id.hashCode(), createNewEpisodesNotification(anime, episodes))
-                }
+                context.notify(
+                    updates.map { (anime, episodes) ->
+                        NotificationManagerCompat.NotificationWithIdAndTag(anime.id.hashCode(), createNewEpisodesNotification(anime, episodes))
+                    },
+                )
             }
         }
     }

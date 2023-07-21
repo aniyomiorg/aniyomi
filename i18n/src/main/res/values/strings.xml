@@ -437,6 +437,7 @@
     </plurals>
     <string name="download_ahead_info">Only works on entries in library and if the current chapter plus the next one are already downloaded</string>
     <string name="save_chapter_as_cbz">Save as CBZ archive</string>
+    <string name="split_tall_images">Split tall images</string>
     <string name="split_tall_images_summary">Improves reader performance</string>
     <string name="pref_download_slots">Maximum downloads</string>
 
@@ -572,8 +573,8 @@
     <string name="updating_category">Updating category</string>
     <string name="local_source_badge">Local</string>
     <string name="downloaded_chapters">Downloaded chapters</string>
-    <!-- Like watchface complications. For badges/buttons on library covers. -->
-    <string name="complications_header">Complications</string>
+    <!-- For badges/buttons on library covers. -->
+    <string name="overlay_header">Overlay</string>
     <string name="tabs_header">Tabs</string>
 
     <!-- Browse source -->

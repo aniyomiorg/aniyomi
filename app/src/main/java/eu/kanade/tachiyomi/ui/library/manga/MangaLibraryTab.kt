@@ -30,7 +30,6 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import eu.kanade.domain.entries.manga.model.isLocal
 import eu.kanade.presentation.category.ChangeCategoryDialog
 import eu.kanade.presentation.entries.LibraryBottomActionMenu
 import eu.kanade.presentation.library.DeleteLibraryEntryDialog
@@ -60,6 +59,7 @@ import tachiyomi.presentation.core.components.material.Scaffold
 import tachiyomi.presentation.core.screens.EmptyScreen
 import tachiyomi.presentation.core.screens.EmptyScreenAction
 import tachiyomi.presentation.core.screens.LoadingScreen
+import tachiyomi.source.local.entries.manga.isLocal
 import uy.kohesive.injekt.injectLazy
 
 object MangaLibraryTab : Tab {

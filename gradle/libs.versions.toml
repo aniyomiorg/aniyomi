@@ -3,7 +3,7 @@ aboutlib_version = "10.6.1"
 okhttp_version = "5.0.0-alpha.11"
 coil_version = "2.2.2"
 shizuku_version = "12.2.0"
-sqlite = "2.3.0"
+sqlite = "2.3.1"
 sqldelight = "1.5.5"
 leakcanary = "2.10"
 voyager = "1.0.0-rc07"
@@ -47,7 +47,7 @@ coil-core = { module = "io.coil-kt:coil", version.ref = "coil_version" }
 coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil_version" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil_version" }
 
-subsamplingscaleimageview = "com.github.tachiyomiorg:subsampling-scale-image-view:846abe0"
+subsamplingscaleimageview = "com.github.tachiyomiorg:subsampling-scale-image-view:c8e2650"
 image-decoder = "com.github.tachiyomiorg:image-decoder:7879b45"
 
 natural-comparator = "com.github.gpanther:java-nat-sort:natural-comparator-1.1"

@@ -5,7 +5,6 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
 import tachiyomi.domain.entries.TriStateFilter
 import tachiyomi.domain.entries.anime.model.Anime
-import tachiyomi.source.local.entries.anime.LocalAnimeSource
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -76,8 +75,6 @@ fun SAnime.toDomainAnime(sourceId: Long): Anime {
         source = sourceId,
     )
 }
-
-fun Anime.isLocal(): Boolean = source == LocalAnimeSource.ID
 
 fun Anime.hasCustomCover(coverCache: AnimeCoverCache = Injekt.get()): Boolean {
     return coverCache.getCustomCoverFile(id).exists()
