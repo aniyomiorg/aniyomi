@@ -68,7 +68,7 @@ compose-simpleicons = "br.com.devsrsouza.compose.icons.android:simple-icons:1.0.
 logcat = "com.squareup.logcat:logcat:0.1"
 
 acra-http = "ch.acra:acra-http:5.9.7"
-firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.1"
+firebase-analytics = "com.google.firebase:firebase-analytics-ktx:21.2.2"
 firebase-crashlytics = "com.google.firebase:firebase-crashlytics-ktx:18.3.1"
 
 aboutLibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlib_version" }

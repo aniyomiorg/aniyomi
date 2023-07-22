@@ -7,11 +7,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import eu.kanade.presentation.components.TabbedDialog
 import eu.kanade.presentation.components.TabbedDialogPaddings
 import eu.kanade.presentation.components.TriStateItem
+import eu.kanade.presentation.library.LibraryColumnsDialog
 import eu.kanade.presentation.util.collectAsState
 import eu.kanade.tachiyomi.R
 import eu.kanade.tachiyomi.ui.library.anime.AnimeLibrarySettingsScreenModel
@@ -22,6 +26,7 @@ import tachiyomi.domain.library.anime.model.sort
 import tachiyomi.domain.library.model.LibraryDisplayMode
 import tachiyomi.domain.library.model.display
 import tachiyomi.domain.library.service.LibraryPreferences
+import tachiyomi.presentation.core.components.BasicItem
 import tachiyomi.presentation.core.components.CheckboxItem
 import tachiyomi.presentation.core.components.HeadingItem
 import tachiyomi.presentation.core.components.RadioItem
@@ -171,6 +176,23 @@ private fun ColumnScope.DisplayPage(
     category: Category,
     screenModel: AnimeLibrarySettingsScreenModel,
 ) {
+    val portraitColumns by screenModel.libraryPreferences.animePortraitColumns().collectAsState()
+    val landscapeColumns by screenModel.libraryPreferences.animeLandscapeColumns().collectAsState()
+
+    var showColumnsDialog by rememberSaveable { mutableStateOf(false) }
+    if (showColumnsDialog) {
+        LibraryColumnsDialog(
+            initialPortrait = portraitColumns,
+            initialLandscape = landscapeColumns,
+            onDismissRequest = { showColumnsDialog = false },
+            onValueChanged = { portrait, landscape ->
+                screenModel.libraryPreferences.animePortraitColumns().set(portrait)
+                screenModel.libraryPreferences.animeLandscapeColumns().set(landscape)
+                showColumnsDialog = false
+            },
+        )
+    }
+
     HeadingItem(R.string.action_display_mode)
     listOf(
         R.string.action_display_grid to LibraryDisplayMode.CompactGrid,
@@ -182,6 +204,13 @@ private fun ColumnScope.DisplayPage(
             label = stringResource(titleRes),
             selected = category.display == mode,
             onClick = { screenModel.setDisplayMode(category, mode) },
+        )
+    }
+
+    if (category.display != LibraryDisplayMode.List) {
+        BasicItem(
+            label = stringResource(R.string.pref_library_columns),
+            onClick = { showColumnsDialog = true },
         )
     }
 
