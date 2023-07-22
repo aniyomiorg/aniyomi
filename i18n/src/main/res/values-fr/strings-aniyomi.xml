@@ -41,12 +41,12 @@
     <string name="action_next_episode">Épisode suivant</string>
     <string name="action_screen_fit">Mode d\'ajustement de l\'écran</string>
     <string name="action_player_pip">Mode image incrustée</string>
-    <string name="action_show_manga">Afficher l\'entrée</string>
+    <string name="action_show_manga">Afficher le titre</string>
     <string name="action_show_anime">Afficher l\'animé</string>
     <string name="action_display_download_badge_anime">Épisodes téléchargés</string>
     <string name="action_display_local_badge_manga">Source locale</string>
     <string name="action_display_local_badge_anime">Animé local</string>
-    <string name="action_display_show_continue_reading_button">Afficher le bouton Continuer à regarder/lire</string>
+    <string name="action_display_show_continue_reading_button">Bouton \"Reprendre\"</string>
     <string name="action_order_by_episode_number">Par numéro d\'épisode</string>
     <string name="action_start_download_externally">Utiliser un téléchargeur externe</string>
     <string name="action_start_download_internally">Utiliser un téléchargeur interne</string>
@@ -86,9 +86,9 @@
     <string name="pref_external_player_preference">Préférence pour les lecteurs externes</string>
     <string name="player_title">%1$s - %2$s</string>
     <string name="episode_download_progress">%1$d% %</string>
-    <string name="pref_category_delete_chapters">Supprimer des chapitres</string>
-    <string name="pref_remove_after_marked_as_read">Après avoir été marqué manuellement comme lu</string>
-    <string name="pref_remove_after_read">Après la lecture, supprimer automatiquement</string>
+    <string name="pref_category_delete_chapters">Suppression des chapitres</string>
+    <string name="pref_remove_after_marked_as_read">Après avoir été marqué comme lu</string>
+    <string name="pref_remove_after_read">Suppression automatique après lecture</string>
     <string name="pref_remove_bookmarked_chapters">Permettre la suppression des chapitres marqués d\'un marque-page</string>
     <string name="pref_remove_exclude_categories_manga">Catégories exclues</string>
     <string name="pref_remove_exclude_categories_anime">Catégories d\'animé exclues</string>
@@ -147,7 +147,7 @@
     <string name="repeating_anime">Revisionnage</string>
     <string name="dialog_with_checkbox_remove_description_anime">Ceci supprimera la date de visionnage de cet épisode. Êtes-vous sûr·e \?</string>
     <string name="dialog_with_checkbox_reset_anime">Réinitialiser tous les épisodes de cet animé</string>
-    <string name="dialog_with_checkbox_reset">Réinitialiser tous les chapitres de cette entrée</string>
+    <string name="dialog_with_checkbox_reset">Réinitialiser tous les chapitres de ce titre</string>
     <string name="share_screenshot_info">%1$s : %2$s, %3$s</string>
     <string name="episode_progress">Progression : %1$s/%2$s</string>
     <string name="episode_progress_no_total">Progression : %1$s</string>

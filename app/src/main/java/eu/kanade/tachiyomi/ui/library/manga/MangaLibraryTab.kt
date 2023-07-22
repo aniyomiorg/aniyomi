@@ -263,7 +263,7 @@ object MangaLibraryTab : Tab {
         }
 
         LaunchedEffect(state.selectionMode, state.dialog) {
-            HomeScreen.showBottomNav(!state.selectionMode && state.dialog !is MangaLibraryScreenModel.Dialog.SettingsSheet)
+            HomeScreen.showBottomNav(!state.selectionMode)
         }
 
         LaunchedEffect(state.isLoading) {

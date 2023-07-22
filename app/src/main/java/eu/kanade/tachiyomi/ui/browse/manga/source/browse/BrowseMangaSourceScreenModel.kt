@@ -19,6 +19,7 @@ import eu.kanade.domain.entries.manga.model.toDomainManga
 import eu.kanade.domain.items.chapter.interactor.SyncChaptersWithTrackServiceTwoWay
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.manga.model.toDomainTrack
+import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.data.cache.MangaCoverCache
 import eu.kanade.tachiyomi.data.track.EnhancedMangaTrackService
 import eu.kanade.tachiyomi.data.track.TrackManager
@@ -41,7 +42,6 @@ import logcat.LogPriority
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.preference.mapAsCheckboxState
 import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.manga.interactor.GetMangaCategories
 import tachiyomi.domain.category.manga.interactor.SetMangaCategories
@@ -120,22 +120,20 @@ class BrowseMangaSourceScreenModel(
                 getRemoteManga.subscribe(sourceId, listing.query ?: "", listing.filters)
             }.flow.map { pagingData ->
                 pagingData.map {
-                    withIOContext {
-                        networkToLocalManga.await(it.toDomainManga(sourceId))
-                            .let { localManga ->
-                                getManga.subscribe(localManga.url, localManga.source)
-                            }
-                            .filterNotNull()
-                            .filter { localManga ->
-                                !sourcePreferences.hideInMangaLibraryItems().get() || !localManga.favorite
-                            }
-                            .stateIn(coroutineScope)
-                    }
+                    networkToLocalManga.await(it.toDomainManga(sourceId))
+                        .let { localManga ->
+                            getManga.subscribe(localManga.url, localManga.source)
+                        }
+                        .filterNotNull()
+                        .filter { localManga ->
+                            !sourcePreferences.hideInMangaLibraryItems().get() || !localManga.favorite
+                        }
+                        .stateIn(ioCoroutineScope)
                 }
             }
-                .cachedIn(coroutineScope)
+                .cachedIn(ioCoroutineScope)
         }
-        .stateIn(coroutineScope, SharingStarted.Lazily, emptyFlow())
+        .stateIn(ioCoroutineScope, SharingStarted.Lazily, emptyFlow())
 
     fun getColumnsPreference(orientation: Int): GridCells {
         val isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE

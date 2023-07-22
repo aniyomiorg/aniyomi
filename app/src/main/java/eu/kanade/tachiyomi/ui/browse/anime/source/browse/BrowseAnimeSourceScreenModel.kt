@@ -19,6 +19,7 @@ import eu.kanade.domain.entries.anime.model.toDomainAnime
 import eu.kanade.domain.items.episode.interactor.SyncEpisodesWithTrackServiceTwoWay
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.anime.model.toDomainTrack
+import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.data.cache.AnimeCoverCache
@@ -41,7 +42,6 @@ import logcat.LogPriority
 import tachiyomi.core.preference.CheckboxState
 import tachiyomi.core.preference.mapAsCheckboxState
 import tachiyomi.core.util.lang.launchIO
-import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.category.anime.interactor.GetAnimeCategories
 import tachiyomi.domain.category.anime.interactor.SetAnimeCategories
@@ -120,22 +120,20 @@ class BrowseAnimeSourceScreenModel(
                 getRemoteAnime.subscribe(sourceId, listing.query ?: "", listing.filters)
             }.flow.map { pagingData ->
                 pagingData.map {
-                    withIOContext {
-                        networkToLocalAnime.await(it.toDomainAnime(sourceId))
-                            .let { localAnime ->
-                                getAnime.subscribe(localAnime.url, localAnime.source)
-                            }
-                            .filterNotNull()
-                            .filter { localAnime ->
-                                !sourcePreferences.hideInAnimeLibraryItems().get() || !localAnime.favorite
-                            }
-                            .stateIn(coroutineScope)
-                    }
+                    networkToLocalAnime.await(it.toDomainAnime(sourceId))
+                        .let { localAnime ->
+                            getAnime.subscribe(localAnime.url, localAnime.source)
+                        }
+                        .filterNotNull()
+                        .filter { localAnime ->
+                            !sourcePreferences.hideInAnimeLibraryItems().get() || !localAnime.favorite
+                        }
+                        .stateIn(ioCoroutineScope)
                 }
             }
-                .cachedIn(coroutineScope)
+                .cachedIn(ioCoroutineScope)
         }
-        .stateIn(coroutineScope, SharingStarted.Lazily, emptyFlow())
+        .stateIn(ioCoroutineScope, SharingStarted.Lazily, emptyFlow())
 
     fun getColumnsPreference(orientation: Int): GridCells {
         val isLandscape = orientation == Configuration.ORIENTATION_LANDSCAPE

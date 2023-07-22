@@ -36,7 +36,6 @@
     <string name="action_rename_category">Renomear categoria</string>
     <string name="action_move_category">Definir categorias</string>
     <string name="action_edit_cover">Editar a capa</string>
-    <string name="action_stop">Parar</string>
     <string name="action_pause">Pausar</string>
     <string name="action_previous_chapter">Capítulo anterior</string>
     <string name="action_next_chapter">Próximo capítulo</string>
@@ -422,7 +421,6 @@
     <string name="pref_library_update_refresh_metadata">Atualizar os metadados automaticamente</string>
     <string name="action_migrate">Migrar</string>
     <string name="action_display_comfortable_grid">Grade confortável</string>
-    <string name="badges_header">Selos</string>
     <string name="action_display_show_tabs">Mostrar as abas de categoria</string>
     <string name="tabs_header">Abas</string>
     <string name="page_list_empty_error">Nenhuma página encontrada</string>
@@ -658,7 +656,6 @@
     <string name="source_filter_empty_screen">Nenhuma fonte instalada foi encontrada</string>
     <string name="source_empty_screen">Nenhuma fonte encontrada</string>
     <string name="action_sort_unread_count">Contagem de não lidos</string>
-    <string name="split_tall_images">Dividir imagens compridas</string>
     <string name="split_tall_images_summary">Melhora o desempenho do leitor</string>
     <string name="download_notifier_split_page_not_found">Página %d não encontrada durante a divisão</string>
     <string name="download_notifier_split_page_path_not_found">Não foi possível encontrar o caminho do arquivo da página %d</string>
@@ -666,7 +663,6 @@
     <string name="pref_reset_viewer_flags_success">Todas as configurações do leitor foram redefinidas</string>
     <string name="pref_reset_viewer_flags_error">Não foi possível redefinir as configurações do leitor</string>
     <string name="pref_reset_viewer_flags">Redefinir as configurações do leitor em cada série</string>
-    <string name="download_notifier_split_failed">Não foi possível dividir a imagem transferida</string>
     <string name="empty_screen">Bem, isso é esquisito</string>
     <string name="ext_info_version">Versão</string>
     <string name="ext_info_language">Idioma</string>
@@ -750,4 +746,14 @@
     <string name="pref_hide_in_library_items">Ocultar títulos que já estão na biblioteca</string>
     <string name="action_copy_to_clipboard">Copiar para a área de transferência</string>
     <string name="action_update_category">Atualizar categoria</string>
+    <string name="split_tall_images">Dividir imagens compridas</string>
+    <string name="overlay_header">Sobreposição</string>
+    <string name="pref_page_rotate">Rotacionar páginas largas para caber</string>
+    <string name="pref_page_rotate_invert">Inverter a orientação das páginas largas rotacionadas</string>
+    <string name="missing_items_unknown">Pode ter capítulos faltando</string>
+    <plurals name="missing_items">
+        <item quantity="one">Faltando %1$s capítulo</item>
+        <item quantity="many">Faltando %1$s capítulos</item>
+        <item quantity="other">Faltando %1$s capítulos</item>
+    </plurals>
     </resources>

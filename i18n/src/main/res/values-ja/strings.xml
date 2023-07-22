@@ -147,7 +147,6 @@
     <string name="action_add">追加</string>
     <string name="action_rename_category">カテゴリー名を編集</string>
     <string name="action_move_category">カテゴリーを設定</string>
-    <string name="action_stop">停止</string>
     <string name="action_remove">削除</string>
     <string name="action_install">インストール</string>
     <string name="action_undo">取り消し</string>
@@ -310,7 +309,6 @@
     <string name="local_source">ローカルソース</string>
     <string name="http_error_hint">WebViewでサイトを開く</string>
     <string name="tabs_header">タブ</string>
-    <string name="badges_header">情報バッジ</string>
     <string name="email">メールアドレス</string>
     <plurals name="download_queue_summary">
         <item quantity="other">残り%1$s件</item>
@@ -634,7 +632,6 @@
     <string name="source_empty_screen">ソースが見つかりません</string>
     <string name="source_filter_empty_screen">インストール済みのソースが見つかりません</string>
     <string name="action_sort_unread_count">未読の章数</string>
-    <string name="split_tall_images">長い画像を分割</string>
     <string name="split_tall_images_summary">ビューアのパフォーマンスを改善します</string>
     <string name="download_notifier_split_page_not_found">分割時にページ%dが見つかりませんでした</string>
     <string name="pref_reset_viewer_flags">シリーズ別のビューア設定をリセット</string>
@@ -642,7 +639,6 @@
     <string name="download_notifier_split_page_path_not_found">ページ%dのファイルパスが見つかりませんでした</string>
     <string name="pref_reset_viewer_flags_success">ビューア設定を全てリセットしました</string>
     <string name="pref_reset_viewer_flags_error">ビューア設定をリセットできませんでした</string>
-    <string name="download_notifier_split_failed">ダウンロードした画像を分割できませんでした</string>
     <string name="empty_screen">えっと、こりゃまずいですね</string>
     <string name="ext_info_version">バージョン</string>
     <string name="ext_info_language">言語</string>
@@ -722,4 +718,12 @@
         <item quantity="other">次の%d章</item>
     </plurals>
     <string name="action_update_category">カテゴリを更新</string>
+    <string name="split_tall_images">長い画像を分割</string>
+    <string name="overlay_header">オーバーレイ</string>
+    <string name="pref_page_rotate">画面に合わせるように幅広いページを回転</string>
+    <string name="pref_page_rotate_invert">回転した幅広いページの向きを反転</string>
+    <plurals name="missing_items">
+        <item quantity="other">%1$s章が欠けています</item>
+    </plurals>
+    <string name="missing_items_unknown">一部の章が足りない可能性あり</string>
     </resources>

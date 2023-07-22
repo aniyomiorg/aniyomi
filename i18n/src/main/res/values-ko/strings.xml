@@ -30,7 +30,6 @@
     <string name="action_rename_category">카테고리 이름 바꾸기</string>
     <string name="action_move_category">카테고리 지정</string>
     <string name="action_edit_cover">표지 편집</string>
-    <string name="action_stop">정지</string>
     <string name="action_remove">제거</string>
     <string name="action_resume">계속</string>
     <string name="action_open_in_browser">브라우저에서 열기</string>
@@ -398,7 +397,7 @@
     <string name="action_migrate">데이터 이전</string>
     <string name="recent_manga_time">%1$s화 - %2$s</string>
     <string name="secure_screen">화면 보안</string>
-    <string name="lock_with_biometrics">잠금 해제 요청</string>
+    <string name="lock_with_biometrics">잠금 해제 필요</string>
     <string name="pref_relative_format">단어 사용</string>
     <string name="pref_category_appearance">모양</string>
     <string name="relative_time_today">오늘</string>
@@ -576,7 +575,6 @@
     <string name="pref_disable_battery_optimization_summary">백그라운드 서재 업데이트와 라이브러리 업데이트를 도울 수 있습니다</string>
     <string name="pref_verbose_logging">자세한 로그</string>
     <string name="pref_verbose_logging_summary">자세한 로그를 시스템 로그에 기록 (성능이 하락할 수 있습니다)</string>
-    <string name="badges_header">배지</string>
     <string name="date">날짜</string>
     <string name="local_filter_order_by">정렬</string>
     <string name="track_started_reading_date">읽기 시작한 날짜</string>
@@ -635,7 +633,6 @@
     <string name="battery_not_low">배터리가 부족하지 않을 때만</string>
     <string name="pref_clear_webview_data">WebView 데이터 지우기</string>
     <string name="webview_data_deleted">WebView 데이터 삭제됨</string>
-    <string name="split_tall_images">긴 이미지 분할</string>
     <string name="split_tall_images_summary">리더 성능 향상</string>
     <string name="ext_info_version">버전</string>
     <string name="ext_info_language">언어</string>
@@ -665,7 +662,6 @@
     <string name="cant_open_last_read_chapter">마지막 회차를 열 수 없습니다</string>
     <string name="appwidget_updates_description">최근에 업데이트된 항목 보기</string>
     <string name="on_hold_list">보류 목록</string>
-    <string name="download_notifier_split_failed">다운로드한 사진을 나눌 수 없습니다</string>
     <string name="download_notifier_split_page_not_found">나누어 짐 중에 %d페이지 안 찾습니다</string>
     <string name="loader_rar5_error">RARv5 포맷은 지원되지 않습니다</string>
     <string name="appwidget_unavailable_locked">앱 잠금 사용 중에 위젯 이용할 없습니다</string>
@@ -723,4 +719,12 @@
         <item quantity="other">다음 %d화</item>
     </plurals>
     <string name="action_update_category">카테고리 업데이트</string>
+    <string name="split_tall_images">긴 이미지 분할</string>
+    <string name="overlay_header">오버레이</string>
+    <string name="pref_page_rotate">화면에 맞게 넓은 페이지 회전</string>
+    <string name="pref_page_rotate_invert">회전된 넓은 페이지의 회전 방향</string>
+    <string name="missing_items_unknown">챕터가 누락되었을 수 있습니다</string>
+    <plurals name="missing_items">
+        <item quantity="other">누락된 회차 %1$s개</item>
+    </plurals>
     </resources>

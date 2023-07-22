@@ -78,6 +78,7 @@ fun BrowseAnimeSourceContent(
 
     if (animeList.itemCount <= 0 && errorState != null && errorState is LoadState.Error) {
         EmptyScreen(
+            modifier = Modifier.padding(contentPadding),
             message = getErrorMessage(errorState),
             actions = if (source is LocalAnimeSource) {
                 listOf(
@@ -112,7 +113,9 @@ fun BrowseAnimeSourceContent(
     }
 
     if (animeList.itemCount == 0 && animeList.loadState.refresh is LoadState.Loading) {
-        LoadingScreen()
+        LoadingScreen(
+            modifier = Modifier.padding(contentPadding),
+        )
         return
     }
 
