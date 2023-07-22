@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
 import eu.kanade.domain.entries.anime.model.toDomainAnime
 import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.presentation.util.ioCoroutineScope
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tachiyomi.core.util.lang.awaitSingle
-import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.entries.anime.interactor.GetAnime
 import tachiyomi.domain.entries.anime.interactor.NetworkToLocalAnime
 import tachiyomi.domain.entries.anime.model.Anime
@@ -94,7 +93,7 @@ abstract class AnimeSearchScreenModel<T>(
 
     abstract fun getItems(): Map<AnimeCatalogueSource, AnimeSearchItemResult>
 
-    fun getAndUpdateItems(function: (Map<AnimeCatalogueSource, AnimeSearchItemResult>) -> Map<AnimeCatalogueSource, AnimeSearchItemResult>) {
+    private fun getAndUpdateItems(function: (Map<AnimeCatalogueSource, AnimeSearchItemResult>) -> Map<AnimeCatalogueSource, AnimeSearchItemResult>) {
         updateItems(function(getItems()))
     }
 
@@ -106,7 +105,7 @@ abstract class AnimeSearchScreenModel<T>(
         val initialItems = getSelectedSources().associateWith { AnimeSearchItemResult.Loading }
         updateItems(initialItems)
 
-        coroutineScope.launch {
+        ioCoroutineScope.launch {
             sources
                 .map { source ->
                     async {
@@ -115,10 +114,8 @@ abstract class AnimeSearchScreenModel<T>(
                                 source.fetchSearchAnime(1, query, source.getFilterList()).awaitSingle()
                             }
 
-                            val titles = withIOContext {
-                                page.animes.map {
-                                    networkToLocalAnime.await(it.toDomainAnime(source.id))
-                                }
+                            val titles = page.animes.map {
+                                networkToLocalAnime.await(it.toDomainAnime(source.id))
                             }
 
                             getAndUpdateItems { items ->
@@ -129,7 +126,7 @@ abstract class AnimeSearchScreenModel<T>(
                         } catch (e: Exception) {
                             getAndUpdateItems { items ->
                                 val mutableMap = items.toMutableMap()
-                                mutableMap[source] = AnimeSearchItemResult.Error(throwable = e)
+                                mutableMap[source] = AnimeSearchItemResult.Error(e)
                                 mutableMap.toSortedMap(sortComparator(mutableMap))
                             }
                         }

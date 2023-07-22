@@ -26,7 +26,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -50,8 +49,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import eu.kanade.tachiyomi.R
 import tachiyomi.presentation.core.components.Pill
+import tachiyomi.presentation.core.util.clearFocusOnSoftKeyboardHide
 import tachiyomi.presentation.core.util.runOnEnterKeyPressed
 import tachiyomi.presentation.core.util.secondaryItemAlpha
+import tachiyomi.presentation.core.util.showSoftKeyboard
 
 const val SEARCH_DEBOUNCE_MILLIS = 250L
 
@@ -255,11 +256,11 @@ fun SearchToolbar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    initialShowKeyboard: Boolean = true,
     cancelAction: () -> Unit = {},
     actionMode: Boolean = false,
 ) {
     val focusRequester = remember { FocusRequester() }
-    var searchClickCount by remember { mutableStateOf(0) }
 
     AppBar(
         titleContent = {
@@ -281,7 +282,9 @@ fun SearchToolbar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester)
-                    .runOnEnterKeyPressed(action = searchAndClearFocus),
+                    .runOnEnterKeyPressed(action = searchAndClearFocus)
+                    .showSoftKeyboard(initialShowKeyboard)
+                    .clearFocusOnSoftKeyboardHide(),
                 textStyle = MaterialTheme.typography.titleMedium.copy(
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Normal,
@@ -320,10 +323,7 @@ fun SearchToolbar(
         navigateUp = if (searchQuery == null) navigateUp else onClickCloseSearch,
         actions = {
             key("search") {
-                val onClick = {
-                    searchClickCount++
-                    onChangeSearchQuery("")
-                }
+                val onClick = { onChangeSearchQuery("") }
 
                 if (!searchEnabled) {
                     // Don't show search action
@@ -332,7 +332,12 @@ fun SearchToolbar(
                         Icon(Icons.Outlined.Search, contentDescription = stringResource(R.string.action_search))
                     }
                 } else if (searchQuery.isNotEmpty()) {
-                    IconButton(onClick) {
+                    IconButton(
+                        onClick = {
+                            onClick()
+                            focusRequester.requestFocus()
+                        },
+                    ) {
                         Icon(Icons.Outlined.Close, contentDescription = stringResource(R.string.action_reset))
                     }
                 }
@@ -344,15 +349,6 @@ fun SearchToolbar(
         scrollBehavior = scrollBehavior,
         onCancelActionMode = cancelAction,
     )
-    LaunchedEffect(searchClickCount) {
-        if (searchQuery == null) return@LaunchedEffect
-        if (searchClickCount == 0 && searchQuery.isNotEmpty()) return@LaunchedEffect
-        try {
-            focusRequester.requestFocus()
-        } catch (_: Throwable) {
-            // TextField is gone
-        }
-    }
 }
 
 sealed interface AppBar {

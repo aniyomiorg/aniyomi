@@ -276,7 +276,7 @@ object AnimeLibraryTab : Tab {
         }
 
         LaunchedEffect(state.selectionMode, state.dialog) {
-            HomeScreen.showBottomNav(!state.selectionMode && state.dialog !is AnimeLibraryScreenModel.Dialog.SettingsSheet)
+            HomeScreen.showBottomNav(!state.selectionMode)
         }
 
         LaunchedEffect(state.isLoading) {

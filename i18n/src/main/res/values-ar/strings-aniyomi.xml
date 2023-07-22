@@ -5,7 +5,7 @@
     <string name="action_sort_last_manga_update">آخر تحديث للمانجا</string>
     <string name="action_show_manga">عرض المانجا</string>
     <string name="action_display_local_badge_manga">المانجا المحلية</string>
-    <string name="pref_update_only_completely_read">مع فصل (فصول) غير مقروءة / حلقة (حلقات) غير مشاهدة</string>
+    <string name="pref_update_only_completely_read">فيها فصول لم تُقرأ</string>
     <string name="pref_library_update_show_tab_badge">إظهار عدد الغير مقروء/ الغير مشاهد على أيقونة التحديثات</string>
     <string name="default_manga_category">فئة المانغا الإفتراضية</string>
     <string name="pref_manga_library_update_categories_details">المانجا في الفئات المستبعدة لن يتم تحديثها حتى وإن كانت أيضا في الفئات المضمنة.</string>
@@ -34,7 +34,7 @@
     <string name="also_set_chapter_settings_for_library">تطبيق أيضًا على جميع المانجا في المكتبة</string>
     <string name="dialog_with_checkbox_reset">إعادة تعيين جميع الفصول لهذه المانجا</string>
     <string name="download_insufficient_space">تعذّر تنزيل الفصول بسبب انخفاض مساحة التخزين</string>
-    <string name="download_queue_size_warning">تحذير: التحميلات كبيرة الحجم والعدد يمكن أن تؤدي إلى تباطؤ المصادر و/أو ان تقوم المصادر بحظر Tachiyomi۔ اضغط لمعرفة المزيد۔</string>
+    <string name="download_queue_size_warning">تحذير: يمكن أن تؤدِّي التنزيلات كبيرة الحجم والعدد إلى إبطاء المصادر، وقد يُحظر Tachiyomi منها بسبب ذلك. اضغط لمعرفة المزيد۔</string>
     <string name="information_webview_required">يتطلب Tachiyomi وجود WebView</string>
     <string name="download_notifier_download_paused_chapters">تم إيقاف التنزيل مؤقتاً</string>
     <string name="channel_new_chapters_episodes">تحديثات الفصول</string>
@@ -120,7 +120,7 @@
     <string name="no_next_episode">الحلقة التالية غير موجودة!</string>
     <string name="rotation_sensor_portrait">المستشعر الرأسي</string>
     <string name="share_screenshot_info">%1$s: %2$s، %3$s</string>
-    <string name="action_display_show_continue_reading_button">إظهار زر \"متابعة المشاهدة/القراءة\"</string>
+    <string name="action_display_show_continue_reading_button">زرُّ متابعة القراءة</string>
     <string name="download_unseen">غير مشاهد</string>
     <string name="action_edit_anime_categories">تعديل فئات الأنمي</string>
     <string name="pref_bottom_nav_no_manga">انقل \"المانغا\" إلى علامة التبويب \"المزيد\"</string>

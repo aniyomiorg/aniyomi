@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="manga_categories">वर्गहरू</string>
-    <string name="unlock_app">अनलक ताचियोमी</string>
+    <string name="unlock_app">ताचियोमी अनलक गर्नुहोस्</string>
     <string name="action_sort_last_manga_update">पछिल्लो अपडेट चेक</string>
     <string name="action_show_manga">इन्ट्री देखाउनुहोस्</string>
     <string name="action_display_local_badge_manga">लोकल माङ्गा</string>
