@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:104333558550:android:ede619ff64f3756df44637",
         "android_client_info": {
-          "package_name": "xyz.jmir.tachiyomi.mi"
+          "package_name": "xyz.luft.tachiyomi.mi"
         }
       },
       "oauth_client": [
@@ -38,7 +38,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:104333558550:android:f00b8e4d00e92b0bf44637",
         "android_client_info": {
-          "package_name": "xyz.jmir.tachiyomi.mi.debug"
+          "package_name": "xyz.luft.tachiyomi.mi.debug"
         }
       },
       "oauth_client": [
