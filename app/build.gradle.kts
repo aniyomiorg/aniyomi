@@ -23,7 +23,7 @@ android {
 
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
-        versionCode = 99
+        versionCode = 100
         versionName = "0.14.5"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
@@ -258,7 +258,7 @@ dependencies {
     implementation(libs.bundles.shizuku)
 
     // Tests
-    testImplementation(libs.junit)
+    testImplementation(libs.bundles.test)
 
     // For detecting memory leaks; see https://square.github.io/leakcanary/
     // debugImplementation(libs.leakcanary.android)

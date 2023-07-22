@@ -1,23 +1,21 @@
 package tachiyomi.domain.items.service
 
-import kotlin.math.floor
-
-fun countMissingItems(itemsInput: List<Float>): Int? {
-    if (itemsInput.isEmpty()) {
+fun List<Float>.missingItemsCount(): Int {
+    if (this.isEmpty()) {
         return 0
     }
 
-    val items = itemsInput
-        // Remove any invalid chapters
+    val items = this
+        // Ignore unknown item numbers
         .filter { it != -1f }
         // Convert to integers, as we cannot check if 16.5 is missing
-        .map { floor(it.toDouble()).toInt() }
+        .map(Float::toInt)
         // Only keep unique chapters so that -1 or 16 are not counted multiple times
         .distinct()
         .sorted()
 
     if (items.isEmpty()) {
-        return null
+        return 0
     }
 
     var missingItemsCount = 0

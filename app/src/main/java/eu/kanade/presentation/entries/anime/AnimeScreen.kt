@@ -73,7 +73,7 @@ import eu.kanade.tachiyomi.util.system.copyToClipboard
 import kotlinx.coroutines.delay
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.domain.items.episode.model.Episode
-import tachiyomi.domain.items.service.countMissingItems
+import tachiyomi.domain.items.service.missingItemsCount
 import tachiyomi.domain.source.anime.model.StubAnimeSource
 import tachiyomi.presentation.core.components.LazyColumn
 import tachiyomi.presentation.core.components.TwoPanelBox
@@ -416,7 +416,7 @@ private fun AnimeScreenSmallImpl(
                         ItemHeader(
                             enabled = episodes.fastAll { !it.selected },
                             itemCount = episodes.size,
-                            missingItemsCount = countMissingItems(episodes.map { it.episode.episodeNumber }),
+                            missingItemsCount = episodes.map { it.episode.episodeNumber }.missingItemsCount(),
                             onClick = onFilterClicked,
                             isManga = false,
                         )
@@ -660,7 +660,7 @@ fun AnimeScreenLargeImpl(
                                 ItemHeader(
                                     enabled = episodes.fastAll { !it.selected },
                                     itemCount = episodes.size,
-                                    missingItemsCount = countMissingItems(episodes.map { it.episode.episodeNumber }),
+                                    missingItemsCount = episodes.map { it.episode.episodeNumber }.missingItemsCount(),
                                     onClick = onFilterButtonClicked,
                                     isManga = false,
                                 )

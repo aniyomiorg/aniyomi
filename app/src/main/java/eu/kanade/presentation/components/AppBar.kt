@@ -256,7 +256,6 @@ fun SearchToolbar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    initialShowKeyboard: Boolean = true,
     cancelAction: () -> Unit = {},
     actionMode: Boolean = false,
 ) {
@@ -283,7 +282,7 @@ fun SearchToolbar(
                     .fillMaxWidth()
                     .focusRequester(focusRequester)
                     .runOnEnterKeyPressed(action = searchAndClearFocus)
-                    .showSoftKeyboard(initialShowKeyboard)
+                    .showSoftKeyboard(remember { searchQuery.isEmpty() })
                     .clearFocusOnSoftKeyboardHide(),
                 textStyle = MaterialTheme.typography.titleMedium.copy(
                     color = MaterialTheme.colorScheme.onBackground,

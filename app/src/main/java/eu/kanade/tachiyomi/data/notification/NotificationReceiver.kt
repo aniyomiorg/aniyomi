@@ -171,14 +171,6 @@ class NotificationReceiver : BroadcastReceiver() {
                     downloadEpisodes(urls, animeId)
                 }
             }
-            // Share crash dump file
-            ACTION_SHARE_CRASH_LOG ->
-                shareFile(
-                    context,
-                    intent.getParcelableExtraCompat(EXTRA_URI)!!,
-                    "text/plain",
-                    intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1),
-                )
         }
     }
 
@@ -397,8 +389,6 @@ class NotificationReceiver : BroadcastReceiver() {
         private const val ACTION_DELETE_IMAGE = "$ID.$NAME.DELETE_IMAGE"
 
         private const val ACTION_SHARE_BACKUP = "$ID.$NAME.SEND_BACKUP"
-
-        private const val ACTION_SHARE_CRASH_LOG = "$ID.$NAME.SEND_CRASH_LOG"
 
         private const val ACTION_CANCEL_RESTORE = "$ID.$NAME.CANCEL_RESTORE"
 
@@ -836,23 +826,6 @@ class NotificationReceiver : BroadcastReceiver() {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
             }
             return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-        }
-
-        /**
-         * Returns [PendingIntent] that starts a share activity for a crash log dump file.
-         *
-         * @param context context of application
-         * @param uri uri of file
-         * @param notificationId id of notification
-         * @return [PendingIntent]
-         */
-        internal fun shareCrashLogPendingBroadcast(context: Context, uri: Uri, notificationId: Int): PendingIntent {
-            val intent = Intent(context, NotificationReceiver::class.java).apply {
-                action = ACTION_SHARE_CRASH_LOG
-                putExtra(EXTRA_URI, uri)
-                putExtra(EXTRA_NOTIFICATION_ID, notificationId)
-            }
-            return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 
         /**

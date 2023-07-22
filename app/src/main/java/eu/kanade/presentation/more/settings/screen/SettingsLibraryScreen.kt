@@ -53,8 +53,8 @@ import tachiyomi.domain.library.service.LibraryPreferences.Companion.DEVICE_ONLY
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_HAS_UNVIEWED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_COMPLETED
 import tachiyomi.domain.library.service.LibraryPreferences.Companion.ENTRY_NON_VIEWED
-import tachiyomi.presentation.core.components.WheelPicker
 import tachiyomi.presentation.core.components.WheelPickerDefaults
+import tachiyomi.presentation.core.components.WheelTextPicker
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -418,28 +418,25 @@ object SettingsLibraryScreen : SearchableSettings {
             modifier = modifier,
             contentAlignment = Alignment.Center,
         ) {
-            WheelPickerDefaults.Background(size = DpSize(maxWidth, maxHeight))
+            WheelPickerDefaults.Background(size = DpSize(maxWidth, 128.dp))
 
             val size = DpSize(width = maxWidth / 2, height = 128.dp)
             Row {
-                WheelPicker(
-                    size = size,
-                    count = 11,
+                val columns = (0..10).map { getColumnValue(value = it) }
+                WheelTextPicker(
                     startIndex = portraitValue,
+                    items = columns,
+                    size = size,
                     onSelectionChanged = onPortraitChange,
                     backgroundContent = null,
-                ) { index ->
-                    WheelPickerDefaults.Item(text = getColumnValue(value = index))
-                }
-                WheelPicker(
-                    size = size,
-                    count = 11,
+                )
+                WheelTextPicker(
                     startIndex = landscapeValue,
+                    items = columns,
+                    size = size,
                     onSelectionChanged = onLandscapeChange,
                     backgroundContent = null,
-                ) { index ->
-                    WheelPickerDefaults.Item(text = getColumnValue(value = index))
-                }
+                )
             }
         }
     }

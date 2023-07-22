@@ -2,7 +2,9 @@ package eu.kanade.tachiyomi.ui.browse.anime.migration.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import cafe.adriel.voyager.core.model.StateScreenModel
 import eu.kanade.domain.entries.anime.interactor.UpdateAnime
@@ -112,7 +115,9 @@ internal fun MigrateAnimeDialog(
                 }
             },
             confirmButton = {
-                Row {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
                     TextButton(
                         onClick = {
                             onClickTitle()

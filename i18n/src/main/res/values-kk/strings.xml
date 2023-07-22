@@ -474,7 +474,6 @@
     <string name="error_user_agent_string_blank">User agent бос бола алмайды</string>
     <string name="pref_reset_viewer_flags">Оқыма баптауларын әрбір туынды үшін қалпына келтіру</string>
     <string name="pref_reset_viewer_flags_summary">Барлық туындылар үшін оқу режимі мен бағдарын қалпына келтіреді</string>
-    <string name="crash_log_saved">Қателіктер тіркеуі сақталды</string>
     <string name="label_background_activity">Аялық белсенділік</string>
     <string name="pref_disable_battery_optimization">Батареяның оңтайландыруын өшіру</string>
     <string name="battery_optimization_setting_activity_not_found">Құрылғы баптаулары ашылмады</string>
@@ -593,7 +592,6 @@
     <string name="update_check_confirm">Жүктеп алу</string>
     <string name="channel_common">Ортақ</string>
     <string name="channel_progress">Прогресс</string>
-    <string name="channel_crash_logs">Қателіктер тіркеуі</string>
     <string name="chapter_settings">Тарау баптаулары</string>
     <string name="chapter_error">Қателік</string>
     <string name="chapter_paused">Тоқтатылды</string>

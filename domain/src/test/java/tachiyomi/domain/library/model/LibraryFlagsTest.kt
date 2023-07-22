@@ -1,20 +1,23 @@
 package tachiyomi.domain.library.model
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotEquals
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.parallel.Execution
+import org.junit.jupiter.api.parallel.ExecutionMode
 import tachiyomi.domain.library.anime.model.AnimeLibrarySort
 import tachiyomi.domain.library.manga.model.MangaLibrarySort
 
+@Execution(ExecutionMode.CONCURRENT)
 class LibraryFlagsTest {
 
     @Test
     fun `Check the amount of flags`() {
-        assertEquals(4, LibraryDisplayMode.values.size)
-        assertEquals(8, MangaLibrarySort.types.size)
-        assertEquals(2, MangaLibrarySort.directions.size)
-        assertEquals(8, AnimeLibrarySort.types.size)
-        assertEquals(2, AnimeLibrarySort.directions.size)
+        LibraryDisplayMode.values.size shouldBe 4
+        MangaLibrarySort.types.size shouldBe 8
+        MangaLibrarySort.directions.size shouldBe 2
+        AnimeLibrarySort.types.size shouldBe 8
+        AnimeLibrarySort.directions.size shouldBe 2
     }
 
     @Test
@@ -23,7 +26,7 @@ class LibraryFlagsTest {
         val new = LibraryDisplayMode.CoverOnlyGrid
         val flag = current + new
 
-        assertEquals(0b00000011, flag)
+        flag shouldBe 0b00000011
     }
 
     @Test
@@ -35,8 +38,8 @@ class LibraryFlagsTest {
         val mangaflag = mangacurrent + newmanga
         val animeflag = animecurrent + newanime
 
-        assertEquals(0b01011100, mangaflag)
-        assertEquals(0b01011100, animeflag)
+        mangaflag shouldBe 0b01011100
+        animeflag shouldBe 0b01011100
     }
 
     @Test
@@ -47,8 +50,8 @@ class LibraryFlagsTest {
         val mangaflag = display + mangasort
         val animeflag = display + animesort
 
-        assertEquals(0b01011111, mangaflag)
-        assertEquals(0b01011111, animeflag)
+        mangaflag shouldBe 0b01011111
+        animeflag shouldBe 0b01011111
     }
 
     @Test
@@ -65,12 +68,12 @@ class LibraryFlagsTest {
         val animesort = AnimeLibrarySort(AnimeLibrarySort.Type.DateAdded, AnimeLibrarySort.Direction.Ascending)
         val animeflag = currentanimeFlag + display + animesort
 
-        assertEquals(0b00001110, currentmangaFlag)
-        assertEquals(0b01011111, mangaflag)
-        assertNotEquals(currentmangaFlag, mangaflag)
-        assertEquals(0b00001110, currentanimeFlag)
-        assertEquals(0b01011111, animeflag)
-        assertNotEquals(currentanimeFlag, animeflag)
+        currentmangaFlag shouldBe 0b00001110
+        mangaflag shouldBe 0b01011111
+        mangaflag shouldNotBe currentmangaFlag
+        currentanimeFlag shouldBe 0b00001110
+        animeflag shouldBe 0b01011111
+        animeflag shouldNotBe currentanimeFlag
     }
 
     @Test
@@ -81,7 +84,7 @@ class LibraryFlagsTest {
         val mangaflag = display + mangasort.type + mangasort.direction
         val animeflag = display + animesort.type + animesort.direction
 
-        assertEquals(0b01000000, mangaflag)
-        assertEquals(0b01000000, animeflag)
+        mangaflag shouldBe 0b01000000
+        animeflag shouldBe 0b01000000
     }
 }

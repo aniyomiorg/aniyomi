@@ -365,11 +365,11 @@
     <string name="nav_zone_next">Next</string>
     <string name="nav_zone_left">Left</string>
     <string name="nav_zone_right">Right</string>
-    <string name="left_to_right_viewer">Left to right</string>
-    <string name="right_to_left_viewer">Right to left</string>
-    <string name="vertical_viewer">Vertical</string>
-    <string name="webtoon_viewer">Webtoon</string>
-    <string name="vertical_plus_viewer">Continuous vertical</string>
+    <string name="left_to_right_viewer">Paged (left to right)</string>
+    <string name="right_to_left_viewer">Paged (right to left)</string>
+    <string name="vertical_viewer">Paged (vertical)</string>
+    <string name="webtoon_viewer">Long strip</string>
+    <string name="vertical_plus_viewer">Long strip with gaps</string>
     <string name="pager_viewer">Paged</string>
     <string name="pref_viewer_nav">Tap zones</string>
     <string name="pref_image_scale_type">Scale type</string>
@@ -518,9 +518,8 @@
     <string name="pref_reset_viewer_flags_summary">Resets reading mode and orientation of all series</string>
     <string name="pref_reset_viewer_flags_success">All reader settings reset</string>
     <string name="pref_reset_viewer_flags_error">Couldn\'t reset reader settings</string>
-    <string name="pref_dump_crash_logs">Dump crash logs</string>
+    <string name="pref_dump_crash_logs">Share crash logs</string>
     <string name="pref_dump_crash_logs_summary">Saves error logs to a file for sharing with the developers</string>
-    <string name="crash_log_saved">Crash logs saved</string>
     <string name="label_background_activity">Background activity</string>
     <string name="pref_disable_battery_optimization">Disable battery optimization</string>
     <string name="pref_disable_battery_optimization_summary">Helps with background library updates and backups</string>
@@ -530,7 +529,7 @@
     <string name="pref_tablet_ui_mode">Tablet UI</string>
     <string name="pref_verbose_logging">Verbose logging</string>
     <string name="pref_verbose_logging_summary">Print verbose logs to system log (reduces app performance)</string>
-    <string name="pref_worker_info">Worker info</string>
+    <string name="pref_debug_info">Debug info</string>
 
       <!-- About section -->
     <string name="website">Website</string>
@@ -606,7 +605,6 @@
         <item quantity="one">Missing %1$s item</item>
         <item quantity="other">Missing %1$s items</item>
     </plurals>
-    <string name="missing_items_unknown">Might be missing items</string>
 
     <!-- Manga info -->
     <string name="ongoing">Ongoing</string>
@@ -779,7 +777,7 @@
 
     <!-- Crash screen -->
     <string name="crash_screen_title">Whoops!</string>
-    <string name="crash_screen_description">%s ran into an unexpected error. We suggest you screenshot this message, dump the crash logs, and then share it in our support channel on Discord.</string>
+    <string name="crash_screen_description">%s ran into an unexpected error. We suggest you share the crash logs in our support channel on Discord.</string>
     <string name="crash_screen_restart_application">Restart the application</string>
 
     <!-- Stats screen -->
@@ -896,7 +894,6 @@
     <string name="channel_skipped">Skipped</string>
     <string name="channel_app_updates">App updates</string>
     <string name="channel_ext_updates">Extension updates</string>
-    <string name="channel_crash_logs">Crash logs</string>
 
     <!-- S Pen actions -->
     <string name="spen_previous_page">Previous page</string>

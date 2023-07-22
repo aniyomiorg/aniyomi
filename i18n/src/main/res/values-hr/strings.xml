@@ -489,12 +489,10 @@
     <string name="file_picker_error">Nije pronađen nijedan program za biranje datoteka</string>
     <string name="myanimelist_relogin">Ponovo se prijavi na MAL</string>
     <string name="pref_show_nsfw_source">Prikaži u popisu izvora i proširenja</string>
-    <string name="channel_crash_logs">Zapisi rušenja programa</string>
     <string name="track_finished_reading_date">Datum kraja</string>
     <string name="track_started_reading_date">Datum početka</string>
-    <string name="crash_log_saved">Zapisi rušenja programa su spremljeni</string>
     <string name="pref_dump_crash_logs_summary">Sprema zapise grešaka u datoteku za obavještavanje programera</string>
-    <string name="pref_dump_crash_logs">Spremi zapise rušenja programa</string>
+    <string name="pref_dump_crash_logs">Dijeli zapise prekida programa</string>
     <string name="pref_viewer_nav">Područja dodira</string>
     <string name="edge_nav">Rub</string>
     <string name="kindlish_nav">Kao Kindle</string>
@@ -623,7 +621,7 @@
     <string name="pref_lowest">Najniža</string>
     <string name="publishing_finished">Objavljivanje završeno</string>
     <string name="cancelled">Prekinuto</string>
-    <string name="on_hiatus">Prekid</string>
+    <string name="on_hiatus">Zaustavljeno</string>
     <string name="library_errors_help">Za pomoć o tome kako popraviti greške aktualiziranja biblioteke, pogledaj %1$s</string>
     <string name="save_chapter_as_cbz">Spremi kao CBZ arhivu</string>
     <string name="action_faq_and_guides">ČPP i vodiči</string>

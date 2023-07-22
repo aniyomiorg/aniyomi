@@ -35,6 +35,7 @@ import eu.kanade.tachiyomi.ui.reader.model.ViewerChapters
 import eu.kanade.tachiyomi.ui.reader.setting.OrientationType
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
 import eu.kanade.tachiyomi.ui.reader.setting.ReadingModeType
+import eu.kanade.tachiyomi.util.chapter.removeDuplicates
 import eu.kanade.tachiyomi.util.editCover
 import eu.kanade.tachiyomi.util.lang.byteSize
 import eu.kanade.tachiyomi.util.lang.takeBytes
@@ -175,12 +176,7 @@ class ReaderViewModel(
             else -> chapters
         }.run {
             if (readerPreferences.skipDupe().get()) {
-                groupBy { it.chapterNumber }
-                    .map { (_, chapters) ->
-                        chapters.find { it.id == selectedChapter.id }
-                            ?: chapters.find { it.scanlator == selectedChapter.scanlator }
-                            ?: chapters.first()
-                    }
+                removeDuplicates(selectedChapter)
             } else {
                 this
             }
@@ -200,17 +196,6 @@ class ReaderViewModel(
 
     private val incognitoMode = preferences.incognitoMode().get()
 
-    override fun onCleared() {
-        val currentChapters = state.value.viewerChapters
-        if (currentChapters != null) {
-            currentChapters.unref()
-            saveReadingProgress(currentChapters.currChapter)
-            chapterToDownload?.let {
-                downloadManager.addDownloadsToStartOfQueue(listOf(it))
-            }
-        }
-    }
-
     init {
         // To save state
         state.map { it.viewerChapters?.currChapter }
@@ -223,6 +208,17 @@ class ReaderViewModel(
                 chapterId = currentChapter.chapter.id!!
             }
             .launchIn(viewModelScope)
+    }
+
+    override fun onCleared() {
+        val currentChapters = state.value.viewerChapters
+        if (currentChapters != null) {
+            currentChapters.unref()
+            saveReadingProgress(currentChapters.currChapter)
+            chapterToDownload?.let {
+                downloadManager.addDownloadsToStartOfQueue(listOf(it))
+            }
+        }
     }
 
     /**
@@ -337,10 +333,11 @@ class ReaderViewModel(
     }
 
     /**
-     * Called when the user is going to load the prev/next chapter through the menu button.
+     * Called when the user is going to load the prev/next chapter through the toolbar buttons.
      */
     private suspend fun loadAdjacent(chapter: ReaderChapter) {
         val loader = loader ?: return
+        saveCurrentChapterReadingProgress()
 
         logcat { "Loading adjacent ${chapter.chapter.url}" }
 
@@ -455,8 +452,13 @@ class ReaderViewModel(
             )
             if (!isNextChapterDownloaded) return@launchIO
 
-            val chaptersToDownload = getNextChapters.await(manga.id, nextChapter.id!!)
-                .take(amount)
+            val chaptersToDownload = getNextChapters.await(manga.id, nextChapter.id!!).run {
+                if (readerPreferences.skipDupe().get()) {
+                    removeDuplicates(nextChapter.toDomainChapter()!!)
+                } else {
+                    this
+                }
+            }.take(amount)
             downloadManager.downloadChapters(
                 manga,
                 chaptersToDownload,
