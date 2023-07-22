@@ -23,8 +23,8 @@ android {
 
     defaultConfig {
         applicationId = "xyz.jmir.tachiyomi.mi"
-        versionCode = 100
-        versionName = "0.14.5"
+        versionCode = 101
+        versionName = "0.14.6"
 
         buildConfigField("String", "COMMIT_COUNT", "\"${getCommitCount()}\"")
         buildConfigField("String", "COMMIT_SHA", "\"${getGitSha()}\"")
@@ -102,7 +102,7 @@ android {
         }
     }
 
-    packagingOptions {
+    packaging {
         resources.excludes.addAll(listOf(
             "META-INF/DEPENDENCIES",
             "LICENSE.txt",
